@@ -5,6 +5,7 @@
   o portal_deploy: this is the location of the tomcat deployment.
   o standalone_jsf: has various developmental versions of JSF pages.
   o porltets: these are the portletized JSF apps.
+  o jsf-portlet-archetype: see http://jroller.com/page/mwessendorf?entry=maven2_magics_for_myfaces and http://www.gorerle.com/vlab-wiki/index.php?title=JavaServerFaces-Archetype.
 
 
 * Building 
