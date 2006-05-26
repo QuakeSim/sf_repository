@@ -3,6 +3,8 @@
     footers, and images.
   o third_party_tools: contains Apache Ant and similar stuff.
   o portal_deploy: this is the location of the tomcat deployment.
+  o standalone_jsf: has various developmental versions of JSF pages.
+  o porltets: these are the portletized JSF apps.
 
 
 * Building 
