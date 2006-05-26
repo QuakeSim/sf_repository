@@ -1,0 +1,19 @@
+* Directories
+  o lnf4portal: has Gridsphere customizations, such as page headers and 
+    footers, and images.
+  o third_party_tools: contains Apache Ant and similar stuff.
+  o portal_deploy: this is the location of the tomcat deployment.
+
+
+* Building 
+  o Use ./install-it-all.sh to build everything.
+  o This is decoupled into several supporting shell scripts, so 
+    see install-it-all.sh for the pieces.
+  o env.sh sets all necessary environment variables.
+  o unpack-tars.sh explodes .tar.gz files in various directories.
+  o build-gridsphere.sh runs ant install on gridsphere.
+  o customize-portal.sh installs the portal lnf stuff.
+
+
+
+
