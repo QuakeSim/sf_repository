@@ -17,6 +17,7 @@ export WEB_SERVICES_HOME=$BUILD_DIR/WebService
 
 #Standalone JSF (for development).
 export SIMPLEX_SA_HOME=$BUILD_DIR/jsf_standalone/Simplex
+export RDAHMM_SA_HOME=$BUILD_DIR/jsf_standalone/RDAHMM
 
 #Portlets
 export SIMPLEX_PORTLET_HOME=$BUILD_DIR/portlets/Simplex

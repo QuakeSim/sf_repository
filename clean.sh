@@ -10,6 +10,27 @@ echo "#################################"
 source ./tomcat-shutdown.sh
 sleep 3
 
+#Clean up the code
+cd $WEB_SERVICES_HOME
+mvn clean
+
+# Clean up standalone stuff
+cd $SIMPLEX_SA_HOME
+mvn clean
+
+cd $RDAHMM_SA_HOME
+mvn clean
+
+
+#Clean up portlet stuff
+cd $SIMPLEX_PORTLET_HOME
+mvn clean
+
+cd $RDAHMM_PORTLET_HOME
+mvn clean
+
+
+
 # CLEAN VENDOR SOFTWARE
 echo "#################################"
 echo "#  Cleaning vendor packages...  #"
@@ -22,9 +43,3 @@ cd $THIRD_PARTY_TOOLS
 find . -type d -exec rm -fr {} \;
 
 
-#Install web services
-cd $WEB_SERVICES_HOME
-mvn clean
-
-cd $SIMPLEX_PORTLET_HOME
-mvn clean
