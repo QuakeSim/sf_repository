@@ -8,26 +8,48 @@
 	
 	<!-- managed beans of the simple hello world app -->
 	<managed-bean>
-		<managed-bean-name>helloWorldBacking</managed-bean-name>
-		<managed-bean-class>org.apache.myfaces.blank.HelloWorldBacking</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
+		<managed-bean-name>rdahmmBean</managed-bean-name>
+		<managed-bean-class>org.apache.myfaces.blank.RDAHMMBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
 	<!-- navigation rules for helloWorld.jsp -->
 	<navigation-rule>
-		<from-view-id>/helloWorld.jsp</from-view-id>
+		<from-view-id>/main.jsp</from-view-id>
 		<navigation-case>
-			<from-outcome>success</from-outcome>
-			<to-view-id>/page2.jsp</to-view-id>
+			<from-outcome>create-new-project</from-outcome>
+			<to-view-id>/NewProject.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/main.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>list-old-projects</from-outcome>
+			<to-view-id>/LoadProject.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	
 	<!-- navigation rules for page2.jsp -->
 	<navigation-rule>
+		<from-view-id>/NewProject.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/LoadProject.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
 		<from-view-id>/page2.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>back</from-outcome>
-			<to-view-id>/helloWorld.jsp</to-view-id>
+			<to-view-id>/main.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 </faces-config>
