@@ -34,7 +34,7 @@
             Attention: You do not need to put /WEB-INF/faces-config.xml in here.
         </description>
         <param-name>javax.faces.CONFIG_FILES</param-name>
-        <param-value>/WEB-INF/examples-config.xml</param-value>
+        <param-value>/WEB-INF/faces-config.xml</param-value>
     </context-param>
     <context-param>
         <description>State saving method: "client" or "server" (= default)
