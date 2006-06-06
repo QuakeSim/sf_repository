@@ -83,6 +83,8 @@
 
     <!-- Project dependencies -->
     <dependencies>
+
+        <!-- Faces Jars -->
         <dependency>
             <groupId>org.apache.myfaces.core</groupId>
             <artifactId>myfaces-api</artifactId>
@@ -104,11 +106,28 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- Junit testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>3.8.1</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- Portlet Dependencies -->
+        <dependency>
+            <groupId>javax.portlet</groupId>
+            <artifactId>portlet-api</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Servlet Dependencies -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.3</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
