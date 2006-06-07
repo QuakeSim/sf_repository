@@ -130,6 +130,26 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Web Service Dependencies -->
+        <dependency>
+             <groupId>QuakeSim2</groupId>
+             <artifactId>WebServices</artifactId>
+             <version>1.0</version>
+             <scope>compile</scope>
+        </dependency>
+        <dependency>
+             <groupId>axis</groupId>
+             <artifactId>axis</artifactId>
+             <version>1.1</version>
+             <scope>compile</scope>
+        </dependency>
+        <dependency>
+             <groupId>axis</groupId>
+             <artifactId>axis-jaxrpc</artifactId>
+             <version>1.2</version>
+             <scope>compile</scope>
+        </dependency>
+
     </dependencies>
 
 

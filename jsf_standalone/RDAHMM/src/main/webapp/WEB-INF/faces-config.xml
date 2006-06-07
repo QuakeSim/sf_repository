@@ -11,6 +11,12 @@
 		<managed-bean-name>rdahmmBean</managed-bean-name>
 		<managed-bean-class>org.apache.myfaces.blank.RDAHMMBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
+                <managed-property>
+                   <property-name>contextUrl</property-name>
+                   <property-value>http://localhost:8080/WebServices/services/ContextManager/</property-value>
+                    <property-name>contextBasePath</property-name>
+                    <property-value>/WebService/WEB-INF/Descriptors/users/</property-value>
+                </managed-property>
 	</managed-bean>
 	
 	<!-- navigation rules for helloWorld.jsp -->

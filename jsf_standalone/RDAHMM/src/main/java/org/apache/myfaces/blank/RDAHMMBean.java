@@ -1,6 +1,11 @@
 package org.apache.myfaces.blank;
 
+//Web Service clients
 import WebFlowClient.cm.*;
+
+//Usual java stuff.
+import java.net.URL;
+import java.io.File;
 
 /**
  * 
@@ -10,31 +15,55 @@ public class RDAHMMBean {
     //properties
     private String userName;
     private String defaultName="defaultUser";
+    private String contextUrl;
+    private String contextBasePath;
+    private String FS="FS";
+    private String CODENAME="RDAHMM";
+
+    public String getContextUrl() {
+	System.out.println(this.toString()+" "+contextUrl);
+	return contextUrl;
+    }
+
+    public void setContextUrl(String cUrl) {
+	this.contextUrl=cUrl;
+	System.out.println(this.toString()+" "+contextUrl);
+    }
+
+    public String getContextBasePath() {
+	System.out.println(this.toString()+" "+contextBasePath);
+	return contextBasePath;
+    }
+
+    public void setContextBasePath(String basepath) {
+	this.contextBasePath=basepath;
+	System.out.println(this.toString()+" "+contextBasePath);
+    }
     
     /**
      * default empty constructor
      */
     public RDAHMMBean(){   
-	//--------------------------------------------------
-	//Set up the context manager service.
-	//--------------------------------------------------
-	String propfile=
-	    application.getRealPath("/WEB-INF/conf/GEMDSTEST.properties");
-	props.setProperties(propfile);
-	
-	
-	String complexUrl=props.getProperty("@UI_SERVER_NAME@");
-	String complexCM=complexUrl+props.getProperty("CM");
-	String base_userpath=props.getProperty("ContextBasePath")
-	    +File.separator+userName+File.separator+CODENAME;
-	
-	ContextManagerImpService cmws = new ContextManagerImpServiceLocator();
-	ContextManagerImp cm = cmws.getContextManager(new URL(complexCM));
-	((ContextManagerSoapBindingStub) cm).setMaintainSession(true);
-	
-	cm.setContextStorage(props.getProperty("Storage"));
-	cm.init(userName,base_userpath);
-	cm.addContext(CODENAME);
+	try {
+	    //--------------------------------------------------
+	    //Set up the context manager service.
+	    //--------------------------------------------------	
+	    String base_userpath=getContextBasePath()+
+		File.separator+userName+File.separator+CODENAME;
+	    
+	    ContextManagerImpService cmws= 
+		new ContextManagerImpServiceLocator();
+	    ContextManagerImp cm
+		=cmws.getContextManager(new URL(contextUrl));
+	    ((ContextManagerSoapBindingStub) cm).setMaintainSession(true);
+	    
+	    cm.setContextStorage(FS);
+	    cm.init(userName,base_userpath);
+	    cm.addContext(CODENAME);
+	}
+	catch(Exception ex) {
+	    ex.printStackTrace();
+	}
     }
     
     /**
