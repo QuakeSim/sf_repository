@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+ <globalConfiguration>
+  <parameter name="adminPassword" value="admin"/>
+  <parameter name="attachments.Directory" value="/tmp"/>
+  <parameter name="sendMultiRefs" value="true"/>
+  <parameter name="sendXsiTypes" value="true"/>
+  <parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
+  <parameter name="sendXMLDeclaration" value="true"/>
+  <requestFlow>
+   <handler type="java:org.apache.axis.handlers.JWSHandler"/>
+  </requestFlow>
+ </globalConfiguration>
+ <handler name="soapmonitor" type="java:org.apache.axis.handlers.SOAPMonitorHandler">
+  <parameter name="wsdlURL" value="/axis/SOAPMonitorService-impl.wsdl"/>
+  <parameter name="namespace" value="http://tempuri.org/wsdl/2001/12/SOAPMonitorService-impl.wsdl"/>
+  <parameter name="serviceName" value="SOAPMonitorService"/>
+  <parameter name="portName" value="Demo"/>
+ </handler>
+ <handler name="RPCDispatcher" type="java:org.apache.axis.providers.java.RPCProvider"/>
+ <handler name="MsgDispatcher" type="java:org.apache.axis.providers.java.MsgProvider"/>
+ <handler name="LocalResponder" type="java:org.apache.axis.transport.local.LocalResponder"/>
+ <handler name="SimpleSessionHandler" type="java:org.apache.axis.handlers.SimpleSessionHandler"/>
+ <handler name="Authenticate" type="java:org.apache.axis.handlers.SimpleAuthenticationHandler"/>
+ <handler name="URLMapper" type="java:org.apache.axis.handlers.http.URLMapper"/>
+ <service name="ApplicationDescriptor" provider="java:RPC">
+  <operation name="readApplDesc" qname="ns1:readApplDesc" xmlns:ns1="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <operation name="readApplIns" qname="ns2:readApplIns" xmlns:ns2="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <operation name="setApplication" qname="ns3:setApplication" xmlns:ns3="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <operation name="setHostDesc" qname="ns4:setHostDesc" xmlns:ns4="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <operation name="getApplications" qname="ns5:getApplications" returnQName="return" xmlns:ns5="urn:GatewayWS"/>
+  <operation name="getInputPortCount" qname="ns6:getInputPortCount" returnQName="return" xmlns:ns6="urn:GatewayWS"/>
+  <operation name="getInputDescription" qname="ns7:getInputDescription" returnQName="return" xmlns:ns7="urn:GatewayWS">
+   <parameter name="in0" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </operation>
+  <operation name="getOutputPortCount" qname="ns8:getOutputPortCount" returnQName="return" xmlns:ns8="urn:GatewayWS"/>
+  <operation name="getOutputDescription" qname="ns9:getOutputDescription" returnQName="return" xmlns:ns9="urn:GatewayWS">
+   <parameter name="in0" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </operation>
+  <operation name="getErrorPortCount" qname="ns10:getErrorPortCount" returnQName="return" xmlns:ns10="urn:GatewayWS"/>
+  <operation name="getErrorDescription" qname="ns11:getErrorDescription" returnQName="return" xmlns:ns11="urn:GatewayWS">
+   <parameter name="in0" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </operation>
+  <operation name="getHostListNames" qname="ns12:getHostListNames" returnQName="return" xmlns:ns12="urn:GatewayWS"/>
+  <operation name="getQueueType" qname="ns13:getQueueType" returnQName="return" xmlns:ns13="urn:GatewayWS"/>
+  <operation name="setApplicationInstance" qname="ns14:setApplicationInstance" xmlns:ns14="urn:GatewayWS"/>
+  <operation name="setInputPortFromabstractToinstance" qname="ns15:setInputPortFromabstractToinstance" xmlns:ns15="urn:GatewayWS">
+   <parameter name="in0" type="ns15:ArrayOf_soapenc_string"/>
+  </operation>
+  <operation name="setOutputPortFromabstractToinstance" qname="ns16:setOutputPortFromabstractToinstance" xmlns:ns16="urn:GatewayWS">
+   <parameter name="in0" type="ns16:ArrayOf_soapenc_string"/>
+  </operation>
+  <operation name="setErrorPortFromabstractToinstance" qname="ns17:setErrorPortFromabstractToinstance" xmlns:ns17="urn:GatewayWS">
+   <parameter name="in0" type="ns17:ArrayOf_soapenc_string"/>
+  </operation>
+  <operation name="setMemoryOptionFromabstractToinstance" qname="ns18:setMemoryOptionFromabstractToinstance" xmlns:ns18="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <operation name="setJobNameFromabstractToinstance" qname="ns19:setJobNameFromabstractToinstance" xmlns:ns19="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <operation name="setNumberOfCPUsFromabstractToinstance" qname="ns20:setNumberOfCPUsFromabstractToinstance" xmlns:ns20="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <operation name="setWalltimeFromabstractToinstance" qname="ns21:setWalltimeFromabstractToinstance" xmlns:ns21="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <operation name="setEmailFromabstractToinstance" qname="ns22:setEmailFromabstractToinstance" xmlns:ns22="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <parameter name="in1" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <parameter name="in2" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <operation name="setQueueOptionsFromabstractToinstance" qname="ns23:setQueueOptionsFromabstractToinstance" xmlns:ns23="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <operation name="setAccountOptionsFromabstractToinstance" qname="ns24:setAccountOptionsFromabstractToinstance" xmlns:ns24="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <operation name="getApplInsString" qname="ns25:getApplInsString" returnQName="return" xmlns:ns25="urn:GatewayWS"/>
+  <operation name="writeApplInsFile" qname="ns26:writeApplInsFile" returnQName="return" xmlns:ns26="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <parameter name="in1" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <operation name="getQueueTypeFrominstance" qname="ns27:getQueueTypeFrominstance" returnQName="return" xmlns:ns27="urn:GatewayWS"/>
+  <operation name="getQsubPathFrominstance" qname="ns28:getQsubPathFrominstance" returnQName="return" xmlns:ns28="urn:GatewayWS"/>
+  <operation name="getHostNameFrominstance" qname="ns29:getHostNameFrominstance" returnQName="return" xmlns:ns29="urn:GatewayWS"/>
+  <operation name="getInputPortCountFrominstance" qname="ns30:getInputPortCountFrominstance" returnQName="return" xmlns:ns30="urn:GatewayWS"/>
+  <operation name="getInputDescriptionFrominstance" qname="ns31:getInputDescriptionFrominstance" returnQName="return" xmlns:ns31="urn:GatewayWS">
+   <parameter name="in0" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </operation>
+  <operation name="getInputLocationFrominstance" qname="ns32:getInputLocationFrominstance" returnQName="return" xmlns:ns32="urn:GatewayWS">
+   <parameter name="in0" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </operation>
+  <operation name="getOutputPortCountFrominstance" qname="ns33:getOutputPortCountFrominstance" returnQName="return" xmlns:ns33="urn:GatewayWS"/>
+  <operation name="getOutputDescriptionFrominstance" qname="ns34:getOutputDescriptionFrominstance" returnQName="return" xmlns:ns34="urn:GatewayWS">
+   <parameter name="in0" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </operation>
+  <operation name="getOutputLocationFrominstance" qname="ns35:getOutputLocationFrominstance" returnQName="return" xmlns:ns35="urn:GatewayWS">
+   <parameter name="in0" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </operation>
+  <operation name="getErrorPortCountFrominstance" qname="ns36:getErrorPortCountFrominstance" returnQName="return" xmlns:ns36="urn:GatewayWS"/>
+  <operation name="getErrorDescriptionFrominstance" qname="ns37:getErrorDescriptionFrominstance" returnQName="return" xmlns:ns37="urn:GatewayWS">
+   <parameter name="in0" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </operation>
+  <operation name="getErrorLocationFrominstance" qname="ns38:getErrorLocationFrominstance" returnQName="return" xmlns:ns38="urn:GatewayWS">
+   <parameter name="in0" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </operation>
+  <operation name="getMemoryOptionFrominstance" qname="ns39:getMemoryOptionFrominstance" returnQName="return" xmlns:ns39="urn:GatewayWS"/>
+  <operation name="getJobNameFrominstance" qname="ns40:getJobNameFrominstance" returnQName="return" xmlns:ns40="urn:GatewayWS"/>
+  <operation name="getNumberOfCPUsFrominstance" qname="ns41:getNumberOfCPUsFrominstance" returnQName="return" xmlns:ns41="urn:GatewayWS"/>
+  <operation name="getWalltimeFrominstance" qname="ns42:getWalltimeFrominstance" returnQName="return" xmlns:ns42="urn:GatewayWS"/>
+  <operation name="getJobBeginEmailFrominstance" qname="ns43:getJobBeginEmailFrominstance" returnQName="return" xmlns:ns43="urn:GatewayWS"/>
+  <operation name="getJobEndEmailFrominstance" qname="ns44:getJobEndEmailFrominstance" returnQName="return" xmlns:ns44="urn:GatewayWS"/>
+  <operation name="getJobAbortEmailFrominstance" qname="ns45:getJobAbortEmailFrominstance" returnQName="return" xmlns:ns45="urn:GatewayWS"/>
+  <operation name="setInputPortFrominstance" qname="ns46:setInputPortFrominstance" xmlns:ns46="urn:GatewayWS">
+   <parameter name="in0" type="ns46:ArrayOf_soapenc_string"/>
+  </operation>
+  <operation name="setOutputPortFrominstance" qname="ns47:setOutputPortFrominstance" xmlns:ns47="urn:GatewayWS">
+   <parameter name="in0" type="ns47:ArrayOf_soapenc_string"/>
+  </operation>
+  <operation name="setErrorPortFrominstance" qname="ns48:setErrorPortFrominstance" xmlns:ns48="urn:GatewayWS">
+   <parameter name="in0" type="ns48:ArrayOf_soapenc_string"/>
+  </operation>
+  <operation name="setMemoryOptionFrominstance" qname="ns49:setMemoryOptionFrominstance" xmlns:ns49="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <operation name="setJobNameFrominstance" qname="ns50:setJobNameFrominstance" xmlns:ns50="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <operation name="setNumberOfCPUsFrominstance" qname="ns51:setNumberOfCPUsFrominstance" xmlns:ns51="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <operation name="setWalltimeFrominstance" qname="ns52:setWalltimeFrominstance" xmlns:ns52="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <operation name="setEmailFrominstance" qname="ns53:setEmailFrominstance" xmlns:ns53="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <parameter name="in1" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <parameter name="in2" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <operation name="setQueueOptionsFrominstance" qname="ns54:setQueueOptionsFrominstance" xmlns:ns54="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <operation name="setAccountOptionsFrominstance" qname="ns55:setAccountOptionsFrominstance" xmlns:ns55="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <requestFlow>
+   <handler type="soapmonitor"/>
+  </requestFlow>
+  <responseFlow>
+   <handler type="soapmonitor"/>
+  </responseFlow>
+  <parameter name="sendMultiRefs" value="true"/>
+  <parameter name="wsdlServicePort" value="ApplicationDescriptor"/>
+  <parameter name="className" value="WebFlowSoap.ApplDescwsImp"/>
+  <parameter name="sendXMLDeclaration" value="true"/>
+  <parameter name="allowedMethods" value="readApplDesc readApplIns setApplication setHostDesc getApplications getInputPortCount getInputDescription getOutputPortCount getOutputDescription getErrorPortCount getErrorDescription getHostListNames getQueueType setApplicationInstance setInputPortFromabstractToinstance setOutputPortFromabstractToinstance setErrorPortFromabstractToinstance setMemoryOptionFromabstractToinstance setJobNameFromabstractToinstance setNumberOfCPUsFromabstractToinstance setWalltimeFromabstractToinstance setEmailFromabstractToinstance setQueueOptionsFromabstractToinstance setAccountOptionsFromabstractToinstance getApplInsString writeApplInsFile getQueueTypeFrominstance getQsubPathFrominstance getHostNameFrominstance getInputPortCountFrominstance getInputDescriptionFrominstance getInputLocationFrominstance getOutputPortCountFrominstance getOutputDescriptionFrominstance getOutputLocationFrominstance getErrorPortCountFrominstance getErrorDescriptionFrominstance getErrorLocationFrominstance getMemoryOptionFrominstance getJobNameFrominstance getNumberOfCPUsFrominstance getWalltimeFrominstance getJobBeginEmailFrominstance getJobEndEmailFrominstance getJobAbortEmailFrominstance setInputPortFrominstance setOutputPortFrominstance setErrorPortFrominstance setMemoryOptionFrominstance setJobNameFrominstance setNumberOfCPUsFrominstance setWalltimeFrominstance setEmailFrominstance setQueueOptionsFrominstance setAccountOptionsFrominstance"/>
+  <parameter name="wsdlServiceElement" value="ApplDescwsImpService"/>
+  <parameter name="wsdlTargetNamespace" value="urn:GatewayWS"/>
+  <parameter name="wsdlPortType" value="ApplDescwsImp"/>
+  <parameter name="scope" value="Session"/>
+  <parameter name="sendXsiTypes" value="true"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns56:ArrayOf_soapenc_string" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:java.lang.String[]" xmlns:ns56="urn:GatewayWS"/>
+ </service>
+ <service name="ContextManager" provider="java:RPC">
+  <parameter name="allowedMethods" value="setContextStorage init addContext getCurrentProperty setCurrentProperty removeContext listContext listContext"/>
+  <parameter name="className" value="WebFlowSoap.ContextManager.ContextManagerImp"/>
+  <parameter name="scope" value="Session"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns57:ArrayOf_soapenc_string" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:java.lang.String[]" xmlns:ns57="urn:GatewayWS"/>
+ </service>
+ <service name="Jobmonitor" provider="java:RPC">
+  <requestFlow>
+   <handler type="soapmonitor"/>
+  </requestFlow>
+  <responseFlow>
+   <handler type="soapmonitor"/>
+  </responseFlow>
+  <parameter name="allowedMethods" value="JobStatus"/>
+  <parameter name="className" value="WebFlowSoap.JMwsImp"/>
+  <parameter name="sendXsiTypes" value="true"/>
+  <parameter name="sendMultiRefs" value="true"/>
+  <parameter name="sendXMLDeclaration" value="true"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns58:JobObjectResult" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:WebFlowSoap.JobObjectResult" xmlns:ns58="urn:GatewayWS"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns59:ArrayOfJobObjectResult" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:WebFlowSoap.JobObjectResult[]" xmlns:ns59="urn:GatewayWS"/>
+ </service>
+ <service name="FileService" provider="java:RPC">
+  <parameter name="allowedMethods" value="listFiles listFiles listDirectories uploadFile downloadFile renameFile copyFile crossload"/>
+  <parameter name="className" value="WebFlowSoap.FileServiceImp"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.JAFDataHandlerDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns60:DataHandler" serializer="org.apache.axis.encoding.ser.JAFDataHandlerSerializerFactory" type="java:javax.activation.DataHandler" xmlns:ns60="FileService"/>
+ </service>
+ <service name="Version" provider="java:RPC">
+  <parameter name="allowedMethods" value="getVersion"/>
+  <parameter name="className" value="org.apache.axis.Version"/>
+ </service>
+ <service name="SimplexDS" provider="java:RPC">
+  <parameter name="allowedMethods" value="importInputData exportInputData readData writeData writeData importOutputData exportOutputData getAllFaults getFault setFault setAllFaults getAllDisplacements setAllDisplacements setFaultParameter getFaultParameter setCodeParameter getCodeParameter setBestchi2 getBestchi2 setAllSimplexInputData"/>
+  <parameter name="scope" value="Session"/>
+  <parameter name="className" value="WebFlowSoap.gemds.simplexds.SimplexDataImpl"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns61:FaultData" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:WebFlowSoap.gemds.simplexds.FaultData" xmlns:ns61="urn:GatewayWS"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns62:ArrayOfFaultData" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:WebFlowSoap.gemds.simplexds.FaultData[]" xmlns:ns62="urn:GatewayWS"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns63:DisplacementData" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:WebFlowSoap.gemds.simplexds.DisplacementData" xmlns:ns63="urn:GatewayWS"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns64:ArrayOfDisplacementData" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:WebFlowSoap.gemds.simplexds.DisplacementData[]" xmlns:ns64="urn:GatewayWS"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns65:FaultParameter" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:WebFlowSoap.gemds.simplexds.FaultParameter" xmlns:ns65="urn:GatewayWS"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns66:ArrayOfFaultParameter" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:WebFlowSoap.gemds.simplexds.FaultParameter[]" xmlns:ns66="urn:GatewayWS"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns67:CodeParameter" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:WebFlowSoap.gemds.simplexds.CodeParameter" xmlns:ns67="urn:GatewayWS"/>
+ </service>
+ <service name="ApplicationDescriptor3" provider="java:RPC">
+  <parameter name="allowedMethods" value="readApplDesc writeApplDesc getApplications getInputFieldCount getInputDescription getOutputFieldCount getOutputDescription getErrorFieldCount getErrorDescription getHostListNames getHostName getHostIP getHostWorkDir getHostQueueType getHostExecPath getHostQueuePath getInputDescription getInputHandle getOutputDescription getOutputHandle getErrorDescription getErrorHandle setInputDescription setInputHandle setOutputDescription setOutputHandle setErrorDescription setErrorHandle getInputMech getOutputMech getErrorMech setInputMech setOutputMech setErrorMech setHostName,setHostIP,setHostWorkDir,setHostQueueType,setHostExecPath,setHostQueuePath addApplication addExecService addBaseInfo addInternalComm addFlagsToBaseInfo addApplHost removeApplication removeExecService removeApplHost getMemoryDirective getJobNameDirective getNCPUDirective getWalltimeDirective getJobBeginDirective getJobEndDirective getJobAbortDirective setQueueDirectives getExecServiceList getExecServiceDesc getExecServiceDef getExecServiceName getExecServiceBP setExecServiceDesc setExecServiceName setExecServiceDef setExecServiceBP"/>
+  <parameter name="scope" value="Session"/>
+  <parameter name="className" value="cgl.gateway.aws.ApplDescImpl3"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns68:ArrayOf_soapenc_string" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:java.lang.String[]" xmlns:ns68="urn:GatewayWS"/>
+ </service>
+ <service name="ApplicationDescriptor2" provider="java:RPC">
+  <requestFlow>
+   <handler type="soapmonitor"/>
+  </requestFlow>
+  <responseFlow>
+   <handler type="soapmonitor"/>
+  </responseFlow>
+  <parameter name="allowedMethods" value="readApplDesc writeApplDesc setApplication setHostDesc getApplications getInputPortCount getInputDescription getOutputPortCount getOutputDescription getErrorPortCount getErrorDescription getHostListNames getQueueType getHostIP getHostWorkDir getHostQueueType getHostExecPath getHostQueuePath getInputDescription getInputHandle getOutputDescription getOutputHandle getErrorDescription getErrorHandle setInputDescription setInputHandle setOutputDescription setOutputHandle setErrorDescription setErrorHandle getInputMech getOutputMech getErrorMech setInputMech setOutputMech setErrorMech setHostName,setHostIP,setHostWorkDir,setHostQueueType,setHostExecPath,setHostQueuePath addApplication addApplHost removeApplication removeApplHost getMemoryDirective getJobNameDirective getNCPUDirective getWalltimeDirective getJobBeginDirective getJobEndDirective getJobAbortDirective setQueueDirectives"/>
+  <parameter name="className" value="WebFlowSoap.ApplDescImpl2"/>
+  <parameter name="scope" value="Session"/>
+  <parameter name="sendXsiTypes" value="true"/>
+  <parameter name="sendMultiRefs" value="true"/>
+  <parameter name="sendXMLDeclaration" value="true"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns69:ArrayOf_soapenc_string" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:java.lang.String[]" xmlns:ns69="urn:GatewayWS"/>
+ </service>
+ <service name="ApplicationInstance3" provider="java:RPC">
+  <requestFlow>
+   <handler type="soapmonitor"/>
+  </requestFlow>
+  <responseFlow>
+   <handler type="soapmonitor"/>
+  </responseFlow>
+  <parameter name="allowedMethods" value="readApplIns writeApplIns createQueueInstance createHostInstance createServiceInstance createApplicationInstance getApplicationName setApplicationName setInputField setOutputField setErrorField setEmail setMemoryOption setJobName setWalltime setNumberOfCPUs getMemoryOption getJobName getWalltime getNumberOfCPUs getApplInsString getQsubPath getQueueType getHostName getInputFieldCount getInputDescription getInputLocation getOutputFieldCount getOutputDescription getOutputLocation getErrorFieldCount getErrorDescription getErrorLocation"/>
+  <parameter name="scope" value="Session"/>
+  <parameter name="className" value="WebFlowSoap.ApplInstanceImpl"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns70:ArrayOf_soapenc_string" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:java.lang.String[]" xmlns:ns70="urn:GatewayWS"/>
+ </service>
+ <service name="ScriptGenerator" provider="java:RPC">
+  <operation name="scriptGen" qname="ns71:scriptGen" returnQName="return" xmlns:ns71="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <parameter name="in1" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <parameter name="in2" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <operation name="writeStringToFile" qname="ns72:writeStringToFile" returnQName="return" xmlns:ns72="urn:GatewayWS">
+   <parameter name="in0" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <parameter name="in1" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <requestFlow>
+   <handler type="soapmonitor"/>
+  </requestFlow>
+  <responseFlow>
+   <handler type="soapmonitor"/>
+  </responseFlow>
+  <parameter name="sendMultiRefs" value="true"/>
+  <parameter name="wsdlServicePort" value="ScriptGenerator"/>
+  <parameter name="className" value="WebFlowSoap.ScriptGeneratorImp"/>
+  <parameter name="sendXMLDeclaration" value="true"/>
+  <parameter name="allowedMethods" value="scriptGen writeStringToFile"/>
+  <parameter name="wsdlServiceElement" value="ScriptGeneratorImpService"/>
+  <parameter name="wsdlTargetNamespace" value="urn:GatewayWS"/>
+  <parameter name="wsdlPortType" value="ScriptGeneratorImp"/>
+  <parameter name="sendXsiTypes" value="true"/>
+  <parameter name="scope" value="Session"/>
+ </service>
+ <service name="AdminService" provider="java:MSG">
+  <parameter name="allowedMethods" value="AdminService"/>
+  <parameter name="enableRemoteAdmin" value="true"/>
+  <parameter name="className" value="org.apache.axis.utils.Admin"/>
+  <parameter name="sendXsiTypes" value="true"/>
+  <parameter name="sendMultiRefs" value="true"/>
+  <parameter name="sendXMLDeclaration" value="true"/>
+  <namespace>http://xml.apache.org/axis/wsdd/</namespace>
+ </service>
+ <service name="SOAPMonitorService" provider="java:RPC">
+  <parameter name="allowedMethods" value="publishMessage"/>
+  <parameter name="className" value="org.apache.axis.monitor.SOAPMonitorService"/>
+  <parameter name="scope" value="Application"/>
+ </service>
+ <service name="Batchscript" provider="java:RPC">
+  <requestFlow>
+   <handler type="soapmonitor"/>
+  </requestFlow>
+  <responseFlow>
+   <handler type="soapmonitor"/>
+  </responseFlow>
+  <parameter name="allowedMethods" value="BatchGen"/>
+  <parameter name="scope" value="session"/>
+  <parameter name="className" value="WebFlowSoap.BSwsImp"/>
+  <parameter name="sendXsiTypes" value="true"/>
+  <parameter name="sendMultiRefs" value="true"/>
+  <parameter name="sendXMLDeclaration" value="true"/>
+ </service>
+ <service name="Submitjob" provider="java:RPC">
+  <requestFlow>
+   <handler type="soapmonitor"/>
+  </requestFlow>
+  <responseFlow>
+   <handler type="soapmonitor"/>
+  </responseFlow>
+  <parameter name="allowedMethods" value="test execLocalCommand execRemoteCommand"/>
+  <parameter name="className" value="WebFlowSoap.SJwsImp"/>
+  <parameter name="scope" value="session"/>
+  <parameter name="sendMultiRefs" value="true"/>
+  <parameter name="sendXsiTypes" value="true"/>
+  <parameter name="sendXMLDeclaration" value="true"/>
+ </service>
+ <service name="ApplicationInstance" provider="java:RPC">
+  <requestFlow>
+   <handler type="soapmonitor"/>
+  </requestFlow>
+  <responseFlow>
+   <handler type="soapmonitor"/>
+  </responseFlow>
+  <parameter name="allowedMethods" value="readApplIns writeApplIns createQueueInstance createHostInstance createApplicationInstance getApplicationName setApplicationName setInputPort setOutputPort setErrorPort setEmail setMemoryOption setJobName setWalltime setNumberOfCPUs getMemoryOption getJobName getWalltime getNumberOfCPUs getApplInsString getQsubPath getQueueType getHostName getInputPortCount getInputDescription getInputLocation getOutputPortCount getOutputDescription getOutputLocation getErrorPortCount getErrorDescription getErrorLocation"/>
+  <parameter name="className" value="WebFlowSoap.ApplInstanceImpl"/>
+  <parameter name="scope" value="Session"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns73:ArrayOf_soapenc_string" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:java.lang.String[]" xmlns:ns73="urn:GatewayWS"/>
+ </service>
+ <service name="Remotefile" provider="java:RPC">
+  <operation name="writeFile">
+   <parameter name="filename" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <parameter name="filemode" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <parameter name="writedata" type="xsd:base64Binary" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </operation>
+  <operation name="readFile" returnQName="return">
+   <parameter name="filename" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <parameter name="filemode" type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </operation>
+  <requestFlow>
+   <handler type="soapmonitor"/>
+  </requestFlow>
+  <responseFlow>
+   <handler type="soapmonitor"/>
+  </responseFlow>
+  <parameter name="allowedMethods" value="writeFile readFile"/>
+  <parameter name="className" value="WebFlowSoap.RFwsImp"/>
+ </service>
+ <service name="DislocDS" provider="java:RPC">
+  <parameter name="allowedMethods" value="importInputData exportInputData readData writeData writeData importOutputData exportOutputData getAllFaults getFault setFault setAllFaults getAllDisplacements setAllDisplacements setObservationStyle getObservationStyle setGridObsvPoints getGridObsvPoints setFreeObsvPoints getFreeObsvPoints setAllDislocInputData"/>
+  <parameter name="scope" value="Session"/>
+  <parameter name="className" value="WebFlowSoap.gemds.dislocds.DislocDataImpl"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns74:FaultData" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:WebFlowSoap.gemds.dislocds.FaultData" xmlns:ns74="urn:GatewayWS"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns75:ArrayOfFaultData" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:WebFlowSoap.gemds.dislocds.FaultData[]" xmlns:ns75="urn:GatewayWS"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns76:DisplacementData" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:WebFlowSoap.gemds.dislocds.DisplacementData" xmlns:ns76="urn:GatewayWS"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns77:ArrayOfDisplacementData" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:WebFlowSoap.gemds.dislocds.DisplacementData[]" xmlns:ns77="urn:GatewayWS"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns78:GridObsvPoints" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:WebFlowSoap.gemds.dislocds.GridObsvPoints" xmlns:ns78="urn:GatewayWS"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns79:FreeObsvPoints" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:WebFlowSoap.gemds.dislocds.FreeObsvPoints" xmlns:ns79="urn:GatewayWS"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns80:ArrayOfFreeObsvPoints" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:WebFlowSoap.gemds.dislocds.FreeObsvPoints[]" xmlns:ns80="urn:GatewayWS"/>
+ </service>
+ <transport name="local">
+  <responseFlow>
+   <handler type="java:org.apache.axis.transport.local.LocalResponder"/>
+  </responseFlow>
+ </transport>
+ <transport name="http">
+  <requestFlow>
+   <handler type="URLMapper"/>
+   <handler type="java:org.apache.axis.handlers.http.HTTPAuthHandler"/>
+  </requestFlow>
+ </transport>
+</deployment>
