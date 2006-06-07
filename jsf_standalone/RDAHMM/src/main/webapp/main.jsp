@@ -6,6 +6,8 @@
     </head>
     <body>
         <f:view>
+            <h:outputText value="#{rdahmmBean.contextUrl}"/>
+            <h:outputText value="#{rdahmmBean.contextBasePath}"/>
             <h:form id="form">
               <h:panelGrid id="grid" columns="2">
                 <h:outputText id="output1" value="Create a new project"/>
