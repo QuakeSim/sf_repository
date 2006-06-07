@@ -11,6 +11,7 @@
             Click the button below to choose either to create a new 
             project or else load and edit an existing project.
             </p>
+
             <h:form id="form">
               <h:panelGrid id="grid" columns="2">
           

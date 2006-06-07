@@ -11,7 +11,7 @@ source ./env.sh
 
 echo ""
 echo "######################################"
-echo "Customizing portal"
+echo "Installing RDAHMM"
 echo "######################################"
 cd $RDAHMM_SA_HOME
 mvn clean install

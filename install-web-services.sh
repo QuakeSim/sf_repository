@@ -9,12 +9,13 @@ echo "######################################"
 echo ""
 source ./env.sh
 
+
 echo ""
 echo "######################################"
-echo "Customizing portal"
+echo "Make the war for deployment in tomcat"
 echo "######################################"
 cd $WEB_SERVICES_HOME
-mvn clean install
-cp -r target/WebServices/ $CATALINA_HOME/webapps/
+mvn clean install -Dpackaging=war
+cp -r $WEB_SERVICES_HOME/target/WebServices/ $CATALINA_HOME/webapps/
 
 

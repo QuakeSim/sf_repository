@@ -13,9 +13,15 @@
 		<managed-bean-scope>session</managed-bean-scope>
                 <managed-property>
                    <property-name>contextUrl</property-name>
-                   <property-value>http://localhost:8080/WebServices/services/ContextManager/</property-value>
-                    <property-name>contextBasePath</property-name>
-                    <property-value>/WebService/WEB-INF/Descriptors/users/</property-value>
+                   <value>http://gf2.ucs.indiana.edu:8080/WebServices/services/ContextManager</value>
+                 </managed-property>
+                 <managed-property>
+                   <property-name>contextBasePath</property-name>
+                   <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users/</value>
+                </managed-property>
+                 <managed-property>
+                   <property-name>codeName</property-name>
+                   <value>RDAHMMusers/</value>
                 </managed-property>
 	</managed-bean>
 	
@@ -26,10 +32,6 @@
 			<from-outcome>create-new-project</from-outcome>
 			<to-view-id>/NewProject.jsp</to-view-id>
 		</navigation-case>
-	</navigation-rule>
-
-	<navigation-rule>
-		<from-view-id>/Main.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>list-old-projects</from-outcome>
 			<to-view-id>/LoadProject.jsp</to-view-id>
