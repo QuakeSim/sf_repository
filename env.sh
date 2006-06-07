@@ -13,7 +13,7 @@ export GRIDSPHERE_HOME=$PORTAL_DEPLOY_DIR/gridsphere-2.1.4
 export PORTAL_WEBAPP_DIR=$CATALINA_HOME/webapps/gridsphere/
 
 # These are maven steps.
-export WEB_SERVICES_HOME=$BUILD_DIR/WebService
+export WEB_SERVICES_HOME=$BUILD_DIR/WebServices
 
 #Standalone JSF (for development).
 export SIMPLEX_SA_HOME=$BUILD_DIR/jsf_standalone/Simplex

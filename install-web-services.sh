@@ -15,6 +15,6 @@ echo "Customizing portal"
 echo "######################################"
 cd $WEB_SERVICES_HOME
 mvn clean install
-cp -r target/WebService $CATALINA_HOME/webapps/
+cp -r target/WebServices/ $CATALINA_HOME/webapps/
 
 
