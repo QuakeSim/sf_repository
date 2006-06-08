@@ -21,7 +21,7 @@
                 </managed-property>
                  <managed-property>
                    <property-name>codeName</property-name>
-                   <value>RDAHMMusers/</value>
+                   <value>RDAHMM</value>
                 </managed-property>
 	</managed-bean>
 	
@@ -43,6 +43,10 @@
 		<from-view-id>/NewProject.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>project-launched</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>

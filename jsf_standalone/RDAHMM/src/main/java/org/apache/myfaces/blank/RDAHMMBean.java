@@ -22,6 +22,40 @@ public class RDAHMMBean {
     private String contextBasePath;
     private String FS="FS";
     private String codeName="RDAHMM";
+    private String projectName="";
+    private int numModelStates;
+    private int randomSeed;
+    private String outputType="";
+
+    public String getProjectName() {
+	return projectName;
+    }
+    public void setProjectName(String projectName){
+	this.projectName=projectName;
+    }
+
+    public int getNumModelStates() {
+	return numModelStates;
+    }
+    public void setNumModelStates(int numModelStates){
+	this.numModelStates=numModelStates;
+    }
+
+    public int getRandomSeed() {
+	return randomSeed;
+    }
+    public void setRandomSeed(int randomSeed){
+	this.randomSeed=randomSeed;
+    }
+    
+
+    public String getOutputType() {
+	return outputType;
+    }
+    public void setOutputType(String outputType){
+	this.outputType=outputType;
+    }
+
 
     public String getCodeName() {
 	return codeName;
@@ -119,6 +153,11 @@ public class RDAHMMBean {
 	userName=Utility.getUserName(defaultName);
 	System.out.println("Username is "+userName);
 	return userName;
+    }
+
+    //This is the command that runs the thing.
+    public String launchProject() {
+	return "project-launched";
     }
 
 }

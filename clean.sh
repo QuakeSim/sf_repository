@@ -46,4 +46,9 @@ rm -rf maven-2.0.4
 rm -rf apache-ant-1.6.5
 
 
+cd $BUILD_DIR
+echo "#################################"
+echo "#  Removing emacs backup files #"
+echo "#################################"
+rm `find . -name "*~"`
 
