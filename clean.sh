@@ -37,9 +37,13 @@ echo "#  Cleaning vendor packages...  #"
 echo "#################################"
 echo ""
 cd $PORTAL_DEPLOY_DIR
-find . -type d -exec rm -fr {} \;
+rm -rf apache-tomcat-5.5.12
+rm -rf gridsphere-2.1.4 
+#find . -type d -exec rm -fr {} \;
 
 cd $THIRD_PARTY_TOOLS
-find . -type d -exec rm -fr {} \;
+rm -rf maven-2.0.4
+rm -rf apache-ant-1.6.5
+
 
 
