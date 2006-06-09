@@ -22,7 +22,7 @@ package org.apache.myfaces.blank;
  */
 public class HelloWorldBacking {
 
-    
+   
     //properties
     private String name;
     
