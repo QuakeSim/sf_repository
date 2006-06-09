@@ -14,6 +14,8 @@ public class RDAHMMBean {
 
     //Internal properties
     boolean isInitialized=false;
+    ContextManagerImp cm=null;
+    String contextName;
 
     //properties
     private String userName;
@@ -26,6 +28,33 @@ public class RDAHMMBean {
     private int numModelStates;
     private int randomSeed;
     private String outputType="";
+    private String inputFile="";
+    
+    //This will just be hard coded for now.
+    private String hostName="danube.ucs.indiana.edu";
+
+
+    //These are our accessor files.
+    public void setHostName(String hostName){
+	this.hostName=hostName;
+    }
+    public String getHostName() {
+	return this.hostName;
+    }
+    public void  setInputFile(String inputFile) {
+	this.inputFile=inputFile;
+    }
+    public String getInputFile() {
+	return this.inputFile;
+    }
+
+    public boolean getIsInitialized() {
+	return isInitialized;
+    }
+    
+    public void setIsInitialized(boolean isInitialized) {
+	this.isInitialized=isInitialized;
+    }
 
     public String getProjectName() {
 	return projectName;
@@ -48,14 +77,12 @@ public class RDAHMMBean {
 	this.randomSeed=randomSeed;
     }
     
-
     public String getOutputType() {
 	return outputType;
     }
     public void setOutputType(String outputType){
 	this.outputType=outputType;
     }
-
 
     public String getCodeName() {
 	return codeName;
@@ -64,7 +91,6 @@ public class RDAHMMBean {
     public void setCodeName(String codeName) {
 	this.codeName=codeName;
     }
-
 
     public String getContextUrl() {
 	System.out.println(this.toString()+":getContextUrl:"+contextUrl);
@@ -105,12 +131,9 @@ public class RDAHMMBean {
 		File.separator+userName+File.separator+codeName;
 	    System.out.println("baseuserpath:"+base_userpath);
 	    
-	    ContextManagerImpService cmws= 
-		new ContextManagerImpServiceLocator();
-	    System.out.println("CMWS initialized:"+cmws.toString());
 
-	    ContextManagerImp cm=
-		cmws.getContextManager(new URL(contextUrl));
+	    cm=(new ContextManagerImpServiceLocator()).
+		getContextManager(new URL(contextUrl));
 	    ((ContextManagerSoapBindingStub) cm).setMaintainSession(true);
 	    System.out.println("Stub initialized");
 
@@ -131,22 +154,42 @@ public class RDAHMMBean {
     /**
      * Method that is backed to a submit button of a form.
      */
-    public String newProject(){
+    public String newProject() throws Exception{
 	if(!isInitialized) {
 	    initWebServices();
 	}
+	return ("new-project-created");
+    }
+    
+    public String setParameterValues() throws Exception {
         //Do real logic
 	System.out.println("Creating new project");
-        return ("create-new-project");
+	
+	//Store the request values persistently
+	contextName=codeName+"/"+projectName;
+	cm.setCurrentProperty(contextName,"projectName",projectName);
+	cm.setCurrentProperty(contextName,"hostName",hostName);
+	cm.setCurrentProperty(contextName,"numModelStates",
+			      numModelStates+"");
+	cm.setCurrentProperty(contextName,"randomSeed",randomSeed+"");
+	return "parameters-set";
     }
 
-    public String loadProject() {
+    public String loadProject() throws Exception {
 	System.out.println("Loading project");
 	if(!isInitialized) {
 	    initWebServices();
 	}
         return ("list-old-projects");
 
+    }
+    
+    public String createInputFile() throws Exception {
+	//The value should be set by JSF from the associated JSP page.
+	//We just need to clean it up and add it to the context
+	
+	cm.setCurrentProperty(contextName,"scriptInput",inputFile);
+	return "input-file-set";
     }
 
     public String getPortalUserName() {
@@ -160,4 +203,12 @@ public class RDAHMMBean {
 	return "project-launched";
     }
 
+    private String trimLine(String line) {
+	String endLine="\015";
+	while(line.lastIndexOf(endLine)>0) {
+	    line=line.substring(line.lastIndexOf(endLine));
+	}
+	
+	return line;
+    }
 }

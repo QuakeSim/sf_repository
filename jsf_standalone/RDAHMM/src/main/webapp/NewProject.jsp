@@ -8,6 +8,7 @@
   <f:view>        
     <h:outputText value="We'll now set up a new project"/>
     <h:form id="form2">
+    <h:outputText value="Submission Host: #{rdahmmBean.hostName}"/>
     <h:outputText value="Input Parameters"/>
     <h:panelGrid columns="3" border="1">
        <h:outputText value="Project Name:"/>
@@ -31,8 +32,8 @@
                      required="true"/>
        <h:message for="outputType" showDetail="true" showSummary="true" errorStyle="color: red"/>
     </h:panelGrid>
-    <h:commandButton id="createProject" value="LaunchProject"
-                     action="#{rdahmmBean.launchProject}"/>
+    <h:commandButton id="createProject" value="Set Input Parameters"
+                     action="#{rdahmmBean.setParameterValues}"/>
     </h:form>
 
     <h:form>

@@ -25,11 +25,11 @@
                 </managed-property>
 	</managed-bean>
 	
-	<!-- navigation rules for helloWorld.jsp -->
+	<!-- navigation rules for Main.jsp -->
 	<navigation-rule>
 		<from-view-id>/Main.jsp</from-view-id>
 		<navigation-case>
-			<from-outcome>create-new-project</from-outcome>
+			<from-outcome>new-project-created</from-outcome>
 			<to-view-id>/NewProject.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
@@ -38,7 +38,7 @@
 		</navigation-case>
 	</navigation-rule>
 	
-	<!-- navigation rules for page2.jsp -->
+	<!-- navigation rules for NewProject.jsp -->
 	<navigation-rule>
 		<from-view-id>/NewProject.jsp</from-view-id>
 		<navigation-case>
@@ -46,10 +46,24 @@
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>project-launched</from-outcome>
+			<from-outcome>parameters-set</from-outcome>
+			<to-view-id>/SetInputFile.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/SetInputFile.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>input-file-set</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+        
+        <!-- LoadProject navigation rules -->
 	<navigation-rule>
 		<from-view-id>/LoadProject.jsp</from-view-id>
 		<navigation-case>
