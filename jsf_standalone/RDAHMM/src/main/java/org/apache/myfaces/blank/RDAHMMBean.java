@@ -29,12 +29,23 @@ public class RDAHMMBean {
     private int randomSeed;
     private String outputType="";
     private String inputFile="";
+
+    private String[] contextList;
     
     //This will just be hard coded for now.
     private String hostName="danube.ucs.indiana.edu";
 
-
-    //These are our accessor files.
+    //--------------------------------------------------
+    // These are accessor methods.
+    //--------------------------------------------------
+    
+    public void setContextList(String[] cl) {
+	System.arraycopy(cl,0,this.contextList,0,cl.length);
+    }
+    public String[] getContextList() {
+	return this.contextList;
+    }
+    
     public void setHostName(String hostName){
 	this.hostName=hostName;
     }
@@ -167,6 +178,7 @@ public class RDAHMMBean {
 	
 	//Store the request values persistently
 	contextName=codeName+"/"+projectName;
+	cm.addContext(contextName);
 	cm.setCurrentProperty(contextName,"projectName",projectName);
 	cm.setCurrentProperty(contextName,"hostName",hostName);
 	cm.setCurrentProperty(contextName,"numModelStates",
@@ -180,6 +192,18 @@ public class RDAHMMBean {
 	if(!isInitialized) {
 	    initWebServices();
 	}
+	contextList=cm.listContext(codeName);
+	if(contextList==null || contextList.length<=0) {
+	    System.out.println(contextList.toString());
+	    System.out.println("No archived projects");
+	}
+	else {
+	    System.out.println("Context has "+contextList.length+" elements");
+	    for(int i=0;i<contextList.length;i++) {
+		System.out.println(contextList[i]);
+	    }
+	}
+	
         return ("list-old-projects");
 
     }
