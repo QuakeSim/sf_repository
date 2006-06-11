@@ -12,7 +12,7 @@
     <url>http://www.myorganization.org</url>
 
     <build>
-        <finalName>Simplex</finalName>
+        <finalName>Simplex-portlet</finalName>
         <plugins>
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>

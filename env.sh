@@ -20,7 +20,8 @@ export SIMPLEX_SA_HOME=$BUILD_DIR/jsf_standalone/Simplex
 export RDAHMM_SA_HOME=$BUILD_DIR/jsf_standalone/RDAHMM
 
 #Portlets
-export SIMPLEX_PORTLET_HOME=$BUILD_DIR/portlets/Simplex
+export SIMPLEX_PORTLET_HOME=$BUILD_DIR/portlets/Simplex-portlet
+export RDAHMM_PORTLET_HOME=$BUILD_DIR/portlets/RDAHMM-portlet
 
 
 export PATH=$ANT_HOME/bin:$MAVEN_HOME/bin:$PATH

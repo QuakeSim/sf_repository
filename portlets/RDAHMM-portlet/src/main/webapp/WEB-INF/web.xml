@@ -163,10 +163,24 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <!-- Portlet Servlet -->
+    <servlet>
+        <servlet-name>PortletServlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet</servlet-class>
+    </servlet>
+
+
+
     <!-- Faces Servlet Mapping -->
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.jsf</url-pattern>
+    </servlet-mapping>
+
+    <!-- Portlet Servlet Mapping -->
+    <servlet-mapping>
+        <servlet-name>PortletServlet</servlet-name>
+        <url-pattern>/jsr/RDAHMM-portlet</url-pattern>
     </servlet-mapping>
 
     <!-- Welcome files -->

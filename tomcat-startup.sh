@@ -9,9 +9,10 @@ echo ""
 
 source ./env.sh
 
-# SHUTDOWN TOMCAT
+# SHUTDOWN TOMCAT before starting
 echo "####################################"
 echo "#  Starting up Portal Tomcat...  #"
 echo "####################################"
-
+$CATALINA_HOME/bin/shutdown.sh
+sleep 3
 $CATALINA_HOME/bin/startup.sh

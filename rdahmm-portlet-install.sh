@@ -11,10 +11,13 @@ source ./env.sh
 
 echo ""
 echo "######################################"
-echo "Customizing portal"
+echo "Installing RDAHMM"
 echo "######################################"
-cd $BUILD_DIR
-cp -r tomcat-configure/conf/* $CATALINA_HOME/conf
-cp -r lnf4portal/CustomPortal $PORTAL_WEBAPP_DIR/WEB-INF
-cp -r lnf4portal/images/* $PORTAL_WEBAPP_DIR/images
+cd $RDAHMM_SA_HOME
+mvn clean install
+cp -r target/RDAHMM $CATALINA_HOME/webapps
+touch $PORTAL_WEBAPP_DIR/WEB-INF/CustomPortal/portlets/RDAHMM-portlet
+
+
+
 
