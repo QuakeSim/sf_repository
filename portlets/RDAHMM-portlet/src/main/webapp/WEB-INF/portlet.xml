@@ -4,58 +4,29 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:portlet="http://java.sun.com/xml/ns/portlet"
 xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0">
     <portlet>
-        <portlet-name>IFramePortlet</portlet-name>
-        <portlet-class>xportlets.iframe.IFrameAction</portlet-class>
-        <init-param>
-            <name>org.apache.velocity.properties</name>
-            <value>/velocity.properties</value>
-        </init-param>
-        <init-param>
-            <name>default-view</name>
-            <value>xportlets-iframe.vm</value>
-        </init-param>
+        <portlet-name>RDAHMM-portlet</portlet-name>
+        <portlet-class>
+           org.apache.portals.bridges.jsf.FacesPortlet
+        </portlet-class>
         <expiration-cache>0</expiration-cache>
+        <init-param>
+            <name>ViewPage</name>
+            <value>/Main.jsp</value>
+        </init-param>
         <supports>
             <mime-type>text/html</mime-type>
             <portlet-mode>VIEW</portlet-mode>
             <portlet-mode>EDIT</portlet-mode>
             <portlet-mode>HELP</portlet-mode>
         </supports>
-        <portlet-preferences>
-            <preference>
-                <name>src</name>
-                <value>http://www.bbc.com/</value>
-            </preference>
-            <preference>
-                <name>name</name>
-                <value>CNN</value>
-            </preference>
-            <preference>
-                <name>width</name>
-                <value>900</value>
-            </preference>
-            <preference>
-                <name>height</name>
-                <value>400</value>
-            </preference>
-            <preference>
-                <name>scrolling</name>
-                <value>Yes</value>
-            </preference>
-            <preference>
-                <name>frameborder</name>
-                <value>0</value>
-            </preference>
-        </portlet-preferences>
         <portlet-info>
-            <title>IFrame Portlet</title>
-            <keywords>iframe, 4Ever, velocity</keywords>
+            <title>RDAHMMPortlet</title>
+            <keywords>RDAHMM</keywords>
         </portlet-info>        
-        <resource-bundle>TheResources</resource-bundle>
     </portlet>
 
     <user-attribute>
-		<description>User Name</description>
-		<name>user.name</name>
-	</user-attribute>
+        <description>User Name</description>
+	<name>user.name</name>
+    </user-attribute>
 </portlet-app> 

@@ -72,24 +72,12 @@
 
         <!-- This is the apache repository for bridges -->
         <repository>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
             <id>apache-maven</id>
             <url>http://cvs.apache.org/repository</url>
         </repository>
 
         <!-- This is our local repository -->
         <repository>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
             <id>crisisgrid-maven-repo</id>
             <url>http://www.crisisgrid.org/maven2</url>
         </repository>
@@ -142,18 +130,13 @@
         <dependency>
             <groupId>javax.portlet</groupId>
             <artifactId>portlet-api</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>ogce-misc</groupId>
-            <artifactId>gridsphere-ui-tags</artifactId>
-            <version>2.1.4</version>
+            <version>1.0</version>
         </dependency>
 
         <dependency>
             <groupId>ogce-misc</groupId>
             <artifactId>gridsphere-ui-tags</artifactId>
-            <version>2.1.4</version>
+            <version>2.1</version>
         </dependency>
 
         <dependency>
