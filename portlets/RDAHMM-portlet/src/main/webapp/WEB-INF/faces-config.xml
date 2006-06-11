@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE faces-config PUBLIC
+  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+  "http://java.sun.com/dtd/web-facesconfig_1_1.dtd" >
+
+<faces-config>
+	
+	<!-- managed beans of the simple hello world app -->
+	<managed-bean>
+		<managed-bean-name>rdahmmBean</managed-bean-name>
+		<managed-bean-class>org.apache.myfaces.blank.RDAHMMBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+                <managed-property>
+                   <property-name>contextUrl</property-name>
+                   <value>http://gf2.ucs.indiana.edu:8080/WebServices/services/ContextManager</value>
+                 </managed-property>
+                 <managed-property>
+                   <property-name>contextBasePath</property-name>
+                   <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users/</value>
+                </managed-property>
+                 <managed-property>
+                   <property-name>codeName</property-name>
+                   <value>RDAHMM</value>
+                </managed-property>
+	</managed-bean>
+	
+	<!-- navigation rules for Main.jsp -->
+	<navigation-rule>
+		<from-view-id>/Main.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>new-project-created</from-outcome>
+			<to-view-id>/NewProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>list-old-projects</from-outcome>
+			<to-view-id>/LoadProject.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<!-- navigation rules for NewProject.jsp -->
+	<navigation-rule>
+		<from-view-id>/NewProject.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>parameters-set</from-outcome>
+			<to-view-id>/SetInputFile.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/SetInputFile.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>input-file-set</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+        
+        <!-- LoadProject navigation rules -->
+	<navigation-rule>
+		<from-view-id>/LoadProject.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/page2.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+</faces-config>
