@@ -16,11 +16,14 @@ source ./customize-portal.sh
 cd $BUILD_DIR
 source ./install-web-services.sh
 
-cd $BUILD_DIR
-source ./simplex-sa-install.sh
+#cd $BUILD_DIR
+#source ./simplex-sa-install.sh
 
 cd $BUILD_DIR
 source ./rdahmm-sa-install.sh
+
+cd $BUILD_DIR
+source ./rdahmm-portlet-install.sh
 
 
 #cd $BUILD_DIR

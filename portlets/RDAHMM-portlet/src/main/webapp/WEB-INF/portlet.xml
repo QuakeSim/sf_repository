@@ -10,7 +10,7 @@ xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0"
         </portlet-class>
         <expiration-cache>0</expiration-cache>
         <init-param>
-            <name>ViewPage</name>
+            <name>default-view</name>
             <value>/Main.jsp</value>
         </init-param>
         <supports>
