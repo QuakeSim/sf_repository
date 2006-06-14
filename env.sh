@@ -9,8 +9,8 @@ export MAVEN_HOME=$THIRD_PARTY_TOOLS/maven-2.0.4
 
 export PORTAL_DEPLOY_DIR=$BUILD_DIR/portal_deploy
 export CATALINA_HOME=$PORTAL_DEPLOY_DIR/apache-tomcat-5.5.12
-#export GRIDSPHERE_HOME=$PORTAL_DEPLOY_DIR/gridsphere-2.1.4
-export GRIDSPHERE_HOME=$PORTAL_DEPLOY_DIR/gridsphere-2.1
+export GRIDSPHERE_HOME=$PORTAL_DEPLOY_DIR/gridsphere-2.1.4
+#export GRIDSPHERE_HOME=$PORTAL_DEPLOY_DIR/gridsphere-2.1
 export PORTAL_WEBAPP_DIR=$CATALINA_HOME/webapps/gridsphere/
 
 # These are maven steps.
