@@ -17,6 +17,20 @@ public class RDAHMMBean {
     ContextManagerImp cm=null;
     String contextName;
 
+    //These are SOPAC properties
+    private String siteCode="sio5";
+    private String beginDate="2006-01-01";
+    private String endDate="2006-01-10";
+    private boolean bboxChecked=false;
+    private double minLatitude;
+    private double maxLatitude;
+    private double minLongitude;
+    private double maxLongitude;
+    private double procCoords;
+    private double contextGroup;
+    private double contextId;
+
+
     //properties
     private String userName;
     private String defaultName="defaultUser";
@@ -38,6 +52,65 @@ public class RDAHMMBean {
     //--------------------------------------------------
     // These are accessor methods.
     //--------------------------------------------------
+    
+    public String getSiteCode() {
+	return siteCode;
+    }
+    public void setSiteCode(String siteCode) {
+	this.siteCode=siteCode;
+    }
+    
+    public String getBeginDate() {
+	return beginDate;
+    }
+    public void setBeginDate(String beginDate) {
+	this.beginDate=beginDate;
+    }
+    public String getEndDate() {
+	return endDate;
+    }
+    public void setendDate(String endDate) {
+	this.endDate=endDate;
+    }
+    
+    public boolean getBboxChecked() {
+	return bboxChecked;
+    }
+    public void setBboxChecked(boolean bboxChecked) {
+	this.bboxChecked=bboxChecked;
+    }
+    
+    public double getMinLatitude() {
+	return minLatitude;
+    }
+    
+    public void setMinLatitude(double minLatitude) {
+	this.minLatitude=minLatitude;
+    }
+
+    public double getMaxLatitude() {
+	return maxLatitude;
+    }
+    
+    public void setMaxLatitude(double maxLatitude) {
+	this.maxLatitude=maxLatitude;
+    }
+    
+    public double getMinLongitude() {
+	return minLongitude;
+    }
+    
+    public void setMinLongitude(double minLongitude) {
+	this.minLatitude=minLatitude;
+    }
+    
+    public void setMaxLongitude(double maxLongitude) {
+	this.maxLongitude=maxLongitude;
+    }
+    public double getMaxLongitude() {
+	return maxLongitude;
+    }
+    
     
     public void setContextList(String[] cl) {
 	System.arraycopy(cl,0,this.contextList,0,cl.length);

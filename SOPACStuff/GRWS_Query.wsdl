@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://geoapp.ucsd.edu:8080/axis/services/GRWS_Query" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://geoapp.ucsd.edu:8080/axis/services/GRWS_Query" xmlns:intf="http://geoapp.ucsd.edu:8080/axis/services/GRWS_Query" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.2.1
+Built on Jun 07, 2005 (10:11:43 EDT)-->
+
+   <wsdl:message name="getResourceAsAttachmentRequest">
+
+      <wsdl:part name="ticketId" type="xsd:int"/>
+
+      <wsdl:part name="contextId" type="xsd:int"/>
+
+      <wsdl:part name="email" type="xsd:string"/>
+
+      <wsdl:part name="queryInstance" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="authRequestResponse">
+
+      <wsdl:part name="authRequestReturn" type="xsd:int"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getResourceURLResponse">
+
+      <wsdl:part name="getResourceURLReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getResourceAsAttachmentResponse">
+
+      <wsdl:part name="getResourceAsAttachmentReturn" type="DataHandler"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getResourceInPayloadResponse">
+
+      <wsdl:part name="getResourceInPayloadReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getResourceInPayloadRequest">
+
+      <wsdl:part name="ticketId" type="xsd:int"/>
+
+      <wsdl:part name="contextId" type="xsd:int"/>
+
+      <wsdl:part name="email" type="xsd:string"/>
+
+      <wsdl:part name="queryInstance" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getResourceURLRequest">
+
+      <wsdl:part name="ticketId" type="xsd:int"/>
+
+      <wsdl:part name="contextId" type="xsd:int"/>
+
+      <wsdl:part name="email" type="xsd:string"/>
+
+      <wsdl:part name="queryInstance" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="authRequestRequest">
+
+      <wsdl:part name="contextId" type="xsd:int"/>
+
+      <wsdl:part name="email" type="xsd:string"/>
+
+      <wsdl:part name="transactionType" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="GRWS_Query">
+
+      <wsdl:operation name="authRequest" parameterOrder="contextId email transactionType">
+
+         <wsdl:input message="impl:authRequestRequest" name="authRequestRequest"/>
+
+         <wsdl:output message="impl:authRequestResponse" name="authRequestResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getResourceInPayload" parameterOrder="ticketId contextId email queryInstance">
+
+         <wsdl:input message="impl:getResourceInPayloadRequest" name="getResourceInPayloadRequest"/>
+
+         <wsdl:output message="impl:getResourceInPayloadResponse" name="getResourceInPayloadResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getResourceAsAttachment" parameterOrder="ticketId contextId email queryInstance">
+
+         <wsdl:input message="impl:getResourceAsAttachmentRequest" name="getResourceAsAttachmentRequest"/>
+
+         <wsdl:output message="impl:getResourceAsAttachmentResponse" name="getResourceAsAttachmentResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getResourceURL" parameterOrder="ticketId contextId email queryInstance">
+
+         <wsdl:input message="impl:getResourceURLRequest" name="getResourceURLRequest"/>
+
+         <wsdl:output message="impl:getResourceURLResponse" name="getResourceURLResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="GRWS_QuerySoapBinding" type="impl:GRWS_Query">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="authRequest">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="authRequestRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.grws.reason.sopac.ucsd.edu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="authRequestResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://geoapp.ucsd.edu:8080/axis/services/GRWS_Query" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getResourceInPayload">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getResourceInPayloadRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.grws.reason.sopac.ucsd.edu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getResourceInPayloadResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://geoapp.ucsd.edu:8080/axis/services/GRWS_Query" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getResourceAsAttachment">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getResourceAsAttachmentRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.grws.reason.sopac.ucsd.edu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getResourceAsAttachmentResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://geoapp.ucsd.edu:8080/axis/services/GRWS_Query" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getResourceURL">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getResourceURLRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.grws.reason.sopac.ucsd.edu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getResourceURLResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://geoapp.ucsd.edu:8080/axis/services/GRWS_Query" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="GRWS_QueryService">
+
+      <wsdl:port binding="impl:GRWS_QuerySoapBinding" name="GRWS_Query">
+
+         <wsdlsoap:address location="http://geoapp.ucsd.edu:8080/axis/services/GRWS_Query"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>
