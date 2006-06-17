@@ -36,6 +36,10 @@
 			<from-outcome>list-old-projects</from-outcome>
 			<to-view-id>/LoadProject.jsp</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>load-database-page</from-outcome>
+			<to-view-id>/DBQuery.jsp</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 	
 	<!-- navigation rules for NewProject.jsp -->
@@ -75,6 +79,19 @@
 		<from-view-id>/page2.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+        
+        <!-- DB query rules -->
+	<navigation-rule>
+		<from-view-id>/DBQuery.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>back-to-main</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>

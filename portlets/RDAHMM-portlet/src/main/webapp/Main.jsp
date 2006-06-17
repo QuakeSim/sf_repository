@@ -21,7 +21,12 @@
 
                 <h:commandButton id="button2" value="Load Project" 
 	                      action="#{rdahmmBean.loadProject}"/>
-                <h:outputText id="output2" value="Load existing project"/>
+                <h:outputText id="output2" value="Load old project"/>
+
+                <h:commandButton id="button3" value="Query Database" 
+	                      action="load-database-page"/>
+                <h:outputText id="output3" 
+                              value="Look at database query page"/>
               </h:panelGrid>
             </h:form>
         </f:view>

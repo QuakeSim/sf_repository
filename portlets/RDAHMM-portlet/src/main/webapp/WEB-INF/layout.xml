@@ -1,0 +1,21 @@
+<portlet-tabbed-pane>
+    <portlet-tab label="RDAHMM-Portlet">
+        <title lang="en">RDAHMM-Portlet</title>
+        <portlet-tabbed-pane style="sub-menu">
+            <portlet-tab label="RDAHMM-portlet">
+                <title lang="en">RDAHMM Portlet</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="proxyPF">
+                                <portlet-class>RDAHMM-portlet#RDAHMM-portlet </portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+        </portlet-tabbed-pane>
+    </portlet-tab>
+</portlet-tabbed-pane>
+
+
