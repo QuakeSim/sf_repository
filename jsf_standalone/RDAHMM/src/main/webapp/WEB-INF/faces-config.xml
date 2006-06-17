@@ -82,4 +82,17 @@
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+        
+        <!-- DB query rules -->
+	<navigation-rule>
+		<from-view-id>/DBQuery.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>back-to-main</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
 </faces-config>

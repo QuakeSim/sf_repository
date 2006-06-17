@@ -1,7 +1,10 @@
 package org.apache.myfaces.blank;
 
-//Web Service clients
+//QuakeSim Web Service clients
 import WebFlowClient.cm.*;
+
+//SOPAC Client Stuff
+import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
 
 //Usual java stuff.
 import java.net.URL;
@@ -22,13 +25,13 @@ public class RDAHMMBean {
     private String beginDate="2006-01-01";
     private String endDate="2006-01-10";
     private boolean bboxChecked=false;
-    private double minLatitude;
-    private double maxLatitude;
-    private double minLongitude;
-    private double maxLongitude;
-    private double procCoords;
-    private double contextGroup;
-    private double contextId;
+    private double minLatitude=32.0;
+    private double maxLatitude=33.4;
+    private double minLongitude=-120.0;
+    private double maxLongitude=-117.0;
+    private String resource;
+    private String contextGroup;
+    private String contextId="4";
 
 
     //properties
@@ -52,7 +55,29 @@ public class RDAHMMBean {
     //--------------------------------------------------
     // These are accessor methods.
     //--------------------------------------------------
-    
+
+    public String getContextGroup() {
+	return contextGroup;
+    }
+    public void setContextGroup(String contextGroup) {
+	this.contextGroup=contextGroup;
+    }
+
+    public String getContextId() {
+	return contextId;
+    }
+
+    public void setContextId(String contextId) {
+	this.contextId=contextId;
+    }
+
+    public String getResource() {
+	return resource;
+    }
+    public void setResource(String resource) {
+	this.resource=resource;
+    }
+
     public String getSiteCode() {
 	return siteCode;
     }
@@ -69,7 +94,7 @@ public class RDAHMMBean {
     public String getEndDate() {
 	return endDate;
     }
-    public void setendDate(String endDate) {
+    public void setEndDate(String endDate) {
 	this.endDate=endDate;
     }
     
@@ -110,7 +135,6 @@ public class RDAHMMBean {
     public double getMaxLongitude() {
 	return maxLongitude;
     }
-    
     
     public void setContextList(String[] cl) {
 	System.arraycopy(cl,0,this.contextList,0,cl.length);
@@ -308,4 +332,38 @@ public class RDAHMMBean {
 	
 	return line;
     }
+
+    public String querySOPAC() {
+
+	String minMaxLatLon=null;
+	
+	System.out.println("Do the query");
+	System.out.println("Use bounding box:"+bboxChecked);
+	System.out.println(siteCode);
+	System.out.println(beginDate);
+	System.out.println(endDate);
+	System.out.println(resource);	
+	System.out.println(contextGroup);	
+	System.out.println(contextId);	
+	System.out.println(minMaxLatLon);	
+
+
+	if(bboxChecked) {
+	    minMaxLatLon=minLatitude+" "+minLongitude+
+		" "+maxLatitude+" "+maxLongitude;
+	}
+	
+	GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
+	gsq.setFromServlet(siteCode, beginDate, endDate, resource,
+			   contextGroup, contextId, minMaxLatLon);
+	String returnedResource = null;
+	returnedResource = gsq.getResource();
+	if (returnedResource!=null 
+	    && !returnedResource.startsWith("ERROR")) {
+	    System.out.println(returnedResource);
+	}
+	
+	return "back-to-main";
+    }
+    
 }
