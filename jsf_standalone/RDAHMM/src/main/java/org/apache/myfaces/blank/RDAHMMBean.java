@@ -47,9 +47,11 @@ public class RDAHMMBean {
     private int randomSeed;
     private String outputType="";
     private String inputFile="";
+    private String chosenProject="";
 
     private String[] contextList;
     private Hashtable contextListHash;
+    //private SelectItem[] projectItems;
     
     //This will just be hard coded for now.
     private String hostName="danube.ucs.indiana.edu";
@@ -57,6 +59,21 @@ public class RDAHMMBean {
     //--------------------------------------------------
     // These are accessor methods.
     //--------------------------------------------------
+
+//     public SelectItem[] getProjectItems(){
+// 	return projectItems;
+//     }
+    
+//     public void setProjectItems(SelectItems[] pItems){
+// 	System.arraycopy(pItems,0,this.projectItems,0,pItems.length);
+//     }
+
+    public String getChosenProject() {
+	return chosenProject;
+    }
+    public void setChosenProject(String chosenProject) {
+	this.chosenProject=chosenProject;
+    }
 
     public Hashtable getContextListHash() {
 	return contextListHash;
@@ -291,6 +308,7 @@ public class RDAHMMBean {
 	cm.setCurrentProperty(contextName,"numModelStates",
 			      numModelStates+"");
 	cm.setCurrentProperty(contextName,"randomSeed",randomSeed+"");
+	cm.setCurrentProperty(contextName,"outputType",outputType);
 	return "parameters-set";
     }
     
@@ -318,7 +336,7 @@ public class RDAHMMBean {
 	//The value should be set by JSF from the associated JSP page.
 	//We just need to clean it up and add it to the context
 	
-	cm.setCurrentProperty(contextName,"scriptInput",inputFile);
+	cm.setCurrentProperty(contextName,"inputFile",inputFile);
 	return "input-file-set";
     }
 
@@ -377,17 +395,31 @@ public class RDAHMMBean {
 
     private void convertContextList() throws Exception {
 	Hashtable returnHash=new Hashtable();
+	//	projectItems=new SelectItems[contextList.lenght];
 	String creationDate=null;
 	String contextname=null;
 	if(contextList!=null && contextList.length>0) {
 	    for(int i=0;i<contextList.length;i++) {
 		contextName=codeName+"/"+contextList[i];
 		creationDate=cm.getCurrentProperty(contextName,"Date");
-		returnHash.put(contextList[i],creationDate);
+		returnHash.put(contextList[i],contextList[i]);
+		//projectItems[i]=new SelectItem(contextList[i],creationDate);
 	    }
-
 	}
 	setContextListHash(returnHash);
     }
-    
+
+    public String populateProject() throws Exception{
+	System.out.println("Chosen project: "+chosenProject);
+	String contextName=codeName+"/"+chosenProject;
+	projectName=cm.getCurrentProperty(contextName,"projectName");
+	hostName=cm.getCurrentProperty(contextName,"hostName");
+	numModelStates=
+	    Integer.parseInt(cm.getCurrentProperty(contextName,"numModelStates"));
+	randomSeed=
+	    Integer.parseInt(cm.getCurrentProperty(contextName,"randomSeed"));
+	outputType=cm.getCurrentProperty(contextName,"outputType");
+	inputFile=cm.getCurrentProperty(contextName,"inputFile");
+	return "project-populated";
+    }
 }

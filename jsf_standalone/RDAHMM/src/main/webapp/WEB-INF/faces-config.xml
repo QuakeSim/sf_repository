@@ -76,10 +76,10 @@
 		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
-		<from-view-id>/page2.jsp</from-view-id>
+		<from-view-id>/LoadProject.jsp</from-view-id>
 		<navigation-case>
-			<from-outcome>back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
+			<from-outcome>project-populated</from-outcome>
+			<to-view-id>/NewProject.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
         
