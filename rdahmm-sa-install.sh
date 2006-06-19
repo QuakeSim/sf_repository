@@ -14,7 +14,7 @@ echo "######################################"
 echo "Installing RDAHMM"
 echo "######################################"
 cd $RDAHMM_SA_HOME
-mvn clean install
+mvn clean package
 cp -r target/RDAHMM $CATALINA_HOME/webapps
 
 

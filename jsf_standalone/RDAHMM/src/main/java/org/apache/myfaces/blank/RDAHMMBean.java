@@ -9,6 +9,7 @@ import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
 //Usual java stuff.
 import java.net.URL;
 import java.io.File;
+import java.util.Hashtable;
 
 /**
  * 
@@ -48,6 +49,7 @@ public class RDAHMMBean {
     private String inputFile="";
 
     private String[] contextList;
+    private Hashtable contextListHash;
     
     //This will just be hard coded for now.
     private String hostName="danube.ucs.indiana.edu";
@@ -55,6 +57,14 @@ public class RDAHMMBean {
     //--------------------------------------------------
     // These are accessor methods.
     //--------------------------------------------------
+
+    public Hashtable getContextListHash() {
+	return contextListHash;
+    }
+
+    public void setContextListHash(Hashtable contextListHash) {
+	this.contextListHash=contextListHash;
+    }
 
     public String getContextGroup() {
 	return contextGroup;
@@ -283,7 +293,7 @@ public class RDAHMMBean {
 	cm.setCurrentProperty(contextName,"randomSeed",randomSeed+"");
 	return "parameters-set";
     }
-
+    
     public String loadProject() throws Exception {
 	System.out.println("Loading project");
 	if(!isInitialized) {
@@ -295,14 +305,13 @@ public class RDAHMMBean {
 	    System.out.println("No archived projects");
 	}
 	else {
+	    convertContextList();
 	    System.out.println("Context has "+contextList.length+" elements");
 	    for(int i=0;i<contextList.length;i++) {
 		System.out.println(contextList[i]);
 	    }
 	}
-	
         return ("list-old-projects");
-
     }
     
     public String createInputFile() throws Exception {
@@ -364,6 +373,21 @@ public class RDAHMMBean {
 	}
 	
 	return "back-to-main";
+    }
+
+    private void convertContextList() throws Exception {
+	Hashtable returnHash=new Hashtable();
+	String creationDate=null;
+	String contextname=null;
+	if(contextList!=null && contextList.length>0) {
+	    for(int i=0;i<contextList.length;i++) {
+		contextName=codeName+"/"+contextList[i];
+		creationDate=cm.getCurrentProperty(contextName,"Date");
+		returnHash.put(contextList[i],creationDate);
+	    }
+
+	}
+	setContextListHash(returnHash);
     }
     
 }

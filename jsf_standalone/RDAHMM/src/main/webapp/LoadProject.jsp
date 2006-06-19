@@ -8,6 +8,19 @@
   <f:view>        
    <h:outputText value="Here are your old projects"/>
     <h:form id="form2">
+     <h:dataTable value="#{rdahmmBean.contextListHash}"
+                  styleClass="table-background"
+                  rowClasses="table-row-odd, table-row-even"
+                  var="contexts">
+        <f:facet name="header">
+           <h:outputText value="Select and load a project"/>
+        </f:facet>
+        <h:column>
+             <h:selectOneRadio>
+                <f:selectItems value="#{contexts}"/>
+             </h:selectOneRadio>
+        </h:column>
+      </h:dataTable>	
      <h:commandLink id="link1" action="back">
        <h:outputText id="linkText" value="#{rdahmmBean.codeName} Main Menu"/>
      </h:commandLink>

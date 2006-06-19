@@ -14,7 +14,7 @@ echo "######################################"
 echo "Customizing portal"
 echo "######################################"
 cd $SIMPLEX_SA_HOME
-mvn clean install
+mvn clean package
 cp -r target/Simplex $CATALINA_HOME/webapps
 
 
