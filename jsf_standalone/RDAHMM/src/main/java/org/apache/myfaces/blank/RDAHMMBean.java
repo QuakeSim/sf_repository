@@ -2,6 +2,8 @@ package org.apache.myfaces.blank;
 
 //QuakeSim Web Service clients
 import WebFlowClient.cm.*;
+import WebFlowClient.fsws.*;
+import cgl.webclients.*;
 
 //SOPAC Client Stuff
 import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
@@ -9,10 +11,18 @@ import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
 //Usual java stuff.
 import java.net.URL;
 import java.io.File;
+import java.io.LineNumberReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+
 import java.util.Hashtable;
+import java.util.StringTokenizer;
 
 /**
- * 
+ * Everything you need to set up and run RDAHMM.
  */
 public class RDAHMMBean {
 
@@ -35,7 +45,7 @@ public class RDAHMMBean {
     private String contextId="4";
 
 
-    //properties
+    //RDAHMM properties
     private String userName;
     private String defaultName="defaultUser";
     private String contextUrl;
@@ -43,15 +53,21 @@ public class RDAHMMBean {
     private String FS="FS";
     private String codeName="RDAHMM";
     private String projectName="";
-    private int numModelStates;
-    private int randomSeed;
+    private int numModelStates=2;
+    private int randomSeed=-19293;
     private String outputType="";
     private String inputFile="";
     private String chosenProject="";
 
     private String[] contextList;
     private Hashtable contextListHash;
-    //private SelectItem[] projectItems;
+    
+    private String binPath;
+    private String baseWorkDir;
+    private String antUrl;
+
+    private String fileServiceUrl;
+
     
     //This will just be hard coded for now.
     private String hostName="danube.ucs.indiana.edu";
@@ -59,15 +75,31 @@ public class RDAHMMBean {
     //--------------------------------------------------
     // These are accessor methods.
     //--------------------------------------------------
-
-//     public SelectItem[] getProjectItems(){
-// 	return projectItems;
-//     }
-    
-//     public void setProjectItems(SelectItems[] pItems){
-// 	System.arraycopy(pItems,0,this.projectItems,0,pItems.length);
-//     }
-
+    public String getBinPath() {
+	return binPath;
+    }
+    public void setBinPath(String binPath){
+	this.binPath=binPath;
+    }
+    public String getBaseWorkDir() {
+	return baseWorkDir;
+    }
+    public void setBaseWorkDir(String baseWorkDir){
+	this.baseWorkDir=baseWorkDir;
+    }
+    public String getAntUrl() {
+	return antUrl;
+    }
+    public void setAntUrl(String antUrl){
+	this.antUrl=antUrl;
+    }
+    public String getFileServiceUrl(){
+	return fileServiceUrl;
+    }
+    public void setFileServiceUrl(String fileServiceUrl){
+	this.fileServiceUrl=fileServiceUrl;
+    }
+   
     public String getChosenProject() {
 	return chosenProject;
     }
@@ -332,12 +364,29 @@ public class RDAHMMBean {
         return ("list-old-projects");
     }
     
-    public String createInputFile() throws Exception {
+    public String launchRDAHMM() throws Exception {
+	String inputFile=projectName+".input";
+	String cfullName=codeName+"/"+projectName;
+	String contextDir=cm.getCurrentProperty(cfullName,"Directory");
+
+	createInputFile(contextDir,inputFile);
+	String value=executeRDAHMM(contextDir,inputFile,cfullName);
+	return "rdahmm-launched";
+
+    }
+    
+    public String createInputFile(String contextDir,
+				  String inputFile) 
+	throws Exception {
 	//The value should be set by JSF from the associated JSP page.
 	//We just need to clean it up and add it to the context
 	
-	cm.setCurrentProperty(contextName,"inputFile",inputFile);
-	return "input-file-set";
+	//	cm.setCurrentProperty(contextName,"inputFile",inputFile);
+	PrintWriter pw=
+	    new PrintWriter(new FileWriter(contextDir+"/"+inputFile),true);
+	pw.println(inputFile);
+	pw.close();
+	return "input-file-created";
     }
 
     public String getPortalUserName() {
@@ -421,5 +470,126 @@ public class RDAHMMBean {
 	outputType=cm.getCurrentProperty(contextName,"outputType");
 	inputFile=cm.getCurrentProperty(contextName,"inputFile");
 	return "project-populated";
+    }
+
+    public String executeRDAHMM(String contextDir,
+				String inputFile,
+				String cfullName) throws Exception{
+	String workDir=baseWorkDir+File.separator
+	    +userName+File.separator+projectName;
+
+	int ndim=getFileDimension(contextDir,inputFile);
+	int nobsv=getLineCount(contextDir,inputFile);
+	
+	//--------------------------------------------------
+	// Set up the file service and move the file.
+	//--------------------------------------------------
+	FSClientStub fsclient=new FSClientStub();
+	fsclient.setBindingUrl(fileServiceUrl);    	
+
+	String destfile=workDir+"/"+inputFile; 
+	fsclient.uploadFile(contextDir+"/"+inputFile,destfile);
+	
+	//--------------------------------------------------
+	// Record the names of the input, output, and log
+	// files on the remote server.
+	//--------------------------------------------------
+	String remoteOutputFile=workDir+"/"+projectName+".output";
+	String remoteLogFile=workDir+"/"+projectName+".stdout";
+	
+	cm.setCurrentProperty(cfullName,"RemoteInputFile",destfile);
+	cm.setCurrentProperty(cfullName,"RemoteOutputFile",remoteOutputFile);
+	cm.setCurrentProperty(cfullName,"RemoteLogFile",remoteLogFile);
+	
+	//--------------------------------------------------
+	// Set up the Ant Service.
+	//--------------------------------------------------
+	AntVisco ant=new AntViscoServiceLocator().getAntVisco(new URL(antUrl));
+	
+	//These need to come from AWS
+	String bf_loc=binPath+"/"+"build.xml";
+	
+	String[] args=new String[12];
+        args[0]="-DworkDir.prop="+workDir;
+        args[1]="-DprojectName.prop="+projectName;
+        args[2]="-Dbindir.prop="+binPath;
+        args[3]="-DRDAHMMBaseName.prop="+projectName;
+        args[4]="-Dnobsv.prop="+nobsv;
+        args[5]="-Dndim.prop="+ndim;
+        args[6]="-Dnstates.prop="+numModelStates;
+        args[7]="-Dranseed.prop="+randomSeed;
+        args[8]="-Doutput_type.prop="+outputType;
+        args[9]="-buildfile";
+        args[10]=bf_loc;
+        args[11]="RunRDAHMM";
+	
+        ant.setArgs(args);
+        ant.execute();
+	
+	return "rdahmm-executing";
+
+    }
+
+    //--------------------------------------------------
+    // Find the first non-blank line and count columns.
+    // Note this can screw up if input file is not
+    // formated correctly, but then RDAHMM itself 
+    // would probably not work either.
+    //--------------------------------------------------
+    
+    private int getFileDimension(String contextDir, 
+				 String inputFile) {
+	
+	boolean success=false;
+	int ndim=0;
+	StringTokenizer st;
+	try {
+
+	    BufferedReader buf=
+		new BufferedReader(new FileReader(contextDir+"/"+inputFile));
+	    
+	    String line=buf.readLine();	
+	    if(line!=null){
+		while(!success) {
+		    if(line.trim().equals("")) {
+			line=buf.readLine();
+		    }
+		    else {
+			success=true;
+			st=new StringTokenizer(line);
+			ndim=st.countTokens();
+		    }		   
+		}
+	    }
+	    buf.close();
+	}
+	catch(Exception ex) {
+	    ex.printStackTrace();
+	}
+	return ndim;
+    }
+
+    //--------------------------------------------------
+    // This counts the line number.
+    //--------------------------`------------------------
+    private int getLineCount(String contextDir, String inputFile) {
+	int nobsv=0;
+	try {
+	    LineNumberReader lnr=
+		new LineNumberReader(new FileReader(contextDir+"/"+inputFile));
+	    
+	    String line2=lnr.readLine();
+	    while(line2!=null) {
+		line2=lnr.readLine();
+	    }
+	    lnr.close();
+	    nobsv=lnr.getLineNumber();
+	}
+	catch(Exception ex) {
+	    ex.printStackTrace();
+	}
+	
+	return nobsv;
+
     }
 }

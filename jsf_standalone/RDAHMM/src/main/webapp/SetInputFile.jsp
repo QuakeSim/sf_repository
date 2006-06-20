@@ -15,7 +15,7 @@
 	       showDetail="true" showSummary="true" errorStyle="color: red"/>
     <p/>
     <h:commandButton id="createProject" value="Set Input File"
-                     action="#{rdahmmBean.createInputFile}"/>
+                     action="#{rdahmmBean.launchRDAHMM}"/>
     </h:form>
 
     <h:form>

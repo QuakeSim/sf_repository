@@ -11,6 +11,13 @@
 		<managed-bean-name>rdahmmBean</managed-bean-name>
 		<managed-bean-class>org.apache.myfaces.blank.RDAHMMBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
+                <!--Who we are-->
+                <managed-property>
+                   <property-name>codeName</property-name>
+                   <value>RDAHMM</value>
+                </managed-property>
+
+                <!-- Needed for the context service-->
                 <managed-property>
                    <property-name>contextUrl</property-name>
                    <value>http://gf2.ucs.indiana.edu:8080/WebServices/services/ContextManager</value>
@@ -19,10 +26,27 @@
                    <property-name>contextBasePath</property-name>
                    <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users/</value>
                 </managed-property>
-                 <managed-property>
-                   <property-name>codeName</property-name>
-                   <value>RDAHMM</value>
-                </managed-property>
+
+                <!-- Neeeded for the Ant command -->
+                <managed-property>
+                   <property-name>antUrl</property-name>
+                   <value>http://danube.ucs.indiana.edu:8045/WebServices/services/AntVisco</value>
+                 </managed-property>
+                <managed-property>
+                   <property-name>binPath</property-name>
+                   <value>/home/gateway/GEMCodes/rdahmm/bin/</value>
+                 </managed-property>
+                <managed-property>
+                   <property-name>baseWorkDir</property-name>
+                   <value>/home/gateway/RDAHMM_WDIR</value>
+                 </managed-property>
+
+                <!-- Needed for the file service-->
+                <managed-property>
+                   <property-name>fileServiceUrl</property-name>
+                   <value>http://danube.ucs.indiana.edu:8045/WebServices/services/FileService</value>
+                 </managed-property>
+
 	</managed-bean>
 	
 	<!-- navigation rules for Main.jsp -->
@@ -62,7 +86,7 @@
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>input-file-set</from-outcome>
+			<from-outcome>rdahmm-launched</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
