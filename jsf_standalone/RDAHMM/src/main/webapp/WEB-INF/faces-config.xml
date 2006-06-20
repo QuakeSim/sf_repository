@@ -30,7 +30,7 @@
                 <!-- Neeeded for the Ant command -->
                 <managed-property>
                    <property-name>antUrl</property-name>
-                   <value>http://danube.ucs.indiana.edu:8045/WebServices/services/AntVisco</value>
+                   <value>http://danube.ucs.indiana.edu:8045/axis/services/AntVisco</value>
                  </managed-property>
                 <managed-property>
                    <property-name>binPath</property-name>
@@ -44,7 +44,7 @@
                 <!-- Needed for the file service-->
                 <managed-property>
                    <property-name>fileServiceUrl</property-name>
-                   <value>http://danube.ucs.indiana.edu:8045/WebServices/services/FileService</value>
+                   <value>http://danube.ucs.indiana.edu:8045/GCWS/services/FileService</value>
                  </managed-property>
 
 	</managed-bean>
@@ -63,6 +63,14 @@
 		<navigation-case>
 			<from-outcome>load-database-page</from-outcome>
 			<to-view-id>/DBQuery.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>load-data-archive</from-outcome>
+			<to-view-id>/DataArchive.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>plot-rdahmm-data</from-outcome>
+			<to-view-id>/PlotData.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	
@@ -110,6 +118,32 @@
         <!-- DB query rules -->
 	<navigation-rule>
 		<from-view-id>/DBQuery.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>back-to-main</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+        <!-- Data archive rules -->
+	<navigation-rule>
+		<from-view-id>/DataArchive.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>back-to-main</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+        <!-- Plot data rules -->
+	<navigation-rule>
+		<from-view-id>/PlotData.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>

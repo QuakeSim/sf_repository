@@ -8,13 +8,13 @@
   <f:view>        
     <h:outputText value="Now select the input file."/>
     <h:form id="form2">
-    <h:inputTextarea id="projectInput" value="#{rdahmmBean.inputFile}"
+    <h:inputTextarea id="projectInput" value="#{rdahmmBean.inputFileContent}"
                     rows="20" cols="50" 
                     required="true"/>
     <h:message for="projectInput" 
 	       showDetail="true" showSummary="true" errorStyle="color: red"/>
     <p/>
-    <h:commandButton id="createProject" value="Set Input File"
+    <h:commandButton id="createProject" value="Click to Run"
                      action="#{rdahmmBean.launchRDAHMM}"/>
     </h:form>
 

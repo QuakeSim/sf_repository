@@ -29,7 +29,7 @@
 
        <h:outputText value="OutputType:"/>
        <h:selectOneListbox value="#{rdahmmBean.outputType}"size="1">
-    		<f:selectItem itemValue="Gaussian"
+    		<f:selectItem itemValue="gauss"
  			      itemLabel="Gaussian"/>
        </h:selectOneListbox>
        <h:message for="outputType" showDetail="true" showSummary="true" errorStyle="color: red"/>

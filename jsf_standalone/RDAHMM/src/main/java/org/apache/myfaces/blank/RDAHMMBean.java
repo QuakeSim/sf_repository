@@ -24,12 +24,14 @@ import java.util.StringTokenizer;
 /**
  * Everything you need to set up and run RDAHMM.
  */
+
 public class RDAHMMBean {
 
     //Internal properties
     boolean isInitialized=false;
     ContextManagerImp cm=null;
     String contextName;
+    String[] fileExtension={".input",".stdout",".A",".B",".L",".Q",".pi"};
 
     //These are SOPAC properties
     private String siteCode="sio5";
@@ -56,7 +58,8 @@ public class RDAHMMBean {
     private int numModelStates=2;
     private int randomSeed=-19293;
     private String outputType="";
-    private String inputFile="";
+    private String inputFileName="";
+    private String inputFileContent="";
     private String chosenProject="";
 
     private String[] contextList;
@@ -208,11 +211,18 @@ public class RDAHMMBean {
     public String getHostName() {
 	return this.hostName;
     }
-    public void  setInputFile(String inputFile) {
-	this.inputFile=inputFile;
+
+    public void  setInputFileName(String inputFileName) {
+	this.inputFileName=inputFileName;
     }
-    public String getInputFile() {
-	return this.inputFile;
+    public String getInputFileName() {
+	return this.inputFileName;
+    }
+    public void  setInputFileContent(String inputFileContent) {
+	this.inputFileContent=inputFileContent;
+    }
+    public String getInputFileContent() {
+	return this.inputFileName;
     }
 
     public boolean getIsInitialized() {
@@ -365,27 +375,32 @@ public class RDAHMMBean {
     }
     
     public String launchRDAHMM() throws Exception {
-	String inputFile=projectName+".input";
+	String inputFileName=projectName+".input";
 	String cfullName=codeName+"/"+projectName;
 	String contextDir=cm.getCurrentProperty(cfullName,"Directory");
 
-	createInputFile(contextDir,inputFile);
-	String value=executeRDAHMM(contextDir,inputFile,cfullName);
+	createInputFile(contextDir,inputFileName,inputFileContent);
+	String value=executeRDAHMM(contextDir,inputFileName,cfullName);
 	return "rdahmm-launched";
 
     }
     
     public String createInputFile(String contextDir,
-				  String inputFile) 
+				  String inputFileName,
+				  String inputFileContent) 
 	throws Exception {
 	//The value should be set by JSF from the associated JSP page.
 	//We just need to clean it up and add it to the context
 	
-	//	cm.setCurrentProperty(contextName,"inputFile",inputFile);
+	//	cm.setCurrentProperty(contextName,"inputFileName",inputFileName);
+	System.out.println("Writing input file: "+contextDir+"/"+inputFileName);
 	PrintWriter pw=
-	    new PrintWriter(new FileWriter(contextDir+"/"+inputFile),true);
-	pw.println(inputFile);
+	    new PrintWriter(new FileWriter(contextDir+"/"+inputFileName),true);
+	pw.println(inputFileContent);
 	pw.close();
+
+	//Clean this up since it could be a memory drain.
+	inputFileContent=null;
 	return "input-file-created";
     }
 
@@ -444,7 +459,6 @@ public class RDAHMMBean {
 
     private void convertContextList() throws Exception {
 	Hashtable returnHash=new Hashtable();
-	//	projectItems=new SelectItems[contextList.lenght];
 	String creationDate=null;
 	String contextname=null;
 	if(contextList!=null && contextList.length>0) {
@@ -468,27 +482,49 @@ public class RDAHMMBean {
 	randomSeed=
 	    Integer.parseInt(cm.getCurrentProperty(contextName,"randomSeed"));
 	outputType=cm.getCurrentProperty(contextName,"outputType");
-	inputFile=cm.getCurrentProperty(contextName,"inputFile");
+	inputFileName=cm.getCurrentProperty(contextName,"inputFileName");
 	return "project-populated";
     }
 
     public String executeRDAHMM(String contextDir,
-				String inputFile,
-				String cfullName) throws Exception{
+				String inputFileName,
+				String cfullName) 
+	throws Exception{
+	
+	System.out.println("FileService URL:"+fileServiceUrl);
+	System.out.println("AntService URL:"+antUrl);
+	
 	String workDir=baseWorkDir+File.separator
 	    +userName+File.separator+projectName;
 
-	int ndim=getFileDimension(contextDir,inputFile);
-	int nobsv=getLineCount(contextDir,inputFile);
+	int ndim=getFileDimension(contextDir,inputFileName);
+	int nobsv=getLineCount(contextDir,inputFileName);
+	//--------------------------------------------------
+	// Set up the Ant Service and make the directory
+	//--------------------------------------------------
+	AntVisco ant=new AntViscoServiceLocator().getAntVisco(new URL(antUrl));
+	String bf_loc=binPath+"/"+"build.xml";
+	String[] args0=new String[4];
+        args0[0]="-DworkDir.prop="+workDir;
+        args0[1]="-buildfile";
+        args0[2]=bf_loc;
+        args0[3]="MakeWorkDir";
+	
+        ant.setArgs(args0);
+        ant.run();
 	
 	//--------------------------------------------------
 	// Set up the file service and move the file.
 	//--------------------------------------------------
 	FSClientStub fsclient=new FSClientStub();
-	fsclient.setBindingUrl(fileServiceUrl);    	
-
-	String destfile=workDir+"/"+inputFile; 
-	fsclient.uploadFile(contextDir+"/"+inputFile,destfile);
+	String destfile=workDir+"/"+inputFileName; 
+	try {
+	    fsclient.setBindingUrl(fileServiceUrl);    	
+	    fsclient.uploadFile(contextDir+"/"+inputFileName,destfile);
+	}
+	catch(Exception ex) {
+	    ex.printStackTrace();
+	}
 	
 	//--------------------------------------------------
 	// Record the names of the input, output, and log
@@ -504,10 +540,8 @@ public class RDAHMMBean {
 	//--------------------------------------------------
 	// Set up the Ant Service.
 	//--------------------------------------------------
-	AntVisco ant=new AntViscoServiceLocator().getAntVisco(new URL(antUrl));
+	//	AntVisco ant=new AntViscoServiceLocator().getAntVisco(new URL(antUrl));
 	
-	//These need to come from AWS
-	String bf_loc=binPath+"/"+"build.xml";
 	
 	String[] args=new String[12];
         args[0]="-DworkDir.prop="+workDir;
@@ -538,7 +572,7 @@ public class RDAHMMBean {
     //--------------------------------------------------
     
     private int getFileDimension(String contextDir, 
-				 String inputFile) {
+				 String inputFileName) {
 	
 	boolean success=false;
 	int ndim=0;
@@ -546,7 +580,7 @@ public class RDAHMMBean {
 	try {
 
 	    BufferedReader buf=
-		new BufferedReader(new FileReader(contextDir+"/"+inputFile));
+		new BufferedReader(new FileReader(contextDir+"/"+inputFileName));
 	    
 	    String line=buf.readLine();	
 	    if(line!=null){
@@ -572,11 +606,11 @@ public class RDAHMMBean {
     //--------------------------------------------------
     // This counts the line number.
     //--------------------------`------------------------
-    private int getLineCount(String contextDir, String inputFile) {
+    private int getLineCount(String contextDir, String inputFileName) {
 	int nobsv=0;
 	try {
 	    LineNumberReader lnr=
-		new LineNumberReader(new FileReader(contextDir+"/"+inputFile));
+		new LineNumberReader(new FileReader(contextDir+"/"+inputFileName));
 	    
 	    String line2=lnr.readLine();
 	    while(line2!=null) {
@@ -590,6 +624,25 @@ public class RDAHMMBean {
 	}
 	
 	return nobsv;
+
+    }
+
+    class ProjectBean {
+	String projectName;
+	String creationDate;
+	
+	public String getProjectName() {
+	    return projectName;
+	}
+	public void setProjectName(String projectName){
+	    this.projectName=projectName;
+	}
+	public String getCreationDate() {
+	    return creationDate;
+	}
+	public void setCreationDate(String creationDate){
+	    this.creationDate=creationDate;
+	}
 
     }
 }
