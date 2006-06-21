@@ -31,7 +31,7 @@
                               value="<b>Query Database:</b> Look at database query page"/>
 
                 <h:commandButton id="button4" value="Data Archive" 
-	                      action="load-data-archive"/>
+	                      action="#{rdahmmBean.loadDataArchive}"/>
                 <h:outputFormat id="output4" escape="false"   
                               value="<b>Data Archive:</b> Download output files"/>
 

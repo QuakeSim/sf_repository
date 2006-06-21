@@ -19,7 +19,9 @@ import java.io.BufferedReader;
 import java.io.PrintWriter;
 
 import java.util.Hashtable;
+import java.util.Vector;
 import java.util.StringTokenizer;
+import java.util.Date;
 
 /**
  * Everything you need to set up and run RDAHMM.
@@ -64,6 +66,7 @@ public class RDAHMMBean {
 
     private String[] contextList;
     private Hashtable contextListHash;
+    private Vector contextListVector;
     
     private String binPath;
     private String baseWorkDir;
@@ -78,6 +81,12 @@ public class RDAHMMBean {
     //--------------------------------------------------
     // These are accessor methods.
     //--------------------------------------------------
+    public String getUserName() {
+	return userName;
+    }
+    public void setUserName(String userName) {
+	this.userName=userName;
+    }
     public String getBinPath() {
 	return binPath;
     }
@@ -116,6 +125,14 @@ public class RDAHMMBean {
 
     public void setContextListHash(Hashtable contextListHash) {
 	this.contextListHash=contextListHash;
+    }
+
+    public Vector getContextListVector() {
+	return contextListVector;
+    }
+
+    public void setContextListVector(Vector contextListVector) {
+	this.contextListVector=contextListVector;
     }
 
     public String getContextGroup() {
@@ -295,6 +312,8 @@ public class RDAHMMBean {
     public RDAHMMBean(){   
 	System.out.println("RDAHMM Bean Created");
 	userName=getPortalUserName();
+	contextListVector=new Vector();
+	contextListHash=new Hashtable();
     }
 
     public void initWebServices() {
@@ -354,11 +373,7 @@ public class RDAHMMBean {
 	return "parameters-set";
     }
     
-    public String loadProject() throws Exception {
-	System.out.println("Loading project");
-	if(!isInitialized) {
-	    initWebServices();
-	}
+    private void setContextList() throws Exception {
 	contextList=cm.listContext(codeName);
 	if(contextList==null || contextList.length<=0) {
 	    System.out.println(contextList.toString());
@@ -371,6 +386,34 @@ public class RDAHMMBean {
 		System.out.println(contextList[i]);
 	    }
 	}
+    }
+    public String loadDataArchive()throws Exception{
+	System.out.println("Loading project");
+	if(!isInitialized) {
+	    initWebServices();
+	}
+	setContextList();
+        return ("load-data-archive");
+    }
+    
+    public String loadProject() throws Exception {
+	System.out.println("Loading project");
+	if(!isInitialized) {
+	    initWebServices();
+	}
+	setContextList();
+// 	contextList=cm.listContext(codeName);
+// 	if(contextList==null || contextList.length<=0) {
+// 	    System.out.println(contextList.toString());
+// 	    System.out.println("No archived projects");
+// 	}
+// 	else {
+// 	    convertContextList();
+// 	    System.out.println("Context has "+contextList.length+" elements");
+// 	    for(int i=0;i<contextList.length;i++) {
+// 		System.out.println(contextList[i]);
+// 	    }
+// 	}
         return ("list-old-projects");
     }
     
@@ -461,15 +504,28 @@ public class RDAHMMBean {
 	Hashtable returnHash=new Hashtable();
 	String creationDate=null;
 	String contextname=null;
+	ProjectBean projectBean;
 	if(contextList!=null && contextList.length>0) {
 	    for(int i=0;i<contextList.length;i++) {
+		projectBean=new ProjectBean();
+		
 		contextName=codeName+"/"+contextList[i];
 		creationDate=cm.getCurrentProperty(contextName,"Date");
+		projectBean.setProjectName(contextList[i]);
+		projectBean.setCreationDate(convertDate(creationDate));
+		projectBean.setHostName(hostName);
+		projectBean.setBaseWorkDir(baseWorkDir);
+		projectBean.setFileServiceUrl(fileServiceUrl);
+		contextListVector.add(projectBean);
 		returnHash.put(contextList[i],contextList[i]);
-		//projectItems[i]=new SelectItem(contextList[i],creationDate);
 	    }
 	}
 	setContextListHash(returnHash);
+    }
+
+    private String convertDate(String longIntForm){
+	long longDate=Long.parseLong(longIntForm);
+	return (new Date(longDate).toString());
     }
 
     public String populateProject() throws Exception{
@@ -627,22 +683,4 @@ public class RDAHMMBean {
 
     }
 
-    class ProjectBean {
-	String projectName;
-	String creationDate;
-	
-	public String getProjectName() {
-	    return projectName;
-	}
-	public void setProjectName(String projectName){
-	    this.projectName=projectName;
-	}
-	public String getCreationDate() {
-	    return creationDate;
-	}
-	public void setCreationDate(String creationDate){
-	    this.creationDate=creationDate;
-	}
-
-    }
 }

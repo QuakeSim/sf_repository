@@ -139,6 +139,10 @@
 			<from-outcome>back-to-main</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>download-data-file</from-outcome>
+			<to-view-id>/DownloadData.jsp</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 
         <!-- Plot data rules -->
