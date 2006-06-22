@@ -30,7 +30,7 @@
   	    <f:facet name="header">
            	<h:outputText value="Input File"/>
             </f:facet>
-  	    <h:commandLink action="download-data-file" target="_blank">
+  	    <h:outputLink value="#{rdahmmBean.codeName}/DownloadData.jsp" target="_blank">
            	<h:outputText value="#{project.projectName}.input"/>
                 <f:param name="userName" value="#{rdahmmBean.userName}"/>
                 <f:param name="hostName" value="#{project.hostName}"/>
@@ -38,14 +38,14 @@
                 <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
                 <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
                 <f:param name="fileExtension" value=".input"/>
-            </h:commandLink>
+            </h:outputLink>
            </h:column>
 
 	   <h:column>
   	    <f:facet name="header">
            	<h:outputText value="Standard Output"/>
             </f:facet>
-  	    <h:commandLink action="download-data-file" target="_blank">
+  	    <h:outputLink value="#{rdahmmBean.codeName}/DownloadData.jsp" target="_blank">
            <h:outputText value="#{project.projectName}.stdout"/>
                 <f:param name="userName" value="#{rdahmmBean.userName}"/>
                 <f:param name="hostName" value="#{project.hostName}"/>
@@ -53,14 +53,14 @@
                 <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
                 <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
                 <f:param name="fileExtension" value=".stdout"/>
-            </h:commandLink>
+            </h:outputLink>
            </h:column>
 
 	   <h:column>
   	    <f:facet name="header">
            	<h:outputText value="A"/>
             </f:facet>
-  	    <h:commandLink action="download-data-file" target="_blank">
+  	    <h:outputLink value="#{rdahmmBean.codeName}/DownloadData.jsp" target="_blank">
            <h:outputText value="#{project.projectName}.A"/>
                 <f:param name="userName" value="#{rdahmmBean.userName}"/>
                 <f:param name="hostName" value="#{project.hostName}"/>
@@ -68,14 +68,14 @@
                 <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
                 <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
                 <f:param name="fileExtension" value=".A"/>
-            </h:commandLink>
+            </h:outputLink>
            </h:column>
 
 	   <h:column>
   	    <f:facet name="header">
            	<h:outputText value="B"/>
             </f:facet>
-  	    <h:commandLink action="download-data-file" target="_blank">
+  	    <h:outputLink value="#{rdahmmBean.codeName}/DownloadData.jsp" target="_blank">
            <h:outputText value="#{project.projectName}.B"/>
                 <f:param name="userName" value="#{rdahmmBean.userName}"/>
                 <f:param name="hostName" value="#{project.hostName}"/>
@@ -83,14 +83,14 @@
                 <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
                 <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
                 <f:param name="fileExtension" value=".B"/>
-            </h:commandLink>
+            </h:outputLink>
            </h:column>
 
 	   <h:column>
   	    <f:facet name="header">
            	<h:outputText value="L"/>
             </f:facet>
-  	    <h:commandLink action="download-data-file" target="_blank">
+  	    <h:outputLink value="#{rdahmmBean.codeName}/DownloadData.jsp" target="_blank">
            <h:outputText value="#{project.projectName}.L"/>
                 <f:param name="userName" value="#{rdahmmBean.userName}"/>
                 <f:param name="hostName" value="#{project.hostName}"/>
@@ -98,7 +98,7 @@
                 <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
                 <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
                 <f:param name="fileExtension" value=".L"/>
-            </h:commandLink>
+            </h:outputLink>
 
            </h:column>
 
@@ -106,7 +106,7 @@
   	    <f:facet name="header">
            	<h:outputText value="Q"/>
             </f:facet>
-  	    <h:commandLink action="download-data-file" target="_blank">
+  	    <h:outputLink value="#{rdahmmBean.codeName}/DownloadData.jsp" target="_blank">
            <h:outputText value="#{project.projectName}.Q"/>
                 <f:param name="userName" value="#{rdahmmBean.userName}"/>
                 <f:param name="hostName" value="#{project.hostName}"/>
@@ -114,14 +114,14 @@
                 <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
                 <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
                 <f:param name="fileExtension" value=".Q"/>
-            </h:commandLink>
+            </h:outputLink>
            </h:column>
 
 	   <h:column>
   	    <f:facet name="header">
            	<h:outputText value="PI"/>
             </f:facet>
-  	    <h:commandLink action="download-data-file" target="_blank">
+  	    <h:outputLink value="#{rdahmmBean.codeName}/DownloadData.jsp" target="_blank">
            <h:outputText value="#{project.projectName}.pi"/>
                 <f:param name="userName" value="#{rdahmmBean.userName}"/>
                 <f:param name="hostName" value="#{project.hostName}"/>
@@ -129,7 +129,7 @@
                 <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
                 <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
                 <f:param name="fileExtension" value=".pi"/>
-            </h:commandLink>
+            </h:outputLink>
            </h:column>
           </h:dataTable>
         </h:form>       
@@ -141,4 +141,4 @@
 
      </f:view>
     </body>
-</htdml>
+</html>

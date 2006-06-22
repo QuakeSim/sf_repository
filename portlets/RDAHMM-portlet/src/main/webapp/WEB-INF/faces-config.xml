@@ -14,7 +14,7 @@
                 <!--Who we are-->
                 <managed-property>
                    <property-name>codeName</property-name>
-                   <value>RDAHMM</value>
+                   <value>RDAHMM-portlet</value>
                 </managed-property>
 
                 <!-- Needed for the context service-->
@@ -118,6 +118,23 @@
         <!-- DB query rules -->
 	<navigation-rule>
 		<from-view-id>/DBQuery.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>back-to-main</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>display-query-results</from-outcome>
+			<to-view-id>/DisplayQueryResults.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+        <!-- Display query rules -->
+	<navigation-rule>
+		<from-view-id>/DisplayQueryResults.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>

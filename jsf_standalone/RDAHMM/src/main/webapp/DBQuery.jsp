@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <html>
     <head>
-        <title>RDAHMM Main Page</title>
+        <title>GPS Database Query Page</title>
     </head>
     <body>
      <f:view>
@@ -105,8 +105,6 @@
          <h:inputText size="5" value="#{rdahmmBean.contextId}"/>
          <h:outputText value="(4=current REASoN combination coordinates)"/>
          </h:panelGrid>
-
-
 
        </h:panelGrid>
 

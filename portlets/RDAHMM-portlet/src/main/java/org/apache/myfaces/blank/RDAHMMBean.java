@@ -47,6 +47,7 @@ public class RDAHMMBean {
     private String resource;
     private String contextGroup;
     private String contextId="4";
+    private String sopacQueryResults="";
 
 
     //RDAHMM properties
@@ -81,6 +82,13 @@ public class RDAHMMBean {
     //--------------------------------------------------
     // These are accessor methods.
     //--------------------------------------------------
+    public String getSopacQueryResults() {
+	return sopacQueryResults;
+    }
+    public void setSopacQueryResults(String sopacQueryResults) {
+	this.sopacQueryResults=sopacQueryResults;
+    }
+
     public String getUserName() {
 	return userName;
     }
@@ -490,14 +498,16 @@ public class RDAHMMBean {
 	GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
 	gsq.setFromServlet(siteCode, beginDate, endDate, resource,
 			   contextGroup, contextId, minMaxLatLon);
-	String returnedResource = null;
-	returnedResource = gsq.getResource();
-	if (returnedResource!=null 
-	    && !returnedResource.startsWith("ERROR")) {
-	    System.out.println(returnedResource);
-	}
+	sopacQueryResults=gsq.getResource();
+	System.out.println(sopacQueryResults);
 	
-	return "back-to-main";
+//  	if (returnedResource!=null 
+// 	    && !returnedResource.startsWith("ERROR")) {
+// 	    System.out.println(returnedResource);
+	    
+// 	}
+	
+	return "display-query-results";
     }
 
     private void convertContextList() throws Exception {

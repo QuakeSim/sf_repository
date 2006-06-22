@@ -13,7 +13,7 @@
          <include name="**/*.xml"/>
          <include name="**/*.jsp"/>
          <exclude name="pom.xml"/>
-         <exclude name="web.xml"/>
+         <exclude name="**/web.xml"/>
       </fileset>
    </copy>
 </target>
