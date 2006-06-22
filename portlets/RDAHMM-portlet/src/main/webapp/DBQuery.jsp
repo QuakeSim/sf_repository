@@ -75,7 +75,8 @@
          <h:selectOneListbox title="Resource:"
 	                     value="#{rdahmmBean.resource}"
 	                     size="1">
-            <f:selectItem itemValue="procCoords"
+            <f:selectItem  
+                           itemValue="procCoords"
                           itemLabel="Processed Coordinates"/>
          </h:selectOneListbox>
          </h:panelGrid>
@@ -88,9 +89,10 @@
          <h:selectOneListbox title="Context Group"
 			     value="#{rdahmmBean.contextGroup}"
 	                     size="1">
-	     <f:selectItem  itemValue="reasonComb" 
+	     <f:selectItem  
+                            itemValue="reasonComb" 
                             itemLabel="REASoN combination"/>
-	     <f:selectItem  itemValue="sopacGlobk" itemLabel="SOPAC GLOBK"/>
+	     <f:selectItem itemValue="sopacGlobk" itemLabel="SOPAC GLOBK"/>
 	     <f:selectItem itemValue="jplGipsy" itemLabel="JPL GIPSY"/>
 	     <f:selectItem itemValue="usgsGlobk" itemLabel="USGS GLOBK"/>
          </h:selectOneListbox>

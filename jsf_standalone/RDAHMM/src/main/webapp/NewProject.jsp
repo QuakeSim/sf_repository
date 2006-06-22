@@ -28,11 +28,12 @@
 
 
        <h:outputText value="OutputType:"/>
-       <h:selectOneListbox value="#{rdahmmBean.outputType}"size="1">
+       <h:selectOneListbox id="OutputType" 
+		value="#{rdahmmBean.outputType}"size="1">
     		<f:selectItem itemValue="gauss"
  			      itemLabel="Gaussian"/>
        </h:selectOneListbox>
-       <h:message for="outputType" showDetail="true" showSummary="true" errorStyle="color: red"/>
+       <h:message for="OutputType" showDetail="true" showSummary="true" errorStyle="color: red"/>
     </h:panelGrid>
     <h:commandButton id="createProject" value="Set Input Parameters"
                      action="#{rdahmmBean.setParameterValues}"/>

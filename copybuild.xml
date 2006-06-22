@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<project name="RDAHMM" default="copy-all-to-portlet" basedir=".">
+
+<target name="copy-all-to-portlet">
+   <property name="dest.dir" value="./portlets/RDAHMM-portlet/"/>
+   <property name="source.dir" value="./jsf_standalone/RDAHMM"/>
+   <copy toDir="${dest.dir}"
+         overwrite="true">
+      <fileset dir="${source.dir}">
+         <include name="**/*.java"/>
+      </fileset>
+      <fileset dir="${source.dir}">
+         <include name="**/*.xml"/>
+         <include name="**/*.jsp"/>
+         <exclude name="pom.xml"/>
+         <exclude name="web.xml"/>
+      </fileset>
+   </copy>
+</target>
+</project>

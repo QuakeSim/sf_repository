@@ -13,20 +13,32 @@
             </p>
 
             <h:form id="form">
-              <h:panelGrid id="grid" columns="2">
+              <h:panelGrid id="grid" columns="2" border="1">
           
                 <h:commandButton id="button1" value="New Project" 
 	                      action="#{rdahmmBean.newProject}"/>
- 		<h:outputText id="output1" value="Create a new project"/>
+ 		<h:outputFormat id="output1" escape="false"
+                              value="<b>New Project:</b>Create a new project"/>
 
                 <h:commandButton id="button2" value="Load Project" 
 	                      action="#{rdahmmBean.loadProject}"/>
-                <h:outputText id="output2" value="Load old project"/>
+                <h:outputFormat id="output2" escape="false"
+  			       value="<b>Load Project:</b>Load old project"/>
 
-                <h:commandButton id="button3" value="Query Database" 
+                <h:commandButton id="button3" value="Query DB" 
 	                      action="load-database-page"/>
-                <h:outputText id="output3" 
-                              value="Look at database query page"/>
+                <h:outputFormat id="output3" escape="false"
+                              value="<b>Query Database:</b> Look at database query page"/>
+
+                <h:commandButton id="button4" value="Data Archive" 
+	                      action="#{rdahmmBean.loadDataArchive}"/>
+                <h:outputFormat id="output4" escape="false"   
+                              value="<b>Data Archive:</b> Download output files"/>
+
+                <h:commandButton id="button5" value="Plot Data" 
+	                      action="plot-rdahmm-data"/>
+                <h:outputFormat id="output5" escape="false"
+                              value="<b>Plot Output:</b> Plot RDAHMM ouput files"/>
               </h:panelGrid>
             </h:form>
         </f:view>

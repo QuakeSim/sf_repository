@@ -239,7 +239,7 @@ public class RDAHMMBean {
 	this.inputFileContent=inputFileContent;
     }
     public String getInputFileContent() {
-	return this.inputFileName;
+	return this.inputFileContent;
     }
 
     public boolean getIsInitialized() {
@@ -443,7 +443,7 @@ public class RDAHMMBean {
 	pw.close();
 
 	//Clean this up since it could be a memory drain.
-	inputFileContent=null;
+	//	inputFileContent=null;
 	return "input-file-created";
     }
 
@@ -505,12 +505,13 @@ public class RDAHMMBean {
 	String creationDate=null;
 	String contextname=null;
 	ProjectBean projectBean;
+	contextListVector.clear();
 	if(contextList!=null && contextList.length>0) {
 	    for(int i=0;i<contextList.length;i++) {
 		projectBean=new ProjectBean();
 		
 		contextName=codeName+"/"+contextList[i];
-		creationDate=cm.getCurrentProperty(contextName,"Date");
+		creationDate=cm.getCurrentProperty(contextName,"LastTime");
 		projectBean.setProjectName(contextList[i]);
 		projectBean.setCreationDate(convertDate(creationDate));
 		projectBean.setHostName(hostName);
@@ -539,6 +540,8 @@ public class RDAHMMBean {
 	    Integer.parseInt(cm.getCurrentProperty(contextName,"randomSeed"));
 	outputType=cm.getCurrentProperty(contextName,"outputType");
 	inputFileName=cm.getCurrentProperty(contextName,"inputFileName");
+	inputFileContent=setRDAHMMInputFile(projectName);
+	System.out.println("Input File:"+inputFileContent);
 	return "project-populated";
     }
 
@@ -683,4 +686,29 @@ public class RDAHMMBean {
 
     }
 
+    private String setRDAHMMInputFile(String projectName) {
+	String inputFileContent="Null Content; please re-enter";
+	String inputFileName=projectName+".input";
+	try {
+	    String thedir=cm.getCurrentProperty(codeName
+						+"/"+projectName,"Directory");
+	    System.out.println(thedir+"/"+inputFileName);
+	    
+	    BufferedReader buf=
+		new BufferedReader(new FileReader(thedir+"/"+inputFileName));
+	    String line=buf.readLine();
+	    inputFileContent=line+"\n";
+	    while(line!=null) {
+		System.out.println(line);
+		line=trimLine(line);	
+		inputFileContent+=line+"\n";
+		line=buf.readLine();
+	    }
+	    buf.close();
+	}
+	catch (Exception ex) {
+	    ex.printStackTrace();
+	}
+	return inputFileContent;
+    }
 }
