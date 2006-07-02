@@ -85,8 +85,17 @@
 			<from-outcome>parameters-set</from-outcome>
 			<to-view-id>/SetInputFile.jsp</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>parameters-to-textfield</from-outcome>
+			<to-view-id>/SetInputFile.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>parameters-to-database</from-outcome>
+			<to-view-id>/SetInputFileFromDB.jsp</to-view-id>
+		</navigation-case>
 	</navigation-rule>
-
+        
+        <!-- SetInputFile navigation rules -->
 	<navigation-rule>
 		<from-view-id>/SetInputFile.jsp</from-view-id>
 		<navigation-case>
@@ -96,6 +105,19 @@
 		<navigation-case>
 			<from-outcome>rdahmm-launched</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+        <!-- SetInputFileFromDB navigation rules -->
+	<navigation-rule>
+		<from-view-id>/SetInputFileFromDB.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>display-query-results</from-outcome>
+			<to-view-id>/SetInputFile.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
         

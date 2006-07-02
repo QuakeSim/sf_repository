@@ -7,7 +7,7 @@
  <body>
   <f:view>        
     <h:outputText value="We'll now set up a new project"/>
-    <h:form id="form2">
+    <h:form>
     <h:outputText value="Submission Host: #{rdahmmBean.hostName}"/>
     <h:outputText value="Input Parameters"/>
     <h:panelGrid columns="3" border="1">
@@ -28,20 +28,22 @@
 
 
        <h:outputText value="OutputType:"/>
-       <h:selectOneListbox id="OutputType" 
+       <h:selectOneListbox 
 		value="#{rdahmmBean.outputType}"size="1">
     		<f:selectItem itemValue="gauss"
  			      itemLabel="Gaussian"/>
        </h:selectOneListbox>
        <h:message for="OutputType" showDetail="true" showSummary="true" errorStyle="color: red"/>
     </h:panelGrid>
-    <h:commandButton id="createProject" value="Set Input Parameters"
-                     action="#{rdahmmBean.setParameterValues}"/>
+    <h:commandButton value="Cut and Past Input"
+                     action="#{rdahmmBean.paramsThenTextArea}"/>
+    <h:commandButton value="Upload Input from SOPAC"
+                     action="#{rdahmmBean.paramsThenDB}"/>
     </h:form>
 
     <h:form>
-    <h:commandLink id="link1" action="back">
-        <h:outputText id="linkText" value="#{rdahmmBean.codeName} Main Menu"/>
+    <h:commandLink action="back">
+        <h:outputText value="#{rdahmmBean.codeName} Main Menu"/>
     </h:commandLink>
     </h:form>
   </f:view>

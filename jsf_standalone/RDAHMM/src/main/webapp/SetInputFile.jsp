@@ -9,7 +9,7 @@
     <h:outputText value="Now select the input file."/>
     <h:form id="form2">
     <h:inputTextarea id="projectInput" value="#{rdahmmBean.inputFileContent}"
-                    rows="20" cols="50" 
+                    rows="20" cols="75" 
                     required="true"/>
     <h:message for="projectInput" 
 	       showDetail="true" showSummary="true" errorStyle="color: red"/>

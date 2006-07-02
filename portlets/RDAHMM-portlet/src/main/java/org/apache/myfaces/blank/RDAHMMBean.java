@@ -17,6 +17,7 @@ import java.io.FileWriter;
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
+import java.io.StringReader;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -365,6 +366,16 @@ public class RDAHMMBean {
 	return ("new-project-created");
     }
     
+    public String paramsThenTextArea() throws Exception {
+	setParameterValues();
+	return "parameters-to-textfield";
+    }
+
+    public String paramsThenDB() throws Exception {
+	setParameterValues();
+	return "parameters-to-database";
+    }
+
     public String setParameterValues() throws Exception {
         //Do real logic
 	System.out.println("Creating new project");
@@ -475,7 +486,7 @@ public class RDAHMMBean {
 	return line;
     }
 
-    public String querySOPAC() {
+    public String querySOPAC() throws Exception {
 
 	String minMaxLatLon=null;
 	
@@ -500,6 +511,10 @@ public class RDAHMMBean {
 			   contextGroup, contextId, minMaxLatLon);
 	sopacQueryResults=gsq.getResource();
 	System.out.println(sopacQueryResults);
+	sopacQueryResults=filterResults(sopacQueryResults,2,3);
+	
+	inputFileContent=sopacQueryResults;
+	
 	
 //  	if (returnedResource!=null 
 // 	    && !returnedResource.startsWith("ERROR")) {
@@ -508,6 +523,37 @@ public class RDAHMMBean {
 // 	}
 	
 	return "display-query-results";
+    }
+
+    /**
+     * This helper method assumes input is a multlined
+     * String of tabbed columns.  It cuts out the number of
+     * columns on the left specified by cutLeftColumns and 
+     * number on the right by cutRightColumns.
+     */
+    private String filterResults(String tabbedString,
+				 int cutLeftColumns,
+				 int cutRightColumns) throws Exception {
+	String returnString="";
+	String space=" ";
+	StringTokenizer st;
+	BufferedReader br=new BufferedReader(new StringReader(tabbedString));
+	String line=br.readLine();
+	while(line!=null) {
+	    st=new StringTokenizer(line);
+	    String newLine="";
+	    int tokenCount=st.countTokens();
+	    for (int i=0;i<tokenCount;i++) {
+		String temp=st.nextToken();
+		if(i>=cutLeftColumns && i<(tokenCount-cutRightColumns)) {
+		    newLine+=temp+space;
+		}
+	    }
+	    returnString+=newLine+"\n";
+	    line=br.readLine();
+	}
+	System.out.println(returnString);
+	return returnString;
     }
 
     private void convertContextList() throws Exception {
