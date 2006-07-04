@@ -60,10 +60,13 @@ public class RDAHMMBean {
     private String codeName="RDAHMM";
     private String projectName="";
     private int numModelStates=2;
-    private int randomSeed=-19293;
+    private int randomSeed=1;
     private String outputType="";
     private String inputFileName="";
     private String inputFileContent="";
+    private double annealStep=0.01;
+
+    //Project properties
     private String chosenProject="";
 
     private String[] contextList;
@@ -83,6 +86,13 @@ public class RDAHMMBean {
     //--------------------------------------------------
     // These are accessor methods.
     //--------------------------------------------------
+    public double getAnnealStep(){
+	return annealStep;
+    }
+    public void setAnnealStep(double annealStep){
+	this.annealStep=annealStep;
+    }
+
     public String getSopacQueryResults() {
 	return sopacQueryResults;
     }
@@ -388,6 +398,7 @@ public class RDAHMMBean {
 	cm.setCurrentProperty(contextName,"numModelStates",
 			      numModelStates+"");
 	cm.setCurrentProperty(contextName,"randomSeed",randomSeed+"");
+	cm.setCurrentProperty(contextName,"annealStep",annealStep+"");
 	cm.setCurrentProperty(contextName,"outputType",outputType);
 	return "parameters-set";
     }
@@ -421,18 +432,6 @@ public class RDAHMMBean {
 	    initWebServices();
 	}
 	setContextList();
-// 	contextList=cm.listContext(codeName);
-// 	if(contextList==null || contextList.length<=0) {
-// 	    System.out.println(contextList.toString());
-// 	    System.out.println("No archived projects");
-// 	}
-// 	else {
-// 	    convertContextList();
-// 	    System.out.println("Context has "+contextList.length+" elements");
-// 	    for(int i=0;i<contextList.length;i++) {
-// 		System.out.println(contextList[i]);
-// 	    }
-// 	}
         return ("list-old-projects");
     }
     
@@ -595,6 +594,10 @@ public class RDAHMMBean {
 	randomSeed=
 	    Integer.parseInt(cm.getCurrentProperty(contextName,"randomSeed"));
 	outputType=cm.getCurrentProperty(contextName,"outputType");
+	annealStep=
+	    Double.parseDouble(cm.getCurrentProperty(contextName,
+						     "annealStep"));
+	
 	inputFileName=cm.getCurrentProperty(contextName,"inputFileName");
 	inputFileContent=setRDAHMMInputFile(projectName);
 	System.out.println("Input File:"+inputFileContent);
@@ -658,7 +661,7 @@ public class RDAHMMBean {
 	//	AntVisco ant=new AntViscoServiceLocator().getAntVisco(new URL(antUrl));
 	
 	
-	String[] args=new String[12];
+	String[] args=new String[13];
         args[0]="-DworkDir.prop="+workDir;
         args[1]="-DprojectName.prop="+projectName;
         args[2]="-Dbindir.prop="+binPath;
@@ -668,9 +671,10 @@ public class RDAHMMBean {
         args[6]="-Dnstates.prop="+numModelStates;
         args[7]="-Dranseed.prop="+randomSeed;
         args[8]="-Doutput_type.prop="+outputType;
-        args[9]="-buildfile";
-        args[10]=bf_loc;
-        args[11]="RunRDAHMM";
+	args[9]="-DannealStep.prop="+annealStep;
+        args[10]="-buildfile";
+        args[11]=bf_loc;
+        args[12]="RunRDAHMM";
 	
         ant.setArgs(args);
         ant.execute();

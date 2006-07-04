@@ -21,6 +21,11 @@
                      required="true"/>
        <h:message for="nmodel" showDetail="true" showSummary="true" errorStyle="color: red"/>
 
+       <h:outputText value="Annealing Step Size:"/>
+       <h:inputText id="annealStep" value="#{rdahmmBean.annealStep}"
+                     required="true"/>
+       <h:message for="annealStep" showDetail="true" showSummary="true" errorStyle="color: red"/>
+
        <h:outputText value="Random Number Seed:"/>
        <h:inputText id="randomSeed" value="#{rdahmmBean.randomSeed}"
                      required="true"/>
