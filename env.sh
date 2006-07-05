@@ -19,6 +19,7 @@ export WEB_SERVICES_HOME=$BUILD_DIR/WebServices
 #Standalone JSF (for development).
 export SIMPLEX_SA_HOME=$BUILD_DIR/jsf_standalone/Simplex
 export RDAHMM_SA_HOME=$BUILD_DIR/jsf_standalone/RDAHMM
+export SENSORGRID_SA_HOME=$BUILD_DIR/jsf_standalone/sensorgrid
 
 #Portlets
 export SIMPLEX_PORTLET_HOME=$BUILD_DIR/portlets/Simplex-portlet

@@ -21,6 +21,8 @@ mvn clean
 cd $RDAHMM_SA_HOME
 mvn clean
 
+cd $SENSORGRID_SA_HOME
+mvn clean
 
 #Clean up portlet stuff
 cd $SIMPLEX_PORTLET_HOME

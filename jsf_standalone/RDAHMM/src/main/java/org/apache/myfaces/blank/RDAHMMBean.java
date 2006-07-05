@@ -386,6 +386,11 @@ public class RDAHMMBean {
 	return "parameters-to-database";
     }
 
+    public String paramsThenMap() throws Exception {
+	setParameterValues();
+	return "parameters-to-googlemap";
+    }
+
     public String setParameterValues() throws Exception {
         //Do real logic
 	System.out.println("Creating new project");

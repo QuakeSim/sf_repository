@@ -44,6 +44,8 @@
                      action="#{rdahmmBean.paramsThenTextArea}"/>
     <h:commandButton value="Upload Input from SOPAC"
                      action="#{rdahmmBean.paramsThenDB}"/>
+    <h:commandButton value="Pick Station from Map"
+                     action="#{rdahmmBean.paramsThenMap}"/>
     </h:form>
 
     <h:form>
