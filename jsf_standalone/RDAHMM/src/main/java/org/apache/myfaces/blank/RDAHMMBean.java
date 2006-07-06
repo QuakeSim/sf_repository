@@ -181,6 +181,7 @@ public class RDAHMMBean {
     }
     public void setSiteCode(String siteCode) {
 	this.siteCode=siteCode;
+	this.siteCode=this.siteCode.toLowerCase();
     }
     
     public String getBeginDate() {
@@ -527,6 +528,11 @@ public class RDAHMMBean {
 // 	}
 	
 	return "display-query-results";
+    }
+
+    public String setTheStation() {
+	System.out.println("Station set: "+siteCode);
+	return "parameters-to-database";
     }
 
     /**

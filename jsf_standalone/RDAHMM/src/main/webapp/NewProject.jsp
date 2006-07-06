@@ -38,7 +38,7 @@
     		<f:selectItem itemValue="gauss"
  			      itemLabel="Gaussian"/>
        </h:selectOneListbox>
-       <h:message for="OutputType" showDetail="true" showSummary="true" errorStyle="color: red"/>
+
     </h:panelGrid>
     <h:commandButton value="Cut and Past Input"
                      action="#{rdahmmBean.paramsThenTextArea}"/>

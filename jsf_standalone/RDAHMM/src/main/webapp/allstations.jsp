@@ -1,3 +1,5 @@
+<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
+<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 
 <%@page import="java.util.*, cgl.sensorgrid.sopac.gps.GetStationsRSS,
 cgl.sensorgrid.gui.google.MapBean, java.io.*"%>
@@ -121,6 +123,7 @@ mapcenter_y = center_xy[1];
 
               Markers[<%=i%>] = createMarker("<%=networkName%>", "<%=name%>", "<%=lon%>", "<%=lat%>", icon);
               map.addOverlay(Markers[<%=i%>]);
+	
               <%
             }
           }
@@ -131,14 +134,21 @@ mapcenter_y = center_xy[1];
           var marker = new GMarker(new GPoint(lon, lat),icon);
           // Show this marker's name in the info window when it is clicked
           var html = "<b>Station Name= </b>" + name + "<br><b>Lat=</b>" + lat + "<br><b>Lon= </b>" + lon + "<br><b>Network= </b>" + networkName;
-          html+="<jsp:include page="nextpage.jsp"/>";
+
 
           GEvent.addListener(marker, "click", function() {
             marker.openInfoWindowHtml(html);});
-            return marker;
+
+          GEvent.addListener(marker, "click", function() {
+		var newElement=document.getElementById("form1:station_name");
+		newElement.setAttribute("value",name);
+	  });
+
+          return marker;
           }
 
         overlayNetworks();
+
 
 
         function printNetworkColors (array)
@@ -164,13 +174,20 @@ mapcenter_y = center_xy[1];
            idiv.innerHTML = html;
          }
          printNetworkColors(networkInfo);
-          </script>
+      </script>
 
-         <p>
-
- <p><font face="Verdana" size="2">More information about California Real Time
-	Network (CRTN) is available at
-	<a href="http://sopac.ucsd.edu/projects/realtime/">SOPAC Web Page</a></font></p>
-
-          </body>
-        </html>
+      <f:view>
+       <h:form>
+         <h:commandLink action="back">
+            <h:outputText value="#{rdahmmBean.codeName} Main Menu"/>
+         </h:commandLink>
+        </h:form>
+       <h:form id="form1">
+       <h:inputText id="station_name" value="#{rdahmmBean.siteCode}"/>
+       <h:commandLink action="parameters-to-database">
+            <h:outputText value="Query Selected Station"/>
+       </h:commandLink>
+       </h:form>
+      </f:view>
+     </body>
+</html>
