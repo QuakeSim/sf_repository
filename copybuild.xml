@@ -14,6 +14,7 @@
          <include name="**/*.class"/>
          <include name="**/*.jar"/>
          <include name="**/*.jsp"/>
+         <include name="**/*.properties"/>
          <exclude name="pom.xml"/>
          <exclude name="**/web.xml"/>
       </fileset>
