@@ -11,6 +11,8 @@
       </fileset>
       <fileset dir="${source.dir}">
          <include name="**/*.xml"/>
+         <include name="**/*.class"/>
+         <include name="**/*.jar"/>
          <include name="**/*.jsp"/>
          <exclude name="pom.xml"/>
          <exclude name="**/web.xml"/>

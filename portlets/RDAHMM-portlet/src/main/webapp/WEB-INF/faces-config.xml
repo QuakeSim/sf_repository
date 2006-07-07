@@ -93,6 +93,25 @@
 			<from-outcome>parameters-to-database</from-outcome>
 			<to-view-id>/SetInputFileFromDB.jsp</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>parameters-to-googlemap</from-outcome>
+			<to-view-id>/allstations.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+       
+        
+        <!-- Allstations navigation rules -->
+	<navigation-rule>
+		<from-view-id>/allstations.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>parameters-to-database</from-outcome>
+			<to-view-id>/SetInputFileFromDB.jsp</to-view-id>
+		</navigation-case>
 	</navigation-rule>
         
         <!-- SetInputFile navigation rules -->

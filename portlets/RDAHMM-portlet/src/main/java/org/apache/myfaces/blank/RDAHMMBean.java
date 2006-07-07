@@ -181,6 +181,7 @@ public class RDAHMMBean {
     }
     public void setSiteCode(String siteCode) {
 	this.siteCode=siteCode;
+	this.siteCode=this.siteCode.toLowerCase();
     }
     
     public String getBeginDate() {
@@ -386,6 +387,11 @@ public class RDAHMMBean {
 	return "parameters-to-database";
     }
 
+    public String paramsThenMap() throws Exception {
+	setParameterValues();
+	return "parameters-to-googlemap";
+    }
+
     public String setParameterValues() throws Exception {
         //Do real logic
 	System.out.println("Creating new project");
@@ -522,6 +528,11 @@ public class RDAHMMBean {
 // 	}
 	
 	return "display-query-results";
+    }
+
+    public String setTheStation() {
+	System.out.println("Station set: "+siteCode);
+	return "parameters-to-database";
     }
 
     /**
