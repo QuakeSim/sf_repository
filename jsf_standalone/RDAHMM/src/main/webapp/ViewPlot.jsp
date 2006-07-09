@@ -6,7 +6,7 @@
     </head>
    <f:view>
     <body>
-	<h:graphicImage url=""/>
+	<h:graphicImage url="#{rdahmmBean.localImageFile}"/>
      <p/>
      <h:commandLink id="link1" action="back">
        <h:outputText id="linkText" value="#{rdahmmBean.codeName} Main Menu"/>
