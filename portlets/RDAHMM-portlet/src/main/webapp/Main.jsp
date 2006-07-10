@@ -36,7 +36,7 @@
                               value="<b>Data Archive:</b> Download output files"/>
 
                 <h:commandButton id="button5" value="Plot Data" 
-	                      action="plot-rdahmm-data"/>
+	                      action="#{rdahmmBean.loadProjectPlots}"/>
                 <h:outputFormat id="output5" escape="false"
                               value="<b>Plot Output:</b> Plot RDAHMM ouput files"/>
               </h:panelGrid>

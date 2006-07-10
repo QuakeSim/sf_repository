@@ -1,5 +1,12 @@
 package org.apache.myfaces.blank;
 
+//Some Faces Context stuff
+//Faces classes
+import javax.faces.context.FacesContext;
+import javax.faces.context.ExternalContext;
+import javax.servlet.ServletContext;
+import javax.portlet.PortletContext;
+
 //QuakeSim Web Service clients
 import WebFlowClient.cm.*;
 import WebFlowClient.fsws.*;
@@ -73,22 +80,78 @@ public class RDAHMMBean {
     private Hashtable contextListHash;
     private Vector contextListVector;
     
+    
+    //Host properties
     private String binPath;
     private String baseWorkDir;
     private String antUrl;
 
     private String fileServiceUrl;
-
-    
-    //This will just be hard coded for now.
     private String hostName="danube.ucs.indiana.edu";
+    private String matlabHostName="gf2.ucs.indiana.edu";
+    private String matlabAntUrl;
+    private String matlabBinPath;
+    private String matlabBaseWorkDir;
+    private String matlabFileServiceUrl;
+
+    private String localImageFile;
 
     //--------------------------------------------------
     // These are accessor methods.
     //--------------------------------------------------
+
+    public String getLocalImageFile() {
+	return localImageFile;
+    }
+    
+    public void setLocalImageFile(String localImageFile){
+	this.localImageFile=localImageFile;
+    }
+
+    public String getMatlabFileServiceUrl() {
+	return matlabFileServiceUrl;
+    }
+
+    public void setMatlabFileServiceUrl(String matlabFileServiceUrl) {
+	this.matlabFileServiceUrl=matlabFileServiceUrl;
+    }
+
+    public String getMatlabBaseWorkDir() {
+	return matlabBaseWorkDir;
+    }
+
+    public void setMatlabBaseWorkDir(String matlabBaseWorkDir) {
+	this.matlabBaseWorkDir=matlabBaseWorkDir;
+    }
+
+    public String getMatlabBinPath() {
+	return matlabBinPath;
+    }
+
+    public void setMatlabBinPath(String matlabBinPath) {
+	this.matlabBinPath=matlabBinPath;
+    }
+
+    public String getMatlabAntUrl() {
+	return matlabAntUrl;
+    }
+
+    public void setMatlabAntUrl(String matlabAntUrl) {
+	this.matlabAntUrl=matlabAntUrl;
+    }
+
+    public String getMatlabHostName() {
+	return matlabHostName;
+    }
+
+    public void setMatlabHostName(String matlabHostName) {
+	this.matlabHostName=matlabHostName;
+    }
+
     public double getAnnealStep(){
 	return annealStep;
     }
+
     public void setAnnealStep(double annealStep){
 	this.annealStep=annealStep;
     }
@@ -96,6 +159,7 @@ public class RDAHMMBean {
     public String getSopacQueryResults() {
 	return sopacQueryResults;
     }
+
     public void setSopacQueryResults(String sopacQueryResults) {
 	this.sopacQueryResults=sopacQueryResults;
     }
@@ -103,30 +167,39 @@ public class RDAHMMBean {
     public String getUserName() {
 	return userName;
     }
+
     public void setUserName(String userName) {
 	this.userName=userName;
     }
+
     public String getBinPath() {
 	return binPath;
     }
+
     public void setBinPath(String binPath){
 	this.binPath=binPath;
     }
+
     public String getBaseWorkDir() {
 	return baseWorkDir;
     }
+
     public void setBaseWorkDir(String baseWorkDir){
 	this.baseWorkDir=baseWorkDir;
     }
+
     public String getAntUrl() {
 	return antUrl;
     }
+
     public void setAntUrl(String antUrl){
 	this.antUrl=antUrl;
     }
+
     public String getFileServiceUrl(){
 	return fileServiceUrl;
     }
+
     public void setFileServiceUrl(String fileServiceUrl){
 	this.fileServiceUrl=fileServiceUrl;
     }
@@ -134,6 +207,7 @@ public class RDAHMMBean {
     public String getChosenProject() {
 	return chosenProject;
     }
+
     public void setChosenProject(String chosenProject) {
 	this.chosenProject=chosenProject;
     }
@@ -172,6 +246,7 @@ public class RDAHMMBean {
     public String getResource() {
 	return resource;
     }
+
     public void setResource(String resource) {
 	this.resource=resource;
     }
@@ -187,12 +262,15 @@ public class RDAHMMBean {
     public String getBeginDate() {
 	return beginDate;
     }
+
     public void setBeginDate(String beginDate) {
 	this.beginDate=beginDate;
     }
+
     public String getEndDate() {
 	return endDate;
     }
+
     public void setEndDate(String endDate) {
 	this.endDate=endDate;
     }
@@ -200,6 +278,7 @@ public class RDAHMMBean {
     public boolean getBboxChecked() {
 	return bboxChecked;
     }
+
     public void setBboxChecked(boolean bboxChecked) {
 	this.bboxChecked=bboxChecked;
     }
@@ -231,6 +310,7 @@ public class RDAHMMBean {
     public void setMaxLongitude(double maxLongitude) {
 	this.maxLongitude=maxLongitude;
     }
+
     public double getMaxLongitude() {
 	return maxLongitude;
     }
@@ -238,6 +318,7 @@ public class RDAHMMBean {
     public void setContextList(String[] cl) {
 	System.arraycopy(cl,0,this.contextList,0,cl.length);
     }
+
     public String[] getContextList() {
 	return this.contextList;
     }
@@ -245,6 +326,7 @@ public class RDAHMMBean {
     public void setHostName(String hostName){
 	this.hostName=hostName;
     }
+
     public String getHostName() {
 	return this.hostName;
     }
@@ -252,12 +334,15 @@ public class RDAHMMBean {
     public void  setInputFileName(String inputFileName) {
 	this.inputFileName=inputFileName;
     }
+
     public String getInputFileName() {
 	return this.inputFileName;
     }
+
     public void  setInputFileContent(String inputFileContent) {
 	this.inputFileContent=inputFileContent;
     }
+
     public String getInputFileContent() {
 	return this.inputFileContent;
     }
@@ -273,6 +358,7 @@ public class RDAHMMBean {
     public String getProjectName() {
 	return projectName;
     }
+
     public void setProjectName(String projectName){
 	this.projectName=projectName;
     }
@@ -280,6 +366,7 @@ public class RDAHMMBean {
     public int getNumModelStates() {
 	return numModelStates;
     }
+
     public void setNumModelStates(int numModelStates){
 	this.numModelStates=numModelStates;
     }
@@ -287,6 +374,7 @@ public class RDAHMMBean {
     public int getRandomSeed() {
 	return randomSeed;
     }
+
     public void setRandomSeed(int randomSeed){
 	this.randomSeed=randomSeed;
     }
@@ -294,6 +382,7 @@ public class RDAHMMBean {
     public String getOutputType() {
 	return outputType;
     }
+
     public void setOutputType(String outputType){
 	this.outputType=outputType;
     }
@@ -317,13 +406,15 @@ public class RDAHMMBean {
     }
 
     public String getContextBasePath() {
-	System.out.println(this.toString()+":getContextBasePath:"+contextBasePath);
+	System.out.println(this.toString()+":getContextBasePath:"
+			   +contextBasePath);
 	return contextBasePath;
     }
 
     public void setContextBasePath(String basepath) {
 	this.contextBasePath=basepath;
-	System.out.println(this.toString()+":setContextBasePath:"+contextBasePath);
+	System.out.println(this.toString()+":setContextBasePath:"
+			   +contextBasePath);
     }
     
     /**
@@ -440,6 +531,15 @@ public class RDAHMMBean {
 	setContextList();
         return ("list-old-projects");
     }
+
+    public String loadProjectPlots() throws Exception {
+	System.out.println("Loading project");
+	if(!isInitialized) {
+	    initWebServices();
+	}
+	setContextList();
+        return ("list-project-plots");
+    }
     
     public String launchRDAHMM() throws Exception {
 	String inputFileName=projectName+".input";
@@ -449,6 +549,23 @@ public class RDAHMMBean {
 	createInputFile(contextDir,inputFileName,inputFileContent);
 	String value=executeRDAHMM(contextDir,inputFileName,cfullName);
 	return "rdahmm-launched";
+
+    }
+
+    public String populateAndPlot() throws Exception {
+	populateProject();
+	launchPlot();
+	return "plot-created";
+    }
+
+    public String launchPlot() throws Exception {
+	String inputFileName=projectName+".input";
+	String cfullName=codeName+"/"+projectName;
+	String contextDir=cm.getCurrentProperty(cfullName,"Directory");
+
+	createInputFile(contextDir,inputFileName,inputFileContent);
+	String value=createDataPlot(contextDir,inputFileName,cfullName);
+	return "matlab-launched";
 
     }
     
@@ -519,14 +636,7 @@ public class RDAHMMBean {
 	sopacQueryResults=filterResults(sopacQueryResults,2,3);
 	
 	inputFileContent=sopacQueryResults;
-	
-	
-//  	if (returnedResource!=null 
-// 	    && !returnedResource.startsWith("ERROR")) {
-// 	    System.out.println(returnedResource);
-	    
-// 	}
-	
+		
 	return "display-query-results";
     }
 
@@ -691,7 +801,101 @@ public class RDAHMMBean {
         ant.execute();
 	
 	return "rdahmm-executing";
+    }
 
+    /**
+     * This is similar to executeRDAHMM but it must take place on
+     * a host with matlab installed on it.
+     */
+    public String createDataPlot(String contextDir,
+				 String inputFileName,
+				 String cfullName) 
+	throws Exception{
+	
+	String workDir=baseWorkDir+File.separator
+	    +userName+File.separator+projectName;
+
+	String matlabWorkDir=matlabBaseWorkDir+File.separator
+	    +userName+File.separator+projectName;
+
+	//--------------------------------------------------
+	// Set up the Ant Service and make the directory on 
+	// the matlab host.
+	//--------------------------------------------------
+	AntVisco ant=
+	    new AntViscoServiceLocator().getAntVisco(new URL(matlabAntUrl));
+	String bf_loc=matlabBinPath+"/"+"build.xml";
+
+	String[] args0=new String[4];
+        args0[0]="-DworkDir.prop="+workDir;
+        args0[1]="-buildfile";
+        args0[2]=bf_loc;
+        args0[3]="MakeWorkDir";
+	
+        ant.setArgs(args0);
+        ant.run();
+	
+	//--------------------------------------------------
+	// Set up the file service and move the file.
+	//--------------------------------------------------
+	FSClientStub fsclient=new FSClientStub();
+	String sourceFile=workDir+"/"+inputFileName; 
+	String inputdestfile=matlabWorkDir+"/"+inputFileName;
+	
+	String qSourceFile=workDir+"/"+projectName+".Q"; 
+	String qDestFile=matlabWorkDir+"/"+projectName+".Q"; 
+
+	String plotFileName=matlabWorkDir+"/"+projectName+".png";
+
+	try {
+	    fsclient.setBindingUrl(fileServiceUrl);    	
+	    fsclient.crossload(sourceFile,matlabFileServiceUrl,inputdestfile);
+	    fsclient.crossload(qSourceFile,matlabFileServiceUrl,qDestFile);
+	}
+	catch(Exception ex) {
+	    ex.printStackTrace();
+	    throw new Exception();
+	}
+	
+	String[] args=new String[8];
+        args[0]="-DworkDir.prop="+matlabWorkDir;
+        args[1]="-DbinDir.prop="+matlabBinPath;
+        args[2]="-DinputFile.prop="+inputdestfile;
+        args[3]="-DqFile.prop="+qDestFile;
+        args[4]="-DplotFile.prop="+plotFileName;
+        args[5]="-buildfile";
+        args[6]=bf_loc;
+        args[7]="ExecMatlab";
+	
+        ant.setArgs(args);
+        ant.run();
+	
+	cm.setCurrentProperty(cfullName,"PlotFileName",plotFileName);
+	
+	//Download the image file
+	
+	ExternalContext ec=FacesContext.getCurrentInstance().getExternalContext();
+        Object context=ec.getContext();
+	String basePath="";
+	if(context instanceof ServletContext){
+	    basePath=((ServletContext)context).getRealPath("/");
+	}
+	else if(context instanceof PortletContext){
+	    basePath=((PortletContext)context).getRealPath("/");
+	}
+	
+	String realImageFile=basePath+"/"+"junk_"+(new Date()).getTime()+".png";
+	localImageFile="junk_"+(new Date()).getTime()+".png";
+	try {
+	    fsclient.setBindingUrl(matlabFileServiceUrl);    	
+	    fsclient.downloadFile(plotFileName,realImageFile);
+	}
+	catch(Exception ex) {
+	    ex.printStackTrace();
+	}
+
+
+	return "matlab-plot-created";
     }
 
     //--------------------------------------------------

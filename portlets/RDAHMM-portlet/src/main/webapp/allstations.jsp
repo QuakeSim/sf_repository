@@ -23,6 +23,7 @@ mapcenter_y = center_xy[1];
       type="text/javascript"></script>
   </head>
   <body>
+
     <table>
       <tr>
         <td width="650" colspan="2">
@@ -177,17 +178,17 @@ mapcenter_y = center_xy[1];
       </script>
 
       <f:view>
-       <h:form>
-         <h:commandLink action="back">
-            <h:outputText value="#{rdahmmBean.codeName} Main Menu"/>
-         </h:commandLink>
-        </h:form>
        <h:form id="form1">
        <h:inputText id="station_name" value="#{rdahmmBean.siteCode}"/>
        <h:commandLink action="parameters-to-database">
             <h:outputText value="Query Selected Station"/>
        </h:commandLink>
        </h:form>
+       <h:form>
+         <h:commandLink action="back">
+            <h:outputText value="#{rdahmmBean.codeName} Main Menu"/>
+         </h:commandLink>
+        </h:form>
       </f:view>
      </body>
 </html>

@@ -6,7 +6,6 @@
  </head>
  <body>
   <f:view>        
-
     <h:form id="form2">
      <h:dataTable value="#{rdahmmBean.contextListHash}"
                   var="contexts">

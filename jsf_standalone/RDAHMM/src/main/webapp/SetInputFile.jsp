@@ -6,7 +6,7 @@
   </head>
  <body>
   <f:view>        
-    <h:outputText value="Now select the input file."/>
+    <h:outputText value="View and edit the input file you will submit"/>
     <h:form id="form2">
     <h:inputTextarea id="projectInput" value="#{rdahmmBean.inputFileContent}"
                     rows="20" cols="75" 
