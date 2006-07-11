@@ -8,10 +8,16 @@
      <f:view>
         <h2>Project Archive</h2>
 	Click the link to download the desired output file.
+
+        <h:outputText value="You don't have any archived projects yet. You
+                    must first run RDAHMM." 
+                    rendered="#{empty rdahmmBean.contextListVector}"/>
+
 	<h:form id="download_table">
           <h:dataTable value="#{rdahmmBean.contextListVector}"
                        border="1"
-                       var="project">
+                       var="project"
+                       rendered="#{!(empty rdahmmBean.contextListVector)}">
 	   <h:column>
   	    <f:facet name="header">
 	        <h:outputText value="Project Name"/>
@@ -135,6 +141,7 @@
         </h:form>       
 
      <p/>	
+     <hr/>
      <h:commandLink id="link1" action="back">
        <h:outputText id="linkText" value="#{rdahmmBean.codeName} Main Menu"/>
      </h:commandLink>

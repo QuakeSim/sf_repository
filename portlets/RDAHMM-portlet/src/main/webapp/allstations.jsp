@@ -29,7 +29,9 @@ mapcenter_y = center_xy[1];
         <td width="650" colspan="2">
           <b><font size="4" face="Verdana">SOPAC Real Time GPS Networks</font></b><p>
             <font face="Verdana" size="2">Click on a station symbol for more
-              information.</font><p></p></td>
+              information on a particular station.  Then click the "Query 
+              Selected Station" link below the map.
+             </font><p></p></td>
             </tr>
       <tr>
         <td width="600">
@@ -184,6 +186,7 @@ mapcenter_y = center_xy[1];
             <h:outputText value="Query Selected Station"/>
        </h:commandLink>
        </h:form>
+       <hr/>
        <h:form>
          <h:commandLink action="back">
             <h:outputText value="#{rdahmmBean.codeName} Main Menu"/>

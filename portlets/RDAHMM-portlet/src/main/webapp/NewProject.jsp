@@ -5,11 +5,27 @@
         <title>RDAHMM Project Management</title>
   </head>
  <body>
+  <h2>Project Setup Page</h2>
+  <p>
+  Please provide the following RDAHMM submission parameters and then
+  click one of the buttons at the bottom of the page:
+  </p>
+  <ul>
+  <li> 
+  Use <b>Pick Station from Map</b> if you want to pick the station to
+  analyze. 
+  </li>
+  <li> 
+  Use <b>Query SOPAC Data Services</b> if you want to query the SOPAC 
+  data services.  This assumes you know the station you want to analyze.
+  </li>
+  <li> 
+  Use <b>Manual Input</b> if you want to cut and paste in a data file.
+  </li>
+  </ul>
   <f:view>        
-    <h:outputText value="We'll now set up a new project"/>
     <h:form>
-    <h:outputText value="Submission Host: #{rdahmmBean.hostName}"/>
-    <h:outputText value="Input Parameters"/>
+    <b>Input Parameter</b>
     <h:panelGrid columns="3" border="1">
        <h:outputText value="Project Name:"/>
        <h:inputText id="projectName" value="#{rdahmmBean.projectName}" 
@@ -40,15 +56,16 @@
        </h:selectOneListbox>
 
     </h:panelGrid>
-    <h:commandButton value="Cut and Past Input"
-                     action="#{rdahmmBean.paramsThenTextArea}"/>
-    <h:commandButton value="Upload Input from SOPAC"
-                     action="#{rdahmmBean.paramsThenDB}"/>
     <h:commandButton value="Pick Station from Map"
                      action="#{rdahmmBean.paramsThenMap}"/>
+    <h:commandButton value="Upload Input from SOPAC"
+                     action="#{rdahmmBean.paramsThenDB}"/>
+    <h:commandButton value="Manual Input"
+                     action="#{rdahmmBean.paramsThenTextArea}"/>
     </h:form>
 
     <h:form>
+    <hr/>
     <h:commandLink action="back">
         <h:outputText value="#{rdahmmBean.codeName} Main Menu"/>
     </h:commandLink>
