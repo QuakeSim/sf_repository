@@ -88,64 +88,82 @@ public class RDAHMMBean {
 
     private String fileServiceUrl;
     private String hostName="danube.ucs.indiana.edu";
-    private String matlabHostName="gf2.ucs.indiana.edu";
-    private String matlabAntUrl;
-    private String matlabBinPath;
-    private String matlabBaseWorkDir;
-    private String matlabFileServiceUrl;
+    private String gnuplotHostName="gf2.ucs.indiana.edu";
+    private String gnuplotAntUrl;
+    private String gnuplotBinPath;
+    private String gnuplotBaseWorkDir;
+    private String gnuplotFileServiceUrl;
 
-    private String localImageFile;
+    private String localImageFileX;
+    private String localImageFileY;    
+    private String localImageFileZ;
 
     //--------------------------------------------------
     // These are accessor methods.
     //--------------------------------------------------
 
-    public String getLocalImageFile() {
-	return localImageFile;
+    public String getLocalImageFileX() {
+	return localImageFileX;
     }
     
-    public void setLocalImageFile(String localImageFile){
-	this.localImageFile=localImageFile;
+    public void setLocalImageFileX(String localImageFileX){
+	this.localImageFileX=localImageFileX;
     }
 
-    public String getMatlabFileServiceUrl() {
-	return matlabFileServiceUrl;
+    public String getLocalImageFileY() {
+	return localImageFileY;
+    }
+    
+    public void setLocalImageFileY(String localImageFileY){
+	this.localImageFileY=localImageFileY;
     }
 
-    public void setMatlabFileServiceUrl(String matlabFileServiceUrl) {
-	this.matlabFileServiceUrl=matlabFileServiceUrl;
+    public String getLocalImageFileZ() {
+	return localImageFileZ;
+    }
+    
+    public void setLocalImageFileZ(String localImageFileZ){
+	this.localImageFileZ=localImageFileZ;
     }
 
-    public String getMatlabBaseWorkDir() {
-	return matlabBaseWorkDir;
+    public String getGnuplotFileServiceUrl() {
+	return gnuplotFileServiceUrl;
     }
 
-    public void setMatlabBaseWorkDir(String matlabBaseWorkDir) {
-	this.matlabBaseWorkDir=matlabBaseWorkDir;
+    public void setGnuplotFileServiceUrl(String gnuplotFileServiceUrl) {
+	this.gnuplotFileServiceUrl=gnuplotFileServiceUrl;
     }
 
-    public String getMatlabBinPath() {
-	return matlabBinPath;
+    public String getGnuplotBaseWorkDir() {
+	return gnuplotBaseWorkDir;
     }
 
-    public void setMatlabBinPath(String matlabBinPath) {
-	this.matlabBinPath=matlabBinPath;
+    public void setGnuplotBaseWorkDir(String gnuplotBaseWorkDir) {
+	this.gnuplotBaseWorkDir=gnuplotBaseWorkDir;
     }
 
-    public String getMatlabAntUrl() {
-	return matlabAntUrl;
+    public String getGnuplotBinPath() {
+	return gnuplotBinPath;
     }
 
-    public void setMatlabAntUrl(String matlabAntUrl) {
-	this.matlabAntUrl=matlabAntUrl;
+    public void setGnuplotBinPath(String gnuplotBinPath) {
+	this.gnuplotBinPath=gnuplotBinPath;
     }
 
-    public String getMatlabHostName() {
-	return matlabHostName;
+    public String getGnuplotAntUrl() {
+	return gnuplotAntUrl;
     }
 
-    public void setMatlabHostName(String matlabHostName) {
-	this.matlabHostName=matlabHostName;
+    public void setGnuplotAntUrl(String gnuplotAntUrl) {
+	this.gnuplotAntUrl=gnuplotAntUrl;
+    }
+
+    public String getGnuplotHostName() {
+	return gnuplotHostName;
+    }
+
+    public void setGnuplotHostName(String gnuplotHostName) {
+	this.gnuplotHostName=gnuplotHostName;
     }
 
     public double getAnnealStep(){
@@ -565,7 +583,7 @@ public class RDAHMMBean {
 
 	createInputFile(contextDir,inputFileName,inputFileContent);
 	String value=createDataPlot(contextDir,inputFileName,cfullName);
-	return "matlab-launched";
+	return "gnuplot-launched";
 
     }
     
@@ -805,7 +823,9 @@ public class RDAHMMBean {
 
     /**
      * This is similar to executeRDAHMM but it must take place on
-     * a host with matlab installed on it.
+     * a host with gnuplot installed on it.  Note this assumes
+     * for historical reasons that rdahmm and the plotting tool
+     * (gnuplot) are on separate machines.
      */
     public String createDataPlot(String contextDir,
 				 String inputFileName,
@@ -815,16 +835,16 @@ public class RDAHMMBean {
 	String workDir=baseWorkDir+File.separator
 	    +userName+File.separator+projectName;
 
-	String matlabWorkDir=matlabBaseWorkDir+File.separator
+	String gnuplotWorkDir=gnuplotBaseWorkDir+File.separator
 	    +userName+File.separator+projectName;
 
 	//--------------------------------------------------
 	// Set up the Ant Service and make the directory on 
-	// the matlab host.
+	// the gnuplot host.
 	//--------------------------------------------------
 	AntVisco ant=
-	    new AntViscoServiceLocator().getAntVisco(new URL(matlabAntUrl));
-	String bf_loc=matlabBinPath+"/"+"build.xml";
+	    new AntViscoServiceLocator().getAntVisco(new URL(gnuplotAntUrl));
+	String bf_loc=gnuplotBinPath+"/"+"build.xml";
 
 	String[] args0=new String[4];
         args0[0]="-DworkDir.prop="+workDir;
@@ -840,37 +860,40 @@ public class RDAHMMBean {
 	//--------------------------------------------------
 	FSClientStub fsclient=new FSClientStub();
 	String sourceFile=workDir+"/"+inputFileName; 
-	String inputdestfile=matlabWorkDir+"/"+inputFileName;
+	String inputdestfile=gnuplotBinPath+"/"+inputFileName;
 	
 	String qSourceFile=workDir+"/"+projectName+".Q"; 
-	String qDestFile=matlabWorkDir+"/"+projectName+".Q"; 
+	String qDestFile=gnuplotBinPath+"/"+projectName+".Q"; 
 
-	String plotFileName=matlabWorkDir+"/"+projectName+".png";
+	String plotFileNameX=gnuplotBinPath+"/"+inputFileName+".X.png";
+	String plotFileNameY=gnuplotBinPath+"/"+inputFileName+".Y.png";
+	String plotFileNameZ=gnuplotBinPath+"/"+inputFileName+".Z.png";
 
 	try {
 	    fsclient.setBindingUrl(fileServiceUrl);    	
-	    fsclient.crossload(sourceFile,matlabFileServiceUrl,inputdestfile);
-	    fsclient.crossload(qSourceFile,matlabFileServiceUrl,qDestFile);
+	    fsclient.crossload(sourceFile,gnuplotFileServiceUrl,inputdestfile);
+	    fsclient.crossload(qSourceFile,gnuplotFileServiceUrl,qDestFile);
 	}
 	catch(Exception ex) {
 	    ex.printStackTrace();
 	    throw new Exception();
 	}
 	
-	String[] args=new String[8];
-        args[0]="-DworkDir.prop="+matlabWorkDir;
-        args[1]="-DbinDir.prop="+matlabBinPath;
-        args[2]="-DinputFile.prop="+inputdestfile;
-        args[3]="-DqFile.prop="+qDestFile;
-        args[4]="-DplotFile.prop="+plotFileName;
-        args[5]="-buildfile";
-        args[6]=bf_loc;
-        args[7]="ExecMatlab";
+	String[] args=new String[7];
+        args[0]="-DworkDir.prop="+gnuplotWorkDir;
+        args[1]="-DbinDir.prop="+gnuplotBinPath;
+        args[2]="-DinputFile.prop="+inputFileName;
+        args[3]="-DqFile.prop="+projectName+".Q";
+        args[4]="-buildfile";
+        args[5]=bf_loc;
+        args[6]="ExecGnuplot";
 	
         ant.setArgs(args);
         ant.run();
 	
-	cm.setCurrentProperty(cfullName,"PlotFileName",plotFileName);
+	cm.setCurrentProperty(cfullName,"PlotFileNameX",plotFileNameZ);
+	cm.setCurrentProperty(cfullName,"PlotFileNameY",plotFileNameY);
+	cm.setCurrentProperty(cfullName,"PlotFileNameZ",plotFileNameZ);
 	
 	//Download the image file
 	
@@ -884,18 +907,36 @@ public class RDAHMMBean {
 	    basePath=((PortletContext)context).getRealPath("/");
 	}
 	
-	String realImageFile=basePath+"/"+"junk_"+(new Date()).getTime()+".png";
-	localImageFile="junk_"+(new Date()).getTime()+".png";
-	try {
-	    fsclient.setBindingUrl(matlabFileServiceUrl);    	
-	    fsclient.downloadFile(plotFileName,realImageFile);
+	long timestamp=(new Date()).getTime();
+	String realImageFileX=basePath+"/"+"junkX_"+timestamp+".png";
+	String realImageFileY=basePath+"/"+"junkY_"+timestamp+".png";
+	String realImageFileZ=basePath+"/"+"junkZ_"+timestamp+".png";
+	localImageFileX="junkX_"+(new Date()).getTime()+".png";
+	localImageFileY="junkY_"+(new Date()).getTime()+".png";
+	localImageFileZ="junkZ_"+(new Date()).getTime()+".png";
+	fsclient.setBindingUrl(gnuplotFileServiceUrl);    	
+
+ 	try {
+	    fsclient.downloadFile(plotFileNameX,realImageFileX);
+	}
+	catch(Exception ex) {
+	    ex.printStackTrace();
+	}
+ 	try {
+	    fsclient.downloadFile(plotFileNameY,realImageFileY);
+	}
+	catch(Exception ex) {
+	    ex.printStackTrace();
+	}
+ 	try {
+	    fsclient.downloadFile(plotFileNameZ,realImageFileZ);
 	}
 	catch(Exception ex) {
 	    ex.printStackTrace();
 	}
 
 
-	return "matlab-plot-created";
+	return "gnuplot-plot-created";
     }
 
     //--------------------------------------------------
