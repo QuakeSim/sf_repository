@@ -48,24 +48,24 @@
                 </managed-property>
 
 
-                <!-- These are matlab host params -->
+                <!-- These are gnuplot host params -->
                 <managed-property>
-                   <property-name>matlabAntUrl</property-name>
+                   <property-name>gnuplotAntUrl</property-name>
                    <value>
-                     http://gf2.ucs.indiana.edu:6060/axis/services/AntVisco
+                     http://danube.ucs.indiana.edu:8045/axis/services/AntVisco
                    </value>
                  </managed-property>
                 <managed-property>
-                   <property-name>matlabBinPath</property-name>
-                   <value>/home/gateway/GEMCodes/RDAHMM2/matlab/</value>
+                   <property-name>gnuplotBinPath</property-name>
+                   <value>/home/gateway/GEMCodes/Gnuplot/rdahmm/plotXYZ/</value>
                  </managed-property>
                 <managed-property>
-                   <property-name>matlabBaseWorkDir</property-name>
+                   <property-name>gnuplotBaseWorkDir</property-name>
                    <value>/home/gateway/RDAHMM_WDIR</value>
                  </managed-property>
                 <managed-property>
-                   <property-name>matlabFileServiceUrl</property-name>
-                   <value>http://gf2.ucs.indiana.edu:6060/axis/services/FileService</value>
+                   <property-name>gnuplotFileServiceUrl</property-name>
+                   <value>http://danube.ucs.indiana.edu:8045/GCWS/services/FileService</value>
                  </managed-property>
 
 	</managed-bean>
