@@ -25,6 +25,12 @@ source ./rdahmm-sa-install.sh
 cd $BUILD_DIR
 source ./rdahmm-portlet-install.sh
 
+cd $BUILD_DIR
+source ./stfilter-sa-install.sh
+
+#cd $BUILD_DIR
+#source ./stfilter-portlet-install.sh
+
 
 #cd $BUILD_DIR
 #source ./simplex-portlet-install.sh
