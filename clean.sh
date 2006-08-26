@@ -34,6 +34,7 @@ mvn clean
 cd $STFILTER_SA_HOME
 mvn clean
 
+
 # CLEAN VENDOR SOFTWARE
 echo "#################################"
 echo "#  Cleaning vendor packages...  #"
