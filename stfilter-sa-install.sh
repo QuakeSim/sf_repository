@@ -9,6 +9,7 @@ echo "######################################"
 echo ""
 source ./env.sh
 
+
 echo ""
 echo "######################################"
 echo "Installing RDAHMM"
