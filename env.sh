@@ -16,6 +16,9 @@ export PORTAL_WEBAPP_DIR=$CATALINA_HOME/webapps/gridsphere/
 # These are maven steps.
 export WEB_SERVICES_HOME=$BUILD_DIR/WebServices
 
+#Generic project code
+export GENERIC_PROJECT_HOME=$BUILD_DIR/GenericQuakeSimProject
+
 #Standalone JSF (for development).
 export SIMPLEX_SA_HOME=$BUILD_DIR/jsf_standalone/Simplex
 export RDAHMM_SA_HOME=$BUILD_DIR/jsf_standalone/RDAHMM
