@@ -16,7 +16,7 @@
 
 	 <h:panelGrid columns="3"> 
 	 <h:outputText value="Site Code(s):"/>
-         <h:inputText id="siteCode" size="5" value="#{rdahmmBean.siteCode}"/>
+         <h:inputText id="siteCode" size="5" value="#{stfilterBean.siteCode}"/>
          <h:outputText value="(space-delimited)"/>
        <h:message for="siteCode" showDetail="true" showSummary="true" errorStyle="color: red"/>
          </h:panelGrid>
@@ -24,14 +24,14 @@
          <h:panelGrid columns="2" border="1">
 	 <h:panelGrid columns="3"> 
 	 <h:outputText value="Begin Date:"/>
-         <h:inputText id="beginDate" value="#{rdahmmBean.beginDate}"/>
+         <h:inputText id="beginDate" value="#{stfilterBean.beginDate}"/>
          <h:outputText value="(YYYY-MM-DD)"/>
        <h:message for="beginDate" showDetail="true" showSummary="true" errorStyle="color: red"/>
          </h:panelGrid>
 
 	 <h:panelGrid columns="3"> 
 	 <h:outputText value="End Date"/>
-         <h:inputText id="endDate" value="#{rdahmmBean.endDate}"/>
+         <h:inputText id="endDate" value="#{stfilterBean.endDate}"/>
          <h:outputText value="(YYYY-MM-DD)"/>
        <h:message for="endDate" showDetail="true" showSummary="true" errorStyle="color: red"/>
          </h:panelGrid>
@@ -41,29 +41,29 @@
          <h:panelGrid border="1">
  	 <h:panelGrid columns="2">
 	 <h:selectBooleanCheckbox 
-              value="rdahmmBean.bboxChecked"
+              value="stfilterBean.bboxChecked"
 	      title="Use Bounding Box Settings Below (optional; check box):"/>
 	 <h:outputText value="Use Bounding Box Settings"/>
          </h:panelGrid>
          <h:panelGrid columns="2">
 	    <h:panelGrid columns="2"> 
 	      <h:outputText value="Minimum Latitude:"/>
-              <h:inputText size="10" value="#{rdahmmBean.minLatitude}"/>
+              <h:inputText size="10" value="#{stfilterBean.minLatitude}"/>
             </h:panelGrid>
 	    <h:panelGrid columns="2"> 
 	      <h:outputText value="Maximum Latitude:"/>
-              <h:inputText size="10" value="#{rdahmmBean.maxLatitude}"/>
+              <h:inputText size="10" value="#{stfilterBean.maxLatitude}"/>
             </h:panelGrid>
          </h:panelGrid>
 
          <h:panelGrid columns="2">
 	   <h:panelGrid columns="2"> 
 	     <h:outputText value="Minimum Longitude:"/>
-             <h:inputText size="10" value="#{rdahmmBean.minLongitude}"/>
+             <h:inputText size="10" value="#{stfilterBean.minLongitude}"/>
            </h:panelGrid>
 	   <h:panelGrid columns="2"> 
 	     <h:outputText value="Maximum Longitude:"/>
-             <h:inputText size="10" value="#{rdahmmBean.maxLongitude}"/>
+             <h:inputText size="10" value="#{stfilterBean.maxLongitude}"/>
            </h:panelGrid>
          </h:panelGrid>
          </h:panelGrid>
@@ -73,7 +73,7 @@
          <h:panelGrid columns="2" border="1">
 	 <h:outputText value="Resource"/>
          <h:selectOneListbox title="Resource:"
-	                     value="#{rdahmmBean.resource}"
+	                     value="#{stfilterBean.resource}"
 	                     size="1">
             <f:selectItem  
                            itemValue="procCoords"
@@ -87,7 +87,7 @@
          <h:panelGrid columns="2" border="1">         
 	 <h:outputText value="Context Group"/>
          <h:selectOneListbox title="Context Group"
-			     value="#{rdahmmBean.contextGroup}"
+			     value="#{stfilterBean.contextGroup}"
 	                     size="1">
 	     <f:selectItem  
                             itemValue="reasonComb" 
@@ -102,7 +102,7 @@
 
 	 <h:panelGrid columns="3"> 
 	 <h:outputText value="Context Id:"/>
-         <h:inputText size="5" value="#{rdahmmBean.contextId}"/>
+         <h:inputText size="5" value="#{stfilterBean.contextId}"/>
          <h:outputText value="(4=current REASoN combination coordinates)"/>
          </h:panelGrid>
 
@@ -111,7 +111,7 @@
        <h:message for="master_table" showDetail="true" showSummary="true" errorStyle="color: red"/>
 
 
-       <h:commandButton id="mybutton3" value="Query Database" action="#{rdahmmBean.querySOPAC}"/>
+       <h:commandButton id="mybutton3" value="Query Database" action="#{stfilterBean.querySOPAC}"/>
 
    </h:form>	
 
@@ -119,7 +119,7 @@
    </hr>
     <h:form>
     <h:commandLink id="link1" action="back">
-        <h:outputText id="linkText" value="#{rdahmmBean.codeName} Main Menu"/>
+        <h:outputText id="linkText" value="#{stfilterBean.codeName} Main Menu"/>
     </h:commandLink>
     </h:form>
   </f:view>

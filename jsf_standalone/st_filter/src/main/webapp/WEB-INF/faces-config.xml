@@ -8,13 +8,13 @@
 	
 	<!-- managed beans of the simple hello world app -->
 	<managed-bean>
-		<managed-bean-name>rdahmmBean</managed-bean-name>
-		<managed-bean-class>org.apache.myfaces.blank.RDAHMMBean</managed-bean-class>
+		<managed-bean-name>stfilterBean</managed-bean-name>
+		<managed-bean-class>org.apache.myfaces.blank.STFILTERBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
                 <!--Who we are-->
                 <managed-property>
                    <property-name>codeName</property-name>
-                   <value>RDAHMM</value>
+                   <value>STFILTER</value>
                 </managed-property>
 
                 <!-- Needed for the context service-->
@@ -36,11 +36,11 @@
                 </managed-property>
                 <managed-property>
                    <property-name>binPath</property-name>
-                   <value>/home/gateway/GEMCodes/RDAHMM2/bin/</value>
+                   <value>/home/gateway/GEMCodes/STFILTER2/bin/</value>
                 </managed-property>
                 <managed-property>
                    <property-name>baseWorkDir</property-name>
-                   <value>/home/gateway/RDAHMM_WDIR</value>
+                   <value>/home/gateway/STFILTER_WDIR</value>
                 </managed-property>
                 <managed-property>
                    <property-name>fileServiceUrl</property-name>
@@ -57,11 +57,11 @@
                  </managed-property>
                 <managed-property>
                    <property-name>gnuplotBinPath</property-name>
-                   <value>/home/gateway/GEMCodes/Gnuplot/rdahmm/plotXYZ/</value>
+                   <value>/home/gateway/GEMCodes/Gnuplot/stfilter/plotXYZ/</value>
                  </managed-property>
                 <managed-property>
                    <property-name>gnuplotBaseWorkDir</property-name>
-                   <value>/home/gateway/RDAHMM_WDIR</value>
+                   <value>/home/gateway/STFILTER_WDIR</value>
                  </managed-property>
                 <managed-property>
                    <property-name>gnuplotFileServiceUrl</property-name>
@@ -143,7 +143,7 @@
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>rdahmm-launched</from-outcome>
+			<from-outcome>stfilter-launched</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>

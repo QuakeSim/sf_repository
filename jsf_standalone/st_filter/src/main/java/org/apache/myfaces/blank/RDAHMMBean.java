@@ -32,10 +32,10 @@ import java.util.StringTokenizer;
 import java.util.Date;
 
 /**
- * Everything you need to set up and run RDAHMM.
+ * Everything you need to set up and run STFILTER.
  */
 
-public class RDAHMMBean {
+public class STFILTERBean {
 
     //Internal properties
     boolean isInitialized=false;
@@ -58,13 +58,13 @@ public class RDAHMMBean {
     private String sopacQueryResults="";
 
 
-    //RDAHMM properties
+    //STFILTER properties
     private String userName;
     private String defaultName="defaultUser";
     private String contextUrl;
     private String contextBasePath;
     private String FS="FS";
-    private String codeName="RDAHMM";
+    private String codeName="STFILTER";
     private String projectName="";
     private int numModelStates=2;
     private int randomSeed=1;
@@ -438,8 +438,8 @@ public class RDAHMMBean {
     /**
      * default empty constructor
      */
-    public RDAHMMBean(){   
-	System.out.println("RDAHMM Bean Created");
+    public STFILTERBean(){   
+	System.out.println("STFILTER Bean Created");
 	userName=getPortalUserName();
 	contextListVector=new Vector();
 	contextListHash=new Hashtable();
@@ -559,14 +559,14 @@ public class RDAHMMBean {
         return ("list-project-plots");
     }
     
-    public String launchRDAHMM() throws Exception {
+    public String launchSTFILTER() throws Exception {
 	String inputFileName=projectName+".input";
 	String cfullName=codeName+"/"+projectName;
 	String contextDir=cm.getCurrentProperty(cfullName,"Directory");
 
 	createInputFile(contextDir,inputFileName,inputFileContent);
-	String value=executeRDAHMM(contextDir,inputFileName,cfullName);
-	return "rdahmm-launched";
+	String value=executeSTFILTER(contextDir,inputFileName,cfullName);
+	return "stfilter-launched";
 
     }
 
@@ -738,12 +738,12 @@ public class RDAHMMBean {
 						     "annealStep"));
 	
 	inputFileName=cm.getCurrentProperty(contextName,"inputFileName");
-	inputFileContent=setRDAHMMInputFile(projectName);
+	inputFileContent=setSTFILTERInputFile(projectName);
 	System.out.println("Input File:"+inputFileContent);
 	return "project-populated";
     }
 
-    public String executeRDAHMM(String contextDir,
+    public String executeSTFILTER(String contextDir,
 				String inputFileName,
 				String cfullName) 
 	throws Exception{
@@ -804,7 +804,7 @@ public class RDAHMMBean {
         args[0]="-DworkDir.prop="+workDir;
         args[1]="-DprojectName.prop="+projectName;
         args[2]="-Dbindir.prop="+binPath;
-        args[3]="-DRDAHMMBaseName.prop="+projectName;
+        args[3]="-DSTFILTERBaseName.prop="+projectName;
         args[4]="-Dnobsv.prop="+nobsv;
         args[5]="-Dndim.prop="+ndim;
         args[6]="-Dnstates.prop="+numModelStates;
@@ -813,18 +813,18 @@ public class RDAHMMBean {
 	args[9]="-DannealStep.prop="+annealStep;
         args[10]="-buildfile";
         args[11]=bf_loc;
-        args[12]="RunRDAHMM";
+        args[12]="RunSTFILTER";
 	
         ant.setArgs(args);
         ant.execute();
 	
-	return "rdahmm-executing";
+	return "stfilter-executing";
     }
 
     /**
-     * This is similar to executeRDAHMM but it must take place on
+     * This is similar to executeSTFILTER but it must take place on
      * a host with gnuplot installed on it.  Note this assumes
-     * for historical reasons that rdahmm and the plotting tool
+     * for historical reasons that stfilter and the plotting tool
      * (gnuplot) are on separate machines.
      */
     public String createDataPlot(String contextDir,
@@ -942,7 +942,7 @@ public class RDAHMMBean {
     //--------------------------------------------------
     // Find the first non-blank line and count columns.
     // Note this can screw up if input file is not
-    // formated correctly, but then RDAHMM itself 
+    // formated correctly, but then STFILTER itself 
     // would probably not work either.
     //--------------------------------------------------
     
@@ -1002,7 +1002,7 @@ public class RDAHMMBean {
 
     }
 
-    private String setRDAHMMInputFile(String projectName) {
+    private String setSTFILTERInputFile(String projectName) {
 	String inputFileContent="Null Content; please re-enter";
 	String inputFileName=projectName+".input";
 	try {

@@ -7,10 +7,10 @@
    <body>
     <h2>Query Results</h2>
     <f:view>
-       <h:outputText value="#{rdahmmBean.sopacQueryResults}" escape="false"/>
+       <h:outputText value="#{stfilterBean.sopacQueryResults}" escape="false"/>
         <h:form>
         <h:commandLink id="link1" action="back">
-         <h:outputText id="linkText" value="#{rdahmmBean.codeName} Main Menu"/>
+         <h:outputText id="linkText" value="#{stfilterBean.codeName} Main Menu"/>
         </h:commandLink>
     </h:form>
    </f:view>
