@@ -41,36 +41,53 @@ import java.util.Date;
 public class GenericProjectBean {
 
     //Internal properties
-    boolean isInitialized=false;
-    ContextManagerImp cm=null;
-    String contextName;
-    String[] fileExtension={".input",".stdout",".A",".B",".L",".Q",".pi"};
+    protected boolean isInitialized=false;
+    protected ContextManagerImp cm=null;
+    protected String contextName;
 
     //Generic project properties
-    private String userName;
-    private String defaultName="defaultUser";
-    private String contextUrl;
-    private String contextBasePath;
-    private String FS="FS";
-    private String projectName="";
-    private String chosenProject="";
-    private String[] contextList;
-    private Hashtable contextListHash;
-    private Vector contextListVector;
-    private String codeName;
+    protected String userName;
+    protected String defaultName="defaultUser";
+    protected String contextUrl;
+    protected String contextBasePath;
+    protected String FS="FS";
+    protected String projectName="";
+    protected String chosenProject="";
+    protected String[] contextList;
+    protected Hashtable contextListHash;
+    protected Vector contextListVector;
+    protected String codeName;
+    protected String inputFileName;
+    protected String inputFileContent;
     
     //Host properties
-    private String binPath;
-    private String baseWorkDir;
-    private String antUrl;
+    protected String binPath;
+    protected String baseWorkDir;
+    protected String antUrl;
 
-    private String fileServiceUrl;
-    private String hostName="danube.ucs.indiana.edu";
-    private String gnuplotHostName="gf2.ucs.indiana.edu";
+    protected String fileServiceUrl;
+    protected String hostName="danube.ucs.indiana.edu";
+    protected String gnuplotHostName="gf2.ucs.indiana.edu";
 
     //--------------------------------------------------
     // These are universal accessor methods.
     //--------------------------------------------------
+
+    public ContextManagerImp getContextManagerImp() {
+	return cm;
+    }
+
+    public void setContextManagerImp(ContextManagerImp cm) {
+	this.cm=cm;
+    }
+
+    public String getContextName() {
+	return contextName;
+    }
+
+    public void setContextName(String contextName) {
+	this.contextName=contextName;
+    }
 
     public String getUserName() {
 	return userName;
@@ -134,22 +151,6 @@ public class GenericProjectBean {
 
     public void setContextListVector(Vector contextListVector) {
 	this.contextListVector=contextListVector;
-    }
-
-    public String getContextGroup() {
-	return contextGroup;
-    }
-
-    public void setContextGroup(String contextGroup) {
-	this.contextGroup=contextGroup;
-    }
-
-    public String getContextId() {
-	return contextId;
-    }
-
-    public void setContextId(String contextId) {
-	this.contextId=contextId;
     }
     
     public void setContextList(String[] cl) {
@@ -271,32 +272,8 @@ public class GenericProjectBean {
 	}
     }
     
-    /**
-     * Method that is backed to a submit button of a form.
-     */
-    public String newProject() throws Exception{
-	if(!isInitialized) {
-	    initWebServices();
-	}
-	return ("new-project-created");
-    }
     
-    public String paramsThenTextArea() throws Exception {
-	setParameterValues();
-	return "parameters-to-textfield";
-    }
-
-    public String paramsThenDB() throws Exception {
-	setParameterValues();
-	return "parameters-to-database";
-    }
-
-    public String paramsThenMap() throws Exception {
-	setParameterValues();
-	return "parameters-to-googlemap";
-    }
-
-    private void setContextList() throws Exception {
+    protected void setContextList() throws Exception {
 	contextList=cm.listContext(codeName);
 	if(contextList==null || contextList.length<=0) {
 	    System.out.println(contextList.toString());
@@ -311,33 +288,7 @@ public class GenericProjectBean {
 	}
     }
 
-    public String loadDataArchive()throws Exception{
-	System.out.println("Loading project");
-	if(!isInitialized) {
-	    initWebServices();
-	}
-	setContextList();
-        return ("load-data-archive");
-    }
     
-    public String loadProject() throws Exception {
-	System.out.println("Loading project");
-	if(!isInitialized) {
-	    initWebServices();
-	}
-	setContextList();
-        return ("list-old-projects");
-    }
-
-    public String loadProjectPlots() throws Exception {
-	System.out.println("Loading project");
-	if(!isInitialized) {
-	    initWebServices();
-	}
-	setContextList();
-        return ("list-project-plots");
-    }
-
     public String createInputFile(String contextDir,
 				  String inputFileName,
 				  String inputFileContent) 
@@ -368,7 +319,7 @@ public class GenericProjectBean {
 	return "project-launched";
     }
 
-    private String trimLine(String line) {
+    protected String trimLine(String line) {
 	String endLine="\015";
 	while(line.lastIndexOf(endLine)>0) {
 	    line=line.substring(line.lastIndexOf(endLine));
@@ -377,7 +328,7 @@ public class GenericProjectBean {
 	return line;
     }
 
-    private void convertContextList() throws Exception {
+    protected void convertContextList() throws Exception {
 	Hashtable returnHash=new Hashtable();
 	String creationDate=null;
 	String contextname=null;
@@ -401,7 +352,7 @@ public class GenericProjectBean {
 	setContextListHash(returnHash);
     }
 
-    private String convertDate(String longIntForm){
+    protected String convertDate(String longIntForm){
 	long longDate=Long.parseLong(longIntForm);
 	return (new Date(longDate).toString());
     }

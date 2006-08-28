@@ -31,18 +31,18 @@ import java.util.Date;
 public class GenericSopacBean extends GenericProjectBean{
 
     //These are SOPAC properties
-    private String siteCode="sio5";
-    private String beginDate="2006-01-01";
-    private String endDate="2006-01-10";
-    private boolean bboxChecked=false;
-    private double minLatitude=32.0;
-    private double maxLatitude=33.4;
-    private double minLongitude=-120.0;
-    private double maxLongitude=-117.0;
-    private String resource;
-    private String contextGroup;
-    private String contextId="4";
-    private String sopacQueryResults="";
+    protected String siteCode="sio5";
+    protected String beginDate="2006-01-01";
+    protected String endDate="2006-01-10";
+    protected boolean bboxChecked=false;
+    protected double minLatitude=32.0;
+    protected double maxLatitude=33.4;
+    protected double minLongitude=-120.0;
+    protected double maxLongitude=-117.0;
+    protected String resource;
+    protected String contextGroup;
+    protected String contextId="4";
+    protected String sopacQueryResults="";
 
     //--------------------------------------------------
     // These are universal accessor methods.
@@ -188,6 +188,36 @@ public class GenericSopacBean extends GenericProjectBean{
     public String setTheStation() {
 	System.out.println("Station set: "+siteCode);
 	return "parameters-to-database";
+    }
+    /**
+     * This helper method assumes input is a multlined
+     * String of tabbed columns.  It cuts out the number of
+     * columns on the left specified by cutLeftColumns and 
+     * number on the right by cutRightColumns.
+     */
+    protected String filterResults(String tabbedString,
+				 int cutLeftColumns,
+				 int cutRightColumns) throws Exception {
+	String returnString="";
+	String space=" ";
+	StringTokenizer st;
+	BufferedReader br=new BufferedReader(new StringReader(tabbedString));
+	String line=br.readLine();
+	while(line!=null) {
+	    st=new StringTokenizer(line);
+	    String newLine="";
+	    int tokenCount=st.countTokens();
+	    for (int i=0;i<tokenCount;i++) {
+		String temp=st.nextToken();
+		if(i>=cutLeftColumns && i<(tokenCount-cutRightColumns)) {
+		    newLine+=temp+space;
+		}
+	    }
+	    returnString+=newLine+"\n";
+	    line=br.readLine();
+	}
+	System.out.println(returnString);
+	return returnString;
     }
 
 }

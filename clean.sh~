@@ -11,9 +11,6 @@ source ./tomcat-shutdown.sh
 sleep 3
 
 #Clean up the code
-cd $GENERIC_PROJECT_HOME
-mvn clean
-
 cd $WEB_SERVICES_HOME
 mvn clean
 

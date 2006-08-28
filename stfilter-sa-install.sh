@@ -16,7 +16,7 @@ echo "Installing RDAHMM"
 echo "######################################"
 cd $STFILTER_SA_HOME
 mvn clean package
-cp -r target/st_filter $CATALINA_HOME/webapps
+cp -r target/STFILTER $CATALINA_HOME/webapps
 
 
 

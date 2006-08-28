@@ -5,14 +5,153 @@
   <artifactId>GenericQuakeSimProject</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>Maven Quick Start Archetype</name>
+  <name>Generic parts of the application management code</name>
   <url>http://maven.apache.org</url>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
+    <repositories>
+        <repository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>apache-maven-snapshots</id>
+            <url>http://cvs.apache.org/maven-snapshot-repository</url>
+        </repository>
+        <repository>
+            <id>apache-maven</id>
+            <url>http://www.ibiblio.org/maven2</url>
+        </repository>
+
+        <!-- This is the apache repository for bridges -->
+        <repository>
+            <id>apache-maven</id>
+            <url>http://cvs.apache.org/repository</url>
+        </repository>
+
+        <!-- This is our local repository -->
+        <repository>
+            <id>crisisgrid-maven-repo</id>
+            <url>http://www.crisisgrid.org/maven2</url>
+        </repository>
+
+    </repositories>
+
+    <!-- Repositories for plugins -->
+    <pluginRepositories>
+        <!-- Repository to get the jetty plugin -->
+        <pluginRepository>
+            <id>mortbay-repo</id>
+            <name>mortbay-repo</name>
+            <url>http://www.mortbay.org/maven2/snapshot</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <!-- Project dependencies -->
+    <dependencies>
+       <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <version>3.8.1</version>
+          <scope>test</scope>
+       </dependency>
+    
+        <!-- Faces Jars -->
+        <dependency>
+            <groupId>myfaces</groupId>
+            <artifactId>myfaces-api</artifactId>
+            <version>1.1.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>myfaces</groupId>
+            <artifactId>myfaces-impl</artifactId>
+            <version>1.1.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>myfaces</groupId>
+            <artifactId>tomahawk</artifactId>
+            <version>1.1.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Junit testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Portlet Dependencies -->
+        <dependency>
+            <groupId>javax.portlet</groupId>
+            <artifactId>portlet-api</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Servlet Dependencies -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.3</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Web Service Dependencies -->
+        <dependency>
+             <groupId>QuakeSim2</groupId>
+             <artifactId>WebServices</artifactId>
+             <version>1.0</version>
+             <scope>compile</scope>
+        </dependency>
+
+        <!-- The following are given "provided" scope 
+             to allow me to compile without actually using 
+             these exact jars.  The real jars in in 
+             WEB-INF/lib.  Not good, but these are 
+             archaic services, so I don't want to waste time
+             resolving these dependencies
+        -->
+        <dependency>
+             <groupId>axis</groupId>
+             <artifactId>axis</artifactId>
+             <version>1.1</version>
+             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+             <groupId>axis</groupId>
+             <artifactId>axis-jaxrpc</artifactId>
+             <version>1.2</version>
+             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+             <groupId>commons-discovery</groupId>
+             <artifactId>commons-discovery</artifactId>
+             <version>0.2</version>
+             <scope>provided</scope>
+        </dependency>
+
+        <!--
+        SOPAC Jars
+        -->
+        <dependency>
+             <groupId>SOPAC</groupId>
+             <artifactId>GRWS_SubmitQuery</artifactId>
+             <version>1.0</version>
+        </dependency>
+
+        <dependency>
+             <groupId>SOPAC</groupId>
+             <artifactId>grwsXmlBeansSchemas</artifactId>
+             <version>1.0</version>
+        </dependency>
+
   </dependencies>
 </project>
