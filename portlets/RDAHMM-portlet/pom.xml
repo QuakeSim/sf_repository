@@ -203,6 +203,16 @@
         </dependency>
 
         <!--
+       Generic Project Dependencies.
+        -->
+        <dependency>
+             <groupId>org.servogrid.genericproject</groupId>
+             <artifactId>GenericQuakeSimProject</artifactId>
+             <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+
+        <!--
         SOPAC Jars
         -->
         <dependency>
