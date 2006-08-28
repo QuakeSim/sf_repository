@@ -55,8 +55,8 @@ public class RDAHMMBean extends GenericSopacBean{
     protected int numModelStates=2;
     protected int randomSeed=1;
     protected String outputType="";
-    protected String inputFileName="";
-    protected String inputFileContent="";
+    //    protected String inputFileName="";
+    //    protected String inputFileContent="";
     protected double annealStep=0.01;    
     
     //RDAHMM Gnuplot stuff properties
@@ -254,6 +254,7 @@ public class RDAHMMBean extends GenericSopacBean{
 	String inputFileName=projectName+".input";
 	String cfullName=codeName+"/"+projectName;
 	String contextDir=cm.getCurrentProperty(cfullName,"Directory");
+	String inputFileContent=getInputFileContent();
 
 	createInputFile(contextDir,inputFileName,inputFileContent);
 	String value=executeRDAHMM(contextDir,inputFileName,cfullName);
