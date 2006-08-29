@@ -37,6 +37,9 @@ mvn clean
 cd $STFILTER_SA_HOME
 mvn clean
 
+cd $STFILTER_PORTLET_HOME
+mvn clean
+
 
 # CLEAN VENDOR SOFTWARE
 echo "#################################"
