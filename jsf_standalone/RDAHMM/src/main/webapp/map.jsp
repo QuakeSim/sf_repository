@@ -86,7 +86,7 @@
           req.send(null);
         }
 
-        // callback for the request
+        // callrdahmm-back for the request
         function processReqChange() {
           if (req.readyState == 4) {
             if (req.status == 200) {

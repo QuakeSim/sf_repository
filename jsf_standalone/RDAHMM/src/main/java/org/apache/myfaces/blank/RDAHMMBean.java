@@ -188,22 +188,22 @@ public class RDAHMMBean extends GenericSopacBean{
 	if(!isInitialized) {
 	    initWebServices();
 	}
-	return ("new-project-created");
+	return ("rdahmm-new-project-created");
     }
     
     public String paramsThenTextArea() throws Exception {
 	setParameterValues();
-	return "parameters-to-textfield";
+	return "rdahmm-parameters-to-textfield";
     }
 
     public String paramsThenDB() throws Exception {
 	setParameterValues();
-	return "parameters-to-database";
+	return "rdahmm-parameters-to-database";
     }
 
     public String paramsThenMap() throws Exception {
 	setParameterValues();
-	return "parameters-to-googlemap";
+	return "rdahmm-parameters-to-googlemap";
     }
 
     public String setParameterValues() throws Exception {
@@ -220,7 +220,7 @@ public class RDAHMMBean extends GenericSopacBean{
 	cm.setCurrentProperty(contextName,"randomSeed",randomSeed+"");
 	cm.setCurrentProperty(contextName,"annealStep",annealStep+"");
 	cm.setCurrentProperty(contextName,"outputType",outputType);
-	return "parameters-set";
+	return "rdahmm-parameters-set";
     }
     
     public String loadDataArchive()throws Exception{
@@ -229,7 +229,7 @@ public class RDAHMMBean extends GenericSopacBean{
 	    initWebServices();
 	}
 	setContextList();
-        return ("load-data-archive");
+        return ("rdahmm-load-data-archive");
     }
     
     public String loadProject() throws Exception {
@@ -238,7 +238,7 @@ public class RDAHMMBean extends GenericSopacBean{
 	    initWebServices();
 	}
 	setContextList();
-        return ("list-old-projects");
+        return ("rdahmm-list-old-projects");
     }
 
     public String loadProjectPlots() throws Exception {
@@ -247,7 +247,7 @@ public class RDAHMMBean extends GenericSopacBean{
 	    initWebServices();
 	}
 	setContextList();
-        return ("list-project-plots");
+        return ("rdahmm-list-project-plots");
     }
     
     public String launchRDAHMM() throws Exception {
@@ -258,14 +258,14 @@ public class RDAHMMBean extends GenericSopacBean{
 
 	createInputFile(contextDir,inputFileName,inputFileContent);
 	String value=executeRDAHMM(contextDir,inputFileName,cfullName);
-	return "rdahmm-launched";
+	return "rdahmm-rdahmm-launched";
 
     }
 
     public String populateAndPlot() throws Exception {
 	populateProject();
 	launchPlot();
-	return "plot-created";
+	return "rdahmm-plot-created";
     }
 
     public String launchPlot() throws Exception {
@@ -275,12 +275,12 @@ public class RDAHMMBean extends GenericSopacBean{
 
 	createInputFile(contextDir,inputFileName,inputFileContent);
 	String value=createDataPlot(contextDir,inputFileName,cfullName);
-	return "gnuplot-launched";
+	return "rdahmm-gnuplot-launched";
 
     }
     //This is the command that runs the thing.
     public String launchProject() {
-	return "project-launched";
+	return "rdahmm-project-launched";
     }
 
     public String populateProject() throws Exception{
@@ -300,7 +300,7 @@ public class RDAHMMBean extends GenericSopacBean{
 	inputFileName=cm.getCurrentProperty(contextName,"inputFileName");
 	inputFileContent=setRDAHMMInputFile(projectName);
 	System.out.println("Input File:"+inputFileContent);
-	return "project-populated";
+	return "rdahmm-project-populated";
     }
 
 
@@ -379,7 +379,7 @@ public class RDAHMMBean extends GenericSopacBean{
         ant.setArgs(args);
         ant.execute();
 	
-	return "rdahmm-executing";
+	return "rdahmm-rdahmm-executing";
     }
 
     /**
@@ -497,7 +497,7 @@ public class RDAHMMBean extends GenericSopacBean{
 	}
 
 
-	return "gnuplot-plot-created";
+	return "rdahmm-gnuplot-plot-created";
     }
 
     //--------------------------------------------------

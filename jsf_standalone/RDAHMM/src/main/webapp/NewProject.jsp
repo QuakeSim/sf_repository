@@ -66,7 +66,7 @@
 
     <h:form>
     <hr/>
-    <h:commandLink action="back">
+    <h:commandLink action="rdahmm-back">
         <h:outputText value="#{rdahmmBean.codeName} Main Menu"/>
     </h:commandLink>
     </h:form>

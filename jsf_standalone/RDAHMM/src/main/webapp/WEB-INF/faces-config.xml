@@ -74,23 +74,23 @@
 	<navigation-rule>
 		<from-view-id>/Main.jsp</from-view-id>
 		<navigation-case>
-			<from-outcome>new-project-created</from-outcome>
+			<from-outcome>rdahmm-new-project-created</from-outcome>
 			<to-view-id>/NewProject.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>list-old-projects</from-outcome>
+			<from-outcome>rdahmm-list-old-projects</from-outcome>
 			<to-view-id>/LoadProject.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>load-database-page</from-outcome>
+			<from-outcome>rdahmm-load-database-page</from-outcome>
 			<to-view-id>/DBQuery.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>load-data-archive</from-outcome>
+			<from-outcome>rdahmm-load-data-archive</from-outcome>
 			<to-view-id>/DataArchive.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>list-project-plots</from-outcome>
+			<from-outcome>rdahmm-list-project-plots</from-outcome>
 			<to-view-id>/PlotData.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
@@ -99,23 +99,23 @@
 	<navigation-rule>
 		<from-view-id>/NewProject.jsp</from-view-id>
 		<navigation-case>
-			<from-outcome>back</from-outcome>
+			<from-outcome>rdahmm-back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>parameters-set</from-outcome>
+			<from-outcome>rdahmm-parameters-set</from-outcome>
 			<to-view-id>/SetInputFile.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>parameters-to-textfield</from-outcome>
+			<from-outcome>rdahmm-parameters-to-textfield</from-outcome>
 			<to-view-id>/SetInputFile.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>parameters-to-database</from-outcome>
+			<from-outcome>rdahmm-parameters-to-database</from-outcome>
 			<to-view-id>/SetInputFileFromDB.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>parameters-to-googlemap</from-outcome>
+			<from-outcome>rdahmm-parameters-to-googlemap</from-outcome>
 			<to-view-id>/allstations.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
@@ -126,11 +126,11 @@
 	<navigation-rule>
 		<from-view-id>/allstations.jsp</from-view-id>
 		<navigation-case>
-			<from-outcome>back</from-outcome>
+			<from-outcome>rdahmm-back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>parameters-to-database</from-outcome>
+			<from-outcome>rdahmm-parameters-to-database</from-outcome>
 			<to-view-id>/SetInputFileFromDB.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
@@ -139,11 +139,11 @@
 	<navigation-rule>
 		<from-view-id>/SetInputFile.jsp</from-view-id>
 		<navigation-case>
-			<from-outcome>back</from-outcome>
+			<from-outcome>rdahmm-back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>rdahmm-launched</from-outcome>
+			<from-outcome>rdahmm-rdahmm-launched</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
@@ -152,11 +152,11 @@
 	<navigation-rule>
 		<from-view-id>/SetInputFileFromDB.jsp</from-view-id>
 		<navigation-case>
-			<from-outcome>back</from-outcome>
+			<from-outcome>rdahmm-back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>display-query-results</from-outcome>
+			<from-outcome>rdahmm-display-query-results</from-outcome>
 			<to-view-id>/SetInputFile.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
@@ -165,14 +165,14 @@
 	<navigation-rule>
 		<from-view-id>/LoadProject.jsp</from-view-id>
 		<navigation-case>
-			<from-outcome>back</from-outcome>
+			<from-outcome>rdahmm-back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
 		<from-view-id>/LoadProject.jsp</from-view-id>
 		<navigation-case>
-			<from-outcome>project-populated</from-outcome>
+			<from-outcome>rdahmm-project-populated</from-outcome>
 			<to-view-id>/NewProject.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
@@ -181,15 +181,15 @@
 	<navigation-rule>
 		<from-view-id>/DBQuery.jsp</from-view-id>
 		<navigation-case>
-			<from-outcome>back</from-outcome>
+			<from-outcome>rdahmm-back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>back-to-main</from-outcome>
+			<from-outcome>rdahmm-back-to-main</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>display-query-results</from-outcome>
+			<from-outcome>rdahmm-display-query-results</from-outcome>
 			<to-view-id>/DisplayQueryResults.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
@@ -198,11 +198,11 @@
 	<navigation-rule>
 		<from-view-id>/DisplayQueryResults.jsp</from-view-id>
 		<navigation-case>
-			<from-outcome>back</from-outcome>
+			<from-outcome>rdahmm-back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>project-populated</from-outcome>
+			<from-outcome>rdahmm-project-populated</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
@@ -211,15 +211,15 @@
 	<navigation-rule>
 		<from-view-id>/DataArchive.jsp</from-view-id>
 		<navigation-case>
-			<from-outcome>back</from-outcome>
+			<from-outcome>rdahmm-back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>back-to-main</from-outcome>
+			<from-outcome>rdahmm-back-to-main</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>download-data-file</from-outcome>
+			<from-outcome>rdahmm-download-data-file</from-outcome>
 			<to-view-id>/DownloadData.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
@@ -228,11 +228,11 @@
 	<navigation-rule>
 		<from-view-id>/PlotData.jsp</from-view-id>
 		<navigation-case>
-			<from-outcome>back</from-outcome>
+			<from-outcome>rdahmm-back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>plot-created</from-outcome>
+			<from-outcome>rdahmm-plot-created</from-outcome>
 			<to-view-id>/ViewPlot.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
@@ -240,7 +240,7 @@
 	<navigation-rule>
 		<from-view-id>/ViewPlot.jsp</from-view-id>
 		<navigation-case>
-			<from-outcome>back</from-outcome>
+			<from-outcome>rdahmm-back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>

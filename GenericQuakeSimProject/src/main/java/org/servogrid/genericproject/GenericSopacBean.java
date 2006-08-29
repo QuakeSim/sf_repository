@@ -182,7 +182,10 @@ public class GenericSopacBean extends GenericProjectBean{
 	
 	inputFileContent=sopacQueryResults;
 		
-	return "display-query-results";
+	String codeName=getCodeName();
+	codeName=codeName.toLowerCase();
+	System.out.println("Sopac query action string:"+codeName+"-display-query-results");
+	return codeName+"-display-query-results";
     }
 
     public String setTheStation() {
