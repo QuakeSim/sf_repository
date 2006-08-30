@@ -182,13 +182,13 @@ mapcenter_y = center_xy[1];
       <f:view>
        <h:form id="form1">
        <h:inputText id="station_name" value="#{rdahmmBean.siteCode}"/>
-       <h:commandLink action="parameters-to-database">
+       <h:commandLink action="rdahmm-parameters-to-database">
             <h:outputText value="Query Selected Station"/>
        </h:commandLink>
        </h:form>
        <hr/>
        <h:form>
-         <h:commandLink action="back">
+         <h:commandLink action="rdahmm-back">
             <h:outputText value="#{rdahmmBean.codeName} Main Menu"/>
          </h:commandLink>
         </h:form>

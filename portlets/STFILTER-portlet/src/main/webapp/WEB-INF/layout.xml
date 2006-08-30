@@ -7,7 +7,7 @@
                 <table-layout>
                     <row-layout>
                         <column-layout>
-                            <portlet-frame label="proxyPF">
+                            <portlet-frame label="STFILTER_PF">
                                 <portlet-class>STFILTER-portlet#STFILTER-portlet </portlet-class>
                             </portlet-frame>
                         </column-layout>

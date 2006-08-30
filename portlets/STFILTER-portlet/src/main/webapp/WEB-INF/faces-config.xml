@@ -156,7 +156,7 @@
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>display-query-results</from-outcome>
+			<from-outcome>stfilter-display-query-results</from-outcome>
 			<to-view-id>/SetInputFile.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
@@ -189,7 +189,7 @@
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>display-query-results</from-outcome>
+			<from-outcome>stfilter-display-query-results</from-outcome>
 			<to-view-id>/DisplayQueryResults.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>

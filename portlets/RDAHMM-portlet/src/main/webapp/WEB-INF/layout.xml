@@ -7,7 +7,7 @@
                 <table-layout>
                     <row-layout>
                         <column-layout>
-                            <portlet-frame label="proxyPF">
+                            <portlet-frame label="RDAHMM-PF">
                                 <portlet-class>RDAHMM-portlet#RDAHMM-portlet </portlet-class>
                             </portlet-frame>
                         </column-layout>
