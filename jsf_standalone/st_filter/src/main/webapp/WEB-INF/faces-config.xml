@@ -36,7 +36,7 @@
                 </managed-property>
                 <managed-property>
                    <property-name>binPath</property-name>
-                   <value>/home/gateway/GEMCodes/STFILTER2/bin/</value>
+                   <value>/home/gateway/GEMCodes/stfilter/</value>
                 </managed-property>
                 <managed-property>
                    <property-name>baseWorkDir</property-name>

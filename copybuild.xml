@@ -25,7 +25,7 @@
 
 <target name="copy-stfilter-to-portlet">
    <property name="dest.dir" value="./portlets/STFILTER-portlet/"/>
-   <property name="source.dir" value="./jsf_standalone/STFILTER"/>
+   <property name="source.dir" value="./jsf_standalone/st_filter"/>
    <copy toDir="${dest.dir}"
          overwrite="true">
       <fileset dir="${source.dir}">

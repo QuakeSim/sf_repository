@@ -12,7 +12,7 @@ source ./env.sh
 
 echo ""
 echo "######################################"
-echo "Installing RDAHMM"
+echo "Installing STFILTER"
 echo "######################################"
 cd $STFILTER_SA_HOME
 mvn clean package

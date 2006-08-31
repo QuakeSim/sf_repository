@@ -177,7 +177,6 @@ public class RDAHMMBean extends GenericSopacBean{
 	cm=getContextManagerImp();
 	System.out.println("RDAHMM Bean Created");
     }
-
     
     /**
      * These are methods associated with Faces
@@ -278,7 +277,8 @@ public class RDAHMMBean extends GenericSopacBean{
 	return "rdahmm-gnuplot-launched";
 
     }
-    //This is the command that runs the thing.
+
+    //Possibly obsolete--need to check.
     public String launchProject() {
 	return "rdahmm-project-launched";
     }

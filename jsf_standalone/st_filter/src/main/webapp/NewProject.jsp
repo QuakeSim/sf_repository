@@ -32,28 +32,46 @@
                     required="true"/>
        <h:message for="projectName" showDetail="true" showSummary="true" errorStyle="color: red"/>
 
-       <h:outputText value="Number of Model States:"/>
-       <h:inputText id="nmodel" value="#{stfilterBean.numModelStates}"
+       <h:outputText value="Residual Option:"/>
+       <h:inputText id="resOption" value="#{stfilterBean.resOption}"
                      required="true"/>
-       <h:message for="nmodel" showDetail="true" showSummary="true" errorStyle="color: red"/>
+       <h:message for="resOption" showDetail="true" showSummary="true" errorStyle="color: red"/>
 
-       <h:outputText value="Annealing Step Size:"/>
-       <h:inputText id="annealStep" value="#{stfilterBean.annealStep}"
+       <h:outputText value="Term Option:"/>
+       <h:inputText id="termOption" value="#{stfilterBean.termOption}"
                      required="true"/>
-       <h:message for="annealStep" showDetail="true" showSummary="true" errorStyle="color: red"/>
+       <h:message for="termOption" showDetail="true" showSummary="true" errorStyle="color: red"/>
 
-       <h:outputText value="Random Number Seed:"/>
-       <h:inputText id="randomSeed" value="#{stfilterBean.randomSeed}"
+       <h:outputText value="Cutoff Criterion (Year):"/>
+       <h:inputText id="cutoffCriterion" value="#{stfilterBean.cutoffCriterion}"
                      required="true"/>
-       <h:message for="randomSeed" showDetail="true" showSummary="true" errorStyle="color: red"/>
+       <h:message for="cutoffCriterion" showDetail="true" showSummary="true" errorStyle="color: red"/>
 
+       <h:outputText value="Span to Estimated Jump Apr:"/>
+       <h:inputText id="estJumpSpan" value="#{stfilterBean.estJumpSpan}"
+                     required="true"/>
+       <h:message for="estJumpSpan" showDetail="true" showSummary="true" errorStyle="color: red"/>
 
-       <h:outputText value="OutputType:"/>
-       <h:selectOneListbox 
-		value="#{stfilterBean.outputType}"size="1">
-    		<f:selectItem itemValue="gauss"
- 			      itemLabel="Gaussian"/>
-       </h:selectOneListbox>
+       <h:outputText value="Weak Obs Criteria (Year):"/>
+       <h:inputText id="weakObsCriteria" value="#{stfilterBean.weakObsCritera}"
+                     required="true"/>
+       <h:message for="weakObsCriteria" showDetail="true" showSummary="true" errorStyle="color: red"/>
+
+       <h:outputText value="Outlier Criteria (mm):"/>
+       <h:inputText id="outlierCriteria" value="#{stfilterBean.outlierCritera}"
+                     required="true"/>
+       <h:message for="outlierCriteria" showDetail="true" showSummary="true" errorStyle="color: red"/>
+
+       <h:outputText value="Very Bad Obs Criteria (mm):"/>
+       <h:inputText id="badObsCritera" value="#{stfilterBean.badObsCritera}"
+                     required="true"/>
+       <h:message for="badObsCriteria" showDetail="true" showSummary="true" errorStyle="color: red"/>
+
+       <h:outputText value="Time Interval:"/>
+       <h:inputText id="timeInterval" value="#{stfilterBean.timeInterval}"
+                     required="true"/>
+       <h:message for="timeInterval" showDetail="true" showSummary="true" errorStyle="color: red"/>
+
 
     </h:panelGrid>
     <h:commandButton value="Pick Station from Map"
