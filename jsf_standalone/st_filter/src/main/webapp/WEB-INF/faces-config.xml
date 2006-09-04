@@ -47,27 +47,6 @@
                    <value>http://danube.ucs.indiana.edu:8045/GCWS/services/FileService</value>
                 </managed-property>
 
-
-                <!-- These are gnuplot host params -->
-                <managed-property>
-                   <property-name>gnuplotAntUrl</property-name>
-                   <value>
-                     http://danube.ucs.indiana.edu:8045/axis/services/AntVisco
-                   </value>
-                 </managed-property>
-                <managed-property>
-                   <property-name>gnuplotBinPath</property-name>
-                   <value>/home/gateway/GEMCodes/Gnuplot/stfilter/plotXYZ/</value>
-                 </managed-property>
-                <managed-property>
-                   <property-name>gnuplotBaseWorkDir</property-name>
-                   <value>/home/gateway/STFILTER_WDIR</value>
-                 </managed-property>
-                <managed-property>
-                   <property-name>gnuplotFileServiceUrl</property-name>
-                   <value>http://danube.ucs.indiana.edu:8045/GCWS/services/FileService</value>
-                 </managed-property>
-
 	</managed-bean>
 	
 	<!-- navigation rules for Main.jsp -->
@@ -157,7 +136,20 @@
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>stfilter-display-query-results</from-outcome>
-			<to-view-id>/SetInputFile.jsp</to-view-id>
+			<to-view-id>/ProjectParams.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+        
+        <!-- ProjectParams.jsp navigation rules -->
+	<navigation-rule>
+		<from-view-id>/ProjectParams.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>stfilter-launched</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
         

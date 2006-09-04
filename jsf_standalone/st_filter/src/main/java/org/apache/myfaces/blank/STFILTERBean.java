@@ -53,6 +53,7 @@ public class STFILTERBean extends GenericSopacBean {
 
     //Some internal fields.
     String twospace="  ";  //Used to format the driver file.
+    boolean projectCreated=false;
 
     //STFILTER properties
     private String codeName="STFILTER";
@@ -86,6 +87,14 @@ public class STFILTERBean extends GenericSopacBean {
     //--------------------------------------------------
     // These are accessor methods.
     //--------------------------------------------------
+
+    public String getOutlierCriteria() {
+	return outlierCriteria;
+    }
+
+    public void  setOutlierCriteria(String outlierCriteria) {
+	this.outlierCriteria=outlierCriteria;
+    }
 
     public int getResOption() {
 	return resOption;
@@ -123,7 +132,7 @@ public class STFILTERBean extends GenericSopacBean {
 	return weakObsCriteria;
     }
 
-    public void setWeakObsCriteria(String weakObsCritera) {
+    public void setWeakObsCriteria(String weakObsCriteria) {
 	this.weakObsCriteria=weakObsCriteria;
     }
 
@@ -168,24 +177,39 @@ public class STFILTERBean extends GenericSopacBean {
     }
 
     public String paramsThenDB() throws Exception {
-	setParameterValues();
+	//	setParameterValues();
+	createNewProject();
 	return "parameters-to-database";
     }
 
     public String paramsThenMap() throws Exception {
-	setParameterValues();
+	//	setParameterValues();
+	createNewProject();
 	return "parameters-to-googlemap";
     }
 
-    public String setParameterValues() throws Exception {
-        //Do real logic
+    public String createNewProject() throws Exception {
 	System.out.println("Creating new project");
 	
 	//Store the request values persistently
 	contextName=codeName+"/"+projectName;
+	String hostName=getHostName();
 	cm.addContext(contextName);
 	cm.setCurrentProperty(contextName,"projectName",projectName);
-	cm.setCurrentProperty(contextName,"hostName",hostName);
+	cm.setCurrentProperty(contextName,"hostName",hostName);	
+	projectCreated=true;
+	
+	return "new-project-created";
+    }
+
+    public String setParameterValues() throws Exception {
+	//This should always be true at this point, but check for 
+	//safety.
+	if(projectCreated!=true) {
+	    createNewProject();
+	}
+
+	//Now set the rest of the parameters.
 	cm.setCurrentProperty(contextName,"resOption",resOption+"");
 	cm.setCurrentProperty(contextName,"termOption",termOption+"");
 	cm.setCurrentProperty(contextName,"cutoffCriterion",
@@ -491,8 +515,47 @@ public class STFILTERBean extends GenericSopacBean {
 // 	    ex.printStackTrace();
 // 	}
 
-
+	
 	return "gnuplot-plot-created";
+    }
+    
+    /**
+     * Override this method.
+     */ 
+    public String querySOPAC() throws Exception {
+	
+	String minMaxLatLon=null;
+	
+	System.out.println("Do the query");
+	System.out.println("Use bounding box:"+bboxChecked);
+	System.out.println(siteCode);
+	System.out.println(beginDate);
+	System.out.println(endDate);
+	System.out.println(resource);	
+	System.out.println(contextGroup);	
+	System.out.println(contextId);	
+	System.out.println(minMaxLatLon);	
+
+
+	if(bboxChecked) {
+	    minMaxLatLon=minLatitude+" "+minLongitude+
+		" "+maxLatitude+" "+maxLongitude;
+	}
+	
+	GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
+	gsq.setFromServlet(siteCode, beginDate, endDate, resource,
+			   contextGroup, contextId, minMaxLatLon);
+	sopacQueryResults=gsq.getResource();
+	System.out.println("Query Results");
+	System.out.println(sopacQueryResults);
+	//	sopacQueryResults=filterResults(sopacQueryResults,2,3);
+	
+	inputFileContent=sopacQueryResults;
+		
+	String codeName=getCodeName();
+	codeName=codeName.toLowerCase();
+	System.out.println("Sopac query action string:"+codeName+"-display-query-results");
+	return codeName+"-display-query-results";
     }
 
     private String setSTFILTERInputFile(String projectName) {

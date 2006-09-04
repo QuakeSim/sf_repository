@@ -11,7 +11,7 @@ source ./env.sh
 
 echo ""
 echo "######################################"
-echo "Installing RDAHMM"
+echo "Installing Generic Bean Code"
 echo "######################################"
 cd $GENERIC_PROJECT_HOME
 mvn clean install

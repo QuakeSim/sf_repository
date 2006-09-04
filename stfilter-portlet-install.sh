@@ -11,7 +11,7 @@ source ./env.sh
 
 echo ""
 echo "######################################"
-echo "Installing RDAHMM"
+echo "Installing STFILTER Portlet"
 echo "######################################"
 cd $STFILTER_PORTLET_HOME
 export PORTLET_NAME=STFILTER-portlet

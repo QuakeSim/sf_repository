@@ -588,4 +588,44 @@ public class RDAHMMBean extends GenericSopacBean{
 	}
 	return inputFileContent;
     }
+    
+    
+    public String querySOPAC() throws Exception {
+	String retString=super.querySOPAC();
+	inputFileContent=filterResults(inputFileContent, 2, 3);
+	return retString;
+    }
+
+    /**
+     * This helper method assumes input is a multlined
+     * String of tabbed columns.  It cuts out the number of
+     * columns on the left specified by cutLeftColumns and 
+     * number on the right by cutRightColumns.
+     */
+    protected String filterResults(String tabbedString,
+				 int cutLeftColumns,
+				 int cutRightColumns) throws Exception {
+	String returnString="";
+	String space=" ";
+	StringTokenizer st;
+	BufferedReader br=new BufferedReader(new StringReader(tabbedString));
+	String line=br.readLine();
+	while(line!=null) {
+	    st=new StringTokenizer(line);
+	    String newLine="";
+	    int tokenCount=st.countTokens();
+	    for (int i=0;i<tokenCount;i++) {
+		String temp=st.nextToken();
+		if(i>=cutLeftColumns && i<(tokenCount-cutRightColumns)) {
+		    newLine+=temp+space;
+		}
+	    }
+	    returnString+=newLine+"\n";
+	    line=br.readLine();
+	}
+	System.out.println(returnString);
+	return returnString;
+    }
+
+
 }
