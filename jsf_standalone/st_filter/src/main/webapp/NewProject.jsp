@@ -7,7 +7,15 @@
  <body>
   <h2>Project Setup Page</h2>
   <p>
-  Provide a name for your project and then pick the station from the map.
+  Provide a name for your project and then pick the station from the map. 
+  <ul>
+  <li> Use <i>Pick Station from Map</i> if you want to find your station on 
+an interactive map before querying it.
+  </li>
+  <li> Use <i>Query Station from Databae</i> if you know the station name 
+and want to go directly to the database query form.
+  </li>
+  </ul>
   </p>
   <f:view>        
     <h:form>
@@ -19,8 +27,12 @@
        <h:message for="projectName" showDetail="true" showSummary="true" errorStyle="color: red"/>
 
     </h:panelGrid>
+    <p>
     <h:commandButton value="Pick Station from Map"
                      action="#{stfilterBean.paramsThenMap}"/>
+
+    <h:commandButton value="Query Station from Database"
+                     action="#{stfilterBean.paramsThenDB}"/>
 
     </h:form>
     <h:form>

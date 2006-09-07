@@ -4,14 +4,14 @@
 <target name="copy-all-to-portlet" depends="copy-rdahmm-to-portlet,copy-stfilter-to-portlet"/>
 
 <target name="copy-rdahmm-to-portlet">
-   <property name="dest.dir" value="./portlets/RDAHMM-portlet/"/>
-   <property name="source.dir" value="./jsf_standalone/RDAHMM"/>
-   <copy toDir="${dest.dir}"
+   <property name="rdahmm.dest.dir" value="./portlets/RDAHMM-portlet/"/>
+   <property name="rdahmm.source.dir" value="./jsf_standalone/RDAHMM"/>
+   <copy toDir="${rdahmm.dest.dir}"
          overwrite="true">
-      <fileset dir="${source.dir}">
+      <fileset dir="${rdahmm.source.dir}">
          <include name="**/*.java"/>
       </fileset>
-      <fileset dir="${source.dir}">
+      <fileset dir="${rdahmm.source.dir}">
          <include name="**/*.xml"/>
          <include name="**/*.class"/>
          <include name="**/*.jar"/>
@@ -24,14 +24,16 @@
 </target>
 
 <target name="copy-stfilter-to-portlet">
-   <property name="dest.dir" value="./portlets/STFILTER-portlet/"/>
-   <property name="source.dir" value="./jsf_standalone/st_filter"/>
-   <copy toDir="${dest.dir}"
+   <property name="stfilter.dest.dir" value="./portlets/STFILTER-portlet/"/>
+   <property name="stfilter.source.dir" value="./jsf_standalone/st_filter"/>
+   <echo message="${stfilter.dest.dir}"/>
+   <echo message="${stfilter.source.dir}"/>
+   <copy toDir="${stfilter.dest.dir}"
          overwrite="true">
-      <fileset dir="${source.dir}">
+      <fileset dir="${stfilter.source.dir}">
          <include name="**/*.java"/>
       </fileset>
-      <fileset dir="${source.dir}">
+      <fileset dir="${stfilter.source.dir}">
          <include name="**/*.xml"/>
          <include name="**/*.class"/>
          <include name="**/*.jar"/>

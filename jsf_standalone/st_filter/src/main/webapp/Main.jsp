@@ -32,15 +32,6 @@
                 <h:outputFormat id="output4" escape="false"   
                               value="<b>Data Archive:</b> Download output files from previous STFILTER runs."/>
 
-                <h:commandButton id="button5" value="Plot Data" 
-	                      action="#{stfilterBean.loadProjectPlots}"/>
-                <h:outputFormat id="output5" escape="false"
-                              value="<b>Plot Output:</b> Plot STFILTER output files."/>
-                <h:commandButton id="button3" value="Query DB" 
-	                      action="load-database-page"/>
-                <h:outputFormat id="output3" escape="false"
-                              value="<b>Query Database:</b> Query the SOPAC GPS archives directly"/>
-
               </h:panelGrid>
             </h:form>
         </f:view>

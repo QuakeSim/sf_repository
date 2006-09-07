@@ -57,8 +57,8 @@ public class GenericProjectBean {
     protected Hashtable contextListHash;
     protected Vector contextListVector;
     protected String codeName;
-    protected String inputFileName;
-    protected String inputFileContent;
+    protected String sopacDataFileName;
+    protected String sopacDataFileContent;
     
     //Host properties
     protected String binPath;
@@ -169,20 +169,20 @@ public class GenericProjectBean {
 	return this.hostName;
     }
 
-    public void  setInputFileName(String inputFileName) {
-	this.inputFileName=inputFileName;
+    public void  setSopacDataFileName(String sopacDataFileName) {
+	this.sopacDataFileName=sopacDataFileName;
     }
 
-    public String getInputFileName() {
-	return this.inputFileName;
+    public String getSopacDataFileName() {
+	return this.sopacDataFileName;
     }
 
-    public void  setInputFileContent(String inputFileContent) {
-	this.inputFileContent=inputFileContent;
+    public void  setSopacDataFileContent(String sopacDataFileContent) {
+	this.sopacDataFileContent=sopacDataFileContent;
     }
 
-    public String getInputFileContent() {
-	return this.inputFileContent;
+    public String getSopacDataFileContent() {
+	return this.sopacDataFileContent;
     }
 
     public boolean getIsInitialized() {
@@ -289,25 +289,6 @@ public class GenericProjectBean {
     }
 
     
-    public String createInputFile(String contextDir,
-				  String inputFileName,
-				  String inputFileContent) 
-	throws Exception {
-	//The value should be set by JSF from the associated JSP page.
-	//We just need to clean it up and add it to the context
-	
-	//	cm.setCurrentProperty(contextName,"inputFileName",inputFileName);
-	System.out.println("Writing input file: "+contextDir+"/"+inputFileName);
-	PrintWriter pw=
-	    new PrintWriter(new FileWriter(contextDir+"/"+inputFileName),true);
-	pw.println(inputFileContent);
-	pw.close();
-
-	//Clean this up since it could be a memory drain.
-	//	inputFileContent=null;
-	return "input-file-created";
-    }
-
     public String getPortalUserName() {
 	userName=Utility.getUserName(defaultName);
 	System.out.println("Username is "+userName);

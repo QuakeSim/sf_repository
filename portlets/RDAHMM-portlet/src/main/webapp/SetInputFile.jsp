@@ -12,7 +12,7 @@
   <f:view>        
     <h:outputText value="View and edit the input file you will submit"/>
     <h:form id="form2">
-    <h:inputTextarea id="projectInput" value="#{rdahmmBean.inputFileContent}"
+    <h:inputTextarea id="projectInput" value="#{rdahmmBean.sopacDataFileContent}"
                     rows="20" cols="75" 
                     required="true"/>
     <h:message for="projectInput" 

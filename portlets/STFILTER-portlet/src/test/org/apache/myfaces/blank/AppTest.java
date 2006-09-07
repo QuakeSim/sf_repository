@@ -34,7 +34,7 @@ public class AppTest
     public void testApp()
     {
 	String theurl="http://localhost:8080/";
-	STFILTERBean rb=new STFILTERBean();
+	STFILTERBean rb=new RDAHMMBean();
 	rb.setCodeName("STFILTER");
 	rb.setContextUrl(theurl);
         assertEquals(theurl,rb.getContextUrl);

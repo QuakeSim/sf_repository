@@ -180,14 +180,34 @@ public class GenericSopacBean extends GenericProjectBean{
 	System.out.println(sopacQueryResults);
 	//	sopacQueryResults=filterResults(sopacQueryResults,2,3);
 	
-	inputFileContent=sopacQueryResults;
+	sopacDataFileContent=sopacQueryResults;
 		
 	String codeName=getCodeName();
 	codeName=codeName.toLowerCase();
 	System.out.println("Sopac query action string:"+codeName+"-display-query-results");
 	return codeName+"-display-query-results";
     }
-
+    
+    public String createSopacDataFile(String contextDir,
+				      String sopacDataFileName,
+				      String sopacDataFileContent) 
+	throws Exception {
+	//The value should be set by JSF from the associated JSP page.
+	//We just need to clean it up and add it to the context
+	
+	//	cm.setCurrentProperty(contextName,"sopacDataFileName",sopacDataFileName);
+	System.out.println("Writing input file: "+contextDir+"/"+sopacDataFileName);
+	PrintWriter pw=
+	    new PrintWriter(new FileWriter(contextDir+"/"+sopacDataFileName),true);
+	pw.println(sopacDataFileContent);
+	pw.close();
+	
+	//Clean this up since it could be a memory drain.
+	//	sopacDataFileContent=null;
+	return "input-file-created";
+    }
+    
+    
     public String setTheStation() {
 	System.out.println("Station set: "+siteCode);
 	return "parameters-to-database";

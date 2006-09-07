@@ -14,7 +14,14 @@ echo "######################################"
 echo "Installing Generic Bean Code"
 echo "######################################"
 cd $GENERIC_PROJECT_HOME
-mvn clean install
+if mvn clean install
+then
+    echo Install complete
+else
+    echo Install failed
+    exit 1
+fi
+
 
 
 

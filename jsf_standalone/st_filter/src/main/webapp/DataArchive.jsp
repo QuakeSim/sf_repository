@@ -34,16 +34,121 @@
 
 	   <h:column>
   	    <f:facet name="header">
-           	<h:outputText value="Input File"/>
+           	<h:outputText value="Driver File"/>
             </f:facet>
   	    <h:outputLink value="#{stfilterBean.codeName}/DownloadData.jsp" target="_blank">
-           	<h:outputText value="#{project.projectName}.input"/>
+           	<h:outputText value="#{project.projectName}.drv"/>
                 <f:param name="userName" value="#{stfilterBean.userName}"/>
                 <f:param name="hostName" value="#{project.hostName}"/>
                 <f:param name="projectName" value="#{project.projectName}"/>
                 <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
                 <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
-                <f:param name="fileExtension" value=".input"/>
+                <f:param name="fileExtension" value=".drv"/>
+            </h:outputLink>
+           </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+           	<h:outputText value="GPS Input Data"/>
+            </f:facet>
+  	    <h:outputLink value="#{stfilterBean.codeName}/DownloadData.jsp" target="_blank">
+           	<h:outputText value="#{project.projectName}.data"/>
+                <f:param name="userName" value="#{stfilterBean.userName}"/>
+                <f:param name="hostName" value="#{project.hostName}"/>
+                <f:param name="projectName" value="#{project.projectName}"/>
+                <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
+                <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
+                <f:param name="fileExtension" value=".data"/>
+            </h:outputLink>
+           </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+           	<h:outputText value="Input Station List"/>
+            </f:facet>
+  	    <h:outputLink value="#{stfilterBean.codeName}/DownloadData.jsp" target="_blank">
+           	<h:outputText value="#{project.projectName}.list"/>
+                <f:param name="userName" value="#{stfilterBean.userName}"/>
+                <f:param name="hostName" value="#{project.hostName}"/>
+                <f:param name="projectName" value="#{project.projectName}"/>
+                <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
+                <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
+                <f:param name="fileExtension" value=".list"/>
+            </h:outputLink>
+           </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+           	<h:outputText value="Site List"/>
+            </f:facet>
+  	    <h:outputLink value="#{stfilterBean.codeName}/DownloadData.jsp" target="_blank">
+           	<h:outputText value="#{project.projectName}.site"/>
+                <f:param name="userName" value="#{stfilterBean.userName}"/>
+                <f:param name="hostName" value="#{project.hostName}"/>
+                <f:param name="projectName" value="#{project.projectName}"/>
+                <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
+                <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
+                <f:param name="fileExtension" value=".site"/>
+            </h:outputLink>
+           </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+           	<h:outputText value="Estimated Parameter File"/>
+            </f:facet>
+  	    <h:outputLink value="#{stfilterBean.codeName}/DownloadData.jsp" target="_blank">
+           	<h:outputText value="#{project.projectName}.para"/>
+                <f:param name="userName" value="#{stfilterBean.userName}"/>
+                <f:param name="hostName" value="#{project.hostName}"/>
+                <f:param name="projectName" value="#{project.projectName}"/>
+                <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
+                <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
+                <f:param name="fileExtension" value=".para"/>
+            </h:outputLink>
+           </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+           	<h:outputText value="Output File"/>
+            </f:facet>
+  	    <h:outputLink value="#{stfilterBean.codeName}/DownloadData.jsp" target="_blank">
+           	<h:outputText value="#{project.projectName}.output"/>
+                <f:param name="userName" value="#{stfilterBean.userName}"/>
+                <f:param name="hostName" value="#{project.hostName}"/>
+                <f:param name="projectName" value="#{project.projectName}"/>
+                <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
+                <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
+                <f:param name="fileExtension" value=".output"/>
+            </h:outputLink>
+           </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+           	<h:outputText value="Residual File"/>
+            </f:facet>
+  	    <h:outputLink value="#{stfilterBean.codeName}/DownloadData.jsp" target="_blank">
+           	<h:outputText value="#{project.projectName}.resi"/>
+                <f:param name="userName" value="#{stfilterBean.userName}"/>
+                <f:param name="hostName" value="#{project.hostName}"/>
+                <f:param name="projectName" value="#{project.projectName}"/>
+                <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
+                <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
+                <f:param name="fileExtension" value=".resi"/>
+            </h:outputLink>
+           </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+           	<h:outputText value="Model File"/>
+            </f:facet>
+  	    <h:outputLink value="#{stfilterBean.codeName}/DownloadData.jsp" target="_blank">
+           	<h:outputText value="#{project.projectName}.mdl"/>
+                <f:param name="userName" value="#{stfilterBean.userName}"/>
+                <f:param name="hostName" value="#{project.hostName}"/>
+                <f:param name="projectName" value="#{project.projectName}"/>
+                <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
+                <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
+                <f:param name="fileExtension" value=".mdl"/>
             </h:outputLink>
            </h:column>
 
@@ -59,82 +164,6 @@
                 <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
                 <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
                 <f:param name="fileExtension" value=".stdout"/>
-            </h:outputLink>
-           </h:column>
-
-	   <h:column>
-  	    <f:facet name="header">
-           	<h:outputText value="A"/>
-            </f:facet>
-  	    <h:outputLink value="#{stfilterBean.codeName}/DownloadData.jsp" target="_blank">
-           <h:outputText value="#{project.projectName}.A"/>
-                <f:param name="userName" value="#{stfilterBean.userName}"/>
-                <f:param name="hostName" value="#{project.hostName}"/>
-                <f:param name="projectName" value="#{project.projectName}"/>
-                <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
-                <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
-                <f:param name="fileExtension" value=".A"/>
-            </h:outputLink>
-           </h:column>
-
-	   <h:column>
-  	    <f:facet name="header">
-           	<h:outputText value="B"/>
-            </f:facet>
-  	    <h:outputLink value="#{stfilterBean.codeName}/DownloadData.jsp" target="_blank">
-           <h:outputText value="#{project.projectName}.B"/>
-                <f:param name="userName" value="#{stfilterBean.userName}"/>
-                <f:param name="hostName" value="#{project.hostName}"/>
-                <f:param name="projectName" value="#{project.projectName}"/>
-                <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
-                <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
-                <f:param name="fileExtension" value=".B"/>
-            </h:outputLink>
-           </h:column>
-
-	   <h:column>
-  	    <f:facet name="header">
-           	<h:outputText value="L"/>
-            </f:facet>
-  	    <h:outputLink value="#{stfilterBean.codeName}/DownloadData.jsp" target="_blank">
-           <h:outputText value="#{project.projectName}.L"/>
-                <f:param name="userName" value="#{stfilterBean.userName}"/>
-                <f:param name="hostName" value="#{project.hostName}"/>
-                <f:param name="projectName" value="#{project.projectName}"/>
-                <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
-                <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
-                <f:param name="fileExtension" value=".L"/>
-            </h:outputLink>
-
-           </h:column>
-
-	   <h:column>
-  	    <f:facet name="header">
-           	<h:outputText value="Q"/>
-            </f:facet>
-  	    <h:outputLink value="#{stfilterBean.codeName}/DownloadData.jsp" target="_blank">
-           <h:outputText value="#{project.projectName}.Q"/>
-                <f:param name="userName" value="#{stfilterBean.userName}"/>
-                <f:param name="hostName" value="#{project.hostName}"/>
-                <f:param name="projectName" value="#{project.projectName}"/>
-                <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
-                <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
-                <f:param name="fileExtension" value=".Q"/>
-            </h:outputLink>
-           </h:column>
-
-	   <h:column>
-  	    <f:facet name="header">
-           	<h:outputText value="PI"/>
-            </f:facet>
-  	    <h:outputLink value="#{stfilterBean.codeName}/DownloadData.jsp" target="_blank">
-           <h:outputText value="#{project.projectName}.pi"/>
-                <f:param name="userName" value="#{stfilterBean.userName}"/>
-                <f:param name="hostName" value="#{project.hostName}"/>
-                <f:param name="projectName" value="#{project.projectName}"/>
-                <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
-                <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
-                <f:param name="fileExtension" value=".pi"/>
             </h:outputLink>
            </h:column>
           </h:dataTable>

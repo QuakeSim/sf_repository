@@ -55,8 +55,8 @@ public class RDAHMMBean extends GenericSopacBean{
     protected int numModelStates=2;
     protected int randomSeed=1;
     protected String outputType="";
-    //    protected String inputFileName="";
-    //    protected String inputFileContent="";
+    //    protected String sopacDataFileName="";
+    //    protected String sopacDataFileContent="";
     protected double annealStep=0.01;    
     
     //RDAHMM Gnuplot stuff properties
@@ -250,13 +250,13 @@ public class RDAHMMBean extends GenericSopacBean{
     }
     
     public String launchRDAHMM() throws Exception {
-	String inputFileName=projectName+".input";
+	String sopacDataFileName=projectName+".input";
 	String cfullName=codeName+"/"+projectName;
 	String contextDir=cm.getCurrentProperty(cfullName,"Directory");
-	String inputFileContent=getInputFileContent();
+	String sopacDataFileContent=getSopacDataFileContent();
 
-	createInputFile(contextDir,inputFileName,inputFileContent);
-	String value=executeRDAHMM(contextDir,inputFileName,cfullName);
+	createSopacDataFile(contextDir,sopacDataFileName,sopacDataFileContent);
+	String value=executeRDAHMM(contextDir,sopacDataFileName,cfullName);
 	return "rdahmm-rdahmm-launched";
 
     }
@@ -268,12 +268,12 @@ public class RDAHMMBean extends GenericSopacBean{
     }
 
     public String launchPlot() throws Exception {
-	String inputFileName=projectName+".input";
+	String sopacDataFileName=projectName+".input";
 	String cfullName=codeName+"/"+projectName;
 	String contextDir=cm.getCurrentProperty(cfullName,"Directory");
 
-	createInputFile(contextDir,inputFileName,inputFileContent);
-	String value=createDataPlot(contextDir,inputFileName,cfullName);
+	createSopacDataFile(contextDir,sopacDataFileName,sopacDataFileContent);
+	String value=createDataPlot(contextDir,sopacDataFileName,cfullName);
 	return "rdahmm-gnuplot-launched";
 
     }
@@ -297,15 +297,15 @@ public class RDAHMMBean extends GenericSopacBean{
 	    Double.parseDouble(cm.getCurrentProperty(contextName,
 						     "annealStep"));
 	
-	inputFileName=cm.getCurrentProperty(contextName,"inputFileName");
-	inputFileContent=setRDAHMMInputFile(projectName);
-	System.out.println("Input File:"+inputFileContent);
+	sopacDataFileName=cm.getCurrentProperty(contextName,"sopacDataFileName");
+	sopacDataFileContent=setRDAHMMSopacDataFile(projectName);
+	System.out.println("Input File:"+sopacDataFileContent);
 	return "rdahmm-project-populated";
     }
 
 
     public String executeRDAHMM(String contextDir,
-				String inputFileName,
+				String sopacDataFileName,
 				String cfullName) 
 	throws Exception{
 	
@@ -315,8 +315,8 @@ public class RDAHMMBean extends GenericSopacBean{
 	String workDir=baseWorkDir+File.separator
 	    +userName+File.separator+projectName;
 
-	int ndim=getFileDimension(contextDir,inputFileName);
-	int nobsv=getLineCount(contextDir,inputFileName);
+	int ndim=getFileDimension(contextDir,sopacDataFileName);
+	int nobsv=getLineCount(contextDir,sopacDataFileName);
 	//--------------------------------------------------
 	// Set up the Ant Service and make the directory
 	//--------------------------------------------------
@@ -335,10 +335,10 @@ public class RDAHMMBean extends GenericSopacBean{
 	// Set up the file service and move the file.
 	//--------------------------------------------------
 	FSClientStub fsclient=new FSClientStub();
-	String destfile=workDir+"/"+inputFileName; 
+	String destfile=workDir+"/"+sopacDataFileName; 
 	try {
 	    fsclient.setBindingUrl(fileServiceUrl);    	
-	    fsclient.uploadFile(contextDir+"/"+inputFileName,destfile);
+	    fsclient.uploadFile(contextDir+"/"+sopacDataFileName,destfile);
 	}
 	catch(Exception ex) {
 	    ex.printStackTrace();
@@ -389,7 +389,7 @@ public class RDAHMMBean extends GenericSopacBean{
      * (gnuplot) are on separate machines.
      */
     public String createDataPlot(String contextDir,
-				 String inputFileName,
+				 String sopacDataFileName,
 				 String cfullName) 
 	throws Exception{
 	
@@ -420,15 +420,15 @@ public class RDAHMMBean extends GenericSopacBean{
 	// Set up the file service and move the file.
 	//--------------------------------------------------
 	FSClientStub fsclient=new FSClientStub();
-	String sourceFile=workDir+"/"+inputFileName; 
-	String inputdestfile=gnuplotBinPath+"/"+inputFileName;
+	String sourceFile=workDir+"/"+sopacDataFileName; 
+	String inputdestfile=gnuplotBinPath+"/"+sopacDataFileName;
 	
 	String qSourceFile=workDir+"/"+projectName+".Q"; 
 	String qDestFile=gnuplotBinPath+"/"+projectName+".Q"; 
 
-	String plotFileNameX=gnuplotBinPath+"/"+inputFileName+".X.png";
-	String plotFileNameY=gnuplotBinPath+"/"+inputFileName+".Y.png";
-	String plotFileNameZ=gnuplotBinPath+"/"+inputFileName+".Z.png";
+	String plotFileNameX=gnuplotBinPath+"/"+sopacDataFileName+".X.png";
+	String plotFileNameY=gnuplotBinPath+"/"+sopacDataFileName+".Y.png";
+	String plotFileNameZ=gnuplotBinPath+"/"+sopacDataFileName+".Z.png";
 
 	try {
 	    fsclient.setBindingUrl(fileServiceUrl);    	
@@ -443,7 +443,7 @@ public class RDAHMMBean extends GenericSopacBean{
 	String[] args=new String[7];
         args[0]="-DworkDir.prop="+gnuplotWorkDir;
         args[1]="-DbinDir.prop="+gnuplotBinPath;
-        args[2]="-DinputFile.prop="+inputFileName;
+        args[2]="-DinputFile.prop="+sopacDataFileName;
         args[3]="-DqFile.prop="+projectName+".Q";
         args[4]="-buildfile";
         args[5]=bf_loc;
@@ -508,7 +508,7 @@ public class RDAHMMBean extends GenericSopacBean{
     //--------------------------------------------------
     
     protected int getFileDimension(String contextDir, 
-				 String inputFileName) {
+				 String sopacDataFileName) {
 	
 	boolean success=false;
 	int ndim=0;
@@ -516,7 +516,7 @@ public class RDAHMMBean extends GenericSopacBean{
 	try {
 
 	    BufferedReader buf=
-		new BufferedReader(new FileReader(contextDir+"/"+inputFileName));
+		new BufferedReader(new FileReader(contextDir+"/"+sopacDataFileName));
 	    
 	    String line=buf.readLine();	
 	    if(line!=null){
@@ -542,11 +542,11 @@ public class RDAHMMBean extends GenericSopacBean{
     //--------------------------------------------------
     // This counts the line number.
     //--------------------------`------------------------
-    protected int getLineCount(String contextDir, String inputFileName) {
+    protected int getLineCount(String contextDir, String sopacDataFileName) {
 	int nobsv=0;
 	try {
 	    LineNumberReader lnr=
-		new LineNumberReader(new FileReader(contextDir+"/"+inputFileName));
+		new LineNumberReader(new FileReader(contextDir+"/"+sopacDataFileName));
 	    
 	    String line2=lnr.readLine();
 	    while(line2!=null) {
@@ -563,22 +563,22 @@ public class RDAHMMBean extends GenericSopacBean{
 
     }
 
-    protected String setRDAHMMInputFile(String projectName) {
-	String inputFileContent="Null Content; please re-enter";
-	String inputFileName=projectName+".input";
+    protected String setRDAHMMSopacDataFile(String projectName) {
+	String sopacDataFileContent="Null Content; please re-enter";
+	String sopacDataFileName=projectName+".input";
 	try {
 	    String thedir=cm.getCurrentProperty(codeName
 						+"/"+projectName,"Directory");
-	    System.out.println(thedir+"/"+inputFileName);
+	    System.out.println(thedir+"/"+sopacDataFileName);
 	    
 	    BufferedReader buf=
-		new BufferedReader(new FileReader(thedir+"/"+inputFileName));
+		new BufferedReader(new FileReader(thedir+"/"+sopacDataFileName));
 	    String line=buf.readLine();
-	    inputFileContent=line+"\n";
+	    sopacDataFileContent=line+"\n";
 	    while(line!=null) {
 		System.out.println(line);
 		line=trimLine(line);	
-		inputFileContent+=line+"\n";
+		sopacDataFileContent+=line+"\n";
 		line=buf.readLine();
 	    }
 	    buf.close();
@@ -586,6 +586,46 @@ public class RDAHMMBean extends GenericSopacBean{
 	catch (Exception ex) {
 	    ex.printStackTrace();
 	}
-	return inputFileContent;
+	return sopacDataFileContent;
     }
+    
+    
+    public String querySOPAC() throws Exception {
+	String retString=super.querySOPAC();
+	sopacDataFileContent=filterResults(sopacDataFileContent, 2, 3);
+	return retString;
+    }
+
+    /**
+     * This helper method assumes input is a multlined
+     * String of tabbed columns.  It cuts out the number of
+     * columns on the left specified by cutLeftColumns and 
+     * number on the right by cutRightColumns.
+     */
+    protected String filterResults(String tabbedString,
+				 int cutLeftColumns,
+				 int cutRightColumns) throws Exception {
+	String returnString="";
+	String space=" ";
+	StringTokenizer st;
+	BufferedReader br=new BufferedReader(new StringReader(tabbedString));
+	String line=br.readLine();
+	while(line!=null) {
+	    st=new StringTokenizer(line);
+	    String newLine="";
+	    int tokenCount=st.countTokens();
+	    for (int i=0;i<tokenCount;i++) {
+		String temp=st.nextToken();
+		if(i>=cutLeftColumns && i<(tokenCount-cutRightColumns)) {
+		    newLine+=temp+space;
+		}
+	    }
+	    returnString+=newLine+"\n";
+	    line=br.readLine();
+	}
+	System.out.println(returnString);
+	return returnString;
+    }
+
+
 }

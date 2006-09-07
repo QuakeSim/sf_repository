@@ -15,7 +15,14 @@ echo "######################################"
 echo "Installing STFILTER"
 echo "######################################"
 cd $STFILTER_SA_HOME
-mvn clean package
+if mvn clean package
+then 
+    echo Install complete
+else
+    echo Install failed
+    exit 1
+fi
+
 cp -r target/STFILTER $CATALINA_HOME/webapps
 
 

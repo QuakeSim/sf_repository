@@ -11,11 +11,17 @@ source ./env.sh
 
 echo ""
 echo "######################################"
-echo "Installing RDAHMM"
+echo "Installing RDAHMM Portlet"
 echo "######################################"
 cd $RDAHMM_PORTLET_HOME
 export PORTLET_NAME=RDAHMM-portlet
-mvn clean package
+if mvn clean package
+then 
+    echo Install complete
+else
+    exit 1
+fi
+
 cp -r target/$PORTLET_NAME $CATALINA_HOME/webapps
 touch $PORTAL_WEBAPP_DIR/WEB-INF/CustomPortal/portlets/$PORTLET_NAME
 

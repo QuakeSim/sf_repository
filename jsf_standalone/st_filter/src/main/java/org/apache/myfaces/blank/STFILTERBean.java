@@ -57,28 +57,52 @@ public class STFILTERBean extends GenericSopacBean {
 
     //STFILTER properties
     private String codeName="STFILTER";
-    private String projectName="";
-    private int resOption;
-    private int termOption;
-    private double cutoffCriterion;
-    private double estJumpSpan;
-    private String weakObsCriteria;
-    private String outlierCriteria;
-    private String badObsCriteria;
-    private String timeInterval;
-    private String inputFileName="";
-    private String inputFileContent="";
-    private String inputFileExtension=".drv";
+    private int resOption=387;
+    private int termOption=556;
+    private double cutoffCriterion=1.0;
+    private double estJumpSpan=1.0;
+    private String weakObsCriteria="30.0 30.0 50.0";
+    private String outlierCriteria="800.0 800.0 800.0";
+    private String badObsCriteria="10000.0 10000.0 10000.0";
+    private String timeInterval="1998.0 2006.8000";
 
-    private String aprioriValueFile="";
-    private String mosesDataList="";
-    private String mosesSiteList="";
-    private String mosesParamFile="";
-    private String residualFile="";
-    private String termOutFile="";
+    //This is the file that will hold the 
+    //results of the GPS station query.
+    private String sopacDataFileName="";
+    private String sopacDataFileContent="";
+    private String sopacDataFileExt=".data";
+
+    //This is the working diretory for running the 
+    //code on the execution host.  The global data
+    //directory is the location of things like the
+    //apriori file.
+    private String workDir="";
+    private String globalDataDir="";
+
+    //This is the driver file and its constituent lines.
+    private String driverFileName="";
+    private String driverFileContent="";
+    private String driverFileExtension=".drv";
+
+    //These are fixed files, at least for now.
+    private String aprioriValueFile="itrf2000_final.net";
+    private String mosesParamFile="moses_test.para";
+
+    //These are file extensions.  The files will be named after the
+    //project.
+    private String mosesDataListExt=".list";
+    private String mosesSiteListExt=".site";
+    private String mosesParamFileExt=".para";
+    private String residualFileExt=".resi";
+    private String termOutFileExt=".mdl";
+    private String outputFileExt=".out";
+
+    //This is the site list file
+    private String siteListFile;
+    private String dataListFile;
 
     //Project properties
-    private String chosenProject="";
+    //    private String chosenProject="";
 
     private String[] contextList;
     private Hashtable contextListHash;
@@ -87,6 +111,14 @@ public class STFILTERBean extends GenericSopacBean {
     //--------------------------------------------------
     // These are accessor methods.
     //--------------------------------------------------
+
+    public String getDriverFileName() {
+	return driverFileName;
+    }
+
+    public void setDriverFileName(String driverFileName){
+	this.driverFileName=driverFileName;
+    }
 
     public String getOutlierCriteria() {
 	return outlierCriteria;
@@ -159,6 +191,7 @@ public class STFILTERBean extends GenericSopacBean {
     public STFILTERBean(){   
 	super();
 	cm=getContextManagerImp();
+	setSiteCode("LBC1");  //Use this for testing.
     }
 
     /**
@@ -190,6 +223,7 @@ public class STFILTERBean extends GenericSopacBean {
 
     public String createNewProject() throws Exception {
 	System.out.println("Creating new project");
+	System.out.println("Project name is "+projectName);
 	
 	//Store the request values persistently
 	contextName=codeName+"/"+projectName;
@@ -199,6 +233,12 @@ public class STFILTERBean extends GenericSopacBean {
 	cm.setCurrentProperty(contextName,"hostName",hostName);	
 	projectCreated=true;
 	
+	//This is the working directory of the execution host.
+	workDir=getBaseWorkDir()+File.separator
+	    +userName+File.separator+projectName;
+
+	globalDataDir=getBinPath();
+
 	return "new-project-created";
     }
 
@@ -210,6 +250,7 @@ public class STFILTERBean extends GenericSopacBean {
 	}
 
 	//Now set the rest of the parameters.
+	//The cm object is inherited.
 	cm.setCurrentProperty(contextName,"resOption",resOption+"");
 	cm.setCurrentProperty(contextName,"termOption",termOption+"");
 	cm.setCurrentProperty(contextName,"cutoffCriterion",
@@ -251,14 +292,19 @@ public class STFILTERBean extends GenericSopacBean {
     }
     
     public String launchSTFILTER() throws Exception {
-	String inputFileName=projectName+inputFileExtension;
+	//Do this here.
+	setParameterValues();
+
+	String sopacDataFileName=getSiteCode()+sopacDataFileExt;
 	String cfullName=codeName+"/"+projectName;
 	String contextDir=cm.getCurrentProperty(cfullName,"Directory");
 
-	createInputFile(contextDir,inputFileName,inputFileContent);
-	String value=executeSTFILTER(contextDir,inputFileName,cfullName);
+	createDriverFile(contextDir);
+	createSopacDataFile(contextDir,sopacDataFileName,sopacDataFileContent);
+	createSiteListFile(contextDir);
+	createDataListFile(contextDir);
+	String value=executeSTFILTER(contextDir,sopacDataFileName,cfullName);
 	return "stfilter-launched";
-
     }
 
     public String populateAndPlot() throws Exception {
@@ -274,46 +320,89 @@ public class STFILTERBean extends GenericSopacBean {
 
 	return "does nothing";
     }
-    
-    public String createInputFile(String contextDir,
-				  String inputFileName,
-				  String inputFileContent) 
+
+    /** 
+     * Create the site list file.  Currently we only support
+     * one site and the XYZ format (ie "1   8").
+     */
+    public void createSiteListFile(String contextDir)
 	throws Exception {
-	System.out.println("Writing input file: "+contextDir+"/"+inputFileName);
+
+	String slash="/";  // This is not File.separator of the webserver
+	siteListFile=projectName+mosesSiteListExt;
+	System.out.println("Writing input file: "+contextDir+"/"+siteListFile);
 	PrintWriter pw=
-	    new PrintWriter(new FileWriter(contextDir+"/"+inputFileName),true);
-	pw.println(twospace+"apriori value file: \t"+aprioriValueFile);
-	pw.println(twospace+"input file: \t"+mosesDataList);
-	pw.println(twospace+"sit_list file: \t"+mosesSiteList);
-	pw.println(twospace+"est_parameter file: \t"+mosesParamFile);
-	pw.println(twospace+"output file: \t"+projectName+".out");
-	pw.println(twospace+"residual file: \t"+residualFile);
-	pw.println(twospace+"res_option: \t"+resOption);
-	pw.println(twospace+"specific term_out file: \t"+termOutFile);
-	pw.println(twospace+"specific term_option: \t"+termOption);
-	pw.println(twospace+"enu_correlation usage: \t"+"no");
-	pw.println(twospace+"cutoff criterion (year): \t"+cutoffCriterion);
-	pw.println(twospace+"span to est jump aper (est_jump_span): \t"+estJumpSpan);
-	pw.println(twospace+"weak_obs (big sigma) criteria: \t"+weakObsCriteria);
-	pw.println(twospace+"outlier (big o-c) criteria mm: \t"+outlierCriteria);
-	pw.println(twospace+"very bad_obs criteria mm: \t"+badObsCriteria);
-	pw.println(twospace+"t_interval: \t"+timeInterval);
+	    new PrintWriter(new FileWriter(contextDir+"/"+siteListFile),true);
+
+	pw.println("  1");  //Need to make this more general.
+	pw.println(getSiteCode().toUpperCase()+"_GPS");
+	pw.close();
+    }
+
+    public void createDataListFile(String contextDir)
+	throws Exception {
+
+	String slash="/";  // This is not File.separator of the webserver
+	dataListFile=projectName+mosesDataListExt;
+	System.out.println("Writing input file: "+contextDir+"/"+dataListFile);
+	PrintWriter pw=
+	    new PrintWriter(new FileWriter(contextDir+"/"+dataListFile),true);
+
+	pw.println(" 1   8");  //Need to make this more general.
+	pw.println(getSiteCode()+sopacDataFileExt);
+	pw.close();
+    }
+
+    /**
+     * Create the stfilter driver file.
+     */
+    public String createDriverFile(String contextDir)
+	throws Exception {
+
+	String fivespace="     ";
+	String slash="/";  // This is not File.separator of the webserver
+	driverFileName=projectName+driverFileExtension;
+	System.out.println("Writing input file: "+contextDir+"/"+driverFileName);
+	PrintWriter pw=
+	    new PrintWriter(new FileWriter(contextDir+"/"+driverFileName),true);
+	pw.println(twospace+"apriori value file:"+fivespace+globalDataDir+slash+aprioriValueFile);
+	pw.println(twospace+"input file:"+fivespace+workDir+slash+projectName+mosesDataListExt);
+	pw.println(twospace+"sit_list file:"+fivespace+workDir+slash+projectName+mosesSiteListExt);
+	//	pw.println(twospace+"est_parameter file: \t\t"+workDir+slash+projectName+mosesParamFileExt);
+	pw.println(twospace+"est_parameter file:"+fivespace+globalDataDir+mosesParamFile);
+	pw.println(twospace+"output file:"+fivespace+workDir+slash+projectName+outputFileExt);
+	pw.println(twospace+"residual file:"+fivespace+workDir+slash+projectName+residualFileExt);
+	pw.println(twospace+"res_option:"+fivespace+resOption);
+	pw.println(twospace+"specific term_out file:"+fivespace+workDir+slash+projectName+termOutFileExt);
+	pw.println(twospace+"specific term_option:"+fivespace+termOption);
+	pw.println(twospace+"enu_correlation usage:"+fivespace+"no");
+	pw.println(twospace+"cutoff criterion (year):"+fivespace+cutoffCriterion);
+	pw.println(twospace+"span to est jump aper (est_jump_span):"+fivespace+estJumpSpan);
+	pw.println(twospace+"weak_obs (big sigma) criteria:"+fivespace+weakObsCriteria);
+	pw.println(twospace+"outlier (big o-c) criteria mm:"+fivespace+outlierCriteria);
+	pw.println(twospace+"very bad_obs criteria mm:"+fivespace+badObsCriteria);
+	pw.println(twospace+"t_interval:"+fivespace+timeInterval);
 	pw.println(twospace+"end:");
 	pw.println("---------- part 2 -- apriori information");
 	pw.println(twospace+"exit:");
 	pw.close();
 
 	//Clean this up since it could be a memory drain.
-	//	inputFileContent=null;
+	//	sopacDataFileContent=null;
 	return "input-file-created";
     }
 
-
+    
+    /**
+     * As currently written, this method sets properties that are
+     * specific to the backend application.
+     */
     public String populateProject() throws Exception{
 	System.out.println("Chosen project: "+chosenProject);
 	String contextName=codeName+"/"+chosenProject;
 	projectName=cm.getCurrentProperty(contextName,"projectName");
 	hostName=cm.getCurrentProperty(contextName,"hostName");
+
 	resOption=Integer.parseInt(cm.getCurrentProperty(contextName,"resOption"));
 	termOption=
 	    Integer.parseInt(cm.getCurrentProperty(contextName,"termOption"));
@@ -326,21 +415,19 @@ public class STFILTERBean extends GenericSopacBean {
 	badObsCriteria=cm.getCurrentProperty(contextName,"badObsCriteria");
 	timeInterval=cm.getCurrentProperty(contextName,"timeInterval");
 	
-	inputFileName=cm.getCurrentProperty(contextName,"inputFileName");
-	inputFileContent=setSTFILTERInputFile(projectName);
+	sopacDataFileName=cm.getCurrentProperty(contextName,"sopacDataFileName");
+	sopacDataFileContent=setSTFILTERInputFile(projectName);
 	return "project-populated";
     }
 
     public String executeSTFILTER(String contextDir,
-				String inputFileName,
+				String sopacDataFileName,
 				String cfullName) 
 	throws Exception{
 	
 	System.out.println("FileService URL:"+fileServiceUrl);
 	System.out.println("AntService URL:"+antUrl);
 	
-	String workDir=baseWorkDir+File.separator
-	    +userName+File.separator+projectName;
 
 	//--------------------------------------------------
 	// Set up the Ant Service and make the directory
@@ -357,28 +444,36 @@ public class STFILTERBean extends GenericSopacBean {
         ant.run();
 	
 	//--------------------------------------------------
-	// Set up the file service and move the file.
+	// Set up the file service and upload the driver,
+	// site list, and gps data files.
 	//--------------------------------------------------
 	FSClientStub fsclient=new FSClientStub();
-	String destfile=workDir+"/"+inputFileName; 
+	String sopacDestfile=workDir+"/"+sopacDataFileName; 
+	String driverDestfile=workDir+"/"+driverFileName; 
+	String siteListDestfile=workDir+"/"+siteListFile;
+	String dataListDestfile=workDir+"/"+dataListFile;
+
 	try {
 	    fsclient.setBindingUrl(fileServiceUrl);    	
-	    fsclient.uploadFile(contextDir+"/"+inputFileName,destfile);
+	    fsclient.uploadFile(contextDir+"/"+sopacDataFileName,sopacDestfile);
+	    fsclient.uploadFile(contextDir+"/"+siteListFile,siteListDestfile);
+	    fsclient.uploadFile(contextDir+"/"+dataListFile,dataListDestfile);
+	    fsclient.uploadFile(contextDir+"/"+driverFileName,driverDestfile);
 	}
 	catch(Exception ex) {
 	    ex.printStackTrace();
 	}
 	
-	//--------------------------------------------------
-	// Record the names of the input, output, and log
-	// files on the remote server.
-	//--------------------------------------------------
-	String remoteOutputFile=workDir+"/"+projectName+".output";
-	String remoteLogFile=workDir+"/"+projectName+".stdout";
+// 	//--------------------------------------------------
+// 	// Record the names of the input, output, and log
+// 	// files on the remote server.
+// 	//--------------------------------------------------
+// 	String remoteOutputFile=workDir+"/"+projectName+".output";
+// 	String remoteLogFile=workDir+"/"+projectName+".stdout";
 	
-	cm.setCurrentProperty(cfullName,"RemoteInputFile",destfile);
-	cm.setCurrentProperty(cfullName,"RemoteOutputFile",remoteOutputFile);
-	cm.setCurrentProperty(cfullName,"RemoteLogFile",remoteLogFile);
+// 	cm.setCurrentProperty(cfullName,"RemoteInputFile",destfile);
+// 	cm.setCurrentProperty(cfullName,"RemoteOutputFile",remoteOutputFile);
+// 	cm.setCurrentProperty(cfullName,"RemoteLogFile",remoteLogFile);
 	
 	//--------------------------------------------------
 	// Run the code.
@@ -408,7 +503,7 @@ public class STFILTERBean extends GenericSopacBean {
      * This method is currently empty.
      */
     public String createDataPlot(String contextDir,
-				 String inputFileName,
+				 String sopacDataFileName,
 				 String cfullName) 
 	throws Exception{
 	
@@ -439,15 +534,15 @@ public class STFILTERBean extends GenericSopacBean {
 // 	// Set up the file service and move the file.
 // 	//--------------------------------------------------
 // 	FSClientStub fsclient=new FSClientStub();
-// 	String sourceFile=workDir+"/"+inputFileName; 
-// 	String inputdestfile=gnuplotBinPath+"/"+inputFileName;
+// 	String sourceFile=workDir+"/"+sopacDataFileName; 
+// 	String inputdestfile=gnuplotBinPath+"/"+sopacDataFileName;
 	
 // 	String qSourceFile=workDir+"/"+projectName+".Q"; 
 // 	String qDestFile=gnuplotBinPath+"/"+projectName+".Q"; 
 
-// 	String plotFileNameX=gnuplotBinPath+"/"+inputFileName+".X.png";
-// 	String plotFileNameY=gnuplotBinPath+"/"+inputFileName+".Y.png";
-// 	String plotFileNameZ=gnuplotBinPath+"/"+inputFileName+".Z.png";
+// 	String plotFileNameX=gnuplotBinPath+"/"+sopacDataFileName+".X.png";
+// 	String plotFileNameY=gnuplotBinPath+"/"+sopacDataFileName+".Y.png";
+// 	String plotFileNameZ=gnuplotBinPath+"/"+sopacDataFileName+".Z.png";
 
 // 	try {
 // 	    fsclient.setBindingUrl(fileServiceUrl);    	
@@ -462,7 +557,7 @@ public class STFILTERBean extends GenericSopacBean {
 // 	String[] args=new String[7];
 //         args[0]="-DworkDir.prop="+gnuplotWorkDir;
 //         args[1]="-DbinDir.prop="+gnuplotBinPath;
-//         args[2]="-DinputFile.prop="+inputFileName;
+//         args[2]="-DinputFile.prop="+sopacDataFileName;
 //         args[3]="-DqFile.prop="+projectName+".Q";
 //         args[4]="-buildfile";
 //         args[5]=bf_loc;
@@ -550,7 +645,7 @@ public class STFILTERBean extends GenericSopacBean {
 	System.out.println(sopacQueryResults);
 	//	sopacQueryResults=filterResults(sopacQueryResults,2,3);
 	
-	inputFileContent=sopacQueryResults;
+	sopacDataFileContent=sopacQueryResults;
 		
 	String codeName=getCodeName();
 	codeName=codeName.toLowerCase();
@@ -559,21 +654,21 @@ public class STFILTERBean extends GenericSopacBean {
     }
 
     private String setSTFILTERInputFile(String projectName) {
-	String inputFileContent="Null Content; please re-enter";
-	String inputFileName=projectName+inputFileExtension;
+	String sopacDataFileContent="Null Content; please re-enter";
+	String sopacDataFileName=projectName+driverFileExtension;
 	try {
 	    String thedir=cm.getCurrentProperty(codeName
 						+"/"+projectName,"Directory");
-	    System.out.println(thedir+"/"+inputFileName);
+	    System.out.println(thedir+"/"+sopacDataFileName);
 	    
 	    BufferedReader buf=
-		new BufferedReader(new FileReader(thedir+"/"+inputFileName));
+		new BufferedReader(new FileReader(thedir+"/"+sopacDataFileName));
 	    String line=buf.readLine();
-	    inputFileContent=line+"\n";
+	    sopacDataFileContent=line+"\n";
 	    while(line!=null) {
 		System.out.println(line);
 		line=trimLine(line);	
-		inputFileContent+=line+"\n";
+		sopacDataFileContent+=line+"\n";
 		line=buf.readLine();
 	    }
 	    buf.close();
@@ -581,6 +676,6 @@ public class STFILTERBean extends GenericSopacBean {
 	catch (Exception ex) {
 	    ex.printStackTrace();
 	}
-	return inputFileContent;
+	return sopacDataFileContent;
     }
 }
