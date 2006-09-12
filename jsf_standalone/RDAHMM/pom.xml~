@@ -12,7 +12,7 @@
     <url>http://www.myorganization.org</url>
 
     <build>
-        <finalName>RDAHMM-portlet</finalName>
+        <finalName>RDAHMM</finalName>
         <plugins>
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
@@ -69,7 +69,6 @@
             <id>apache-maven-snapshots</id>
             <url>http://cvs.apache.org/maven-snapshot-repository</url>
         </repository>
-
         <repository>
             <id>apache-maven</id>
             <url>http://www.ibiblio.org/maven2</url>
@@ -86,6 +85,7 @@
             <id>crisisgrid-maven-repo</id>
             <url>http://www.crisisgrid.org/maven2</url>
         </repository>
+
     </repositories>
 
     <!-- Repositories for plugins -->
@@ -138,25 +138,6 @@
             <version>1.0</version>
             <scope>provided</scope>
         </dependency>
-
-        <dependency>
-            <groupId>ogce-misc</groupId>
-            <artifactId>gridsphere-ui-tags</artifactId>
-            <version>2.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.portals.bridges</groupId>
-            <artifactId>portals-bridges-commons</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.portals.bridges</groupId>
-            <artifactId>portals-bridges-jsf</artifactId>
-            <version>1.0</version>
-        </dependency>
-
 
         <!-- Servlet Dependencies -->
         <dependency>
@@ -218,7 +199,7 @@
         <dependency>
              <groupId>SOPAC</groupId>
              <artifactId>GRWS_SubmitQuery</artifactId>
-             <version>3.0</version>
+             <version>2.0</version>
         </dependency>
 
         <dependency>
