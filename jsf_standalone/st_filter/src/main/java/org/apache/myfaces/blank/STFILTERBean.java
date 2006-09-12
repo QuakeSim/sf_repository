@@ -37,6 +37,8 @@ import java.util.Vector;
 import java.util.StringTokenizer;
 import java.util.Date;
 
+//
+
 /**
  * Everything you need to set up and run STFILTER.
  */
@@ -61,17 +63,14 @@ public class STFILTERBean extends GenericSopacBean {
     private int termOption=556;
     private double cutoffCriterion=1.0;
     private double estJumpSpan=1.0;
-    //    private String weakObsCriteria="30.0 30.0 50.0";
     private WeakObsCriteria weakObsCriteria=
 	new WeakObsCriteria(30.0,30.0,50.0);
     private OutlierCriteria outlierCriteria=
 	new OutlierCriteria(800.0,800.0,800.0);
-    //    private String outlierCriteria="800.0 800.0 800.0";
-    //    private String badObsCriteria="10000.0 10000.0 10000.0";
     private BadObsCriteria badObsCriteria=
 	new BadObsCriteria(10000.0, 10000.0, 10000.0);
-    //    private String timeInterval="1998.0 2006.8000";
     private TimeInterval timeInterval=new TimeInterval(1998.0, 2006.800);
+
 
     //This is the file that will hold the 
     //results of the GPS station query.
@@ -107,14 +106,19 @@ public class STFILTERBean extends GenericSopacBean {
     //This is the site list file
     private String siteListFile;
     private String dataListFile;
+    private String estParameterFile;
 
     //Project properties
-    //    private String chosenProject="";
-
     private String[] contextList;
     private Hashtable contextListHash;
     private Vector contextListVector;
-    
+
+    //These contain the site estimate params.  Note
+    //this needs to be generalized, as I'm assuming only 
+    //one site is used at a time.
+    MyStationContainer myStation;
+    AllStationsContainer allsites;
+
     //--------------------------------------------------
     // These are accessor methods.
     //--------------------------------------------------
@@ -199,6 +203,11 @@ public class STFILTERBean extends GenericSopacBean {
 	super();
 	cm=getContextManagerImp();
 	setSiteCode("LBC1");  //Use this for testing.
+	
+	//Set up the default station containers
+	myStation=new MyStationContainer("LBC1");
+	allsites=new AllStationsContainer();
+	allsites.addDefaultEstParams();
     }
 
     /**
@@ -310,6 +319,7 @@ public class STFILTERBean extends GenericSopacBean {
 	createSopacDataFile(contextDir,sopacDataFileName,sopacDataFileContent);
 	createSiteListFile(contextDir);
 	createDataListFile(contextDir);
+	createEstimatedParamFile(contextDir);
 	String value=executeSTFILTER(contextDir,sopacDataFileName,cfullName);
 	return "stfilter-launched";
     }
@@ -346,6 +356,17 @@ public class STFILTERBean extends GenericSopacBean {
 	pw.close();
     }
 
+    public void createEstimatedParamFile(String contextDir)
+	throws Exception {
+	estParameterFile=projectName+mosesParamFileExt;
+	PrintWriter pw=
+	    new PrintWriter(new FileWriter(contextDir+"/"+estParameterFile),true);
+	
+	pw.println(allsites.printContents());
+	pw.println(myStation.printContents());
+	pw.close();
+    }
+
     public void createDataListFile(String contextDir)
 	throws Exception {
 
@@ -375,8 +396,8 @@ public class STFILTERBean extends GenericSopacBean {
 	pw.println(twospace+"apriori value file:"+fivespace+globalDataDir+slash+aprioriValueFile);
 	pw.println(twospace+"input file:"+fivespace+workDir+slash+projectName+mosesDataListExt);
 	pw.println(twospace+"sit_list file:"+fivespace+workDir+slash+projectName+mosesSiteListExt);
-	//	pw.println(twospace+"est_parameter file: \t\t"+workDir+slash+projectName+mosesParamFileExt);
-	pw.println(twospace+"est_parameter file:"+fivespace+globalDataDir+mosesParamFile);
+	pw.println(twospace+"est_parameter file: \t\t"+workDir+slash+projectName+mosesParamFileExt);
+	//	pw.println(twospace+"est_parameter file:"+fivespace+globalDataDir+mosesParamFile);
 	pw.println(twospace+"output file:"+fivespace+workDir+slash+projectName+outputFileExt);
 	pw.println(twospace+"residual file:"+fivespace+workDir+slash+projectName+residualFileExt);
 	pw.println(twospace+"res_option:"+fivespace+resOption);
@@ -459,6 +480,7 @@ public class STFILTERBean extends GenericSopacBean {
 	String driverDestfile=workDir+"/"+driverFileName; 
 	String siteListDestfile=workDir+"/"+siteListFile;
 	String dataListDestfile=workDir+"/"+dataListFile;
+	String estParamDestfile=workDir+"/"+estParameterFile;
 
 	try {
 	    fsclient.setBindingUrl(fileServiceUrl);    	
@@ -466,6 +488,7 @@ public class STFILTERBean extends GenericSopacBean {
 	    fsclient.uploadFile(contextDir+"/"+siteListFile,siteListDestfile);
 	    fsclient.uploadFile(contextDir+"/"+dataListFile,dataListDestfile);
 	    fsclient.uploadFile(contextDir+"/"+driverFileName,driverDestfile);
+	    fsclient.uploadFile(contextDir+"/"+estParameterFile,estParamDestfile);
 	}
 	catch(Exception ex) {
 	    ex.printStackTrace();

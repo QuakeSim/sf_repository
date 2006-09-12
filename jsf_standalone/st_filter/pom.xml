@@ -198,7 +198,7 @@
         <dependency>
              <groupId>SOPAC</groupId>
              <artifactId>GRWS_SubmitQuery</artifactId>
-             <version>2.0</version>
+             <version>3.0</version>
         </dependency>
 
         <dependency>
