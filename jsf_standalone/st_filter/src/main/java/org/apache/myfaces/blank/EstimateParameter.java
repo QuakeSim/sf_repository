@@ -38,7 +38,7 @@ public abstract class EstimateParameter {
     }
 
     public double getAprioriConstraint() {
-	return aprioriValue;
+	return aprioriConstraint;
     }
     
     public void setAprioriConstraint(double aprioriConstraint) {

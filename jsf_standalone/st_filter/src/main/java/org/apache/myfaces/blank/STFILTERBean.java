@@ -118,10 +118,33 @@ public class STFILTERBean extends GenericSopacBean {
     //one site is used at a time.
     MyStationContainer myStation;
     AllStationsContainer allsites;
+    Vector allsitesVec;
+    Vector mysiteVec;
+
+    //Some useful rendering constants
+    boolean renderAllSites=false;
+    boolean renderMySite=false;
+    
 
     //--------------------------------------------------
     // These are accessor methods.
     //--------------------------------------------------
+    
+    public Vector getAllsitesVec(){
+	return allsitesVec;
+    }
+
+    public void setAllsitesVec(Vector asvec) {
+	this.allsitesVec=asvec;
+    }
+
+    public Vector getMysiteVec(){
+	return mysiteVec;
+    }
+
+    public void setMysiteVec(Vector mysiteVec){
+	this.mysiteVec=mysiteVec;
+    }
 
     public String getDriverFileName() {
 	return driverFileName;
@@ -208,6 +231,9 @@ public class STFILTERBean extends GenericSopacBean {
 	myStation=new MyStationContainer("LBC1");
 	allsites=new AllStationsContainer();
 	allsites.addDefaultEstParams();
+
+	allsitesVec=allsites.getEstParamVector();
+	mysiteVec=myStation.getEstParamVector();
     }
 
     /**

@@ -9,5 +9,5 @@ public class ConstantBiasEast extends ConstantBias {
 	aprioriValue=0.0;
 	aprioriConstraint=50.0;
 	startDate=2004.0;
-    }
+    }   
 }

@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <html>
   <head>
-        <title>STFILTER Project Management</title>
+        <title>STFILTER Input Parameters</title>
   </head>
  <body>
   <h2>Project Setup Page</h2>
