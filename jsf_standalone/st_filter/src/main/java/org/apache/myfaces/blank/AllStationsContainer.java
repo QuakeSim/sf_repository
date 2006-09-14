@@ -6,6 +6,7 @@ package org.apache.myfaces.blank;
 
 public class AllStationsContainer extends StationContainer {
     public AllStationsContainer() {
+	super();
 	setSiteName("all_site");
 	//	addDefaultEstParams();
     }

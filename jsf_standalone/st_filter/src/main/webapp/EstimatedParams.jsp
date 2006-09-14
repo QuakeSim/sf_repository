@@ -23,11 +23,14 @@ add or remove a "global" parameter.  Click "My Sites" to add or remove
 additional parameters for your chosen site.
   </p>
    
-  The following are global, or "all site" parameters.
+  The following are global, or "all site" parameters.  Edit values that you
+want to change and submit.
   <h:form>
     <h:dataTable var="allsites" 
-                 rendered="#{empty stfilterBean.mysiteVec}"
-                 value="#{stfilterBean.allsitesVec}">
+ 		 border="2"
+                 binding="#{stfilterBean.allsites.dataTable}"
+                 rendered="#{!empty stfilterBean.allsites.estParamVector}"
+                 value="#{stfilterBean.allsites.estParamVector}">
 	   <h:column>
   	    <f:facet name="header">
 	        <h:outputText value="Parameter Full Name"/>
@@ -46,16 +49,67 @@ additional parameters for your chosen site.
   	    <f:facet name="header">
 	        <h:outputText value="Apriori Value"/>
             </f:facet>
-  	    <h:outputText value="#{allsites.aprioriValue}"/>
+  	    <h:inputText id="allsite_aprioriValue"
+                  required="true" value="#{allsites.aprioriValue}"/>
            </h:column>
 
 	   <h:column>
   	    <f:facet name="header">
-	        <h:outputText value="Apriori Contstraint"/>
+	        <h:outputText value="Apriori Constraint"/>
             </f:facet>
-  	    <h:outputText value="#{allsites.aprioriConstraint}"/>
+  	    <h:inputText value="#{allsites.aprioriConstraint}"/>
            </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+	        <h:outputText value="Start Date"/>
+            </f:facet>
+  	    <h:inputText value="#{allsites.startDate}"
+                          rendered="#{!empty allsites.startDate}"/>
+  	    <h:outputText value="N/A"
+                          rendered="#{empty allsites.startDate}"/>
+           </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+	        <h:outputText value="End Date"/>
+            </f:facet>
+  	    <h:inputText value="#{allsites.endDate}"
+                          rendered="#{!empty allsites.endDate}"/>
+  	    <h:outputText value="N/A"
+                          rendered="#{empty allsites.endDate}"/>
+           </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+	        <h:outputText value="Period Length"/>
+            </f:facet>
+  	    <h:inputText value="#{allsites.periodLength}"
+                          rendered="#{!empty allsites.periodLength}"/>
+  	    <h:outputText value="N/A"
+                          rendered="#{empty allsites.periodLength}"/>
+           </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+	        <h:outputText value="Remove Parameter"/>
+            </f:facet>
+            <h:commandLink value="Remove"
+	               actionListener="#{stfilterBean.allsites.removeEstParameterListener}"/>
+           </h:column>
+
     </h:dataTable>
+
+    <p/>
+    Choose from the seletion box if you want to add a station to the
+   all_sites list.
+   
+    <h:selectOneListbox title="Site Listing" value="Help" size="1">
+	<f:selectItems value="#{stfilterBean.allsites.mplHelper}"/>
+    </h:selectOneListbox>
+        
+    <h:commandButton value="Add Station" 
+		action="#{stfilterBean.allsites.addEstParameter}"/>
 <hr/>
 <p/>
 
@@ -66,6 +120,7 @@ additional parameters for your chosen site.
        value="For your chosen station, you have chosen the following parameters." rendered="#{!empty stfilterBean.mysiteVec}"/>
 
     <h:dataTable var="mysite" 
+ 		 border="2"
                  rendered="#{!empty stfilterBean.mysiteVec}"
                  value="#{stfilterBean.mysiteVec}">
 	   <h:column>
@@ -86,17 +141,60 @@ additional parameters for your chosen site.
   	    <f:facet name="header">
 	        <h:outputText value="Apriori Value"/>
             </f:facet>
-  	    <h:outputText value="#{mysite.aprioriValue}"/>
+  	    <h:inputText value="#{mysite.aprioriValue}"/>
            </h:column>
 
 	   <h:column>
   	    <f:facet name="header">
-	        <h:outputText value="Apriori Contstraint"/>
+	        <h:outputText value="Apriori Constraint"/>
             </f:facet>
-  	    <h:outputText value="#{mysite.aprioriConstraint}"/>
+  	    <h:inputText id="mysite_apriori" required="true"
+                  value="#{mysite.aprioriConstraint}"/>
            </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+	        <h:outputText value="Start Date"/>
+            </f:facet>
+  	    <h:inputText value="#{mysite.startDate}"
+                          rendered="#{!empty mysite.startDate}"/>
+  	    <h:outputText value="N/A"
+                          rendered="#{empty mysite.startDate}"/>
+           </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+	        <h:outputText value="End Date"/>
+            </f:facet>
+  	    <h:inputText value="#{mysite.endDate}"
+                          rendered="#{!empty mysite.endDate}"/>
+  	    <h:outputText value="N/A"
+                          rendered="#{empty mysite.endDate}"/>
+           </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+	        <h:outputText value="Period Length"/>
+            </f:facet>
+  	    <h:inputText value="#{mysite.periodLength}"
+                          rendered="#{!empty mysite.periodLength}"/>
+  	    <h:outputText value="N/A"
+                          rendered="#{empty mysite.periodLength}"/>
+           </h:column>
+
     </h:dataTable>
+
+<p/>
+    <h:commandButton value="Run ST_FILTER"
+                     action="#{stfilterBean.launchSTFILTER}"/>
+
   </h:form>
+    <h:form>
+    <hr/>
+    <h:commandLink action="back">
+        <h:outputText value="#{stfilterBean.codeName} Main Menu"/>
+    </h:commandLink>
+    </h:form>
 
 
 

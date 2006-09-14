@@ -129,8 +129,8 @@
 
     </h:panelGrid>
 
-    <h:commandButton value="Run ST_FILTER"
-                     action="#{stfilterBean.launchSTFILTER}"/>
+    <h:commandButton value="Edit Estimate Parameters"
+                     action="set-estimated-params"/>
     </h:form>
 
     <h:form>

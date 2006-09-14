@@ -2,29 +2,29 @@ package org.apache.myfaces.blank;
 
 public class SemiannualAmpBias extends EstimateParameter {
     
-    double startDate;
-    double periodLength;
+    Double startDate;
+    Double periodLength;
     String space="  ";
 
-    public double getStartDate() {
+    public Double getStartDate() {
 	return startDate;
     }
     
-    public void setStartDate(double startDate){
+    public void setStartDate(Double startDate){
 	this.startDate=startDate;
     }
 
-    public double getPeriodLength() {
+    public Double getPeriodLength() {
 	return periodLength;
     }
     
-    public void setPeriodLength(double periodLength){
+    public void setPeriodLength(Double periodLength){
 	this.periodLength=periodLength;
     }
 
     public String printStringLine() {
-	String retString=parameterType+space+aprioriValue+space+
-	    aprioriConstraint+space+periodLength+space+startDate;
+	String retString=parameterType+space+aprioriValue.toString()+space+
+	    aprioriConstraint.toString()+space+periodLength.toString()+space+startDate.toString();
 	return retString;
     }    
 

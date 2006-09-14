@@ -6,9 +6,9 @@ public class AnnualAmpNorth extends AnnualAmpBias {
 	//Set the default values of these fields inherited from the parent
 	parameterType=17;
 	parameterFullName="Constant bias east (mm)";
-	aprioriValue=0.0;
-	aprioriConstraint=50.0;
-	startDate=2002.0;
-	periodLength=365.25;
+	aprioriValue=new Double(0.0);
+	aprioriConstraint=new Double(3.0);
+	startDate=new Double(2002.0);
+	periodLength=new Double(365.25);
     }
 }
