@@ -156,6 +156,10 @@
 	<navigation-rule>
 		<from-view-id>/EstimatedParams.jsp</from-view-id>
 		<navigation-case>
+			<from-outcome>add-estimate-parameter</from-outcome>
+			<to-view-id>/AddEstimateParameter.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>

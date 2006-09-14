@@ -22,7 +22,7 @@ public class StationContainer {
     String space=" ";
     String siteName;
 
-    UIData dataTable;
+    UIData dataTable,dataTable2;
 
     public StationContainer() {
 	initMasterParamList();
@@ -34,6 +34,7 @@ public class StationContainer {
      * parameter type. 
      */
     public void initMasterParamList() {
+	System.out.println("Initializing master list");
 	masterParamList.add(new ConstantBiasEast());
 	masterParamList.add(new ConstantBiasNorth());
 	masterParamList.add(new ConstantBiasUp());
@@ -101,6 +102,14 @@ public class StationContainer {
 	this.dataTable=dataTable;
     }
 
+    public UIData getDataTable2() {
+	return dataTable2;
+    }
+    
+    public void setDataTable2(UIData dataTable2) {
+	this.dataTable2=dataTable2;
+    }
+
     public Vector getEstParamVector() {
 	return estParamVector;
     }
@@ -116,6 +125,12 @@ public class StationContainer {
     public void removeEstParameterListener(ActionEvent actionEvent) {
 	if(dataTable.getRowData() instanceof EstimateParameter){
 	    removeEstParameter((EstimateParameter)dataTable.getRowData());
+	}
+    }
+
+    public void addEstParameterListener(ActionEvent actionEvent) {
+	if(dataTable2.getRowData() instanceof EstimateParameter){
+	    addEstParameter((EstimateParameter)dataTable2.getRowData());
 	}
     }
 

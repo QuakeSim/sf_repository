@@ -5,7 +5,7 @@ public class EpisodicNorth extends EpisodicBias {
     public EpisodicNorth(){
 	//Set the default values of these fields inherited from the parent
 	parameterType=8;
-	parameterFullName="Constant bias north (mm)";
+	parameterFullName="Episodic north (mm)";
 	aprioriValue=new Double(0.0);
 	aprioriConstraint=new Double(50.0);
 	startDate=new Double(2002.0);

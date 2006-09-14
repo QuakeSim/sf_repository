@@ -100,24 +100,90 @@ want to change and submit.
 
     </h:dataTable>
 
-    <p/>
-    Choose from the seletion box if you want to add a station to the
-   all_sites list.
-   
-    <h:selectOneListbox title="Site Listing" value="Help" size="1">
-	<f:selectItems value="#{stfilterBean.allsites.mplHelper}"/>
-    </h:selectOneListbox>
-        
-    <h:commandButton value="Add Station" 
-		action="#{stfilterBean.allsites.addEstParameter}"/>
+
 <hr/>
-<p/>
+
+    <h:outputText 
+       value="The following estimate parameters can be added." />
+
+    <h:dataTable var="masterParamList" 
+ 		 border="2"
+                 binding="#{stfilterBean.allsites.dataTable2}"
+                 rendered="#{!empty stfilterBean.allsites.masterParamList}"
+                 value="#{stfilterBean.allsites.masterParamList}">
+	   <h:column>
+  	    <f:facet name="header">
+	        <h:outputText value="Parameter Full Name"/>
+            </f:facet>
+  	    <h:outputText value="#{masterParamList.parameterFullName}"/>
+           </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+	        <h:outputText value="Parameter Type"/>
+            </f:facet>
+  	    <h:outputText value="#{masterParamList.parameterType}"/>
+           </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+	        <h:outputText value="Apriori Value"/>
+            </f:facet>
+  	    <h:inputText
+                  required="true" value="#{masterParamList.aprioriValue}"/>
+           </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+	        <h:outputText value="Apriori Constraint"/>
+            </f:facet>
+  	    <h:inputText value="#{masterParamList.aprioriConstraint}"/>
+           </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+	        <h:outputText value="Start Date"/>
+            </f:facet>
+  	    <h:inputText value="#{masterParamList.startDate}"
+                          rendered="#{!empty masterParamList.startDate}"/>
+  	    <h:outputText value="N/A"
+                          rendered="#{empty masterParamList.startDate}"/>
+           </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+	        <h:outputText value="End Date"/>
+            </f:facet>
+  	    <h:inputText value="#{masterParamList.endDate}"
+                          rendered="#{!empty masterParamList.endDate}"/>
+  	    <h:outputText value="N/A"
+                          rendered="#{empty masterParamList.endDate}"/>
+           </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+	        <h:outputText value="Period Length"/>
+            </f:facet>
+  	    <h:inputText value="#{masterParamList.periodLength}"
+                          rendered="#{!empty masterParamList.periodLength}"/>
+  	    <h:outputText value="N/A"
+                          rendered="#{empty masterParamList.periodLength}"/>
+           </h:column>
+
+	   <h:column>
+  	    <f:facet name="header">
+	        <h:outputText value="Add Parameter"/>
+            </f:facet>
+            <h:commandLink value="Add"
+	               actionListener="#{stfilterBean.allsites.addEstParameterListener}"/>
+           </h:column>
+
+    </h:dataTable>
+
 
     <h:outputText 
        value="You have not yet added any parameters for your chosen station" rendered="#{empty stfilterBean.mysiteVec}"/>
 
-    <h:outputText 
-       value="For your chosen station, you have chosen the following parameters." rendered="#{!empty stfilterBean.mysiteVec}"/>
 
     <h:dataTable var="mysite" 
  		 border="2"
