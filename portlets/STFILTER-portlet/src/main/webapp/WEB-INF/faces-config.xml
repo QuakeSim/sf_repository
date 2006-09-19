@@ -99,7 +99,6 @@
 		</navigation-case>
 	</navigation-rule>
 
-       
         
         <!-- Allstations navigation rules -->
 	<navigation-rule>
@@ -143,6 +142,23 @@
         <!-- ProjectParams.jsp navigation rules -->
 	<navigation-rule>
 		<from-view-id>/ProjectParams.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>set-estimated-params</from-outcome>
+			<to-view-id>/EstimatedParams.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+        <!-- EstimatedParams.jsp navigation rules -->
+	<navigation-rule>
+		<from-view-id>/EstimatedParams.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>add-estimate-parameter</from-outcome>
+			<to-view-id>/AddEstimateParameter.jsp</to-view-id>
+		</navigation-case>
 		<navigation-case>
 			<from-outcome>back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>

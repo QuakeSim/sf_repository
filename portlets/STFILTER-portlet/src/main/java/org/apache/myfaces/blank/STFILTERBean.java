@@ -6,10 +6,12 @@ import org.servogrid.genericproject.GenericProjectBean;
 import org.servogrid.genericproject.Utility;
 import org.servogrid.genericproject.ProjectBean;
 
-//Some Faces Context stuff
 //Faces classes
+import javax.faces.event.ActionEvent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
+
+//Servlet and portlet API stuff.
 import javax.servlet.ServletContext;
 import javax.portlet.PortletContext;
 
@@ -116,12 +118,70 @@ public class STFILTERBean extends GenericSopacBean {
     //These contain the site estimate params.  Note
     //this needs to be generalized, as I'm assuming only 
     //one site is used at a time.
-    MyStationContainer myStation;
-    AllStationsContainer allsites;
+//     MyStationContainer myStation;
+//     AllStationsContainer allsites;
+    StationContainer myStation;
+    StationContainer allsites;
+     Vector allsitesVec;
+     Vector mysiteVec;
+
+    //Some useful rendering constants
+    boolean renderAllSites=false;
+    boolean renderMySite=false;
+    boolean renderMasterParamList1=false;
+    boolean renderMasterParamList2=false;
 
     //--------------------------------------------------
     // These are accessor methods.
     //--------------------------------------------------
+    public void toggleRenderMPL1(ActionEvent ev){
+	renderMasterParamList1=!renderMasterParamList1;
+	//	return renderMasterParamList;
+    }
+
+    public boolean getRenderMasterParamList1(){
+	return renderMasterParamList1;
+    }
+
+    public void setRenderMasterParamList1(boolean renderMasterParamList1){
+	this.renderMasterParamList1=renderMasterParamList1;
+    }
+
+    public void toggleRenderMPL2(ActionEvent ev){
+	renderMasterParamList2=!renderMasterParamList2;
+	//	return renderMasterParamList;
+    }
+
+    public boolean getRenderMasterParamList2(){
+	return renderMasterParamList2;
+    }
+
+    public void setRenderMasterParamList2(boolean renderMasterParamList2){
+	this.renderMasterParamList2=renderMasterParamList2;
+    }
+    public AllStationsContainer getAllsites(){
+	return (AllStationsContainer)allsites;
+    }
+
+    public MyStationContainer getMyStation(){
+	return (MyStationContainer)myStation;
+    }
+    
+    public Vector getAllsitesVec(){
+	return allsitesVec;
+    }
+
+    public void setAllsitesVec(Vector asvec) {
+	this.allsitesVec=asvec;
+    }
+
+    public Vector getMysiteVec(){
+	return mysiteVec;
+    }
+
+    public void setMysiteVec(Vector mysiteVec){
+	this.mysiteVec=mysiteVec;
+    }
 
     public String getDriverFileName() {
 	return driverFileName;
@@ -205,9 +265,17 @@ public class STFILTERBean extends GenericSopacBean {
 	setSiteCode("LBC1");  //Use this for testing.
 	
 	//Set up the default station containers
-	myStation=new MyStationContainer("LBC1");
+// 	myStation=new StationContainer("LBC1");
+// 	allsites=new StationContainer("all_site");
+// 	allsites.addDefaultEstParams();
+
+ 	myStation=new MyStationContainer("LBC1");
 	allsites=new AllStationsContainer();
-	allsites.addDefaultEstParams();
+	//	((AllStationsContainer)allsites).addDefaultEstParams();
+
+	//	allsitesVec=allsites.getEstParamVector();
+	//	mysiteVec=myStation.getEstParamVector();
+
     }
 
     /**
@@ -361,9 +429,15 @@ public class STFILTERBean extends GenericSopacBean {
 	estParameterFile=projectName+mosesParamFileExt;
 	PrintWriter pw=
 	    new PrintWriter(new FileWriter(contextDir+"/"+estParameterFile),true);
-	
-	pw.println(allsites.printContents());
-	pw.println(myStation.printContents());
+	if(myStation.printContents()!=null) {
+	    pw.println("  2");
+	    pw.println(allsites.printContents());
+	    pw.println(myStation.printContents());
+	}
+	else {
+	    pw.println("  1");
+	    pw.println(allsites.printContents());
+	}
 	pw.close();
     }
 
@@ -393,23 +467,23 @@ public class STFILTERBean extends GenericSopacBean {
 	System.out.println("Writing input file: "+contextDir+"/"+driverFileName);
 	PrintWriter pw=
 	    new PrintWriter(new FileWriter(contextDir+"/"+driverFileName),true);
-	pw.println(twospace+"apriori value file:"+fivespace+globalDataDir+slash+aprioriValueFile);
-	pw.println(twospace+"input file:"+fivespace+workDir+slash+projectName+mosesDataListExt);
-	pw.println(twospace+"sit_list file:"+fivespace+workDir+slash+projectName+mosesSiteListExt);
-	pw.println(twospace+"est_parameter file: \t\t"+workDir+slash+projectName+mosesParamFileExt);
-	//	pw.println(twospace+"est_parameter file:"+fivespace+globalDataDir+mosesParamFile);
-	pw.println(twospace+"output file:"+fivespace+workDir+slash+projectName+outputFileExt);
-	pw.println(twospace+"residual file:"+fivespace+workDir+slash+projectName+residualFileExt);
-	pw.println(twospace+"res_option:"+fivespace+resOption);
-	pw.println(twospace+"specific term_out file:"+fivespace+workDir+slash+projectName+termOutFileExt);
-	pw.println(twospace+"specific term_option:"+fivespace+termOption);
-	pw.println(twospace+"enu_correlation usage:"+fivespace+"no");
-	pw.println(twospace+"cutoff criterion (year):"+fivespace+cutoffCriterion);
-	pw.println(twospace+"span to est jump aper (est_jump_span):"+fivespace+estJumpSpan);
-	pw.println(twospace+"weak_obs (big sigma) criteria:"+fivespace+weakObsCriteria.getEast()+twospace+weakObsCriteria.getNorth()+twospace+weakObsCriteria.getUp());
-	pw.println(twospace+"outlier (big o-c) criteria mm:"+fivespace+outlierCriteria.getEast()+twospace+outlierCriteria.getNorth()+outlierCriteria.getUp());
-	pw.println(twospace+"very bad_obs criteria mm:"+fivespace+badObsCriteria.getEast()+twospace+badObsCriteria.getNorth()+twospace+badObsCriteria.getUp());
-	pw.println(twospace+"t_interval:"+fivespace+timeInterval.getBeginTime()+twospace+timeInterval.getEndTime());
+	pw.println(twospace+"apriori value file:"+twospace+globalDataDir+slash+aprioriValueFile);
+	pw.println(twospace+"input file:"+twospace+workDir+slash+projectName+mosesDataListExt);
+	pw.println(twospace+"sit_list file:"+twospace+workDir+slash+projectName+mosesSiteListExt);
+	pw.println(twospace+"est_parameter file:"+twospace+workDir+slash+projectName+mosesParamFileExt);
+	//	pw.println(twospace+"est_parameter file:"+twospace+globalDataDir+mosesParamFile);
+	pw.println(twospace+"output file:"+twospace+workDir+slash+projectName+outputFileExt);
+	pw.println(twospace+"residual file:"+twospace+workDir+slash+projectName+residualFileExt);
+	pw.println(twospace+"res_option:"+twospace+resOption);
+	pw.println(twospace+"specific term_out file:"+twospace+workDir+slash+projectName+termOutFileExt);
+	pw.println(twospace+"specific term_option:"+twospace+termOption);
+	pw.println(twospace+"enu_correlation usage:"+twospace+"no");
+	pw.println(twospace+"cutoff criterion (year):"+twospace+cutoffCriterion);
+	pw.println(twospace+"span to est jump aper (est_jump_span):"+twospace+estJumpSpan);
+	pw.println(twospace+"weak_obs (big sigma) criteria:"+twospace+weakObsCriteria.getEast()+twospace+weakObsCriteria.getNorth()+twospace+weakObsCriteria.getUp());
+	pw.println(twospace+"outlier (big o-c) criteria mm:"+twospace+outlierCriteria.getEast()+twospace+outlierCriteria.getNorth()+twospace+outlierCriteria.getUp());
+	pw.println(twospace+"very bad_obs criteria mm:"+twospace+badObsCriteria.getEast()+twospace+badObsCriteria.getNorth()+twospace+badObsCriteria.getUp());
+	pw.println(twospace+"t_interval:"+twospace+timeInterval.getBeginTime()+twospace+timeInterval.getEndTime());
 	pw.println(twospace+"end:");
 	pw.println("---------- part 2 -- apriori information");
 	pw.println(twospace+"exit:");
@@ -537,113 +611,9 @@ public class STFILTERBean extends GenericSopacBean {
 				 String cfullName) 
 	throws Exception{
 	
-// 	String workDir=baseWorkDir+File.separator
-// 	    +userName+File.separator+projectName;
-
-// 	String gnuplotWorkDir=gnuplotBaseWorkDir+File.separator
-// 	    +userName+File.separator+projectName;
-
-// 	//--------------------------------------------------
-// 	// Set up the Ant Service and make the directory on 
-// 	// the gnuplot host.
-// 	//--------------------------------------------------
-// 	AntVisco ant=
-// 	    new AntViscoServiceLocator().getAntVisco(new URL(gnuplotAntUrl));
-// 	String bf_loc=gnuplotBinPath+"/"+"build.xml";
-
-// 	String[] args0=new String[4];
-//         args0[0]="-DworkDir.prop="+workDir;
-//         args0[1]="-buildfile";
-//         args0[2]=bf_loc;
-//         args0[3]="MakeWorkDir";
-	
-//         ant.setArgs(args0);
-//         ant.run();
-	
-// 	//--------------------------------------------------
-// 	// Set up the file service and move the file.
-// 	//--------------------------------------------------
-// 	FSClientStub fsclient=new FSClientStub();
-// 	String sourceFile=workDir+"/"+sopacDataFileName; 
-// 	String inputdestfile=gnuplotBinPath+"/"+sopacDataFileName;
-	
-// 	String qSourceFile=workDir+"/"+projectName+".Q"; 
-// 	String qDestFile=gnuplotBinPath+"/"+projectName+".Q"; 
-
-// 	String plotFileNameX=gnuplotBinPath+"/"+sopacDataFileName+".X.png";
-// 	String plotFileNameY=gnuplotBinPath+"/"+sopacDataFileName+".Y.png";
-// 	String plotFileNameZ=gnuplotBinPath+"/"+sopacDataFileName+".Z.png";
-
-// 	try {
-// 	    fsclient.setBindingUrl(fileServiceUrl);    	
-// 	    fsclient.crossload(sourceFile,gnuplotFileServiceUrl,inputdestfile);
-// 	    fsclient.crossload(qSourceFile,gnuplotFileServiceUrl,qDestFile);
-// 	}
-// 	catch(Exception ex) {
-// 	    ex.printStackTrace();
-// 	    throw new Exception();
-// 	}
-	
-// 	String[] args=new String[7];
-//         args[0]="-DworkDir.prop="+gnuplotWorkDir;
-//         args[1]="-DbinDir.prop="+gnuplotBinPath;
-//         args[2]="-DinputFile.prop="+sopacDataFileName;
-//         args[3]="-DqFile.prop="+projectName+".Q";
-//         args[4]="-buildfile";
-//         args[5]=bf_loc;
-//         args[6]="ExecGnuplot";
-	
-//         ant.setArgs(args);
-//         ant.run();
-	
-// 	cm.setCurrentProperty(cfullName,"PlotFileNameX",plotFileNameZ);
-// 	cm.setCurrentProperty(cfullName,"PlotFileNameY",plotFileNameY);
-// 	cm.setCurrentProperty(cfullName,"PlotFileNameZ",plotFileNameZ);
-	
-// 	//Download the image file
-	
-// 	ExternalContext ec=FacesContext.getCurrentInstance().getExternalContext();
-//         Object context=ec.getContext();
-// 	String basePath="";
-// 	if(context instanceof ServletContext){
-// 	    basePath=((ServletContext)context).getRealPath("/");
-// 	}
-// 	else if(context instanceof PortletContext){
-// 	    basePath=((PortletContext)context).getRealPath("/");
-// 	}
-	
-// 	long timestamp=(new Date()).getTime();
-// 	String realImageFileX=basePath+"/"+"junkX_"+timestamp+".png";
-// 	String realImageFileY=basePath+"/"+"junkY_"+timestamp+".png";
-// 	String realImageFileZ=basePath+"/"+"junkZ_"+timestamp+".png";
-// 	localImageFileX="junkX_"+(new Date()).getTime()+".png";
-// 	localImageFileY="junkY_"+(new Date()).getTime()+".png";
-// 	localImageFileZ="junkZ_"+(new Date()).getTime()+".png";
-// 	fsclient.setBindingUrl(gnuplotFileServiceUrl);    	
-
-//  	try {
-// 	    fsclient.downloadFile(plotFileNameX,realImageFileX);
-// 	}
-// 	catch(Exception ex) {
-// 	    ex.printStackTrace();
-// 	}
-//  	try {
-// 	    fsclient.downloadFile(plotFileNameY,realImageFileY);
-// 	}
-// 	catch(Exception ex) {
-// 	    ex.printStackTrace();
-// 	}
-//  	try {
-// 	    fsclient.downloadFile(plotFileNameZ,realImageFileZ);
-// 	}
-// 	catch(Exception ex) {
-// 	    ex.printStackTrace();
-// 	}
-
-	
 	return "gnuplot-plot-created";
-    }
-    
+    }    
+
     /**
      * Override this method.
      */ 

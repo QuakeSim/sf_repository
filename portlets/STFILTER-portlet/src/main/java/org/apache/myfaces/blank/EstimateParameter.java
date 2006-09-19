@@ -8,11 +8,20 @@ package org.apache.myfaces.blank;
 
 public abstract class EstimateParameter {
     
+    //The following are always supported by all children.
     int parameterType;
     String parameterFullName;
-    double aprioriValue;
-    double aprioriConstraint;
+    Double aprioriValue;
+    Double aprioriConstraint;
+    
+    //The following are optional properties that are set to 
+    //some N/A value.  These are overridden as necessary by
+    //the children.
+    Double startDate;
+    Double endDate;
+    Double periodLength;
 
+    //These are the standard required methods.
     public int getParameterType() {
 	return parameterType;
     }
@@ -29,19 +38,19 @@ public abstract class EstimateParameter {
 	this.parameterFullName=parameterFullName;
     }
     
-    public double getAprioriValue() {
+    public Double getAprioriValue() {
 	return aprioriValue;
     }
     
-    public void setAprioriValue(double aprioriValue) {
+    public void setAprioriValue(Double aprioriValue) {
 	this.aprioriValue=aprioriValue;
     }
 
-    public double getAprioriConstraint() {
-	return aprioriValue;
+    public Double getAprioriConstraint() {
+	return aprioriConstraint;
     }
     
-    public void setAprioriConstraint(double aprioriConstraint) {
+    public void setAprioriConstraint(Double aprioriConstraint) {
 	this.aprioriConstraint=aprioriConstraint;
     }
     
@@ -49,5 +58,16 @@ public abstract class EstimateParameter {
     // the parameter file.
     public abstract String printStringLine();
     
+    public Double getStartDate() {
+	return null;
+    }
+
+    public Double getEndDate() {
+	return null;
+    }
+
+    public Double getPeriodLength() {
+	return null;
+    }
 
 }

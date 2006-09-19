@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <html>
   <head>
-        <title>STFILTER Project Management</title>
+        <title>STFILTER Input Parameters</title>
   </head>
  <body>
   <h2>Project Setup Page</h2>
@@ -129,8 +129,8 @@
 
     </h:panelGrid>
 
-    <h:commandButton value="Run ST_FILTER"
-                     action="#{stfilterBean.launchSTFILTER}"/>
+    <h:commandButton value="Edit Estimate Parameters"
+                     action="set-estimated-params"/>
     </h:form>
 
     <h:form>

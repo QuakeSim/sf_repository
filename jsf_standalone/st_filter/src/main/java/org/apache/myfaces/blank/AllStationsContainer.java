@@ -11,12 +11,4 @@ public class AllStationsContainer extends StationContainer {
 	//	addDefaultEstParams();
     }
 
-    public void addDefaultEstParams() {
-	addEstParameter(new ConstantBiasEast());
-	addEstParameter(new ConstantBiasNorth());
-	addEstParameter(new ConstantBiasUp());
-	addEstParameter(new VelocityEast());
-	addEstParameter(new VelocityNorth());
-	addEstParameter(new VelocityUp());
-    }
 }

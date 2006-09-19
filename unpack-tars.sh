@@ -18,11 +18,23 @@ echo "######################################"
 echo "Unpacking Tomcat and GridSphere..."
 echo "######################################"
 cd $PORTAL_DEPLOY_DIR
-for i in *.tar.gz
-  do   echo "unpacking $i"; tar xzf $i
+for i in *.tar.gz 
+do
+   echo $i
+   echo ${i%.tar.gz}
+   if [ ! -d ${i%.tar.gz} ]; then
+     echo "unpacking $i"; tar xzf $i
+  else 
+      echo "$i already unpacked."
+  fi
 done
 for i in *.tgz
-  do   echo "unpacking $i"; tar xzf $i
+do
+  if [ ! -d ${i%.tgz} ]; then
+     echo "unpacking $i"; tar xzf $i
+  else 
+      echo "$i already unpacked."
+  fi
 done
 
 echo ""

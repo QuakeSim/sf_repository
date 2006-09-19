@@ -4,7 +4,7 @@ public class AnnualPhaseUp extends AnnualPhaseBias {
     
     public AnnualPhaseUp(){
 	//Set the default values of these fields inherited from the parent
-	parameterType=19;
+	parameterType=21;
 	parameterFullName="Annual phase up (degree)";
 	aprioriValue=new Double(0.0);
 	aprioriConstraint=new Double(3.0);

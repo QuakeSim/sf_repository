@@ -14,7 +14,11 @@ import javax.faces.component.UIData;
 import javax.faces.model.SelectItem;
 
 public class StationContainer {
-    Vector masterParamList=new Vector();
+    //These must be shared between all StationContainer
+    //instances.
+    static Vector masterParamList;
+    static boolean mplInitialized=false;
+
     SelectItem[] mplHelper;
     Vector estParamVector=new Vector();
     EstimateParameter newEstParameter;
@@ -24,9 +28,43 @@ public class StationContainer {
 
     UIData dataTable,dataTable2;
 
+    static EstimateParameter constantBiasEast, constantBiasNorth, constantBiasUp;
+    EstimateParameter velocityEast, velocityNorth, velocityUp;
+    EstimateParameter episodicEast,episodicNorth, episodicUp;
+    EstimateParameter annualAmpEast, annualAmpNorth, annualAmpUp;
+    EstimateParameter annualPhaseEast, annualPhaseNorth, annualPhaseUp;
+    EstimateParameter semiannualAmpEast, semiannualAmpNorth, semiannualAmpUp;
+
+    public StationContainer(String stationName){
+	this();
+	setSiteName(stationName);
+    }
+
     public StationContainer() {
+	masterParamList=MasterParamList.getMasterParamList();
+
+	constantBiasEast=new ConstantBiasEast();
+	constantBiasNorth=new ConstantBiasNorth();
+	constantBiasUp=new ConstantBiasUp();
+	velocityEast=new VelocityEast();
+	velocityNorth=new VelocityNorth();
+	velocityUp=new VelocityUp();
+	episodicEast=new EpisodicEast();
+	episodicNorth=new EpisodicNorth();
+	episodicUp=new EpisodicUp();
+	annualAmpEast=new AnnualAmpEast();
+	annualAmpNorth=new AnnualAmpNorth();
+	annualAmpUp=new AnnualAmpUp();
+	annualPhaseEast=new AnnualPhaseEast();
+	annualPhaseNorth=new AnnualPhaseNorth();
+	annualPhaseUp=new AnnualPhaseUp();
+	semiannualAmpEast=new SemiannualAmpEast();
+	semiannualAmpNorth=new SemiannualAmpNorth();
+	semiannualAmpUp=new SemiannualAmpUp();
+
 	initMasterParamList();
-	updateMplHelper();
+	//	addDefaultEstParams();
+	//	updateMplHelper();
     }
 
     /**
@@ -34,41 +72,55 @@ public class StationContainer {
      * parameter type. 
      */
     public void initMasterParamList() {
-	System.out.println("Initializing master list");
-	masterParamList.add(new ConstantBiasEast());
-	masterParamList.add(new ConstantBiasNorth());
-	masterParamList.add(new ConstantBiasUp());
-	masterParamList.add(new VelocityEast());
-	masterParamList.add(new VelocityNorth());
-	masterParamList.add(new VelocityUp());
-	masterParamList.add(new EpisodicEast());
-	masterParamList.add(new EpisodicNorth());
-	masterParamList.add(new EpisodicUp());
-	masterParamList.add(new AnnualAmpEast());
-	masterParamList.add(new AnnualAmpNorth());
-	masterParamList.add(new AnnualAmpUp());
-	masterParamList.add(new AnnualPhaseEast());
-	masterParamList.add(new AnnualPhaseNorth());
-	masterParamList.add(new AnnualPhaseUp());
-	masterParamList.add(new SemiannualAmpEast());
-	masterParamList.add(new SemiannualAmpNorth());
-	masterParamList.add(new SemiannualAmpUp());
+	if(!mplInitialized) {
+	    System.out.println("Initializing master list");
+	    masterParamList.add(constantBiasEast);
+	    masterParamList.add(constantBiasNorth);
+	    masterParamList.add(constantBiasUp);
+	    masterParamList.add(velocityEast);
+	    masterParamList.add(velocityNorth);
+	    masterParamList.add(velocityUp);
+	    masterParamList.add(episodicEast);
+	    masterParamList.add(episodicNorth);
+	    masterParamList.add(episodicUp);
+	    masterParamList.add(annualAmpEast);
+	    masterParamList.add(annualAmpNorth);
+	    masterParamList.add(annualAmpUp);
+	    masterParamList.add(annualPhaseEast);
+	    masterParamList.add(annualPhaseNorth);
+	    masterParamList.add(annualPhaseUp);
+	    masterParamList.add(semiannualAmpEast);
+	    masterParamList.add(semiannualAmpNorth);
+	    masterParamList.add(semiannualAmpUp);
+
+	    mplInitialized=true;
+	}
     }
+
+    public void addDefaultEstParams() {
+// 	addEstParameter(constantBiasEast);
+// 	addEstParameter(constantBiasNorth);
+// 	addEstParameter(constantBiasUp);
+// 	addEstParameter(velocityEast);
+// 	addEstParameter(velocityNorth);
+// 	addEstParameter(velocityUp);
+    }
+    
 
     /**
      * This updates the SelectItem array that is 
      * used in the display.
      */
-    public void updateMplHelper(){
-	if(masterParamList!=null && masterParamList.size()>1) {
-	    mplHelper=new SelectItem[masterParamList.size()];
-	    for(int i=0;i<masterParamList.size();i++) {
-		String thename=((EstimateParameter)masterParamList.get(i)).getParameterFullName();
-		System.out.println(thename);
-		mplHelper[i]=new SelectItem(thename,thename);
-	    }
-	}
-    }
+//     public void updateMplHelper(){
+// 	if(masterParamList!=null && masterParamList.size()>1) {
+// 	    mplHelper=new SelectItem[masterParamList.size()];
+// 	    for(int i=0;i<masterParamList.size();i++) {
+// 		String thename=((EstimateParameter)masterParamList.get(i)).getParameterFullName();
+// 		System.out.println(thename);
+// 		mplHelper[i]=new SelectItem(thename,thename);
+// 	    }
+// 	}
+//     }
 
     public void setNewEstParameter(EstimateParameter newEstParameter){
 	this.newEstParameter=newEstParameter;
@@ -133,32 +185,34 @@ public class StationContainer {
 	    addEstParameter((EstimateParameter)dataTable2.getRowData());
 	}
     }
-
+    
+    
     /**
      * This adds the provided EstimateParameter to the 
      * containing vector.  It is also removed from the 
      * available master list, since we can't duplicate.
      */
     public void addEstParameter(EstimateParameter estParam){
-	    estParamVector.add(estParam);
-	    masterParamList.remove(estParam);
-	    updateMplHelper();
+	boolean testit=masterParamList.removeElement(estParam);
+	estParamVector.add(estParam);
+	//	    updateMplHelper();
+	System.out.println("testit is "+testit);
     }
-
+    
     /**
      * This is a no-argument form suitable for interaction with 
      * JSP pages.
      */
-    public void addEstParameterAction(){
-	if(newEstParameter!=null) {
-	    estParamVector.add(newEstParameter);
-	    masterParamList.remove(newEstParameter);
-	    updateMplHelper();
-	}
-	else {
-	    System.out.println("No new parameter was added.");
-	}
-    }
+//     public void addEstParameterAction(){
+// 	if(newEstParameter!=null) {
+// 	    masterParamList.remove(newEstParameter);
+// 	    estParamVector.add(newEstParameter);
+// 	    //    updateMplHelper();
+// 	}
+// 	else {
+// 	    System.out.println("No new parameter was added.");
+// 	}
+//     }
 
     /**
      * This removes the provided EstimateParameter to the 
@@ -166,9 +220,9 @@ public class StationContainer {
      * master list.
      */    
     public void removeEstParameter(EstimateParameter estParam) {
-	estParamVector.remove(estParam);
+	estParamVector.removeElement(estParam);
 	masterParamList.add(estParam);
-	updateMplHelper();
+	//	updateMplHelper();
     }
 
     public String getSiteName() {

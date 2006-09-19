@@ -6,10 +6,12 @@ import org.servogrid.genericproject.GenericProjectBean;
 import org.servogrid.genericproject.Utility;
 import org.servogrid.genericproject.ProjectBean;
 
-//Some Faces Context stuff
 //Faces classes
+import javax.faces.event.ActionEvent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
+
+//Servlet and portlet API stuff.
 import javax.servlet.ServletContext;
 import javax.portlet.PortletContext;
 
@@ -116,26 +118,53 @@ public class STFILTERBean extends GenericSopacBean {
     //These contain the site estimate params.  Note
     //this needs to be generalized, as I'm assuming only 
     //one site is used at a time.
-    MyStationContainer myStation;
-    AllStationsContainer allsites;
-    Vector allsitesVec;
-    Vector mysiteVec;
+//     MyStationContainer myStation;
+//     AllStationsContainer allsites;
+    StationContainer myStation;
+    StationContainer allsites;
+     Vector allsitesVec;
+     Vector mysiteVec;
 
     //Some useful rendering constants
     boolean renderAllSites=false;
     boolean renderMySite=false;
-    
+    boolean renderMasterParamList1=false;
+    boolean renderMasterParamList2=false;
 
     //--------------------------------------------------
     // These are accessor methods.
     //--------------------------------------------------
+    public void toggleRenderMPL1(ActionEvent ev){
+	renderMasterParamList1=!renderMasterParamList1;
+	//	return renderMasterParamList;
+    }
 
+    public boolean getRenderMasterParamList1(){
+	return renderMasterParamList1;
+    }
+
+    public void setRenderMasterParamList1(boolean renderMasterParamList1){
+	this.renderMasterParamList1=renderMasterParamList1;
+    }
+
+    public void toggleRenderMPL2(ActionEvent ev){
+	renderMasterParamList2=!renderMasterParamList2;
+	//	return renderMasterParamList;
+    }
+
+    public boolean getRenderMasterParamList2(){
+	return renderMasterParamList2;
+    }
+
+    public void setRenderMasterParamList2(boolean renderMasterParamList2){
+	this.renderMasterParamList2=renderMasterParamList2;
+    }
     public AllStationsContainer getAllsites(){
-	return allsites;
+	return (AllStationsContainer)allsites;
     }
 
     public MyStationContainer getMyStation(){
-	return myStation;
+	return (MyStationContainer)myStation;
     }
     
     public Vector getAllsitesVec(){
@@ -236,12 +265,17 @@ public class STFILTERBean extends GenericSopacBean {
 	setSiteCode("LBC1");  //Use this for testing.
 	
 	//Set up the default station containers
-	myStation=new MyStationContainer("LBC1");
-	allsites=new AllStationsContainer();
-	allsites.addDefaultEstParams();
+// 	myStation=new StationContainer("LBC1");
+// 	allsites=new StationContainer("all_site");
+// 	allsites.addDefaultEstParams();
 
-	allsitesVec=allsites.getEstParamVector();
-	mysiteVec=myStation.getEstParamVector();
+ 	myStation=new MyStationContainer("LBC1");
+	allsites=new AllStationsContainer();
+	//	((AllStationsContainer)allsites).addDefaultEstParams();
+
+	//	allsitesVec=allsites.getEstParamVector();
+	//	mysiteVec=myStation.getEstParamVector();
+
     }
 
     /**

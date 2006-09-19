@@ -4,7 +4,7 @@ public class AnnualPhaseNorth extends AnnualPhaseBias {
     
     public AnnualPhaseNorth(){
 	//Set the default values of these fields inherited from the parent
-	parameterType=19;
+	parameterType=20;
 	parameterFullName="Annual phase north (degree)";
 	aprioriValue=new Double(0.0);
 	aprioriConstraint=new Double(3.0);

@@ -9,6 +9,7 @@ package org.apache.myfaces.blank;
 public class MyStationContainer extends StationContainer {
 
     public MyStationContainer() {
+	super();
     }
 
     public MyStationContainer(String stationName){

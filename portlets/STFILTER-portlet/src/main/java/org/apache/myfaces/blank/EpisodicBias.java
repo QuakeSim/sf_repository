@@ -2,29 +2,29 @@ package org.apache.myfaces.blank;
 
 public class EpisodicBias extends EstimateParameter {
     
-    double startDate;
-    double endDate;
+    Double startDate;
+    Double endDate;
     String space="  ";
 
-    public double getStartDate() {
+    public Double getStartDate() {
 	return startDate;
     }
     
-    public void setStartDate(double startDate){
+    public void setStartDate(Double startDate){
 	this.startDate=startDate;
     }
 
-    public double getEndDate() {
+    public Double getEndDate() {
 	return endDate;
     }
     
-    public void setEndDate(double endDate){
+    public void setEndDate(Double endDate){
 	this.endDate=endDate;
     }
 
     public String printStringLine() {
-	String retString=parameterType+space+aprioriValue+space+
-	    aprioriConstraint+space+startDate+space+endDate;
+	String retString=parameterType+space+aprioriValue.toString()+space+
+	    aprioriConstraint.toString()+space+startDate.toString()+space+endDate.toString();
 	return retString;
     }    
 
