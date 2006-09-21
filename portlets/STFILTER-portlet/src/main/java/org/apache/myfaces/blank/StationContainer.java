@@ -16,8 +16,8 @@ import javax.faces.model.SelectItem;
 public class StationContainer {
     //These must be shared between all StationContainer
     //instances.
-    static Vector masterParamList;
-    static boolean mplInitialized=false;
+    Vector masterParamList;
+    boolean mplInitialized=false;
 
     SelectItem[] mplHelper;
     Vector estParamVector=new Vector();

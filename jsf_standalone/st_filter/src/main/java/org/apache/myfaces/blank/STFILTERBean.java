@@ -12,7 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
 
 //Servlet and portlet API stuff.
-import javax.servlSGet.ServletContext;
+import javax.servlet.ServletContext;
 import javax.portlet.PortletContext;
 
 //QuakeSim Web Service clients
