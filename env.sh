@@ -14,7 +14,12 @@ export GRIDSPHERE_HOME=$PORTAL_DEPLOY_DIR/gridsphere-2.1.4
 export PORTAL_WEBAPP_DIR=$CATALINA_HOME/webapps/gridsphere/
 
 # These are maven steps.
+
+# Here are the "portal" services.
 export WEB_SERVICES_HOME=$BUILD_DIR/WebServices
+
+# Here is the AntVisco execution service.
+export ANT_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/AntVisco
 
 #Generic project code
 export GENERIC_PROJECT_HOME=$BUILD_DIR/GenericQuakeSimProject

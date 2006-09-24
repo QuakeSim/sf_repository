@@ -14,7 +14,12 @@ echo "######################################"
 echo "Deploying Ant Execution Service"
 echo "######################################"
 cd $ANT_EXECUTION_HOME
-mvn clean package
+if mvn clean package
+then
+    echo Ant exec install complete.
+else
+    exit 1
+fi
 cp -r target/antexec $CATALINA_HOME/webapps
 
 

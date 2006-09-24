@@ -28,8 +28,8 @@ cd $SENSORGRID_SA_HOME
 mvn clean
 
 #Clean up portlet stuff
-cd $SIMPLEX_PORTLET_HOME
-mvn clean
+#cd $SIMPLEX_PORTLET_HOME
+#mvn clean
 
 cd $RDAHMM_PORTLET_HOME
 mvn clean
@@ -38,6 +38,9 @@ cd $STFILTER_SA_HOME
 mvn clean
 
 cd $STFILTER_PORTLET_HOME
+mvn clean
+
+cd $ANT_EXECUTION_HOME
 mvn clean
 
 
