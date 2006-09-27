@@ -27,6 +27,11 @@
                 <h:outputFormat id="output2" escape="false"
   			       value="<b>Load Project:</b> Load old projects"/>
 
+                <h:commandButton id="button3" value="Delete Project" 
+	                      action="#{stfilterBean.loadProjectKillList}"/>
+                <h:outputFormat id="output3" escape="false"
+  			       value="<b>Delete Project:</b> Delete old projects"/>
+
                 <h:commandButton id="button4" value="Data Archive" 
 	                      action="#{stfilterBean.loadDataArchive}"/>
                 <h:outputFormat id="output4" escape="false"   

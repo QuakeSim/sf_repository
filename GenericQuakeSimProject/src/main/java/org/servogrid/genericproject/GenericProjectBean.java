@@ -33,6 +33,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.StringTokenizer;
 import java.util.Date;
+import java.util.ArrayList;
 
 /**
  * Everything you need to set up and run RDAHMM.
@@ -69,9 +70,19 @@ public class GenericProjectBean {
     protected String hostName="danube.ucs.indiana.edu";
     protected String gnuplotHostName="gf2.ucs.indiana.edu";
 
+    protected ArrayList projectsToDelete;
+
     //--------------------------------------------------
     // These are universal accessor methods.
     //--------------------------------------------------
+
+    public ArrayList getProjectsToDelete() {
+	return projectsToDelete;
+    }
+    
+    public void setProjectsToDelete(ArrayList projectsToDelete) {
+	this.projectsToDelete=projectsToDelete;
+    }
 
     public ContextManagerImp getContextManagerImp() {
 	return cm;
@@ -239,6 +250,7 @@ public class GenericProjectBean {
 	userName=getPortalUserName();
 	contextListVector=new Vector();
 	contextListHash=new Hashtable();
+	projectsToDelete=new ArrayList();
     }
 
     public void initWebServices() {
@@ -271,7 +283,6 @@ public class GenericProjectBean {
 	    ex.printStackTrace();
 	}
     }
-    
     
     protected void setContextList() throws Exception {
 	contextList=cm.listContext(codeName);

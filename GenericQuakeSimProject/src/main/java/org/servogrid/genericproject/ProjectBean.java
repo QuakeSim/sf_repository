@@ -7,7 +7,15 @@ public class ProjectBean {
     String hostName;
     String baseWorkDir;
     String fileServiceUrl;
+    String siteCode;
     
+
+    public String getSiteCode(){
+	return siteCode;
+    }
+    public void setSiteCode(String siteCode){
+	this.siteCode=siteCode;
+    }
     public String getProjectName() {
 	return projectName;
     }

@@ -39,7 +39,6 @@ import java.util.Vector;
 import java.util.StringTokenizer;
 import java.util.Date;
 
-//
 
 /**
  * Everything you need to set up and run STFILTER.
@@ -366,6 +365,16 @@ public class STFILTERBean extends GenericSopacBean {
         return ("list-old-projects");
     }
 
+    public String loadProjectKillList() throws Exception {
+	System.out.println("Loading project");
+	if(!isInitialized) {
+	    initWebServices();
+	}
+	setContextList();
+        return ("list-death-row");
+    }
+    
+
     public String loadProjectPlots() throws Exception {
 	System.out.println("Loading project");
 	if(!isInitialized) {
@@ -495,6 +504,21 @@ public class STFILTERBean extends GenericSopacBean {
     }
 
     
+    public String deleteProject() throws Exception {
+	//projectsToDelete is an ArrayList inherited from GenericProjectBean.
+	//It is set by the calling faces page.
+	if(projectsToDelete!=null && projectsToDelete.size()>0) {
+	    for(int i=0;i<projectsToDelete.size();i++) {
+		String contextName=codeName+"/"
+		    +(String)projectsToDelete.get(i);
+		cm.removeContext(contextName);
+	    }
+	    projectsToDelete.clear();
+	}
+	setContextList();
+	return "project-removed";
+    }
+
     /**
      * As currently written, this method sets properties that are
      * specific to the backend application.

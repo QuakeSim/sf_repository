@@ -61,6 +61,10 @@
 			<to-view-id>/LoadProject.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>list-death-row</from-outcome>
+			<to-view-id>/DeleteProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>load-database-page</from-outcome>
 			<to-view-id>/DBQuery.jsp</to-view-id>
 		</navigation-case>
@@ -176,15 +180,25 @@
 			<from-outcome>back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>project-removed</from-outcome>
+			<to-view-id>/LoadProject.jsp</to-view-id>
+		</navigation-case>
 	</navigation-rule>
+
 	<navigation-rule>
-		<from-view-id>/LoadProject.jsp</from-view-id>
+		<from-view-id>/DeleteProject.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
 		<navigation-case>
 			<from-outcome>project-populated</from-outcome>
 			<to-view-id>/SetInputFileFromDB.jsp</to-view-id>
 		</navigation-case>
-	</navigation-rule>
-        
+     
+        </navigation-rule>
+
         <!-- DB query rules -->
 	<navigation-rule>
 		<from-view-id>/DBQuery.jsp</from-view-id>

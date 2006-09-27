@@ -42,6 +42,7 @@
                 <f:param name="hostName" value="#{project.hostName}"/>
                 <f:param name="projectName" value="#{project.projectName}"/>
                 <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
+                <f:param name="fileName" value="#{project.projectName}"/>
                 <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
                 <f:param name="fileExtension" value=".drv"/>
             </h:outputLink>
@@ -52,10 +53,11 @@
            	<h:outputText value="GPS Input Data"/>
             </f:facet>
   	    <h:outputLink value="#{stfilterBean.codeName}/DownloadData.jsp" target="_blank">
-           	<h:outputText value="#{project.projectName}.data"/>
+           	<h:outputText value="#{project.siteCode}.data"/>
                 <f:param name="userName" value="#{stfilterBean.userName}"/>
                 <f:param name="hostName" value="#{project.hostName}"/>
                 <f:param name="projectName" value="#{project.projectName}"/>
+                <f:param name="fileName" value="#{project.siteCode}"/>
                 <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
                 <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
                 <f:param name="fileExtension" value=".data"/>
@@ -71,6 +73,7 @@
                 <f:param name="userName" value="#{stfilterBean.userName}"/>
                 <f:param name="hostName" value="#{project.hostName}"/>
                 <f:param name="projectName" value="#{project.projectName}"/>
+                <f:param name="fileName" value="#{project.projectName}"/>
                 <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
                 <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
                 <f:param name="fileExtension" value=".list"/>
@@ -87,6 +90,7 @@
                 <f:param name="hostName" value="#{project.hostName}"/>
                 <f:param name="projectName" value="#{project.projectName}"/>
                 <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
+                <f:param name="fileName" value="#{project.projectName}"/>
                 <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
                 <f:param name="fileExtension" value=".site"/>
             </h:outputLink>
@@ -102,6 +106,7 @@
                 <f:param name="hostName" value="#{project.hostName}"/>
                 <f:param name="projectName" value="#{project.projectName}"/>
                 <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
+                <f:param name="fileName" value="#{project.projectName}"/>
                 <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
                 <f:param name="fileExtension" value=".para"/>
             </h:outputLink>
@@ -117,6 +122,7 @@
                 <f:param name="hostName" value="#{project.hostName}"/>
                 <f:param name="projectName" value="#{project.projectName}"/>
                 <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
+                <f:param name="fileName" value="#{project.projectName}"/>
                 <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
                 <f:param name="fileExtension" value=".output"/>
             </h:outputLink>
@@ -132,6 +138,7 @@
                 <f:param name="hostName" value="#{project.hostName}"/>
                 <f:param name="projectName" value="#{project.projectName}"/>
                 <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
+                <f:param name="fileName" value="#{project.projectName}"/>
                 <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
                 <f:param name="fileExtension" value=".resi"/>
             </h:outputLink>
@@ -147,6 +154,7 @@
                 <f:param name="hostName" value="#{project.hostName}"/>
                 <f:param name="projectName" value="#{project.projectName}"/>
                 <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
+                <f:param name="fileName" value="#{project.projectName}"/>
                 <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
                 <f:param name="fileExtension" value=".mdl"/>
             </h:outputLink>
@@ -162,6 +170,7 @@
                 <f:param name="hostName" value="#{project.hostName}"/>
                 <f:param name="projectName" value="#{project.projectName}"/>
                 <f:param name="baseWorkDir" value="#{project.baseWorkDir}"/>
+                <f:param name="fileName" value="#{project.projectName}"/>
                 <f:param name="fileServiceUrl" value="#{project.fileServiceUrl}"/>
                 <f:param name="fileExtension" value=".stdout"/>
             </h:outputLink>

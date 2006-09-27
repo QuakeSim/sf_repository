@@ -22,23 +22,22 @@
 
         <h:column>
          <f:facet name="header">
-           <h:outputText value="Select and load a project"/>
+           <h:outputText value="Select to delete one or more projects"/>
          </f:facet>
 
-             <h:selectOneRadio 
-                       id="projectRadioSelect"
+             <h:selectManyCheckbox 
+                       id="projectRadioDelete"
                        required="true"
                        layout="pageDirection"
-                       value="#{stfilterBean.chosenProject}">
+                       value="#{stfilterBean.projectsToDelete}">
                 <f:selectItems value="#{context}"/>
-             </h:selectOneRadio>
-             <h:message for="projectRadioAdd" showDetail="true" showSummary="true" errorStyle="color: red"/>
+             </h:selectManyCheckbox>
+             <h:message for="projectRadioDelete" showDetail="true" showSummary="true" errorStyle="color: red"/>
 
         </h:column>
      </h:dataTable>
-     <h:commandButton action="#{stfilterBean.populateProject}"
+     <h:commandButton action="#{stfilterBean.deleteProject}"
                       rendered="#{!(empty stfilterBean.contextListHash)}"/>
-
 
     </h:form>
      <p/>	

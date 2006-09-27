@@ -169,6 +169,12 @@
         <url-pattern>*.jsf</url-pattern>
     </servlet-mapping>
 
+    <!-- These are custom mime mappings for this app -->
+    <mime-mapping>
+        <extension>list</extension>
+        <mime-type>text.html</mime-type>
+    </mime-mapping>
+
     <!-- Welcome files -->
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>

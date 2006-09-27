@@ -32,7 +32,7 @@ public class GenericSopacBean extends GenericProjectBean{
 
     //These are SOPAC properties
     protected String siteCode="sio5";
-    protected String beginDate="2006-01-01";
+    protected String beginDate="2004-01-01";
     protected String endDate="2006-01-10";
     protected boolean bboxChecked=false;
     protected double minLatitude=32.0;
@@ -212,5 +212,35 @@ public class GenericSopacBean extends GenericProjectBean{
 	System.out.println("Station set: "+siteCode);
 	return "parameters-to-database";
     }
+    
+
+    /**
+     * Have to override this to add the siteCode.
+     */
+    protected void convertContextList() throws Exception {
+	Hashtable returnHash=new Hashtable();
+	String creationDate=null;
+	String contextname=null;
+	ProjectBean projectBean;
+	contextListVector.clear();
+	if(contextList!=null && contextList.length>0) {
+	    for(int i=0;i<contextList.length;i++) {
+		projectBean=new ProjectBean();
+		
+		contextName=codeName+"/"+contextList[i];
+		creationDate=cm.getCurrentProperty(contextName,"LastTime");
+		projectBean.setProjectName(contextList[i]);
+		projectBean.setCreationDate(convertDate(creationDate));
+		projectBean.setHostName(hostName);
+		projectBean.setBaseWorkDir(baseWorkDir);
+		projectBean.setFileServiceUrl(fileServiceUrl);
+		projectBean.setSiteCode(siteCode);
+		contextListVector.add(projectBean);
+		returnHash.put(contextList[i],contextList[i]);
+	    }
+	}
+	setContextListHash(returnHash);
+    }
+    
 
 }

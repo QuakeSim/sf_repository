@@ -11,26 +11,40 @@
                     must first run STFILTER." 
                     rendered="#{empty stfilterBean.contextListHash}"/>
 
-    <h:form id="form2">
+
+
+    <h:form>
      <h:dataTable value="#{stfilterBean.contextListHash}"
-                  var="contexts"
+                  border="1"
+                  var="context"
                   rendered="#{!(empty stfilterBean.contextListHash)}">
-        <f:facet name="header">
-           <h:outputText value="Select and load a project"/>
-        </f:facet>
+
+
         <h:column>
+         <f:facet name="header">
+           <h:outputText value="Select and load a project"/>
+         </f:facet>
+
              <h:selectOneRadio 
+                       id="projectRadioSelect"
+                       required="true"
                        layout="pageDirection"
                        value="#{stfilterBean.chosenProject}">
-                <f:selectItems value="#{contexts}"/>
+                <f:selectItems value="#{context}"/>
              </h:selectOneRadio>
+             <h:message for="projectRadioAdd" showDetail="true" showSummary="true" errorStyle="color: red"/>
+
         </h:column>
      </h:dataTable>
      <h:commandButton action="#{stfilterBean.populateProject}"
                       rendered="#{!(empty stfilterBean.contextListHash)}"/>
+
+
+    </h:form>
      <p/>	
 
      <hr/>
+   <h:form>
      <h:commandLink id="link1" action="back">
        <h:outputText id="linkText" value="#{stfilterBean.codeName} Main Menu"/>
      </h:commandLink>
