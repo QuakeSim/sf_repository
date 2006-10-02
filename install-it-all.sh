@@ -24,6 +24,9 @@ source ./install-web-services.sh
 cd $BUILD_DIR
 source ./antvisco-deploy.sh
 
+cd $BUILD_DIR
+source ./rdahmmexec-deploy.sh
+
 # Build the generic project classes.
 cd $BUILD_DIR
 source ./genericproject-install.sh

@@ -43,10 +43,19 @@ public class GenericSopacBean extends GenericProjectBean{
     protected String contextGroup;
     protected String contextId="4";
     protected String sopacQueryResults="";
+    protected boolean returnUrl;
 
     //--------------------------------------------------
     // These are universal accessor methods.
     //--------------------------------------------------
+
+    public boolean getReturnUrl(){
+	return returnUrl;
+    }
+
+    public void setReturnUrl(boolean reutrnUrl){
+	this.returnUrl=returnUrl;
+    }
 
     public String getSopacQueryResults() {
 	return sopacQueryResults;

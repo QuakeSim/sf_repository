@@ -43,6 +43,8 @@ mvn clean
 cd $ANT_EXECUTION_HOME
 mvn clean
 
+cd $RDAHMM_EXECUTION_HOME
+mvn clean
 
 # CLEAN VENDOR SOFTWARE
 echo "#################################"

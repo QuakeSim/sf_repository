@@ -20,6 +20,7 @@ export WEB_SERVICES_HOME=$BUILD_DIR/WebServices
 
 # Here is the AntVisco execution service.
 export ANT_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/AntVisco
+export RDAHMM_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/RDAHMMService
 
 #Generic project code
 export GENERIC_PROJECT_HOME=$BUILD_DIR/GenericQuakeSimProject
