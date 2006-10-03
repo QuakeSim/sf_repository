@@ -58,8 +58,6 @@ public class GenericProjectBean {
     protected Hashtable contextListHash;
     protected Vector contextListVector;
     protected String codeName;
-    protected String sopacDataFileName;
-    protected String sopacDataFileContent;
     
     //Host properties
     protected String binPath;
@@ -178,22 +176,6 @@ public class GenericProjectBean {
 
     public String getHostName() {
 	return this.hostName;
-    }
-
-    public void  setSopacDataFileName(String sopacDataFileName) {
-	this.sopacDataFileName=sopacDataFileName;
-    }
-
-    public String getSopacDataFileName() {
-	return this.sopacDataFileName;
-    }
-
-    public void  setSopacDataFileContent(String sopacDataFileContent) {
-	this.sopacDataFileContent=sopacDataFileContent;
-    }
-
-    public String getSopacDataFileContent() {
-	return this.sopacDataFileContent;
     }
 
     public boolean getIsInitialized() {

@@ -6,8 +6,12 @@
  </head>
    <body>
     <h2>Query Results</h2>
+    You can download your data by clicking the following link.
     <f:view>
-       <h:outputText value="#{rdahmmBean.sopacQueryResults}" escape="false"/>
+       <h:outputLink value="#{rdahmmBean.sopacDataFileUrl}" target="_blank">
+          <h:outputText value="#{rdahmmBean.sopacDataFileUrl}"/>
+       </h:outputLink>
+        <hr/>
         <h:form>
         <h:commandLink id="link1" action="rdahmm-back">
          <h:outputText id="linkText" value="#{rdahmmBean.codeName} Main Menu"/>

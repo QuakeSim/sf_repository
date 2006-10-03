@@ -192,6 +192,11 @@
 			<from-outcome>rdahmm-display-query-results</from-outcome>
 			<to-view-id>/DisplayQueryResults.jsp</to-view-id>
 		</navigation-case>
+ 
+		<navigation-case>
+			<from-outcome>rdahmm-query-results-url</from-outcome>
+			<to-view-id>/DisplayQueryResults.jsp</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 
         <!-- Display query rules -->

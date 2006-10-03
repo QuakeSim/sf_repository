@@ -37,9 +37,9 @@
                 <h:outputFormat id="output5" escape="false"
                               value="<b>Plot Output:</b> Plot RDAHMM output files."/>
                 <h:commandButton id="button3" value="Query DB" 
-	                      action="load-database-page"/>
+	                      action="rdahmm-load-database-page"/>
                 <h:outputFormat id="output3" escape="false"
-                              value="<b>Query Database:</b> Query the SOPAC GPS archives directly"/>
+                              value="<b>Query Database:</b> Query the SOPAC GPS archives directly.  This is used for testing."/>
 
               </h:panelGrid>
             </h:form>
