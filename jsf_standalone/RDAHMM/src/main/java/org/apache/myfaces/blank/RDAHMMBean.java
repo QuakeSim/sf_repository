@@ -69,106 +69,6 @@ public class RDAHMMBean extends GenericSopacBean{
     protected String localImageFileY;    
     protected String localImageFileZ;
 
-    //--------------------------------------------------
-    // These are accessor methods.
-    //--------------------------------------------------
-
-    public String getLocalImageFileX() {
-	return localImageFileX;
-    }
-    
-    public void setLocalImageFileX(String localImageFileX){
-	this.localImageFileX=localImageFileX;
-    }
-
-    public String getLocalImageFileY() {
-	return localImageFileY;
-    }
-    
-    public void setLocalImageFileY(String localImageFileY){
-	this.localImageFileY=localImageFileY;
-    }
-
-    public String getLocalImageFileZ() {
-	return localImageFileZ;
-    }
-    
-    public void setLocalImageFileZ(String localImageFileZ){
-	this.localImageFileZ=localImageFileZ;
-    }
-
-    public String getGnuplotFileServiceUrl() {
-	return gnuplotFileServiceUrl;
-    }
-
-    public void setGnuplotFileServiceUrl(String gnuplotFileServiceUrl) {
-	this.gnuplotFileServiceUrl=gnuplotFileServiceUrl;
-    }
-
-    public String getGnuplotBaseWorkDir() {
-	return gnuplotBaseWorkDir;
-    }
-
-    public void setGnuplotBaseWorkDir(String gnuplotBaseWorkDir) {
-	this.gnuplotBaseWorkDir=gnuplotBaseWorkDir;
-    }
-
-    public String getGnuplotBinPath() {
-	return gnuplotBinPath;
-    }
-
-    public void setGnuplotBinPath(String gnuplotBinPath) {
-	this.gnuplotBinPath=gnuplotBinPath;
-    }
-
-    public String getGnuplotAntUrl() {
-	return gnuplotAntUrl;
-    }
-
-    public void setGnuplotAntUrl(String gnuplotAntUrl) {
-	this.gnuplotAntUrl=gnuplotAntUrl;
-    }
-
-    public String getGnuplotHostName() {
-	return gnuplotHostName;
-    }
-
-    public void setGnuplotHostName(String gnuplotHostName) {
-	this.gnuplotHostName=gnuplotHostName;
-    }
-
-    public double getAnnealStep(){
-	return annealStep;
-    }
-
-    public void setAnnealStep(double annealStep){
-	this.annealStep=annealStep;
-    }
-
-    public int getNumModelStates() {
-	return numModelStates;
-    }
-
-    public void setNumModelStates(int numModelStates){
-	this.numModelStates=numModelStates;
-    }
-
-    public int getRandomSeed() {
-	return randomSeed;
-    }
-
-    public void setRandomSeed(int randomSeed){
-	this.randomSeed=randomSeed;
-    }
-    
-    public String getOutputType() {
-	return outputType;
-    }
-
-    public void setOutputType(String outputType){
-	this.outputType=outputType;
-    }
-
     /**
      * default empty constructor
      */
@@ -627,5 +527,104 @@ public class RDAHMMBean extends GenericSopacBean{
 	return returnString;
     }
 
+    //--------------------------------------------------
+    // These are accessor methods.
+    //--------------------------------------------------
+
+    public String getLocalImageFileX() {
+	return localImageFileX;
+    }
+    
+    public void setLocalImageFileX(String localImageFileX){
+	this.localImageFileX=localImageFileX;
+    }
+
+    public String getLocalImageFileY() {
+	return localImageFileY;
+    }
+    
+    public void setLocalImageFileY(String localImageFileY){
+	this.localImageFileY=localImageFileY;
+    }
+
+    public String getLocalImageFileZ() {
+	return localImageFileZ;
+    }
+    
+    public void setLocalImageFileZ(String localImageFileZ){
+	this.localImageFileZ=localImageFileZ;
+    }
+
+    public String getGnuplotFileServiceUrl() {
+	return gnuplotFileServiceUrl;
+    }
+
+    public void setGnuplotFileServiceUrl(String gnuplotFileServiceUrl) {
+	this.gnuplotFileServiceUrl=gnuplotFileServiceUrl;
+    }
+
+    public String getGnuplotBaseWorkDir() {
+	return gnuplotBaseWorkDir;
+    }
+
+    public void setGnuplotBaseWorkDir(String gnuplotBaseWorkDir) {
+	this.gnuplotBaseWorkDir=gnuplotBaseWorkDir;
+    }
+
+    public String getGnuplotBinPath() {
+	return gnuplotBinPath;
+    }
+
+    public void setGnuplotBinPath(String gnuplotBinPath) {
+	this.gnuplotBinPath=gnuplotBinPath;
+    }
+
+    public String getGnuplotAntUrl() {
+	return gnuplotAntUrl;
+    }
+
+    public void setGnuplotAntUrl(String gnuplotAntUrl) {
+	this.gnuplotAntUrl=gnuplotAntUrl;
+    }
+
+    public String getGnuplotHostName() {
+	return gnuplotHostName;
+    }
+
+    public void setGnuplotHostName(String gnuplotHostName) {
+	this.gnuplotHostName=gnuplotHostName;
+    }
+
+    public double getAnnealStep(){
+	return annealStep;
+    }
+
+    public void setAnnealStep(double annealStep){
+	this.annealStep=annealStep;
+    }
+
+    public int getNumModelStates() {
+	return numModelStates;
+    }
+
+    public void setNumModelStates(int numModelStates){
+	this.numModelStates=numModelStates;
+    }
+
+    public int getRandomSeed() {
+	return randomSeed;
+    }
+
+    public void setRandomSeed(int randomSeed){
+	this.randomSeed=randomSeed;
+    }
+    
+    public String getOutputType() {
+	return outputType;
+    }
+
+    public void setOutputType(String outputType){
+	this.outputType=outputType;
+    }
 
 }
