@@ -111,7 +111,7 @@
        <h:message for="master_table" showDetail="true" showSummary="true" errorStyle="color: red"/>
 
 
-       <h:commandButton id="mybutton3" value="Query Database" action="#{rdahmmBean.querySOPAC}"/>
+       <h:commandButton id="mybutton3" value="Query Database" action="#{rdahmmBean.querySOPACGetURL}"/>
 
    </h:form>	
 

@@ -45,215 +45,6 @@ import java.util.Date;
  */
 
 public class STFILTERBean extends GenericSopacBean {
-
-    //Internal properties
-//     boolean isInitialized=false;
-//     ContextManagerImp cm=null;
-//     String contextName;
-//     String[] fileExtension={".input",".stdout",".A",".B",".L",".Q",".pi"};
-    
-//    private ContextManagerImp cm;
-
-    //Some internal fields.
-    String twospace="  ";  //Used to format the driver file.
-    boolean projectCreated=false;
-
-    //STFILTER properties
-    private String codeName="STFILTER";
-    private int resOption=387;
-    private int termOption=556;
-    private double cutoffCriterion=1.0;
-    private double estJumpSpan=1.0;
-    private WeakObsCriteria weakObsCriteria=
-	new WeakObsCriteria(30.0,30.0,50.0);
-    private OutlierCriteria outlierCriteria=
-	new OutlierCriteria(800.0,800.0,800.0);
-    private BadObsCriteria badObsCriteria=
-	new BadObsCriteria(10000.0, 10000.0, 10000.0);
-    private TimeInterval timeInterval=new TimeInterval(1998.0, 2006.800);
-
-
-    //This is the file that will hold the 
-    //results of the GPS station query.
-    private String sopacDataFileName="";
-    private String sopacDataFileContent="";
-    private String sopacDataFileExt=".data";
-
-    //This is the working diretory for running the 
-    //code on the execution host.  The global data
-    //directory is the location of things like the
-    //apriori file.
-    private String workDir="";
-    private String globalDataDir="";
-
-    //This is the driver file and its constituent lines.
-    private String driverFileName="";
-    private String driverFileContent="";
-    private String driverFileExtension=".drv";
-
-    //These are fixed files, at least for now.
-    private String aprioriValueFile="itrf2000_final.net";
-    private String mosesParamFile="moses_test.para";
-
-    //These are file extensions.  The files will be named after the
-    //project.
-    private String mosesDataListExt=".list";
-    private String mosesSiteListExt=".site";
-    private String mosesParamFileExt=".para";
-    private String residualFileExt=".resi";
-    private String termOutFileExt=".mdl";
-    private String outputFileExt=".out";
-
-    //This is the site list file
-    private String siteListFile;
-    private String dataListFile;
-    private String estParameterFile;
-
-    //Project properties
-    private String[] contextList;
-    private Hashtable contextListHash;
-    private Vector contextListVector;
-
-    //These contain the site estimate params.  Note
-    //this needs to be generalized, as I'm assuming only 
-    //one site is used at a time.
-//     MyStationContainer myStation;
-//     AllStationsContainer allsites;
-    StationContainer myStation;
-    StationContainer allsites;
-     Vector allsitesVec;
-     Vector mysiteVec;
-
-    //Some useful rendering constants
-    boolean renderAllSites=false;
-    boolean renderMySite=false;
-    boolean renderMasterParamList1=false;
-    boolean renderMasterParamList2=false;
-
-    //--------------------------------------------------
-    // These are accessor methods.
-    //--------------------------------------------------
-    public void toggleRenderMPL1(ActionEvent ev){
-	renderMasterParamList1=!renderMasterParamList1;
-	//	return renderMasterParamList;
-    }
-
-    public boolean getRenderMasterParamList1(){
-	return renderMasterParamList1;
-    }
-
-    public void setRenderMasterParamList1(boolean renderMasterParamList1){
-	this.renderMasterParamList1=renderMasterParamList1;
-    }
-
-    public void toggleRenderMPL2(ActionEvent ev){
-	renderMasterParamList2=!renderMasterParamList2;
-	//	return renderMasterParamList;
-    }
-
-    public boolean getRenderMasterParamList2(){
-	return renderMasterParamList2;
-    }
-
-    public void setRenderMasterParamList2(boolean renderMasterParamList2){
-	this.renderMasterParamList2=renderMasterParamList2;
-    }
-    public AllStationsContainer getAllsites(){
-	return (AllStationsContainer)allsites;
-    }
-
-    public MyStationContainer getMyStation(){
-	return (MyStationContainer)myStation;
-    }
-    
-    public Vector getAllsitesVec(){
-	return allsitesVec;
-    }
-
-    public void setAllsitesVec(Vector asvec) {
-	this.allsitesVec=asvec;
-    }
-
-    public Vector getMysiteVec(){
-	return mysiteVec;
-    }
-
-    public void setMysiteVec(Vector mysiteVec){
-	this.mysiteVec=mysiteVec;
-    }
-
-    public String getDriverFileName() {
-	return driverFileName;
-    }
-
-    public void setDriverFileName(String driverFileName){
-	this.driverFileName=driverFileName;
-    }
-
-    public OutlierCriteria getOutlierCriteria() {
-	return outlierCriteria;
-    }
-
-    public void  setOutlierCriteria(OutlierCriteria outlierCriteria) {
-	this.outlierCriteria=outlierCriteria;
-    }
-
-    public int getResOption() {
-	return resOption;
-    }
-
-    public void setResOption(int resOption) {
-	this.resOption=resOption;
-    }
-
-    public int getTermOption() {
-	return termOption;
-    }
-
-    public void setTermOption(int termOption) {
-	this.termOption=termOption;
-    }
-
-    public double getCutoffCriterion() {
-	return cutoffCriterion;
-    }
-
-    public void setCutoffCriterion(double cutoffCriterion) {
-	this.cutoffCriterion=cutoffCriterion;
-    }
-
-    public double getEstJumpSpan() {
-	return estJumpSpan;
-    }
-
-    public void setEstJumpSpan(double estJumpSpan) {
-	this.estJumpSpan=estJumpSpan;
-    }
-
-    public WeakObsCriteria getWeakObsCriteria() {
-	return weakObsCriteria;
-    }
-
-    public void setWeakObsCriteria(WeakObsCriteria wobc) {
-	weakObsCriteria=wobc;
-    }
-
-    public BadObsCriteria getBadObsCriteria() {
-	return badObsCriteria;
-    }
-
-    public void setBadObsCriteria(BadObsCriteria badObsCriteria) {
-	this.badObsCriteria=badObsCriteria;
-    }
-
-    public TimeInterval getTimeInterval() {
-	return timeInterval;
-    }
-
-    public void setTimeInterval(TimeInterval timeInterval) {
-	this.timeInterval=timeInterval;
-    }
-
     
     /**
      * default empty constructor
@@ -263,18 +54,21 @@ public class STFILTERBean extends GenericSopacBean {
 	cm=getContextManagerImp();
 	setSiteCode("LBC1");  //Use this for testing.
 	
-	//Set up the default station containers
-// 	myStation=new StationContainer("LBC1");
-// 	allsites=new StationContainer("all_site");
-// 	allsites.addDefaultEstParams();
 
+	//Set up here the station list vectors.
+	masterList=new MasterParamList();
+	myStationList=new StationParamList();
+	allsitesList=new AllSitesParamList();
+
+	//Set up here the station conntainer
  	myStation=new MyStationContainer("LBC1");
+	myStation.setEstParamVector(myStationList.getStationParamList());
+	myStation.setMasterParamList(masterList.getStationParamList());
+	
+	//Set up the default station list.
 	allsites=new AllStationsContainer();
-	//	((AllStationsContainer)allsites).addDefaultEstParams();
-
-	//	allsitesVec=allsites.getEstParamVector();
-	//	mysiteVec=myStation.getEstParamVector();
-
+	allsites.setEstParamVector(allsitesList.getStationParamList());
+	allsites.setMasterParamList(masterList.getStationParamList());
     }
 
     /**
@@ -702,4 +496,208 @@ public class STFILTERBean extends GenericSopacBean {
 	}
 	return sopacDataFileContent;
     }
+
+    //Some internal fields.
+    String twospace="  ";  //Used to format the driver file.
+    boolean projectCreated=false;
+
+    //STFILTER properties
+    private String codeName="STFILTER";
+    private int resOption=387;
+    private int termOption=556;
+    private double cutoffCriterion=1.0;
+    private double estJumpSpan=1.0;
+    private WeakObsCriteria weakObsCriteria=
+	new WeakObsCriteria(30.0,30.0,50.0);
+    private OutlierCriteria outlierCriteria=
+	new OutlierCriteria(800.0,800.0,800.0);
+    private BadObsCriteria badObsCriteria=
+	new BadObsCriteria(10000.0, 10000.0, 10000.0);
+    private TimeInterval timeInterval=new TimeInterval(1998.0, 2006.800);
+
+
+    //This is the file that will hold the 
+    //results of the GPS station query.
+    private String sopacDataFileName="";
+    private String sopacDataFileContent="";
+    private String sopacDataFileExt=".data";
+
+    //This is the working diretory for running the 
+    //code on the execution host.  The global data
+    //directory is the location of things like the
+    //apriori file.
+    private String workDir="";
+    private String globalDataDir="";
+
+    //This is the driver file and its constituent lines.
+    private String driverFileName="";
+    private String driverFileContent="";
+    private String driverFileExtension=".drv";
+
+    //These are fixed files, at least for now.
+    private String aprioriValueFile="itrf2000_final.net";
+    private String mosesParamFile="moses_test.para";
+
+    //These are file extensions.  The files will be named after the
+    //project.
+    private String mosesDataListExt=".list";
+    private String mosesSiteListExt=".site";
+    private String mosesParamFileExt=".para";
+    private String residualFileExt=".resi";
+    private String termOutFileExt=".mdl";
+    private String outputFileExt=".out";
+
+    //This is the site list file
+    private String siteListFile;
+    private String dataListFile;
+    private String estParameterFile;
+
+    //Project properties
+    private String[] contextList;
+    private Hashtable contextListHash;
+    private Vector contextListVector;
+
+    //These contain the site estimate params.  Note
+    //this needs to be generalized, as I'm assuming only 
+    //one site is used at a time.
+    StationContainer myStation;
+    StationContainer allsites;
+
+    StationParamList myStationList,allsitesList;
+    MasterParamList masterList;
+
+    //These are not needed?
+//     Vector allsitesVec;
+//     Vector mysiteVec;
+    
+    //Some useful rendering constants
+    boolean renderAllSites=false;
+    boolean renderMySite=false;
+    boolean renderMasterParamList1=false;
+    boolean renderMasterParamList2=false;
+
+    //--------------------------------------------------
+    // These are accessor methods.
+    //--------------------------------------------------
+    public void toggleRenderMPL1(ActionEvent ev){
+	renderMasterParamList1=!renderMasterParamList1;
+	//	return renderMasterParamList;
+    }
+
+    public boolean getRenderMasterParamList1(){
+	return renderMasterParamList1;
+    }
+
+    public void setRenderMasterParamList1(boolean renderMasterParamList1){
+	this.renderMasterParamList1=renderMasterParamList1;
+    }
+
+    public void toggleRenderMPL2(ActionEvent ev){
+	renderMasterParamList2=!renderMasterParamList2;
+	//	return renderMasterParamList;
+    }
+
+    public boolean getRenderMasterParamList2(){
+	return renderMasterParamList2;
+    }
+
+    public void setRenderMasterParamList2(boolean renderMasterParamList2){
+	this.renderMasterParamList2=renderMasterParamList2;
+    }
+    public AllStationsContainer getAllsites(){
+	return (AllStationsContainer)allsites;
+    }
+
+    public MyStationContainer getMyStation(){
+	return (MyStationContainer)myStation;
+    }
+    
+//     public Vector getAllsitesVec(){
+// 	return allsitesVec;
+//     }
+
+//     public void setAllsitesVec(Vector asvec) {
+// 	this.allsitesVec=asvec;
+//     }
+
+//     public Vector getMysiteVec(){
+// 	return mysiteVec;
+//     }
+
+//     public void setMysiteVec(Vector mysiteVec){
+// 	this.mysiteVec=mysiteVec;
+//     }
+
+    public String getDriverFileName() {
+	return driverFileName;
+    }
+
+    public void setDriverFileName(String driverFileName){
+	this.driverFileName=driverFileName;
+    }
+
+    public OutlierCriteria getOutlierCriteria() {
+	return outlierCriteria;
+    }
+
+    public void  setOutlierCriteria(OutlierCriteria outlierCriteria) {
+	this.outlierCriteria=outlierCriteria;
+    }
+
+    public int getResOption() {
+	return resOption;
+    }
+
+    public void setResOption(int resOption) {
+	this.resOption=resOption;
+    }
+
+    public int getTermOption() {
+	return termOption;
+    }
+
+    public void setTermOption(int termOption) {
+	this.termOption=termOption;
+    }
+
+    public double getCutoffCriterion() {
+	return cutoffCriterion;
+    }
+
+    public void setCutoffCriterion(double cutoffCriterion) {
+	this.cutoffCriterion=cutoffCriterion;
+    }
+
+    public double getEstJumpSpan() {
+	return estJumpSpan;
+    }
+
+    public void setEstJumpSpan(double estJumpSpan) {
+	this.estJumpSpan=estJumpSpan;
+    }
+
+    public WeakObsCriteria getWeakObsCriteria() {
+	return weakObsCriteria;
+    }
+
+    public void setWeakObsCriteria(WeakObsCriteria wobc) {
+	weakObsCriteria=wobc;
+    }
+
+    public BadObsCriteria getBadObsCriteria() {
+	return badObsCriteria;
+    }
+
+    public void setBadObsCriteria(BadObsCriteria badObsCriteria) {
+	this.badObsCriteria=badObsCriteria;
+    }
+
+    public TimeInterval getTimeInterval() {
+	return timeInterval;
+    }
+
+    public void setTimeInterval(TimeInterval timeInterval) {
+	this.timeInterval=timeInterval;
+    }
+
 }

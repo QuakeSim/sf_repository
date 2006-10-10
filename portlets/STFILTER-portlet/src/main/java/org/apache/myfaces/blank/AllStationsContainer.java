@@ -8,7 +8,8 @@ public class AllStationsContainer extends StationContainer {
     public AllStationsContainer() {
 	super();
 	setSiteName("all_site");
-	//	addDefaultEstParams();
     }
-
+    
+    
+    
 }
