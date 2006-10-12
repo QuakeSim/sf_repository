@@ -46,6 +46,9 @@ mvn clean
 cd $RDAHMM_EXECUTION_HOME
 mvn clean
 
+cd $STFILTER_EXECUTION_HOME
+mvn clean
+
 # CLEAN VENDOR SOFTWARE
 echo "#################################"
 echo "#  Cleaning vendor packages...  #"

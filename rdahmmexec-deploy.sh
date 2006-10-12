@@ -11,7 +11,7 @@ source ./env.sh
 
 echo ""
 echo "######################################"
-echo "Deploying Ant Execution Service"
+echo "Deploying RDAHMM Execution Service"
 echo "######################################"
 cd $RDAHMM_EXECUTION_HOME
 if mvn clean package

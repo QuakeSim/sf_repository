@@ -27,6 +27,9 @@ source ./antvisco-deploy.sh
 cd $BUILD_DIR
 source ./rdahmmexec-deploy.sh
 
+cd $BUILD_DIR
+source ./stfilterexec-deploy.sh
+
 # Build the generic project classes.
 cd $BUILD_DIR
 source ./genericproject-install.sh
