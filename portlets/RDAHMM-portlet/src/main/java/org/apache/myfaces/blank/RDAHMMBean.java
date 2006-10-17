@@ -199,7 +199,7 @@ public class RDAHMMBean extends GenericSopacBean{
 	
 	sopacDataFileName=cm.getCurrentProperty(contextName,"sopacDataFileName");
 	sopacDataFileContent=setRDAHMMSopacDataFile(projectName);
-	System.out.println("Input File:"+sopacDataFileContent);
+	//	System.out.println("Input File:"+sopacDataFileContent);
 	return "rdahmm-project-populated";
     }
 
@@ -448,11 +448,11 @@ public class RDAHMMBean extends GenericSopacBean{
 	    LineNumberReader lnr=
 		new LineNumberReader(new FileReader(contextDir+"/"+sopacDataFileName));
 	    
-	    String line2=lnr.readLine();
+ 	    String line2=lnr.readLine();
 	    while(line2!=null) {
-		line2=lnr.readLine();
-	    }
-	    lnr.close();
+ 		line2=lnr.readLine();
+ 	    }
+ 	    lnr.close();
 	    nobsv=lnr.getLineNumber();
 	}
 	catch(Exception ex) {
@@ -469,14 +469,14 @@ public class RDAHMMBean extends GenericSopacBean{
 	try {
 	    String thedir=cm.getCurrentProperty(codeName
 						+"/"+projectName,"Directory");
-	    System.out.println(thedir+"/"+sopacDataFileName);
+	    //	    System.out.println(thedir+"/"+sopacDataFileName);
 	    
 	    BufferedReader buf=
 		new BufferedReader(new FileReader(thedir+"/"+sopacDataFileName));
 	    String line=buf.readLine();
 	    sopacDataFileContent=line+"\n";
-	    while(line!=null) {
-		System.out.println(line);
+	    while(line!=null && !line.equals("")) {
+		//		System.out.println(line);
 		line=trimLine(line);	
 		sopacDataFileContent+=line+"\n";
 		line=buf.readLine();
@@ -510,7 +510,8 @@ public class RDAHMMBean extends GenericSopacBean{
 	StringTokenizer st;
 	BufferedReader br=new BufferedReader(new StringReader(tabbedString));
 	String line=br.readLine();
-	while(line!=null) {
+	while(line!=null && !line.equals("")) {
+	    //	    System.out.println("Line: "+line);
 	    st=new StringTokenizer(line);
 	    String newLine="";
 	    int tokenCount=st.countTokens();
@@ -520,10 +521,14 @@ public class RDAHMMBean extends GenericSopacBean{
 		    newLine+=temp+space;
 		}
 	    }
+	    //	    System.out.println("New Line: "+newLine);
 	    returnString+=newLine+"\n";
 	    line=br.readLine();
 	}
+	returnString=returnString.trim();
+	System.out.println("Here is the file");
 	System.out.println(returnString);
+	System.out.println("That was the file");
 	return returnString;
     }
 

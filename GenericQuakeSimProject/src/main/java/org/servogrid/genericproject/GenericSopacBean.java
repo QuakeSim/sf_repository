@@ -114,7 +114,7 @@ public class GenericSopacBean extends GenericProjectBean{
 	gsq.setFromServlet(siteCode, beginDate, endDate, resource,
 			   contextGroup, contextId, minMaxLatLon);
 	sopacQueryResults=gsq.getResource();
-	System.out.println(sopacQueryResults);
+	//	System.out.println(sopacQueryResults);
 	
 	sopacDataFileContent=sopacQueryResults;
 		
