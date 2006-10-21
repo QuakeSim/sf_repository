@@ -526,9 +526,9 @@ public class RDAHMMBean extends GenericSopacBean{
 	    line=br.readLine();
 	}
 	returnString=returnString.trim();
-	System.out.println("Here is the file");
-	System.out.println(returnString);
-	System.out.println("That was the file");
+// 	System.out.println("Here is the file");
+// 	System.out.println(returnString);
+// 	System.out.println("That was the file");
 	return returnString;
     }
 
