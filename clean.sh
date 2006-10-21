@@ -44,7 +44,9 @@ cd $ANT_EXECUTION_HOME
 mvn clean
 
 cd $RDAHMM_EXECUTION_HOME
-mvn clean
+#the tomcat.base.dir value doesn't matter, just needed to prevent
+#maven from barfing.
+mvn clean -Dtomcat.base.dir=/tmp
 
 cd $STFILTER_EXECUTION_HOME
 mvn clean

@@ -16,9 +16,37 @@ public class RDAHMMService extends AntVisco implements Runnable{
 
     final String FILE_PROTOCOL="file";
     final String HTTP_PROTOCOL="http";
+
+    //These are the system properties that may have
+    //default values.
+    Properties properties;
+    String baseWorkDir;
+    String projectName;
+    String binPath;
+    int randomSeed;
+    double annealStep;
+    String buildFilePath;
+    String antTarget;
     
     public RDAHMMService() {
 	super();
+	try {
+	    properties=new Properties();
+	    properties.load(new 
+			    FileInputStream(new File("rdahmmconfig.properties")));
+	    baseWorkDir=properties.getProperty("base.workdir");
+	    projectName=properties.getProperty("project.name");
+	    binPath=properties.getProperty("bin.path");
+	    randomSeed=
+		Integer.parseInt(properties.getProperty("random.seed"));
+	    annealStep=
+		Double.parseDouble(properties.getProperty("anneal.step"));
+	    buildFilePath=properties.getProperty("build.file.path");
+	    antTarget=properties.getProperty("ant.target");
+	}
+	catch(Exception ex) {
+	    
+	}
     }
 
     /**
@@ -28,9 +56,9 @@ public class RDAHMMService extends AntVisco implements Runnable{
      * number on the right by cutRightColumns.
      */
     protected void filterResults(String tabbedFile,
-				   String rdahmmInputFile,
-				   int cutLeftColumns,
-				   int cutRightColumns) throws Exception {
+				 String rdahmmInputFile,
+				 int cutLeftColumns,
+				 int cutRightColumns) throws Exception {
 	String returnString="";
 	String space=" ";
 	StringTokenizer st;

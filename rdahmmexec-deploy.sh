@@ -14,7 +14,7 @@ echo "######################################"
 echo "Deploying RDAHMM Execution Service"
 echo "######################################"
 cd $RDAHMM_EXECUTION_HOME
-if mvn clean package
+if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME
 then
     echo Ant exec install complete.
 else

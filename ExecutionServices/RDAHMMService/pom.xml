@@ -13,6 +13,12 @@
 
     <build>
         <finalName>rdahmmexec</finalName>
+        <resources>
+           <resource>
+               <directory>src/main/resources</directory>
+               <filtering>true</filtering>
+           </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
@@ -23,6 +29,12 @@
             </plugin>
         </plugins>
     </build>
+    <!-- We get this from the command line and pass to the resources
+         via filtering -->
+    <properties>
+       <tomcat.base.dir>${tomcat.base.dir}</tomcat.base.dir>
+       <bin.path>${tomcat.base.dir}/webapps/${pom.artifactId}/WEB-INF/binaryexec</bin.path>
+    </properties>
 
     <repositories>
         <repository>
