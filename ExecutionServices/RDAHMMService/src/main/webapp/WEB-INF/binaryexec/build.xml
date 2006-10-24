@@ -37,7 +37,15 @@
       <env key="PATH" path="${bindir.prop}:/bin/:$PATH"/>
    </exec>
 </target>
-<target name="RunRDAHMM" depends="ExecRDAHMM">
+<target name="CopyOutput">
+   <echo message="Creating ${outputDestDir.prop}" />
+   <mkdir dir="${outputDestDir.prop}" />
+   <copy todir="${outputDestDir.prop}">
+     <fileset dir="${workDir.prop}/>
+   </copy>
+</target>
+
+<target name="RunRDAHMM" depends="CopyOutput">
    <echo message="RDAHMM run completed"/>
 </target>
 </project>

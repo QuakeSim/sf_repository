@@ -24,6 +24,9 @@ mvn clean
 cd $RDAHMM_SA_HOME
 mvn clean
 
+cd $SIMPLE_RDAHMM_SA_HOME
+mvn clean
+
 cd $SENSORGRID_SA_HOME
 mvn clean
 

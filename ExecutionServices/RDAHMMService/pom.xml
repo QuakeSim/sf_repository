@@ -79,61 +79,63 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- The following are given "provided" scope 
-             to allow me to compile without actually using 
-             these exact jars.  The real jars in in 
-             WEB-INF/lib.  Not good, but these are 
-             archaic services, so I don't want to waste time
-             resolving these dependencies
-        -->
+        <!-- Axis jars -->
         <dependency>
              <groupId>axis</groupId>
              <artifactId>axis</artifactId>
-             <version>1.1</version>
-             <scope>provided</scope>
+             <version>1.4</version>
         </dependency>
 
         <dependency>
              <groupId>axis</groupId>
              <artifactId>axis-jaxrpc</artifactId>
-             <version>1.2</version>
-             <scope>provided</scope>
+             <version>1.4</version>
         </dependency>
 
         <dependency>
              <groupId>commons-discovery</groupId>
              <artifactId>commons-discovery</artifactId>
              <version>0.2</version>
-             <scope>provided</scope>
         </dependency>
 
         <dependency>
              <groupId>commons-logging</groupId>
              <artifactId>commons-logging</artifactId>
-             <version>1.0.2</version>
-             <scope>provided</scope>
+             <version>1.0.4</version>
         </dependency>
 
         <dependency>
-             <groupId>ant</groupId>
-             <artifactId>ant</artifactId>
-             <version>1.6.5</version>
-             <scope>provided</scope>
+             <groupId>axis</groupId>
+             <artifactId>axis-wsdl4j</artifactId>
+             <version>1.5.1</version>
         </dependency>
 
         <dependency>
-             <groupId>ant</groupId>
-             <artifactId>ant-launcher</artifactId>
-             <version>1.6.5</version>
-             <scope>provided</scope>
+             <groupId>axis</groupId>
+             <artifactId>axis-saaj</artifactId>
+             <version>1.4</version>
         </dependency>
 
         <dependency>
              <groupId>log4j</groupId>
              <artifactId>log4j</artifactId>
              <version>1.2.8</version>
-             <scope>provided</scope>
         </dependency>
+
+
+        <!-- These are ant jars -->
+        <dependency>
+             <groupId>ant</groupId>
+             <artifactId>ant</artifactId>
+             <version>1.6.5</version>
+        </dependency>
+
+        <dependency>
+             <groupId>ant</groupId>
+             <artifactId>ant-launcher</artifactId>
+             <version>1.6.5</version>
+        </dependency>
+
 
        </dependencies>
 

@@ -21,6 +21,8 @@ public class RDAHMMService extends AntVisco implements Runnable{
     //default values.
     Properties properties;
     String baseWorkDir;
+    String baseDestDir;
+    String outputDestDir;
     String projectName;
     String binPath;
     String outputType;
@@ -33,12 +35,18 @@ public class RDAHMMService extends AntVisco implements Runnable{
 	super();	
 	System.out.println("Constructing the RDAHMM Service");
 	ClassLoader loader=ClassLoader.getSystemClassLoader();
+	
+	//Must fix this!!!!!!
+	String propertyFile="/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/rdahmmexec/WEB-INF/classes/rdahmmconfig.properties";
 
 	properties=new Properties();
-	// 	    properties.load(new 
-	// 			    FileInputStream("rdahmmconfig.properties"));
-	properties.load(loader.getResourceAsStream("rdahmmconfig.properties"));
+	System.out.println("Looking for props in the classpath");
+	properties.load(new 
+			FileInputStream(propertyFile));
+	//	properties.load(loader.getResourceAsStream("rdahmmconfig.properties"));
+
 	baseWorkDir=properties.getProperty("base.workdir");
+	baseDestDir=properties.getProperty("base.dest.dir");
 	projectName=properties.getProperty("project.name");
 	binPath=properties.getProperty("bin.path");
 	outputType=properties.getProperty("output.type");
@@ -51,6 +59,16 @@ public class RDAHMMService extends AntVisco implements Runnable{
 	
 	//Put a time stamp on the project name:
 	projectName+="-"+(new Date()).getTime();
+	
+	outputDestDir=baseDestDir+"/"+projectName;
+
+	System.out.println("Here are some property values");
+	System.out.println(baseWorkDir);
+	System.out.println(projectName);
+	System.out.println(binPath);
+	System.out.println(outputType);
+	System.out.println(randomSeed);
+	System.out.println("Etc etc, done initializing");
 	
     }
 
@@ -199,6 +217,7 @@ public class RDAHMMService extends AntVisco implements Runnable{
 
     private String[] setUpArgArray(String inputFileUrlString,
 				   String workDir,
+				   String outputDestDir,
 				   String projectName,
 				   String binPath,
 				   int nobsv,
@@ -210,7 +229,7 @@ public class RDAHMMService extends AntVisco implements Runnable{
 				   String buildFilePath,
 				   String antTarget) throws Exception {
 	
-	String[] args=new String[13];
+	String[] args=new String[14];
         args[0]="-DworkDir.prop="+workDir;
         args[1]="-DprojectName.prop="+projectName;
         args[2]="-Dbindir.prop="+binPath;
@@ -221,9 +240,10 @@ public class RDAHMMService extends AntVisco implements Runnable{
         args[7]="-Dranseed.prop="+randomSeed;
         args[8]="-Doutput_type.prop="+outputType;
 	args[9]="-DannealStep.prop="+annealStep;
-        args[10]="-buildfile";
-        args[11]=buildFilePath;
-        args[12]=antTarget;
+	args[10]="-DoutputDestDir.prop="+outputDestDir;
+        args[11]="-buildfile";
+        args[12]=buildFilePath;
+        args[13]=antTarget;
 
 	return args;
     }
@@ -297,9 +317,13 @@ public class RDAHMMService extends AntVisco implements Runnable{
     public String[] runBlockingRDAHMM(String inputFileUrlString,
 				      int numModelStates) 
 	throws Exception {
+	System.out.println("Running blocking execution");
+	System.out.println(inputFileUrlString);
+	System.out.println(numModelStates);
 	
 	String[] returnVals=runBlockingRDAHMM(inputFileUrlString,
 					      baseWorkDir,
+					      outputDestDir;
 					      projectName,
 					      binPath,
 					      numModelStates,
@@ -317,10 +341,14 @@ public class RDAHMMService extends AntVisco implements Runnable{
      */
     public String[] runNonblockingRDAHMM(String inputFileUrlString,
 					 int numModelStates) throws Exception {
-	
+	System.out.println("Running non-blocking execution");
+	System.out.println(inputFileUrlString);
+	System.out.println(numModelStates);
+
 	
 	String[] returnVals=runNonblockingRDAHMM(inputFileUrlString,
 						 baseWorkDir,
+						 outputDestDir,
 						 projectName,
 						 binPath,
 						 numModelStates,
@@ -338,15 +366,16 @@ public class RDAHMMService extends AntVisco implements Runnable{
      * RDAHMM finished executing.  This is the full API.
      */
     public String[] runBlockingRDAHMM(String inputFileUrlString,
-				  String baseWorkDir,
-				  String projectName,
-				  String binPath,
-				  int numModelStates,
-				  int randomSeed,
-				  String outputType,
-				  double annealStep,
-				  String buildFilePath,
-				  String antTarget) throws Exception {
+				      String baseWorkDir,
+				      String outputDestDir;
+				      String projectName,
+				      String binPath,
+				      int numModelStates,
+				      int randomSeed,
+				      String outputType,
+				      double annealStep,
+				      String buildFilePath,
+				      String antTarget) throws Exception {
 	
 	
 	//Set up the work directory
@@ -367,6 +396,7 @@ public class RDAHMMService extends AntVisco implements Runnable{
 
 	String[] args=setUpArgArray(localFileFiltered,
 				    workDir,
+				    outputDestDir,
 				    projectName,
 				    binPath,
 				    nobsv,
@@ -400,15 +430,16 @@ public class RDAHMMService extends AntVisco implements Runnable{
      * API.
      */
     public String[] runNonblockingRDAHMM(String inputFileUrlString,
-				      String baseWorkDir,
-				      String projectName,
-				      String binPath,
-				      int numModelStates,
-				      int randomSeed,
-				      String outputType,
-				      double annealStep,
-				      String buildFilePath,
-				      String antTarget) throws Exception {
+					 String baseWorkDir,
+					 String outputDestDir,
+					 String projectName,
+					 String binPath,
+					 int numModelStates,
+					 int randomSeed,
+					 String outputType,
+					 double annealStep,
+					 String buildFilePath,
+					 String antTarget) throws Exception {
 	
 	String workDir=baseWorkDir+File.separator+projectName;
 

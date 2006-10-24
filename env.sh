@@ -34,6 +34,7 @@ export SIMPLEX_SA_HOME=$BUILD_DIR/jsf_standalone/Simplex
 export RDAHMM_SA_HOME=$BUILD_DIR/jsf_standalone/RDAHMM
 export STFILTER_SA_HOME=$BUILD_DIR/jsf_standalone/st_filter
 export SENSORGRID_SA_HOME=$BUILD_DIR/jsf_standalone/sensorgrid
+export SIMPLE_RDAHMM_SA_HOME=$BUILD_DIR/jsf_standalone/SimpleRDAHMMClient/
 
 #Portlets
 export SIMPLEX_PORTLET_HOME=$BUILD_DIR/portlets/Simplex-portlet
