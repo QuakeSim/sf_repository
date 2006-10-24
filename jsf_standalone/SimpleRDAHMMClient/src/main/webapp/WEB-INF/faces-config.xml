@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE faces-config PUBLIC
+  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+  "http://java.sun.com/dtd/web-facesconfig_1_1.dtd" >
+
+<faces-config>
+	
+	<!-- managed beans of the simple hello world app -->
+	<managed-bean>
+		<managed-bean-name>simpleRdahmmClientBean</managed-bean-name>
+		<managed-bean-class>cgl.webservices.SimpleRdahmmClientBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+
+	</managed-bean>
+	
+	<!-- navigation rules for Main.jsp -->
+	<navigation-rule>
+		<from-view-id>/Main.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>run-rdahmm</from-outcome>
+			<to-view-id>/ShowResults.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+</faces-config>
