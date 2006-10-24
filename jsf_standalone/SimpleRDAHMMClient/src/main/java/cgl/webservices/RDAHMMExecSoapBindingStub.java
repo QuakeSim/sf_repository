@@ -13,6 +13,73 @@ public class RDAHMMExecSoapBindingStub extends org.apache.axis.client.Stub imple
     private java.util.Vector cachedSerFactories = new java.util.Vector();
     private java.util.Vector cachedDeserFactories = new java.util.Vector();
 
+    static org.apache.axis.description.OperationDesc [] _operations;
+
+    static {
+        _operations = new org.apache.axis.description.OperationDesc[4];
+        org.apache.axis.description.OperationDesc oper;
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("runBlockingRDAHMM");
+        oper.addParameter(new javax.xml.namespace.QName("", "inputFileUrlString"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "numModelStates"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.setReturnType(new javax.xml.namespace.QName("urn:GatewayWS", "ArrayOf_soapenc_string"));
+        oper.setReturnClass(java.lang.String[].class);
+        oper.setReturnQName(new javax.xml.namespace.QName("", "runBlockingRDAHMMReturn"));
+        oper.setStyle(org.apache.axis.enum.Style.RPC);
+        oper.setUse(org.apache.axis.enum.Use.ENCODED);
+        _operations[0] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("runBlockingRDAHMM");
+        oper.addParameter(new javax.xml.namespace.QName("", "inputFileUrlString"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "baseWorkDir"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "projectName"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "binPath"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "numModelStates"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "randomSeed"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "outputType"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "annealStep"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"), double.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "buildFilePath"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "antTarget"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.setReturnType(new javax.xml.namespace.QName("urn:GatewayWS", "ArrayOf_soapenc_string"));
+        oper.setReturnClass(java.lang.String[].class);
+        oper.setReturnQName(new javax.xml.namespace.QName("", "runBlockingRDAHMMReturn"));
+        oper.setStyle(org.apache.axis.enum.Style.RPC);
+        oper.setUse(org.apache.axis.enum.Use.ENCODED);
+        _operations[1] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("runNonblockingRDAHMM");
+        oper.addParameter(new javax.xml.namespace.QName("", "inputFileUrlString"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "numModelStates"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.setReturnType(new javax.xml.namespace.QName("urn:GatewayWS", "ArrayOf_soapenc_string"));
+        oper.setReturnClass(java.lang.String[].class);
+        oper.setReturnQName(new javax.xml.namespace.QName("", "runNonblockingRDAHMMReturn"));
+        oper.setStyle(org.apache.axis.enum.Style.RPC);
+        oper.setUse(org.apache.axis.enum.Use.ENCODED);
+        _operations[2] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("runNonblockingRDAHMM");
+        oper.addParameter(new javax.xml.namespace.QName("", "inputFileUrlString"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "baseWorkDir"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "projectName"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "binPath"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "numModelStates"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "randomSeed"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "outputType"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "annealStep"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"), double.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "buildFilePath"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.addParameter(new javax.xml.namespace.QName("", "antTarget"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, org.apache.axis.description.ParameterDesc.IN, false, false);
+        oper.setReturnType(new javax.xml.namespace.QName("urn:GatewayWS", "ArrayOf_soapenc_string"));
+        oper.setReturnClass(java.lang.String[].class);
+        oper.setReturnQName(new javax.xml.namespace.QName("", "runNonblockingRDAHMMReturn"));
+        oper.setStyle(org.apache.axis.enum.Style.RPC);
+        oper.setUse(org.apache.axis.enum.Use.ENCODED);
+        _operations[3] = oper;
+
+    }
+
     public RDAHMMExecSoapBindingStub() throws org.apache.axis.AxisFault {
          this(null);
     }
@@ -72,10 +139,7 @@ public class RDAHMMExecSoapBindingStub extends org.apache.axis.client.Stub imple
             java.util.Enumeration keys = super.cachedProperties.keys();
             while (keys.hasMoreElements()) {
                 java.lang.String key = (java.lang.String) keys.nextElement();
-                if(_call.isPropertySupported(key))
-                    _call.setProperty(key, super.cachedProperties.get(key));
-                else
-                    _call.setScopedProperty(key, super.cachedProperties.get(key));
+                _call.setProperty(key, super.cachedProperties.get(key));
             }
             // All the type mapping information is registered
             // when the first call is made.
@@ -85,6 +149,7 @@ public class RDAHMMExecSoapBindingStub extends org.apache.axis.client.Stub imple
             synchronized (this) {
                 if (firstCall()) {
                     // must set encoding style before registering serializers
+                    _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
                     _call.setEncodingStyle(org.apache.axis.Constants.URI_SOAP11_ENC);
                     for (int i = 0; i < cachedSerFactories.size(); ++i) {
                         java.lang.Class cls = (java.lang.Class) cachedSerClasses.get(i);
@@ -110,20 +175,21 @@ public class RDAHMMExecSoapBindingStub extends org.apache.axis.client.Stub imple
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.addParameter(new javax.xml.namespace.QName("", "inputFileUrlString"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "numModelStates"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, javax.xml.rpc.ParameterMode.IN);
-        _call.setReturnType(new javax.xml.namespace.QName("urn:GatewayWS", "ArrayOf_soapenc_string"), java.lang.String[].class);
+        _call.setOperation(_operations[0]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
-        _call.setOperationStyle("rpc");
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("http://gf2.ucs.indiana.edu:8080/rdahmmexec/services/RDAHMMExec", "runBlockingRDAHMM"));
 
+        setRequestHeaders(_call);
+        setAttachments(_call);
         java.lang.Object _resp = _call.invoke(new java.lang.Object[] {inputFileUrlString, new java.lang.Integer(numModelStates)});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
         }
         else {
+            extractAttachments(_call);
             try {
                 return (java.lang.String[]) _resp;
             } catch (java.lang.Exception _exception) {
@@ -137,28 +203,21 @@ public class RDAHMMExecSoapBindingStub extends org.apache.axis.client.Stub imple
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.addParameter(new javax.xml.namespace.QName("", "inputFileUrlString"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "baseWorkDir"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "projectName"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "binPath"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "numModelStates"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "randomSeed"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "outputType"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "annealStep"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"), double.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "buildFilePath"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "antTarget"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.setReturnType(new javax.xml.namespace.QName("urn:GatewayWS", "ArrayOf_soapenc_string"), java.lang.String[].class);
+        _call.setOperation(_operations[1]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
-        _call.setOperationStyle("rpc");
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("http://gf2.ucs.indiana.edu:8080/rdahmmexec/services/RDAHMMExec", "runBlockingRDAHMM"));
 
+        setRequestHeaders(_call);
+        setAttachments(_call);
         java.lang.Object _resp = _call.invoke(new java.lang.Object[] {inputFileUrlString, baseWorkDir, projectName, binPath, new java.lang.Integer(numModelStates), new java.lang.Integer(randomSeed), outputType, new java.lang.Double(annealStep), buildFilePath, antTarget});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
         }
         else {
+            extractAttachments(_call);
             try {
                 return (java.lang.String[]) _resp;
             } catch (java.lang.Exception _exception) {
@@ -172,20 +231,21 @@ public class RDAHMMExecSoapBindingStub extends org.apache.axis.client.Stub imple
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.addParameter(new javax.xml.namespace.QName("", "inputFileUrlString"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "numModelStates"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, javax.xml.rpc.ParameterMode.IN);
-        _call.setReturnType(new javax.xml.namespace.QName("urn:GatewayWS", "ArrayOf_soapenc_string"), java.lang.String[].class);
+        _call.setOperation(_operations[2]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
-        _call.setOperationStyle("rpc");
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("http://gf2.ucs.indiana.edu:8080/rdahmmexec/services/RDAHMMExec", "runNonblockingRDAHMM"));
 
+        setRequestHeaders(_call);
+        setAttachments(_call);
         java.lang.Object _resp = _call.invoke(new java.lang.Object[] {inputFileUrlString, new java.lang.Integer(numModelStates)});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
         }
         else {
+            extractAttachments(_call);
             try {
                 return (java.lang.String[]) _resp;
             } catch (java.lang.Exception _exception) {
@@ -199,28 +259,21 @@ public class RDAHMMExecSoapBindingStub extends org.apache.axis.client.Stub imple
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.addParameter(new javax.xml.namespace.QName("", "inputFileUrlString"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "baseWorkDir"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "projectName"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "binPath"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "numModelStates"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "randomSeed"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "outputType"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "annealStep"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"), double.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "buildFilePath"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.addParameter(new javax.xml.namespace.QName("", "antTarget"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.setReturnType(new javax.xml.namespace.QName("urn:GatewayWS", "ArrayOf_soapenc_string"), java.lang.String[].class);
+        _call.setOperation(_operations[3]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
-        _call.setOperationStyle("rpc");
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("http://gf2.ucs.indiana.edu:8080/rdahmmexec/services/RDAHMMExec", "runNonblockingRDAHMM"));
 
+        setRequestHeaders(_call);
+        setAttachments(_call);
         java.lang.Object _resp = _call.invoke(new java.lang.Object[] {inputFileUrlString, baseWorkDir, projectName, binPath, new java.lang.Integer(numModelStates), new java.lang.Integer(randomSeed), outputType, new java.lang.Double(annealStep), buildFilePath, antTarget});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
         }
         else {
+            extractAttachments(_call);
             try {
                 return (java.lang.String[]) _resp;
             } catch (java.lang.Exception _exception) {
