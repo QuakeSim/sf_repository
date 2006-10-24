@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<project name="RDAHMM" default="RunRDAHMM" basedir=".">
+
+<!--
+<taskdef name="TransferFile" classname="commgrids.antwebtasks.TransferFile"/>
+<taskdef name="MakeMovie" classname="commgrids.antwebtasks.AntServiceInvoker"/>
+<taskdef name="AntEmail" classname="commgrids.antwebtasks.AntEmail"/>
+-->
+
+<target name="MakeWorkDir">
+   <echo message="Creating ${workDir.prop}" />
+   <mkdir dir="${workDir.prop}" />
+</target>
+
+<target name="ExecRDAHMM" depends="MakeWorkDir">
+   <echo message="Bin directory: ${bindir.prop}"/>
+   <echo message="Number of observables: ${nobsv.prop}"/>
+   <echo message="Dimension: ${ndim.prop}"/>
+   <echo message="Number of States: ${nstates.prop}"/>
+   <echo message="Random seed: ${ranseed.prop}"/>
+   <echo message="Output type: ${output_type.prop}"/>
+   <echo message="Project base name: ${RDAHMMBaseName.prop}"/>
+   <echo message="Annealing step size: ${annealStep.prop}"/>
+   <exec executable="${bindir.prop}/rdahmm" 
+         output="${workDir.prop}/${RDAHMMBaseName.prop}.stdout"
+	 dir="${workDir.prop}">
+      <arg line="-data ${workDir.prop}/${RDAHMMBaseName.prop}.input"/>
+      <arg line="-T ${nobsv.prop}"/>
+      <arg line="-D ${ndim.prop}"/>
+      <arg line="-N ${nstates.prop}"/>
+      <arg line="-output_type ${output_type.prop}"/>
+      <arg line="-anneal"/>
+      <arg line="-annealstep ${annealStep.prop}"/>
+      <arg line="-regularize"/>
+      <arg line="-omega 0 0 10 1.0e-6"/>
+      <arg line="-seed ${ranseed.prop}"/>
+      <env key="PATH" path="${bindir.prop}:/bin/:$PATH"/>
+   </exec>
+</target>
+<target name="RunRDAHMM" depends="ExecRDAHMM">
+   <echo message="RDAHMM run completed"/>
+</target>
+</project>
+
+
+
