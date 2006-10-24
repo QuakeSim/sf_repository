@@ -23,30 +23,35 @@ public class RDAHMMService extends AntVisco implements Runnable{
     String baseWorkDir;
     String projectName;
     String binPath;
+    String outputType;
     int randomSeed;
     double annealStep;
     String buildFilePath;
     String antTarget;
     
-    public RDAHMMService() {
-	super();
-	try {
-	    properties=new Properties();
-	    properties.load(new 
-			    FileInputStream(new File("rdahmmconfig.properties")));
-	    baseWorkDir=properties.getProperty("base.workdir");
-	    projectName=properties.getProperty("project.name");
-	    binPath=properties.getProperty("bin.path");
-	    randomSeed=
-		Integer.parseInt(properties.getProperty("random.seed"));
-	    annealStep=
-		Double.parseDouble(properties.getProperty("anneal.step"));
-	    buildFilePath=properties.getProperty("build.file.path");
-	    antTarget=properties.getProperty("ant.target");
-	}
-	catch(Exception ex) {
-	    
-	}
+    public RDAHMMService() throws Exception{
+	super();	
+	System.out.println("Constructing the RDAHMM Service");
+	ClassLoader loader=ClassLoader.getSystemClassLoader();
+
+	properties=new Properties();
+	// 	    properties.load(new 
+	// 			    FileInputStream("rdahmmconfig.properties"));
+	properties.load(loader.getResourceAsStream("rdahmmconfig.properties"));
+	baseWorkDir=properties.getProperty("base.workdir");
+	projectName=properties.getProperty("project.name");
+	binPath=properties.getProperty("bin.path");
+	outputType=properties.getProperty("output.type");
+	randomSeed=
+	    Integer.parseInt(properties.getProperty("random.seed"));
+	annealStep=
+	    Double.parseDouble(properties.getProperty("anneal.step"));
+	buildFilePath=properties.getProperty("build.file.path");
+	antTarget=properties.getProperty("ant.target");
+	
+	//Put a time stamp on the project name:
+	projectName+="-"+(new Date()).getTime();
+	
     }
 
     /**
@@ -286,10 +291,51 @@ public class RDAHMMService extends AntVisco implements Runnable{
 
     }
 
+    /**
+     * This is the simplified API that uses default values.
+     */ 
+    public String[] runBlockingRDAHMM(String inputFileUrlString,
+				      int numModelStates) 
+	throws Exception {
+	
+	String[] returnVals=runBlockingRDAHMM(inputFileUrlString,
+					      baseWorkDir,
+					      projectName,
+					      binPath,
+					      numModelStates,
+					      randomSeed,
+					      outputType,
+					      annealStep,
+					      buildFilePath,
+					      antTarget);
+	return returnVals;
+    }
+
+
+    /**
+     * This is the simplified API that uses default properties.
+     */
+    public String[] runNonblockingRDAHMM(String inputFileUrlString,
+					 int numModelStates) throws Exception {
+	
+	
+	String[] returnVals=runNonblockingRDAHMM(inputFileUrlString,
+						 baseWorkDir,
+						 projectName,
+						 binPath,
+						 numModelStates,
+						 randomSeed,
+						 outputType,
+						 annealStep,
+						 buildFilePath,
+						 antTarget);
+	return returnVals;
+    }
+
 
     /**
      * This version is used to to hold response until 
-     * RDAHMM finished executing.
+     * RDAHMM finished executing.  This is the full API.
      */
     public String[] runBlockingRDAHMM(String inputFileUrlString,
 				  String baseWorkDir,
@@ -350,7 +396,8 @@ public class RDAHMMService extends AntVisco implements Runnable{
     
     /**
      * This version immediately returns and is used
-     * for programs that take longer to run.
+     * for programs that take longer to run.  This is the full
+     * API.
      */
     public String[] runNonblockingRDAHMM(String inputFileUrlString,
 				      String baseWorkDir,
@@ -417,45 +464,21 @@ public class RDAHMMService extends AntVisco implements Runnable{
      */ 
 
     public static void main(String[] args) {
-	RDAHMMService rds=new RDAHMMService();
+
 	
 	String dataUrl="http://geoapp.ucsd.edu/xml/geodesy/reason/grws/resources/output/procCoords/4-47353-20061008100245.txt";
-	String workDir="/tmp/";
-	String projectName="test";
-	String binPath="/home/gateway/GEMCodes/RDAHMM2/bin/";
 	int numModelStates=2;
-	int randomSeed=1;
-	String outputType="gaussian";
-	double annealStep=0.01;
-	String buildFilePath="/home/gateway/GEMCodes/RDAHMM2/bin/build.xml";
-	String antTarget="RunRDAHMM";
-
 	try {
+	    RDAHMMService rds=new RDAHMMService();
 	    System.out.println("----------------------------------");
 	    System.out.println("Testing blocking version");
 	    rds.runBlockingRDAHMM(dataUrl,
-				  workDir,
-				  projectName,
-				  binPath,
-				  numModelStates,
-				  randomSeed,
-				  outputType,
-				  annealStep,
-				  buildFilePath,
-				  antTarget);	
+				  numModelStates);
 
 	    System.out.println("----------------------------------");
 	    System.out.println("Testing non-blocking version");
 	    rds.runNonblockingRDAHMM(dataUrl,
-				  workDir,
-				  projectName,
-				  binPath,
-				  numModelStates,
-				  randomSeed,
-				  outputType,
-				  annealStep,
-				  buildFilePath,
-				  antTarget);	
+				  numModelStates);
 	}
 	catch (Exception ex) {
 	    ex.printStackTrace();

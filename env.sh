@@ -23,6 +23,9 @@ export ANT_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/AntVisco
 export RDAHMM_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/RDAHMMService
 export STFILTER_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/STFilterService
 
+# These are needed to use 
+export RDAHMM_BIN_HOME=$HOME/GEMCodes/RDAHMM2/bin/
+
 #Generic project code
 export GENERIC_PROJECT_HOME=$BUILD_DIR/GenericQuakeSimProject
 
