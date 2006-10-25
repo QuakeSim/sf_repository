@@ -54,10 +54,6 @@ mvn clean -Dtomcat.base.dir=/tmp
 cd $STFILTER_EXECUTION_HOME
 mvn clean
 
-cd $SIMPLE_RDAHMM_SA_HOME
-mvn clean
-
-
 # CLEAN VENDOR SOFTWARE
 echo "#################################"
 echo "#  Cleaning vendor packages...  #"

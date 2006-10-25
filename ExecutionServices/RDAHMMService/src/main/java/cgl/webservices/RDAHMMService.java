@@ -20,6 +20,7 @@ public class RDAHMMService extends AntVisco implements Runnable{
     //These are the system properties that may have
     //default values.
     Properties properties;
+    String serverUrl;
     String baseWorkDir;
     String baseDestDir;
     String outputDestDir;
@@ -40,11 +41,14 @@ public class RDAHMMService extends AntVisco implements Runnable{
 	String propertyFile="/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/rdahmmexec/WEB-INF/classes/rdahmmconfig.properties";
 
 	properties=new Properties();
+
 	System.out.println("Looking for props in the classpath");
 	properties.load(new 
 			FileInputStream(propertyFile));
 	//	properties.load(loader.getResourceAsStream("rdahmmconfig.properties"));
 
+
+	serverUrl=properties.getProperty("rdahmm.service.url");
 	baseWorkDir=properties.getProperty("base.workdir");
 	baseDestDir=properties.getProperty("base.dest.dir");
 	projectName=properties.getProperty("project.name");
@@ -323,7 +327,7 @@ public class RDAHMMService extends AntVisco implements Runnable{
 	
 	String[] returnVals=runBlockingRDAHMM(inputFileUrlString,
 					      baseWorkDir,
-					      outputDestDir;
+					      outputDestDir,
 					      projectName,
 					      binPath,
 					      numModelStates,
@@ -367,7 +371,7 @@ public class RDAHMMService extends AntVisco implements Runnable{
      */
     public String[] runBlockingRDAHMM(String inputFileUrlString,
 				      String baseWorkDir,
-				      String outputDestDir;
+				      String outputDestDir,
 				      String projectName,
 				      String binPath,
 				      int numModelStates,
@@ -411,17 +415,7 @@ public class RDAHMMService extends AntVisco implements Runnable{
 	//Methods inherited from parent
         setArgs(args);
         run();
-	
-	String[] extensions={".input",".range",".Q",".pi",
-			   ".minval",".maxval",".L",".B",".Q",".stdout"};
-
-	String[] returnFiles=new String[extensions.length];
-	for(int i=0;i<extensions.length;i++) {
-	    returnFiles[i]=projectName+extensions[i];
-	}
-	
-	return returnFiles;
-	
+	return getTheReturnFiles();	
     }
     
     /**
@@ -462,6 +456,7 @@ public class RDAHMMService extends AntVisco implements Runnable{
 
 	String[] args=setUpArgArray(localFileFiltered,
 				    workDir,
+				    outputDestDir,
 				    projectName,
 				    binPath,
 				    nobsv,
@@ -477,17 +472,29 @@ public class RDAHMMService extends AntVisco implements Runnable{
 	//Methods inherited from parent
         setArgs(args);
         execute();
-	String[] extensions={".input",".range",".Q",".pi",
-			   ".minval",".maxval",".L",".B",".Q",".stdout"};
 
+	return getTheReturnFiles();
+    }
+
+    /**
+     * A dumb little method for constructing the URL outputs. This
+     * will not get called if the execute()/run() method fails.
+     */ 
+    protected String[] getTheReturnFiles() {
+
+	String[] extensions={".input",".range",".Q",".pi",".A",
+			     ".minval",".maxval",".L",".B",
+			     ".Q",".stdout",
+	                     ".input.X.png",".input.Y.png",".input.Z.png"};
+	
 	String[] returnFiles=new String[extensions.length];
 	for(int i=0;i<extensions.length;i++) {
-	    returnFiles[i]=projectName+extensions[i];
+	    returnFiles[i]=serverUrl+"/"+projectName
+		+"/"+projectName+extensions[i];
 	}
 	
 	return returnFiles;
     }
-
     
 
     /** 
@@ -495,8 +502,6 @@ public class RDAHMMService extends AntVisco implements Runnable{
      */ 
 
     public static void main(String[] args) {
-
-	
 	String dataUrl="http://geoapp.ucsd.edu/xml/geodesy/reason/grws/resources/output/procCoords/4-47353-20061008100245.txt";
 	int numModelStates=2;
 	try {

@@ -15,9 +15,13 @@ package cgl.webservices;
 import java.net.URL;
 
 public class SimpleRdahmmClient {
+    //The value for this property is set in faces-config.xml.
     String rdahmmServiceUrl="http://gf2.ucs.indiana.edu:8080/rdahmmexec/services/RDAHMMExec";
-    int numModelStates=0;
-    String dataUrl;
+
+    //Some properties with default values
+    int numModelStates=2;
+
+    String dataUrl="http://geoapp.ucsd.edu/xml/geodesy/reason/grws/resources/output/procCoords/4-56150-20061025144159.txt";
     RDAHMMService rdservice;
 
     //These are the output files
@@ -32,7 +36,12 @@ public class SimpleRdahmmClient {
     String projectB;
     String projectA;
 
+    String projectGraphX;
+    String projectGraphY;
+    String projectGraphZ;
+
     public SimpleRdahmmClient() throws Exception {
+	System.out.println("Service to contact: "+rdahmmServiceUrl);
 	rdservice=(new RDAHMMServiceServiceLocator()).
 	    getRDAHMMExec(new URL(rdahmmServiceUrl));
     }
@@ -40,20 +49,22 @@ public class SimpleRdahmmClient {
     //This is the no-argument version. It requires these values to 
     //be set outside the method.  This is typical usage in a JSF
     //page.
-    public void runNonblockingRDAHMM() throws Exception {
+    public String runNonblockingRDAHMM() throws Exception {
 	if(dataUrl!=null && numModelStates>0) {
-	    String[] vals=rdservice.runNonblockingRDAHMM(dataUrl,numModelStates);
+	    String[] vals=rdservice.runNonblockingRDAHMM(dataUrl,numModelStates);	    setPropertyVals(vals);
 	}
 	else throw new Exception();
+	return "simple-rdahmm-client-nav1";
     }
 
     //This method is also suitable for use in a JSF page.
-    public void runBlockingRDAHMM()  throws Exception {
+    public String runBlockingRDAHMM()  throws Exception {
 	if(dataUrl!=null && numModelStates>0) {
 	    String [] vals=rdservice.runBlockingRDAHMM(dataUrl,numModelStates);	
 	    setPropertyVals(vals);
 	}
 	else throw new Exception();
+	return "simple-rdahmm-client-nav1";
     }
 
     //This is a more full-fledged method.  The returned strings
@@ -77,16 +88,24 @@ public class SimpleRdahmmClient {
     //This method is pretty dumb. The values's order is hard-coded
     //on the server.
     protected void setPropertyVals(String[] vals) {
+	//These are the output files.
 	projectInput=vals[0];
 	projectRange=vals[1];
 	projectQ=vals[2];
 	projectPi=vals[3];
-	projectMinval=vals[4];
-	projectMaxval=vals[5];
-	projectL=vals[6];
-	projectB=vals[7];
-	projectQ=vals[8];
-	projectStdout=vals[9];
+	projectA=vals[4];
+	projectMinval=vals[5];
+	projectMaxval=vals[6];
+	projectL=vals[7];
+	projectB=vals[8];
+	projectQ=vals[9];
+	projectStdout=vals[10];
+	
+	//These are the images
+	projectGraphX=vals[11];
+	projectGraphY=vals[12];
+	projectGraphZ=vals[13];
+       
     }
 
     /**
@@ -194,6 +213,31 @@ public class SimpleRdahmmClient {
     public void setProjectA(String projectA){
 	this.projectA=projectA;
     }
+
+    public String  getProjectGraphX(){
+	return projectGraphX;
+    }
+
+    public void setProjectGraphX(String projectGraphX){
+	this.projectGraphX=projectGraphX;
+    }
+
+    public String  getProjectGraphY(){
+	return projectGraphY;
+    }
+
+    public void setProjectGraphY(String projectGraphY){
+	this.projectGraphY=projectGraphY;
+    }
+
+    public String  getProjectGraphZ(){
+	return projectGraphZ;
+    }
+
+    public void setProjectGraphZ(String projectGraphZ){
+	this.projectGraphZ=projectGraphZ;
+    }
+
 
 
     public static void main(String[] args) {

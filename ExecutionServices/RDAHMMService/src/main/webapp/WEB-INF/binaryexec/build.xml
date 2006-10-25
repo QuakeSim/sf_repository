@@ -37,15 +37,32 @@
       <env key="PATH" path="${bindir.prop}:/bin/:$PATH"/>
    </exec>
 </target>
-<target name="CopyOutput">
+<target name="CopyOutput" depends="ExecRDAHMM">
    <echo message="Creating ${outputDestDir.prop}" />
    <mkdir dir="${outputDestDir.prop}" />
    <copy todir="${outputDestDir.prop}">
-     <fileset dir="${workDir.prop}/>
+     <fileset dir="${workDir.prop}"/>
    </copy>
+   <copy file="${workDir.prop}/${RDAHMMBaseName.prop}.input" 
+         todir="${bindir.prop}"/>
+   <copy file="${workDir.prop}/${RDAHMMBaseName.prop}.Q" 
+         todir="${bindir.prop}"/>
+
 </target>
 
-<target name="RunRDAHMM" depends="CopyOutput">
+<target name="ExecGnuplot" depends="CopyOutput">
+   <exec executable="${bindir.prop}/plot_go.sh"
+         dir="${bindir.prop}">
+      <arg line="${RDAHMMBaseName.prop}.input"/>
+      <arg line="${RDAHMMBaseName.prop}.Q"/>
+      <env key="PATH" path="${bindir.prop}:/bin/:/usr/bin/:$PATH"/>
+   </exec>
+   <move todir="${outputDestDir.prop}">
+     <fileset file="*.png"/>
+   </move>
+</target>
+
+<target name="RunRDAHMM" depends="ExecGnuplot">
    <echo message="RDAHMM run completed"/>
 </target>
 </project>

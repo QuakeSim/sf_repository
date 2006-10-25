@@ -36,6 +36,7 @@
        <tomcat.base.dir>${tomcat.base.dir}</tomcat.base.dir>
        <bin.path>${tomcat.base.dir}/webapps/${pom.artifactId}/WEB-INF/binaryexec</bin.path>
        <user.home>${user.home}</user.home>
+       <rdahmm.service.url>${rdahmm.service.url}</rdahmm.service.url>
     </properties>
 
     <repositories>
