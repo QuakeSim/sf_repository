@@ -8,10 +8,15 @@ import java.net.*;
 import org.apache.tools.ant.Main;
 import org.apache.log4j.*;
 
+//Needed to get the ServletContext to read the properties.
 import org.apache.axis.MessageContext;
 import org.apache.axis.transport.http.HTTPConstants;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
+
+
+//SOPAC Client Stuff
+import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
 
 
 /**
@@ -342,8 +347,47 @@ public class RDAHMMService extends AntVisco implements Runnable{
     }
 
     /**
+     * This version runs in non-blocking mode and gets
+     * the data from the SOPAC data service.
+     */
+    public String[] runNonblockingRDAHMM(String siteCode,
+					 String beginDate,
+					 String endDate,
+					 int numModelStates)
+	throws Exception {
+	try {
+	    String dataUrl=querySOPACGetURL(siteCode,beginDate,endDate);
+	    return runNonblockingRDAHMM(dataUrl,numModelStates);
+	}
+	catch (Exception ex) {
+	    ex.printStackTrace();
+	    throw new Exception();
+	}
+    }
+
+    /**
+     * This version runs in blocking mode and gets
+     * the data from the SOPAC data service.
+     */
+    public String[] runBlockingRDAHMM(String siteCode,
+				      String beginDate,
+				      String endDate,
+				      int numModelStates)
+	throws Exception {
+	try {
+	    String dataUrl=querySOPACGetURL(siteCode,beginDate,endDate);
+	    return runBlockingRDAHMM(dataUrl,numModelStates);
+	}
+	catch (Exception ex) {
+	    ex.printStackTrace();
+	    throw new Exception();
+	}
+    }
+
+    /**
      * This is the simplified API that uses default values.
      */ 
+
     public String[] runBlockingRDAHMM(String inputFileUrlString,
 				      int numModelStates) 
 	throws Exception {
@@ -520,6 +564,28 @@ public class RDAHMMService extends AntVisco implements Runnable{
 	}
 	
 	return returnFiles;
+    }
+    
+    /**
+     * This version of the client gets back the URL of the
+     * results, rather than the results directly.  The String
+     * return type is used for JSF page navigation.
+     */
+    protected String querySOPACGetURL(String siteCode,
+				      String beginDate,
+				      String endDate) throws Exception {
+	
+	String resource="procCoords";
+	String contextGroup="reasonComb";
+	String minMaxLatLon="";
+	String contextId="4";
+
+	GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
+	gsq.setFromServlet(siteCode, beginDate, endDate, resource,
+			   contextGroup, contextId, minMaxLatLon, true);
+	String dataUrl=gsq.getResource();
+	System.out.println("GRWS data url: "+dataUrl);
+	return dataUrl;
     }
     
 

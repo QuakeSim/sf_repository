@@ -40,15 +40,23 @@ public class SimpleRdahmmClient {
     String projectGraphY;
     String projectGraphZ;
 
+    //These are properties needed if you want to include a query
+    //to the GRWS web service.
+    String siteCode="sio5";
+    String beginDate="2004-01-01";
+    String endDate="2006-01-10";
+    
     public SimpleRdahmmClient() throws Exception {
 	System.out.println("Service to contact: "+rdahmmServiceUrl);
 	rdservice=(new RDAHMMServiceServiceLocator()).
 	    getRDAHMMExec(new URL(rdahmmServiceUrl));
     }
     
-    //This is the no-argument version. It requires these values to 
-    //be set outside the method.  This is typical usage in a JSF
-    //page.
+    /**
+     * This is the no-argument version. It requires these values to 
+     * be set outside the method.  This is typical usage in a JSF
+     * page.
+     */
     public String runNonblockingRDAHMM() throws Exception {
 	if(dataUrl!=null && numModelStates>0) {
 	    String[] vals=rdservice.runNonblockingRDAHMM(dataUrl,numModelStates);	    setPropertyVals(vals);
@@ -57,7 +65,9 @@ public class SimpleRdahmmClient {
 	return "simple-rdahmm-client-nav1";
     }
 
-    //This method is also suitable for use in a JSF page.
+    /**
+     * This method is also suitable for use in a JSF page.
+     */
     public String runBlockingRDAHMM()  throws Exception {
 	if(dataUrl!=null && numModelStates>0) {
 	    String [] vals=rdservice.runBlockingRDAHMM(dataUrl,numModelStates);	
@@ -67,10 +77,44 @@ public class SimpleRdahmmClient {
 	return "simple-rdahmm-client-nav1";
     }
 
-    //This is a more full-fledged method.  The returned strings
-    // are URLs for the output values.
+    /**
+     * This method is also suitable for use in a JSF page.
+     * This one needs a sitecode, begin and end dates.
+     */
+    public String runBlockingRDAHMM2()  throws Exception {
+	if(dataUrl!=null && numModelStates>0) {
+	    String [] vals=rdservice.runBlockingRDAHMM(siteCode,
+						       beginDate,
+						       endDate,
+						       numModelStates);	
+	    setPropertyVals(vals);
+	}
+	else throw new Exception();
+	return "simple-rdahmm-client-nav1";
+    }
+
+    /**
+     * This method is also suitable for use in a JSF page.
+     * This one needs a sitecode, begin and end dates.
+     */
+    public String runNonblockingRDAHMM2()  throws Exception {
+	if(dataUrl!=null && numModelStates>0) {
+	    String [] vals=rdservice.runBlockingRDAHMM(siteCode,
+						       beginDate,
+						       endDate,
+						       numModelStates);	
+	    setPropertyVals(vals);
+	}
+	else throw new Exception();
+	return "simple-rdahmm-client-nav1";
+    }
+
+    /** 
+     * This is a more full-fledged method.  The returned strings
+     * are URLs for the output values.
+     */
     public String[] runBlockingRDAHMM(String dataUrl,
-				  int numModelStates) 
+				      int numModelStates) 
 	throws Exception {
 
 	setDataUrl(dataUrl);
@@ -238,6 +282,30 @@ public class SimpleRdahmmClient {
 	this.projectGraphZ=projectGraphZ;
     }
 
+    public String getSiteCode() {
+	return siteCode;
+    }
+    public void setSiteCode(String siteCode) {
+	this.siteCode=siteCode;
+	this.siteCode=this.siteCode.toLowerCase();
+    }
+    
+    public String getBeginDate() {
+	return beginDate;
+    }
+
+    public void setBeginDate(String beginDate) {
+	this.beginDate=beginDate;
+    }
+
+    public String getEndDate() {
+	return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+	this.endDate=endDate;
+    }
+    
 
 
     public static void main(String[] args) {

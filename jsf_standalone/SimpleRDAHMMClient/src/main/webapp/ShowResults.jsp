@@ -52,7 +52,6 @@ Internet".
 
        <h:outputLink value="#{simpleRdahmmClientBean.projectMaxval}">
        <h:outputText value="Maximum Value"/>
-
        </h:outputLink>
 
        <h:outputLink value="#{simpleRdahmmClientBean.projectGraphX}">

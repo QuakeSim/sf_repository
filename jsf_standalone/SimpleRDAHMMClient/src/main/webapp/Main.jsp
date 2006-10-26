@@ -13,10 +13,22 @@
     <b>Input Parameters</b>
     <h:panelGrid columns="3" border="1">
 
-       <h:outputText value="Input Data Url"/>
-       <h:inputText id="inputDataUrl" value="#{simpleRdahmmClientBean.dataUrl}"
-                     required="true" size="50"/>
-       <h:message for="inputDataUrl" showDetail="true" showSummary="true" errorStyle="color: red"/>
+       <h:outputText value="Site Code"/>
+       <h:inputText id="siteCode" value="#{simpleRdahmmClientBean.siteCode}"
+                     required="true"/>
+       <h:message for="siteCode" showDetail="true" showSummary="true" errorStyle="color: red"/>
+
+
+       <h:outputText value="Begin Date"/>
+       <h:inputText id="beginDate" value="#{simpleRdahmmClientBean.beginDate}"
+                     required="true"/>
+       <h:message for="beginDate" showDetail="true" showSummary="true" errorStyle="color: red"/>
+
+
+       <h:outputText value="End Date"/>
+       <h:inputText id="endDate" value="#{simpleRdahmmClientBean.endDate}"
+                     required="true"/>
+       <h:message for="endDate" showDetail="true" showSummary="true" errorStyle="color: red"/>
 
        <h:outputText value="Number of Model States"/>	
        <h:inputText id="nmodel" value="#{simpleRdahmmClientBean.numModelStates}"
@@ -24,8 +36,9 @@
        <h:message for="nmodel" showDetail="true" showSummary="true" errorStyle="color: red"/>
 
     </h:panelGrid>
+
     <h:commandButton value="Submit"
-                     action="#{simpleRdahmmClientBean.runNonblockingRDAHMM}"/>
+                     action="#{simpleRdahmmClientBean.runBlockingRDAHMM2}"/>
     </h:form>
 
   </f:view>
