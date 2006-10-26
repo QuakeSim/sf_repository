@@ -8,6 +8,12 @@ import java.net.*;
 import org.apache.tools.ant.Main;
 import org.apache.log4j.*;
 
+import org.apache.axis.MessageContext;
+import org.apache.axis.transport.http.HTTPConstants;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServlet;
+
+
 /**
  * A simple wrapper for Ant.
  */
@@ -32,22 +38,37 @@ public class RDAHMMService extends AntVisco implements Runnable{
     String buildFilePath;
     String antTarget;
     
-    public RDAHMMService() throws Exception{
-	super();	
-	System.out.println("Constructing the RDAHMM Service");
-	ClassLoader loader=ClassLoader.getSystemClassLoader();
+    public RDAHMMService(boolean useClassLoader) 
+	throws Exception {
+	super();
+	    
+	if(useClassLoader) {
+	    System.out.println("Using classloader");
+	    //This is useful for command line clients but does not work
+	    //inside Tomcat.
+	    ClassLoader loader=ClassLoader.getSystemClassLoader();
+	    properties=new Properties();
+	    
+	    //This works if you are using the classloader but not inside
+	    //Tomcat.
+	    properties.load(loader.getResourceAsStream("rdahmmconfig.properties"));
+	}
+	else {
+	    //Extract the Servlet Context
+	    System.out.println("Using Servlet Context");
+	    MessageContext msgC=MessageContext.getCurrentContext();
+	    ServletContext context=((HttpServlet)msgC.getProperty(HTTPConstants.MC_HTTP_SERVLET)).getServletContext();
+	    
+	    
+	    String propertyFile=context.getRealPath("/")
+		+"/WEB-INF/classes/rdahmmconfig.properties";
+	    System.out.println("Prop file location "+propertyFile);
+	    
+	    properties=new Properties();	    
+	    properties.load(new 
+			    FileInputStream(propertyFile));
+	}
 	
-	//Must fix this!!!!!!
-	String propertyFile="/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/rdahmmexec/WEB-INF/classes/rdahmmconfig.properties";
-
-	properties=new Properties();
-
-	System.out.println("Looking for props in the classpath");
-	properties.load(new 
-			FileInputStream(propertyFile));
-	//	properties.load(loader.getResourceAsStream("rdahmmconfig.properties"));
-
-
 	serverUrl=properties.getProperty("rdahmm.service.url");
 	baseWorkDir=properties.getProperty("base.workdir");
 	baseDestDir=properties.getProperty("base.dest.dir");
@@ -66,6 +87,7 @@ public class RDAHMMService extends AntVisco implements Runnable{
 	
 	outputDestDir=baseDestDir+"/"+projectName;
 
+
 	System.out.println("Here are some property values");
 	System.out.println(baseWorkDir);
 	System.out.println(projectName);
@@ -73,6 +95,10 @@ public class RDAHMMService extends AntVisco implements Runnable{
 	System.out.println(outputType);
 	System.out.println(randomSeed);
 	System.out.println("Etc etc, done initializing");
+    }
+    
+    public RDAHMMService() throws Exception{
+	this(false);
 	
     }
 
@@ -505,7 +531,9 @@ public class RDAHMMService extends AntVisco implements Runnable{
 	String dataUrl="http://geoapp.ucsd.edu/xml/geodesy/reason/grws/resources/output/procCoords/4-47353-20061008100245.txt";
 	int numModelStates=2;
 	try {
-	    RDAHMMService rds=new RDAHMMService();
+	    //Since we are running on the command line, use 
+	    //the classloader to find the property files
+	    RDAHMMService rds=new RDAHMMService(true);
 	    System.out.println("----------------------------------");
 	    System.out.println("Testing blocking version");
 	    rds.runBlockingRDAHMM(dataUrl,
