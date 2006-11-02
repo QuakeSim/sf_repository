@@ -38,12 +38,13 @@ export STFILTER_SA_HOME=$BUILD_DIR/jsf_standalone/st_filter
 export SENSORGRID_SA_HOME=$BUILD_DIR/jsf_standalone/sensorgrid
 export SIMPLE_RDAHMM_SA_HOME=$BUILD_DIR/jsf_standalone/SimpleRDAHMMClient/
 export STATION_MONITOR_SA_HOME=$BUILD_DIR/jsf_standalone/StationMonitor/
-export STATION_MONITOR_SA_HOME=$BUILD_DIR/jsf_standalone/StationMonitor/
 export REALTIME_RDAHMM_SA_HOME=$BUILD_DIR/jsf_standalone/RealTimeRDAHMM
 
 #Portlets
 export SIMPLEX_PORTLET_HOME=$BUILD_DIR/portlets/Simplex-portlet
 export RDAHMM_PORTLET_HOME=$BUILD_DIR/portlets/RDAHMM-portlet
 export STFILTER_PORTLET_HOME=$BUILD_DIR/portlets/STFILTER-portlet
+export STATION_MONITOR_PORTLET_HOME=$BUILD_DIR/portlets/StationMonitor-portlet
+export REALTIME_RDAHMM_PORTLET_HOME=$BUILD_DIR/portlets/RealTimeRDAHMM-portlet
 
 export PATH=$ANT_HOME/bin:$MAVEN_HOME/bin:$PATH

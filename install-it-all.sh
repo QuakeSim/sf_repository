@@ -58,3 +58,9 @@ source ./stationmonitor-sa-install.sh
 cd $BUILD_DIR
 source ./realtime-rdahmm-sa-install.sh
 
+cd $BUILD_DIR
+source ./stationmonitor-portlet-install.sh
+
+cd $BUILD_DIR
+source ./realtime-rdahmm-portlet-install.sh
+

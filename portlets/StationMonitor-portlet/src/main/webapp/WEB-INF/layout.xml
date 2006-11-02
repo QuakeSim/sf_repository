@@ -1,0 +1,21 @@
+<portlet-tabbed-pane>
+    <portlet-tab label="StationMonitor-Portlet">
+        <title lang="en">StationMonitor-Portlet</title>
+        <portlet-tabbed-pane style="sub-menu">
+            <portlet-tab label="StationMonitor-portlet">
+                <title lang="en">StationMonitor Portlet</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="StationMonitor-PF">
+                                <portlet-class>StationMonitor-portlet#StationMonitor-portlet</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+        </portlet-tabbed-pane>
+    </portlet-tab>
+</portlet-tabbed-pane>
+
+
