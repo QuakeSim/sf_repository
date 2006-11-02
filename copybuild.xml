@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <project name="RDAHMM" default="copy-all-to-portlet" basedir=".">
 
-<target name="copy-all-to-portlet" depends="copy-rdahmm-to-portlet,copy-stfilter-to-portlet"/>
+<target name="copy-all-to-portlet" depends="copy-rdahmm-to-portlet,copy-stfilter-to-portlet,copy-stationmonitor-to-portlet,copy-realtimerdahmm-to-portlet"/>
 
 <target name="copy-rdahmm-to-portlet">
    <property name="rdahmm.dest.dir" value="./portlets/RDAHMM-portlet/"/>
@@ -34,6 +34,50 @@
          <include name="**/*.java"/>
       </fileset>
       <fileset dir="${stfilter.source.dir}">
+         <include name="**/*.xml"/>
+         <include name="**/*.class"/>
+         <include name="**/*.jar"/>
+         <include name="**/*.jsp"/>
+         <include name="**/*.properties"/>
+         <exclude name="pom.xml"/>
+         <exclude name="**/web.xml"/>
+      </fileset>
+   </copy>
+</target>
+
+<target name="copy-stationmonitor-to-portlet">
+   <property name="stationmonitor.dest.dir" value="./portlets/StationMonitor-portlet/"/>
+   <property name="stationmonitor.source.dir" value="./jsf_standalone/StationMonitor"/>
+   <echo message="${stationmonitor.dest.dir}"/>
+   <echo message="${stationmonitor.source.dir}"/>
+   <copy toDir="${stationmonitor.dest.dir}"
+         overwrite="true">
+      <fileset dir="${stationmonitor.source.dir}">
+         <include name="**/*.java"/>
+      </fileset>
+      <fileset dir="${stationmonitor.source.dir}">
+         <include name="**/*.xml"/>
+         <include name="**/*.class"/>
+         <include name="**/*.jar"/>
+         <include name="**/*.jsp"/>
+         <include name="**/*.properties"/>
+         <exclude name="pom.xml"/>
+         <exclude name="**/web.xml"/>
+      </fileset>
+   </copy>
+</target>
+
+<target name="copy-realtimerdahmm-to-portlet">
+   <property name="realtimerdahmm.dest.dir" value="./portlets/RealTimeRDAHMM-portlet/"/>
+   <property name="realtimerdahmm.source.dir" value="./jsf_standalone/RealTimeRDAHMM"/>
+   <echo message="${realtimerdahmm.dest.dir}"/>
+   <echo message="${realtimerdahmm.source.dir}"/>
+   <copy toDir="${realtimerdahmm.dest.dir}"
+         overwrite="true">
+      <fileset dir="${realtimerdahmm.source.dir}">
+         <include name="**/*.java"/>
+      </fileset>
+      <fileset dir="${realtimerdahmm.source.dir}">
          <include name="**/*.xml"/>
          <include name="**/*.class"/>
          <include name="**/*.jar"/>
