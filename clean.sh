@@ -57,6 +57,12 @@ mvn clean
 cd $SIMPLE_RDAHMM_SA_HOME
 mvn clean
 
+cd $REALTIME_RDAHMM_SA_HOME
+mvn clean
+
+cd $STATION_MONITOR_SA_HOME
+mvn clean
+
 
 # CLEAN VENDOR SOFTWARE
 echo "#################################"

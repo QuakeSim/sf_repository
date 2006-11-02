@@ -52,10 +52,9 @@ source ./stfilter-sa-install.sh
 cd $BUILD_DIR
 source ./stfilter-portlet-install.sh
 
+cd $BUILD_DIR
+source ./stationmonitor-sa-install.sh
 
-#cd $BUILD_DIR
-#source ./stfilter-portlet-install.sh
+cd $BUILD_DIR
+source ./realtime-rdahmm-sa-install.sh
 
-
-#cd $BUILD_DIR
-#source ./simplex-portlet-install.sh
