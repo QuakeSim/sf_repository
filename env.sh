@@ -45,6 +45,6 @@ export SIMPLEX_PORTLET_HOME=$BUILD_DIR/portlets/Simplex-portlet
 export RDAHMM_PORTLET_HOME=$BUILD_DIR/portlets/RDAHMM-portlet
 export STFILTER_PORTLET_HOME=$BUILD_DIR/portlets/STFILTER-portlet
 export STATION_MONITOR_PORTLET_HOME=$BUILD_DIR/portlets/StationMonitor-portlet
-export REALTIME_RDAHMM_PORTLET_HOME=$BUILD_DIR/portlets/RealTimeRDAHMM-portlet
+export REALTIME_RDAHMM_PORTLET_HOME=$BUILD_DIR/portlets/RealTimeRdahmm-portlet
 
 export PATH=$ANT_HOME/bin:$MAVEN_HOME/bin:$PATH
