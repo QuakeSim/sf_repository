@@ -10,7 +10,7 @@
       set output "$1"
       set grid
       set ylabel "Coordinate(m)"
-      set xlabel "Time(s)"
+      set xlabel "Time(days)"
       show label
       set size 1.7,0.65
       #set key left
