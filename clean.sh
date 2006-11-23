@@ -19,29 +19,29 @@ mvn clean
 
 # Clean up standalone stuff
 cd $SIMPLEX_SA_HOME
-mvn clean
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
 cd $RDAHMM_SA_HOME
-mvn clean
+mvn clean  -Dtomcat.base.dir=$CATALINA_HOME
 
 cd $SIMPLE_RDAHMM_SA_HOME
-mvn clean
+mvn clean 
 
 cd $SENSORGRID_SA_HOME
-mvn clean
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
 #Clean up portlet stuff
 #cd $SIMPLEX_PORTLET_HOME
 #mvn clean
 
 cd $RDAHMM_PORTLET_HOME
-mvn clean
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
 cd $STFILTER_SA_HOME
-mvn clean
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
 cd $STFILTER_PORTLET_HOME
-mvn clean
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
 cd $ANT_EXECUTION_HOME
 mvn clean
@@ -55,19 +55,19 @@ cd $STFILTER_EXECUTION_HOME
 mvn clean
 
 cd $SIMPLE_RDAHMM_SA_HOME
-mvn clean
+mvn clean 
 
 cd $REALTIME_RDAHMM_SA_HOME
-mvn clean
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
 cd $STATION_MONITOR_SA_HOME
-mvn clean
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
 cd $REALTIME_RDAHMM_PORTLET_HOME
-mvn clean
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
 cd $STATION_MONITOR_PORTLET_HOME
-mvn clean
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
 
 # CLEAN VENDOR SOFTWARE

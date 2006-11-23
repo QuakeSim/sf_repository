@@ -5,20 +5,21 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>QuakeSim2</groupId>
-    <artifactId>StationMonitor</artifactId>
+    <artifactId>RealTimeRDAHMM</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>A custom project using myfaces</name>
     <url>http://www.myorganization.org</url>
 
     <build>
-        <finalName>StationMonitor</finalName>
+        <finalName>RealTimeRDAHMM</finalName>
         <resources>
            <resource>
                <directory>src/main/resources</directory>
                <filtering>true</filtering>
            </resource>
         </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
@@ -29,7 +30,6 @@
             </plugin>
         </plugins>
     </build>
-
 
     <!-- We get this from the command line and pass to the resources
          via filtering -->

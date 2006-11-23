@@ -15,7 +15,7 @@ echo "######################################"
 echo "Installing STFILTER"
 echo "######################################"
 cd $STFILTER_SA_HOME
-if mvn clean package
+if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME
 then 
     echo Install complete
 else

@@ -14,7 +14,7 @@ echo "######################################"
 echo "Installing REALTIME_RDAHMM"
 echo "######################################"
 cd $REALTIME_RDAHMM_SA_HOME
-if mvn clean package 
+if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME
 
 then
     echo Install complete

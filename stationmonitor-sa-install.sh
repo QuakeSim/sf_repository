@@ -14,7 +14,7 @@ echo "######################################"
 echo "Installing STATION_MONITOR"
 echo "######################################"
 cd $STATION_MONITOR_SA_HOME
-if mvn clean package 
+if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME
 
 then
     echo Install complete
