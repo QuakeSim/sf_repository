@@ -22,10 +22,10 @@ cd $SIMPLEX_SA_HOME
 mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
 cd $RDAHMM_SA_HOME
-mvn clean  -Dtomcat.base.dir=$CATALINA_HOME
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
 cd $SIMPLE_RDAHMM_SA_HOME
-mvn clean 
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
 cd $SENSORGRID_SA_HOME
 mvn clean -Dtomcat.base.dir=$CATALINA_HOME

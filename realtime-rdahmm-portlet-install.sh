@@ -15,7 +15,7 @@ echo "Installing REALTIME_RDAHMM"
 echo "######################################"
 cd $REALTIME_RDAHMM_PORTLET_HOME
 export PORTLET_NAME=RealTimeRDAHMM-portlet
-if mvn clean package 
+if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME
 
 then
     echo Install complete

@@ -15,7 +15,7 @@ echo "Installing STFILTER Portlet"
 echo "######################################"
 cd $STFILTER_PORTLET_HOME
 export PORTLET_NAME=STFILTER-portlet
-if mvn clean package
+if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME
 then
     echo Install complete
 else

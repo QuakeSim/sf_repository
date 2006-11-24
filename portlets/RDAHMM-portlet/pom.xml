@@ -13,6 +13,12 @@
 
     <build>
         <finalName>RDAHMM-portlet</finalName>
+        <resources>
+           <resource>
+               <directory>src/main/resources</directory>
+               <filtering>true</filtering>
+           </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
@@ -23,6 +29,15 @@
             </plugin>
         </plugins>
     </build>
+
+
+    <!-- We get this from the command line and pass to the resources
+         via filtering -->
+    <properties>
+       <tomcat.base.dir>${tomcat.base.dir}</tomcat.base.dir>
+    </properties>
+
+
 
     <!-- Profile to run jetty, so the tomcat jars are included in the bundle. They are not included by default -->
     <profiles>
