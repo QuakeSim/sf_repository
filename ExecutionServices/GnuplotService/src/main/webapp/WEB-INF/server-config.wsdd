@@ -35,10 +35,10 @@
   <parameter name="allowedMethods" value="getVersion"/>
   <parameter name="className" value="org.apache.axis.Version"/>
  </service>
- <service name="RDAHMMExec" provider="java:RPC">
-  <parameter name="allowedMethods" value="runBlockingRDAHMM runNonblockingRDAHMM"/>
+ <service name="GnuplotExec" provider="java:RPC">
+  <parameter name="allowedMethods" value="runBlockingGnuplot runNonblockingGnuplot"/>
   <parameter name="scope" value="Session"/>
-  <parameter name="className" value="cgl.webservices.RDAHMMService"/>
+  <parameter name="className" value="cgl.webservices.GnuplotService"/>
   <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns1:ArrayOf_soapenc_string" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:java.lang.String[]" xmlns:ns1="urn:GatewayWS"/>
  </service>
  <transport name="http">

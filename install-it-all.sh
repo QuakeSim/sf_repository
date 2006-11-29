@@ -28,6 +28,9 @@ cd $BUILD_DIR
 source ./rdahmmexec-deploy.sh
 
 cd $BUILD_DIR
+source ./gnuplotexec-deploy.sh
+
+cd $BUILD_DIR
 source ./stfilterexec-deploy.sh
 
 # Build the generic project classes.

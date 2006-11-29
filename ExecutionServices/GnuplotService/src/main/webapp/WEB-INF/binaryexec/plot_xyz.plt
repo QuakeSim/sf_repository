@@ -10,15 +10,17 @@
       set output "$1"
       set grid
       set ylabel "Coordinate(m)"
-      set xlabel "Time(days)"
+      set xlabel "Time(s [$4 $5])"
       show label
-      set size 1.7,0.65
+      set size 0.7,0.7
       #set key left
       set nokey
       set yrange [y_min:y_max]
       set xrange [x_min:x_max]
       set multiplot
-      call 'plotINPUT.xyz_func.plt' '$0' '$2'
+      call 'INPUT.xyzplot_func.plt' '$0' '$2'
+      set key
+      plot 0 title "Base value is:$3" with lines linetype 30;
       set nomultiplot
       reset
 
