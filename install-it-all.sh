@@ -47,6 +47,9 @@ cd $BUILD_DIR
 source ./simple-rdahmm-sa-install.sh
 
 cd $BUILD_DIR
+source ./simple-stfilter-sa-install.sh
+
+cd $BUILD_DIR
 source ./rdahmm-portlet-install.sh
 
 cd $BUILD_DIR

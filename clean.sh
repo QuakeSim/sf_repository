@@ -27,6 +27,9 @@ mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 cd $SIMPLE_RDAHMM_SA_HOME
 mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
+cd $SIMPLE_STFILTER_SA_HOME
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME
+
 cd $SENSORGRID_SA_HOME
 mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
