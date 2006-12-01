@@ -7,10 +7,11 @@
 </target>
 
 <target name="ExecGnuplot">
+   <echo message="Test"/>
    <exec executable="${bindir.prop}/plot_plain.sh"
-         dir="${bindir.prop}">
+         dir="${workDir.prop}">
       <arg line="${GnuplotBaseName.prop}.input"/>
-      <env key="PATH" path="${bindir.prop}:/bin/:/usr/bin/:$PATH"/>
+      <env key="PLOT_TEMPLATE_DIR" path="${bindir.prop}"/>
    </exec>
    <move todir="${outputDestDir.prop}">
      <fileset file="*.png"/>

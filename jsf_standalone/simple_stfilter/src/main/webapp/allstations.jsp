@@ -23,7 +23,11 @@ mapcenter_y = center_xy[1];
       type="text/javascript"></script>
   </head>
   <body>
-
+   
+   <!--This is an outer bounding table to make columns.-->
+   <table>  
+   <tr>
+   <td>
     <table>
       <tr>
         <td width="650" colspan="2">
@@ -42,8 +46,8 @@ mapcenter_y = center_xy[1];
         </td>
       </tr>
     </table>
-
-
+ 
+ 
     <!-- fail nicely if the browser has no Javascript -->
     <noscript><b>JavaScript must be enabled in order for you to use Google Maps.</b>
       However, it seems JavaScript is either disabled or not supported by your browser.
@@ -179,19 +183,33 @@ mapcenter_y = center_xy[1];
          printNetworkColors(networkInfo);
       </script>
 
+      </td>
+      <td>
+
       <f:view>
        <h:form id="form1">
+       <h:panelGrid columns="2">
+       <h:outputText value="Site Code"/>
        <h:inputText id="station_name" value="#{stfilterBean.siteCode}"/>
-       <h:commandLink action="parameters-to-database">
+   
+       <h:outputText value="Begin Date"/>
+       <h:inputText id="begin_date" value="#{stfilterBean.beginDate}"/>
+
+
+       <h:outputText value="End Date"/>
+       <h:inputText id="end_date" value="#{stfilterBean.endDate}"/>
+
+       </h:panelGrid>
+
+       <h:commandLink action="#{stfilterBean.runBlockingGnuplot}">
             <h:outputText value="Query Selected Station"/>
        </h:commandLink>
        </h:form>
-       <hr/>
-       <h:form>
-         <h:commandLink action="back">
-            <h:outputText value="#{stfilterBean.codeName} Main Menu"/>
-         </h:commandLink>
-        </h:form>
       </f:view>
+
+     </td>
+     </table>
+
+
      </body>
 </html>

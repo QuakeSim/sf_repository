@@ -7,5 +7,7 @@ cat $1 | awk '{print $3}' | sed -n '$p'| sed '/^$/d' > $1.xyz.endtime
 
 #PLOT_TEMPLATE_DIR="/home/zhigang/tmp/ss/plotXYZ/"
 
-./plot_go.sh $1.xyz $1.Q
+echo "Plot template directory is $PLOT_TEMPLATE_DIR"
+
+$PLOT_TEMPLATE_DIR/plot_go.sh $1.xyz $1.Q
 

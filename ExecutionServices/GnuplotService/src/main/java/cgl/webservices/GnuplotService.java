@@ -105,6 +105,9 @@ public class GnuplotService extends AntVisco implements Runnable{
      * String of tabbed columns.  It cuts out the number of
      * columns on the left specified by cutLeftColumns and 
      * number on the right by cutRightColumns.
+     *
+     * Use -1 for both cutLeft and cutRight to do null
+     * filtering (ie just renaming the file).
      */
     protected void filterResults(String tabbedFile,
 				 String gnuplotInputFile,
@@ -118,10 +121,10 @@ public class GnuplotService extends AntVisco implements Runnable{
 	    new PrintWriter(new FileWriter(gnuplotInputFile),true);
 	String line=br.readLine();
 	while(line!=null) {
-	    //	    System.out.println(line);
 	    st=new StringTokenizer(line);
-	    String newLine="";
+	    String newLine=line;
 	    int tokenCount=st.countTokens();
+	    if(cutRightColumns<0) cutRightColumns=tokenCount+1;
 	    for (int i=0;i<tokenCount;i++) {
 		String temp=st.nextToken();
 		if(i>=cutLeftColumns && i<(tokenCount-cutRightColumns)) {
@@ -328,12 +331,11 @@ public class GnuplotService extends AntVisco implements Runnable{
      */
     public String[] runNonblockingGnuplot(String siteCode,
 					 String beginDate,
-					 String endDate,
-					 int numModelStates)
+					  String endDate)
 	throws Exception {
 	try {
 	    String dataUrl=querySOPACGetURL(siteCode,beginDate,endDate);
-	    return runNonblockingGnuplot(dataUrl,numModelStates);
+	    return runNonblockingGnuplot(dataUrl);
 	}
 	catch (Exception ex) {
 	    ex.printStackTrace();
@@ -346,13 +348,12 @@ public class GnuplotService extends AntVisco implements Runnable{
      * the data from the SOPAC data service.
      */
     public String[] runBlockingGnuplot(String siteCode,
-				      String beginDate,
-				      String endDate,
-				      int numModelStates)
+				       String beginDate,
+				       String endDate)
 	throws Exception {
 	try {
 	    String dataUrl=querySOPACGetURL(siteCode,beginDate,endDate);
-	    return runBlockingGnuplot(dataUrl,numModelStates);
+	    return runBlockingGnuplot(dataUrl);
 	}
 	catch (Exception ex) {
 	    ex.printStackTrace();
@@ -364,12 +365,10 @@ public class GnuplotService extends AntVisco implements Runnable{
      * This is the simplified API that uses default values.
      */ 
 
-    public String[] runBlockingGnuplot(String inputFileUrlString,
-				      int numModelStates) 
+    public String[] runBlockingGnuplot(String inputFileUrlString)
 	throws Exception {
 	System.out.println("Running blocking execution");
 	System.out.println(inputFileUrlString);
-	System.out.println(numModelStates);
 	
 	String[] returnVals=runBlockingGnuplot(inputFileUrlString,
 					      baseWorkDir,
@@ -385,11 +384,11 @@ public class GnuplotService extends AntVisco implements Runnable{
     /**
      * This is the simplified API that uses default properties.
      */
-    public String[] runNonblockingGnuplot(String inputFileUrlString,
-					 int numModelStates) throws Exception {
+    public String[] runNonblockingGnuplot(String inputFileUrlString)
+	throws Exception {
+	
 	System.out.println("Running non-blocking execution");
 	System.out.println(inputFileUrlString);
-	System.out.println(numModelStates);
 
 	
 	String[] returnVals=runNonblockingGnuplot(inputFileUrlString,
@@ -424,15 +423,16 @@ public class GnuplotService extends AntVisco implements Runnable{
 	//necessary.
 	String localFile=downloadInputFile(inputFileUrlString,workDir);
 
-	//Filter the file
-	String localFileFiltered=workDir+File.separator+projectName+".input";
-	filterResults(localFile, localFileFiltered, 2, 3);
-	
-	//Get the dimensions and number of observations.
-	int ndim=getFileDimension(localFileFiltered);
-	int nobsv=getLineCount(localFileFiltered);
 
-	String[] args=setUpArgArray(localFileFiltered,
+ 	//Filter the file
+ 	String localFileFiltered=workDir+File.separator+projectName+".input";
+ 	filterResults(localFile, localFileFiltered, -1, -1);
+	
+// 	//Get the dimensions and number of observations.
+// 	int ndim=getFileDimension(localFileFiltered);
+// 	int nobsv=getLineCount(localFileFiltered);
+
+	String[] args=setUpArgArray(localFile,
 				    workDir,
 				    outputDestDir,
 				    projectName,
@@ -499,10 +499,7 @@ public class GnuplotService extends AntVisco implements Runnable{
      */ 
     protected String[] getTheReturnFiles() {
 
-	String[] extensions={".input",".range",".Q",".pi",".A",
-			     ".minval",".maxval",".L",".B",
-			     ".Q",".stdout",
-	                     ".input.X.png",".input.Y.png",".input.Z.png"};
+	String[] extensions={".input.X.png",".input.Y.png",".input.Z.png"};
 	
 	String[] returnFiles=new String[extensions.length];
 	for(int i=0;i<extensions.length;i++) {
@@ -548,14 +545,12 @@ public class GnuplotService extends AntVisco implements Runnable{
 	    GnuplotService rds=new GnuplotService(true);
 	    System.out.println("----------------------------------");
 	    System.out.println("Testing blocking version");
-	    rds.runBlockingGnuplot(dataUrl,
-				  numModelStates);
+	    rds.runBlockingGnuplot(dataUrl);
 
 	    System.out.println("----------------------------------");
 	    System.out.println("Testing non-blocking version");
-	    rds.runNonblockingGnuplot(dataUrl,
-				  numModelStates);
-	}
+	    rds.runNonblockingGnuplot(dataUrl);
+}
 	catch (Exception ex) {
 	    ex.printStackTrace();
 	}

@@ -1,4 +1,4 @@
 <%@ page session="false"%>
 <%
-response.sendRedirect("Main.jsf");
+response.sendRedirect("allstations.jsf");
 %>
