@@ -198,7 +198,16 @@ public class STFILTERBean extends GenericSopacBean {
 	String[] results=gnuplotService.runBlockingGnuplot(siteCode, 
 							   beginDate,
 							   endDate);
-	return "time-series-plotted";
+	localImageFileX=results[0];
+	localImageFileY=results[1];
+	localImageFileZ=results[2];
+	
+
+	for(int i=0;i<results.length;i++) {
+	    System.out.println("Query results:"+results[i]);
+	}
+
+	return "plot-time-series";
     }
 
     /**

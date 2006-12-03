@@ -13,8 +13,9 @@
       <arg line="${GnuplotBaseName.prop}.input"/>
       <env key="PLOT_TEMPLATE_DIR" path="${bindir.prop}"/>
    </exec>
+   <echo message="Moving to ${outputDestDir.prop}"/>
    <move todir="${outputDestDir.prop}">
-     <fileset file="*.png"/>
+     <fileset file="${workDir.prop}/*.png"/>
    </move>
 </target>
 

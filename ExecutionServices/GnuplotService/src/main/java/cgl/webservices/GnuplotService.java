@@ -251,14 +251,15 @@ public class GnuplotService extends AntVisco implements Runnable{
 				   String buildFilePath,
 				   String antTarget) throws Exception {
 	
-	String[] args=new String[7];
+	String[] args=new String[8];
         args[0]="-DworkDir.prop="+workDir;
         args[1]="-DprojectName.prop="+projectName;
         args[2]="-Dbindir.prop="+binPath;
         args[3]="-DGnuplotBaseName.prop="+projectName;
-        args[4]="-buildfile";
-        args[5]=buildFilePath;
-        args[6]=antTarget;
+	args[4]="-DoutputDestDir.prop="+outputDestDir;
+        args[5]="-buildfile";
+        args[6]=buildFilePath;
+        args[7]=antTarget;
 
 	return args;
     }
@@ -469,14 +470,12 @@ public class GnuplotService extends AntVisco implements Runnable{
 	String localFile=downloadInputFile(inputFileUrlString,workDir);
 
 	//Filter the file
-	//Filter the file
 	String localFileFiltered=workDir+File.separator+projectName+".input";
 	filterResults(localFile, localFileFiltered, 2, 3);
 	
 	//Get the dimensions and number of observations.
 	int ndim=getFileDimension(localFileFiltered);
 	int nobsv=getLineCount(localFileFiltered);
-
 
 	String[] args=setUpArgArray(localFileFiltered,
 				    workDir,
@@ -499,7 +498,7 @@ public class GnuplotService extends AntVisco implements Runnable{
      */ 
     protected String[] getTheReturnFiles() {
 
-	String[] extensions={".input.X.png",".input.Y.png",".input.Z.png"};
+	String[] extensions={".input.xyz.X.png",".input.xyz.Y.png",".input.xyz.Z.png"};
 	
 	String[] returnFiles=new String[extensions.length];
 	for(int i=0;i<extensions.length;i++) {
