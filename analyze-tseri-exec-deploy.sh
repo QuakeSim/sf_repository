@@ -20,17 +20,17 @@ echo "######################################"
 echo "Deploying ANALYZETSERI Execution Service"
 echo "######################################"
 cd $ANALYZE_TSERI_EXECUTION_HOME
-if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME -Danalyze_tseri.service.url=$PORTAL_SERVER_URL/analyze_tseri_exec
+if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME -Danalyze_tseri.service.url=$PORTAL_SERVER_URL/analyze-tseri-exec
 then
     echo Ant exec install complete.
 else
     exit 1
 fi
-cp -r target/gnuplotexec $CATALINA_HOME/webapps
+cp -r target/analyze-tseri-exec $CATALINA_HOME/webapps
 
 # Copy over the ANALYZE_TSERI Executable
 if 
-    chmod +x $CATALINA_HOME/webapps/analyze_tseri_exec/WEB-INF/binaryexec/*
+    chmod +x $CATALINA_HOME/webapps/analyze-tseri-exec/WEB-INF/binaryexec/*
 then 
     echo "ANALYZE_TSERI scripts installed."
 else 

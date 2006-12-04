@@ -201,7 +201,7 @@ mapcenter_y = center_xy[1];
 
        </h:panelGrid>
 
-       <h:commandLink action="#{stfilterBean.runBlockingGnuplot}">
+       <h:commandLink action="#{stfilterBean.runBlockingAnalyzeTseri}">
             <h:outputText value="Query Selected Station"/>
        </h:commandLink>
        </h:form>

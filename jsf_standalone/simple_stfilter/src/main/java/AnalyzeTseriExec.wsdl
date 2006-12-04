@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://gf2.ucs.indiana.edu:8080/analyze-tseri-exec/services/AnalyzeTseriExec" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://gf2.ucs.indiana.edu:8080/analyze-tseri-exec/services/AnalyzeTseriExec" xmlns:intf="http://gf2.ucs.indiana.edu:8080/analyze-tseri-exec/services/AnalyzeTseriExec" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="urn:GatewayWS" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema targetNamespace="urn:GatewayWS" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="ArrayOf_soapenc_string">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="soapenc:string[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="runBlockingAnalyzeTseriRequest2">
+
+      <wsdl:part name="inputFileUrlString" type="soapenc:string"/>
+
+      <wsdl:part name="baseWorkDir" type="soapenc:string"/>
+
+      <wsdl:part name="outputDestDir" type="soapenc:string"/>
+
+      <wsdl:part name="projectName" type="soapenc:string"/>
+
+      <wsdl:part name="binPath" type="soapenc:string"/>
+
+      <wsdl:part name="buildFilePath" type="soapenc:string"/>
+
+      <wsdl:part name="antTarget" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runBlockingAnalyzeTseriResponse1">
+
+      <wsdl:part name="runBlockingAnalyzeTseriReturn" type="tns1:ArrayOf_soapenc_string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runBlockingAnalyzeTseriResponse">
+
+      <wsdl:part name="runBlockingAnalyzeTseriReturn" type="tns1:ArrayOf_soapenc_string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runBlockingAnalyzeTseriResponse2">
+
+      <wsdl:part name="runBlockingAnalyzeTseriReturn" type="tns1:ArrayOf_soapenc_string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runBlockingAnalyzeTseriRequest1">
+
+      <wsdl:part name="inputFileUrlString" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runBlockingAnalyzeTseriRequest">
+
+      <wsdl:part name="siteCode" type="soapenc:string"/>
+
+      <wsdl:part name="beginDate" type="soapenc:string"/>
+
+      <wsdl:part name="endDate" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="AnalyzeTseriService">
+
+      <wsdl:operation name="runBlockingAnalyzeTseri" parameterOrder="siteCode beginDate endDate">
+
+         <wsdl:input message="impl:runBlockingAnalyzeTseriRequest" name="runBlockingAnalyzeTseriRequest"/>
+
+         <wsdl:output message="impl:runBlockingAnalyzeTseriResponse" name="runBlockingAnalyzeTseriResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runBlockingAnalyzeTseri" parameterOrder="inputFileUrlString">
+
+         <wsdl:input message="impl:runBlockingAnalyzeTseriRequest1" name="runBlockingAnalyzeTseriRequest1"/>
+
+         <wsdl:output message="impl:runBlockingAnalyzeTseriResponse1" name="runBlockingAnalyzeTseriResponse1"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runBlockingAnalyzeTseri" parameterOrder="inputFileUrlString baseWorkDir outputDestDir projectName binPath buildFilePath antTarget">
+
+         <wsdl:input message="impl:runBlockingAnalyzeTseriRequest2" name="runBlockingAnalyzeTseriRequest2"/>
+
+         <wsdl:output message="impl:runBlockingAnalyzeTseriResponse2" name="runBlockingAnalyzeTseriResponse2"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="AnalyzeTseriExecSoapBinding" type="impl:AnalyzeTseriService">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="runBlockingAnalyzeTseri">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="runBlockingAnalyzeTseriRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="runBlockingAnalyzeTseriResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf2.ucs.indiana.edu:8080/analyze-tseri-exec/services/AnalyzeTseriExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runBlockingAnalyzeTseri">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="runBlockingAnalyzeTseriRequest1">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="runBlockingAnalyzeTseriResponse1">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf2.ucs.indiana.edu:8080/analyze-tseri-exec/services/AnalyzeTseriExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runBlockingAnalyzeTseri">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="runBlockingAnalyzeTseriRequest2">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="runBlockingAnalyzeTseriResponse2">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf2.ucs.indiana.edu:8080/analyze-tseri-exec/services/AnalyzeTseriExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="AnalyzeTseriServiceService">
+
+      <wsdl:port binding="impl:AnalyzeTseriExecSoapBinding" name="AnalyzeTseriExec">
+
+         <wsdlsoap:address location="http://gf2.ucs.indiana.edu:8080/analyze-tseri-exec/services/AnalyzeTseriExec"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

@@ -19,6 +19,13 @@
                 </managed-property>
 
                 <managed-property>
+                   <property-name>analyzeTseriServiceUrl</property-name>
+                   <value>
+                     http://gf2.ucs.indiana.edu:8080/analyze-tseri-exec/services/AnalyzeTseriExec
+                   </value>
+                </managed-property>
+
+                <managed-property>
                    <property-name>binPath</property-name>
                    <value>/home/gateway/GEMCodes/stfilter/</value>
                 </managed-property>

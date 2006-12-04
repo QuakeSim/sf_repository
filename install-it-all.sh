@@ -22,9 +22,12 @@ source ./customize-portal.sh
 cd $BUILD_DIR
 source ./install-web-services.sh
 
-# Build the Ant execution service
-cd $BUILD_DIR
-source ./antvisco-deploy.sh
+#----------------------------------------------------------------------
+# Build the Ant execution services
+#----------------------------------------------------------------------
+# Not installed, probably obsolete.
+#cd $BUILD_DIR
+#source ./antvisco-deploy.sh
 
 cd $BUILD_DIR
 source ./rdahmmexec-deploy.sh
@@ -32,17 +35,22 @@ source ./rdahmmexec-deploy.sh
 cd $BUILD_DIR
 source ./gnuplotexec-deploy.sh
 
-cd $BUILD_DIR
-source ./stfilterexec-deploy.sh
+# Not installed, probably obsolete.
+#cd $BUILD_DIR
+#source ./stfilterexec-deploy.sh
 
 cd $BUILD_DIR
 source ./analyze-tseri-exec-deploy.sh
 
-
+#----------------------------------------------------------------------
 # Build the generic project classes.
+#----------------------------------------------------------------------
 cd $BUILD_DIR
 source ./genericproject-install.sh
 
+#----------------------------------------------------------------------
+# Buid the standalone (SA) web applications.
+#----------------------------------------------------------------------
 #cd $BUILD_DIR
 #source ./simplex-sa-install.sh
 
@@ -61,6 +69,9 @@ source ./rdahmm-portlet-install.sh
 cd $BUILD_DIR
 source ./stfilter-sa-install.sh
 
+#----------------------------------------------------------------------
+# Build the portlets.
+#----------------------------------------------------------------------
 cd $BUILD_DIR
 source ./stfilter-portlet-install.sh
 

@@ -29,8 +29,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
     final String FILE_PROTOCOL="file";
     final String HTTP_PROTOCOL="http";
 
-    //These are the system properties that may have
-    //default values.
+    //These are properties read from the property file.
     Properties properties;
     String serverUrl;
     String baseWorkDir;
@@ -38,11 +37,10 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
     String outputDestDir;
     String projectName;
     String binPath;
-    String outputType;
-    int randomSeed;
-    double annealStep;
     String buildFilePath;
     String antTarget;
+
+    String workDir;
     
     public AnalyzeTseriService(boolean useClassLoader) 
 	throws Exception {
@@ -57,7 +55,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
 	    
 	    //This works if you are using the classloader but not inside
 	    //Tomcat.
-	    properties.load(loader.getResourceAsStream("gnuplotconfig.properties"));
+	    properties.load(loader.getResourceAsStream("analyze_tseri_config.properties"));
 	}
 	else {
 	    //Extract the Servlet Context
@@ -67,7 +65,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
 	    
 	    
 	    String propertyFile=context.getRealPath("/")
-		+"/WEB-INF/classes/gnuplotconfig.properties";
+		+"/WEB-INF/classes/analyze_tseri_config.properties";
 	    System.out.println("Prop file location "+propertyFile);
 	    
 	    properties=new Properties();	    
@@ -75,30 +73,114 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
 			    FileInputStream(propertyFile));
 	}
 	
-	serverUrl=properties.getProperty("gnuplot.service.url");
+	serverUrl=properties.getProperty("analyze_tseri.service.url");
 	baseWorkDir=properties.getProperty("base.workdir");
 	baseDestDir=properties.getProperty("base.dest.dir");
 	projectName=properties.getProperty("project.name");
 	binPath=properties.getProperty("bin.path");
 	buildFilePath=properties.getProperty("build.file.path");
 	antTarget=properties.getProperty("ant.target");
+	a
 	
 	//Put a time stamp on the project name:
 	projectName+="-"+(new Date()).getTime();
 	
 	outputDestDir=baseDestDir+"/"+projectName;
-
-
-	System.out.println("Here are some property values");
-	System.out.println(baseWorkDir);
-	System.out.println(projectName);
-	System.out.println(binPath);
+	workDir=baseWorkDir+File.separator+projectName;
     }
     
     public AnalyzeTseriService() throws Exception{
 	this(false);
 	
     }
+    /** 
+     * Create the site list file.  Currently we only support
+     * one site and the XYZ format (ie "1   8").
+     */
+    public void createSiteListFile(String contextDir)
+	throws Exception {
+
+	String slash="/";  // This is not File.separator of the webserver
+	siteListFile=projectName+mosesSiteListExt;
+	System.out.println("Writing input file: "+contextDir+"/"+siteListFile);
+	PrintWriter pw=
+	    new PrintWriter(new FileWriter(contextDir+"/"+siteListFile),true);
+
+	pw.println("  1");  //Need to make this more general.
+	pw.println(getSiteCode().toUpperCase()+"_GPS");
+	pw.close();
+    }
+
+    public void createEstimatedParamFile(String contextDir)
+	throws Exception {
+	estParameterFile=projectName+mosesParamFileExt;
+	PrintWriter pw=
+	    new PrintWriter(new FileWriter(contextDir+"/"+estParameterFile),true);
+	if(myStation.printContents()!=null) {
+	    pw.println("  2");
+	    pw.println(allsites.printContents());
+	    pw.println(myStation.printContents());
+	}
+	else {
+	    pw.println("  1");
+	    pw.println(allsites.printContents());
+	}
+	pw.close();
+    }
+
+    public void createDataListFile(String contextDir)
+	throws Exception {
+
+	String slash="/";  // This is not File.separator of the webserver
+	dataListFile=projectName+mosesDataListExt;
+	System.out.println("Writing input file: "+contextDir+"/"+dataListFile);
+	PrintWriter pw=
+	    new PrintWriter(new FileWriter(contextDir+"/"+dataListFile),true);
+
+	pw.println(" 1   8");  //Need to make this more general.
+	pw.println(getSiteCode()+sopacDataFileExt);
+	pw.close();
+    }
+
+    /**
+     * Create the stfilter driver file.
+     */
+    public String createDriverFile(String contextDir)
+	throws Exception {
+
+	String fivespace="     ";
+	String slash="/";  // This is not File.separator of the webserver
+	driverFileName=projectName+driverFileExtension;
+	System.out.println("Writing input file: "+contextDir+"/"+driverFileName);
+	PrintWriter pw=
+	    new PrintWriter(new FileWriter(contextDir+"/"+driverFileName),true);
+	pw.println(twospace+"apriori value file:"+twospace+globalDataDir+slash+aprioriValueFile);
+	pw.println(twospace+"input file:"+twospace+workDir+slash+projectName+mosesDataListExt);
+	pw.println(twospace+"sit_list file:"+twospace+workDir+slash+projectName+mosesSiteListExt);
+	pw.println(twospace+"est_parameter file:"+twospace+workDir+slash+projectName+mosesParamFileExt);
+	//	pw.println(twospace+"est_parameter file:"+twospace+globalDataDir+mosesParamFile);
+	pw.println(twospace+"output file:"+twospace+workDir+slash+projectName+outputFileExt);
+	pw.println(twospace+"residual file:"+twospace+workDir+slash+projectName+residualFileExt);
+	pw.println(twospace+"res_option:"+twospace+resOption);
+	pw.println(twospace+"specific term_out file:"+twospace+workDir+slash+projectName+termOutFileExt);
+	pw.println(twospace+"specific term_option:"+twospace+termOption);
+	pw.println(twospace+"enu_correlation usage:"+twospace+"no");
+	pw.println(twospace+"cutoff criterion (year):"+twospace+cutoffCriterion);
+	pw.println(twospace+"span to est jump aper (est_jump_span):"+twospace+estJumpSpan);
+	pw.println(twospace+"weak_obs (big sigma) criteria:"+twospace+weakObsCriteria.getEast()+twospace+weakObsCriteria.getNorth()+twospace+weakObsCriteria.getUp());
+	pw.println(twospace+"outlier (big o-c) criteria mm:"+twospace+outlierCriteria.getEast()+twospace+outlierCriteria.getNorth()+twospace+outlierCriteria.getUp());
+	pw.println(twospace+"very bad_obs criteria mm:"+twospace+badObsCriteria.getEast()+twospace+badObsCriteria.getNorth()+twospace+badObsCriteria.getUp());
+	pw.println(twospace+"t_interval:"+twospace+timeInterval.getBeginTime()+twospace+timeInterval.getEndTime());
+	pw.println(twospace+"end:");
+	pw.println("---------- part 2 -- apriori information");
+	pw.println(twospace+"exit:");
+	pw.close();
+
+	//Clean this up since it could be a memory drain.
+	//	sopacDataFileContent=null;
+	return "input-file-created";
+    }
+
 
     /**
      * This helper method assumes input is a multlined
@@ -417,7 +499,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
 	
 	
 	//Set up the work directory
-	String workDir=baseWorkDir+File.separator+projectName;
+	//	String workDir=baseWorkDir+File.separator+projectName;
 	makeWorkDir(workDir,buildFilePath);
 	
 	//Copy the input file to the working directory, if 
@@ -460,7 +542,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
 					 String buildFilePath,
 					 String antTarget) throws Exception {
 	
-	String workDir=baseWorkDir+File.separator+projectName;
+	//	String workDir=baseWorkDir+File.separator+projectName;
 
 	//Make working directory
 	makeWorkDir(workDir,buildFilePath);

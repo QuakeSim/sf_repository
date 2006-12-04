@@ -182,22 +182,22 @@ public class STFILTERBean extends GenericSopacBean {
      * navigation purposes.  The real data is placed in other
      * variables.
      */
-    public String runBlockingGnuplot() 
+    public String runBlockingAnalyzeTseri() 
 	throws Exception {
 
 	//Create the client stub for the gnuplot service.
-	System.out.println(gnuplotServiceUrl);
+	System.out.println(analyzeTseriServiceUrl);
 	try {
-	    gnuplotService=(new GnuplotServiceServiceLocator()).
-		getGnuplotExec(new URL(gnuplotServiceUrl));
+	    analyzeTseriService=(new AnalyzeTseriServiceServiceLocator()).
+		getAnalyzeTseriExec(new URL(analyzeTseriServiceUrl));
 	}
 	catch (Exception ex) {
 	    ex.printStackTrace();
 	}
 
-	String[] results=gnuplotService.runBlockingGnuplot(siteCode, 
-							   beginDate,
-							   endDate);
+	String[] results=analyzeTseriService.runBlockingAnalyzeTseri(siteCode, 
+								     beginDate,
+								     endDate);
 	localImageFileX=results[0];
 	localImageFileY=results[1];
 	localImageFileZ=results[2];
@@ -211,16 +211,16 @@ public class STFILTERBean extends GenericSopacBean {
     }
 
     /**
-     * This client invokes the remote Gnuplot service.
+     * This client invokes the remote AnalyzeTseri service.
      * This version explicitly requires the parameters to be
      * passed in from the arguments.
      */ 
-    public String[] runBlockingGnuplot(String siteCode,
+    public String[] runBlockingAnalyzeTseri(String siteCode,
 				       String beginDate,
 				       String endDate) 
 	throws Exception {
 	
-	String[] results=gnuplotService.runBlockingGnuplot(siteCode,
+	String[] results=analyzeTseriService.runBlockingAnalyzeTseri(siteCode,
 							   beginDate,
 							   endDate);
 	return results;
@@ -499,6 +499,7 @@ public class STFILTERBean extends GenericSopacBean {
     //This is the gnuplot service url.  Duh.  We get the value
     //from the faces-config.xml file.
     String gnuplotServiceUrl;
+    String analyzeTseriServiceUrl;
 
     //STFILTER properties
     private String codeName="STFILTER";
@@ -577,6 +578,7 @@ public class STFILTERBean extends GenericSopacBean {
     protected String localImageFileZ;
 
     //The gnuplot service client stub
+    AnalyzeTseriService analyzeTseriService;
     GnuplotService gnuplotService;
 
 
@@ -686,6 +688,14 @@ public class STFILTERBean extends GenericSopacBean {
 
     public void setTimeInterval(TimeInterval timeInterval) {
 	this.timeInterval=timeInterval;
+    }
+
+    public void setAnalyzeTseriServiceUrl(String analyzeTseriServiceUrl) {
+	this.analyzeTseriServiceUrl=analyzeTseriServiceUrl;
+    }
+    
+    public String getAnalyzeTseriServiceUrl() {
+	return analyzeTseriServiceUrl;
     }
 
     public void setGnuplotServiceUrl(String gnuplotServiceUrl) {
