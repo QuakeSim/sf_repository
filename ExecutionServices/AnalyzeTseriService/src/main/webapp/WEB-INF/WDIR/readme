@@ -1,0 +1,2 @@
+This is the place where all the code inputs and outputs go.  This readme is really here just to make sure that this directory will be copied over by maven, since it will otherwise ignore empty directories when building the target.
+

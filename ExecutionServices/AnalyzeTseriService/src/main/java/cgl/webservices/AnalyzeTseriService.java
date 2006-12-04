@@ -20,11 +20,11 @@ import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
 
 
 /**
- * Despite the name, this is not a general purpose Gnuplot service.  It
+ * Despite the name, this is not a general purpose AnalyzeTseri service.  It
  * is used to make plots of the GRWS time series data.
  */
-public class GnuplotService extends AntVisco implements Runnable{    
-    static Logger logger=Logger.getLogger(GnuplotService.class);
+public class AnalyzeTseriService extends AntVisco implements Runnable{    
+    static Logger logger=Logger.getLogger(AnalyzeTseriService.class);
 
     final String FILE_PROTOCOL="file";
     final String HTTP_PROTOCOL="http";
@@ -44,7 +44,7 @@ public class GnuplotService extends AntVisco implements Runnable{
     String buildFilePath;
     String antTarget;
     
-    public GnuplotService(boolean useClassLoader) 
+    public AnalyzeTseriService(boolean useClassLoader) 
 	throws Exception {
 	super();
 	    
@@ -95,7 +95,7 @@ public class GnuplotService extends AntVisco implements Runnable{
 	System.out.println(binPath);
     }
     
-    public GnuplotService() throws Exception{
+    public AnalyzeTseriService() throws Exception{
 	this(false);
 	
     }
@@ -255,7 +255,7 @@ public class GnuplotService extends AntVisco implements Runnable{
         args[0]="-DworkDir.prop="+workDir;
         args[1]="-DprojectName.prop="+projectName;
         args[2]="-Dbindir.prop="+binPath;
-        args[3]="-DGnuplotBaseName.prop="+projectName;
+        args[3]="-DAnalyzeTseriBaseName.prop="+projectName;
 	args[4]="-DoutputDestDir.prop="+outputDestDir;
         args[5]="-buildfile";
         args[6]=buildFilePath;
@@ -268,7 +268,7 @@ public class GnuplotService extends AntVisco implements Runnable{
     //--------------------------------------------------
     // Find the first non-blank line and count columns.
     // Note this can screw up if input file is not
-    // formated correctly, but then Gnuplot itself 
+    // formated correctly, but then AnalyzeTseri itself 
     // would probably not work either.
     //--------------------------------------------------
     protected int getFileDimension(String fileFullName) {
@@ -330,13 +330,13 @@ public class GnuplotService extends AntVisco implements Runnable{
      * This version runs in non-blocking mode and gets
      * the data from the SOPAC data service.
      */
-    public String[] runNonblockingGnuplot(String siteCode,
+    public String[] runNonblockingAnalyzeTseri(String siteCode,
 					 String beginDate,
 					  String endDate)
 	throws Exception {
 	try {
 	    String dataUrl=querySOPACGetURL(siteCode,beginDate,endDate);
-	    return runNonblockingGnuplot(dataUrl);
+	    return runNonblockingAnalyzeTseri(dataUrl);
 	}
 	catch (Exception ex) {
 	    ex.printStackTrace();
@@ -348,13 +348,13 @@ public class GnuplotService extends AntVisco implements Runnable{
      * This version runs in blocking mode and gets
      * the data from the SOPAC data service.
      */
-    public String[] runBlockingGnuplot(String siteCode,
+    public String[] runBlockingAnalyzeTseri(String siteCode,
 				       String beginDate,
 				       String endDate)
 	throws Exception {
 	try {
 	    String dataUrl=querySOPACGetURL(siteCode,beginDate,endDate);
-	    return runBlockingGnuplot(dataUrl);
+	    return runBlockingAnalyzeTseri(dataUrl);
 	}
 	catch (Exception ex) {
 	    ex.printStackTrace();
@@ -366,12 +366,12 @@ public class GnuplotService extends AntVisco implements Runnable{
      * This is the simplified API that uses default values.
      */ 
 
-    public String[] runBlockingGnuplot(String inputFileUrlString)
+    public String[] runBlockingAnalyzeTseri(String inputFileUrlString)
 	throws Exception {
 	System.out.println("Running blocking execution");
 	System.out.println(inputFileUrlString);
 	
-	String[] returnVals=runBlockingGnuplot(inputFileUrlString,
+	String[] returnVals=runBlockingAnalyzeTseri(inputFileUrlString,
 					      baseWorkDir,
 					      outputDestDir,
 					      projectName,
@@ -385,14 +385,14 @@ public class GnuplotService extends AntVisco implements Runnable{
     /**
      * This is the simplified API that uses default properties.
      */
-    public String[] runNonblockingGnuplot(String inputFileUrlString)
+    public String[] runNonblockingAnalyzeTseri(String inputFileUrlString)
 	throws Exception {
 	
 	System.out.println("Running non-blocking execution");
 	System.out.println(inputFileUrlString);
 
 	
-	String[] returnVals=runNonblockingGnuplot(inputFileUrlString,
+	String[] returnVals=runNonblockingAnalyzeTseri(inputFileUrlString,
 						 baseWorkDir,
 						 outputDestDir,
 						 projectName,
@@ -405,9 +405,9 @@ public class GnuplotService extends AntVisco implements Runnable{
 
     /**
      * This version is used to to hold response until 
-     * Gnuplot finished executing.  This is the full API.
+     * AnalyzeTseri finished executing.  This is the full API.
      */
-    public String[] runBlockingGnuplot(String inputFileUrlString,
+    public String[] runBlockingAnalyzeTseri(String inputFileUrlString,
 				      String baseWorkDir,
 				      String outputDestDir,
 				      String projectName,
@@ -452,7 +452,7 @@ public class GnuplotService extends AntVisco implements Runnable{
      * for programs that take longer to run.  This is the full
      * API.
      */
-    public String[] runNonblockingGnuplot(String inputFileUrlString,
+    public String[] runNonblockingAnalyzeTseri(String inputFileUrlString,
 					 String baseWorkDir,
 					 String outputDestDir,
 					 String projectName,
@@ -529,29 +529,5 @@ public class GnuplotService extends AntVisco implements Runnable{
 	String dataUrl=gsq.getResource();
 	System.out.println("GRWS data url: "+dataUrl);
 	return dataUrl;
-    }
-    
-
-    /** 
-     * This is added for testing.
-     */ 
-    public static void main(String[] args) {
-	String dataUrl="http://geoapp.ucsd.edu/xml/geodesy/reason/grws/resources/output/procCoords/4-47353-20061008100245.txt";
-	int numModelStates=2;
-	try {
-	    //Since we are running on the command line, use 
-	    //the classloader to find the property files
-	    GnuplotService rds=new GnuplotService(true);
-	    System.out.println("----------------------------------");
-	    System.out.println("Testing blocking version");
-	    rds.runBlockingGnuplot(dataUrl);
-
-	    System.out.println("----------------------------------");
-	    System.out.println("Testing non-blocking version");
-	    rds.runNonblockingGnuplot(dataUrl);
-}
-	catch (Exception ex) {
-	    ex.printStackTrace();
-	}
     }
 }

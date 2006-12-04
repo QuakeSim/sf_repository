@@ -4,7 +4,9 @@ source ./env.sh
 
 echo "Build home is $BUILD_DIR"
 
+#----------------------------------------------------------------------
 # Unpack various third party jars for tomcat, gridsphere, etc.
+#----------------------------------------------------------------------
 cd $BUILD_DIR
 source ./unpack-tars.sh
 
@@ -32,6 +34,10 @@ source ./gnuplotexec-deploy.sh
 
 cd $BUILD_DIR
 source ./stfilterexec-deploy.sh
+
+cd $BUILD_DIR
+source ./analyze-tseri-exec-deploy.sh
+
 
 # Build the generic project classes.
 cd $BUILD_DIR

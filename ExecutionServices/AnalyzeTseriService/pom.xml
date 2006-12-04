@@ -5,14 +5,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>cgl.webservices</groupId>
-    <artifactId>gnuplotexec</artifactId>
+    <artifactId>analyze-tseri-exec</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>Ant Visco execution service</name>
     <url>http://www.myorganization.org</url>
 
     <build>
-        <finalName>gnuplotexec</finalName>
+        <finalName>analyze-tseri-exec</finalName>
         <resources>
            <resource>
                <directory>src/main/resources</directory>
@@ -36,7 +36,7 @@
        <tomcat.base.dir>${tomcat.base.dir}</tomcat.base.dir>
        <bin.path>${tomcat.base.dir}/webapps/${pom.artifactId}/WEB-INF/binaryexec</bin.path>
        <user.home>${user.home}</user.home>
-       <gnuplot.service.url>${gnuplot.service.url}</gnuplot.service.url>
+       <analyze_tseri.service.url>${analyze_tseri.service.url}</analyze_tseri.service.url>
     </properties>
 
     <repositories>

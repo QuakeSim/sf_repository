@@ -25,6 +25,7 @@ export ANT_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/AntVisco
 export RDAHMM_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/RDAHMMService
 export STFILTER_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/STFilterService
 export GNUPLOT_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/GnuplotService
+export ANALYZE_TSERI_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/AnalyzeTseriService
 
 # These are needed to use the rdahmm service.
 export RDAHMM_BIN_HOME=$HOME/GEMCodes/RDAHMM2/bin/

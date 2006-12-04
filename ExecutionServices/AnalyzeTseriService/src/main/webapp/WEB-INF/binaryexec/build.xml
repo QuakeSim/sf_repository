@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
-<project name="Gnuplot" default="RunGnuplot" basedir=".">
+<project name="AnalyzeTseri" default="RunAnalyzeTseri" basedir=".">
 
 <target name="MakeWorkDir">
    <echo message="Creating ${workDir.prop}" />
    <mkdir dir="${workDir.prop}" />
 </target>
 
-<target name="ExecGnuplot">
+<target name="ExecAnalyzeTseri">
    <echo message="Test"/>
    <exec executable="${bindir.prop}/plot_plain.sh"
          dir="${workDir.prop}">
-      <arg line="${GnuplotBaseName.prop}.input"/>
+      <arg line="${AnalyzeTseriBaseName.prop}.input"/>
       <env key="PLOT_TEMPLATE_DIR" path="${bindir.prop}"/>
    </exec>
    <echo message="Moving to ${outputDestDir.prop}"/>
@@ -19,8 +19,8 @@
    </move>
 </target>
 
-<target name="RunGnuplot" depends="ExecGnuplot">
-   <echo message="Gnuplot run completed"/>
+<target name="RunAnalyzeTseri" depends="ExecAnalyzeTseri">
+   <echo message="AnalyzeTseri run completed"/>
 </target>
 </project>
 
