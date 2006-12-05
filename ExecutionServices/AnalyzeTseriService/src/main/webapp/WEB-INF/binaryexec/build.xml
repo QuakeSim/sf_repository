@@ -13,7 +13,10 @@
       <arg line="${AnalyzeTseriBaseName.prop}.input"/>
       <env key="PLOT_TEMPLATE_DIR" path="${bindir.prop}"/>
    </exec>
-   <echo message="Moving to ${outputDestDir.prop}"/>
+   <exec executable="${bindir.prop}/analyze_tseri_linux"
+         dir="${workDir.prop}">
+      <arg line="${AnalyzeTseriBaseName.prop}.drv"/>
+   </exec>
    <move todir="${outputDestDir.prop}">
      <fileset file="${workDir.prop}/*.png"/>
    </move>

@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServlet;
 //SOPAC Client Stuff
 import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
 
-
 /**
  * Despite the name, this is not a general purpose AnalyzeTseri service.  It
  * is used to make plots of the GRWS time series data.
@@ -40,11 +39,91 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
     String buildFilePath;
     String antTarget;
 
+    //The working directory, derived from baseWorkDir and projectName;
     String workDir;
-    
+
+    //The site code value, passed in when the service is invoked.
+    String siteCode;
+
+    //Useful formatting strings
+    String twospace="  ";
+    String fivespace="     ";
+    String slash="/";  
+
+    //This is the driver file and its constituent lines.
+    private String driverFileName="";
+    private String driverFileContent="";
+    private String driverFileExtension=".drv";
+
+    //These are fixed files, at least for now.
+    private String aprioriValueFile="itrf2000_final.net";
+    private String mosesParamFile="moses_test.para";
+
+    //These are file extensions.  The files will be named after the
+    //project.
+    private String mosesDataListExt=".list";
+    private String mosesSiteListExt=".site";
+    private String mosesParamFileExt=".para";
+    private String residualFileExt=".resi";
+    private String termOutFileExt=".mdl";
+    private String outputFileExt=".out";
+
+    //This is the site list file
+    private String siteListFile;
+    private String dataListFile;
+    private String estParameterFile;
+
+    //STFILTER properties
+    private String codeName="STFILTER";
+    private int resOption=1;
+    private int termOption=556;
+    private double cutoffCriterion=1.0;
+    private double estJumpSpan=1.0;
+    private WeakObsCriteria weakObsCriteria=
+	new WeakObsCriteria(30.0,30.0,50.0);
+    private OutlierCriteria outlierCriteria=
+	new OutlierCriteria(800.0,800.0,800.0);
+    private BadObsCriteria badObsCriteria=
+	new BadObsCriteria(10000.0, 10000.0, 10000.0);
+    private TimeInterval timeInterval=new TimeInterval(1998.0, 2006.800);
+
+    //This is the file that will hold the 
+    //results of the GPS station query.
+    private String sopacDataFileName="";
+    private String sopacDataFileContent="";
+    private String sopacDataFileExt=".data";
+
+    //These contain the site estimate params.  Note
+    //this needs to be generalized, as I'm assuming only 
+    //one site is used at a time.
+    StationContainer myStation;
+    StationContainer allsites;
+
+    StationParamList myStationList,allsitesList;
+    MasterParamList masterList;
+
+    /**
+     * Fun begins here.  This is the workhorse constructor.
+     */
     public AnalyzeTseriService(boolean useClassLoader) 
 	throws Exception {
 	super();
+
+	//Set up here the station list vectors.
+	masterList=new MasterParamList();
+	myStationList=new StationParamList();
+	allsitesList=new AllSitesParamList();
+
+	//Set up here the station conntainer
+ 	myStation=new MyStationContainer("LBC1");
+	myStation.setEstParamVector(myStationList.getStationParamList());
+	myStation.setMasterParamList(masterList.getStationParamList());
+	
+	//Set up the default station list.
+	allsites=new AllStationsContainer();
+	allsites.setEstParamVector(allsitesList.getStationParamList());
+	allsites.setMasterParamList(masterList.getStationParamList());
+
 	    
 	if(useClassLoader) {
 	    System.out.println("Using classloader");
@@ -80,7 +159,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
 	binPath=properties.getProperty("bin.path");
 	buildFilePath=properties.getProperty("build.file.path");
 	antTarget=properties.getProperty("ant.target");
-	a
+	aprioriValueFile=properties.getProperty("apriori.value.file");
 	
 	//Put a time stamp on the project name:
 	projectName+="-"+(new Date()).getTime();
@@ -89,6 +168,10 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
 	workDir=baseWorkDir+File.separator+projectName;
     }
     
+    /**
+     * This is an empty argument constructor required by the
+     * bean pattern.
+     */
     public AnalyzeTseriService() throws Exception{
 	this(false);
 	
@@ -97,25 +180,23 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
      * Create the site list file.  Currently we only support
      * one site and the XYZ format (ie "1   8").
      */
-    public void createSiteListFile(String contextDir)
-	throws Exception {
+    private void createSiteListFile(String siteCode) throws Exception {
 
-	String slash="/";  // This is not File.separator of the webserver
 	siteListFile=projectName+mosesSiteListExt;
-	System.out.println("Writing input file: "+contextDir+"/"+siteListFile);
+	System.out.println("Writing input file: "+workDir+"/"+siteListFile);
 	PrintWriter pw=
-	    new PrintWriter(new FileWriter(contextDir+"/"+siteListFile),true);
+	    new PrintWriter(new FileWriter(workDir+"/"+siteListFile),true);
 
 	pw.println("  1");  //Need to make this more general.
-	pw.println(getSiteCode().toUpperCase()+"_GPS");
+	pw.println(siteCode.toUpperCase()+"_GPS");
 	pw.close();
     }
 
-    public void createEstimatedParamFile(String contextDir)
-	throws Exception {
+    private void createEstimatedParamFile() throws Exception {
+
 	estParameterFile=projectName+mosesParamFileExt;
 	PrintWriter pw=
-	    new PrintWriter(new FileWriter(contextDir+"/"+estParameterFile),true);
+	    new PrintWriter(new FileWriter(workDir+"/"+estParameterFile),true);
 	if(myStation.printContents()!=null) {
 	    pw.println("  2");
 	    pw.println(allsites.printContents());
@@ -128,33 +209,29 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
 	pw.close();
     }
 
-    public void createDataListFile(String contextDir)
+    private void createDataListFile(String siteCode,
+				    String dataFileName) 
 	throws Exception {
 
-	String slash="/";  // This is not File.separator of the webserver
 	dataListFile=projectName+mosesDataListExt;
-	System.out.println("Writing input file: "+contextDir+"/"+dataListFile);
+	System.out.println("Writing input file: "+workDir+"/"+dataListFile);
 	PrintWriter pw=
-	    new PrintWriter(new FileWriter(contextDir+"/"+dataListFile),true);
+	    new PrintWriter(new FileWriter(workDir+"/"+dataListFile),true);
 
 	pw.println(" 1   8");  //Need to make this more general.
-	pw.println(getSiteCode()+sopacDataFileExt);
+	//	pw.println(siteCode+sopacDataFileExt);
+	pw.println(dataFileName);
 	pw.close();
     }
 
     /**
      * Create the stfilter driver file.
      */
-    public String createDriverFile(String contextDir)
-	throws Exception {
-
-	String fivespace="     ";
-	String slash="/";  // This is not File.separator of the webserver
+    private String createDriverFile() throws Exception {
 	driverFileName=projectName+driverFileExtension;
-	System.out.println("Writing input file: "+contextDir+"/"+driverFileName);
 	PrintWriter pw=
-	    new PrintWriter(new FileWriter(contextDir+"/"+driverFileName),true);
-	pw.println(twospace+"apriori value file:"+twospace+globalDataDir+slash+aprioriValueFile);
+	    new PrintWriter(new FileWriter(workDir+"/"+driverFileName),true);
+	pw.println(twospace+"apriori value file:"+twospace+aprioriValueFile);
 	pw.println(twospace+"input file:"+twospace+workDir+slash+projectName+mosesDataListExt);
 	pw.println(twospace+"sit_list file:"+twospace+workDir+slash+projectName+mosesSiteListExt);
 	pw.println(twospace+"est_parameter file:"+twospace+workDir+slash+projectName+mosesParamFileExt);
@@ -413,8 +490,8 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
      * the data from the SOPAC data service.
      */
     public String[] runNonblockingAnalyzeTseri(String siteCode,
-					 String beginDate,
-					  String endDate)
+					       String beginDate,
+					       String endDate)
 	throws Exception {
 	try {
 	    String dataUrl=querySOPACGetURL(siteCode,beginDate,endDate);
@@ -431,12 +508,12 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
      * the data from the SOPAC data service.
      */
     public String[] runBlockingAnalyzeTseri(String siteCode,
-				       String beginDate,
-				       String endDate)
+					    String beginDate,
+					    String endDate)
 	throws Exception {
 	try {
 	    String dataUrl=querySOPACGetURL(siteCode,beginDate,endDate);
-	    return runBlockingAnalyzeTseri(dataUrl);
+	    return runBlockingAnalyzeTseri(siteCode,dataUrl);
 	}
 	catch (Exception ex) {
 	    ex.printStackTrace();
@@ -448,18 +525,20 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
      * This is the simplified API that uses default values.
      */ 
 
-    public String[] runBlockingAnalyzeTseri(String inputFileUrlString)
+    public String[] runBlockingAnalyzeTseri(String siteCode,
+					    String inputFileUrlString)
 	throws Exception {
 	System.out.println("Running blocking execution");
 	System.out.println(inputFileUrlString);
 	
-	String[] returnVals=runBlockingAnalyzeTseri(inputFileUrlString,
-					      baseWorkDir,
-					      outputDestDir,
-					      projectName,
-					      binPath,
-					      buildFilePath,
-					      antTarget);
+	String[] returnVals=runBlockingAnalyzeTseri(siteCode,
+						    inputFileUrlString,
+						    baseWorkDir,
+						    outputDestDir,
+						    projectName,
+						    binPath,
+						    buildFilePath,
+						    antTarget);
 	return returnVals;
     }
 
@@ -474,13 +553,14 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
 	System.out.println(inputFileUrlString);
 
 	
-	String[] returnVals=runNonblockingAnalyzeTseri(inputFileUrlString,
-						 baseWorkDir,
-						 outputDestDir,
-						 projectName,
-						 binPath,
-						 buildFilePath,
-						 antTarget);
+	String[] returnVals=runNonblockingAnalyzeTseri(siteCode,
+						       inputFileUrlString,
+						       baseWorkDir,
+						       outputDestDir,
+						       projectName,
+						       binPath,
+						       buildFilePath,
+						       antTarget);
 	return returnVals;
     }
 
@@ -489,13 +569,15 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
      * This version is used to to hold response until 
      * AnalyzeTseri finished executing.  This is the full API.
      */
-    public String[] runBlockingAnalyzeTseri(String inputFileUrlString,
-				      String baseWorkDir,
-				      String outputDestDir,
-				      String projectName,
-				      String binPath,
-				      String buildFilePath,
-				      String antTarget) throws Exception {
+    public String[] runBlockingAnalyzeTseri(String siteCode,
+					    String inputFileUrlString,
+					    String baseWorkDir,
+					    String outputDestDir,
+					    String projectName,
+					    String binPath,
+					    String buildFilePath,
+					    String antTarget) 
+	throws Exception {
 	
 	
 	//Set up the work directory
@@ -510,6 +592,14 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
  	//Filter the file
  	String localFileFiltered=workDir+File.separator+projectName+".input";
  	filterResults(localFile, localFileFiltered, -1, -1);
+
+	//Make the input files.
+	createSiteListFile(siteCode);
+	createEstimatedParamFile();
+	createDataListFile(siteCode,localFileFiltered);
+	createDriverFile();
+
+
 	
 // 	//Get the dimensions and number of observations.
 // 	int ndim=getFileDimension(localFileFiltered);
@@ -534,13 +624,15 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
      * for programs that take longer to run.  This is the full
      * API.
      */
-    public String[] runNonblockingAnalyzeTseri(String inputFileUrlString,
-					 String baseWorkDir,
-					 String outputDestDir,
-					 String projectName,
-					 String binPath,
-					 String buildFilePath,
-					 String antTarget) throws Exception {
+    public String[] runNonblockingAnalyzeTseri(String siteCode,
+					       String inputFileUrlString,
+					       String baseWorkDir,
+					       String outputDestDir,
+					       String projectName,
+					       String binPath,
+					       String buildFilePath,
+					       String antTarget) 
+	throws Exception {
 	
 	//	String workDir=baseWorkDir+File.separator+projectName;
 
@@ -553,11 +645,14 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
 
 	//Filter the file
 	String localFileFiltered=workDir+File.separator+projectName+".input";
-	filterResults(localFile, localFileFiltered, 2, 3);
-	
-	//Get the dimensions and number of observations.
-	int ndim=getFileDimension(localFileFiltered);
-	int nobsv=getLineCount(localFileFiltered);
+	filterResults(localFile, localFileFiltered, -1, -1);
+
+
+	//Make the input files.
+	createSiteListFile(siteCode);
+	createEstimatedParamFile();
+	createDataListFile(siteCode,localFileFiltered);
+	createDriverFile();
 
 	String[] args=setUpArgArray(localFileFiltered,
 				    workDir,
