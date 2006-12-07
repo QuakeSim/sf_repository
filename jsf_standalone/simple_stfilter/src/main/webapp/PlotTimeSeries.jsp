@@ -12,7 +12,7 @@
         <br/>
 	<h:graphicImage url="#{stfilterBean.localImageFileZ}"/>
      <p/>
-     <h:commandLink id="link1" action="back">
+     <h:commandLink id="link1" action="back-to-main">
        <h:outputText id="linkText" value="#{stfilterBean.codeName} Main Menu"/>
      </h:commandLink>
     </body>

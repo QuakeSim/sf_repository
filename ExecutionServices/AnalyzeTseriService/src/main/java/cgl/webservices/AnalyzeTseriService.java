@@ -102,6 +102,9 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
     StationParamList myStationList,allsitesList;
     MasterParamList masterList;
 
+    //    String stamp=(new Date()).getTime()+"";
+    String stamp="TEST";
+
     /**
      * Fun begins here.  This is the workhorse constructor.
      */
@@ -162,7 +165,8 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
 	aprioriValueFile=properties.getProperty("apriori.value.file");
 	
 	//Put a time stamp on the project name:
-	projectName+="-"+(new Date()).getTime();
+	projectName+="-"+stamp;
+
 	
 	outputDestDir=baseDestDir+"/"+projectName;
 	workDir=baseWorkDir+File.separator+projectName;
@@ -174,8 +178,8 @@ public class AnalyzeTseriService extends AntVisco implements Runnable{
      */
     public AnalyzeTseriService() throws Exception{
 	this(false);
-	
     }
+
     /** 
      * Create the site list file.  Currently we only support
      * one site and the XYZ format (ie "1   8").

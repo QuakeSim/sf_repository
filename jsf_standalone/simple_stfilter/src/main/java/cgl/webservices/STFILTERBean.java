@@ -18,8 +18,10 @@ import javax.portlet.PortletContext;
 //QuakeSim Web Service clients
 import WebFlowClient.cm.*;
 import WebFlowClient.fsws.*;
-//import cgl.webclients.*;
 import cgl.webservices.*;
+
+//GPS Metadata Stuff
+import cgl.sensorgrid.sopac.gps.GetStationsRSS;
 
 //SOPAC Client Stuff
 import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
@@ -69,6 +71,17 @@ public class STFILTERBean extends GenericSopacBean {
 	allsites=new AllStationsContainer();
 	allsites.setEstParamVector(allsitesList.getStationParamList());
 	allsites.setMasterParamList(masterList.getStationParamList());
+    }
+
+    /**
+     * These are methods for 
+     */  
+    public void setUpGPSNetwork() {
+	GetStationRSS RSSBeanID=new GetSTationRSS();
+	Vector networkNames=RSSBeanID.networkNames();
+	String[] center_xy=RSSBeanID.getMapCenter();
+	mapCenterX=center_xy[0];
+	mapCenterY=center_xy[1];
     }
 
     /**
@@ -226,23 +239,6 @@ public class STFILTERBean extends GenericSopacBean {
 	return results;
     }
 
-    
-//     public String launchSTFILTER() throws Exception {
-// 	//Do this here.
-// 	setParameterValues();
-
-// 	String sopacDataFileName=getSiteCode()+sopacDataFileExt;
-// 	String cfullName=codeName+"/"+projectName;
-// 	String contextDir=cm.getCurrentProperty(cfullName,"Directory");
-
-// 	createDriverFile(contextDir);
-// 	createSopacDataFile(contextDir,sopacDataFileName,sopacDataFileContent);
-// 	createSiteListFile(contextDir);
-// 	createDataListFile(contextDir);
-// 	createEstimatedParamFile(contextDir);
-// 	String value=executeSTFILTER(contextDir,sopacDataFileName,cfullName);
-// 	return "stfilter-launched";
-//     }
 
     public String populateAndPlot() throws Exception {
 	populateProject();
@@ -385,70 +381,6 @@ public class STFILTERBean extends GenericSopacBean {
     }
 
 
-//     public String executeSTFILTER(String contextDir,
-// 				String sopacDataFileName,
-// 				String cfullName) 
-// 	throws Exception{
-	
-// 	System.out.println("FileService URL:"+fileServiceUrl);
-// 	System.out.println("AntService URL:"+gnuplotServiceUrl);
-	
-
-// 	//--------------------------------------------------
-// 	// Set up the Ant Service and make the directory
-// 	//--------------------------------------------------
-// 	AntVisco ant=new AntViscoServiceLocator().getAntVisco(new URL(gnuplotServiceUrl));
-// 	String bf_loc=binPath+"/"+"build.xml";
-// 	String[] args0=new String[4];
-//         args0[0]="-DworkDir.prop="+workDir;
-//         args0[1]="-buildfile";
-//         args0[2]=bf_loc;
-//         args0[3]="MakeWorkDir";
-	
-//         ant.setArgs(args0);
-//         ant.run();
-	
-// 	//--------------------------------------------------
-// 	// Set up the file service and upload the driver,
-// 	// site list, and gps data files.
-// 	//--------------------------------------------------
-// 	FSClientStub fsclient=new FSClientStub();
-// 	String sopacDestfile=workDir+"/"+sopacDataFileName; 
-// 	String driverDestfile=workDir+"/"+driverFileName; 
-// 	String siteListDestfile=workDir+"/"+siteListFile;
-// 	String dataListDestfile=workDir+"/"+dataListFile;
-// 	String estParamDestfile=workDir+"/"+estParameterFile;
-
-// 	try {
-// 	    fsclient.setBindingUrl(fileServiceUrl);    	
-// 	    fsclient.uploadFile(contextDir+"/"+sopacDataFileName,sopacDestfile);
-// 	    fsclient.uploadFile(contextDir+"/"+siteListFile,siteListDestfile);
-// 	    fsclient.uploadFile(contextDir+"/"+dataListFile,dataListDestfile);
-// 	    fsclient.uploadFile(contextDir+"/"+driverFileName,driverDestfile);
-// 	    fsclient.uploadFile(contextDir+"/"+estParameterFile,estParamDestfile);
-// 	}
-// 	catch(Exception ex) {
-// 	    ex.printStackTrace();
-// 	}
-
-// 	//--------------------------------------------------
-// 	// Run the code.
-// 	//--------------------------------------------------	
-	
-// 	String[] args=new String[7];
-//         args[0]="-DworkDir.prop="+workDir;
-//         args[1]="-DprojectName.prop="+projectName;
-//         args[2]="-Dbindir.prop="+binPath;
-//         args[3]="-DSTFILTERBaseName.prop="+projectName;
-//         args[4]="-buildfile";
-//         args[5]=bf_loc;
-//         args[6]="RunSTFILTER";
-	
-//         ant.setArgs(args);
-//         ant.execute();
-	
-// 	return "stfilter-executing";
-//     }
 
     /**
      * This is similar to executeSTFILTER but it must take place on
@@ -581,6 +513,11 @@ public class STFILTERBean extends GenericSopacBean {
     AnalyzeTseriService analyzeTseriService;
     GnuplotService gnuplotService;
 
+    //Stuff for creating the maps with default values.
+    String mapCenterX="33.036";
+    String mapCenterY="-117.24";
+	
+    
 
     //--------------------------------------------------
     // These are accessor methods.
@@ -728,6 +665,22 @@ public class STFILTERBean extends GenericSopacBean {
     
     public void setLocalImageFileZ(String localImageFileZ){
 	this.localImageFileZ=localImageFileZ;
+    }
+
+    public void setMapCenterX(String mapCenterX){
+	this.mapCenterX=mapCenterX;
+    }
+
+    public String getMapCenterX(String mapCenterX){
+	return mapCenterX;
+    }
+
+    public void setMapCenterY(String mapCenterY){
+	this.mapCenterY=mapCenterY;
+    }
+
+    public String getMapCenterY(String mapCenterY){
+	return mapCenterY;
     }
 
 }

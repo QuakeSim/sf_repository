@@ -8,11 +8,23 @@
 
 <target name="ExecAnalyzeTseri">
    <echo message="Test"/>
+  <!--
    <exec executable="${bindir.prop}/plot_plain.sh"
          dir="${workDir.prop}">
       <arg line="${AnalyzeTseriBaseName.prop}.input"/>
       <env key="PLOT_TEMPLATE_DIR" path="${bindir.prop}"/>
    </exec>
+   -->
+   <exec executable="${bindir.prop}/plot_mep.sh"
+         dir="${workDir.prop}">
+      <arg line="${AnalyzeTseriBaseName.prop}.input"/>
+      <env key="PLOT_TEMPLATE_DIR" path="${bindir.prop}"/>
+      <env key="INPUTFILE" path="${workDir.prop}/${AnalyzeTseriBaseName.prop}.input"/>
+      <env key="OUTPUT_X" path="${workDir.prop}/${AnalyzeTseriBaseName.prop}.input.xyz.X.png"/>
+      <env key="OUTPUT_Y" path="${workDir.prop}/${AnalyzeTseriBaseName.prop}.input.xyz.Y.png"/>
+      <env key="OUTPUT_Z" path="${workDir.prop}/${AnalyzeTseriBaseName.prop}.input.xyz.Z.png"/>
+   </exec>
+
    <exec executable="${bindir.prop}/analyze_tseri_linux"
          dir="${workDir.prop}">
       <arg line="${AnalyzeTseriBaseName.prop}.drv"/>

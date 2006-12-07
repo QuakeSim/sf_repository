@@ -10,12 +10,12 @@ cgl.sensorgrid.gui.google.MapBean, java.io.*"%>
 Vector networkNames = RSSBeanID.networkNames();
 
 //Vector stationsVec = RSSBeanID.getAllStationsVec();
-String mapcenter_x = "33.036";
-String mapcenter_y = "-117.24";
+String mapcenter_x = "33.6";
+String mapcenter_y = "-117.06";
 
-String [] center_xy = RSSBeanID.getMapCenter();
-mapcenter_x = center_xy[0];
-mapcenter_y = center_xy[1];
+//String [] center_xy = RSSBeanID.getMapCenter();
+//mapcenter_x = center_xy[0];
+//mapcenter_y = center_xy[1];
 %>
 <html>
   <head>
@@ -25,26 +25,23 @@ mapcenter_y = center_xy[1];
   <body>
    
    <!--This is an outer bounding table to make columns.-->
-   <table>  
+   <table border="1">  
    <tr>
    <td>
     <table>
       <tr>
-        <td width="650" colspan="2">
-          <b><font size="4" face="Verdana">SOPAC Real Time GPS Networks</font></b><p>
-            <font face="Verdana" size="2">Click on a station symbol for more
+        <td width="550" colspan="2">
+          <b><font size="4">SOPAC Real Time GPS Networks</font></b><p>
+            <font size="2">Click on a station symbol for more
               information on a particular station.  Then click the "Query 
               Selected Station" link below the map.
              </font><p></p></td>
             </tr>
       <tr>
-        <td width="600">
-          <div id="map" style="width: 600px; height: 600px">      </div>
+        <td>
+          <div id="map" style="width: 500px; height: 500px">      </div>
         </td>
-        <td valign="top" width="50">
-          <div id="networksDiv"> Network Names and Colors     </div>
-        </td>
-      </tr>
+       </tr>
     </table>
  
  
@@ -169,9 +166,9 @@ mapcenter_y = center_xy[1];
             var col;
             for (col = 0; col < array [row] . length; ++ col){
               if(col==0)
-              html = html + "  <td>" + array [row] [col] + "</td>";
+              html = html + "  " + array [row] [col] + " ";
               if(col==1)
-              html = html + "  <td align='center'><img border=0 src=" + array [row] [col] + "></td>";
+              html = html + "  <img border=0 src=" + array [row] [col] + "/>";
 
             }
             html = html + " </tr>";
@@ -184,8 +181,8 @@ mapcenter_y = center_xy[1];
       </script>
 
       </td>
-      <td>
-
+      <td valign="top">
+      <b><font size="4">Query GPS archive and run ST Filter </font></b>
       <f:view>
        <h:form id="form1">
        <h:panelGrid columns="2">

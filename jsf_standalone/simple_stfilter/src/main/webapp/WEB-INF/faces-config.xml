@@ -45,4 +45,11 @@
 			<to-view-id>/PlotTimeSeries.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>	
+	<navigation-rule>
+		<from-view-id>/PlotTimeSeries.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back-to-main</from-outcome>
+			<to-view-id>/allstations.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>	
 </faces-config>
