@@ -62,11 +62,6 @@
     </noscript>
 
     <script type="text/javascript">
-      //<![CDATA[
-      // Check to see if this browser can run the Google API
-
-      //    if (GBrowserIsCompatible()) {
-        // Create a base icon for all of our markers
         var req;
         var baseIcon = new GIcon();
         baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
@@ -154,13 +149,9 @@
               stations [<%=i%>] [1] = "<%=lat%>";
               stations [<%=i%>] [2] = "<%=lon%>";
 
-          		var html = "<b>Station Name= </b>" + "<%=name%>" + "<br><b>Lat=</b>" + "<%=lat%>" + "<br><b>Lon= </b>" + "<%=lon%>" + "<br><b>Network= </b>" + "<%=networkName%>";
+              var html = "<b>Station Name= </b>" + "<%=name%>" + "<br><b>Lat=</b>" + "<%=lat%>" + "<br><b>Lon= </b>" + "<%=lon%>" + "<br><b>Network= </b>" + "<%=networkName%>";
 
-							var infoTabs = [
-							new GInfoWindowTab("Current X", '<%=x_tabcontent%>'),
-							new GInfoWindowTab("Current Y", '<%=y_tabcontent%>'),
-							new GInfoWindowTab("Current Z", '<%=z_tabcontent%>')
-							];  
+	     var infoTabs = [new GInfoWindowTab("Current X", '<%=x_tabcontent%>'),new GInfoWindowTab("Current Y", '<%=y_tabcontent%>'),new GInfoWindowTab("Current Z", '<%=z_tabcontent%>')];  
 
               Markers[<%=i%>] = createTabsInfoMarker(new GPoint("<%=lon%>", "<%=lat%>") , infoTabs , icon);
 

@@ -260,7 +260,14 @@
              <version>1.0</version>
         </dependency>
 
-
+        <!--
+        Sensor Grid jar dependency.
+        -->
+        <dependency>
+             <groupId>cgl</groupId>
+             <artifactId>sensorgrid</artifactId>
+             <version>1.0</version>
+        </dependency>
     </dependencies>
 
 

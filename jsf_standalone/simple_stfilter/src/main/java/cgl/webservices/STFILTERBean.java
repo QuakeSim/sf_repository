@@ -77,11 +77,12 @@ public class STFILTERBean extends GenericSopacBean {
      * These are methods for 
      */  
     public void setUpGPSNetwork() {
-	GetStationRSS RSSBeanID=new GetSTationRSS();
+	GetStationsRSS RSSBeanID=new GetStationsRSS();
 	Vector networkNames=RSSBeanID.networkNames();
 	String[] center_xy=RSSBeanID.getMapCenter();
 	mapCenterX=center_xy[0];
 	mapCenterY=center_xy[1];
+	System.out.println("Map center:"+center_xy[0]+" "+center_xy[1]);
     }
 
     /**
@@ -671,7 +672,7 @@ public class STFILTERBean extends GenericSopacBean {
 	this.mapCenterX=mapCenterX;
     }
 
-    public String getMapCenterX(String mapCenterX){
+    public String getMapCenterX(){
 	return mapCenterX;
     }
 
@@ -679,7 +680,7 @@ public class STFILTERBean extends GenericSopacBean {
 	this.mapCenterY=mapCenterY;
     }
 
-    public String getMapCenterY(String mapCenterY){
+    public String getMapCenterY(){
 	return mapCenterY;
     }
 
