@@ -58,18 +58,54 @@ public class STFILTERBean extends GenericSopacBean {
     public STFILTERBean(){   
 	super();
 	setSiteCode("LBC1");  //Use this for testing.
+	setUpGPSNetwork();
+	setUpOverlayNetwork();
+	System.out.println("Constructor completed");
     }
 
     /**
      * These are methods for 
      */  
     public void setUpGPSNetwork() {
+	System.out.println("Setting up GPS network stuff");
 	RSSBeanID=new GetStationsRSS();
 	networkNames=RSSBeanID.networkNames();
 	String[] center_xy=RSSBeanID.getMapCenter();
 	mapCenterX=center_xy[0];
 	mapCenterY=center_xy[1];
-	System.out.println("Map center:"+center_xy[0]+" "+center_xy[1]);
+    }
+
+    public void setUpOverlayNetwork() {
+	System.out.println("Setting up overlay");
+	networkBeanArray=new GPSNetworkInfoBean[networkNames.size()];
+	for(int j=0;j<networkNames.size();j++) {
+	    String networkName=(String)networkNames.get(j);
+	    networkBeanArray[j]=new GPSNetworkInfoBean();
+	    networkBeanArray[j].setNetworkName(networkName);
+	    networkBeanArray[j].assignNetworkIconUrl(getColor(j));
+
+	    //Translate stationsVec into something JSF can handle
+	    stationsVec=RSSBeanID.getStationsVec(networkName);
+	    GPSStationBean[] stationBeanArray=
+		new GPSStationBean[stationsVec.size()];
+	    for(int i=0;i<stationsVec.size();i++) {
+		String stationName=(String)stationsVec.get(i);
+		double lon=Double.parseDouble(RSSBeanID.getStationInfo(stationName)[0]);
+		double lat=Double.parseDouble(RSSBeanID.getStationInfo(stationName)[1]);
+		stationBeanArray[i]=new GPSStationBean();
+		stationBeanArray[i].setParentNetwork(networkName);
+		stationBeanArray[i].setStationName(stationName);
+		stationBeanArray[i].setStationLat(lat);
+		stationBeanArray[i].setStationLon(lon);
+	    }
+	    networkBeanArray[j].setStationsBeanArray(stationBeanArray);
+	}
+    }
+
+    private String getColor(int j) {
+	int k=0;
+	if(j>colors.length) return colors[k];
+	else return colors[j];
     }
 
     public String loadTabTemplateFile() throws Exception{
@@ -112,7 +148,6 @@ public class STFILTERBean extends GenericSopacBean {
      */
     public String runGnuplotAndPlot() throws Exception {
 	runBlockingGnuplot();
-	setUpGPSNetwork();
 	constructPlotHtml(loadTabTemplateFile());
 	return "plot-time-series";
     }
@@ -269,10 +304,23 @@ public class STFILTERBean extends GenericSopacBean {
     String[] tabContent=new String[3];
     GetStationsRSS RSSBeanID;
     Vector networkNames, stationsVec;
+    GPSNetworkInfoBean[] networkBeanArray;
+    int networkBeanArraySize;
+    
+    //Needed for GPS map display
+    String[] colors={"red","green","blue","black","white","yellow","purple","brown"};
 
     //--------------------------------------------------
     // These are accessor methods.
     //--------------------------------------------------
+    public GPSNetworkInfoBean[] getNetworkBeanArray() {
+	return networkBeanArray;
+    }
+    
+    public int getNetworkBeanArraySize() {
+	return networkBeanArray.length;
+    }
+
     public String getSiteCodeLon() {
 	return siteCodeLon;
     }

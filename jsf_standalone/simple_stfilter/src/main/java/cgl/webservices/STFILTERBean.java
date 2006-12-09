@@ -88,56 +88,10 @@ public class STFILTERBean extends GenericSopacBean {
     }
 
     public String loadTabTemplateFile() {
-        //Used to load the tabcontent.htm file.  This is a template
-	//for the display pages.
-	str_tabcontent = new String();
-	java.io.BufferedInputStream bis=null;
-	try{
-	    bis =new java.io.BufferedInputStream(new java.io.FileInputStream(config.getServletContext().getRealPath("form/tabcontent.htm")));
-	    BufferedReader br = new BufferedReader(new InputStreamReader(bis));
-	    String line = null;
-	    while ((line = br.readLine()) != null) {
-		str_tabcontent=str_tabcontent+line;
-	    }
-	}
-	catch(Exception e){
-	    e.printStackTrace();
-	}
-	finally {
-	    if (bis != null)bis.close();
-	}
+	String str_tabcontent="";
 	return str_tabcontent;
     }
 
-    public String constructPlotHtml(String str_tabcontent) {	
-	for (int i = 0; i < stationsVec.size(); i++) {
-	    String name = (String)stationsVec.get(i);
-	    String lat = RSSBeanID.getStationInfo(name)[0];
-	    String lon = RSSBeanID.getStationInfo(name)[1];
-            
-	    tabContentX=new String(str_tabcontent);
-	    tabContentY=new String(str_tabcontent);
-	    tabContentZ=new String(str_tabcontent);
-
-	    tabContentX=tabContentX.replace("{!name!}",name);
-	    tabContentX=tabContentX.replace("{!networkName!}",networkName);
-	    tabContentX=tabContentX.replace("{!lon!}",lon);
-	    tabContentX=tabContentX.replace("{!lat!}",lat);
-	    tabContentX=tabContentX.replace("{!output_png!}","http://darya.ucs.indiana.edu:23080/sensorgrid/rdahmm/plain/" + name + "/" + name + ".xyz.xyz.X.png");
-	    tabContentY=tabContentY.replace("{!name!}",name);
-	    tabContentY=tabContentY.replace("{!networkName!}",networkName);
-	    tabContentY=tabContentY.replace("{!lon!}",lon);
-	    tabContentY=tabContentY.replace("{!lat!}",lat);
-	    tabContentY=tabContentY.replace("{!output_png!}","http://darya.ucs.indiana.edu:23080/sensorgrid/rdahmm/plain/" + name + "/" + name + ".xyz.xyz.Y.png");
-	    tabContentZ=tabContentZ.replace("{!name!}",name);
-	    tabContentZ=tabContentZ.replace("{!networkName!}",networkName);
-	    tabContentZ=tabContentZ.replace("{!lon!}",lon);
-	    tabContentZ=tabContentZ.replace("{!lat!}",lat);
-	    tabContentZ=tabContentZ.replace("{!output_png!}","http://darya.ucs.indiana.edu:23080/sensorgrid/rdahmm/plain/" + name + "/" + name + ".xyz.xyz.Z.png");
-	} 
-	
-    }
-    
     /**
      * Method that is backed to a submit button of a form.
      */
