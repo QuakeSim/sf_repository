@@ -198,7 +198,7 @@ String mapcenter_y = "-117.06";
 
        </h:panelGrid>
 
-       <h:commandLink action="#{stfilterBean.runBlockingAnalyzeTseri}">
+       <h:commandLink action="#{stfilterBean.runGnuplotAndPlot}">
             <h:outputText value="Query Selected Station"/>
        </h:commandLink>
        </h:form>

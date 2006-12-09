@@ -36,6 +36,9 @@ import java.io.File;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.io.InputStreamReader;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -54,190 +57,64 @@ public class STFILTERBean extends GenericSopacBean {
      */
     public STFILTERBean(){   
 	super();
-	cm=getContextManagerImp();
 	setSiteCode("LBC1");  //Use this for testing.
-	
-	//Set up here the station list vectors.
-	masterList=new MasterParamList();
-	myStationList=new StationParamList();
-	allsitesList=new AllSitesParamList();
-
-	//Set up here the station conntainer
- 	myStation=new MyStationContainer("LBC1");
-	myStation.setEstParamVector(myStationList.getStationParamList());
-	myStation.setMasterParamList(masterList.getStationParamList());
-	
-	//Set up the default station list.
-	allsites=new AllStationsContainer();
-	allsites.setEstParamVector(allsitesList.getStationParamList());
-	allsites.setMasterParamList(masterList.getStationParamList());
-	
-	System.out.println("Stfitlerbean initialized");
     }
 
     /**
      * These are methods for 
      */  
     public void setUpGPSNetwork() {
-	GetStationsRSS RSSBeanID=new GetStationsRSS();
-	Vector networkNames=RSSBeanID.networkNames();
+	RSSBeanID=new GetStationsRSS();
+	networkNames=RSSBeanID.networkNames();
 	String[] center_xy=RSSBeanID.getMapCenter();
 	mapCenterX=center_xy[0];
 	mapCenterY=center_xy[1];
 	System.out.println("Map center:"+center_xy[0]+" "+center_xy[1]);
     }
 
-    public String loadTabTemplateFile() {
-        //Used to load the tabcontent.htm file.  This is a template
-	//for the display pages.
-	str_tabcontent = new String();
-	java.io.BufferedInputStream bis=null;
-	try{
-	    bis =new java.io.BufferedInputStream(new java.io.FileInputStream(config.getServletContext().getRealPath("form/tabcontent.htm")));
-	    BufferedReader br = new BufferedReader(new InputStreamReader(bis));
-	    String line = null;
-	    while ((line = br.readLine()) != null) {
-		str_tabcontent=str_tabcontent+line;
-	    }
-	}
-	catch(Exception e){
-	    e.printStackTrace();
-	}
-	finally {
-	    if (bis != null)bis.close();
-	}
+    public String loadTabTemplateFile() throws Exception{
+	
+	String str_tabcontent="<div page=\"1\" label=\"Current\" class=\"active\" style=\"font-family: Verdana,Geneva,Arial,Helvetica,sans-serif; font-size: 11px;\"> <div style=\"border-bottom: 1px solid rgb(204, 204, 204); width: 450px; padding-bottom: 2px; font-weight: bold;\"> <span class=\"style3\">Station Name: <span class=\"style1\">{!name!}</span> | Network:<span class=\"style1\">{!networkName!}</span> | Lat: <span class=\"style1\">{!lat!}</span> | Lon: <span class=\"style1\">{!lon!}</span></span> </div> <img src=\"{!output_png!}\" height=\"335\" width=\"447\"> </div>";
+	
 	return str_tabcontent;
     }
-
-    public String constructPlotHtml(String str_tabcontent) {	
-	for (int i = 0; i < stationsVec.size(); i++) {
-	    String name = (String)stationsVec.get(i);
-	    String lat = RSSBeanID.getStationInfo(name)[0];
-	    String lon = RSSBeanID.getStationInfo(name)[1];
-            
-	    tabContentX=new String(str_tabcontent);
-	    tabContentY=new String(str_tabcontent);
-	    tabContentZ=new String(str_tabcontent);
-
-	    tabContentX=tabContentX.replace("{!name!}",name);
-	    tabContentX=tabContentX.replace("{!networkName!}",networkName);
-	    tabContentX=tabContentX.replace("{!lon!}",lon);
-	    tabContentX=tabContentX.replace("{!lat!}",lat);
-	    tabContentX=tabContentX.replace("{!output_png!}","http://darya.ucs.indiana.edu:23080/sensorgrid/rdahmm/plain/" + name + "/" + name + ".xyz.xyz.X.png");
-	    tabContentY=tabContentY.replace("{!name!}",name);
-	    tabContentY=tabContentY.replace("{!networkName!}",networkName);
-	    tabContentY=tabContentY.replace("{!lon!}",lon);
-	    tabContentY=tabContentY.replace("{!lat!}",lat);
-	    tabContentY=tabContentY.replace("{!output_png!}","http://darya.ucs.indiana.edu:23080/sensorgrid/rdahmm/plain/" + name + "/" + name + ".xyz.xyz.Y.png");
-	    tabContentZ=tabContentZ.replace("{!name!}",name);
-	    tabContentZ=tabContentZ.replace("{!networkName!}",networkName);
-	    tabContentZ=tabContentZ.replace("{!lon!}",lon);
-	    tabContentZ=tabContentZ.replace("{!lat!}",lat);
-	    tabContentZ=tabContentZ.replace("{!output_png!}","http://darya.ucs.indiana.edu:23080/sensorgrid/rdahmm/plain/" + name + "/" + name + ".xyz.xyz.Z.png");
-	} 
+    
+    //Note this method assumes tabContent and siteCode have been obtained
+    public void constructPlotHtml(String str_tabcontent) {
+	stationsVec=RSSBeanID.getAllStationsVec();
 	
+	siteCodeLat = RSSBeanID.getStationInfo(siteCode)[0];
+	siteCodeLon = RSSBeanID.getStationInfo(siteCode)[1];
+	
+	tabContent[0]=new String(str_tabcontent);
+	tabContent[1]=new String(str_tabcontent);
+	tabContent[2]=new String(str_tabcontent);
+	
+	tabContent[0]=tabContent[0].replace("{!name!}",siteCode);
+	tabContent[0]=tabContent[0].replace("{!networkName!}","Need to Fix");
+	tabContent[0]=tabContent[0].replace("{!lon!}",siteCodeLon);
+	tabContent[0]=tabContent[0].replace("{!lat!}",siteCodeLat);
+	tabContent[0]=tabContent[0].replace("{!output_png!}",localImageFileX);
+	tabContent[1]=tabContent[1].replace("{!name!}",siteCode);
+	tabContent[1]=tabContent[1].replace("{!networkName!}","Need to Fix");
+	tabContent[1]=tabContent[1].replace("{!lon!}",siteCodeLon);
+	tabContent[1]=tabContent[1].replace("{!lat!}",siteCodeLat);
+	tabContent[1]=tabContent[1].replace("{!output_png!}",localImageFileY);
+	tabContent[2]=tabContent[2].replace("{!name!}",siteCode);
+	tabContent[2]=tabContent[2].replace("{!networkName!}","Need to Fix");
+	tabContent[2]=tabContent[2].replace("{!lon!}",siteCodeLon);
+	tabContent[2]=tabContent[2].replace("{!lat!}",siteCodeLat);
+	tabContent[2]=tabContent[2].replace("{!output_png!}",localImageFileZ);
     }
     
     /**
-     * Method that is backed to a submit button of a form.
+     * This is a method suitable for calling through JSF EL 
      */
-    public String newProject() throws Exception{
-	if(!isInitialized) {
-	    initWebServices();
-	}
-	return ("new-project-created");
-    }
-    
-    public String paramsThenTextArea() throws Exception {
-	setParameterValues();
-	return "parameters-to-textfield";
-    }
-
-    public String paramsThenDB() throws Exception {
-	//	setParameterValues();
-	createNewProject();
-	return "parameters-to-database";
-    }
-
-    public String paramsThenMap() throws Exception {
-	//	setParameterValues();
-	createNewProject();
-	return "parameters-to-googlemap";
-    }
-
-    public String createNewProject() throws Exception {
-	System.out.println("Creating new project");
-	System.out.println("Project name is "+projectName);
-	
-	//Store the request values persistently
-	contextName=codeName+"/"+projectName;
-	String hostName=getHostName();
-	cm.addContext(contextName);
-	cm.setCurrentProperty(contextName,"projectName",projectName);
-	cm.setCurrentProperty(contextName,"hostName",hostName);	
-	projectCreated=true;
-	
-	//This is the working directory of the execution host.
-	workDir=getBaseWorkDir()+File.separator
-	    +userName+File.separator+projectName;
-
-	globalDataDir=getBinPath();
-
-	return "new-project-created";
-    }
-
-    public String setParameterValues() throws Exception {
-	//This should always be true at this point, but check for 
-	//safety.
-	if(projectCreated!=true) {
-	    createNewProject();
-	}
-
-	//Now set the rest of the parameters.
-	//The cm object is inherited.
-	cm.setCurrentProperty(contextName,"resOption",resOption+"");
-	cm.setCurrentProperty(contextName,"termOption",termOption+"");
-	cm.setCurrentProperty(contextName,"cutoffCriterion",
-			      cutoffCriterion+"");	
-	cm.setCurrentProperty(contextName,"estJumpSpan",estJumpSpan+"");
-	return "parameters-set";
-    }
-    
-    public String loadDataArchive()throws Exception{
-	System.out.println("Loading project");
-	if(!isInitialized) {
-	    initWebServices();
-	}
-	setContextList();
-        return ("load-data-archive");
-    }
-    
-    public String loadProject() throws Exception {
-	System.out.println("Loading project");
-	if(!isInitialized) {
-	    initWebServices();
-	}
-	setContextList();
-        return ("list-old-projects");
-    }
-
-    public String loadProjectKillList() throws Exception {
-	System.out.println("Loading project");
-	if(!isInitialized) {
-	    initWebServices();
-	}
-	setContextList();
-        return ("list-death-row");
-    }
-    
-
-    public String loadProjectPlots() throws Exception {
-	System.out.println("Loading project");
-	if(!isInitialized) {
-	    initWebServices();
-	}
-	setContextList();
-        return ("list-project-plots");
+    public String runGnuplotAndPlot() throws Exception {
+	runBlockingGnuplot();
+	setUpGPSNetwork();
+	constructPlotHtml(loadTabTemplateFile());
+	return "plot-time-series";
     }
 
     /**
@@ -249,27 +126,26 @@ public class STFILTERBean extends GenericSopacBean {
      * navigation purposes.  The real data is placed in other
      * variables.
      */
-    public String runBlockingAnalyzeTseri() 
+    public String runBlockingGnuplot() 
 	throws Exception {
 
 	//Create the client stub for the gnuplot service.
-	System.out.println(analyzeTseriServiceUrl);
+	System.out.println(gnuplotServiceUrl);
 	try {
-	    analyzeTseriService=(new AnalyzeTseriServiceServiceLocator()).
-		getAnalyzeTseriExec(new URL(analyzeTseriServiceUrl));
+	    gnuplotService=(new GnuplotServiceServiceLocator()).
+		getGnuplotExec(new URL(gnuplotServiceUrl));
 	}
 	catch (Exception ex) {
 	    ex.printStackTrace();
 	}
 
-	String[] results=analyzeTseriService.runBlockingAnalyzeTseri(siteCode, 
-								     beginDate,
-								     endDate);
+	String[] results=gnuplotService.runBlockingGnuplot(siteCode, 
+							   beginDate,
+							   endDate);
 	localImageFileX=results[0];
 	localImageFileY=results[1];
 	localImageFileZ=results[2];
 	
-
 	for(int i=0;i<results.length;i++) {
 	    System.out.println("Query results:"+results[i]);
 	}
@@ -282,201 +158,17 @@ public class STFILTERBean extends GenericSopacBean {
      * This version explicitly requires the parameters to be
      * passed in from the arguments.
      */ 
-    public String[] runBlockingAnalyzeTseri(String siteCode,
+    public String[] runBlockingGnuplot(String siteCode,
 				       String beginDate,
 				       String endDate) 
 	throws Exception {
 	
-	String[] results=analyzeTseriService.runBlockingAnalyzeTseri(siteCode,
+	String[] results=gnuplotService.runBlockingGnuplot(siteCode,
 							   beginDate,
 							   endDate);
 	return results;
     }
-
-
-    public String populateAndPlot() throws Exception {
-	populateProject();
-	launchPlot();
-	return "plot-created";
-    }
-
-    /**
-     * Currently empty.
-     */
-    public String launchPlot() throws Exception {
-
-	return "does nothing";
-    }
-
-    /** 
-     * Create the site list file.  Currently we only support
-     * one site and the XYZ format (ie "1   8").
-     */
-    public void createSiteListFile(String contextDir)
-	throws Exception {
-
-	String slash="/";  // This is not File.separator of the webserver
-	siteListFile=projectName+mosesSiteListExt;
-	System.out.println("Writing input file: "+contextDir+"/"+siteListFile);
-	PrintWriter pw=
-	    new PrintWriter(new FileWriter(contextDir+"/"+siteListFile),true);
-
-	pw.println("  1");  //Need to make this more general.
-	pw.println(getSiteCode().toUpperCase()+"_GPS");
-	pw.close();
-    }
-
-    public void createEstimatedParamFile(String contextDir)
-	throws Exception {
-	estParameterFile=projectName+mosesParamFileExt;
-	PrintWriter pw=
-	    new PrintWriter(new FileWriter(contextDir+"/"+estParameterFile),true);
-	if(myStation.printContents()!=null) {
-	    pw.println("  2");
-	    pw.println(allsites.printContents());
-	    pw.println(myStation.printContents());
-	}
-	else {
-	    pw.println("  1");
-	    pw.println(allsites.printContents());
-	}
-	pw.close();
-    }
-
-    public void createDataListFile(String contextDir)
-	throws Exception {
-
-	String slash="/";  // This is not File.separator of the webserver
-	dataListFile=projectName+mosesDataListExt;
-	System.out.println("Writing input file: "+contextDir+"/"+dataListFile);
-	PrintWriter pw=
-	    new PrintWriter(new FileWriter(contextDir+"/"+dataListFile),true);
-
-	pw.println(" 1   8");  //Need to make this more general.
-	pw.println(getSiteCode()+sopacDataFileExt);
-	pw.close();
-    }
-
-    /**
-     * Create the stfilter driver file.
-     */
-    public String createDriverFile(String contextDir)
-	throws Exception {
-
-	String fivespace="     ";
-	String slash="/";  // This is not File.separator of the webserver
-	driverFileName=projectName+driverFileExtension;
-	System.out.println("Writing input file: "+contextDir+"/"+driverFileName);
-	PrintWriter pw=
-	    new PrintWriter(new FileWriter(contextDir+"/"+driverFileName),true);
-	pw.println(twospace+"apriori value file:"+twospace+globalDataDir+slash+aprioriValueFile);
-	pw.println(twospace+"input file:"+twospace+workDir+slash+projectName+mosesDataListExt);
-	pw.println(twospace+"sit_list file:"+twospace+workDir+slash+projectName+mosesSiteListExt);
-	pw.println(twospace+"est_parameter file:"+twospace+workDir+slash+projectName+mosesParamFileExt);
-	//	pw.println(twospace+"est_parameter file:"+twospace+globalDataDir+mosesParamFile);
-	pw.println(twospace+"output file:"+twospace+workDir+slash+projectName+outputFileExt);
-	pw.println(twospace+"residual file:"+twospace+workDir+slash+projectName+residualFileExt);
-	pw.println(twospace+"res_option:"+twospace+resOption);
-	pw.println(twospace+"specific term_out file:"+twospace+workDir+slash+projectName+termOutFileExt);
-	pw.println(twospace+"specific term_option:"+twospace+termOption);
-	pw.println(twospace+"enu_correlation usage:"+twospace+"no");
-	pw.println(twospace+"cutoff criterion (year):"+twospace+cutoffCriterion);
-	pw.println(twospace+"span to est jump aper (est_jump_span):"+twospace+estJumpSpan);
-	pw.println(twospace+"weak_obs (big sigma) criteria:"+twospace+weakObsCriteria.getEast()+twospace+weakObsCriteria.getNorth()+twospace+weakObsCriteria.getUp());
-	pw.println(twospace+"outlier (big o-c) criteria mm:"+twospace+outlierCriteria.getEast()+twospace+outlierCriteria.getNorth()+twospace+outlierCriteria.getUp());
-	pw.println(twospace+"very bad_obs criteria mm:"+twospace+badObsCriteria.getEast()+twospace+badObsCriteria.getNorth()+twospace+badObsCriteria.getUp());
-	pw.println(twospace+"t_interval:"+twospace+timeInterval.getBeginTime()+twospace+timeInterval.getEndTime());
-	pw.println(twospace+"end:");
-	pw.println("---------- part 2 -- apriori information");
-	pw.println(twospace+"exit:");
-	pw.close();
-
-	//Clean this up since it could be a memory drain.
-	//	sopacDataFileContent=null;
-	return "input-file-created";
-    }
-
     
-    public String deleteProject() throws Exception {
-	//projectsToDelete is an ArrayList inherited from GenericProjectBean.
-	//It is set by the calling faces page.
-	if(projectsToDelete!=null && projectsToDelete.size()>0) {
-	    for(int i=0;i<projectsToDelete.size();i++) {
-		String contextName=codeName+"/"
-		    +(String)projectsToDelete.get(i);
-		cm.removeContext(contextName);
-	    }
-	    projectsToDelete.clear();
-	}
-	setContextList();
-	return "project-removed";
-    }
-
-    /**
-     * As currently written, this method sets properties that are
-     * specific to the backend application.
-     */
-    public String populateProject() throws Exception{
-	System.out.println("Chosen project: "+chosenProject);
-	String contextName=codeName+"/"+chosenProject;
-	projectName=cm.getCurrentProperty(contextName,"projectName");
-	hostName=cm.getCurrentProperty(contextName,"hostName");
-
-	resOption=Integer.parseInt(cm.getCurrentProperty(contextName,"resOption"));
-	termOption=
-	    Integer.parseInt(cm.getCurrentProperty(contextName,"termOption"));
-	cutoffCriterion=
-	    Double.parseDouble(cm.getCurrentProperty(contextName,"cutoffCriterion"));
-	estJumpSpan=
-	    Double.parseDouble(cm.getCurrentProperty(contextName,"estJumpSpan"));
-	sopacDataFileName=cm.getCurrentProperty(contextName,"sopacDataFileName");
-	sopacDataFileContent=setSTFILTERInputFile(projectName);
-	return "project-populated";
-    }
-
-
-
-    /**
-     * This is similar to executeSTFILTER but it must take place on
-     * a host with gnuplot installed on it.  Note this assumes
-     * for historical reasons that stfilter and the plotting tool
-     * (gnuplot) are on separate machines.
-     *
-     * This method is currently empty.
-     */
-    public String createDataPlot(String contextDir,
-				 String sopacDataFileName,
-				 String cfullName) 
-	throws Exception{
-	
-	return "gnuplot-plot-created";
-    }    
-
-    private String setSTFILTERInputFile(String projectName) {
-	String sopacDataFileContent="Null Content; please re-enter";
-	String sopacDataFileName=projectName+driverFileExtension;
-	try {
-	    String thedir=cm.getCurrentProperty(codeName
-						+"/"+projectName,"Directory");
-	    System.out.println(thedir+"/"+sopacDataFileName);
-	    
-	    BufferedReader buf=
-		new BufferedReader(new FileReader(thedir+"/"+sopacDataFileName));
-	    String line=buf.readLine();
-	    sopacDataFileContent=line+"\n";
-	    while(line!=null) {
-		System.out.println(line);
-		line=trimLine(line);	
-		sopacDataFileContent+=line+"\n";
-		line=buf.readLine();
-	    }
-	    buf.close();
-	}
-	catch (Exception ex) {
-	    ex.printStackTrace();
-	}
-	return sopacDataFileContent;
-    }
 
     //Some internal fields.
     String twospace="  ";  //Used to format the driver file.
@@ -570,14 +262,43 @@ public class STFILTERBean extends GenericSopacBean {
     //Stuff for creating the maps with default values.
     String mapCenterX="33.036";
     String mapCenterY="-117.24";
+    String siteCodeLon, siteCodeLat;
 	
     //Used to making the tabbed display pages.
     String str_tabcontent;
-    String tabContentX, tabContentY, tabContentZ;
+    String[] tabContent=new String[3];
+    GetStationsRSS RSSBeanID;
+    Vector networkNames, stationsVec;
 
     //--------------------------------------------------
     // These are accessor methods.
     //--------------------------------------------------
+    public String getSiteCodeLon() {
+	return siteCodeLon;
+    }
+
+    public void setSiteCodeLon(String siteCodeLon) {
+	this.siteCodeLon=siteCodeLon;
+    }
+
+    public String getSiteCodeLat() {
+	return siteCodeLat;
+    }
+
+    public void setSiteCodeLat(String siteCodeLat) {
+	this.siteCodeLat=siteCodeLat;
+    }
+
+    public String[] getTabContent() {
+	return tabContent;
+    }
+    
+    public void setTabContent(String[] tabContent){
+	for(int i=0;i<tabContent.length;i++){
+	    this.tabContent[i]=tabContent[i];
+	}
+    }
+
     public void toggleRenderMPL1(ActionEvent ev){
 	renderMasterParamList1=!renderMasterParamList1;
 	//	return renderMasterParamList;

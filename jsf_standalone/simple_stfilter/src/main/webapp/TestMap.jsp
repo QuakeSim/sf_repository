@@ -49,14 +49,8 @@
     </table>
 
    <f:view>
-
-   <%
-   String mapCenterX="37.0";
-   String mapCenterY="-117.0";
-   
-   %>
-	
-   <h:outputText value="#{stfilterBean.resOption}"/>
+   <%-- Just use this to initialize the stfilterBean object. --%>
+   <h:outputText value="#{stfilterBean.resOption}" rendered="false"/>
 
 
     <script type="text/javascript">

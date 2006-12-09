@@ -69,6 +69,10 @@ source ./rdahmm-portlet-install.sh
 cd $BUILD_DIR
 source ./stfilter-sa-install.sh
 
+cd $BUILD_DIR
+source ./plotgrws-timeseries-sa-install.sh
+
+
 #----------------------------------------------------------------------
 # Build the portlets.
 #----------------------------------------------------------------------

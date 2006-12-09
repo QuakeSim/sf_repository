@@ -68,7 +68,7 @@
         map.addControl(new GLargeMapControl());
         map.addControl(new GMapTypeControl());
         map.addControl(new GScaleControl());
-        map.centerAndZoom(new GPoint(${stfilterBean.mapCenterY}, ${stfilterBean.mapCenterZ}), 10);
+        map.centerAndZoom(new GPoint(${stfilterBean.mapCenterY}, ${stfilterBean.mapCenterX}), 10);
 
         var colors = new Array (6);
         colors[0]="red";

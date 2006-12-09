@@ -42,6 +42,7 @@ export SIMPLE_RDAHMM_SA_HOME=$BUILD_DIR/jsf_standalone/SimpleRDAHMMClient/
 export STATION_MONITOR_SA_HOME=$BUILD_DIR/jsf_standalone/StationMonitor/
 export REALTIME_RDAHMM_SA_HOME=$BUILD_DIR/jsf_standalone/RealTimeRDAHMM
 export SIMPLE_STFILTER_SA_HOME=$BUILD_DIR/jsf_standalone/simple_stfilter
+export PLOT_GRWS_TIMESERIES_SA_HOME=$BUILD_DIR/jsf_standalone/PlotGRWSTimeSeries
 
 #Portlets
 export SIMPLEX_PORTLET_HOME=$BUILD_DIR/portlets/Simplex-portlet
