@@ -2,7 +2,7 @@
 #set -x
 
 # SET THE ENVIRONMENT
-export PORTAL_SERVER_URL=http://gf2.ucs.indiana.edu:8080/
+export PORTAL_SERVER_URL=http://localhost:8080/
 
 export BUILD_DIR=`pwd`
 export THIRD_PARTY_TOOLS=$BUILD_DIR/third_party_tools

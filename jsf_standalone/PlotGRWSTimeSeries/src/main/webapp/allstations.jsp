@@ -1,9 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
+<%@page import="java.util.*, cgl.sensorgrid.sopac.gps.GetStationsRSS, java.io.*, java.lang.*,cgl.webservices.*"%>
 
 <html>
   <head>
-    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTCdqtmO6Kma7uYZgpagQkNe17MQhRS93QdZFchZ2Vy9IpcH0W3nbN34g"
+
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBSPTG4M0VeHMNoDOKS2I0IJH6WVtRT4Ye3YMLMmOKDiX0HJAySVruBU5g"
       type="text/javascript"></script>
   </head>
   <body>
@@ -38,9 +40,16 @@
       try again.
     </noscript>
 
+ 	<%
+	out.println("Here are the session objects");
+	Enumeration en=session.getAttributeNames();
+	while(en.hasMoreElements()) {
+	   String name=(String)en.nextElement();
+	   out.println(name);
+	}
+        %>
 
     <script type="text/javascript">
-	document.write("test");
         var req;
         var baseIcon = new GIcon();
         baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
@@ -50,6 +59,7 @@
         baseIcon.infoWindowAnchor = new GPoint(5, 1);
         baseIcon.infoShadowAnchor = new GPoint(5, 5);
 
+
         // Create the map
         var map = new GMap2(document.getElementById("map"));
         map.addControl(new GLargeMapControl());
@@ -57,30 +67,37 @@
         map.addControl(new GScaleControl());
         map.setCenter(new GLatLng(${stfilterBean.mapCenterX},
 			${stfilterBean.mapCenterY}), 7);
+        <%
+	STFILTERBean stfilterBean=(STFILTERBean)session.getAttribute("stfilterBean");
+        out.println(stfilterBean.getNetworkBeanArraySize());
+	for(int i=0;i<stfilterBean.getNetworkBeanArraySize();i++) {
+	   int numStations=stfilterBean.getNetworkBeanArray()[i].getNumberOfStations();
+           String networkName=stfilterBean.getNetworkBeanArray()[i].getNetworkName();
+     %>
+          var stations = new Array(<%=numStations%>);
+          var Markers = new Array(<%=numStations%>);
+    <%
+	   for(int j=0;j<numStations;j++){
+	      String stationName=stfilterBean.getNetworkBeanArray()[i].getStationsBeanArray()[j].getStationName();
+	      double lon=stfilterBean.getNetworkBeanArray()[i].getStationsBeanArray()[j].getStationLon();
+	      double lat=stfilterBean.getNetworkBeanArray()[i].getStationsBeanArray()[j].getStationLat();
 
-	for(i=0;i<${stfilterBean.networkBeanArraySize};i++) {
- 
+        %>
           var icon = new GIcon(baseIcon);
- 	  var junk=${stfilterBean.networkBeanArray[0].stationBeanArraySize};
           icon.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";
-          var stations = new Array(${stfilterBean.networkBeanArray[0].stationBeanArraySize});
-          var Markers = new Array(${stfilterBean.networkBeanArray[0].stationBeanArraySize});
+	      Markers[<%=j%>]=createMarker("<%=networkName%>","<%=stationName%>",
+                          <%=lon+""%>,<%=lat+""%>,icon);
+              map.addOverlay(Markers[<%=j%>]);
 
-          for (j = 0; j < Markers.length; j++){         
-
-	      Markers[j]=createMarker(${stfilterBean.networkBeanArray[0].networkName},                         "world",
-                          "-118","37",icon);
-              map.addOverlay(Markers[j]);
-	  }
-
-
+        <%
+	}
         }
-	
+	%>	
+
         function createMarker(networkName, name, lon, lat, icon) {
           var marker = new GMarker(new GLatLng(lat,lon),icon);
           // Show this marker's name in the info window when it is clicked
           var html = "<b>Station Name= </b>" + name + "<br><b>Lat=</b>" + lat + "<br><b>Lon= </b>" + lon + "<br><b>Network= </b>" + networkName;
-
 
           GEvent.addListener(marker, "click", function() {
             marker.openInfoWindowHtml(html);});
@@ -91,7 +108,6 @@
 	  });
           return marker;
         }
-
 
       </script>
 

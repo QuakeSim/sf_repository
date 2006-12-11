@@ -90,8 +90,8 @@ public class STFILTERBean extends GenericSopacBean {
 		new GPSStationBean[stationsVec.size()];
 	    for(int i=0;i<stationsVec.size();i++) {
 		String stationName=(String)stationsVec.get(i);
-		double lon=Double.parseDouble(RSSBeanID.getStationInfo(stationName)[0]);
-		double lat=Double.parseDouble(RSSBeanID.getStationInfo(stationName)[1]);
+		double lon=Double.parseDouble(RSSBeanID.getStationInfo(stationName)[1]);
+		double lat=Double.parseDouble(RSSBeanID.getStationInfo(stationName)[0]);
 		stationBeanArray[i]=new GPSStationBean();
 		stationBeanArray[i].setParentNetwork(networkName);
 		stationBeanArray[i].setStationName(stationName);
