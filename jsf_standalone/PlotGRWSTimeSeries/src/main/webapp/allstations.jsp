@@ -16,7 +16,7 @@
    <td>
     <table>
       <tr>
-        <td width="550" colspan="2">
+        <td width="650" colspan="2">
           <b><font size="4">SOPAC Real Time GPS Networks</font></b><p>
             <font size="2">Click on a station symbol for more
               information on a particular station.  Then click the "Query 
@@ -25,7 +25,7 @@
             </tr>
       <tr>
         <td>
-          <div id="map" style="width: 500px; height: 500px">      </div>
+          <div id="map" style="width: 650px; height: 600px">      </div>
         </td>
        </tr>
     </table>
@@ -39,15 +39,6 @@
       To view Google Maps, enable JavaScript by changing your browser options, and then
       try again.
     </noscript>
-
- 	<%
-	out.println("Here are the session objects");
-	Enumeration en=session.getAttributeNames();
-	while(en.hasMoreElements()) {
-	   String name=(String)en.nextElement();
-	   out.println(name);
-	}
-        %>
 
     <script type="text/javascript">
         var req;
@@ -92,7 +83,37 @@
         <%
 	}
         }
+        //Pop open the results if we managed to get them.
+	if(stfilterBean.getTabContent()!=null 
+            && (stfilterBean.getTabContent()[0]!=null)
+	    && (stfilterBean.getTabContent()[1]!=null) 
+	    && (stfilterBean.getTabContent()[2]!=null)) {
+	    String tabContentX=stfilterBean.getTabContent()[0];
+	    String tabContentY=stfilterBean.getTabContent()[1];
+	    String tabContentZ=stfilterBean.getTabContent()[2];
+	    String siteCodeLat=stfilterBean.getSiteCodeLat();
+	    String siteCodeLon=stfilterBean.getSiteCodeLon();
+	%>
+	var icon=new GIcon(baseIcon);
+        icon.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";	
+	var infoTabs=[new GInfoWindowTab("Current X",'<%=tabContentX%>'),
+	              new GInfoWindowTab("Current Y",'<%=tabContentY%>'),
+		      new GInfoWindowTab("Current Z",'<%=tabContentZ%>')];  
+		     
+        document.write(<%=siteCodeLat%>+" "+<%=siteCodeLon%>);
+	var marker=new GMarker(new GLatLng(<%=siteCodeLat%>,<%=siteCodeLon%>),
+	    	       	       icon);
+    
+       map.openInfoWindowTabsHtml(new GLatLng(<%=siteCodeLat%>,<%=siteCodeLon%>),infoTabs);
+       map.addOverlay(marker);
+	<%
+       }
 	%>	
+ 
+	function displayTimeSeriesMarker(tabContentX, tabContentY, tabContentZ,lat, lon, icon) {
+	
+
+        }
 
         function createMarker(networkName, name, lon, lat, icon) {
           var marker = new GMarker(new GLatLng(lat,lon),icon);
@@ -108,8 +129,27 @@
 	  });
           return marker;
         }
-
       </script>
+      <td valign="top">
+      <b><font size="4">Query GPS archive </font></b>
+       <h:form id="form1">
+       <h:panelGrid columns="2">
+       <h:outputText value="Site Code"/>
+       <h:inputText id="station_name" value="#{stfilterBean.siteCode}"/>
+   
+       <h:outputText value="Begin Date"/>
+       <h:inputText id="begin_date" value="#{stfilterBean.beginDate}"/>
+
+
+       <h:outputText value="End Date"/>
+       <h:inputText id="end_date" value="#{stfilterBean.endDate}"/>
+
+       </h:panelGrid>
+
+       <h:commandLink action="#{stfilterBean.runGnuplotAndPlot}">
+            <h:outputText value="Query Selected Station"/>
+       </h:commandLink>
+       </h:form>
 
       </td>
      </table>

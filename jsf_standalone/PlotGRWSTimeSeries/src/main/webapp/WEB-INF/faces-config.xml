@@ -14,14 +14,14 @@
                 <managed-property>
                    <property-name>gnuplotServiceUrl</property-name>
                    <value>
-                     http://gf2.ucs.indiana.edu:8080/gnuplotexec/services/GnuplotExec
+                     http://localhost:8080/gnuplotexec/services/GnuplotExec
                    </value>
                 </managed-property>
 
                 <managed-property>
                    <property-name>analyzeTseriServiceUrl</property-name>
                    <value>
-                     http://gf2.ucs.indiana.edu:8080/analyze-tseri-exec/services/AnalyzeTseriExec
+                     http://localhost:8080/analyze-tseri-exec/services/AnalyzeTseriExec
                    </value>
                 </managed-property>
 
@@ -32,7 +32,7 @@
 
                 <managed-property>
                    <property-name>baseWorkDir</property-name>
-                   <value>/home/gateway/GNUPLOT_WDIR</value>
+                   <value>/Users/marlonpierce/GNUPLOT_WDIR</value>
                 </managed-property>
 
 	</managed-bean>
@@ -42,7 +42,7 @@
 		<from-view-id>/allstations.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>plot-time-series</from-outcome>
-			<to-view-id>/PlotTimeSeries2.jsp</to-view-id>
+			<to-view-id>/allstations.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>	
 	<navigation-rule>

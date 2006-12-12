@@ -117,15 +117,17 @@ public class STFILTERBean extends GenericSopacBean {
     
     //Note this method assumes tabContent and siteCode have been obtained
     public void constructPlotHtml(String str_tabcontent) {
-	stationsVec=RSSBeanID.getAllStationsVec();
+
+	//	stationsVec=RSSBeanID.getAllStationsVec();
 	
 	siteCodeLat = RSSBeanID.getStationInfo(siteCode)[0];
 	siteCodeLon = RSSBeanID.getStationInfo(siteCode)[1];
 	
+	
 	tabContent[0]=new String(str_tabcontent);
 	tabContent[1]=new String(str_tabcontent);
 	tabContent[2]=new String(str_tabcontent);
-	
+
 	tabContent[0]=tabContent[0].replace("{!name!}",siteCode);
 	tabContent[0]=tabContent[0].replace("{!networkName!}","Need to Fix");
 	tabContent[0]=tabContent[0].replace("{!lon!}",siteCodeLon);
