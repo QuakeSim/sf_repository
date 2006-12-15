@@ -10,3 +10,10 @@ src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft
       type="text/javascript"></script>
     <script type="text/javascript">
 
+
+-----------------
+This is for localhost:8080
+-----------------
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBSPTG4M0VeHMNoDOKS2I0IJH6WVtRT4Ye3YMLMmOKDiX0HJAySVruBU5g"
+      type="text/javascript"></script>
+
