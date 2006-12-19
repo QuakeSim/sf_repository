@@ -1,0 +1,12 @@
+#!/bin/bash 
+
+oldname=cgl.webservices
+newname=cgl.webservices
+
+for filename in "$@"; do
+    if [ -f $filename ]; then
+        sed "s/$oldname/$newname/" < $filename > tmp
+        mv tmp $filename
+    fi
+done   
+

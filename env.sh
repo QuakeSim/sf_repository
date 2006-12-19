@@ -12,7 +12,6 @@ export MAVEN_HOME=$THIRD_PARTY_TOOLS/maven-2.0.4
 export PORTAL_DEPLOY_DIR=$BUILD_DIR/portal_deploy
 export CATALINA_HOME=$PORTAL_DEPLOY_DIR/apache-tomcat-5.5.12
 export GRIDSPHERE_HOME=$PORTAL_DEPLOY_DIR/gridsphere-2.1.4
-#export GRIDSPHERE_HOME=$PORTAL_DEPLOY_DIR/gridsphere-2.1
 export PORTAL_WEBAPP_DIR=$CATALINA_HOME/webapps/gridsphere/
 
 # These are maven steps.
@@ -50,5 +49,5 @@ export RDAHMM_PORTLET_HOME=$BUILD_DIR/portlets/RDAHMM-portlet
 export STFILTER_PORTLET_HOME=$BUILD_DIR/portlets/STFILTER-portlet
 export STATION_MONITOR_PORTLET_HOME=$BUILD_DIR/portlets/StationMonitor-portlet
 export REALTIME_RDAHMM_PORTLET_HOME=$BUILD_DIR/portlets/RealTimeRdahmm-portlet
-
+export PLOT_GRWS_TIMESERIES_PORTLET_HOME=$BUILD_DIR/portlets/PlotGRWSTimeSeries-portlet
 export PATH=$ANT_HOME/bin:$MAVEN_HOME/bin:$PATH
