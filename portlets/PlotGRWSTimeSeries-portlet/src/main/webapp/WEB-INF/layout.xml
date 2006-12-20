@@ -3,7 +3,7 @@
         <title lang="en">PlotGRWSTimeSeries</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab label="PlotGRWSTimeSeries-portlet">
-                <title lang="en">PlotGRWSTimeSeries</title>
+                <title lang="en" PlotGRWSTimeSeries</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
