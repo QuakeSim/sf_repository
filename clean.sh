@@ -61,6 +61,9 @@ mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
 cd $PLOT_GRWS_TIMESERIES_SA_HOME
 mvn clean -Dtomcat.base.dir=$CATALINA_HOME
+
+cd $MESHGENERATOR_SA_HOME
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME
  
 #Clean up portlet stuff
 #cd $SIMPLEX_PORTLET_HOME
@@ -87,6 +90,9 @@ cd $STATION_MONITOR_PORTLET_HOME
 mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
 cd $PLOT_GRWS_TIMESERIES_PORTLET_HOME
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME
+
+cd $MESHGENERATOR_PORTLET_HOME
 mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
 #--------------------------------------------------
