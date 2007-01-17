@@ -123,8 +123,8 @@ System.out.println("workdir is "+workDir);
 System.out.println("plotMesh value is "+plotMesh);
 String localUrl=null;
 try {
-   String localDest=application.getRealPath(".");
-   localDest=localDest+"/meshdownloads";
+   String localDest=application.getRealPath("/meshdownloads");
+   //localDest=localDest+"/meshdownloads";
    System.out.println("localDest is "+localDest);
    String tetraFileName=projectName+".tetra";
    fsclient.downloadFile(workDir+File.separator+tetraFileName,
