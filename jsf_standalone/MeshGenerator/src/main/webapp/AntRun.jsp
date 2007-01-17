@@ -50,7 +50,7 @@ Mesh" below. To refine all faults, just click "Refine Mesh".</p>
 					<h:commandButton value="Refine Mesh" actionListener="#{MGBean.toggleRefineMesh}" />
 					<h:commandButton value="View Messages" actionListener="#{MGBean.toggleViewMeshMessages}" />
 					<h:commandButton value="View Mesh" action="#{MGBean.SetAndViewMeshImage}" />
-					<h:outputLink id="link1" value="painter.jsp">
+					<h:outputLink id="link1" value="#{facesContext.externalContext.requestContextPath}/painter.jsp">
 						<f:param name="layers" value="#{MGBean.myLayersParamForJnlp}" />
 						<f:param name="faults" value="#{MGBean.myFaultsParamForJnlp}" />
 						<f:param name="plotMesh" value="true" />

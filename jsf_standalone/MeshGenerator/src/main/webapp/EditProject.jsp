@@ -656,7 +656,7 @@ list-column-left">
 					<h:outputFormat escape="false"
 						value="<br>You can also try the Java Web Start version by clicking the link below." />
 
-					<h:outputLink id="link1" value="painter.jsp">
+					<h:outputLink id="link1" value="#{facesContext.externalContext.requestContextPath}/painter.jsp">
 						<f:param name="layers" value="#{MGBean.myLayersParamForJnlp}" />
 						<f:param name="faults" value="#{MGBean.myFaultsParamForJnlp}" />
 						<h:outputText value="Web Start Plotter" />

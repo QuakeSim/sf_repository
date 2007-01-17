@@ -78,7 +78,7 @@ function dataTableSelectOneRadio(radio) {
 					</f:facet>
 					<h:panelGrid columns="4" border="1">
 
-						<h:outputLink id="link1" value="DownloadMeshes.jsp" target="_blank">
+						<h:outputLink id="link1" value="#{facesContext.externalContext.requestContextPath}/DownloadMeshes.jsp" target="_blank">
 							<f:param name="ProjectSelect" value="#{myentry3.projectName}" />
 							<f:param name="MeshChoice" value=".node" />
 							<f:param name="baseWorkDir" value="#{MGBean.baseWorkDir}" />
@@ -89,7 +89,7 @@ function dataTableSelectOneRadio(radio) {
 
 							<h:outputText value="Node" />
 						</h:outputLink>
-						<h:outputLink id="link2" value="DownloadMeshes.jsp" target="_blank">
+						<h:outputLink id="link2" value="#{facesContext.externalContext.requestContextPath}/DownloadMeshes.jsp" target="_blank">
 							<f:param name="ProjectSelect" value="#{myentry3.projectName}" />
 							<f:param name="MeshChoice" value=".tetra" />
 							<f:param name="baseWorkDir" value="#{MGBean.baseWorkDir}" />
@@ -100,7 +100,7 @@ function dataTableSelectOneRadio(radio) {
 
 							<h:outputText value="Tetra" />
 						</h:outputLink>
-						<h:outputLink id="link3" value="DownloadMeshes.jsp" target="_blank">
+						<h:outputLink id="link3" value="#{facesContext.externalContext.requestContextPath}/DownloadMeshes.jsp" target="_blank">
 							<f:param name="ProjectSelect" value="#{myentry3.projectName}" />
 							<f:param name="MeshChoice" value=".index" />
 							<f:param name="baseWorkDir" value="#{MGBean.baseWorkDir}" />
@@ -111,7 +111,7 @@ function dataTableSelectOneRadio(radio) {
 
 							<h:outputText value="Index" />
 						</h:outputLink>
-						<h:outputLink id="link4" value="DownloadMeshes.jsp" target="_blank">
+						<h:outputLink id="link4" value="#{facesContext.externalContext.requestContextPath}/DownloadMeshes.jsp" target="_blank">
 							<f:param name="ProjectSelect" value="#{myentry3.projectName}" />
 							<f:param name="MeshChoice" value=".tar.gz" />
 							<f:param name="baseWorkDir" value="#{MGBean.baseWorkDir}" />
