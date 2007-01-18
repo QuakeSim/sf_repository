@@ -43,6 +43,7 @@ public class RDAHMMService extends AntVisco implements Runnable{
     String buildFilePath;
     String antTarget;
     
+    
     public RDAHMMService(boolean useClassLoader) 
 	throws Exception {
 	super();
@@ -349,6 +350,8 @@ public class RDAHMMService extends AntVisco implements Runnable{
     /**
      * This version runs in non-blocking mode and gets
      * the data from the SOPAC data service.
+     * It assumes default values for the contextGroup, contextId
+     * resource, and bouding box.
      */
     public String[] runNonblockingRDAHMM(String siteCode,
 					 String beginDate,
@@ -357,6 +360,35 @@ public class RDAHMMService extends AntVisco implements Runnable{
 	throws Exception {
 	try {
 	    String dataUrl=querySOPACGetURL(siteCode,beginDate,endDate);
+	    return runNonblockingRDAHMM(dataUrl,numModelStates);
+	}
+	catch (Exception ex) {
+	    ex.printStackTrace();
+	    throw new Exception();
+	}
+    }
+
+    /**
+     * This non-blocking version lets you pass in all values 
+     * for querying the SOPAC data service.
+     */
+    public String[] runNonblockingRDAHMM(String siteCode,
+					 String resource,
+					 String contextGroup,
+					 String contextId,
+					 String minMaxLatLon,
+					 String beginDate,
+					 String endDate,
+					 int numModelStates)
+	throws Exception {
+	try {
+	    String dataUrl=querySOPACGetURL(siteCode,
+					    resource,
+					    contextGroup,
+					    contextId,
+					    minMaxLatLon,
+					    beginDate,
+					    endDate);
 	    return runNonblockingRDAHMM(dataUrl,numModelStates);
 	}
 	catch (Exception ex) {
@@ -376,6 +408,35 @@ public class RDAHMMService extends AntVisco implements Runnable{
 	throws Exception {
 	try {
 	    String dataUrl=querySOPACGetURL(siteCode,beginDate,endDate);
+	    return runBlockingRDAHMM(dataUrl,numModelStates);
+	}
+	catch (Exception ex) {
+	    ex.printStackTrace();
+	    throw new Exception();
+	}
+    }
+
+    /**
+     * This blocking version lets you pass in all values 
+     * for querying the SOPAC data service.
+     */
+    public String[] runBlockingRDAHMM(String siteCode,
+					 String resource,
+					 String contextGroup,
+					 String contextId,
+					 String minMaxLatLon,
+					 String beginDate,
+					 String endDate,
+					 int numModelStates)
+	throws Exception {
+	try {
+	    String dataUrl=querySOPACGetURL(siteCode,
+					    resource,
+					    contextGroup,
+					    contextId,
+					    minMaxLatLon,
+					    beginDate,
+					    endDate);
 	    return runBlockingRDAHMM(dataUrl,numModelStates);
 	}
 	catch (Exception ex) {
@@ -566,6 +627,28 @@ public class RDAHMMService extends AntVisco implements Runnable{
 	return returnFiles;
     }
     
+    /**
+     * This is a bit verion with less defaults.
+     */
+    protected String querySOPACGetURL(String siteCode,
+				      String resource,
+				      String contextGroup,
+				      String contextId,
+				      String minMaxLatLon,
+				      String beginDate,
+				      String endDate) throws Exception {
+
+
+	GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
+	gsq.setFromServlet(siteCode, beginDate, endDate, resource,
+			   contextGroup, contextId, minMaxLatLon, true);
+	String dataUrl=gsq.getResource();
+	System.out.println("GRWS data url: "+dataUrl);
+	return dataUrl;
+	
+	
+    }
+
     /**
      * This version of the client gets back the URL of the
      * results, rather than the results directly.  The String
