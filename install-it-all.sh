@@ -72,8 +72,8 @@ source ./stfilter-sa-install.sh
 cd $BUILD_DIR
 source ./plotgrws-timeseries-sa-install.sh
 
-cd $BUILD_DIR
-source ./meshgenerator-sa-install.sh
+#cd $BUILD_DIR
+#source ./meshgenerator-sa-install.sh
 
 #----------------------------------------------------------------------
 # Build the portlets.

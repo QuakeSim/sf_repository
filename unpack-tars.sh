@@ -15,7 +15,7 @@ source ./env.sh
 
 # UNPACK THE VENDOR SOFTWARE
 echo "######################################"
-echo "Unpacking Tomcat and GridSphere..."
+echo "Unpacking Tomcat, GridSphere, and YUI..."
 echo "######################################"
 cd $PORTAL_DEPLOY_DIR
 for i in *.tar.gz 
@@ -37,3 +37,7 @@ for i in *.tar.gz
   do echo "unpacking $i"; tar xzf $i
 done
 
+echo "######################################"
+echo " Moving YUI to tomcat's ROOT."
+echo "######################################"
+mv $YUI_SOURCE_DIR $YUI_DEPLOY_DIR
