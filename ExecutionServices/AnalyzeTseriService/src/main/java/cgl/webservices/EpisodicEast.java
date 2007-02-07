@@ -11,4 +11,5 @@ public class EpisodicEast extends EpisodicBias {
 	startDate=new Double(2002.0);
 	endDate=new Double(2004.0);
     }
+
 }

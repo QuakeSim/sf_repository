@@ -6,7 +6,10 @@ public class EpisodicBias extends EstimateParameter {
     Double endDate;
     String space="  ";
 
-    public Double getStartDate() {
+    public EpisodicBias() {
+	}
+
+	public Double getStartDate() {
 	return startDate;
     }
     

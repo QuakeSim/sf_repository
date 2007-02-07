@@ -20,6 +20,8 @@ public abstract class EstimateParameter {
     Double startDate;
     Double endDate;
     Double periodLength;
+    
+    public EstimateParameter() {}
 
     //These are the standard required methods.
     public int getParameterType() {

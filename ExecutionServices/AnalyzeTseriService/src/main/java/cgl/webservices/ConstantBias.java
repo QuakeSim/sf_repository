@@ -4,7 +4,7 @@
 
 package cgl.webservices;
 
-public abstract class ConstantBias extends EstimateParameter {
+public class ConstantBias extends EstimateParameter {
     
     //These are additional fields.  See also the parent.
     Double startDate;
