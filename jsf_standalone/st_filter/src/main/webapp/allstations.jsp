@@ -19,7 +19,7 @@ mapcenter_y = center_xy[1];
 %>
 <html>
   <head>
-    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTCdqtmO6Kma7uYZgpagQkNe17MQhRS93QdZFchZ2Vy9IpcH0W3nbN34g"
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAuZXFNqpWwSQD2wTwESuVIBQw1I5omejC7eYYY2abAtd66RdBwBREMz5uWt_AXSxz6bvwTTHBIDhL1Q"
       type="text/javascript"></script>
   </head>
   <body>

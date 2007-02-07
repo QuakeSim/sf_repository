@@ -353,6 +353,8 @@ below.  After making your selections,click again to toggle the display off.
 <p/>
     <h:commandButton value="Run ST_FILTER"
                      action="#{stfilterBean.launchSTFILTER}"/>
+    <h:commandButton value="Run ST_FILTER_WS"
+                     action="#{stfilterBean.launchSTFILTERWS}"/>
     </h:form>
 
     <h:form>
