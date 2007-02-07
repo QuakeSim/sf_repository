@@ -1,6 +1,8 @@
 package org.apache.myfaces.blank;
 
 //Imports from the mother ship
+import org.apache.axis.client.Call;
+import org.apache.axis.client.Service;
 import org.servogrid.genericproject.GenericSopacBean;
 import org.servogrid.genericproject.GenericProjectBean;
 import org.servogrid.genericproject.Utility;
@@ -13,6 +15,7 @@ import javax.faces.context.ExternalContext;
 
 //Servlet and portlet API stuff.
 import javax.servlet.ServletContext;
+import javax.xml.namespace.QName;
 import javax.portlet.PortletContext;
 
 //QuakeSim Web Service clients
@@ -39,665 +42,788 @@ import java.util.Vector;
 import java.util.StringTokenizer;
 import java.util.Date;
 
-
 /**
  * Everything you need to set up and run STFILTER.
  */
 
 public class STFILTERBean extends GenericSopacBean {
-    
-    /**
-     * default empty constructor
-     */
-    public STFILTERBean(){   
-	super();
-	cm=getContextManagerImp();
-	setSiteCode("LBC1");  //Use this for testing.
-	
 
-	//Set up here the station list vectors.
-	masterList=new MasterParamList();
-	myStationList=new StationParamList();
-	allsitesList=new AllSitesParamList();
+	// Some internal fields.
+	String twospace = "  "; // Used to format the driver file.
 
-	//Set up here the station conntainer
- 	myStation=new MyStationContainer("LBC1");
-	myStation.setEstParamVector(myStationList.getStationParamList());
-	myStation.setMasterParamList(masterList.getStationParamList());
-	
-	//Set up the default station list.
-	allsites=new AllStationsContainer();
-	allsites.setEstParamVector(allsitesList.getStationParamList());
-	allsites.setMasterParamList(masterList.getStationParamList());
-    }
+	boolean projectCreated = false;
 
-    /**
-     * Method that is backed to a submit button of a form.
-     */
-    public String newProject() throws Exception{
-	if(!isInitialized) {
-	    initWebServices();
+	// STFILTER properties
+	private String codeName = "STFILTER";
+
+	private int resOption = 387;
+
+	private int termOption = 556;
+
+	private double cutoffCriterion = 1.0;
+
+	private double estJumpSpan = 1.0;
+
+	private WeakObsCriteria weakObsCriteria = new WeakObsCriteria(30.0, 30.0,
+			50.0);
+
+	private OutlierCriteria outlierCriteria = new OutlierCriteria(800.0, 800.0,
+			800.0);
+
+	private BadObsCriteria badObsCriteria = new BadObsCriteria(10000.0,
+			10000.0, 10000.0);
+
+	private TimeInterval timeInterval = new TimeInterval(1998.0, 2006.800);
+
+	// This is the file that will hold the
+	// results of the GPS station query.
+	private String sopacDataFileName = "";
+
+	private String sopacDataFileContent = "";
+
+	private String sopacDataFileExt = ".data";
+
+	// This is the working diretory for running the
+	// code on the execution host. The global data
+	// directory is the location of things like the
+	// apriori file.
+	private String workDir = "";
+
+	private String globalDataDir = "";
+
+	// This is the driver file and its constituent lines.
+	private String driverFileName = "";
+
+	private String driverFileContent = "";
+
+	private String driverFileExtension = ".drv";
+
+	// These are fixed files, at least for now.
+	private String aprioriValueFile = "itrf2000_final.net";
+
+	private String mosesParamFile = "moses_test.para";
+
+	// These are file extensions. The files will be named after the
+	// project.
+	private String mosesDataListExt = ".list";
+
+	private String mosesSiteListExt = ".site";
+
+	private String mosesParamFileExt = ".para";
+
+	private String residualFileExt = ".resi";
+
+	private String termOutFileExt = ".mdl";
+
+	private String outputFileExt = ".out";
+
+	// This is the site list file
+	private String siteListFile;
+
+	private String dataListFile;
+
+	private String estParameterFile;
+
+	// Project properties
+	private String[] contextList;
+
+	private Hashtable contextListHash;
+
+	private Vector contextListVector;
+
+	// These contain the site estimate params. Note
+	// this needs to be generalized, as I'm assuming only
+	// one site is used at a time.
+	StationContainer myStation;
+
+	StationContainer allsites;
+
+	StationParamList myStationList, allsitesList;
+
+	MasterParamList masterList;
+
+	// These are not needed?
+	// Vector allsitesVec;
+	// Vector mysiteVec;
+
+	// Some useful rendering constants
+	boolean renderAllSites = false;
+
+	boolean renderMySite = false;
+
+	boolean renderMasterParamList1 = false;
+
+	boolean renderMasterParamList2 = false;
+
+	// String stamp=(new Date()).getTime()+"";
+	String stamp = "TEST";
+
+	/**
+	 * default empty constructor
+	 */
+	public STFILTERBean() {
+		super();
+		cm = getContextManagerImp();
+		setSiteCode("LBC1"); // Use this for testing.
+
+		// Set up here the station list vectors.
+		masterList = new MasterParamList();
+		myStationList = new StationParamList();
+		allsitesList = new AllSitesParamList();
+
+		// Set up here the station conntainer
+		myStation = new MyStationContainer("LBC1");
+		myStation.setEstParamVector(myStationList.getStationParamList());
+		myStation.setMasterParamList(masterList.getStationParamList());
+
+		// Set up the default station list.
+		allsites = new AllStationsContainer();
+		allsites.setEstParamVector(allsitesList.getStationParamList());
+		allsites.setMasterParamList(masterList.getStationParamList());
 	}
-	return ("new-project-created");
-    }
-    
-    public String paramsThenTextArea() throws Exception {
-	setParameterValues();
-	return "parameters-to-textfield";
-    }
 
-    public String paramsThenDB() throws Exception {
-	//	setParameterValues();
-	createNewProject();
-	return "parameters-to-database";
-    }
-
-    public String paramsThenMap() throws Exception {
-	//	setParameterValues();
-	createNewProject();
-	return "parameters-to-googlemap";
-    }
-
-    public String createNewProject() throws Exception {
-	System.out.println("Creating new project");
-	System.out.println("Project name is "+projectName);
-	
-	//Store the request values persistently
-	contextName=codeName+"/"+projectName;
-	String hostName=getHostName();
-	cm.addContext(contextName);
-	cm.setCurrentProperty(contextName,"projectName",projectName);
-	cm.setCurrentProperty(contextName,"hostName",hostName);	
-	projectCreated=true;
-	
-	//This is the working directory of the execution host.
-	workDir=getBaseWorkDir()+File.separator
-	    +userName+File.separator+projectName;
-
-	globalDataDir=getBinPath();
-
-	return "new-project-created";
-    }
-
-    public String setParameterValues() throws Exception {
-	//This should always be true at this point, but check for 
-	//safety.
-	if(projectCreated!=true) {
-	    createNewProject();
+	/**
+	 * Method that is backed to a submit button of a form.
+	 */
+	public String newProject() throws Exception {
+		if (!isInitialized) {
+			initWebServices();
+		}
+		return ("new-project-created");
 	}
 
-	//Now set the rest of the parameters.
-	//The cm object is inherited.
-	cm.setCurrentProperty(contextName,"resOption",resOption+"");
-	cm.setCurrentProperty(contextName,"termOption",termOption+"");
-	cm.setCurrentProperty(contextName,"cutoffCriterion",
-			      cutoffCriterion+"");	
-	cm.setCurrentProperty(contextName,"estJumpSpan",estJumpSpan+"");
-// 	cm.setCurrentProperty(contextName,"weakObsCriteria",
-// 			      weakObsCriteria);
-//	cm.setCurrentProperty(contextName,"outlierCriteria",outlierCriteria);
-//	cm.setCurrentProperty(contextName,"badObsCriteria",badObsCriteria);
-//	cm.setCurrentProperty(contextName,"timeInterval",timeInterval);
-	return "parameters-set";
-    }
-    
-    public String loadDataArchive()throws Exception{
-	System.out.println("Loading project");
-	if(!isInitialized) {
-	    initWebServices();
+	public String paramsThenTextArea() throws Exception {
+		setParameterValues();
+		return "parameters-to-textfield";
 	}
-	setContextList();
-        return ("load-data-archive");
-    }
-    
-    public String loadProject() throws Exception {
-	System.out.println("Loading project");
-	if(!isInitialized) {
-	    initWebServices();
+
+	public String paramsThenDB() throws Exception {
+		// setParameterValues();
+		createNewProject();
+		return "parameters-to-database";
 	}
-	setContextList();
-        return ("list-old-projects");
-    }
 
-    public String loadProjectKillList() throws Exception {
-	System.out.println("Loading project");
-	if(!isInitialized) {
-	    initWebServices();
+	public String paramsThenMap() throws Exception {
+		// setParameterValues();
+		createNewProject();
+		return "parameters-to-googlemap";
 	}
-	setContextList();
-        return ("list-death-row");
-    }
-    
 
-    public String loadProjectPlots() throws Exception {
-	System.out.println("Loading project");
-	if(!isInitialized) {
-	    initWebServices();
+	public String createNewProject() throws Exception {
+		System.out.println("Creating new project");
+		System.out.println("Project name is " + projectName);
+
+		// Store the request values persistently
+		contextName = codeName + "/" + projectName;
+		String hostName = getHostName();
+		cm.addContext(contextName);
+		cm.setCurrentProperty(contextName, "projectName", projectName);
+		cm.setCurrentProperty(contextName, "hostName", hostName);
+		projectCreated = true;
+
+		// This is the working directory of the execution host.
+		workDir = getBaseWorkDir() + File.separator + userName + File.separator
+				+ projectName;
+
+		globalDataDir = getBinPath();
+
+		return "new-project-created";
 	}
-	setContextList();
-        return ("list-project-plots");
-    }
-    
-    public String launchSTFILTER() throws Exception {
-	//Do this here.
-	setParameterValues();
 
-	String sopacDataFileName=getSiteCode()+sopacDataFileExt;
-	String cfullName=codeName+"/"+projectName;
-	String contextDir=cm.getCurrentProperty(cfullName,"Directory");
+	public String setParameterValues() throws Exception {
+		// This should always be true at this point, but check for
+		// safety.
+		if (projectCreated != true) {
+			createNewProject();
+		}
 
-	createDriverFile(contextDir);
-	createSopacDataFile(contextDir,sopacDataFileName,sopacDataFileContent);
-	createSiteListFile(contextDir);
-	createDataListFile(contextDir);
-	createEstimatedParamFile(contextDir);
-	String value=executeSTFILTER(contextDir,sopacDataFileName,cfullName);
-	return "stfilter-launched";
-    }
-
-    public String populateAndPlot() throws Exception {
-	populateProject();
-	launchPlot();
-	return "plot-created";
-    }
-
-    /**
-     * Currently empty.
-     */
-    public String launchPlot() throws Exception {
-
-	return "does nothing";
-    }
-
-    /** 
-     * Create the site list file.  Currently we only support
-     * one site and the XYZ format (ie "1   8").
-     */
-    public void createSiteListFile(String contextDir)
-	throws Exception {
-
-	String slash="/";  // This is not File.separator of the webserver
-	siteListFile=projectName+mosesSiteListExt;
-	System.out.println("Writing input file: "+contextDir+"/"+siteListFile);
-	PrintWriter pw=
-	    new PrintWriter(new FileWriter(contextDir+"/"+siteListFile),true);
-
-	pw.println("  1");  //Need to make this more general.
-	pw.println(getSiteCode().toUpperCase()+"_GPS");
-	pw.close();
-    }
-
-    public void createEstimatedParamFile(String contextDir)
-	throws Exception {
-	estParameterFile=projectName+mosesParamFileExt;
-	PrintWriter pw=
-	    new PrintWriter(new FileWriter(contextDir+"/"+estParameterFile),true);
-	if(myStation.printContents()!=null) {
-	    pw.println("  2");
-	    pw.println(allsites.printContents());
-	    pw.println(myStation.printContents());
+		// Now set the rest of the parameters.
+		// The cm object is inherited.
+		cm.setCurrentProperty(contextName, "resOption", resOption + "");
+		cm.setCurrentProperty(contextName, "termOption", termOption + "");
+		cm.setCurrentProperty(contextName, "cutoffCriterion", cutoffCriterion
+				+ "");
+		cm.setCurrentProperty(contextName, "estJumpSpan", estJumpSpan + "");
+		// cm.setCurrentProperty(contextName,"weakObsCriteria",
+		// weakObsCriteria);
+		// cm.setCurrentProperty(contextName,"outlierCriteria",outlierCriteria);
+		// cm.setCurrentProperty(contextName,"badObsCriteria",badObsCriteria);
+		// cm.setCurrentProperty(contextName,"timeInterval",timeInterval);
+		return "parameters-set";
 	}
-	else {
-	    pw.println("  1");
-	    pw.println(allsites.printContents());
+
+	public String loadDataArchive() throws Exception {
+		System.out.println("Loading project");
+		if (!isInitialized) {
+			initWebServices();
+		}
+		setContextList();
+		return ("load-data-archive");
 	}
-	pw.close();
-    }
 
-    public void createDataListFile(String contextDir)
-	throws Exception {
-
-	String slash="/";  // This is not File.separator of the webserver
-	dataListFile=projectName+mosesDataListExt;
-	System.out.println("Writing input file: "+contextDir+"/"+dataListFile);
-	PrintWriter pw=
-	    new PrintWriter(new FileWriter(contextDir+"/"+dataListFile),true);
-
-	pw.println(" 1   8");  //Need to make this more general.
-	pw.println(getSiteCode()+sopacDataFileExt);
-	pw.close();
-    }
-
-    /**
-     * Create the stfilter driver file.
-     */
-    public String createDriverFile(String contextDir)
-	throws Exception {
-
-	String fivespace="     ";
-	String slash="/";  // This is not File.separator of the webserver
-	driverFileName=projectName+driverFileExtension;
-	System.out.println("Writing input file: "+contextDir+"/"+driverFileName);
-	PrintWriter pw=
-	    new PrintWriter(new FileWriter(contextDir+"/"+driverFileName),true);
-	pw.println(twospace+"apriori value file:"+twospace+globalDataDir+slash+aprioriValueFile);
-	pw.println(twospace+"input file:"+twospace+workDir+slash+projectName+mosesDataListExt);
-	pw.println(twospace+"sit_list file:"+twospace+workDir+slash+projectName+mosesSiteListExt);
-	pw.println(twospace+"est_parameter file:"+twospace+workDir+slash+projectName+mosesParamFileExt);
-	//	pw.println(twospace+"est_parameter file:"+twospace+globalDataDir+mosesParamFile);
-	pw.println(twospace+"output file:"+twospace+workDir+slash+projectName+outputFileExt);
-	pw.println(twospace+"residual file:"+twospace+workDir+slash+projectName+residualFileExt);
-	pw.println(twospace+"res_option:"+twospace+resOption);
-	pw.println(twospace+"specific term_out file:"+twospace+workDir+slash+projectName+termOutFileExt);
-	pw.println(twospace+"specific term_option:"+twospace+termOption);
-	pw.println(twospace+"enu_correlation usage:"+twospace+"no");
-	pw.println(twospace+"cutoff criterion (year):"+twospace+cutoffCriterion);
-	pw.println(twospace+"span to est jump aper (est_jump_span):"+twospace+estJumpSpan);
-	pw.println(twospace+"weak_obs (big sigma) criteria:"+twospace+weakObsCriteria.getEast()+twospace+weakObsCriteria.getNorth()+twospace+weakObsCriteria.getUp());
-	pw.println(twospace+"outlier (big o-c) criteria mm:"+twospace+outlierCriteria.getEast()+twospace+outlierCriteria.getNorth()+twospace+outlierCriteria.getUp());
-	pw.println(twospace+"very bad_obs criteria mm:"+twospace+badObsCriteria.getEast()+twospace+badObsCriteria.getNorth()+twospace+badObsCriteria.getUp());
-	pw.println(twospace+"t_interval:"+twospace+timeInterval.getBeginTime()+twospace+timeInterval.getEndTime());
-	pw.println(twospace+"end:");
-	pw.println("---------- part 2 -- apriori information");
-	pw.println(twospace+"exit:");
-	pw.close();
-
-	//Clean this up since it could be a memory drain.
-	//	sopacDataFileContent=null;
-	return "input-file-created";
-    }
-
-    
-    public String deleteProject() throws Exception {
-	//projectsToDelete is an ArrayList inherited from GenericProjectBean.
-	//It is set by the calling faces page.
-	if(projectsToDelete!=null && projectsToDelete.size()>0) {
-	    for(int i=0;i<projectsToDelete.size();i++) {
-		String contextName=codeName+"/"
-		    +(String)projectsToDelete.get(i);
-		cm.removeContext(contextName);
-	    }
-	    projectsToDelete.clear();
+	public String loadProject() throws Exception {
+		System.out.println("Loading project");
+		if (!isInitialized) {
+			initWebServices();
+		}
+		setContextList();
+		return ("list-old-projects");
 	}
-	setContextList();
-	return "project-removed";
-    }
 
-    /**
-     * As currently written, this method sets properties that are
-     * specific to the backend application.
-     */
-    public String populateProject() throws Exception{
-	System.out.println("Chosen project: "+chosenProject);
-	String contextName=codeName+"/"+chosenProject;
-	projectName=cm.getCurrentProperty(contextName,"projectName");
-	hostName=cm.getCurrentProperty(contextName,"hostName");
-
-	resOption=Integer.parseInt(cm.getCurrentProperty(contextName,"resOption"));
-	termOption=
-	    Integer.parseInt(cm.getCurrentProperty(contextName,"termOption"));
-	cutoffCriterion=
-	    Double.parseDouble(cm.getCurrentProperty(contextName,"cutoffCriterion"));
-	estJumpSpan=
-	    Double.parseDouble(cm.getCurrentProperty(contextName,"estJumpSpan"));
-	//	weakObsCriteria=cm.getCurrentProperty(contextName,"weakObsCriteria");
-	//	outlierCriteria=cm.getCurrentProperty(contextName,"outlierCriteria");
-	//	badObsCriteria=cm.getCurrentProperty(contextName,"badObsCriteria");
-	//	timeInterval=cm.getCurrentProperty(contextName,"timeInterval");
-	
-	sopacDataFileName=cm.getCurrentProperty(contextName,"sopacDataFileName");
-	sopacDataFileContent=setSTFILTERInputFile(projectName);
-	return "project-populated";
-    }
-
-    public String executeSTFILTER(String contextDir,
-				String sopacDataFileName,
-				String cfullName) 
-	throws Exception{
-	
-	System.out.println("FileService URL:"+fileServiceUrl);
-	System.out.println("AntService URL:"+antUrl);
-	
-
-	//--------------------------------------------------
-	// Set up the Ant Service and make the directory
-	//--------------------------------------------------
-	AntVisco ant=new AntViscoServiceLocator().getAntVisco(new URL(antUrl));
-	String bf_loc=binPath+"/"+"build.xml";
-	String[] args0=new String[4];
-        args0[0]="-DworkDir.prop="+workDir;
-        args0[1]="-buildfile";
-        args0[2]=bf_loc;
-        args0[3]="MakeWorkDir";
-	
-        ant.setArgs(args0);
-        ant.run();
-	
-	//--------------------------------------------------
-	// Set up the file service and upload the driver,
-	// site list, and gps data files.
-	//--------------------------------------------------
-	FSClientStub fsclient=new FSClientStub();
-	String sopacDestfile=workDir+"/"+sopacDataFileName; 
-	String driverDestfile=workDir+"/"+driverFileName; 
-	String siteListDestfile=workDir+"/"+siteListFile;
-	String dataListDestfile=workDir+"/"+dataListFile;
-	String estParamDestfile=workDir+"/"+estParameterFile;
-
-	try {
-	    fsclient.setBindingUrl(fileServiceUrl);    	
-	    fsclient.uploadFile(contextDir+"/"+sopacDataFileName,sopacDestfile);
-	    fsclient.uploadFile(contextDir+"/"+siteListFile,siteListDestfile);
-	    fsclient.uploadFile(contextDir+"/"+dataListFile,dataListDestfile);
-	    fsclient.uploadFile(contextDir+"/"+driverFileName,driverDestfile);
-	    fsclient.uploadFile(contextDir+"/"+estParameterFile,estParamDestfile);
+	public String loadProjectKillList() throws Exception {
+		System.out.println("Loading project");
+		if (!isInitialized) {
+			initWebServices();
+		}
+		setContextList();
+		return ("list-death-row");
 	}
-	catch(Exception ex) {
-	    ex.printStackTrace();
+
+	public String loadProjectPlots() throws Exception {
+		System.out.println("Loading project");
+		if (!isInitialized) {
+			initWebServices();
+		}
+		setContextList();
+		return ("list-project-plots");
+	}
+
+	public String launchSTFILTER() throws Exception {
+		// Do this here.
+		setParameterValues();
+
+		String sopacDataFileName = getSiteCode() + sopacDataFileExt;
+		String cfullName = codeName + "/" + projectName;
+		String contextDir = cm.getCurrentProperty(cfullName, "Directory");
+
+		createDriverFile(contextDir);
+		createSopacDataFile(contextDir, sopacDataFileName, sopacDataFileContent);
+		createSiteListFile(contextDir);
+		createDataListFile(contextDir);
+		createEstimatedParamFile(contextDir);
+		String value = executeSTFILTER(contextDir, sopacDataFileName, cfullName);
+		return "stfilter-launched";
 	}
 	
-// 	//--------------------------------------------------
-// 	// Record the names of the input, output, and log
-// 	// files on the remote server.
-// 	//--------------------------------------------------
-// 	String remoteOutputFile=workDir+"/"+projectName+".output";
-// 	String remoteLogFile=workDir+"/"+projectName+".stdout";
-	
-// 	cm.setCurrentProperty(cfullName,"RemoteInputFile",destfile);
-// 	cm.setCurrentProperty(cfullName,"RemoteOutputFile",remoteOutputFile);
-// 	cm.setCurrentProperty(cfullName,"RemoteLogFile",remoteLogFile);
-	
-	//--------------------------------------------------
-	// Run the code.
-	//--------------------------------------------------	
-	
-	String[] args=new String[7];
-        args[0]="-DworkDir.prop="+workDir;
-        args[1]="-DprojectName.prop="+projectName;
-        args[2]="-Dbindir.prop="+binPath;
-        args[3]="-DSTFILTERBaseName.prop="+projectName;
-        args[4]="-buildfile";
-        args[5]=bf_loc;
-        args[6]="RunSTFILTER";
-	
-        ant.setArgs(args);
-        ant.execute();
-	
-	return "stfilter-executing";
-    }
+	public String launchSTFILTERWS() throws Exception {
+		// Do this here.
+		try {
+			String endpoint = "http://gf1.ucs.indiana.edu:8888/analyze-tseri-exec/services/AnalyzeTseriExec";
+			String siteCode = getSiteCode();
 
-    /**
-     * This is similar to executeSTFILTER but it must take place on
-     * a host with gnuplot installed on it.  Note this assumes
-     * for historical reasons that stfilter and the plotting tool
-     * (gnuplot) are on separate machines.
-     *
-     * This method is currently empty.
-     */
-    public String createDataPlot(String contextDir,
-				 String sopacDataFileName,
-				 String cfullName) 
-	throws Exception{
-	
-	return "gnuplot-plot-created";
-    }    
+			String sopacDataFileName  = projectName+"-"+getSiteCode()+"-"+stamp + sopacDataFileExt;
+			//String cfullName = codeName + "/" + projectName;
+			//String contextDir = cm.getCurrentProperty(cfullName, "Directory");
+			
+			String contextDir = "/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/STFILTER/WDIR/"; 
+			createSopacDataFile(contextDir, sopacDataFileName, sopacDataFileContent);
+			String dataUrl = "http://gf1.ucs.indiana.edu:8888/STFILTER/WDIR/"+sopacDataFileName;
+			System.out.println("[!!] dataUrl = "+dataUrl);
+			
+			double[][] globalParam = new double[allsites.estParamVector.size()][5];
+			double[][] siteParam = new double[myStation.estParamVector.size()][5];
+			
+		    setParam(allsites, globalParam);
+		    setParam(myStation, siteParam);
 
-    /**
-     * Override this method.
-     */ 
-    public String querySOPAC() throws Exception {
-	
-	String minMaxLatLon=null;
-	
-	System.out.println("Do the query");
-	System.out.println("Use bounding box:"+bboxChecked);
-	System.out.println(siteCode);
-	System.out.println(beginDate);
-	System.out.println(endDate);
-	System.out.println(resource);	
-	System.out.println(contextGroup);	
-	System.out.println(contextId);	
-	System.out.println(minMaxLatLon);	
+			Service service = new Service();
+			Call call = (Call) service.createCall();
 
+			call.setTargetEndpointAddress(new java.net.URL(endpoint));
+			call.setOperationName(new QName("http://soapinterop.org/",
+					"execATS"));
+			
+			String[] ret = (String[]) call.invoke(new Object[] {siteCode, dataUrl, globalParam, siteParam});
+			
+			System.out.println("Output: ");
+			for (int i = 0; i < ret.length; i++) {
+				System.out.println(ret[i]);
+			}
 
-	if(bboxChecked) {
-	    minMaxLatLon=minLatitude+" "+minLongitude+
-		" "+maxLatitude+" "+maxLongitude;
+			//String ret = (String[]) call.invoke(new Object[] { });
+
+			//System.out.println("Output: " + ret);
+		} catch (Exception e) {
+			System.err.println(e.toString());
+		}
+		return "stfilterws-launched";
 	}
-	
-	GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
-	gsq.setFromServlet(siteCode, beginDate, endDate, resource,
-			   contextGroup, contextId, minMaxLatLon);
-	sopacQueryResults=gsq.getResource();
-	System.out.println("Query Results");
-	System.out.println(sopacQueryResults);
-	//	sopacQueryResults=filterResults(sopacQueryResults,2,3);
-	
-	sopacDataFileContent=sopacQueryResults;
-		
-	String codeName=getCodeName();
-	codeName=codeName.toLowerCase();
-	System.out.println("Sopac query action string:"+codeName+"-display-query-results");
-	return codeName+"-display-query-results";
-    }
 
-    private String setSTFILTERInputFile(String projectName) {
-	String sopacDataFileContent="Null Content; please re-enter";
-	String sopacDataFileName=projectName+driverFileExtension;
-	try {
-	    String thedir=cm.getCurrentProperty(codeName
-						+"/"+projectName,"Directory");
-	    System.out.println(thedir+"/"+sopacDataFileName);
-	    
-	    BufferedReader buf=
-		new BufferedReader(new FileReader(thedir+"/"+sopacDataFileName));
-	    String line=buf.readLine();
-	    sopacDataFileContent=line+"\n";
-	    while(line!=null) {
-		System.out.println(line);
-		line=trimLine(line);	
-		sopacDataFileContent+=line+"\n";
-		line=buf.readLine();
-	    }
-	    buf.close();
+	private void setParam(StationContainer station, double[][] globalParam) {
+		for (int i = 0; i < station.estParamVector.size(); i++) {
+			EstimateParameter ep = (EstimateParameter) station.estParamVector.get(i);
+			globalParam[i][0] = ep.parameterType;
+			switch (ep.parameterType) {
+			case 1:
+			case 2:
+			case 3:
+				globalParam[i][1] = ((ConstantBias) ep).aprioriConstraint.doubleValue();
+				globalParam[i][2] = ((ConstantBias) ep).aprioriValue.doubleValue();
+				globalParam[i][3] = ((ConstantBias) ep).startDate.doubleValue();
+				break;
+			case 4:
+			case 5:
+			case 6:
+				globalParam[i][1] = ((VelocityBias) ep).aprioriConstraint.doubleValue();
+				globalParam[i][2] = ((VelocityBias) ep).aprioriValue.doubleValue();
+				globalParam[i][3] = ((VelocityBias) ep).startDate.doubleValue();
+				globalParam[i][4] = ((VelocityBias) ep).endDate.doubleValue();
+				break;
+			case 7:
+			case 8:
+			case 9:
+				globalParam[i][1] = ((EpisodicBias) ep).aprioriConstraint.doubleValue();
+				globalParam[i][2] = ((EpisodicBias) ep).aprioriValue.doubleValue();
+				globalParam[i][3] = ((EpisodicBias) ep).startDate.doubleValue();
+				globalParam[i][4] = ((EpisodicBias) ep).endDate.doubleValue();
+				break;
+			}
+		}
 	}
-	catch (Exception ex) {
-	    ex.printStackTrace();
+
+	public String populateAndPlot() throws Exception {
+		populateProject();
+		launchPlot();
+		return "plot-created";
 	}
-	return sopacDataFileContent;
-    }
 
-    //Some internal fields.
-    String twospace="  ";  //Used to format the driver file.
-    boolean projectCreated=false;
+	/**
+	 * Currently empty.
+	 */
+	public String launchPlot() throws Exception {
 
-    //STFILTER properties
-    private String codeName="STFILTER";
-    private int resOption=387;
-    private int termOption=556;
-    private double cutoffCriterion=1.0;
-    private double estJumpSpan=1.0;
-    private WeakObsCriteria weakObsCriteria=
-	new WeakObsCriteria(30.0,30.0,50.0);
-    private OutlierCriteria outlierCriteria=
-	new OutlierCriteria(800.0,800.0,800.0);
-    private BadObsCriteria badObsCriteria=
-	new BadObsCriteria(10000.0, 10000.0, 10000.0);
-    private TimeInterval timeInterval=new TimeInterval(1998.0, 2006.800);
+		return "does nothing";
+	}
 
+	/**
+	 * Create the site list file. Currently we only support one site and the XYZ
+	 * format (ie "1 8").
+	 */
+	public void createSiteListFile(String contextDir) throws Exception {
 
-    //This is the file that will hold the 
-    //results of the GPS station query.
-    private String sopacDataFileName="";
-    private String sopacDataFileContent="";
-    private String sopacDataFileExt=".data";
+		String slash = "/"; // This is not File.separator of the webserver
+		siteListFile = projectName + mosesSiteListExt;
+		System.out.println("Writing input file: " + contextDir + "/"
+				+ siteListFile);
+		PrintWriter pw = new PrintWriter(new FileWriter(contextDir + "/"
+				+ siteListFile), true);
 
-    //This is the working diretory for running the 
-    //code on the execution host.  The global data
-    //directory is the location of things like the
-    //apriori file.
-    private String workDir="";
-    private String globalDataDir="";
+		pw.println("  1"); // Need to make this more general.
+		pw.println(getSiteCode().toUpperCase() + "_GPS");
+		pw.close();
+	}
 
-    //This is the driver file and its constituent lines.
-    private String driverFileName="";
-    private String driverFileContent="";
-    private String driverFileExtension=".drv";
+	public void createEstimatedParamFile(String contextDir) throws Exception {
+		estParameterFile = projectName + mosesParamFileExt;
+		PrintWriter pw = new PrintWriter(new FileWriter(contextDir + "/"
+				+ estParameterFile), true);
+		if (myStation.printContents() != null) {
+			pw.println("  2");
+			pw.println(allsites.printContents());
+			pw.println(myStation.printContents());
+		} else {
+			pw.println("  1");
+			pw.println(allsites.printContents());
+		}
+		pw.close();
+	}
 
-    //These are fixed files, at least for now.
-    private String aprioriValueFile="itrf2000_final.net";
-    private String mosesParamFile="moses_test.para";
+	public void createDataListFile(String contextDir) throws Exception {
 
-    //These are file extensions.  The files will be named after the
-    //project.
-    private String mosesDataListExt=".list";
-    private String mosesSiteListExt=".site";
-    private String mosesParamFileExt=".para";
-    private String residualFileExt=".resi";
-    private String termOutFileExt=".mdl";
-    private String outputFileExt=".out";
+		String slash = "/"; // This is not File.separator of the webserver
+		dataListFile = projectName + mosesDataListExt;
+		System.out.println("Writing input file: " + contextDir + "/"
+				+ dataListFile);
+		PrintWriter pw = new PrintWriter(new FileWriter(contextDir + "/"
+				+ dataListFile), true);
 
-    //This is the site list file
-    private String siteListFile;
-    private String dataListFile;
-    private String estParameterFile;
+		pw.println(" 1   8"); // Need to make this more general.
+		pw.println(getSiteCode() + sopacDataFileExt);
+		pw.close();
+	}
 
-    //Project properties
-    private String[] contextList;
-    private Hashtable contextListHash;
-    private Vector contextListVector;
+	/**
+	 * Create the stfilter driver file.
+	 */
+	public String createDriverFile(String contextDir) throws Exception {
 
-    //These contain the site estimate params.  Note
-    //this needs to be generalized, as I'm assuming only 
-    //one site is used at a time.
-    StationContainer myStation;
-    StationContainer allsites;
+		String fivespace = "     ";
+		String slash = "/"; // This is not File.separator of the webserver
+		driverFileName = projectName + driverFileExtension;
+		System.out.println("Writing input file: " + contextDir + "/"
+				+ driverFileName);
+		PrintWriter pw = new PrintWriter(new FileWriter(contextDir + "/"
+				+ driverFileName), true);
+		pw.println(twospace + "apriori value file:" + twospace + globalDataDir
+				+ slash + aprioriValueFile);
+		pw.println(twospace + "input file:" + twospace + workDir + slash
+				+ projectName + mosesDataListExt);
+		pw.println(twospace + "sit_list file:" + twospace + workDir + slash
+				+ projectName + mosesSiteListExt);
+		pw.println(twospace + "est_parameter file:" + twospace + workDir
+				+ slash + projectName + mosesParamFileExt);
+		// pw.println(twospace+"est_parameter
+		// file:"+twospace+globalDataDir+mosesParamFile);
+		pw.println(twospace + "output file:" + twospace + workDir + slash
+				+ projectName + outputFileExt);
+		pw.println(twospace + "residual file:" + twospace + workDir + slash
+				+ projectName + residualFileExt);
+		pw.println(twospace + "res_option:" + twospace + resOption);
+		pw.println(twospace + "specific term_out file:" + twospace + workDir
+				+ slash + projectName + termOutFileExt);
+		pw.println(twospace + "specific term_option:" + twospace + termOption);
+		pw.println(twospace + "enu_correlation usage:" + twospace + "no");
+		pw.println(twospace + "cutoff criterion (year):" + twospace
+				+ cutoffCriterion);
+		pw.println(twospace + "span to est jump aper (est_jump_span):"
+				+ twospace + estJumpSpan);
+		pw.println(twospace + "weak_obs (big sigma) criteria:" + twospace
+				+ weakObsCriteria.getEast() + twospace
+				+ weakObsCriteria.getNorth() + twospace
+				+ weakObsCriteria.getUp());
+		pw.println(twospace + "outlier (big o-c) criteria mm:" + twospace
+				+ outlierCriteria.getEast() + twospace
+				+ outlierCriteria.getNorth() + twospace
+				+ outlierCriteria.getUp());
+		pw
+				.println(twospace + "very bad_obs criteria mm:" + twospace
+						+ badObsCriteria.getEast() + twospace
+						+ badObsCriteria.getNorth() + twospace
+						+ badObsCriteria.getUp());
+		pw.println(twospace + "t_interval:" + twospace
+				+ timeInterval.getBeginTime() + twospace
+				+ timeInterval.getEndTime());
+		pw.println(twospace + "end:");
+		pw.println("---------- part 2 -- apriori information");
+		pw.println(twospace + "exit:");
+		pw.close();
 
-    StationParamList myStationList,allsitesList;
-    MasterParamList masterList;
+		// Clean this up since it could be a memory drain.
+		// sopacDataFileContent=null;
+		return "input-file-created";
+	}
 
-    //These are not needed?
-//     Vector allsitesVec;
-//     Vector mysiteVec;
-    
-    //Some useful rendering constants
-    boolean renderAllSites=false;
-    boolean renderMySite=false;
-    boolean renderMasterParamList1=false;
-    boolean renderMasterParamList2=false;
+	public String deleteProject() throws Exception {
+		// projectsToDelete is an ArrayList inherited from GenericProjectBean.
+		// It is set by the calling faces page.
+		if (projectsToDelete != null && projectsToDelete.size() > 0) {
+			for (int i = 0; i < projectsToDelete.size(); i++) {
+				String contextName = codeName + "/"
+						+ (String) projectsToDelete.get(i);
+				cm.removeContext(contextName);
+			}
+			projectsToDelete.clear();
+		}
+		setContextList();
+		return "project-removed";
+	}
 
-    //--------------------------------------------------
-    // These are accessor methods.
-    //--------------------------------------------------
-    public void toggleRenderMPL1(ActionEvent ev){
-	renderMasterParamList1=!renderMasterParamList1;
-	//	return renderMasterParamList;
-    }
+	/**
+	 * As currently written, this method sets properties that are specific to
+	 * the backend application.
+	 */
+	public String populateProject() throws Exception {
+		System.out.println("Chosen project: " + chosenProject);
+		String contextName = codeName + "/" + chosenProject;
+		projectName = cm.getCurrentProperty(contextName, "projectName");
+		hostName = cm.getCurrentProperty(contextName, "hostName");
 
-    public boolean getRenderMasterParamList1(){
-	return renderMasterParamList1;
-    }
+		resOption = Integer.parseInt(cm.getCurrentProperty(contextName,
+				"resOption"));
+		termOption = Integer.parseInt(cm.getCurrentProperty(contextName,
+				"termOption"));
+		cutoffCriterion = Double.parseDouble(cm.getCurrentProperty(contextName,
+				"cutoffCriterion"));
+		estJumpSpan = Double.parseDouble(cm.getCurrentProperty(contextName,
+				"estJumpSpan"));
+		// weakObsCriteria=cm.getCurrentProperty(contextName,"weakObsCriteria");
+		// outlierCriteria=cm.getCurrentProperty(contextName,"outlierCriteria");
+		// badObsCriteria=cm.getCurrentProperty(contextName,"badObsCriteria");
+		// timeInterval=cm.getCurrentProperty(contextName,"timeInterval");
 
-    public void setRenderMasterParamList1(boolean renderMasterParamList1){
-	this.renderMasterParamList1=renderMasterParamList1;
-    }
+		sopacDataFileName = cm.getCurrentProperty(contextName,
+				"sopacDataFileName");
+		sopacDataFileContent = setSTFILTERInputFile(projectName);
+		return "project-populated";
+	}
 
-    public void toggleRenderMPL2(ActionEvent ev){
-	renderMasterParamList2=!renderMasterParamList2;
-	//	return renderMasterParamList;
-    }
+	public String executeSTFILTER(String contextDir, String sopacDataFileName,
+			String cfullName) throws Exception {
 
-    public boolean getRenderMasterParamList2(){
-	return renderMasterParamList2;
-    }
+		System.out.println("FileService URL:" + fileServiceUrl);
+		System.out.println("AntService URL:" + antUrl);
 
-    public void setRenderMasterParamList2(boolean renderMasterParamList2){
-	this.renderMasterParamList2=renderMasterParamList2;
-    }
-    public AllStationsContainer getAllsites(){
-	return (AllStationsContainer)allsites;
-    }
+		// --------------------------------------------------
+		// Set up the Ant Service and make the directory
+		// --------------------------------------------------
+		AntVisco ant = new AntViscoServiceLocator()
+				.getAntVisco(new URL(antUrl));
+		String bf_loc = binPath + "/" + "build.xml";
+		String[] args0 = new String[4];
+		args0[0] = "-DworkDir.prop=" + workDir;
+		args0[1] = "-buildfile";
+		args0[2] = bf_loc;
+		args0[3] = "MakeWorkDir";
 
-    public MyStationContainer getMyStation(){
-	return (MyStationContainer)myStation;
-    }
-    
-//     public Vector getAllsitesVec(){
-// 	return allsitesVec;
-//     }
+		ant.setArgs(args0);
+		ant.run();
 
-//     public void setAllsitesVec(Vector asvec) {
-// 	this.allsitesVec=asvec;
-//     }
+		// --------------------------------------------------
+		// Set up the file service and upload the driver,
+		// site list, and gps data files.
+		// --------------------------------------------------
+		FSClientStub fsclient = new FSClientStub();
+		String sopacDestfile = workDir + "/" + sopacDataFileName;
+		String driverDestfile = workDir + "/" + driverFileName;
+		String siteListDestfile = workDir + "/" + siteListFile;
+		String dataListDestfile = workDir + "/" + dataListFile;
+		String estParamDestfile = workDir + "/" + estParameterFile;
 
-//     public Vector getMysiteVec(){
-// 	return mysiteVec;
-//     }
+		try {
+			fsclient.setBindingUrl(fileServiceUrl);
+			fsclient.uploadFile(contextDir + "/" + sopacDataFileName,
+					sopacDestfile);
+			fsclient.uploadFile(contextDir + "/" + siteListFile,
+					siteListDestfile);
+			fsclient.uploadFile(contextDir + "/" + dataListFile,
+					dataListDestfile);
+			fsclient.uploadFile(contextDir + "/" + driverFileName,
+					driverDestfile);
+			fsclient.uploadFile(contextDir + "/" + estParameterFile,
+					estParamDestfile);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 
-//     public void setMysiteVec(Vector mysiteVec){
-// 	this.mysiteVec=mysiteVec;
-//     }
+		// //--------------------------------------------------
+		// // Record the names of the input, output, and log
+		// // files on the remote server.
+		// //--------------------------------------------------
+		// String remoteOutputFile=workDir+"/"+projectName+".output";
+		// String remoteLogFile=workDir+"/"+projectName+".stdout";
 
-    public String getDriverFileName() {
-	return driverFileName;
-    }
+		// cm.setCurrentProperty(cfullName,"RemoteInputFile",destfile);
+		// cm.setCurrentProperty(cfullName,"RemoteOutputFile",remoteOutputFile);
+		// cm.setCurrentProperty(cfullName,"RemoteLogFile",remoteLogFile);
 
-    public void setDriverFileName(String driverFileName){
-	this.driverFileName=driverFileName;
-    }
+		// --------------------------------------------------
+		// Run the code.
+		// --------------------------------------------------
 
-    public OutlierCriteria getOutlierCriteria() {
-	return outlierCriteria;
-    }
+		String[] args = new String[7];
+		args[0] = "-DworkDir.prop=" + workDir;
+		args[1] = "-DprojectName.prop=" + projectName;
+		args[2] = "-Dbindir.prop=" + binPath;
+		args[3] = "-DSTFILTERBaseName.prop=" + projectName;
+		args[4] = "-buildfile";
+		args[5] = bf_loc;
+		args[6] = "RunSTFILTER";
 
-    public void  setOutlierCriteria(OutlierCriteria outlierCriteria) {
-	this.outlierCriteria=outlierCriteria;
-    }
+		ant.setArgs(args);
+		ant.execute();
 
-    public int getResOption() {
-	return resOption;
-    }
+		return "stfilter-executing";
+	}
 
-    public void setResOption(int resOption) {
-	this.resOption=resOption;
-    }
+	/**
+	 * This is similar to executeSTFILTER but it must take place on a host with
+	 * gnuplot installed on it. Note this assumes for historical reasons that
+	 * stfilter and the plotting tool (gnuplot) are on separate machines.
+	 * 
+	 * This method is currently empty.
+	 */
+	public String createDataPlot(String contextDir, String sopacDataFileName,
+			String cfullName) throws Exception {
 
-    public int getTermOption() {
-	return termOption;
-    }
+		return "gnuplot-plot-created";
+	}
 
-    public void setTermOption(int termOption) {
-	this.termOption=termOption;
-    }
+	/**
+	 * Override this method.
+	 */
+	public String querySOPAC() throws Exception {
 
-    public double getCutoffCriterion() {
-	return cutoffCriterion;
-    }
+		String minMaxLatLon = null;
 
-    public void setCutoffCriterion(double cutoffCriterion) {
-	this.cutoffCriterion=cutoffCriterion;
-    }
+		System.out.println("Do the query");
+		System.out.println("Use bounding box:" + bboxChecked);
+		System.out.println(siteCode);
+		System.out.println(beginDate);
+		System.out.println(endDate);
+		System.out.println(resource);
+		System.out.println(contextGroup);
+		System.out.println(contextId);
+		System.out.println(minMaxLatLon);
 
-    public double getEstJumpSpan() {
-	return estJumpSpan;
-    }
+		if (bboxChecked) {
+			minMaxLatLon = minLatitude + " " + minLongitude + " " + maxLatitude
+					+ " " + maxLongitude;
+		}
 
-    public void setEstJumpSpan(double estJumpSpan) {
-	this.estJumpSpan=estJumpSpan;
-    }
+		GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
+		gsq.setFromServlet(siteCode, beginDate, endDate, resource,
+				contextGroup, contextId, minMaxLatLon);
+		sopacQueryResults = gsq.getResource();
+		System.out.println("Query Results");
+		System.out.println(sopacQueryResults);
+		// sopacQueryResults=filterResults(sopacQueryResults,2,3);
 
-    public WeakObsCriteria getWeakObsCriteria() {
-	return weakObsCriteria;
-    }
+		sopacDataFileContent = sopacQueryResults;
 
-    public void setWeakObsCriteria(WeakObsCriteria wobc) {
-	weakObsCriteria=wobc;
-    }
+		String codeName = getCodeName();
+		codeName = codeName.toLowerCase();
+		System.out.println("Sopac query action string:" + codeName
+				+ "-display-query-results");
+		return codeName + "-display-query-results";
+	}
 
-    public BadObsCriteria getBadObsCriteria() {
-	return badObsCriteria;
-    }
+	private String setSTFILTERInputFile(String projectName) {
+		String sopacDataFileContent = "Null Content; please re-enter";
+		String sopacDataFileName = projectName + driverFileExtension;
+		try {
+			String thedir = cm.getCurrentProperty(codeName + "/" + projectName,
+					"Directory");
+			System.out.println(thedir + "/" + sopacDataFileName);
 
-    public void setBadObsCriteria(BadObsCriteria badObsCriteria) {
-	this.badObsCriteria=badObsCriteria;
-    }
+			BufferedReader buf = new BufferedReader(new FileReader(thedir + "/"
+					+ sopacDataFileName));
+			String line = buf.readLine();
+			sopacDataFileContent = line + "\n";
+			while (line != null) {
+				System.out.println(line);
+				line = trimLine(line);
+				sopacDataFileContent += line + "\n";
+				line = buf.readLine();
+			}
+			buf.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return sopacDataFileContent;
+	}
 
-    public TimeInterval getTimeInterval() {
-	return timeInterval;
-    }
+	// --------------------------------------------------
+	// These are accessor methods.
+	// --------------------------------------------------
+	public void toggleRenderMPL1(ActionEvent ev) {
+		renderMasterParamList1 = !renderMasterParamList1;
+		// return renderMasterParamList;
+	}
 
-    public void setTimeInterval(TimeInterval timeInterval) {
-	this.timeInterval=timeInterval;
-    }
+	public boolean getRenderMasterParamList1() {
+		return renderMasterParamList1;
+	}
 
+	public void setRenderMasterParamList1(boolean renderMasterParamList1) {
+		this.renderMasterParamList1 = renderMasterParamList1;
+	}
+
+	public void toggleRenderMPL2(ActionEvent ev) {
+		renderMasterParamList2 = !renderMasterParamList2;
+		// return renderMasterParamList;
+	}
+
+	public boolean getRenderMasterParamList2() {
+		return renderMasterParamList2;
+	}
+
+	public void setRenderMasterParamList2(boolean renderMasterParamList2) {
+		this.renderMasterParamList2 = renderMasterParamList2;
+	}
+
+	public AllStationsContainer getAllsites() {
+		return (AllStationsContainer) allsites;
+	}
+
+	public MyStationContainer getMyStation() {
+		return (MyStationContainer) myStation;
+	}
+
+	// public Vector getAllsitesVec(){
+	// return allsitesVec;
+	// }
+
+	// public void setAllsitesVec(Vector asvec) {
+	// this.allsitesVec=asvec;
+	// }
+
+	// public Vector getMysiteVec(){
+	// return mysiteVec;
+	// }
+
+	// public void setMysiteVec(Vector mysiteVec){
+	// this.mysiteVec=mysiteVec;
+	// }
+
+	public String getDriverFileName() {
+		return driverFileName;
+	}
+
+	public void setDriverFileName(String driverFileName) {
+		this.driverFileName = driverFileName;
+	}
+
+	public OutlierCriteria getOutlierCriteria() {
+		return outlierCriteria;
+	}
+
+	public void setOutlierCriteria(OutlierCriteria outlierCriteria) {
+		this.outlierCriteria = outlierCriteria;
+	}
+
+	public int getResOption() {
+		return resOption;
+	}
+
+	public void setResOption(int resOption) {
+		this.resOption = resOption;
+	}
+
+	public int getTermOption() {
+		return termOption;
+	}
+
+	public void setTermOption(int termOption) {
+		this.termOption = termOption;
+	}
+
+	public double getCutoffCriterion() {
+		return cutoffCriterion;
+	}
+
+	public void setCutoffCriterion(double cutoffCriterion) {
+		this.cutoffCriterion = cutoffCriterion;
+	}
+
+	public double getEstJumpSpan() {
+		return estJumpSpan;
+	}
+
+	public void setEstJumpSpan(double estJumpSpan) {
+		this.estJumpSpan = estJumpSpan;
+	}
+
+	public WeakObsCriteria getWeakObsCriteria() {
+		return weakObsCriteria;
+	}
+
+	public void setWeakObsCriteria(WeakObsCriteria wobc) {
+		weakObsCriteria = wobc;
+	}
+
+	public BadObsCriteria getBadObsCriteria() {
+		return badObsCriteria;
+	}
+
+	public void setBadObsCriteria(BadObsCriteria badObsCriteria) {
+		this.badObsCriteria = badObsCriteria;
+	}
+
+	public TimeInterval getTimeInterval() {
+		return timeInterval;
+	}
+
+	public void setTimeInterval(TimeInterval timeInterval) {
+		this.timeInterval = timeInterval;
+	}
 }
