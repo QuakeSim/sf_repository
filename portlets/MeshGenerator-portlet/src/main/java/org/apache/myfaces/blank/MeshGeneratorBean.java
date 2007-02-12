@@ -188,7 +188,29 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	
 	String idlBinPath = "/home/gateway/GEMCodes/GeoFEST_IDL/";
 
+	String selectedProject="";
+	
+	String plotTarget="";
+	
 	// --------------------------------------------------
+	public void setSelectedProject(String tmp_str) {
+		this.selectedProject = tmp_str;
+	}
+
+	public String getSelectedProject() {
+
+		return this.selectedProject;
+	}
+
+	public void setPlotTarget(String tmp_str) {
+		this.plotTarget = tmp_str;
+	}
+
+	public String getPlotTarget() {
+
+		return this.plotTarget;
+	}
+	
 	public void setIdlBinPath(String tmp_str) {
 		this.idlBinPath = tmp_str;
 	}
@@ -234,12 +256,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		// --------------------------------------------------
 		// Process the form information
 		// --------------------------------------------------
-		FacesContext fc = FacesContext.getCurrentInstance();
-		String selectedProject = (String) fc.getExternalContext()
-				.getRequestParameterMap().get("ProjectSelect");
-		String PLOT_TARGET = (String) fc.getExternalContext()
-				.getRequestParameterMap().get("DataChoice");
 		String projectFullName = codeName + SEPARATOR + selectedProject;
+		String PLOT_TARGET=this.plotTarget;
 
 		if (selectedProject != null && !selectedProject.equals("")
 				&& PLOT_TARGET != null && !PLOT_TARGET.equals("")) {
@@ -2780,6 +2798,21 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		this.ListGeoFESTData = true;
 		return ("MG-gf-graph-output");
 	}
+	
+	public String ContourPlot() throws Exception {
+		System.out.println("Contour Plot");
+		if (!isInitialized) {
+			initWebServices();
+		}
+		setContextList();
+		FacesContext fc = FacesContext.getCurrentInstance();
+		this.selectedProject = (String) fc.getExternalContext()
+				.getRequestParameterMap().get("ProjectSelect");
+		this.plotTarget = (String) fc.getExternalContext()
+				.getRequestParameterMap().get("DataChoice");
+
+		return ("MG-contour-plot");
+	}	
 	// --------------------------------------------------
 	// These are accessor methods.
 	// --------------------------------------------------
