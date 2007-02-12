@@ -24,7 +24,7 @@
                 <!-- Needed for the context service-->
                 <managed-property>
                    <property-name>contextUrl</property-name>
-                   <value>http://gf8.ucs.indiana.edu:13080/WebServices/services/ContextManager</value>
+                   <value>http://gf1.ucs.indiana.edu:13080/WebServices/services/ContextManager</value>
                  </managed-property>
                  <managed-property>
                    <property-name>contextBasePath</property-name>
@@ -52,6 +52,24 @@
                    <value>/home/gateway/GeoFEST_WDIR/</value>
                 </managed-property>
                 <managed-property>
+                   <property-name>idlServiceURL</property-name>
+                   <value>
+                     http://danube.ucs.indiana.edu:8045/axis/services/AntVisco
+                   </value>
+                </managed-property>
+                <managed-property>
+                   <property-name>idlServerDest</property-name>
+                   <value>/home/gateway/GEMCodes/GeoFEST_IDL/</value>
+                </managed-property>
+                <managed-property>
+                   <property-name>idlBinPath</property-name>
+                   <value>/home/gateway/GEMCodes/GeoFEST_IDL/</value>
+                </managed-property>
+                <managed-property>
+                   <property-name>idlServiceURL2</property-name>
+                   <value>http://danube.ucs.indiana.edu:8045/GCWS/services/FileService</value>
+                </managed-property>
+                <managed-property>
                    <property-name>fileServiceUrl</property-name>
                    <value>http://danube.ucs.indiana.edu:8045/GCWS/services/FileService</value>
                 </managed-property>
@@ -67,27 +85,6 @@
                    <property-name>mesh_gen_viz_base_dir</property-name>
                    <value>/home/gateway/yan_offscreen/offscreen/</value>
                 </managed-property>
-
-
-                <!-- These are gnuplot host params -->
-                <managed-property>
-                   <property-name>gnuplotAntUrl</property-name>
-                   <value>
-                     http://danube.ucs.indiana.edu:8045/axis/services/AntVisco
-                   </value>
-                 </managed-property>
-                <managed-property>
-                   <property-name>gnuplotBinPath</property-name>
-                   <value>/home/gateway/GEMCodes/Gnuplot/rdahmm/plotXYZ/</value>
-                 </managed-property>
-                <managed-property>
-                   <property-name>gnuplotBaseWorkDir</property-name>
-                   <value>/home/gateway/RDAHMM_WDIR</value>
-                 </managed-property>
-                <managed-property>
-                   <property-name>gnuplotFileServiceUrl</property-name>
-                   <value>http://danube.ucs.indiana.edu:8045/GCWS/services/FileService</value>
-                 </managed-property>
 
 	</managed-bean>
 
@@ -113,6 +110,10 @@
 		<navigation-case>
 			<from-outcome>MG-scp-mesh</from-outcome>
 			<to-view-id>/ScpMesh.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-gf-project</from-outcome>
+			<to-view-id>/GfProject.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 
@@ -174,6 +175,10 @@
 			<from-outcome>MG-back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-geotrans-params</from-outcome>
+			<to-view-id>/GeotransParams.jsp</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 
 	<navigation-rule>
@@ -220,6 +225,58 @@
 	</navigation-rule>	
 	<navigation-rule>
 		<from-view-id>/FetchMesh.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/GfProject.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-gf-archived-data</from-outcome>
+			<to-view-id>/gfarchivedData.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-gf-graph-output</from-outcome>
+			<to-view-id>/gfGraphOutput.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/GeotransParams.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/gfarchivedData.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/gfGraphOutput.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-contour-plot</from-outcome>
+			<to-view-id>/ContourPlot.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/ContourPlot.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>MG-back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>

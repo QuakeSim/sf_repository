@@ -1,17 +1,9 @@
 package org.apache.myfaces.blank;
 
 //Imports from the mother ship
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.LineNumberReader;
-import java.io.StringReader;
+import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.Hashtable;
+import java.util.*;
 import java.text.*;
 
 import javax.faces.context.ExternalContext;
@@ -33,11 +25,12 @@ import TestClient.Select.SelectService;
 import TestClient.Select.SelectServiceLocator;
 import WebFlowClient.ViscoViz.MyVTKServicePortType;
 import WebFlowClient.ViscoViz.MyVTKServiceLocator;
-import WebFlowClient.fsws.FSClientStub;
+import WebFlowClient.fsws.*;
 import cgl.webclients.AntVisco;
 import cgl.webclients.AntViscoServiceLocator;
 import WebFlowClient.cm.*;
 import WebFlowClient.sjws.*;
+import WebFlowClient.aws2.*;
 
 /**
  * Everything you need to set up and run MeshGenerator.
@@ -49,36 +42,9 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	// ContextManagerImp cm=null;
 	// boolean isInitialized=false;
 
-	// RDAHMM file extensions
+	// MeshGenerator file extensions
 	String[] fileExtension = { ".input", ".stdout", ".A", ".B", ".L", ".Q",
 			".pi" };
-
-	// RDAHMM properties
-
-	protected int numModelStates = 2;
-
-	protected int randomSeed = 1;
-
-	protected String outputType = "";
-
-	// protected String sopacDataFileName="";
-	// protected String sopacDataFileContent="";
-	protected double annealStep = 0.01;
-
-	// RDAHMM Gnuplot stuff properties
-	protected String gnuplotAntUrl;
-
-	protected String gnuplotBinPath;
-
-	protected String gnuplotBaseWorkDir;
-
-	protected String gnuplotFileServiceUrl;
-
-	protected String localImageFileX;
-
-	protected String localImageFileY;
-
-	protected String localImageFileZ;
 
 	// MeshGenerator Bean staff
 	protected String codeName = "MeshGenerator";
@@ -126,6 +92,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 	Fault currentFault = new Fault();
 
+	GeotransParamsData currentGeotransParamsData = new GeotransParamsData();
+
 	List myFaultDBEntryList = new ArrayList();
 
 	List myLayerDBEntryList = new ArrayList();
@@ -135,19 +103,23 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	List myLayerEntryForProjectList = new ArrayList();
 
 	List myFaultsForProject = new ArrayList();
-	
+
 	List myProjectNameList = new ArrayList();
-	
+
 	List myLoadMeshTableEntryList = new ArrayList();
-	
-	List myarchivedMeshTableEntryList =new ArrayList();
-	
+
+	List myarchivedMeshTableEntryList = new ArrayList();
+
 	String[] myProjectCreationDateArray;
+
 	String[] myProjectMeshHostArray;
+
 	String[] myProjectNameArray;
-	
+
 	String[] faultarrayForMesh;
+
 	String[] deleteProjectsList;
+
 	String[] selectProjectsList;
 
 	private HtmlDataTable myLayerDataTable;
@@ -170,20 +142,26 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 	String magic15 = new String("1.5");
 
-	String workDir = new String();
-
 	String projectDir = new String();
 
 	MeshViewer myMeshViewer = new MeshViewer(meshServerUrl);
-	String mesh_gen_viz_fileServiceUrl= new String("http://gf2.ucs.indiana.edu:6060/jetspeed/services/FileService");
-	String mesh_gen_viz_base_dir = new String("/home/gateway/yan_offscreen/offscreen/");
+
+	String mesh_gen_viz_fileServiceUrl = new String(
+			"http://gf2.ucs.indiana.edu:6060/jetspeed/services/FileService");
+
+	String mesh_gen_viz_base_dir = new String(
+			"/home/gateway/yan_offscreen/offscreen/");
 
 	String myLayersParamForJnlp = new String("");
+
 	String myFaultsParamForJnlp = new String("");
+
 	String workDirForJnlp = new String("");
+
 	String projectNameForJnlp = new String("");
+
 	String fsURLForJnlp = new String("");
-	
+
 	String refineOutMessage = new String(
 			"Finite element mesh is being initialized.  Depending on your problem, this may take several minutes to complete.  Select Refine Mesh to see if initialization is complete and to iteratively refine your mesh.  Click Save Mesh when you are done.");
 
@@ -196,7 +174,241 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 	String SEPARATOR = "/";
 
+	boolean statusGeoFEST = false;
+
+	boolean ListGeoFESTData = false;
+
+	String contourPlotPdfUrl = "";
+
+	String idlServiceURL = "http://danube.ucs.indiana.edu:8045/axis/services/AntVisco";
+
+	String idlServiceURL2 = "http://danube.ucs.indiana.edu:8045/GCWS/services/FileService";
+
+	String idlServerDest = "/home/gateway/GEMCodes/GeoFEST_IDL/";
+	
+	String idlBinPath = "/home/gateway/GEMCodes/GeoFEST_IDL/";
+
 	// --------------------------------------------------
+	public void setIdlBinPath(String tmp_str) {
+		this.idlBinPath = tmp_str;
+	}
+
+	public String getIdlBinPath() {
+
+		return this.idlBinPath;
+	}
+	
+	public void setIdlServerDest(String tmp_str) {
+		this.idlServerDest = tmp_str;
+	}
+
+	public String getIdlServerDest() {
+
+		return this.idlServerDest;
+	}
+	
+	public void setIdlServiceURL2(String tmp_str) {
+		this.idlServiceURL2 = tmp_str;
+	}
+
+	public String getIdlServiceURL2() {
+
+		return this.idlServiceURL2;
+	}
+
+	public void setIdlServiceURL(String tmp_str) {
+		this.idlServiceURL = tmp_str;
+	}
+
+	public String getIdlServiceURL() {
+
+		return this.idlServiceURL;
+	}
+
+	public void setContourPlotPdfUrl(String tmp_str) {
+		this.contourPlotPdfUrl = tmp_str;
+	}
+
+	public String getContourPlotPdfUrl() {
+
+		// --------------------------------------------------
+		// Process the form information
+		// --------------------------------------------------
+		FacesContext fc = FacesContext.getCurrentInstance();
+		String selectedProject = (String) fc.getExternalContext()
+				.getRequestParameterMap().get("ProjectSelect");
+		String PLOT_TARGET = (String) fc.getExternalContext()
+				.getRequestParameterMap().get("DataChoice");
+		String projectFullName = codeName + SEPARATOR + selectedProject;
+
+		if (selectedProject != null && !selectedProject.equals("")
+				&& PLOT_TARGET != null && !PLOT_TARGET.equals("")) {
+
+			try {
+
+				// --------------------------------------------------
+				// Set up the file service
+				// --------------------------------------------------
+				FSClientStub fsclient = new FSClientStub();
+
+				String WORK_DIR = baseWorkDir + "/" + userName + "/"
+						+ selectedProject + "/";
+				String BIN_PATH = binPath;
+				String BF_LOC = binPath + "/build-geosnip.xml";
+
+				// Get the final time value
+				String TIMESTEP = "0";
+				String print_times_type = cm.getCurrentProperty(
+						projectFullName, "print_times_type");
+				
+				if (print_times_type != null
+						&& print_times_type.equalsIgnoreCase("steps")) {
+					try {
+						String sNumPrint = cm.getCurrentProperty(
+								projectFullName, "number_print_times");
+						String sNumInterval = cm.getCurrentProperty(
+								projectFullName, "print_interval");
+						double numPrint = Double.parseDouble(sNumPrint);
+						double numInterval = Double.parseDouble(sNumInterval);
+						double lastTimeStep = (numPrint - 1.0) * numInterval;
+						TIMESTEP = lastTimeStep + "";
+					} catch (Exception ex) {
+						// Don't worry, just use the default.
+					}
+				}
+
+				// --------------------------------------------------
+				// Get the client stub for the ant service
+				// Need two ants: one for the host with the data
+				// file and the other for the host with the
+				// idl installation. For now, only gridfarm2
+				// has IDL installed.
+				// Note: File transfer service does NOT work on
+				// gf2,so we push to gf4 and use shared file system.
+				// --------------------------------------------------
+				String dataServiceURL = this.antUrl;
+				AntVisco antHost = new AntViscoServiceLocator()
+						.getAntVisco(new URL(dataServiceURL));
+
+				AntVisco antIdl = new AntViscoServiceLocator()
+						.getAntVisco(new URL(idlServiceURL));
+
+				
+
+				// --------------------------------------------------
+				// Run the ant tsnip process.
+				// --------------------------------------------------
+				String[] args = new String[9];
+				// Needed to run Geotrans and GeoFEST targets
+				args[0] = "-Dworkdir.prop=" + WORK_DIR;
+				args[1] = "-DprojectName.prop=" + selectedProject;
+				args[2] = "-Dbindir.prop=" + BIN_PATH;
+				args[3] = "-Dtimestep.prop=" + TIMESTEP;
+				args[4] = "-DremoteUrl.prop=" + idlServiceURL2;
+				args[5] = "-DremoteDest.prop=" + idlServerDest;
+
+				// Needed to run ant on danube
+				args[6] = "-buildfile";
+				args[7] = BF_LOC;
+				args[8] = "tsnip";
+
+				antHost.setArgs(args);
+				antHost.run();
+
+				// --------------------------------------------------
+				// Move the tsnipped files to the IDL host.
+				// --------------------------------------------------
+				String dataHostURL = fileServiceUrl;
+
+				String idlHostURL = idlServiceURL2;
+
+				fsclient.setBindingUrl(dataHostURL);
+
+				// These are files on the data host.
+				String firststep = WORK_DIR + "/" + "geofest0.out";
+				String laststep = WORK_DIR + "/" + "geofestx.out";
+				String nodecount = WORK_DIR + "/" + "nnodefile";
+
+				// These are the names on the IDL host.
+				String idlFirst = idlServerDest + "/geofest0.out";
+				String idlLast = idlServerDest + "/geofestx.out";
+				String idlNode = idlServerDest + "/nnodefile";
+
+				fsclient.downloadFile(firststep, "/tmp/firststep" );
+				fsclient.downloadFile(laststep, "/tmp/laststep" );
+				fsclient.downloadFile(nodecount, "/tmp/nodecount" );
+				fsclient.setBindingUrl(idlHostURL);
+				fsclient.uploadFile("/tmp/firststep", idlFirst);
+				fsclient.uploadFile("/tmp/laststep", idlLast);
+				fsclient.uploadFile("/tmp/nodecount", idlNode);
+				
+				// --------------------------------------------------
+				// Run the ant idl process
+				// --------------------------------------------------
+				String IDL_BIN_PATH = idlBinPath;
+				String IDL_BF_LOC = IDL_BIN_PATH + "/build-idl.xml";
+
+				String[] args2 = new String[4];
+				args2[0] = "-Dbindir.prop=" + IDL_BIN_PATH;
+				args2[1] = "-buildfile";
+				args2[2] = IDL_BF_LOC;
+				args2[3] = PLOT_TARGET;
+
+				System.out.println("3");
+				System.out.println(IDL_BIN_PATH);
+				System.out.println(IDL_BF_LOC);
+				System.out.println(PLOT_TARGET);
+				System.out.println(idlServiceURL);
+
+				antIdl.setArgs(args2);
+				antIdl.run();
+
+				// --------------------------------------------------
+				// Get back the image
+				// --------------------------------------------------
+				long tstamp = (new Date()).getTime();
+				String localImageName = PLOT_TARGET + tstamp + ".pdf";
+				String remoteImageName = PLOT_TARGET + ".pdf";
+				
+
+				String fullLocalName = getRealPath() + "/" + localImageName;
+				String fullRemoteName = IDL_BIN_PATH + remoteImageName;
+				String fsUrl = idlServiceURL2;
+				fsclient.setBindingUrl(fsUrl);
+				fsclient.downloadFile(fullRemoteName, fullLocalName);
+				this.contourPlotPdfUrl = getContextPath() + "/"
+						+ localImageName;
+				
+				
+			} catch (Exception ex) {
+				System.out.println("Image not available");
+				ex.printStackTrace();
+			}
+		} else {
+			System.out.println("Something wroong");
+		}
+
+		return this.contourPlotPdfUrl;
+	}
+
+	public void setCurrentGeotransParamsData(
+			GeotransParamsData tmp_GeotransParamsData) {
+		this.currentGeotransParamsData = tmp_GeotransParamsData;
+	}
+
+	public GeotransParamsData getCurrentGeotransParamsData() {
+		return this.currentGeotransParamsData;
+	}
+
+	public void setStatusGeoFEST(boolean tmp_str) {
+		this.statusGeoFEST = tmp_str;
+	}
+
+	public boolean getStatusGeoFEST() {
+
+		return this.statusGeoFEST;
+	}
+
 	public void setMyarchivedMeshTableEntryList(List tmp_str) {
 		this.myarchivedMeshTableEntryList = tmp_str;
 	}
@@ -207,18 +419,30 @@ public class MeshGeneratorBean extends GenericSopacBean {
 			String[] tmp_contextlist = cm.listContext(codeName);
 			if (tmp_contextlist.length > 0) {
 				for (int i = 0; i < tmp_contextlist.length; i++) {
-					loadMeshTableEntry tmp_loadMeshTableEntry=new loadMeshTableEntry();
-					tmp_loadMeshTableEntry.projectName=tmp_contextlist[i];
-					tmp_loadMeshTableEntry.meshHost=cm.getCurrentProperty(codeName+"/"+tmp_contextlist[i],"hostName");
-					if(tmp_loadMeshTableEntry.meshHost==null) {
-						tmp_loadMeshTableEntry.meshHost="null";
+					loadMeshTableEntry tmp_loadMeshTableEntry = new loadMeshTableEntry();
+					tmp_loadMeshTableEntry.projectName = tmp_contextlist[i];
+					tmp_loadMeshTableEntry.meshHost = cm.getCurrentProperty(
+							codeName + "/" + tmp_contextlist[i], "hostName");
+					if (tmp_loadMeshTableEntry.meshHost == null) {
+						tmp_loadMeshTableEntry.meshHost = "null";
 					}
-					tmp_loadMeshTableEntry.creationDate=(new Date(Long.parseLong(cm.getCurrentProperty(codeName+"/"+tmp_contextlist[i],"LastTime")))).toString();
-					tmp_loadMeshTableEntry.view=false;
-	                String archived=cm.getCurrentProperty(codeName+"/"+tmp_contextlist[i],"MeshArchived");
-	                if(archived!=null && archived.equalsIgnoreCase("true")) {
-	                	myarchivedMeshTableEntryList.add(tmp_loadMeshTableEntry);
-	                }
+					tmp_loadMeshTableEntry.creationDate = (new Date(Long
+							.parseLong(cm.getCurrentProperty(codeName + "/"
+									+ tmp_contextlist[i], "LastTime"))))
+							.toString();
+					tmp_loadMeshTableEntry.view = false;
+					String archived = "";
+					if (this.ListGeoFESTData == true) {
+						archived = cm.getCurrentProperty(codeName + "/"
+								+ tmp_contextlist[i], "ListGeoFESTData");
+					} else {
+						archived = cm.getCurrentProperty(codeName + "/"
+								+ tmp_contextlist[i], "MeshArchived");
+					}
+					if (archived != null && archived.equalsIgnoreCase("true")) {
+						myarchivedMeshTableEntryList
+								.add(tmp_loadMeshTableEntry);
+					}
 				}
 			}
 
@@ -227,7 +451,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		}
 		return this.myarchivedMeshTableEntryList;
 	}
-	
+
 	public void setMyLoadMeshTableEntryList(List tmp_str) {
 		this.myLoadMeshTableEntryList = tmp_str;
 	}
@@ -238,14 +462,18 @@ public class MeshGeneratorBean extends GenericSopacBean {
 			String[] tmp_contextlist = cm.listContext(codeName);
 			if (tmp_contextlist.length > 0) {
 				for (int i = 0; i < tmp_contextlist.length; i++) {
-					loadMeshTableEntry tmp_loadMeshTableEntry=new loadMeshTableEntry();
-					tmp_loadMeshTableEntry.projectName=tmp_contextlist[i];
-					tmp_loadMeshTableEntry.meshHost=cm.getCurrentProperty(codeName+"/"+tmp_contextlist[i],"hostName");
-					if(tmp_loadMeshTableEntry.meshHost==null) {
-						tmp_loadMeshTableEntry.meshHost="null";
+					loadMeshTableEntry tmp_loadMeshTableEntry = new loadMeshTableEntry();
+					tmp_loadMeshTableEntry.projectName = tmp_contextlist[i];
+					tmp_loadMeshTableEntry.meshHost = cm.getCurrentProperty(
+							codeName + "/" + tmp_contextlist[i], "hostName");
+					if (tmp_loadMeshTableEntry.meshHost == null) {
+						tmp_loadMeshTableEntry.meshHost = "null";
 					}
-					tmp_loadMeshTableEntry.creationDate=(new Date(Long.parseLong(cm.getCurrentProperty(codeName+"/"+tmp_contextlist[i],"LastTime")))).toString();
-					tmp_loadMeshTableEntry.view=false;
+					tmp_loadMeshTableEntry.creationDate = (new Date(Long
+							.parseLong(cm.getCurrentProperty(codeName + "/"
+									+ tmp_contextlist[i], "LastTime"))))
+							.toString();
+					tmp_loadMeshTableEntry.view = false;
 					myLoadMeshTableEntryList.add(tmp_loadMeshTableEntry);
 				}
 			}
@@ -255,7 +483,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		}
 		return this.myLoadMeshTableEntryList;
 	}
-	
+
 	public void setSelectProjectsList(String[] tmp_str) {
 		this.selectProjectsList = tmp_str;
 	}
@@ -264,7 +492,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 		return this.selectProjectsList;
 	}
-	
+
 	public void setDeleteProjectsList(String[] tmp_str) {
 		this.deleteProjectsList = tmp_str;
 	}
@@ -279,7 +507,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 			String[] tmp_contextlist = cm.listContext(codeName);
 			if (tmp_contextlist.length > 0) {
 				for (int i = 0; i < tmp_contextlist.length; i++) {
-					myProjectMeshHostArray[i]=cm.getCurrentProperty(codeName+"/"+tmp_contextlist[i],"hostName");
+					myProjectMeshHostArray[i] = cm.getCurrentProperty(codeName
+							+ "/" + tmp_contextlist[i], "hostName");
 				}
 			}
 
@@ -289,13 +518,16 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		return this.myProjectMeshHostArray;
 
 	}
-	
+
 	public String[] getMyProjectCreationDateArray() {
 		try {
 			String[] tmp_contextlist = cm.listContext(codeName);
 			if (tmp_contextlist.length > 0) {
 				for (int i = 0; i < tmp_contextlist.length; i++) {
-					myProjectCreationDateArray[i]=(new Date(Long.parseLong(cm.getCurrentProperty(codeName+"/"+tmp_contextlist[i],"LastTime")))).toString();
+					myProjectCreationDateArray[i] = (new Date(Long.parseLong(cm
+							.getCurrentProperty(codeName + "/"
+									+ tmp_contextlist[i], "LastTime"))))
+							.toString();
 				}
 			}
 		} catch (Exception ex) {
@@ -303,7 +535,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		}
 		return this.myProjectCreationDateArray;
 	}
-	
+
 	public void setMyProjectNameList(List tmp_str) {
 		this.myProjectNameList = tmp_str;
 	}
@@ -314,7 +546,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 			String[] tmp_contextlist = cm.listContext(codeName);
 			if (tmp_contextlist.length > 0) {
 				for (int i = 0; i < tmp_contextlist.length; i++) {
-					myProjectNameList.add(new SelectItem(tmp_contextlist[i],tmp_contextlist[i]));
+					myProjectNameList.add(new SelectItem(tmp_contextlist[i],
+							tmp_contextlist[i]));
 				}
 			}
 
@@ -325,7 +558,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		return this.myProjectNameList;
 
 	}
-	
+
 	public void setMesh_gen_viz_base_dir(String tmp_str) {
 		this.mesh_gen_viz_base_dir = tmp_str;
 	}
@@ -334,7 +567,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 		return this.mesh_gen_viz_base_dir;
 	}
-	
+
 	public void setMesh_gen_viz_fileServiceUrl(String tmp_str) {
 		this.mesh_gen_viz_fileServiceUrl = tmp_str;
 	}
@@ -343,22 +576,23 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 		return this.mesh_gen_viz_fileServiceUrl;
 	}
-	
+
 	public String getFsURLForJnlp() {
-		this.fsURLForJnlp=getBASE64(fileServiceUrl);
+		this.fsURLForJnlp = getBASE64(fileServiceUrl);
 		return this.fsURLForJnlp;
 	}
-	
+
 	public String getProjectNameForJnlp() {
-		this.projectNameForJnlp=getBASE64(projectName);
+		this.projectNameForJnlp = getBASE64(projectName);
 		return this.projectNameForJnlp;
 	}
-	
+
 	public String getWorkDirForJnlp() {
-		this.workDirForJnlp=getBASE64(workDir);
+		this.workDirForJnlp = getBASE64(baseWorkDir + "/" + userName + "/"
+				+ projectName + "/");
 		return this.workDirForJnlp;
 	}
-	
+
 	public void setFaultarrayForMesh(String[] tmp_str) {
 		this.faultarrayForMesh = tmp_str;
 	}
@@ -367,7 +601,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 		return this.faultarrayForMesh;
 	}
-	
+
 	public void setRefineOutMessage(String tmp_str) {
 		this.refineOutMessage = tmp_str;
 	}
@@ -383,7 +617,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 	public List getMyFaultsForProject() {
 		this.myFaultsForProject.clear();
-		myFaultEntryForProjectList=getMyFaultEntryForProjectList();
+		myFaultEntryForProjectList = getMyFaultEntryForProjectList();
 		for (int i = 0; i < myFaultEntryForProjectList.size(); i++) {
 			faultEntryForProject tmp_FaultEntryForProject = (faultEntryForProject) myFaultEntryForProjectList
 					.get(i);
@@ -518,7 +752,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 		return this.myLayersParamForJnlp;
 	}
-
 
 	public void setMyMeshViewer(MeshViewer tmp_str) {
 		this.myMeshViewer = tmp_str;
@@ -866,7 +1099,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	public void handleFaultsRadioValueChange(ValueChangeEvent event) {
 
 		try {
-			// Catch the MyData item during the third phase of the JSF lifecycle.
+			// Catch the MyData item during the third phase of the JSF
+			// lifecycle.
 			FaultDBEntry tmp_FaultDBEntry = (FaultDBEntry) getMyFaultDataTable()
 					.getRowData();
 			SelectItem tmp_SelectItem = tmp_FaultDBEntry.getFaultName();
@@ -879,7 +1113,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	public String handleFaultEntryEdit(ActionEvent ev) {
 
 		try {
-			// Catch the MyData item during the third phase of the JSF lifecycle.
+			// Catch the MyData item during the third phase of the JSF
+			// lifecycle.
 			FaultDBEntry tmp_FaultDBEntry = (FaultDBEntry) getMyFaultDataTable()
 					.getRowData();
 			SelectItem tmp_SelectItem = tmp_FaultDBEntry.getFaultName();
@@ -901,7 +1136,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 		// Get selected MyData item to be edited.
 		try {
-			// Catch the MyData item during the third phase of the JSF lifecycle.
+			// Catch the MyData item during the third phase of the JSF
+			// lifecycle.
 			LayerDBEntry tmp_LayerDBEntry = (LayerDBEntry) getMyLayerDataTable()
 					.getRowData();
 			SelectItem tmp_SelectItem = tmp_LayerDBEntry.getLayerName();
@@ -928,15 +1164,16 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		return retval;
 	}
 
-	//	public void handleUpdateFaultsRadioChange(ValueChangeEvent event) {
+	// public void handleUpdateFaultsRadioChange(ValueChangeEvent event) {
 	//
 	//
-	//	}
+	// }
 
 	public void handleLayersRadioValueChange(ValueChangeEvent event) {
 
 		try {
-			// Catch the MyData item during the third phase of the JSF lifecycle.
+			// Catch the MyData item during the third phase of the JSF
+			// lifecycle.
 			LayerDBEntry tmp_LayerDBEntry = (LayerDBEntry) getMyLayerDataTable()
 					.getRowData();
 			SelectItem tmp_SelectItem = tmp_LayerDBEntry.getLayerName();
@@ -1100,10 +1337,10 @@ public class MeshGeneratorBean extends GenericSopacBean {
 					theFault, theSegment));
 			double lonEnd = Double.parseDouble(getDBValue(select, "LonEnd",
 					theFault, theSegment));
-			//			System.out.println(latEnd);
-			//			System.out.println(latStart);
-			//			System.out.println(lonStart);
-			//			System.out.println(lonEnd);
+			// System.out.println(latEnd);
+			// System.out.println(latStart);
+			// System.out.println(lonStart);
+			// System.out.println(lonEnd);
 
 			// Calculate the length
 			NumberFormat format = NumberFormat.getInstance();
@@ -1600,7 +1837,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 			for (int i = 0; i < refiningFaults.length; i++) {
 				String faultName = refiningFaults[i] + ".flt";
 				String[] args = new String[10];
-				args[0] = "-Dworkdir.prop=" + workDir;
+				args[0] = "-Dworkdir.prop=" + baseWorkDir + "/" + userName
+						+ "/" + projectName + "/";
 				args[1] = "-DprojectDir.prop=" + projectDir;
 				args[2] = "-DprojectName.prop=" + projectName;
 				args[3] = "-Dbindir.prop=" + binPath;
@@ -1630,7 +1868,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 			// --------------------------------------------------
 			FSClientStub fsclient = new FSClientStub();
 			fsclient.setBindingUrl(fileServiceUrl);
-			fsclient.downloadFile(workDir + File.separator + refineout, "/tmp/"
+			fsclient.downloadFile(baseWorkDir + "/" + userName + "/"
+					+ projectName + "/" + File.separator + refineout, "/tmp/"
 					+ refineout + tstamp);
 			BufferedReader buf = new BufferedReader(new FileReader("/tmp/"
 					+ refineout + tstamp));
@@ -1649,11 +1888,9 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		}
 
 	}
-	
-	
+
 	public void toggleAddLayerForProject(ActionEvent ev) {
 		initEditFormsSelection();
-		String newline = "<br>";
 		String projectFullName = codeName + SEPARATOR + projectName;
 		String gcname = currentLayer.layerName;
 
@@ -1720,7 +1957,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 	public void toggleAddFaultForProject(ActionEvent ev) {
 		initEditFormsSelection();
-		String newline = "<br>";
 		String projectFullName = codeName + SEPARATOR + projectName;
 		String gcname = currentFault.faultName;
 
@@ -1785,8 +2021,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	}
 
 	public String toggleFireMeshGen() {
-		this.workDir = baseWorkDir;
-		this.projectDir = this.workDir;
+		this.projectDir = this.baseWorkDir;
 
 		int MINIMUM_NUMBER_FAULTS = 1;
 		int MINIMUM_NUMBER_LAYERS = 1;
@@ -1832,8 +2067,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 					return "MG-this";
 				}
 
-				String hostDir = workDir + "/" + userName + "/" + projectName
-						+ "/";
+				String hostDir = baseWorkDir + "/" + userName + "/"
+						+ projectName + "/";
 				String command = "mkdir -p " + hostDir;
 				sjws.execLocalCommand(command);
 
@@ -1931,7 +2166,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 				// Finally, initialize the mesh
 
-				this.workDir = hostDir;
 				this.projectDir = hostDir;
 
 				// These need to come from AWS
@@ -2030,17 +2264,21 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 	public String SaveMeshMetaData() throws Exception {
 		String projectFullName = codeName + SEPARATOR + projectName;
-		cm.setCurrentProperty(projectFullName,"MeshArchived","true");
-		cm.setCurrentProperty(projectFullName,"hostName",hostName);
-		cm.setCurrentProperty(projectFullName,"workDir",workDir);
+		cm.setCurrentProperty(projectFullName, "MeshArchived", "true");
+		cm.setCurrentProperty(projectFullName, "hostName", hostName);
+		cm.setCurrentProperty(projectFullName, "workDir", baseWorkDir + "/"
+				+ userName + "/" + projectName + "/");
 
-		String name=cm.getCurrentProperty(projectFullName,"Name");
+		String UserMsg = "Index, tetra, and node files were saved";
+		if (this.statusGeoFEST != true) {
+			return ("MG-back");
+		} else {
+			currentGeotransParamsData.reset(this.projectName);
+			return ("MG-geotrans-params");
 
-		String UserMsg="Index, tetra, and node files were saved";
-		
-		return ("MG-back");
+		}
 	}
-	
+
 	public void init_edit_project() {
 		initEditFormsSelection();
 		projectSelectionCode = "";
@@ -2078,7 +2316,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		faultSelectionCode = "";
 		return "MG-edit-project";
 	}
-	
+
 	public String toggleDeleteProject() {
 		if (!isInitialized) {
 			initWebServices();
@@ -2100,8 +2338,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		}
 
 		return "MG-this";
-	}	
-	
+	}
+
 	public String setProjectname() throws Exception {
 		// Do real logic
 		System.out.println("Creating new project");
@@ -2118,14 +2356,16 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	public String SetAndViewMeshImage() throws Exception {
 		myMeshViewer.reset();
 		myMeshViewer.setServiceUrl(this.meshServerUrl);
-		myMeshViewer.fileServiceUrl=fileServiceUrl;
-		myMeshViewer.projectName=projectName;
-		myMeshViewer.workDir=workDir;
-		myMeshViewer.mesh_gen_viz_base_dir=mesh_gen_viz_base_dir;
-		myMeshViewer.mesh_gen_viz_fileServiceUrl=mesh_gen_viz_fileServiceUrl;
+		myMeshViewer.fileServiceUrl = fileServiceUrl;
+		myMeshViewer.projectName = projectName;
+		myMeshViewer.workDir = baseWorkDir + "/" + userName + "/" + projectName
+				+ "/";
+		;
+		myMeshViewer.mesh_gen_viz_base_dir = mesh_gen_viz_base_dir;
+		myMeshViewer.mesh_gen_viz_fileServiceUrl = mesh_gen_viz_fileServiceUrl;
 		return "MG-view-mesh";
 	}
-	
+
 	public String SetAndPlot() throws Exception {
 		myMeshViewer.reset();
 		myMeshViewer.setServiceUrl(this.meshServerUrl);
@@ -2149,36 +2389,34 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		setContextList();
 		return ("MG-list-project");
 	}
-	
+
 	public String loadThenAntRun() throws Exception {
 		System.out.println("Loading Mesh");
 		if (!isInitialized) {
 			initWebServices();
 		}
 		setContextList();
-		for(int i=0; i< myLoadMeshTableEntryList.size();i++)
-		{
-			loadMeshTableEntry tmp_myLoadMeshTableEntry=(loadMeshTableEntry)myLoadMeshTableEntryList.get(i);
-			if( tmp_myLoadMeshTableEntry.view == true) {
-				this.projectName=tmp_myLoadMeshTableEntry.projectName;
-				this.meshSize="50";
-				this.magic15="1.5";
-				this.workDir=baseWorkDir + "/" + userName + "/" + projectName
-				+ "/";
+		for (int i = 0; i < myLoadMeshTableEntryList.size(); i++) {
+			loadMeshTableEntry tmp_myLoadMeshTableEntry = (loadMeshTableEntry) myLoadMeshTableEntryList
+					.get(i);
+			if (tmp_myLoadMeshTableEntry.view == true) {
+				this.projectName = tmp_myLoadMeshTableEntry.projectName;
+				this.meshSize = "50";
+				this.magic15 = "1.5";
 				break;
 			}
 		}
-		
+
 		return toggleFireMeshGen();
 	}
-	
+
 	public String loadMesh() throws Exception {
 		System.out.println("Loading Mesh");
 		if (!isInitialized) {
 			initWebServices();
 		}
 		setContextList();
-		
+
 		return ("MG-load-mesh");
 	}
 
@@ -2188,484 +2426,362 @@ public class MeshGeneratorBean extends GenericSopacBean {
 			initWebServices();
 		}
 		setContextList();
-		
+		this.ListGeoFESTData = false;
 		return ("MG-fetch-mesh");
-	}	
-	public String loadProjectPlots() throws Exception {
-		System.out.println("Loading project");
+	}
+
+	public String gfProject() throws Exception {
+		System.out.println("GeoFest2 main page");
+		if (!isInitialized) {
+			initWebServices();
+		}
+
+		return ("MG-gf-project");
+	}
+
+	public String runGeoFEST() throws Exception {
+		System.out.println("GeoFest2 main page");
+		if (!isInitialized) {
+			initWebServices();
+		}
+		this.statusGeoFEST = true;
+		return ("MG-back");
+	}
+
+	public String GeoFEST_Full_Run() throws Exception {
+		System.out.println("GeoFEST_Full_Run main page");
+		if (!isInitialized) {
+			initWebServices();
+		}
+		this.currentGeotransParamsData.run_choice = "GeoFEST_Full_Run";
+		StageGeotransFile();
+		return ("MG-back");
+	}
+
+	public String GeoFEST_Dry_Run() throws Exception {
+		System.out.println("GeoFEST_Dry_Run main page");
+		if (!isInitialized) {
+			initWebServices();
+		}
+		this.currentGeotransParamsData.run_choice = "GeoFEST_Dry_Run";
+		StageGeotransFile();
+		return ("MG-back");
+	}
+
+	protected static String getRealPath() {
+		String path = ".";
+		try {
+			path = FacesContext.getCurrentInstance().getApplication()
+					.getClass().getResource("/")
+					+ "../../meshdownloads/";
+			path = path.substring(5);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return path;
+	}
+
+	protected static String getContextPath() {
+		String path = ".";
+		try {
+			path = FacesContext.getCurrentInstance().getExternalContext()
+					.getRequestContextPath()
+					+ "/meshdownloads/";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return path;
+	}
+
+	public void StageGeotransFile() throws Exception {
+		System.out.println("StageGeotransFile processing");
+		if (!isInitialized) {
+			initWebServices();
+		}
+		// --------------------------------------------------
+		// Set up the file to write.
+		// --------------------------------------------------
+		String projectFullName = codeName + SEPARATOR + projectName;
+		String geotrans_file = cm.getCurrentProperty(projectFullName,
+				"Directory")
+				+ "/" + projectName + ".std";
+		PrintWriter pw = new PrintWriter(new FileWriter(geotrans_file), true);
+		// --------------------------------------------------
+		// Now write out all the geotrans params to a file.
+		// --------------------------------------------------
+		String output_file = this.currentGeotransParamsData.outputFileName;
+		String GFInput = this.currentGeotransParamsData.inputFileName;
+		String emailAddr = "";
+
+		String br = "";
+		String space = " ";
+
+		pw.println("output_filename" + space + output_file);
+		pw.print("number_space_dimensions" + space
+				+ this.currentGeotransParamsData.number_space_dimensions + br);
+		pw.print("number_degrees_freedom" + space
+				+ this.currentGeotransParamsData.number_degrees_freedom + br);
+		pw.print("nrates" + space + this.currentGeotransParamsData.nrates + br);
+		pw.print("shape_flag" + space
+				+ this.currentGeotransParamsData.shape_flag + br);
+		pw.print("solver_flag" + space
+				+ this.currentGeotransParamsData.solver_flag + br);
+		pw.print("number_time_groups" + space
+				+ this.currentGeotransParamsData.number_time_groups + br);
+		pw.print("reform_steps" + space
+				+ this.currentGeotransParamsData.reform_steps + br);
+		pw.print("backup_steps" + space
+				+ this.currentGeotransParamsData.backup_steps + br);
+		pw.print("fault_interval" + space
+				+ this.currentGeotransParamsData.fault_interval + br);
+		pw.print("end_time" + space + this.currentGeotransParamsData.end_time
+				+ br);
+		pw.print("alpha" + space + this.currentGeotransParamsData.alpha + br);
+		pw.print("time_step" + space + this.currentGeotransParamsData.time_step
+				+ br);
+
+		pw.print("top_bc" + space + this.currentGeotransParamsData.top_bc
+				+ space + this.currentGeotransParamsData.top_bc_value + br);
+		pw.print("east_bc" + space + this.currentGeotransParamsData.east_bc
+				+ space + this.currentGeotransParamsData.east_bc_value + br);
+		pw.print("west_bc" + space + this.currentGeotransParamsData.west_bc
+				+ space + this.currentGeotransParamsData.west_bc_value + br);
+		pw.print("north_bc" + space + this.currentGeotransParamsData.north_bc
+				+ space + this.currentGeotransParamsData.north_bc_value + br);
+		pw.print("south_bc" + space + this.currentGeotransParamsData.south_bc
+				+ space + this.currentGeotransParamsData.south_bc_value + br);
+		pw.print("bottom_bc" + space + this.currentGeotransParamsData.bottom_bc
+				+ space + this.currentGeotransParamsData.bottom_bc_value + br);
+
+		pw.print("reporting_nodes" + space
+				+ this.currentGeotransParamsData.reportingNodes + br);
+		pw.print("reporting_elements" + space
+				+ this.currentGeotransParamsData.reportingElements + br);
+		pw.print("print_times_type" + space
+				+ this.currentGeotransParamsData.printTimesType + br);
+		pw.print("start_from_file" + space
+				+ this.currentGeotransParamsData.restartFile + br);
+		pw.print("checkpoint_file" + space
+				+ this.currentGeotransParamsData.checkpointFile + br);
+
+		// Finally, handle the number_print_times variable, which
+
+		if (this.currentGeotransParamsData.printTimesType
+				.equalsIgnoreCase("steps")) {
+			pw.println("number_print_times" + space
+					+ this.currentGeotransParamsData.numberofPrintTimes);
+			pw.println("print_interval" + space
+					+ this.currentGeotransParamsData.printTimesInterval);
+			cm.setCurrentProperty(projectFullName, "print_times_type",
+					this.currentGeotransParamsData.printTimesType);
+			cm.setCurrentProperty(projectFullName, "number_print_times",
+					this.currentGeotransParamsData.numberofPrintTimes);
+			cm.setCurrentProperty(projectFullName, "print_interval",
+					this.currentGeotransParamsData.printTimesInterval);
+		} else if (this.currentGeotransParamsData.printTimesType
+				.equalsIgnoreCase("list")) {
+			String print_time_vals = this.currentGeotransParamsData.printTimesInterval;
+			double dptv = Double.parseDouble(print_time_vals);
+			double maxSteps = Double
+					.parseDouble(this.currentGeotransParamsData.end_time);
+			int icount = 0;
+			pw.print("print_times" + " ");
+			while (icount * dptv < maxSteps) {
+				icount++;
+				pw.print(icount * dptv + " ");
+			}
+			pw.println("");
+			pw.println("number_print_times" + " " + (icount - 1));
+			cm.setCurrentProperty(projectFullName, "print_times", (icount - 1)
+					+ "");
+			cm.setCurrentProperty(projectFullName, "print_times_type",
+					this.currentGeotransParamsData.printTimesType);
+			cm.setCurrentProperty(projectFullName, "maxSteps", maxSteps + "");
+			cm.setCurrentProperty(projectFullName, "print_time_vals",
+					print_time_vals);
+
+		} else {
+			// Use defaults
+		}
+		// --------------------------------------------------
+		// Push the geotrans file out to the server with
+		// the file service.
+		// --------------------------------------------------
+		FSClientStub fsclient = new FSClientStub();
+		fsclient.setBindingUrl(fileServiceUrl);
+		fsclient.uploadFile(geotrans_file, baseWorkDir + "/" + userName + "/"
+				+ projectName + "/" + projectName + ".std");
+		// Lastly, see if we need to run GeoFEST. If not, just return to the
+		// Main page. We assume by default that GeoFEST should be launched.
+
+		String GenMovie = "MovieMaker";
+		if (GenMovie == null || GenMovie != "MovieMaker")
+			GenMovie = "GeoFEST_email";
+
+		String BIN_PATH = this.binPath;
+		String BASE_WORK_DIR = this.baseWorkDir;
+		String WORK_DIR = BASE_WORK_DIR + "/" + userName + "/" + projectName;
+		String BF_LOC = this.binPath + "build-geotrans.xml";
+
+		// --------------------------------------------------
+		// Get these from the request. Needed to run
+		// GeoFEST and Geotrans.
+		// --------------------------------------------------
+		String GFOutput = output_file;
+		String GFLog = this.currentGeotransParamsData.logFileName;
+		String email = emailAddr;
+
+		// --------------------------------------------------
+		// Set up the context and the session.
+		// --------------------------------------------------
+		String inputName = WORK_DIR + "/" + GFInput;
+		String inputName4download = getRealPath() + "/" + GFInput;
+		String outputName = WORK_DIR + "/" + GFOutput;
+		String outputName4download = getRealPath() + "/" + GFOutput;
+		String logName = WORK_DIR + "/" + GFLog;
+		String logName4download = getRealPath() + "/" + GFLog;
+		String tarName = WORK_DIR + "/" + projectName + ".tar.gz";
+		String tarName4download = getRealPath() + "/" + projectName + ".tar.gz";
+
+		cm.setCurrentProperty(projectFullName, "hostName", hostName);
+
+		cm.setCurrentProperty(projectFullName, "GFInput", GFInput);
+		cm.setCurrentProperty(projectFullName, "Input_Fullname", inputName);
+
+		cm.setCurrentProperty(projectFullName, "GFOutput", GFOutput);
+		cm.setCurrentProperty(projectFullName, "Output_Fullname", outputName);
+
+		cm.setCurrentProperty(projectFullName, "GFLog", GFLog);
+		cm.setCurrentProperty(projectFullName, "Log_Fullname", logName);
+
+		// --------------------------------------------------
+		// Get the client stub for the ant service
+		// --------------------------------------------------
+		AntVisco ant = new AntViscoServiceLocator()
+				.getAntVisco(new URL(antUrl));
+
+		// --------------------------------------------------
+		// Additional parameters needed to run the movie maker.
+		// should be removed? I am not sure
+		// --------------------------------------------------
+		String jabbaFSUrl = "http://jabba.jpl.nasa.gov:8181/axis/services/FileService";
+		String antUrl = "http://jabba.jpl.nasa.gov:8181/axis/services/AntService";
+		String movieServerUrl = "http://jabba.jpl.nasa.gov:8181/Movies/GeoFEST/";
+		String remoteDest = "/raid/ciprico/mpierce/rivadata/";
+		String topology = projectName + ".toptris";
+		String jabba_bf_loc = "/home/mpierce/jakarta-tomcat-4.1.24/webapps/axis/WEB-INF/build/build.xml";
+		String vizName = "Geo";
+
+		// If we are doing a dry run, just launch geotrans and stop.
+		if (this.currentGeotransParamsData.run_choice
+				.equalsIgnoreCase("GeoFEST_Dry_Run")) {
+
+			String[] args = new String[17];
+			// Needed to run Geotrans and GeoFEST targets
+			args[0] = "-Dworkdir.prop=" + WORK_DIR;
+			args[1] = "-DprojectName.prop=" + projectName;
+			args[2] = "-Dbindir.prop=" + BIN_PATH;
+			args[3] = "-DGFInput.prop=" + GFInput;
+			args[4] = "-DGFOutput.prop=" + GFOutput;
+			args[5] = "-DGFLog.prop=" + GFLog;
+
+			// Needed to run MovieMaker
+			args[6] = "-DremoteUrl.prop=" + jabbaFSUrl;
+			args[7] = "-DremoteDest.prop=" + remoteDest;
+			args[8] = "-Dtopology.prop=" + topology;
+			args[9] = "-DAntUrl.prop=" + antUrl;
+			args[10] = "-DmovieServer.prop=" + movieServerUrl;
+			args[11] = "-DvizName.prop=" + vizName;
+			args[12] = "-DemailAddress.prop=" + email;
+			args[13] = "-Dbf_loc.prop=" + jabba_bf_loc;
+
+			// Needed to run ant on danube
+			args[14] = "-buildfile";
+			args[15] = BF_LOC;
+			args[16] = "geotrans-tar";
+
+			ant.setArgs(args);
+			ant.execute();
+
+		}
+		// Do the full run by default.
+		else {
+			String[] args = new String[17];
+			// Needed to run Geotrans and GeoFEST targets
+			args[0] = "-Dworkdir.prop=" + WORK_DIR;
+			args[1] = "-DprojectName.prop=" + projectName;
+			args[2] = "-Dbindir.prop=" + BIN_PATH;
+			args[3] = "-DGFInput.prop=" + GFInput;
+			args[4] = "-DGFOutput.prop=" + GFOutput;
+			args[5] = "-DGFLog.prop=" + GFLog;
+
+			// Needed to run MovieMaker
+			args[6] = "-DremoteUrl.prop=" + jabbaFSUrl;
+			args[7] = "-DremoteDest.prop=" + remoteDest;
+			args[8] = "-Dtopology.prop=" + topology;
+			args[9] = "-DAntUrl.prop=" + antUrl;
+			args[10] = "-DmovieServer.prop=" + movieServerUrl;
+			args[11] = "-DvizName.prop=" + vizName;
+			args[12] = "-DemailAddress.prop=" + email;
+			args[13] = "-Dbf_loc.prop=" + jabba_bf_loc;
+
+			// Needed to run ant on danube
+			args[14] = "-buildfile";
+			args[15] = BF_LOC;
+			args[16] = GenMovie;
+
+			ant.setArgs(args);
+			ant.execute();
+		}
+
+		// --------------------------------------------------
+		// Process the form information
+		// --------------------------------------------------
+		File f = new File(getRealPath());
+		if (!f.exists()) {
+			f.mkdirs();
+		}
+		// Now set up the file service to download the file.
+		try {
+			FSClientStub fsclient1 = new FSClientStub();
+			fsclient1.setBindingUrl(fileServiceUrl);
+			fsclient1.downloadFile(inputName, inputName4download);
+			fsclient1.downloadFile(outputName, outputName4download);
+			fsclient1.downloadFile(logName, logName4download);
+			fsclient1.downloadFile(tarName, tarName4download);
+			cm.setCurrentProperty(projectFullName, "download_contextpath",
+					getContextPath());
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			System.out.println("Data not available");
+		}
+
+		cm.setCurrentProperty(projectFullName, "ListGeoFESTData", "true");
+
+	}
+
+	public String gfarchivedData() throws Exception {
+		System.out.println("gf archived data");
 		if (!isInitialized) {
 			initWebServices();
 		}
 		setContextList();
-		return ("rdahmm-list-project-plots");
+		this.ListGeoFESTData = true;
+		return ("MG-gf-archived-data");
 	}
 
-	public String launchRDAHMM() throws Exception {
-		String sopacDataFileName = projectName + ".input";
-		String cfullName = codeName + "/" + projectName;
-		String contextDir = cm.getCurrentProperty(cfullName, "Directory");
-		String sopacDataFileContent = getSopacDataFileContent();
-
-		createSopacDataFile(contextDir, sopacDataFileName, sopacDataFileContent);
-		String value = executeRDAHMM(contextDir, sopacDataFileName, cfullName);
-		return "rdahmm-rdahmm-launched";
-
-	}
-
-	public String populateAndPlot() throws Exception {
-		populateProject();
-		launchPlot();
-		return "rdahmm-plot-created";
-	}
-
-	public String launchPlot() throws Exception {
-		String sopacDataFileName = projectName + ".input";
-		String cfullName = codeName + "/" + projectName;
-		String contextDir = cm.getCurrentProperty(cfullName, "Directory");
-
-		createSopacDataFile(contextDir, sopacDataFileName, sopacDataFileContent);
-		String value = createDataPlot(contextDir, sopacDataFileName, cfullName);
-		return "rdahmm-gnuplot-launched";
-
-	}
-
-	// Possibly obsolete--need to check.
-	public String launchProject() {
-		return "rdahmm-project-launched";
-	}
-
-	public String populateProject() throws Exception {
-		System.out.println("Chosen project: " + chosenProject);
-		String contextName = codeName + "/" + chosenProject;
-		projectName = cm.getCurrentProperty(contextName, "projectName");
-		hostName = cm.getCurrentProperty(contextName, "hostName");
-		numModelStates = Integer.parseInt(cm.getCurrentProperty(contextName,
-				"numModelStates"));
-		randomSeed = Integer.parseInt(cm.getCurrentProperty(contextName,
-				"randomSeed"));
-		outputType = cm.getCurrentProperty(contextName, "outputType");
-		annealStep = Double.parseDouble(cm.getCurrentProperty(contextName,
-				"annealStep"));
-
-		sopacDataFileName = cm.getCurrentProperty(contextName,
-				"sopacDataFileName");
-		sopacDataFileContent = setRDAHMMSopacDataFile(projectName);
-		// System.out.println("Input File:"+sopacDataFileContent);
-		return "rdahmm-project-populated";
-	}
-
-	public String executeRDAHMM(String contextDir, String sopacDataFileName,
-			String cfullName) throws Exception {
-
-		System.out.println("FileService URL:" + fileServiceUrl);
-		System.out.println("AntService URL:" + antUrl);
-
-		String workDir = baseWorkDir + File.separator + userName
-				+ File.separator + projectName;
-
-		int ndim = getFileDimension(contextDir, sopacDataFileName);
-		int nobsv = getLineCount(contextDir, sopacDataFileName);
-		// --------------------------------------------------
-		// Set up the Ant Service and make the directory
-		// --------------------------------------------------
-		AntVisco ant = new AntViscoServiceLocator()
-				.getAntVisco(new URL(antUrl));
-		String bf_loc = binPath + "/" + "build.xml";
-		String[] args0 = new String[4];
-		args0[0] = "-DworkDir.prop=" + workDir;
-		args0[1] = "-buildfile";
-		args0[2] = bf_loc;
-		args0[3] = "MakeWorkDir";
-
-		ant.setArgs(args0);
-		ant.run();
-
-		// --------------------------------------------------
-		// Set up the file service and move the file.
-		// --------------------------------------------------
-		FSClientStub fsclient = new FSClientStub();
-		String destfile = workDir + "/" + sopacDataFileName;
-		try {
-			fsclient.setBindingUrl(fileServiceUrl);
-			fsclient.uploadFile(contextDir + "/" + sopacDataFileName, destfile);
-		} catch (Exception ex) {
-			ex.printStackTrace();
+	public String gfGraphOutput() throws Exception {
+		System.out.println("gf Graph Output");
+		if (!isInitialized) {
+			initWebServices();
 		}
-
-		// --------------------------------------------------
-		// Record the names of the input, output, and log
-		// files on the remote server.
-		// --------------------------------------------------
-		String remoteOutputFile = workDir + "/" + projectName + ".output";
-		String remoteLogFile = workDir + "/" + projectName + ".stdout";
-
-		cm.setCurrentProperty(cfullName, "RemoteInputFile", destfile);
-		cm.setCurrentProperty(cfullName, "RemoteOutputFile", remoteOutputFile);
-		cm.setCurrentProperty(cfullName, "RemoteLogFile", remoteLogFile);
-
-		// --------------------------------------------------
-		// Set up the Ant Service.
-		// --------------------------------------------------
-		// AntVisco ant=new AntViscoServiceLocator().getAntVisco(new
-		// URL(antUrl));
-
-		String[] args = new String[13];
-		args[0] = "-DworkDir.prop=" + workDir;
-		args[1] = "-DprojectName.prop=" + projectName;
-		args[2] = "-Dbindir.prop=" + binPath;
-		args[3] = "-DRDAHMMBaseName.prop=" + projectName;
-		args[4] = "-Dnobsv.prop=" + nobsv;
-		args[5] = "-Dndim.prop=" + ndim;
-		args[6] = "-Dnstates.prop=" + numModelStates;
-		args[7] = "-Dranseed.prop=" + randomSeed;
-		args[8] = "-Doutput_type.prop=" + outputType;
-		args[9] = "-DannealStep.prop=" + annealStep;
-		args[10] = "-buildfile";
-		args[11] = bf_loc;
-		args[12] = "RunRDAHMM";
-
-		ant.setArgs(args);
-		ant.execute();
-
-		return "rdahmm-rdahmm-executing";
+		setContextList();
+		this.ListGeoFESTData = true;
+		return ("MG-gf-graph-output");
 	}
-
-	/**
-	 * This is similar to executeRDAHMM but it must take place on a host with
-	 * gnuplot installed on it. Note this assumes for historical reasons that
-	 * rdahmm and the plotting tool (gnuplot) are on separate machines.
-	 */
-	public String createDataPlot(String contextDir, String sopacDataFileName,
-			String cfullName) throws Exception {
-
-		String workDir = baseWorkDir + File.separator + userName
-				+ File.separator + projectName;
-
-		String gnuplotWorkDir = gnuplotBaseWorkDir + File.separator + userName
-				+ File.separator + projectName;
-
-		// --------------------------------------------------
-		// Set up the Ant Service and make the directory on
-		// the gnuplot host.
-		// --------------------------------------------------
-		AntVisco ant = new AntViscoServiceLocator().getAntVisco(new URL(
-				gnuplotAntUrl));
-		String bf_loc = gnuplotBinPath + "/" + "build.xml";
-
-		String[] args0 = new String[4];
-		args0[0] = "-DworkDir.prop=" + workDir;
-		args0[1] = "-buildfile";
-		args0[2] = bf_loc;
-		args0[3] = "MakeWorkDir";
-
-		ant.setArgs(args0);
-		ant.run();
-
-		// --------------------------------------------------
-		// Set up the file service and move the file.
-		// --------------------------------------------------
-		FSClientStub fsclient = new FSClientStub();
-		String sourceFile = workDir + "/" + sopacDataFileName;
-		String inputdestfile = gnuplotBinPath + "/" + sopacDataFileName;
-
-		String qSourceFile = workDir + "/" + projectName + ".Q";
-		String qDestFile = gnuplotBinPath + "/" + projectName + ".Q";
-
-		String plotFileNameX = gnuplotBinPath + "/" + sopacDataFileName
-				+ ".X.png";
-		String plotFileNameY = gnuplotBinPath + "/" + sopacDataFileName
-				+ ".Y.png";
-		String plotFileNameZ = gnuplotBinPath + "/" + sopacDataFileName
-				+ ".Z.png";
-
-		try {
-			fsclient.setBindingUrl(fileServiceUrl);
-			fsclient
-					.crossload(sourceFile, gnuplotFileServiceUrl, inputdestfile);
-			fsclient.crossload(qSourceFile, gnuplotFileServiceUrl, qDestFile);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			throw new Exception();
-		}
-
-		String[] args = new String[7];
-		args[0] = "-DworkDir.prop=" + gnuplotWorkDir;
-		args[1] = "-DbinDir.prop=" + gnuplotBinPath;
-		args[2] = "-DinputFile.prop=" + sopacDataFileName;
-		args[3] = "-DqFile.prop=" + projectName + ".Q";
-		args[4] = "-buildfile";
-		args[5] = bf_loc;
-		args[6] = "ExecGnuplot";
-
-		ant.setArgs(args);
-		ant.run();
-
-		cm.setCurrentProperty(cfullName, "PlotFileNameX", plotFileNameZ);
-		cm.setCurrentProperty(cfullName, "PlotFileNameY", plotFileNameY);
-		cm.setCurrentProperty(cfullName, "PlotFileNameZ", plotFileNameZ);
-
-		// Download the image file
-
-		ExternalContext ec = FacesContext.getCurrentInstance()
-				.getExternalContext();
-		Object context = ec.getContext();
-		String basePath = "";
-		if (context instanceof ServletContext) {
-			basePath = ((ServletContext) context).getRealPath("/");
-		} else if (context instanceof PortletContext) {
-			basePath = ((PortletContext) context).getRealPath("/");
-		}
-
-		long timestamp = (new Date()).getTime();
-		String realImageFileX = basePath + "/" + "junkX_" + timestamp + ".png";
-		String realImageFileY = basePath + "/" + "junkY_" + timestamp + ".png";
-		String realImageFileZ = basePath + "/" + "junkZ_" + timestamp + ".png";
-		localImageFileX = "junkX_" + (new Date()).getTime() + ".png";
-		localImageFileY = "junkY_" + (new Date()).getTime() + ".png";
-		localImageFileZ = "junkZ_" + (new Date()).getTime() + ".png";
-		fsclient.setBindingUrl(gnuplotFileServiceUrl);
-
-		try {
-			fsclient.downloadFile(plotFileNameX, realImageFileX);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		try {
-			fsclient.downloadFile(plotFileNameY, realImageFileY);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		try {
-			fsclient.downloadFile(plotFileNameZ, realImageFileZ);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		return "rdahmm-gnuplot-plot-created";
-	}
-
-	// --------------------------------------------------
-	// Find the first non-blank line and count columns.
-	// Note this can screw up if input file is not
-	// formated correctly, but then RDAHMM itself
-	// would probably not work either.
-	// --------------------------------------------------
-
-	protected int getFileDimension(String contextDir, String sopacDataFileName) {
-
-		boolean success = false;
-		int ndim = 0;
-		StringTokenizer st;
-		try {
-
-			BufferedReader buf = new BufferedReader(new FileReader(contextDir
-					+ "/" + sopacDataFileName));
-
-			String line = buf.readLine();
-			if (line != null) {
-				while (!success) {
-					if (line.trim().equals("")) {
-						line = buf.readLine();
-					} else {
-						success = true;
-						st = new StringTokenizer(line);
-						ndim = st.countTokens();
-					}
-				}
-			}
-			buf.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return ndim;
-	}
-
-	// --------------------------------------------------
-	// This counts the line number.
-	// --------------------------`------------------------
-	protected int getLineCount(String contextDir, String sopacDataFileName) {
-		int nobsv = 0;
-		try {
-			LineNumberReader lnr = new LineNumberReader(new FileReader(
-					contextDir + "/" + sopacDataFileName));
-
-			String line2 = lnr.readLine();
-			while (line2 != null) {
-				line2 = lnr.readLine();
-			}
-			lnr.close();
-			nobsv = lnr.getLineNumber();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		return nobsv;
-
-	}
-
-	protected String setRDAHMMSopacDataFile(String projectName) {
-		String sopacDataFileContent = "Null Content; please re-enter";
-		String sopacDataFileName = projectName + ".input";
-		try {
-			String thedir = cm.getCurrentProperty(codeName + "/" + projectName,
-					"Directory");
-			// System.out.println(thedir+"/"+sopacDataFileName);
-
-			BufferedReader buf = new BufferedReader(new FileReader(thedir + "/"
-					+ sopacDataFileName));
-			String line = buf.readLine();
-			sopacDataFileContent = line + "\n";
-			while (line != null && !line.equals("")) {
-				// System.out.println(line);
-				line = trimLine(line);
-				sopacDataFileContent += line + "\n";
-				line = buf.readLine();
-			}
-			buf.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return sopacDataFileContent;
-	}
-
-	public String querySOPAC() throws Exception {
-		String retString = super.querySOPAC();
-		sopacDataFileContent = filterResults(sopacDataFileContent, 2, 3);
-		return retString;
-	}
-
-	/**
-	 * This helper method assumes input is a multlined String of tabbed columns.
-	 * It cuts out the number of columns on the left specified by cutLeftColumns
-	 * and number on the right by cutRightColumns.
-	 */
-	protected String filterResults(String tabbedString, int cutLeftColumns,
-			int cutRightColumns) throws Exception {
-		String returnString = "";
-		String space = " ";
-		StringTokenizer st;
-		BufferedReader br = new BufferedReader(new StringReader(tabbedString));
-		String line = br.readLine();
-		while (line != null && !line.equals("")) {
-			// System.out.println("Line: "+line);
-			st = new StringTokenizer(line);
-			String newLine = "";
-			int tokenCount = st.countTokens();
-			for (int i = 0; i < tokenCount; i++) {
-				String temp = st.nextToken();
-				if (i >= cutLeftColumns && i < (tokenCount - cutRightColumns)) {
-					newLine += temp + space;
-				}
-			}
-			// System.out.println("New Line: "+newLine);
-			returnString += newLine + "\n";
-			line = br.readLine();
-		}
-		returnString = returnString.trim();
-		// System.out.println("Here is the file");
-		// System.out.println(returnString);
-		// System.out.println("That was the file");
-		return returnString;
-	}
-
 	// --------------------------------------------------
 	// These are accessor methods.
 	// --------------------------------------------------
-
-	public String getLocalImageFileX() {
-		return localImageFileX;
-	}
-
-	public void setLocalImageFileX(String localImageFileX) {
-		this.localImageFileX = localImageFileX;
-	}
-
-	public String getLocalImageFileY() {
-		return localImageFileY;
-	}
-
-	public void setLocalImageFileY(String localImageFileY) {
-		this.localImageFileY = localImageFileY;
-	}
-
-	public String getLocalImageFileZ() {
-		return localImageFileZ;
-	}
-
-	public void setLocalImageFileZ(String localImageFileZ) {
-		this.localImageFileZ = localImageFileZ;
-	}
-
-	public String getGnuplotFileServiceUrl() {
-		return gnuplotFileServiceUrl;
-	}
-
-	public void setGnuplotFileServiceUrl(String gnuplotFileServiceUrl) {
-		this.gnuplotFileServiceUrl = gnuplotFileServiceUrl;
-	}
-
-	public String getGnuplotBaseWorkDir() {
-		return gnuplotBaseWorkDir;
-	}
-
-	public void setGnuplotBaseWorkDir(String gnuplotBaseWorkDir) {
-		this.gnuplotBaseWorkDir = gnuplotBaseWorkDir;
-	}
-
-	public String getGnuplotBinPath() {
-		return gnuplotBinPath;
-	}
-
-	public void setGnuplotBinPath(String gnuplotBinPath) {
-		this.gnuplotBinPath = gnuplotBinPath;
-	}
-
-	public String getGnuplotAntUrl() {
-		return gnuplotAntUrl;
-	}
-
-	public void setGnuplotAntUrl(String gnuplotAntUrl) {
-		this.gnuplotAntUrl = gnuplotAntUrl;
-	}
-
-	public String getGnuplotHostName() {
-		return gnuplotHostName;
-	}
-
-	public void setGnuplotHostName(String gnuplotHostName) {
-		this.gnuplotHostName = gnuplotHostName;
-	}
-
-	public double getAnnealStep() {
-		return annealStep;
-	}
-
-	public void setAnnealStep(double annealStep) {
-		this.annealStep = annealStep;
-	}
-
-	public int getNumModelStates() {
-		return numModelStates;
-	}
-
-	public void setNumModelStates(int numModelStates) {
-		this.numModelStates = numModelStates;
-	}
-
-	public int getRandomSeed() {
-		return randomSeed;
-	}
-
-	public void setRandomSeed(int randomSeed) {
-		this.randomSeed = randomSeed;
-	}
-
-	public String getOutputType() {
-		return outputType;
-	}
-
-	public void setOutputType(String outputType) {
-		this.outputType = outputType;
-	}
 
 }
