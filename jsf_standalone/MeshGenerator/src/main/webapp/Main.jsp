@@ -36,6 +36,11 @@
 			<h:outputFormat id="output5" escape="false"
 				value="<b>Retrieve Meshes:</b> Download previously generated mesh files to your desktop. You may download individual files or get everything (including geometry specification files) in a single tar bundle." />
 
+			<h:commandButton id="button6" value="GeoFEST2"
+				action="#{MGBean.gfProject}" />
+			<h:outputFormat id="output6" escape="false"
+				value="<b>GeoFEST2:</b>  These pages will guide you through the steps needed to run GeoFEST2 to simulate faults." />
+
 		</h:panelGrid>
 	</h:form>
 </f:view>
