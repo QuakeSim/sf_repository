@@ -22,6 +22,7 @@ import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
 /**
  * A simple wrapper for Ant.
  */
+
 public class RDAHMMService extends AntVisco implements Runnable{    
     static Logger logger=Logger.getLogger(RDAHMMService.class);
 
@@ -40,6 +41,8 @@ public class RDAHMMService extends AntVisco implements Runnable{
     String outputType;
     int randomSeed;
     double annealStep;
+    double betamin;
+    int ntries;
     String buildFilePath;
     String antTarget;
     
@@ -85,6 +88,10 @@ public class RDAHMMService extends AntVisco implements Runnable{
 	    Integer.parseInt(properties.getProperty("random.seed"));
 	annealStep=
 	    Double.parseDouble(properties.getProperty("anneal.step"));
+	betamin=	    
+	    Double.parseDouble(properties.getProperty("betamin.prop"));
+	ntries=
+	    Integer.parseInt(properties.getProperty("ntries.prop"));
 	buildFilePath=properties.getProperty("build.file.path");
 	antTarget=properties.getProperty("ant.target");
 	
@@ -105,43 +112,121 @@ public class RDAHMMService extends AntVisco implements Runnable{
     
     public RDAHMMService() throws Exception{
 	this(false);
+    }
+
+    /**
+     * This merges multiple files into a single file,
+     * duplicating UNIX paste.
+     */ 
+    public void mergeInputFiles(String[] inputFileArray, 
+				String mergedFileName) {
+
+	//Find the shortest of the input files.
+	int shortCount=Integer.MAX_VALUE;
+	System.out.println("Max integer Value="+shortCount);
+
+	for(int i=0;i<inputFileArray.length;i++){
+	    int lineCount=getLineCount(inputFileArray[i]);
+	    if(lineCount < shortCount) shortCount=lineCount;
+	}
+	System.out.println("Shortest file length="+shortCount);	
+	
+	// Now do the thing.
+	try {
+	    //This is our output file.
+	    PrintWriter pw=
+		new PrintWriter(new FileWriter(mergedFileName),true);
+	    
+	    //Set up bufferedreader array
+	    BufferedReader[] br=new BufferedReader[inputFileArray.length];
+	    for(int i=0;i<br.length;i++){
+		br[i]=new BufferedReader(new FileReader(inputFileArray[i]));
+	    }
+	    
+	    //Loop over each line of the file
+	    for(int i=0;i<shortCount;i++) {
+		String line="";		
+		for(int j=0;j<br.length;j++) {
+		    line+=br[j].readLine();
+		}
+		pw.println(line);
+	    }
+	    
+	}
+	catch(Exception ex) {
+	    ex.printStackTrace();
+	}
 	
     }
+
+    /**
+     * This is a helper method to convert token-separated
+     * inputFileUrlStrings into arrays.
+     */
+    private String[] convertInputUrlStringToArray(String inputFileUrlString){
+	inputFileUrlString.trim();
+	
+	String[] returnArray;
+	
+	StringTokenizer st=new StringTokenizer(inputFileUrlString);
+	int arrayDim=st.countTokens();
+	if(arrayDim<2) {
+	    returnArray=new String[1];
+	    returnArray[0]=inputFileUrlString.trim();
+	}
+	else {
+	    int i=0;
+	    returnArray=new String[arrayDim];
+	    while(st.hasMoreTokens()) {
+		returnArray[i]=st.nextToken();
+		i++;
+	    }
+	}
+	return returnArray;
+    }
+    
 
     /**
      * This helper method assumes input is a multlined
      * String of tabbed columns.  It cuts out the number of
      * columns on the left specified by cutLeftColumns and 
      * number on the right by cutRightColumns.
+     *
+     * This method can accepted either single-valued or
+     * multiple valued entries.  These 
      */
-    protected void filterResults(String tabbedFile,
-				 String rdahmmInputFile,
-				 int cutLeftColumns,
-				 int cutRightColumns) throws Exception {
-	String returnString="";
+    protected String[] filterResults(String[] tabbedFile,
+				     int cutLeftColumns,
+				     int cutRightColumns) throws Exception {
+	String[] filteredFileArray=new String[tabbedFile.length];
 	String space=" ";
 	StringTokenizer st;
-	BufferedReader br=new BufferedReader(new FileReader(tabbedFile));
-	PrintWriter printer=
-	    new PrintWriter(new FileWriter(rdahmmInputFile),true);
-	String line=br.readLine();
-	while(line!=null) {
-	    //	    System.out.println(line);
-	    st=new StringTokenizer(line);
-	    String newLine="";
-	    int tokenCount=st.countTokens();
-	    for (int i=0;i<tokenCount;i++) {
-		String temp=st.nextToken();
-		if(i>=cutLeftColumns && i<(tokenCount-cutRightColumns)) {
-		    newLine+=temp+space;
+	for(int i=0;i<tabbedFile.length;i++){
+	    filteredFileArray[i]=tabbedFile[i]+".filtered";
+	    BufferedReader br=
+		new BufferedReader(new FileReader(tabbedFile[i]));
+	    PrintWriter printer=
+		new PrintWriter(new FileWriter(filteredFileArray[i]),true);
+	    String line=br.readLine();
+	    while(line!=null) {
+		//	    System.out.println(line);
+		st=new StringTokenizer(line);
+		String newLine="";
+		int tokenCount=st.countTokens();
+		for (int j=0;j<tokenCount;j++) {
+		    String temp=st.nextToken();
+		    if(j>=cutLeftColumns && j<(tokenCount-cutRightColumns)) {
+			newLine+=temp+space;
+		    }
 		}
+		//	    System.out.println(newLine);
+		printer.println(newLine);
+		line=br.readLine();
 	    }
-	    //	    System.out.println(newLine);
-	    printer.println(newLine);
-	    line=br.readLine();
 	}
-	return;
+	return filteredFileArray;
     }
+
     private void makeWorkDir(String workDir, 
 			     String bf_loc)
 	throws Exception {
@@ -162,53 +247,64 @@ public class RDAHMMService extends AntVisco implements Runnable{
     }
    
     
-    private String downloadInputFile(String inputFileUrlString,
-				     String inputFileDestDir)
+    /**
+     * Note that inputFileUrlString can be either single values or
+     * else have multiple, space separated values.  It also
+     * returns a space-separated set of values.
+     * All files are written to the same directory.
+     */
+    private String[] downloadInputFile(String[] inputFileUrlString,
+				       String inputFileDestDir)
 	throws Exception {
 
 	//Convert to a URL. This will throw an exception if
 	//malformed.
-	URL inputFileUrl=new URL(inputFileUrlString);
 	
-	String protocol=inputFileUrl.getProtocol();
-	System.out.println("Protocol: "+protocol);
-	String fileSimpleName=extractSimpleName(inputFileUrl.getFile());
-	System.out.println(fileSimpleName);
+	String[] fileLocalFullName=new String[inputFileUrlString.length];
+	for(int i=0;i<inputFileUrlString.length;i++) {
+	    
+	    URL inputFileUrl=new URL(inputFileUrlString[i]);
+	    
+	    String protocol=inputFileUrl.getProtocol();
+	    System.out.println("Protocol: "+protocol);
+	    String fileSimpleName=extractSimpleName(inputFileUrl.getFile());
+	    System.out.println(fileSimpleName);
+	    
+	    fileLocalFullName[i]=inputFileDestDir+File.separator
+		+fileSimpleName;
+	    
+	    if(protocol.equals(FILE_PROTOCOL)) {
+		String filePath=inputFileUrl.getFile();
+		fileSimpleName=inputFileUrl.getFile();
 
-	String fileLocalFullName=inputFileDestDir+File.separator
-	    +fileSimpleName;
-
-	if(protocol.equals(FILE_PROTOCOL)) {
-	    String filePath=inputFileUrl.getFile();
-	    fileSimpleName=inputFileUrl.getFile();
-
-	    System.out.println("File path is "+filePath);
-	    File filePathObject=new File(filePath);
-	    File destFileObject=new File(fileLocalFullName);
-
-	    //See if the inputFileUrl and the dest file are the same.
-	    if(filePathObject.getCanonicalPath().
-	       equals(destFileObject.getCanonicalPath())) {
-		System.out.println("Files are the same.  We're done.");
+		System.out.println("File path is "+filePath);
+		File filePathObject=new File(filePath);
+		File destFileObject=new File(fileLocalFullName[i]);
+		
+		//See if the inputFileUrl and the dest file are the same.
+		if(filePathObject.getCanonicalPath().
+		   equals(destFileObject.getCanonicalPath())) {
+		    System.out.println("Files are the same.  We're done.");
+		    return fileLocalFullName;
+		}
+		
+		//Otherwise, we will have to copy it.
+		copyFileToFile(filePathObject, destFileObject);
 		return fileLocalFullName;
 	    }
 	    
-	    //Otherwise, we will have to copy it.
-	    copyFileToFile(filePathObject, destFileObject);
-	    return fileLocalFullName;
-	}
-
-	else if(protocol.equals(HTTP_PROTOCOL)) {
-	    copyUrlToFile(inputFileUrl,fileLocalFullName);
-	}
-
-	else {
-	    System.out.println("Unknown protocol for accessing inputfile");
-	    throw new Exception("Unknown protocol");
+	    else if(protocol.equals(HTTP_PROTOCOL)) {
+		copyUrlToFile(inputFileUrl,fileLocalFullName[i]);
+	    }
+	    
+	    else {
+		System.out.println("Unknown protocol for accessing inputfile");
+		throw new Exception("Unknown protocol");
+	    }
 	}
 	return fileLocalFullName;
     }
-    
+	
 
     /**
      * Famous method that I googled. This copies a file to a new
@@ -250,7 +346,6 @@ public class RDAHMMService extends AntVisco implements Runnable{
 	out.close();
 	
     }
-
     private String[] setUpArgArray(String inputFileUrlString,
 				   String workDir,
 				   String outputDestDir,
@@ -265,7 +360,7 @@ public class RDAHMMService extends AntVisco implements Runnable{
 				   String buildFilePath,
 				   String antTarget) throws Exception {
 	
-	String[] args=new String[14];
+	String[] args=new String[16];
         args[0]="-DworkDir.prop="+workDir;
         args[1]="-DprojectName.prop="+projectName;
         args[2]="-Dbindir.prop="+binPath;
@@ -276,10 +371,12 @@ public class RDAHMMService extends AntVisco implements Runnable{
         args[7]="-Dranseed.prop="+randomSeed;
         args[8]="-Doutput_type.prop="+outputType;
 	args[9]="-DannealStep.prop="+annealStep;
-	args[10]="-DoutputDestDir.prop="+outputDestDir;
-        args[11]="-buildfile";
-        args[12]=buildFilePath;
-        args[13]=antTarget;
+	args[10]="-Dbetamin.prop="+betamin;
+	args[11]="-Dntries.prop="+ntries;
+	args[12]="-DoutputDestDir.prop="+outputDestDir;
+        args[13]="-buildfile";
+        args[14]=buildFilePath;
+        args[15]=antTarget;
 
 	return args;
     }
@@ -325,7 +422,7 @@ public class RDAHMMService extends AntVisco implements Runnable{
 
     //--------------------------------------------------
     // This counts the line number.
-    //--------------------------`------------------------
+    //--------------------------------------------------
     protected int getLineCount(String fileFullName) {
 	int nobsv=0;
 	try {
@@ -352,6 +449,8 @@ public class RDAHMMService extends AntVisco implements Runnable{
      * the data from the SOPAC data service.
      * It assumes default values for the contextGroup, contextId
      * resource, and bouding box.
+     * 
+     * This can take multiple site codes as a single string.
      */
     public String[] runNonblockingRDAHMM(String siteCode,
 					 String beginDate,
@@ -421,13 +520,13 @@ public class RDAHMMService extends AntVisco implements Runnable{
      * for querying the SOPAC data service.
      */
     public String[] runBlockingRDAHMM(String siteCode,
-					 String resource,
-					 String contextGroup,
-					 String contextId,
-					 String minMaxLatLon,
-					 String beginDate,
-					 String endDate,
-					 int numModelStates)
+				      String resource,
+				      String contextGroup,
+				      String contextId,
+				      String minMaxLatLon,
+				      String beginDate,
+				      String endDate,
+				      int numModelStates)
 	throws Exception {
 	try {
 	    String dataUrl=querySOPACGetURL(siteCode,
@@ -519,17 +618,20 @@ public class RDAHMMService extends AntVisco implements Runnable{
 	
 	//Copy the input file to the working directory, if 
 	//necessary.
-	String localFile=downloadInputFile(inputFileUrlString,workDir);
-
-	//Filter the file
-	String localFileFiltered=workDir+File.separator+projectName+".input";
-	filterResults(localFile, localFileFiltered, 2, 3);
+	String[] inputFileUrlArray=
+	    convertInputUrlStringToArray(inputFileUrlString);
+	
+	String[] localFileArray=downloadInputFile(inputFileUrlArray,workDir);
+	String[] localFileArrayFiltered=filterResults(localFileArray, 2, 3);
+	String rdahmmInputFile=workDir+"/"+projectName+".input";
+	mergeInputFiles(localFileArrayFiltered,rdahmmInputFile);
+			
 	
 	//Get the dimensions and number of observations.
-	int ndim=getFileDimension(localFileFiltered);
-	int nobsv=getLineCount(localFileFiltered);
+	int ndim=getFileDimension(rdahmmInputFile);
+	int nobsv=getLineCount(rdahmmInputFile);
 
-	String[] args=setUpArgArray(localFileFiltered,
+	String[] args=setUpArgArray(rdahmmInputFile,
 				    workDir,
 				    outputDestDir,
 				    projectName,
@@ -566,26 +668,26 @@ public class RDAHMMService extends AntVisco implements Runnable{
 					 String buildFilePath,
 					 String antTarget) throws Exception {
 	
+	//Set up the work directory
 	String workDir=baseWorkDir+File.separator+projectName;
-
-	//Make working directory
 	makeWorkDir(workDir,buildFilePath);
-
+	
 	//Copy the input file to the working directory, if 
 	//necessary.
-	String localFile=downloadInputFile(inputFileUrlString,workDir);
-
-	//Filter the file
-	//Filter the file
-	String localFileFiltered=workDir+File.separator+projectName+".input";
-	filterResults(localFile, localFileFiltered, 2, 3);
+	String[] inputFileUrlArray=
+	    convertInputUrlStringToArray(inputFileUrlString);
+	
+	String[] localFileArray=downloadInputFile(inputFileUrlArray,workDir);
+	String[] localFileArrayFiltered=filterResults(localFileArray, 2, 3);
+	String rdahmmInputFile=workDir+"/"+projectName+".input";
+	mergeInputFiles(localFileArrayFiltered,rdahmmInputFile);
 	
 	//Get the dimensions and number of observations.
-	int ndim=getFileDimension(localFileFiltered);
-	int nobsv=getLineCount(localFileFiltered);
+	int ndim=getFileDimension(rdahmmInputFile);
+	int nobsv=getLineCount(rdahmmInputFile);
 
 
-	String[] args=setUpArgArray(localFileFiltered,
+	String[] args=setUpArgArray(rdahmmInputFile,
 				    workDir,
 				    outputDestDir,
 				    projectName,
@@ -629,6 +731,11 @@ public class RDAHMMService extends AntVisco implements Runnable{
     
     /**
      * This is a bit verion with less defaults.
+     * We can accept more than one site code as 
+     * token-separated values (typically space-separated).
+     * 
+     * It returns a string that can also be 
+     * multi-values (space-separated string).
      */
     protected String querySOPACGetURL(String siteCode,
 				      String resource,
@@ -638,15 +745,21 @@ public class RDAHMMService extends AntVisco implements Runnable{
 				      String beginDate,
 				      String endDate) throws Exception {
 
-
+	//Make sure we don't have unnecessary space.
+	String dataUrl="";
+	System.out.println(siteCode);
+	
+	StringTokenizer st=new StringTokenizer(siteCode);
 	GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
-	gsq.setFromServlet(siteCode, beginDate, endDate, resource,
-			   contextGroup, contextId, minMaxLatLon, true);
-	String dataUrl=gsq.getResource();
-	System.out.println("GRWS data url: "+dataUrl);
-	return dataUrl;
-	
-	
+	while(st.hasMoreTokens()) {
+	    String siteCodeEntry=st.nextToken();
+	    System.out.println("Site entry:"+siteCodeEntry);
+	    gsq.setFromServlet(siteCodeEntry, beginDate, endDate, resource,
+			       contextGroup, contextId, minMaxLatLon, true);
+	    dataUrl+=gsq.getResource()+" ";
+	    System.out.println("GRWS data url: "+dataUrl);
+	}
+	return dataUrl.trim();
     }
 
     /**
@@ -662,13 +775,21 @@ public class RDAHMMService extends AntVisco implements Runnable{
 	String contextGroup="reasonComb";
 	String minMaxLatLon="";
 	String contextId="4";
-
-	GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
-	gsq.setFromServlet(siteCode, beginDate, endDate, resource,
-			   contextGroup, contextId, minMaxLatLon, true);
-	String dataUrl=gsq.getResource();
-	System.out.println("GRWS data url: "+dataUrl);
-	return dataUrl;
+	
+	return querySOPACGetURL(siteCode,
+				resource,
+				contextGroup,
+				contextId,
+				minMaxLatLon,
+				beginDate,
+				endDate);
+	
+	// 	GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
+	// 	gsq.setFromServlet(siteCode, beginDate, endDate, resource,
+	// 			   contextGroup, contextId, minMaxLatLon, true);
+	// 	String dataUrl=gsq.getResource();
+	// 	System.out.println("GRWS data url: "+dataUrl);
+	//	return dataUrl;
     }
     
 

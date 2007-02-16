@@ -21,7 +21,7 @@ scm:svn:http://svn.apache.org/repos/test/myfaces/maven-myfaces-plugins/myfaces-a
 	</file>
       </activation>
       <build>
-        <plugins>
+        <plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-scm-plugin</artifactId>

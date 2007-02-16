@@ -21,7 +21,8 @@ public class SimpleRdahmmClient {
     //Some properties with default values
     int numModelStates=2;
 
-    String dataUrl="http://geoapp.ucsd.edu/xml/geodesy/reason/grws/resources/output/procCoords/4-56150-20061025144159.txt";
+    //    String dataUrl="http://geoapp.ucsd.edu/xml/geodesy/reason/grws/resources/output/procCoords/4-56150-20061025144159.txt";
+    String dataUrl="";
     RDAHMMService rdservice;
 
     //These are the output files

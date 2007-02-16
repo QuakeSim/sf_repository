@@ -30,9 +30,11 @@
       <arg line="-N ${nstates.prop}"/>
       <arg line="-output_type ${output_type.prop}"/>
       <arg line="-anneal"/>
-      <arg line="-annealstep ${annealStep.prop}"/>
+      <arg line="-annealfactor ${annealStep.prop}"/>
+      <arg line="-betamin 0.1"/>
       <arg line="-regularize"/>
       <arg line="-omega 0 0 10 1.0e-6"/>
+      <arg line="-ntries 10"/>
       <arg line="-seed ${ranseed.prop}"/>
       <env key="PATH" path="${bindir.prop}:/bin/:$PATH"/>
    </exec>

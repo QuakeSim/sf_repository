@@ -18,14 +18,13 @@
   <script>
 	//Set up the object and add a listener.
 	YAHOO.namespace("example.calendar");
-	function init() {
-	  YAHOO.example.calendar.cal1=new YAHOO.widget.Calendar("cal1","cal1Container");
-	  YAHOO.example.calendar.cal1.render();
+	function init1() {
+	  YAHOO.example.calendar.cal1=new YAHOO.widget.Calendar("cal1","cal1Container",{title:"Choose a date1:",close:true});
 
-	YAHOO.util.Event.addListener(window,"load",init);
+	YAHOO.example.calendar.cal1.render();
 
 	//Add an alert window.
-	var mySelectHandler=function(type,args,obj) {
+	var myBeginDateHandler=function(type,args,obj) {
 		var dates=args[0];
 		var date=dates[0];
 		var year=date[0],month=date[1],day=date[2];
@@ -35,14 +34,37 @@
 	        newStartDateVal.setAttribute("value",startDate);
         }
 
-	YAHOO.example.calendar.cal1.selectEvent.subscribe(mySelectHandler,YAHOO.example.calendar.cal1, true);
-	YAHOO.example.calendar.cal1.render();
+	YAHOO.example.calendar.cal1.selectEvent.subscribe(myBeginDateHandler,YAHOO.example.calendar.cal1, true);
+
 	}
-	YAHOO.util.Event.addListener(window,"load",init);
+	YAHOO.util.Event.addListener(window,"load",init1);
+
+	function init2() {
+	  YAHOO.example.calendar.cal2=new YAHOO.widget.Calendar("cal2","cal2Container",{title:"Choose a date2:",close:true});
+
+	YAHOO.example.calendar.cal2.render();
+
+	//Add an alert window.
+	var myEndDateHandler=function(type,args,obj) {
+		var dates=args[0];
+		var date=dates[0];
+		var year=date[0],month=date[1],day=date[2];
+		var endDate=year+"-"+month+"-"+day;
+
+		var newEndDateVal=document.getElementById("form1:endDate");
+	        newEndDateVal.setAttribute("value",endDate);
+        }
+
+	YAHOO.example.calendar.cal2.selectEvent.subscribe(myEndDateHandler,YAHOO.example.calendar.cal2, true);
+
+	}
+	YAHOO.util.Event.addListener(window,"load",init2);
   </script>
 
-  Here is the caledar <br>
+  Here is the calendar <br>
   <div id="cal1Container"></div>
+  <p>
+  <div id="cal2Container"></div>
 
   The input data URL is obtained directly from the GRWS web service
   as a return type.

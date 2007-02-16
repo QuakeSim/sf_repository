@@ -84,6 +84,16 @@
             <url>http://cvs.apache.org/maven-snapshot-repository</url>
         </repository>
         <repository>
+            <id>SOPAC</id>
+            <url>http://sopac.ucsd.edu/repositories/maven2</url>
+        </repository>
+        <!-- This is our local repository -->
+        <repository>
+            <id>crisisgrid-maven-repo</id>
+            <url>http://www.crisisgrid.org/maven2</url>
+        </repository>
+
+        <repository>
             <id>apache-maven</id>
             <url>http://www.ibiblio.org/maven2</url>
         </repository>
@@ -92,12 +102,6 @@
         <repository>
             <id>apache-maven</id>
             <url>http://cvs.apache.org/repository</url>
-        </repository>
-
-        <!-- This is our local repository -->
-        <repository>
-            <id>crisisgrid-maven-repo</id>
-            <url>http://www.crisisgrid.org/maven2</url>
         </repository>
 
     </repositories>
@@ -213,7 +217,7 @@
         <dependency>
              <groupId>SOPAC</groupId>
              <artifactId>GRWS_SubmitQuery</artifactId>
-             <version>4.0</version>
+             <version>4.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>

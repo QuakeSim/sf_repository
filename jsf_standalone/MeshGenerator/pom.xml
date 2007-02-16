@@ -210,6 +210,7 @@
         <!--
         SOPAC Jars
         -->
+<!--
         <dependency>
              <groupId>SOPAC</groupId>
              <artifactId>GRWS_SubmitQuery</artifactId>
@@ -221,7 +222,7 @@
              <artifactId>grwsXmlBeansSchemas</artifactId>
              <version>1.0</version>
         </dependency>
-
+-->
 
     </dependencies>
 

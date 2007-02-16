@@ -25,6 +25,3 @@ fi
 cp -r target/$PORTLET_NAME $CATALINA_HOME/webapps
 touch $PORTAL_WEBAPP_DIR/WEB-INF/CustomPortal/portlets/$PORTLET_NAME
 
-
-
-
