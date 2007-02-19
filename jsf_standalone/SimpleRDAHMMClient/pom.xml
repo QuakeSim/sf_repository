@@ -13,6 +13,7 @@
 
     <build>
         <finalName>SimpleRDAHMMClient</finalName>
+<!--
         <plugins>
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
@@ -22,6 +23,7 @@
                 </configuration>
             </plugin>
         </plugins>
+-->
     </build>
 
     <!-- Profile to run jetty, so the tomcat jars are included in the bundle. They are not included by default -->
@@ -95,11 +97,13 @@
     <!-- Repositories for plugins -->
     <pluginRepositories>
         <!-- Repository to get the jetty plugin -->
+<!--
         <pluginRepository>
             <id>mortbay-repo</id>
             <name>mortbay-repo</name>
             <url>http://www.mortbay.org/maven2/snapshot</url>
         </pluginRepository>
+-->
     </pluginRepositories>
 
     <!-- Project dependencies -->
