@@ -9,6 +9,8 @@ echo ""
 
 source ./env.sh
 
+export CATALINA_OPTS="-server -Xms512m -Xmx512m -XX:NewSize=128m -XX:PermSize=16m -XX:MaxPermSize=128m -XX:+UseConcMarkSweepGC -XX:+UseParNewGC"
+
 # SHUTDOWN TOMCAT before starting
 echo "####################################"
 echo "#  Starting up Portal Tomcat...  #"
