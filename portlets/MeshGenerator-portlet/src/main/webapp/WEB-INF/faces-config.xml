@@ -24,11 +24,11 @@
                 <!-- Needed for the context service-->
                 <managed-property>
                    <property-name>contextUrl</property-name>
-                   <value>http://gf1.ucs.indiana.edu:13080/WebServices/services/ContextManager</value>
+                   <value>http://gf2.ucs.indiana.edu:8080/WebServices/services/ContextManager</value>
                  </managed-property>
                  <managed-property>
                    <property-name>contextBasePath</property-name>
-                   <value>/home/zhigang/dest1/users/</value>
+                   <value>home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users/</value>
                 </managed-property>
 
                 <managed-property>
