@@ -44,6 +44,7 @@ export STATION_MONITOR_SA_HOME=$BUILD_DIR/jsf_standalone/StationMonitor/
 export REALTIME_RDAHMM_SA_HOME=$BUILD_DIR/jsf_standalone/RealTimeRDAHMM
 export SIMPLE_STFILTER_SA_HOME=$BUILD_DIR/jsf_standalone/simple_stfilter
 export PLOT_GRWS_TIMESERIES_SA_HOME=$BUILD_DIR/jsf_standalone/PlotGRWSTimeSeries
+export MESHGENERATOR_SA_HOME=$BUILD_DIR/jsf_standalone/MeshGenerator
 
 #Portlets
 export SIMPLEX_PORTLET_HOME=$BUILD_DIR/portlets/Simplex-portlet
@@ -52,4 +53,5 @@ export STFILTER_PORTLET_HOME=$BUILD_DIR/portlets/STFILTER-portlet
 export STATION_MONITOR_PORTLET_HOME=$BUILD_DIR/portlets/StationMonitor-portlet
 export REALTIME_RDAHMM_PORTLET_HOME=$BUILD_DIR/portlets/RealTimeRdahmm-portlet
 export PLOT_GRWS_TIMESERIES_PORTLET_HOME=$BUILD_DIR/portlets/PlotGRWSTimeSeries-portlet
+export MESHGENERATOR_PORTLET_HOME=$BUILD_DIR/portlets/MeshGenerator-portlet
 export PATH=$ANT_HOME/bin:$MAVEN_HOME/bin:$PATH

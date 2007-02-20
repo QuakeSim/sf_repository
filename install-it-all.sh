@@ -54,26 +54,26 @@ source ./genericproject-install.sh
 #cd $BUILD_DIR
 #source ./simplex-sa-install.sh
 
-cd $BUILD_DIR
-source ./rdahmm-sa-install.sh
+# Uncommented since we only need for development.
+#cd $BUILD_DIR
+#source ./rdahmm-sa-install.sh
 
 cd $BUILD_DIR
 source ./simple-rdahmm-sa-install.sh
 
-cd $BUILD_DIR
-source ./simple-stfilter-sa-install.sh
+# Development version
+#cd $BUILD_DIR
+#source ./simple-stfilter-sa-install.sh
 
-cd $BUILD_DIR
-source ./rdahmm-portlet-install.sh
-
-cd $BUILD_DIR
-source ./stfilter-sa-install.sh
+# Development version
+#cd $BUILD_DIR
+#source ./stfilter-sa-install.sh
 
 cd $BUILD_DIR
 source ./plotgrws-timeseries-sa-install.sh
 
 #cd $BUILD_DIR
-source ./meshgenerator-sa-install.sh
+#source ./meshgenerator-sa-install.sh
 
 #----------------------------------------------------------------------
 # Build the portlets.
@@ -82,9 +82,12 @@ cd $BUILD_DIR
 source ./stfilter-portlet-install.sh
 
 cd $BUILD_DIR
+source ./rdahmm-portlet-install.sh
+
+cd $BUILD_DIR
 source ./stationmonitor-sa-install.sh
 
-#cd $BUILD_DIR
+cd $BUILD_DIR
 source ./meshgenerator-portlet-install.sh
 
 cd $BUILD_DIR

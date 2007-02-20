@@ -8,6 +8,7 @@
       type="text/javascript"></script>
   </head>
   <body>
+
    
    <!--This is an outer bounding table to make columns.-->
    <table border="1">  
@@ -128,6 +129,24 @@
 	  });
           return marker;
         }
+
+	//Needed for Mozilla 2 compatibility
+	function getScrolling() {
+	    var x = 0; var y = 0;
+    		if (document.body && document.body.scrollLeft && !isNaN(document.body.scrollLeft)) {
+	        x = document.body.scrollLeft;
+    		} else if (window.pageXOffset && !isNaN(window.pageXOffset)) {
+        	x = window.pageXOffset;
+    		}
+    		if (document.body && document.body.scrollTop && !isNaN(document.body.scrollTop)) {
+        	y = document.body.scrollTop;
+    		} else if (window.pageYOffset && !isNaN(window.pageYOffset)) {
+        	y = window.pageYOffset;
+    		}
+    		return x + "," + y;
+	}
+        
+
       </script>
       <td valign="top">
       <b><font size="4">Query GPS archive </font></b>
