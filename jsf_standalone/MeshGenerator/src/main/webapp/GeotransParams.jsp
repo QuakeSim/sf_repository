@@ -171,8 +171,8 @@
 						<h:selectOneMenu id="top_bc"
 							value="#{MGBean.currentGeotransParamsData.top_bc}">
 							<f:selectItem id="top_bcitem1" itemLabel="Locked Node"
-								itemValue="Locked Node" />
-							<f:selectItem id="top_bcitem2" itemLabel="Free Node"
+								itemValue="locked node" />
+							<f:selectItem id="top_bcitem2" itemLabel="free node"
 								itemValue="Free Node" />
 						</h:selectOneMenu>
 						<h:outputText value="BC Values:" />
@@ -188,7 +188,7 @@
 						<h:selectOneMenu id="east_bc"
 							value="#{MGBean.currentGeotransParamsData.east_bc}">
 							<f:selectItem id="east_bcitem1" itemLabel="Locked Node"
-								itemValue="Locked Node" />
+								itemValue="locked node" />
 							<f:selectItem id="east_bcitem2" itemLabel="Free Node"
 								itemValue="Free Node" />
 						</h:selectOneMenu>
@@ -205,7 +205,7 @@
 						<h:selectOneMenu id="west_bc"
 							value="#{MGBean.currentGeotransParamsData.west_bc}">
 							<f:selectItem id="west_bcitem1" itemLabel="Locked Node"
-								itemValue="Locked Node" />
+								itemValue="locked node" />
 							<f:selectItem id="west_bcitem2" itemLabel="Free Node"
 								itemValue="Free Node" />
 						</h:selectOneMenu>
@@ -222,7 +222,7 @@
 						<h:selectOneMenu id="north_bc"
 							value="#{MGBean.currentGeotransParamsData.north_bc}">
 							<f:selectItem id="north_bcitem1" itemLabel="Locked Node"
-								itemValue="Locked Node" />
+								itemValue="locked node" />
 							<f:selectItem id="north_bcitem2" itemLabel="Free Node"
 								itemValue="Free Node" />
 						</h:selectOneMenu>
@@ -239,7 +239,7 @@
 						<h:selectOneMenu id="south_bc"
 							value="#{MGBean.currentGeotransParamsData.south_bc}">
 							<f:selectItem id="south_bcitem1" itemLabel="Locked Node"
-								itemValue="Locked Node" />
+								itemValue="locked node" />
 							<f:selectItem id="south_bcitem2" itemLabel="Free Node"
 								itemValue="Free Node" />
 						</h:selectOneMenu>
@@ -256,7 +256,7 @@
 						<h:selectOneMenu id="bottom_bc"
 							value="#{MGBean.currentGeotransParamsData.bottom_bc}">
 							<f:selectItem id="bottom_bcitem1" itemLabel="Locked Node"
-								itemValue="Locked Node" />
+								itemValue="locked node" />
 							<f:selectItem id="bottom_bcitem2" itemLabel="Free Node"
 								itemValue="Free Node" />
 						</h:selectOneMenu>
@@ -320,14 +320,14 @@
 						<h:selectOneMenu id="RestartFile"
 							value="#{MGBean.currentGeotransParamsData.restartFile}">
 							<f:selectItem id="restartFileitem1" itemLabel="No Restart"
-								itemValue="No Restart" />
+								itemValue="NO_RESTART" />
 						</h:selectOneMenu>
 
 						<h:outputText value="Checkpoint File:" />
 						<h:selectOneMenu id="CheckpointFile"
 							value="#{MGBean.currentGeotransParamsData.checkpointFile}">
 							<f:selectItem id="checkpointFileitem1" itemLabel="No Save"
-								itemValue="No Save" />
+								itemValue="NO_SAVE" />
 						</h:selectOneMenu>
 
 
