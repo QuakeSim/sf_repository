@@ -48,9 +48,9 @@ public class SimpleRdahmmClient {
     String endDate="2006-01-10";
     
     public SimpleRdahmmClient() throws Exception {
-	System.out.println("Service to contact: "+rdahmmServiceUrl);
-	rdservice=(new RDAHMMServiceServiceLocator()).
-	    getRDAHMMExec(new URL(rdahmmServiceUrl));
+		  System.out.println("Service to contact: "+rdahmmServiceUrl);
+		  rdservice=(new RDAHMMServiceServiceLocator()).
+				getRDAHMMExec(new URL(rdahmmServiceUrl));
     }
     
     /**
@@ -59,192 +59,193 @@ public class SimpleRdahmmClient {
      * page.
      */
     public String runNonblockingRDAHMM() throws Exception {
-	if(dataUrl!=null && numModelStates>0) {
-	    String[] vals=rdservice.runNonblockingRDAHMM(dataUrl,numModelStates);	    setPropertyVals(vals);
-	}
-	else throw new Exception();
-	return "simple-rdahmm-client-nav1";
+		  if(dataUrl!=null && numModelStates>0) {
+				String[] vals=rdservice.runNonblockingRDAHMM(dataUrl,numModelStates);	    
+				setPropertyVals(vals);
+		  }
+		  else throw new Exception();
+		  return "simple-rdahmm-client-nav1";
     }
-
+	 
     /**
      * This method is also suitable for use in a JSF page.
      */
     public String runBlockingRDAHMM()  throws Exception {
-	if(dataUrl!=null && numModelStates>0) {
-	    String [] vals=rdservice.runBlockingRDAHMM(dataUrl,numModelStates);	
-	    setPropertyVals(vals);
-	}
-	else throw new Exception();
-	return "simple-rdahmm-client-nav1";
+		  if(dataUrl!=null && numModelStates>0) {
+				String [] vals=rdservice.runBlockingRDAHMM(dataUrl,numModelStates);	
+				setPropertyVals(vals);
+		  }
+		  else throw new Exception();
+		  return "simple-rdahmm-client-nav1";
     }
-
+	 
     /**
      * This method is also suitable for use in a JSF page.
      * This one needs a sitecode, begin and end dates.
      */
     public String runBlockingRDAHMM2()  throws Exception {
-	if(dataUrl!=null && numModelStates>0) {
-	    String [] vals=rdservice.runBlockingRDAHMM(siteCode,
-						       beginDate,
-						       endDate,
-						       numModelStates);	
-	    setPropertyVals(vals);
-	}
-	else throw new Exception();
-	return "simple-rdahmm-client-nav1";
+		  if(dataUrl!=null && numModelStates>0) {
+				String [] vals=rdservice.runBlockingRDAHMM(siteCode,
+																		 beginDate,
+																		 endDate,
+																		 numModelStates);	
+				setPropertyVals(vals);
+		  }
+		  else throw new Exception();
+		  return "simple-rdahmm-client-nav1";
     }
-
+	 
     /**
      * This method is also suitable for use in a JSF page.
      * This one needs a sitecode, begin and end dates.
      */
     public String runNonblockingRDAHMM2()  throws Exception {
-	if(dataUrl!=null && numModelStates>0) {
-	    String [] vals=rdservice.runBlockingRDAHMM(siteCode,
-						       beginDate,
-						       endDate,
-						       numModelStates);	
-	    setPropertyVals(vals);
-	}
-	else throw new Exception();
-	return "simple-rdahmm-client-nav1";
+		  if(dataUrl!=null && numModelStates>0) {
+				String [] vals=rdservice.runBlockingRDAHMM(siteCode,
+																		 beginDate,
+																		 endDate,
+																		 numModelStates);	
+				setPropertyVals(vals);
+		  }
+		  else throw new Exception();
+		  return "simple-rdahmm-client-nav1";
     }
-
+	 
     /** 
      * This is a more full-fledged method.  The returned strings
      * are URLs for the output values.
      */
     public String[] runBlockingRDAHMM(String dataUrl,
-				      int numModelStates) 
-	throws Exception {
-
-	setDataUrl(dataUrl);
-	setNumModelStates(numModelStates);
-	return rdservice.runBlockingRDAHMM(dataUrl,numModelStates);
+												  int numModelStates) 
+		  throws Exception {
+		  
+		  setDataUrl(dataUrl);
+		  setNumModelStates(numModelStates);
+		  return rdservice.runBlockingRDAHMM(dataUrl,numModelStates);
     }
-
+	 
     public String[] runNonblockingRDAHMM(String dataUrl,
-					 int numModelStates) throws Exception {
-	setDataUrl(dataUrl);
-	setNumModelStates(numModelStates);
-	return rdservice.runNonblockingRDAHMM(dataUrl,numModelStates);
+													  int numModelStates) throws Exception {
+		  setDataUrl(dataUrl);
+		  setNumModelStates(numModelStates);
+		  return rdservice.runNonblockingRDAHMM(dataUrl,numModelStates);
     }
-
+	 
     //This method is pretty dumb. The values's order is hard-coded
     //on the server.
     protected void setPropertyVals(String[] vals) {
-	//These are the output files.
-	projectInput=vals[0];
-	projectRange=vals[1];
-	projectQ=vals[2];
-	projectPi=vals[3];
-	projectA=vals[4];
-	projectMinval=vals[5];
-	projectMaxval=vals[6];
-	projectL=vals[7];
-	projectB=vals[8];
-	projectQ=vals[9];
-	projectStdout=vals[10];
-	
-	//These are the images
-	projectGraphX=vals[11];
-	projectGraphY=vals[12];
-	projectGraphZ=vals[13];
-       
+		  //These are the output files.
+		  projectInput=vals[0];
+		  projectRange=vals[1];
+		  projectQ=vals[2];
+		  projectPi=vals[3];
+		  projectA=vals[4];
+		  projectMinval=vals[5];
+		  projectMaxval=vals[6];
+		  projectL=vals[7];
+		  projectB=vals[8];
+		  projectQ=vals[9];
+		  projectStdout=vals[10];
+		  
+		  //These are the images
+		  projectGraphX=vals[11];
+		  projectGraphY=vals[12];
+		  projectGraphZ=vals[13];
+		  
     }
 
     /**
      * Below is psycho-bean property freakout madness.
      */
     public void setNumModelStates(int numModelStates){
-	this.numModelStates=numModelStates;
+		  this.numModelStates=numModelStates;
     }
-
+	 
     public int getNumModelStates() {
-	return numModelStates;
+		  return numModelStates;
     }
     
     public void setDataUrl(String dataUrl) {
-	this.dataUrl=dataUrl;
+		  this.dataUrl=dataUrl;
     }
-
+	 
     public String getDataUrl() {
-	return dataUrl;
+		  return dataUrl;
     }
-
+	 
     public void setRdahmmServiceUrl(String rdahmmServiceUrl) {
-	this.rdahmmServiceUrl=rdahmmServiceUrl;
+		  this.rdahmmServiceUrl=rdahmmServiceUrl;
     }
-
+	 
     public String getRdahmmServiceUrl(){
-	return rdahmmServiceUrl;
+		  return rdahmmServiceUrl;
     }
-
+	 
     public String getProjectStdout() {
-	return projectStdout;
+		  return projectStdout;
     }
-
+	 
     public void setProjectStdout(String projectStdout) {
-	this.projectStdout=projectStdout;
+		  this.projectStdout=projectStdout;
     }
-
+	 
     public String getProjectRange(){
-	return projectRange;
+		  return projectRange;
     }
     
     public void setProjectRange(String projectRange){
-	this.projectRange=projectRange;
+		  this.projectRange=projectRange;
     }
-
+	 
     public String getProjectQ(){
-	return projectQ;
+		  return projectQ;
     }
     
     public void setProjectQ(String projectQ){
-	this.projectQ=projectQ;
+		  this.projectQ=projectQ;
     }
-
+	 
     public String getProjectPi(){
-	return projectPi;
+		  return projectPi;
     }
-
+	 
     public void setProjectPi(String projectPi){
-	this.projectPi=projectPi;
+		  this.projectPi=projectPi;
     }
-
+	 
     public String getProjectMinval(){
-	return projectMinval;
+		  return projectMinval;
     }
-
+	 
     public void setProjetcMinval(String projectMinval){
-	this.projectMinval=projectMinval;
+		  this.projectMinval=projectMinval;
     }
-
+	 
     public String getProjectMaxval(){
-	return projectMaxval;
+		  return projectMaxval;
     }
-
+	 
     public void setProjectMaxval(String projectMaxval){
-	this.projectMaxval=projectMaxval;
+		  this.projectMaxval=projectMaxval;
     }
 
     public String getProjectL(){
-	return projectL;
+		  return projectL;
     }
-
+	 
     public void setProjectL(String projectL){
-	this.projectL=projectL;
+		  this.projectL=projectL;
     }
-
+	 
     public String getProjectInput(){
-	return projectInput;
+		  return projectInput;
     }
     public void setProjectInput(String projectInput){
-	this.projectInput=projectInput;
+		  this.projectInput=projectInput;
     }
-
+	 
     public String getProjectB(){
-	return projectB;
+		  return projectB;
     }
 
     public void setProjectB(String projectB){
