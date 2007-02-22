@@ -48,115 +48,114 @@ public class RDAHMMService extends AntVisco implements Runnable{
     
     
     public RDAHMMService(boolean useClassLoader) 
-	throws Exception {
-	super();
-	    
-	if(useClassLoader) {
-	    System.out.println("Using classloader");
-	    //This is useful for command line clients but does not work
-	    //inside Tomcat.
-	    ClassLoader loader=ClassLoader.getSystemClassLoader();
-	    properties=new Properties();
-	    
-	    //This works if you are using the classloader but not inside
-	    //Tomcat.
-	    properties.load(loader.getResourceAsStream("rdahmmconfig.properties"));
-	}
-	else {
-	    //Extract the Servlet Context
-	    System.out.println("Using Servlet Context");
-	    MessageContext msgC=MessageContext.getCurrentContext();
-	    ServletContext context=((HttpServlet)msgC.getProperty(HTTPConstants.MC_HTTP_SERVLET)).getServletContext();
-	    
-	    
-	    String propertyFile=context.getRealPath("/")
-		+"/WEB-INF/classes/rdahmmconfig.properties";
-	    System.out.println("Prop file location "+propertyFile);
-	    
-	    properties=new Properties();	    
-	    properties.load(new 
-			    FileInputStream(propertyFile));
-	}
-	
-	serverUrl=properties.getProperty("rdahmm.service.url");
-	baseWorkDir=properties.getProperty("base.workdir");
-	baseDestDir=properties.getProperty("base.dest.dir");
-	projectName=properties.getProperty("project.name");
-	binPath=properties.getProperty("bin.path");
-	outputType=properties.getProperty("output.type");
-	randomSeed=
-	    Integer.parseInt(properties.getProperty("random.seed"));
-	annealStep=
-	    Double.parseDouble(properties.getProperty("anneal.step"));
-	betamin=	    
-	    Double.parseDouble(properties.getProperty("betamin.prop"));
-	ntries=
-	    Integer.parseInt(properties.getProperty("ntries.prop"));
-	buildFilePath=properties.getProperty("build.file.path");
-	antTarget=properties.getProperty("ant.target");
-	
-	//Put a time stamp on the project name:
-	projectName+="-"+(new Date()).getTime();
-	
-	outputDestDir=baseDestDir+"/"+projectName;
-
-
-	System.out.println("Here are some property values");
-	System.out.println(baseWorkDir);
-	System.out.println(projectName);
-	System.out.println(binPath);
-	System.out.println(outputType);
-	System.out.println(randomSeed);
-	System.out.println("Etc etc, done initializing");
+		  throws Exception {
+		  super();
+		  
+		  if(useClassLoader) {
+				System.out.println("Using classloader");
+				//This is useful for command line clients but does not work
+				//inside Tomcat.
+				ClassLoader loader=ClassLoader.getSystemClassLoader();
+				properties=new Properties();
+				
+				//This works if you are using the classloader but not inside
+				//Tomcat.
+				properties.load(loader.getResourceAsStream("rdahmmconfig.properties"));
+		  }
+		  else {
+				//Extract the Servlet Context
+				System.out.println("Using Servlet Context");
+				MessageContext msgC=MessageContext.getCurrentContext();
+				ServletContext context=((HttpServlet)msgC.getProperty(HTTPConstants.MC_HTTP_SERVLET)).getServletContext();
+				
+				
+				String propertyFile=context.getRealPath("/")
+					 +"/WEB-INF/classes/rdahmmconfig.properties";
+				System.out.println("Prop file location "+propertyFile);
+				
+				properties=new Properties();	    
+				properties.load(new 
+									 FileInputStream(propertyFile));
+		  }
+		  
+		  serverUrl=properties.getProperty("rdahmm.service.url");
+		  baseWorkDir=properties.getProperty("base.workdir");
+		  baseDestDir=properties.getProperty("base.dest.dir");
+		  projectName=properties.getProperty("project.name");
+		  binPath=properties.getProperty("bin.path");
+		  outputType=properties.getProperty("output.type");
+		  randomSeed=
+				Integer.parseInt(properties.getProperty("random.seed"));
+		  annealStep=
+				Double.parseDouble(properties.getProperty("anneal.step"));
+		  betamin=	    
+				Double.parseDouble(properties.getProperty("betamin.prop"));
+		  ntries=
+				Integer.parseInt(properties.getProperty("ntries.prop"));
+		  buildFilePath=properties.getProperty("build.file.path");
+		  antTarget=properties.getProperty("ant.target");
+		  
+		  //Put a time stamp on the project name:
+		  projectName+="-"+(new Date()).getTime();
+		  
+		  outputDestDir=baseDestDir+"/"+projectName;
+		  
+		  
+		  System.out.println("Here are some property values");
+		  System.out.println(baseWorkDir);
+		  System.out.println(projectName);
+		  System.out.println(binPath);
+		  System.out.println(outputType);
+		  System.out.println(randomSeed);
+		  System.out.println("Etc etc, done initializing");
     }
     
     public RDAHMMService() throws Exception{
-	this(false);
+		  this(false);
     }
-
+	 
     /**
      * This merges multiple files into a single file,
      * duplicating UNIX paste.
      */ 
     public void mergeInputFiles(String[] inputFileArray, 
-				String mergedFileName) {
-
-	//Find the shortest of the input files.
-	int shortCount=Integer.MAX_VALUE;
-	System.out.println("Max integer Value="+shortCount);
-
-	for(int i=0;i<inputFileArray.length;i++){
-	    int lineCount=getLineCount(inputFileArray[i]);
-	    if(lineCount < shortCount) shortCount=lineCount;
-	}
-	System.out.println("Shortest file length="+shortCount);	
-	
-	// Now do the thing.
-	try {
-	    //This is our output file.
-	    PrintWriter pw=
-		new PrintWriter(new FileWriter(mergedFileName),true);
+										  String mergedFileName) {
+		  
+		  //Find the shortest of the input files.
+		  int shortCount=Integer.MAX_VALUE;
+		  System.out.println("Max integer Value="+shortCount);
+		  
+		  for(int i=0;i<inputFileArray.length;i++){
+				int lineCount=getLineCount(inputFileArray[i]);
+				if(lineCount < shortCount) shortCount=lineCount;
+		  }
+		  System.out.println("Shortest file length="+shortCount);	
+		  
+		  // Now do the thing.
+		  try {
+				//This is our output file.
+				PrintWriter pw=
+					 new PrintWriter(new FileWriter(mergedFileName),true);
+				
+				//Set up bufferedreader array
+				BufferedReader[] br=new BufferedReader[inputFileArray.length];
+				for(int i=0;i<br.length;i++){
+					 br[i]=new BufferedReader(new FileReader(inputFileArray[i]));
+				}
+				
+				//Loop over each line of the file
+				for(int i=0;i<shortCount;i++) {
+					 String line="";		
+					 for(int j=0;j<br.length;j++) {
+						  line+=br[j].readLine();
+					 }
+					 pw.println(line);
+				}
 	    
-	    //Set up bufferedreader array
-	    BufferedReader[] br=new BufferedReader[inputFileArray.length];
-	    for(int i=0;i<br.length;i++){
-		br[i]=new BufferedReader(new FileReader(inputFileArray[i]));
-	    }
-	    
-	    //Loop over each line of the file
-	    for(int i=0;i<shortCount;i++) {
-		String line="";		
-		for(int j=0;j<br.length;j++) {
-		    line+=br[j].readLine();
-		}
-		pw.println(line);
-	    }
-	    
-	}
-	catch(Exception ex) {
-	    ex.printStackTrace();
-	}
-	
+		  }
+		  catch(Exception ex) {
+				ex.printStackTrace();
+		  }
     }
 
     /**
@@ -164,25 +163,25 @@ public class RDAHMMService extends AntVisco implements Runnable{
      * inputFileUrlStrings into arrays.
      */
     private String[] convertInputUrlStringToArray(String inputFileUrlString){
-	inputFileUrlString.trim();
+		  inputFileUrlString.trim();
+		  
+		  String[] returnArray;
 	
-	String[] returnArray;
-	
-	StringTokenizer st=new StringTokenizer(inputFileUrlString);
-	int arrayDim=st.countTokens();
-	if(arrayDim<2) {
-	    returnArray=new String[1];
-	    returnArray[0]=inputFileUrlString.trim();
-	}
-	else {
-	    int i=0;
-	    returnArray=new String[arrayDim];
-	    while(st.hasMoreTokens()) {
-		returnArray[i]=st.nextToken();
-		i++;
-	    }
-	}
-	return returnArray;
+		  StringTokenizer st=new StringTokenizer(inputFileUrlString);
+		  int arrayDim=st.countTokens();
+		  if(arrayDim<2) {
+				returnArray=new String[1];
+				returnArray[0]=inputFileUrlString.trim();
+		  }
+		  else {
+				int i=0;
+				returnArray=new String[arrayDim];
+				while(st.hasMoreTokens()) {
+					 returnArray[i]=st.nextToken();
+					 i++;
+				}
+		  }
+		  return returnArray;
     }
     
 
@@ -453,95 +452,95 @@ public class RDAHMMService extends AntVisco implements Runnable{
      * This can take multiple site codes as a single string.
      */
     public String[] runNonblockingRDAHMM(String siteCode,
-					 String beginDate,
-					 String endDate,
-					 int numModelStates)
-	throws Exception {
-	try {
-	    String dataUrl=querySOPACGetURL(siteCode,beginDate,endDate);
-	    return runNonblockingRDAHMM(dataUrl,numModelStates);
-	}
-	catch (Exception ex) {
-	    ex.printStackTrace();
-	    throw new Exception();
-	}
+													  String beginDate,
+													  String endDate,
+													  int numModelStates)
+		  throws Exception {
+		  try {
+				String dataUrl=querySOPACGetURL(siteCode,beginDate,endDate);
+				return runNonblockingRDAHMM(dataUrl,numModelStates);
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+				throw new Exception();
+		  }
     }
-
+	 
     /**
      * This non-blocking version lets you pass in all values 
      * for querying the SOPAC data service.
      */
     public String[] runNonblockingRDAHMM(String siteCode,
-					 String resource,
-					 String contextGroup,
-					 String contextId,
-					 String minMaxLatLon,
-					 String beginDate,
-					 String endDate,
-					 int numModelStates)
-	throws Exception {
-	try {
-	    String dataUrl=querySOPACGetURL(siteCode,
-					    resource,
-					    contextGroup,
-					    contextId,
-					    minMaxLatLon,
-					    beginDate,
-					    endDate);
-	    return runNonblockingRDAHMM(dataUrl,numModelStates);
-	}
-	catch (Exception ex) {
-	    ex.printStackTrace();
-	    throw new Exception();
-	}
+													  String resource,
+													  String contextGroup,
+													  String contextId,
+													  String minMaxLatLon,
+													  String beginDate,
+													  String endDate,
+													  int numModelStates)
+		  throws Exception {
+		  try {
+				String dataUrl=querySOPACGetURL(siteCode,
+														  resource,
+														  contextGroup,
+														  contextId,
+														  minMaxLatLon,
+														  beginDate,
+														  endDate);
+				return runNonblockingRDAHMM(dataUrl,numModelStates);
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+				throw new Exception();
+		  }
     }
-
+	 
     /**
      * This version runs in blocking mode and gets
      * the data from the SOPAC data service.
      */
     public String[] runBlockingRDAHMM(String siteCode,
-				      String beginDate,
-				      String endDate,
-				      int numModelStates)
-	throws Exception {
-	try {
-	    String dataUrl=querySOPACGetURL(siteCode,beginDate,endDate);
-	    return runBlockingRDAHMM(dataUrl,numModelStates);
-	}
-	catch (Exception ex) {
-	    ex.printStackTrace();
-	    throw new Exception();
-	}
+												  String beginDate,
+												  String endDate,
+												  int numModelStates)
+		  throws Exception {
+		  try {
+				String dataUrl=querySOPACGetURL(siteCode,beginDate,endDate);
+				return runBlockingRDAHMM(dataUrl,numModelStates);
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+				throw new Exception();
+		  }
     }
-
+	 
     /**
      * This blocking version lets you pass in all values 
      * for querying the SOPAC data service.
      */
     public String[] runBlockingRDAHMM(String siteCode,
-				      String resource,
-				      String contextGroup,
-				      String contextId,
-				      String minMaxLatLon,
-				      String beginDate,
-				      String endDate,
-				      int numModelStates)
-	throws Exception {
-	try {
-	    String dataUrl=querySOPACGetURL(siteCode,
-					    resource,
-					    contextGroup,
-					    contextId,
-					    minMaxLatLon,
-					    beginDate,
-					    endDate);
-	    return runBlockingRDAHMM(dataUrl,numModelStates);
-	}
-	catch (Exception ex) {
-	    ex.printStackTrace();
-	    throw new Exception();
-	}
+												  String resource,
+												  String contextGroup,
+												  String contextId,
+												  String minMaxLatLon,
+												  String beginDate,
+												  String endDate,
+												  int numModelStates)
+		  throws Exception {
+		  try {
+				String dataUrl=querySOPACGetURL(siteCode,
+														  resource,
+														  contextGroup,
+														  contextId,
+														  minMaxLatLon,
+														  beginDate,
+														  endDate);
+				return runBlockingRDAHMM(dataUrl,numModelStates);
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+				throw new Exception();
+		  }
     }
 
     /**
@@ -549,106 +548,107 @@ public class RDAHMMService extends AntVisco implements Runnable{
      */ 
 
     public String[] runBlockingRDAHMM(String inputFileUrlString,
-				      int numModelStates) 
-	throws Exception {
-	System.out.println("Running blocking execution");
-	System.out.println(inputFileUrlString);
-	System.out.println(numModelStates);
-	
-	String[] returnVals=runBlockingRDAHMM(inputFileUrlString,
-					      baseWorkDir,
-					      outputDestDir,
-					      projectName,
-					      binPath,
-					      numModelStates,
-					      randomSeed,
-					      outputType,
-					      annealStep,
-					      buildFilePath,
-					      antTarget);
-	return returnVals;
+												  int numModelStates) 
+		  throws Exception {
+		  System.out.println("Running blocking execution");
+		  System.out.println(inputFileUrlString);
+		  System.out.println(numModelStates);
+		  
+		  String[] returnVals=runBlockingRDAHMM(inputFileUrlString,
+															 baseWorkDir,
+															 outputDestDir,
+															 projectName,
+															 binPath,
+															 numModelStates,
+															 randomSeed,
+															 outputType,
+															 annealStep,
+															 buildFilePath,
+															 antTarget);
+		  return returnVals;
     }
-
+	 
 
     /**
      * This is the simplified API that uses default properties.
      */
     public String[] runNonblockingRDAHMM(String inputFileUrlString,
-					 int numModelStates) throws Exception {
-	System.out.println("Running non-blocking execution");
-	System.out.println(inputFileUrlString);
-	System.out.println(numModelStates);
-
-	
-	String[] returnVals=runNonblockingRDAHMM(inputFileUrlString,
-						 baseWorkDir,
-						 outputDestDir,
-						 projectName,
-						 binPath,
-						 numModelStates,
-						 randomSeed,
-						 outputType,
-						 annealStep,
-						 buildFilePath,
-						 antTarget);
-	return returnVals;
+													  int numModelStates) 
+		  throws Exception {
+		  System.out.println("Running non-blocking execution");
+		  System.out.println(inputFileUrlString);
+		  System.out.println(numModelStates);
+		  
+		  
+		  String[] returnVals=runNonblockingRDAHMM(inputFileUrlString,
+																 baseWorkDir,
+																 outputDestDir,
+																 projectName,
+																 binPath,
+																 numModelStates,
+																 randomSeed,
+																 outputType,
+																 annealStep,
+																 buildFilePath,
+																 antTarget);
+		  return returnVals;
     }
-
-
+	 
+	 
     /**
      * This version is used to to hold response until 
      * RDAHMM finished executing.  This is the full API.
      */
     public String[] runBlockingRDAHMM(String inputFileUrlString,
-				      String baseWorkDir,
-				      String outputDestDir,
-				      String projectName,
-				      String binPath,
-				      int numModelStates,
-				      int randomSeed,
-				      String outputType,
-				      double annealStep,
-				      String buildFilePath,
-				      String antTarget) throws Exception {
-	
-	
-	//Set up the work directory
-	String workDir=baseWorkDir+File.separator+projectName;
-	makeWorkDir(workDir,buildFilePath);
-	
-	//Copy the input file to the working directory, if 
-	//necessary.
-	String[] inputFileUrlArray=
-	    convertInputUrlStringToArray(inputFileUrlString);
-	
-	String[] localFileArray=downloadInputFile(inputFileUrlArray,workDir);
-	String[] localFileArrayFiltered=filterResults(localFileArray, 2, 3);
-	String rdahmmInputFile=workDir+"/"+projectName+".input";
-	mergeInputFiles(localFileArrayFiltered,rdahmmInputFile);
-			
-	
-	//Get the dimensions and number of observations.
-	int ndim=getFileDimension(rdahmmInputFile);
-	int nobsv=getLineCount(rdahmmInputFile);
-
-	String[] args=setUpArgArray(rdahmmInputFile,
-				    workDir,
-				    outputDestDir,
-				    projectName,
-				    binPath,
-				    nobsv,
-				    ndim,
-				    numModelStates,
-				    randomSeed,
-				    outputType,
-				    annealStep,
-				    buildFilePath,
-				    antTarget);
-	
-	//Methods inherited from parent
+												  String baseWorkDir,
+												  String outputDestDir,
+												  String projectName,
+												  String binPath,
+												  int numModelStates,
+												  int randomSeed,
+												  String outputType,
+												  double annealStep,
+												  String buildFilePath,
+												  String antTarget) throws Exception {
+		  
+		  
+		  //Set up the work directory
+		  String workDir=baseWorkDir+File.separator+projectName;
+		  makeWorkDir(workDir,buildFilePath);
+		  
+		  //Copy the input file to the working directory, if 
+		  //necessary.
+		  String[] inputFileUrlArray=
+				convertInputUrlStringToArray(inputFileUrlString);
+		  
+		  String[] localFileArray=downloadInputFile(inputFileUrlArray,workDir);
+		  String[] localFileArrayFiltered=filterResults(localFileArray, 2, 3);
+		  String rdahmmInputFile=workDir+"/"+projectName+".input";
+		  mergeInputFiles(localFileArrayFiltered,rdahmmInputFile);
+		  
+		  
+		  //Get the dimensions and number of observations.
+		  int ndim=getFileDimension(rdahmmInputFile);
+		  int nobsv=getLineCount(rdahmmInputFile);
+		  
+		  String[] args=setUpArgArray(rdahmmInputFile,
+												workDir,
+												outputDestDir,
+												projectName,
+												binPath,
+												nobsv,
+												ndim,
+												numModelStates,
+												randomSeed,
+												outputType,
+												annealStep,
+												buildFilePath,
+												antTarget);
+		  
+		  //Methods inherited from parent
         setArgs(args);
         run();
-	return getTheReturnFiles();	
+		  return getTheReturnFiles();	
     }
     
     /**
@@ -657,76 +657,76 @@ public class RDAHMMService extends AntVisco implements Runnable{
      * API.
      */
     public String[] runNonblockingRDAHMM(String inputFileUrlString,
-					 String baseWorkDir,
-					 String outputDestDir,
-					 String projectName,
-					 String binPath,
-					 int numModelStates,
-					 int randomSeed,
-					 String outputType,
-					 double annealStep,
-					 String buildFilePath,
-					 String antTarget) throws Exception {
-	
-	//Set up the work directory
-	String workDir=baseWorkDir+File.separator+projectName;
-	makeWorkDir(workDir,buildFilePath);
-	
-	//Copy the input file to the working directory, if 
-	//necessary.
-	String[] inputFileUrlArray=
-	    convertInputUrlStringToArray(inputFileUrlString);
-	
-	String[] localFileArray=downloadInputFile(inputFileUrlArray,workDir);
-	String[] localFileArrayFiltered=filterResults(localFileArray, 2, 3);
-	String rdahmmInputFile=workDir+"/"+projectName+".input";
-	mergeInputFiles(localFileArrayFiltered,rdahmmInputFile);
-	
-	//Get the dimensions and number of observations.
-	int ndim=getFileDimension(rdahmmInputFile);
-	int nobsv=getLineCount(rdahmmInputFile);
-
-
-	String[] args=setUpArgArray(rdahmmInputFile,
-				    workDir,
-				    outputDestDir,
-				    projectName,
-				    binPath,
-				    nobsv,
-				    ndim,
-				    numModelStates,
-				    randomSeed,
-				    outputType,
-				    annealStep,
-				    buildFilePath,
-				    antTarget);
-	
-	
-	//Methods inherited from parent
+													  String baseWorkDir,
+													  String outputDestDir,
+													  String projectName,
+													  String binPath,
+													  int numModelStates,
+													  int randomSeed,
+													  String outputType,
+													  double annealStep,
+													  String buildFilePath,
+													  String antTarget) throws Exception {
+		  
+		  //Set up the work directory
+		  String workDir=baseWorkDir+File.separator+projectName;
+		  makeWorkDir(workDir,buildFilePath);
+		  
+		  //Copy the input file to the working directory, if 
+		  //necessary.
+		  String[] inputFileUrlArray=
+				convertInputUrlStringToArray(inputFileUrlString);
+		  
+		  String[] localFileArray=downloadInputFile(inputFileUrlArray,workDir);
+		  String[] localFileArrayFiltered=filterResults(localFileArray, 2, 3);
+		  String rdahmmInputFile=workDir+"/"+projectName+".input";
+		  mergeInputFiles(localFileArrayFiltered,rdahmmInputFile);
+		  
+		  //Get the dimensions and number of observations.
+		  int ndim=getFileDimension(rdahmmInputFile);
+		  int nobsv=getLineCount(rdahmmInputFile);
+		  
+		  
+		  String[] args=setUpArgArray(rdahmmInputFile,
+												workDir,
+												outputDestDir,
+												projectName,
+												binPath,
+												nobsv,
+												ndim,
+												numModelStates,
+												randomSeed,
+												outputType,
+												annealStep,
+												buildFilePath,
+												antTarget);
+		  
+		  
+		  //Methods inherited from parent
         setArgs(args);
         execute();
-
-	return getTheReturnFiles();
+		  
+		  return getTheReturnFiles();
     }
-
+	 
     /**
      * A dumb little method for constructing the URL outputs. This
      * will not get called if the execute()/run() method fails.
      */ 
     protected String[] getTheReturnFiles() {
-
-	String[] extensions={".input",".range",".Q",".pi",".A",
-			     ".minval",".maxval",".L",".B",
-			     ".Q",".stdout",
-	                     ".input.X.png",".input.Y.png",".input.Z.png"};
-	
-	String[] returnFiles=new String[extensions.length];
-	for(int i=0;i<extensions.length;i++) {
-	    returnFiles[i]=serverUrl+"/"+projectName
-		+"/"+projectName+extensions[i];
-	}
-	
-	return returnFiles;
+		  
+		  String[] extensions={".input",".range",".Q",".pi",".A",
+									  ".minval",".maxval",".L",".B",
+									  ".Q",".stdout",
+									  ".input.X.png",".input.Y.png",".input.Z.png"};
+		  
+		  String[] returnFiles=new String[extensions.length];
+		  for(int i=0;i<extensions.length;i++) {
+				returnFiles[i]=serverUrl+"/"+projectName
+					 +"/"+projectName+extensions[i];
+		  }
+		  
+		  return returnFiles;
     }
     
     /**
@@ -738,84 +738,84 @@ public class RDAHMMService extends AntVisco implements Runnable{
      * multi-values (space-separated string).
      */
     protected String querySOPACGetURL(String siteCode,
-				      String resource,
-				      String contextGroup,
-				      String contextId,
-				      String minMaxLatLon,
-				      String beginDate,
-				      String endDate) throws Exception {
-
-	//Make sure we don't have unnecessary space.
-	String dataUrl="";
-	System.out.println(siteCode);
-	
-	StringTokenizer st=new StringTokenizer(siteCode);
-	GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
-	while(st.hasMoreTokens()) {
-	    String siteCodeEntry=st.nextToken();
-	    System.out.println("Site entry:"+siteCodeEntry);
-	    gsq.setFromServlet(siteCodeEntry, beginDate, endDate, resource,
-			       contextGroup, contextId, minMaxLatLon, true);
-	    dataUrl+=gsq.getResource()+" ";
-	    System.out.println("GRWS data url: "+dataUrl);
-	}
-	return dataUrl.trim();
+												  String resource,
+												  String contextGroup,
+												  String contextId,
+												  String minMaxLatLon,
+												  String beginDate,
+												  String endDate) throws Exception {
+		  
+		  //Make sure we don't have unnecessary space.
+		  String dataUrl="";
+		  System.out.println(siteCode);
+		  
+		  StringTokenizer st=new StringTokenizer(siteCode);
+		  GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
+		  while(st.hasMoreTokens()) {
+				String siteCodeEntry=st.nextToken();
+				System.out.println("Site entry:"+siteCodeEntry);
+				gsq.setFromServlet(siteCodeEntry, beginDate, endDate, resource,
+										 contextGroup, contextId, minMaxLatLon, true);
+				dataUrl+=gsq.getResource()+" ";
+				System.out.println("GRWS data url: "+dataUrl);
+		  }
+		  return dataUrl.trim();
     }
-
+	 
     /**
      * This version of the client gets back the URL of the
      * results, rather than the results directly.  The String
      * return type is used for JSF page navigation.
      */
     protected String querySOPACGetURL(String siteCode,
-				      String beginDate,
-				      String endDate) throws Exception {
-	
-	String resource="procCoords";
-	String contextGroup="reasonComb";
-	String minMaxLatLon="";
-	String contextId="4";
-	
-	return querySOPACGetURL(siteCode,
-				resource,
-				contextGroup,
-				contextId,
-				minMaxLatLon,
-				beginDate,
-				endDate);
-	
-	// 	GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
-	// 	gsq.setFromServlet(siteCode, beginDate, endDate, resource,
-	// 			   contextGroup, contextId, minMaxLatLon, true);
-	// 	String dataUrl=gsq.getResource();
-	// 	System.out.println("GRWS data url: "+dataUrl);
-	//	return dataUrl;
+												  String beginDate,
+												  String endDate) throws Exception {
+		  
+		  String resource="procCoords";
+		  String contextGroup="reasonComb";
+		  String minMaxLatLon="";
+		  String contextId="4";
+		  
+		  return querySOPACGetURL(siteCode,
+										  resource,
+										  contextGroup,
+										  contextId,
+										  minMaxLatLon,
+										  beginDate,
+										  endDate);
+		  
+		  // 	GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
+		  // 	gsq.setFromServlet(siteCode, beginDate, endDate, resource,
+		  // 			   contextGroup, contextId, minMaxLatLon, true);
+		  // 	String dataUrl=gsq.getResource();
+		  // 	System.out.println("GRWS data url: "+dataUrl);
+		  //	return dataUrl;
     }
     
-
+	 
     /** 
      * This is added for testing.
      */ 
-
+	 
     public static void main(String[] args) {
-	String dataUrl="http://geoapp.ucsd.edu/xml/geodesy/reason/grws/resources/output/procCoords/4-47353-20061008100245.txt";
-	int numModelStates=2;
-	try {
-	    //Since we are running on the command line, use 
-	    //the classloader to find the property files
-	    RDAHMMService rds=new RDAHMMService(true);
-	    System.out.println("----------------------------------");
-	    System.out.println("Testing blocking version");
-	    rds.runBlockingRDAHMM(dataUrl,
-				  numModelStates);
-
-	    System.out.println("----------------------------------");
-	    System.out.println("Testing non-blocking version");
-	    rds.runNonblockingRDAHMM(dataUrl,
-				  numModelStates);
-	}
-	catch (Exception ex) {
-	    ex.printStackTrace();
-	}
+		  String dataUrl="http://geoapp.ucsd.edu/xml/geodesy/reason/grws/resources/output/procCoords/4-47353-20061008100245.txt";
+		  int numModelStates=2;
+		  try {
+				//Since we are running on the command line, use 
+				//the classloader to find the property files
+				RDAHMMService rds=new RDAHMMService(true);
+				System.out.println("----------------------------------");
+				System.out.println("Testing blocking version");
+				rds.runBlockingRDAHMM(dataUrl,
+											 numModelStates);
+				
+				System.out.println("----------------------------------");
+				System.out.println("Testing non-blocking version");
+				rds.runNonblockingRDAHMM(dataUrl,
+												 numModelStates);
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
     }
 }
