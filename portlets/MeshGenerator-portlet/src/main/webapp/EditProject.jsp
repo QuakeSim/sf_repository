@@ -3,6 +3,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
+
+<style>
+	.alignTop {
+		vertical-align:top;
+	}
+	.header2 {
+		font-family: Arial, sans-serif;
+		font-size: 18pt;
+		font: bold;
+	}
+</style>
+
+
 <html>
 <head>
 <link rel="stylesheet" type="text/css"
@@ -44,11 +57,13 @@ function dataTableSelectOneRadio(radio) {
 
 </script>
 <f:view>
-	<h2>Project Input</h2>
+	<h:outputText styleClass="header2" value="Project Input"/>
+
 	<p>Create your geometry out of layers and faults.</p>
 
-
-	<h:panelGrid id="EditProject" columns="2" border="1">
+	<h:panelGrid id="EditProject" 
+		columnClasses="alignTop,alignTop"
+		columns="2" border="1">
 		<h:form id="selectproj">
 			<h:panelGroup>
 
@@ -77,8 +92,6 @@ function dataTableSelectOneRadio(radio) {
 
 			</h:panelGroup>
 		</h:form>
-
-
 
 		<h:panelGroup>
 			<h:form id="layerform" rendered="#{MGBean.renderCreateNewLayerForm}">
@@ -518,29 +531,33 @@ function dataTableSelectOneRadio(radio) {
 
 		</h:panelGroup>
 	</h:panelGrid>
-	<hr />
-	<h2>Current Project Components</h2>
+
+  <p/>
+
+	<h:panelGroup 
+		rendered="#{!empty MGBean.myFaultEntryForProjectList 
+							|| !empty MGBean.myLayerEntryForProjectList}">
+
+	<h:outputText styleClass="header2" value="Current Project Components"/>
 
 	<h:panelGrid id="ProjectComponentList" columns="3" border="1"
-		columnClasses="list-column-top,
-  list-column-left, list-column-top,
-list-column-left">
+			columnClasses="alignTop, alignTop, alignTop">
 
 		<h:panelGroup>
 			<h:form id="UpdateSelectFaultsForm"
 				rendered="#{!empty MGBean.myFaultEntryForProjectList}">
 				<h:panelGrid columns="1" border="1">
 					<h:panelGroup>
-						<h:panelGrid columns="1" border="1">
-							<h:outputFormat escape="false" value="<b>Faults</b>">
-							</h:outputFormat>
+						<h:panelGrid columns="1">
+							<h:outputText escape="false" value="<b>Faults</b>"/>
 						</h:panelGrid>
 
 						<h:dataTable border="1"
 							value="#{MGBean.myFaultEntryForProjectList}" var="myentry3">
 							<h:column>
 								<f:facet name="header">
-									<h:outputText escape="false" value="<b>Name</b>" />
+									<h:outputText escape="false" value="<b>Name</b>">
+                           </h:outputText>
 								</f:facet>
 								<h:outputText value="#{myentry3.faultName}" />
 							</h:column>
@@ -574,9 +591,9 @@ list-column-left">
 				rendered="#{!empty MGBean.myLayerEntryForProjectList}">
 				<h:panelGrid columns="1" border="1">
 					<h:panelGroup>
-						<h:panelGrid columns="1" border="1">
-							<h:outputFormat escape="false" value="<b>Layers</b>">
-							</h:outputFormat>
+						<h:panelGrid columns="1">
+							<h:outputText escape="false" value="<b>Layers</b>">
+                     </h:outputText>
 						</h:panelGrid>
 
 						<h:dataTable border="1"
@@ -615,8 +632,34 @@ list-column-left">
 			</h:form>
 		</h:panelGroup>
 
+		<h:form id="PlottingTools">
+			<h:panelGroup 				
+				rendered="#{!empty MGBean.myFaultEntryForProjectList 
+							|| !empty MGBean.myLayerEntryForProjectList}"
+>
+				<h:outputFormat escape="false" value="<b>Plotting Tools</b><br><br>" />
+				<h:panelGrid columns="1" border="0">
+					<h:outputFormat escape="false"
+						value="Click the button below to plot Layers and Faults.<br><br>" />
+					<h:commandButton value="  Plot  " action="#{MGBean.SetAndPlot}" />
+					<h:outputFormat escape="false"
+						value="<br>You can also try the Java Web Start version by clicking the link below." />
+
+					<h:outputLink id="link1" value="#{facesContext.externalContext.requestContextPath}/painter.jsp">
+						<f:param name="layers" value="#{MGBean.myLayersParamForJnlp}" />
+						<f:param name="faults" value="#{MGBean.myFaultsParamForJnlp}" />
+						<h:outputText value="Web Start Plotter" />
+					</h:outputLink>
+
+				</h:panelGrid>
+			</h:panelGroup>
+		</h:form>
+
 		<h:form id="MeshGen">
-			<h:panelGrid columns="1" footerClass="subtitle"
+			<h:panelGrid columns="1" 
+				rendered="#{!empty MGBean.myFaultEntryForProjectList 
+							&& !empty MGBean.myLayerEntryForProjectList}"
+				footerClass="subtitle"
 				headerClass="subtitlebig" styleClass="medium"
 				columnClasses="subtitle,medium">
 				<h:outputFormat escape="false"
@@ -645,28 +688,8 @@ list-column-left">
 
 			</h:panelGrid>
 		</h:form>
-
-		<h:form id="PlottingTools">
-			<h:panelGroup>
-				<h:outputFormat escape="false" value="<b>Plotting Tools</b><br><br>" />
-				<h:panelGrid columns="1" border="0">
-					<h:outputFormat escape="false"
-						value="Click the button below to plot Layers and Faults.<br><br>" />
-					<h:commandButton value="  Plot  " action="#{MGBean.SetAndPlot}" />
-					<h:outputFormat escape="false"
-						value="<br>You can also try the Java Web Start version by clicking the link below." />
-
-					<h:outputLink id="link1" value="#{facesContext.externalContext.requestContextPath}/painter.jsp">
-						<f:param name="layers" value="#{MGBean.myLayersParamForJnlp}" />
-						<f:param name="faults" value="#{MGBean.myFaultsParamForJnlp}" />
-						<h:outputText value="Web Start Plotter" />
-					</h:outputLink>
-
-				</h:panelGrid>
-			</h:panelGroup>
-		</h:form>
-
 	</h:panelGrid>
+   </h:panelGroup>
 
 	<h:form>
 		<hr />
