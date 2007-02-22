@@ -18,18 +18,18 @@ public class GeotransParamsData {
 	
 	//cordinate boundary
 	
-	String top_bc="Lock Node";
-	String top_bc_value="0 0. 0. 0. 1.";
-	String east_bc="Lock Node";
-	String east_bc_value="0 0. 0. 0. 1.";
-	String west_bc="Lock Node";
-	String west_bc_value="0 0. 0. 0. 1.";
-	String north_bc="Lock Node";
-	String north_bc_value="0 0. 0. 0. 1.";
-	String south_bc="Lock Node";
-	String south_bc_value="0 0. 0. 0. 1.";
-	String bottom_bc="Lock Node";
-	String bottom_bc_value="0 0. 0. 0. 1.";
+	String top_bc="locked node";
+	String top_bc_value="0 0. 0. 0. 1. ";
+	String east_bc="locked node";
+	String east_bc_value="0 0. 0. 0. 1. ";
+	String west_bc="locked node";
+	String west_bc_value="0 0. 0. 0. 1. ";
+	String north_bc="locked node";
+	String north_bc_value="0 0. 0. 0. 1. ";
+	String south_bc="locked node";
+	String south_bc_value="0 0. 0. 0. 1. ";
+	String bottom_bc="locked node";
+	String bottom_bc_value="0 0. 0. 0. 1. ";
 	
 	//Output Parameters and Formatting
 	
@@ -38,8 +38,8 @@ public class GeotransParamsData {
 	String printTimesType="Steps";
 	String numberofPrintTimes="20";
 	String printTimesInterval="1.0";
-	String restartFile="No Restart";
-	String checkpointFile="No Save";
+	String restartFile="NO_RESTART";
+	String checkpointFile="NO_SAVE";
 	
 	String inputFileName="";
 	String outputFileName="";
@@ -81,8 +81,8 @@ public class GeotransParamsData {
 		printTimesType="Steps";
 		numberofPrintTimes="20";
 		printTimesInterval="1.0";
-		restartFile="No Restart";
-		checkpointFile="No Save";	
+		restartFile="NO_RESTART";
+		checkpointFile="NO_SAVE";	
 		
 		inputFileName=projectName+".inp";
 		outputFileName=projectName+".out";

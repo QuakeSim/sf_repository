@@ -2535,51 +2535,51 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		String space = " ";
 
 		pw.println("output_filename" + space + output_file);
-		pw.print("number_space_dimensions" + space
+		pw.println("number_space_dimensions" + space
 				+ this.currentGeotransParamsData.number_space_dimensions + br);
-		pw.print("number_degrees_freedom" + space
+		pw.println("number_degrees_freedom" + space
 				+ this.currentGeotransParamsData.number_degrees_freedom + br);
-		pw.print("nrates" + space + this.currentGeotransParamsData.nrates + br);
-		pw.print("shape_flag" + space
+		pw.println("nrates" + space + this.currentGeotransParamsData.nrates + br);
+		pw.println("shape_flag" + space
 				+ this.currentGeotransParamsData.shape_flag + br);
-		pw.print("solver_flag" + space
+		pw.println("solver_flag" + space
 				+ this.currentGeotransParamsData.solver_flag + br);
-		pw.print("number_time_groups" + space
+		pw.println("number_time_groups" + space
 				+ this.currentGeotransParamsData.number_time_groups + br);
-		pw.print("reform_steps" + space
+		pw.println("reform_steps" + space
 				+ this.currentGeotransParamsData.reform_steps + br);
-		pw.print("backup_steps" + space
+		pw.println("backup_steps" + space
 				+ this.currentGeotransParamsData.backup_steps + br);
-		pw.print("fault_interval" + space
+		pw.println("fault_interval" + space
 				+ this.currentGeotransParamsData.fault_interval + br);
-		pw.print("end_time" + space + this.currentGeotransParamsData.end_time
+		pw.println("end_time" + space + this.currentGeotransParamsData.end_time
 				+ br);
-		pw.print("alpha" + space + this.currentGeotransParamsData.alpha + br);
-		pw.print("time_step" + space + this.currentGeotransParamsData.time_step
+		pw.println("alpha" + space + this.currentGeotransParamsData.alpha + br);
+		pw.println("time_step" + space + this.currentGeotransParamsData.time_step
 				+ br);
 
-		pw.print("top_bc" + space + this.currentGeotransParamsData.top_bc
+		pw.println("top_bc" + space + this.currentGeotransParamsData.top_bc
 				+ space + this.currentGeotransParamsData.top_bc_value + br);
-		pw.print("east_bc" + space + this.currentGeotransParamsData.east_bc
+		pw.println("east_bc" + space + this.currentGeotransParamsData.east_bc
 				+ space + this.currentGeotransParamsData.east_bc_value + br);
-		pw.print("west_bc" + space + this.currentGeotransParamsData.west_bc
+		pw.println("west_bc" + space + this.currentGeotransParamsData.west_bc
 				+ space + this.currentGeotransParamsData.west_bc_value + br);
-		pw.print("north_bc" + space + this.currentGeotransParamsData.north_bc
+		pw.println("north_bc" + space + this.currentGeotransParamsData.north_bc
 				+ space + this.currentGeotransParamsData.north_bc_value + br);
-		pw.print("south_bc" + space + this.currentGeotransParamsData.south_bc
+		pw.println("south_bc" + space + this.currentGeotransParamsData.south_bc
 				+ space + this.currentGeotransParamsData.south_bc_value + br);
-		pw.print("bottom_bc" + space + this.currentGeotransParamsData.bottom_bc
+		pw.println("bottom_bc" + space + this.currentGeotransParamsData.bottom_bc
 				+ space + this.currentGeotransParamsData.bottom_bc_value + br);
 
-		pw.print("reporting_nodes" + space
+		pw.println("reporting_nodes" + space
 				+ this.currentGeotransParamsData.reportingNodes + br);
-		pw.print("reporting_elements" + space
+		pw.println("reporting_elements" + space
 				+ this.currentGeotransParamsData.reportingElements + br);
-		pw.print("print_times_type" + space
+		pw.println("print_times_type" + space
 				+ this.currentGeotransParamsData.printTimesType + br);
-		pw.print("start_from_file" + space
+		pw.println("start_from_file" + space
 				+ this.currentGeotransParamsData.restartFile + br);
-		pw.print("checkpoint_file" + space
+		pw.println("checkpoint_file" + space
 				+ this.currentGeotransParamsData.checkpointFile + br);
 
 		// Finally, handle the number_print_times variable, which
