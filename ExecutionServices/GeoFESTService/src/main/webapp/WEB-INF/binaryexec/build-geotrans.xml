@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<project name="guiVisco" default="all" basedir=".">
+
+<!--
+<property name="workdir.prop" value="/home/gateway/nr8files"/>
+<property name="projectDir.prop" value="/home/gateway/nr8files"/>
+<property name="projectName.prop" value="nr8"/>
+<property name="bindir.prop" value="/home/gateway/GEMCodes/GeoFEST"/>
+<property name="meshsize.prop" value="50.0"/>
+<property name="outdir.prop" value=""/>
+<property name="tomcatdir.prop" value=""/>
+-->
+
+<!-- This is used to create the mesh from the input geometry -->
+<target name="autoref">
+   <exec executable="${bindir.prop}/autoref.pl" 
+         output="${workdir.prop}/autoref.out"
+	      error="${workdir.prop}/autoref.error"
+	      dir="${workdir.prop}">
+      <arg value="${workdir.prop}/${projectName.prop}"/>
+      <arg value="${mode.prop}"/>
+   </exec>  
+</target>
+
+<!--This is used to create the GeoFEST input file. -->
+<target name="geotrans">
+   <touch file="${workdir.prop}/geotrans.error"/>
+   <exec executable="${bindir.prop}/geotrans" 
+         output="${workdir.prop}/geotrans.out"
+	      error="${workdir.prop}/geotrans.error"
+	      dir="${workdir.prop}">
+      <arg value="${workdir.prop}/${projectName.prop}"/>
+      <arg value="${workdir.prop}/${projectName.prop}.std"/>
+      <arg value="${workdir.prop}/${GFInput.prop}"/>
+      <env key="PATH" path="/home/gateway/GEMCodes/GeoFEST/:/bin/:/usr/bin:$PATH"/>
+   </exec>
+</target>
+
+<target name="geotrans-tar" depends="geotrans">
+   <delete file="${workdir.prop}/${projectName.prop}.tar.gz"/>
+   <delete file="${workdir.prop}/${projectName.prop}.tar"/>
+   <tar tarfile="${workdir.prop}/${projectName.prop}.tar.gz" basedir="${workdir.prop}" compression="gzip"/>
+</target>
+
+<target name="GeoFEST" depends="geotrans-tar">
+   <exec executable="${bindir.prop}/GeoFEST" 
+         output="${workdir.prop}/${GFLog.prop}"
+	      dir="${workdir.prop}">
+      <arg value="${workdir.prop}/${GFInput.prop}"/>
+      <arg value="${workdir.prop}/${GFOutput.prop}"/>
+      <arg value="${workdir.prop}/${GFLog.prop}"/>
+      <env key="PATH" path="/home/gateway/GEMCodes/GeoFEST/:/bin/:$PATH"/>
+   </exec>
+</target>
+
+<target name="tar.all" depends="GeoFEST">
+   <delete file="${workdir.prop}/${projectName.prop}.tar.gz"/>
+   <delete file="${workdir.prop}/${projectName.prop}.tar"/>
+   <tar tarfile="${workdir.prop}/${projectName.prop}.tar.gz" basedir="${workdir.prop}" compression="gzip"/>
+</target>
+
+
+<target name="all" depends="GeoFEST"/>
+</project>
+
+
+
