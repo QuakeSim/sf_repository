@@ -27,9 +27,12 @@ export RDAHMM_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/RDAHMMService
 export STFILTER_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/STFilterService
 export GNUPLOT_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/GnuplotService
 export ANALYZE_TSERI_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/AnalyzeTseriService
+export GEOFEST_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/GeoFESTService
 
-# These are needed to use the rdahmm service.
+# These are directory locations for binaries that we should not put in
+# SourceForge
 export RDAHMM_BIN_HOME=$HOME/GEMCodes/RDAHMM2/bin/
+export GEOFEST_BIN_HOME=$HOME/GEMCodes/GeoFEST/bin/
 
 #Generic project code
 export GENERIC_PROJECT_HOME=$BUILD_DIR/GenericQuakeSimProject

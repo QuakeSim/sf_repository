@@ -64,7 +64,7 @@ mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
 cd $MESHGENERATOR_SA_HOME
 mvn clean -Dtomcat.base.dir=$CATALINA_HOME
- 
+
 #Clean up portlet stuff
 #cd $SIMPLEX_PORTLET_HOME
 #mvn clean
@@ -117,6 +117,10 @@ mvn clean
 
 cd $ANALYZE_TSERI_EXECUTION_HOME
 mvn clean -Dtomcat.base.dir=/tmp -Danalyze_tseri.service.url=/tmp
+
+cd $GEOFEST_EXECUTION_HOME
+mvn clean -Dtomcat.base.dir=/tmp -Dgeofest.service.url=/tmp
+ 
 
 #--------------------------------------------------
 # CLEAN VENDOR SOFTWARE
