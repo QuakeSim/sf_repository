@@ -6,21 +6,23 @@ package cgl.webservices.geofest;
 
 public class Fault {
 	
-	 String faultName = "";
-	 String faultLocationX = "";
-	 String faultLocationY = "";
-	 String faultLocationZ = "";
-	 String faultLength = "";
-	 String faultWidth = "";
-	 String faultDepth = "";
-	 String faultDipAngle = "";
-	 String faultStrikeAngle = "";
-	 String faultSlip = "";
-	 String faultRakeAngle = "";
-	 String faultLatStart="";
-	 String faultLatEnd="";
-	 String faultLonStart="";
-	 String faultLonEnd="";
+	 //These are some default values for testing.
+	 //Derived from Northridge, of course.
+	 String faultName="testFault";
+	 String faultLocationX="0.0";
+	 String faultLocationY="0.0";
+	 String faultLocationZ = "0.0";
+	 String faultLength = "14.009";
+	 String faultWidth="21.";
+	 String faultDepth="19.5";
+	 String faultDipAngle="40.0";
+	 String faultStrikeAngle="122";
+	 String faultSlip="1.22";
+	 String faultRakeAngle="101";
+	 String faultLatStart="34.243";
+	 String faultLatEnd="34.176";
+	 String faultLonStart="-118.72";
+	 String faultLonEnd="-118.591";
 
 	 public String getFaultLatStart() {
 		  return faultLatStart;

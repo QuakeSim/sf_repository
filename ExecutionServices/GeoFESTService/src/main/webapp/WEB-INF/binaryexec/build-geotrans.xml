@@ -12,7 +12,12 @@
 -->
 
 <!-- This is used to create the mesh from the input geometry -->
-<target name="autoref">
+<target name="MakeWorkDir">
+   <echo message="Creating ${workdir.prop}" />
+   <mkdir dir="${workdir.prop}" />
+</target>
+
+<target name="autoref" depends="MakeWorkDir">
    <exec executable="${bindir.prop}/autoref.pl" 
          output="${workdir.prop}/autoref.out"
 	      error="${workdir.prop}/autoref.error"

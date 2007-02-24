@@ -5,20 +5,22 @@ package cgl.webservices.geofest;
  */
 
 public class Layer {
-	
-	 String layerName = "";
-	 String layerOriginX = "";
-	 String layerOriginY = "";
-	 String layerOriginZ = "";
-	 String layerLatOrigin = "";
-	 String layerLonOrigin = "";
-	 String layerLength = "";
-	 String layerWidth = "";
-	 String layerDepth = "";
-	 String lameLambda = "";
-	 String lameMu = "";
-	 String viscosity = "";
-	 String exponent = "";
+
+	 //Some default values, taken from the Northridge 
+	 //layer, of course.
+	 String layerName="NorthridgeAreaUpper";
+	 String layerOriginX = "-103.0";
+	 String layerOriginY = "-104.0";
+	 String layerOriginZ = "0.0";
+	 String layerLatOrigin = "34.243";
+	 String layerLonOrigin = "-118.72";
+	 String layerLength = "240.0";
+	 String layerWidth = "240.0";
+	 String layerDepth = "5.0";
+	 String lameLambda = "17.0";
+	 String lameMu = "17.0";
+	 String viscosity = "17.0";
+	 String exponent = "1.0";
 	 
 	 
 	 public void setLayerName(String tmp_str) {

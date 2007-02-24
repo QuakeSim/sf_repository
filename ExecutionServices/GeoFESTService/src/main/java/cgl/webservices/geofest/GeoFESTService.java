@@ -41,11 +41,40 @@ public class GeoFESTService extends AntVisco implements Runnable{
     String baseDestDir;
     String outputDestDir;
     String projectName;
-    String binPath;
+    String binDir;
     String buildFilePath;
     String antTarget;
     
-    
+	 /**
+	  * This is a main() for testing.
+	  */
+	 public static void main(String[] args) {
+		  Fault[] faults=new Fault[1];
+		  faults[0]=new Fault();
+
+		  Layer[] layers=new Layer[1];
+		  layers[0]=new Layer();
+
+		  String userName="duhFaultUser";
+		  String projectName="faultsatmyfeet";
+
+		  try {
+				GeoFESTService gfs=new GeoFESTService(true);
+				gfs.runBlockingMeshGenerator(userName,
+													  projectName,
+													  faults,
+													  layers,
+													  "rare");
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+	 }
+
+    /**
+	  * The constructor. Set useClassLoader=true when running
+	  * on the command line.
+	  */
     public GeoFESTService(boolean useClassLoader) 
 		  throws Exception {
 
@@ -76,11 +105,13 @@ public class GeoFESTService extends AntVisco implements Runnable{
 				properties.load(new FileInputStream(propertyFile));
 		  }
 		  
+		  //Note these will be "global" for this class, so
+		  //I will not explicitly pass them around.
 		  serverUrl=properties.getProperty("geofest.service.url");
 		  baseWorkDir=properties.getProperty("base.workdir");
 		  baseDestDir=properties.getProperty("base.dest.dir");
 		  projectName=properties.getProperty("project.name");
-		  binPath=properties.getProperty("bin.path");
+		  binDir=properties.getProperty("bin.path");
 		  buildFilePath=properties.getProperty("build.file.path");
 		  antTarget=properties.getProperty("ant.target");
 	 }
@@ -93,14 +124,20 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	  * This runs the mesh generator code in blocking mode,
 	  * i.e., it does not return until the mesh is done.
 	  */
-	 public void runBlockingMeshGenerator(String projectDir,
+	 public void runBlockingMeshGenerator(String userName,
 													  String projectName,
 													  Fault[] faults,
-													  Layer[] layers) 
+													  Layer[] layers,
+													  String autoref_mode) 
 		  throws Exception {
-
-		  createGeometryFiles(projectDir,projectName,faults,layers);
-		  String[] args=setUpArgs();
+		  
+		  String workDir=baseWorkDir+File.separator
+				+userName+"-"+generateTimeStamp();
+		  
+		  createGeometryFiles(workDir,projectName,faults,layers);
+		  String[] args=setUpMeshArgs(workDir,
+												projectName,
+												autoref_mode);
 		  //Methods from parent
 		  setArgs(args);
 		  run();
@@ -110,21 +147,27 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	  * Runs the meshgenerator in non-blocking mode, which
 	  * is necessary for large meshes.
 	  */
-	 public String runNonBlockingMeshGenerator(String projectDir,
-															 String projectName,
-															 Fault[] faults,
-															 Layer[] layers) 
+	 public void runNonBlockingMeshGenerator(String userName,
+														  String projectName,
+														  Fault[] faults,
+														  Layer[] layers,
+														  String autoref_mode) 
 		  throws Exception{
 
-		  String ticket=generateTicket();
-		  createGeometryFiles(projectDir,projectName,faults, layers);
-		  String[] args=setUpArgs();
+		  String workDir=baseWorkDir+File.separator
+				+userName+"-"+generateTimeStamp();
+		  
+		  createGeometryFiles(workDir,projectName,faults, layers);
+		  
+		  String[] args=setUpMeshArgs(workDir,
+												projectName,
+												autoref_mode);
 		  
 		  //Methods from parent
 		  setArgs(args);
 		  execute();
-		  return ticket;
 	 }
+	 
 	 
 	 /**
 	  * Checks the running Mesh Generator service.
@@ -161,20 +204,21 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	  * This method writes out all the input files
 	  * that are needed for creating the mesh.
 	  */
-	 protected void createGeometryFiles(String projectDir,
-												  String projectName,
-												  Fault[] faults,
-												  Layer[] layers) 
+	 protected void createGeometryFiles(String workDir,
+													String projectName,
+													Fault[] faults,
+													Layer[] layers) 
 		  throws Exception {
 		  
-		  writeGroupFile(projectDir,projectName,faults,layers);
-		  writeAllFaultParamFiles(projectDir,faults,layers[0]);
-		  writeAllMaterialsFiles(projectDir,layers);
-		  writeAllFaultOutputFiles(projectDir,faults,layers[0]);
-		  writeAllLayerOutputFiles(projectDir,layers);
+		  makeWorkDir(workDir);
+		  writeGroupFile(workDir,projectName,faults,layers);
+		  writeAllFaultParamFiles(workDir,faults,layers[0]);
+		  writeAllMaterialsFiles(workDir,layers);
+		  writeAllFaultOutputFiles(workDir,faults,layers[0]);
+		  writeAllLayerOutputFiles(workDir,layers);
 	 }
 
-	 
+
     /**
      * This merges multiple files into a single file,
      * duplicating UNIX paste.
@@ -287,15 +331,15 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  return filteredFileArray;
     }
 	 
-    private void makeWorkDir(String workDir, 
-									  String bf_loc)
+    private void makeWorkDir(String workDir) 
 		  throws Exception {
+				
 		  System.out.println("Working Directory is "+workDir);
-		  
+
 		  String[] args0=new String[4];
-        args0[0]="-DworkDir.prop="+workDir;
+        args0[0]="-Dworkdir.prop="+workDir;
         args0[1]="-buildfile";
-        args0[2]=bf_loc;
+        args0[2]=buildFilePath;
         args0[3]="MakeWorkDir";
 		  
         setArgs(args0);
@@ -493,7 +537,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	  * Generate a ticket.  This can be used to 
 	  * make "gentle" status queries later.
 	  */
-	 protected String generateTicket(){
+	 protected String generateTimeStamp(){
 		  String stringDate=(new Date().getTime())+"";
 		  return stringDate;
 	 }
@@ -821,8 +865,43 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  pw.close();
 	 }
 	 
-	 protected String[] setUpArgs() {
-		  String[] args=new String[1];
+	 /**
+	  * Set up the arg array.  Note that the binDir and 
+	  * buildFilePath variables are constants, so not
+	  * explicitly passed in.
+	  */
+	 protected String[] setUpMeshArgs(String workDir,
+												 String projectName,
+												 String autoref_mode) {
+		  String[] args=new String[7];
+		  args[0]="-Dbindir.prop="+binDir;
+		  args[1]="-Dworkdir.prop="+workDir;
+		  args[2]="-DprojectName.prop="+projectName;
+		  args[3]="-Dmode.prop="+autoref_mode;
+        args[4]="-buildfile";
+        args[5]=buildFilePath;
+        args[6]="autoref";
+		  return args;
+	 }
+
+	 /**
+	  * Set up the arg array.  Note that the binDir and 
+	  * buildFilePath variables are constants, so not
+	  * explicitly passed in.
+	  */
+	 protected String[] setUpGeoFESTArgs(String workDir,
+													 String projectName) {
+		  
+		  String[] args=new String[9];
+		  args[0]="-Dbindir.prop="+binDir;
+		  args[1]="-Dworkdir.prop="+workDir;
+		  args[2]="-DprojectName.prop="+projectName;
+		  args[3]="-DGFInput.prop="+projectName;
+		  args[4]="-DGFOutput.prop="+projectName;
+		  args[5]="-DGFLog.prop="+projectName;
+        args[6]="-buildfile";
+        args[7]=buildFilePath;
+        args[8]="tar.all";
 		  return args;
 	 }
 }

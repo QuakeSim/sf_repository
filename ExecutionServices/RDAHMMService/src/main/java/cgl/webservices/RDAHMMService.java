@@ -346,22 +346,22 @@ public class RDAHMMService extends AntVisco implements Runnable{
 	
     }
     private String[] setUpArgArray(String inputFileUrlString,
-				   String workDir,
-				   String outputDestDir,
-				   String projectName,
-				   String binPath,
-				   int nobsv,
-				   int ndim,
-				   int numModelStates,
-				   int randomSeed,
-				   String outputType,
-				   double annealStep,
-				   String buildFilePath,
-				   String antTarget) throws Exception {
-	
-	String[] args=new String[16];
-        args[0]="-DworkDir.prop="+workDir;
-        args[1]="-DprojectName.prop="+projectName;
+											  String workDir,
+											  String outputDestDir,
+											  String projectName,
+											  String binPath,
+											  int nobsv,
+											  int ndim,
+											  int numModelStates,
+											  int randomSeed,
+											  String outputType,
+											  double annealStep,
+											  String buildFilePath,
+											  String antTarget) throws Exception {
+		  
+		  String[] args=new String[16];
+		  args[0]="-DworkDir.prop="+workDir;
+		  args[1]="-DprojectName.prop="+projectName;
         args[2]="-Dbindir.prop="+binPath;
         args[3]="-DRDAHMMBaseName.prop="+projectName;
         args[4]="-Dnobsv.prop="+nobsv;
@@ -369,15 +369,15 @@ public class RDAHMMService extends AntVisco implements Runnable{
         args[6]="-Dnstates.prop="+numModelStates;
         args[7]="-Dranseed.prop="+randomSeed;
         args[8]="-Doutput_type.prop="+outputType;
-	args[9]="-DannealStep.prop="+annealStep;
-	args[10]="-Dbetamin.prop="+betamin;
-	args[11]="-Dntries.prop="+ntries;
-	args[12]="-DoutputDestDir.prop="+outputDestDir;
+		  args[9]="-DannealStep.prop="+annealStep;
+		  args[10]="-Dbetamin.prop="+betamin;
+		  args[11]="-Dntries.prop="+ntries;
+		  args[12]="-DoutputDestDir.prop="+outputDestDir;
         args[13]="-buildfile";
         args[14]=buildFilePath;
         args[15]=antTarget;
 
-	return args;
+		  return args;
     }
 
 
