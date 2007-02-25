@@ -1,0 +1,76 @@
+Constructing mesh for project /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.
+Layer 0 file is NorthridgeAreaUpper.sld
+Fault 0 file is testFault.flt
+Summary: 
+		The file /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.grp contains
+			1 layers and 
+			1 faults. 
+Domain Thicnkess is 5
+Domain Maximum Horizontal is 240
+Element max size is 96
+number	dip(o)	strike(o)	slip(m)	rake(o)	length(km)	width(km)	depth(km)
+1.0	40.0	122	1.22	101	14.009	21.	19.5	0.0
+t0.0		
+
+Normal into hanging wall vector is
+ -0.340625537142036 -0.545114808635377 0.766044443131804
+
+with norm = 1
+htrig norm = 1
+hanging wall motion is
+ (unit) (0.23666820989058, 0.738820130945477, 0.630977790842829) times 0.5 * 1.22 (the slip) 
+
+B vector is
+ -0.909924393493156 0.396225515983164 -0.122649658010071
+
+B norm is 1
+fault origin is
+ 0.0 0.0 -19.5
+
+Zrange dip test: 13.4985398030963 13.4985398034173 (must match reasonably)
+Area test: 294.189 294.189 (must match reasonably)
+Setting minimum element size to 5.6036
+AKIRA_v1 /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 0
+CROM /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 96 1
+tagbigflt.pl /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.node /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.tetra testFault.flt 5.6036 /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.index 
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+tagbigflt.pl /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.node /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.tetra testFault.flt 5.6036 /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.index 
+Generated 185 elements, 169 are too large.
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+tagbigflt.pl /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.node /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.tetra testFault.flt 5.6036 /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.index 
+Generated 257 elements, 229 are too large.
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+tagbigflt.pl /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.node /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.tetra testFault.flt 5.6036 /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.index 
+Generated 343 elements, 283 are too large.
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+tagbigflt.pl /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.node /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.tetra testFault.flt 5.6036 /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.index 
+Generated 459 elements, 306 are too large.
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+tagbigflt.pl /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.node /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.tetra testFault.flt 5.6036 /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.index 
+Generated 626 elements, 298 are too large.
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+tagbigflt.pl /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.node /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.tetra testFault.flt 5.6036 /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.index 
+Generated 859 elements, 279 are too large.
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+tagbigflt.pl /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.node /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.tetra testFault.flt 5.6036 /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.index 
+Generated 1183 elements, 150 are too large.
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+tagbigflt.pl /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.node /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.tetra testFault.flt 5.6036 /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.index 
+Generated 1640 elements, 13 are too large.
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+tagbigflt.pl /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.node /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.tetra testFault.flt 5.6036 /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.index 
+Generated 2239 elements, 2 are too large.
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+tagbigflt.pl /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.node /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.tetra testFault.flt 5.6036 /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet.index 
+Generated 3006 elements, 0 are too large.
+Done.

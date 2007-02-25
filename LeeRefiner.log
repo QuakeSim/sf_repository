@@ -1,0 +1,356 @@
+AKIRA_v1 /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 0
+Finished Reading In Solids 
+0 / 12 TETRA # 12 Type 3 
+Total Number of Surface Not Preserved 2 
+0 / 2 TETRA # 72 Type 1 
+Total Number of Surface Not Preserved 2 
+0 / 2 TETRA # 84 Type 1 
+Total Number of Surface Not Preserved 2 
+0 / 2 TETRA # 98 Type 1 
+Total Number of Surface Not Preserved 2 
+0 / 2 TETRA # 111 Type 1 
+Total Number of Surface Not Preserved 1 
+0 / 1 TETRA # 124 Type 1 
+Total Number of Surface Not Preserved 1 
+0 / 1 TETRA # 132 Type 1 
+Total Number of Surface Not Preserved 1 
+0 / 1 TETRA # 136 Type 1 
+Total Number of Surface Not Preserved 2 
+0 / 2 TETRA # 138 Type 1 
+Total Number of Surface Not Preserved 1 
+0 / 1 TETRA # 147 Type 1 
+Total Number of Surface Not Preserved 1 
+0 / 1 TETRA # 152 Type 1 
+Total Number of Surface Not Preserved 1 
+0 / 1 TETRA # 158 Type 1 
+Total Number of Surface Not Preserved 0 
+Surface Preserved 
+The Worst Q 1.327818e-02 Volume 1.728000e+06
+QDIST[0] = 35 
+QDIST[1] = 11 
+QDIST[2] = 7 
+QDIST[3] = 1 
+QDIST[4] = 0 
+QDIST[5] = 0 
+QDIST[6] = 0 
+QDIST[7] = 0 
+QDIST[8] = 0 
+QDIST[9] = 0 
+Object 0 with Volume 2.880000e+05 
+Object 1 with Volume 0.000000e+00 
+Total Points 24 Tetra 54 
+CROM /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 96 1
+Refine Wavelength Points 0 
+The Worst Q 1.327818e-02 AVGQ 1.029394e-01 
+The Worst Q 1.448708e-02 AVGQ 1.173210e-01 
+The Worst Q 2.977918e-02 AVGQ 1.212703e-01 
+The Worst Q 5.053357e-02 AVGQ 1.540960e-01 
+The Worst Q 5.053357e-02 AVGQ 1.540960e-01 
+QDIST[0] = 31 
+QDIST[1] = 9 
+QDIST[2] = 12 
+QDIST[3] = 2 
+QDIST[4] = 0 
+QDIST[5] = 1 
+QDIST[6] = 0 
+QDIST[7] = 1 
+QDIST[8] = 0 
+QDIST[9] = 0 
+TOTAL POINTS 24 TETRAHEDRA 56 
+Refine Wavelength Points 20 
+Mesh Refine 0 / 9 Tetra 56 Tri 134 
+The Worst Q 1.247286e-03 AVGQ 1.207877e-01 
+The Worst Q 4.937725e-03 AVGQ 1.234946e-01 
+The Worst Q 4.942693e-03 AVGQ 1.259790e-01 
+The Worst Q 4.956115e-03 AVGQ 1.527543e-01 
+The Worst Q 4.956115e-03 AVGQ 1.527543e-01 
+QDIST[0] = 29 
+QDIST[1] = 26 
+QDIST[2] = 13 
+QDIST[3] = 3 
+QDIST[4] = 0 
+QDIST[5] = 1 
+QDIST[6] = 0 
+QDIST[7] = 2 
+QDIST[8] = 0 
+QDIST[9] = 0 
+TOTAL POINTS 33 TETRAHEDRA 74 
+Refine Wavelength Points 25 
+Mesh Refine 0 / 20 Tetra 74 Tri 179 
+The Worst Q 2.269599e-03 AVGQ 1.142499e-01 
+The Worst Q 1.884805e-02 AVGQ 1.337945e-01 
+The Worst Q 1.894574e-02 AVGQ 1.384770e-01 
+The Worst Q 1.908447e-02 AVGQ 1.410643e-01 
+The Worst Q 1.908447e-02 AVGQ 1.410643e-01 
+QDIST[0] = 37 
+QDIST[1] = 58 
+QDIST[2] = 17 
+QDIST[3] = 1 
+QDIST[4] = 1 
+QDIST[5] = 0 
+QDIST[6] = 2 
+QDIST[7] = 0 
+QDIST[8] = 0 
+QDIST[9] = 0 
+TOTAL POINTS 53 TETRAHEDRA 116 
+Refine Wavelength Points 12 
+Mesh Refine 0 / 9 Tetra 116 Tri 283 
+The Worst Q 5.102673e-03 AVGQ 1.478200e-01 
+The Worst Q 9.978911e-03 AVGQ 1.628224e-01 
+The Worst Q 1.056721e-02 AVGQ 1.614193e-01 
+The Worst Q 1.162153e-02 AVGQ 1.767606e-01 
+The Worst Q 1.162153e-02 AVGQ 1.767606e-01 
+QDIST[0] = 5 
+QDIST[1] = 99 
+QDIST[2] = 25 
+QDIST[3] = 1 
+QDIST[4] = 1 
+QDIST[5] = 1 
+QDIST[6] = 2 
+QDIST[7] = 0 
+QDIST[8] = 0 
+QDIST[9] = 0 
+TOTAL POINTS 62 TETRAHEDRA 134 
+Refine Wavelength Points 0 
+The Worst Q 1.162153e-02 AVGQ 1.767606e-01 
+The Worst Q 1.202738e-02 AVGQ 1.745478e-01 
+The Worst Q 1.201422e-02 AVGQ 1.748112e-01 
+The Worst Q 1.201422e-02 AVGQ 1.748112e-01 
+QDIST[0] = 5 
+QDIST[1] = 110 
+QDIST[2] = 14 
+QDIST[3] = 1 
+QDIST[4] = 4 
+QDIST[5] = 0 
+QDIST[6] = 0 
+QDIST[7] = 0 
+QDIST[8] = 0 
+QDIST[9] = 0 
+TOTAL POINTS 62 TETRAHEDRA 134 
+Refine Wavelength Points 0 
+The Worst Q 1.201422e-02 AVGQ 1.748112e-01 
+The Worst Q 1.216754e-02 AVGQ 1.783591e-01 
+The Worst Q 1.228974e-02 AVGQ 1.708574e-01 
+The Worst Q 1.249361e-02 AVGQ 1.764580e-01 
+The Worst Q 1.249361e-02 AVGQ 1.764580e-01 
+QDIST[0] = 6 
+QDIST[1] = 108 
+QDIST[2] = 15 
+QDIST[3] = 3 
+QDIST[4] = 3 
+QDIST[5] = 0 
+QDIST[6] = 0 
+QDIST[7] = 0 
+QDIST[8] = 0 
+QDIST[9] = 0 
+TOTAL POINTS 62 TETRAHEDRA 135 
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Refine Points 20 
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Mesh Refine 0 / 18 Tetra 135 Tri 330 
+The Worst Q 8.287949e-03 AVGQ 1.502588e-01 
+The Worst Q 1.640905e-02 AVGQ 2.017168e-01 
+The Worst Q 1.479372e-02 AVGQ 2.126679e-01 
+The Worst Q 1.364857e-02 AVGQ 2.114485e-01 
+The Worst Q 1.364857e-02 AVGQ 2.114485e-01 
+QDIST[0] = 10 
+QDIST[1] = 88 
+QDIST[2] = 66 
+QDIST[3] = 15 
+QDIST[4] = 5 
+QDIST[5] = 0 
+QDIST[6] = 1 
+QDIST[7] = 0 
+QDIST[8] = 0 
+QDIST[9] = 0 
+TOTAL POINTS 80 TETRAHEDRA 185 
+
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Refine Points 26 
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Mesh Refine 0 / 25 Tetra 185 Tri 448 
+The Worst Q 9.683931e-03 AVGQ 1.905757e-01 
+The Worst Q 5.065718e-02 AVGQ 2.369363e-01 
+The Worst Q 5.091499e-02 AVGQ 2.470014e-01 
+The Worst Q 5.093207e-02 AVGQ 2.534051e-01 
+The Worst Q 5.093207e-02 AVGQ 2.534051e-01 
+QDIST[0] = 7 
+QDIST[1] = 75 
+QDIST[2] = 110 
+QDIST[3] = 41 
+QDIST[4] = 10 
+QDIST[5] = 10 
+QDIST[6] = 3 
+QDIST[7] = 1 
+QDIST[8] = 0 
+QDIST[9] = 0 
+TOTAL POINTS 105 TETRAHEDRA 257 
+
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Refine Points 35 
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Mesh Refine 0 / 30 Tetra 257 Tri 616 
+The Worst Q 8.974928e-03 AVGQ 2.325609e-01 
+The Worst Q 5.102899e-02 AVGQ 2.902936e-01 
+The Worst Q 5.114747e-02 AVGQ 2.952295e-01 
+The Worst Q 5.114747e-02 AVGQ 2.952295e-01 
+QDIST[0] = 2 
+QDIST[1] = 55 
+QDIST[2] = 156 
+QDIST[3] = 72 
+QDIST[4] = 34 
+QDIST[5] = 17 
+QDIST[6] = 4 
+QDIST[7] = 3 
+QDIST[8] = 0 
+QDIST[9] = 0 
+TOTAL POINTS 135 TETRAHEDRA 343 
+
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Refine Points 45 
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Mesh Refine 0 / 40 Tetra 343 Tri 817 
+The Worst Q 1.394484e-02 AVGQ 2.791742e-01 
+The Worst Q 7.382340e-02 AVGQ 3.179721e-01 
+The Worst Q 6.953513e-02 AVGQ 3.263104e-01 
+The Worst Q 6.737624e-02 AVGQ 3.322941e-01 
+The Worst Q 6.737624e-02 AVGQ 3.322941e-01 
+QDIST[0] = 3 
+QDIST[1] = 33 
+QDIST[2] = 177 
+QDIST[3] = 137 
+QDIST[4] = 58 
+QDIST[5] = 31 
+QDIST[6] = 14 
+QDIST[7] = 6 
+QDIST[8] = 0 
+QDIST[9] = 0 
+TOTAL POINTS 175 TETRAHEDRA 459 
+
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Refine Points 58 
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Mesh Refine 0 / 56 Tetra 459 Tri 1087 
+The Worst Q 1.770011e-02 AVGQ 3.069332e-01 
+The Worst Q 7.477617e-02 AVGQ 3.558948e-01 
+The Worst Q 7.363467e-02 AVGQ 3.681930e-01 
+The Worst Q 7.360739e-02 AVGQ 3.678226e-01 
+The Worst Q 7.360739e-02 AVGQ 3.678226e-01 
+QDIST[0] = 5 
+QDIST[1] = 31 
+QDIST[2] = 202 
+QDIST[3] = 172 
+QDIST[4] = 103 
+QDIST[5] = 67 
+QDIST[6] = 35 
+QDIST[7] = 10 
+QDIST[8] = 1 
+QDIST[9] = 0 
+TOTAL POINTS 231 TETRAHEDRA 626 
+
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Refine Points 77 
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Mesh Refine 0 / 77 Tetra 626 Tri 1473 
+The Worst Q 1.931330e-02 AVGQ 3.572423e-01 
+The Worst Q 6.530402e-02 AVGQ 4.143613e-01 
+The Worst Q 6.166522e-02 AVGQ 4.206933e-01 
+The Worst Q 7.403677e-02 AVGQ 4.217910e-01 
+The Worst Q 7.403677e-02 AVGQ 4.217910e-01 
+QDIST[0] = 7 
+QDIST[1] = 27 
+QDIST[2] = 199 
+QDIST[3] = 193 
+QDIST[4] = 172 
+QDIST[5] = 122 
+QDIST[6] = 90 
+QDIST[7] = 38 
+QDIST[8] = 11 
+QDIST[9] = 0 
+TOTAL POINTS 308 TETRAHEDRA 859 
+
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Refine Points 102 
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Mesh Refine 0 / 101 Tetra 859 Tri 2009 
+Mesh Refine 100 / 101 Tetra 1147 Tri 2672 
+The Worst Q 2.189528e-02 AVGQ 4.266054e-01 
+The Worst Q 7.726402e-02 AVGQ 4.745661e-01 
+The Worst Q 7.436635e-02 AVGQ 4.807149e-01 
+The Worst Q 7.436635e-02 AVGQ 4.807149e-01 
+QDIST[0] = 2 
+QDIST[1] = 27 
+QDIST[2] = 180 
+QDIST[3] = 243 
+QDIST[4] = 230 
+QDIST[5] = 178 
+QDIST[6] = 162 
+QDIST[7] = 102 
+QDIST[8] = 50 
+QDIST[9] = 9 
+TOTAL POINTS 409 TETRAHEDRA 1183 
+
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Refine Points 136 
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Mesh Refine 0 / 136 Tetra 1183 Tri 2745 
+Mesh Refine 100 / 136 Tetra 1494 Tri 3449 
+The Worst Q 2.277634e-02 AVGQ 4.801769e-01 
+The Worst Q 7.227284e-02 AVGQ 5.227314e-01 
+The Worst Q 8.377558e-02 AVGQ 5.223521e-01 
+The Worst Q 8.377558e-02 AVGQ 5.223521e-01 
+QDIST[0] = 3 
+QDIST[1] = 25 
+QDIST[2] = 200 
+QDIST[3] = 265 
+QDIST[4] = 288 
+QDIST[5] = 301 
+QDIST[6] = 235 
+QDIST[7] = 169 
+QDIST[8] = 122 
+QDIST[9] = 32 
+TOTAL POINTS 545 TETRAHEDRA 1640 
+
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Refine Points 181 
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Mesh Refine 0 / 174 Tetra 1640 Tri 3769 
+Mesh Refine 100 / 174 Tetra 2005 Tri 4564 
+The Worst Q 1.480452e-02 AVGQ 4.841515e-01 
+The Worst Q 8.373112e-02 AVGQ 5.173679e-01 
+The Worst Q 8.362345e-02 AVGQ 5.198008e-01 
+The Worst Q 8.362345e-02 AVGQ 5.198008e-01 
+QDIST[0] = 4 
+QDIST[1] = 55 
+QDIST[2] = 220 
+QDIST[3] = 356 
+QDIST[4] = 448 
+QDIST[5] = 408 
+QDIST[6] = 333 
+QDIST[7] = 228 
+QDIST[8] = 152 
+QDIST[9] = 35 
+TOTAL POINTS 719 TETRAHEDRA 2239 
+
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Refine Points 239 
+APOLLO /home/gateway/GeoFEST_WDIR//duhFaultUser/faultsatmyfeet-NOW/faultsatmyfeet 1.0
+Mesh Refine 0 / 238 Tetra 2239 Tri 5096 
+Mesh Refine 100 / 238 Tetra 2546 Tri 5790 
+Mesh Refine 200 / 238 Tetra 2838 Tri 6453 
+The Worst Q 1.877193e-02 AVGQ 4.846153e-01 
+The Worst Q 1.446225e-01 AVGQ 5.307390e-01 
+The Worst Q 1.429346e-01 AVGQ 5.356667e-01 
+The Worst Q 1.429346e-01 AVGQ 5.356667e-01 
+QDIST[0] = 0 
+QDIST[1] = 24 
+QDIST[2] = 270 
+QDIST[3] = 381 
+QDIST[4] = 622 
+QDIST[5] = 678 
+QDIST[6] = 470 
+QDIST[7] = 315 
+QDIST[8] = 193 
+QDIST[9] = 53 
+TOTAL POINTS 957 TETRAHEDRA 3006 
+
