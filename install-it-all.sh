@@ -42,6 +42,9 @@ source ./gnuplotexec-deploy.sh
 cd $BUILD_DIR
 source ./analyze-tseri-exec-deploy.sh
 
+cd $BUILD_DIR
+source ./geofestexec-deploy.sh
+
 #----------------------------------------------------------------------
 # Build the generic project classes.
 #----------------------------------------------------------------------

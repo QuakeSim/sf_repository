@@ -49,22 +49,46 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	  * This is a main() for testing.
 	  */
 	 public static void main(String[] args) {
+		  //Create fault.
 		  Fault[] faults=new Fault[1];
 		  faults[0]=new Fault();
 
+		  //Create layer.
 		  Layer[] layers=new Layer[1];
 		  layers[0]=new Layer();
+
+		  //Create geotrans params
+		  GeotransParamsBean gpb=new GeotransParamsBean();
 
 		  String userName="duhFaultUser";
 		  String projectName="faultsatmyfeet";
 
 		  try {
+				//Make the mesh.
 				GeoFESTService gfs=new GeoFESTService(true);
-				gfs.runBlockingMeshGenerator(userName,
-													  projectName,
-													  faults,
-													  layers,
-													  "rare");
+				
+				//This will actually return before the job is 
+				//finished, so we'll use ticket2 in later calculations.
+// 				System.out.println("Running non-blocking version");
+//  				String ticket1=gfs.runNonBlockingMeshGenerator(userName,
+// 																			  projectName,
+// 																			  faults,
+// 																			  layers,
+// 																			  "rare");
+				
+				System.out.println("Running blocking version");
+ 				String ticket2=gfs.runBlockingMeshGenerator(userName,
+																		  projectName,
+																		  faults,
+																		  layers,
+																		 "rare");
+
+// 				System.out.println("Packing input files");
+// 				gfs.runPackageGeoFESTFiles(userName,projectName,gpb,ticket2);
+
+				System.out.println("Running GeoFEST");
+				gfs.runGeoFEST(userName,projectName,gpb,ticket2);
+				
 		  }
 		  catch (Exception ex) {
 				ex.printStackTrace();
@@ -121,18 +145,22 @@ public class GeoFESTService extends AntVisco implements Runnable{
     }
 	 
 	 /**
-	  * This runs the mesh generator code in blocking mode,
-	  * i.e., it does not return until the mesh is done.
-	  */
-	 public void runBlockingMeshGenerator(String userName,
-													  String projectName,
-													  Fault[] faults,
-													  Layer[] layers,
-													  String autoref_mode) 
+	  * Does all the generic parts for setting up the 
+	  * mesh generator run.  
+	  * 
+	  * Returns the time stamp, which is needed for
+	  * later querying.	  *
+	  */ 
+	 protected String prefabMeshGenerator(String userName,
+													String projectName,
+													Fault[] faults,
+													Layer[] layers,
+													String autoref_mode) 
 		  throws Exception {
 		  
-		  String workDir=baseWorkDir+File.separator
-				+userName+"-"+generateTimeStamp();
+		  String timeStamp=generateTimeStamp();
+		  
+		  String workDir=generateWorkDir(userName,projectName,timeStamp);
 		  
 		  createGeometryFiles(workDir,projectName,faults,layers);
 		  String[] args=setUpMeshArgs(workDir,
@@ -140,34 +168,69 @@ public class GeoFESTService extends AntVisco implements Runnable{
 												autoref_mode);
 		  //Methods from parent
 		  setArgs(args);
+		  
+		  return timeStamp;
+	 }
+	 
+	 /**
+	  *
+	  */
+	 protected String generateWorkDir(String userName,
+												 String projectName,
+												 String timeStamp) {
+		  
+		  String workDir=baseWorkDir+File.separator
+				+userName+File.separator
+				+projectName+"-"+timeStamp;
+		  
+		  return workDir;
+		  
+	 }
+
+	 /**
+	  * This runs the mesh generator code in blocking mode,
+	  * i.e., it does not return until the mesh is done.
+	  * 
+	  * Returns the time stamp, which is needed for
+	  * later querying.
+	  */
+	 public String runBlockingMeshGenerator(String userName,
+													  String projectName,
+													  Fault[] faults,
+													  Layer[] layers,
+													  String autoref_mode) 
+		  throws Exception {
+		  String timeStamp=prefabMeshGenerator(userName,
+															projectName,
+															faults,
+															layers,
+															autoref_mode);
 		  run();
+		  return timeStamp;
 	 }
 	 
 	 /**
 	  * Runs the meshgenerator in non-blocking mode, which
-	  * is necessary for large meshes.
+	  * is necessary for large meshes. 
+	  * 
+	  * Returns the time stamp, which is needed for
+	  * later querying.
 	  */
-	 public void runNonBlockingMeshGenerator(String userName,
-														  String projectName,
-														  Fault[] faults,
-														  Layer[] layers,
-														  String autoref_mode) 
+	 public String runNonBlockingMeshGenerator(String userName,
+															 String projectName,
+															 Fault[] faults,
+															 Layer[] layers,
+															 String autoref_mode) 
 		  throws Exception{
-
-		  String workDir=baseWorkDir+File.separator
-				+userName+"-"+generateTimeStamp();
-		  
-		  createGeometryFiles(workDir,projectName,faults, layers);
-		  
-		  String[] args=setUpMeshArgs(workDir,
-												projectName,
-												autoref_mode);
-		  
-		  //Methods from parent
-		  setArgs(args);
+		  String timeStamp=prefabMeshGenerator(userName,
+															projectName,
+															faults,
+															layers,
+															autoref_mode);
 		  execute();
+		  return timeStamp;
 	 }
-	 
+
 	 
 	 /**
 	  * Checks the running Mesh Generator service.
@@ -177,19 +240,62 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  throws Exception {
 	 }
 	 
+	 
 	 /**
 	  * This method is used to tar up the mesh and input files.
 	  * This always runs in blocking mode.
+	  * 
+	  * It requires that you send it a time stamp, and thus
+	  * it effectively requires that you have run the 
+	  * mesh generator steps separately.
 	  */
-	 public void runPackageGeoFESTFiles()
+	 public void runPackageGeoFESTFiles(String userName,
+													String projectName,
+													GeotransParamsBean gpb,
+													String timeStamp)
 		  throws Exception {
+
+		  //The target is always "geotrans.tar".
+		  String[] args=
+				prefabGeoFESTCall(userName,
+										projectName,
+										gpb,
+										timeStamp,
+										"geotrans.tar");
+
+		  setArgs(args);
+		  run();
 	 }
 	 
+	 protected String[] prefabGeoFESTCall(String userName,
+													  String projectName,
+													  GeotransParamsBean gpb,
+													  String timeStamp,
+													  String targetName) 
+		  throws Exception {
+		  
+		  String workDir=generateWorkDir(userName,projectName,timeStamp);
+		  createGeoFESTInputFile(workDir,projectName,gpb);
+		  String[] args=setUpGeoFESTArgs(workDir,
+													projectName,
+													targetName);
+		  return args;
+	 }
+
 	 /**
 	  * Actually runs GeoFEST.  Always runs in non-blocking mode.
 	  */
-	 public void runGeoFEST() 
+	 public void runGeoFEST(String userName,
+									String projectName,
+									GeotransParamsBean gpb,
+									String timeStamp)
 		  throws Exception {
+		  
+		  //The target is always "tar.all".
+		  String[] args=
+				prefabGeoFESTCall(userName,projectName,gpb,timeStamp,"tar.all");
+		  setArgs(args);
+		  execute();
 	 }
 
 	 /**
@@ -218,7 +324,112 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  writeAllLayerOutputFiles(workDir,layers);
 	 }
 
-
+	 /**
+	  * Spit out the geotrans parameters.
+	  */
+	 protected void createGeoFESTInputFile(String workDir,
+														String projectName,
+														GeotransParamsBean gpb) 
+		  throws Exception {
+		  
+		  // --------------------------------------------------
+		  // Set up the file to write.
+		  // --------------------------------------------------
+		  String geotrans_file = workDir+File.separator+projectName+".std";
+		  PrintWriter pw = new PrintWriter(new FileWriter(geotrans_file), true);
+		  
+		  // --------------------------------------------------
+		  // Now write out all the geotrans params to a file.
+		  // --------------------------------------------------
+		  String output_file = gpb.getOutputFileName();
+		  String GFInput = gpb.getInputFileName();
+		  
+		  String br = "";
+		  String space = " ";
+		  
+		  pw.println("output_filename" + space + gpb.getOutputFileName()+br);
+		  pw.println("number_space_dimensions" + space
+						 +gpb.getNumber_space_dimensions()+br);
+		  
+		  pw.println("number_degrees_freedom" + space
+						 +gpb.getNumber_degrees_freedom()+br);
+		  
+		  pw.println("nrates" + space + gpb.getNrates()+br);
+		  
+		  pw.println("shape_flag" + space + gpb.getShape_flag()+br);
+		  
+		  pw.println("solver_flag" + space + gpb.getSolver_flag()+br);
+		  
+		  pw.println("number_time_groups" 
+						 + space + gpb.getNumber_time_groups()+br);
+		  
+		  pw.println("reform_steps" + space + gpb.getReform_steps() +br);
+		  
+		  pw.println("backup_steps" + space + gpb.getBackup_steps()+br);
+		  
+		  
+		  pw.println("fault_interval" + space + gpb.getFault_interval()+br);
+		  
+		  pw.println("end_time" + space + gpb.getEnd_time()+br);
+		  
+		  pw.println("alpha" + space + gpb.getAlpha()+br);
+		  
+		  pw.println("time_step" + space + gpb.getTime_step()+br);
+		  
+		  pw.println("top_bc" + space + gpb.getTop_bc() 
+						 + space+ gpb.getTop_bc_value()+br);
+		  
+		  pw.println("east_bc" + space + gpb.getEast_bc() 
+						 + space+ gpb.getEast_bc_value()+br);
+		  
+		  pw.println("west_bc" + space + gpb.getWest_bc() 
+						 + space+ gpb.getWest_bc_value()+br);
+		  
+		  pw.println("north_bc" + space + gpb.getNorth_bc() 
+						 + space+ gpb.getNorth_bc_value()+br);
+		  
+		  pw.println("south_bc" + space + gpb.getSouth_bc() 
+						 + space+ gpb.getSouth_bc_value()+br);
+		  
+		  pw.println("bottom_bc" + space + gpb.getBottom_bc() 
+						 + space+ gpb.getBottom_bc_value()+br);
+		  
+		  pw.println("reporting_nodes" + space + gpb.getReportingNodes()+br);
+		  
+		  pw.println("reporting_elements" 
+						 + space + gpb.getReportingElements()+br);
+		  
+		  pw.println("print_times_type" + space +gpb.getPrintTimesType()+br);
+		  
+		  pw.println("start_from_file" + space + gpb.getRestartFile()+br);
+		  
+		  pw.println("checkpoint_file" + space + gpb.getCheckpointFile()+br);
+		  
+		  // Finally, handle the number_print_times variable, which
+		  
+		  if (gpb.getPrintTimesType().equalsIgnoreCase("steps")) {
+				pw.println("number_print_times" + space
+							  + gpb.getNumberofPrintTimes());
+				pw.println("print_interval" + space
+							  + gpb.getPrintTimesInterval());
+				
+		  } 
+		  else if (gpb.getPrintTimesType().equalsIgnoreCase("list")) {
+				String print_time_vals = gpb.getPrintTimesInterval();
+				double dptv = Double.parseDouble(print_time_vals);
+				double maxSteps = Double
+					 .parseDouble(gpb.getEnd_time());
+				int icount = 0;
+				pw.print("print_times" + " ");
+				while (icount * dptv < maxSteps) {
+					 icount++;
+					 pw.print(icount * dptv + " ");
+				}
+				pw.println("");
+				pw.println("number_print_times" + " " + (icount - 1));
+		  }
+	 }
+	 
     /**
      * This merges multiple files into a single file,
      * duplicating UNIX paste.
@@ -538,7 +749,8 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	  * make "gentle" status queries later.
 	  */
 	 protected String generateTimeStamp(){
-		  String stringDate=(new Date().getTime())+"";
+		  //		  String stringDate=(new Date().getTime())+"";
+		  String stringDate="NOW";
 		  return stringDate;
 	 }
 
@@ -890,18 +1102,19 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	  * explicitly passed in.
 	  */
 	 protected String[] setUpGeoFESTArgs(String workDir,
-													 String projectName) {
+													 String projectName,
+													 String targetName) {
 		  
 		  String[] args=new String[9];
 		  args[0]="-Dbindir.prop="+binDir;
 		  args[1]="-Dworkdir.prop="+workDir;
 		  args[2]="-DprojectName.prop="+projectName;
-		  args[3]="-DGFInput.prop="+projectName;
-		  args[4]="-DGFOutput.prop="+projectName;
-		  args[5]="-DGFLog.prop="+projectName;
+		  args[3]="-DGFInput.prop="+projectName+".inp";
+		  args[4]="-DGFOutput.prop="+projectName+".out";
+		  args[5]="-DGFLog.prop="+projectName+".log";
         args[6]="-buildfile";
         args[7]=buildFilePath;
-        args[8]="tar.all";
+        args[8]=targetName;
 		  return args;
 	 }
 }
