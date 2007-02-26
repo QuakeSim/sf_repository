@@ -26,6 +26,9 @@
       <arg value="${mode.prop}"/>
       <env key="PATH" path="${bindir.prop}:/bin:/usr/bin/:$PATH"/>
    </exec>  
+   <copy todir="${outputdest.prop}">
+      <fileset dir="${workdir.prop}"/>
+   </copy>
 </target>
 
 <!--This is used to create the GeoFEST input file. -->
@@ -46,6 +49,10 @@
    <delete file="${workdir.prop}/${projectName.prop}.tar.gz"/>
    <delete file="${workdir.prop}/${projectName.prop}.tar"/>
    <tar tarfile="${workdir.prop}/${projectName.prop}.tar.gz" basedir="${workdir.prop}" compression="gzip"/>
+   <copy file="${workdir.prop}/${projectName.prop}.tar.gz" 
+         todir="${outputdest.prop}">
+   </copy>
+
 </target>
 
 <target name="GeoFEST" depends="geotrans">
@@ -63,6 +70,9 @@
    <delete file="${workdir.prop}/${projectName.prop}.tar.gz"/>
    <delete file="${workdir.prop}/${projectName.prop}.tar"/>
    <tar tarfile="${workdir.prop}/${projectName.prop}.tar.gz" basedir="${workdir.prop}" compression="gzip"/>
+   <copy todir="${outputdest.prop}">
+      <fileset dir="${workdir.prop}"/>
+   </copy>
 </target>
 
 
