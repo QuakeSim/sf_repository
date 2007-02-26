@@ -77,17 +77,17 @@ public class GeoFESTService extends AntVisco implements Runnable{
 // 																			  "rare");
 				
 				System.out.println("Running blocking version");
- 				String ticket2=gfs.runBlockingMeshGenerator(userName,
-																		  projectName,
-																		  faults,
-																		  layers,
-																		 "rare");
-
-// 				System.out.println("Packing input files");
-// 				gfs.runPackageGeoFESTFiles(userName,projectName,gpb,ticket2);
-
+ 				String[] returnedUrls=gfs.runBlockingMeshGenerator(userName,
+																					projectName,
+																					faults,
+																					layers,
+																					"rare");
+				
+				// 				System.out.println("Packing input files");
+				// 				gfs.runPackageGeoFESTFiles(userName,projectName,gpb,ticket2);
+				
 				System.out.println("Running GeoFEST");
-				gfs.runGeoFEST(userName,projectName,gpb,ticket2);
+				gfs.runGeoFEST(userName,projectName,gpb,returnedUrls[0]);
 				
 		  }
 		  catch (Exception ex) {
@@ -194,7 +194,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	  * Returns the time stamp, which is needed for
 	  * later querying.
 	  */
-	 public String runBlockingMeshGenerator(String userName,
+	 public String[] runBlockingMeshGenerator(String userName,
 													  String projectName,
 													  Fault[] faults,
 													  Layer[] layers,
@@ -206,21 +206,23 @@ public class GeoFESTService extends AntVisco implements Runnable{
 															layers,
 															autoref_mode);
 		  run();
-		  return timeStamp;
+		  return getTheMeshGenReturnFiles(userName,projectName,timeStamp);
 	 }
 	 
 	 /**
 	  * Runs the meshgenerator in non-blocking mode, which
 	  * is necessary for large meshes. 
 	  * 
-	  * Returns the time stamp, which is needed for
-	  * later querying.
+	  * Returns a string array.  String[0] is a timestamp,
+	  * which is needed for later querying.  The rest of
+	  * the array consists of URLs for the project
+	  * 
 	  */
-	 public String runNonBlockingMeshGenerator(String userName,
-															 String projectName,
-															 Fault[] faults,
-															 Layer[] layers,
-															 String autoref_mode) 
+	 public String[] runNonBlockingMeshGenerator(String userName,
+																String projectName,
+																Fault[] faults,
+																Layer[] layers,
+																String autoref_mode) 
 		  throws Exception{
 		  String timeStamp=prefabMeshGenerator(userName,
 															projectName,
@@ -228,10 +230,43 @@ public class GeoFESTService extends AntVisco implements Runnable{
 															layers,
 															autoref_mode);
 		  execute();
-		  return timeStamp;
+		  return getTheMeshGenReturnFiles(userName,projectName,timeStamp);
 	 }
 
 	 
+	 protected String[] getTheMeshGenReturnFiles(String userName,
+																String projectName,
+																String timeStamp) {
+		  String baseUrl=generateBaseUrl(userName,projectName,timeStamp);
+		  String[] meshOutputUrls=new String[12];
+		  meshOutputUrls[0]=timeStamp;		  
+		  meshOutputUrls[1]=baseUrl+"/"+"autoref.out";
+		  meshOutputUrls[2]=baseUrl+"/"+"autoref.error";
+		  meshOutputUrls[3]=baseUrl+"/"+projectName+".node";
+		  meshOutputUrls[4]=baseUrl+"/"+projectName+".tetra";
+		  meshOutputUrls[5]=baseUrl+"/"+projectName+".bc";
+		  meshOutputUrls[6]=baseUrl+"/"+projectName+".index";
+		  meshOutputUrls[7]=baseUrl+"/"+"junk.box";
+		  meshOutputUrls[8]=baseUrl+"/"+"tstout";
+		  meshOutputUrls[9]=baseUrl+"/"+"refiner.log";
+		  meshOutputUrls[10]=baseUrl+"/"+"LeeRefiner.log";
+		  meshOutputUrls[11]=baseUrl+"/"+"tagbigflt.log";
+		  
+		  return meshOutputUrls;
+	 }
+
+	 protected String generateBaseUrl(String userName,
+												 String projectName,
+												 String timeStamp) {
+
+		  //Need to be careful here because this must follow
+		  //the workDir convention also.
+		  String baseUrl=serverUrl+"/"+userName+"/"
+				+projectName+"/"+"-"+timeStamp;
+
+		  return baseUrl;
+	 }
+
 	 /**
 	  * Checks the running Mesh Generator service.
 	  * Useful in non-blocking execution.
@@ -248,23 +283,26 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	  * It requires that you send it a time stamp, and thus
 	  * it effectively requires that you have run the 
 	  * mesh generator steps separately.
+	  *
+	  * Returns a string array.  String[0] is the time stamp.
+	  * String[1] is the URL of the tar.gz of all files.
 	  */
-	 public void runPackageGeoFESTFiles(String userName,
-													String projectName,
-													GeotransParamsBean gpb,
-													String timeStamp)
+	 public String[] runPackageGeoFESTFiles(String userName,
+														 String projectName,
+														 GeotransParamsBean gpb,
+														 String timeStamp)
 		  throws Exception {
 
 		  //The target is always "geotrans.tar".
-		  String[] args=
-				prefabGeoFESTCall(userName,
-										projectName,
-										gpb,
-										timeStamp,
-										"geotrans.tar");
-
+		  String[] args=prefabGeoFESTCall(userName,
+													 projectName,
+													 gpb,
+													 timeStamp,
+													 "geotrans.tar");
+		  
 		  setArgs(args);
 		  run();
+		  return getTheGeoFESTInputFiles(userName,projectName,timeStamp);
 	 }
 	 
 	 protected String[] prefabGeoFESTCall(String userName,
@@ -284,8 +322,14 @@ public class GeoFESTService extends AntVisco implements Runnable{
 
 	 /**
 	  * Actually runs GeoFEST.  Always runs in non-blocking mode.
+	  *
+	  * Returns the timestamp as String[0].  The rest are URLs
+	  * of various output files.  String[1] is everything in a
+	  * tar.gz.  String[2] is the GeoFEST input file.  String[3]
+	  * is the GeoFEST output file.  String [4] is the standard output
+	  * of geofest.  String [5] is the GeoFEST log file.
 	  */
-	 public void runGeoFEST(String userName,
+	 public String[] runGeoFEST(String userName,
 									String projectName,
 									GeotransParamsBean gpb,
 									String timeStamp)
@@ -296,6 +340,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 				prefabGeoFESTCall(userName,projectName,gpb,timeStamp,"tar.all");
 		  setArgs(args);
 		  execute();
+		  return getAllTheGeoFESTFiles(userName,projectName,timeStamp);
 	 }
 
 	 /**
@@ -305,7 +350,39 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  throws Exception {
 	 }
 
+	 /**
+	  * 
+	  */
+	 protected String[] getTheGeoFESTInputFiles(String userName,
+															  String projectName,
+															  String timeStamp) {
+		  String baseUrl=generateBaseUrl(userName,projectName,timeStamp);
+		  String[] gfUrls=new String[2];
+		  gfUrls[0]=timeStamp;
+		  gfUrls[1]=baseUrl+"/"+projectName+".tar.gz";
 
+		  return gfUrls;
+	 }
+
+	 protected String[] getAllTheGeoFESTFiles(String userName,
+															String projectName,
+															String timeStamp) {
+		  String baseUrl=generateBaseUrl(userName,projectName,timeStamp);
+		  String[] gfUrls=new String[10];
+		  gfUrls[0]=timeStamp;
+		  gfUrls[1]=baseUrl+"/"+projectName+".tar.gz";
+		  gfUrls[2]=baseUrl+"/"+projectName+".inp";
+		  gfUrls[3]=baseUrl+"/"+projectName+".out";
+		  gfUrls[4]=baseUrl+"/"+projectName+".log";
+		  gfUrls[5]=baseUrl+"/"+projectName+".index";
+		  gfUrls[6]=baseUrl+"/"+projectName+".node";
+		  gfUrls[7]=baseUrl+"/"+projectName+".tetra";
+		  gfUrls[8]=baseUrl+"/"+projectName+".tetvols";
+		  gfUrls[9]=baseUrl+"/"+projectName+".toptris";
+		  
+		  return gfUrls;
+	 }
+	 
 	 /**
 	  * This method writes out all the input files
 	  * that are needed for creating the mesh.
