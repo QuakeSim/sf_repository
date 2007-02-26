@@ -23,6 +23,9 @@ import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
 //Needed for some number formatting.
 import java.text.*;
 
+//Needed for a unique id
+import java.rmi.server.UID;
+
 /**
  * A simple wrapper for Ant.
  */
@@ -39,7 +42,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
     String serverUrl;
     String baseWorkDir;
     String baseDestDir;
-    String outputDestDir;
+    String baseOutputDestDir;
     String projectName;
     String binDir;
     String buildFilePath;
@@ -138,7 +141,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  binDir=properties.getProperty("bin.path");
 		  buildFilePath=properties.getProperty("build.file.path");
 		  antTarget=properties.getProperty("ant.target");
-		  outputDestDir=properties.getProperty("output.dest.dir");
+		  baseOutputDestDir=properties.getProperty("output.dest.dir");
 	 }
     
     public GeoFESTService() throws Exception{
@@ -162,17 +165,36 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  String timeStamp=generateTimeStamp();
 		  
 		  String workDir=generateWorkDir(userName,projectName,timeStamp);
+		  String outputDestDir=generateOutputDestDir(userName,
+																	projectName,
+																	timeStamp);
 		  
 		  createGeometryFiles(workDir,projectName,faults,layers);
 		  String[] args=setUpMeshArgs(workDir,
 												projectName,
-												autoref_mode);
+												autoref_mode,
+												outputDestDir);
 		  //Methods from parent
 		  setArgs(args);
 		  
 		  return timeStamp;
 	 }
 	 
+	 /**
+	  *
+	  */
+	 protected String generateOutputDestDir(String userName,
+														 String projectName,
+														 String timeStamp) {
+		  
+		  String outputDestDir=baseOutputDestDir+File.separator
+				+userName+File.separator
+				+projectName+"-"+timeStamp;
+		  
+		  return outputDestDir;
+		  
+	 }
+
 	 /**
 	  *
 	  */
@@ -314,10 +336,15 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  throws Exception {
 		  
 		  String workDir=generateWorkDir(userName,projectName,timeStamp);
+
 		  createGeoFESTInputFile(workDir,projectName,gpb);
+		  String outputDestDir=generateOutputDestDir(userName,
+																	projectName,
+																	timeStamp);
 		  String[] args=setUpGeoFESTArgs(workDir,
 													projectName,
-													targetName);
+													targetName,
+													outputDestDir);
 		  return args;
 	 }
 
@@ -827,8 +854,10 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	  * make "gentle" status queries later.
 	  */
 	 protected String generateTimeStamp(){
-		  //		  String stringDate=(new Date().getTime())+"";
-		  String stringDate="NOW";
+		  //String stringDate=(new Date().getTime())+"";
+		  //String stringDate="NOW";
+		  //short s=1;
+		  String stringDate=(new UID().toString());
 		  return stringDate;
 	 }
 
@@ -1162,7 +1191,8 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	  */
 	 protected String[] setUpMeshArgs(String workDir,
 												 String projectName,
-												 String autoref_mode) {
+												 String autoref_mode,
+												 String outputDestDir) {
 		  String[] args=new String[8];
 		  args[0]="-Dbindir.prop="+binDir;
 		  args[1]="-Dworkdir.prop="+workDir;
@@ -1182,7 +1212,8 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	  */
 	 protected String[] setUpGeoFESTArgs(String workDir,
 													 String projectName,
-													 String targetName) {
+													 String targetName,
+													 String outputDestDir) {
 		  
 		  String[] args=new String[10];
 		  args[0]="-Dbindir.prop="+binDir;
