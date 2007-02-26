@@ -38,8 +38,11 @@
  <service name="GeoFESTExec" provider="java:RPC">
   <parameter name="allowedMethods" value="runBlockingMeshGenerator runNonBlockingMeshGenerator queryMeshGeneratorStatus runPackageGeoFESTFiles runGeoFEST queryGeoFESTStatus"/>
   <parameter name="scope" value="Session"/>
-  <parameter name="className" value="cgl.webservices.GeoFESTService"/>
+  <parameter name="className" value="cgl.webservices.geofest.GeoFESTService"/>
   <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns1:ArrayOf_soapenc_string" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:java.lang.String[]" xmlns:ns1="urn:GatewayWS"/>
+        <beanMapping qname="myNS:Fault" xmlns:myNS="urn:GeoFESTService" languageSpecificType="java:cgl.webservices.geofest.Fault"/>
+        <beanMapping qname="myNS:Layer" xmlns:myNS="urn:GeoFESTService" languageSpecificType="java:cgl.webservices.geofest.Layer"/>
+        <beanMapping qname="myNS:GeotransParamsBean" xmlns:myNS="urn:GeoFESTService" languageSpecificType="java:cgl.webservices.geofest.GeotransParamsBean"/>
  </service>
  <transport name="http">
   <requestFlow>
