@@ -15,7 +15,7 @@ echo "Installing MESHGENERATOR Portlet"
 echo "######################################"
 cd $MESHGENERATOR_PORTLET_HOME
 export PORTLET_NAME=MeshGenerator-portlet
-if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME
+if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME -Dportal.host.name=$PORTAL_HOST_NAME
 then 
     echo Install complete
 else

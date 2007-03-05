@@ -26,6 +26,29 @@
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                  <executions>
+                     <execution>
+                        <phase>package</phase>
+                           <configuration>
+                             <tasks>
+                               <replace dir="${basedir}/target/${pom.artifactId}" 
+                                        token="gf2.ucs.indiana.edu"
+                                        value="${portal.host.name}"/>
+
+                               <replace dir="${basedir}/target/${pom.artifactId}" 
+                                        token="/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/"
+                                        value="${tomcat.base.dir}"/>
+
+                             </tasks>
+                           </configuration>
+                           <goals>
+                             <goal>run</goal>
+                           </goals>
+                     </execution> 
+                  </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -34,6 +57,7 @@
          via filtering -->
     <properties>
        <tomcat.base.dir>${tomcat.base.dir}</tomcat.base.dir>
+       <portal.host.name>${portal.host.name}</portal.host.name>
     </properties>
 
 

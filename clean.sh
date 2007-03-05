@@ -36,7 +36,7 @@ cd $SIMPLEX_SA_HOME
 mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
 cd $RDAHMM_SA_HOME
-mvn clean -Dtomcat.base.dir=$CATALINA_HOME
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME -Dportal.host.name=$PORTAL_HOST_NAME
 
 cd $SIMPLE_RDAHMM_SA_HOME
 mvn clean -Dtomcat.base.dir=$CATALINA_HOME
@@ -78,22 +78,22 @@ echo "#################################"
 echo ""
 
 cd $RDAHMM_PORTLET_HOME
-mvn clean -Dtomcat.base.dir=$CATALINA_HOME
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME -Dgoogle.key=$GOOGLE_KEY -Dportal.host.name=$PORTAL_HOST_NAME
 
 cd $STFILTER_PORTLET_HOME
-mvn clean -Dtomcat.base.dir=$CATALINA_HOME
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME -Dgoogle.key=$GOOGLE_KEY -Dportal.host.name=$PORTAL_HOST_NAME
 
 cd $REALTIME_RDAHMM_PORTLET_HOME
-mvn clean -Dtomcat.base.dir=$CATALINA_HOME
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME -Dgoogle.key=$GOOGLE_KEY -Dportal.host.name=$PORTAL_HOST_NAME 
 
 cd $STATION_MONITOR_PORTLET_HOME
-mvn clean -Dtomcat.base.dir=$CATALINA_HOME
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME -Dgoogle.key=$GOOGLE_KEY -Dportal.host.name=$PORTAL_HOST_NAME 
 
 cd $PLOT_GRWS_TIMESERIES_PORTLET_HOME
-mvn clean -Dtomcat.base.dir=$CATALINA_HOME
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME -Dgoogle.key=$GOOGLE_KEY -Dportal.host.name=$PORTAL_HOST_NAME 
 
 cd $MESHGENERATOR_PORTLET_HOME
-mvn clean -Dtomcat.base.dir=$CATALINA_HOME
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME -Dgoogle.key=$GOOGLE_KEY -Dportal.host.name=$PORTAL_HOST_NAME
 
 #--------------------------------------------------
 # Clean up the execution services.

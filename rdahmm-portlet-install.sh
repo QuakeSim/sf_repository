@@ -15,7 +15,7 @@ echo "Installing RDAHMM Portlet"
 echo "######################################"
 cd $RDAHMM_PORTLET_HOME
 export PORTLET_NAME=RDAHMM-portlet
-if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME
+if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME -Dportal.host.name=$PORTAL_HOST_NAME -Dgoogle.key=$GOOGLE_KEY
 then 
     echo Install complete
 else

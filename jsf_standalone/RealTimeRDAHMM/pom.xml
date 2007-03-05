@@ -5,14 +5,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>QuakeSim2</groupId>
-    <artifactId>RealTimeRDAHMM-portlet</artifactId>
+    <artifactId>RealTimeRDAHMM</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>A custom project using myfaces</name>
     <url>http://www.myorganization.org</url>
 
     <build>
-        <finalName>RealTimeRDAHMM-portlet</finalName>
+        <finalName>RealTimeRDAHMM</finalName>
         <resources>
            <resource>
                <directory>src/main/resources</directory>

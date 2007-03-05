@@ -15,7 +15,7 @@ echo "Installing STATION_MONITOR Portlet"
 echo "######################################"
 cd $STATION_MONITOR_PORTLET_HOME
 export PORTLET_NAME=StationMonitor-portlet
-if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME
+if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME -Dgoogle.key=$GOOGLE_KEY -Dportal.host.name=$PORTAL_HOST_NAME
 
 then
     echo Install complete

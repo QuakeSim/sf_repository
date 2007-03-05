@@ -14,7 +14,7 @@ echo "######################################"
 echo "Installing RDAHMM"
 echo "######################################"
 cd $RDAHMM_SA_HOME
-if mvn clean package -Dportal.server.url=$PORTAL_SERVER_URL -Dbuild.dir=$BUILD_DIR -Dtomcat.base.dir=$CATALINA_HOME
+if mvn clean package -Dportal.server.url=$PORTAL_SERVER_URL -Dbuild.dir=$BUILD_DIR -Dtomcat.base.dir=$CATALINA_HOME -Dportal.host.name=$PORTAL_HOST_NAME
 
 then
     echo Install complete

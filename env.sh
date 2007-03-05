@@ -2,8 +2,19 @@
 #set -x
 
 # SET THE ENVIRONMENT
-export PORTAL_SERVER_URL=http://gf2.ucs.indiana.edu:8080/
 
+#--------------------------------------------------
+# The following variables must be set for your 
+# individual installation.
+#--------------------------------------------------
+export PORTAL_HOST_NAME=gf2.ucs.indiana.edu
+export PORTAL_SERVER_URL=http://$PORTAL_HOST_NAME:8080/
+export GOOGLE_KEY="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTCdqtmO6Kma7uYZgpagQkNe17MQhRS93QdZFchZ2Vy9IpcH0W3nbN34g"
+
+
+#--------------------------------------------------
+# None of the variables below should be changed.
+#--------------------------------------------------
 export BUILD_DIR=`pwd`
 export THIRD_PARTY_TOOLS=$BUILD_DIR/third_party_tools
 export ANT_HOME=$THIRD_PARTY_TOOLS/apache-ant-1.6.5
