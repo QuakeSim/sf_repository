@@ -130,8 +130,8 @@ echo "#  Cleaning vendor packages...  #"
 echo "#################################"
 echo ""
 cd $PORTAL_DEPLOY_DIR
-rm -rf apache-tomcat-5.5.12
-rm -rf gridsphere-2.1.4 
+rm -rf $CATALINA_HOME
+rm -rf $GRIDSPHERE_HOME
 #find . -type d -exec rm -fr {} \;
 
 cd $THIRD_PARTY_TOOLS

@@ -21,7 +21,8 @@ export ANT_HOME=$THIRD_PARTY_TOOLS/apache-ant-1.6.5
 export MAVEN_HOME=$THIRD_PARTY_TOOLS/maven-2.0.4
 
 export PORTAL_DEPLOY_DIR=$BUILD_DIR/portal_deploy
-export CATALINA_HOME=$PORTAL_DEPLOY_DIR/apache-tomcat-5.5.12
+#export CATALINA_HOME=$PORTAL_DEPLOY_DIR/apache-tomcat-5.5.12
+export CATALINA_HOME=$PORTAL_DEPLOY_DIR/apache-tomcat-5.5.20
 export GRIDSPHERE_HOME=$PORTAL_DEPLOY_DIR/gridsphere-2.1.4
 export YUI_SOURCE_DIR=$PORTAL_DEPLOY_DIR/yui_0.12.2
 export PORTAL_WEBAPP_DIR=$CATALINA_HOME/webapps/gridsphere/

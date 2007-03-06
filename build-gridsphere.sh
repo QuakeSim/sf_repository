@@ -18,7 +18,15 @@ echo "######################################"
 #cp $ANT_HOME/lib/ant-launcher.jar $CATALINA_HOME/shared/lib
 
 cd $GRIDSPHERE_HOME
-ant install <<EOF
+if ant install <<EOF
 y
 n
 EOF
+then 
+	 echo Gridsphere installed
+else
+	 echo Gridsphere installation failed
+	 exit 1
+fi
+
+
