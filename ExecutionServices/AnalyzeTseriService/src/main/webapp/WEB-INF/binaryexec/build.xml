@@ -15,6 +15,7 @@
       <env key="PLOT_TEMPLATE_DIR" path="${bindir.prop}"/>
    </exec>
    -->
+	<!--
    <exec executable="${bindir.prop}/plot_mep.sh"
          dir="${workDir.prop}">
       <arg line="${AnalyzeTseriBaseName.prop}.input"/>
@@ -24,19 +25,26 @@
       <env key="OUTPUT_Y" path="${workDir.prop}/${AnalyzeTseriBaseName.prop}.input.xyz.Y.png"/>
       <env key="OUTPUT_Z" path="${workDir.prop}/${AnalyzeTseriBaseName.prop}.input.xyz.Z.png"/>
    </exec>
+	-->
 
    <exec executable="${bindir.prop}/analyze_tseri_linux"
          dir="${workDir.prop}">
       <arg line="${AnalyzeTseriBaseName.prop}.drv"/>
    </exec>
    <move todir="${outputDestDir.prop}">
-     <fileset file="${workDir.prop}/*.png"/>
+    <fileset file="${workDir.prop}/*.png"/>
+    <fileset file="${workDir.prop}/*.resi"/>
    </move>
 </target>
 
 <target name="RunAnalyzeTseri" depends="ExecAnalyzeTseri">
    <echo message="AnalyzeTseri run completed"/>
 </target>
+
+<target name="test" >
+	<echo message="${workDir.prop}" />
+</target>
+
 </project>
 
 

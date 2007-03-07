@@ -23,14 +23,14 @@ public class MasterParamList extends StationParamList {
 	stationParamList.add(episodicEast);
 	stationParamList.add(episodicNorth);
 	stationParamList.add(episodicUp);
-	stationParamList.add(annualAmpEast);
-	stationParamList.add(annualAmpNorth);
-	stationParamList.add(annualAmpUp);
-	stationParamList.add(annualPhaseEast);
-	stationParamList.add(annualPhaseNorth);
-	stationParamList.add(annualPhaseUp);
-	stationParamList.add(semiannualAmpEast);
-	stationParamList.add(semiannualAmpNorth);
-	stationParamList.add(semiannualAmpUp);
+//	stationParamList.add(annualAmpEast);
+//	stationParamList.add(annualAmpNorth);
+//	stationParamList.add(annualAmpUp);
+//	stationParamList.add(annualPhaseEast);
+//	stationParamList.add(annualPhaseNorth);
+//	stationParamList.add(annualPhaseUp);
+//	stationParamList.add(semiannualAmpEast);
+//	stationParamList.add(semiannualAmpNorth);
+//	stationParamList.add(semiannualAmpUp);
     }
 }
