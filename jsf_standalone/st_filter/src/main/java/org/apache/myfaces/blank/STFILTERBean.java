@@ -10,6 +10,9 @@ import org.servogrid.genericproject.ProjectBean;
 
 //Faces classes
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
 
@@ -27,26 +30,38 @@ import cgl.webclients.*;
 import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
 
 //Usual java stuff.
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.File;
 import java.io.BufferedReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 
-import java.util.Hashtable;
-import java.util.Vector;
-import java.util.StringTokenizer;
-import java.util.Date;
+import java.text.DateFormat;
+import java.util.*;
+
 
 /**
  * Everything you need to set up and run STFILTER.
  */
 
 public class STFILTERBean extends GenericSopacBean {
+
+	final String FILE_PROTOCOL = "file";
+
+	final String HTTP_PROTOCOL = "http";
+
 
 	// Some internal fields.
 	String twospace = "  "; // Used to format the driver file.
@@ -157,6 +172,9 @@ public class STFILTERBean extends GenericSopacBean {
 
 	// String stamp=(new Date()).getTime()+"";
 	String stamp = "TEST";
+	
+	// .resi file
+	String resiURL = null;
 
 	/**
 	 * default empty constructor
@@ -308,23 +326,35 @@ public class STFILTERBean extends GenericSopacBean {
 	public String launchSTFILTERWS() throws Exception {
 		// Do this here.
 		try {
-			String endpoint = "http://gf1.ucs.indiana.edu:8888/analyze-tseri-exec/services/AnalyzeTseriExec";
+			String endpoint = "http://gf3.ucs.indiana.edu:8888/analyze-tseri-exec/services/AnalyzeTseriExec";
 			String siteCode = getSiteCode();
 
 			String sopacDataFileName  = projectName+"-"+getSiteCode()+"-"+stamp + sopacDataFileExt;
+			System.out.println("[!!] sopacDataFileName = "+sopacDataFileName);
 			//String cfullName = codeName + "/" + projectName;
 			//String contextDir = cm.getCurrentProperty(cfullName, "Directory");
 			
 			String contextDir = "/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/STFILTER/WDIR/"; 
 			createSopacDataFile(contextDir, sopacDataFileName, sopacDataFileContent);
-			String dataUrl = "http://gf1.ucs.indiana.edu:8888/STFILTER/WDIR/"+sopacDataFileName;
+			String dataUrl = "http://gf3.ucs.indiana.edu:8888/STFILTER/WDIR/"+sopacDataFileName;
 			System.out.println("[!!] dataUrl = "+dataUrl);
 			
 			double[][] globalParam = new double[allsites.estParamVector.size()][5];
-			double[][] siteParam = new double[myStation.estParamVector.size()][5];
+			double[][] siteParam = new double[myStation.estParamVector.size()+EpisodicBiasParam.size()][5];
 			
 		    setParam(allsites, globalParam);
 		    setParam(myStation, siteParam);
+		    
+		    for (int i = myStation.estParamVector.size(); i < myStation.estParamVector.size() + EpisodicBiasParam.size(); i++) {
+				System.out.println("[!!]"+EpisodicBiasParam.get(i-myStation.estParamVector.size()).toString());
+				System.out.println("[!!]"+EpisodicBiasParam.size());
+				EpisodicBias eb = (EpisodicBias) EpisodicBiasParam.get(i-myStation.estParamVector.size());
+				globalParam[i][0] = eb.parameterType;
+				globalParam[i][1] = eb.aprioriConstraint.doubleValue();
+				globalParam[i][2] = eb.aprioriValue.doubleValue();
+				globalParam[i][3] = eb.startDate.doubleValue();
+				globalParam[i][4] = eb.endDate.doubleValue();
+		    }
 
 			Service service = new Service();
 			Call call = (Call) service.createCall();
@@ -340,13 +370,188 @@ public class STFILTERBean extends GenericSopacBean {
 				System.out.println(ret[i]);
 			}
 
-			//String ret = (String[]) call.invoke(new Object[] { });
+			// Draw graphs
+			resiURL = ret[3];
 
 			//System.out.println("Output: " + ret);
 		} catch (Exception e) {
 			System.err.println(e.toString());
 		}
 		return "stfilterws-launched";
+	}
+
+	private String extractSimpleName(String extendedName) {
+		return (new File(extendedName)).getName();
+	}
+
+	/**
+	 * Famous method that I googled. This copies a file to a new place on the
+	 * file system.
+	 */
+	private void copyFileToFile(File sourceFile, File destFile)
+			throws Exception {
+		InputStream in = new FileInputStream(sourceFile);
+		OutputStream out = new FileOutputStream(destFile);
+		byte[] buf = new byte[1024];
+		int length;
+		while ((length = in.read(buf)) > 0) {
+			out.write(buf, 0, length);
+		}
+		in.close();
+		out.close();
+	}
+
+	/**
+	 * Another famous method that I googled. This downloads contents from the
+	 * given URL to a local file.
+	 */
+	private void copyUrlToFile(URL inputFileUrl, String destFile)
+			throws Exception {
+
+		URLConnection uconn = inputFileUrl.openConnection();
+		InputStream in = inputFileUrl.openStream();
+		OutputStream out = new FileOutputStream(destFile);
+
+		// Extract the name of the file from the url.
+
+		byte[] buf = new byte[1024];
+		int length;
+		while ((length = in.read(buf)) > 0) {
+			out.write(buf, 0, length);
+		}
+		in.close();
+		out.close();
+
+	}
+
+	private String downloadInputFile(String inputFileUrlString,
+			String inputFileDestDir) throws Exception {
+
+		// Convert to a URL. This will throw an exception if
+		// malformed.
+		URL inputFileUrl = new URL(inputFileUrlString);
+
+		String protocol = inputFileUrl.getProtocol();
+		System.out.println("Protocol: " + protocol);
+		String fileSimpleName = extractSimpleName(inputFileUrl.getFile());
+		System.out.println(fileSimpleName);
+
+		String fileLocalFullName = inputFileDestDir + File.separator
+				+ fileSimpleName;
+
+		if (protocol.equals(FILE_PROTOCOL)) {
+			String filePath = inputFileUrl.getFile();
+			fileSimpleName = inputFileUrl.getFile();
+
+			System.out.println("File path is " + filePath);
+			File filePathObject = new File(filePath);
+			File destFileObject = new File(fileLocalFullName);
+
+			// See if the inputFileUrl and the dest file are the same.
+			if (filePathObject.getCanonicalPath().equals(
+					destFileObject.getCanonicalPath())) {
+				System.out.println("Files are the same.  We're done.");
+				return fileLocalFullName;
+			}
+
+			// Otherwise, we will have to copy it.
+			copyFileToFile(filePathObject, destFileObject);
+			return fileLocalFullName;
+		}
+
+		else if (protocol.equals(HTTP_PROTOCOL)) {
+			copyUrlToFile(inputFileUrl, fileLocalFullName);
+		}
+
+		else {
+			System.out.println("Unknown protocol for accessing inputfile");
+			throw new Exception("Unknown protocol");
+		}
+		return fileLocalFullName;
+	}
+
+//	*   residuals for site  LBC1_GPS  with option   1  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+//	*   time       E        N        Se       Sn      Ren      U        Su      Reu     Rnu     site      long     lati
+//	 2004.5779   -13.28   -56.52     4.41     4.63  0.0000  -100.55     5.00  0.0000  0.0000  LBC1_GPS  241.8628  33.8321
+//	 2004.5806   -11.88   -60.75     4.38     4.54  0.0000   -75.21     4.91  0.0000  0.0000  LBC1_GPS  241.8628  33.8321
+//	 2004.5833   -10.35   -65.99     4.83     4.99  0.0000  -105.65     5.43  0.0000  0.0000  LBC1_GPS  241.8628  33.8321
+
+	public List getFilteredList() {
+		URL url;
+		ArrayList list = new ArrayList();
+		ArrayList row = null;
+
+		try {
+
+			url = new URL(resiURL);
+			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+
+			String line;
+			
+			line = in.readLine();
+			line = in.readLine();
+			
+			Calendar thisYear = Calendar.getInstance();
+			Calendar nextYear= Calendar.getInstance();
+			Calendar cur = Calendar.getInstance();
+			
+			double time;
+			int idx = 1;
+			StringTokenizer st;
+			while ((line = in.readLine()) != null) {
+				st = new StringTokenizer (line);
+				row = new ArrayList();
+				row.add(String.valueOf(idx)); // idx
+				
+				time = Double.parseDouble(st.nextToken());
+				thisYear.set((int)Math.floor(time), 0, 1, 0, 0, 0);
+				nextYear.set((int)Math.ceil(time), 0, 1, 0, 0, 0);
+				cur = Calendar.getInstance();
+				cur.setTimeInMillis(thisYear.getTimeInMillis() + (long)((time-Math.floor(time))*(nextYear.getTimeInMillis() - thisYear.getTimeInMillis())));
+				System.out.println("[!!] ["+idx+"] time = "+time+", cur ="+DateFormat.getDateInstance().format(cur.getTime()));
+				row.add(cur.getTime()); // time
+				row.add(st.nextToken()); // E
+				row.add(st.nextToken()); // N
+				st.nextToken(); // Se
+				st.nextToken(); // Sn
+				st.nextToken(); // Ren
+				row.add(st.nextToken()); // U
+				list.add(row);
+				idx++;
+			}
+			in.close();
+			
+		} catch (MalformedURLException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		return list;
+		//BufferedReader rd = new BufferedReader( new StringReader (sopacDataFileContent));
+	}
+
+	public List getSopacDataList() {
+		ArrayList list = new ArrayList();
+		ArrayList row = null;
+		StringTokenizer st = new StringTokenizer (sopacDataFileContent);
+		int idx = 1;
+		while (st.hasMoreTokens()) {
+			row = new ArrayList();
+			row.add(String.valueOf(idx));
+			row.add(st.nextToken());
+			row.add(st.nextToken());
+			row.add(st.nextToken());
+			row.add(st.nextToken());
+			row.add(st.nextToken());
+			row.add(st.nextToken());
+			row.add(st.nextToken());
+			row.add(st.nextToken());
+			list.add(row);
+			idx++;
+		}
+		return list;
+		//BufferedReader rd = new BufferedReader( new StringReader (sopacDataFileContent));
 	}
 
 	private void setParam(StationContainer station, double[][] globalParam) {
@@ -825,5 +1030,115 @@ public class STFILTERBean extends GenericSopacBean {
 
 	public void setTimeInterval(TimeInterval timeInterval) {
 		this.timeInterval = timeInterval;
+	}
+
+	public String getResiURL() {
+		return resiURL;
+	}
+
+	public void setResiURL(String resiURL) {
+		this.resiURL = resiURL;
+	}
+	
+	private SelectItem[] myStationParamList;
+	
+	public SelectItem[] getMyStationParamList() {
+		System.out.println("[!!] Size = "+myStation.getMasterParamList().size());
+		myStationParamList = new SelectItem[myStation.getMasterParamList().size()];
+		for (int i=0; i<myStation.getMasterParamList().size(); i++) {
+			myStationParamList[i] = new SelectItem(new Integer(i), ((EstimateParameter)myStation.getMasterParamList().get(i)).getParameterFullName());
+		}
+		return myStationParamList;
+	}
+
+	private int myStationParamListIndex = 0;
+	public int getMyStationParamListIndex() {
+		return myStationParamListIndex;
+	}
+	
+	public void myStationParamListChanged(ValueChangeEvent event) {
+		if (event.getNewValue() != null) {
+			System.out.println("[!!] ValueChangeEvent = "+event.getNewValue());
+			//myStationParamListIndex = ((Integer)event.getNewValue()).intValue(); 
+			myStationParamListIndex = Integer.parseInt((String) event.getNewValue());
+			switch (myStationParamListIndex) {
+			case 0:
+				currentParam = episodicEast; 
+				break;
+			case 1:
+				currentParam = episodicNorth; 
+				break;
+			case 2:
+				currentParam = episodicUp; 
+				break;
+			}
+		}
+		System.out.println("[!!] currentParam = "+currentParam.getParameterFullName());
+	}
+	
+	public void aprioriValueChanged(ValueChangeEvent event) {
+		System.out.println("[!!] aprioriValueChanged = "+event.getNewValue());
+		if (event.getNewValue() != null) {
+			currentParam.setAprioriValue((Double) event.getNewValue());
+		}
+	}
+	
+	public void aprioriConstraintChanged(ValueChangeEvent event) {
+		System.out.println("[!!] aprioriConstraintChanged = "+event.getNewValue());
+		if (event.getNewValue() != null) {
+			currentParam.setAprioriConstraint((Double) event.getNewValue());
+			addEpisodicBiasParamVector();
+		}
+	}
+
+	private void addEpisodicBiasParamVector() {
+		if (!EpisodicBiasParam.contains(currentParam)) {
+			EpisodicBiasParam.add(currentParam);
+		}
+	}
+	
+	public void startDateChanged(ValueChangeEvent event) {
+		System.out.println("[!!] startDateChanged = "+event.getNewValue());
+		if (event.getNewValue() != null) {
+			currentParam.setStartDate((Double) event.getNewValue());
+			addEpisodicBiasParamVector();
+		}
+	}
+	
+	public void endDateChanged(ValueChangeEvent event) {
+		System.out.println("[!!] endDateChanged = "+event.getNewValue());
+		if (event.getNewValue() != null) {
+			currentParam.setEndDate((Double) event.getNewValue());
+			addEpisodicBiasParamVector();
+		}
+	}
+	
+	Vector EpisodicBiasParam = new Vector();
+	EpisodicBias episodicEast = new EpisodicEast(); 
+	EpisodicBias episodicNorth = new EpisodicNorth();
+	EpisodicBias episodicUp = new EpisodicUp();
+
+	EpisodicBias currentParam = episodicEast; 
+	
+	public EstimateParameter getCurrentParam() {
+		return currentParam;
+	}
+	
+	public String setEstimatedParams() throws Exception {
+		launchSTFILTERWS();
+		return "set-estimated-params";
+	}
+	
+	public static void main (String[] args) {
+		Calendar org = Calendar.getInstance();
+		Calendar cal2004 = Calendar.getInstance();
+		cal2004.set(2004, 0, 1, 0, 0, 0);
+		Calendar cal2005 = Calendar.getInstance();
+		cal2005.set(2005, 0, 1, 0, 0, 0);
+
+		Calendar cur = Calendar.getInstance();
+		cur.setTimeInMillis(cal2004.getTimeInMillis() + (long)(.5777*(cal2005.getTimeInMillis() - cal2004.getTimeInMillis())));
+		System.out.println(cur.getTime());
+		
 	}
 }
