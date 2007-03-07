@@ -1,5 +1,10 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
+<%@ taglib uri="http://big.faceless.org/products/graph" prefix="bfg" %>
+
+<script type="text/ecmascript" src="http://bfo.co.uk/bfograph.js"> </script>
+<script type="text/ecmascript" src="http://gf3.ucs.indiana.edu:8888/STFILTER/bfograph2.js"> </script>
+
 <html>
   <head>
         <title>STFILTER Estimate Parameters</title>
@@ -353,8 +358,6 @@ below.  After making your selections,click again to toggle the display off.
 <p/>
     <h:commandButton value="Run ST_FILTER"
                      action="#{stfilterBean.launchSTFILTER}"/>
-    <h:commandButton value="Run ST_FILTER_WS"
-                     action="#{stfilterBean.launchSTFILTERWS}"/>
     </h:form>
 
     <h:form>
@@ -364,7 +367,94 @@ below.  After making your selections,click again to toggle the display off.
     </h:commandLink>
     </h:form>
 
+    <%-- Loop to verify that it works --%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+	<h:form id="myStationParam">
+		<h:selectOneMenu 
+			valueChangeListener="#{stfilterBean.myStationParamListChanged}" 
+			onchange="this.form.submit()">
+			<f:selectItem itemValue="0" itemLabel="Episodic East"/> 
+			<f:selectItem itemValue="1" itemLabel="Episodic North"/> 
+			<f:selectItem itemValue="2" itemLabel="Episodic Up"/> 
+		</h:selectOneMenu> 
+		<br>
 
+    <c:if test="${stfilterBean.resiURL != null}">
+    <bfg:axesgraph width="800" height="400" backwallpaint="stripe(#eeeeee,axis=bottom,line=#cccccc,altaxis=left)">
+      <bfg:axis pos="left" type="float"/>
+      <bfg:axis pos="bottom" type="date(yyyy-MM-dd)" rotate="-20" density="sparse"/>
+      <bfg:lineseries name="East" 
+      	linethickness="2" 
+      	onmousemove="bfgShowPopup('('+bfgToDate(seriesx, 'yyyy-MM-dd') +','+bfgRound(seriesy,2)+')', event)" 
+      	onmouseout="bfgHidePopup()" 
+      	onclick="Update(seriesx)">
+      	<%-- onclick="alert('('+bfgToDate(seriesx, 'yyyy-MM-dd') +','+bfgRound(seriesy,2)+')')" --%>
+        <c:forEach items="${stfilterBean.filteredList}" var="i">
+          <bfg:data x="${i[1]}" y="${i[stfilterBean.myStationParamListIndex + 2]}"/>
+        </c:forEach>
+      </bfg:lineseries>
+      <%--
+      <bfg:lineseries name="North" linethickness="2" onmousemove="bfgShowPopup('('+bfgToDate(seriesx, 'yyyy-MM-dd') +','+bfgRound(seriesy,2)+')', event)" onmouseout="bfgHidePopup()" onclick="alert('('+bfgToDate(seriesx, 'yyyy-MM-dd') +','+bfgRound(seriesy,2)+')')">
+        <c:forEach items="${stfilterBean.filteredList}" var="i">
+          <bfg:data x="${i[1]}" y="${i[3]}"/>
+        </c:forEach>
+      </bfg:lineseries>
+      <bfg:lineseries name="Up" linethickness="2" onmousemove="bfgShowPopup('('+bfgToDate(seriesx, 'yyyy-MM-dd') +','+bfgRound(seriesy,2)+')', event)" onmouseout="bfgHidePopup()" onclick="alert('('+bfgToDate(seriesx, 'yyyy-MM-dd') +','+bfgRound(seriesy,2)+')')">
+        <c:forEach items="${stfilterBean.filteredList}" var="i">
+          <bfg:data x="${i[1]}" y="${i[4]}"/>
+        </c:forEach>
+      </bfg:lineseries>
+
+      <bfg:key align="bottom" color="#eeeeee">
+        <bfg:keyitem series="East"/>
+        <bfg:keyitem series="North"/>
+        <bfg:keyitem series="Up"/>
+      </bfg:key>
+      --%>
+    </bfg:axesgraph>
+    </c:if>
+
+	</h:form>
+	
+	<h:form id="myStationCurrentParam">
+		<h:panelGrid columns="2">
+			<h:panelGroup>
+				<h:outputText value="Apriori Value"/>
+			</h:panelGroup>
+			<h:panelGroup>
+				<h:inputText id="aprioriValue" 
+					valueChangeListener="#{stfilterBean.aprioriValueChanged}"
+					value="#{stfilterBean.currentParam.aprioriValue}"/>
+			</h:panelGroup>
+			<h:panelGroup>
+				<h:outputText value="Apriori Constraint"/>
+			</h:panelGroup>
+			<h:panelGroup>
+				<h:inputText id="aprioriConstraint" 
+					valueChangeListener="#{stfilterBean.aprioriConstraintChanged}"
+					value="#{stfilterBean.currentParam.aprioriConstraint}"/>
+			</h:panelGroup>
+			<h:panelGroup>
+				<h:outputText value="Start Date"/>
+			</h:panelGroup>
+			<h:panelGroup>
+				<h:inputText id="startDate" 
+					valueChangeListener="#{stfilterBean.startDateChanged}"
+					value="#{stfilterBean.currentParam.startDate}"/>
+			</h:panelGroup>
+			<h:panelGroup>
+				<h:outputText value="End Date"/>
+			</h:panelGroup>
+			<h:panelGroup>
+				<h:inputText id="endDate" 
+					valueChangeListener="#{stfilterBean.endDateChanged}"
+					value="#{stfilterBean.currentParam.endDate}"/>
+			</h:panelGroup>
+		</h:panelGrid>
+ 		<h:commandButton value="Save"/>
+	    <h:commandButton value="Run ST_FILTER_WS"
+	                     action="#{stfilterBean.launchSTFILTERWS}"/>
+	</h:form>
   </f:view>
 </html>
