@@ -7,10 +7,10 @@ import javax.xml.namespace.QName;
 public class AnalyzeTseriServiceClient {
 	public static void main(String[] args) {
 		try {
-			String endpoint = "http://gf1.ucs.indiana.edu:8888/analyze-tseri-exec/services/AnalyzeTseriExec";
+			String endpoint = "http://gf3.ucs.indiana.edu:8888/analyze-tseri-exec/services/AnalyzeTseriExec";
 
 			String siteCode = "dhlg";
-			String dataUrl = "http://gf1.ucs.indiana.edu:8888/inputTest.xyz";
+			String dataUrl = "http://gf3.ucs.indiana.edu:8888/inputTest.xyz";
 			double[][] globalParam = { 
 					{ 7, 0.0, 50.0, 2005.0, 2008.0 },
 					{ 9, 0.0, 50.0, 2005.0, 2008.0 } };

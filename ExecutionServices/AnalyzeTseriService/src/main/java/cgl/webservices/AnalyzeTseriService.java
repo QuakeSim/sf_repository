@@ -710,7 +710,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 	protected String[] getTheReturnFiles() {
 
 		String[] extensions = { ".input.xyz.X.png", ".input.xyz.Y.png",
-				".input.xyz.Z.png" };
+				".input.xyz.Z.png", ".resi" };
 
 		String[] returnFiles = new String[extensions.length];
 		for (int i = 0; i < extensions.length; i++) {
@@ -921,7 +921,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 
 	public static void main(String[] args) {
 		String siteCode = "dhlg";
-		String dataUrl = "http://gf1.ucs.indiana.edu:8888/inputTest.xyz";
+		String dataUrl = "http://gf3.ucs.indiana.edu:8888/inputTest.xyz";
 		double[][] globalParam = { { 7, 0.0, 50.0, 2005.0, 2008.0 },
 				{ 9, 0.0, 50.0, 2005.0, 2008.0 } };
 		double[][] siteParam = { { 8, 0.0, 50.0, 2005.0, 2008.0 } };
@@ -930,7 +930,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 
 	public static void mainTest1(String[] args) {
 		// Test Set #1 : moose
-		String dataUrl = "http://gf1.ucs.indiana.edu:8888/inputTest.xyz";
+		String dataUrl = "http://gf3.ucs.indiana.edu:8888/inputTest.xyz";
 		String siteCode = "dhlg";
 
 		// Test Set #2
