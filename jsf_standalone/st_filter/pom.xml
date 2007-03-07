@@ -28,6 +28,33 @@
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                  <executions>
+                     <execution>
+                        <phase>package</phase>
+                           <configuration>
+                             <tasks>
+                               <replace dir="${basedir}/target/${pom.artifactId}"
+                                        token="gf2.ucs.indiana.edu"
+                                        value="${portal.host.name}"/>
+
+                               <replace dir="${basedir}/target/${pom.artifactId}"
+                                        token="/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/"
+                                        value="${tomcat.base.dir}"/>
+                               <replace dir="${basedir}/target/${pom.artifactId}"
+                                        token="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTCdqtmO6Kma7uYZgpagQkNe17MQhRS93QdZFchZ2Vy9IpcH0W3nbN34g"
+                                        value="${google.key}"/>
+
+
+                             </tasks>
+                           </configuration>
+                           <goals>
+                             <goal>run</goal>
+                           </goals>
+                     </execution>
+                  </executions>
+            </plugin>
         </plugins>
     </build>
 
