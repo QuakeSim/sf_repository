@@ -20,7 +20,7 @@
                 <!-- Needed for the context service-->
                 <managed-property>
                    <property-name>contextUrl</property-name>
-                   <value>http://gf1.ucs.indiana.edu:8888/WebServices/services/ContextManager</value>
+                   <value>http://gf3.ucs.indiana.edu:8888/WebServices/services/ContextManager</value>
                  </managed-property>
                  <managed-property>
                    <property-name>contextBasePath</property-name>
