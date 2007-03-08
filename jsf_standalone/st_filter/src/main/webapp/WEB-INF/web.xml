@@ -175,6 +175,20 @@
         <mime-type>text.html</mime-type>
     </mime-mapping>
 
+    <!-- BFO -->
+    <servlet>
+    	<servlet-name>GraphServlet</servlet-name>         
+    	<servlet-class>org.faceless.graph2.tag.GraphServlet</servlet-class>     
+    </servlet>     
+    <servlet-mapping>         
+    	<servlet-name>GraphServlet</servlet-name>
+        <url-pattern>/servlet/GraphServlet/*</url-pattern>
+    </servlet-mapping>
+	<taglib>  
+		<taglib-uri>http://big.faceless.org/products/graph</taglib-uri>  
+		<taglib-location>/WEB-INF/lib/bfograph.jar</taglib-location> 
+	</taglib>
+
     <!-- Welcome files -->
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>

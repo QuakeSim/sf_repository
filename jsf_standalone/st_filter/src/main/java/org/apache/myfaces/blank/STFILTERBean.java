@@ -334,7 +334,7 @@ public class STFILTERBean extends GenericSopacBean {
 			//String cfullName = codeName + "/" + projectName;
 			//String contextDir = cm.getCurrentProperty(cfullName, "Directory");
 			
-			String contextDir = "/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/STFILTER/WDIR/"; 
+			String contextDir = "/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/STFILTER/WDIR/"; 
 			createSopacDataFile(contextDir, sopacDataFileName, sopacDataFileContent);
 			String dataUrl = "http://gf3.ucs.indiana.edu:8888/STFILTER/WDIR/"+sopacDataFileName;
 			System.out.println("[!!] dataUrl = "+dataUrl);
@@ -508,7 +508,7 @@ public class STFILTERBean extends GenericSopacBean {
 				nextYear.set((int)Math.ceil(time), 0, 1, 0, 0, 0);
 				cur = Calendar.getInstance();
 				cur.setTimeInMillis(thisYear.getTimeInMillis() + (long)((time-Math.floor(time))*(nextYear.getTimeInMillis() - thisYear.getTimeInMillis())));
-				System.out.println("[!!] ["+idx+"] time = "+time+", cur ="+DateFormat.getDateInstance().format(cur.getTime()));
+				//System.out.println("[!!] ["+idx+"] time = "+time+", cur ="+DateFormat.getDateInstance().format(cur.getTime()));
 				row.add(cur.getTime()); // time
 				row.add(st.nextToken()); // E
 				row.add(st.nextToken()); // N

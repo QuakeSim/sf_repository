@@ -130,7 +130,7 @@
     </h:panelGrid>
 
     <h:commandButton value="Edit Estimate Parameters"
-                     action="set-estimated-params"/>
+                     action="#{stfilterBean.setEstimatedParams}"/>
     </h:form>
 
     <h:form>
