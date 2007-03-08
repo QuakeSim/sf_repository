@@ -43,7 +43,7 @@
                                         token="/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/"
                                         value="${tomcat.base.dir}"/>
                                <replace dir="${basedir}/target/${pom.artifactId}"
-                                        token="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTCdqtmO6Kma7uYZgpagQkNe17MQhRS93QdZFchZ2Vy9IpcH0W3nbN34g"
+                                        token="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAuZXFNqpWwSQD2wTwESuVIBQw1I5omejC7eYYY2abAtd66RdBwBREMz5uWt_AXSxz6bvwTTHBIDhL1Q"
                                         value="${google.key}"/>
 
 
