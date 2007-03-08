@@ -413,7 +413,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		if (protocol.equals(FILE_PROTOCOL)) {
 			String filePath = inputFileUrl.getFile();
 			fileSimpleName = inputFileUrl.getFile();
-
+ 
 			System.out.println("File path is " + filePath);
 			File filePathObject = new File(filePath);
 			File destFileObject = new File(fileLocalFullName);
@@ -984,75 +984,3 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 
 }
 
-/*
- * jychoi@gridfarm001 classes $ echo . ../lib/*.jar
- * /home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/common/lib/*.jar |
- * tr ' ' ':'
- * .:../lib/ant-1.6.5.jar:../lib/ant-launcher-1.6.5.jar:../lib/axis-1.4.jar:../lib/axis-jaxrpc-1.4.jar:../lib/axis-saaj-1.4.jar:../lib/axis-wsdl4j-1.5.1.jar:../lib/commons-discovery-0.2.jar:../lib/commons-logging-1.0.4.jar:../lib/GRWS_SubmitQuery-4.0.jar:../lib/grwsXmlBeansSchemas-1.0.jar:../lib/log4j-1.2.8.jar:/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/common/lib/commons-el.jar:/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/common/lib/jasper-compiler.jar:/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/common/lib/jasper-compiler-jdt.jar:/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/common/lib/jasper-runtime.jar:/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/common/lib/jsp-api.jar:/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/common/lib/naming-factory-dbcp.jar:/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/common/lib/naming-factory.jar:/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/common/lib/naming-resources.jar:/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/common/lib/servlet-api.jar
- * 
- * jychoi@gridfarm001 classes $ export CP=`echo . ../lib/*.jar
- * /home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/common/lib/*.jar |
- * tr ' ' ':'`
- * 
- * jychoi@gridfarm001 classes $ java -classpath $CP
- * cgl.webservices.RDAHMMService
- * 
- */
-
-/*
- * sit_list file
- */
-
-/*
- * /home/jychoi/apps/stfilter/test1 jychoi@gridfarm001 test1 $ cat test.para 1
- * all_site 6 1 0.0 50.0 2004.0 2 0.0 50.0 2004.0 3 0.0 50.0 2004.0 4 0.0 50.0
- * 2002.0 2004.0 5 0.0 50.0 2002.0 2004.0 6 0.0 50.0 2002.0 2004.0
- */
-/*
- * /home/jychoi/apps/stfilter/test2 jychoi@gridfarm001 test2 $ cat test2.para 2
- * all_site 7 1 0.0 50.0 2004.0 2 0.0 50.0 2004.0 3 0.0 50.0 2004.0 4 0.0 50.0
- * 2002.0 2004.0 5 0.0 50.0 2002.0 2004.0 6 0.0 50.0 2002.0 2004.0 7 0.0 50.0
- * 2002.0 2004.0
- * 
- * LBC1 1 8 0.0 50.0 2002.0 2004.0
- * 
- */
-/*
- * Log file when executing STFILTER #1
- * 
- * Writing input file:
- * /home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users//defaultUser/STFILTER/defaultUser/STFILTER/test2/test2.drv
- * Writing input file:
- * /home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users//defaultUser/STFILTER/defaultUser/STFILTER/test2/lbc1.data
- * Writing input file:
- * /home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users//defaultUser/STFILTER/defaultUser/STFILTER/test2/test2.site
- * Writing input file:
- * /home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users//defaultUser/STFILTER/defaultUser/STFILTER/test2/test2.list
- * [!!] printContents() = LBC1 1 8 0.0 50.0 2002.0 2004.0
- * 
- * [!!] printContents() = all_site 7 1 0.0 50.0 2004.0 2 0.0 50.0 2004.0 3 0.0
- * 50.0 2004.0 4 0.0 50.0 2002.0 2004.0 5 0.0 50.0 2002.0 2004.0 6 0.0 50.0
- * 2002.0 2004.0 7 0.0 50.0 2002.0 2004.0
- * 
- * [!!] printContents() = LBC1 1 8 0.0 50.0 2002.0 2004.0
- * 
- * FileService URL:http://danube.ucs.indiana.edu:8045/GCWS/services/FileService
- * AntService URL:http://danube.ucs.indiana.edu:8045/axis/services/AntVisco
- */
-
-/*
- * Log file when executing STFILTER #2 Writing input file:
- * /home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users//defaultUser/STFILTER/defaultUser/STFILTER/test1/test1.drv
- * Writing input file:
- * /home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users//defaultUser/STFILTER/defaultUser/STFILTER/test1/lbc1.data
- * Writing input file:
- * /home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users//defaultUser/STFILTER/defaultUser/STFILTER/test1/test1.site
- * Writing input file:
- * /home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users//defaultUser/STFILTER/defaultUser/STFILTER/test1/test1.list
- * [!!] printContents() = null [!!] printContents() = all_site 6 1 0.0 50.0
- * 2004.0 2 0.0 50.0 2004.0 3 0.0 50.0 2004.0 4 0.0 50.0 2002.0 2004.0 5 0.0
- * 50.0 2002.0 2004.0 6 0.0 50.0 2002.0 2004.0
- * 
- * FileService URL:http://danube.ucs.indiana.edu:8045/GCWS/services/FileService
- * AntService URL:http://danube.ucs.indiana.edu:8045/axis/services/AntVisco
- */
