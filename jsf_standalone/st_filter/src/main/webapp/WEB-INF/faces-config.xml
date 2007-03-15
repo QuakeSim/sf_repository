@@ -101,6 +101,18 @@
 			<from-outcome>parameters-to-googlemap</from-outcome>
 			<to-view-id>/allstations.jsp</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>stfilter-display-query-results</from-outcome>
+			<to-view-id>/ProjectParams.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>set-estimated-params</from-outcome>
+			<to-view-id>/EstimatedParams.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>edit-default-params</from-outcome>
+			<to-view-id>/EditDefaultParams.jsp</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 
         
@@ -266,4 +278,14 @@
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+	
+        <!-- EditDefaultParams navigation rules -->
+	<navigation-rule>
+		<from-view-id>/EditDefaultParams.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/NewProject.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
 </faces-config>

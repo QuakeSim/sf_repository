@@ -1,8 +1,10 @@
 package org.apache.myfaces.blank;
 
 //Imports from the mother ship
+import org.apache.axis.MessageContext;
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
+import org.apache.axis.transport.http.HTTPConstants;
 import org.servogrid.genericproject.GenericSopacBean;
 import org.servogrid.genericproject.GenericProjectBean;
 import org.servogrid.genericproject.Utility;
@@ -18,6 +20,7 @@ import javax.faces.context.ExternalContext;
 
 //Servlet and portlet API stuff.
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServlet;
 import javax.xml.namespace.QName;
 import javax.portlet.PortletContext;
 
@@ -198,6 +201,11 @@ public class STFILTERBean extends GenericSopacBean {
 		allsites = new AllStationsContainer();
 		allsites.setEstParamVector(allsitesList.getStationParamList());
 		allsites.setMasterParamList(masterList.getStationParamList());
+		
+		
+		// Init. By Jong
+		setResource("procCoords");
+		setContextGroup("reasonComb");
 	}
 
 	/**
@@ -326,17 +334,32 @@ public class STFILTERBean extends GenericSopacBean {
 	public String launchSTFILTERWS() throws Exception {
 		// Do this here.
 		try {
-			String endpoint = "http://gf3.ucs.indiana.edu:8888/analyze-tseri-exec/services/AnalyzeTseriExec";
+		
+			//String endpoint = "http://gf3.ucs.indiana.edu:8888/analyze-tseri-exec/services/AnalyzeTseriExec";
+			//String contextDir = "/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/STFILTER/WDIR/"; 
+			//String dataUrl = "http://gf3.ucs.indiana.edu:8888/STFILTER/WDIR/"+sopacDataFileName;
+			FacesContext fc = FacesContext.getCurrentInstance();
+			String endpoint = fc.getExternalContext().getInitParameter("analyze_tseri.service.url");
+			System.out.println("[!!] endpoint = "+endpoint);
+			String workDir = fc.getExternalContext().getInitParameter("work.dir");
+			System.out.println("[!!] workDir = "+workDir);
+			String workUrl = fc.getExternalContext().getInitParameter("work.url");
+			System.out.println("[!!] workUrl = "+workUrl);
+			
+			if ((endpoint == null) || (endpoint.equals(""))) {
+				System.out.println("[!!] Set init-param in web.xml");
+				return "";
+			}
+			
 			String siteCode = getSiteCode();
-
 			String sopacDataFileName  = projectName+"-"+getSiteCode()+"-"+stamp + sopacDataFileExt;
 			System.out.println("[!!] sopacDataFileName = "+sopacDataFileName);
-			//String cfullName = codeName + "/" + projectName;
-			//String contextDir = cm.getCurrentProperty(cfullName, "Directory");
+			String cfullName = codeName + "/" + projectName;
 			
-			String contextDir = "/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/STFILTER/WDIR/"; 
-			createSopacDataFile(contextDir, sopacDataFileName, sopacDataFileContent);
-			String dataUrl = "http://gf3.ucs.indiana.edu:8888/STFILTER/WDIR/"+sopacDataFileName;
+			String dataUrl = workUrl+sopacDataFileName;
+			System.out.println("[!!] dataUrl = "+workUrl);
+			
+			createSopacDataFile(workDir, sopacDataFileName, sopacDataFileContent);
 			System.out.println("[!!] dataUrl = "+dataUrl);
 			
 			double[][] globalParam = new double[allsites.estParamVector.size()][5];
@@ -372,6 +395,18 @@ public class STFILTERBean extends GenericSopacBean {
 
 			// Draw graphs
 			resiURL = ret[3];
+			
+			List filteredList = createFilteredList();
+			if (paramHistory.size() < maxHistory) {
+				paramHistory.add(0, filteredList);
+			} else {
+				paramHistory.add(0, filteredList);
+				for (int i = paramHistory.size(); i > maxHistory ; i--) {
+					paramHistory.remove(i-1);
+				}
+			}
+			
+			System.out.println("paramHistory.size() = "+paramHistory.size());
 
 			//System.out.println("Output: " + ret);
 		} catch (Exception e) {
@@ -476,7 +511,7 @@ public class STFILTERBean extends GenericSopacBean {
 //	 2004.5806   -11.88   -60.75     4.38     4.54  0.0000   -75.21     4.91  0.0000  0.0000  LBC1_GPS  241.8628  33.8321
 //	 2004.5833   -10.35   -65.99     4.83     4.99  0.0000  -105.65     5.43  0.0000  0.0000  LBC1_GPS  241.8628  33.8321
 
-	public List getFilteredList() {
+	public List createFilteredList() {
 		URL url;
 		ArrayList list = new ArrayList();
 		ArrayList row = null;
@@ -1039,7 +1074,11 @@ public class STFILTERBean extends GenericSopacBean {
 	public void setResiURL(String resiURL) {
 		this.resiURL = resiURL;
 	}
-	
+
+	/*
+	 * Added by Jong
+	 * 
+	 */
 	private SelectItem[] myStationParamList;
 	
 	public SelectItem[] getMyStationParamList() {
@@ -1129,6 +1168,38 @@ public class STFILTERBean extends GenericSopacBean {
 		return "set-estimated-params";
 	}
 	
+	int maxHistory = 3;
+	Vector paramHistory = new Vector();
+	String[] graphName = {"Current", "Old 1", "Old 2"};
+	
+	public int getParamHistorySize() {
+		return paramHistory.size();
+	}
+	
+	public String clearHistory() throws Exception {
+		for (int i = paramHistory.size(); i > 1; i--) {
+			paramHistory.remove(i-1);
+		}
+		
+		return "";
+	}
+	
+	public String savePref() {
+		return "";
+	}
+	
+	/**
+	 * Navigation Rule
+	 * @return
+	 * @throws Exception
+	 */
+	public String createNewAndQuery() throws Exception {
+		// setParameterValues();
+		createNewProject();
+		querySOPAC();
+		return setEstimatedParams();
+	}
+	
 	public static void main (String[] args) {
 		Calendar org = Calendar.getInstance();
 		Calendar cal2004 = Calendar.getInstance();
@@ -1141,4 +1212,29 @@ public class STFILTERBean extends GenericSopacBean {
 		System.out.println(cur.getTime());
 		
 	}
+
+	public int getMaxHistory() {
+		return maxHistory;
+	}
+
+	public void setMaxHistory(int maxHistory) {
+		this.maxHistory = maxHistory;
+	}
+
+	public Vector getParamHistory() {
+		return paramHistory;
+	}
+
+	public void setParamHistory(Vector paramHistory) {
+		this.paramHistory = paramHistory;
+	}
+
+	public String[] getGraphName() {
+		return graphName;
+	}
+
+	public void setGraphName(String[] graphName) {
+		this.graphName = graphName;
+	}
+
 }
