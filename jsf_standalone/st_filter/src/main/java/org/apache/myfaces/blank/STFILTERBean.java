@@ -23,6 +23,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.xml.namespace.QName;
 import javax.portlet.PortletContext;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
+import javax.portlet.ReadOnlyException;
+import javax.portlet.ValidatorException;
+import javax.portlet.WindowState;
 
 //QuakeSim Web Service clients
 import WebFlowClient.cm.*;
@@ -82,14 +87,11 @@ public class STFILTERBean extends GenericSopacBean {
 
 	private double estJumpSpan = 1.0;
 
-	private WeakObsCriteria weakObsCriteria = new WeakObsCriteria(30.0, 30.0,
-			50.0);
+	private WeakObsCriteria weakObsCriteria = new WeakObsCriteria(30.0, 30.0, 50.0);
 
-	private OutlierCriteria outlierCriteria = new OutlierCriteria(800.0, 800.0,
-			800.0);
+	private OutlierCriteria outlierCriteria = new OutlierCriteria(800.0, 800.0, 800.0);
 
-	private BadObsCriteria badObsCriteria = new BadObsCriteria(10000.0,
-			10000.0, 10000.0);
+	private BadObsCriteria badObsCriteria = new BadObsCriteria(10000.0, 10000.0, 10000.0);
 
 	private TimeInterval timeInterval = new TimeInterval(1998.0, 2006.800);
 
@@ -184,8 +186,11 @@ public class STFILTERBean extends GenericSopacBean {
 	 */
 	public STFILTERBean() {
 		super();
+			
+		loadPrefs();
+		updateWithPrefs();
+		
 		cm = getContextManagerImp();
-		setSiteCode("LBC1"); // Use this for testing.
 
 		// Set up here the station list vectors.
 		masterList = new MasterParamList();
@@ -206,6 +211,43 @@ public class STFILTERBean extends GenericSopacBean {
 		// Init. By Jong
 		setResource("procCoords");
 		setContextGroup("reasonComb");
+	}
+
+	protected void loadPrefs() {
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		PortletRequest pRequest = (PortletRequest)facesContext.getExternalContext().getRequest();
+		PortletPreferences prefs = pRequest.getPreferences();
+		
+		_siteCode              = prefs.getValue("_siteCode", siteCode);
+		_beginDate             = prefs.getValue("_beginDate", beginDate);
+		_endDate               = prefs.getValue("_endDate", endDate);
+		_bboxChecked           = Boolean.parseBoolean(prefs.getValue("_bboxChecked", Boolean.toString(bboxChecked)));
+		_minLatitude           = Double.parseDouble(prefs.getValue("_minLatitude", Double.toString(minLatitude)));
+		_maxLatitude           = Double.parseDouble(prefs.getValue("_maxLatitude", Double.toString(maxLatitude)));
+		_minLongitude          = Double.parseDouble(prefs.getValue("_minLongitude", Double.toString(minLongitude)));
+		_maxLongitude          = Double.parseDouble(prefs.getValue("_maxLongitude", Double.toString(maxLongitude)));
+		_resource              = prefs.getValue("_resource", resource);
+		_contextGroup          = prefs.getValue("_contextGroup", contextGroup);
+		_contextId             = prefs.getValue("_contextId", contextId);
+		_resOption             = Integer.parseInt(prefs.getValue("_resOption", Integer.toString(resOption)));
+		_termOption            = Integer.parseInt(prefs.getValue("_termOption", Integer.toString(termOption)));
+		_cutoffCriterion       = Double.parseDouble(prefs.getValue("_cutoffCriterion", Double.toString(cutoffCriterion)));
+		_estJumpSpan           = Double.parseDouble(prefs.getValue("_estJumpSpan", Double.toString(estJumpSpan)));
+
+		_weakObsCriteria.north = Double.parseDouble(prefs.getValue("_weakObsCriteria.north", Double.toString(weakObsCriteria.north)));
+		_weakObsCriteria.east  = Double.parseDouble(prefs.getValue("_weakObsCriteria.east", Double.toString(weakObsCriteria.east)));
+		_weakObsCriteria.up    = Double.parseDouble(prefs.getValue("_weakObsCriteria.up", Double.toString(weakObsCriteria.up)));
+
+		_outlierCriteria.north = Double.parseDouble(prefs.getValue("_outlierCriteria.north", Double.toString(outlierCriteria.north)));
+		_outlierCriteria.east  = Double.parseDouble(prefs.getValue("_outlierCriteria.east", Double.toString(outlierCriteria.east)));
+		_outlierCriteria.up    = Double.parseDouble(prefs.getValue("_outlierCriteria.up", Double.toString(outlierCriteria.up)));
+
+		_badObsCriteria.north  = Double.parseDouble(prefs.getValue("_badObsCriteria.north", Double.toString(badObsCriteria.north)));
+		_badObsCriteria.east   = Double.parseDouble(prefs.getValue("_badObsCriteria.east", Double.toString(badObsCriteria.east)));
+		_badObsCriteria.up     = Double.parseDouble(prefs.getValue("_badObsCriteria.up", Double.toString(badObsCriteria.up)));
+
+		_timeInterval.beginTime= Double.parseDouble(prefs.getValue("_timeInterval", Double.toString(timeInterval.beginTime)));			
+		_timeInterval.endTime  = Double.parseDouble(prefs.getValue("_timeInterval", Double.toString(timeInterval.endTime)));
 	}
 
 	/**
@@ -335,9 +377,12 @@ public class STFILTERBean extends GenericSopacBean {
 		// Do this here.
 		try {
 		
-			//String endpoint = "http://gf3.ucs.indiana.edu:8888/analyze-tseri-exec/services/AnalyzeTseriExec";
-			//String contextDir = "/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/STFILTER/WDIR/"; 
-			//String dataUrl = "http://gf3.ucs.indiana.edu:8888/STFILTER/WDIR/"+sopacDataFileName;
+			// String endpoint =
+			// "http://gf3.ucs.indiana.edu:8888/analyze-tseri-exec/services/AnalyzeTseriExec";
+			// String contextDir =
+			// "/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/STFILTER/WDIR/";
+			// String dataUrl =
+			// "http://gf3.ucs.indiana.edu:8888/STFILTER/WDIR/"+sopacDataFileName;
 			FacesContext fc = FacesContext.getCurrentInstance();
 			String endpoint = fc.getExternalContext().getInitParameter("analyze_tseri.service.url");
 			System.out.println("[!!] endpoint = "+endpoint);
@@ -408,7 +453,7 @@ public class STFILTERBean extends GenericSopacBean {
 			
 			System.out.println("paramHistory.size() = "+paramHistory.size());
 
-			//System.out.println("Output: " + ret);
+			// System.out.println("Output: " + ret);
 		} catch (Exception e) {
 			System.err.println(e.toString());
 		}
@@ -505,12 +550,6 @@ public class STFILTERBean extends GenericSopacBean {
 		return fileLocalFullName;
 	}
 
-//	*   residuals for site  LBC1_GPS  with option   1  0  0  0  0  0  0  0  0  0  0  0  0  0  0
-//	*   time       E        N        Se       Sn      Ren      U        Su      Reu     Rnu     site      long     lati
-//	 2004.5779   -13.28   -56.52     4.41     4.63  0.0000  -100.55     5.00  0.0000  0.0000  LBC1_GPS  241.8628  33.8321
-//	 2004.5806   -11.88   -60.75     4.38     4.54  0.0000   -75.21     4.91  0.0000  0.0000  LBC1_GPS  241.8628  33.8321
-//	 2004.5833   -10.35   -65.99     4.83     4.99  0.0000  -105.65     5.43  0.0000  0.0000  LBC1_GPS  241.8628  33.8321
-
 	public List createFilteredList() {
 		URL url;
 		ArrayList list = new ArrayList();
@@ -543,7 +582,8 @@ public class STFILTERBean extends GenericSopacBean {
 				nextYear.set((int)Math.ceil(time), 0, 1, 0, 0, 0);
 				cur = Calendar.getInstance();
 				cur.setTimeInMillis(thisYear.getTimeInMillis() + (long)((time-Math.floor(time))*(nextYear.getTimeInMillis() - thisYear.getTimeInMillis())));
-				//System.out.println("[!!] ["+idx+"] time = "+time+", cur ="+DateFormat.getDateInstance().format(cur.getTime()));
+				// System.out.println("[!!] ["+idx+"] time = "+time+", cur
+				// ="+DateFormat.getDateInstance().format(cur.getTime()));
 				row.add(cur.getTime()); // time
 				row.add(st.nextToken()); // E
 				row.add(st.nextToken()); // N
@@ -563,7 +603,8 @@ public class STFILTERBean extends GenericSopacBean {
 		}
 		
 		return list;
-		//BufferedReader rd = new BufferedReader( new StringReader (sopacDataFileContent));
+		// BufferedReader rd = new BufferedReader( new StringReader
+		// (sopacDataFileContent));
 	}
 
 	public List getSopacDataList() {
@@ -586,7 +627,8 @@ public class STFILTERBean extends GenericSopacBean {
 			idx++;
 		}
 		return list;
-		//BufferedReader rd = new BufferedReader( new StringReader (sopacDataFileContent));
+		// BufferedReader rd = new BufferedReader( new StringReader
+		// (sopacDataFileContent));
 	}
 
 	private void setParam(StationContainer station, double[][] globalParam) {
@@ -1098,7 +1140,8 @@ public class STFILTERBean extends GenericSopacBean {
 	public void myStationParamListChanged(ValueChangeEvent event) {
 		if (event.getNewValue() != null) {
 			System.out.println("[!!] ValueChangeEvent = "+event.getNewValue());
-			//myStationParamListIndex = ((Integer)event.getNewValue()).intValue(); 
+			// myStationParamListIndex =
+			// ((Integer)event.getNewValue()).intValue();
 			myStationParamListIndex = Integer.parseInt((String) event.getNewValue());
 			switch (myStationParamListIndex) {
 			case 0:
@@ -1184,12 +1227,10 @@ public class STFILTERBean extends GenericSopacBean {
 		return "";
 	}
 	
-	public String savePref() {
-		return "";
-	}
 	
 	/**
 	 * Navigation Rule
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
@@ -1236,5 +1277,273 @@ public class STFILTERBean extends GenericSopacBean {
 	public void setGraphName(String[] graphName) {
 		this.graphName = graphName;
 	}
+	
+	
+    protected String _siteCode = this.siteCode;
+	protected String _beginDate = this.beginDate;
+	protected String _endDate = this.endDate;
+	protected boolean _bboxChecked = this.bboxChecked;
+	protected double _minLatitude = this.minLatitude;
+	protected double _maxLatitude = this.maxLatitude;
+	protected double _minLongitude = -this.minLongitude;
+	protected double _maxLongitude = -this.maxLongitude;
+	protected String _resource = this.resource;
+	protected String _contextGroup = this.contextGroup;
+	protected String _contextId = this.contextId;
+	protected int _resOption = this.resOption;
+	protected int _termOption = this.termOption;
+	protected double _cutoffCriterion = this.cutoffCriterion;
+	protected double _estJumpSpan = this.estJumpSpan;
+	protected WeakObsCriteria _weakObsCriteria = this.weakObsCriteria;
+	protected OutlierCriteria _outlierCriteria = this.outlierCriteria;
+	protected BadObsCriteria _badObsCriteria = this.badObsCriteria;
+	protected TimeInterval _timeInterval = this.timeInterval;
+	
+	
+	public String savePref() {
 
+		updateWithPrefs();
+		savePrefs();
+		
+		//WindowState windowState = pRequest.getWindowState();
+		
+		return "S_OK";
+	}
+
+	private void savePrefs() {
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		PortletRequest pRequest = (PortletRequest)facesContext.getExternalContext().getRequest();
+		PortletPreferences prefs = pRequest.getPreferences();
+
+		try {
+			prefs.setValue("_siteCode", _siteCode);
+			prefs.setValue("_beginDate", _beginDate);
+			prefs.setValue("_endDate", _endDate);
+			prefs.setValue("_bboxChecked", Boolean.toString(bboxChecked));
+			prefs.setValue("_minLatitude", Double.toString(_minLatitude));
+			prefs.setValue("_maxLatitude", Double.toString(_maxLatitude));
+			prefs.setValue("_minLongitude", Double.toString(_minLongitude));
+			prefs.setValue("_maxLongitude", Double.toString(_maxLongitude));
+			prefs.setValue("_resource", _resource);
+			prefs.setValue("_contextGroup", _contextGroup);
+			prefs.setValue("_contextId", _contextId);
+			prefs.setValue("_resOption", Integer.toString(_resOption));
+			prefs.setValue("_termOption", Integer.toString(_termOption));
+			prefs.setValue("_cutoffCriterion", Double.toString(_cutoffCriterion));
+			prefs.setValue("_estJumpSpan", Double.toString(_estJumpSpan));
+
+			prefs.setValue("_weakObsCriteria.north", Double.toString(_weakObsCriteria.north));
+			prefs.setValue("_weakObsCriteria.east", Double.toString(_weakObsCriteria.east));
+			prefs.setValue("_weakObsCriteria.up", Double.toString(_weakObsCriteria.up));
+			
+			prefs.setValue("_outlierCriteria.north", Double.toString(_outlierCriteria.north));
+			prefs.setValue("_outlierCriteria.east", Double.toString(_outlierCriteria.east));
+			prefs.setValue("_outlierCriteria.up", Double.toString(_outlierCriteria.up));
+			
+			prefs.setValue("_badObsCriteria.north", Double.toString(_badObsCriteria.north));
+			prefs.setValue("_badObsCriteria.east", Double.toString(_badObsCriteria.east));
+			prefs.setValue("_badObsCriteria.up", Double.toString(_badObsCriteria.up));
+			
+			prefs.setValue("_timeInterval", Double.toString(_timeInterval.beginTime));			
+			prefs.setValue("_timeInterval", Double.toString(_timeInterval.endTime));
+			
+			prefs.store();
+			System.out.println("[!!] Pref. saved.");
+		} catch (ReadOnlyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ValidatorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	protected void updateWithPrefs() {
+		siteCode               = _siteCode              ;
+		beginDate              = _beginDate             ;
+		endDate                = _endDate               ;
+		bboxChecked            = _bboxChecked           ;
+		minLatitude            = _minLatitude           ;
+		maxLatitude            = _maxLatitude           ;
+		minLongitude           = _minLongitude          ;
+		maxLongitude           = _maxLongitude          ;
+		resource               = _resource              ;
+		contextGroup           = _contextGroup          ;
+		contextId              = _contextId             ;
+		resOption              = _resOption             ;
+		termOption             = _termOption            ;
+		cutoffCriterion        = _cutoffCriterion       ;
+		estJumpSpan            = _estJumpSpan           ;
+
+		weakObsCriteria.north  = _weakObsCriteria.north ;
+		weakObsCriteria.east   = _weakObsCriteria.east  ;
+		weakObsCriteria.up     = _weakObsCriteria.up    ;
+
+		outlierCriteria.north  = _outlierCriteria.north ;
+		outlierCriteria.east   = _outlierCriteria.east  ;
+		outlierCriteria.up     = _outlierCriteria.up    ;
+
+		badObsCriteria.north   = _badObsCriteria.north  ;
+		badObsCriteria.east    = _badObsCriteria.east   ;
+		badObsCriteria.up      = _badObsCriteria.up     ;
+
+		timeInterval.beginTime = _timeInterval.beginTime;
+		timeInterval.endTime   = _timeInterval.endTime  ;
+	}
+
+	public BadObsCriteria get_badObsCriteria() {
+		return _badObsCriteria;
+	}
+
+	public void set_badObsCriteria(BadObsCriteria obsCriteria) {
+		_badObsCriteria = obsCriteria;
+	}
+
+	public boolean is_bboxChecked() {
+		return _bboxChecked;
+	}
+
+	public void set_bboxChecked(boolean checked) {
+		_bboxChecked = checked;
+	}
+
+	public String get_beginDate() {
+		return _beginDate;
+	}
+
+	public void set_beginDate(String date) {
+		_beginDate = date;
+	}
+
+	public String get_contextGroup() {
+		return _contextGroup;
+	}
+
+	public void set_contextGroup(String group) {
+		_contextGroup = group;
+	}
+
+	public String get_contextId() {
+		return _contextId;
+	}
+
+	public void set_contextId(String id) {
+		_contextId = id;
+	}
+
+	public double get_cutoffCriterion() {
+		return _cutoffCriterion;
+	}
+
+	public void set_cutoffCriterion(double criterion) {
+		_cutoffCriterion = criterion;
+	}
+
+	public String get_endDate() {
+		return _endDate;
+	}
+
+	public void set_endDate(String date) {
+		_endDate = date;
+	}
+
+	public double get_estJumpSpan() {
+		return _estJumpSpan;
+	}
+
+	public void set_estJumpSpan(double jumpSpan) {
+		_estJumpSpan = jumpSpan;
+	}
+
+	public double get_maxLatitude() {
+		return _maxLatitude;
+	}
+
+	public void set_maxLatitude(double latitude) {
+		_maxLatitude = latitude;
+	}
+
+	public double get_maxLongitude() {
+		return _maxLongitude;
+	}
+
+	public void set_maxLongitude(double longitude) {
+		_maxLongitude = longitude;
+	}
+
+	public double get_minLatitude() {
+		return _minLatitude;
+	}
+
+	public void set_minLatitude(double latitude) {
+		_minLatitude = latitude;
+	}
+
+	public double get_minLongitude() {
+		return _minLongitude;
+	}
+
+	public void set_minLongitude(double longitude) {
+		_minLongitude = longitude;
+	}
+
+	public OutlierCriteria get_outlierCriteria() {
+		return _outlierCriteria;
+	}
+
+	public void set_outlierCriteria(OutlierCriteria criteria) {
+		_outlierCriteria = criteria;
+	}
+
+	public int get_resOption() {
+		return _resOption;
+	}
+
+	public void set_resOption(int option) {
+		_resOption = option;
+	}
+
+	public String get_resource() {
+		return _resource;
+	}
+
+	public void set_resource(String _resource) {
+		this._resource = _resource;
+	}
+
+	public String get_siteCode() {
+		return _siteCode;
+	}
+
+	public void set_siteCode(String code) {
+		_siteCode = code;
+	}
+
+	public int get_termOption() {
+		return _termOption;
+	}
+
+	public void set_termOption(int option) {
+		_termOption = option;
+	}
+
+	public TimeInterval get_timeInterval() {
+		return _timeInterval;
+	}
+
+	public void set_timeInterval(TimeInterval interval) {
+		_timeInterval = interval;
+	}
+
+	public WeakObsCriteria get_weakObsCriteria() {
+		return _weakObsCriteria;
+	}
+
+	public void set_weakObsCriteria(WeakObsCriteria obsCriteria) {
+		_weakObsCriteria = obsCriteria;
+	}
+	
 }

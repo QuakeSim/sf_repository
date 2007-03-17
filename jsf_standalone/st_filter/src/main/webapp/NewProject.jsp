@@ -1,20 +1,22 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
+<%@page import="java.util.*, cgl.sensorgrid.sopac.gps.GetStationsRSS,
+cgl.sensorgrid.gui.google.MapBean, java.io.*"%>
+
+<jsp:useBean id="RSSBeanID" scope="session" class="cgl.sensorgrid.sopac.gps.GetStationsRSS"/>
+<jsp:useBean id="MapperID" scope="session" class="cgl.sensorgrid.gui.google.Mapper"/>
+
 <html>
   <head>
         <title>STFILTER Project Management</title>
   </head>
  <body>
-  <h2>Project Setup Page</h2>
-  <p>
-  Provide a name for your project and then pick the station from the map. 
-<%@page import="java.util.*, cgl.sensorgrid.sopac.gps.GetStationsRSS,
-cgl.sensorgrid.gui.google.MapBean, java.io.*"%>
-<jsp:useBean id="RSSBeanID" scope="session" class="cgl.sensorgrid.sopac.gps.GetStationsRSS"/>
-<jsp:useBean id="MapperID" scope="session" class="cgl.sensorgrid.gui.google.Mapper"/>
+ Provide a name for your project and then pick the station from the map. 
+
+	<f:view>
 
 <%-- Javascript Toolbox --%>
-<script type="text/javascript" src="${pageContext.request.contextPath}/date.js"></script>
+<script type="text/ecmascript" src="<h:outputText value="#{facesContext.externalContext.requestContextPath}"/>/scripts/date.js"> </script>
 
 <%-- Yahoo UI --%>
 <script type="text/javascript" src="/yui_0.12.2/build/yahoo/yahoo.js"></script>
@@ -51,12 +53,14 @@ function endDateHandler(type,args,obj) {
 }
 
 function checkDate() {
-	var beginDateObj = Date.parseString(document.forms.form1["form1:beginDate"].value, 'yyyy-MM-dd');
-	var endDateObj = Date.parseString(document.forms.form1["form1:endDate"].value, 'yyyy-MM-dd');
+	var beginDateObj = Date.parseString(document.forms.form1["form1:beginDate"].value, 'yyyy-M-d');
+	var endDateObj = Date.parseString(document.forms.form1["form1:endDate"].value, 'yyyy-M-d');
 	if (beginDateObj.isBefore(endDateObj)) {
 		return true;
 	} else {
 		alert("Begin date should be before end date");
+		alert(beginDateObj);
+		alert(endDateObj);
 		return false;
 	} 
 }
@@ -68,13 +72,13 @@ function showAndFocus() {
 
 function init() 
 {
-	var beginDateObj = Date.parseString(document.forms.form1["form1:beginDate"].value, 'yyyy-MM-dd');
+	var beginDateObj = Date.parseString(document.forms.form1["form1:beginDate"].value, 'yyyy-M-d');
 	YAHOO.example.calendar.beginDate = new YAHOO.widget.Calendar("beginDate","beginDateContainer", { title:"Choose a start date:", close:true, pagedate:beginDateObj.format('MM/yyyy'), selected:beginDateObj.format('MM/dd/yyyy') } );
 	YAHOO.example.calendar.beginDate.selectEvent.subscribe(beginDateHandler, YAHOO.example.calendar.beginDate, true);
 	YAHOO.example.calendar.beginDate.render();
 	YAHOO.util.Event.addListener("form1:beginDateImg", "mouseover", YAHOO.example.calendar.beginDate.show, YAHOO.example.calendar.beginDate, true); 
 
-	var endDateObj = Date.parseString(document.forms.form1["form1:endDate"].value, 'yyyy-MM-dd');
+	var endDateObj = Date.parseString(document.forms.form1["form1:endDate"].value, 'yyyy-M-d');
 	YAHOO.example.calendar.endDate = new YAHOO.widget.Calendar("endDate","endDateContainer", { title:"Choose an end date:", close:true, pagedate:endDateObj.format('MM/yyyy'), selected:endDateObj.format('MM/dd/yyyy') } );
 	YAHOO.example.calendar.endDate.selectEvent.subscribe(endDateHandler, YAHOO.example.calendar.endDate, true);
 	YAHOO.example.calendar.endDate.render();
@@ -254,7 +258,6 @@ mapcenter_y = center_xy[1];
     </noscript>
 	
 	<td valign="top">
-	<f:view>
 	<h:form id="form1" onsubmit="return checkDate()">
     <h:panelGrid columns="2" border="1">
 		<h:outputText value="Project Name:"/>

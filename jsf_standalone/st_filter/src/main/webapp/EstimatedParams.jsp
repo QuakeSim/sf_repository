@@ -19,11 +19,8 @@
  <body>
  <h2>Station Estimate Parameters</h2>
   <f:view>        
-	<script type="text/javascript" src="<h:outputText value="#{facesContext.externalContext.requestContextPath}"/>/scripts/cropper/lib/prototype.js" language="javascript"></script>
 	<script type="text/ecmascript" src="<h:outputText value="#{facesContext.externalContext.requestContextPath}"/>/scripts/bfograph.js"> </script>
 	<script type="text/ecmascript" src="<h:outputText value="#{facesContext.externalContext.requestContextPath}"/>/scripts/bfograph2.js"> </script>
-	<script type="text/javascript" src="<h:outputText value="#{facesContext.externalContext.requestContextPath}"/>/scripts/cropper/lib/scriptaculous.js?load=builder,dragdrop" language="javascript"></script>
-	<script type="text/javascript" src="<h:outputText value="#{facesContext.externalContext.requestContextPath}"/>/scripts/cropper/cropper.js" language="javascript"></script>
 	
     <table>
     <tr>
