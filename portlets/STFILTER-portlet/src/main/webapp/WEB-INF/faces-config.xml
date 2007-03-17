@@ -20,11 +20,11 @@
                 <!-- Needed for the context service-->
                 <managed-property>
                    <property-name>contextUrl</property-name>
-                   <value>http://gf2.ucs.indiana.edu:8080/WebServices/services/ContextManager</value>
+                   <value>http://gf3.ucs.indiana.edu:8888/WebServices/services/ContextManager</value>
                  </managed-property>
                  <managed-property>
                    <property-name>contextBasePath</property-name>
-                   <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users/</value>
+                   <value>/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users/</value>
                 </managed-property>
 
                 <!-- These are execution host params -->
@@ -100,6 +100,18 @@
 		<navigation-case>
 			<from-outcome>parameters-to-googlemap</from-outcome>
 			<to-view-id>/allstations.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>stfilter-display-query-results</from-outcome>
+			<to-view-id>/ProjectParams.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>set-estimated-params</from-outcome>
+			<to-view-id>/EstimatedParams.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>edit-default-params</from-outcome>
+			<to-view-id>/EditDefaultParams.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 
@@ -266,4 +278,14 @@
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+	
+        <!-- EditDefaultParams navigation rules -->
+	<navigation-rule>
+		<from-view-id>/EditDefaultParams.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/NewProject.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
 </faces-config>

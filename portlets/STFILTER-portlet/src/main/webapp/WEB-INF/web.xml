@@ -57,6 +57,24 @@
             if you trigger a link or button action that stays on the same page.  
             Default: "false"</description>  
   </context-param>  
+
+  <!-- STFILTER Init Param -->
+  <context-param>
+    <param-name>analyze_tseri.service.url</param-name>
+    <param-value>http://gf3.ucs.indiana.edu:8888/analyze-tseri-exec/services/AnalyzeTseriExec</param-value>
+    <description>WebServer end point for AanalyzeTserieService </description>
+  </context-param>
+  <context-param>
+    <param-name>work.dir</param-name>
+    <param-value>/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/STFILTER/WDIR/</param-value>
+    <description>Working dir which is accessible through httpd</description>
+  </context-param>
+  <context-param>
+    <param-name>work.url</param-name>
+    <param-value>http://gf3.ucs.indiana.edu:8888/STFILTER/WDIR/</param-value>
+    <description>URL of wor.dir</description>
+  </context-param>
+
   <!-- Extensions Filter -->  
   <filter>  
     <filter-name>extensionsFilter</filter-name>  
@@ -110,15 +128,29 @@
         <servlet-class>org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet</servlet-class>
     </servlet>
 
-
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/RDAHHM-portlet/*</url-pattern>
+        <url-pattern>/STFILTER-portlet/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>PortletServlet</servlet-name>
         <url-pattern>/jsr/STFILTER-portlet</url-pattern>
     </servlet-mapping>
+
+    <!-- BFO -->
+    <servlet>
+		<servlet-name>GraphServlet</servlet-name>         
+		<servlet-class>org.faceless.graph2.tag.GraphServlet</servlet-class>     
+    </servlet>     
+    <servlet-mapping>         
+		<servlet-name>GraphServlet</servlet-name>
+        <url-pattern>/servlet/GraphServlet/*</url-pattern>
+    </servlet-mapping>
+	<taglib>  
+		<taglib-uri>http://big.faceless.org/products/graph</taglib-uri>  
+		<taglib-location>/WEB-INF/lib/bfograph.jar</taglib-location> 
+	</taglib>
+
 </web-app> 
  

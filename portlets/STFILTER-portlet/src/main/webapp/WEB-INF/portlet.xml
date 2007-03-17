@@ -8,12 +8,14 @@ xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0"
     <portlet-class>org.apache.portals.bridges.jsf.FacesPortlet</portlet-class>
       <expiration-cache>0</expiration-cache>
       <init-param>
-      <!--
-      <name>default-view</name>
-       -->
       <name>ViewPage</name>
       <value>/Main.jsp</value>
      </init-param>
+     <init-param>
+      <name>EditPage</name>
+      <value>/EditDefaultParams.jsp</value>
+     </init-param>
+
      <supports>
        <mime-type>text/html</mime-type>
        <portlet-mode>VIEW</portlet-mode>

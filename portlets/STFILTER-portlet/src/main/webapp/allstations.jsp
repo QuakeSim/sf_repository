@@ -19,7 +19,7 @@ mapcenter_y = center_xy[1];
 %>
 <html>
   <head>
-    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTCdqtmO6Kma7uYZgpagQkNe17MQhRS93QdZFchZ2Vy9IpcH0W3nbN34g"
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAuZXFNqpWwSQD2wTwESuVIBRBrwnbnLbpn3Gq_e9fnTRzhOmcJRQo3xdLzghObGORYbtO3zTTnS6jqg"
       type="text/javascript"></script>
   </head>
   <body>
@@ -177,23 +177,6 @@ mapcenter_y = center_xy[1];
            idiv.innerHTML = html;
          }
          printNetworkColors(networkInfo);
-
-	//Needed for Mozilla 2 compatibility
-	function getScrolling() {
-	    var x = 0; var y = 0;
-    		if (document.body && document.body.scrollLeft && !isNaN(document.body.scrollLeft)) {
-	        x = document.body.scrollLeft;
-    		} else if (window.pageXOffset && !isNaN(window.pageXOffset)) {
-        	x = window.pageXOffset;
-    		}
-    		if (document.body && document.body.scrollTop && !isNaN(document.body.scrollTop)) {
-        	y = document.body.scrollTop;
-    		} else if (window.pageYOffset && !isNaN(window.pageYOffset)) {
-        	y = window.pageYOffset;
-    		}
-    		return x + "," + y;
-	}
-
       </script>
 
       <f:view>
