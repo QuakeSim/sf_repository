@@ -7,7 +7,7 @@
 # The following variables must be set for your 
 # individual installation.
 #--------------------------------------------------
-export PORTAL_HOST_NAME=gf2.ucs.indiana.edu
+export PORTAL_HOST_NAME=gf19.ucs.indiana.edu
 export PORTAL_SERVER_URL=http://$PORTAL_HOST_NAME:8080/
 export GOOGLE_KEY="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTCdqtmO6Kma7uYZgpagQkNe17MQhRS93QdZFchZ2Vy9IpcH0W3nbN34g"
 
