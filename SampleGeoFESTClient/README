@@ -1,0 +1,14 @@
+1. Set up the classpath.
+
+export CP=`echo /globalhome/gateway/axis-1_4/lib/*.jar|tr ' ' ':'`:.
+
+2. Compile 
+javac -d . -classpath $CP cgl/quakesim/geofest/*.java
+
+3. Invoke 
+
+java -classpath $CP cgl/quakesim/geofest/GeoFESTClient
+
+4. To use a different service, use something like 
+
+java -classpath $CP cgl/quakesim/geofest/GeoFESTClient http://gf19.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec
