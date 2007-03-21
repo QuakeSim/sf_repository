@@ -104,7 +104,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	  */
     public GeoFESTService(boolean useClassLoader) 
 		  throws Exception {
-
+		  
 		  super();
 		  
 		  if(useClassLoader) {
@@ -189,7 +189,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  
 		  String outputDestDir=baseOutputDestDir+File.separator
 				+userName+File.separator
-				+projectName+"-"+timeStamp;
+				+projectName+File.separator+timeStamp;
 		  
 		  return outputDestDir;
 		  
@@ -204,7 +204,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  
 		  String workDir=baseWorkDir+File.separator
 				+userName+File.separator
-				+projectName+"-"+timeStamp;
+				+projectName+File.separator+timeStamp;
 		  
 		  return workDir;
 		  
@@ -274,6 +274,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  meshOutputUrls[9]=baseUrl+"/"+"refiner.log";
 		  meshOutputUrls[10]=baseUrl+"/"+"LeeRefiner.log";
 		  meshOutputUrls[11]=baseUrl+"/"+"tagbigflt.log";
+
 		  
 		  return meshOutputUrls;
 	 }
@@ -285,7 +286,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  //Need to be careful here because this must follow
 		  //the workDir convention also.
 		  String baseUrl=serverUrl+"/"+userName+"/"
-				+projectName+"/"+"-"+timeStamp;
+				+projectName+"/"+"/"+timeStamp;
 
 		  return baseUrl;
 	 }
@@ -396,7 +397,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 															String projectName,
 															String timeStamp) {
 		  String baseUrl=generateBaseUrl(userName,projectName,timeStamp);
-		  String[] gfUrls=new String[10];
+		  String[] gfUrls=new String[12];
 		  gfUrls[0]=timeStamp;
 		  gfUrls[1]=baseUrl+"/"+projectName+".tar.gz";
 		  gfUrls[2]=baseUrl+"/"+projectName+".inp";
@@ -407,6 +408,9 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  gfUrls[7]=baseUrl+"/"+projectName+".tetra";
 		  gfUrls[8]=baseUrl+"/"+projectName+".tetvols";
 		  gfUrls[9]=baseUrl+"/"+projectName+".toptris";
+		  gfUrls[10]=baseUrl+"/"+"cghist.txt";
+		  gfUrls[11]=baseUrl+"/"+"jobstatus.log";
+
 		  
 		  return gfUrls;
 	 }

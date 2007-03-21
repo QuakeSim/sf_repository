@@ -16,7 +16,7 @@ public class GeotransParamsBean {
 	String reform_steps ="1";
 	String backup_steps="5000";
 	String fault_interval="5000.0";
-	String end_time="500.0";
+	String end_time="50.0";
 	String alpha ="1.0";
 	String time_step="0.5";
 	
@@ -40,7 +40,7 @@ public class GeotransParamsBean {
 	String reportingNodes="All";
 	String reportingElements="All";
 	String printTimesType="Steps";
-	String numberofPrintTimes="20";
+	String numberofPrintTimes="5";
 	String printTimesInterval="1.0";
 	String restartFile="NO_RESTART";
 	String checkpointFile="NO_SAVE";

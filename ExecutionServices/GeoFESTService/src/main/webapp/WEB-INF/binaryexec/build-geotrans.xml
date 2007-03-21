@@ -18,6 +18,9 @@
 </target>
 
 <target name="autoref" depends="MakeWorkDir">
+   <tstamp/>
+   <echo append="true" file="${workdir.prop}/jobstatus.log">Autoref running: ${TSTAMP}.${DSTAMP}
+   </echo>
    <exec executable="${bindir.prop}/autoref.pl" 
          output="${workdir.prop}/autoref.out"
 	      error="${workdir.prop}/autoref.error"
@@ -25,14 +28,23 @@
       <arg value="${projectName.prop}"/>
       <arg value="${mode.prop}"/>
       <env key="PATH" path="${bindir.prop}:/bin:/usr/bin/:$PATH"/>
-   </exec>  
+   </exec>
+   <echo append="true" file="${workdir.prop}/jobstatus.log">Autoref complete: ${TSTAMP}.${DSTAMP}
+   </echo>
+
+<!--
    <copy todir="${outputdest.prop}">
       <fileset dir="${workdir.prop}"/>
    </copy>
+-->
 </target>
 
 <!--This is used to create the GeoFEST input file. -->
 <target name="geotrans">
+   <tstamp/>
+   <echo append="true" 
+         file="${workdir.prop}/jobstatus.log">Geotrans running: ${TSTAMP}.${DSTAMP}
+   </echo>
    <touch file="${workdir.prop}/geotrans.error"/>
    <exec executable="${bindir.prop}/geotrans" 
          output="${workdir.prop}/geotrans.out"
@@ -42,20 +54,39 @@
       <arg value="${projectName.prop}.std"/>
       <arg value="${GFInput.prop}"/>
       <env key="PATH" path="${bindir.prop}:/bin/:/usr/bin:$PATH"/>
-   </exec>
+   </exec>   
+   <echo append="true" file="${workdir.prop}/jobstatus.log">Geotrans complete: ${TSTAMP}.${DSTAMP}
+   </echo>
+
 </target>
 
 <target name="geotrans.tar" depends="geotrans">
+   <tstamp/>
+   <echo append="true" 
+         file="${workdir.prop}/jobstatus.log">Tarring geotrans files: ${TSTAMP}.${DSTAMP}" 
+   </echo>
+
    <delete file="${workdir.prop}/${projectName.prop}.tar.gz"/>
    <delete file="${workdir.prop}/${projectName.prop}.tar"/>
    <tar tarfile="${workdir.prop}/${projectName.prop}.tar.gz" basedir="${workdir.prop}" compression="gzip"/>
+
+   <echo append="true" file="${workdir.prop}/jobstatus.log">Geotrans tar complete: ${TSTAMP}.${DSTAMP}
+   </echo>
+
+<!--
    <copy file="${workdir.prop}/${projectName.prop}.tar.gz" 
          todir="${outputdest.prop}">
    </copy>
+-->
 
 </target>
 
 <target name="GeoFEST" depends="geotrans">
+   <tstamp/>
+   <echo append="true"  
+           file="${workdir.prop}/jobstatus.log">GeoFEST running: ${TSTAMP}.${DSTAMP}
+   </echo>
+
    <exec executable="${bindir.prop}/GeoFEST" 
          output="${workdir.prop}/${GFLog.prop}"
 	      dir="${workdir.prop}">
@@ -64,19 +95,38 @@
       <arg value="${GFLog.prop}"/>
       <env key="PATH" path="${bindir.prop}:/bin/:/usr/bin:$PATH"/>
    </exec>
+   <echo append="true"  file="${workdir.prop}/jobstatus.log">GeoFEST complete: ${TSTAMP}.${DSTAMP}
+   </echo>
+
 </target>
 
 <target name="tar.all" depends="GeoFEST">
+   <tstamp/>
+   <echo append="true" file="${workdir.prop}/jobstatus.log">Creating tar of output: ${TSTAMP}.${DSTAMP}
+   </echo>
+
    <delete file="${workdir.prop}/${projectName.prop}.tar.gz"/>
    <delete file="${workdir.prop}/${projectName.prop}.tar"/>
    <tar tarfile="${workdir.prop}/${projectName.prop}.tar.gz" basedir="${workdir.prop}" compression="gzip"/>
+ 
+   <echo append="true" file="${workdir.prop}/jobstatus.log">GeoFEST complete: ${TSTAMP}.${DSTAMP}
+   </echo>
+
+
+<!--
    <copy todir="${outputdest.prop}">
       <fileset dir="${workdir.prop}"/>
    </copy>
+-->
 </target>
 
 
-<target name="all" depends="GeoFEST"/>
+<target name="all" depends="GeoFEST">
+   <tstamp/>
+   <echo append="true" file="${workdir.prop}/jobstatus.log">Job Complete: ${TSTAMP}.${DSTAMP}
+   </echo>
+
+</target>
 </project>
 
 
