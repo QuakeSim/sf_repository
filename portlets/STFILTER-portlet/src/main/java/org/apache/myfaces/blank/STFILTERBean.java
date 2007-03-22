@@ -215,39 +215,41 @@ public class STFILTERBean extends GenericSopacBean {
 
 	protected void loadPrefs() {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
-		PortletRequest pRequest = (PortletRequest)facesContext.getExternalContext().getRequest();
-		PortletPreferences prefs = pRequest.getPreferences();
-		
-		_siteCode              = prefs.getValue("_siteCode", siteCode);
-		_beginDate             = prefs.getValue("_beginDate", beginDate);
-		_endDate               = prefs.getValue("_endDate", endDate);
-		_bboxChecked           = Boolean.parseBoolean(prefs.getValue("_bboxChecked", Boolean.toString(bboxChecked)));
-		_minLatitude           = Double.parseDouble(prefs.getValue("_minLatitude", Double.toString(minLatitude)));
-		_maxLatitude           = Double.parseDouble(prefs.getValue("_maxLatitude", Double.toString(maxLatitude)));
-		_minLongitude          = Double.parseDouble(prefs.getValue("_minLongitude", Double.toString(minLongitude)));
-		_maxLongitude          = Double.parseDouble(prefs.getValue("_maxLongitude", Double.toString(maxLongitude)));
-		_resource              = prefs.getValue("_resource", resource);
-		_contextGroup          = prefs.getValue("_contextGroup", contextGroup);
-		_contextId             = prefs.getValue("_contextId", contextId);
-		_resOption             = Integer.parseInt(prefs.getValue("_resOption", Integer.toString(resOption)));
-		_termOption            = Integer.parseInt(prefs.getValue("_termOption", Integer.toString(termOption)));
-		_cutoffCriterion       = Double.parseDouble(prefs.getValue("_cutoffCriterion", Double.toString(cutoffCriterion)));
-		_estJumpSpan           = Double.parseDouble(prefs.getValue("_estJumpSpan", Double.toString(estJumpSpan)));
-
-		_weakObsCriteria.north = Double.parseDouble(prefs.getValue("_weakObsCriteria.north", Double.toString(weakObsCriteria.north)));
-		_weakObsCriteria.east  = Double.parseDouble(prefs.getValue("_weakObsCriteria.east", Double.toString(weakObsCriteria.east)));
-		_weakObsCriteria.up    = Double.parseDouble(prefs.getValue("_weakObsCriteria.up", Double.toString(weakObsCriteria.up)));
-
-		_outlierCriteria.north = Double.parseDouble(prefs.getValue("_outlierCriteria.north", Double.toString(outlierCriteria.north)));
-		_outlierCriteria.east  = Double.parseDouble(prefs.getValue("_outlierCriteria.east", Double.toString(outlierCriteria.east)));
-		_outlierCriteria.up    = Double.parseDouble(prefs.getValue("_outlierCriteria.up", Double.toString(outlierCriteria.up)));
-
-		_badObsCriteria.north  = Double.parseDouble(prefs.getValue("_badObsCriteria.north", Double.toString(badObsCriteria.north)));
-		_badObsCriteria.east   = Double.parseDouble(prefs.getValue("_badObsCriteria.east", Double.toString(badObsCriteria.east)));
-		_badObsCriteria.up     = Double.parseDouble(prefs.getValue("_badObsCriteria.up", Double.toString(badObsCriteria.up)));
-
-		_timeInterval.beginTime= Double.parseDouble(prefs.getValue("_timeInterval", Double.toString(timeInterval.beginTime)));			
-		_timeInterval.endTime  = Double.parseDouble(prefs.getValue("_timeInterval", Double.toString(timeInterval.endTime)));
+		if ( facesContext.getExternalContext().getRequest() instanceof PortletRequest) {
+			PortletRequest pRequest = (PortletRequest)facesContext.getExternalContext().getRequest();
+			PortletPreferences prefs = pRequest.getPreferences();
+			
+			_siteCode              = prefs.getValue("_siteCode", siteCode);
+			_beginDate             = prefs.getValue("_beginDate", beginDate);
+			_endDate               = prefs.getValue("_endDate", endDate);
+			_bboxChecked           = Boolean.parseBoolean(prefs.getValue("_bboxChecked", Boolean.toString(bboxChecked)));
+			_minLatitude           = Double.parseDouble(prefs.getValue("_minLatitude", Double.toString(minLatitude)));
+			_maxLatitude           = Double.parseDouble(prefs.getValue("_maxLatitude", Double.toString(maxLatitude)));
+			_minLongitude          = Double.parseDouble(prefs.getValue("_minLongitude", Double.toString(minLongitude)));
+			_maxLongitude          = Double.parseDouble(prefs.getValue("_maxLongitude", Double.toString(maxLongitude)));
+			_resource              = prefs.getValue("_resource", resource);
+			_contextGroup          = prefs.getValue("_contextGroup", contextGroup);
+			_contextId             = prefs.getValue("_contextId", contextId);
+			_resOption             = Integer.parseInt(prefs.getValue("_resOption", Integer.toString(resOption)));
+			_termOption            = Integer.parseInt(prefs.getValue("_termOption", Integer.toString(termOption)));
+			_cutoffCriterion       = Double.parseDouble(prefs.getValue("_cutoffCriterion", Double.toString(cutoffCriterion)));
+			_estJumpSpan           = Double.parseDouble(prefs.getValue("_estJumpSpan", Double.toString(estJumpSpan)));
+	
+			_weakObsCriteria.north = Double.parseDouble(prefs.getValue("_weakObsCriteria.north", Double.toString(weakObsCriteria.north)));
+			_weakObsCriteria.east  = Double.parseDouble(prefs.getValue("_weakObsCriteria.east", Double.toString(weakObsCriteria.east)));
+			_weakObsCriteria.up    = Double.parseDouble(prefs.getValue("_weakObsCriteria.up", Double.toString(weakObsCriteria.up)));
+	
+			_outlierCriteria.north = Double.parseDouble(prefs.getValue("_outlierCriteria.north", Double.toString(outlierCriteria.north)));
+			_outlierCriteria.east  = Double.parseDouble(prefs.getValue("_outlierCriteria.east", Double.toString(outlierCriteria.east)));
+			_outlierCriteria.up    = Double.parseDouble(prefs.getValue("_outlierCriteria.up", Double.toString(outlierCriteria.up)));
+	
+			_badObsCriteria.north  = Double.parseDouble(prefs.getValue("_badObsCriteria.north", Double.toString(badObsCriteria.north)));
+			_badObsCriteria.east   = Double.parseDouble(prefs.getValue("_badObsCriteria.east", Double.toString(badObsCriteria.east)));
+			_badObsCriteria.up     = Double.parseDouble(prefs.getValue("_badObsCriteria.up", Double.toString(badObsCriteria.up)));
+	
+			_timeInterval.beginTime= Double.parseDouble(prefs.getValue("_timeInterval", Double.toString(timeInterval.beginTime)));			
+			_timeInterval.endTime  = Double.parseDouble(prefs.getValue("_timeInterval", Double.toString(timeInterval.endTime)));
+		}
 	}
 
 	/**
@@ -1312,6 +1314,7 @@ public class STFILTERBean extends GenericSopacBean {
 
 	private void savePrefs() {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
+		if ( facesContext.getExternalContext().getRequest() instanceof PortletRequest) {
 		PortletRequest pRequest = (PortletRequest)facesContext.getExternalContext().getRequest();
 		PortletPreferences prefs = pRequest.getPreferences();
 
@@ -1358,6 +1361,7 @@ public class STFILTERBean extends GenericSopacBean {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
 		}
 	}
 

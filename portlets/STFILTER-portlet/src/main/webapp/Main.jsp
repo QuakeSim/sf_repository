@@ -21,7 +21,7 @@
 	                      action="#{stfilterBean.newProject}"/>
  		<h:outputFormat id="output1" escape="false"
                               value="<b>New Project:</b> Create a new project"/>
-
+				<%--
                 <h:commandButton id="button2" value="Load Project" 
 	                      action="#{stfilterBean.loadProject}"/>
                 <h:outputFormat id="output2" escape="false"
@@ -34,6 +34,9 @@
 
                 <h:commandButton id="button4" value="Data Archive" 
 	                      action="#{stfilterBean.loadDataArchive}"/>
+                <h:outputFormat id="output4" escape="false"   
+                              value="<b>Data Archive:</b> Download output files from previous STFILTER runs."/>
+				--%>
               </h:panelGrid>
             </h:form>
         </f:view>
