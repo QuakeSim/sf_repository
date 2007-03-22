@@ -9,8 +9,7 @@
 #--------------------------------------------------
 export PORTAL_HOST_NAME=gf19.ucs.indiana.edu
 export PORTAL_SERVER_URL=http://$PORTAL_HOST_NAME:8080/
-export GOOGLE_KEY="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTCdqtmO6Kma7uYZgpagQkNe17MQhRS93QdZFchZ2Vy9IpcH0W3nbN34g"
-
+export GOOGLE_KEY="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBSP8m3Tdo1MGc8NudJLOupgVl5cGRRkVwnXuOTLyf1PITz2N2IjgsfSkw"
 
 #--------------------------------------------------
 # None of the variables below should be changed.

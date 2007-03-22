@@ -20,6 +20,7 @@
            </resource>
         </resources>
         <plugins>
+<!--
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>maven-jetty6-plugin</artifactId>
@@ -27,6 +28,7 @@
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                 </configuration>
             </plugin>
+-->
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                   <executions>
@@ -37,6 +39,13 @@
                                <replace dir="${basedir}/target/${pom.artifactId}" 
                                         token="gf2.ucs.indiana.edu"
                                         value="${portal.host.name}"/>
+
+                               <replace dir="${basedir}/target/${pom.artifactId}">
+<replacetoken><![CDATA[http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTCdqtmO6Kma7uYZgpagQkNe17MQhRS93QdZFchZ2Vy9IpcH0W3nbN34g]]>
+</replacetoken>
+<replacevalue>${google.key}</replacevalue>
+                               </replace>
+
 
                              </tasks>
                            </configuration>
@@ -200,6 +209,7 @@
              archaic services, so I don't want to waste time
              resolving these dependencies
         -->
+        <!--
         <dependency>
              <groupId>axis</groupId>
              <artifactId>axis</artifactId>
@@ -220,6 +230,45 @@
              <version>0.2</version>
              <scope>provided</scope>
         </dependency>
+        -->
+
+        <!-- Axis jars -->
+        <dependency>
+             <groupId>axis</groupId>
+             <artifactId>axis</artifactId>
+             <version>1.4</version>
+        </dependency>
+
+        <dependency>
+             <groupId>axis</groupId>
+             <artifactId>axis-jaxrpc</artifactId>
+             <version>1.4</version>
+        </dependency>
+
+        <dependency>
+             <groupId>commons-discovery</groupId>
+             <artifactId>commons-discovery</artifactId>
+             <version>0.2</version>
+        </dependency>
+
+        <dependency>
+             <groupId>commons-logging</groupId>
+             <artifactId>commons-logging</artifactId>
+             <version>1.0.4</version>
+        </dependency>
+
+        <dependency>
+             <groupId>axis</groupId>
+             <artifactId>axis-wsdl4j</artifactId>
+             <version>1.5.1</version>
+        </dependency>
+
+        <dependency>
+             <groupId>axis</groupId>
+             <artifactId>axis-saaj</artifactId>
+             <version>1.4</version>
+        </dependency>
+
 
         <!--
        Generic Project Dependencies.
