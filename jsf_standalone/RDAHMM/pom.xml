@@ -18,8 +18,7 @@
                <directory>src/main/resources</directory>
                <filtering>true</filtering>
            </resource>
-        </resources>
-        <plugins>
+        </resources>        <plugins>
 <!--
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
@@ -38,12 +37,18 @@
                              <tasks>
                                <replace dir="${basedir}/target/${pom.artifactId}" 
                                         token="gf2.ucs.indiana.edu"
-                                        value="${portal.host.name}"/>
+                                        value="${portal.host.name}">
+                                  <include name="**/*.jsp"/>
+                                  <include name="**/*.xml"/>
+                               </replace>
 
                                <replace dir="${basedir}/target/${pom.artifactId}">
 <replacetoken><![CDATA[http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTCdqtmO6Kma7uYZgpagQkNe17MQhRS93QdZFchZ2Vy9IpcH0W3nbN34g]]>
 </replacetoken>
 <replacevalue>${google.key}</replacevalue>
+                                  <include name="**/*.jsp"/>
+                                  <include name="**/*.xml"/>
+
                                </replace>
 
 
@@ -104,7 +109,7 @@
     <repositories>
         <repository>
             <releases>
-                <enabled>false</enabled>
+                <enabled>true</enabled>
             </releases>
             <snapshots>
                 <enabled>true</enabled>
@@ -120,6 +125,10 @@
         <repository>
             <id>crisisgrid-maven-repo</id>
             <url>http://www.crisisgrid.org/maven2</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+
         </repository>
 
         <repository>
