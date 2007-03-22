@@ -1,0 +1,502 @@
+#
+# An unexpected error has been detected by Java Runtime Environment:
+#
+#  SIGBUS (0x7) at pc=0xf7ee4c03, pid=27862, tid=3395673008
+#
+# Java VM: Java HotSpot(TM) Server VM (1.6.0-b105 mixed mode)
+# Problematic frame:
+# C  [libzip.so+0xbc03]
+#
+# If you would like to submit a bug report, please visit:
+#   http://java.sun.com/webapps/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x08906400):  JavaThread "ContainerBackgroundProcessor[StandardEngine[Catalina]]" daemon [_thread_in_native, id=27885]
+
+siginfo:si_signo=7, si_errno=0, si_code=2, si_addr=0xc85a1a62
+
+Registers:
+EAX=0x085599e0, EBX=0xf7ee971c, ECX=0xc8590000, EDX=0x00cbf000
+ESP=0xca65bf08, EBP=0xca65bf30, ESI=0xc85a1a45, EDI=0x089d5fb8
+EIP=0xf7ee4c03, CR2=0xc85a1a62, EFLAGS=0x00010282
+
+Top of Stack: (sp=0xca65bf08)
+0xca65bf08:   00000030 ca514188 ca514190 ca51457c
+0xca65bf18:   09038ee8 09038ee8 f7ee4bbb f7ee971c
+0xca65bf28:   08c83e54 00000000 ca65bf60 f7ee4fbb
+0xca65bf38:   085599e0 08c83e54 00000000 00000000
+0xca65bf48:   08906400 ca65be00 20f2fe8d f7ee971c
+0xca65bf58:   ca65bfa8 089064e8 ca65c3d0 f7edc169
+0xca65bf68:   085599e0 ca65bfa8 00000018 00000018
+0xca65bf78:   ca65bfa8 f4ed9207 ca65bfb0 ca65c018 
+
+Instructions: (pc=0xf7ee4c03)
+0xf7ee4bf3:   8b 70 04 8b 45 08 8b 48 10 8b 50 1c 01 ce 29 d6
+0xf7ee4c03:   0f b6 46 1d 0f b6 56 1c c1 e0 08 09 c2 89 55 f0 
+
+Stack: [0xca60d000,0xca65e000),  sp=0xca65bf08,  free space=315k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [libzip.so+0xbc03]
+C  [libzip.so+0xbfbb]  ZIP_GetEntry+0x10b
+C  [libzip.so+0x3169]  Java_java_util_zip_ZipFile_getEntry+0xc9
+J  java.util.zip.ZipFile.getEntry(JLjava/lang/String;Z)J
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+J  java.util.zip.ZipFile.getEntry(JLjava/lang/String;Z)J
+J  java.util.jar.JarFile.getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;
+J  org.apache.catalina.loader.WebappClassLoader.findResourceInternal(Ljava/lang/String;Ljava/lang/String;)Lorg/apache/catalina/loader/ResourceEntry;
+J  org.apache.catalina.loader.WebappClassLoader.findClassInternal(Ljava/lang/String;)Ljava/lang/Class;
+J  org.apache.catalina.loader.WebappClassLoader.findClass(Ljava/lang/String;)Ljava/lang/Class;
+J  org.apache.catalina.loader.WebappClassLoader.loadClass(Ljava/lang/String;Z)Ljava/lang/Class;
+J  org.apache.catalina.loader.WebappClassLoader.loadClass(Ljava/lang/String;)Ljava/lang/Class;
+j  java.lang.ClassLoader.loadClassInternal(Ljava/lang/String;)Ljava/lang/Class;+2
+v  ~StubRoutines::call_stub
+j  java.lang.Class.getDeclaredFields0(Z)[Ljava/lang/reflect/Field;+0
+j  java.lang.Class.privateGetDeclaredFields(Z)[Ljava/lang/reflect/Field;+73
+J  org.apache.catalina.loader.WebappClassLoader.clearReferences()V
+j  org.apache.catalina.loader.WebappClassLoader.stop()V+1
+j  org.apache.catalina.loader.WebappLoader.stop()V+110
+j  org.apache.catalina.core.StandardContext.stop()V+379
+J  org.apache.catalina.startup.HostConfig.checkResources(Lorg/apache/catalina/startup/HostConfig$DeployedApplication;)V
+J  org.apache.catalina.startup.HostConfig.check()V
+j  org.apache.catalina.startup.HostConfig.lifecycleEvent(Lorg/apache/catalina/LifecycleEvent;)V+13
+J  org.apache.catalina.core.ContainerBase.backgroundProcess()V
+J  org.apache.catalina.core.ContainerBase$ContainerBackgroundProcessor.processChildren(Lorg/apache/catalina/Container;Ljava/lang/ClassLoader;)V
+j  org.apache.catalina.core.ContainerBase$ContainerBackgroundProcessor.run()V+81
+j  java.lang.Thread.run()V+11
+v  ~StubRoutines::call_stub
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x08bef000 JavaThread "TP-Monitor" daemon [_thread_blocked, id=27916]
+  0x088cc000 JavaThread "TP-Processor4" daemon [_thread_in_native, id=27915]
+  0x0819ec00 JavaThread "TP-Processor3" daemon [_thread_blocked, id=27914]
+  0x082b5000 JavaThread "TP-Processor2" daemon [_thread_blocked, id=27913]
+  0x08544000 JavaThread "TP-Processor1" daemon [_thread_blocked, id=27912]
+  0xc91f5000 JavaThread "http-8080-Monitor" [_thread_blocked, id=27911]
+  0xc91f4000 JavaThread "http-8080-Processor25" daemon [_thread_blocked, id=27910]
+  0xc91f3400 JavaThread "http-8080-Processor24" daemon [_thread_in_native, id=27909]
+  0xc91f2400 JavaThread "http-8080-Processor23" daemon [_thread_blocked, id=27908]
+  0xc91f1c00 JavaThread "http-8080-Processor22" daemon [_thread_blocked, id=27907]
+  0xc8fe5400 JavaThread "http-8080-Processor21" daemon [_thread_blocked, id=27906]
+  0xc8fe4800 JavaThread "http-8080-Processor20" daemon [_thread_blocked, id=27905]
+  0xc8fe3800 JavaThread "http-8080-Processor19" daemon [_thread_blocked, id=27904]
+  0xc8fe2c00 JavaThread "http-8080-Processor18" daemon [_thread_blocked, id=27903]
+  0xc8fe2000 JavaThread "http-8080-Processor17" daemon [_thread_blocked, id=27902]
+  0xc9078c00 JavaThread "http-8080-Processor16" daemon [_thread_blocked, id=27901]
+  0xc9077c00 JavaThread "http-8080-Processor15" daemon [_thread_blocked, id=27900]
+  0xc9077000 JavaThread "http-8080-Processor14" daemon [_thread_blocked, id=27899]
+  0xc9547400 JavaThread "http-8080-Processor13" daemon [_thread_blocked, id=27898]
+  0xc9546800 JavaThread "http-8080-Processor12" daemon [_thread_blocked, id=27897]
+  0xc9545c00 JavaThread "http-8080-Processor11" daemon [_thread_blocked, id=27896]
+  0xc95dcc00 JavaThread "http-8080-Processor10" daemon [_thread_blocked, id=27895]
+  0xc95dbc00 JavaThread "http-8080-Processor9" daemon [_thread_blocked, id=27894]
+  0xc95db400 JavaThread "http-8080-Processor8" daemon [_thread_blocked, id=27893]
+  0xc88f4000 JavaThread "http-8080-Processor7" daemon [_thread_blocked, id=27892]
+  0xc88f3400 JavaThread "http-8080-Processor6" daemon [_thread_blocked, id=27891]
+  0xc9e67000 JavaThread "http-8080-Processor5" daemon [_thread_blocked, id=27890]
+  0x0830d400 JavaThread "http-8080-Processor4" daemon [_thread_blocked, id=27889]
+  0x08429c00 JavaThread "http-8080-Processor3" daemon [_thread_blocked, id=27888]
+  0x08559000 JavaThread "http-8080-Processor2" daemon [_thread_blocked, id=27887]
+  0x083eec00 JavaThread "http-8080-Processor1" daemon [_thread_blocked, id=27886]
+=>0x08906400 JavaThread "ContainerBackgroundProcessor[StandardEngine[Catalina]]" daemon [_thread_in_native, id=27885]
+  0xcae71800 JavaThread "Low Memory Detector" daemon [_thread_blocked, id=27882]
+  0xcae70000 JavaThread "CompilerThread1" daemon [_thread_blocked, id=27881]
+  0xcae6ec00 JavaThread "CompilerThread0" daemon [_thread_blocked, id=27880]
+  0xcae6d800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=27879]
+  0xcae6c800 JavaThread "Surrogate Locker Thread (CMS)" daemon [_thread_blocked, id=27878]
+  0xcae5cc00 JavaThread "Finalizer" daemon [_thread_blocked, id=27877]
+  0xcae5c400 JavaThread "Reference Handler" daemon [_thread_blocked, id=27876]
+  0x08059000 JavaThread "main" [_thread_in_native, id=27863]
+
+Other Threads:
+  0xcae59c00 VMThread [id=27875]
+  0xcae73400 WatcherThread [id=27883]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap
+ par new generation   total 118016K, used 47213K [0xcc8f0000, 0xd48f0000, 0xd48f0000)
+  eden space 104960K,  44% used [0xcc8f0000, 0xcf67d9c0, 0xd2f70000)
+  from space 13056K,   4% used [0xd2f70000, 0xd2ffda90, 0xd3c30000)
+  to   space 13056K,   0% used [0xd3c30000, 0xd3c30000, 0xd48f0000)
+ concurrent mark-sweep generation total 393216K, used 22903K [0xd48f0000, 0xec8f0000, 0xec8f0000)
+ concurrent-mark-sweep perm gen total 131072K, used 73542K [0xec8f0000, 0xf48f0000, 0xf48f0000)
+
+Dynamic libraries:
+0064e000-00663000 r-xp 00000000 fd:00 509091                             /lib/ld-2.3.4.so
+00663000-00664000 r-xp 00014000 fd:00 509091                             /lib/ld-2.3.4.so
+00664000-00665000 rwxp 00015000 fd:00 509091                             /lib/ld-2.3.4.so
+00667000-0078a000 r-xp 00000000 fd:00 507918                             /lib/tls/libc-2.3.4.so
+0078a000-0078b000 r-xp 00123000 fd:00 507918                             /lib/tls/libc-2.3.4.so
+0078b000-0078e000 rwxp 00124000 fd:00 507918                             /lib/tls/libc-2.3.4.so
+0078e000-00790000 rwxp 0078e000 00:00 0 
+00792000-00794000 r-xp 00000000 fd:00 507976                             /lib/libdl-2.3.4.so
+00794000-00796000 rwxp 00001000 fd:00 507976                             /lib/libdl-2.3.4.so
+00798000-007b9000 r-xp 00000000 fd:00 507978                             /lib/tls/libm-2.3.4.so
+007b9000-007bb000 rwxp 00020000 fd:00 507978                             /lib/tls/libm-2.3.4.so
+007cf000-007dd000 r-xp 00000000 fd:00 507974                             /lib/tls/libpthread-2.3.4.so
+007dd000-007df000 rwxp 0000d000 fd:00 507974                             /lib/tls/libpthread-2.3.4.so
+007df000-007e1000 rwxp 007df000 00:00 0 
+00a8e000-00a9d000 r-xp 00000000 fd:00 507906                             /lib/libresolv-2.3.4.so
+00a9d000-00a9f000 rwxp 0000f000 fd:00 507906                             /lib/libresolv-2.3.4.so
+00a9f000-00aa1000 rwxp 00a9f000 00:00 0 
+06000000-0657e000 r-xp 00000000 00:14 65306653                           /globalhome/globalbin/jdk1.6.0/jre/lib/i386/server/libjvm.so
+0657e000-065b5000 rwxp 0057e000 00:14 65306653                           /globalhome/globalbin/jdk1.6.0/jre/lib/i386/server/libjvm.so
+065b5000-069d5000 rwxp 065b5000 00:00 0 
+08048000-08052000 r-xp 00000000 00:14 65323677                           /globalhome/globalbin/jdk1.6.0/bin/java
+08052000-08053000 rwxp 00009000 00:14 65323677                           /globalhome/globalbin/jdk1.6.0/bin/java
+08053000-0925b000 rwxp 08053000 00:00 0 
+c7c00000-c7cfc000 rwxp c7c00000 00:00 0 
+c7cfc000-c7d00000 ---p c7cfc000 00:00 0 
+c7d00000-c7d53000 rwxp c7d00000 00:00 0 
+c7d53000-c7e00000 ---p c7d53000 00:00 0 
+c7e00000-c7ef3000 rwxp c7e00000 00:00 0 
+c7ef3000-c7f00000 ---p c7ef3000 00:00 0 
+c7f00000-c7ff2000 rwxp c7f00000 00:00 0 
+c7ff2000-c8000000 ---p c7ff2000 00:00 0 
+c8000000-c80fc000 rwxp c8000000 00:00 0 
+c80fc000-c8100000 ---p c80fc000 00:00 0 
+c8449000-c844e000 r-xs 00016000 00:14 639114                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/xml-apis-1.0.b2.jar
+c844e000-c8451000 r-xs 00019000 00:14 639120                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/wsdl4j.jar
+c8451000-c8463000 r-xs 000ca000 00:14 639108                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/tomahawk-1.1.0.jar
+c8463000-c8475000 r-xs 000ca000 00:14 639108                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/tomahawk-1.1.0.jar
+c8475000-c847a000 r-xs 00032000 00:14 639096                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/soap.jar
+c847a000-c847c000 r-xs 00003000 00:14 639113                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/saaj.jar
+c847c000-c847e000 r-xs 0000e000 00:14 639105                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/oro-2.0.8.jar
+c847e000-c8487000 r-xs 00069000 00:14 639116                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/myfaces-impl-1.1.0.jar
+c8487000-c848c000 r-xs 00035000 00:14 639118                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/myfaces-api-1.1.0.jar
+c848c000-c848e000 r-xs 00004000 00:14 639092                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/jstl-1.1.2.jar
+c848e000-c8490000 r-xs 00007000 00:14 639106                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/jaxrpc.jar
+c8490000-c851a000 r-xs 00348000 00:14 639119                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/grwsXmlBeansSchemas-1.0.jar
+c851a000-c851c000 r-xs 00013000 00:14 639098                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/commons-validator-1.1.4.jar
+c851c000-c851e000 r-xs 00008000 00:14 639097                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/commons-logging-1.0.4.jar
+c851e000-c8522000 r-xs 0002f000 00:14 639115                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/commons-lang-2.1.jar
+c8522000-c8524000 r-xs 00004000 00:14 639099                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/commons-fileupload-1.0.jar
+c8524000-c8527000 r-xs 00019000 00:14 639104                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/commons-el-1.0.jar
+c8527000-c852a000 r-xs 0000f000 00:14 639093                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/commons-discovery.jar
+c852a000-c852d000 r-xs 0000f000 00:14 639112                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/commons-discovery-0.2.jar
+c852d000-c8531000 r-xs 0001f000 00:14 639117                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/commons-digester-1.7.jar
+c8531000-c853e000 r-xs 0007c000 00:14 639109                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/commons-collections-3.1.jar
+c853e000-c8540000 r-xs 0000a000 00:14 639094                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/commons-codec-1.3.jar
+c8540000-c8545000 r-xs 0002a000 00:14 639110                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/commons-beanutils-1.7.0.jar
+c8545000-c8557000 r-xs 00125000 00:14 639101                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/axis.jar
+c8557000-c855a000 r-xs 0001c000 00:14 639095                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/axis-wsdl4j-1.5.1.jar
+c855a000-c855b000 r-xs 00004000 00:14 639107                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/axis-saaj-1.4.jar
+c855b000-c855d000 r-xs 00006000 00:14 639100                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/axis-jaxrpc-1.4.jar
+c855d000-c8571000 r-xs 00173000 00:14 639103                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/axis-1.4.jar
+c8571000-c858f000 r-xs 00181000 00:14 639102                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/WebServices-1.0.jar
+c858f000-c8590000 r-xs 00002000 00:14 639111                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/GenericQuakeSimProject-1.0-SNAPSHOT.jar
+c8590000-c86bc000 r-xs 00cbf000 00:14 639121                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM/WEB-INF/lib/GRWS_SubmitQuery-4.0-SNAPSHOT.jar
+c86bc000-c86bf000 ---p c86bc000 00:00 0 
+c86bf000-c870d000 rwxp c86bf000 00:00 0 
+c870d000-c8710000 ---p c870d000 00:00 0 
+c8710000-c875e000 rwxp c8710000 00:00 0 
+c875e000-c8761000 ---p c875e000 00:00 0 
+c8761000-c87af000 rwxp c8761000 00:00 0 
+c87af000-c87b2000 ---p c87af000 00:00 0 
+c87b2000-c88f7000 rwxp c87b2000 00:00 0 
+c88f7000-c8900000 ---p c88f7000 00:00 0 
+c8900000-c89f5000 rwxp c8900000 00:00 0 
+c89f5000-c8a00000 ---p c89f5000 00:00 0 
+c8a00000-c8b00000 rwxp c8a00000 00:00 0 
+c8b1a000-c8b1d000 ---p c8b1a000 00:00 0 
+c8b1d000-c8b6b000 rwxp c8b1d000 00:00 0 
+c8b6b000-c8b6e000 ---p c8b6b000 00:00 0 
+c8b6e000-c8bbc000 rwxp c8b6e000 00:00 0 
+c8bbc000-c8bbf000 ---p c8bbc000 00:00 0 
+c8bbf000-c8c0d000 rwxp c8bbf000 00:00 0 
+c8c0d000-c8c10000 ---p c8c0d000 00:00 0 
+c8c10000-c8c5e000 rwxp c8c10000 00:00 0 
+c8c5e000-c8c61000 ---p c8c5e000 00:00 0 
+c8c61000-c8caf000 rwxp c8c61000 00:00 0 
+c8caf000-c8cb2000 ---p c8caf000 00:00 0 
+c8cb2000-c8dfb000 rwxp c8cb2000 00:00 0 
+c8dfb000-c8e00000 ---p c8dfb000 00:00 0 
+c8e00000-c8f00000 rwxp c8e00000 00:00 0 
+c8f00000-c8fe6000 rwxp c8f00000 00:00 0 
+c8fe6000-c9000000 ---p c8fe6000 00:00 0 
+c9000000-c90fd000 rwxp c9000000 00:00 0 
+c90fd000-c9100000 ---p c90fd000 00:00 0 
+c9100000-c91ff000 rwxp c9100000 00:00 0 
+c91ff000-c9200000 ---p c91ff000 00:00 0 
+c920d000-c9210000 ---p c920d000 00:00 0 
+c9210000-c925e000 rwxp c9210000 00:00 0 
+c925e000-c9261000 ---p c925e000 00:00 0 
+c9261000-c92af000 rwxp c9261000 00:00 0 
+c92af000-c92b2000 ---p c92af000 00:00 0 
+c92b2000-c93f5000 rwxp c92b2000 00:00 0 
+c93f5000-c9400000 ---p c93f5000 00:00 0 
+c9400000-c94f7000 rwxp c9400000 00:00 0 
+c94f7000-c9500000 ---p c94f7000 00:00 0 
+c9500000-c9600000 rwxp c9500000 00:00 0 
+c9625000-c9628000 ---p c9625000 00:00 0 
+c9628000-c9676000 rwxp c9628000 00:00 0 
+c9676000-c9679000 ---p c9676000 00:00 0 
+c9679000-c96c7000 rwxp c9679000 00:00 0 
+c96c7000-c96ca000 ---p c96c7000 00:00 0 
+c96ca000-c9718000 rwxp c96ca000 00:00 0 
+c9718000-c971b000 ---p c9718000 00:00 0 
+c971b000-c9769000 rwxp c971b000 00:00 0 
+c9769000-c977b000 r-xs 000ca000 00:14 508023                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/PlotGRWSTimeSeries/WEB-INF/lib/tomahawk-1.1.0.jar
+c9781000-c9784000 ---p c9781000 00:00 0 
+c9784000-c97d2000 rwxp c9784000 00:00 0 
+c97d2000-c97d5000 ---p c97d2000 00:00 0 
+c97d5000-c9823000 rwxp c97d5000 00:00 0 
+c9823000-c9835000 r-xs 000ca000 00:14 606344                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/StationMonitor-portlet/WEB-INF/lib/tomahawk-1.1.0.jar
+c984a000-c984c000 r-xs 00009000 00:14 606341                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/StationMonitor-portlet/WEB-INF/lib/portals-bridges-jsf-1.0.jar
+c988f000-c98a1000 r-xs 000ca000 00:14 573515                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/MeshGenerator-portlet/WEB-INF/lib/tomahawk-1.1.0.jar
+c98a1000-c98b3000 r-xs 000ca000 00:14 540804                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM-portlet/WEB-INF/lib/tomahawk-1.1.0.jar
+c98b3000-c98c5000 r-xs 000ca000 00:14 524464                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/STFILTER-portlet/WEB-INF/lib/tomahawk-1.1.0.jar
+c98d5000-c98d7000 r-xs 00009000 00:14 524462                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/STFILTER-portlet/WEB-INF/lib/portals-bridges-jsf-1.0.jar
+c98df000-c98e1000 r-xs 00009000 00:14 573513                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/MeshGenerator-portlet/WEB-INF/lib/portals-bridges-jsf-1.0.jar
+c98e1000-c98e3000 r-xs 00009000 00:14 540802                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RDAHMM-portlet/WEB-INF/lib/portals-bridges-jsf-1.0.jar
+c9923000-c9926000 ---p c9923000 00:00 0 
+c9926000-c9974000 rwxp c9926000 00:00 0 
+c9974000-c9977000 ---p c9974000 00:00 0 
+c9977000-c99c5000 rwxp c9977000 00:00 0 
+c99c5000-c99c8000 ---p c99c5000 00:00 0 
+c99c8000-c9a16000 rwxp c99c8000 00:00 0 
+c9a16000-c9a19000 ---p c9a16000 00:00 0 
+c9a19000-c9a67000 rwxp c9a19000 00:00 0 
+c9a67000-c9a6a000 ---p c9a67000 00:00 0 
+c9a6a000-c9ab8000 rwxp c9a6a000 00:00 0 
+c9ab8000-c9abb000 ---p c9ab8000 00:00 0 
+c9abb000-c9b09000 rwxp c9abb000 00:00 0 
+c9b09000-c9b10000 r-xs 00106000 00:14 65306722                           /globalhome/globalbin/jdk1.6.0/jre/lib/resources.jar
+c9b5e000-c9b61000 ---p c9b5e000 00:00 0 
+c9b61000-c9baf000 rwxp c9b61000 00:00 0 
+c9baf000-c9bb2000 ---p c9baf000 00:00 0 
+c9bb2000-c9d00000 rwxp c9bb2000 00:00 0 
+c9d2c000-c9d3e000 r-xs 000ca000 00:14 557193                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/StationMonitor/WEB-INF/lib/tomahawk-1.1.0.jar
+c9d41000-c9d44000 ---p c9d41000 00:00 0 
+c9d44000-c9d92000 rwxp c9d44000 00:00 0 
+c9d92000-c9da4000 r-xs 000ca000 00:14 475291                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/SimpleRDAHMMClient/WEB-INF/lib/tomahawk-1.1.0.jar
+c9daf000-c9db2000 ---p c9daf000 00:00 0 
+c9db2000-c9eff000 rwxp c9db2000 00:00 0 
+c9eff000-c9f00000 ---p c9eff000 00:00 0 
+c9f47000-c9f4a000 ---p c9f47000 00:00 0 
+c9f4a000-c9f98000 rwxp c9f4a000 00:00 0 
+c9f98000-c9fa0000 r-xs 00043000 00:14 247893                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/XMLChartDataset.jar
+c9fa0000-c9fb0000 r-xs 0008d000 00:14 247875                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/gridsphere-portal-2.1.jar
+c9fb0000-c9fb2000 r-xs 00002000 00:14 247869                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/odmg-3.0.jar
+c9fb2000-c9fb4000 r-xs 0000a000 00:14 247887                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/commons-io-1.0.jar
+c9fb4000-c9fb6000 r-xs 0000a000 00:14 247891                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/jaimlib.jar
+c9fb6000-c9fb8000 r-xs 00005000 00:14 247874                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/log4j-sandbox-0.3alpha.jar
+c9fb8000-c9fe3000 r-xs 00194000 00:14 247864                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/spring-1.2.3.jar
+c9fe3000-c9fe5000 r-xs 00010000 00:14 247880                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/portlet-api-2.1.jar
+c9fe5000-c9fe9000 r-xs 00033000 00:14 247863                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/commons-httpclient-2.0.1.jar
+c9fe9000-c9fed000 r-xs 0003d000 00:14 247854                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/hsqldb-1.7.1.jar
+c9fed000-c9fee000 r-xs 00003000 00:14 247873                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/portals-bridges-common-0.4-SNAPSHOT.jar
+c9fee000-c9ff1000 r-xs 00014000 00:14 247888                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/jakarta-oro.jar
+c9ff1000-ca000000 r-xs 000ee000 00:14 247853                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/ant.jar
+ca000000-ca0fb000 rwxp ca000000 00:00 0 
+ca0fb000-ca100000 ---p ca0fb000 00:00 0 
+ca100000-ca200000 rwxp ca100000 00:00 0 
+ca21c000-ca21f000 ---p ca21c000 00:00 0 
+ca21f000-ca26d000 rwxp ca21f000 00:00 0 
+ca26d000-ca273000 r-xs 00025000 00:14 247866                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/commons-collections-2.1.1.jar
+ca273000-ca274000 r-xs 00003000 00:14 247876                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/ant-contrib-0.3.jar
+ca274000-ca27f000 r-xs 000d0000 00:14 247862                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/jfreechart-0.9.18.jar
+ca27f000-ca281000 r-xs 00007000 00:14 247858                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/tmf.jar
+ca281000-ca284000 r-xs 00035000 00:14 247892                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/cactus-framework-20030401.jar
+ca284000-ca28b000 r-xs 0004e000 00:14 247882                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/mail.jar
+ca28b000-ca28d000 r-xs 0000d000 00:14 247870                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/portlet-jsr-api-2.1.jar
+ca28d000-ca28f000 r-xs 0000d000 00:14 247889                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/commons-beanutils-1.3.jar
+ca28f000-ca296000 r-xs 00056000 00:14 247872                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/jcommon-0.9.3.jar
+ca296000-ca29d000 r-xs 0004f000 00:14 247890                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/c3p0-0.8.4.5.jar
+ca29d000-ca2a0000 r-xs 00022000 00:14 247884                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/jdom-1.0.jar
+ca2a0000-ca2a3000 r-xs 00012000 00:14 247877                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/gridsphere-provider-2.1.jar
+ca2a3000-ca2b6000 r-xs 00126000 00:14 247886                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/castor-0.9.7-xml.jar
+ca2b6000-ca2c2000 r-xs 000b8000 00:14 247878                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/poi-2.5.1-final-20040804.jar
+ca2c2000-ca2c4000 r-xs 00001000 00:14 247857                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/jta.jar
+ca2c4000-ca2c6000 r-xs 0000c000 00:14 247861                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/activation.jar
+ca2c6000-ca2c8000 r-xs 00004000 00:14 247883                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/commons-fileupload-1.0.jar
+ca2c8000-ca2ca000 r-xs 00004000 00:14 247867                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/gridsphere-service-framework-2.1.jar
+ca2ca000-ca2cc000 r-xs 00005000 00:14 247881                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/aspectjrt.jar
+ca2cc000-ca2ce000 r-xs 00006000 00:14 247859                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/jakarta-regexp-1.2.jar
+ca2ce000-ca2cf000 r-xs 00006000 00:14 247856                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/cactus-integration-ant-20030401.jar
+ca2cf000-ca2d1000 r-xs 00008000 00:14 247855                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/commons-logging-1.0.4.jar
+ca2d1000-ca2d9000 r-xs 0004f000 00:14 247868                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/log4j-1.2.8.jar
+ca2d9000-ca2e8000 r-xs 000de000 00:14 247879                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/hibernate2.jar
+ca2e8000-ca2ef000 r-xs 00045000 00:14 247865                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/cglib-full-2.0.2.jar
+ca2ef000-ca2f7000 r-xs 0006f000 00:14 247885                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/dom4j-1.4.jar
+ca2f7000-ca2f8000 r-xs 0000c000 00:14 247871                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/ehcache-0.9.jar
+ca2f8000-ca2fb000 r-xs 0001b000 00:14 247860                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/shared/lib/junit-3.8.1.jar
+ca300000-ca3ff000 rwxp ca300000 00:00 0 
+ca3ff000-ca400000 ---p ca3ff000 00:00 0 
+ca43b000-ca44d000 r-xs 000ca000 00:14 589967                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RealTimeRDAHMM/WEB-INF/lib/tomahawk-1.1.0.jar
+ca45e000-ca470000 r-xs 000ca000 00:14 622845                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RealTimeRDAHMM-portlet/WEB-INF/lib/tomahawk-1.1.0.jar
+ca483000-ca485000 r-xs 00009000 00:14 589964                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RealTimeRDAHMM/WEB-INF/lib/portals-bridges-jsf-1.0.jar
+ca485000-ca487000 r-xs 00009000 00:14 622842                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/RealTimeRDAHMM-portlet/WEB-INF/lib/portals-bridges-jsf-1.0.jar
+ca4b9000-ca4cc000 r-xp 00000000 00:14 65306673                           /globalhome/globalbin/jdk1.6.0/jre/lib/i386/libnet.so
+ca4cc000-ca4cd000 rwxp 00013000 00:14 65306673                           /globalhome/globalbin/jdk1.6.0/jre/lib/i386/libnet.so
+ca4cd000-ca4d0000 r-xs 000ca000 00:14 65306742                           /globalhome/globalbin/jdk1.6.0/jre/lib/ext/localedata.jar
+ca4d0000-ca4d1000 r-xs 00001000 00:14 246001                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/server/lib/servlets-invoker.jar
+ca4d1000-ca4d2000 r-xs 00005000 00:14 246003                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/server/lib/servlets-webdav.jar
+ca4d2000-ca4d3000 r-xs 00005000 00:14 245992                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/server/lib/catalina-ant-jmx.jar
+ca4d3000-ca4d4000 r-xs 00004000 00:14 246008                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/server/lib/tomcat-jkstatus-ant.jar
+ca4d4000-ca4d6000 r-xs 00005000 00:14 246005                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/server/lib/tomcat-apr.jar
+ca4d6000-ca4da000 r-xs 0002f000 00:14 245994                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/server/lib/catalina-cluster.jar
+ca4da000-ca4dc000 r-xs 0000e000 00:14 245996                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/server/lib/catalina-storeconfig.jar
+ca4dc000-ca4de000 r-xs 00005000 00:14 245993                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/server/lib/catalina-ant.jar
+ca500000-ca5fa000 rwxp ca500000 00:00 0 
+ca5fa000-ca600000 ---p ca5fa000 00:00 0 
+ca60d000-ca610000 ---p ca60d000 00:00 0 
+ca610000-ca65e000 rwxp ca610000 00:00 0 
+ca65e000-ca65f000 r-xs 00004000 00:14 246000                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/server/lib/servlets-default.jar
+ca68b000-ca693000 r-xs 00097000 00:14 245997                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/server/lib/catalina.jar
+ca693000-ca695000 r-xs 00019000 00:14 245998                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/server/lib/commons-modeler.jar
+ca6c5000-ca6c6000 r-xs 00004000 00:14 246006                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/server/lib/tomcat-coyote.jar
+ca6c6000-ca6c8000 r-xs 00027000 00:14 246004                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/server/lib/tomcat-ajp.jar
+ca6c8000-ca6cd000 r-xs 0005f000 00:14 245985                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/common/lib/jasper-compiler.jar
+ca6f5000-ca6fa000 r-xs 0003a000 00:14 246009                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/server/lib/tomcat-util.jar
+ca6fa000-ca6fc000 r-xs 00014000 00:14 246007                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/server/lib/tomcat-http.jar
+ca6fc000-ca6fe000 r-xs 0001b000 00:14 245995                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/server/lib/catalina-optional.jar
+ca6fe000-ca700000 r-xs 00011000 00:14 245986                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/common/lib/jasper-runtime.jar
+ca700000-ca7ff000 rwxp ca700000 00:00 0 
+ca7ff000-ca800000 ---p ca7ff000 00:00 0 
+ca811000-ca813000 r-xs 0000a000 00:14 245990                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/common/lib/naming-resources.jar
+ca835000-ca839000 r-xp 00000000 fd:00 507950                             /lib/libnss_dns-2.3.4.so
+ca839000-ca83b000 rwxp 00003000 fd:00 507950                             /lib/libnss_dns-2.3.4.so
+ca83b000-ca846000 r-xs 0011e000 00:14 245984                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/common/lib/jasper-compiler-jdt.jar
+ca846000-ca849000 r-xs 00023000 00:14 245988                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/common/lib/naming-factory-dbcp.jar
+ca849000-ca84b000 r-xs 00016000 00:14 245991                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/common/lib/servlet-api.jar
+ca84b000-ca84d000 r-xs 0000b000 00:14 245987                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/common/lib/jsp-api.jar
+ca84d000-ca850000 r-xs 00019000 00:14 245983                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/common/lib/commons-el.jar
+ca850000-ca851000 r-xs 00007000 00:14 245989                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/common/lib/naming-factory.jar
+ca851000-ca853000 r-xs 00007000 00:14 245980                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/common/i18n/tomcat-i18n-es.jar
+ca853000-ca855000 r-xs 00008000 00:14 245979                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/common/i18n/tomcat-i18n-en.jar
+ca855000-ca857000 r-xs 00007000 00:14 245982                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/common/i18n/tomcat-i18n-ja.jar
+ca857000-ca859000 r-xs 00006000 00:14 245981                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/common/i18n/tomcat-i18n-fr.jar
+ca859000-ca85b000 r-xs 00002000 00:14 245972                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/bin/tomcat-juli.jar
+ca85b000-ca85d000 r-xs 00005000 00:14 245962                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/bin/commons-logging-api.jar
+ca85d000-ca85f000 r-xs 00001000 00:14 245961                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/bin/commons-daemon.jar
+ca85f000-ca866000 r-xs 0005d000 00:14 245768                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/bin/jmx.jar
+ca866000-ca867000 r-xs 00005000 00:14 245958                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/bin/bootstrap.jar
+ca867000-ca868000 ---p ca867000 00:00 0 
+ca868000-ca8e8000 rwxp ca868000 00:00 0 
+ca8e8000-ca8eb000 ---p ca8e8000 00:00 0 
+ca8eb000-ca939000 rwxp ca8eb000 00:00 0 
+ca939000-ca93c000 ---p ca939000 00:00 0 
+ca93c000-ca9ba000 rwxp ca93c000 00:00 0 
+ca9ba000-ca9bd000 ---p ca9ba000 00:00 0 
+ca9bd000-caa3b000 rwxp ca9bd000 00:00 0 
+caa3b000-caa3e000 ---p caa3b000 00:00 0 
+caa3e000-caa8c000 rwxp caa3e000 00:00 0 
+caa8c000-caa8f000 ---p caa8c000 00:00 0 
+caa8f000-caadd000 rwxp caa8f000 00:00 0 
+caadd000-cacdd000 r-xp 00000000 fd:03 608615                             /usr/lib/locale/locale-archive
+cacdd000-cace0000 ---p cacdd000 00:00 0 
+cace0000-cad2e000 rwxp cace0000 00:00 0 
+cad2e000-cad31000 ---p cad2e000 00:00 0 
+cad31000-cad7f000 rwxp cad31000 00:00 0 
+cad7f000-cad80000 ---p cad7f000 00:00 0 
+cad80000-caefe000 rwxp cad80000 00:00 0 
+caefe000-caf00000 ---p caefe000 00:00 0 
+caf1f000-caf4f000 rwxp caf1f000 00:00 0 
+caf4f000-cb0c9000 r-xs 02c68000 00:14 65306748                           /globalhome/globalbin/jdk1.6.0/jre/lib/rt.jar
+cb0c9000-cb0e0000 r-xs 00110000 00:14 245769                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/common/endorsed/xercesImpl.jar
+cb0e0000-cb0e8000 r-xs 00028000 00:14 245770                             /globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/common/endorsed/xml-apis.jar
+cb0e8000-cb0e9000 ---p cb0e8000 00:00 0 
+cb0e9000-cb169000 rwxp cb0e9000 00:00 0 
+cb169000-cb16a000 ---p cb169000 00:00 0 
+cb16a000-cb1ea000 rwxp cb16a000 00:00 0 
+cb1ea000-cb1eb000 ---p cb1ea000 00:00 0 
+cb1eb000-cc6ee000 rwxp cb1eb000 00:00 0 
+cc6ee000-cc8ef000 rwxp cc6ee000 00:00 0 
+cc8ef000-f48f0000 rwxp cc8ef000 00:00 0 
+f48fa000-f48fb000 ---p f48fa000 00:00 0 
+f48fb000-f497b000 rwxp f48fb000 00:00 0 
+f497b000-f497c000 ---p f497b000 00:00 0 
+f497c000-f49fc000 rwxp f497c000 00:00 0 
+f49fc000-f49fd000 ---p f49fc000 00:00 0 
+f49fd000-f4a7d000 rwxp f49fd000 00:00 0 
+f4a7d000-f4a7e000 ---p f4a7d000 00:00 0 
+f4a7e000-f4afe000 rwxp f4a7e000 00:00 0 
+f4afe000-f4aff000 ---p f4afe000 00:00 0 
+f4aff000-f4b7f000 rwxp f4aff000 00:00 0 
+f4b7f000-f4b80000 ---p f4b7f000 00:00 0 
+f4b80000-f4cfd000 rwxp f4b80000 00:00 0 
+f4cfd000-f4d00000 ---p f4cfd000 00:00 0 
+f4d17000-f4d18000 ---p f4d17000 00:00 0 
+f4d18000-f4d98000 rwxp f4d18000 00:00 0 
+f4d98000-f4d99000 ---p f4d98000 00:00 0 
+f4d99000-f4e33000 rwxp f4d99000 00:00 0 
+f4e33000-f4ed9000 rwxp f4e33000 00:00 0 
+f4ed9000-f5541000 rwxp f4ed9000 00:00 0 
+f5541000-f7ed9000 rwxp f5541000 00:00 0 
+f7ed9000-f7ee8000 r-xp 00000000 00:14 65306669                           /globalhome/globalbin/jdk1.6.0/jre/lib/i386/libzip.so
+f7ee8000-f7eea000 rwxp 0000e000 00:14 65306669                           /globalhome/globalbin/jdk1.6.0/jre/lib/i386/libzip.so
+f7eea000-f7f0d000 r-xp 00000000 00:14 65306665                           /globalhome/globalbin/jdk1.6.0/jre/lib/i386/libjava.so
+f7f0d000-f7f0f000 rwxp 00023000 00:14 65306665                           /globalhome/globalbin/jdk1.6.0/jre/lib/i386/libjava.so
+f7f0f000-f7f18000 r-xp 00000000 fd:00 507953                             /lib/libnss_files-2.3.4.so
+f7f18000-f7f1a000 rwxp 00008000 fd:00 507953                             /lib/libnss_files-2.3.4.so
+f7f1a000-f7f2c000 r-xp 00000000 fd:00 507937                             /lib/libnsl-2.3.4.so
+f7f2c000-f7f2e000 rwxp 00011000 fd:00 507937                             /lib/libnsl-2.3.4.so
+f7f2e000-f7f30000 rwxp f7f2e000 00:00 0 
+f7f47000-f7f4f000 rwxs 00000000 fd:02 475138                             /tmp/hsperfdata_gateway/27862
+f7f4f000-f7f57000 r-xp 00000000 fd:00 507980                             /lib/tls/librt-2.3.4.so
+f7f57000-f7f59000 rwxp 00007000 fd:00 507980                             /lib/tls/librt-2.3.4.so
+f7f59000-f7f63000 rwxp f7f59000 00:00 0 
+f7f6d000-f7f78000 r-xp 00000000 00:14 65306664                           /globalhome/globalbin/jdk1.6.0/jre/lib/i386/libverify.so
+f7f78000-f7f79000 rwxp 0000b000 00:14 65306664                           /globalhome/globalbin/jdk1.6.0/jre/lib/i386/libverify.so
+f7f79000-f7f7f000 r-xp 00000000 00:14 65306651                           /globalhome/globalbin/jdk1.6.0/jre/lib/i386/native_threads/libhpi.so
+f7f7f000-f7f80000 rwxp 00006000 00:14 65306651                           /globalhome/globalbin/jdk1.6.0/jre/lib/i386/native_threads/libhpi.so
+f7f80000-f7f81000 rwxp f7f80000 00:00 0 
+f7f81000-f7f82000 r-xp f7f81000 00:00 0 
+f7f82000-f7f85000 ---p f7f82000 00:00 0 
+f7f85000-f7fd5000 rwxp f7f85000 00:00 0 
+f7fd5000-f7fdc000 r-xp 00000000 00:14 65306667                           /globalhome/globalbin/jdk1.6.0/jre/lib/i386/jli/libjli.so
+f7fdc000-f7fde000 rwxp 00006000 00:14 65306667                           /globalhome/globalbin/jdk1.6.0/jre/lib/i386/jli/libjli.so
+f7ffd000-f7ffe000 rwxp f7ffd000 00:00 0 
+ffff6000-ffffe000 rwxp ffff6000 00:00 0 
+ffffe000-fffff000 ---p 00000000 00:00 0 
+
+VM Arguments:
+jvm_args: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Djava.util.logging.config.file=/globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/conf/logging.properties -Xms512m -Xmx512m -XX:NewSize=128m -XX:PermSize=16m -XX:MaxPermSize=128m -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -Djava.endorsed.dirs=/globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/common/endorsed -Dcatalina.base=/globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20 -Dcatalina.home=/globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20 -Djava.io.tmpdir=/globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/temp
+java_command: org.apache.catalina.startup.Bootstrap start
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=/globalhome/globalbin/jdk1.6.0/
+PATH=/globalhome/gateway/QuakeSim2/third_party_tools/apache-ant-1.6.5/bin:/globalhome/gateway/QuakeSim2/third_party_tools/maven-2.0.4/bin:/globalhome/globalbin/jdk1.6.0/bin:/globalhome/globalbin/jdk1.6.0/db/frameworks/NetworkServer/bin:/globalhome/globalbin/jdk1.6.0/db/frameworks/embedded/bin:/globalhome/globalbin/jdk1.6.0/jre/bin:/globalhome/globalbin/subversion-1.4.3/doc/tools/bin:/globalhome/globalbin/jdk1.5.0_11/bin:/globalhome/globalbin/jdk1.5.0_11/jre/bin:/globalhome/globalbin/httpd/bin:/globalhome/globalbin/apr/bin:/globalhome/globalbin/subversion/bin:/globalhome/globalbin/apr-util/bin:/globalhome/globalbin/jdk1.6.0//bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/globalhome/gateway/bin
+LD_LIBRARY_PATH=/globalhome/globalbin/jdk1.6.0/jre/lib/i386/server:/globalhome/globalbin/jdk1.6.0/jre/lib/i386:/globalhome/globalbin/jdk1.6.0/jre/../lib/i386
+SHELL=/bin/bash
+DISPLAY=156.56.104.30:0.0
+
+Signal Handlers:
+SIGSEGV: [libjvm.so+0x51cf50], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGBUS: [libjvm.so+0x51cf50], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGFPE: [libjvm.so+0x43d040], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGPIPE: [libjvm.so+0x43d040], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGILL: [libjvm.so+0x43d040], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGUSR1: SIG_DFL, sa_mask[0]=0x00000000, sa_flags=0x00000000
+SIGUSR2: [libjvm.so+0x43f050], sa_mask[0]=0x00000000, sa_flags=0x10000004
+SIGHUP: [libjvm.so+0x43ea70], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGINT: SIG_IGN, sa_mask[0]=0x00000000, sa_flags=0x00000000
+SIGQUIT: [libjvm.so+0x43ea70], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGTERM: [libjvm.so+0x43ea70], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGUSR2: [libjvm.so+0x43f050], sa_mask[0]=0x00000000, sa_flags=0x10000004
+
+
+---------------  S Y S T E M  ---------------
+
+OS:Red Hat Enterprise Linux ES release 4 (Nahant)
+
+uname:Linux 2.6.9-5.ELsmp #1 SMP Wed Jan 5 19:29:47 EST 2005 x86_64
+libc:glibc 2.3.4 NPTL 2.3.4 
+rlimit: STACK 10240k, CORE 0k, NPROC 71680, NOFILE 1024, AS infinity
+load average:0.15 0.03 0.01
+
+CPU:total 8 family 6, cmov, cx8, fxsr, mmx, sse, sse2
+
+Memory: 4k page, physical 8165620k(5471508k free), swap 2097144k(2097144k free)
+
+vm_info: Java HotSpot(TM) Server VM (1.6.0-b105) for linux-x86, built on Nov 29 2006 01:11:40 by "java_re" with gcc 3.2.1-7a (J2SE release)
+
