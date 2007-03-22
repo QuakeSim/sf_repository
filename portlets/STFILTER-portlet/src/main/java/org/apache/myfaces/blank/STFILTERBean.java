@@ -216,6 +216,7 @@ public class STFILTERBean extends GenericSopacBean {
 	protected void loadPrefs() {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		if ( facesContext.getExternalContext().getRequest() instanceof PortletRequest) {
+			System.out.println("[!!] request is PortletRequest. Pref. will be loaded.");
 			PortletRequest pRequest = (PortletRequest)facesContext.getExternalContext().getRequest();
 			PortletPreferences prefs = pRequest.getPreferences();
 			
@@ -247,8 +248,10 @@ public class STFILTERBean extends GenericSopacBean {
 			_badObsCriteria.east   = Double.parseDouble(prefs.getValue("_badObsCriteria.east", Double.toString(badObsCriteria.east)));
 			_badObsCriteria.up     = Double.parseDouble(prefs.getValue("_badObsCriteria.up", Double.toString(badObsCriteria.up)));
 	
-			_timeInterval.beginTime= Double.parseDouble(prefs.getValue("_timeInterval", Double.toString(timeInterval.beginTime)));			
-			_timeInterval.endTime  = Double.parseDouble(prefs.getValue("_timeInterval", Double.toString(timeInterval.endTime)));
+			_timeInterval.beginTime= Double.parseDouble(prefs.getValue("_timeInterval.beginTime", Double.toString(timeInterval.beginTime)));			
+			_timeInterval.endTime  = Double.parseDouble(prefs.getValue("_timeInterval.endTime", Double.toString(timeInterval.endTime)));
+		} else {
+			System.out.println("[!!] request is NOT PortletRequest. Pref. will NOT be loaded.");
 		}
 	}
 
@@ -432,8 +435,23 @@ public class STFILTERBean extends GenericSopacBean {
 			call.setTargetEndpointAddress(new java.net.URL(endpoint));
 			call.setOperationName(new QName("http://soapinterop.org/",
 					"execATS"));
+
+//			public static String[] execATS(String siteCode,  
+//					int resOption, int termOption, double cutoffCriterion, double estJumpSpan,
+//					double weakObsCriteriaEast, double weakObsCriteriaNorth, double weakObsCriteriaUp,
+//					double outlierCriteriaEast, double outlierCriteriaNorth, double outlierCriteriaUp,
+//					double badObsCriteriaEast, double badObsCriteriaNorth, double badObsCriteriaUp,
+//					double timeIntervalBeginTime, double timeIntervalEndTime,
+//					String dataUrl, double[][] globalParam, double[][] siteParam) {
 			
-			String[] ret = (String[]) call.invoke(new Object[] {siteCode, dataUrl, globalParam, siteParam});
+			String[] ret = (String[]) call.invoke(new Object[] { siteCode,
+					new Integer(this.resOption), new Integer(this.termOption), 
+					new Double(this.cutoffCriterion), new Double(this.estJumpSpan),
+					new Double(this.weakObsCriteria.east), new Double(this.weakObsCriteria.north), new Double(this.weakObsCriteria.up),
+					new Double(this.outlierCriteria.east), new Double(this.outlierCriteria.north), new Double(this.outlierCriteria.up),
+					new Double(this.badObsCriteria.east), new Double(this.badObsCriteria.north), new Double(this.badObsCriteria.up),
+					new Double(this.timeInterval.beginTime), new Double(this.timeInterval.endTime),
+					dataUrl, globalParam, siteParam });
 			
 			System.out.println("Output: ");
 			for (int i = 0; i < ret.length; i++) {
@@ -1315,6 +1333,7 @@ public class STFILTERBean extends GenericSopacBean {
 	private void savePrefs() {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		if ( facesContext.getExternalContext().getRequest() instanceof PortletRequest) {
+		System.out.println("[!!] request is PortletRequest. Pref. will save.");
 		PortletRequest pRequest = (PortletRequest)facesContext.getExternalContext().getRequest();
 		PortletPreferences prefs = pRequest.getPreferences();
 
@@ -1347,8 +1366,8 @@ public class STFILTERBean extends GenericSopacBean {
 			prefs.setValue("_badObsCriteria.east", Double.toString(_badObsCriteria.east));
 			prefs.setValue("_badObsCriteria.up", Double.toString(_badObsCriteria.up));
 			
-			prefs.setValue("_timeInterval", Double.toString(_timeInterval.beginTime));			
-			prefs.setValue("_timeInterval", Double.toString(_timeInterval.endTime));
+			prefs.setValue("_timeInterval.beginTime", Double.toString(_timeInterval.beginTime));			
+			prefs.setValue("_timeInterval.endTime", Double.toString(_timeInterval.endTime));
 			
 			prefs.store();
 			System.out.println("[!!] Pref. saved.");
@@ -1362,6 +1381,8 @@ public class STFILTERBean extends GenericSopacBean {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		} else {
+			System.out.println("[!!] request is NOT PortletRequest. Pref. will NOT save.");
 		}
 	}
 

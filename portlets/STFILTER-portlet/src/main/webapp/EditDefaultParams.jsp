@@ -118,14 +118,14 @@ YAHOO.util.Event.addListener(window, "load", init);
 
 		<h:outputText value="Resource"/>
 		<h:panelGroup>
-			<h:selectOneListbox title="Resource:" value="#{stfilterBean._resource}" size="1">
+			<h:selectOneListbox id="lbResource" title="Resource:" value="#{stfilterBean._resource}" size="1">
 				<f:selectItem itemValue="procCoords" itemLabel="Processed Coordinates"/>
 			</h:selectOneListbox>
 		</h:panelGroup>
 
 		<h:outputText value="Context Group"/>
 		<h:panelGroup>
-			<h:selectOneListbox title="Context Group" value="#{stfilterBean._contextGroup}" size="1">
+			<h:selectOneListbox id="lbConGroup" title="Context Group" value="#{stfilterBean._contextGroup}" size="1">
 				<f:selectItem itemValue="reasonComb" itemLabel="REASoN combination"/>
 				<f:selectItem itemValue="sopacGlobk" itemLabel="SOPAC GLOBK"/>
 				<f:selectItem itemValue="jplGipsy" itemLabel="JPL GIPSY"/>
@@ -133,25 +133,31 @@ YAHOO.util.Event.addListener(window, "load", init);
 			</h:selectOneListbox>
 		</h:panelGroup>
 
+		<h:outputText value="Context Id:"/>
+		<h:panelGroup>
+			<h:inputText id="inConId" size="5" value="#{stfilterBean.contextId}"/>
+			<h:outputText value="(4=current REASoN combination coordinates)"/>
+		</h:panelGroup>
+
 		<f:facet name="footer">
 			<h:panelGrid columns="2">
 			<f:facet name="header">
 				<h:panelGroup>
-				<h:selectBooleanCheckbox value="#{stfilterBean._bboxChecked}" title="Use Bounding Box Settings Below (optional; check box):"/>
+				<h:selectBooleanCheckbox id="cbBBox" value="#{stfilterBean._bboxChecked}" title="Use Bounding Box Settings Below (optional; check box):"/>
 				<h:outputText value="Use Bounding Box Settings"/>
 				</h:panelGroup>
 			</f:facet>
 			<h:outputText value="Minimum Latitude:"/>
-			<h:inputText size="10" value="#{stfilterBean._minLatitude}"/>
+			<h:inputText id="inMinLat" size="10" value="#{stfilterBean._minLatitude}"/>
 			
 			<h:outputText value="Maximum Latitude:"/>
-			<h:inputText size="10" value="#{stfilterBean._maxLatitude}"/>
+			<h:inputText id="inMaxLat" size="10" value="#{stfilterBean._maxLatitude}"/>
 	
 			<h:outputText value="Minimum Longitude:"/>
-			<h:inputText size="10" value="#{stfilterBean._minLongitude}"/>
+			<h:inputText id="inMinLon" size="10" value="#{stfilterBean._minLongitude}"/>
 	
 			<h:outputText value="Maximum Longitude:"/>
-			<h:inputText size="10" value="#{stfilterBean._maxLongitude}"/>
+			<h:inputText id="inMaxLon" size="10" value="#{stfilterBean._maxLongitude}"/>
 			</h:panelGrid>
 		</f:facet>
 		</h:panelGrid> 
@@ -189,7 +195,7 @@ YAHOO.util.Event.addListener(window, "load", init);
 
 
 		<h:outputText value="Weak Obs Criteria (Year):"/> 
-		<h:dataTable value="#{stfilterBean._weakObsCriteria}" var="weakObsCriteria" border="0">
+		<h:dataTable id="dtWeak" value="#{stfilterBean._weakObsCriteria}" var="weakObsCriteria" border="0">
 			<h:column>
 			<h:inputText id="weakObsCriteria1" value="#{weakObsCriteria.east}" required="true"/>
 			</h:column>
@@ -202,7 +208,7 @@ YAHOO.util.Event.addListener(window, "load", init);
 		</h:dataTable>
 
 		<h:outputText value="Outlier Criteria (mm):"/>
-		<h:dataTable value="#{stfilterBean._outlierCriteria}" var="outlierCriteria" border="0">
+		<h:dataTable id="dtOutlier" value="#{stfilterBean._outlierCriteria}" var="outlierCriteria" border="0">
 			<h:column>
 			<h:inputText id="outlierCriteria1" value="#{outlierCriteria.east}" required="true"/>
 			</h:column>
@@ -215,7 +221,7 @@ YAHOO.util.Event.addListener(window, "load", init);
 		</h:dataTable>
 
 		<h:outputText value="Bad Obs Criteria (mm):"/>
-		<h:dataTable value="#{stfilterBean._badObsCriteria}" var="badObsCriteria" border="0">
+		<h:dataTable id="dtBad" value="#{stfilterBean._badObsCriteria}" var="badObsCriteria" border="0">
 			<h:column>
 			<h:inputText id="badObsCriteria1" value="#{badObsCriteria.east}" required="true"/>
 			</h:column>
@@ -228,7 +234,7 @@ YAHOO.util.Event.addListener(window, "load", init);
 		</h:dataTable>
 		
 		<h:outputText value="Time Interval:"/>
-		<h:dataTable value="#{stfilterBean._timeInterval}" var="timeInterval" border="0">
+		<h:dataTable id="dtTime" value="#{stfilterBean._timeInterval}" var="timeInterval" border="0">
 			<h:column>
 			<h:inputText id="timeInterval1" value="#{timeInterval.beginTime}" required="true"/>
 			</h:column>
@@ -238,15 +244,15 @@ YAHOO.util.Event.addListener(window, "load", init);
 		</h:dataTable>
 
 		</h:panelGrid> 
-		<h:commandButton id="BT_SAVE" value="Save" action="#{stfilterBean.savePref}"/>
+		<h:commandButton id="btSave" value="Save" action="#{stfilterBean.savePref}"/>
 	</h:form>
 
 	</hr>
-	<h:form>
-		<h:commandLink id="link1" action="back">
-		<h:outputText id="linkText" value="#{stfilterBean.codeName} Main Menu"/>
-	</h:commandLink>
-</h:form>
+	<h:form id="fmBack">
+		<h:commandLink id="lnBack" action="back">
+		<h:outputText value="#{stfilterBean.codeName} Main Menu"/>
+		</h:commandLink>
+	</h:form>
 </f:view>
 </body>
 </html>
