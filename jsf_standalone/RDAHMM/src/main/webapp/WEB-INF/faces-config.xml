@@ -9,65 +9,31 @@
 	<!-- managed beans of the simple hello world app -->
 	<managed-bean>
 		<managed-bean-name>rdahmmBean</managed-bean-name>
-		<managed-bean-class>org.apache.myfaces.blank.RDAHMMBean</managed-bean-class>
+		<managed-bean-class>cgl.webservices.RDAHMMBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
+
                 <!--Who we are-->
                 <managed-property>
                    <property-name>codeName</property-name>
                    <value>RDAHMM</value>
                 </managed-property>
 
+                <!--RDAHMM Service URL-->
+                <managed-property>
+                   <property-name>rdahmmServiceUrl</property-name>
+                   <value>http://gf19.ucs.indiana.edu:8080/rdahmmexec/services/RDAHMMExec</value>
+                </managed-property>
+
+
                 <!-- Needed for the context service-->
                 <managed-property>
                    <property-name>contextUrl</property-name>
-                   <value>http://gf2.ucs.indiana.edu:8080/WebServices/services/ContextManager</value>
+                   <value>http://gf19.ucs.indiana.edu:8080/WebServices/services/ContextManager</value>
                  </managed-property>
                  <managed-property>
                    <property-name>contextBasePath</property-name>
-                   <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users/</value>
+                   <value>/globalhome/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/WebServices/WEB-INF/Descriptors/users/</value>
                 </managed-property>
-
-                <!-- These are execution host params -->
-                <managed-property>
-                   <property-name>antUrl</property-name>
-                   <value>
-                     http://danube.ucs.indiana.edu:8045/axis/services/AntVisco
-                   </value>
-                </managed-property>
-                <managed-property>
-                   <property-name>binPath</property-name>
-                   <value>/home/gateway/GEMCodes/RDAHMM2/bin/</value>
-                </managed-property>
-                <managed-property>
-                   <property-name>baseWorkDir</property-name>
-                   <value>/home/gateway/RDAHMM_WDIR</value>
-                </managed-property>
-                <managed-property>
-                   <property-name>fileServiceUrl</property-name>
-                   <value>http://danube.ucs.indiana.edu:8045/GCWS/services/FileService</value>
-                </managed-property>
-
-
-                <!-- These are gnuplot host params -->
-                <managed-property>
-                   <property-name>gnuplotAntUrl</property-name>
-                   <value>
-                     http://danube.ucs.indiana.edu:8045/axis/services/AntVisco
-                   </value>
-                 </managed-property>
-                <managed-property>
-                   <property-name>gnuplotBinPath</property-name>
-                   <value>/home/gateway/GEMCodes/Gnuplot/rdahmm/plotXYZ/</value>
-                 </managed-property>
-                <managed-property>
-                   <property-name>gnuplotBaseWorkDir</property-name>
-                   <value>/home/gateway/RDAHMM_WDIR</value>
-                 </managed-property>
-                <managed-property>
-                   <property-name>gnuplotFileServiceUrl</property-name>
-                   <value>http://danube.ucs.indiana.edu:8045/GCWS/services/FileService</value>
-                 </managed-property>
-
 	</managed-bean>
 	
 	<!-- navigation rules for Main.jsp -->
@@ -75,15 +41,11 @@
 		<from-view-id>/Main.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>rdahmm-new-project-created</from-outcome>
-			<to-view-id>/NewProject.jsp</to-view-id>
+			<to-view-id>/allstations.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>rdahmm-list-old-projects</from-outcome>
 			<to-view-id>/LoadProject.jsp</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>rdahmm-load-database-page</from-outcome>
-			<to-view-id>/DBQuery.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>rdahmm-load-data-archive</from-outcome>
@@ -94,32 +56,6 @@
 			<to-view-id>/PlotData.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
-	<!-- navigation rules for NewProject.jsp -->
-	<navigation-rule>
-		<from-view-id>/NewProject.jsp</from-view-id>
-		<navigation-case>
-			<from-outcome>rdahmm-back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>rdahmm-parameters-set</from-outcome>
-			<to-view-id>/SetInputFile.jsp</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>rdahmm-parameters-to-textfield</from-outcome>
-			<to-view-id>/SetInputFile.jsp</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>rdahmm-parameters-to-database</from-outcome>
-			<to-view-id>/SetInputFileFromDB.jsp</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>rdahmm-parameters-to-googlemap</from-outcome>
-			<to-view-id>/allstations.jsp</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-
        
         
         <!-- Allstations navigation rules -->
@@ -131,33 +67,7 @@
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>rdahmm-parameters-to-database</from-outcome>
-			<to-view-id>/SetInputFileFromDB.jsp</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-        
-        <!-- SetInputFile navigation rules -->
-	<navigation-rule>
-		<from-view-id>/SetInputFile.jsp</from-view-id>
-		<navigation-case>
-			<from-outcome>rdahmm-back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>rdahmm-rdahmm-launched</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-
-        <!-- SetInputFileFromDB navigation rules -->
-	<navigation-rule>
-		<from-view-id>/SetInputFileFromDB.jsp</from-view-id>
-		<navigation-case>
-			<from-outcome>rdahmm-back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>rdahmm-display-query-results</from-outcome>
-			<to-view-id>/SetInputFile.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
         
@@ -173,42 +83,7 @@
 		<from-view-id>/LoadProject.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>rdahmm-project-populated</from-outcome>
-			<to-view-id>/NewProject.jsp</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-        
-        <!-- DB query rules -->
-	<navigation-rule>
-		<from-view-id>/DBQuery.jsp</from-view-id>
-		<navigation-case>
-			<from-outcome>rdahmm-back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>rdahmm-back-to-main</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>rdahmm-display-query-results</from-outcome>
-			<to-view-id>/DisplayQueryResults.jsp</to-view-id>
-		</navigation-case>
- 
-		<navigation-case>
-			<from-outcome>rdahmm-query-results-url</from-outcome>
-			<to-view-id>/DisplayQueryResults.jsp</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-
-        <!-- Display query rules -->
-	<navigation-rule>
-		<from-view-id>/DisplayQueryResults.jsp</from-view-id>
-		<navigation-case>
-			<from-outcome>rdahmm-back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>rdahmm-project-populated</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
+			<to-view-id>/allstations.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 
@@ -222,10 +97,6 @@
 		<navigation-case>
 			<from-outcome>rdahmm-back-to-main</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>rdahmm-download-data-file</from-outcome>
-			<to-view-id>/DownloadData.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 
@@ -241,6 +112,7 @@
 			<to-view-id>/ViewPlot.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+
         <!-- ViewPlot rules -->
 	<navigation-rule>
 		<from-view-id>/ViewPlot.jsp</from-view-id>
