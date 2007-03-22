@@ -5,8 +5,6 @@
   "http://java.sun.com/dtd/web-facesconfig_1_1.dtd" >
 
 <faces-config>
-	
-	<!-- managed beans of the simple hello world app -->
 	<managed-bean>
 		<managed-bean-name>rdahmmBean</managed-bean-name>
 		<managed-bean-class>cgl.webservices.RDAHMMBean</managed-bean-class>
@@ -66,8 +64,17 @@
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>rdahmm-parameters-to-database</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
+			<from-outcome>rdahmm-output-display</from-outcome>
+			<to-view-id>/allstations.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>rdahmm-parameters-set</from-outcome>
+			<to-view-id>/allstations.jsp</to-view-id>
+		</navigation-case>
+
+		<navigation-case>
+			<from-outcome>rdahmm-new-project-created</from-outcome>
+			<to-view-id>/allstations.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
         

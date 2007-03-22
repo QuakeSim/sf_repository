@@ -37,24 +37,6 @@
                      required="true"/>
        <h:message for="nmodel" showDetail="true" showSummary="true" errorStyle="color: red"/>
 
-       <h:outputText value="Annealing Step Size:"/>
-       <h:inputText id="annealStep" value="#{rdahmmBean.annealStep}"
-                     required="true"/>
-       <h:message for="annealStep" showDetail="true" showSummary="true" errorStyle="color: red"/>
-
-       <h:outputText value="Random Number Seed:"/>
-       <h:inputText id="randomSeed" value="#{rdahmmBean.randomSeed}"
-                     required="true"/>
-       <h:message for="randomSeed" showDetail="true" showSummary="true" errorStyle="color: red"/>
-
-
-       <h:outputText value="OutputType:"/>
-       <h:selectOneListbox 
-		value="#{rdahmmBean.outputType}"size="1">
-    		<f:selectItem itemValue="gauss"
- 			      itemLabel="Gaussian"/>
-       </h:selectOneListbox>
-
     </h:panelGrid>
     <h:commandButton value="Pick Station from Map"
                      action="#{rdahmmBean.paramsThenMap}"/>

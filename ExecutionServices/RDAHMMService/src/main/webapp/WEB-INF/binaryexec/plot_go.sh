@@ -18,6 +18,6 @@ if [ $# == 2 ]; then
   sed 's/INPUT.xyz/'$1'/g;s/INPUT.Q/'$2'/g' plot_xyz.plt > plot$1.plt
   sed 's/INPUT.xyz/'$1'/g;s/INPUT.Q/'$2'/g' plot_func.plt > plot$1_func.plt
 
-  /usr/local/bin/gnuplot < $1.plt
+  `which gnuplot` < $1.plt
   rm *$1*.plt
 fi

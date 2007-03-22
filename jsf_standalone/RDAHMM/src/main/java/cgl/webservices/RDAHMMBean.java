@@ -73,9 +73,11 @@ public class RDAHMMBean extends GenericSopacBean{
     String beginDate="2005-01-01";
     String endDate="2006-01-10";
 	 String resource="procCoords";
-	 String contextGroup="reasonComb";
+	 String contextGroup="sopacGlobk";
 	 String minMaxLatLon="";
-	 String contextId="4";
+	 String contextId="5";
+
+	 Vector rdahmmRunValues=new Vector();
     
 	 
     //RDAHMM file extensions
@@ -83,7 +85,7 @@ public class RDAHMMBean extends GenericSopacBean{
 	 
     //RDAHMM properties
     protected String codeName="RDAHMM";
-    protected int numModelStates=2;
+    protected int numModelStates=4;
     protected int randomSeed=1;
     protected String outputType="";
     protected double annealStep=0.01;    
@@ -119,28 +121,17 @@ public class RDAHMMBean extends GenericSopacBean{
      * navigations.
      */
     public String newProject() throws Exception{
+		  System.out.println("New project created");
 		  isInitialized=getIsInitialized();
 		  if(!isInitialized) {
 				initWebServices();
 		  }
+
+		  rdahmmRunValues.clear();
 		  
 		  return ("rdahmm-new-project-created");
     }
     
-    public String paramsThenTextArea() throws Exception {
-		  setParameterValues();
-		  return "rdahmm-parameters-to-textfield";
-    }
-	 
-    public String paramsThenDB() throws Exception {
-		  setParameterValues();
-		  return "rdahmm-parameters-to-database";
-    }
-	 
-    public String paramsThenMap() throws Exception {
-		  setParameterValues();
-		  return "rdahmm-parameters-to-googlemap";
-    }
 	 
     public String setParameterValues() throws Exception {
         //Do real logic
@@ -153,6 +144,23 @@ public class RDAHMMBean extends GenericSopacBean{
 		  cm.setCurrentProperty(contextName,"hostName",hostName);
 		  cm.setCurrentProperty(contextName,"numModelStates",
 										numModelStates+"");
+		  cm.setCurrentProperty(contextName,"siteCode",siteCode);
+		  cm.setCurrentProperty(contextName,"beginDate",beginDate);
+		  cm.setCurrentProperty(contextName,"endDate",endDate);
+		  cm.setCurrentProperty(contextName,"projectInput",projectInput);
+		  cm.setCurrentProperty(contextName,"projectRange",projectRange);
+		  cm.setCurrentProperty(contextName,"projectQ",projectQ);
+		  cm.setCurrentProperty(contextName,"projectPi",projectPi);
+		  cm.setCurrentProperty(contextName,"projectMinval",projectMinval);
+		  cm.setCurrentProperty(contextName,"projectMaxval",projectMaxval);
+		  cm.setCurrentProperty(contextName,"projectL",projectL);
+		  cm.setCurrentProperty(contextName,"projectB",projectB);
+		  cm.setCurrentProperty(contextName,"projectQ",projectQ);
+		  cm.setCurrentProperty(contextName,"projectStdout",projectStdout);
+		  cm.setCurrentProperty(contextName,"projectGraphX",projectGraphX);
+		  cm.setCurrentProperty(contextName,"projectGraphY",projectGraphY);
+		  cm.setCurrentProperty(contextName,"projectGraphZ",projectGraphZ);
+
 		  return "rdahmm-parameters-set";
     }
     
@@ -196,7 +204,10 @@ public class RDAHMMBean extends GenericSopacBean{
 	  *
 	  * It returns URLs for the plots, numerical values, etc.
 	  */
-	 public String[] runBlockingRDAHMM_Full() throws Exception {
+	 public String runBlockingRDAHMM_Full() throws Exception {
+		  
+		  newProject();
+
 		  String [] returnStrings=
 				rdservice.runBlockingRDAHMM(siteCode,
 													 resource,
@@ -207,13 +218,15 @@ public class RDAHMMBean extends GenericSopacBean{
 													 endDate,
 													 numModelStates);
 		  setPropertyVals(returnStrings);
-		  return returnStrings;
+		  setParameterValues();
+		  return "rdahmm-output-display";
 	 }
 
 	 /**
 	  * This is the nonblocking version of the full invocation.
 	  */ 
-	 public String[] runNonblockingRDAHMM_Full() throws Exception {
+	 public String runNonblockingRDAHMM_Full() throws Exception {
+		  System.out.println("Running RDAHMM");
 		  String [] returnStrings=
 				rdservice.runNonblockingRDAHMM(siteCode,
 														 resource,
@@ -224,7 +237,8 @@ public class RDAHMMBean extends GenericSopacBean{
 														 endDate,
 														 numModelStates);
 		  setPropertyVals(returnStrings);
-		  return returnStrings;
+		  setParameterValues();
+		  return "rdahmm-output-display";
 	 }
 	 
     public String populateProject() 
@@ -324,6 +338,12 @@ public class RDAHMMBean extends GenericSopacBean{
     //on the server.
     protected void setPropertyVals(String[] vals) {
 		  //These are the output files.
+		  rdahmmRunValues.clear();
+
+		  for(int i=0;i<vals.length;i++) {
+				rdahmmRunValues.add(vals[i]);
+		  }
+		  
 		  projectInput=vals[0];
 		  projectRange=vals[1];
 		  projectQ=vals[2];
@@ -494,8 +514,14 @@ public class RDAHMMBean extends GenericSopacBean{
     }
 
     public void setEndDate(String endDate) {
-	this.endDate=endDate;
+		  this.endDate=endDate;
     }
-    
-
+	 
+	 public void setRdahmmRunValues(Vector rdahmmRunValues){
+		  this.rdahmmRunValues=rdahmmRunValues;
+	 }
+	 
+	 public Vector getRdahmmRunValues() {
+		  return rdahmmRunValues;
+	 }
 }

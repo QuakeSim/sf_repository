@@ -19,44 +19,225 @@ mapcenter_y = center_xy[1];
 %>
 <html>
   <head>
-    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTCdqtmO6Kma7uYZgpagQkNe17MQhRS93QdZFchZ2Vy9IpcH0W3nbN34g"
+ <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBSP8m3Tdo1MGc8NudJLOupgVl5cGRRkVwnXuOTLyf1PITz2N2IjgsfSkw"
       type="text/javascript"></script>
   </head>
   <body>
 
+  <script type="text/javascript" src="/yui_0.12.2/build/yahoo/yahoo.js"></script>
+  <script type="text/javascript" src="/yui_0.12.2/build/event/event.js"></script>
+  <script type="text/javascript" src="/yui_0.12.2/build/dom/dom.js"></script>
+
+  <script type="text/javascript" src="/yui_0.12.2/build/calendar/calendar.js"></script>
+  <link type="text/css" rel="stylesheet" href="/yui_0.12.2/build/calendar/assets/calendar.css">
+
+  <style>
+   #cal1Container { display:none; position:relative; width:200px;}
+   #cal2Container { display:none; position:relative; width:200px}
+  </style>
+
+  <script>
+	//Set up the object and add a listener.
+	YAHOO.namespace("example.calendar");
+
+	//Add an alert window.
+	function myBeginDateHandler1(type,args,obj) {
+		var dates=args[0];
+		var date=dates[0];
+		var year=date[0],month=date[1],day=date[2];
+		var startDate=year+"-"+month+"-"+day;
+		var newStartDateVal=document.getElementById("form1:beginDate");
+	        newStartDateVal.setAttribute("value",startDate);
+       	}
+
+	//Add an alert window.
+	function myEndDateHandler2(type,args,obj) {
+		var dates=args[0];
+		var date=dates[0];
+		var year=date[0],month=date[1],day=date[2];
+		var endDate=year+"-"+month+"-"+day;
+		var newEndDateVal=document.getElementById("form1:endDate");
+	        newEndDateVal.setAttribute("value",endDate);
+       	}
+
+	function init() {
+	     	//Set up the first calendar
+	     	YAHOO.example.calendar.cal1=new YAHOO.widget.Calendar("cal1","cal1Container",{title:"Beginning Date:",close:true});
+ 	     	YAHOO.example.calendar.cal1.selectEvent.subscribe(myBeginDateHandler1,YAHOO.example.calendar.cal1, true);
+	     	YAHOO.example.calendar.cal1.render();
+		YAHOO.util.Event.addListener("form1:cal1Button","mouseover",YAHOO.example.calendar.cal1.show,YAHOO.example.calendar.cal1,true);
+
+	
+		//Set up the second calendar
+	     	YAHOO.example.calendar.cal2=new YAHOO.widget.Calendar("cal2","cal2Container",{title:"Ending Date:",close:true});
+		YAHOO.example.calendar.cal2.selectEvent.subscribe(myEndDateHandler2,YAHOO.example.calendar.cal2, true);
+	     	YAHOO.example.calendar.cal2.render();
+		YAHOO.util.Event.addListener("form1:cal2Button","mouseover",YAHOO.example.calendar.cal2.show,YAHOO.example.calendar.cal2,true);
+
+	}
+
+        YAHOO.util.Event.addListener(window,"load",init);
+
+  </script>
     <table>
       <tr>
-        <td width="650" colspan="2">
-          <b><font size="4" face="Verdana">SOPAC Real Time GPS Networks</font></b><p>
+        <td width="650" colspan="3">
+          <b><font size="4" face="Verdana">RDAHMM GPS Data Analysis</font></b><p>
             <font face="Verdana" size="2">Click on a station symbol for more
-              information on a particular station.  Then click the "Query 
-              Selected Station" link below the map.
+              information on a particular station.  Then click the "Run RDAHMM"
+				 link below the map.
              </font><p></p></td>
             </tr>
       <tr>
-        <td width="600">
-          <div id="map" style="width: 600px; height: 600px">      </div>
-        </td>
         <td valign="top" width="50">
           <div id="networksDiv"> Network Names and Colors     </div>
         </td>
+
+        <td valign="top" width="600">
+          <div id="map" style="width: 600px; height: 600px">      </div>
+        </td>
+
+     	<td valign="top">
+      <table>
+      <tr>
+      <td>
+      <f:view>
+       <h:form id="form1">
+
+	    <b>Input Parameters</b>
+
+   	 <h:panelGrid id="InputGridPanel" columns="4" border="1">
+
+      	 <h:outputText value="Project Name:"/>
+       	<h:inputText id="projectName" 
+							value="#{rdahmmBean.projectName}" 
+       	 	         required="true"/>
+       	<h:message for="projectName" 
+							showDetail="true" 
+							showSummary="true" 
+							errorStyle="color: red"/>
+         <h:outputText value=""/>
+
+	 		<h:outputText value="Number of Model States:"/>
+       	<h:inputText id="nmodel" value="#{rdahmmBean.numModelStates}"
+                     required="true"/>
+       	<h:message for="nmodel" 
+							showDetail="true" 
+							showSummary="true" 
+							errorStyle="color: red"/>
+         <h:outputText value=""/>
+
+
+       <h:outputText value="Begin Date"/>
+       <h:inputText id="beginDate" value="#{rdahmmBean.beginDate}"
+                     required="true"/>
+       <h:graphicImage id="cal1Button" url="calendar.gif"/>
+
+       <h:message for="beginDate" showDetail="true" showSummary="true" errorStyle="color: red"/>
+
+
+       <h:outputText value="End Date"/>
+       <h:inputText id="endDate" value="#{rdahmmBean.endDate}"
+                     required="true"/>
+
+       <h:graphicImage id="cal2Button" url="calendar.gif"/>
+       <h:message for="endDate" showDetail="true" showSummary="true" errorStyle="color: red"/>
+
+
+       <h:outputText value="Site Code"/>
+       <h:inputText id="station_name" value="#{rdahmmBean.siteCode}"/>
+       <h:message for="station_name" showDetail="true" showSummary="true" errorStyle="color: red"/>
+         <h:outputText value=""/>
+
+       </h:panelGrid>
+
+       <h:commandLink action="#{rdahmmBean.runBlockingRDAHMM_Full}">
+            <h:outputText value="Run RDAHMM"/>
+       </h:commandLink>
+
+       </h:form>
+	    </f:view>
+
+      </td>
       </tr>
+      <tr>      
+      <td valign="top" align="left">
+       <div id="cal1Container"></div>
+       <div id="cal2Container"></div>
+      </td>
+      </tr>
+     <tr>
+       <td>
+
+     <f:view>
+      <h:panelGrid id="OutputGridPanel"
+				rendered="#{!(empty rdahmmBean.rdahmmRunValues)}">
+       <h:outputText  escape="false" value="<b>Output Values</b>"/>
+       <h:outputLink value="#{rdahmmBean.projectInput}" target="_blank">
+       <h:outputText value="Input File"/>
+       </h:outputLink>
+
+
+       <h:outputLink value="#{rdahmmBean.projectRange}" target="_blank">
+       <h:outputText value="Range"/>
+       </h:outputLink>
+
+       <h:outputLink target="_blank" value="#{rdahmmBean.projectQ}">
+       <h:outputText value="Optimal State Sequence File (Q)"/>
+       </h:outputLink>
+
+
+       <h:outputLink target="_blank" value="#{rdahmmBean.projectA}">
+       <h:outputText value="Model Transition Probability (A)"/>
+       </h:outputLink>
+
+
+       <h:outputLink target="_blank" value="#{rdahmmBean.projectB}">
+       <h:outputText value="Model Output Distribution (B)"/>
+       </h:outputLink>
+
+
+       <h:outputLink target="_blank" value="#{rdahmmBean.projectL}">
+       <h:outputText value="Model Log Likelihood (L)"/>
+       </h:outputLink>>
+
+
+       <h:outputLink target="_blank" value="#{rdahmmBean.projectPi}">
+       <h:outputText value="Model Initial State Probability (PI)"/>
+       </h:outputLink>
+
+       <h:outputLink target="_blank" value="#{rdahmmBean.projectMinval}">
+       <h:outputText value="Minimum Value"/>
+       </h:outputLink>
+
+       <h:outputLink target="_blank" value="#{rdahmmBean.projectMaxval}">
+       <h:outputText value="Maximum Value"/>
+       </h:outputLink>
+
+       <h:outputLink target="_blank" value="#{rdahmmBean.projectGraphX}">
+       <h:outputText value="Plot of X Values"/>
+       </h:outputLink>
+
+       <h:outputLink target="_blank" value="#{rdahmmBean.projectGraphY}">
+       <h:outputText value="Plot of Y Values"/>
+       </h:outputLink>
+
+       <h:outputLink target="_blank" value="#{rdahmmBean.projectGraphZ}">
+       <h:outputText value="Plot of Z Values"/>
+       </h:outputLink>
+	
+
+      </h:panelGrid>
+
+    </f:view>
+	  </td>
+    </tr>
+     </table>
+    </tr>
     </table>
 
 
-    <!-- fail nicely if the browser has no Javascript -->
-    <noscript><b>JavaScript must be enabled in order for you to use Google Maps.</b>
-      However, it seems JavaScript is either disabled or not supported by your browser.
-      To view Google Maps, enable JavaScript by changing your browser options, and then
-      try again.
-    </noscript>
-
     <script type="text/javascript">
-      //<![CDATA[
-      // Check to see if this browser can run the Google API
-
-      //    if (GBrowserIsCompatible()) {
-        // Create a base icon for all of our markers
         var req;
         var baseIcon = new GIcon();
         baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
@@ -178,7 +359,7 @@ mapcenter_y = center_xy[1];
          }
          printNetworkColors(networkInfo);
 
-	//Needed for Mozilla 2 compatibility
+	//Needed for Firefox 2.0 compatibility
 	function getScrolling() {
 	    var x = 0; var y = 0;
     		if (document.body && document.body.scrollLeft && !isNaN(document.body.scrollLeft)) {
@@ -194,22 +375,17 @@ mapcenter_y = center_xy[1];
     		return x + "," + y;
 	}
 
-
       </script>
 
-      <f:view>
-       <h:form id="form1">
-       <h:inputText id="station_name" value="#{rdahmmBean.siteCode}"/>
-       <h:commandLink action="rdahmm-parameters-to-database">
-            <h:outputText value="Query Selected Station"/>
-       </h:commandLink>
-       </h:form>
-       <hr/>
+
+     <hr/>
+     <f:view>
        <h:form>
          <h:commandLink action="rdahmm-back">
             <h:outputText value="#{rdahmmBean.codeName} Main Menu"/>
          </h:commandLink>
         </h:form>
       </f:view>
+
      </body>
 </html>

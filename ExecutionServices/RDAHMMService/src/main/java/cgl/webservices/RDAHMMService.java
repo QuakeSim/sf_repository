@@ -527,6 +527,14 @@ public class RDAHMMService extends AntVisco implements Runnable{
 												  String endDate,
 												  int numModelStates)
 		  throws Exception {
+		  String token="::";
+		  System.out.println(siteCode+token+resource
+									+token+contextGroup
+									+token+contextId
+									+token+minMaxLatLon
+									+token+beginDate
+									+token+endDate
+									+token+numModelStates);
 		  try {
 				String dataUrl=querySOPACGetURL(siteCode,
 														  resource,
