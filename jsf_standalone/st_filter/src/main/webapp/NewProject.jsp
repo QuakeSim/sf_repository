@@ -19,12 +19,12 @@ cgl.sensorgrid.gui.google.MapBean, java.io.*"%>
 <script type="text/ecmascript" src="<h:outputText value="#{facesContext.externalContext.requestContextPath}"/>/scripts/date.js"> </script>
 
 <%-- Yahoo UI --%>
-<script type="text/javascript" src="/yui_0.12.2/build/yahoo/yahoo.js"></script>
-<script type="text/javascript" src="/yui_0.12.2/build/event/event.js"></script>
-<script type="text/javascript" src="/yui_0.12.2/build/dom/dom.js"></script>
+<script type="text/javascript" src="<h:outputText value="#{facesContext.externalContext.requestContextPath}"/>/scripts/yui_0.12.2/build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="<h:outputText value="#{facesContext.externalContext.requestContextPath}"/>/scripts/yui_0.12.2/build/event/event.js"></script>
+<script type="text/javascript" src="<h:outputText value="#{facesContext.externalContext.requestContextPath}"/>/scripts/yui_0.12.2/build/dom/dom.js"></script>
 
-<script type="text/javascript" src="/yui_0.12.2/build/calendar/calendar.js"></script>
-<link type="text/css" rel="stylesheet" href="/yui_0.12.2/build/calendar/assets/calendar.css">
+<script type="text/javascript" src="<h:outputText value="#{facesContext.externalContext.requestContextPath}"/>/scripts/yui_0.12.2/build/calendar/calendar.js"></script>
+<link type="text/css" rel="stylesheet" href="<h:outputText value="#{facesContext.externalContext.requestContextPath}"/>/scripts/yui_0.12.2/build/calendar/assets/calendar.css">
 
 <style>
 #beginDateContainer { display:none; position:absolute; }
