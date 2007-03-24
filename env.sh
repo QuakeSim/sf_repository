@@ -7,9 +7,9 @@
 # The following variables must be set for your 
 # individual installation.
 #--------------------------------------------------
-export PORTAL_HOST_NAME=gf19.ucs.indiana.edu
+export PORTAL_HOST_NAME=localhost
 export PORTAL_SERVER_URL=http://$PORTAL_HOST_NAME:8080/
-export GOOGLE_KEY="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBSP8m3Tdo1MGc8NudJLOupgVl5cGRRkVwnXuOTLyf1PITz2N2IjgsfSkw"
+export GOOGLE_KEY="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBSPTG4M0VeHMNoDOKS2I0IJH6WVtRT4Ye3YMLMmOKDiX0HJAySVruBU5g"
 
 #--------------------------------------------------
 # None of the variables below should be changed.
@@ -59,6 +59,7 @@ export REALTIME_RDAHMM_SA_HOME=$BUILD_DIR/jsf_standalone/RealTimeRDAHMM
 export SIMPLE_STFILTER_SA_HOME=$BUILD_DIR/jsf_standalone/simple_stfilter
 export PLOT_GRWS_TIMESERIES_SA_HOME=$BUILD_DIR/jsf_standalone/PlotGRWSTimeSeries
 export MESHGENERATOR_SA_HOME=$BUILD_DIR/jsf_standalone/MeshGenerator
+export NEW_MESHGENERATOR_SA_HOME=$BUILD_DIR/jsf_standalone/NewMeshGen
 
 #Portlets
 export SIMPLEX_PORTLET_HOME=$BUILD_DIR/portlets/Simplex-portlet

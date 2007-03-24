@@ -17,8 +17,12 @@
                    <value>MeshGenerator</value>
                 </managed-property>
                  <managed-property>
-                   <property-name>selectdbURL</property-name>
-                   <value>http://danube.ucs.indiana.edu:9090/axis/services/Select</value>
+                   <property-name>faultDBServiceURL</property-name>
+                   <value>http://gf2.ucs.indiana.edu:9090/axis/services/Select</value>
+                 </managed-property>
+                 <managed-property>
+                   <property-name>meshServerUrl</property-name>
+                   <value>http://gf2.ucs.indiana.edu:18084</value>
                  </managed-property>
  
                 <!-- Needed for the context service-->
@@ -37,46 +41,6 @@
                  </managed-property>
 
                 <!-- These are execution host params -->
-                <managed-property>
-                   <property-name>antUrl</property-name>
-                   <value>
-                     http://danube.ucs.indiana.edu:8045/axis/services/AntVisco
-                   </value>
-                </managed-property>
-                <managed-property>
-                   <property-name>binPath</property-name>
-                   <value>/home/gateway/GEMCodes/GeoFEST/</value>
-                </managed-property>
-                <managed-property>
-                   <property-name>baseWorkDir</property-name>
-                   <value>/home/gateway/GeoFEST_WDIR/</value>
-                </managed-property>
-                <managed-property>
-                   <property-name>idlServiceURL</property-name>
-                   <value>
-                     http://danube.ucs.indiana.edu:8045/axis/services/AntVisco
-                   </value>
-                </managed-property>
-                <managed-property>
-                   <property-name>idlServerDest</property-name>
-                   <value>/home/gateway/GEMCodes/GeoFEST_IDL/</value>
-                </managed-property>
-                <managed-property>
-                   <property-name>idlBinPath</property-name>
-                   <value>/home/gateway/GEMCodes/GeoFEST_IDL/</value>
-                </managed-property>
-                <managed-property>
-                   <property-name>idlServiceURL2</property-name>
-                   <value>http://danube.ucs.indiana.edu:8045/GCWS/services/FileService</value>
-                </managed-property>
-                <managed-property>
-                   <property-name>fileServiceUrl</property-name>
-                   <value>http://danube.ucs.indiana.edu:8045/GCWS/services/FileService</value>
-                </managed-property>
-                <managed-property>
-                   <property-name>submitjobUrl</property-name>
-                   <value>http://danube.ucs.indiana.edu:8045/GCWS/services/Submitjob</value>
-                </managed-property>
                 <managed-property>
                    <property-name>mesh_gen_viz_fileServiceUrl</property-name>
                    <value>http://gf2.ucs.indiana.edu:6060/jetspeed/services/FileService</value>
