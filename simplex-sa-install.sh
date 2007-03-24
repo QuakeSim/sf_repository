@@ -11,11 +11,17 @@ source ./env.sh
 
 echo ""
 echo "######################################"
-echo "Deploying Ant Execution Service"
+echo "Installing Simplex"
 echo "######################################"
-cd $ANT_EXECUTION_HOME
-mvn clean package
-cp -r target/antexec $CATALINA_HOME/webapps
+cd $SIMPLEX_SA_HOME
+if mvn clean package -Dportal.server.url=$PORTAL_SERVER_URL -Dbuild.dir=$BUILD_DIR -Dtomcat.base.dir=$CATALINA_HOME
+
+then
+    echo Install complete
+else
+    exit 1
+fi
+cp -r target/Simplex $CATALINA_HOME/webapps
 
 
 
