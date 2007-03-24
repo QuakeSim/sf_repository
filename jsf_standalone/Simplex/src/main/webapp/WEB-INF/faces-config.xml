@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE faces-config PUBLIC
+    "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+    "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+
+<faces-config>
+
+	<!-- managed beans of the simple hello world app -->
+	<managed-bean>
+		<managed-bean-name>SimplexBean</managed-bean-name>
+		<managed-bean-class>org.apache.myfaces.blank.SimplexBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+                <!--Who we are-->
+                <managed-property>
+                   <property-name>codeName</property-name>
+                   <value>Simplex2</value>
+                </managed-property>
+                
+                <!-- Needed for the selectdbURL service-->
+                 <managed-property>
+                   <property-name>selectdbURL</property-name>
+                   <value>http://gf2.ucs.indiana.edu:9090/axis/services/Select</value>
+                 </managed-property>
+ 
+                <!-- Needed for the context service-->
+                <managed-property>
+                   <property-name>contextUrl</property-name>
+                   <value>http://gf1.ucs.indiana.edu:13080/WebServices/services/ContextManager</value>
+                 </managed-property>
+                 <managed-property>
+                   <property-name>contextBasePath</property-name>
+                   <value>/home/zhigang/dest1/users/</value>
+                </managed-property>
+
+                <!-- These are execution host params -->
+                <managed-property>
+                   <property-name>antUrl</property-name>
+                   <value>
+                     http://gf2.ucs.indiana.edu:6060/axis/services/AntVisco
+                   </value>
+                </managed-property>
+                <managed-property>
+                   <property-name>binPath</property-name>
+                   <value>/home/gateway/GEMCodes/Simplex/</value>
+                </managed-property>
+                <managed-property>
+                   <property-name>buildPath</property-name>
+                   <value>/home/gateway/GEMCodes/Simplex/</value>
+                </managed-property>
+                <managed-property>
+                   <property-name>baseWorkDir</property-name>
+                   <value>/tmp/</value>
+                </managed-property>
+                <managed-property>
+                   <property-name>fileServiceUrl</property-name>
+                   <value>http://gf2.ucs.indiana.edu:6060/GCWS/services/FileService</value>
+                </managed-property>
+
+                <!-- These are submitjob services params -->
+                <managed-property>
+                   <property-name>submitjobUrl</property-name>
+                   <value>http://gf2.ucs.indiana.edu:6060/GCWS/services/Submitjob</value>
+                </managed-property>
+                <managed-property>
+                   <property-name>submitjob_binPath</property-name>
+                   <value>/home/gateway/GEMCodes/Simplex/</value>
+                </managed-property>
+                <managed-property>
+                   <property-name>submitjob_buildPath</property-name>
+                   <value>/home/gateway/GEMCodes/Simplex/</value>
+                </managed-property>
+                <managed-property>
+                   <property-name>submitjob_baseWorkDir</property-name>
+                   <value>/tmp/</value>
+                </managed-property>
+                <managed-property>
+                   <property-name>submitjob_fileServiceUrl</property-name>
+                   <value>http://gf2.ucs.indiana.edu:6060/GCWS/services/FileService</value>
+                </managed-property>
+
+	</managed-bean>
+
+	<navigation-rule>
+		<display-name>Simplex2 Main Page</display-name>
+		<from-view-id>/Main.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>Simplex2-new-project</from-outcome>
+			<to-view-id>/NewProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-load-project</from-outcome>
+			<to-view-id>/LoadProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-archived-data</from-outcome>
+			<to-view-id>/ArchivedData.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-listgmt-archives</from-outcome>
+			<to-view-id>/ListGMTArchives.jsp</to-view-id>
+		</navigation-case>
+
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/NewProject.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>Simplex2-edit-project</from-outcome>
+			<to-view-id>/EditProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/EditProject.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>Simplex2-this</from-outcome>
+			<to-view-id>/EditProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/LoadProject.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>Simplex2-edit-project</from-outcome>
+			<to-view-id>/EditProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-this</from-outcome>
+			<to-view-id>/LoadProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/ArchivedData.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>Simplex2-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/ListGMTArchives.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>Simplex2-gmt-view</from-outcome>
+			<to-view-id>/GMTView.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/GMTView.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>Simplex2-this</from-outcome>
+			<to-view-id>/GMTView.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+
+</faces-config>
