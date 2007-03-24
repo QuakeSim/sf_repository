@@ -34,7 +34,7 @@
             Attention: You do not need to put /WEB-INF/faces-config.xml in here.
         </description>
         <param-name>javax.faces.CONFIG_FILES</param-name>
-        <param-value>/WEB-INF/examples-config.xml</param-value>
+        <param-value>/WEB-INF/faces-config.xml</param-value>
     </context-param>
     <context-param>
         <description>State saving method: "client" or "server" (= default)
@@ -118,7 +118,7 @@
     <!-- Extensions Filter -->
     <filter>
         <filter-name>extensionsFilter</filter-name>
-        <filter-class>org.apache.myfaces.webapp.filter.ExtensionsFilter</filter-class>
+    <filter-class>org.apache.myfaces.component.html.util.ExtensionsFilter</filter-class>
         <init-param>
             <description>Set the size limit for uploaded files.
                 Format: 10 - 10 bytes
