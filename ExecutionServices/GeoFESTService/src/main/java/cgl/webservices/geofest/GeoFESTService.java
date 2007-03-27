@@ -80,17 +80,17 @@ public class GeoFESTService extends AntVisco implements Runnable{
 // 																			  "rare");
 				
 				System.out.println("Running blocking version");
- 				String[] returnedUrls=gfs.runBlockingMeshGenerator(userName,
-																					projectName,
-																					faults,
-																					layers,
-																					"rare");
+ 				MeshRunBean mrb=gfs.runBlockingMeshGenerator(userName,
+																			projectName,
+																			faults,
+																			layers,
+																			"rare");
 				
 				// 				System.out.println("Packing input files");
 				// 				gfs.runPackageGeoFESTFiles(userName,projectName,gpb,ticket2);
 				
 				System.out.println("Running GeoFEST");
-				gfs.runGeoFEST(userName,projectName,gpb,returnedUrls[0]);
+				gfs.runGeoFEST(userName,projectName,gpb,mrb.getJobUIDStamp());
 				
 		  }
 		  catch (Exception ex) {
@@ -217,11 +217,11 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	  * Returns the time stamp, which is needed for
 	  * later querying.
 	  */
-	 public String[] runBlockingMeshGenerator(String userName,
-													  String projectName,
-													  Fault[] faults,
-													  Layer[] layers,
-													  String autoref_mode) 
+	 public MeshRunBean runBlockingMeshGenerator(String userName,
+																String projectName,
+																Fault[] faults,
+																Layer[] layers,
+																String autoref_mode) 
 		  throws Exception {
 		  String timeStamp=prefabMeshGenerator(userName,
 															projectName,
@@ -241,11 +241,11 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	  * the array consists of URLs for the project
 	  * 
 	  */
-	 public String[] runNonBlockingMeshGenerator(String userName,
-																String projectName,
-																Fault[] faults,
-																Layer[] layers,
-																String autoref_mode) 
+	 public MeshRunBean runNonBlockingMeshGenerator(String userName,
+																		 String projectName,
+																		 Fault[] faults,
+																		 Layer[] layers,
+																		 String autoref_mode) 
 		  throws Exception{
 		  String timeStamp=prefabMeshGenerator(userName,
 															projectName,
@@ -257,26 +257,27 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	 }
 
 	 
-	 protected String[] getTheMeshGenReturnFiles(String userName,
-																String projectName,
-																String timeStamp) {
-		  String baseUrl=generateBaseUrl(userName,projectName,timeStamp);
-		  String[] meshOutputUrls=new String[12];
-		  meshOutputUrls[0]=timeStamp;		  
-		  meshOutputUrls[1]=baseUrl+"/"+"autoref.out";
-		  meshOutputUrls[2]=baseUrl+"/"+"autoref.error";
-		  meshOutputUrls[3]=baseUrl+"/"+projectName+".node";
-		  meshOutputUrls[4]=baseUrl+"/"+projectName+".tetra";
-		  meshOutputUrls[5]=baseUrl+"/"+projectName+".bc";
-		  meshOutputUrls[6]=baseUrl+"/"+projectName+".index";
-		  meshOutputUrls[7]=baseUrl+"/"+"junk.box";
-		  meshOutputUrls[8]=baseUrl+"/"+"tstout";
-		  meshOutputUrls[9]=baseUrl+"/"+"refiner.log";
-		  meshOutputUrls[10]=baseUrl+"/"+"LeeRefiner.log";
-		  meshOutputUrls[11]=baseUrl+"/"+"tagbigflt.log";
+	 protected MeshRunBean getTheMeshGenReturnFiles(String userName,
+																		 String projectName,
+																		 String jobUIDStamp) {
+		  String baseUrl=generateBaseUrl(userName,projectName,jobUIDStamp);
 
+		  MeshRunBean mrb=new MeshRunBean();
+		  mrb.setJobUIDStamp(jobUIDStamp);
+		  mrb.setProjectName(projectName);
+		  mrb.setAutoref(baseUrl+"/"+"autoref.out");
+		  mrb.setAutorefError(baseUrl+"/"+"autoref.error");
+		  mrb.setNodeUrl(baseUrl+"/"+projectName+".node");
+		  mrb.setTetraUrl(baseUrl+"/"+projectName+".tetra");
+		  mrb.setBcUrl(baseUrl+"/"+projectName+".bc");
+		  mrb.setIndexUrl(baseUrl+"/"+projectName+".index");
+		  mrb.setJunkBox(baseUrl+"/"+"junk.box");
+		  mrb.setTstout(baseUrl+"/"+"tstout");
+		  mrb.setLeeRefinerLog(baseUrl+"/"+"LeeRefiner.log");
+		  mrb.setRefinerLog(baseUrl+"/"+"refiner.log");
+		  mrb.setTagbigfltLog(baseUrl+"/"+"tagbigflt.log");
 		  
-		  return meshOutputUrls;
+		  return mrb;
 	 }
 
 	 protected String generateBaseUrl(String userName,
@@ -358,10 +359,10 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	  * is the GeoFEST output file.  String [4] is the standard output
 	  * of geofest.  String [5] is the GeoFEST log file.
 	  */
-	 public String[] runGeoFEST(String userName,
-									String projectName,
-									GeotransParamsBean gpb,
-									String timeStamp)
+	 public GFOutputBean runGeoFEST(String userName,
+											  String projectName,
+											  GeotransParamsBean gpb,
+											  String timeStamp)
 		  throws Exception {
 		  
 		  //The target is always "tar.all".
@@ -392,27 +393,27 @@ public class GeoFESTService extends AntVisco implements Runnable{
 
 		  return gfUrls;
 	 }
+	 
+	 protected GFOutputBean getAllTheGeoFESTFiles(String userName,
+																 String projectName,
+																 String jobUIDStamp) {
 
-	 protected String[] getAllTheGeoFESTFiles(String userName,
-															String projectName,
-															String timeStamp) {
-		  String baseUrl=generateBaseUrl(userName,projectName,timeStamp);
-		  String[] gfUrls=new String[12];
-		  gfUrls[0]=timeStamp;
-		  gfUrls[1]=baseUrl+"/"+projectName+".tar.gz";
-		  gfUrls[2]=baseUrl+"/"+projectName+".inp";
-		  gfUrls[3]=baseUrl+"/"+projectName+".out";
-		  gfUrls[4]=baseUrl+"/"+projectName+".log";
-		  gfUrls[5]=baseUrl+"/"+projectName+".index";
-		  gfUrls[6]=baseUrl+"/"+projectName+".node";
-		  gfUrls[7]=baseUrl+"/"+projectName+".tetra";
-		  gfUrls[8]=baseUrl+"/"+projectName+".tetvols";
-		  gfUrls[9]=baseUrl+"/"+projectName+".toptris";
-		  gfUrls[10]=baseUrl+"/"+"cghist.txt";
-		  gfUrls[11]=baseUrl+"/"+"jobstatus.log";
-
+		  GFOutputBean gfoutput=new GFOutputBean();
+		  String baseUrl=generateBaseUrl(userName,projectName,jobUIDStamp);
 		  
-		  return gfUrls;
+		  gfoutput.setJobUIDStamp(jobUIDStamp);
+		  gfoutput.setTarOfEverythingUrl(baseUrl+"/"+projectName+".tar.gz");
+		  gfoutput.setInputUrl(baseUrl+"/"+projectName+".inp");
+		  gfoutput.setOutputUrl(baseUrl+"/"+projectName+".out");
+		  gfoutput.setLogUrl(baseUrl+"/"+projectName+".log");
+		  gfoutput.setIndexUrl(baseUrl+"/"+projectName+".index");
+		  gfoutput.setNodeUrl(baseUrl+"/"+projectName+".node");
+		  gfoutput.setTetraUrl(baseUrl+"/"+projectName+".tetra");
+		  gfoutput.setTetvolsUrl(baseUrl+"/"+projectName+".tetvols");
+		  gfoutput.setToptrisUrl(baseUrl+"/"+projectName+".toptris");
+		  gfoutput.setCghistUrl(baseUrl+"/"+"cghist.txt");
+		  gfoutput.setJobStatusUrl(baseUrl+"/"+"jobstatus.log");
+		  return gfoutput;
 	 }
 	 
 	 /**
