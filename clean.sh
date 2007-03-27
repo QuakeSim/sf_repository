@@ -65,6 +65,9 @@ mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 cd $MESHGENERATOR_SA_HOME
 mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
+cd $NEW_MESHGENERATOR_SA_HOME
+mvn clean
+
 #Clean up portlet stuff
 #cd $SIMPLEX_PORTLET_HOME
 #mvn clean
