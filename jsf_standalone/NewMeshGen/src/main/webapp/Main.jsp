@@ -12,7 +12,7 @@
 	<h2>Geometry Creation and Mesh Generation</h2>
 	<p>These pages will guide you through the steps needed to create a
 	fault geometry and a finite element mesh.</p>
-
+	
 	<h:form id="form">
 		<h:panelGrid id="grid" columns="2" border="1">
 

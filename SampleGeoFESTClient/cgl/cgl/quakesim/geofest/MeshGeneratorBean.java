@@ -57,71 +57,41 @@ public class MeshGeneratorBean extends GenericSopacBean {
     boolean renderSearchByFaultNameForm = false;    
     boolean renderSearchByAuthorForm = false;    
     boolean renderSearchByLatLonForm = false;
-    boolean renderViewAllFaultsForm = false;
-    
-    String faultSelectionCode = "";
-    
-    boolean renderAddFaultFromDBForm = false;
-    
-    long EditProjectTableColumns = 1;
-    
-    Layer currentLayer = new Layer();
-    
-    Fault currentFault = new Fault();
-    
-    GeotransParamsData currentGeotransParamsData = new GeotransParamsData();
-    
-    List myFaultDBEntryList = new ArrayList();
-    
-    List myLayerDBEntryList = new ArrayList();
-    
-    List myFaultEntryForProjectList = new ArrayList();
-    
-    List myLayerEntryForProjectList = new ArrayList();
-    
-    List myFaultsForProject = new ArrayList();
-    
-    List myProjectNameList = new ArrayList();
-    
-    List myLoadMeshTableEntryList = new ArrayList();
-    
-    List myarchivedMeshTableEntryList = new ArrayList();
-    
-    String[] myProjectCreationDateArray;
-    
-    String[] myProjectMeshHostArray;
-    
-    String[] myProjectNameArray;
-    
-    String[] faultarrayForMesh;
-    
-    String[] deleteProjectsList;
-    
-    String[] selectProjectsList;
-    
-    private HtmlDataTable myLayerDataTable;
-    
-    private HtmlDataTable myFaultDataTable;
-    
-    String forSearchStr = new String();
-    
-    String faultLatStart = new String();
-    
-    String faultLatEnd = new String();
-    
-    String faultLonStart = new String();
-    
-    String faultLonEnd = new String();
-    
+    boolean renderViewAllFaultsForm = false;    
+    String faultSelectionCode = "";    
+    boolean renderAddFaultFromDBForm = false;    
+    long EditProjectTableColumns = 1;    
+    Layer currentLayer = new Layer();    
+    Fault currentFault = new Fault();    
+    GeotransParamsData currentGeotransParamsData = new GeotransParamsData();    
+    List myFaultDBEntryList = new ArrayList();    
+    List myLayerDBEntryList = new ArrayList();    
+    List myFaultEntryForProjectList = new ArrayList();    
+    List myLayerEntryForProjectList = new ArrayList();    
+    List myFaultsForProject = new ArrayList();    
+    List myProjectNameList = new ArrayList();    
+    List myLoadMeshTableEntryList = new ArrayList();    
+    List myarchivedMeshTableEntryList = new ArrayList();    
+    String[] myProjectCreationDateArray;    
+    String[] myProjectMeshHostArray;    
+    String[] myProjectNameArray;    
+    String[] faultarrayForMesh;    
+    String[] deleteProjectsList;    
+    String[] selectProjectsList;    
+    private HtmlDataTable myLayerDataTable;    
+    private HtmlDataTable myFaultDataTable;    
+    String forSearchStr = new String();    
+    String faultLatStart = new String();    
+    String faultLatEnd = new String();    
+    String faultLonStart = new String();    
+    String faultLonEnd = new String();    
     GeoFESTUtils gfutils = new GeoFESTUtils();
-    
     String projectDir = new String();
-    
-    MeshViewer myMeshViewer = new MeshViewer(meshServerUrl);
+
+    MeshViewer myMeshViewer; 
     String mesh_gen_viz_fileServiceUrl = 
 	"http://gf2.ucs.indiana.edu:6060/jetspeed/services/FileService";
-    String mesh_gen_viz_base_dir = new String(
-					      "/home/gateway/yan_offscreen/offscreen/");
+    String mesh_gen_viz_base_dir = new String("/home/gateway/yan_offscreen/offscreen/");
     String myLayersParamForJnlp = new String("");
     String myFaultsParamForJnlp = new String("");
     String workDirForJnlp = new String("");
@@ -130,7 +100,16 @@ public class MeshGeneratorBean extends GenericSopacBean {
     String jobToken="";
     String userName="";
     String projectName="";
+    String meshResolution="";
+
+    //These should be populated from faces-config.xml
+    String meshViewerServerUrl="http://gf2.ucs.indiana.edu:18084";
+    String geoFESTServiceUrl="http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec";
+    String faultDBServiceUrl="http://gf2.ucs.indiana.edu:9090/axis/services/Select";
     
+    //This is our geofest service stub.
+    GeoFESTService geofestService;
+
     // --------------------------------------------------
     // Set some variables. Need to put in properties.
     // --------------------------------------------------
@@ -144,10 +123,54 @@ public class MeshGeneratorBean extends GenericSopacBean {
     String plotTarget="";
     // --------------------------------------------------
 
+    /**
+     * The client constructor.
+     */
+    public MeshGeneratorBean() throws Exception {
+	super();
+	gfutils.initLayerInteger();
+	cm = getContextManagerImp();
+
+	geofestService=
+	    new GeoFESTServiceServiceLocator().getGeoFESTExec(new URL(geoFESTServiceUrl));
+	
+	myMeshViewer = new MeshViewer(meshViewerServerUrl);
+	System.out.println("MeshGenerator Bean Created");
+
+    }
 
     //--------------------------------------------------
     // This section contains the main execution calls.
     //--------------------------------------------------
+
+    /**
+     * Protected convenience method. 
+     */ 
+    protected Fault[] convertArrayListToFaultArray(List faultList)
+	throws Exception {
+	if(faultList==null || faultList.size()<0){
+	    throw new Exception();
+	}
+	
+	Fault[] faults=new Fault[faultList.size()];
+	for(int i=0;i<faultList.size();i++) {
+	    faults[i]=(Fault)faultList.get(i);
+	}
+	return faults;
+    }
+
+    protected Layer[] convertArrayListToLayerArray(List layerList)
+	throws Exception {
+	if(layerList==null || layerList.size()<0){
+	    throw new Exception();
+	}
+	
+	Layer[] layers=new Layer[layerList.size()];
+	for(int i=0;i<layerList.size();i++) {
+	    layers[i]=(Layer)layerList.get(i);
+	}
+	return layers;
+    }
 
     /**
      * This is a JSF compatible method for running the mesh generator
@@ -156,12 +179,17 @@ public class MeshGeneratorBean extends GenericSopacBean {
      */ 
     public String runBlockingMeshGenerartorJSF() 
 	throws Exception {
-	String[] resultUrls=geofesService.runBlockingMeshGenerator(userName,
+	
+	//Temporary, need to fix
+	Layer[] layers=convertArrayListToLayerArray(myLayerEntryForProjectList);
+	Fault[] faults=convertArrayListToFaultArray(myFaultEntryForProjectList);
+	
+	String[] resultUrls=geofestService.runBlockingMeshGenerator(userName,
 								   projectName,
 								   faults,
 								   layers,
 								   meshResolution);
-	setJobTokenName(resultUrls[0]);
+	setJobToken(resultUrls[0]);
 	return MESH_GENERATION_NAV_STRING;
     }
     
@@ -170,14 +198,17 @@ public class MeshGeneratorBean extends GenericSopacBean {
      * immediately.  The client must determine separately if the mesh
      * generation has finished.
      */ 
-    public String runNonblockingMeshGenerartorJSF() 
+    public String runNonBlockingMeshGenerartorJSF() 
 	throws Exception {
-	String[] resultUrls=geofestService.runNonblockingMeshGenerator(userName,
+	Layer[] layers=convertArrayListToLayerArray(myLayerEntryForProjectList);
+	Fault[] faults=convertArrayListToFaultArray(myFaultEntryForProjectList);
+
+	String[] resultUrls=geofestService.runNonBlockingMeshGenerator(userName,
 								      projectName,
 								      faults,
 								      layers,
 								      meshResolution);
-	setJobTokenName(resultUrls[0]);
+	setJobToken(resultUrls[0]);
 	return MESH_GENERATION_NAV_STRING;
     }
 
@@ -187,7 +218,10 @@ public class MeshGeneratorBean extends GenericSopacBean {
      */
     public String runGeoFESTJSF()
 	throws Exception {
-	String tokenName=getJobTokenName();
+	//Temporary, need to fix.
+	GeotransParamsBean geotransparamsbean=new GeotransParamsBean();
+
+	String tokenName=getJobToken();
 	String[] resultUrls=geofestService.runGeoFEST(userName,
 						      projectName,
 						      geotransparamsbean,
@@ -422,7 +456,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	String getAuthorListSQL = "select Author1 from LAYER LEFT JOIN LREFERENCE on LAYER.InterpId=LREFERENCE.InterpId;";
 	
 	myLayerDBEntryList.clear();
-	currentLayer.reset();
+	currentLayer=new Layer();
 	
 	List tmp_layerNameList = QueryFaultsBySQL(getLayerListSQL);
 	List tmp_layerAuthorList = QueryFaultsBySQL(getAuthorListSQL);
@@ -635,7 +669,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	    FaultDBEntry tmp_FaultDBEntry = (FaultDBEntry) getMyFaultDataTable()
 		.getRowData();
 	    SelectItem tmp_SelectItem = tmp_FaultDBEntry.getFaultName();
-	    currentFault.faultName = tmp_SelectItem.getValue().toString();
+	    currentFault.setFaultName(tmp_SelectItem.getValue().toString());
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
@@ -652,14 +686,14 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	    FaultDBEntry tmp_FaultDBEntry = (FaultDBEntry) getMyFaultDataTable()
 		.getRowData();
 	    SelectItem tmp_SelectItem = tmp_FaultDBEntry.getFaultName();
-	    currentFault.faultName = tmp_SelectItem.getValue().toString();
+	    currentFault.setFaultName(tmp_SelectItem.getValue().toString());
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
 	initEditFormsSelection();
-	currentFault.faultName = currentFault.faultName.trim();
-	if (!currentFault.faultName.equals("")) {
-	    currentFault = QueryFaultFromDB(currentFault.faultName.trim());
+	currentFault.setFaultName(currentFault.getFaultName().trim());
+	if (!currentFault.getFaultName().equals("")) {
+	    currentFault = QueryFaultFromDB(currentFault.getFaultName().trim());
 	}
 	renderCreateNewFaultForm = !renderCreateNewFaultForm;
 	
@@ -678,14 +712,14 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	    LayerDBEntry tmp_LayerDBEntry = (LayerDBEntry) getMyLayerDataTable()
 		.getRowData();
 			SelectItem tmp_SelectItem = tmp_LayerDBEntry.getLayerName();
-			currentLayer.layerName = tmp_SelectItem.getValue().toString();
+			currentLayer.setLayerName(tmp_SelectItem.getValue().toString());
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
 	initEditFormsSelection();
-	currentLayer.layerName = currentLayer.layerName.trim();
-	if (!currentLayer.layerName.equals("")) {
-	    currentLayer = QueryLayerFromDB(currentLayer.layerName.trim());
+	currentLayer.setLayerName(currentLayer.getLayerName().trim());
+	if (!currentLayer.getLayerName().equals("")) {
+	    currentLayer = QueryLayerFromDB(currentLayer.getLayerName().trim());
 	}
 	renderCreateNewLayerForm = !renderCreateNewLayerForm;
 	
@@ -714,7 +748,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	    LayerDBEntry tmp_LayerDBEntry = (LayerDBEntry) getMyLayerDataTable()
 		.getRowData();
 	    SelectItem tmp_SelectItem = tmp_LayerDBEntry.getLayerName();
-	    currentLayer.layerName = tmp_SelectItem.getValue().toString();
+	    currentLayer.setLayerName(tmp_SelectItem.getValue().toString());
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
@@ -748,11 +782,11 @@ public class MeshGeneratorBean extends GenericSopacBean {
     public void toggleProjectSelection(ActionEvent ev) {
 	initEditFormsSelection();
 	if (projectSelectionCode.equals("CreateNewLayer")) {
-	    currentLayer.reset();
+	    currentLayer=new Layer();
 	    renderCreateNewLayerForm = !renderCreateNewLayerForm;
 	}
 	if (projectSelectionCode.equals("CreateNewFault")) {
-	    currentFault.reset();
+	    currentFault=new Fault();
 	    renderCreateNewFaultForm = !renderCreateNewFaultForm;
 	}
 	if (projectSelectionCode.equals("AddLayerFromDB")) {
@@ -797,18 +831,18 @@ public class MeshGeneratorBean extends GenericSopacBean {
      */
     public void toggleSelectFaultDBEntry(ActionEvent ev) {
 	initEditFormsSelection();
-	currentFault.setFaultName(currentFault.getFaultName.trim());
-	if (!currentFault.getFaultName.equals("")) {
-	    currentFault = QueryFaultFromDB(currentFault.faultName.trim());
+	currentFault.setFaultName(currentFault.getFaultName().trim());
+	if (!currentFault.getFaultName().equals("")) {
+	    currentFault = QueryFaultFromDB(currentFault.getFaultName().trim());
 	}
 	renderCreateNewFaultForm = !renderCreateNewFaultForm;
     }
     
     public void toggleSelectLayerDBEntry(ActionEvent ev) {
 	initEditFormsSelection();
-	currentLayer.setLayerName(currentLayer.layerName.trim());
-	if (!currentLayer.getLayerName.equals("")) {
-	    currentLayer = QueryLayerFromDB(currentLayer.layerName.trim());
+	currentLayer.setLayerName(currentLayer.getLayerName().trim());
+	if (!currentLayer.getLayerName().equals("")) {
+	    currentLayer = QueryLayerFromDB(currentLayer.getLayerName().trim());
 	}
 	renderCreateNewLayerForm = !renderCreateNewLayerForm;
     }
@@ -863,34 +897,34 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		System.out.println("error");
 	    }
 	    if ((tmp_view == true) && (tmp_update == false)) {
-		currentLayer.getLayerName = tmp_layerName;
+		currentLayer.setLayerName(tmp_layerName);
 		String thename = projectFullName + SEPARATOR + LAYERS;
 		
 		String fullname = thename + SEPARATOR + currentLayer.getLayerName();
 
-		currentLayer.getLayerOriginX(setValue(cm, layerStatus, fullname,
+		currentLayer.setLayerOriginX(setValue(cm, layerStatus, fullname,
 						     "layerOriginX"));
-		currentLayer.getLayerOriginY(setValue(cm, layerStatus, fullname,
+		currentLayer.setLayerOriginY(setValue(cm, layerStatus, fullname,
 						     "layerOriginY"));
-		currentLayer.getLayerOriginZ(setValue(cm, layerStatus, fullname,
+		currentLayer.setLayerOriginZ(setValue(cm, layerStatus, fullname,
 						     "layerOriginZ"));
-		currentLayer.getLayerLatOrigin(setValue(cm, layerStatus,
+		currentLayer.setLayerLatOrigin(setValue(cm, layerStatus,
 						       fullname, "layerLatOrigin"));
-		currentLayer.getLayerLonOrigin(setValue(cm, layerStatus,
+		currentLayer.setLayerLonOrigin(setValue(cm, layerStatus,
 						       fullname, "layerLonOrigin"));
-		currentLayer.getLayerLength(setValue(cm, layerStatus, fullname,
+		currentLayer.setLayerLength(setValue(cm, layerStatus, fullname,
 						    "layerLength"));
-		currentLayer.getLayerWidth(setValue(cm, layerStatus, fullname,
+		currentLayer.setLayerWidth(setValue(cm, layerStatus, fullname,
 						   "layerWidth"));
-		currentLayer.getLayerDepth(setValue(cm, layerStatus, fullname,
+		currentLayer.setLayerDepth(setValue(cm, layerStatus, fullname,
 						   "layerDepth"));
-		currentLayer.getLameLambda(setValue(cm, layerStatus, fullname,
+		currentLayer.setLameLambda(setValue(cm, layerStatus, fullname,
 						   "lameLambda"));
-		currentLayer.getLameMu(setValue(cm, layerStatus, fullname,
+		currentLayer.setLameMu(setValue(cm, layerStatus, fullname,
 					       "lameMu"));
-		currentLayer.getViscosity(setValue(cm, layerStatus, fullname,
+		currentLayer.setViscosity(setValue(cm, layerStatus, fullname,
 						  "viscosity"));
-		currentLayer.getExponent(setValue(cm, layerStatus, fullname,
+		currentLayer.setExponent(setValue(cm, layerStatus, fullname,
 						 "exponent"));
 		renderCreateNewLayerForm = !renderCreateNewLayerForm;
 		
@@ -903,7 +937,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		try {
 		    MyVTKServiceLocator service = new MyVTKServiceLocator();
 		    MyVTKServicePortType meshserv = service
-			.getMyVTKService(new URL(meshServerUrl));
+			.getMyVTKService(new URL(meshViewerServerUrl));
 		    meshserv.removeLayer(tmp_layerName);
 		} catch (Exception ex) {
 		    ;
@@ -941,27 +975,27 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		System.out.println("error");
 	    }
 	    if ((tmp_view == true) && (tmp_update == false)) {
-		currentFault.faultName = tmp_faultName;
+		currentFault.setFaultName(tmp_faultName);
 		String thename = projectFullName + SEPARATOR + FAULTS;
 		
 		String fullname = thename + SEPARATOR + currentFault.getFaultName();
-		currentFault.getFaultLocationX(setValue(cm, faultStatus,
+		currentFault.setFaultLocationX(setValue(cm, faultStatus,
 						       fullname, "faultOriginX"));
-		currentFault.getFaultLocationY(setValue(cm, faultStatus,
+		currentFault.setFaultLocationY(setValue(cm, faultStatus,
 						       fullname, "faultOriginY"));
-		currentFault.getFaultLength(setValue(cm, faultStatus, fullname,
+		currentFault.setFaultLength(setValue(cm, faultStatus, fullname,
 						    "faultLength"));
-		currentFault.getFaultWidth(setValue(cm, faultStatus, fullname,
+		currentFault.setFaultWidth(setValue(cm, faultStatus, fullname,
 						   "faultWidth"));
-		currentFault.getFaultDepth(setValue(cm, faultStatus, fullname,
+		currentFault.setFaultDepth(setValue(cm, faultStatus, fullname,
 						   "faultDepth"));
-		currentFault.getFaultDipAngle(setValue(cm, faultStatus,
+		currentFault.setFaultDipAngle(setValue(cm, faultStatus,
 						      fullname, "faultDipAngle"));
-		currentFault.getFaultStrikeAngle(setValue(cm, faultStatus,
+		currentFault.setFaultStrikeAngle(setValue(cm, faultStatus,
 							 fullname, "faultStrikeAngle"));
-		currentFault.getFaultSlip(setValue(cm, faultStatus, fullname,
+		currentFault.setFaultSlip(setValue(cm, faultStatus, fullname,
 						  "faultSlip"));
-		currentFault.getFaultRakeAngle(setValue(cm, faultStatus,
+		currentFault.setFaultRakeAngle(setValue(cm, faultStatus,
 						       fullname, "faultRakeAngle"));
 		renderCreateNewFaultForm = !renderCreateNewFaultForm;
 		
@@ -974,7 +1008,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		try {
 		    MyVTKServiceLocator service = new MyVTKServiceLocator();
 		    MyVTKServicePortType meshserv = service
-			.getMyVTKService(new URL(meshServerUrl));
+			.getMyVTKService(new URL(meshViewerServerUrl));
 		    meshserv.removeFault(tmp_faultName);
 		} catch (Exception ex) {
 		    ;
@@ -1007,7 +1041,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
     public void toggleAddLayerForProject(ActionEvent ev) {
 	initEditFormsSelection();
 	String projectFullName = codeName + SEPARATOR + projectName;
-	String gcname = currentLayer.layerName;
+	String gcname = currentLayer.getLayerName();
 	
 	// Get rid of spaces.
 	while (gcname.indexOf(" ") > -1) {
@@ -1016,21 +1050,21 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		+ gcname
 		.substring(gcname.indexOf(" ") + 1, gcname.length());
 	}
-	currentLayer.layerName = gcname;
+	currentLayer.setLayerName(gcname);
 	GeoFESTElement layerelement = new GeoFESTElement();
-	layerelement.addElement("layerName", currentLayer.layerName);
-	layerelement.addElement("layerOriginX", currentLayer.layerOriginX);
-	layerelement.addElement("layerOriginY", currentLayer.layerOriginY);
-	layerelement.addElement("layerOriginZ", currentLayer.layerOriginZ);
-	layerelement.addElement("layerLatOrigin", currentLayer.layerLatOrigin);
-	layerelement.addElement("layerLonOrigin", currentLayer.layerLonOrigin);
-	layerelement.addElement("layerLength", currentLayer.layerLength);
-	layerelement.addElement("layerWidth", currentLayer.layerWidth);
-	layerelement.addElement("layerDepth", currentLayer.layerDepth);
-	layerelement.addElement("lameLambda", currentLayer.lameLambda);
-	layerelement.addElement("lameMu", currentLayer.lameMu);
-	layerelement.addElement("viscosity", currentLayer.viscosity);
-	layerelement.addElement("exponent", currentLayer.exponent);
+	layerelement.addElement("layerName", currentLayer.getLayerName());
+	layerelement.addElement("layerOriginX", currentLayer.getLayerOriginX());
+	layerelement.addElement("layerOriginY", currentLayer.getLayerOriginY());
+	layerelement.addElement("layerOriginZ", currentLayer.getLayerOriginZ());
+	layerelement.addElement("layerLatOrigin", currentLayer.getLayerLatOrigin());
+	layerelement.addElement("layerLonOrigin", currentLayer.getLayerLonOrigin());
+	layerelement.addElement("layerLength", currentLayer.getLayerLength());
+	layerelement.addElement("layerWidth", currentLayer.getLayerWidth());
+	layerelement.addElement("layerDepth", currentLayer.getLayerDepth());
+	layerelement.addElement("lameLambda", currentLayer.getLameLambda());
+	layerelement.addElement("lameMu", currentLayer.getLameMu());
+	layerelement.addElement("viscosity", currentLayer.getViscosity());
+	layerelement.addElement("exponent", currentLayer.getExponent());
 	
 	try {
 	    gfutils.setContextProperties(cm, projectFullName, LAYERS, gcname,
@@ -1047,15 +1081,15 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	    // -----------------------------------------------------------
 	    // add Layer to VTK
 	    // -----------------------------------------------------------
-	    float X = Float.parseFloat(currentLayer.layerOriginX);
-	    float Y = Float.parseFloat(currentLayer.layerOriginY);
-	    float Z = Float.parseFloat(currentLayer.layerOriginZ);
-	    float Length = Float.parseFloat(currentLayer.layerLength);
-	    float Width = Float.parseFloat(currentLayer.layerWidth);
-	    float Depth = Float.parseFloat(currentLayer.layerDepth);
+	    float X = Float.parseFloat(currentLayer.getLayerOriginX());
+	    float Y = Float.parseFloat(currentLayer.getLayerOriginY());
+	    float Z = Float.parseFloat(currentLayer.getLayerOriginZ());
+	    float Length = Float.parseFloat(currentLayer.getLayerLength());
+	    float Width = Float.parseFloat(currentLayer.getLayerWidth());
+	    float Depth = Float.parseFloat(currentLayer.getLayerDepth());
 	    MyVTKServiceLocator tmp_service = new MyVTKServiceLocator();
 	    MyVTKServicePortType meshserv = tmp_service
-		.getMyVTKService(new URL(meshServerUrl));
+		.getMyVTKService(new URL(meshViewerServerUrl));
 	    meshserv.addLayer(gcname, X, Y, Z, Length, Width, Depth);
 	} catch (Exception ex) {
 	}
@@ -1064,7 +1098,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
     public void toggleAddFaultForProject(ActionEvent ev) {
 	initEditFormsSelection();
 	String projectFullName = codeName + SEPARATOR + projectName;
-	String gcname = currentFault.faultName;
+	String gcname = currentFault.getFaultName();
 	
 	// Get rid of spaces.
 	while (gcname.indexOf(" ") > -1) {
@@ -1074,17 +1108,17 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		.substring(gcname.indexOf(" ") + 1, gcname.length());
 	}
 	GeoFESTElement faultelement = new GeoFESTElement();
-	faultelement.addElement("faultName", currentFault.faultName);
-	faultelement.addElement("faultOriginX", currentFault.faultLocationX);
-	faultelement.addElement("faultOriginY", currentFault.faultLocationY);
-	faultelement.addElement("faultLength", currentFault.faultLength);
-	faultelement.addElement("faultWidth", currentFault.faultWidth);
-	faultelement.addElement("faultDepth", currentFault.faultDepth);
-	faultelement.addElement("faultDipAngle", currentFault.faultDipAngle);
+	faultelement.addElement("faultName", currentFault.getFaultName());
+	faultelement.addElement("faultOriginX", currentFault.getFaultLocationX());
+	faultelement.addElement("faultOriginY", currentFault.getFaultLocationY());
+	faultelement.addElement("faultLength", currentFault.getFaultLength());
+	faultelement.addElement("faultWidth", currentFault.getFaultWidth());
+	faultelement.addElement("faultDepth", currentFault.getFaultDepth());
+	faultelement.addElement("faultDipAngle", currentFault.getFaultDipAngle());
 	faultelement.addElement("faultStrikeAngle",
-				currentFault.faultStrikeAngle);
-	faultelement.addElement("faultSlip", currentFault.faultSlip);
-	faultelement.addElement("faultRakeAngle", currentFault.faultRakeAngle);
+				currentFault.getFaultStrikeAngle());
+	faultelement.addElement("faultSlip", currentFault.getFaultSlip());
+	faultelement.addElement("faultRakeAngle", currentFault.getFaultRakeAngle());
 	
 	faultelement.addElement("faultOriginZ", "0.0");
 	faultelement.addElement("faultNumber", "1.0");
@@ -1101,17 +1135,17 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	// add Fault to mesh image.
 	// -----------------------------------------------------------
 	try {
-	    float X = Float.parseFloat(currentFault.faultLocationX);
-	    float Y = Float.parseFloat(currentFault.faultLocationY);
-	    float Width = Float.parseFloat(currentFault.faultWidth);
-	    float Depth = Float.parseFloat(currentFault.faultDepth);
-	    float Length = Float.parseFloat(currentFault.faultLength);
-	    float Dip = (float) Double.parseDouble(currentFault.faultDipAngle);
+	    float X = Float.parseFloat(currentFault.getFaultLocationX());
+	    float Y = Float.parseFloat(currentFault.getFaultLocationY());
+	    float Width = Float.parseFloat(currentFault.getFaultWidth());
+	    float Depth = Float.parseFloat(currentFault.getFaultDepth());
+	    float Length = Float.parseFloat(currentFault.getFaultLength());
+	    float Dip = (float) Double.parseDouble(currentFault.getFaultDipAngle());
 	    float Strike = (float) Double
-		.parseDouble(currentFault.faultStrikeAngle);
+		.parseDouble(currentFault.getFaultStrikeAngle());
 	    MyVTKServiceLocator service = new MyVTKServiceLocator();
 	    MyVTKServicePortType meshserv = service.getMyVTKService(new URL(
-									    meshServerUrl));
+									    meshViewerServerUrl));
 	    meshserv.addFault(gcname, X, Y, Length, Width, Depth, Dip, Strike);
 	} catch (Exception ex) {
 	    ex.printStackTrace();
@@ -1128,16 +1162,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
     
     public void setRenderDBLayerList(boolean renderDBLayerList1) {
 	this.renderDBLayerList = renderDBLayerList1;
-    }
-    
-    /**
-     * default empty constructor
-     */
-    public MeshGeneratorBean() {
-	super();
-	gfutils.initLayerInteger();
-	cm = getContextManagerImp();
-	System.out.println("MeshGenerator Bean Created");
     }
     
     /**
@@ -1245,7 +1269,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
     
     public String SetAndViewMeshImage() throws Exception {
 	myMeshViewer.reset();
-	myMeshViewer.setServiceUrl(this.meshServerUrl);
+	myMeshViewer.setServiceUrl(this.meshViewerServerUrl);
 	myMeshViewer.fileServiceUrl = fileServiceUrl;
 	myMeshViewer.projectName = projectName;
 	myMeshViewer.workDir = baseWorkDir + "/" + userName + "/" + projectName
@@ -1258,7 +1282,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
     
     public String SetAndPlot() throws Exception {
 	myMeshViewer.reset();
-	myMeshViewer.setServiceUrl(this.meshServerUrl);
+	myMeshViewer.setServiceUrl(this.meshViewerServerUrl);
 	return "MG-plot";
     }
     
@@ -1279,27 +1303,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	setContextList();
 	return ("MG-list-project");
     }
-    
-    public String loadThenAntRun() throws Exception {
-	System.out.println("Loading Mesh");
-	if (!isInitialized) {
-	    initWebServices();
-	}
-	setContextList();
-	for (int i = 0; i < myLoadMeshTableEntryList.size(); i++) {
-	    loadMeshTableEntry tmp_myLoadMeshTableEntry = (loadMeshTableEntry) myLoadMeshTableEntryList
-		.get(i);
-	    if (tmp_myLoadMeshTableEntry.view == true) {
-		this.projectName = tmp_myLoadMeshTableEntry.projectName;
-		this.meshSize = "50";
-		this.magic15 = "1.5";
-		break;
-	    }
-	}
-	
-	return toggleFireMeshGen();
-    }
-    
+        
     public String loadMesh() throws Exception {
 	System.out.println("Loading Mesh");
 	if (!isInitialized) {
@@ -1428,6 +1432,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
      */ 
     public String getContourPlotPdfUrl() {
 	//Rewrite this and put the associated service in SVN.
+	return "Junk";
     }
     /**
      * These are some accessor methods.
@@ -1590,17 +1595,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
     }
     
     public String[] getFaultarrayForMesh() {
-	
 	return this.faultarrayForMesh;
-    }
-    
-    public void setRefineOutMessage(String tmp_str) {
-	this.refineOutMessage = tmp_str;
-    }
-    
-    public String getRefineOutMessage() {
-	
-	return this.refineOutMessage;
     }
     
     public void setMyFaultsForProject(List tmp_str) {
@@ -1967,14 +1962,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	return this.currentFault;
     }
 
-	public void setMeshServerUrl(String tmp_url) {
-		this.meshServerUrl = tmp_url;
-	}
-
-	public String getMeshServerUrl() {
-		return this.meshServerUrl;
-	}
-
 	public void setSelectdbURL(String tmp_url) {
 		this.faultDBServiceUrl = tmp_url;
 	}
@@ -2095,6 +2082,31 @@ public class MeshGeneratorBean extends GenericSopacBean {
     public String getProjectName() {
 	return projectName;
     }
+
+    public String getMeshResolution() {
+	return meshResolution;
+    }
+    
+    public void setMeshResolution(String meshResolution){
+	this.meshResolution=meshResolution;
+    }
+    
+    public String getGeoFESTServiceUrl() {
+	return geoFESTServiceUrl;
+    }
+    
+    public void setGeoFESTServiceUrl(String geoFESTServiceUrl){
+	this.geoFESTServiceUrl=geoFESTServiceUrl;
+    }
+    
+    public String getFaultDBServiceUrl() {
+	return faultDBServiceUrl;
+    }
+
+    public void setFaultDBServiceUrl(String faultDBServiceUrl){
+	this.faultDBServiceUrl=faultDBServiceUrl;
+    }
+
 
     //--------------------------------------------------
     // End the accessor method section.

@@ -9,7 +9,7 @@
 	<!-- managed beans of the simple hello world app -->
 	<managed-bean>
 		<managed-bean-name>MGBean</managed-bean-name>
-		<managed-bean-class>org.apache.myfaces.blank.MeshGeneratorBean</managed-bean-class>
+		<managed-bean-class>cgl.quakesim.geofest.MeshGeneratorBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
                 <!--Who we are-->
                 <managed-property>
@@ -17,28 +17,29 @@
                    <value>MeshGenerator</value>
                 </managed-property>
                  <managed-property>
-                   <property-name>faultDBServiceURL</property-name>
+                   <property-name>faultDBServiceUrl</property-name>
                    <value>http://gf2.ucs.indiana.edu:9090/axis/services/Select</value>
                  </managed-property>
                  <managed-property>
-                   <property-name>meshServerUrl</property-name>
+                   <property-name>geoFESTServiceUrl</property-name>
+                   <value>Http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec</value>
+                 </managed-property>
+<!--
+                 <managed-property>
+                   <property-name>meshViewerServerUrl</property-name>
                    <value>http://gf2.ucs.indiana.edu:18084</value>
                  </managed-property>
+-->
  
                 <!-- Needed for the context service-->
                 <managed-property>
                    <property-name>contextUrl</property-name>
-                   <value>http://gf2.ucs.indiana.edu:8080/WebServices/services/ContextManager</value>
+                   <value>http://localhost:8080/WebServices/services/ContextManager</value>
                  </managed-property>
                  <managed-property>
                    <property-name>contextBasePath</property-name>
-                   <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users/</value>
+                   <value>/Users/mpierce/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users/</value>
                 </managed-property>
-
-                <managed-property>
-                   <property-name>meshServerUrl</property-name>
-                   <value>http://gf2.ucs.indiana.edu:18084</value>
-                 </managed-property>
 
                 <!-- These are execution host params -->
                 <managed-property>

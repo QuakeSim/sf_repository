@@ -668,20 +668,6 @@ function dataTableSelectOneRadio(radio) {
 					value="Click the button below to generate a mesh for the geometry.<br><br>" />
 
 				<h:panelGrid columns="2" border="0">
-					<h:outputText escape="false" value="<b>Mesh Size: </b>" />
-					<h:panelGroup>
-						<h:inputText id="MeshSize" value="#{MGBean.meshSize}"
-							required="true" />
-						<h:message for="MeshSize" showDetail="true" showSummary="true"
-							errorStyle="color: red" />
-					</h:panelGroup>
-					<h:outputText escape="false" value="<b>Mesh Refine Limit: </b>" />
-					<h:panelGroup>
-						<h:inputText id="MeshRefineLimit" value="#{MGBean.magic15}"
-							required="true" />
-						<h:message for="MeshRefineLimit" showDetail="true"
-							showSummary="true" errorStyle="color: red" />
-					</h:panelGroup>
 					<h:commandButton value="Generate Mesh"
 						action="#{MGBean.toggleFireMeshGen}" />
 				</h:panelGrid>
