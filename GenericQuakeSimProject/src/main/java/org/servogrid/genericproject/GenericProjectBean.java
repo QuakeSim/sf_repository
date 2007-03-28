@@ -269,25 +269,25 @@ public class GenericProjectBean {
     }
     
     protected void setContextList() throws Exception {
-	contextList=cm.listContext(codeName);
-	if(contextList==null || contextList.length<=0) {
-	    System.out.println(contextList.toString());
-	    System.out.println("No archived projects");
-	}
-	else {
-	    convertContextList();
-	    System.out.println("Context has "+contextList.length+" elements");
-	    for(int i=0;i<contextList.length;i++) {
-		System.out.println(contextList[i]);
-	    }
-	}
+		  contextList=cm.listContext(codeName);
+		  if(contextList==null || contextList.length<=0) {
+				System.out.println(contextList.toString());
+				System.out.println("No archived projects");
+		  }
+		  else {
+				convertContextList();
+				System.out.println("Context has "+contextList.length+" elements");
+				for(int i=0;i<contextList.length;i++) {
+					 System.out.println(contextList[i]);
+				}
+		  }
     }
-
+	 
     
     public String getPortalUserName() {
-	userName=Utility.getUserName(defaultName);
-	System.out.println("Username is "+userName);
-	return userName;
+		  userName=Utility.getUserName(defaultName);
+		  System.out.println("Username is "+userName);
+		  return userName;
     }
 
     //This is the command that runs the thing.
