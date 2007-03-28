@@ -66,7 +66,7 @@ function dataTableSelectOneRadio(radio) {
 		columns="2" border="1">
 		<h:form id="selectproj">
 			<h:panelGroup>
-
+				
 				<h:outputFormat escape="false"
 					value="<b>Project Name: #{MGBean.projectName} </b>" />
 
@@ -666,10 +666,13 @@ function dataTableSelectOneRadio(radio) {
 					value="<b>Create Initial Mesh</b><br><br>" />
 				<h:outputFormat escape="false"
 					value="Click the button below to generate a mesh for the geometry.<br><br>" />
-
+			  
+           <h:outputText value="Mesh Refinement Level"/>
+			  <h:inputText id="refinement" required="true" value="#{MGBean.meshResolution}"/>
+					
 				<h:panelGrid columns="2" border="0">
 					<h:commandButton value="Generate Mesh"
-						action="#{MGBean.toggleFireMeshGen}" />
+						action="#{MGBean.runBlockingMeshGeneratorJSF}" />
 				</h:panelGrid>
 
 			</h:panelGrid>

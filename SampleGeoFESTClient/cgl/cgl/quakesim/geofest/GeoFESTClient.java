@@ -116,29 +116,30 @@ public class GeoFESTClient {
 	    System.out.println("Running blocking version");
 	    //Invoke the mesh creation step.  Uses the "rare"
 	    //option.
-	    String[] returnUrls1=gfs.runBlockingMeshGenerator(userName,
-							      projectName,
-							      faults,
-							      layers,
-							      "rare");
+	    MeshRunBean mrb=gfs.runBlockingMeshGenerator(userName,
+																	 projectName,
+																	 faults,
+																	 layers,
+																	 "rare");
 	    //Print out the URLs of the resulting mesh files
-	    System.out.println("These are the URLs of the mesh input files.");
-	    for(int i=0;i<returnUrls1.length;i++){
-		System.out.println(returnUrls1[i]);
-	    }
+// 	    System.out.println("These are the URLs of the mesh input files.");
+// 	    for(int i=0;i<returnUrls1.length;i++){
+// 			  System.out.println(returnUrls1[i]);
+// 	    }
 	    
 	    System.out.println("Running GeoFEST");
 	    
 	    //Run GeoFEST.
-	    String[] returnUrls2=
-		gfs.runGeoFEST(userName,projectName,gpb,returnUrls1[0]);
+	    GFOutputBean gfoutput=
+			  gfs.runGeoFEST(userName,projectName,gpb,mrb.getJobUIDStamp());
 	    
 	    //Print out the URLs of the GeoFEST output.
 	    System.out.println("These are the URLs of the GeoFEST output files.");			
 	    System.out.println("Not all of these will be immediately active.");
-	    for(int i=0;i<returnUrls2.length;i++){
-		System.out.println(returnUrls2[i]);
-	    }
+
+// 	    for(int i=0;i<returnUrls2.length;i++){
+// 			  System.out.println(returnUrls2[i]);
+// 	    }
 	    
 	}
 	catch (Exception ex) {

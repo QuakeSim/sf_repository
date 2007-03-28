@@ -22,7 +22,7 @@ public class GeoFESTServiceServiceLocator extends org.apache.axis.client.Service
     }
 
     // Use to get a proxy class for GeoFESTExec
-    private java.lang.String GeoFESTExec_address = "http://gf19.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec";
+    private java.lang.String GeoFESTExec_address = "http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec";
 
     public java.lang.String getGeoFESTExecAddress() {
         return GeoFESTExec_address;
@@ -105,7 +105,7 @@ public class GeoFESTServiceServiceLocator extends org.apache.axis.client.Service
     }
 
     public javax.xml.namespace.QName getServiceName() {
-        return new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "GeoFESTServiceService");
+        return new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "GeoFESTServiceService");
     }
 
     private java.util.HashSet ports = null;
@@ -113,7 +113,7 @@ public class GeoFESTServiceServiceLocator extends org.apache.axis.client.Service
     public java.util.Iterator getPorts() {
         if (ports == null) {
             ports = new java.util.HashSet();
-            ports.add(new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "GeoFESTExec"));
+            ports.add(new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "GeoFESTExec"));
         }
         return ports.iterator();
     }

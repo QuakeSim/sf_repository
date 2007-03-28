@@ -29,14 +29,14 @@ public class GeoFESTExecSoapBindingStub extends org.apache.axis.client.Stub impl
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "projectName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "faults"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "ArrayOf_tns1_Fault"), cgl.quakesim.geofest.Fault[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "faults"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "ArrayOf_tns1_Fault"), cgl.quakesim.geofest.Fault[].class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "layers"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "ArrayOf_tns1_Layer"), cgl.quakesim.geofest.Layer[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "layers"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "ArrayOf_tns1_Layer"), cgl.quakesim.geofest.Layer[].class, false, false);
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "autoref_mode"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("urn:GatewayWS", "ArrayOf_soapenc_string"));
-        oper.setReturnClass(java.lang.String[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "MeshRunBean"));
+        oper.setReturnClass(cgl.quakesim.geofest.MeshRunBean.class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "runBlockingMeshGeneratorReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -48,14 +48,14 @@ public class GeoFESTExecSoapBindingStub extends org.apache.axis.client.Stub impl
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "projectName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "faults"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "ArrayOf_tns1_Fault"), cgl.quakesim.geofest.Fault[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "faults"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "ArrayOf_tns1_Fault"), cgl.quakesim.geofest.Fault[].class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "layers"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "ArrayOf_tns1_Layer"), cgl.quakesim.geofest.Layer[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "layers"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "ArrayOf_tns1_Layer"), cgl.quakesim.geofest.Layer[].class, false, false);
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "autoref_mode"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("urn:GatewayWS", "ArrayOf_soapenc_string"));
-        oper.setReturnClass(java.lang.String[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "MeshRunBean"));
+        oper.setReturnClass(cgl.quakesim.geofest.MeshRunBean.class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "runNonBlockingMeshGeneratorReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -95,8 +95,8 @@ public class GeoFESTExecSoapBindingStub extends org.apache.axis.client.Stub impl
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "timeStamp"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("urn:GatewayWS", "ArrayOf_soapenc_string"));
-        oper.setReturnClass(java.lang.String[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "GFOutputBean"));
+        oper.setReturnClass(cgl.quakesim.geofest.GFOutputBean.class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "runGeoFESTReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -140,7 +140,7 @@ public class GeoFESTExecSoapBindingStub extends org.apache.axis.client.Stub impl
             java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
             java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
             java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
-            qName = new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "ArrayOf_tns1_Fault");
+            qName = new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "ArrayOf_tns1_Fault");
             cachedSerQNames.add(qName);
             cls = cgl.quakesim.geofest.Fault[].class;
             cachedSerClasses.add(cls);
@@ -149,7 +149,7 @@ public class GeoFESTExecSoapBindingStub extends org.apache.axis.client.Stub impl
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "ArrayOf_tns1_Layer");
+            qName = new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "ArrayOf_tns1_Layer");
             cachedSerQNames.add(qName);
             cls = cgl.quakesim.geofest.Layer[].class;
             cachedSerClasses.add(cls);
@@ -157,6 +157,20 @@ public class GeoFESTExecSoapBindingStub extends org.apache.axis.client.Stub impl
             qName2 = null;
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "GFOutputBean");
+            cachedSerQNames.add(qName);
+            cls = cgl.quakesim.geofest.GFOutputBean.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "MeshRunBean");
+            cachedSerQNames.add(qName);
+            cls = cgl.quakesim.geofest.MeshRunBean.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("urn:GatewayWS", "ArrayOf_soapenc_string");
             cachedSerQNames.add(qName);
@@ -255,7 +269,7 @@ public class GeoFESTExecSoapBindingStub extends org.apache.axis.client.Stub impl
         }
     }
 
-    public java.lang.String[] runBlockingMeshGenerator(java.lang.String userName, java.lang.String projectName, cgl.quakesim.geofest.Fault[] faults, cgl.quakesim.geofest.Layer[] layers, java.lang.String autoref_mode) throws java.rmi.RemoteException {
+    public cgl.quakesim.geofest.MeshRunBean runBlockingMeshGenerator(java.lang.String userName, java.lang.String projectName, cgl.quakesim.geofest.Fault[] faults, cgl.quakesim.geofest.Layer[] layers, java.lang.String autoref_mode) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -276,9 +290,9 @@ public class GeoFESTExecSoapBindingStub extends org.apache.axis.client.Stub impl
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.String[]) _resp;
+                return (cgl.quakesim.geofest.MeshRunBean) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.String[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.String[].class);
+                return (cgl.quakesim.geofest.MeshRunBean) org.apache.axis.utils.JavaUtils.convert(_resp, cgl.quakesim.geofest.MeshRunBean.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -286,7 +300,7 @@ public class GeoFESTExecSoapBindingStub extends org.apache.axis.client.Stub impl
 }
     }
 
-    public java.lang.String[] runNonBlockingMeshGenerator(java.lang.String userName, java.lang.String projectName, cgl.quakesim.geofest.Fault[] faults, cgl.quakesim.geofest.Layer[] layers, java.lang.String autoref_mode) throws java.rmi.RemoteException {
+    public cgl.quakesim.geofest.MeshRunBean runNonBlockingMeshGenerator(java.lang.String userName, java.lang.String projectName, cgl.quakesim.geofest.Fault[] faults, cgl.quakesim.geofest.Layer[] layers, java.lang.String autoref_mode) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -307,9 +321,9 @@ public class GeoFESTExecSoapBindingStub extends org.apache.axis.client.Stub impl
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.String[]) _resp;
+                return (cgl.quakesim.geofest.MeshRunBean) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.String[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.String[].class);
+                return (cgl.quakesim.geofest.MeshRunBean) org.apache.axis.utils.JavaUtils.convert(_resp, cgl.quakesim.geofest.MeshRunBean.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -372,7 +386,7 @@ public class GeoFESTExecSoapBindingStub extends org.apache.axis.client.Stub impl
 }
     }
 
-    public java.lang.String[] runGeoFEST(java.lang.String userName, java.lang.String projectName, cgl.quakesim.geofest.GeotransParamsBean gpb, java.lang.String timeStamp) throws java.rmi.RemoteException {
+    public cgl.quakesim.geofest.GFOutputBean runGeoFEST(java.lang.String userName, java.lang.String projectName, cgl.quakesim.geofest.GeotransParamsBean gpb, java.lang.String timeStamp) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -393,9 +407,9 @@ public class GeoFESTExecSoapBindingStub extends org.apache.axis.client.Stub impl
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.String[]) _resp;
+                return (cgl.quakesim.geofest.GFOutputBean) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.String[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.String[].class);
+                return (cgl.quakesim.geofest.GFOutputBean) org.apache.axis.utils.JavaUtils.convert(_resp, cgl.quakesim.geofest.GFOutputBean.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {

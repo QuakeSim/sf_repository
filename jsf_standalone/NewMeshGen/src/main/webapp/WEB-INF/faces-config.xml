@@ -22,7 +22,7 @@
                  </managed-property>
                  <managed-property>
                    <property-name>geoFESTServiceUrl</property-name>
-                   <value>Http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec</value>
+                   <value>Http://gf19.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec</value>
                  </managed-property>
 <!--
                  <managed-property>
@@ -97,6 +97,10 @@
 	<navigation-rule>
 		<from-view-id>/EditProject.jsp</from-view-id>
 		<navigation-case>
+			<from-outcome>mesh_generation_running</from-outcome>
+			<to-view-id>/RunMesh.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>MG-ant-run</from-outcome>
 			<to-view-id>/AntRun.jsp</to-view-id>
 		</navigation-case>
@@ -123,6 +127,26 @@
 		<navigation-case>
 			<from-outcome>MG-back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/RunMesh.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-edit-project</from-outcome>
+			<to-view-id>/EditProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-view-mesh</from-outcome>
+			<to-view-id>/ViewMesh.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-geotrans-params</from-outcome>
+			<to-view-id>/GeotransParams.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	

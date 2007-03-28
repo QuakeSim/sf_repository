@@ -122,7 +122,7 @@ cd $ANALYZE_TSERI_EXECUTION_HOME
 mvn clean -Dtomcat.base.dir=/tmp -Danalyze_tseri.service.url=/tmp
 
 cd $GEOFEST_EXECUTION_HOME
-mvn clean -Dtomcat.base.dir=/tmp -Dgeofest.service.url=/tmp
+Mvn clean -Dtomcat.base.dir=/tmp -Dgeofest.service.url=/tmp
  
 
 #--------------------------------------------------

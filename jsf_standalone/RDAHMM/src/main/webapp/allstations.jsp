@@ -177,7 +177,6 @@ mapcenter_y = center_xy[1];
        <h:outputText value="Input File"/>
        </h:outputLink>
 
-
        <h:outputLink value="#{rdahmmBean.projectRange}" target="_blank">
        <h:outputText value="Range"/>
        </h:outputLink>
