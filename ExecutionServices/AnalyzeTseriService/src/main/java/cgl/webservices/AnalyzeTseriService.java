@@ -291,47 +291,25 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		driverFileName = projectName + driverFileExtension;
 		System.out.println("Writing input file: " + workDir + "/"
 				+ driverFileName);
-		PrintWriter pw = new PrintWriter(new FileWriter(workDir + "/"
-				+ driverFileName), true);
-		pw.println(twospace + "apriori value file:" + twospace
-				+ aprioriValueFile);
-		pw.println(twospace + "input file:" + twospace + workDir + slash
-				+ projectName + mosesDataListExt);
-		pw.println(twospace + "sit_list file:" + twospace + workDir + slash
-				+ projectName + mosesSiteListExt);
-		pw.println(twospace + "est_parameter file:" + twospace + workDir
-				+ slash + projectName + mosesParamFileExt);
+		PrintWriter pw = new PrintWriter(new FileWriter(workDir + "/" + driverFileName), true);
+		pw.println(twospace + "apriori value file:" + twospace + aprioriValueFile);
+		pw.println(twospace + "input file:" + twospace + workDir + slash + projectName + mosesDataListExt);
+		pw.println(twospace + "sit_list file:" + twospace + workDir + slash + projectName + mosesSiteListExt);
+		pw.println(twospace + "est_parameter file:" + twospace + workDir + slash + projectName + mosesParamFileExt);
 		// pw.println(twospace+"est_parameter
 		// file:"+twospace+globalDataDir+mosesParamFile);
-		pw.println(twospace + "output file:" + twospace + workDir + slash
-				+ projectName + outputFileExt);
-		pw.println(twospace + "residual file:" + twospace + workDir + slash
-				+ projectName + residualFileExt);
+		pw.println(twospace + "output file:" + twospace + workDir + slash + projectName + outputFileExt);
+		pw.println(twospace + "residual file:" + twospace + workDir + slash + projectName + residualFileExt);
 		pw.println(twospace + "res_option:" + twospace + resOption);
-		pw.println(twospace + "specific term_out file:" + twospace + workDir
-				+ slash + projectName + termOutFileExt);
+		pw.println(twospace + "specific term_out file:" + twospace + workDir + slash + projectName + termOutFileExt);
 		pw.println(twospace + "specific term_option:" + twospace + termOption);
 		pw.println(twospace + "enu_correlation usage:" + twospace + "no");
-		pw.println(twospace + "cutoff criterion (year):" + twospace
-				+ cutoffCriterion);
-		pw.println(twospace + "span to est jump aper (est_jump_span):"
-				+ twospace + estJumpSpan);
-		pw.println(twospace + "weak_obs (big sigma) criteria:" + twospace
-				+ weakObsCriteria.getEast() + twospace
-				+ weakObsCriteria.getNorth() + twospace
-				+ weakObsCriteria.getUp());
-		pw.println(twospace + "outlier (big o-c) criteria mm:" + twospace
-				+ outlierCriteria.getEast() + twospace
-				+ outlierCriteria.getNorth() + twospace
-				+ outlierCriteria.getUp());
-		pw
-				.println(twospace + "very bad_obs criteria mm:" + twospace
-						+ badObsCriteria.getEast() + twospace
-						+ badObsCriteria.getNorth() + twospace
-						+ badObsCriteria.getUp());
-		pw.println(twospace + "t_interval:" + twospace
-				+ timeInterval.getBeginTime() + twospace
-				+ timeInterval.getEndTime());
+		pw.println(twospace + "cutoff criterion (year):" + twospace + cutoffCriterion);
+		pw.println(twospace + "span to est jump aper (est_jump_span):" + twospace + estJumpSpan);
+		pw.println(twospace + "weak_obs (big sigma) criteria:" + twospace + weakObsCriteria.getEast() + twospace + weakObsCriteria.getNorth() + twospace + weakObsCriteria.getUp());
+		pw.println(twospace + "outlier (big o-c) criteria mm:" + twospace + outlierCriteria.getEast() + twospace + outlierCriteria.getNorth() + twospace + outlierCriteria.getUp());
+		pw.println(twospace + "very bad_obs criteria mm:" + twospace + badObsCriteria.getEast() + twospace + badObsCriteria.getNorth() + twospace + badObsCriteria.getUp());
+		pw.println(twospace + "t_interval:" + twospace + timeInterval.getBeginTime() + twospace + timeInterval.getEndTime()); 
 		pw.println(twospace + "end:");
 		pw.println("---------- part 2 -- apriori information");
 		pw.println(twospace + "exit:");
@@ -833,6 +811,112 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		return rtn;
 	}
 
+	public static String[] execATS(String siteCode,  
+			int resOption, int termOption, double cutoffCriterion, double estJumpSpan,
+			double weakObsCriteriaEast, double weakObsCriteriaNorth, double weakObsCriteriaUp,
+			double outlierCriteriaEast, double outlierCriteriaNorth, double outlierCriteriaUp,
+			double badObsCriteriaEast, double badObsCriteriaNorth, double badObsCriteriaUp,
+			double timeIntervalBeginTime, double timeIntervalEndTime,
+			String dataUrl, double[][] globalParam, double[][] siteParam) {
+		
+		AnalyzeTseriService ats;
+		
+		try {
+			ats = new AnalyzeTseriService(false);
+			ats.myStation.setSiteName(siteCode);
+			ats.resOption = resOption;
+			ats.termOption = termOption;
+			ats.cutoffCriterion = cutoffCriterion;
+			ats.estJumpSpan = estJumpSpan;
+			ats.weakObsCriteria.east = weakObsCriteriaEast;
+			ats.weakObsCriteria.north = weakObsCriteriaNorth;
+			ats.weakObsCriteria.up = weakObsCriteriaUp;
+			ats.outlierCriteria.east = outlierCriteriaEast;
+			ats.outlierCriteria.north = outlierCriteriaNorth;
+			ats.outlierCriteria.up = outlierCriteriaUp;
+			ats.badObsCriteria.east = badObsCriteriaEast;
+			ats.badObsCriteria.north = badObsCriteriaNorth;
+			ats.badObsCriteria.up = badObsCriteriaUp;
+			ats.timeInterval.beginTime = timeIntervalBeginTime;
+			ats.timeInterval.endTime = timeIntervalEndTime;
+			
+
+			System.out.println("Size : " + globalParam.length);
+			System.out.println("Size : " + siteParam.length);
+			for (int i = 0; i < globalParam.length; i++) {
+				switch ((int) globalParam[i][0]) {
+				case 1:
+				case 2:
+				case 3:
+					addConstantBias(ats.allsites, ats.allsitesList,
+							(int) globalParam[i][0], globalParam[i][1],
+							globalParam[i][2], globalParam[i][3], true);
+					break;
+				case 4:
+				case 5:
+				case 6:
+					addVelocityBias(ats.allsites, ats.allsitesList,
+							(int) globalParam[i][0], globalParam[i][1],
+							globalParam[i][2], globalParam[i][3],
+							globalParam[i][4], true);
+					break;
+				case 7:
+				case 8:
+				case 9:
+					addEpisodicBias(ats.allsites, ats.allsitesList,
+							(int) globalParam[i][0], globalParam[i][1],
+							globalParam[i][2], globalParam[i][3],
+							globalParam[i][4]);
+					break;
+				}
+			}
+
+			for (int i = 0; i < siteParam.length; i++) {
+				switch ((int) siteParam[i][0]) {
+				case 1:
+				case 2:
+				case 3:
+					addConstantBias(ats.myStation, ats.myStationList,
+							(int) siteParam[i][0], siteParam[i][1],
+							siteParam[i][2], siteParam[i][3], false);
+					break;
+				case 4:
+				case 5:
+				case 6:
+					addVelocityBias(ats.myStation, ats.myStationList,
+							(int) siteParam[i][0], siteParam[i][1],
+							siteParam[i][2], siteParam[i][3], siteParam[i][4],
+							false);
+					break;
+				case 7:
+				case 8:
+				case 9:
+					addEpisodicBias(ats.myStation, ats.myStationList,
+							(int) siteParam[i][0], siteParam[i][1],
+							siteParam[i][2], siteParam[i][3], siteParam[i][4]);
+					break;
+				}
+			}
+
+			System.out.println("----------------------------------");
+			System.out.println("Executing runBlockingAnalyzeTseri ... ");
+			String[] returnVals = ats
+					.runBlockingAnalyzeTseri(siteCode, dataUrl);
+
+			for (int i = 0; i < returnVals.length; i++) {
+				System.out.println(returnVals[i]);
+			}
+			
+			return returnVals;
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+	
 	/**
 	 * A possible web service function
 	 */

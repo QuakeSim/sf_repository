@@ -24,7 +24,30 @@ public class AnalyzeTseriServiceClient {
 			call.setOperationName(new QName("http://soapinterop.org/",
 					"execATS"));
 			
-			String[] ret = (String[]) call.invoke(new Object[] {siteCode, dataUrl, globalParam, siteParam});
+			int resOption = 387; 
+			int termOption = 556; 
+			double cutoffCriterion = 1.0; 
+			double estJumpSpan = 1.0;
+			double weakObsCriteriaEast = 30.0; 
+			double weakObsCriteriaNorth = 30.0; 
+			double weakObsCriteriaUp = 50.0;
+			double outlierCriteriaEast = 800.0; 
+			double outlierCriteriaNorth = 800.0; 
+			double outlierCriteriaUp = 800.0;
+			double badObsCriteriaEast = 10000.0; 
+			double badObsCriteriaNorth = 10000.0; 
+			double badObsCriteriaUp = 10000.0;
+			double timeIntervalBeginTime = 2004.8; 
+			double timeIntervalEndTime = 2006.8;
+
+			String[] ret = (String[]) call.invoke(new Object[] { siteCode,
+					new Integer(resOption), new Integer(termOption), 
+					new Double(cutoffCriterion), new Double(estJumpSpan),
+					new Double(weakObsCriteriaEast), new Double(weakObsCriteriaNorth), new Double(weakObsCriteriaUp),
+					new Double(outlierCriteriaEast), new Double(outlierCriteriaNorth), new Double(outlierCriteriaUp),
+					new Double(badObsCriteriaEast), new Double(badObsCriteriaNorth), new Double(badObsCriteriaUp),
+					new Double(timeIntervalBeginTime), new Double(timeIntervalEndTime),
+					dataUrl, globalParam, siteParam });
 			
 			System.out.println("Output: ");
 			for (int i = 0; i < ret.length; i++) {
