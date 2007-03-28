@@ -43,6 +43,8 @@
         <beanMapping qname="myNS:Fault" xmlns:myNS="urn:GeoFESTService" languageSpecificType="java:cgl.webservices.geofest.Fault"/>
         <beanMapping qname="myNS:Layer" xmlns:myNS="urn:GeoFESTService" languageSpecificType="java:cgl.webservices.geofest.Layer"/>
         <beanMapping qname="myNS:GeotransParamsBean" xmlns:myNS="urn:GeoFESTService" languageSpecificType="java:cgl.webservices.geofest.GeotransParamsBean"/>
+        <beanMapping qname="myNS:MeshRunBean" xmlns:myNS="urn:GeoFESTService" languageSpecificType="java:cgl.webservices.geofest.MeshRunBean"/>
+        <beanMapping qname="myNS:GFOutputBean" xmlns:myNS="urn:GeoFESTService" languageSpecificType="java:cgl.webservices.geofest.GFOutputBean"/>
  </service>
  <transport name="http">
   <requestFlow>
