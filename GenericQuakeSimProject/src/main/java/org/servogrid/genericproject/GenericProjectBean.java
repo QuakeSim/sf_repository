@@ -65,6 +65,8 @@ public class GenericProjectBean {
     protected String antUrl;
 
     protected String fileServiceUrl;
+    protected String hostName;
+    protected String gnuplotHostName;
     //    protected String hostName="danube.ucs.indiana.edu";
     //    protected String gnuplotHostName="gf2.ucs.indiana.edu";
 
@@ -170,13 +172,13 @@ public class GenericProjectBean {
 	return this.contextList;
     }
     
-//     public void setHostName(String hostName){
-// 	this.hostName=hostName;
-//     }
+     public void setHostName(String hostName){
+	this.hostName=hostName;
+    }
 
-//     public String getHostName() {
-// 	return this.hostName;
-//     }
+    public String getHostName() {
+	return this.hostName;
+    }
 
     public boolean getIsInitialized() {
 	return isInitialized;
@@ -302,29 +304,29 @@ public class GenericProjectBean {
 	return line;
     }
 
-//     protected void convertContextList() throws Exception {
-// 	Hashtable returnHash=new Hashtable();
-// 	String creationDate=null;
-// 	String contextname=null;
-// 	ProjectBean projectBean;
-// 	contextListVector.clear();
-// 	if(contextList!=null && contextList.length>0) {
-// 	    for(int i=0;i<contextList.length;i++) {
-// 		projectBean=new ProjectBean();
+    protected void convertContextList() throws Exception {
+	Hashtable returnHash=new Hashtable();
+	String creationDate=null;
+	String contextname=null;
+	ProjectBean projectBean;
+	contextListVector.clear();
+	if(contextList!=null && contextList.length>0) {
+	    for(int i=0;i<contextList.length;i++) {
+		projectBean=new ProjectBean();
 		
-// 		contextName=codeName+"/"+contextList[i];
-// 		creationDate=cm.getCurrentProperty(contextName,"LastTime");
-// 		projectBean.setProjectName(contextList[i]);
-// 		projectBean.setCreationDate(convertDate(creationDate));
-// 		projectBean.setHostName(hostName);
-// 		projectBean.setBaseWorkDir(baseWorkDir);
-// 		projectBean.setFileServiceUrl(fileServiceUrl);
-// 		contextListVector.add(projectBean);
-// 		returnHash.put(contextList[i],contextList[i]);
-// 	    }
-// 	}
-// 	setContextListHash(returnHash);
-//     }
+		contextName=codeName+"/"+contextList[i];
+		creationDate=cm.getCurrentProperty(contextName,"LastTime");
+		projectBean.setProjectName(contextList[i]);
+		projectBean.setCreationDate(convertDate(creationDate));
+		projectBean.setHostName(hostName);
+		projectBean.setBaseWorkDir(baseWorkDir);
+		projectBean.setFileServiceUrl(fileServiceUrl);
+		contextListVector.add(projectBean);
+		returnHash.put(contextList[i],contextList[i]);
+	    }
+	}
+	setContextListHash(returnHash);
+    }
 
     protected String convertDate(String longIntForm){
 	long longDate=Long.parseLong(longIntForm);
