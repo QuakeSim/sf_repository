@@ -88,7 +88,7 @@ YAHOO.util.Event.addListener(window, "load", init);
 		<h:outputText value="Site Code(s):"/>
 		<h:panelGroup>
 			<h:inputText id="siteCode" size="5" value="#{stfilterBean._siteCode}"/>
-			<h:outputText value="(space-delimited)"/>
+			<h:outputText id="otSiteCode" value="(space-delimited)"/>
 			<h:message for="siteCode" showDetail="true" showSummary="true" errorStyle="color: red"/>
 		</h:panelGroup>
 		</h:panelGrid>
