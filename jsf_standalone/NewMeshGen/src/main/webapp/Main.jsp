@@ -22,25 +22,14 @@
 				value="<b>New Project:</b> Create a new geometry out of new and existing faults and layers." />
 
 			<h:commandButton id="button2" value="Load Project"
-				action="#{MGBean.loadProject}" />
+				action="#{MGBean.loadProjectList}" />
 			<h:outputFormat id="output2" escape="false"
 				value="<b>Load Project:</b> Load or delete a previously created project. Use this to add or remove faults and layers, and to change properties." />
-
-			<h:commandButton id="button4" value="Load Mesh"
-				action="#{MGBean.loadMesh}" />
-			<h:outputFormat id="output4" escape="false"
-				value="<b>Load Mesh:</b> Load a previously created project mesh. Use this to further refine a previously created project mesh. Also allows you to go directly to code submission for GeoFEST." />
 
 			<h:commandButton id="button5" value="Fetch Mesh"
 				action="#{MGBean.fetchMesh}" />
 			<h:outputFormat id="output5" escape="false"
-				value="<b>Retrieve Meshes:</b> Download previously generated mesh files to your desktop. You may download individual files or get everything (including geometry specification files) in a single tar bundle." />
-
-			<h:commandButton id="button6" value="GeoFEST2"
-				action="#{MGBean.gfProject}" />
-			<h:outputFormat id="output6" escape="false"
-				value="<b>GeoFEST2:</b>  These pages will guide you through the steps needed to run GeoFEST2 to simulate faults." />
-
+				value="<b>Retrieve Meshes:</b> Download previously generated mesh files and other output to your desktop. You may download individual files or get everything (including geometry specification files) in a single tar bundle." />
 		</h:panelGrid>
 	</h:form>
 </f:view>

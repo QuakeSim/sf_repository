@@ -18,60 +18,68 @@ mesh, click the button.
 	<h:form>
 		<h:panelGrid columns="1" border="0">
 			<h:panelGroup>
-  				<h:panelGrid id="MeshOutputPanel" columns="2" border="0">
+  				<h:panelGrid id="MeshOutputPanel" columns="2" border="1">
 					    <h:outputText value="Project Name"/>
 				       <h:outputText value="#{MGBean.projectMeshRunBean.projectName}"/>
 
 					    <h:outputText value="Job UID Stamp"/>
 				       <h:outputText value="#{MGBean.projectMeshRunBean.jobUIDStamp}"/>
 	
+						    <h:outputText value="Autoref:"/>
 				       <h:outputLink value="#{MGBean.projectMeshRunBean.autoref}" target="_blank">
 						    <h:outputText value="Autoref"/>
 						 </h:outputLink>
 	
+						    <h:outputText value="Autoref Error:"/>
 				       <h:outputLink value="#{MGBean.projectMeshRunBean.autorefError}" target="_blank">
 						    <h:outputText value="Autoref Error"/>
 						 </h:outputLink>
 
+						    <h:outputText value="BC File:"/>
 				       <h:outputLink value="#{MGBean.projectMeshRunBean.bcUrl}" target="_blank">
 						    <h:outputText value="BC File"/>
 						 </h:outputLink>
 
+						    <h:outputText value="Index File:"/>
 				       <h:outputLink value="#{MGBean.projectMeshRunBean.indexUrl}" target="_blank">
 						    <h:outputText value="Index File"/>
 						 </h:outputLink>
 
+						    <h:outputText value="junkBox:"/>
 				       <h:outputLink value="#{MGBean.projectMeshRunBean.junkBox}" target="_blank">
 						    <h:outputText value="junkBox"/>
 						 </h:outputLink>
 
+						    <h:outputText value="Lee Refiner Log:"/>
 				       <h:outputLink value="#{MGBean.projectMeshRunBean.leeRefinerLog}" target="_blank">
 						    <h:outputText value="Lee Refiner Log"/>
 						 </h:outputLink>
 
+						    <h:outputText value="Node File:"/>
 				       <h:outputLink value="#{MGBean.projectMeshRunBean.nodeUrl}" target="_blank">
 						    <h:outputText value="Node File"/>
 						 </h:outputLink>
 
+						    <h:outputText value="Tagging Log:"/>
 				       <h:outputLink value="#{MGBean.projectMeshRunBean.tagbigfltLog}" target="_blank">
 						    <h:outputText value="Tagging Log"/>
 						 </h:outputLink>
 
+						    <h:outputText value="Tetra Url:"/>
 				       <h:outputLink value="#{MGBean.projectMeshRunBean.tetraUrl}" target="_blank">
 						    <h:outputText value="Tetra Url"/>
 						 </h:outputLink>
 
+						    <h:outputText value="Tstout URL:"/>
 				       <h:outputLink value="#{MGBean.projectMeshRunBean.tstout}" target="_blank">
 						    <h:outputText value="Tstout URL"/>
 						 </h:outputLink>
 
+						    <h:outputText value="Refiner Log:"/>
 				       <h:outputLink value="#{MGBean.projectMeshRunBean.refinerLog}" target="_blank">
 						    <h:outputText value="refinerLog"/>
 						 </h:outputLink>
 
-				       <h:outputLink value="#{MGBean.projectMeshRunBean.refinerLog}" target="_blank">
-						    <h:outputText value="refinerLog"/>
-						 </h:outputLink>
 						 
 				</h:panelGrid>
 
@@ -81,9 +89,10 @@ mesh, click the button.
 						<f:param name="layers" value="#{MGBean.myLayersParamForJnlp}" />
 						<f:param name="faults" value="#{MGBean.myFaultsParamForJnlp}" />
 						<f:param name="plotMesh" value="true" />
-						<f:param name="workDir" value="#{MGBean.workDirForJnlp}" />
+						<f:param name="gfHostName" value="#{MGBean.geoFESTBaseUrlForJnlp}" />
 						<f:param name="projectName" value="#{MGBean.projectNameForJnlp}" />
-						<f:param name="fsURL" value="#{MGBean.fsURLForJnlp}" />
+						<f:param name="userName" value="#{MGBean.userName}" />
+						<f:param name="jobUIDStamp" value="#{MGBean.jobToken}" />
 						
 						<h:outputText value="Web Start Plotter" />
 					</h:outputLink>

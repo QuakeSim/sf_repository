@@ -189,37 +189,37 @@ public class GenericProjectBean {
     }
 
     public String getProjectName() {
-	return projectName;
+		  return projectName;
     }
-
+	 
     public void setProjectName(String projectName){
-	this.projectName=projectName;
+		  this.projectName=projectName;
     }
     
     public String getCodeName() {
-	return codeName;
+		  return codeName;
     }
     
     public void setCodeName(String codeName) {
-	this.codeName=codeName;
+		  this.codeName=codeName;
     }
 
     public String getContextUrl() {
-	System.out.println(this.toString()+":getContextUrl:"+contextUrl);
-	return contextUrl;
+		  System.out.println(this.toString()+":getContextUrl:"+contextUrl);
+		  return contextUrl;
     }
-
+	 
     public void setContextUrl(String cUrl) {
-	this.contextUrl=cUrl;
-	System.out.println(this.toString()+":setContextUrl:"+contextUrl);
+		  this.contextUrl=cUrl;
+		  System.out.println(this.toString()+":setContextUrl:"+contextUrl);
     }
-
+	 
     public String getContextBasePath() {
-	System.out.println(this.toString()+":getContextBasePath:"
-			   +contextBasePath);
-	return contextBasePath;
+		  System.out.println(this.toString()+":getContextBasePath:"
+									+contextBasePath);
+		  return contextBasePath;
     }
-
+	 
     public void setContextBasePath(String basepath) {
 	this.contextBasePath=basepath;
 	System.out.println(this.toString()+":setContextBasePath:"
@@ -230,42 +230,42 @@ public class GenericProjectBean {
      * default empty constructor
      */
     public GenericProjectBean(){   
-	System.out.println("Generic Project Bean Created");
-	userName=getPortalUserName();
-	contextListVector=new Vector();
-	contextListHash=new Hashtable();
-	projectsToDelete=new ArrayList();
+		  System.out.println("Generic Project Bean Created");
+		  userName=getPortalUserName();
+		  contextListVector=new Vector();
+		  contextListHash=new Hashtable();
+		  projectsToDelete=new ArrayList();
     }
-
+	 
     public void initWebServices() {
-	System.out.println("Initializing web services");
-
-	try {
-	    //--------------------------------------------------
-	    //Set up the context manager service.
-	    //--------------------------------------------------	
-	    String base_userpath=getContextBasePath()+
-		File.separator+userName+File.separator+codeName;
-	    System.out.println("baseuserpath:"+base_userpath);
-	    
-
-	    cm=(new ContextManagerImpServiceLocator()).
-		getContextManager(new URL(contextUrl));
-	    ((ContextManagerSoapBindingStub) cm).setMaintainSession(true);
-	    System.out.println("Stub initialized");
-
-	    cm.setContextStorage(FS);
-	    cm.init(userName,base_userpath);
-	    cm.addContext(codeName);
-
-	    System.out.println("We're done, take it home.");
-	    
-	    isInitialized=true;
-	}
-	catch(Exception ex) {
-	    System.out.println("We got an exception");
-	    ex.printStackTrace();
-	}
+		  System.out.println("Initializing web services");
+		  
+		  try {
+				//--------------------------------------------------
+				//Set up the context manager service.
+				//--------------------------------------------------	
+				String base_userpath=getContextBasePath()+
+					 File.separator+userName+File.separator+codeName;
+				System.out.println("baseuserpath:"+base_userpath);
+				
+				
+				cm=(new ContextManagerImpServiceLocator()).
+					 getContextManager(new URL(contextUrl));
+				((ContextManagerSoapBindingStub) cm).setMaintainSession(true);
+				System.out.println("Stub initialized");
+				
+				cm.setContextStorage(FS);
+				cm.init(userName,base_userpath);
+				cm.addContext(codeName);
+				
+				System.out.println("We're done, take it home.");
+				
+				isInitialized=true;
+		  }
+		  catch(Exception ex) {
+				System.out.println("We got an exception");
+				ex.printStackTrace();
+		  }
     }
     
     protected void setContextList() throws Exception {

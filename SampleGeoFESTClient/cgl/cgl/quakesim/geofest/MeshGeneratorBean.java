@@ -1,3 +1,4 @@
+
 package cgl.quakesim.geofest;
 
 //Imports from the mother ship
@@ -39,7 +40,7 @@ import org.servogrid.genericproject.Utility;
 public class MeshGeneratorBean extends GenericSopacBean {
     
     // MeshGenerator Bean stuff
-    protected String codeName = "MeshGenerator";
+    
     static final String MESH_GENERATION_NAV_STRING="mesh_generation_running";
     static final String GEOFEST_EXECUTION_LAUNCHED="geofest_execution_launched";
     static final String DEFAULT_USER_NAME="geofest_default_user";
@@ -99,8 +100,9 @@ public class MeshGeneratorBean extends GenericSopacBean {
     String projectDir = new String();
 
     MeshViewer myMeshViewer; 
+
     String mesh_gen_viz_fileServiceUrl = 
-	"http://gf2.ucs.indiana.edu:6060/jetspeed/services/FileService";
+		  "http://gf2.ucs.indiana.edu:6060/jetspeed/services/FileService";
     String mesh_gen_viz_base_dir = new String("/home/gateway/yan_offscreen/offscreen/");
     String myLayersParamForJnlp = new String("");
     String myFaultsParamForJnlp = new String("");
@@ -108,15 +110,18 @@ public class MeshGeneratorBean extends GenericSopacBean {
     String projectNameForJnlp = new String("");
     String fsURLForJnlp = new String("");
     String jobToken="";
-    String userName="";
+    String userName=getUserName();
     String projectName="";
     String meshResolution="rare";
 
     //These should be populated from faces-config.xml
     String meshViewerServerUrl="http://gf2.ucs.indiana.edu:18084";
-    String geoFESTServiceUrl="http://gf19.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec";
     String faultDBServiceUrl="http://gf2.ucs.indiana.edu:9090/axis/services/Select";
-    
+	 String geoFESTBaseUrl="http://gf19.ucs.indiana.edu:8080/geofestexec/";
+    String geoFESTServiceUrl=geoFESTBaseUrl+"/"+"services/GeoFESTExec";
+	 String geoFESTBaseUrlForJnlp=getGeoFESTBaseUrlForJnlp();
+
+
     //This is our geofest service stub.
     GeoFESTService geofestService;
 
@@ -138,6 +143,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
      */
     public MeshGeneratorBean() throws Exception {
 		  super();
+
 		  gfutils.initLayerInteger();
 		  cm = getContextManagerImp();
 		  
@@ -145,8 +151,13 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				new GeoFESTServiceServiceLocator().getGeoFESTExec(new URL(geoFESTServiceUrl));
 		  
 		  myMeshViewer = new MeshViewer(meshViewerServerUrl);
+
+		  //Always create a new project and load existing projects
+// 		  newProject();
+// 		  loadProjectList();
+
+		  //We are done.
 		  System.out.println("MeshGenerator Bean Created");
-		  
     }
 	 
     //--------------------------------------------------
@@ -424,41 +435,41 @@ public class MeshGeneratorBean extends GenericSopacBean {
      * Queries the fault db for everything.
      */
     public void ViewAllFaults() {
-	
-	String getFaultList = "SELECT F.FaultName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
-	String getAuthorList = "SELECT R.Author1 FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
-	String getSegmentList = "SELECT F.SegmentName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
-	String getLatStartList = "SELECT F.LatStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
-	String getLatEndList = "SELECT F.LatEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
-	String getLonStartList = "SELECT F.LonStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
-	String getLonEndList = "SELECT F.LonEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
-	
-	myFaultDBEntryList.clear();
-	
-	List faultSegmentNameList = QueryFaultsBySQL(getSegmentList);
-	List faultAuthorList = QueryFaultsBySQL(getAuthorList);
-	List faultLatStarts = QueryFaultsBySQL(getLatStartList);
-	List faultLatEnds = QueryFaultsBySQL(getLatEndList);
-	List faultLonStarts = QueryFaultsBySQL(getLonStartList);
-	List faultLonEnds = QueryFaultsBySQL(getLonEndList);
-	List tmp_faultNameList = QueryFaultsBySQL(getFaultList);
-	for (int i = 0; i < tmp_faultNameList.size(); i++) {
-	    String tmp1 = tmp_faultNameList.get(i).toString();
-	    FaultDBEntry tmp_FaultDBEntry = new FaultDBEntry();
-	    tmp_FaultDBEntry.faultName = new SelectItem(tmp1 + "@"
-							+ faultSegmentNameList.get(i).toString(), tmp1);
-	    tmp_FaultDBEntry.faultAuthor = faultAuthorList.get(i).toString();
-	    tmp_FaultDBEntry.faultSegmentName = faultSegmentNameList.get(i)
-		.toString();
-	    tmp_FaultDBEntry.faultSegmentCoordinates = "("
-		+ faultLatStarts.get(i).toString() + ","
-		+ faultLatEnds.get(i).toString() + ")-("
-		+ faultLonStarts.get(i).toString() + ","
-					+ faultLonEnds.get(i).toString() + ")";
-	    myFaultDBEntryList.add(tmp_FaultDBEntry);
-	    
-	}
-	
+		  
+		  String getFaultList = "SELECT F.FaultName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
+		  String getAuthorList = "SELECT R.Author1 FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
+		  String getSegmentList = "SELECT F.SegmentName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
+		  String getLatStartList = "SELECT F.LatStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
+		  String getLatEndList = "SELECT F.LatEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
+		  String getLonStartList = "SELECT F.LonStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
+		  String getLonEndList = "SELECT F.LonEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
+		  
+		  myFaultDBEntryList.clear();
+		  
+		  List faultSegmentNameList = QueryFaultsBySQL(getSegmentList);
+		  List faultAuthorList = QueryFaultsBySQL(getAuthorList);
+		  List faultLatStarts = QueryFaultsBySQL(getLatStartList);
+		  List faultLatEnds = QueryFaultsBySQL(getLatEndList);
+		  List faultLonStarts = QueryFaultsBySQL(getLonStartList);
+		  List faultLonEnds = QueryFaultsBySQL(getLonEndList);
+		  List tmp_faultNameList = QueryFaultsBySQL(getFaultList);
+		  for (int i = 0; i < tmp_faultNameList.size(); i++) {
+				String tmp1 = tmp_faultNameList.get(i).toString();
+				FaultDBEntry tmp_FaultDBEntry = new FaultDBEntry();
+				tmp_FaultDBEntry.faultName = new SelectItem(tmp1 + "@"
+																		  + faultSegmentNameList.get(i).toString(), tmp1);
+				tmp_FaultDBEntry.faultAuthor = faultAuthorList.get(i).toString();
+				tmp_FaultDBEntry.faultSegmentName = faultSegmentNameList.get(i)
+					 .toString();
+				tmp_FaultDBEntry.faultSegmentCoordinates = "("
+					 + faultLatStarts.get(i).toString() + ","
+					 + faultLatEnds.get(i).toString() + ")-("
+					 + faultLonStarts.get(i).toString() + ","
+					 + faultLonEnds.get(i).toString() + ")";
+				myFaultDBEntryList.add(tmp_FaultDBEntry);
+				
+		  }
+		  
     }
     
     public void QueryLayersList() {
@@ -673,17 +684,17 @@ public class MeshGeneratorBean extends GenericSopacBean {
      * 
      */
     public void handleFaultsRadioValueChange(ValueChangeEvent event) {
-	
-	try {
-	    // Catch the MyData item during the third phase of the JSF
-	    // lifecycle.
-	    FaultDBEntry tmp_FaultDBEntry = (FaultDBEntry) getMyFaultDataTable()
-		.getRowData();
-	    SelectItem tmp_SelectItem = tmp_FaultDBEntry.getFaultName();
-	    currentFault.setFaultName(tmp_SelectItem.getValue().toString());
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
+		  
+		  try {
+				// Catch the MyData item during the third phase of the JSF
+				// lifecycle.
+				FaultDBEntry tmp_FaultDBEntry = (FaultDBEntry) getMyFaultDataTable()
+					 .getRowData();
+				SelectItem tmp_SelectItem = tmp_FaultDBEntry.getFaultName();
+				currentFault.setFaultName(tmp_SelectItem.getValue().toString());
+		  } catch (Exception e) {
+				e.printStackTrace();
+		  }
     }
     
     /**
@@ -774,17 +785,18 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
     /**
      * This method clears all the render choices, setting them to false.
+	  * Not sure if this should be public.
      */
     public void initEditFormsSelection() {
-	renderSearchByFaultNameForm = false;
-	renderSearchByAuthorForm = false;
-	renderSearchByLatLonForm = false;
-	renderViewAllFaultsForm = false;
-	renderCreateNewLayerForm = false;
-	renderCreateNewFaultForm = false;
-	renderAddLayerFromDBForm = false;
-	renderAddFaultSelectionForm = false;
-	renderAddFaultFromDBForm = false;
+		  renderSearchByFaultNameForm = false;
+		  renderSearchByAuthorForm = false;
+		  renderSearchByLatLonForm = false;
+		  renderViewAllFaultsForm = false;
+		  renderCreateNewLayerForm = false;
+		  renderCreateNewFaultForm = false;
+		  renderAddLayerFromDBForm = false;
+		  renderAddFaultSelectionForm = false;
+		  renderAddFaultFromDBForm = false;
     }
     
     /**
@@ -854,48 +866,101 @@ public class MeshGeneratorBean extends GenericSopacBean {
      * Handle fault db entry events.
      */
     public void toggleSelectFaultDBEntry(ActionEvent ev) {
-	initEditFormsSelection();
-	currentFault.setFaultName(currentFault.getFaultName().trim());
-	if (!currentFault.getFaultName().equals("")) {
-	    currentFault = QueryFaultFromDB(currentFault.getFaultName().trim());
-	}
-	renderCreateNewFaultForm = !renderCreateNewFaultForm;
+		  initEditFormsSelection();
+		  currentFault.setFaultName(currentFault.getFaultName().trim());
+		  if (!currentFault.getFaultName().equals("")) {
+				currentFault = QueryFaultFromDB(currentFault.getFaultName().trim());
+		  }
+		  renderCreateNewFaultForm = !renderCreateNewFaultForm;
     }
     
     public void toggleSelectLayerDBEntry(ActionEvent ev) {
-	initEditFormsSelection();
-	currentLayer.setLayerName(currentLayer.getLayerName().trim());
-	if (!currentLayer.getLayerName().equals("")) {
-	    currentLayer = QueryLayerFromDB(currentLayer.getLayerName().trim());
-	}
-	renderCreateNewLayerForm = !renderCreateNewLayerForm;
+		  initEditFormsSelection();
+		  currentLayer.setLayerName(currentLayer.getLayerName().trim());
+		  if (!currentLayer.getLayerName().equals("")) {
+				currentLayer = QueryLayerFromDB(currentLayer.getLayerName().trim());
+		  }
+		  renderCreateNewLayerForm = !renderCreateNewLayerForm;
     }
     
     public void toggleFaultSearchByName(ActionEvent ev) {
-	initEditFormsSelection();
-	this.forSearchStr = this.forSearchStr.trim();
-	if (!this.forSearchStr.equals("")) {
-	    QueryFaultsByName(this.forSearchStr);
-	}
-	this.forSearchStr = "";
-	renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
+		  initEditFormsSelection();
+		  this.forSearchStr = this.forSearchStr.trim();
+		  if (!this.forSearchStr.equals("")) {
+				QueryFaultsByName(this.forSearchStr);
+		  }
+		  this.forSearchStr = "";
+		  renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
     }
     
     public void toggleFaultSearchByLonLat(ActionEvent ev) {
-	initEditFormsSelection();
-	this.faultLatStart = this.faultLatStart.trim();
-	this.faultLatEnd = this.faultLatEnd.trim();
-	this.faultLonStart = this.faultLonStart.trim();
-	this.faultLonEnd = this.faultLonEnd.trim();
-	if ((!this.faultLatStart.equals("")) && (!this.faultLatEnd.equals(""))
-	    && (!this.faultLonStart.equals(""))
-	    && (!this.faultLonEnd.equals(""))) {
-	    QueryFaultsByLonLat(this.faultLatStart, this.faultLatEnd,
-				this.faultLonStart, this.faultLonEnd);
-	}
-	renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
+		  initEditFormsSelection();
+		  this.faultLatStart = this.faultLatStart.trim();
+		  this.faultLatEnd = this.faultLatEnd.trim();
+		  this.faultLonStart = this.faultLonStart.trim();
+		  this.faultLonEnd = this.faultLonEnd.trim();
+		  if ((!this.faultLatStart.equals("")) && (!this.faultLatEnd.equals(""))
+				&& (!this.faultLonStart.equals(""))
+				&& (!this.faultLonEnd.equals(""))) {
+				QueryFaultsByLonLat(this.faultLatStart, this.faultLatEnd,
+										  this.faultLonStart, this.faultLonEnd);
+		  }
+		  renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
     }
     
+	 /**
+	  * Create the layer collection
+	  */ 
+	 protected List populateLayerCollection(List myLayerEntryProjectList) throws Exception {
+		  List myLayerCollection=new ArrayList();
+		  for(int i=0;i<myLayerEntryProjectList.size();i++) {
+				layerEntryForProject tmp_LayerEntryForProject 
+					 = (layerEntryForProject) myLayerEntryForProjectList.get(i);
+				String tmp_layerName = tmp_LayerEntryForProject.getLayerName();
+				myLayerCollection.add(populateLayerFromContext(tmp_layerName));
+		  }
+		  return myLayerCollection;
+	 }
+
+	 protected Layer populateLayerFromContext(String tmp_layerName) throws Exception  {
+		  System.out.print("Populating Layer "+tmp_layerName+" for  "+projectName);
+		  String layerStatus = "Update";				
+		  String projectFullName = codeName + SEPARATOR + projectName;
+
+		  currentLayer=new Layer();
+		  currentLayer.setLayerName(tmp_layerName);
+		  String thename = projectFullName + SEPARATOR + LAYERS;
+		  
+		  String fullname = thename + SEPARATOR + currentLayer.getLayerName();
+		  
+		  currentLayer.setLayerOriginX(setValue(cm, layerStatus, fullname,
+															 "layerOriginX"));
+		  currentLayer.setLayerOriginY(setValue(cm, layerStatus, fullname,
+															 "layerOriginY"));
+		  currentLayer.setLayerOriginZ(setValue(cm, layerStatus, fullname,
+															 "layerOriginZ"));
+		  currentLayer.setLayerLatOrigin(setValue(cm, layerStatus,
+																fullname, "layerLatOrigin"));
+		  currentLayer.setLayerLonOrigin(setValue(cm, layerStatus,
+																fullname, "layerLonOrigin"));
+		  currentLayer.setLayerLength(setValue(cm, layerStatus, fullname,
+															"layerLength"));
+		  currentLayer.setLayerWidth(setValue(cm, layerStatus, fullname,
+														  "layerWidth"));
+		  currentLayer.setLayerDepth(setValue(cm, layerStatus, fullname,
+														  "layerDepth"));
+		  currentLayer.setLameLambda(setValue(cm, layerStatus, fullname,
+														  "lameLambda"));
+		  currentLayer.setLameMu(setValue(cm, layerStatus, fullname,
+													 "lameMu"));
+		  currentLayer.setViscosity(setValue(cm, layerStatus, fullname,
+														 "viscosity"));
+		  currentLayer.setExponent(setValue(cm, layerStatus, fullname,
+														"exponent"));
+		  return currentLayer;
+		  
+	 }
+
     public void toggleUpdateLayerProjectEntry(ActionEvent ev) {
 		  String layerStatus = "Update";
 		  try {
@@ -923,43 +988,51 @@ public class MeshGeneratorBean extends GenericSopacBean {
 					 System.out.println("error");
 				}
 				if ((tmp_view == true) && (tmp_update == false)) {
-					 currentLayer=(Layer)myLayerCollection.get(iSelectLayer);
-					 currentLayer.setLayerName(tmp_layerName);
-					 String thename = projectFullName + SEPARATOR + LAYERS;
+					 if(myLayerCollection.size()>iSelectLayer) {
+						  currentLayer=(Layer)myLayerCollection.get(iSelectLayer);
+					 }
+					 else {
+						  currentLayer=new Layer();
+					 }
+
+					 currentLayer=populateLayerFromContext(tmp_layerName);
+
+// 					 currentLayer.setLayerName(tmp_layerName);
+// 					 String thename = projectFullName + SEPARATOR + LAYERS;
 					 
-					 String fullname = thename + SEPARATOR + currentLayer.getLayerName();
+// 					 String fullname = thename + SEPARATOR + currentLayer.getLayerName();
 					 
-					 currentLayer.setLayerOriginX(setValue(cm, layerStatus, fullname,
-																		"layerOriginX"));
-					 currentLayer.setLayerOriginY(setValue(cm, layerStatus, fullname,
-																		"layerOriginY"));
-					 currentLayer.setLayerOriginZ(setValue(cm, layerStatus, fullname,
-																		"layerOriginZ"));
-					 currentLayer.setLayerLatOrigin(setValue(cm, layerStatus,
-																		  fullname, "layerLatOrigin"));
-					 currentLayer.setLayerLonOrigin(setValue(cm, layerStatus,
-																		  fullname, "layerLonOrigin"));
-					 currentLayer.setLayerLength(setValue(cm, layerStatus, fullname,
-																	  "layerLength"));
-					 currentLayer.setLayerWidth(setValue(cm, layerStatus, fullname,
-																	 "layerWidth"));
-					 currentLayer.setLayerDepth(setValue(cm, layerStatus, fullname,
-																	 "layerDepth"));
-					 currentLayer.setLameLambda(setValue(cm, layerStatus, fullname,
-																	 "lameLambda"));
-					 currentLayer.setLameMu(setValue(cm, layerStatus, fullname,
-																"lameMu"));
-					 currentLayer.setViscosity(setValue(cm, layerStatus, fullname,
-																	"viscosity"));
-					 currentLayer.setExponent(setValue(cm, layerStatus, fullname,
-																  "exponent"));
+// 					 currentLayer.setLayerOriginX(setValue(cm, layerStatus, fullname,
+// 																		"layerOriginX"));
+// 					 currentLayer.setLayerOriginY(setValue(cm, layerStatus, fullname,
+// 																		"layerOriginY"));
+// 					 currentLayer.setLayerOriginZ(setValue(cm, layerStatus, fullname,
+// 																		"layerOriginZ"));
+// 					 currentLayer.setLayerLatOrigin(setValue(cm, layerStatus,
+// 																		  fullname, "layerLatOrigin"));
+// 					 currentLayer.setLayerLonOrigin(setValue(cm, layerStatus,
+// 																		  fullname, "layerLonOrigin"));
+// 					 currentLayer.setLayerLength(setValue(cm, layerStatus, fullname,
+// 																	  "layerLength"));
+// 					 currentLayer.setLayerWidth(setValue(cm, layerStatus, fullname,
+// 																	 "layerWidth"));
+// 					 currentLayer.setLayerDepth(setValue(cm, layerStatus, fullname,
+// 																	 "layerDepth"));
+// 					 currentLayer.setLameLambda(setValue(cm, layerStatus, fullname,
+// 																	 "lameLambda"));
+// 					 currentLayer.setLameMu(setValue(cm, layerStatus, fullname,
+// 																"lameMu"));
+// 					 currentLayer.setViscosity(setValue(cm, layerStatus, fullname,
+// 																	"viscosity"));
+// 					 currentLayer.setExponent(setValue(cm, layerStatus, fullname,
+// 																  "exponent"));
 					 renderCreateNewLayerForm = !renderCreateNewLayerForm;
 					 
 				}
 				if ((tmp_update == true) && (tmp_view == false)) {
-					 
-					 myLayerCollection.remove(iSelectLayer);
-					 
+					 if(myLayerCollection.size()>iSelectLayer) {					 
+						  myLayerCollection.remove(iSelectLayer);
+					 }
 					 String tmp = projectFullName + SEPARATOR + LAYERS + SEPARATOR
 						  + tmp_layerName;
 					 cm.removeContext(tmp);
@@ -980,6 +1053,47 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  }
     }
     
+	 protected List populateFaultCollection(List myFaultEntryProjectList) throws Exception {
+		  List myFaulCollection=new ArrayList();
+		  for (int i=0;i<myFaultEntryProjectList.size();i++) {
+				faultEntryForProject tmp_faultEntryForProject=
+					 (faultEntryForProject)myFaultEntryForProjectList.get(i);
+				String tmp_faultName=tmp_faultEntryForProject.getFaultName();
+				myFaultCollection.add(populateFaultFromContext(tmp_faultName));
+		  }		  
+		  return myFaultCollection;
+	 }
+
+	 protected Fault populateFaultFromContext(String tmp_faultName) throws Exception {
+		  System.out.print("Populating Fault "+tmp_faultName+" for  "+projectName);
+		  String faultStatus="Update";
+		  String projectFullName = codeName + SEPARATOR + projectName;
+		  currentFault=new Fault();
+		  currentFault.setFaultName(tmp_faultName);
+		  String thename = projectFullName + SEPARATOR + FAULTS;
+		  
+		  String fullname = thename + SEPARATOR + currentFault.getFaultName();
+		  currentFault.setFaultLocationX(setValue(cm, faultStatus,
+																fullname, "faultOriginX"));
+		  currentFault.setFaultLocationY(setValue(cm, faultStatus,
+																fullname, "faultOriginY"));
+		  currentFault.setFaultLength(setValue(cm, faultStatus, fullname,
+															"faultLength"));
+		  currentFault.setFaultWidth(setValue(cm, faultStatus, fullname,
+														  "faultWidth"));
+		  currentFault.setFaultDepth(setValue(cm, faultStatus, fullname,
+														  "faultDepth"));
+		  currentFault.setFaultDipAngle(setValue(cm, faultStatus,
+															  fullname, "faultDipAngle"));
+		  currentFault.setFaultStrikeAngle(setValue(cm, faultStatus,
+																  fullname, "faultStrikeAngle"));
+		  currentFault.setFaultSlip(setValue(cm, faultStatus, fullname,
+														 "faultSlip"));
+		  currentFault.setFaultRakeAngle(setValue(cm, faultStatus,
+																fullname, "faultRakeAngle"));
+		  return currentFault;
+	 }
+
     public void toggleUpdateFaultProjectEntry(ActionEvent ev) {
 		  String faultStatus = "Update";
 		  try {
@@ -1008,34 +1122,43 @@ public class MeshGeneratorBean extends GenericSopacBean {
 					 System.out.println("error");
 				}
 				if ((tmp_view == true) && (tmp_update == false)) {
-					 currentFault=(Fault)myFaultCollection.get(iSelectFault);
-					 currentFault.setFaultName(tmp_faultName);
-					 String thename = projectFullName + SEPARATOR + FAULTS;
+					 //Try to recover from memory, or else load from context.
+					 if(myFaultCollection.size()>iSelectFault) {
+						  currentFault=(Fault)myFaultCollection.get(iSelectFault);
+					 }
+					 else {
+						  currentFault=new Fault();
+					 }
+					 currentFault=populateFaultFromContext(tmp_faultName);
+// 					 currentFault.setFaultName(tmp_faultName);
+// 					 String thename = projectFullName + SEPARATOR + FAULTS;
 					 
-					 String fullname = thename + SEPARATOR + currentFault.getFaultName();
-					 currentFault.setFaultLocationX(setValue(cm, faultStatus,
-																		  fullname, "faultOriginX"));
-					 currentFault.setFaultLocationY(setValue(cm, faultStatus,
-																		  fullname, "faultOriginY"));
-					 currentFault.setFaultLength(setValue(cm, faultStatus, fullname,
-																	  "faultLength"));
-					 currentFault.setFaultWidth(setValue(cm, faultStatus, fullname,
-																	 "faultWidth"));
-					 currentFault.setFaultDepth(setValue(cm, faultStatus, fullname,
-																	 "faultDepth"));
-					 currentFault.setFaultDipAngle(setValue(cm, faultStatus,
-																		 fullname, "faultDipAngle"));
-					 currentFault.setFaultStrikeAngle(setValue(cm, faultStatus,
-																			 fullname, "faultStrikeAngle"));
-					 currentFault.setFaultSlip(setValue(cm, faultStatus, fullname,
-																	"faultSlip"));
-					 currentFault.setFaultRakeAngle(setValue(cm, faultStatus,
-																		  fullname, "faultRakeAngle"));
+// 					 String fullname = thename + SEPARATOR + currentFault.getFaultName();
+// 					 currentFault.setFaultLocationX(setValue(cm, faultStatus,
+// 																		  fullname, "faultOriginX"));
+// 					 currentFault.setFaultLocationY(setValue(cm, faultStatus,
+// 																		  fullname, "faultOriginY"));
+// 					 currentFault.setFaultLength(setValue(cm, faultStatus, fullname,
+// 																	  "faultLength"));
+// 					 currentFault.setFaultWidth(setValue(cm, faultStatus, fullname,
+// 																	 "faultWidth"));
+// 					 currentFault.setFaultDepth(setValue(cm, faultStatus, fullname,
+// 																	 "faultDepth"));
+// 					 currentFault.setFaultDipAngle(setValue(cm, faultStatus,
+// 																		 fullname, "faultDipAngle"));
+// 					 currentFault.setFaultStrikeAngle(setValue(cm, faultStatus,
+// 																			 fullname, "faultStrikeAngle"));
+// 					 currentFault.setFaultSlip(setValue(cm, faultStatus, fullname,
+// 																	"faultSlip"));
+// 					 currentFault.setFaultRakeAngle(setValue(cm, faultStatus,
+// 																		  fullname, "faultRakeAngle"));
 					 renderCreateNewFaultForm = !renderCreateNewFaultForm;
 					 
 				}
 				if ((tmp_update == true) && (tmp_view == false)) {
-					 myFaultCollection.remove(iSelectFault);
+					 if(myFaultCollection.size()>iSelectFault) {
+						  myFaultCollection.remove(iSelectFault);
+					 }
 
 					 String tmp = projectFullName + SEPARATOR + FAULTS + SEPARATOR
 						  + tmp_faultName;
@@ -1221,9 +1344,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
     public String SaveMeshMetaData() throws Exception {
 		  String projectFullName = codeName + SEPARATOR + projectName;
 		  cm.setCurrentProperty(projectFullName, "MeshArchived", "true");
-		  cm.setCurrentProperty(projectFullName, "hostName", hostName);
-		  cm.setCurrentProperty(projectFullName, "workDir", baseWorkDir + "/"
-										+ userName + "/" + projectName + "/");
 		  
 		  String UserMsg = "Index, tetra, and node files were saved";
 		  if (this.statusGeoFEST != true) {
@@ -1239,20 +1359,19 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  initEditFormsSelection();
 		  projectSelectionCode = "";
 		  faultSelectionCode = "";
-		  
     }
     
     public String NewProjectThenEditProject() throws Exception {
-	if (!isInitialized) {
-	    initWebServices();
-	}
-	setContextList();
-	setProjectname();
-	init_edit_project();
-	return "MG-edit-project";
+		  if (!isInitialized) {
+				initWebServices();
+		  }
+		  setContextList();
+		  setProjectname();
+		  init_edit_project();
+		  return "MG-edit-project";
     }
     
-    public String toggleSelectProject() {
+    public String toggleSelectProject() throws Exception  {
 		  if (!isInitialized) {
 				initWebServices();
 		  }
@@ -1263,11 +1382,22 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  }
 		  
 		  initEditFormsSelection();
+		  //This is implemented as a selectmanycheckbox on the client side (LoadProject.jsp),
+		  //hence the unusual for loop.
 		  if (selectProjectsList != null) {
 				for (int i = 0; i < 1; i++) {
 					 this.projectName = selectProjectsList[0];
 				}
 		  }
+		  
+		  //Reconstruct the project lists
+		  myFaultEntryForProjectList=reconstructMyFaultEntryForProjectList(projectName);
+		  myLayerEntryForProjectList=reconstructMyLayerEntryForProjectList(projectName);
+
+		  //Reconstruct the fault and layer object collections from the context
+		  myFaultCollection=populateFaultCollection(myFaultEntryForProjectList);
+		  myLayerCollection=populateLayerCollection(myLayerEntryForProjectList);
+
 		  projectSelectionCode = "";
 		  faultSelectionCode = "";
 		  return "MG-edit-project";
@@ -1337,42 +1467,102 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	return ("rdahmm-load-data-archive");
     }
     
-    public String loadProject() throws Exception {
-	System.out.println("Loading project");
-	if (!isInitialized) {
-	    initWebServices();
-	}
-	setContextList();
-	return ("MG-list-project");
+    public String loadProjectList() throws Exception {
+		  System.out.println("Loading project");
+		  if (!isInitialized) {
+				initWebServices();
+		  }
+		  setContextList();
+
+
+		  return ("MG-list-project");
     }
-        
-    public String loadMesh() throws Exception {
-	System.out.println("Loading Mesh");
-	if (!isInitialized) {
-	    initWebServices();
-	}
-	setContextList();
-	
-	return ("MG-load-mesh");
+
+	 /**
+	  * Reconstructs the fault entry list.
+	  */
+	 protected List reconstructMyFaultEntryForProjectList(String projectName) {
+		  System.out.println("Reconstructing "+projectName);
+		  String projectFullName = codeName + SEPARATOR + projectName;
+		  this.myFaultEntryForProjectList.clear();
+		  try {
+				if (cm.listContext(projectFullName) != null) {
+					 String thename = projectFullName + SEPARATOR + FAULTS;
+					 String[] faults = cm.listContext(thename);
+					 if (faults.length > 0) {
+						  for (int i = 0; i < faults.length; i++) {
+								//Reconstruct the faultEntryForProjectList object
+								faultEntryForProject tmp_myFaultEntryForProject = new faultEntryForProject();
+								tmp_myFaultEntryForProject.setFaultName(faults[i]);
+								tmp_myFaultEntryForProject.view = false;
+								tmp_myFaultEntryForProject.delete = false;
+								this.myFaultEntryForProjectList
+									 .add(tmp_myFaultEntryForProject);
+						  }
+					 }
+				}
+		  } catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  
+		  return this.myFaultEntryForProjectList;
+    }
+
+	 /**
+	  * Reconstruct the layer list from the context.
+	  */
+    protected List reconstructMyLayerEntryForProjectList(String pojectName) {
+		  String projectFullName = codeName + SEPARATOR + projectName;
+		  this.myLayerEntryForProjectList.clear();
+		  try {
+				if (cm.listContext(projectFullName) != null) {
+					 String thename = projectFullName + SEPARATOR + LAYERS;
+					 String[] layers = cm.listContext(thename);
+					 if (layers.length > 0) {
+						  for (int i = 0; i < layers.length; i++) {
+								layerEntryForProject tmp_myLayerEntryForProject = new layerEntryForProject();
+								tmp_myLayerEntryForProject.layerName = layers[i];
+								tmp_myLayerEntryForProject.view = false;
+								tmp_myLayerEntryForProject.delete = false;
+								this.myLayerEntryForProjectList
+									 .add(tmp_myLayerEntryForProject);
+								
+						  }
+					 }
+				}
+		  } catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  return this.myLayerEntryForProjectList;
+    }
+   
+     public String loadMesh() throws Exception {
+		  System.out.println("Loading Mesh");
+		  if (!isInitialized) {
+				initWebServices();
+		  }
+		  setContextList();
+		  
+		  return ("MG-load-mesh");
     }
     
     public String fetchMesh() throws Exception {
-	System.out.println("Fetching Mesh");
-	if (!isInitialized) {
-	    initWebServices();
-	}
-	setContextList();
-	this.ListGeoFESTData = false;
-	return ("MG-fetch-mesh");
+		  System.out.println("Fetching Mesh");
+		  if (!isInitialized) {
+				initWebServices();
+		  }
+		  setContextList();
+		  this.ListGeoFESTData = false;
+		  return ("MG-fetch-mesh");
     }
     
     public String gfProject() throws Exception {
-	System.out.println("GeoFest2 main page");
-	if (!isInitialized) {
-	    initWebServices();
-	}
-	
-	return ("MG-gf-project");
+		  System.out.println("GeoFest2 main page");
+		  if (!isInitialized) {
+				initWebServices();
+		  }
+		  
+		  return ("MG-gf-project");
     }
     
     public String runGeoFEST() throws Exception {
@@ -1418,54 +1608,55 @@ public class MeshGeneratorBean extends GenericSopacBean {
     }
     
     protected static String getContextPath() {
-	String path = ".";
-	try {
-	    path = FacesContext.getCurrentInstance().getExternalContext()
-		.getRequestContextPath()
-		+ "/meshdownloads/";
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
-	return path;
+		  String path = ".";
+		  try {
+				path = FacesContext.getCurrentInstance().getExternalContext()
+					 .getRequestContextPath()
+					 + "/meshdownloads/";
+		  } catch (Exception e) {
+				e.printStackTrace();
+		  }
+		  return path;
     }
     
     public void StageGeotransFile() throws Exception {
     }
     
     public String gfarchivedData() throws Exception {
-	System.out.println("gf archived data");
-	if (!isInitialized) {
-	    initWebServices();
-	}
-	setContextList();
-	this.ListGeoFESTData = true;
-	return ("MG-gf-archived-data");
+		  System.out.println("gf archived data");
+		  if (!isInitialized) {
+				initWebServices();
+		  }
+		  setContextList();
+		  this.ListGeoFESTData = true;
+		  return ("MG-gf-archived-data");
     }
     
     public String gfGraphOutput() throws Exception {
-	System.out.println("gf Graph Output");
-	if (!isInitialized) {
-	    initWebServices();
-	}
-	setContextList();
-	this.ListGeoFESTData = true;
-	return ("MG-gf-graph-output");
+		  System.out.println("gf Graph Output");
+		  if (!isInitialized) {
+				initWebServices();
+		  }
+		  setContextList();
+		  this.ListGeoFESTData = true;
+		  return ("MG-gf-graph-output");
     }
     
     public String ContourPlot() throws Exception {
-	System.out.println("Contour Plot");
-	if (!isInitialized) {
-	    initWebServices();
-	}
-	setContextList();
-	FacesContext fc = FacesContext.getCurrentInstance();
-	this.selectedProject = (String) fc.getExternalContext()
-	    .getRequestParameterMap().get("ProjectSelect");
-	this.plotTarget = (String) fc.getExternalContext()
-	    .getRequestParameterMap().get("DataChoice");
-	
-	return ("MG-contour-plot");
+		  System.out.println("Contour Plot");
+		  if (!isInitialized) {
+				initWebServices();
+		  }
+		  setContextList();
+		  FacesContext fc = FacesContext.getCurrentInstance();
+		  this.selectedProject = (String) fc.getExternalContext()
+				.getRequestParameterMap().get("ProjectSelect");
+		  this.plotTarget = (String) fc.getExternalContext()
+				.getRequestParameterMap().get("DataChoice");
+		  
+		  return ("MG-contour-plot");
     }	
+
     // --------------------------------------------------
     // These are accessor methods.
     // --------------------------------------------------
@@ -1576,134 +1767,125 @@ public class MeshGeneratorBean extends GenericSopacBean {
     }
     
     public void setMyProjectNameList(List tmp_str) {
-	this.myProjectNameList = tmp_str;
+		  this.myProjectNameList = tmp_str;
     }
     
     public List getMyProjectNameList() {
-	this.myProjectNameList.clear();
-	try {
-	    String[] tmp_contextlist = cm.listContext(codeName);
-	    if (tmp_contextlist.length > 0) {
-		for (int i = 0; i < tmp_contextlist.length; i++) {
-		    myProjectNameList.add(new SelectItem(tmp_contextlist[i],
-							 tmp_contextlist[i]));
-		}
-	    }
-	    
-	} catch (Exception ex) {
-	    ex.printStackTrace();
-	}
-	
-	return this.myProjectNameList;
-	
+		  this.myProjectNameList.clear();
+		  try {
+				String[] tmp_contextlist = cm.listContext(codeName);
+				if (tmp_contextlist.length > 0) {
+					 for (int i = 0; i < tmp_contextlist.length; i++) {
+						  myProjectNameList.add(new SelectItem(tmp_contextlist[i],
+																			tmp_contextlist[i]));
+					 }
+				}
+				
+		  } catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  return this.myProjectNameList;
     }
     
     public void setMesh_gen_viz_base_dir(String tmp_str) {
-	this.mesh_gen_viz_base_dir = tmp_str;
+		  this.mesh_gen_viz_base_dir = tmp_str;
     }
     
     public String getMesh_gen_viz_base_dir() {
-	
-	return this.mesh_gen_viz_base_dir;
+		  return this.mesh_gen_viz_base_dir;
     }
     
     public void setMesh_gen_viz_fileServiceUrl(String tmp_str) {
-	this.mesh_gen_viz_fileServiceUrl = tmp_str;
+		  this.mesh_gen_viz_fileServiceUrl = tmp_str;
     }
     
     public String getMesh_gen_viz_fileServiceUrl() {
-	
-	return this.mesh_gen_viz_fileServiceUrl;
+		  return this.mesh_gen_viz_fileServiceUrl;
     }
-    
-    public String getFsURLForJnlp() {
-	this.fsURLForJnlp = getBASE64(fileServiceUrl);
-	return this.fsURLForJnlp;
-    }
-    
+
     public String getProjectNameForJnlp() {
-	this.projectNameForJnlp = getBASE64(projectName);
-	return this.projectNameForJnlp;
-    }
-    
-    public String getWorkDirForJnlp() {
-	this.workDirForJnlp = getBASE64(baseWorkDir + "/" + userName + "/"
-					+ projectName + "/");
-	return this.workDirForJnlp;
+		  this.projectNameForJnlp = getBASE64(projectName);
+		  return this.projectNameForJnlp;
     }
     
     public void setFaultarrayForMesh(String[] tmp_str) {
-	this.faultarrayForMesh = tmp_str;
+		  this.faultarrayForMesh = tmp_str;
     }
     
     public String[] getFaultarrayForMesh() {
-	return this.faultarrayForMesh;
+		  return this.faultarrayForMesh;
     }
     
     public void setMyFaultsForProject(List tmp_str) {
-	this.myFaultsForProject = tmp_str;
+		  this.myFaultsForProject = tmp_str;
     }
     
-    public List getMyFaultsForProject() {
-	this.myFaultsForProject.clear();
-	myFaultEntryForProjectList = getMyFaultEntryForProjectList();
-	for (int i = 0; i < myFaultEntryForProjectList.size(); i++) {
-	    faultEntryForProject tmp_FaultEntryForProject = (faultEntryForProject) myFaultEntryForProjectList
-		.get(i);
-	    String tmp_str = tmp_FaultEntryForProject.getFaultName();
-	    myFaultsForProject.add(new SelectItem(tmp_str, tmp_str));
-	}
-	
-	return this.myFaultsForProject;
+	 /**
+	  * This method gets all the faults for the project.  It calls getMyFaultEntryForProjectList(),
+	  * which reconstructs the contexts from file storage. 
+	  */
+    public List getMyFaultsForProject()  throws Exception {
+		  this.myFaultsForProject.clear();
+		  myFaultEntryForProjectList = getMyFaultEntryForProjectList();
+		  for (int i = 0; i < myFaultEntryForProjectList.size(); i++) {
+				faultEntryForProject tmp_FaultEntryForProject = (faultEntryForProject) myFaultEntryForProjectList
+					 .get(i);
+				String tmp_str = tmp_FaultEntryForProject.getFaultName();
+				myFaultsForProject.add(new SelectItem(tmp_str, tmp_str));
+		  }
+		  
+		  return this.myFaultsForProject;
     }
     
     public List getMyarchivedMeshTableEntryList() {
-	myarchivedMeshTableEntryList.clear();
-	try {
-	    String[] tmp_contextlist = cm.listContext(codeName);
-	    if (tmp_contextlist.length > 0) {
-		for (int i = 0; i < tmp_contextlist.length; i++) {
-		    loadMeshTableEntry tmp_loadMeshTableEntry = new loadMeshTableEntry();
-		    tmp_loadMeshTableEntry.projectName = tmp_contextlist[i];
-		    tmp_loadMeshTableEntry.meshHost = cm.getCurrentProperty(
-									    codeName + "/" + tmp_contextlist[i], "hostName");
-		    if (tmp_loadMeshTableEntry.meshHost == null) {
-			tmp_loadMeshTableEntry.meshHost = "null";
-		    }
-		    tmp_loadMeshTableEntry.creationDate = (new Date(Long
-								    .parseLong(cm.getCurrentProperty(codeName + "/"
-												     + tmp_contextlist[i], "LastTime"))))
-			.toString();
-		    tmp_loadMeshTableEntry.view = false;
-		    String archived = "";
-		    if (this.ListGeoFESTData == true) {
-			archived = cm.getCurrentProperty(codeName + "/"
-							 + tmp_contextlist[i], "ListGeoFESTData");
-		    } else {
-			archived = cm.getCurrentProperty(codeName + "/"
-							 + tmp_contextlist[i], "MeshArchived");
-		    }
-		    if (archived != null && archived.equalsIgnoreCase("true")) {
-			myarchivedMeshTableEntryList
-			    .add(tmp_loadMeshTableEntry);
-		    }
-		}
-	    }
-	    
-	} catch (Exception ex) {
-	    ex.printStackTrace();
-	}
-	return this.myarchivedMeshTableEntryList;
+		  myarchivedMeshTableEntryList.clear();
+		  try {
+				String[] tmp_contextlist = cm.listContext(codeName);
+				if (tmp_contextlist.length > 0) {
+					 for (int i = 0; i < tmp_contextlist.length; i++) {
+						  System.out.println("Listing archived contexts: "+tmp_contextlist[i]);
+						  loadMeshTableEntry tmp_loadMeshTableEntry = new loadMeshTableEntry();
+						  tmp_loadMeshTableEntry.projectName = tmp_contextlist[i];
+						  tmp_loadMeshTableEntry.meshHost = 
+								cm.getCurrentProperty(codeName + "/" + tmp_contextlist[i], "hostName");
+						  if (tmp_loadMeshTableEntry.meshHost == null) {
+								tmp_loadMeshTableEntry.meshHost = "null";
+						  }
+						  tmp_loadMeshTableEntry.creationDate = (new Date(Long
+																						  .parseLong(cm.getCurrentProperty(codeName + "/"
+																																	  + tmp_contextlist[i], "LastTime"))))
+								.toString();
+						  tmp_loadMeshTableEntry.view = false;
+						  String archived = "";
+						  if (this.ListGeoFESTData == true) {
+								archived = cm.getCurrentProperty(codeName + "/"
+																			+ tmp_contextlist[i], "ListGeoFESTData");
+						  } else {
+								archived = cm.getCurrentProperty(codeName + "/"
+																			+ tmp_contextlist[i], "MeshArchived");
+						  }
+
+						  if (archived != null && archived.equalsIgnoreCase("true")) {
+								myarchivedMeshTableEntryList
+									 .add(tmp_loadMeshTableEntry);
+						  }
+					 }
+				}
+				
+		  } catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  return this.myarchivedMeshTableEntryList;
     }
     
     public void setMyLoadMeshTableEntryList(List tmp_str) {
-	this.myLoadMeshTableEntryList = tmp_str;
+		  this.myLoadMeshTableEntryList = tmp_str;
     }
     
     public List getMyLoadMeshTableEntryList() {
-	myLoadMeshTableEntryList.clear();
-	try {
-	    String[] tmp_contextlist = cm.listContext(codeName);
+		  myLoadMeshTableEntryList.clear();
+		  try {
+				String[] tmp_contextlist = cm.listContext(codeName);
 	    if (tmp_contextlist.length > 0) {
 		for (int i = 0; i < tmp_contextlist.length; i++) {
 		    loadMeshTableEntry tmp_loadMeshTableEntry = new loadMeshTableEntry();
@@ -1738,219 +1920,227 @@ public class MeshGeneratorBean extends GenericSopacBean {
     }
     
     public String getBASE64(String s) {
-	if (s == null)
-	    return null;
-	String tmp_str = (new BASE64Encoder()).encode(s.getBytes());
-	return tmp_str;
+		  if (s == null)
+				return null;
+		  String tmp_str = (new BASE64Encoder()).encode(s.getBytes());
+		  return tmp_str;
     }
     
     public void setMyFaultsParamForJnlp(String tmp_str) {
-	this.myFaultsParamForJnlp = tmp_str;
+		  this.myFaultsParamForJnlp = tmp_str;
     }
     
     public String getMyFaultsParamForJnlp() {
-	myFaultsParamForJnlp = "";
-	// --------------------------------------------------
-	// Get set up. Start with useful constants.
-	// --------------------------------------------------
-	String space = " ";
-	String status = "Update";
-	
-	// --------------------------------------------------
-	// Find out who we are.
-	// --------------------------------------------------
-	String projectFullName = codeName + SEPARATOR + projectName;
-	System.out.println("Painter project name: " + projectFullName);
-	String tmp_faults = new String("");
-	try {
-	    
-	    // Here we must loop over the number of faults.
-	    String thename = projectFullName + SEPARATOR + FAULTS;
-	    String[] faults = cm.listContext(thename);
-	    if (faults != null && faults.length > 0) {
-		for (int i = 0; i < faults.length; i++) {
-		    String fullname = thename + SEPARATOR + faults[i];
-		    String faultDef = "addFault" + space;
-		    faultDef += faults[i] + space;
-		    faultDef += cmGetValue(cm, status, fullname, "faultOriginX")
-			+ space;
-		    faultDef += cmGetValue(cm, status, fullname, "faultOriginY")
-			+ space;
-		    faultDef += cmGetValue(cm, status, fullname, "faultLength")
-			+ space;
-		    faultDef += cmGetValue(cm, status, fullname, "faultWidth")
-			+ space;
-		    faultDef += cmGetValue(cm, status, fullname, "faultDepth")
-			+ space;
-		    faultDef += cmGetValue(cm, status, fullname,
-					   "faultDipAngle")
-			+ space;
-		    faultDef += cmGetValue(cm, status, fullname,
-					   "faultStrikeAngle")
-			+ space;
-		    System.out.println("Faults!" + faultDef);
-		    tmp_faults = tmp_faults + "*" + faultDef;
-		    
-		}
-	    }
-	} catch (Exception ex) {
-	    ex.printStackTrace();
-	}
-	this.myFaultsParamForJnlp = getBASE64(tmp_faults);
-	
-	return this.myFaultsParamForJnlp;
+		  myFaultsParamForJnlp = "";
+		  // --------------------------------------------------
+		  // Get set up. Start with useful constants.
+		  // --------------------------------------------------
+		  String space = " ";
+		  String status = "Update";
+		  
+		  // --------------------------------------------------
+		  // Find out who we are.
+		  // --------------------------------------------------
+		  String projectFullName = codeName + SEPARATOR + projectName;
+		  System.out.println("Painter project name: " + projectFullName);
+		  String tmp_faults = new String("");
+		  try {
+				
+				// Here we must loop over the number of faults.
+				String thename = projectFullName + SEPARATOR + FAULTS;
+				String[] faults = cm.listContext(thename);
+				if (faults != null && faults.length > 0) {
+					 for (int i = 0; i < faults.length; i++) {
+						  String fullname = thename + SEPARATOR + faults[i];
+						  String faultDef = "addFault" + space;
+						  faultDef += faults[i] + space;
+						  faultDef += cmGetValue(cm, status, fullname, "faultOriginX")
+								+ space;
+						  faultDef += cmGetValue(cm, status, fullname, "faultOriginY")
+								+ space;
+						  faultDef += cmGetValue(cm, status, fullname, "faultLength")
+								+ space;
+						  faultDef += cmGetValue(cm, status, fullname, "faultWidth")
+								+ space;
+						  faultDef += cmGetValue(cm, status, fullname, "faultDepth")
+								+ space;
+						  faultDef += cmGetValue(cm, status, fullname,
+														 "faultDipAngle")
+								+ space;
+						  faultDef += cmGetValue(cm, status, fullname,
+														 "faultStrikeAngle")
+								+ space;
+						  System.out.println("Faults!" + faultDef);
+						  tmp_faults = tmp_faults + "*" + faultDef;
+					 }
+				}
+		  } catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  this.myFaultsParamForJnlp = getBASE64(tmp_faults);
+		  
+		  return this.myFaultsParamForJnlp;
     }
     
     public void setMyLayersParamForJnlp(String tmp_str) {
-	this.myLayersParamForJnlp = tmp_str;
+		  this.myLayersParamForJnlp = tmp_str;
     }
     
     public String getMyLayersParamForJnlp() {
-	myLayersParamForJnlp = "";
-	// --------------------------------------------------
-	// Get set up. Start with useful constants.
-	// --------------------------------------------------
-	String space = " ";
-	String status = "Update";
-	
-	// --------------------------------------------------
-	// Find out who we are.
-	// --------------------------------------------------
-	String projectFullName = codeName + SEPARATOR + projectName;
-	System.out.println("Painter project name: " + projectFullName);
-	String tmp_layers = new String("");
-	try {
-	    // Here we must loop over the number of layers
-	    String thename = projectFullName + SEPARATOR + LAYERS;
-	    String[] layers = cm.listContext(thename);
-	    
-	    if (layers != null && layers.length > 0) {
-		for (int i = 0; i < layers.length; i++) {
-		    String fullname = thename + SEPARATOR + layers[i];
-		    String layerDef = "addLayer" + space;
-		    layerDef += layers[i] + space;
-		    layerDef += cmGetValue(cm, status, fullname, "layerOriginX")
-			+ space;
-		    layerDef += cmGetValue(cm, status, fullname, "layerOriginY")
-			+ space;
-		    layerDef += cmGetValue(cm, status, fullname, "layerOriginZ")
-			+ space;
-		    layerDef += cmGetValue(cm, status, fullname, "layerLength")
-			+ space;
-		    layerDef += cmGetValue(cm, status, fullname, "layerWidth")
-			+ space;
-		    layerDef += cmGetValue(cm, status, fullname, "layerDepth");
-		    System.out.println("Layers!" + layerDef);
-		    tmp_layers = tmp_layers + "*" + layerDef;
-		}
-	    }
-	    
-	} catch (Exception ex) {
-	    ex.printStackTrace();
-	}
-	this.myLayersParamForJnlp = getBASE64(tmp_layers);
-	
-	return this.myLayersParamForJnlp;
+		  myLayersParamForJnlp = "";
+		  // --------------------------------------------------
+		  // Get set up. Start with useful constants.
+		  // --------------------------------------------------
+		  String space = " ";
+		  String status = "Update";
+		  
+		  // --------------------------------------------------
+		  // Find out who we are.
+		  // --------------------------------------------------
+		  String projectFullName = codeName + SEPARATOR + projectName;
+		  System.out.println("Painter project name: " + projectFullName);
+		  String tmp_layers = new String("");
+		  try {
+				// Here we must loop over the number of layers
+				String thename = projectFullName + SEPARATOR + LAYERS;
+				String[] layers = cm.listContext(thename);
+				
+				if (layers != null && layers.length > 0) {
+					 for (int i = 0; i < layers.length; i++) {
+						  String fullname = thename + SEPARATOR + layers[i];
+						  String layerDef = "addLayer" + space;
+						  layerDef += layers[i] + space;
+						  layerDef += cmGetValue(cm, status, fullname, "layerOriginX")
+								+ space;
+						  layerDef += cmGetValue(cm, status, fullname, "layerOriginY")
+								+ space;
+						  layerDef += cmGetValue(cm, status, fullname, "layerOriginZ")
+								+ space;
+						  layerDef += cmGetValue(cm, status, fullname, "layerLength")
+								+ space;
+						  layerDef += cmGetValue(cm, status, fullname, "layerWidth")
+								+ space;
+						  layerDef += cmGetValue(cm, status, fullname, "layerDepth");
+						  System.out.println("Layers!" + layerDef);
+						  tmp_layers = tmp_layers + "*" + layerDef;
+					 }
+				}
+				
+		  } catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  this.myLayersParamForJnlp = getBASE64(tmp_layers);
+		  
+		  return this.myLayersParamForJnlp;
     }
     
     public void setMyMeshViewer(MeshViewer tmp_str) {
-	this.myMeshViewer = tmp_str;
+		  this.myMeshViewer = tmp_str;
     }
     
     public MeshViewer getMyMeshViewer() {
 		  return this.myMeshViewer;
     }
     
-    public List getMyLayerEntryForProjectList() {
-		  String projectFullName = codeName + SEPARATOR + projectName;
-		  this.myLayerEntryForProjectList.clear();
-		  try {
-				if (cm.listContext(projectFullName) != null) {
-					 String thename = projectFullName + SEPARATOR + LAYERS;
-					 String[] layers = cm.listContext(thename);
-					 if (layers.length > 0) {
-						  for (int i = 0; i < layers.length; i++) {
-								layerEntryForProject tmp_myLayerEntryForProject = new layerEntryForProject();
-								tmp_myLayerEntryForProject.layerName = layers[i];
-								tmp_myLayerEntryForProject.view = false;
-								tmp_myLayerEntryForProject.delete = false;
-								this.myLayerEntryForProjectList
-									 .add(tmp_myLayerEntryForProject);
+    public List getMyLayerEntryForProjectList() throws Exception {
+		  //Assumes this has been set.
+		  String projectName=getProjectName();
+		  return reconstructMyLayerEntryForProjectList(projectName);
+// 		  String projectFullName = codeName + SEPARATOR + projectName;
+// 		  this.myLayerEntryForProjectList.clear();
+// 		  try {
+// 				if (cm.listContext(projectFullName) != null) {
+// 					 String thename = projectFullName + SEPARATOR + LAYERS;
+// 					 String[] layers = cm.listContext(thename);
+// 					 if (layers.length > 0) {
+// 						  for (int i = 0; i < layers.length; i++) {
+// 								layerEntryForProject tmp_myLayerEntryForProject = new layerEntryForProject();
+// 								tmp_myLayerEntryForProject.layerName = layers[i];
+// 								tmp_myLayerEntryForProject.view = false;
+// 								tmp_myLayerEntryForProject.delete = false;
+// 								this.myLayerEntryForProjectList
+// 									 .add(tmp_myLayerEntryForProject);
 								
-						  }
-					 }
-				}
-		  } catch (Exception ex) {
-				ex.printStackTrace();
-		  }
+// 						  }
+// 					 }
+// 				}
+// 		  } catch (Exception ex) {
+// 				ex.printStackTrace();
+// 		  }
 		  
-		  return this.myLayerEntryForProjectList;
+// 		  return this.myLayerEntryForProjectList;
     }
     
     public void setMyLayerEntryForProjectList(List tmp_list) {
 		  this.myLayerEntryForProjectList = tmp_list;
     }
     
-    public List getMyFaultEntryForProjectList() {
-	String projectFullName = codeName + SEPARATOR + projectName;
-	this.myFaultEntryForProjectList.clear();
-	try {
-	    if (cm.listContext(projectFullName) != null) {
-		String thename = projectFullName + SEPARATOR + FAULTS;
-		String[] faults = cm.listContext(thename);
-		if (faults.length > 0) {
-		    for (int i = 0; i < faults.length; i++) {
-			faultEntryForProject tmp_myFaultEntryForProject = new faultEntryForProject();
-			tmp_myFaultEntryForProject.setFaultName(faults[i]);
-			tmp_myFaultEntryForProject.view = false;
-			tmp_myFaultEntryForProject.delete = false;
-			this.myFaultEntryForProjectList
-			    .add(tmp_myFaultEntryForProject);
-			
-		    }
-		}
-	    }
-	} catch (Exception ex) {
-	    ex.printStackTrace();
-	}
-	
-	return this.myFaultEntryForProjectList;
+	 /**
+	  * This is a fairly muscular getter. It reconstructs the entire list from the 
+	  * context.
+	  */
+    public List getMyFaultEntryForProjectList() throws Exception {
+		  String projectName=getProjectName();
+		  return reconstructMyFaultEntryForProjectList(projectName);
+// 		  String projectFullName = codeName + SEPARATOR + projectName;
+// 		  this.myFaultEntryForProjectList.clear();
+// 		  try {
+// 				if (cm.listContext(projectFullName) != null) {
+// 					 String thename = projectFullName + SEPARATOR + FAULTS;
+// 					 String[] faults = cm.listContext(thename);
+// 					 if (faults.length > 0) {
+// 						  for (int i = 0; i < faults.length; i++) {
+// 								//Reconstruct the faultEntryForProjectList object
+// 								faultEntryForProject tmp_myFaultEntryForProject = new faultEntryForProject();
+// 								tmp_myFaultEntryForProject.setFaultName(faults[i]);
+// 								tmp_myFaultEntryForProject.view = false;
+// 								tmp_myFaultEntryForProject.delete = false;
+// 								this.myFaultEntryForProjectList
+// 									 .add(tmp_myFaultEntryForProject);
+// 						  }
+// 					 }
+// 				}
+// 		  } catch (Exception ex) {
+// 				ex.printStackTrace();
+// 		  }
+		  
+// 		  return this.myFaultEntryForProjectList;
     }
     
     public void setMyFaultEntryForProjectList(List tmp_list) {
-	this.myFaultEntryForProjectList = tmp_list;
+		  this.myFaultEntryForProjectList = tmp_list;
     }
     
     public String getForSearchStr() {
-	return this.forSearchStr;
+		  return this.forSearchStr;
     }
     
     public void setForSearchStr(String tmp_str) {
-	this.forSearchStr = tmp_str;
+		  this.forSearchStr = tmp_str;
     }
     
     public String getFaultLatStart() {
-	return this.faultLatStart;
+		  return this.faultLatStart;
     }
     
     public void setFaultLatStart(String tmp_str) {
-	this.faultLatStart = tmp_str;
+		  this.faultLatStart = tmp_str;
     }
     
     public String getFaultLatEnd() {
-	return this.faultLatEnd;
+		  return this.faultLatEnd;
     }
     
     public void setFaultLatEnd(String tmp_str) {
-	this.faultLatEnd = tmp_str;
+		  this.faultLatEnd = tmp_str;
     }
     
     public String getFaultLonStart() {
-	return this.faultLonStart;
+		  return this.faultLonStart;
     }
     
     public void setFaultLonStart(String tmp_str) {
-	this.faultLonStart = tmp_str;
+		  this.faultLonStart = tmp_str;
     }
     
     public String getFaultLonEnd() {
@@ -2165,7 +2355,21 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  this.projectGeoFestOutput=projectGeoFestOutput;
 	 }
 
+	 public String getGeoFESTBaseUrl() {
+		  return geoFESTBaseUrl;
+	 }
 
+	 public void setGeoFESTBaseUrl(){
+		  this.geoFESTBaseUrl=geoFESTBaseUrl;
+	 }
+
+	 /**
+	  * Base64 encoded for safe transmission.
+	  */ 
+	 public String getGeoFESTBaseUrlForJnlp() {
+		  return getBASE64(geoFESTBaseUrl);
+	 }
+	 
     //--------------------------------------------------
     // End the accessor method section.
     //--------------------------------------------------

@@ -1,10 +1,27 @@
 <%@ page contentType="application/x-java-jnlp-file"%>
 <%@ page import="sun.misc.BASE64Decoder"%>
 <%@ page import="java.io.*"%>
+<%@ page import="java.net.*"%>
 <%@ page import="WebFlowClient.fsws.*" %>
 
 
 <%! 
+public void downloadFile(String urlOfFile, String destFile) throws Exception {
+		 java.net.URL inputFileUrl=new java.net.URL(urlOfFile);
+ 		  java.net.URLConnection uconn=inputFileUrl.openConnection();
+		  java.io.InputStream in=inputFileUrl.openStream();
+		  java.io.OutputStream out=new java.io.FileOutputStream(destFile);
+		  
+		  //Extract the name of the file from the url.
+		  
+		  byte[] buf=new byte[1024];
+		  int length;
+		  while((length=in.read(buf))>0) {
+				out.write(buf,0,length);
+		  }
+		  in.close();
+		  out.close();
+}
 
 public String getFromBASE64(String s) {
 	if (s == null)
@@ -20,7 +37,6 @@ public String getFromBASE64(String s) {
 
 
 %>
-
 
 
 <?xml version="1.0" encoding="utf-8"?>
@@ -99,47 +115,43 @@ String plotMesh=request.getParameter("plotMesh");
 if ( (plotMesh!=null) && (plotMesh.equals("true")) ) {
 	
 
-String workDir=request.getParameter("workDir");
-String projectName=request.getParameter("projectName");
-String fsURL=request.getParameter("fsURL");
-if(workDir!=null) {
-	workDir= getFromBASE64(workDir);
-}
-if(projectName!=null) {
-	projectName= getFromBASE64(projectName);
-}
-if(fsURL!=null) {
-	fsURL= getFromBASE64(fsURL);
-}
+String baseUrl=getFromBASE64(request.getParameter("gfHostName"));
+String userName=request.getParameter("userName");
+//This will be encoded for safe transit.		 
+String projectName=getFromBASE64(request.getParameter("projectName"));
+String jobId=request.getParameter("jobUIDStamp");
 
+String slash="/";
+String baseOutputUrl=baseUrl+slash
+		 +userName+slash+projectName+slash+jobId+slash;
 
-String SEPARATOR="/";
-FSClientStub fsclient=new FSClientStub();
-fsclient.setBindingUrl(fsURL);    
-String space=" ";
 // Plot the mesh if requested.  If the request value is anything other than
 // "true" then don't plot.
-System.out.println("workdir is "+workDir);
 System.out.println("plotMesh value is "+plotMesh);
 String localUrl=null;
+
+String nodeUrl=baseOutputUrl+projectName+".node";		 
+String tetraUrl=baseOutputUrl+projectName+".tetra";		 
+
 try {
    String localDest=application.getRealPath("/meshdownloads");
    //localDest=localDest+"/meshdownloads";
    System.out.println("localDest is "+localDest);
-   String tetraFileName=projectName+".tetra";
-   fsclient.downloadFile(workDir+File.separator+tetraFileName,
-                         localDest+File.separator+tetraFileName);
-   String nodeFileName=projectName+".node";
-   fsclient.downloadFile(workDir+File.separator+nodeFileName,
-                         localDest+File.separator+nodeFileName);
+	
+	String localNodeFile=localDest+"/"+projectName+".node";
+	String localTetraFile=localDest+"/"+projectName+".tetra";
 
-   localUrl=codebase+SEPARATOR+"meshdownloads"+SEPARATOR+projectName;
+	downloadFile(nodeUrl,localNodeFile);
+	downloadFile(tetraUrl,localTetraFile);
+
+   localUrl=codebase+slash+"meshdownloads"+slash+projectName;
 }
 catch(Exception ex) {
    ex.printStackTrace();
    System.err.println("Download file not available");
 }
 
+String space=" ";		 
 if(plotMesh!=null && plotMesh.equals("true") && localUrl!=null) {
    	String meshCmd="mesh"+space;
 	meshCmd+=localUrl+space;

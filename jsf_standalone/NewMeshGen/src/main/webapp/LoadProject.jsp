@@ -54,7 +54,6 @@ function dataTableSelectOneRadio(radio) {
 					onclick="dataTableSelectOneRadio(this)"
 					layout="pageDirection">
 					
-					layout="pageDirection">
 					<f:selectItems value="#{MGBean.myProjectNameList}" />
 				</h:selectManyCheckbox>
 				<h:commandButton value="Select"

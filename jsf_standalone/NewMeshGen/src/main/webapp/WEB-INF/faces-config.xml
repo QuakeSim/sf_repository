@@ -24,13 +24,6 @@
                    <property-name>geoFESTServiceUrl</property-name>
                    <value>Http://gf19.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec</value>
                  </managed-property>
-<!--
-                 <managed-property>
-                   <property-name>meshViewerServerUrl</property-name>
-                   <value>http://gf2.ucs.indiana.edu:18084</value>
-                 </managed-property>
--->
- 
                 <!-- Needed for the context service-->
                 <managed-property>
                    <property-name>contextUrl</property-name>
@@ -38,7 +31,7 @@
                  </managed-property>
                  <managed-property>
                    <property-name>contextBasePath</property-name>
-                   <value>/Users/mpierce/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users/</value>
+                   <value>/Users/mpierce/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/WebServices/WEB-INF/Descriptors/users/</value>
                 </managed-property>
 
                 <!-- These are execution host params -->
@@ -50,7 +43,6 @@
                    <property-name>mesh_gen_viz_base_dir</property-name>
                    <value>/home/gateway/yan_offscreen/offscreen/</value>
                 </managed-property>
-
 	</managed-bean>
 
 	<navigation-rule>
@@ -98,7 +90,7 @@
 		<from-view-id>/EditProject.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>mesh_generation_running</from-outcome>
-			<to-view-id>/RunMesh.jsp</to-view-id>
+			<to-view-id>/EditProject.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>MG-ant-run</from-outcome>

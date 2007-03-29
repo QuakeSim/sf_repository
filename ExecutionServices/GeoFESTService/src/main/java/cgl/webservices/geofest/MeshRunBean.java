@@ -20,7 +20,7 @@ public class MeshRunBean {
 	 String tagbigfltLog;
 	 String tstout;
 	 String junkBox;
-	 
+
 	 public void setJobUIDStamp(String jobUIDStamp){
 		  this.jobUIDStamp=jobUIDStamp;
 	 }

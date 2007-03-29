@@ -269,7 +269,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  mrb.setAutorefError(baseUrl+"/"+"autoref.error");
 		  mrb.setNodeUrl(baseUrl+"/"+projectName+".node");
 		  mrb.setTetraUrl(baseUrl+"/"+projectName+".tetra");
-		  mrb.setBcUrl(baseUrl+"/"+projectName+".bc");
+		  mrb.setBcUrl(baseUrl+"/"+projectName+".bcmap");
 		  mrb.setIndexUrl(baseUrl+"/"+projectName+".index");
 		  mrb.setJunkBox(baseUrl+"/"+"junk.box");
 		  mrb.setTstout(baseUrl+"/"+"tstout");
