@@ -3,6 +3,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
+
+<style>
+	.alignTop {
+		vertical-align:top;
+	}
+	.header2 {
+		font-family: Arial, sans-serif;
+		font-size: 18pt;
+		font: bold;
+	}
+</style>
+
+
 <html>
 <head>
 
@@ -43,100 +56,148 @@ function dataTableSelectOneRadio(radio) {
 </script>
 
 <f:view>
+	<h:panelGrid rendered="#{empty MGBean.myArchivedMeshRunList}">
+	<h:outputText styleClass="header2" value="Mesh Refinement"/>
+	<h:outputText value="You don't have any archived projects."/>
+   </h:panelGrid>
+
+	<h:panelGrid rendered="#{!empty MGBean.myArchivedMeshRunList}">
+	<h:outputText styleClass="header2" value="Mesh Refinement"/>
+	<h:outputText value="Here are your archived projects."/>
 	<h:form>
-		<h:panelGrid columns="1" border="0">
-			<h:outputText escape="false" value="<h2>Archived Meshes</h2><br>" />
-			<h:outputText escape="false"
-				value="You have the following archived meshes. Click the link to download the desired file to your desk top. To save directly to your desktop, click your mouse's right button over the link and select<br>" />
-			<h:outputText escape="false"
-				value="Click the <b>Tar</b> link if you want to download all the files in the project in a single bundle. This includes the mesh files, geometry and fault specification files, among other things. the appropriate option.<br>" />
+  				<h:dataTable value="#{MGBean.myArchivedMeshRunList}" var="mrb" id="MeshOutputPanel" border="1">
+					<h:column>
+					    <f:facet name="header">
+					    <h:outputText value="Project Name"/>
+						 </f:facet>
+				       <h:outputText value="#{mrb.projectName}"/>
+					</h:column>
 
-			<h:dataTable border="1" value="#{MGBean.myarchivedMeshTableEntryList}"
-				var="myentry3">
-				<h:column>
+					<h:column>
+					    <f:facet name="header">
+					    <h:outputText value="Job UID Stamp"/>
+						 </f:facet>
+				       <h:outputText value="#{mrb.jobUIDStamp}"/>
+					</h:column>
+
+	
+					<h:column>
+					<f:facet name="header">	 
+						    <h:outputText value="Autoref"/>
+				   </f:facet>
+				       <h:outputLink value="#{mrb.autoref}" target="_blank">
+						    <h:outputText value="Autoref"/>
+						 </h:outputLink>
+					</h:column>
+
+	
+					<h:column>
 					<f:facet name="header">
-						<h:outputText escape="false" value="<b>Project Name</b>" />
-					</f:facet>
-					<h:outputText value="#{myentry3.projectName}" />
-				</h:column>
-				<h:column>
+						    <h:outputText value="Autoref Error"/>
+				   </f:facet>
+				       <h:outputLink value="#{mrb.autorefError}" target="_blank">
+						    <h:outputText value="Autoref Error"/>
+						 </h:outputLink>
+					</h:column>
+
+
+					<h:column>
 					<f:facet name="header">
-						<h:outputText escape="false" value="<b>Creation Date</b>" />
-					</f:facet>
-					<h:outputText value="#{myentry3.creationDate}" />
+						    <h:outputText value="BC File"/>
+				   </f:facet>
+				       <h:outputLink value="#{mrb.bcUrl}" target="_blank">
+						    <h:outputText value="BC File"/>
+						 </h:outputLink>
+					</h:column>
 
-				</h:column>
-				<h:column>
+
+					<h:column>
 					<f:facet name="header">
-						<h:outputText escape="false" value="<b>	Storage Host</b>" />
-					</f:facet>
-					<h:outputText value="#{myentry3.meshHost}" />
-				</h:column>
-				<h:column>
+						    <h:outputText value="Index File"/>
+				   </f:facet>
+				       <h:outputLink value="#{mrb.indexUrl}" target="_blank">
+						    <h:outputText value="Index File"/>
+						 </h:outputLink>
+					</h:column>
+
+
+					<h:column>
 					<f:facet name="header">
-						<h:outputText escape="false" value="<b>	Mesh File</b>" />
-					</f:facet>
-					<h:panelGrid columns="4" border="1">
-
-						<h:outputLink id="link1" value="#{facesContext.externalContext.requestContextPath}/DownloadMeshes.jsp" target="_blank">
-							<f:param name="ProjectSelect" value="#{myentry3.projectName}" />
-							<f:param name="MeshChoice" value=".node" />
-							<f:param name="baseWorkDir" value="#{MGBean.baseWorkDir}" />
-							<f:param name="userName" value="#{MGBean.userName}" />
-							<f:param name="antUrl" value="#{MGBean.antUrl}" />
-							<f:param name="binPath" value="#{MGBean.binPath}" />
-							<f:param name="fileServiceUrl" value="#{MGBean.fileServiceUrl}" />
-
-							<h:outputText value="Node" />
-						</h:outputLink>
-						<h:outputLink id="link2" value="#{facesContext.externalContext.requestContextPath}/DownloadMeshes.jsp" target="_blank">
-							<f:param name="ProjectSelect" value="#{myentry3.projectName}" />
-							<f:param name="MeshChoice" value=".tetra" />
-							<f:param name="baseWorkDir" value="#{MGBean.baseWorkDir}" />
-							<f:param name="userName" value="#{MGBean.userName}" />
-							<f:param name="antUrl" value="#{MGBean.antUrl}" />
-							<f:param name="binPath" value="#{MGBean.binPath}" />
-							<f:param name="fileServiceUrl" value="#{MGBean.fileServiceUrl}" />
-
-							<h:outputText value="Tetra" />
-						</h:outputLink>
-						<h:outputLink id="link3" value="#{facesContext.externalContext.requestContextPath}/DownloadMeshes.jsp" target="_blank">
-							<f:param name="ProjectSelect" value="#{myentry3.projectName}" />
-							<f:param name="MeshChoice" value=".index" />
-							<f:param name="baseWorkDir" value="#{MGBean.baseWorkDir}" />
-							<f:param name="userName" value="#{MGBean.userName}" />
-							<f:param name="antUrl" value="#{MGBean.antUrl}" />
-							<f:param name="binPath" value="#{MGBean.binPath}" />
-							<f:param name="fileServiceUrl" value="#{MGBean.fileServiceUrl}" />
-
-							<h:outputText value="Index" />
-						</h:outputLink>
-						<h:outputLink id="link4" value="#{facesContext.externalContext.requestContextPath}/DownloadMeshes.jsp" target="_blank">
-							<f:param name="ProjectSelect" value="#{myentry3.projectName}" />
-							<f:param name="MeshChoice" value=".tar.gz" />
-							<f:param name="baseWorkDir" value="#{MGBean.baseWorkDir}" />
-							<f:param name="userName" value="#{MGBean.userName}" />
-							<f:param name="antUrl" value="#{MGBean.antUrl}" />
-							<f:param name="binPath" value="#{MGBean.binPath}" />
-							<f:param name="fileServiceUrl" value="#{MGBean.fileServiceUrl}" />
-
-							<h:outputText value="Tar.gz" />
-						</h:outputLink>
-					</h:panelGrid>
-				</h:column>
+						    <h:outputText value="Lee Refiner Log"/>
+				   </f:facet>
+				       <h:outputLink value="#{mrb.leeRefinerLog}" target="_blank">
+						    <h:outputText value="Lee Refiner Log"/>
+						 </h:outputLink>
+					</h:column>
 
 
+					<h:column>
+					<f:facet name="header">
+						    <h:outputText value="Node File"/>
+				   </f:facet>
+				       <h:outputLink value="#{mrb.nodeUrl}" target="_blank">
+						    <h:outputText value="Node File"/>
+						 </h:outputLink>
+					</h:column>
+
+
+					<h:column>
+					<f:facet name="header">
+						    <h:outputText value="Tagging Log"/>
+				   </f:facet>
+				       <h:outputLink value="#{mrb.tagbigfltLog}" target="_blank">
+						    <h:outputText value="Tagging Log"/>
+						 </h:outputLink>
+					</h:column>
+
+
+					<h:column>
+					<f:facet name="header">
+						    <h:outputText value="Tetra Url"/>
+				   </f:facet>
+				       <h:outputLink value="#{mrb.tetraUrl}" target="_blank">
+						    <h:outputText value="Tetra Url"/>
+						 </h:outputLink>
+					</h:column>
+
+					<h:column>
+					<f:facet name="header">
+						    <h:outputText value="Refiner Log"/>
+				   </f:facet>
+				       <h:outputLink value="#{mrb.refinerLog}" target="_blank">
+						    <h:outputText value="refinerLog"/>
+						 </h:outputLink>
+					</h:column>
+						 
 			</h:dataTable>
-		</h:panelGrid>
 
-	</h:form>
+ 	</h:form>
+   </h:panelGrid>
+	<h:form>
+  				<h:dataTable value="#{MGBean.myArchivedMeshRunList}" var="mrb2" id="MeshOutputPanel2" border="1">
 
+					<h:outputLink value="#{facesContext.externalContext.requestContextPath}/painter.jsp">
+						<f:param name="layers" value="#{MGBean.myLayersParamForJnlp}" />
+						<f:param name="faults" value="#{MGBean.myFaultsParamForJnlp}" />
+						<f:param name="plotMesh" value="true" />
+						<f:param name="gfHostName" value="#{MGBean.geoFESTBaseUrlForJnlp}" />
+						<f:param name="projectName" value="#{mrb2.projectName}" />
+						<f:param name="userName" value="#{MGBean.userName}" />
+						<f:param name="jobUIDStamp" value="#{mrb2.jobUIDStamp}" />
+						
+						<h:outputText value="mrb2.jobUIDStamp" />
+					</h:outputLink>
+
+				</h:dataTable>
+
+ 	</h:form>
 	<h:form>
 		<hr />
 		<h:commandLink action="MG-back">
 			<h:outputText value="#{MGBean.codeName} Main Menu" />
 		</h:commandLink>
 	</h:form>
+
 </f:view>
 </body>
 </html>

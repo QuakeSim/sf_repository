@@ -95,21 +95,21 @@ public class GenericProjectBean {
     public String getContextName() {
 	return contextName;
     }
-
+	 
     public void setContextName(String contextName) {
-	this.contextName=contextName;
+		  this.contextName=contextName;
     }
-
+	 
     public String getUserName() {
-	return userName;
+		  return userName;
     }
-
+	 
     public void setUserName(String userName) {
-	this.userName=userName;
+		  this.userName=userName;
     }
-
+	 
     public String getBinPath() {
-	return binPath;
+		  return binPath;
     }
 
     public void setBinPath(String binPath){
@@ -205,7 +205,7 @@ public class GenericProjectBean {
     }
 
     public String getContextUrl() {
-		  System.out.println(this.toString()+":getContextUrl:"+contextUrl);
+		  //		  System.out.println(this.toString()+":getContextUrl:"+contextUrl);
 		  return contextUrl;
     }
 	 
@@ -215,15 +215,11 @@ public class GenericProjectBean {
     }
 	 
     public String getContextBasePath() {
-		  System.out.println(this.toString()+":getContextBasePath:"
-									+contextBasePath);
 		  return contextBasePath;
     }
 	 
     public void setContextBasePath(String basepath) {
-	this.contextBasePath=basepath;
-	System.out.println(this.toString()+":setContextBasePath:"
-			   +contextBasePath);
+		  this.contextBasePath=basepath;
     }
     
     /**
