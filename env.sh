@@ -59,7 +59,7 @@ export REALTIME_RDAHMM_SA_HOME=$BUILD_DIR/jsf_standalone/RealTimeRDAHMM
 export SIMPLE_STFILTER_SA_HOME=$BUILD_DIR/jsf_standalone/simple_stfilter
 export PLOT_GRWS_TIMESERIES_SA_HOME=$BUILD_DIR/jsf_standalone/PlotGRWSTimeSeries
 export MESHGENERATOR_SA_HOME=$BUILD_DIR/jsf_standalone/MeshGenerator
-export NEW_MESHGENERATOR_SA_HOME=$BUILD_DIR/jsf_standalone/NewMeshGen
+export NEW_MESHGENERATOR_SA_HOME=$BUILD_DIR/jsf_standalone/NewMeshGen2
 
 #Portlets
 export SIMPLEX_PORTLET_HOME=$BUILD_DIR/portlets/Simplex-portlet

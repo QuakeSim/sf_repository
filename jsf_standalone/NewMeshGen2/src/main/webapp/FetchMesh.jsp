@@ -65,19 +65,20 @@ function dataTableSelectOneRadio(radio) {
 	<h:outputText styleClass="header2" value="Mesh Refinement"/>
 	<h:outputText value="Here are your archived projects."/>
 	<h:form>
+
   				<h:dataTable value="#{MGBean.myArchivedMeshRunList}" var="mrb" id="MeshOutputPanel" border="1">
 					<h:column>
 					    <f:facet name="header">
 					    <h:outputText value="Project Name"/>
 						 </f:facet>
-				       <h:outputText value="#{mrb.projectName}"/>
+				       <h:outputText value="#{mrb.meshRunBean.projectName}"/>
 					</h:column>
 
 					<h:column>
 					    <f:facet name="header">
 					    <h:outputText value="Job UID Stamp"/>
 						 </f:facet>
-				       <h:outputText value="#{mrb.jobUIDStamp}"/>
+				       <h:outputText value="#{mrb.meshRunBean.jobUIDStamp}"/>
 					</h:column>
 
 	
@@ -85,7 +86,7 @@ function dataTableSelectOneRadio(radio) {
 					<f:facet name="header">	 
 						    <h:outputText value="Autoref"/>
 				   </f:facet>
-				       <h:outputLink value="#{mrb.autoref}" target="_blank">
+				       <h:outputLink value="#{mrb.meshRunBean.autoref}" target="_blank">
 						    <h:outputText value="Autoref"/>
 						 </h:outputLink>
 					</h:column>
@@ -95,7 +96,7 @@ function dataTableSelectOneRadio(radio) {
 					<f:facet name="header">
 						    <h:outputText value="Autoref Error"/>
 				   </f:facet>
-				       <h:outputLink value="#{mrb.autorefError}" target="_blank">
+				       <h:outputLink value="#{mrb.meshRunBean.autorefError}" target="_blank">
 						    <h:outputText value="Autoref Error"/>
 						 </h:outputLink>
 					</h:column>
@@ -105,7 +106,7 @@ function dataTableSelectOneRadio(radio) {
 					<f:facet name="header">
 						    <h:outputText value="BC File"/>
 				   </f:facet>
-				       <h:outputLink value="#{mrb.bcUrl}" target="_blank">
+				       <h:outputLink value="#{mrb.meshRunBean.bcUrl}" target="_blank">
 						    <h:outputText value="BC File"/>
 						 </h:outputLink>
 					</h:column>
@@ -115,7 +116,7 @@ function dataTableSelectOneRadio(radio) {
 					<f:facet name="header">
 						    <h:outputText value="Index File"/>
 				   </f:facet>
-				       <h:outputLink value="#{mrb.indexUrl}" target="_blank">
+				       <h:outputLink value="#{mrb.meshRunBean.indexUrl}" target="_blank">
 						    <h:outputText value="Index File"/>
 						 </h:outputLink>
 					</h:column>
@@ -125,7 +126,7 @@ function dataTableSelectOneRadio(radio) {
 					<f:facet name="header">
 						    <h:outputText value="Lee Refiner Log"/>
 				   </f:facet>
-				       <h:outputLink value="#{mrb.leeRefinerLog}" target="_blank">
+				       <h:outputLink value="#{mrb.meshRunBean.leeRefinerLog}" target="_blank">
 						    <h:outputText value="Lee Refiner Log"/>
 						 </h:outputLink>
 					</h:column>
@@ -135,7 +136,7 @@ function dataTableSelectOneRadio(radio) {
 					<f:facet name="header">
 						    <h:outputText value="Node File"/>
 				   </f:facet>
-				       <h:outputLink value="#{mrb.nodeUrl}" target="_blank">
+				       <h:outputLink value="#{mrb.meshRunBean.nodeUrl}" target="_blank">
 						    <h:outputText value="Node File"/>
 						 </h:outputLink>
 					</h:column>
@@ -145,7 +146,7 @@ function dataTableSelectOneRadio(radio) {
 					<f:facet name="header">
 						    <h:outputText value="Tagging Log"/>
 				   </f:facet>
-				       <h:outputLink value="#{mrb.tagbigfltLog}" target="_blank">
+				       <h:outputLink value="#{mrb.meshRunBean.tagbigfltLog}" target="_blank">
 						    <h:outputText value="Tagging Log"/>
 						 </h:outputLink>
 					</h:column>
@@ -155,7 +156,7 @@ function dataTableSelectOneRadio(radio) {
 					<f:facet name="header">
 						    <h:outputText value="Tetra Url"/>
 				   </f:facet>
-				       <h:outputLink value="#{mrb.tetraUrl}" target="_blank">
+				       <h:outputLink value="#{mrb.meshRunBean.tetraUrl}" target="_blank">
 						    <h:outputText value="Tetra Url"/>
 						 </h:outputLink>
 					</h:column>
@@ -164,33 +165,30 @@ function dataTableSelectOneRadio(radio) {
 					<f:facet name="header">
 						    <h:outputText value="Refiner Log"/>
 				   </f:facet>
-				       <h:outputLink value="#{mrb.refinerLog}" target="_blank">
+				       <h:outputLink value="#{mrb.meshRunBean.refinerLog}" target="_blank">
 						    <h:outputText value="refinerLog"/>
 						 </h:outputLink>
 					</h:column>
-						 
-			</h:dataTable>
+					
+					<h:column>
+					<f:facet name="header">
+						    <h:outputText value="Plot Mesh"/>
+				   </f:facet>
+					<h:outputLink value="#{facesContext.externalContext.requestContextPath}/painter.jsp">
+						<f:param name="layers" value="#{mrb.jnlpLayers}" />
+						<f:param name="faults" value="#{mrb.jnlpFaults}" />
+						<f:param name="plotMesh" value="true" />
+						<f:param name="gfHostName" value="#{mrb.geoFESTBaseUrlForJnlp}" />
+						<f:param name="projectName" value="#{mrb.projectName}" />
+						<f:param name="userName" value="#{mrb.userName}" />
+						<f:param name="jobUIDStamp" value="#{mrb.meshRunBean.jobUIDStamp}" />
+						<h:outputText value="Plot"/>
+					</h:outputLink>
+					</h:column>
 
+			</h:dataTable>
  	</h:form>
    </h:panelGrid>
-	<h:form>
-  				<h:dataTable value="#{MGBean.myArchivedMeshRunList}" var="mrb2" id="MeshOutputPanel2" border="1">
-
-					<h:outputLink value="#{facesContext.externalContext.requestContextPath}/painter.jsp">
-						<f:param name="layers" value="#{MGBean.myLayersParamForJnlp}" />
-						<f:param name="faults" value="#{MGBean.myFaultsParamForJnlp}" />
-						<f:param name="plotMesh" value="true" />
-						<f:param name="gfHostName" value="#{MGBean.geoFESTBaseUrlForJnlp}" />
-						<f:param name="projectName" value="#{mrb2.projectName}" />
-						<f:param name="userName" value="#{MGBean.userName}" />
-						<f:param name="jobUIDStamp" value="#{mrb2.jobUIDStamp}" />
-						
-						<h:outputText value="mrb2.jobUIDStamp" />
-					</h:outputLink>
-
-				</h:dataTable>
-
- 	</h:form>
 	<h:form>
 		<hr />
 		<h:commandLink action="MG-back">

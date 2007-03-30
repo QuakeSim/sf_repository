@@ -21,39 +21,39 @@ public class StationContainer {
     Vector estParamVector;
 
     boolean mplInitialized=false;
-
+	 
     SelectItem[] mplHelper;
     EstimateParameter newEstParameter;
     String newLine="\n";
     String space=" ";
     String siteName;
-
+	 
     UIData dataTable,dataTable2;
-
+	 
 
     public StationContainer(String stationName){
-	this();
-	setSiteName(stationName);
+		  this();
+		  setSiteName(stationName);
     }
-
+	 
     public StationContainer() {
     }
-
+	 
     
     public void updateEstParameterListener(ActionEvent actionEvent) {
-	System.out.println("I'm listening...");
+		  System.out.println("I'm listening...");
     }
-
+	 
     public void removeEstParameterListener(ActionEvent actionEvent) {
-	if(dataTable.getRowData() instanceof EstimateParameter){
-	    removeEstParameter((EstimateParameter)dataTable.getRowData());
-	}
+		  if(dataTable.getRowData() instanceof EstimateParameter){
+				removeEstParameter((EstimateParameter)dataTable.getRowData());
+		  }
     }
-
+	 
     public void addEstParameterListener(ActionEvent actionEvent) {
-	if(dataTable2.getRowData() instanceof EstimateParameter){
-	    addEstParameter((EstimateParameter)dataTable2.getRowData());
-	}
+		  if(dataTable2.getRowData() instanceof EstimateParameter){
+				addEstParameter((EstimateParameter)dataTable2.getRowData());
+		  }
     }
     
     
@@ -63,10 +63,10 @@ public class StationContainer {
      * available master list, since we can't duplicate.
      */
     public void addEstParameter(EstimateParameter estParam){
-	boolean testit=masterParamList.removeElement(estParam);
-	estParamVector.add(estParam);
-	//	    updateMplHelper();
-	System.out.println("testit is "+testit);
+		  boolean testit=masterParamList.removeElement(estParam);
+		  estParamVector.add(estParam);
+		  //	    updateMplHelper();
+		  System.out.println("testit is "+testit);
     }
     
     /**
