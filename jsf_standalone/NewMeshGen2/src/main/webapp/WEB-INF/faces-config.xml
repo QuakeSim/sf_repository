@@ -82,7 +82,7 @@
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>MG-back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
+			<to-view-id>/NewProject.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 
@@ -93,20 +93,12 @@
 			<to-view-id>/EditProject.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>MG-ant-run</from-outcome>
-			<to-view-id>/AntRun.jsp</to-view-id>
-		</navigation-case>
-		<navigation-case>
 			<from-outcome>MG-this</from-outcome>
 			<to-view-id>/EditProject.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>MG-back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>MG-plot</from-outcome>
-			<to-view-id>/Plot.jsp</to-view-id>
+			<to-view-id>/LoadProject.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 
@@ -143,26 +135,6 @@
 	</navigation-rule>
 	
 	<navigation-rule>
-		<from-view-id>/AntRun.jsp</from-view-id>
-		<navigation-case>
-			<from-outcome>MG-edit-project</from-outcome>
-			<to-view-id>/EditProject.jsp</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>MG-view-mesh</from-outcome>
-			<to-view-id>/ViewMesh.jsp</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>MG-back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>MG-geotrans-params</from-outcome>
-			<to-view-id>/GeotransParams.jsp</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-
-	<navigation-rule>
 		<from-view-id>/ViewMesh.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>MG-ant-run</from-outcome>
@@ -186,29 +158,27 @@
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>MG-back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
+			<to-view-id>/LoadProject.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+
 	<navigation-rule>
 		<from-view-id>/LoadMesh.jsp</from-view-id>
-		<navigation-case>
-			<from-outcome>MG-ant-run</from-outcome>
-			<to-view-id>/AntRun.jsp</to-view-id>
-		</navigation-case>
 		<navigation-case>
 			<from-outcome>MG-this</from-outcome>
 			<to-view-id>/LoadProject.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>MG-back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
+			<to-view-id>/LoadMesh.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>	
+
 	<navigation-rule>
 		<from-view-id>/FetchMesh.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>MG-back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
+			<to-view-id>/FetchMesh.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	

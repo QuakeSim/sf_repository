@@ -66,9 +66,8 @@ function dataTableSelectOneRadio(radio) {
 		columns="2" border="1">
 		<h:form id="selectproj">
 			<h:panelGroup>
-				
-				<h:outputFormat escape="false"
-					value="<b>Project Name: #{MGBean.projectName} </b>" />
+				<h:outputText escape="false"
+					value="<b>Project Name: #{MGBean.projectName}</b>" />
 
 				<h:selectOneRadio layout="pageDirection" id="subscriptions"
 					value="#{MGBean.projectSelectionCode}">

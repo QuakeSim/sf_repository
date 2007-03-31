@@ -74,6 +74,24 @@ function dataTableSelectOneRadio(radio) {
 
 	</h:form>
 
+<p/>
+	<h:form>
+		<b>New Project Name</b>
+		<h:panelGrid columns="2" border="1">
+			<h:outputText value="Project Name:" />
+			<h:panelGroup>
+			<h:inputText id="projectName" value="#{MGBean.projectName}"
+				required="true" />
+			<h:message for="projectName" showDetail="true" showSummary="true"
+				errorStyle="color: red" />
+			</h:panelGroup>
+		</h:panelGrid>
+		<h:commandButton value="Make Selection"
+			action="#{MGBean.NewProjectThenEditProject}" />
+
+	</h:form>
+
+
 	<h:form>
 		<hr />
 		<h:commandLink action="MG-back">
