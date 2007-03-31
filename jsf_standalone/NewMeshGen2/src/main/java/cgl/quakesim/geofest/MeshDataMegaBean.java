@@ -7,7 +7,9 @@ package cgl.quakesim.geofest;
 
 public class MeshDataMegaBean {
 	 
-	 MeshRunBean meshRunBean;
+	 //These default to empty beans, but this will be overridden later,.
+	 MeshRunBean meshRunBean=new MeshRunBean();
+	 GeotransParamsBean geotransParamsBean=new GeotransParamsBean();
 	 String jnlpLayers;
 	 String jnlpFaults;       //Stringifying fault info suitable for the webstart app.
 	 String plotMesh="true";        //This is a legacy field, will always be "true".
@@ -17,6 +19,14 @@ public class MeshDataMegaBean {
 	 String jobUIDStamp;
 	 
 	 public MeshDataMegaBean() {
+	 }
+
+	 public void setGeotransParamsBean(GeotransParamsBean geotransParamsBean) {
+		  this.geotransParamsBean=geotransParamsBean;
+	 }
+
+	 public GeotransParamsBean getGeotransParamsBean() {
+		  return this.geotransParamsBean;
 	 }
 
 	 public MeshRunBean getMeshRunBean(){

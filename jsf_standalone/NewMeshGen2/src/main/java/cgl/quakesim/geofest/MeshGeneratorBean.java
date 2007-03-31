@@ -48,6 +48,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
     static final String MESH_GENERATION_NAV_STRING="mesh_generation_running";
     static final String GEOFEST_EXECUTION_LAUNCHED="geofest_execution_launched";
     static final String DEFAULT_USER_NAME="geofest_default_user";
+    static final String GO_TO_GEOTRANSPARAMS="MG-geotransparams";
     
     /**
      * The following are property fields.  Associated get/set methods
@@ -68,7 +69,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
     long EditProjectTableColumns = 1;    
     Layer currentLayer = new Layer();    
     Fault currentFault = new Fault();    
-    GeotransParamsData currentGeotransParamsData = new GeotransParamsData();    
+	 //    GeotransParamsData currentGeotransParamsData = new GeotransParamsData();    
+	 GeotransParamsBean currentGeotransParamsBean = new GeotransParamsBean();    
 
 	 //Need to go through and simplify these.
     List myFaultDBEntryList = new ArrayList();    
@@ -99,6 +101,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
     String[] selectProjectsList;    
     private HtmlDataTable myLayerDataTable;    
     private HtmlDataTable myFaultDataTable;    
+	 private HtmlDataTable myMeshDataTable;
     String forSearchStr = new String();    
     String faultLatStart = new String();    
     String faultLatEnd = new String();    
@@ -167,10 +170,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				new GeoFESTServiceServiceLocator().getGeoFESTExec(new URL(geoFESTServiceUrl));
 		  
 		  myMeshViewer = new MeshViewer(meshViewerServerUrl);
-
-		  //Always create a new project and load existing projects
-// 		  newProject();
-// 		  loadProjectList();
 
 		  //We are done.
 		  System.out.println("MeshGenerator Bean Created");
@@ -277,9 +276,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
     public String runBlockingMeshGeneratorJSF() 
 		  throws Exception {
 		  
-// 		  Layer[] layers=convertArrayListToLayerArray(myLayerCollection);
-// 		  Fault[] faults=convertArrayListToFaultArray(myFaultCollection);
-
 		  Layer[] layers=getLayersFromDB();
 		  Fault[] faults=getFaultsFromDB();
 		  
@@ -300,8 +296,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
      */ 
     public String runNonBlockingMeshGenerartorJSF() 
 		  throws Exception {
-// 		  Layer[] layers=convertArrayListToLayerArray(myLayerCollection);
-// 		  Fault[] faults=convertArrayListToFaultArray(myFaultCollection);
 
 		  Layer[] layers=getLayersFromDB();
 		  Fault[] faults=getFaultsFromDB();
@@ -322,18 +316,42 @@ public class MeshGeneratorBean extends GenericSopacBean {
      */
     public String runGeoFESTJSF()
 		  throws Exception {
-		  //Temporary, need to fix.
-		  GeotransParamsBean geotransparamsbean=new GeotransParamsBean();
-		  
+
 		  String tokenName=getJobToken();
+		  GeotransParamsBean currentGeotransParamsBean=getCurrentGeotransParamsBean();
 		  projectGeoFestOutput=geofestService.runGeoFEST(userName,
 																		 projectName,
-																		 geotransparamsbean,
+																		 currentGeotransParamsBean,
 																		 tokenName);
+		  saveGeotransParamsToDB(userName, projectName, tokenName, currentGeotransParamsBean);
 		  return GEOFEST_EXECUTION_LAUNCHED;
     }
 	 
-	 
+	 protected void saveGeotransParamsToDB(String userName, 
+														String projectName, 
+														String tokenName, 
+														GeotransParamsBean currentGeotransParamsBean) {
+
+		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
+		  //Set up the bean template.
+		  MeshDataMegaBean mega=new MeshDataMegaBean();
+		  mega.setUserName(userName);
+		  mega.setProjectName(projectName);
+		  mega.setJobUIDStamp(tokenName);
+		  //Find the matching bean
+		  ObjectSet results=db.get(mega);
+		  if(results.hasNext()) {
+				//Reassign the bean.  Should only be one match.
+				mega=(MeshDataMegaBean)results.next();
+				//Update the geotrans params
+				mega.setGeotransParamsBean(currentGeotransParamsBean);
+				db.set(mega);
+				db.commit();
+		  }
+		  db.close();
+		  
+	 }
+
     //--------------------------------------------------
 
     //--------------------------------------------------
@@ -880,6 +898,27 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  renderAddFaultSelectionForm = false;
 		  renderAddFaultFromDBForm = false;
     }
+
+	 /**
+	  * Select Mesh for Geofest run.
+	  */
+	 public String selectMeshForGeoFEST(ActionEvent event) {
+		  //load the mesh into memory.
+		  //Default will be an empty bean
+		  
+		  //Recover the mega bean.
+		  MeshDataMegaBean mega=(MeshDataMegaBean)getMyMeshDataTable().getRowData();
+		  String selectedMeshName=mega.getMeshRunBean().getProjectName();
+		  String selectedMeshStamp=mega.getMeshRunBean().getJobUIDStamp();
+
+		  currentGeotransParamsBean=mega.getGeotransParamsBean();
+		  currentGeotransParamsBean.setInputFileName(selectedMeshName+".inp");
+		  currentGeotransParamsBean.setOutputFileName(selectedMeshName+".out");
+		  currentGeotransParamsBean.setLogFileName(selectedMeshName+".log");
+
+		  //Go to geotransparams.
+		  return GO_TO_GEOTRANSPARAMS;
+	 }
     
     /**
      * Possibly needed for backward compatibility.
@@ -1277,26 +1316,13 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  return ("MG-new-project");
     }
     
-    public String SaveMeshMetaData() throws Exception {
-		  String projectFullName = codeName + SEPARATOR + projectName;
-		  cm.setCurrentProperty(projectFullName, "MeshArchived", "true");
-		  
-		  String UserMsg = "Index, tetra, and node files were saved";
-		  if (this.statusGeoFEST != true) {
-				return ("MG-back");
-		  } else {
-				currentGeotransParamsData.reset(this.projectName);
-				return ("MG-geotrans-params");
-				
-		  }
-    }
-    
     public void init_edit_project() {
 		  initEditFormsSelection();
 		  projectSelectionCode = "";
 		  faultSelectionCode = "";
     }
     
+
     public String NewProjectThenEditProject() throws Exception {
 		  if (!isInitialized) {
 				initWebServices();
@@ -1338,7 +1364,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  faultSelectionCode = "";
 		  return "MG-edit-project";
     }
-    
+
     public String toggleDeleteProject() {
 		  if (!isInitialized) {
 				initWebServices();
@@ -1510,68 +1536,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  return ("MG-fetch-mesh");
     }
     
-//     public String gfProject() throws Exception {
-// 		  System.out.println("GeoFest2 main page");
-// 		  if (!isInitialized) {
-// 				initWebServices();
-// 		  }
-		  
-// 		  return ("MG-gf-project");
-//     }
-    
-//     public String runGeoFEST() throws Exception {
-// 		  System.out.println("GeoFest2 main page");
-// 		  if (!isInitialized) {
-// 				initWebServices();
-// 		  }
-// 		  this.statusGeoFEST = true;
-// 		  return ("MG-back");
-//     }
-    
-//     public String GeoFEST_Full_Run() throws Exception {
-// 		  System.out.println("GeoFEST_Full_Run main page");
-// 		  if (!isInitialized) {
-// 				initWebServices();
-// 		  }
-// 		  this.currentGeotransParamsData.run_choice = "GeoFEST_Full_Run";
-// 		  StageGeotransFile();
-// 		  return ("MG-back");
-//     }
-    
-//     public String GeoFEST_Dry_Run() throws Exception {
-// 		  System.out.println("GeoFEST_Dry_Run main page");
-// 		  if (!isInitialized) {
-// 				initWebServices();
-// 		  }
-// 		  this.currentGeotransParamsData.run_choice = "GeoFEST_Dry_Run";
-// 		  StageGeotransFile();
-// 		  return ("MG-back");
-//     }
-    
-//     protected static String getRealPath() {
-// 		  String path = ".";
-// 		  try {
-// 				path = FacesContext.getCurrentInstance().getApplication()
-// 					 .getClass().getResource("/")
-// 					 + "../../meshdownloads/";
-// 				path = path.substring(5);
-// 		  } catch (Exception e) {
-// 				e.printStackTrace();
-// 		  }
-// 		  return path;
-//     }
-    
-//     protected static String getContextPath() {
-// 		  String path = ".";
-// 		  try {
-// 				path = FacesContext.getCurrentInstance().getExternalContext()
-// 					 .getRequestContextPath()
-// 					 + "/meshdownloads/";
-// 		  } catch (Exception e) {
-// 				e.printStackTrace();
-// 		  }
-// 		  return path;
-//     }
     
     public void StageGeotransFile() throws Exception {
     }
@@ -1645,23 +1609,22 @@ public class MeshGeneratorBean extends GenericSopacBean {
     public void setContourPlotPdfUrl(String tmp_str) {
 		  this.contourPlotPdfUrl = tmp_str;
     }
+	 
+//     public void setCurrentGeotransParamsData(GeotransParamsData tmp_GeotransParamsData) {
+// 		  this.currentGeotransParamsData = tmp_GeotransParamsData;
+//     }
     
-    
-    public void setCurrentGeotransParamsData(GeotransParamsData tmp_GeotransParamsData) {
-		  this.currentGeotransParamsData = tmp_GeotransParamsData;
-    }
-    
-    public GeotransParamsData getCurrentGeotransParamsData() {
-		  return this.currentGeotransParamsData;
-    }
+//     public GeotransParamsData getCurrentGeotransParamsData() {
+// 		  return this.currentGeotransParamsData;
+//     }
     
     public void setStatusGeoFEST(boolean tmp_str) {
-	this.statusGeoFEST = tmp_str;
+		  this.statusGeoFEST = tmp_str;
     }
     
     public boolean getStatusGeoFEST() {
-	
-	return this.statusGeoFEST;
+		  
+		  return this.statusGeoFEST;
     }
     
     public void setMyarchivedMeshTableEntryList(List tmp_str) {
@@ -1673,10 +1636,9 @@ public class MeshGeneratorBean extends GenericSopacBean {
     }
     
     public String[] getSelectProjectsList() {
-		  
 		  return this.selectProjectsList;
     }
-    
+
     public void setDeleteProjectsList(String[] tmp_str) {
 		  this.deleteProjectsList = tmp_str;
     }
@@ -1685,39 +1647,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  return this.deleteProjectsList;
     }
     
-//     public String[] getMyProjectMeshHostArray() {
-// 		  try {
-// 				String[] tmp_contextlist = cm.listContext(codeName);
-// 				if (tmp_contextlist.length > 0) {
-// 					 for (int i = 0; i < tmp_contextlist.length; i++) {
-// 						  myProjectMeshHostArray[i] = cm.getCurrentProperty(codeName
-// 																							 + "/" + tmp_contextlist[i], "hostName");
-// 					 }
-// 				}
-				
-// 		  } catch (Exception ex) {
-// 				ex.printStackTrace();
-// 	}
-// 		  return this.myProjectMeshHostArray;
-		  
-//     }
-    
-// 	 public String[] getMyProjectCreationDateArray() {
-// 		  try {
-// 				String[] tmp_contextlist = cm.listContext(codeName);
-// 				if (tmp_contextlist.length > 0) {
-// 					 for (int i = 0; i < tmp_contextlist.length; i++) {
-// 						  myProjectCreationDateArray[i] = (new Date(Long.parseLong(cm
-// 																									  .getCurrentProperty(codeName + "/"
-// 																																 + tmp_contextlist[i], "LastTime"))))
-// 								.toString();
-// 					 }
-// 				}
-// 		  } catch (Exception ex) {
-// 				ex.printStackTrace();
-// 		  }
-// 	return this.myProjectCreationDateArray;
-//     }
     
     public void setMyProjectNameList(List tmp_str) {
 		  this.myProjectNameList = tmp_str;
@@ -1738,13 +1667,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
 																	  project.getProjectName()));
 				}
 				db.close();
-// 				String[] tmp_contextlist = cm.listContext(codeName);
-// 				if (tmp_contextlist.length > 0) {
-// 					 for (int i = 0; i < tmp_contextlist.length; i++) {
-// 						  myProjectNameList.add(new SelectItem(tmp_contextlist[i],
-// 																			tmp_contextlist[i]));
-// 					 }
-// 				}
 				
 		  } catch (Exception ex) {
 				ex.printStackTrace();
@@ -2096,29 +2018,36 @@ public class MeshGeneratorBean extends GenericSopacBean {
     // Getters ----------------------------------------------------------
     
     public HtmlDataTable getMyLayerDataTable() {
-	return myLayerDataTable;
+		  return myLayerDataTable;
+    }
+
+    public HtmlDataTable getMyMeshDataTable() {
+		  return myLayerDataTable;
     }
     
     public HtmlDataTable getMyFaultDataTable() {
-	return myFaultDataTable;
+		  return myFaultDataTable;
     }
     
     // Setters ----------------------------------------------------------
+    public void setMyMeshDataTable(HtmlDataTable tmp_DataTable) {
+		  this.myMeshDataTable = tmp_DataTable;
+    }
+
     public void setMyLayerDataTable(HtmlDataTable tmp_DataTable) {
-	this.myLayerDataTable = tmp_DataTable;
+		  this.myLayerDataTable = tmp_DataTable;
     }
     
     public void setMyFaultDataTable(HtmlDataTable tmp_DataTable) {
-	this.myFaultDataTable = tmp_DataTable;
+		  this.myFaultDataTable = tmp_DataTable;
     }
     
-
     public void setCurrentLayer(Layer tmp_layer) {
-	this.currentLayer = tmp_layer;
+		  this.currentLayer = tmp_layer;
     }
     
     public Layer getCurrentLayer() {
-	return this.currentLayer;
+		  return this.currentLayer;
     }
     
     public void setCurrentFault(Fault tmp_fault) {
@@ -2313,6 +2242,14 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 	 public void setMeshDataMegaList(List meshDataMegaList){
 		  this.meshDataMegaList=meshDataMegaList;
+	 }
+
+	 public void setCurrentGeotransParamsBean(GeotransParamsBean geotransParamsBean){
+		  this.currentGeotransParamsBean=geotransParamsBean;
+	 }
+
+	 public GeotransParamsBean getCurrentGeotransParamsBean(){
+		  return this.currentGeotransParamsBean;
 	 }
 
     //--------------------------------------------------
