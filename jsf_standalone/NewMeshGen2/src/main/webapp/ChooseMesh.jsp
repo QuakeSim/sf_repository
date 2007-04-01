@@ -122,6 +122,7 @@ function dataTableSelectOneRadio(radio) {
 						    <h:outputText value="Run GeoFEST"/>
 				   </f:facet>
 					<h:commandButton actionListener="#{MGBean.selectMeshForGeoFEST}" 
+										  action="MG-geotransparams"
 										  value="Select"/>
 						
  					</h:column>

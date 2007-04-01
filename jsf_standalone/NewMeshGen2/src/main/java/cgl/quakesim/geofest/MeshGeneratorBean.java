@@ -82,6 +82,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
     List myLoadMeshTableEntryList = new ArrayList();    
     List myarchivedMeshTableEntryList = new ArrayList();    
 	 List myArchivedMeshRunList=new ArrayList();
+	 List myArchivedMeshRunList2=new ArrayList();
 	 List meshDataMegaList=new ArrayList();
 
 	 //These are used to store the actual layers and faults
@@ -101,7 +102,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
     String[] selectProjectsList;    
     private HtmlDataTable myLayerDataTable;    
     private HtmlDataTable myFaultDataTable;    
-	 private HtmlDataTable myMeshDataTable;
+	 UIData myMeshDataTable, myMeshDataTable2;
     String forSearchStr = new String();    
     String faultLatStart = new String();    
     String faultLatEnd = new String();    
@@ -246,15 +247,27 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  return layers;
     }
 	 
-	 protected void storeMeshRunInContext(MeshRunBean mrb) throws Exception {
+	 protected void storeMeshRunInContext(String userName,
+													  String projectName,
+													  String jobStamp,
+													  MeshRunBean mrb) throws Exception {
 		  
 		  System.out.println("Storing meshrun");
 		  System.out.println(mrb.getProjectName());
 		  System.out.println(mrb.getJobUIDStamp());
 		  
+		  //Store the mesh run in a meshrun megabean.
+		  MeshDataMegaBean mega=new MeshDataMegaBean();
+		  mega.setProjectName(projectName);
+		  mega.setUserName(userName);
+		  mega.setJobUIDStamp(jobStamp);
+		  mega.setMeshRunBean(mrb);
+// 		  mega.setJnlpLayers(getMyLayersParamForJnlp(db, projectName));
+// 		  mega.setJnlpFaults(getMyFaultsParamForJnlp(db,projectName));
+						  
 		  //Set up the database.  This open/close routine may need to be improved later.
 		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
-		  db.set(mrb);
+		  db.set(mega);
 		  db.commit();
 		  db.close(); 
 	 }
@@ -285,7 +298,10 @@ public class MeshGeneratorBean extends GenericSopacBean {
 																						 layers,
 																						 meshResolution);
 		  setJobToken(projectMeshRunBean.getJobUIDStamp());
-		  storeMeshRunInContext(projectMeshRunBean);
+		  storeMeshRunInContext(userName,
+										projectName,
+										projectMeshRunBean.getJobUIDStamp(),
+										projectMeshRunBean);
 		  return MESH_GENERATION_NAV_STRING;
     }
     
@@ -306,7 +322,10 @@ public class MeshGeneratorBean extends GenericSopacBean {
 																							 layers,
 																							 meshResolution);
 		  setJobToken(projectMeshRunBean.getJobUIDStamp());
-		  storeMeshRunInContext(projectMeshRunBean);
+		  storeMeshRunInContext(userName,
+										projectName,
+										projectMeshRunBean.getJobUIDStamp(),
+										projectMeshRunBean);
 		  return MESH_GENERATION_NAV_STRING;
     }
 
@@ -316,35 +335,44 @@ public class MeshGeneratorBean extends GenericSopacBean {
      */
     public String runGeoFESTJSF()
 		  throws Exception {
-
+		  
 		  String tokenName=getJobToken();
 		  GeotransParamsBean currentGeotransParamsBean=getCurrentGeotransParamsBean();
+		  System.out.println("ProjectName:"+projectName);
+		  System.out.println("tokenName:"+tokenName);
 		  projectGeoFestOutput=geofestService.runGeoFEST(userName,
 																		 projectName,
 																		 currentGeotransParamsBean,
 																		 tokenName);
-		  saveGeotransParamsToDB(userName, projectName, tokenName, currentGeotransParamsBean);
+		  saveGeotransParamsToDB(userName, 
+										 projectName, 
+										 tokenName, 
+										 currentGeotransParamsBean,
+										 projectGeoFestOutput);
 		  return GEOFEST_EXECUTION_LAUNCHED;
     }
 	 
 	 protected void saveGeotransParamsToDB(String userName, 
 														String projectName, 
 														String tokenName, 
-														GeotransParamsBean currentGeotransParamsBean) {
+														GeotransParamsBean currentGeotransParamsBean,
+														GFOutputBean projectGeoFestOtput) {
 
 		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
-		  //Set up the bean template.
+		  //Set up the bean template for searching.
 		  MeshDataMegaBean mega=new MeshDataMegaBean();
 		  mega.setUserName(userName);
 		  mega.setProjectName(projectName);
 		  mega.setJobUIDStamp(tokenName);
 		  //Find the matching bean
 		  ObjectSet results=db.get(mega);
+		  System.out.println("Megabean to update found? "+results.size());
 		  if(results.hasNext()) {
 				//Reassign the bean.  Should only be one match.
 				mega=(MeshDataMegaBean)results.next();
 				//Update the geotrans params
 				mega.setGeotransParamsBean(currentGeotransParamsBean);
+				mega.setGFOutputBean(projectGeoFestOutput);
 				db.set(mega);
 				db.commit();
 		  }
@@ -902,14 +930,18 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	 /**
 	  * Select Mesh for Geofest run.
 	  */
-	 public String selectMeshForGeoFEST(ActionEvent event) {
+	 public String selectMeshForGeoFEST(ActionEvent ev) {
 		  //load the mesh into memory.
 		  //Default will be an empty bean
 		  
 		  //Recover the mega bean.
-		  MeshDataMegaBean mega=(MeshDataMegaBean)getMyMeshDataTable().getRowData();
+		  MeshDataMegaBean mega=(MeshDataMegaBean)myMeshDataTable.getRowData();
 		  String selectedMeshName=mega.getMeshRunBean().getProjectName();
 		  String selectedMeshStamp=mega.getMeshRunBean().getJobUIDStamp();
+		  
+		  //Set these class variables
+		  projectName=selectedMeshName;
+		  jobToken=selectedMeshStamp;
 
 		  currentGeotransParamsBean=mega.getGeotransParamsBean();
 		  currentGeotransParamsBean.setInputFileName(selectedMeshName+".inp");
@@ -1737,25 +1769,17 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  if (myprojectlist.size() > 0) {
 				for(int i=0;i<myprojectlist.size();i++){
 					 MeshRunBean mrb=new MeshRunBean();
-					 MeshDataMegaBean mega=null;
+					 MeshDataMegaBean mega=new MeshDataMegaBean();
 					 String projectName=((SelectItem)myprojectlist.get(i)).getLabel();
-					 
 					 db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
-		  				 
-					 ObjectSet results=db.get(mrb);
+					 ObjectSet results=db.get(mega);
 					 System.out.println("Returning data values");
 					 //Should only have one value.
-					 MeshRunBean mrb2=null;
+					 //					 MeshRunBean mrb2=null;
 					 while(results.hasNext()){
-						  mrb2=(MeshRunBean)results.next();
-						  mega=new MeshDataMegaBean();
-						  System.out.println("Here's where it is set:"+getGeoFESTBaseUrlForJnlp());
-						  mega.setGeoFESTBaseUrlForJnlp(getGeoFESTBaseUrlForJnlp());
-						  mega.setJnlpLayers(getMyLayersParamForJnlp(db, projectName));
-						  mega.setJnlpFaults(getMyFaultsParamForJnlp(db,projectName));
-						  mega.setUserName(userName);
-						  mega.setProjectName(getBASE64(projectName));
-						  mega.setMeshRunBean(mrb2);
+						  mega=(MeshDataMegaBean)results.next();
+						  //						  mega=new MeshDataMegaBean();
+						  //						  System.out.println("Here's where it is set:"+getGeoFESTBaseUrlForJnlp());
 						  myArchivedMeshRunList.add(mega);
 					 }
 					 db.close();
@@ -1763,48 +1787,38 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  }
 		  return this.myArchivedMeshRunList;
     }
+
+	 public List getMyArchivedMeshRunList2() throws Exception {
+		  List myprojectlist=getMyProjectNameList();
+
+		  myArchivedMeshRunList2.clear();
+		  
+		  if (myprojectlist.size() > 0) {
+				for(int i=0;i<myprojectlist.size();i++){
+					 //					 MeshRunBean mrb=new MeshRunBean();
+					 MeshDataMegaBean mega=new MeshDataMegaBean();
+					 String projectName=((SelectItem)myprojectlist.get(i)).getLabel();
+					 
+					 db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
+					 ObjectSet results=db.get(mega);
+					 System.out.println("Returning data values");
+					 //Should only have one value.
+					 System.out.println("Mega count:"+results.size());
+					 while(results.hasNext()){
+						  mega=(MeshDataMegaBean)results.next();
+						  System.out.println("Mega name:"+mega.getProjectName());
+						  myArchivedMeshRunList2.add(mega);
+					 }
+					 db.close();
+				}
+		  }
+		  return this.myArchivedMeshRunList2;
+    }
     
     public void setMyLoadMeshTableEntryList(List tmp_str) {
 		  this.myLoadMeshTableEntryList = tmp_str;
     }
     
-//     public List getMyLoadMeshTableEntryList() {
-// 		  myLoadMeshTableEntryList.clear();
-// 		  try {
-// 				String[] tmp_contextlist = cm.listContext(codeName);
-// 	    if (tmp_contextlist.length > 0) {
-// 		for (int i = 0; i < tmp_contextlist.length; i++) {
-// 		    loadMeshTableEntry tmp_loadMeshTableEntry = new loadMeshTableEntry();
-// 		    tmp_loadMeshTableEntry.projectName = tmp_contextlist[i];
-// 		    tmp_loadMeshTableEntry.meshHost = cm.getCurrentProperty(
-// 									    codeName + "/" + tmp_contextlist[i], "hostName");
-// 		    if (tmp_loadMeshTableEntry.meshHost == null) {
-// 			tmp_loadMeshTableEntry.meshHost = "null";
-// 		    }
-// 		    tmp_loadMeshTableEntry.creationDate = (new Date(Long
-// 								    .parseLong(cm.getCurrentProperty(codeName + "/"
-// 												     + tmp_contextlist[i], "LastTime"))))
-// 			.toString();
-// 		    tmp_loadMeshTableEntry.view = false;
-// 		    myLoadMeshTableEntryList.add(tmp_loadMeshTableEntry);
-// 		}
-// 	    }
-	    
-// 	} catch (Exception ex) {
-// 	    ex.printStackTrace();
-// 	}
-// 	return this.myLoadMeshTableEntryList;
-//     }
-    
-//     public String cmGetValue(ContextManagerImp cm, String Status, String name,
-// 									  String prop) throws Exception {
-// 		  String retval = "";
-// 		  if (Status.equals("Update")) {
-// 				retval = cm.getCurrentProperty(name, prop);
-// 		  }
-// 		  return retval;
-//     }
-   
     public String getBASE64(String s) {
 		  if (s == null)
 				return null;
@@ -2021,7 +2035,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  return myLayerDataTable;
     }
 
-    public HtmlDataTable getMyMeshDataTable() {
+    public UIData getMyMeshDataTable() {
 		  return myLayerDataTable;
     }
     
@@ -2030,7 +2044,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
     }
     
     // Setters ----------------------------------------------------------
-    public void setMyMeshDataTable(HtmlDataTable tmp_DataTable) {
+    public void setMyMeshDataTable(UIData tmp_DataTable) {
 		  this.myMeshDataTable = tmp_DataTable;
     }
 

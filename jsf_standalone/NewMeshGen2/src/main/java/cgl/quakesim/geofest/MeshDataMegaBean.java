@@ -10,6 +10,7 @@ public class MeshDataMegaBean {
 	 //These default to empty beans, but this will be overridden later,.
 	 MeshRunBean meshRunBean=new MeshRunBean();
 	 GeotransParamsBean geotransParamsBean=new GeotransParamsBean();
+	 GFOutputBean gFOutputBean=new GFOutputBean();
 	 String jnlpLayers;
 	 String jnlpFaults;       //Stringifying fault info suitable for the webstart app.
 	 String plotMesh="true";        //This is a legacy field, will always be "true".
@@ -19,6 +20,16 @@ public class MeshDataMegaBean {
 	 String jobUIDStamp;
 	 
 	 public MeshDataMegaBean() {
+	 }
+	 
+	 public void setGFOutputBean(GFOutputBean gFOutputBean){
+		  System.out.println("gfoutputbean set");
+		  this.gFOutputBean=gFOutputBean;
+	 }
+
+	 public GFOutputBean getGFOutputBean() {
+		  System.out.println("returning gfoutputbean");
+		  return gFOutputBean;
 	 }
 
 	 public void setGeotransParamsBean(GeotransParamsBean geotransParamsBean) {
