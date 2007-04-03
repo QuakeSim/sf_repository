@@ -10,7 +10,8 @@ public class MeshDataMegaBean {
 	 //These default to empty beans, but this will be overridden later,.
 	 MeshRunBean meshRunBean=new MeshRunBean();
 	 GeotransParamsBean geotransParamsBean=new GeotransParamsBean();
-	 GFOutputBean gFOutputBean=new GFOutputBean();
+	 //	 GFOutputBean gFOutputBean=new GFOutputBean();
+	 GFOutputBean geofestOutputBean=new GFOutputBean();
 	 String jnlpLayers;
 	 String jnlpFaults;       //Stringifying fault info suitable for the webstart app.
 	 String plotMesh="true";        //This is a legacy field, will always be "true".
@@ -22,14 +23,15 @@ public class MeshDataMegaBean {
 	 public MeshDataMegaBean() {
 	 }
 	 
-	 public void setGFOutputBean(GFOutputBean gFOutputBean){
-		  System.out.println("gfoutputbean set");
-		  this.gFOutputBean=gFOutputBean;
+	 public void setGeofestOutputBean(GFOutputBean geofestOutputBean){
+		  //System.out.println("gfoutputbean set");
+		  this.geofestOutputBean=geofestOutputBean;
+		  System.out.println("GFOUTPUT CGHIST:"+this.geofestOutputBean.getCghistUrl());
 	 }
 
-	 public GFOutputBean getGFOutputBean() {
-		  System.out.println("returning gfoutputbean");
-		  return gFOutputBean;
+	 public GFOutputBean getGeofestOutputBean() {
+		  //System.out.println("returning gfoutputbean");
+		  return geofestOutputBean;
 	 }
 
 	 public void setGeotransParamsBean(GeotransParamsBean geotransParamsBean) {
@@ -64,11 +66,11 @@ public class MeshDataMegaBean {
 	 }
 
 	 public void setProjectName(String projectName) {
-		  System.out.println(projectName);
+		  //System.out.println(projectName);
 		  this.projectName=projectName;
 	 }
 	 public String getProjectName() {
-		  System.out.println(projectName);
+		  //System.out.println(projectName);
 		  return this.projectName;
 	 }
 
@@ -82,12 +84,12 @@ public class MeshDataMegaBean {
 	 public void setJobUIDStamp(String jobUIDStamp) {this.jobUIDStamp=jobUIDStamp;}
 
 	 public String getGeoFESTBaseUrlForJnlp() {
-		  System.out.println("geofestbaseurlforjnlp in mega: "+geoFESTBaseUrlForJnlp);
+		  //System.out.println("geofestbaseurlforjnlp in mega: "+geoFESTBaseUrlForJnlp);
 		  return geoFESTBaseUrlForJnlp;
 	 }
 
 	 public void setGeoFESTBaseUrlForJnlp(String geoFESTBaseUrlForJnlp) {
-		  System.out.println("geofestbaseurlforjnlp in mega: "+geoFESTBaseUrlForJnlp);
+		  //System.out.println("geofestbaseurlforjnlp in mega: "+geoFESTBaseUrlForJnlp);
 		  this.geoFESTBaseUrlForJnlp=geoFESTBaseUrlForJnlp;
 	 }
 }

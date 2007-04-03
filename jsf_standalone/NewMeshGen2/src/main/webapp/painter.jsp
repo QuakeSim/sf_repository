@@ -119,7 +119,7 @@ if ( (plotMesh!=null) && (plotMesh.equals("true")) ) {
 String baseUrl=getFromBASE64(request.getParameter("gfHostName"));
 String userName=request.getParameter("userName");
 //This will be encoded for safe transit.		 
-String projectName=getFromBASE64(request.getParameter("projectName"));
+String projectName=request.getParameter("projectName");
 String jobId=request.getParameter("jobUIDStamp");
 
 String slash="/";

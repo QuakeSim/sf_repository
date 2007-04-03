@@ -44,8 +44,13 @@ function dataTableSelectOneRadio(radio) {
 
 <f:view>
 	<h:form>
-		<h:panelGrid columns="2" border="1">
-			<h:panelGrid columns="1" border="0">
+      <h:outputText rendered="#{(empty MGBean.myProjectNameList)}"
+						  value="You don't have any archived projects.  Please create a new one."/>
+		<h:panelGrid columns="2" 
+ 						 rendered="#{!(empty MGBean.myProjectNameList)}"
+						 border="1">
+			<h:panelGrid columns="1" 
+							 border="0">
 				<h:outputText escape="false" value="<b>Select Projects</b><br><br>" />
 				<h:outputText escape="false"
 					value="Please select from one of the previous projects." />
@@ -59,7 +64,9 @@ function dataTableSelectOneRadio(radio) {
 				<h:commandButton value="Select"
 					action="#{MGBean.toggleSelectProject}" />
 			</h:panelGrid>
-			<h:panelGrid columns="1" border="0">
+
+			<h:panelGrid columns="1" 
+							 border="0">
 				<h:outputText escape="false" value="<b>Select Projects</b><br><br>" />
 				<h:outputText escape="false"
 					value="Please select from one of the previous projects." />

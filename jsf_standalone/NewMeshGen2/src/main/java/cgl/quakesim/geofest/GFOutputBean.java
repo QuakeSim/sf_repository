@@ -466,7 +466,7 @@ public class GFOutputBean  implements java.io.Serializable {
         new org.apache.axis.description.TypeDesc(GFOutputBean.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "GFOutputBean"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("urn:GeoFESTService", "GFOutputBean"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("cghistUrl");
         elemField.setXmlName(new javax.xml.namespace.QName("", "cghistUrl"));

@@ -436,7 +436,7 @@ public class MeshRunBean  implements java.io.Serializable {
         new org.apache.axis.description.TypeDesc(MeshRunBean.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec", "MeshRunBean"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("urn:GeoFESTService", "MeshRunBean"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("autoref");
         elemField.setXmlName(new javax.xml.namespace.QName("", "autoref"));

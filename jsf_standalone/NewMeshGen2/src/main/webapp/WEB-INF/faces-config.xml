@@ -90,7 +90,7 @@
 		<from-view-id>/EditProject.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>mesh_generation_running</from-outcome>
-			<to-view-id>/EditProject.jsp</to-view-id>
+			<to-view-id>/LoadProject.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>MG-this</from-outcome>
@@ -206,7 +206,11 @@
 		<from-view-id>/GeotransParams.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>MG-back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
+			<to-view-id>/ChooseMesh.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>geofest_execution_launched</from-outcome>
+			<to-view-id>/ChooseMesh.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 

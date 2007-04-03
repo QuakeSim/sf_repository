@@ -4,7 +4,6 @@
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
-
 package cgl.quakesim.geofest;
 
 public class GeotransParamsBean  implements java.io.Serializable {
@@ -36,7 +35,7 @@ public class GeotransParamsBean  implements java.io.Serializable {
 	String south_bc_value="0 0. 0. 0. 1. ";
 	String bottom_bc="locked node";
 	String bottom_bc_value="0 0. 0. 0. 1. ";
-	
+
 	//Output Parameters and Formatting
 	
 	String reportingNodes="All";

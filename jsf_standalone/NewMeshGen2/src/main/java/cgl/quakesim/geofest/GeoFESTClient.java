@@ -17,7 +17,7 @@ public class GeoFESTClient {
      */
     public static void main(String[] args) {
 	
-	final String DEFAULT_SERVICE_URL="http://gf7.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec";
+	final String DEFAULT_SERVICE_URL="http://gf19.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec";
 	
 	String serviceUrl="";
 	System.out.println(args);
@@ -134,6 +134,8 @@ public class GeoFESTClient {
 			  gfs.runGeoFEST(userName,projectName,gpb,mrb.getJobUIDStamp());
 	    
 	    //Print out the URLs of the GeoFEST output.
+		 System.out.println(gfoutput.getNodeUrl());
+		 System.out.println(gfoutput.getCghistUrl());
 	    System.out.println("These are the URLs of the GeoFEST output files.");			
 	    System.out.println("Not all of these will be immediately active.");
 
