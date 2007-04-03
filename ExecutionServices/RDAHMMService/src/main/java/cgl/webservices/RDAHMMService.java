@@ -197,54 +197,54 @@ public class RDAHMMService extends AntVisco implements Runnable{
     protected String[] filterResults(String[] tabbedFile,
 				     int cutLeftColumns,
 				     int cutRightColumns) throws Exception {
-	String[] filteredFileArray=new String[tabbedFile.length];
-	String space=" ";
-	StringTokenizer st;
-	for(int i=0;i<tabbedFile.length;i++){
-	    filteredFileArray[i]=tabbedFile[i]+".filtered";
-	    BufferedReader br=
-		new BufferedReader(new FileReader(tabbedFile[i]));
-	    PrintWriter printer=
-		new PrintWriter(new FileWriter(filteredFileArray[i]),true);
-	    String line=br.readLine();
-	    while(line!=null) {
-		//	    System.out.println(line);
-		st=new StringTokenizer(line);
-		String newLine="";
-		int tokenCount=st.countTokens();
-		for (int j=0;j<tokenCount;j++) {
-		    String temp=st.nextToken();
-		    if(j>=cutLeftColumns && j<(tokenCount-cutRightColumns)) {
-			newLine+=temp+space;
-		    }
-		}
-		//	    System.out.println(newLine);
-		printer.println(newLine);
-		line=br.readLine();
-	    }
-	}
-	return filteredFileArray;
+		  String[] filteredFileArray=new String[tabbedFile.length];
+		  String space=" ";
+		  StringTokenizer st;
+		  for(int i=0;i<tabbedFile.length;i++){
+				filteredFileArray[i]=tabbedFile[i]+".filtered";
+				BufferedReader br=
+					 new BufferedReader(new FileReader(tabbedFile[i]));
+				PrintWriter printer=
+					 new PrintWriter(new FileWriter(filteredFileArray[i]),true);
+				String line=br.readLine();
+				while(line!=null) {
+					 //	    System.out.println(line);
+					 st=new StringTokenizer(line);
+					 String newLine="";
+					 int tokenCount=st.countTokens();
+					 for (int j=0;j<tokenCount;j++) {
+						  String temp=st.nextToken();
+						  if(j>=cutLeftColumns && j<(tokenCount-cutRightColumns)) {
+								newLine+=temp+space;
+						  }
+					 }
+					 //	    System.out.println(newLine);
+					 printer.println(newLine);
+					 line=br.readLine();
+				}
+		  }
+		  return filteredFileArray;
     }
-
+	 
     private void makeWorkDir(String workDir, 
-			     String bf_loc)
-	throws Exception {
-	System.out.println("Working Directory is "+workDir);
-
-	String[] args0=new String[4];
+									  String bf_loc)
+		  throws Exception {
+		  System.out.println("Working Directory is "+workDir);
+		  
+		  String[] args0=new String[4];
         args0[0]="-DworkDir.prop="+workDir;
         args0[1]="-buildfile";
         args0[2]=bf_loc;
         args0[3]="MakeWorkDir";
-	
+		  
         setArgs(args0);
         run();
     }  
-
+	 
     private String extractSimpleName(String extendedName) {
-	return (new File(extendedName)).getName();
+		  return (new File(extendedName)).getName();
     }
-   
+	 
     
     /**
      * Note that inputFileUrlString can be either single values or
@@ -254,96 +254,96 @@ public class RDAHMMService extends AntVisco implements Runnable{
      */
     private String[] downloadInputFile(String[] inputFileUrlString,
 				       String inputFileDestDir)
-	throws Exception {
-
-	//Convert to a URL. This will throw an exception if
-	//malformed.
-	
-	String[] fileLocalFullName=new String[inputFileUrlString.length];
-	for(int i=0;i<inputFileUrlString.length;i++) {
-	    
-	    URL inputFileUrl=new URL(inputFileUrlString[i]);
-	    
-	    String protocol=inputFileUrl.getProtocol();
-	    System.out.println("Protocol: "+protocol);
-	    String fileSimpleName=extractSimpleName(inputFileUrl.getFile());
-	    System.out.println(fileSimpleName);
-	    
-	    fileLocalFullName[i]=inputFileDestDir+File.separator
-		+fileSimpleName;
-	    
-	    if(protocol.equals(FILE_PROTOCOL)) {
-		String filePath=inputFileUrl.getFile();
-		fileSimpleName=inputFileUrl.getFile();
-
-		System.out.println("File path is "+filePath);
-		File filePathObject=new File(filePath);
-		File destFileObject=new File(fileLocalFullName[i]);
-		
-		//See if the inputFileUrl and the dest file are the same.
-		if(filePathObject.getCanonicalPath().
-		   equals(destFileObject.getCanonicalPath())) {
-		    System.out.println("Files are the same.  We're done.");
-		    return fileLocalFullName;
-		}
-		
-		//Otherwise, we will have to copy it.
-		copyFileToFile(filePathObject, destFileObject);
-		return fileLocalFullName;
-	    }
-	    
-	    else if(protocol.equals(HTTP_PROTOCOL)) {
-		copyUrlToFile(inputFileUrl,fileLocalFullName[i]);
-	    }
-	    
-	    else {
-		System.out.println("Unknown protocol for accessing inputfile");
-		throw new Exception("Unknown protocol");
-	    }
-	}
-	return fileLocalFullName;
+		  throws Exception {
+		  
+		  //Convert to a URL. This will throw an exception if
+		  //malformed.
+		  
+		  String[] fileLocalFullName=new String[inputFileUrlString.length];
+		  for(int i=0;i<inputFileUrlString.length;i++) {
+				
+				URL inputFileUrl=new URL(inputFileUrlString[i]);
+				
+				String protocol=inputFileUrl.getProtocol();
+				System.out.println("Protocol: "+protocol);
+				String fileSimpleName=extractSimpleName(inputFileUrl.getFile());
+				System.out.println(fileSimpleName);
+				
+				fileLocalFullName[i]=inputFileDestDir+File.separator
+					 +fileSimpleName;
+				
+				if(protocol.equals(FILE_PROTOCOL)) {
+					 String filePath=inputFileUrl.getFile();
+					 fileSimpleName=inputFileUrl.getFile();
+					 
+					 System.out.println("File path is "+filePath);
+					 File filePathObject=new File(filePath);
+					 File destFileObject=new File(fileLocalFullName[i]);
+					 
+					 //See if the inputFileUrl and the dest file are the same.
+					 if(filePathObject.getCanonicalPath().
+						 equals(destFileObject.getCanonicalPath())) {
+						  System.out.println("Files are the same.  We're done.");
+						  return fileLocalFullName;
+					 }
+					 
+					 //Otherwise, we will have to copy it.
+					 copyFileToFile(filePathObject, destFileObject);
+					 return fileLocalFullName;
+				}
+				
+				else if(protocol.equals(HTTP_PROTOCOL)) {
+					 copyUrlToFile(inputFileUrl,fileLocalFullName[i]);
+				}
+				
+				else {
+					 System.out.println("Unknown protocol for accessing inputfile");
+					 throw new Exception("Unknown protocol");
+				}
+		  }
+		  return fileLocalFullName;
     }
-	
+	 
 
     /**
      * Famous method that I googled. This copies a file to a new
      * place on the file system.
      */
     private void copyFileToFile(File sourceFile,File destFile) 
-	throws Exception {
-	InputStream in=new FileInputStream(sourceFile);
-	OutputStream out=new FileOutputStream(destFile);
-	byte[] buf=new byte[1024];
-	int length;
-	while((length=in.read(buf))>0) {
-	    out.write(buf,0,length);
-	}
-	in.close();
-	out.close();
+		  throws Exception {
+		  InputStream in=new FileInputStream(sourceFile);
+		  OutputStream out=new FileOutputStream(destFile);
+		  byte[] buf=new byte[1024];
+		  int length;
+		  while((length=in.read(buf))>0) {
+				out.write(buf,0,length);
+		  }
+		  in.close();
+		  out.close();
     }
-
+	 
     /**
      * Another famous method that I googled. This downloads contents
      * from the given URL to a local file.
      */
     
     private void copyUrlToFile(URL inputFileUrl,String destFile) 
-	throws Exception {
-
-	URLConnection uconn=inputFileUrl.openConnection();
-	InputStream in=inputFileUrl.openStream();
-	OutputStream out=new FileOutputStream(destFile);
-
-	//Extract the name of the file from the url.
-	
-	byte[] buf=new byte[1024];
-	int length;
-	while((length=in.read(buf))>0) {
-	    out.write(buf,0,length);
-	}
-	in.close();
-	out.close();
-	
+		  throws Exception {
+		  
+		  URLConnection uconn=inputFileUrl.openConnection();
+		  InputStream in=inputFileUrl.openStream();
+		  OutputStream out=new FileOutputStream(destFile);
+		  
+		  //Extract the name of the file from the url.
+		  
+		  byte[] buf=new byte[1024];
+		  int length;
+		  while((length=in.read(buf))>0) {
+				out.write(buf,0,length);
+		  }
+		  in.close();
+		  out.close();
+		  
     }
     private String[] setUpArgArray(String inputFileUrlString,
 											  String workDir,
@@ -376,12 +376,10 @@ public class RDAHMMService extends AntVisco implements Runnable{
         args[13]="-buildfile";
         args[14]=buildFilePath;
         args[15]=antTarget;
-
+		  
 		  return args;
     }
-
-
-
+	 
     //--------------------------------------------------
     // Find the first non-blank line and count columns.
     // Note this can screw up if input file is not
@@ -389,60 +387,60 @@ public class RDAHMMService extends AntVisco implements Runnable{
     // would probably not work either.
     //--------------------------------------------------
     protected int getFileDimension(String fileFullName) {
-	
-	boolean success=false;
-	int ndim=0;
-	StringTokenizer st;
-	try {
-
-	    BufferedReader buf=
-		new BufferedReader(new FileReader(fileFullName));
-	    
-	    String line=buf.readLine();	
-	    if(line!=null){
-		while(!success) {
-		    if(line.trim().equals("")) {
-			line=buf.readLine();
-		    }
-		    else {
-			success=true;
-			st=new StringTokenizer(line);
-			ndim=st.countTokens();
-		    }		   
-		}
-	    }
-	    buf.close();
-	}
-	catch(Exception ex) {
-	    ex.printStackTrace();
-	}
-	return ndim;
+		  
+		  boolean success=false;
+		  int ndim=0;
+		  StringTokenizer st;
+		  try {
+				
+				BufferedReader buf=
+					 new BufferedReader(new FileReader(fileFullName));
+				
+				String line=buf.readLine();	
+				if(line!=null){
+					 while(!success) {
+						  if(line.trim().equals("")) {
+								line=buf.readLine();
+						  }
+						  else {
+								success=true;
+								st=new StringTokenizer(line);
+								ndim=st.countTokens();
+						  }		   
+					 }
+				}
+				buf.close();
+		  }
+		  catch(Exception ex) {
+				ex.printStackTrace();
+		  }
+		  return ndim;
     }
-
+	 
     //--------------------------------------------------
     // This counts the line number.
     //--------------------------------------------------
     protected int getLineCount(String fileFullName) {
-	int nobsv=0;
-	try {
-	    LineNumberReader lnr=
-		new LineNumberReader(new FileReader(fileFullName));
-	    
-	    String line2=lnr.readLine();
-	    while(line2!=null) {
-		line2=lnr.readLine();
-	    }
-	    lnr.close();
-	    nobsv=lnr.getLineNumber();
-	}
-	catch(Exception ex) {
-	    ex.printStackTrace();
-	}
-	
-	return nobsv;
-
+		  int nobsv=0;
+		  try {
+				LineNumberReader lnr=
+					 new LineNumberReader(new FileReader(fileFullName));
+				
+				String line2=lnr.readLine();
+				while(line2!=null) {
+					 line2=lnr.readLine();
+				}
+				lnr.close();
+				nobsv=lnr.getLineNumber();
+		  }
+		  catch(Exception ex) {
+				ex.printStackTrace();
+		  }
+		  
+		  return nobsv;
+		  
     }
-
+	 
     /**
      * This version runs in non-blocking mode and gets
      * the data from the SOPAC data service.
@@ -459,6 +457,21 @@ public class RDAHMMService extends AntVisco implements Runnable{
 		  try {
 				String dataUrl=querySOPACGetURL(siteCode,beginDate,endDate);
 				return runNonblockingRDAHMM(dataUrl,numModelStates);
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+				throw new Exception();
+		  }
+    }
+
+    public RDAHMMResultsBean runNonblockingRDAHMM2(String siteCode,
+																  String beginDate,
+																  String endDate,
+																  int numModelStates)
+		  throws Exception {
+		  try {
+				String dataUrl=querySOPACGetURL(siteCode,beginDate,endDate);
+				return createRDAHMMBean(runNonblockingRDAHMM(dataUrl,numModelStates));
 		  }
 		  catch (Exception ex) {
 				ex.printStackTrace();
@@ -487,7 +500,34 @@ public class RDAHMMService extends AntVisco implements Runnable{
 														  minMaxLatLon,
 														  beginDate,
 														  endDate);
+
 				return runNonblockingRDAHMM(dataUrl,numModelStates);
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+				throw new Exception();
+		  }
+    }
+
+    public RDAHMMResultsBean runNonblockingRDAHMM2(String siteCode,
+																	String resource,
+																	String contextGroup,
+																	String contextId,
+																	String minMaxLatLon,
+																	String beginDate,
+																	String endDate,
+																	int numModelStates)
+		  throws Exception {
+		  try {
+				String dataUrl=querySOPACGetURL(siteCode,
+														  resource,
+														  contextGroup,
+														  contextId,
+														  minMaxLatLon,
+														  beginDate,
+														  endDate);
+				return createRDAHMMBean(runNonblockingRDAHMM(dataUrl,numModelStates));
+				//				return runNonblockingRDAHMM(dataUrl,numModelStates);
 		  }
 		  catch (Exception ex) {
 				ex.printStackTrace();
@@ -507,6 +547,22 @@ public class RDAHMMService extends AntVisco implements Runnable{
 		  try {
 				String dataUrl=querySOPACGetURL(siteCode,beginDate,endDate);
 				return runBlockingRDAHMM(dataUrl,numModelStates);
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+				throw new Exception();
+		  }
+    }
+	 
+
+    public RDAHMMResultsBean runBlockingRDAHMM2(String siteCode,
+																String beginDate,
+																String endDate,
+																int numModelStates)
+		  throws Exception {
+		  try {
+				String dataUrl=querySOPACGetURL(siteCode,beginDate,endDate);
+				return createRDAHMMBean(runBlockingRDAHMM(dataUrl,numModelStates));
 		  }
 		  catch (Exception ex) {
 				ex.printStackTrace();
@@ -550,6 +606,39 @@ public class RDAHMMService extends AntVisco implements Runnable{
 				throw new Exception();
 		  }
     }
+	 
+    public RDAHMMResultsBean runBlockingRDAHMM2(String siteCode,
+																String resource,
+																String contextGroup,
+																String contextId,
+																String minMaxLatLon,
+																String beginDate,
+																String endDate,
+																int numModelStates)
+		  throws Exception {
+		  String token="::";
+		  System.out.println(siteCode+token+resource
+									+token+contextGroup
+									+token+contextId
+									+token+minMaxLatLon
+									+token+beginDate
+									+token+endDate
+									+token+numModelStates);
+		  try {
+				String dataUrl=querySOPACGetURL(siteCode,
+														  resource,
+														  contextGroup,
+														  contextId,
+														  minMaxLatLon,
+														  beginDate,
+														  endDate);
+				return createRDAHMMBean(runBlockingRDAHMM(dataUrl,numModelStates));
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+				throw new Exception();
+		  }
+    }
 
     /**
      * This is the simplified API that uses default values.
@@ -573,7 +662,31 @@ public class RDAHMMService extends AntVisco implements Runnable{
 															 annealStep,
 															 buildFilePath,
 															 antTarget);
+
 		  return returnVals;
+    }
+
+    public RDAHMMResultsBean runBlockingRDAHMM2(String inputFileUrlString,
+																int numModelStates) 
+		  throws Exception {
+		  System.out.println("Running blocking execution");
+		  System.out.println(inputFileUrlString);
+		  System.out.println(numModelStates);
+		  
+		  String[] returnVals=runBlockingRDAHMM(inputFileUrlString,
+															 baseWorkDir,
+															 outputDestDir,
+															 projectName,
+															 binPath,
+															 numModelStates,
+															 randomSeed,
+															 outputType,
+															 annealStep,
+															 buildFilePath,
+															 antTarget);
+		  
+
+		  return createRDAHMMBean(returnVals);
     }
 	 
 
@@ -600,6 +713,28 @@ public class RDAHMMService extends AntVisco implements Runnable{
 																 buildFilePath,
 																 antTarget);
 		  return returnVals;
+    }
+
+    public RDAHMMResultsBean runNonblockingRDAHMM2(String inputFileUrlString,
+																	int numModelStates) 
+		  throws Exception {
+		  System.out.println("Running non-blocking execution");
+		  System.out.println(inputFileUrlString);
+		  System.out.println(numModelStates);
+		  
+		  
+		  String[] returnVals=runNonblockingRDAHMM(inputFileUrlString,
+																 baseWorkDir,
+																 outputDestDir,
+																 projectName,
+																 binPath,
+																 numModelStates,
+																 randomSeed,
+																 outputType,
+																 annealStep,
+																 buildFilePath,
+																 antTarget);
+		  return createRDAHMMBean(returnVals);
     }
 	 
 	 
@@ -659,6 +794,58 @@ public class RDAHMMService extends AntVisco implements Runnable{
 		  return getTheReturnFiles();	
     }
     
+    public RDAHMMResultsBean runBlockingRDAHMM2(String inputFileUrlString,
+																String baseWorkDir,
+																String outputDestDir,
+																String projectName,
+																String binPath,
+																int numModelStates,
+																int randomSeed,
+																String outputType,
+																double annealStep,
+																String buildFilePath,
+																String antTarget) throws Exception {
+		  
+		  
+		  //Set up the work directory
+		  String workDir=baseWorkDir+File.separator+projectName;
+		  makeWorkDir(workDir,buildFilePath);
+		  
+		  //Copy the input file to the working directory, if 
+		  //necessary.
+		  String[] inputFileUrlArray=
+				convertInputUrlStringToArray(inputFileUrlString);
+		  
+		  String[] localFileArray=downloadInputFile(inputFileUrlArray,workDir);
+		  String[] localFileArrayFiltered=filterResults(localFileArray, 2, 3);
+		  String rdahmmInputFile=workDir+"/"+projectName+".input";
+		  mergeInputFiles(localFileArrayFiltered,rdahmmInputFile);
+		  
+		  
+		  //Get the dimensions and number of observations.
+		  int ndim=getFileDimension(rdahmmInputFile);
+		  int nobsv=getLineCount(rdahmmInputFile);
+		  
+		  String[] args=setUpArgArray(rdahmmInputFile,
+												workDir,
+												outputDestDir,
+												projectName,
+												binPath,
+												nobsv,
+												ndim,
+												numModelStates,
+												randomSeed,
+												outputType,
+												annealStep,
+												buildFilePath,
+												antTarget);
+		  
+		  //Methods inherited from parent
+        setArgs(args);
+        run();
+		  return createRDAHMMBean(getTheReturnFiles());
+    }
+    
     /**
      * This version immediately returns and is used
      * for programs that take longer to run.  This is the full
@@ -715,6 +902,59 @@ public class RDAHMMService extends AntVisco implements Runnable{
         execute();
 		  
 		  return getTheReturnFiles();
+    }
+
+    public RDAHMMResultsBean runNonblockingRDAHMM2(String inputFileUrlString,
+																	String baseWorkDir,
+																	String outputDestDir,
+																	String projectName,
+																	String binPath,
+																	int numModelStates,
+																	int randomSeed,
+																	String outputType,
+																	double annealStep,
+																	String buildFilePath,
+																	String antTarget) throws Exception {
+		  
+		  //Set up the work directory
+		  String workDir=baseWorkDir+File.separator+projectName;
+		  makeWorkDir(workDir,buildFilePath);
+		  
+		  //Copy the input file to the working directory, if 
+		  //necessary.
+		  String[] inputFileUrlArray=
+				convertInputUrlStringToArray(inputFileUrlString);
+		  
+		  String[] localFileArray=downloadInputFile(inputFileUrlArray,workDir);
+		  String[] localFileArrayFiltered=filterResults(localFileArray, 2, 3);
+		  String rdahmmInputFile=workDir+"/"+projectName+".input";
+		  mergeInputFiles(localFileArrayFiltered,rdahmmInputFile);
+		  
+		  //Get the dimensions and number of observations.
+		  int ndim=getFileDimension(rdahmmInputFile);
+		  int nobsv=getLineCount(rdahmmInputFile);
+		  
+		  
+		  String[] args=setUpArgArray(rdahmmInputFile,
+												workDir,
+												outputDestDir,
+												projectName,
+												binPath,
+												nobsv,
+												ndim,
+												numModelStates,
+												randomSeed,
+												outputType,
+												annealStep,
+												buildFilePath,
+												antTarget);
+		  
+		  
+		  //Methods inherited from parent
+        setArgs(args);
+        execute();
+		  
+		  return createRDAHMMBean(getTheReturnFiles());
     }
 	 
     /**
@@ -800,6 +1040,26 @@ public class RDAHMMService extends AntVisco implements Runnable{
 		  //	return dataUrl;
     }
     
+	 protected RDAHMMResultsBean createRDAHMMBean(String[] results) {
+		  RDAHMMResultsBean rrb=new RDAHMMResultsBean();
+		  
+		  rrb.setInputUrl(results[0]);
+		  rrb.setRangeUrl(results[1]);
+		  rrb.setQUrl(results[2]);
+		  rrb.setPiUrl(results[3]);
+		  rrb.setAUrl(results[4]);
+		  rrb.setMinvalUrl(results[5]);
+		  rrb.setMaxvalUrl(results[6]);
+		  rrb.setLUrl(results[7]);
+		  rrb.setBUrl(results[8]);
+		  rrb.setQUrl(results[9]);
+		  rrb.setStdoutUrl(results[10]);
+		  rrb.setInputXPngUrl(results[11]);
+		  rrb.setInputYPngUrl(results[12]);
+		  rrb.setInputZPngUrl(results[13]);
+
+		  return rrb;
+	 }
 	 
     /** 
      * This is added for testing.
