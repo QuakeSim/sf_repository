@@ -69,4 +69,7 @@ export STATION_MONITOR_PORTLET_HOME=$BUILD_DIR/portlets/StationMonitor-portlet
 export REALTIME_RDAHMM_PORTLET_HOME=$BUILD_DIR/portlets/RealTimeRdahmm-portlet
 export PLOT_GRWS_TIMESERIES_PORTLET_HOME=$BUILD_DIR/portlets/PlotGRWSTimeSeries-portlet
 export MESHGENERATOR_PORTLET_HOME=$BUILD_DIR/portlets/MeshGenerator-portlet
+export NEW_MESHGENERATOR_PORTLET_HOME=$BUILD_DIR/portlets/NewMeshGen-portlet
+
+#Set the path to include ant and maven.
 export PATH=$ANT_HOME/bin:$MAVEN_HOME/bin:$PATH
