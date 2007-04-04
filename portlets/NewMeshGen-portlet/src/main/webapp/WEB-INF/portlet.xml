@@ -43,7 +43,53 @@ xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0"
        <portlet-mode>HELP</portlet-mode>
      </supports>
      <portlet-info>
-      <title>NewMeshGen-Portlet</title>
+      <title>MeshFetcher-Portlet</title>
+      <keywords>MeshGenerator</keywords>
+     </portlet-info>        
+   </portlet>
+
+	<portlet>
+    <portlet-name>choosemesh-portlet</portlet-name>
+    <portlet-class>org.apache.portals.bridges.jsf.FacesPortlet</portlet-class>
+      <expiration-cache>0</expiration-cache>
+      <init-param>
+      <!--
+      <name>default-view</name>
+       -->
+      <name>ViewPage</name>
+      <value>/ChooseMesh.jsp</value>
+     </init-param>
+     <supports>
+       <mime-type>text/html</mime-type>
+       <portlet-mode>VIEW</portlet-mode>
+       <portlet-mode>EDIT</portlet-mode>
+       <portlet-mode>HELP</portlet-mode>
+     </supports>
+     <portlet-info>
+      <title>MeshChooser-Portlet</title>
+      <keywords>MeshGenerator</keywords>
+     </portlet-info>        
+   </portlet>
+
+	<portlet>
+    <portlet-name>fetch-geofest-output-portlet</portlet-name>
+    <portlet-class>org.apache.portals.bridges.jsf.FacesPortlet</portlet-class>
+      <expiration-cache>0</expiration-cache>
+      <init-param>
+      <!--
+      <name>default-view</name>
+       -->
+      <name>ViewPage</name>
+      <value>/FetchGeoFESTOutput.jsp</value>
+     </init-param>
+     <supports>
+       <mime-type>text/html</mime-type>
+       <portlet-mode>VIEW</portlet-mode>
+       <portlet-mode>EDIT</portlet-mode>
+       <portlet-mode>HELP</portlet-mode>
+     </supports>
+     <portlet-info>
+      <title>Geofest-Output-Portlet</title>
       <keywords>MeshGenerator</keywords>
      </portlet-info>        
    </portlet>

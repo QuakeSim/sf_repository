@@ -37,6 +37,7 @@ import org.servogrid.genericproject.Utility;
 //Import stuff from db4o
 import com.db4o.*;
 
+
 /**
  * Everything you need to set up and run MeshGenerator.
  */
@@ -264,6 +265,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  mega.setGeoFESTBaseUrlForJnlp(getGeoFESTBaseUrlForJnlp());
  		  mega.setJnlpLayers(getMyLayersParamForJnlp(null, projectName));
  		  mega.setJnlpFaults(getMyFaultsParamForJnlp(null,projectName));
+		  mega.setCreationDate((new Date()).toString());
 						  
 		  //Set up the database.  This open/close routine may need to be improved later.
 		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");	 
@@ -272,14 +274,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  db.close(); 
 	 }
 	 
-// 	 protected MeshRunBean restoreMeshRunInstance(String projectName, 
-// 																 String jobUIDStamp) 
-// 		  throws Exception {
-// 		  //		  return (MeshRunBean)results.next();
-		  
-//  		  MeshRunBean mrb=new MeshRunBean();
-// 		  return mrb;
-// 	 }
 
     /**
      * This is a JSF compatible method for running the mesh generator
@@ -1411,18 +1405,19 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				ex.printStackTrace();
 		  }
 		  try {
+				db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");
 				if (deleteProjectsList != null) {
 					 for (int i = 0; i < deleteProjectsList.length; i++) {
-						  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");
 						  ProjectBean delproj=new ProjectBean();
+						  delproj.setProjectName((String)deleteProjectsList[i]);
 						  ObjectSet results=db.get(delproj);
 						  if(results.hasNext()){
 								delproj=(ProjectBean)results.next();
 								db.delete(delproj);
 						  }
-						  db.close();
 					 }
 				}
+				db.close();
 		  } catch (Exception ex) {
 				ex.printStackTrace();
 		  }

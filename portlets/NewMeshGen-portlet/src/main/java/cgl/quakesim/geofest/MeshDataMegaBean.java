@@ -19,6 +19,7 @@ public class MeshDataMegaBean {
 	 String projectName;
 	 String userName;
 	 String jobUIDStamp;
+	 String creationDate;
 	 
 	 public MeshDataMegaBean() {
 	 }
@@ -91,5 +92,13 @@ public class MeshDataMegaBean {
 	 public void setGeoFESTBaseUrlForJnlp(String geoFESTBaseUrlForJnlp) {
 		  //System.out.println("geofestbaseurlforjnlp in mega: "+geoFESTBaseUrlForJnlp);
 		  this.geoFESTBaseUrlForJnlp=geoFESTBaseUrlForJnlp;
+	 }
+
+	 public void setCreationDate(String creationDate){
+		  this.creationDate=creationDate;
+	 }
+
+	 public String getCreationDate(){
+		  return creationDate;
 	 }
 }
