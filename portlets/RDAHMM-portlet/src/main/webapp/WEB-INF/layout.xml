@@ -14,6 +14,18 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
+            <portlet-tab label="RDAHMM-data-archive-portlet">
+                <title lang="en">RDAHMM Data Archive Portlet</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="RDAHMM-Archive-PF">
+                                <portlet-class>RDAHMM-portlet#RDAHMM-archive-portlet</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
         </portlet-tabbed-pane>
     </portlet-tab>
 </portlet-tabbed-pane>

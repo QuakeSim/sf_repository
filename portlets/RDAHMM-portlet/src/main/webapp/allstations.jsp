@@ -154,9 +154,19 @@ mapcenter_y = center_xy[1];
 
        </h:panelGrid>
 
-       <h:commandLink action="#{rdahmmBean.runBlockingRDAHMM_Full}">
-            <h:outputText value="Run RDAHMM"/>
-       </h:commandLink>
+       <h:commandButton  value="Run RDAHMM" 
+		 						 action="#{rdahmmBean.runBlockingRDAHMM_Full}">
+       </h:commandButton>
+		 <h:commandButton id="save" 
+		 						rendered="#{(rdahmmBean.resultsBean!=null)}"
+		 						action="#{rdahmmBean.saveProject}"
+		 						value="Save to Archive"/>
+
+		 <h:commandButton id="delete" 
+		 						rendered="#{(rdahmmBean.resultsBean!=null)}"
+		 						action="#{rdahmmBean.discardProject}"
+		 						value="Discard"/>
+
 
        </h:form>
 	    </f:view>
@@ -177,60 +187,59 @@ mapcenter_y = center_xy[1];
 				rendered="#{(rdahmmBean.resultsBean!=null)}">
 
        <h:outputText  escape="false" value="<b>Output Values</b>"/>
-       <h:outputLink value="#{rdahmmBean.resultsBean.projectInput}" target="_blank">
+       <h:outputLink value="#{rdahmmBean.projectInput}" target="_blank">
        <h:outputText value="Input File"/>
        </h:outputLink>
 
 
-       <h:outputLink value="#{rdahmmBean.resultsBean.projectRange}" target="_blank">
+       <h:outputLink value="#{rdahmmBean.resultsBean.rangeUrl}" target="_blank">
        <h:outputText value="Range"/>
        </h:outputLink>
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectQ}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.QUrl}">
        <h:outputText value="Optimal State Sequence File (Q)"/>
        </h:outputLink>
 
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectA}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.AUrl}">
        <h:outputText value="Model Transition Probability (A)"/>
        </h:outputLink>
 
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectB}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.BUrl}">
        <h:outputText value="Model Output Distribution (B)"/>
        </h:outputLink>
 
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectL}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.LUrl}">
        <h:outputText value="Model Log Likelihood (L)"/>
        </h:outputLink>>
 
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectPi}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.piUrl}">
        <h:outputText value="Model Initial State Probability (PI)"/>
        </h:outputLink>
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectMinval}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.minvalUrl}">
        <h:outputText value="Minimum Value"/>
        </h:outputLink>
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectMaxval}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.maxvalUrl}">
        <h:outputText value="Maximum Value"/>
        </h:outputLink>
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectGraphX}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.inputXPngUrl}">
        <h:outputText value="Plot of X Values"/>
        </h:outputLink>
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectGraphY}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.inputYPngUrl}">
        <h:outputText value="Plot of Y Values"/>
        </h:outputLink>
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectGraphZ}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.inputZPngUrl}">
        <h:outputText value="Plot of Z Values"/>
        </h:outputLink>
 	
-
       </h:panelGrid>
 
     </f:view>
@@ -239,6 +248,7 @@ mapcenter_y = center_xy[1];
      </table>
     </tr>
     </table>
+
 
 
     <script type="text/javascript">

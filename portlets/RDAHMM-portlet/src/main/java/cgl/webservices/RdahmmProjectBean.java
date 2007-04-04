@@ -19,6 +19,16 @@ public class RdahmmProjectBean {
     String creationDate;
 	 String hostName;
 
+	 RDAHMMResultsBean resultsBean;
+
+	 public RDAHMMResultsBean getResultsBean(){
+		  return resultsBean;
+	 }
+
+	 public void setResultsBean(RDAHMMResultsBean resultsBean) {
+		  this.resultsBean=resultsBean;
+	 }
+
     public String getProjectName() {
 		  return projectName;
     }

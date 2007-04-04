@@ -88,4 +88,28 @@
       </fileset>
    </copy>
 </target>
+
+<!--
+<target name="copy-rdahmm-to-portlet">
+   <property name="rdahmm.dest.dir" value="./portlets/RDAHMM-portlet/"/>
+   <property name="rdahmm.source.dir" value="./jsf_standalone/RDAHMM"/>
+   <echo message="${rdahmm.dest.dir}"/>
+   <echo message="${rdahmm.source.dir}"/>
+   <copy toDir="${rdahmm.dest.dir}"
+         overwrite="true">
+      <fileset dir="${rdahmm.source.dir}">
+         <include name="**/*.java"/>
+      </fileset>
+      <fileset dir="${rdahmm.source.dir}">
+         <include name="**/*.xml"/>
+         <include name="**/*.class"/>
+         <include name="**/*.jar"/>
+         <include name="**/*.jsp"/>
+         <include name="**/*.properties"/>
+         <exclude name="pom.xml"/>
+         <exclude name="**/web.xml"/>
+      </fileset>
+   </copy>
+</target>
+-->
 </project>

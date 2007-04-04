@@ -36,6 +36,8 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.StringTokenizer;
 import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
 
 //Import stuff from db4o
 import com.db4o.*;
@@ -105,6 +107,7 @@ public class RDAHMMBean extends GenericSopacBean{
 	 RdahmmProjectBean rdahmmProjectBean=new RdahmmProjectBean();
 	 RDAHMMResultsBean resultsBean=null;
 	 ObjectContainer db;
+	 List projectArchive=new ArrayList();
 
     /**
      * default empty constructor
@@ -133,16 +136,45 @@ public class RDAHMMBean extends GenericSopacBean{
 				initWebServices();
 		  }
 		  
+// 		  RdahmmProjectBean localBean=getRdahmmProjectBean();
+// 		  makeProjectDirectory();
+// 		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");
+// 		  db.set(localBean);
+// 		  db.commit();
+// 		  db.close();
+
+		  rdahmmRunValues.clear();
+		  
+		  return ("rdahmm-new-project-created");
+    }
+
+	 /**
+	  * Clears the local memory, not the DB.
+	  */
+	 public String discardProject() throws Exception {
+		  System.out.println("Discarding project");
+		  //Clear the in-memory value.
+		  setResultsBean(null);
+
+		  return ("rdahmm-project-saved");
+	 }
+
+    public String saveProject() throws Exception{
+		  System.out.println("Saving project");
+		  System.out.println(getContextBasePath()+"/"+userName+"/"+codeName+".db");
 		  RdahmmProjectBean localBean=getRdahmmProjectBean();
+		  localBean.setResultsBean(getResultsBean());
+
 		  makeProjectDirectory();
 		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");
 		  db.set(localBean);
 		  db.commit();
 		  db.close();
-
-		  rdahmmRunValues.clear();
 		  
-		  return ("rdahmm-new-project-created");
+		  //Clear the in-memory value.
+		  setResultsBean(null);
+
+		  return ("rdahmm-project-saved");
     }
     
 	 protected void makeProjectDirectory() {
@@ -150,36 +182,6 @@ public class RDAHMMBean extends GenericSopacBean{
 		  System.out.println(getContextBasePath()+"/"+userName+"/"+codeName+"/");
 		  projectDir.mkdirs();
 	 }
-	 
-//     public String setParameterValues() throws Exception {
-// 		  //Store the request values persistently
-		  
-
-// 		  contextName=codeName+"/"+projectName;
-// 		  cm.addContext(contextName);
-// 		  cm.setCurrentProperty(contextName,"projectName",projectName);
-// 		  cm.setCurrentProperty(contextName,"hostName",hostName);
-// 		  cm.setCurrentProperty(contextName,"numModelStates",
-// 										numModelStates+"");
-// 		  cm.setCurrentProperty(contextName,"siteCode",siteCode);
-// 		  cm.setCurrentProperty(contextName,"beginDate",beginDate);
-// 		  cm.setCurrentProperty(contextName,"endDate",endDate);
-// 		  cm.setCurrentProperty(contextName,"projectInput",projectInput);
-// 		  cm.setCurrentProperty(contextName,"projectRange",projectRange);
-// 		  cm.setCurrentProperty(contextName,"projectQ",projectQ);
-// 		  cm.setCurrentProperty(contextName,"projectPi",projectPi);
-// 		  cm.setCurrentProperty(contextName,"projectMinval",projectMinval);
-// 		  cm.setCurrentProperty(contextName,"projectMaxval",projectMaxval);
-// 		  cm.setCurrentProperty(contextName,"projectL",projectL);
-// 		  cm.setCurrentProperty(contextName,"projectB",projectB);
-// 		  cm.setCurrentProperty(contextName,"projectQ",projectQ);
-// 		  cm.setCurrentProperty(contextName,"projectStdout",projectStdout);
-// 		  cm.setCurrentProperty(contextName,"projectGraphX",projectGraphX);
-// 		  cm.setCurrentProperty(contextName,"projectGraphY",projectGraphY);
-// 		  cm.setCurrentProperty(contextName,"projectGraphZ",projectGraphZ);
-
-// 		  return "rdahmm-parameters-set";
-//     }
     
     public String loadDataArchive()throws Exception{
 		  System.out.println("Loading project");
@@ -215,15 +217,16 @@ public class RDAHMMBean extends GenericSopacBean{
 	 public String runBlockingRDAHMM_Full() throws Exception {
 		  
 		  newProject();
+		  RdahmmProjectBean localBean=getRdahmmProjectBean();
 		  RDAHMMResultsBean resultsBean=
-				rdservice.runBlockingRDAHMM2(siteCode,
-													  resource,
-													  contextGroup,
-													  contextId,
-													  minMaxLatLon,
-													  beginDate,
-													  endDate,
-													  numModelStates);
+				rdservice.runBlockingRDAHMM2(localBean.getSiteCode(),
+													  localBean.getResource(),
+													  localBean.getContextGroup(),
+													  localBean.getContextId(),
+													  localBean.getMinMaxLatLon(),
+													  localBean.getBeginDate(),
+													  localBean.getEndDate(),
+													  localBean.getNumModelStates());
 		  setResultsBean(resultsBean);
 		  //		  setPropertyVals(projectName, returnBean);
 		  //		  setParameterValues(projectName);
@@ -457,5 +460,26 @@ public class RDAHMMBean extends GenericSopacBean{
 	 public RDAHMMResultsBean getResultsBean(){
 		  return resultsBean;
 	 }
-	 
+
+	 public void setProjectArchive(List projectArchive) {
+		  this.projectArchive=projectArchive;
+	 }
+
+	 public List getProjectArchive() {
+		  projectArchive.clear();
+		  try {
+				db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");
+				ObjectSet results=db.get(RdahmmProjectBean.class);
+				while(results.hasNext()) {
+					 projectArchive.add((RdahmmProjectBean)results.next());
+				}
+				db.close();
+		  }
+
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  
+		  return projectArchive;
+	 }
 }
