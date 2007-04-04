@@ -36,7 +36,7 @@ cd $SIMPLEX_SA_HOME
 mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
 cd $RDAHMM_SA_HOME
-mvn clean -Dtomcat.base.dir=$CATALINA_HOME -Dportal.host.name=$PORTAL_HOST_NAME
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME -Dportal.host.name=$PORTAL_HOST_NAME -Dgoogle.key=$GOOGLE_KEY
 
 cd $SIMPLE_RDAHMM_SA_HOME
 mvn clean -Dtomcat.base.dir=$CATALINA_HOME

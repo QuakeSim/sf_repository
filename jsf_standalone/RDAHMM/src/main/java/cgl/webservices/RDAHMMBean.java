@@ -36,6 +36,8 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.StringTokenizer;
 import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
 
 //Import stuff from db4o
 import com.db4o.*;
@@ -105,6 +107,7 @@ public class RDAHMMBean extends GenericSopacBean{
 	 RdahmmProjectBean rdahmmProjectBean=new RdahmmProjectBean();
 	 RDAHMMResultsBean resultsBean=null;
 	 ObjectContainer db;
+	 List projectArchive=new ArrayList();
 
     /**
      * default empty constructor
@@ -457,5 +460,26 @@ public class RDAHMMBean extends GenericSopacBean{
 	 public RDAHMMResultsBean getResultsBean(){
 		  return resultsBean;
 	 }
-	 
+
+	 public void setProjectArchive(List projectArchive) {
+		  this.projectArchive=projectArchive;
+	 }
+
+	 public List getProjectArchive() {
+		  projectArchive.clear();
+		  try {
+				db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");
+				ObjectSet results=db.get(RdahmmProjectBean.class);
+				while(results.hasNext()) {
+					 projectArchive.add((RdahmmProjectBean)results.next());
+				}
+				db.close();
+		  }
+
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  
+		  return projectArchive;
+	 }
 }
