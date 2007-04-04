@@ -19,7 +19,7 @@ mapcenter_y = center_xy[1];
 %>
 <html>
   <head>
- <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBSP8m3Tdo1MGc8NudJLOupgVl5cGRRkVwnXuOTLyf1PITz2N2IjgsfSkw"
+  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTwM0brOpm-All5BF6PoaKBxRWWERS5kaQBLplD6GDaf1-YuioaBH35uw"
       type="text/javascript"></script>
   </head>
   <body>
@@ -110,7 +110,7 @@ mapcenter_y = center_xy[1];
 
       	 <h:outputText value="Project Name:"/>
        	<h:inputText id="projectName" 
-							value="#{rdahmmBean.projectName}" 
+							value="#{rdahmmBean.rdahmmProjectBean.projectName}" 
        	 	         required="true"/>
        	<h:message for="projectName" 
 							showDetail="true" 
@@ -118,26 +118,17 @@ mapcenter_y = center_xy[1];
 							errorStyle="color: red"/>
          <h:outputText value=""/>
 
-	 		<h:outputText value="Number of Model States:"/>
-       	<h:inputText id="nmodel" value="#{rdahmmBean.numModelStates}"
-                     required="true"/>
-       	<h:message for="nmodel" 
-							showDetail="true" 
-							showSummary="true" 
-							errorStyle="color: red"/>
-         <h:outputText value=""/>
-
-
        <h:outputText value="Begin Date"/>
-       <h:inputText id="beginDate" value="#{rdahmmBean.beginDate}"
-                     required="true"/>
+       <h:inputText id="beginDate" 
+		 				  value="#{rdahmmBean.rdahmmProjectBean.beginDate}"
+						  required="true"/>
        <h:graphicImage id="cal1Button" url="calendar.gif"/>
 
        <h:message for="beginDate" showDetail="true" showSummary="true" errorStyle="color: red"/>
 
 
        <h:outputText value="End Date"/>
-       <h:inputText id="endDate" value="#{rdahmmBean.endDate}"
+       <h:inputText id="endDate" value="#{rdahmmBean.rdahmmProjectBean.endDate}"
                      required="true"/>
 
        <h:graphicImage id="cal2Button" url="calendar.gif"/>
@@ -145,9 +136,21 @@ mapcenter_y = center_xy[1];
 
 
        <h:outputText value="Site Code"/>
-       <h:inputText id="station_name" value="#{rdahmmBean.siteCode}"/>
+       <h:inputText id="station_name" value="#{rdahmmBean.rdahmmProjectBean.siteCode}"/>
        <h:message for="station_name" showDetail="true" showSummary="true" errorStyle="color: red"/>
          <h:outputText value=""/>
+
+	 		<h:outputText value="Number of Model States:"/>
+       	<h:inputText id="nmodel" 
+							 value="#{rdahmmBean.rdahmmProjectBean.numModelStates}"
+                      required="true"/>
+       	<h:message for="nmodel" 
+							showDetail="true" 
+							showSummary="true" 
+							errorStyle="color: red"/>
+         <h:outputText value=""/>
+
+
 
        </h:panelGrid>
 
@@ -171,58 +174,59 @@ mapcenter_y = center_xy[1];
 
      <f:view>
       <h:panelGrid id="OutputGridPanel"
-				rendered="#{!(empty rdahmmBean.rdahmmRunValues)}">
+				rendered="#{(rdahmmBean.resultsBean!=null)}">
+
        <h:outputText  escape="false" value="<b>Output Values</b>"/>
-       <h:outputLink value="#{rdahmmBean.projectInput}" target="_blank">
+       <h:outputLink value="#{rdahmmBean.resultsBean.projectInput}" target="_blank">
        <h:outputText value="Input File"/>
        </h:outputLink>
 
 
-       <h:outputLink value="#{rdahmmBean.projectRange}" target="_blank">
+       <h:outputLink value="#{rdahmmBean.resultsBean.projectRange}" target="_blank">
        <h:outputText value="Range"/>
        </h:outputLink>
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.projectQ}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectQ}">
        <h:outputText value="Optimal State Sequence File (Q)"/>
        </h:outputLink>
 
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.projectA}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectA}">
        <h:outputText value="Model Transition Probability (A)"/>
        </h:outputLink>
 
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.projectB}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectB}">
        <h:outputText value="Model Output Distribution (B)"/>
        </h:outputLink>
 
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.projectL}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectL}">
        <h:outputText value="Model Log Likelihood (L)"/>
        </h:outputLink>>
 
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.projectPi}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectPi}">
        <h:outputText value="Model Initial State Probability (PI)"/>
        </h:outputLink>
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.projectMinval}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectMinval}">
        <h:outputText value="Minimum Value"/>
        </h:outputLink>
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.projectMaxval}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectMaxval}">
        <h:outputText value="Maximum Value"/>
        </h:outputLink>
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.projectGraphX}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectGraphX}">
        <h:outputText value="Plot of X Values"/>
        </h:outputLink>
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.projectGraphY}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectGraphY}">
        <h:outputText value="Plot of Y Values"/>
        </h:outputLink>
 
-       <h:outputLink target="_blank" value="#{rdahmmBean.projectGraphZ}">
+       <h:outputLink target="_blank" value="#{rdahmmBean.resultsBean.projectGraphZ}">
        <h:outputText value="Plot of Z Values"/>
        </h:outputLink>
 	

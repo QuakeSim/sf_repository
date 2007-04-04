@@ -37,6 +37,9 @@ import java.util.Vector;
 import java.util.StringTokenizer;
 import java.util.Date;
 
+//Import stuff from db4o
+import com.db4o.*;
+
 /**
  * Everything you need to set up and run RDAHMM.
  */
@@ -78,7 +81,6 @@ public class RDAHMMBean extends GenericSopacBean{
 	 String contextId="5";
 
 	 Vector rdahmmRunValues=new Vector();
-    
 	 
     //RDAHMM file extensions
     String[] fileExtension={".input",".stdout",".A",".B",".L",".Q",".pi"};
@@ -99,6 +101,10 @@ public class RDAHMMBean extends GenericSopacBean{
     protected String localImageFileX;
     protected String localImageFileY;    
     protected String localImageFileZ;
+
+	 RdahmmProjectBean rdahmmProjectBean=new RdahmmProjectBean();
+	 RDAHMMResultsBean resultsBean=null;
+	 ObjectContainer db;
 
     /**
      * default empty constructor
@@ -126,43 +132,54 @@ public class RDAHMMBean extends GenericSopacBean{
 		  if(!isInitialized) {
 				initWebServices();
 		  }
+		  
+		  RdahmmProjectBean localBean=getRdahmmProjectBean();
+		  makeProjectDirectory();
+		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");
+		  db.set(localBean);
+		  db.commit();
+		  db.close();
 
 		  rdahmmRunValues.clear();
 		  
 		  return ("rdahmm-new-project-created");
     }
     
+	 protected void makeProjectDirectory() {
+		  File projectDir=new File(getContextBasePath()+"/"+userName+"/"+codeName+"/");
+		  System.out.println(getContextBasePath()+"/"+userName+"/"+codeName+"/");
+		  projectDir.mkdirs();
+	 }
 	 
-    public String setParameterValues() throws Exception {
-        //Do real logic
-		  System.out.println("Creating new project");
+//     public String setParameterValues() throws Exception {
+// 		  //Store the request values persistently
 		  
-		  //Store the request values persistently
-		  contextName=codeName+"/"+projectName;
-		  cm.addContext(contextName);
-		  cm.setCurrentProperty(contextName,"projectName",projectName);
-		  cm.setCurrentProperty(contextName,"hostName",hostName);
-		  cm.setCurrentProperty(contextName,"numModelStates",
-										numModelStates+"");
-		  cm.setCurrentProperty(contextName,"siteCode",siteCode);
-		  cm.setCurrentProperty(contextName,"beginDate",beginDate);
-		  cm.setCurrentProperty(contextName,"endDate",endDate);
-		  cm.setCurrentProperty(contextName,"projectInput",projectInput);
-		  cm.setCurrentProperty(contextName,"projectRange",projectRange);
-		  cm.setCurrentProperty(contextName,"projectQ",projectQ);
-		  cm.setCurrentProperty(contextName,"projectPi",projectPi);
-		  cm.setCurrentProperty(contextName,"projectMinval",projectMinval);
-		  cm.setCurrentProperty(contextName,"projectMaxval",projectMaxval);
-		  cm.setCurrentProperty(contextName,"projectL",projectL);
-		  cm.setCurrentProperty(contextName,"projectB",projectB);
-		  cm.setCurrentProperty(contextName,"projectQ",projectQ);
-		  cm.setCurrentProperty(contextName,"projectStdout",projectStdout);
-		  cm.setCurrentProperty(contextName,"projectGraphX",projectGraphX);
-		  cm.setCurrentProperty(contextName,"projectGraphY",projectGraphY);
-		  cm.setCurrentProperty(contextName,"projectGraphZ",projectGraphZ);
 
-		  return "rdahmm-parameters-set";
-    }
+// 		  contextName=codeName+"/"+projectName;
+// 		  cm.addContext(contextName);
+// 		  cm.setCurrentProperty(contextName,"projectName",projectName);
+// 		  cm.setCurrentProperty(contextName,"hostName",hostName);
+// 		  cm.setCurrentProperty(contextName,"numModelStates",
+// 										numModelStates+"");
+// 		  cm.setCurrentProperty(contextName,"siteCode",siteCode);
+// 		  cm.setCurrentProperty(contextName,"beginDate",beginDate);
+// 		  cm.setCurrentProperty(contextName,"endDate",endDate);
+// 		  cm.setCurrentProperty(contextName,"projectInput",projectInput);
+// 		  cm.setCurrentProperty(contextName,"projectRange",projectRange);
+// 		  cm.setCurrentProperty(contextName,"projectQ",projectQ);
+// 		  cm.setCurrentProperty(contextName,"projectPi",projectPi);
+// 		  cm.setCurrentProperty(contextName,"projectMinval",projectMinval);
+// 		  cm.setCurrentProperty(contextName,"projectMaxval",projectMaxval);
+// 		  cm.setCurrentProperty(contextName,"projectL",projectL);
+// 		  cm.setCurrentProperty(contextName,"projectB",projectB);
+// 		  cm.setCurrentProperty(contextName,"projectQ",projectQ);
+// 		  cm.setCurrentProperty(contextName,"projectStdout",projectStdout);
+// 		  cm.setCurrentProperty(contextName,"projectGraphX",projectGraphX);
+// 		  cm.setCurrentProperty(contextName,"projectGraphY",projectGraphY);
+// 		  cm.setCurrentProperty(contextName,"projectGraphZ",projectGraphZ);
+
+// 		  return "rdahmm-parameters-set";
+//     }
     
     public String loadDataArchive()throws Exception{
 		  System.out.println("Loading project");
@@ -191,44 +208,36 @@ public class RDAHMMBean extends GenericSopacBean{
         return ("rdahmm-list-project-plots");
     }
     
-	 	 
-    //Possibly obsolete--need to check.
-    public String launchProject() {
-		  return "rdahmm-project-launched";
-    }
-
 	 /**
-	  * This is a no-argument method that can be called by the 
-	  * associated JSF page.  It assumes all the parameters have
-	  * been obtained from the form set methods.
-	  *
-	  * It returns URLs for the plots, numerical values, etc.
-	  */
+	  * This is the nonblocking version of the full invocation.
+	  * It uses the results bean rather than the string array.
+	  */ 
 	 public String runBlockingRDAHMM_Full() throws Exception {
 		  
 		  newProject();
-
-		  String [] returnStrings=
-				rdservice.runBlockingRDAHMM(siteCode,
-													 resource,
-													 contextGroup,
-													 contextId,
-													 minMaxLatLon,
-													 beginDate,
-													 endDate,
-													 numModelStates);
-		  setPropertyVals(returnStrings);
-		  setParameterValues();
+		  RDAHMMResultsBean resultsBean=
+				rdservice.runBlockingRDAHMM2(siteCode,
+													  resource,
+													  contextGroup,
+													  contextId,
+													  minMaxLatLon,
+													  beginDate,
+													  endDate,
+													  numModelStates);
+		  setResultsBean(resultsBean);
+		  //		  setPropertyVals(projectName, returnBean);
+		  //		  setParameterValues(projectName);
 		  return "rdahmm-output-display";
 	 }
 
 	 /**
 	  * This is the nonblocking version of the full invocation.
+	  * It uses the results bean rather than the string array.
 	  */ 
 	 public String runNonblockingRDAHMM_Full() throws Exception {
 		  System.out.println("Running RDAHMM");
-		  String [] returnStrings=
-				rdservice.runNonblockingRDAHMM(siteCode,
+		  RDAHMMResultsBean returnBean=
+				rdservice.runNonblockingRDAHMM2(siteCode,
 														 resource,
 														 contextGroup,
 														 contextId,
@@ -236,131 +245,39 @@ public class RDAHMMBean extends GenericSopacBean{
 														 beginDate,
 														 endDate,
 														 numModelStates);
-		  setPropertyVals(returnStrings);
-		  setParameterValues();
+		  setResultsBean(resultsBean);
+		  //		  setPropertyVals(projectName,returnBean);
+		  //		  setParameterValues();
 		  return "rdahmm-output-display";
 	 }
 	 
     public String populateProject() 
 		  throws Exception{
 
-		  System.out.println("Chosen project: "+chosenProject);
-		  String contextName=codeName+"/"+chosenProject;
-		  projectName=cm.getCurrentProperty(contextName,"projectName");
-		  hostName=cm.getCurrentProperty(contextName,"hostName");
-		  numModelStates=
-				Integer.parseInt(cm.getCurrentProperty(contextName,"numModelStates"));
+// 		  System.out.println("Chosen project: "+chosenProject);
+// 		  String contextName=codeName+"/"+chosenProject;
+// 		  projectName=cm.getCurrentProperty(contextName,"projectName");
+// 		  hostName=cm.getCurrentProperty(contextName,"hostName");
+// 		  numModelStates=
+// 				Integer.parseInt(cm.getCurrentProperty(contextName,"numModelStates"));
 		  return "rdahmm-project-populated";
     }
 	 
 	 
-    /**
-     * This is the no-argument version. It requires these values to 
-     * be set outside the method.  This is typical usage in a JSF
-     * page.
-     */
-    public String runNonblockingRDAHMM() throws Exception {
-		  if(dataUrl!=null && numModelStates>0) {
-				String[] vals=rdservice.runNonblockingRDAHMM(dataUrl,numModelStates);	    
-				setPropertyVals(vals);
-		  }
-		  else throw new Exception();
-		  return "simple-rdahmm-client-nav1";
-    }
-	 
-    /**
-     * This method is also suitable for use in a JSF page.
-     */
-    public String runBlockingRDAHMM()  throws Exception {
-		  if(dataUrl!=null && numModelStates>0) {
-				String [] vals=rdservice.runBlockingRDAHMM(dataUrl,numModelStates);	
-				setPropertyVals(vals);
-		  }
-		  else throw new Exception();
-		  return "simple-rdahmm-client-nav1";
-    }
-	 
-    /**
-     * This method is also suitable for use in a JSF page.
-     * This one needs a sitecode, begin and end dates.
-     */
-    public String runBlockingRDAHMM2()  throws Exception {
-		  if(dataUrl!=null && numModelStates>0) {
-				String [] vals=rdservice.runBlockingRDAHMM(siteCode,
-																		 beginDate,
-																		 endDate,
-																		 numModelStates);	
-				setPropertyVals(vals);
-		  }
-		  else throw new Exception();
-		  return "simple-rdahmm-client-nav1";
-    }
-	 
-    /**
-     * This method is also suitable for use in a JSF page.
-     * This one needs a sitecode, begin and end dates.
-     */
-    public String runNonblockingRDAHMM2()  throws Exception {
-		  if(dataUrl!=null && numModelStates>0) {
-				String [] vals=rdservice.runBlockingRDAHMM(siteCode,
-																		 beginDate,
-																		 endDate,
-																		 numModelStates);	
-				setPropertyVals(vals);
-		  }
-		  else throw new Exception();
-		  return "simple-rdahmm-client-nav1";
-    }
-	 
-    /** 
-     * This is a more full-fledged method.  The returned strings
-     * are URLs for the output values.
-     */
-    public String[] runBlockingRDAHMM(String dataUrl,
-												  int numModelStates) 
-		  throws Exception {
-		  
-		  setDataUrl(dataUrl);
-		  setNumModelStates(numModelStates);
-		  return rdservice.runBlockingRDAHMM(dataUrl,numModelStates);
-    }
-	 
-    public String[] runNonblockingRDAHMM(String dataUrl,
-													  int numModelStates) 
-		  throws Exception {
-
-		  setDataUrl(dataUrl);
-		  setNumModelStates(numModelStates);
-		  return rdservice.runNonblockingRDAHMM(dataUrl,numModelStates);
-    }
-	 
-    //This method is pretty dumb. The values's order is hard-coded
-    //on the server.
-    protected void setPropertyVals(String[] vals) {
+    protected void setPropertyVals(String projectName, RDAHMMResultsBean rrb) {
 		  //These are the output files.
 		  rdahmmRunValues.clear();
 
-		  for(int i=0;i<vals.length;i++) {
-				rdahmmRunValues.add(vals[i]);
+		  try {
+				makeProjectDirectory();
+				db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
+				db.set(rrb);
+				db.commit();
+				db.close();
 		  }
-		  
-		  projectInput=vals[0];
-		  projectRange=vals[1];
-		  projectQ=vals[2];
-		  projectPi=vals[3];
-		  projectA=vals[4];
-		  projectMinval=vals[5];
-		  projectMaxval=vals[6];
-		  projectL=vals[7];
-		  projectB=vals[8];
-		  projectQ=vals[9];
-		  projectStdout=vals[10];
-		  
-		  //These are the images
-		  projectGraphX=vals[11];
-		  projectGraphY=vals[12];
-		  projectGraphZ=vals[13];
-		  
+		  catch(Exception ex) {
+				ex.printStackTrace();
+		  }
     }
 
     /**
@@ -458,61 +375,61 @@ public class RDAHMMBean extends GenericSopacBean{
     }
 
     public void setProjectB(String projectB){
-	this.projectB=projectB;
+		  this.projectB=projectB;
     }
-
+	 
     public String  getProjectA(){
-	return projectA;
+		  return projectA;
     }
-
+	 
     public void setProjectA(String projectA){
-	this.projectA=projectA;
+		  this.projectA=projectA;
     }
-
+	 
     public String  getProjectGraphX(){
-	return projectGraphX;
+		  return projectGraphX;
     }
-
+	 
     public void setProjectGraphX(String projectGraphX){
-	this.projectGraphX=projectGraphX;
+		  this.projectGraphX=projectGraphX;
     }
-
+	 
     public String  getProjectGraphY(){
-	return projectGraphY;
+		  return projectGraphY;
     }
-
+	 
     public void setProjectGraphY(String projectGraphY){
-	this.projectGraphY=projectGraphY;
+		  this.projectGraphY=projectGraphY;
     }
-
+	 
     public String  getProjectGraphZ(){
-	return projectGraphZ;
+		  return projectGraphZ;
     }
-
+	 
     public void setProjectGraphZ(String projectGraphZ){
-	this.projectGraphZ=projectGraphZ;
+		  this.projectGraphZ=projectGraphZ;
     }
-
+	 
     public String getSiteCode() {
-	return siteCode;
+		  return siteCode;
     }
     public void setSiteCode(String siteCode) {
-	this.siteCode=siteCode;
-	this.siteCode=this.siteCode.toLowerCase();
+		  this.siteCode=siteCode;
+		  this.siteCode=this.siteCode.toLowerCase();
     }
     
     public String getBeginDate() {
-	return beginDate;
+		  return beginDate;
     }
-
+	 
     public void setBeginDate(String beginDate) {
-	this.beginDate=beginDate;
+		  this.beginDate=beginDate;
     }
-
+	 
     public String getEndDate() {
-	return endDate;
+		  return endDate;
     }
-
+	 
     public void setEndDate(String endDate) {
 		  this.endDate=endDate;
     }
@@ -524,4 +441,21 @@ public class RDAHMMBean extends GenericSopacBean{
 	 public Vector getRdahmmRunValues() {
 		  return rdahmmRunValues;
 	 }
+
+	 public RdahmmProjectBean getRdahmmProjectBean() {
+		  return rdahmmProjectBean;
+	 }
+	 
+	 public void setRdahmmProjectBean(RdahmmProjectBean rdahmmProjectBean) {
+		  this.rdahmmProjectBean=rdahmmProjectBean;
+	 }
+
+	 public void setResultsBean(RDAHMMResultsBean resultsBean) {
+		  this.resultsBean=resultsBean;
+	 }
+
+	 public RDAHMMResultsBean getResultsBean(){
+		  return resultsBean;
+	 }
+	 
 }
