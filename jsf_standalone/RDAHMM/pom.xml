@@ -18,7 +18,8 @@
                <directory>src/main/resources</directory>
                <filtering>true</filtering>
            </resource>
-        </resources>        <plugins>
+        </resources>
+        <plugins>
 <!--
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
@@ -26,7 +27,7 @@
                 <configuration>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                 </configuration>
-            </plugin>
+            </plugin>            
 -->
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -38,19 +39,27 @@
                                <replace dir="${basedir}/target/${pom.artifactId}" 
                                         token="gf2.ucs.indiana.edu"
                                         value="${portal.host.name}">
-                                  <include name="**/*.jsp"/>
-                                  <include name="**/*.xml"/>
+                               <include name="**/*.jsp"/>
+                               <include name="**/*.xml"/>
+                               <include name="**/*.properties"/>
                                </replace>
 
-                               <replace dir="${basedir}/target/${pom.artifactId}">
-<replacetoken><![CDATA[http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTCdqtmO6Kma7uYZgpagQkNe17MQhRS93QdZFchZ2Vy9IpcH0W3nbN34g]]>
-</replacetoken>
-<replacevalue>${google.key}</replacevalue>
-                                  <include name="**/*.jsp"/>
-                                  <include name="**/*.xml"/>
-
+                               <replace dir="${basedir}/target/${pom.artifactId}" 
+                                        token="/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/"
+                                        value="${tomcat.base.dir}">
+                               <include name="**/*.jsp"/>
+                               <include name="**/*.xml"/>
+                               <include name="**/*.properties"/>
                                </replace>
 
+
+                               <replace dir="${basedir}/target/${pom.artifactId}" 
+                                        token="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTCdqtmO6Kma7uYZgpagQkNe17MQhRS93QdZFchZ2Vy9IpcH0W3nbN34g"
+                                        value="${google.key}">
+			       <include name="**/*.jsp"/>
+                               <include name="**/*.xml"/>
+                               <include name="**/*.properties"/>
+                               </replace>
 
                              </tasks>
                            </configuration>
@@ -63,11 +72,13 @@
         </plugins>
     </build>
 
+
     <!-- We get this from the command line and pass to the resources
          via filtering -->
     <properties>
        <tomcat.base.dir>${tomcat.base.dir}</tomcat.base.dir>
        <portal.host.name>${portal.host.name}</portal.host.name>
+       <google.key>${google.key}</google.key>
     </properties>
 
 
@@ -109,7 +120,7 @@
     <repositories>
         <repository>
             <releases>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
             </releases>
             <snapshots>
                 <enabled>true</enabled>
@@ -125,10 +136,6 @@
         <repository>
             <id>crisisgrid-maven-repo</id>
             <url>http://www.crisisgrid.org/maven2</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-
         </repository>
 
         <repository>
@@ -141,7 +148,6 @@
             <id>apache-maven</id>
             <url>http://cvs.apache.org/repository</url>
         </repository>
-
     </repositories>
 
     <!-- Repositories for plugins -->
@@ -195,6 +201,16 @@
             <scope>provided</scope>
         </dependency>
 
+		  <!--
+				db40 dependency
+			 -->
+        <dependency>
+             <groupId>QuakeSim2</groupId>
+             <artifactId>db4o-java5</artifactId>
+             <version>6.1</version>
+        </dependency>
+
+
         <!-- Servlet Dependencies -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -239,8 +255,7 @@
              <version>0.2</version>
              <scope>provided</scope>
         </dependency>
-        -->
-
+       -->
         <!-- Axis jars -->
         <dependency>
              <groupId>axis</groupId>
@@ -279,6 +294,7 @@
         </dependency>
 
 
+
         <!--
        Generic Project Dependencies.
         -->
@@ -303,7 +319,6 @@
              <artifactId>grwsXmlBeansSchemas</artifactId>
              <version>1.0</version>
         </dependency>
-
 
     </dependencies>
 
