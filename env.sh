@@ -39,6 +39,7 @@ export STFILTER_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/STFilterService
 export GNUPLOT_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/GnuplotService
 export ANALYZE_TSERI_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/AnalyzeTseriService
 export GEOFEST_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/GeoFESTService
+export DISLOC_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/DislocService
 
 # These are directory locations for binaries that we should not put in
 # SourceForge
