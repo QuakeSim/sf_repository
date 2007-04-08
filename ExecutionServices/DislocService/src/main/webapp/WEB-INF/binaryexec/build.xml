@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="RDAHMM" default="RunRDAHMM" basedir=".">
+<project name="Disloc" default="RunDisloc" basedir=".">
 
 <!--
 <taskdef name="TransferFile" classname="commgrids.antwebtasks.TransferFile"/>
@@ -12,13 +12,13 @@
    <mkdir dir="${workDir.prop}" />
 </target>
 
-<target name="ExecRDAHMM" depends="MakeWorkDir">
+<target name="ExecDisloc" depends="MakeWorkDir">
    <echo message="Bin directory: ${bindir.prop}"/>
-   <exec executable="${bindir.prop}/rdahmm" 
-         output="${workDir.prop}/${RDAHMMBaseName.prop}.stdout"
+   <exec executable="${bindir.prop}/disloc" 
+         output="${workDir.prop}/${projectName.prop}.stdout"
 			dir="${workDir.prop}">
-      <arg line="${workDir.prop}/${DislocBaseName.prop}.input"/>
-      <arg line="${workDir.prop}/${DislocBaseName.prop}.output"/>
+      <arg line="${workDir.prop}/${projectName.prop}.input"/>
+      <arg line="${workDir.prop}/${projectName.prop}.output"/>
       <env key="PATH" path="${bindir.prop}:/bin/:$PATH"/>
    </exec>
 </target>
