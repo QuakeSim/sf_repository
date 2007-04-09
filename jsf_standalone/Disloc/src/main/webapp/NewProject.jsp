@@ -5,11 +5,11 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <html>
 <head>
-<title>MeshGenerator Project Management</title>
+<title>Disloc Project Management</title>
 </head>
 <body>
 <h2>Project Input</h2>
-<p>Create your geometry out of layers and faults.</p>
+<p>Input project observation points. </p>
 
 <f:view>
 	<h:form>

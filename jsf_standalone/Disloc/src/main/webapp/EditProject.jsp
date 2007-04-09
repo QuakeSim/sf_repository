@@ -59,7 +59,7 @@ function dataTableSelectOneRadio(radio) {
 <f:view>
 	<h:outputText styleClass="header2" value="Project Input"/>
 
-	<p>Create your geometry out of layers and faults.</p>
+	<p>Create your geometry out of observation points and faults.</p>
 
 	<h:panelGrid id="EditProject" 
 		columnClasses="alignTop,alignTop"
@@ -68,25 +68,22 @@ function dataTableSelectOneRadio(radio) {
 			<h:panelGroup>
 
 				<h:outputFormat escape="false"
-					value="<b>Project Name: #{MGBean.projectName} </b>" />
+					value="<b>Project Name: #{DislocBean.projectName} </b>" />
 
 				<h:selectOneRadio layout="pageDirection" id="subscriptions"
-					value="#{MGBean.projectSelectionCode}">
+					value="#{DislocBean.projectSelectionCode}">
 					<f:selectItem id="item1"
-						itemLabel="Create New Layer: Click to specify geometry for a layer."
-						itemValue="CreateNewLayer" />
+						itemLabel="Observations: Click to specify grid of observation points."
+						itemValue="CreateObservationGrid" />
 					<f:selectItem id="item2"
 						itemLabel="Create New Fault: Click to specify geometry for a fault segment."
 						itemValue="CreateNewFault" />
-					<f:selectItem id="item3"
-						itemLabel="Add Layer from DB: Click to select a layer from the database."
-						itemValue="AddLayerFromDB" />
 					<f:selectItem id="item4"
 						itemLabel="Add Fault from DB: Click to select a fault segment from the database."
 						itemValue="AddFaultSelection" />
 				</h:selectOneRadio>
 				<h:commandButton id="button1" value="Make Selection"
-					actionListener="#{MGBean.toggleProjectSelection}">
+					actionListener="#{DislocBean.toggleProjectSelection}">
 				</h:commandButton>
 
 
@@ -94,7 +91,7 @@ function dataTableSelectOneRadio(radio) {
 		</h:form>
 
 		<h:panelGroup>
-			<h:form id="layerform" rendered="#{MGBean.renderCreateNewLayerForm}">
+			<h:form id="layerform" rendered="#{DislocBean.renderCreateNewLayerForm}">
 
 				<h:panelGrid id="LayerTable" columns="2" footerClass="subtitle"
 					headerClass="subtitlebig" styleClass="medium"
@@ -102,29 +99,25 @@ function dataTableSelectOneRadio(radio) {
 
 					<f:facet name="header">
 						<h:outputFormat id="output2" escape="false"
-							value="<b>Input Solid Layer Geometry </b>" />
+							value="<b>define Grid of Observation Points </b>" />
 					</f:facet>
 
-					<h:outputText value="Layer Name:" />
+					<h:outputText value="Grid Minimum X Value:" />
 					<h:panelGroup>
-						<h:inputText id="LayerName"
-							value="#{MGBean.currentLayer.layerName}" required="true" />
-						<h:message for="LayerName" showDetail="true" showSummary="true"
-							errorStyle="color: red" />
+						<h:inputText id="minx"
+							value="#{DislocBean.dislocParams.gridMinXValue}" required="true" />
 					</h:panelGroup>
 
-					<h:outputText value="Origin X:" />
+					<h:outputText value="X Spacing:" />
 					<h:panelGroup>
-						<h:inputText id="LayerOriginX"
-							value="#{MGBean.currentLayer.layerOriginX}" required="true" />
-						<h:message for="LayerOriginX" showDetail="true" showSummary="true"
-							errorStyle="color: red" />
+						<h:inputText id="xspacing"
+							value="#{DislocBean.dislocParams.gridXSpacing}" required="true" />
 					</h:panelGroup>
 
-					<h:outputText value="Origin Y:" />
+					<h:outputText value="X Iterations" />
 					<h:panelGroup>
 						<h:inputText id="LayerOriginY"
-							value="#{MGBean.currentLayer.layerOriginY}" required="true" />
+							value="#{DislocBean.currentLayer.layerOriginY}" required="true" />
 						<h:message for="LayerOriginY" showDetail="true" showSummary="true"
 							errorStyle="color: red" />
 					</h:panelGroup>
@@ -132,7 +125,7 @@ function dataTableSelectOneRadio(radio) {
 					<h:outputText value="Origin Z:" />
 					<h:panelGroup>
 						<h:inputText id="LayerOriginZ"
-							value="#{MGBean.currentLayer.layerOriginZ}" required="true" />
+							value="#{DislocBean.currentLayer.layerOriginZ}" required="true" />
 						<h:message for="LayerOriginZ" showDetail="true" showSummary="true"
 							errorStyle="color: red" />
 					</h:panelGroup>
@@ -141,7 +134,7 @@ function dataTableSelectOneRadio(radio) {
 					<h:outputText value="Length:" />
 					<h:panelGroup>
 						<h:inputText id="LayerLength"
-							value="#{MGBean.currentLayer.layerLength}" required="true" />
+							value="#{DislocBean.currentLayer.layerLength}" required="true" />
 						<h:message for="LayerLength" showDetail="true" showSummary="true"
 							errorStyle="color: red" />
 					</h:panelGroup>
@@ -150,7 +143,7 @@ function dataTableSelectOneRadio(radio) {
 					<h:outputText value="Width:" />
 					<h:panelGroup>
 						<h:inputText id="LayerWidth"
-							value="#{MGBean.currentLayer.layerWidth}" required="true" />
+							value="#{DislocBean.currentLayer.layerWidth}" required="true" />
 						<h:message for="LayerWidth" showDetail="true" showSummary="true"
 							errorStyle="color: red" />
 					</h:panelGroup>
@@ -159,7 +152,7 @@ function dataTableSelectOneRadio(radio) {
 					<h:outputText value="Depth:" />
 					<h:panelGroup>
 						<h:inputText id="LayerDepth"
-							value="#{MGBean.currentLayer.layerDepth}" required="true" />
+							value="#{DislocBean.currentLayer.layerDepth}" required="true" />
 						<h:message for="LayerDepth" showDetail="true" showSummary="true"
 							errorStyle="color: red" />
 					</h:panelGroup>
@@ -167,7 +160,7 @@ function dataTableSelectOneRadio(radio) {
 					<h:outputText value="Lame Lambda:" />
 					<h:panelGroup>
 						<h:inputText id="LayerLameLambda"
-							value="#{MGBean.currentLayer.lameLambda}" required="true" />
+							value="#{DislocBean.currentLayer.lameLambda}" required="true" />
 						<h:message for="LayerLameLambda" showDetail="true"
 							showSummary="true" errorStyle="color: red" />
 					</h:panelGroup>
@@ -175,7 +168,7 @@ function dataTableSelectOneRadio(radio) {
 					<h:outputText value="Lame Mu:" />
 					<h:panelGroup>
 						<h:inputText id="LayerLameMu"
-							value="#{MGBean.currentLayer.lameMu}" required="true" />
+							value="#{DislocBean.currentLayer.lameMu}" required="true" />
 						<h:message for="LayerLameMu" showDetail="true" showSummary="true"
 							errorStyle="color: red" />
 					</h:panelGroup>
@@ -184,7 +177,7 @@ function dataTableSelectOneRadio(radio) {
 					<h:outputText value="Viscosity:" />
 					<h:panelGroup>
 						<h:inputText id="LayerViscosity"
-							value="#{MGBean.currentLayer.viscosity}" required="true" />
+							value="#{DislocBean.currentLayer.viscosity}" required="true" />
 						<h:message for="LayerViscosity" showDetail="true"
 							showSummary="true" errorStyle="color: red" />
 					</h:panelGroup>
@@ -192,19 +185,19 @@ function dataTableSelectOneRadio(radio) {
 					<h:outputText value="Exponent:" />
 					<h:panelGroup>
 						<h:inputText id="LayerExponent"
-							value="#{MGBean.currentLayer.exponent}" required="true" />
+							value="#{DislocBean.currentLayer.exponent}" required="true" />
 						<h:message for="LayerExponent" showDetail="true"
 							showSummary="true" errorStyle="color: red" />
 					</h:panelGroup>
 
 					<h:commandButton id="addlayer" value="select"
-						actionListener="#{MGBean.toggleAddLayerForProject}" />
+						actionListener="#{DislocBean.toggleAddLayerForProject}" />
 
 
 				</h:panelGrid>
 			</h:form>
 
-			<h:form id="Faultform" rendered="#{MGBean.renderCreateNewFaultForm}">
+			<h:form id="Faultform" rendered="#{DislocBean.renderCreateNewFaultForm}">
 				<h:panelGrid id="FaultTable" columns="2" footerClass="subtitle"
 					headerClass="subtitlebig" styleClass="medium"
 					columnClasses="subtitle,medium">
@@ -217,7 +210,7 @@ function dataTableSelectOneRadio(radio) {
 					<h:outputText value="Fault Name:" />
 					<h:panelGroup>
 						<h:inputText id="FaultName"
-							value="#{MGBean.currentFault.faultName}" required="true" />
+							value="#{DislocBean.currentFault.faultName}" required="true" />
 						<h:message for="FaultName" showDetail="true" showSummary="true"
 							errorStyle="color: red" />
 					</h:panelGroup>
@@ -225,7 +218,7 @@ function dataTableSelectOneRadio(radio) {
 					<h:outputText value="Location X:" />
 					<h:panelGroup>
 						<h:inputText id="FaultLocationX"
-							value="#{MGBean.currentFault.faultLocationX}" required="true" />
+							value="#{DislocBean.currentFault.faultLocationX}" required="true" />
 						<h:message for="FaultLocationX" showDetail="true"
 							showSummary="true" errorStyle="color: red" />
 					</h:panelGroup>
@@ -233,7 +226,7 @@ function dataTableSelectOneRadio(radio) {
 					<h:outputText value="Location Y:" />
 					<h:panelGroup>
 						<h:inputText id="FaultLocationY"
-							value="#{MGBean.currentFault.faultLocationY}" required="true" />
+							value="#{DislocBean.currentFault.faultLocationY}" required="true" />
 						<h:message for="FaultLocationY" showDetail="true"
 							showSummary="true" errorStyle="color: red" />
 					</h:panelGroup>
@@ -242,7 +235,7 @@ function dataTableSelectOneRadio(radio) {
 					<h:outputText value="Length:" />
 					<h:panelGroup>
 						<h:inputText id="FaultLength"
-							value="#{MGBean.currentFault.faultLength}" required="true" />
+							value="#{DislocBean.currentFault.faultLength}" required="true" />
 						<h:message for="FaultLength" showDetail="true" showSummary="true"
 							errorStyle="color: red" />
 					</h:panelGroup>
@@ -251,7 +244,7 @@ function dataTableSelectOneRadio(radio) {
 					<h:outputText value="Width:" />
 					<h:panelGroup>
 						<h:inputText id="FaultWidth"
-							value="#{MGBean.currentFault.faultWidth}" required="true" />
+							value="#{DislocBean.currentFault.faultWidth}" required="true" />
 						<h:message for="FaultWidth" showDetail="true" showSummary="true"
 							errorStyle="color: red" />
 					</h:panelGroup>
@@ -260,7 +253,7 @@ function dataTableSelectOneRadio(radio) {
 					<h:outputText value="Depth:" />
 					<h:panelGroup>
 						<h:inputText id="FaultDepth"
-							value="#{MGBean.currentFault.faultDepth}" required="true" />
+							value="#{DislocBean.currentFault.faultDepth}" required="true" />
 						<h:message for="FaultDepth" showDetail="true" showSummary="true"
 							errorStyle="color: red" />
 					</h:panelGroup>
@@ -268,7 +261,7 @@ function dataTableSelectOneRadio(radio) {
 					<h:outputText value="Dip Angle:" />
 					<h:panelGroup>
 						<h:inputText id="FaultDipAngle"
-							value="#{MGBean.currentFault.faultDipAngle}" required="true" />
+							value="#{DislocBean.currentFault.faultDipAngle}" required="true" />
 						<h:message for="FaultDipAngle" showDetail="true"
 							showSummary="true" errorStyle="color: red" />
 					</h:panelGroup>
@@ -276,7 +269,7 @@ function dataTableSelectOneRadio(radio) {
 					<h:outputText value="Strike Angle:" />
 					<h:panelGroup>
 						<h:inputText id="FaultStrikeAngle"
-							value="#{MGBean.currentFault.faultStrikeAngle}" required="true" />
+							value="#{DislocBean.currentFault.faultStrikeAngle}" required="true" />
 						<h:message for="FaultStrikeAngle" showDetail="true"
 							showSummary="true" errorStyle="color: red" />
 					</h:panelGroup>
@@ -285,7 +278,7 @@ function dataTableSelectOneRadio(radio) {
 					<h:outputText value="Slip:" />
 					<h:panelGroup>
 						<h:inputText id="FaultSlip"
-							value="#{MGBean.currentFault.faultSlip}" required="true" />
+							value="#{DislocBean.currentFault.faultSlip}" required="true" />
 						<h:message for="FaultSlip" showDetail="true" showSummary="true"
 							errorStyle="color: red" />
 					</h:panelGroup>
@@ -293,27 +286,27 @@ function dataTableSelectOneRadio(radio) {
 					<h:outputText value="Rake Angle:" />
 					<h:panelGroup>
 						<h:inputText id="FaultRakeAngle"
-							value="#{MGBean.currentFault.faultRakeAngle}" required="true" />
+							value="#{DislocBean.currentFault.faultRakeAngle}" required="true" />
 						<h:message for="FaultRakeAngle" showDetail="true"
 							showSummary="true" errorStyle="color: red" />
 					</h:panelGroup>
 					<h:commandButton id="addfault" value="select"
-						actionListener="#{MGBean.toggleAddFaultForProject}" />
+						actionListener="#{DislocBean.toggleAddFaultForProject}" />
 
 
 				</h:panelGrid>
 			</h:form>
 
 			<h:form id="SelectLayerDBEntryForm"
-				rendered="#{MGBean.renderAddLayerFromDBForm}">
-				<h:dataTable value="#{MGBean.myLayerDBEntryList}" var="myentry2"
-					binding="#{MGBean.myLayerDataTable}">
+				rendered="#{DislocBean.renderAddLayerFromDBForm}">
+				<h:dataTable value="#{DislocBean.myLayerDBEntryList}" var="myentry2"
+					binding="#{DislocBean.myLayerDataTable}">
 					<h:column>
 						<f:facet name="header">
 							<h:outputText escape="false" value="<b>LayerName</b>" />
 						</f:facet>
 						<h:selectOneRadio layout="pageDirection"
-							valueChangeListener="#{MGBean.handleLayersRadioValueChange}"
+							valueChangeListener="#{DislocBean.handleLayersRadioValueChange}"
 							onchange="dataTableSelectOneRadio(this)"
 							onclick="dataTableSelectOneRadio(this)">
 							<f:selectItems value="#{myentry2.layerName}" />
@@ -329,18 +322,18 @@ function dataTableSelectOneRadio(radio) {
 						<f:facet name="header">
 							<h:outputText escape="false" value="<b>Action</b>" />
 						</f:facet>
-						<h:commandLink actionListener="#{MGBean.handleLayerEntryEdit}">
+						<h:commandLink actionListener="#{DislocBean.handleLayerEntryEdit}">
 							<h:outputText value="Get" />
 						</h:commandLink>
 					</h:column>
 				</h:dataTable>
 
 				<h:commandButton id="SelectLayerDBEntry" value="SelectLayerDBEntry"
-					actionListener="#{MGBean.toggleSelectLayerDBEntry}" />
+					actionListener="#{DislocBean.toggleSelectLayerDBEntry}" />
 			</h:form>
 
 			<h:form id="faultselection"
-				rendered="#{MGBean.renderAddFaultSelectionForm}">
+				rendered="#{DislocBean.renderAddFaultSelectionForm}">
 				<h:panelGrid id="AddFaultSelection" columns="1"
 					footerClass="subtitle" headerClass="subtitlebig"
 					styleClass="medium" columnClasses="subtitle,medium">
@@ -356,7 +349,7 @@ function dataTableSelectOneRadio(radio) {
 					<h:panelGroup>
 
 						<h:selectOneRadio layout="pageDirection" id="subscriptionssss"
-							value="#{MGBean.faultSelectionCode}">
+							value="#{DislocBean.faultSelectionCode}">
 							<f:selectItem id="item01" itemLabel="Search by fault name."
 								itemValue="SearchByFaultName" />
 							<f:selectItem id="item02"
@@ -368,14 +361,14 @@ function dataTableSelectOneRadio(radio) {
 								itemValue="ViewAllFaults" />
 						</h:selectOneRadio>
 						<h:commandButton id="button122" value="Make Selection"
-							actionListener="#{MGBean.toggleFaultSelection}" />
+							actionListener="#{DislocBean.toggleFaultSelection}" />
 
 					</h:panelGroup>
 				</h:panelGrid>
 			</h:form>
 
 			<h:form id="faultsearchByNameform"
-				rendered="#{MGBean.renderSearchByFaultNameForm}">
+				rendered="#{DislocBean.renderSearchByFaultNameForm}">
 				<h:panelGrid id="FaultSearchName" columns="1" footerClass="subtitle"
 					headerClass="subtitlebig" styleClass="medium"
 					columnClasses="subtitle,medium">
@@ -389,19 +382,19 @@ function dataTableSelectOneRadio(radio) {
 						</h:panelGroup>
 
 						<h:panelGroup>
-							<h:inputText id="Fault_Name" value="#{MGBean.forSearchStr}"
+							<h:inputText id="Fault_Name" value="#{DislocBean.forSearchStr}"
 								required="true" />
 							<h:message for="Fault_Name" showDetail="true" showSummary="true"
 								errorStyle="color: red" />
 							<h:commandButton value="Query"
-								actionListener="#{MGBean.toggleFaultSearchByName}" />
+								actionListener="#{DislocBean.toggleFaultSearchByName}" />
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGrid>
 			</h:form>
 
 			<h:form id="faultlatlonsearchform"
-				rendered="#{MGBean.renderSearchByLatLonForm}">
+				rendered="#{DislocBean.renderSearchByLatLonForm}">
 				<h:panelGrid id="FaultLatLonSearch" columns="1"
 					footerClass="subtitle" headerClass="subtitlebig"
 					styleClass="medium" columnClasses="subtitle,medium">
@@ -417,14 +410,14 @@ function dataTableSelectOneRadio(radio) {
 						<h:outputText value="Starting Latitude: " />
 						<h:panelGroup>
 							<h:inputText id="StartingLatitude"
-								value="#{MGBean.faultLatStart}" required="true" />
+								value="#{DislocBean.faultLatStart}" required="true" />
 							<h:message for="StartingLatitude" showDetail="true"
 								showSummary="true" errorStyle="color: red" />
 						</h:panelGroup>
 
 						<h:outputText value="Ending Latitude: " />
 						<h:panelGroup>
-							<h:inputText id="EndingLatitude" value="#{MGBean.faultLatEnd}"
+							<h:inputText id="EndingLatitude" value="#{DislocBean.faultLatEnd}"
 								required="true" />
 							<h:message for="EndingLatitude" showDetail="true"
 								showSummary="true" errorStyle="color: red" />
@@ -432,13 +425,13 @@ function dataTableSelectOneRadio(radio) {
 						<h:outputText value="Starting Longitude: " />
 						<h:panelGroup>
 							<h:inputText id="StartingLongitude"
-								value="#{MGBean.faultLonStart}" required="true" />
+								value="#{DislocBean.faultLonStart}" required="true" />
 							<h:message for="StartingLongitude" showDetail="true"
 								showSummary="true" errorStyle="color: red" />
 						</h:panelGroup>
 						<h:outputText value="Ending Longitude: " />
 						<h:panelGroup>
-							<h:inputText id="EndingLongitude" value="#{MGBean.faultLonEnd}"
+							<h:inputText id="EndingLongitude" value="#{DislocBean.faultLonEnd}"
 								required="true" />
 							<h:message for="EndingLongitude" showDetail="true"
 								showSummary="true" errorStyle="color: red" />
@@ -446,7 +439,7 @@ function dataTableSelectOneRadio(radio) {
 						<h:panelGroup>
 
 							<h:commandButton value="Query"
-								actionListener="#{MGBean.toggleFaultSearchByLonLat}" />
+								actionListener="#{DislocBean.toggleFaultSearchByLonLat}" />
 						</h:panelGroup>
 					</h:panelGrid>
 
@@ -454,7 +447,7 @@ function dataTableSelectOneRadio(radio) {
 			</h:form>
 
 			<h:form id="FaultAuthorSearchform"
-				rendered="#{MGBean.renderSearchByAuthorForm}">
+				rendered="#{DislocBean.renderSearchByAuthorForm}">
 				<h:panelGrid id="FaultAuthorSearch" columns="1"
 					footerClass="subtitle" headerClass="subtitlebig"
 					styleClass="medium" columnClasses="subtitle,medium">
@@ -469,27 +462,27 @@ function dataTableSelectOneRadio(radio) {
 
 						<h:panelGroup>
 							<h:inputText id="FaultAuthorForSearch"
-								value="#{MGBean.forSearchStr}" required="true" />
+								value="#{DislocBean.forSearchStr}" required="true" />
 							<h:message for="FaultAuthorForSearch" showDetail="true"
 								showSummary="true" errorStyle="color: red" />
 							<h:commandButton value="Query"
-								actionListener="#{MGBean.toggleFaultSearchByAuthor}" />
+								actionListener="#{DislocBean.toggleFaultSearchByAuthor}" />
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGrid>
 			</h:form>
 
 			<h:form id="SelectFaultDBEntryForm"
-				rendered="#{MGBean.renderAddFaultFromDBForm}">
-				<h:dataTable value="#{MGBean.myFaultDBEntryList}" var="myentry1"
-					binding="#{MGBean.myFaultDataTable}">
+				rendered="#{DislocBean.renderAddFaultFromDBForm}">
+				<h:dataTable value="#{DislocBean.myFaultDBEntryList}" var="myentry1"
+					binding="#{DislocBean.myFaultDataTable}">
 
 					<h:column>
 						<f:facet name="header">
 							<h:outputText escape="false" value="<b>FaultName</b>" />
 						</f:facet>
 						<h:selectOneRadio layout="pageDirection"
-							valueChangeListener="#{MGBean.handleFaultsRadioValueChange}"
+							valueChangeListener="#{DislocBean.handleFaultsRadioValueChange}"
 							onchange="dataTableSelectOneRadio(this)"
 							onclick="dataTableSelectOneRadio(this)">
 							<f:selectItems value="#{myentry1.faultName}" />
@@ -520,13 +513,13 @@ function dataTableSelectOneRadio(radio) {
 						<f:facet name="header">
 							<h:outputText escape="false" value="<b>Action</b>" />
 						</f:facet>
-						<h:commandLink actionListener="#{MGBean.handleFaultEntryEdit}">
+						<h:commandLink actionListener="#{DislocBean.handleFaultEntryEdit}">
 							<h:outputText value="Get" />
 						</h:commandLink>
 					</h:column>
 				</h:dataTable>
 				<h:commandButton id="SelectFaultDBEntry" value="SelectFaultDBEntry"
-					actionListener="#{MGBean.toggleSelectFaultDBEntry}" />
+					actionListener="#{DislocBean.toggleSelectFaultDBEntry}" />
 			</h:form>
 
 		</h:panelGroup>
@@ -535,8 +528,8 @@ function dataTableSelectOneRadio(radio) {
   <p/>
 
 	<h:panelGroup 
-		rendered="#{!empty MGBean.myFaultEntryForProjectList 
-							|| !empty MGBean.myLayerEntryForProjectList}">
+		rendered="#{!empty DislocBean.myFaultEntryForProjectList 
+							|| !empty DislocBean.myLayerEntryForProjectList}">
 
 	<h:outputText styleClass="header2" value="Current Project Components"/>
 
@@ -545,7 +538,7 @@ function dataTableSelectOneRadio(radio) {
 
 		<h:panelGroup>
 			<h:form id="UpdateSelectFaultsForm"
-				rendered="#{!empty MGBean.myFaultEntryForProjectList}">
+				rendered="#{!empty DislocBean.myFaultEntryForProjectList}">
 				<h:panelGrid columns="1" border="1">
 					<h:panelGroup>
 						<h:panelGrid columns="1">
@@ -553,7 +546,7 @@ function dataTableSelectOneRadio(radio) {
 						</h:panelGrid>
 
 						<h:dataTable border="1"
-							value="#{MGBean.myFaultEntryForProjectList}" var="myentry3">
+							value="#{DislocBean.myFaultEntryForProjectList}" var="myentry3">
 							<h:column>
 								<f:facet name="header">
 									<h:outputText escape="false" value="<b>Name</b>">
@@ -584,11 +577,11 @@ function dataTableSelectOneRadio(radio) {
 
 				</h:panelGrid>
 				<h:commandButton id="SelectFault4proj" value="UpdateFault"
-					actionListener="#{MGBean.toggleUpdateFaultProjectEntry}" />
+					actionListener="#{DislocBean.toggleUpdateFaultProjectEntry}" />
 
 			</h:form>
 			<h:form id="UpdateSelectLayersForm"
-				rendered="#{!empty MGBean.myLayerEntryForProjectList}">
+				rendered="#{!empty DislocBean.myLayerEntryForProjectList}">
 				<h:panelGrid columns="1" border="1">
 					<h:panelGroup>
 						<h:panelGrid columns="1">
@@ -597,7 +590,7 @@ function dataTableSelectOneRadio(radio) {
 						</h:panelGrid>
 
 						<h:dataTable border="1"
-							value="#{MGBean.myLayerEntryForProjectList}" var="myentry4">
+							value="#{DislocBean.myLayerEntryForProjectList}" var="myentry4">
 							<h:column>
 								<f:facet name="header">
 									<h:outputText escape="false" value="<b>Name</b>" />
@@ -627,27 +620,27 @@ function dataTableSelectOneRadio(radio) {
 
 				</h:panelGrid>
 				<h:commandButton id="SelectFault4proj" value="UpdateLayer"
-					actionListener="#{MGBean.toggleUpdateLayerProjectEntry}" />
+					actionListener="#{DislocBean.toggleUpdateLayerProjectEntry}" />
 
 			</h:form>
 		</h:panelGroup>
 
 		<h:form id="PlottingTools">
 			<h:panelGroup 				
-				rendered="#{!empty MGBean.myFaultEntryForProjectList 
-							|| !empty MGBean.myLayerEntryForProjectList}"
+				rendered="#{!empty DislocBean.myFaultEntryForProjectList 
+							|| !empty DislocBean.myLayerEntryForProjectList}"
 >
 				<h:outputFormat escape="false" value="<b>Plotting Tools</b><br><br>" />
 				<h:panelGrid columns="1" border="0">
 					<h:outputFormat escape="false"
 						value="Click the button below to plot Layers and Faults.<br><br>" />
-					<h:commandButton value="  Plot  " action="#{MGBean.SetAndPlot}" />
+					<h:commandButton value="  Plot  " action="#{DislocBean.SetAndPlot}" />
 					<h:outputFormat escape="false"
 						value="<br>You can also try the Java Web Start version by clicking the link below." />
 
 					<h:outputLink id="link1" value="#{facesContext.externalContext.requestContextPath}/painter.jsp">
-						<f:param name="layers" value="#{MGBean.myLayersParamForJnlp}" />
-						<f:param name="faults" value="#{MGBean.myFaultsParamForJnlp}" />
+						<f:param name="layers" value="#{DislocBean.myLayersParamForJnlp}" />
+						<f:param name="faults" value="#{DislocBean.myFaultsParamForJnlp}" />
 						<h:outputText value="Web Start Plotter" />
 					</h:outputLink>
 
@@ -657,8 +650,8 @@ function dataTableSelectOneRadio(radio) {
 
 		<h:form id="MeshGen">
 			<h:panelGrid columns="1" 
-				rendered="#{!empty MGBean.myFaultEntryForProjectList 
-							&& !empty MGBean.myLayerEntryForProjectList}"
+				rendered="#{!empty DislocBean.myFaultEntryForProjectList 
+							&& !empty DislocBean.myLayerEntryForProjectList}"
 				footerClass="subtitle"
 				headerClass="subtitlebig" styleClass="medium"
 				columnClasses="subtitle,medium">
@@ -670,20 +663,20 @@ function dataTableSelectOneRadio(radio) {
 				<h:panelGrid columns="2" border="0">
 					<h:outputText escape="false" value="<b>Mesh Size: </b>" />
 					<h:panelGroup>
-						<h:inputText id="MeshSize" value="#{MGBean.meshSize}"
+						<h:inputText id="MeshSize" value="#{DislocBean.meshSize}"
 							required="true" />
 						<h:message for="MeshSize" showDetail="true" showSummary="true"
 							errorStyle="color: red" />
 					</h:panelGroup>
 					<h:outputText escape="false" value="<b>Mesh Refine Limit: </b>" />
 					<h:panelGroup>
-						<h:inputText id="MeshRefineLimit" value="#{MGBean.magic15}"
+						<h:inputText id="MeshRefineLimit" value="#{DislocBean.magic15}"
 							required="true" />
 						<h:message for="MeshRefineLimit" showDetail="true"
 							showSummary="true" errorStyle="color: red" />
 					</h:panelGroup>
 					<h:commandButton value="Generate Mesh"
-						action="#{MGBean.toggleFireMeshGen}" />
+						action="#{DislocBean.toggleFireMeshGen}" />
 				</h:panelGrid>
 
 			</h:panelGrid>
@@ -694,7 +687,7 @@ function dataTableSelectOneRadio(radio) {
 	<h:form>
 		<hr />
 		<h:commandLink action="MG-back">
-			<h:outputText value="#{MGBean.codeName} Main Menu" />
+			<h:outputText value="#{DislocBean.codeName} Main Menu" />
 		</h:commandLink>
 	</h:form>
 

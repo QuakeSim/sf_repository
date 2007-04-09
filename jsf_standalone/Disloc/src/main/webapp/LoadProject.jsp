@@ -6,7 +6,7 @@
 <html>
 <head>
 
-<title>MeshGenerator Load and Delete Project</title>
+<title>Disloc Load and Delete Project</title>
 </head>
 <body>
 <script language="JavaScript">
@@ -49,27 +49,27 @@ function dataTableSelectOneRadio(radio) {
 				<h:outputText escape="false" value="<b>Select Projects</b><br><br>" />
 				<h:outputText escape="false"
 					value="Please select from one of the previous projects." />
-				<h:selectManyCheckbox id="projectlistforload" value="#{MGBean.selectProjectsList}"
+				<h:selectManyCheckbox id="projectlistforload" value="#{DislocBean.selectProjectsList}"
 					onchange="dataTableSelectOneRadio(this)"
 					onclick="dataTableSelectOneRadio(this)"
 					layout="pageDirection">
 					
 					layout="pageDirection">
-					<f:selectItems value="#{MGBean.myProjectNameList}" />
+					<f:selectItems value="#{DislocBean.myProjectNameList}" />
 				</h:selectManyCheckbox>
 				<h:commandButton value="Select"
-					action="#{MGBean.toggleSelectProject}" />
+					action="#{DislocBean.toggleSelectProject}" />
 			</h:panelGrid>
 			<h:panelGrid columns="1" border="0">
 				<h:outputText escape="false" value="<b>Select Projects</b><br><br>" />
 				<h:outputText escape="false"
 					value="Please select from one of the previous projects." />
-				<h:selectManyCheckbox id="projectfordelete" value="#{MGBean.deleteProjectsList}"
+				<h:selectManyCheckbox id="projectfordelete" value="#{DislocBean.deleteProjectsList}"
 					layout="pageDirection">
-					<f:selectItems value="#{MGBean.myProjectNameList}" />
+					<f:selectItems value="#{DislocBean.myProjectNameList}" />
 				</h:selectManyCheckbox>
 				<h:commandButton value="Delete"
-					action="#{MGBean.toggleDeleteProject}" />
+					action="#{DislocBean.toggleDeleteProject}" />
 			</h:panelGrid>
 		</h:panelGrid>
 
@@ -78,7 +78,7 @@ function dataTableSelectOneRadio(radio) {
 	<h:form>
 		<hr />
 		<h:commandLink action="MG-back">
-			<h:outputText value="#{MGBean.codeName} Main Menu" />
+			<h:outputText value="#{DislocBean.codeName} Main Menu" />
 		</h:commandLink>
 	</h:form>
 </f:view>

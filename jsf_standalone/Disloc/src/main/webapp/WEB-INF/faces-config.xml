@@ -8,7 +8,7 @@
 
 	<!-- managed beans of the simple hello world app -->
 	<managed-bean>
-		<managed-bean-name>MGBean</managed-bean-name>
+		<managed-bean-name>DislocBean</managed-bean-name>
 		<managed-bean-class>cgl.quakesim.disloc.DislocBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
                 <!--Who we are-->
@@ -18,74 +18,13 @@
                 </managed-property>
                  <managed-property>
                    <property-name>selectdbURL</property-name>
-                   <value>http://danube.ucs.indiana.edu:9090/axis/services/Select</value>
+                   <value>http://gf2.ucs.indiana.edu:9090/axis/services/Select</value>
                  </managed-property>
  
-                <!-- Needed for the context service-->
-                <managed-property>
-                   <property-name>contextUrl</property-name>
-                   <value>http://gf2.ucs.indiana.edu:8080/WebServices/services/ContextManager</value>
-                 </managed-property>
-                 <managed-property>
-                   <property-name>contextBasePath</property-name>
-                   <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users/</value>
-                </managed-property>
-
                 <managed-property>
                    <property-name>meshServerUrl</property-name>
                    <value>http://gf2.ucs.indiana.edu:18084</value>
                  </managed-property>
-
-                <!-- These are execution host params -->
-                <managed-property>
-                   <property-name>antUrl</property-name>
-                   <value>
-                     http://danube.ucs.indiana.edu:8045/axis/services/AntVisco
-                   </value>
-                </managed-property>
-                <managed-property>
-                   <property-name>binPath</property-name>
-                   <value>/home/gateway/GEMCodes/GeoFEST/</value>
-                </managed-property>
-                <managed-property>
-                   <property-name>baseWorkDir</property-name>
-                   <value>/home/gateway/GeoFEST_WDIR/</value>
-                </managed-property>
-                <managed-property>
-                   <property-name>idlServiceURL</property-name>
-                   <value>
-                     http://danube.ucs.indiana.edu:8045/axis/services/AntVisco
-                   </value>
-                </managed-property>
-                <managed-property>
-                   <property-name>idlServerDest</property-name>
-                   <value>/home/gateway/GEMCodes/GeoFEST_IDL/</value>
-                </managed-property>
-                <managed-property>
-                   <property-name>idlBinPath</property-name>
-                   <value>/home/gateway/GEMCodes/GeoFEST_IDL/</value>
-                </managed-property>
-                <managed-property>
-                   <property-name>idlServiceURL2</property-name>
-                   <value>http://danube.ucs.indiana.edu:8045/GCWS/services/FileService</value>
-                </managed-property>
-                <managed-property>
-                   <property-name>fileServiceUrl</property-name>
-                   <value>http://danube.ucs.indiana.edu:8045/GCWS/services/FileService</value>
-                </managed-property>
-                <managed-property>
-                   <property-name>submitjobUrl</property-name>
-                   <value>http://danube.ucs.indiana.edu:8045/GCWS/services/Submitjob</value>
-                </managed-property>
-                <managed-property>
-                   <property-name>mesh_gen_viz_fileServiceUrl</property-name>
-                   <value>http://gf2.ucs.indiana.edu:6060/jetspeed/services/FileService</value>
-                </managed-property>
-                <managed-property>
-                   <property-name>mesh_gen_viz_base_dir</property-name>
-                   <value>/home/gateway/yan_offscreen/offscreen/</value>
-                </managed-property>
-
 	</managed-bean>
 
 	<navigation-rule>
