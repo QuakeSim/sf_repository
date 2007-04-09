@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE faces-config PUBLIC
+    "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+    "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+
+<faces-config>
+
+	<!-- managed beans of the simple hello world app -->
+	<managed-bean>
+		<managed-bean-name>MGBean</managed-bean-name>
+		<managed-bean-class>cgl.quakesim.disloc.DislocBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+                <!--Who we are-->
+                <managed-property>
+                   <property-name>codeName</property-name>
+                   <value>Disloc</value>
+                </managed-property>
+                 <managed-property>
+                   <property-name>selectdbURL</property-name>
+                   <value>http://danube.ucs.indiana.edu:9090/axis/services/Select</value>
+                 </managed-property>
+ 
+                <!-- Needed for the context service-->
+                <managed-property>
+                   <property-name>contextUrl</property-name>
+                   <value>http://gf2.ucs.indiana.edu:8080/WebServices/services/ContextManager</value>
+                 </managed-property>
+                 <managed-property>
+                   <property-name>contextBasePath</property-name>
+                   <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users/</value>
+                </managed-property>
+
+                <managed-property>
+                   <property-name>meshServerUrl</property-name>
+                   <value>http://gf2.ucs.indiana.edu:18084</value>
+                 </managed-property>
+
+                <!-- These are execution host params -->
+                <managed-property>
+                   <property-name>antUrl</property-name>
+                   <value>
+                     http://danube.ucs.indiana.edu:8045/axis/services/AntVisco
+                   </value>
+                </managed-property>
+                <managed-property>
+                   <property-name>binPath</property-name>
+                   <value>/home/gateway/GEMCodes/GeoFEST/</value>
+                </managed-property>
+                <managed-property>
+                   <property-name>baseWorkDir</property-name>
+                   <value>/home/gateway/GeoFEST_WDIR/</value>
+                </managed-property>
+                <managed-property>
+                   <property-name>idlServiceURL</property-name>
+                   <value>
+                     http://danube.ucs.indiana.edu:8045/axis/services/AntVisco
+                   </value>
+                </managed-property>
+                <managed-property>
+                   <property-name>idlServerDest</property-name>
+                   <value>/home/gateway/GEMCodes/GeoFEST_IDL/</value>
+                </managed-property>
+                <managed-property>
+                   <property-name>idlBinPath</property-name>
+                   <value>/home/gateway/GEMCodes/GeoFEST_IDL/</value>
+                </managed-property>
+                <managed-property>
+                   <property-name>idlServiceURL2</property-name>
+                   <value>http://danube.ucs.indiana.edu:8045/GCWS/services/FileService</value>
+                </managed-property>
+                <managed-property>
+                   <property-name>fileServiceUrl</property-name>
+                   <value>http://danube.ucs.indiana.edu:8045/GCWS/services/FileService</value>
+                </managed-property>
+                <managed-property>
+                   <property-name>submitjobUrl</property-name>
+                   <value>http://danube.ucs.indiana.edu:8045/GCWS/services/Submitjob</value>
+                </managed-property>
+                <managed-property>
+                   <property-name>mesh_gen_viz_fileServiceUrl</property-name>
+                   <value>http://gf2.ucs.indiana.edu:6060/jetspeed/services/FileService</value>
+                </managed-property>
+                <managed-property>
+                   <property-name>mesh_gen_viz_base_dir</property-name>
+                   <value>/home/gateway/yan_offscreen/offscreen/</value>
+                </managed-property>
+
+	</managed-bean>
+
+	<navigation-rule>
+		<display-name>MG Main Page</display-name>
+		<from-view-id>/Main.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-new-project</from-outcome>
+			<to-view-id>/NewProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-list-project</from-outcome>
+			<to-view-id>/LoadProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-load-mesh</from-outcome>
+			<to-view-id>/LoadMesh.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-fetch-mesh</from-outcome>
+			<to-view-id>/FetchMesh.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-scp-mesh</from-outcome>
+			<to-view-id>/ScpMesh.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-gf-project</from-outcome>
+			<to-view-id>/GfProject.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/NewProject.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-edit-project</from-outcome>
+			<to-view-id>/EditProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/EditProject.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-ant-run</from-outcome>
+			<to-view-id>/AntRun.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-this</from-outcome>
+			<to-view-id>/EditProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-plot</from-outcome>
+			<to-view-id>/Plot.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/Plot.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-edit-project</from-outcome>
+			<to-view-id>/EditProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/AntRun.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-edit-project</from-outcome>
+			<to-view-id>/EditProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-view-mesh</from-outcome>
+			<to-view-id>/ViewMesh.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-geotrans-params</from-outcome>
+			<to-view-id>/GeotransParams.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/ViewMesh.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-ant-run</from-outcome>
+			<to-view-id>/AntRun.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>	
+
+	<navigation-rule>
+		<from-view-id>/LoadProject.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-edit-project</from-outcome>
+			<to-view-id>/EditProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-this</from-outcome>
+			<to-view-id>/LoadProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/LoadMesh.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-ant-run</from-outcome>
+			<to-view-id>/AntRun.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-this</from-outcome>
+			<to-view-id>/LoadProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>	
+	<navigation-rule>
+		<from-view-id>/FetchMesh.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/GfProject.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-gf-archived-data</from-outcome>
+			<to-view-id>/gfarchivedData.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-gf-graph-output</from-outcome>
+			<to-view-id>/gfGraphOutput.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/GeotransParams.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/gfarchivedData.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/gfGraphOutput.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-contour-plot</from-outcome>
+			<to-view-id>/ContourPlot.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>MG-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/ContourPlot.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>MG-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+</faces-config>
