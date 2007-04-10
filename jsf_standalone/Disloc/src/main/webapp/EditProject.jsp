@@ -91,7 +91,7 @@ function dataTableSelectOneRadio(radio) {
 		</h:form>
 
 		<h:panelGroup>
-			<h:form id="layerform" rendered="#{DislocBean.renderCreateNewLayerForm}">
+			<h:form id="layerform" rendered="#{DislocBean.renderDislocGridParams}">
 
 				<h:panelGrid id="LayerTable" columns="2" footerClass="subtitle"
 					headerClass="subtitlebig" styleClass="medium"
@@ -116,82 +116,30 @@ function dataTableSelectOneRadio(radio) {
 
 					<h:outputText value="X Iterations" />
 					<h:panelGroup>
-						<h:inputText id="LayerOriginY"
-							value="#{DislocBean.currentLayer.layerOriginY}" required="true" />
-						<h:message for="LayerOriginY" showDetail="true" showSummary="true"
-							errorStyle="color: red" />
+						<h:inputText id="xiterations"
+							value="#{DislocBean.dislocParams.gridXIterations}" required="true" />
 					</h:panelGroup>
 
-					<h:outputText value="Origin Z:" />
+					<h:outputText value="Grid Minimum Y Value:" />
 					<h:panelGroup>
-						<h:inputText id="LayerOriginZ"
-							value="#{DislocBean.currentLayer.layerOriginZ}" required="true" />
-						<h:message for="LayerOriginZ" showDetail="true" showSummary="true"
-							errorStyle="color: red" />
+						<h:inputText id="miny"
+							value="#{DislocBean.dislocParams.gridMinYValue}" required="true" />
 					</h:panelGroup>
 
-
-					<h:outputText value="Length:" />
+					<h:outputText value="Y Spacing:" />
 					<h:panelGroup>
-						<h:inputText id="LayerLength"
-							value="#{DislocBean.currentLayer.layerLength}" required="true" />
-						<h:message for="LayerLength" showDetail="true" showSummary="true"
-							errorStyle="color: red" />
+						<h:inputText id="yspacing"
+							value="#{DislocBean.dislocParams.gridYSpacing}" required="true" />
 					</h:panelGroup>
 
-
-					<h:outputText value="Width:" />
+					<h:outputText value="Y Iterations" />
 					<h:panelGroup>
-						<h:inputText id="LayerWidth"
-							value="#{DislocBean.currentLayer.layerWidth}" required="true" />
-						<h:message for="LayerWidth" showDetail="true" showSummary="true"
-							errorStyle="color: red" />
+						<h:inputText id="yiterations"
+							value="#{DislocBean.dislocParams.gridYIterations}" required="true" />
 					</h:panelGroup>
 
-
-					<h:outputText value="Depth:" />
-					<h:panelGroup>
-						<h:inputText id="LayerDepth"
-							value="#{DislocBean.currentLayer.layerDepth}" required="true" />
-						<h:message for="LayerDepth" showDetail="true" showSummary="true"
-							errorStyle="color: red" />
-					</h:panelGroup>
-
-					<h:outputText value="Lame Lambda:" />
-					<h:panelGroup>
-						<h:inputText id="LayerLameLambda"
-							value="#{DislocBean.currentLayer.lameLambda}" required="true" />
-						<h:message for="LayerLameLambda" showDetail="true"
-							showSummary="true" errorStyle="color: red" />
-					</h:panelGroup>
-
-					<h:outputText value="Lame Mu:" />
-					<h:panelGroup>
-						<h:inputText id="LayerLameMu"
-							value="#{DislocBean.currentLayer.lameMu}" required="true" />
-						<h:message for="LayerLameMu" showDetail="true" showSummary="true"
-							errorStyle="color: red" />
-					</h:panelGroup>
-
-
-					<h:outputText value="Viscosity:" />
-					<h:panelGroup>
-						<h:inputText id="LayerViscosity"
-							value="#{DislocBean.currentLayer.viscosity}" required="true" />
-						<h:message for="LayerViscosity" showDetail="true"
-							showSummary="true" errorStyle="color: red" />
-					</h:panelGroup>
-
-					<h:outputText value="Exponent:" />
-					<h:panelGroup>
-						<h:inputText id="LayerExponent"
-							value="#{DislocBean.currentLayer.exponent}" required="true" />
-						<h:message for="LayerExponent" showDetail="true"
-							showSummary="true" errorStyle="color: red" />
-					</h:panelGroup>
-
-					<h:commandButton id="addlayer" value="select"
-						actionListener="#{DislocBean.toggleAddLayerForProject}" />
+					<h:commandButton id="addobservation" value="select"
+						actionListener="#{DislocBean.toggleAddObservationsForProject}" />
 
 
 				</h:panelGrid>
@@ -211,125 +159,73 @@ function dataTableSelectOneRadio(radio) {
 					<h:panelGroup>
 						<h:inputText id="FaultName"
 							value="#{DislocBean.currentFault.faultName}" required="true" />
-						<h:message for="FaultName" showDetail="true" showSummary="true"
-							errorStyle="color: red" />
 					</h:panelGroup>
 
 					<h:outputText value="Location X:" />
 					<h:panelGroup>
 						<h:inputText id="FaultLocationX"
 							value="#{DislocBean.currentFault.faultLocationX}" required="true" />
-						<h:message for="FaultLocationX" showDetail="true"
-							showSummary="true" errorStyle="color: red" />
 					</h:panelGroup>
 
 					<h:outputText value="Location Y:" />
 					<h:panelGroup>
 						<h:inputText id="FaultLocationY"
 							value="#{DislocBean.currentFault.faultLocationY}" required="true" />
-						<h:message for="FaultLocationY" showDetail="true"
-							showSummary="true" errorStyle="color: red" />
 					</h:panelGroup>
-
 
 					<h:outputText value="Length:" />
 					<h:panelGroup>
 						<h:inputText id="FaultLength"
 							value="#{DislocBean.currentFault.faultLength}" required="true" />
-						<h:message for="FaultLength" showDetail="true" showSummary="true"
-							errorStyle="color: red" />
 					</h:panelGroup>
-
 
 					<h:outputText value="Width:" />
 					<h:panelGroup>
 						<h:inputText id="FaultWidth"
 							value="#{DislocBean.currentFault.faultWidth}" required="true" />
-						<h:message for="FaultWidth" showDetail="true" showSummary="true"
-							errorStyle="color: red" />
 					</h:panelGroup>
-
 
 					<h:outputText value="Depth:" />
 					<h:panelGroup>
 						<h:inputText id="FaultDepth"
 							value="#{DislocBean.currentFault.faultDepth}" required="true" />
-						<h:message for="FaultDepth" showDetail="true" showSummary="true"
-							errorStyle="color: red" />
 					</h:panelGroup>
 
 					<h:outputText value="Dip Angle:" />
 					<h:panelGroup>
 						<h:inputText id="FaultDipAngle"
 							value="#{DislocBean.currentFault.faultDipAngle}" required="true" />
-						<h:message for="FaultDipAngle" showDetail="true"
-							showSummary="true" errorStyle="color: red" />
+					</h:panelGroup>
+
+					<h:outputText value="Dip Slip:" />
+					<h:panelGroup>
+						<h:inputText id="FaultSlip"
+							value="#{DislocBean.currentFault.faultDipSlip}" required="true" />
 					</h:panelGroup>
 
 					<h:outputText value="Strike Angle:" />
 					<h:panelGroup>
 						<h:inputText id="FaultStrikeAngle"
 							value="#{DislocBean.currentFault.faultStrikeAngle}" required="true" />
-						<h:message for="FaultStrikeAngle" showDetail="true"
-							showSummary="true" errorStyle="color: red" />
 					</h:panelGroup>
 
-
-					<h:outputText value="Slip:" />
+					<h:outputText value="Strike Slip:" />
 					<h:panelGroup>
-						<h:inputText id="FaultSlip"
-							value="#{DislocBean.currentFault.faultSlip}" required="true" />
-						<h:message for="FaultSlip" showDetail="true" showSummary="true"
-							errorStyle="color: red" />
+						<h:inputText id="FaultStrikeSlip"
+							value="#{DislocBean.currentFault.faultStrikeSlip}" required="true" />
 					</h:panelGroup>
 
-					<h:outputText value="Rake Angle:" />
+					<h:outputText value="Tensile Slip:" />
 					<h:panelGroup>
-						<h:inputText id="FaultRakeAngle"
-							value="#{DislocBean.currentFault.faultRakeAngle}" required="true" />
-						<h:message for="FaultRakeAngle" showDetail="true"
-							showSummary="true" errorStyle="color: red" />
+						<h:inputText id="FaultTensileSlip"
+							value="#{DislocBean.currentFault.faultTensileSlip}" required="true" />
 					</h:panelGroup>
+
 					<h:commandButton id="addfault" value="select"
 						actionListener="#{DislocBean.toggleAddFaultForProject}" />
 
 
 				</h:panelGrid>
-			</h:form>
-
-			<h:form id="SelectLayerDBEntryForm"
-				rendered="#{DislocBean.renderAddLayerFromDBForm}">
-				<h:dataTable value="#{DislocBean.myLayerDBEntryList}" var="myentry2"
-					binding="#{DislocBean.myLayerDataTable}">
-					<h:column>
-						<f:facet name="header">
-							<h:outputText escape="false" value="<b>LayerName</b>" />
-						</f:facet>
-						<h:selectOneRadio layout="pageDirection"
-							valueChangeListener="#{DislocBean.handleLayersRadioValueChange}"
-							onchange="dataTableSelectOneRadio(this)"
-							onclick="dataTableSelectOneRadio(this)">
-							<f:selectItems value="#{myentry2.layerName}" />
-						</h:selectOneRadio>
-					</h:column>
-					<h:column>
-						<f:facet name="header">
-							<h:outputText escape="false" value="<b>Author1</b>" />
-						</f:facet>
-						<h:outputText value="#{myentry2.layerAuthor}" />
-					</h:column>
-					<h:column>
-						<f:facet name="header">
-							<h:outputText escape="false" value="<b>Action</b>" />
-						</f:facet>
-						<h:commandLink actionListener="#{DislocBean.handleLayerEntryEdit}">
-							<h:outputText value="Get" />
-						</h:commandLink>
-					</h:column>
-				</h:dataTable>
-
-				<h:commandButton id="SelectLayerDBEntry" value="SelectLayerDBEntry"
-					actionListener="#{DislocBean.toggleSelectLayerDBEntry}" />
 			</h:form>
 
 			<h:form id="faultselection"
@@ -580,28 +476,29 @@ function dataTableSelectOneRadio(radio) {
 					actionListener="#{DislocBean.toggleUpdateFaultProjectEntry}" />
 
 			</h:form>
-			<h:form id="UpdateSelectLayersForm"
-				rendered="#{!empty DislocBean.myLayerEntryForProjectList}">
+
+			<h:form id="UpdateSelectedParamsForm"
+				rendered="#{!empty DislocBean.myObservationsForProjectList}">
 				<h:panelGrid columns="1" border="1">
 					<h:panelGroup>
 						<h:panelGrid columns="1">
-							<h:outputText escape="false" value="<b>Layers</b>">
-                     </h:outputText>
+							<h:outputText escape="false" value="<b>Observations</b>"/>
 						</h:panelGrid>
 
 						<h:dataTable border="1"
-							value="#{DislocBean.myLayerEntryForProjectList}" var="myentry4">
+							value="#{DislocBean.myObservationsForProjectList}" var="myentry3">
 							<h:column>
 								<f:facet name="header">
-									<h:outputText escape="false" value="<b>Name</b>" />
+									<h:outputText escape="false" value="<b>Name</b>">
+                           </h:outputText>
 								</f:facet>
-								<h:outputText value="#{myentry4.layerName}" />
+								<h:outputText value="Observations" />
 							</h:column>
 							<h:column>
 								<f:facet name="header">
 									<h:outputText escape="false" value="<b>View</b>" />
 								</f:facet>
-								<h:selectBooleanCheckbox value="#{myentry4.view}"
+								<h:selectBooleanCheckbox value="#{myentry3.view}"
 									onchange="selectOne(this.form,this)"
 									onclick="selectOne(this.form,this)" />
 
@@ -610,7 +507,7 @@ function dataTableSelectOneRadio(radio) {
 								<f:facet name="header">
 									<h:outputText escape="false" value="<b>Remove</b>" />
 								</f:facet>
-								<h:selectBooleanCheckbox value="#{myentry4.delete}"
+								<h:selectBooleanCheckbox value="#{myentry3.delete}"
 									onchange="selectOne(this.form,this)"
 									onclick="selectOne(this.form,this)" />
 							</h:column>
@@ -619,65 +516,27 @@ function dataTableSelectOneRadio(radio) {
 					</h:panelGroup>
 
 				</h:panelGrid>
-				<h:commandButton id="SelectFault4proj" value="UpdateLayer"
-					actionListener="#{DislocBean.toggleUpdateLayerProjectEntry}" />
+				<h:commandButton id="updateObsv" value="Update Observations"
+					actionListener="#{DislocBean.toggleUpdateProjectObservations}" />
 
 			</h:form>
 		</h:panelGroup>
 
-		<h:form id="PlottingTools">
-			<h:panelGroup 				
-				rendered="#{!empty DislocBean.myFaultEntryForProjectList 
-							|| !empty DislocBean.myLayerEntryForProjectList}"
->
-				<h:outputFormat escape="false" value="<b>Plotting Tools</b><br><br>" />
-				<h:panelGrid columns="1" border="0">
-					<h:outputFormat escape="false"
-						value="Click the button below to plot Layers and Faults.<br><br>" />
-					<h:commandButton value="  Plot  " action="#{DislocBean.SetAndPlot}" />
-					<h:outputFormat escape="false"
-						value="<br>You can also try the Java Web Start version by clicking the link below." />
-
-					<h:outputLink id="link1" value="#{facesContext.externalContext.requestContextPath}/painter.jsp">
-						<f:param name="layers" value="#{DislocBean.myLayersParamForJnlp}" />
-						<f:param name="faults" value="#{DislocBean.myFaultsParamForJnlp}" />
-						<h:outputText value="Web Start Plotter" />
-					</h:outputLink>
-
-				</h:panelGrid>
-			</h:panelGroup>
-		</h:form>
-
-		<h:form id="MeshGen">
+		<h:form id="RunDisloc">
 			<h:panelGrid columns="1" 
-				rendered="#{!empty DislocBean.myFaultEntryForProjectList 
-							&& !empty DislocBean.myLayerEntryForProjectList}"
+				rendered="#{!(empty DislocBean.myFaultsForProjectList)
+							   && !(empty DislocBean.myObservationsForProjectList)}"
 				footerClass="subtitle"
 				headerClass="subtitlebig" styleClass="medium"
 				columnClasses="subtitle,medium">
-				<h:outputFormat escape="false"
-					value="<b>Create Initial Mesh</b><br><br>" />
-				<h:outputFormat escape="false"
-					value="Click the button below to generate a mesh for the geometry.<br><br>" />
 
-				<h:panelGrid columns="2" border="0">
-					<h:outputText escape="false" value="<b>Mesh Size: </b>" />
-					<h:panelGroup>
-						<h:inputText id="MeshSize" value="#{DislocBean.meshSize}"
-							required="true" />
-						<h:message for="MeshSize" showDetail="true" showSummary="true"
-							errorStyle="color: red" />
-					</h:panelGroup>
-					<h:outputText escape="false" value="<b>Mesh Refine Limit: </b>" />
-					<h:panelGroup>
-						<h:inputText id="MeshRefineLimit" value="#{DislocBean.magic15}"
-							required="true" />
-						<h:message for="MeshRefineLimit" showDetail="true"
-							showSummary="true" errorStyle="color: red" />
-					</h:panelGroup>
+				<h:outputFormat escape="false"
+					value="<b>Run Disloc</b><br><br>" />
+				<h:outputFormat escape="false"
+					value="Click the button below to run Disloc.<br><br>" />
+
 					<h:commandButton value="Generate Mesh"
 						action="#{DislocBean.toggleFireMeshGen}" />
-				</h:panelGrid>
 
 			</h:panelGrid>
 		</h:form>
@@ -686,7 +545,7 @@ function dataTableSelectOneRadio(radio) {
 
 	<h:form>
 		<hr />
-		<h:commandLink action="MG-back">
+		<h:commandLink action="Disloc-back">
 			<h:outputText value="#{DislocBean.codeName} Main Menu" />
 		</h:commandLink>
 	</h:form>

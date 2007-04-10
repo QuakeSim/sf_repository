@@ -30,7 +30,7 @@ cp -r target/dislocexec $CATALINA_HOME/webapps
 # Copy over the Disloc and related executable
 if 
     mkdir -p $CATALINA_HOME/webapps/dislocexec/WEB-INF/binaryexec
-    cp $DISLOC_BIN_HOME/* $CATALINA_HOME/webapps/dislocexec/WEB-INF/binaryexec
+    cp $DISLOC_BIN_HOME/disloc $CATALINA_HOME/webapps/dislocexec/WEB-INF/binaryexec
     chmod +x $CATALINA_HOME/webapps/dislocexec/WEB-INF/binaryexec/*
 then 
     echo "Disloc binary installed"

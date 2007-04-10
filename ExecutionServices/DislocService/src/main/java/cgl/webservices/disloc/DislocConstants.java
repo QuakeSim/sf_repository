@@ -6,5 +6,6 @@ public class DislocConstants {
 	 public static final double FIXED_ORIGIN_LAT=0.0;
 	 public static final double FIXED_ORIGIN_LON=0.0;
 	 public static final int FAULT_LINE_PREFIX=1;
+	 public static final String DISLOC_DEFAULT_TARGET="ExecDisloc";
 
 }

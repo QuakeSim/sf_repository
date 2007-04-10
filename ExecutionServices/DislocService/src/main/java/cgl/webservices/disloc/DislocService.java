@@ -92,6 +92,7 @@ public class DislocService extends AntVisco implements Runnable {
 																  Fault[] faults,
 																  String targetName) 
 		  throws Exception {
+		  if(targetName==null) targetName=DislocConstants.DISLOC_DEFAULT_TARGET;
 		  String jobStamp=generateJobStamp();
 
 		  String[] args=prefabDisloc(userName,
@@ -111,6 +112,7 @@ public class DislocService extends AntVisco implements Runnable {
 															 Fault[] faults,
 															 String targetName) 
 		  throws Exception {
+		  if(targetName==null) targetName=DislocConstants.DISLOC_DEFAULT_TARGET;
 		  String jobStamp=generateJobStamp();
 		  String[] args=prefabDisloc(userName,
 											  projectName,

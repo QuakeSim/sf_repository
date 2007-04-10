@@ -13,7 +13,7 @@ echo ""
 echo "######################################"
 echo "Installing MESHGERATOR"
 echo "######################################"
-cd $MESHGENERATOR_SA_HOME
+cd $DISLOC_SA_HOME
 if mvn clean package -Dportal.server.url=$PORTAL_SERVER_URL -Dbuild.dir=$BUILD_DIR -Dtomcat.base.dir=$CATALINA_HOME
 
 then
@@ -21,7 +21,7 @@ then
 else
     exit 1
 fi
-cp -r target/MeshGenerator $CATALINA_HOME/webapps
+cp -r target/Disloc $CATALINA_HOME/webapps
 
 
 

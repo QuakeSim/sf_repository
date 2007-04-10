@@ -39,7 +39,6 @@ function dataTableSelectOneRadio(radio) {
     }
     radio.checked = true;
 }
-
 </script>
 
 <f:view>
@@ -49,6 +48,7 @@ function dataTableSelectOneRadio(radio) {
 				<h:outputText escape="false" value="<b>Select Projects</b><br><br>" />
 				<h:outputText escape="false"
 					value="Please select from one of the previous projects." />
+	
 				<h:selectManyCheckbox id="projectlistforload" value="#{DislocBean.selectProjectsList}"
 					onchange="dataTableSelectOneRadio(this)"
 					onclick="dataTableSelectOneRadio(this)"
@@ -72,12 +72,27 @@ function dataTableSelectOneRadio(radio) {
 					action="#{DislocBean.toggleDeleteProject}" />
 			</h:panelGrid>
 		</h:panelGrid>
+	</h:form>
+<p/>
+	<h:form>
+		<b>New Project Name</b>
+		<h:panelGrid columns="2" border="1">
+			<h:outputText value="Project Name:" />
+			<h:panelGroup>
+			<h:inputText id="projectName" value="#{MGBean.projectName}"
+				required="true" />
+			<h:message for="projectName" showDetail="true" showSummary="true"
+				errorStyle="color: red" />
+			</h:panelGroup>
+		</h:panelGrid>
+		<h:commandButton value="Make Selection"
+			action="#{Disloc.newProjectThenEditProject}" />
 
 	</h:form>
 
 	<h:form>
 		<hr />
-		<h:commandLink action="MG-back">
+		<h:commandLink action="disloc-back">
 			<h:outputText value="#{DislocBean.codeName} Main Menu" />
 		</h:commandLink>
 	</h:form>

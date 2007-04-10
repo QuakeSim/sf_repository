@@ -129,7 +129,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
     //These should be populated from faces-config.xml
     String meshViewerServerUrl="http://gf2.ucs.indiana.edu:18084";
-    String faultDBServiceUrl="http://gf2.ucs.indiana.edu:9090/axis/services/Select";
+    String faultDBServiceUrl="http://gf2.ucs.indiana.edu:9090/axis/services/Select;"
 	 String geoFESTBaseUrl="http://gf19.ucs.indiana.edu:8080/geofestexec/";
     String geoFESTServiceUrl=geoFESTBaseUrl+"/"+"services/GeoFESTExec";
 	 String geoFESTBaseUrlForJnlp=getGeoFESTBaseUrlForJnlp();
@@ -2007,19 +2007,19 @@ public class MeshGeneratorBean extends GenericSopacBean {
     }
     
     public String getFaultLonEnd() {
-	return this.faultLonEnd;
+		  return this.faultLonEnd;
     }
     
     public void setFaultLonEnd(String tmp_str) {
-	this.faultLonEnd = tmp_str;
+		  this.faultLonEnd = tmp_str;
     }
     
     public List getMyFaultDBEntryList() {
-	return myFaultDBEntryList;
+		  return myFaultDBEntryList;
     }
     
     public List getMyLayerDBEntryList() {
-	return myLayerDBEntryList;
+		  return myLayerDBEntryList;
     }
     // Getters ----------------------------------------------------------
     
@@ -2153,19 +2153,19 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	}
     
     public boolean getRenderAddFaultSelectionForm() {
-	return renderAddFaultSelectionForm;
+		  return renderAddFaultSelectionForm;
     }
     
     public void setRenderAddFaultSelectionForm(boolean tmp_boolean) {
-	this.renderAddFaultSelectionForm = tmp_boolean;
+		  this.renderAddFaultSelectionForm = tmp_boolean;
     }
-
+	 
     public void setJobToken(String jobToken){
-	this.jobToken=jobToken;
+		  this.jobToken=jobToken;
     }
     
     public String getJobToken(){
-	return jobToken;
+		  return jobToken;
     }
 
     public void setUserName(String userName){

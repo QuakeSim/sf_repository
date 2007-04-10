@@ -45,6 +45,7 @@ export DISLOC_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/DislocService
 # SourceForge
 export RDAHMM_BIN_HOME=$HOME/GEMCodes/RDAHMM2/bin/
 export GEOFEST_BIN_HOME=$HOME/GEMCodes/GeoFEST/bin/
+export DISLOC_BIN_HOME=$HOME/GEMCodes/Disloc/
 
 #Generic project code
 export GENERIC_PROJECT_HOME=$BUILD_DIR/GenericQuakeSimProject
@@ -61,6 +62,7 @@ export SIMPLE_STFILTER_SA_HOME=$BUILD_DIR/jsf_standalone/simple_stfilter
 export PLOT_GRWS_TIMESERIES_SA_HOME=$BUILD_DIR/jsf_standalone/PlotGRWSTimeSeries
 export MESHGENERATOR_SA_HOME=$BUILD_DIR/jsf_standalone/MeshGenerator
 export NEW_MESHGENERATOR_SA_HOME=$BUILD_DIR/jsf_standalone/NewMeshGen2
+export DISLOC_SA_HOME=$BUILD_DIR/jsf_standalone/Disloc
 
 #Portlets
 export SIMPLEX_PORTLET_HOME=$BUILD_DIR/portlets/Simplex-portlet
