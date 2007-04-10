@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE faces-config PUBLIC
+    "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+    "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+
+<faces-config>
+
+	<!-- managed beans of the simple hello world app -->
+	<managed-bean>
+		<managed-bean-name>DislocBean</managed-bean-name>
+		<managed-bean-class>cgl.quakesim.disloc.DislocBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+                <!--Who we are-->
+                <managed-property>
+                   <property-name>codeName</property-name>
+                   <value>Disloc</value>
+                </managed-property>
+                 <managed-property>
+                   <property-name>selectdbURL</property-name>
+                   <value>http://gf2.ucs.indiana.edu:9090/axis/services/Select</value>
+                 </managed-property> 
+	</managed-bean>
+
+
+	<navigation-rule>
+		<from-view-id>/EditProject.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>disloc-ant-run</from-outcome>
+			<to-view-id>/AntRun.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>disloc-this</from-outcome>
+			<to-view-id>/EditProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>disloc-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>disloc-plot</from-outcome>
+			<to-view-id>/Plot.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/Plot.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>disloc-edit-project</from-outcome>
+			<to-view-id>/EditProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>disloc-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/AntRun.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>disloc-edit-project</from-outcome>
+			<to-view-id>/EditProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>disloc-view-mesh</from-outcome>
+			<to-view-id>/ViewMesh.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>disloc-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>disloc-geotrans-params</from-outcome>
+			<to-view-id>/GeotransParams.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/ViewMesh.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>disloc-ant-run</from-outcome>
+			<to-view-id>/AntRun.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>disloc-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>	
+
+	<navigation-rule>
+		<from-view-id>/LoadProject.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>disloc-edit-project</from-outcome>
+			<to-view-id>/EditProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>disloc-this</from-outcome>
+			<to-view-id>/LoadProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>disloc-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/LoadMesh.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>disloc-ant-run</from-outcome>
+			<to-view-id>/AntRun.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>disloc-this</from-outcome>
+			<to-view-id>/LoadProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>disloc-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>	
+	<navigation-rule>
+		<from-view-id>/FetchMesh.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>disloc-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+</faces-config>
