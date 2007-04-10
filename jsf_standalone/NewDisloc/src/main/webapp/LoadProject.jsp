@@ -4,6 +4,17 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <html>
+<style>
+	.alignTop {
+		vertical-align:top;
+	}
+	.header2 {
+		font-family: Arial, sans-serif;
+		font-size: 18pt;
+		font: bold;
+	}
+</style>
+
 <head>
 
 <title>Disloc Load and Delete Project</title>
@@ -43,28 +54,35 @@ function dataTableSelectOneRadio(radio) {
 
 <f:view>
 	<h:form>
-		<h:panelGrid columns="2" border="1">
+	<h:outputText styleClass="header2" value="Project Archive"/>
+        <p/>
+		  <h:outputText value="You don't have any archived projects."
+							 rendered="#{empty DislocBean.myProjectNameList}"/>
+		<h:panelGrid columns="2" 
+						 rendered="#{!(empty DislocBean.myProjectNameList)}"		 
+						 border="1">
 			<h:panelGrid columns="1" border="0">
 				<h:outputText escape="false" value="<b>Select Projects</b><br><br>" />
 				<h:outputText escape="false"
 					value="Please select from one of the previous projects." />
 	
-				<h:selectManyCheckbox id="projectlistforload" value="#{DislocBean.selectProjectsList}"
+				<h:selectManyCheckbox id="projectlistforload" 
+											 value="#{DislocBean.selectProjectsArray}"
 					onchange="dataTableSelectOneRadio(this)"
 					onclick="dataTableSelectOneRadio(this)"
 					layout="pageDirection">
 					
-					layout="pageDirection">
 					<f:selectItems value="#{DislocBean.myProjectNameList}" />
 				</h:selectManyCheckbox>
 				<h:commandButton value="Select"
 					action="#{DislocBean.toggleSelectProject}" />
 			</h:panelGrid>
-			<h:panelGrid columns="1" border="0">
+			<h:panelGrid columns="1" 
+							 border="0">
 				<h:outputText escape="false" value="<b>Select Projects</b><br><br>" />
 				<h:outputText escape="false"
 					value="Please select from one of the previous projects." />
-				<h:selectManyCheckbox id="projectfordelete" value="#{DislocBean.deleteProjectsList}"
+				<h:selectManyCheckbox id="projectfordelete" value="#{DislocBean.deleteProjectsArray}"
 					layout="pageDirection">
 					<f:selectItems value="#{DislocBean.myProjectNameList}" />
 				</h:selectManyCheckbox>
@@ -79,14 +97,14 @@ function dataTableSelectOneRadio(radio) {
 		<h:panelGrid columns="2" border="1">
 			<h:outputText value="Project Name:" />
 			<h:panelGroup>
-			<h:inputText id="projectName" value="#{MGBean.projectName}"
+			<h:inputText id="projectName" value="#{DislocBean.projectName}"
 				required="true" />
 			<h:message for="projectName" showDetail="true" showSummary="true"
 				errorStyle="color: red" />
 			</h:panelGroup>
 		</h:panelGrid>
 		<h:commandButton value="Make Selection"
-			action="#{Disloc.newProjectThenEditProject}" />
+			action="#{DislocBean.NewProjectThenEditProject}" />
 
 	</h:form>
 

@@ -45,6 +45,9 @@ source ./analyze-tseri-exec-deploy.sh
 cd $BUILD_DIR
 source ./geofestexec-deploy.sh
 
+cd $BUILD_DIR
+source ./dislocexec-deploy.sh
+
 #----------------------------------------------------------------------
 # Build the generic project classes.
 #----------------------------------------------------------------------

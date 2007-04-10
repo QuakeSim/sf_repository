@@ -91,15 +91,15 @@ function dataTableSelectOneRadio(radio) {
 		</h:form>
 
 		<h:panelGroup>
-			<h:form id="layerform" rendered="#{DislocBean.renderDislocGridParams}">
+			<h:form id="obsvform" rendered="#{DislocBean.renderDislocGridParamsForm}">
 
-				<h:panelGrid id="LayerTable" columns="2" footerClass="subtitle"
+				<h:panelGrid id="ObsvTable" columns="2" footerClass="subtitle"
 					headerClass="subtitlebig" styleClass="medium"
 					columnClasses="subtitle,medium">
 
 					<f:facet name="header">
 						<h:outputFormat id="output2" escape="false"
-							value="<b>define Grid of Observation Points </b>" />
+							value="<b>Define Grid of Observation Points </b>" />
 					</f:facet>
 
 					<h:outputText value="Grid Minimum X Value:" />
@@ -424,13 +424,13 @@ function dataTableSelectOneRadio(radio) {
   <p/>
 
 	<h:panelGroup 
-		rendered="#{!empty DislocBean.myFaultEntryForProjectList 
-							|| !empty DislocBean.myLayerEntryForProjectList}">
+		rendered="#{!empty DislocBean.myFaultEntryForProjectList
+					   || !empty DislocBean.myObservationsForProjectList}">
 
 	<h:outputText styleClass="header2" value="Current Project Components"/>
 
-	<h:panelGrid id="ProjectComponentList" columns="3" border="1"
-			columnClasses="alignTop, alignTop, alignTop">
+	<h:panelGrid id="ProjectComponentList" columns="2" border="1"
+			columnClasses="alignTop, alignTop">
 
 		<h:panelGroup>
 			<h:form id="UpdateSelectFaultsForm"
@@ -476,9 +476,9 @@ function dataTableSelectOneRadio(radio) {
 					actionListener="#{DislocBean.toggleUpdateFaultProjectEntry}" />
 
 			</h:form>
-
+         <p/>
 			<h:form id="UpdateSelectedParamsForm"
-				rendered="#{!empty DislocBean.myObservationsForProjectList}">
+				rendered="#{!empty DislocBean.myObsvEntryForProjectList}">
 				<h:panelGrid columns="1" border="1">
 					<h:panelGroup>
 						<h:panelGrid columns="1">
@@ -486,7 +486,7 @@ function dataTableSelectOneRadio(radio) {
 						</h:panelGrid>
 
 						<h:dataTable border="1"
-							value="#{DislocBean.myObservationsForProjectList}" var="myentry3">
+							value="#{DislocBean.myObsvEntryForProjectList}" var="myentry4">
 							<h:column>
 								<f:facet name="header">
 									<h:outputText escape="false" value="<b>Name</b>">
@@ -498,7 +498,7 @@ function dataTableSelectOneRadio(radio) {
 								<f:facet name="header">
 									<h:outputText escape="false" value="<b>View</b>" />
 								</f:facet>
-								<h:selectBooleanCheckbox value="#{myentry3.view}"
+								<h:selectBooleanCheckbox value="#{myentry4.view}"
 									onchange="selectOne(this.form,this)"
 									onclick="selectOne(this.form,this)" />
 
@@ -507,7 +507,7 @@ function dataTableSelectOneRadio(radio) {
 								<f:facet name="header">
 									<h:outputText escape="false" value="<b>Remove</b>" />
 								</f:facet>
-								<h:selectBooleanCheckbox value="#{myentry3.delete}"
+								<h:selectBooleanCheckbox value="#{myentry4.delete}"
 									onchange="selectOne(this.form,this)"
 									onclick="selectOne(this.form,this)" />
 							</h:column>
@@ -524,8 +524,8 @@ function dataTableSelectOneRadio(radio) {
 
 		<h:form id="RunDisloc">
 			<h:panelGrid columns="1" 
-				rendered="#{!(empty DislocBean.myFaultsForProjectList)
-							   && !(empty DislocBean.myObservationsForProjectList)}"
+				rendered="#{!(empty DislocBean.myFaultEntryForProjectList)
+							   && !(empty DislocBean.myObsvEntryForProjectList)}"
 				footerClass="subtitle"
 				headerClass="subtitlebig" styleClass="medium"
 				columnClasses="subtitle,medium">
@@ -535,8 +535,8 @@ function dataTableSelectOneRadio(radio) {
 				<h:outputFormat escape="false"
 					value="Click the button below to run Disloc.<br><br>" />
 
-					<h:commandButton value="Generate Mesh"
-						action="#{DislocBean.toggleFireMeshGen}" />
+					<h:commandButton value="Run Disloc"
+						action="#{DislocBean.runNonBlockingDislocJSF}" />
 
 			</h:panelGrid>
 		</h:form>

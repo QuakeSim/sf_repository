@@ -836,7 +836,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
      * This is used to handle the forms for editing a fault's params.
      */ 
     public String handleFaultEntryEdit(ActionEvent ev) {
-		  
 		  try {
 				// Catch the MyData item during the third phase of the JSF
 				// lifecycle.
@@ -1284,7 +1283,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
     }
     
-    //Method needs to be either re-writteb or deleted.
+    //Method needs to be either re-written or deleted.
     public void toggleRefineMesh(ActionEvent ev) {
     }
 

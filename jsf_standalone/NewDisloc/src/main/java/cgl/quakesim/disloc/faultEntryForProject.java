@@ -1,4 +1,4 @@
-package cgl.quakesim.geofest;
+package cgl.quakesim.disloc;
 
 
 import javax.faces.model.SelectItem;
