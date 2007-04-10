@@ -62,7 +62,7 @@ export SIMPLE_STFILTER_SA_HOME=$BUILD_DIR/jsf_standalone/simple_stfilter
 export PLOT_GRWS_TIMESERIES_SA_HOME=$BUILD_DIR/jsf_standalone/PlotGRWSTimeSeries
 export MESHGENERATOR_SA_HOME=$BUILD_DIR/jsf_standalone/MeshGenerator
 export NEW_MESHGENERATOR_SA_HOME=$BUILD_DIR/jsf_standalone/NewMeshGen2
-export DISLOC_SA_HOME=$BUILD_DIR/jsf_standalone/Disloc
+export DISLOC_SA_HOME=$BUILD_DIR/jsf_standalone/NewDisloc
 
 #Portlets
 export SIMPLEX_PORTLET_HOME=$BUILD_DIR/portlets/Simplex-portlet
