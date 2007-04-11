@@ -8,8 +8,8 @@ public class DislocParamsBean {
 	 double gridMinYValue;
 	 double gridXSpacing;
 	 double gridYSpacing;
-	 double gridXIterations;
-	 double gridYIterations;
+	 int gridXIterations;
+	 int gridYIterations;
 
 	 int observationPointStyle=1;
 
@@ -42,11 +42,11 @@ public class DislocParamsBean {
 		  this.gridYSpacing=gridYSpacing;
 	 }
 
-	 public void setGridXIterations(double gridXIterations) {
+	 public void setGridXIterations(int gridXIterations) {
 		  this.gridXIterations=gridXIterations;
 	 }
 
-	 public void setGridYIterations(double gridYIterations) {
+	 public void setGridYIterations(int gridYIterations) {
 		  this.gridYIterations=gridYIterations;
 	 }
 
@@ -80,11 +80,11 @@ public class DislocParamsBean {
 		  return this.gridYSpacing;
 	 }
 
-	 public double getGridXIterations() {
+	 public int getGridXIterations() {
 		  return this.gridXIterations;
 	 }
 
-	 public double getGridYIterations() {
+	 public int getGridYIterations() {
 		  return this.gridYIterations;
 	 }
 
