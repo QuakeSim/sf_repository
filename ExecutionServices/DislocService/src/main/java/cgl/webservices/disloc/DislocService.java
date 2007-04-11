@@ -88,10 +88,11 @@ public class DislocService extends AntVisco implements Runnable {
 	 
 	 public DislocResultsBean runNonBlockingDisloc(String userName,
 																  String projectName,
-																  DislocParamsBean dislocParams,
 																  Fault[] faults,
+																  DislocParamsBean dislocParams,
 																  String targetName) 
 		  throws Exception {
+		  System.out.println("RunNonBlocking called");
 		  if(targetName==null) targetName=DislocConstants.DISLOC_DEFAULT_TARGET;
 		  String jobStamp=generateJobStamp();
 
@@ -108,8 +109,8 @@ public class DislocService extends AntVisco implements Runnable {
 
 	 public DislocResultsBean runBlockingDisloc(String userName,
 															 String projectName,
-															 DislocParamsBean dislocParams,
 															 Fault[] faults,
+															 DislocParamsBean dislocParams,
 															 String targetName) 
 		  throws Exception {
 		  if(targetName==null) targetName=DislocConstants.DISLOC_DEFAULT_TARGET;
@@ -135,6 +136,7 @@ public class DislocService extends AntVisco implements Runnable {
 		  
 		  
 		  workDir=generateWorkDir(userName,projectName,jobStamp);
+		  makeWorkDir(workDir);
 		  createDislocInputFile(userName,
 										projectName,
 										dislocParams,
@@ -153,6 +155,7 @@ public class DislocService extends AntVisco implements Runnable {
 		  throws Exception {
 
 		  String inputFile=workDir+File.separator+projectName+".input";
+		  System.out.println("Input File: "+inputFile);
 		  PrintWriter pw=new PrintWriter(new FileWriter(inputFile),true);
 
 		  //Create the input file.  First create the grid points
@@ -197,6 +200,8 @@ public class DislocService extends AntVisco implements Runnable {
 	 protected String generateWorkDir(String userName,
 												 String projectName,
 												 String timeStamp) {
+
+
 		  
 		  String workDir=baseWorkDir+File.separator
 				+userName+File.separator
@@ -259,6 +264,21 @@ public class DislocService extends AntVisco implements Runnable {
 		  //Doesn't do anything yet.
 	 }
 
+   private void makeWorkDir(String workDir) 
+		  throws Exception {
+				
+		  System.out.println("Working Directory is "+workDir);
+
+		  String[] args0=new String[4];
+        args0[0]="-DworkDir.prop="+workDir;
+        args0[1]="-buildfile";
+        args0[2]=buildFilePath;
+        args0[3]="MakeWorkDir";
+		  
+        setArgs(args0);
+        run();
+    }  
+	
 	 protected void printFaultParams(PrintWriter pw, Fault[] faults)
 		  throws Exception {
 		  

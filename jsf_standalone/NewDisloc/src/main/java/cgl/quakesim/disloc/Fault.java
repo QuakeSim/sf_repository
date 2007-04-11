@@ -544,7 +544,7 @@ public class Fault  implements java.io.Serializable {
         new org.apache.axis.description.TypeDesc(Fault.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("urn:Fault", "Fault"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("urn:DislocService", "Fault"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("faultDepth");
         elemField.setXmlName(new javax.xml.namespace.QName("", "faultDepth"));

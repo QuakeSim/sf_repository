@@ -421,11 +421,9 @@ function dataTableSelectOneRadio(radio) {
 		</h:panelGroup>
 	</h:panelGrid>
 
-  <p/>
-
 	<h:panelGroup 
 		rendered="#{!empty DislocBean.myFaultEntryForProjectList
-					   || !empty DislocBean.myObservationsForProjectList}">
+					   || !empty DislocBean.myObsvEntryForProjectList}">
 
 	<h:outputText styleClass="header2" value="Current Project Components"/>
 
@@ -476,7 +474,7 @@ function dataTableSelectOneRadio(radio) {
 					actionListener="#{DislocBean.toggleUpdateFaultProjectEntry}" />
 
 			</h:form>
-         <p/>
+
 			<h:form id="UpdateSelectedParamsForm"
 				rendered="#{!empty DislocBean.myObsvEntryForProjectList}">
 				<h:panelGrid columns="1" border="1">

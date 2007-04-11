@@ -8,6 +8,6 @@
 package cgl.quakesim.disloc;
 
 public interface DislocService extends java.rmi.Remote {
-    public cgl.quakesim.disloc.DislocResultsBean runNonBlockingDisloc(java.lang.String userName, java.lang.String projectName, cgl.quakesim.disloc.DislocParamsBean dislocParams, cgl.quakesim.disloc.Fault[] faults, java.lang.String targetName) throws java.rmi.RemoteException;
-    public cgl.quakesim.disloc.DislocResultsBean runBlockingDisloc(java.lang.String userName, java.lang.String projectName, cgl.quakesim.disloc.DislocParamsBean dislocParams, cgl.quakesim.disloc.Fault[] faults, java.lang.String targetName) throws java.rmi.RemoteException;
+    public cgl.quakesim.disloc.DislocResultsBean runBlockingDisloc(java.lang.String userName, java.lang.String projectName, cgl.quakesim.disloc.Fault[] faults, cgl.quakesim.disloc.DislocParamsBean dislocParams, java.lang.String targetName) throws java.rmi.RemoteException;
+    public cgl.quakesim.disloc.DislocResultsBean runNonBlockingDisloc(java.lang.String userName, java.lang.String projectName, cgl.quakesim.disloc.Fault[] faults, cgl.quakesim.disloc.DislocParamsBean dislocParams, java.lang.String targetName) throws java.rmi.RemoteException;
 }

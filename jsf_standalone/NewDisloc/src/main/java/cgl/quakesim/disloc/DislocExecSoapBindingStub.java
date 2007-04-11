@@ -24,39 +24,39 @@ public class DislocExecSoapBindingStub extends org.apache.axis.client.Stub imple
         org.apache.axis.description.OperationDesc oper;
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
-        oper.setName("runNonBlockingDisloc");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "userName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
-        oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "projectName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
-        oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "dislocParams"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://localhost:8080/dislocexec/services/DislocExec", "DislocParamsBean"), cgl.quakesim.disloc.DislocParamsBean.class, false, false);
-        oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "faults"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://localhost:8080/dislocexec/services/DislocExec", "ArrayOf_tns1_Fault"), cgl.quakesim.disloc.Fault[].class, false, false);
-        oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "targetName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
-        oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("urn:DislocResultsBean", "DislocResultsBean"));
-        oper.setReturnClass(cgl.quakesim.disloc.DislocResultsBean.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "runNonBlockingDislocReturn"));
-        oper.setStyle(org.apache.axis.constants.Style.RPC);
-        oper.setUse(org.apache.axis.constants.Use.ENCODED);
-        _operations[0] = oper;
-
-        oper = new org.apache.axis.description.OperationDesc();
         oper.setName("runBlockingDisloc");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "userName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "projectName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "dislocParams"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://localhost:8080/dislocexec/services/DislocExec", "DislocParamsBean"), cgl.quakesim.disloc.DislocParamsBean.class, false, false);
-        oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "faults"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://localhost:8080/dislocexec/services/DislocExec", "ArrayOf_tns1_Fault"), cgl.quakesim.disloc.Fault[].class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "dislocParams"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn:DislocService", "DislocParamsBean"), cgl.quakesim.disloc.DislocParamsBean.class, false, false);
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "targetName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("urn:DislocResultsBean", "DislocResultsBean"));
+        oper.setReturnType(new javax.xml.namespace.QName("urn:DislocService", "DislocResultsBean"));
         oper.setReturnClass(cgl.quakesim.disloc.DislocResultsBean.class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "runBlockingDislocReturn"));
+        oper.setStyle(org.apache.axis.constants.Style.RPC);
+        oper.setUse(org.apache.axis.constants.Use.ENCODED);
+        _operations[0] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("runNonBlockingDisloc");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "userName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "projectName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "faults"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://localhost:8080/dislocexec/services/DislocExec", "ArrayOf_tns1_Fault"), cgl.quakesim.disloc.Fault[].class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "dislocParams"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn:DislocService", "DislocParamsBean"), cgl.quakesim.disloc.DislocParamsBean.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "targetName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("urn:DislocService", "DislocResultsBean"));
+        oper.setReturnClass(cgl.quakesim.disloc.DislocResultsBean.class);
+        oper.setReturnQName(new javax.xml.namespace.QName("", "runNonBlockingDislocReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[1] = oper;
@@ -96,26 +96,26 @@ public class DislocExecSoapBindingStub extends org.apache.axis.client.Stub imple
             cachedSerQNames.add(qName);
             cls = cgl.quakesim.disloc.Fault[].class;
             cachedSerClasses.add(cls);
-            qName = new javax.xml.namespace.QName("urn:Fault", "Fault");
+            qName = new javax.xml.namespace.QName("urn:DislocService", "Fault");
             qName2 = null;
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("http://localhost:8080/dislocexec/services/DislocExec", "DislocParamsBean");
+            qName = new javax.xml.namespace.QName("urn:DislocService", "DislocParamsBean");
             cachedSerQNames.add(qName);
             cls = cgl.quakesim.disloc.DislocParamsBean.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
-            qName = new javax.xml.namespace.QName("urn:DislocResultsBean", "DislocResultsBean");
+            qName = new javax.xml.namespace.QName("urn:DislocService", "DislocResultsBean");
             cachedSerQNames.add(qName);
             cls = cgl.quakesim.disloc.DislocResultsBean.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
-            qName = new javax.xml.namespace.QName("urn:Fault", "Fault");
+            qName = new javax.xml.namespace.QName("urn:DislocService", "Fault");
             cachedSerQNames.add(qName);
             cls = cgl.quakesim.disloc.Fault.class;
             cachedSerClasses.add(cls);
@@ -189,7 +189,7 @@ public class DislocExecSoapBindingStub extends org.apache.axis.client.Stub imple
         }
     }
 
-    public cgl.quakesim.disloc.DislocResultsBean runNonBlockingDisloc(java.lang.String userName, java.lang.String projectName, cgl.quakesim.disloc.DislocParamsBean dislocParams, cgl.quakesim.disloc.Fault[] faults, java.lang.String targetName) throws java.rmi.RemoteException {
+    public cgl.quakesim.disloc.DislocResultsBean runBlockingDisloc(java.lang.String userName, java.lang.String projectName, cgl.quakesim.disloc.Fault[] faults, cgl.quakesim.disloc.DislocParamsBean dislocParams, java.lang.String targetName) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -198,11 +198,11 @@ public class DislocExecSoapBindingStub extends org.apache.axis.client.Stub imple
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("http://disloc.webservices.cgl", "runNonBlockingDisloc"));
+        _call.setOperationName(new javax.xml.namespace.QName("http://disloc.webservices.cgl", "runBlockingDisloc"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {userName, projectName, dislocParams, faults, targetName});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {userName, projectName, faults, dislocParams, targetName});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -220,7 +220,7 @@ public class DislocExecSoapBindingStub extends org.apache.axis.client.Stub imple
 }
     }
 
-    public cgl.quakesim.disloc.DislocResultsBean runBlockingDisloc(java.lang.String userName, java.lang.String projectName, cgl.quakesim.disloc.DislocParamsBean dislocParams, cgl.quakesim.disloc.Fault[] faults, java.lang.String targetName) throws java.rmi.RemoteException {
+    public cgl.quakesim.disloc.DislocResultsBean runNonBlockingDisloc(java.lang.String userName, java.lang.String projectName, cgl.quakesim.disloc.Fault[] faults, cgl.quakesim.disloc.DislocParamsBean dislocParams, java.lang.String targetName) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -229,11 +229,11 @@ public class DislocExecSoapBindingStub extends org.apache.axis.client.Stub imple
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("http://disloc.webservices.cgl", "runBlockingDisloc"));
+        _call.setOperationName(new javax.xml.namespace.QName("http://disloc.webservices.cgl", "runNonBlockingDisloc"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {userName, projectName, dislocParams, faults, targetName});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {userName, projectName, faults, dislocParams, targetName});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;

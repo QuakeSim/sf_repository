@@ -11,9 +11,9 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
     <sequence>
      <element name="gridMinXValue" type="xsd:double"/>
      <element name="gridMinYValue" type="xsd:double"/>
-     <element name="gridXIterations" type="xsd:double"/>
+     <element name="gridXIterations" type="xsd:int"/>
      <element name="gridXSpacing" type="xsd:double"/>
-     <element name="gridYIterations" type="xsd:double"/>
+     <element name="gridYIterations" type="xsd:int"/>
      <element name="gridYSpacing" type="xsd:double"/>
      <element name="observationPointStyle" type="xsd:int"/>
      <element name="originLat" type="xsd:double"/>

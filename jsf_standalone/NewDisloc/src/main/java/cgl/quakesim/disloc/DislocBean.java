@@ -98,6 +98,9 @@ public class DislocBean extends GenericSopacBean {
 		  super();
 
 		  dislocService=new DislocServiceServiceLocator().getDislocExec(new URL(dislocServiceUrl));
+		  System.out.println("Binding to: "+dislocServiceUrl);
+
+		  dislocParams.setObservationPointStyle(1);
 
 		  //We are done.
 		  System.out.println("Primary Disloc Bean Created");
@@ -160,12 +163,12 @@ public class DislocBean extends GenericSopacBean {
 		  throws Exception {
 		  
 		  Fault[] faults=getFaultsFromDB();
-		  DislocParamsBean paramsBean=getDislocParamsFromDB();
+		  DislocParamsBean dislocParams=getDislocParamsFromDB();
 		  
 		  DislocResultsBean dislocResultsBean=dislocService.runBlockingDisloc(userName,
 																									 projectName,
-																									 paramsBean,
 																									 faults,
+																									 dislocParams,
 																									 null);
 		  setJobToken(dislocResultsBean.getJobUIDStamp());
 		  storeResultsInContext(userName,
@@ -184,12 +187,17 @@ public class DislocBean extends GenericSopacBean {
 		  throws Exception {
 
 		  Fault[] faults=getFaultsFromDB();
-		  DislocParamsBean paramsBean=getDislocParamsFromDB();
-		  
+		  DislocParamsBean dislocParams=getDislocParamsFromDB();
+		 
+		  System.out.println(dislocParams.getObservationPointStyle());
+		  System.out.println(dislocParams.getGridMinXValue());
+		  System.out.println(dislocParams.getGridXIterations());
+		  System.out.println(dislocParams.getGridXSpacing());
+
 		  DislocResultsBean dislocResultsBean=dislocService.runNonBlockingDisloc(userName,
 																										 projectName,
-																										 paramsBean,
 																										 faults,
+																										 dislocParams,
 																										 null);
 		  setJobToken(dislocResultsBean.getJobUIDStamp());
 		  storeResultsInContext(userName,

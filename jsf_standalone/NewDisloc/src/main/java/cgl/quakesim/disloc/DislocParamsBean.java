@@ -12,11 +12,11 @@ public class DislocParamsBean  implements java.io.Serializable {
 
     private double gridMinYValue;
 
-    private double gridXIterations;
+    private int gridXIterations;
 
     private double gridXSpacing;
 
-    private double gridYIterations;
+    private int gridYIterations;
 
     private double gridYSpacing;
 
@@ -32,9 +32,9 @@ public class DislocParamsBean  implements java.io.Serializable {
     public DislocParamsBean(
            double gridMinXValue,
            double gridMinYValue,
-           double gridXIterations,
+           int gridXIterations,
            double gridXSpacing,
-           double gridYIterations,
+           int gridYIterations,
            double gridYSpacing,
            int observationPointStyle,
            double originLat,
@@ -96,7 +96,7 @@ public class DislocParamsBean  implements java.io.Serializable {
      * 
      * @return gridXIterations
      */
-    public double getGridXIterations() {
+    public int getGridXIterations() {
         return gridXIterations;
     }
 
@@ -106,7 +106,7 @@ public class DislocParamsBean  implements java.io.Serializable {
      * 
      * @param gridXIterations
      */
-    public void setGridXIterations(double gridXIterations) {
+    public void setGridXIterations(int gridXIterations) {
         this.gridXIterations = gridXIterations;
     }
 
@@ -136,7 +136,7 @@ public class DislocParamsBean  implements java.io.Serializable {
      * 
      * @return gridYIterations
      */
-    public double getGridYIterations() {
+    public int getGridYIterations() {
         return gridYIterations;
     }
 
@@ -146,7 +146,7 @@ public class DislocParamsBean  implements java.io.Serializable {
      * 
      * @param gridYIterations
      */
-    public void setGridYIterations(double gridYIterations) {
+    public void setGridYIterations(int gridYIterations) {
         this.gridYIterations = gridYIterations;
     }
 
@@ -264,9 +264,9 @@ public class DislocParamsBean  implements java.io.Serializable {
         int _hashCode = 1;
         _hashCode += new Double(getGridMinXValue()).hashCode();
         _hashCode += new Double(getGridMinYValue()).hashCode();
-        _hashCode += new Double(getGridXIterations()).hashCode();
+        _hashCode += getGridXIterations();
         _hashCode += new Double(getGridXSpacing()).hashCode();
-        _hashCode += new Double(getGridYIterations()).hashCode();
+        _hashCode += getGridYIterations();
         _hashCode += new Double(getGridYSpacing()).hashCode();
         _hashCode += getObservationPointStyle();
         _hashCode += new Double(getOriginLat()).hashCode();
@@ -280,7 +280,7 @@ public class DislocParamsBean  implements java.io.Serializable {
         new org.apache.axis.description.TypeDesc(DislocParamsBean.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://localhost:8080/dislocexec/services/DislocExec", "DislocParamsBean"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("urn:DislocService", "DislocParamsBean"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("gridMinXValue");
         elemField.setXmlName(new javax.xml.namespace.QName("", "gridMinXValue"));
@@ -296,7 +296,7 @@ public class DislocParamsBean  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("gridXIterations");
         elemField.setXmlName(new javax.xml.namespace.QName("", "gridXIterations"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
@@ -308,7 +308,7 @@ public class DislocParamsBean  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("gridYIterations");
         elemField.setXmlName(new javax.xml.namespace.QName("", "gridYIterations"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
