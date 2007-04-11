@@ -88,7 +88,7 @@ public class DislocBean extends GenericSopacBean {
 
 	 //Service information
 	 DislocService dislocService;
-	 String dislocServiceUrl="http://localhost:8080/dislocexec/services/DislocExec";
+	 String dislocServiceUrl="http://gf19.ucs.indiana.edu:8080/dislocexec/services/DislocExec";
     String faultDBServiceUrl="http://gf2.ucs.indiana.edu:9090/axis/services/Select";
 
     /**
@@ -551,7 +551,8 @@ public class DislocBean extends GenericSopacBean {
 				double x = (lonEnd - lonStart) * factor;
 				double y = (latEnd - latStart) * 111.32;
 				//				String length = format.format(Math.sqrt(x * x + y * y));
-				double length = Math.sqrt(x * x + y * y);
+				//				double length = Math.sqrt(x * x + y * y);
+				double length=Double.parseDouble(format.format(Math.sqrt(x * x + y * y)));
 				tmp_fault.setFaultName (theFault);
 				tmp_fault.setFaultLocationX(0.0);
 				tmp_fault.setFaultLocationY(0.0);

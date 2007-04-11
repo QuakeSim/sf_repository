@@ -185,7 +185,7 @@ public class DislocService extends AntVisco implements Runnable {
 
 		  String[] args=new String[6];
 		  args[0]="-Dbindir.prop="+binDir;
-		  args[1]="-Dworkdir.prop="+workDir;
+		  args[1]="-DworkDir.prop="+workDir;
 		  args[2]="-DprojectName.prop="+projectName;
 		  args[3]="-buildfile";
 		  args[4]=buildFilePath;
