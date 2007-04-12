@@ -1399,6 +1399,7 @@ public class DislocBean extends GenericSopacBean {
 					 DislocProjectSummaryBean dpsb=(DislocProjectSummaryBean)results.next();
 					 myArchivedDislocResultsList.add(dpsb);
 				}
+				db.close();
 		  }
 		  catch (Exception ex){
 				ex.printStackTrace();

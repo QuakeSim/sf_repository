@@ -12,8 +12,6 @@ public class DislocResultsBean  implements java.io.Serializable {
 
     private java.lang.String jobUIDStamp;
 
-    private java.lang.String ouptutFileUrl;
-
     private java.lang.String outputFileUrl;
 
     private java.lang.String projectName;
@@ -26,13 +24,11 @@ public class DislocResultsBean  implements java.io.Serializable {
     public DislocResultsBean(
            java.lang.String inputFileUrl,
            java.lang.String jobUIDStamp,
-           java.lang.String ouptutFileUrl,
            java.lang.String outputFileUrl,
            java.lang.String projectName,
            java.lang.String stdoutUrl) {
            this.inputFileUrl = inputFileUrl;
            this.jobUIDStamp = jobUIDStamp;
-           this.ouptutFileUrl = ouptutFileUrl;
            this.outputFileUrl = outputFileUrl;
            this.projectName = projectName;
            this.stdoutUrl = stdoutUrl;
@@ -76,26 +72,6 @@ public class DislocResultsBean  implements java.io.Serializable {
      */
     public void setJobUIDStamp(java.lang.String jobUIDStamp) {
         this.jobUIDStamp = jobUIDStamp;
-    }
-
-
-    /**
-     * Gets the ouptutFileUrl value for this DislocResultsBean.
-     * 
-     * @return ouptutFileUrl
-     */
-    public java.lang.String getOuptutFileUrl() {
-        return ouptutFileUrl;
-    }
-
-
-    /**
-     * Sets the ouptutFileUrl value for this DislocResultsBean.
-     * 
-     * @param ouptutFileUrl
-     */
-    public void setOuptutFileUrl(java.lang.String ouptutFileUrl) {
-        this.ouptutFileUrl = ouptutFileUrl;
     }
 
 
@@ -176,9 +152,6 @@ public class DislocResultsBean  implements java.io.Serializable {
             ((this.jobUIDStamp==null && other.getJobUIDStamp()==null) || 
              (this.jobUIDStamp!=null &&
               this.jobUIDStamp.equals(other.getJobUIDStamp()))) &&
-            ((this.ouptutFileUrl==null && other.getOuptutFileUrl()==null) || 
-             (this.ouptutFileUrl!=null &&
-              this.ouptutFileUrl.equals(other.getOuptutFileUrl()))) &&
             ((this.outputFileUrl==null && other.getOutputFileUrl()==null) || 
              (this.outputFileUrl!=null &&
               this.outputFileUrl.equals(other.getOutputFileUrl()))) &&
@@ -204,9 +177,6 @@ public class DislocResultsBean  implements java.io.Serializable {
         }
         if (getJobUIDStamp() != null) {
             _hashCode += getJobUIDStamp().hashCode();
-        }
-        if (getOuptutFileUrl() != null) {
-            _hashCode += getOuptutFileUrl().hashCode();
         }
         if (getOutputFileUrl() != null) {
             _hashCode += getOutputFileUrl().hashCode();
@@ -236,12 +206,6 @@ public class DislocResultsBean  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("jobUIDStamp");
         elemField.setXmlName(new javax.xml.namespace.QName("", "jobUIDStamp"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
-        elemField.setNillable(true);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("ouptutFileUrl");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "ouptutFileUrl"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

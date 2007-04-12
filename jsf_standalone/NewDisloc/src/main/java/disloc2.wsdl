@@ -46,7 +46,6 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
     <sequence>
      <element name="inputFileUrl" nillable="true" type="soapenc:string"/>
      <element name="jobUIDStamp" nillable="true" type="soapenc:string"/>
-     <element name="ouptutFileUrl" nillable="true" type="soapenc:string"/>
      <element name="outputFileUrl" nillable="true" type="soapenc:string"/>
      <element name="projectName" nillable="true" type="soapenc:string"/>
      <element name="stdoutUrl" nillable="true" type="soapenc:string"/>

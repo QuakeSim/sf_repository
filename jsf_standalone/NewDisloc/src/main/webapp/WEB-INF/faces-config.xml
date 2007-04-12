@@ -72,4 +72,12 @@
 		</navigation-case>
 	</navigation-rule>
 
+	<navigation-rule>
+		<from-view-id>/FetchResults.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>disloc-this</from-outcome>
+			<to-view-id>/FetchResults.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
 </faces-config>
