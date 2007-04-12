@@ -93,8 +93,8 @@ source ./rdahmm-portlet-install.sh
 cd $BUILD_DIR
 source ./stationmonitor-sa-install.sh
 
-cd $BUILD_DIR
-source ./meshgenerator-portlet-install.sh
+#cd $BUILD_DIR
+#source ./meshgenerator-portlet-install.sh
 
 cd $BUILD_DIR
 source ./realtime-rdahmm-sa-install.sh

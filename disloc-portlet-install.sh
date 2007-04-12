@@ -13,7 +13,7 @@ echo ""
 echo "######################################"
 echo "Installing Disloc Portlet"
 echo "######################################"
-cd $NEW_DISLOC_PORTLET_HOME
+cd $DISLOC_PORTLET_HOME
 export PORTLET_NAME=Disloc-portlet
 if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME -Dportal.host.name=$PORTAL_HOST_NAME
 then 
