@@ -1,0 +1,33 @@
+<portlet-tabbed-pane>
+    <portlet-tab label="Disloc-Portlet">
+        <title lang="en">Disloc-Portlet</title>
+        <portlet-tabbed-pane style="sub-menu">
+            <portlet-tab label="Disloc-Setup">
+                <title lang="en">Run Disloc</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="Disloc-PF">
+                                <portlet-class>Disloc-portlet#Disloc-portlet</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+              <portlet-tab label="Fetch-disloc-results">
+                <title lang="en">Fetch Disloc Results</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="Disloc-fetchmesh-PF">
+                                <portlet-class>Disloc-portlet#fetchresults-portlet</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+        </portlet-tabbed-pane>
+    </portlet-tab>
+</portlet-tabbed-pane>
+
+
