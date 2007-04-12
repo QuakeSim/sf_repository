@@ -62,7 +62,7 @@ function dataTableSelectOneRadio(radio) {
 						 rendered="#{!(empty DislocBean.myProjectNameList)}"		 
 						 border="1">
 			<h:panelGrid columns="1" border="0">
-				<h:outputText escape="false" value="<b>Select Projects</b><br><br>" />
+				<h:outputText escape="false" value="<b>Select Project</b><br><br>" />
 				<h:outputText escape="false"
 					value="Please select from one of the previous projects." />
 	
@@ -79,7 +79,7 @@ function dataTableSelectOneRadio(radio) {
 			</h:panelGrid>
 			<h:panelGrid columns="1" 
 							 border="0">
-				<h:outputText escape="false" value="<b>Select Projects</b><br><br>" />
+				<h:outputText escape="false" value="<b>Delete Projects</b><br><br>" />
 				<h:outputText escape="false"
 					value="Please select from one of the previous projects." />
 				<h:selectManyCheckbox id="projectfordelete" value="#{DislocBean.deleteProjectsArray}"

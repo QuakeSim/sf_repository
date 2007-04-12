@@ -16,7 +16,7 @@ public class DislocResultsBean {
 	 public String getInputFileUrl() {
 		  return inputFileUrl;
 	 }
-	 public String getOuptutFileUrl() {
+	 public String getOutputFileUrl() {
 		  return outputFileUrl;
 	 }
 	 public String getStdoutUrl() {

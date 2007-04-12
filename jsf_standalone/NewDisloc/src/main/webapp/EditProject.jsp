@@ -221,6 +221,18 @@ function dataTableSelectOneRadio(radio) {
 							value="#{DislocBean.currentFault.faultTensileSlip}" required="true" />
 					</h:panelGroup>
 
+					<h:outputText value="Lame Lambda:" />
+					<h:panelGroup>
+						<h:inputText id="LameLambda"
+							value="#{DislocBean.currentFault.faultLameLambda}" required="true" />
+					</h:panelGroup>
+
+					<h:outputText value="Lame Mu:" />
+					<h:panelGroup>
+						<h:inputText id="LameMu"
+							value="#{DislocBean.currentFault.faultLameMu}" required="true" />
+					</h:panelGroup>
+
 					<h:commandButton id="addfault" value="select"
 						actionListener="#{DislocBean.toggleAddFaultForProject}" />
 

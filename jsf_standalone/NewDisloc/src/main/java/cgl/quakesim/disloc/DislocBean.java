@@ -41,7 +41,7 @@ public class DislocBean extends GenericSopacBean {
     
 	 //Some navigation strings.
     static final String DEFAULT_USER_NAME="disloc_default_user";
-	 static final String DISLOC_NAV_STRING="Disloc-this";
+	 static final String DISLOC_NAV_STRING="disloc-submitted";
 	 static final String SEPARATOR="/";
 
     /**
@@ -80,6 +80,7 @@ public class DislocBean extends GenericSopacBean {
     List myFaultEntryForProjectList = new ArrayList();    
 	 List myObservationsForProjectList=new ArrayList();
 	 List myObsvEntryForProjectList=new ArrayList();
+	 List myArchivedDislocResultsList=new ArrayList();
 
 	 HtmlDataTable myFaultDataTable;
 	 
@@ -146,11 +147,24 @@ public class DislocBean extends GenericSopacBean {
 		  return paramsBean;
 	 }
 	 
-	 protected void storeResultsInContext(String userName,
+	 protected void storeProjectInContext(String userName,
 													  String projectName,
 													  String jobUIDStamp,
-													  DislocResultsBean dislocResultsBean) {
-		  //Fill in later
+													  DislocParamsBean paramsBean,
+													  DislocResultsBean dislocResultsBean) 
+		  throws Exception {
+		  DislocProjectSummaryBean summaryBean=new DislocProjectSummaryBean();
+		  summaryBean.setUserName(userName);
+		  summaryBean.setProjectName(projectName);
+		  summaryBean.setJobUIDStamp(jobUIDStamp);
+		  summaryBean.setParamsBean(paramsBean);
+		  summaryBean.setResultsBean(dislocResultsBean);
+		  summaryBean.setCreationDate(new Date().toString());
+
+ 		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");	
+		  db.set(summaryBean);
+		  db.commit();
+		  db.close();
 	 }
 
 
@@ -164,6 +178,8 @@ public class DislocBean extends GenericSopacBean {
 		  
 		  Fault[] faults=getFaultsFromDB();
 		  DislocParamsBean dislocParams=getDislocParamsFromDB();
+		  // This will be fixed at "1" for now.
+		  dislocParams.setObservationPointStyle(1);
 		  
 		  DislocResultsBean dislocResultsBean=dislocService.runBlockingDisloc(userName,
 																									 projectName,
@@ -171,9 +187,12 @@ public class DislocBean extends GenericSopacBean {
 																									 dislocParams,
 																									 null);
 		  setJobToken(dislocResultsBean.getJobUIDStamp());
-		  storeResultsInContext(userName,
+
+		  
+		  storeProjectInContext(userName,
 										projectName,
 										dislocResultsBean.getJobUIDStamp(),
+										dislocParams,
 										dislocResultsBean);
 		  return DISLOC_NAV_STRING;
     }
@@ -188,6 +207,7 @@ public class DislocBean extends GenericSopacBean {
 
 		  Fault[] faults=getFaultsFromDB();
 		  DislocParamsBean dislocParams=getDislocParamsFromDB();
+		  dislocParams.setObservationPointStyle(1);
 		 
 		  System.out.println(dislocParams.getObservationPointStyle());
 		  System.out.println(dislocParams.getGridMinXValue());
@@ -200,9 +220,11 @@ public class DislocBean extends GenericSopacBean {
 																										 dislocParams,
 																										 null);
 		  setJobToken(dislocResultsBean.getJobUIDStamp());
-		  storeResultsInContext(userName,
+		  System.out.println("Output file url:"+dislocResultsBean.getOutputFileUrl());
+		  storeProjectInContext(userName,
 										projectName,
 										dislocResultsBean.getJobUIDStamp(),
+										dislocParams,
 										dislocResultsBean);
 
 		  return DISLOC_NAV_STRING;
@@ -1364,5 +1386,25 @@ public class DislocBean extends GenericSopacBean {
 		  this.dislocParams=dislocParams;
 	 }
 
+	 public void setMyArchivedDislocResultsList(List myArchivedDislocResultsList)  {
+		 this.myArchivedDislocResultsList=myArchivedDislocResultsList;
+	 }
+	 
+	 public List getMyArchivedDislocResultsList() {
+		  myArchivedDislocResultsList.clear();
+		  try {
+				db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");		  
+				ObjectSet results=db.get(new DislocProjectSummaryBean());
+				while(results.hasNext()) {
+					 DislocProjectSummaryBean dpsb=(DislocProjectSummaryBean)results.next();
+					 myArchivedDislocResultsList.add(dpsb);
+				}
+		  }
+		  catch (Exception ex){
+				ex.printStackTrace();
+		  }
+		  return this.myArchivedDislocResultsList;
+	 }
+	 
 	 
 }
