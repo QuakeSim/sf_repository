@@ -104,6 +104,9 @@ mvn clean -Dtomcat.base.dir=$CATALINA_HOME -Dgoogle.key=$GOOGLE_KEY -Dportal.hos
 cd $NEW_MESHGENERATOR_PORTLET_HOME
 mvn clean -Dtomcat.base.dir=$CATALINA_HOME -Dgoogle.key=$GOOGLE_KEY -Dportal.host.name=$PORTAL_HOST_NAME
 
+cd $DISLOC_PORTLET_HOME
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME -Dgoogle.key=$GOOGLE_KEY -Dportal.host.name=$PORTAL_HOST_NAME
+
 #--------------------------------------------------
 # Clean up the execution services.
 #--------------------------------------------------
