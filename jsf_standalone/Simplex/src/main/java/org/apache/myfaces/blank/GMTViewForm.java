@@ -15,6 +15,23 @@ public class GMTViewForm {
 	boolean bplot_calc=false;
 	String plot_resid="";
 	boolean bplot_resid=false;
+	
+	public void reset() {
+		area_prop = "";
+		scale_prop = "";
+		mapticks_prop = "";
+		vectormag_prop = "";
+		plot_background = "";
+		bplot_background = false;
+		plot_causative = "";
+		bplot_causative = false;
+		plot_obs = "";
+		bplot_obs = false;
+		plot_calc = "";
+		bplot_calc = false;
+		plot_resid = "";
+		bplot_resid = false;
+	}
 
 	public boolean getBplot_resid() {
 		if (this.plot_resid.equals("")) {

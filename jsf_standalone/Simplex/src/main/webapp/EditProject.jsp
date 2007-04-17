@@ -277,7 +277,7 @@ vertical-align:top;
 						<h:selectBooleanCheckbox id="faultStrikeAngleVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultStrikeAngleVary}" />
 
-						<h:outputText value="Slip:" />
+						<h:outputText value="Dip Slip:" />
 						<h:panelGroup>
 							<h:inputText id="FaultSlip"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultSlip}"
@@ -288,7 +288,7 @@ vertical-align:top;
 						<h:selectBooleanCheckbox id="faultDipSlipVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultDipSlipVary}" />
 
-						<h:outputText value="Rake Angle:" />
+						<h:outputText value="Strike Slip:" />
 						<h:panelGroup>
 							<h:inputText id="FaultRakeAngle"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultRakeAngle}"

@@ -43,7 +43,7 @@ function dataTableSelectOneRadio(radio) {
 
 </script>
 <f:view>
-	<h:form>
+	<h:form id="linkDummyForm">
 		<h:panelGrid columns="1" border="0">
 			<h:panelGroup>
 				<h:outputText escape="false" value="Click " />
@@ -148,14 +148,19 @@ function dataTableSelectOneRadio(radio) {
 
 
 					<h:commandButton id="ReplotGMT" value="Click here to replot"
-						actionListener="#{SimplexBean.toggleReplotGMT}" />
+						action="#{SimplexBean.toggleReplotGMT}" />
+
+
 
 				</h:panelGrid>
 			</h:form>
 
 			<h:panelGrid columns="1" border="0">
+				<h:outputLink id="dldCmdLink" value="#{SimplexBean.gmtPlotPdfUrl}" target="iframe-name">
+          <h:outputText value="load pdf in box"/>
+        </h:outputLink>
 				<f:verbatim>
-					<iframe src="#{SimplexBean.gmtPlotPdfUrl}" width=500 height=500></iframe>
+					<iframe src="#{SimplexBean.gmtPlotPdfUrl}" name="iframe-name" width=500 height=500></iframe>
 				</f:verbatim>
 			</h:panelGrid>
 		</h:panelGrid>

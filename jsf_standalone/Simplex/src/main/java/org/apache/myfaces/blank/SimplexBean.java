@@ -379,7 +379,7 @@ public class SimplexBean extends GenericSopacBean {
 		// Get rid of spaces
 		while (spacyString.indexOf(" ") > -1) {
 			spacyString = spacyString.substring(0, spacyString.indexOf(" "))
-					+ "_"
+					+ ""
 					+ spacyString.substring(spacyString.indexOf(" ") + 1,
 							spacyString.length());
 
@@ -827,6 +827,7 @@ public class SimplexBean extends GenericSopacBean {
 				String name = st.nextToken();
 				String val = st.nextToken();
 				System.out.println("Props processed:" + name + " " + val);
+				val = removeSpaces(val);
 				if (name.equals("area_prop")) {
 					currentGMTViewForm.area_prop = val;
 				} else if (name.equals("scale_prop")) {
@@ -916,10 +917,7 @@ public class SimplexBean extends GenericSopacBean {
 			// --------------------------------------------------
 			// Set up the FileService client
 			// --------------------------------------------------
-			FSClientStub ant_fsclient = new FSClientStub();
-			ant_fsclient.setBindingUrl(fileServiceUrl);
-			FSClientStub sj_fsclient = new FSClientStub();
-			sj_fsclient.setBindingUrl(submitjob_fileServiceUrl);
+			FSClientStub fsclient = new FSClientStub();
 
 			// --------------------------------------------------
 			// Set up the job submission service
@@ -936,10 +934,24 @@ public class SimplexBean extends GenericSopacBean {
 			// Set the download file name
 			String dataFile = baseWorkDir + "/" + userName + "/"
 					+ selectedProject + "/" + selectedProject + ".output";
-			ant_fsclient.downloadFile(dataFile, "/tmp/tmpforsj");
+			fsclient.setBindingUrl(fileServiceUrl);
+			fsclient.downloadFile(dataFile, "/tmp/tmpforsj");
 			String sjdataFile = submitjob_baseWorkDir + "/" + userName + "/"
 					+ selectedProject + "/" + selectedProject + ".output";
-			sj_fsclient.uploadFile("/tmp/tmpforsj", sjdataFile);
+
+			String command = "/bin/mkdir " + submitjob_baseWorkDir + "/" + userName ;
+			System.out.println("Command is " + command);
+			String[] stuff = sjws.execLocalCommand(command);
+			System.out.println("Stuff: " + stuff[0]);
+			System.out.println("Stuff: " + stuff[1]);
+			command = "/bin/mkdir " + submitjob_baseWorkDir + "/" + userName + "/"	+ selectedProject + "/";
+			System.out.println("Command is " + command);
+			stuff = sjws.execLocalCommand(command);
+			System.out.println("Stuff: " + stuff[0]);
+			System.out.println("Stuff: " + stuff[1]);
+	
+			fsclient.setBindingUrl(submitjob_fileServiceUrl);
+			fsclient.uploadFile("/tmp/tmpforsj", sjdataFile);
 
 			long timestamp = (new Date()).getTime();
 			baseImageName = selectedProject + timestamp;
@@ -957,14 +969,14 @@ public class SimplexBean extends GenericSopacBean {
 			if (origin_lat == null || origin_lat.equals("null"))
 				origin_lat = "";
 
-			String command = submitjob_binPath + "map_simplex.prl "
+			command = submitjob_binPath + "map_simplex.prl "
 					+ "--origin_lat " + origin_lat + " " + "--origin_lon "
 					+ origin_lon + " " + sjdataFile + " "
 					+ submitjob_baseWorkDir + "/" + userName + "/"
 					+ selectedProject + "/" + " " + baseImageName;
 			System.out.println("Command is " + command);
 
-			String[] stuff = sjws.execLocalCommand(command);
+			stuff = sjws.execLocalCommand(command);
 
 			System.out.println("Stuff: " + stuff[0]);
 			System.out.println("Stuff: " + stuff[1]);
@@ -976,12 +988,14 @@ public class SimplexBean extends GenericSopacBean {
 			String dlfile = submitjob_baseWorkDir + "/" + userName + "/"
 					+ selectedProject + "/" + baseImageName + ".properties";
 			String locfilename = "/tmp/" + baseImageName + ".properties";
-			sj_fsclient.downloadFile(dlfile, locfilename);
+			fsclient.setBindingUrl(submitjob_fileServiceUrl);
+			fsclient.downloadFile(dlfile, locfilename);
 
 			// Read the file and set param values.
 			// Don't worry too much if this fails.
 			System.out.println(dlfile + " " + locfilename);
 
+			currentGMTViewForm.reset();
 			processPropsFile(locfilename);
 		} catch (Exception ex) {
 			System.out.println("doSjPlotForGMT failed");
@@ -1289,9 +1303,9 @@ public class SimplexBean extends GenericSopacBean {
 
 	}
 	
-	public void toggleReplotGMT(ActionEvent ev) {
+	public String toggleReplotGMT() {
 		doAntPlotForGMT(projectName);
-		
+		return this.gmtPlotPdfUrl;
 	}
 
 	public String loadDataArchive() throws Exception {
