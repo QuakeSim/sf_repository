@@ -89,8 +89,11 @@ public class DislocBean extends GenericSopacBean {
 
 	 //Service information
 	 DislocService dislocService;
-	 String dislocServiceUrl="http://gf19.ucs.indiana.edu:8080/dislocexec/services/DislocExec";
-    String faultDBServiceUrl="http://gf2.ucs.indiana.edu:9090/axis/services/Select";
+// 	 String dislocServiceUrl="http://gf19.ucs.indiana.edu:8080/dislocexec/services/DislocExec";
+//     String faultDBServiceUrl="http://gf2.ucs.indiana.edu:9090/axis/services/Select";
+
+ 	 String dislocServiceUrl; 
+	 String faultDBServiceUrl;
 
     /**
      * The client constructor.
@@ -98,10 +101,6 @@ public class DislocBean extends GenericSopacBean {
     public DislocBean() throws Exception {
 		  super();
 
-		  dislocService=new DislocServiceServiceLocator().getDislocExec(new URL(dislocServiceUrl));
-		  System.out.println("Binding to: "+dislocServiceUrl);
-
-		  dislocParams.setObservationPointStyle(1);
 
 		  //We are done.
 		  System.out.println("Primary Disloc Bean Created");
@@ -118,6 +117,13 @@ public class DislocBean extends GenericSopacBean {
 	 protected void makeProjectDirectory() {
 		  File projectDir=new File(getContextBasePath()+"/"+userName+"/"+codeName+"/");
 		  projectDir.mkdirs();
+	 }
+
+	 protected void initDislocWebServices() throws Exception {
+		  dislocService=new DislocServiceServiceLocator().getDislocExec(new URL(getDislocServiceUrl()));
+		  System.out.println("Binding to: "+dislocServiceUrl);
+		  
+		  dislocParams.setObservationPointStyle(1);
 	 }
 	 
 	 protected Fault[] getFaultsFromDB(){
@@ -175,6 +181,8 @@ public class DislocBean extends GenericSopacBean {
      */ 
     public String runBlockingDislocJSF() 
 		  throws Exception {
+
+		  initDislocWebServices();
 		  
 		  Fault[] faults=getFaultsFromDB();
 		  DislocParamsBean dislocParams=getDislocParamsFromDB();
@@ -204,6 +212,8 @@ public class DislocBean extends GenericSopacBean {
      */ 
     public String runNonBlockingDislocJSF() 
 		  throws Exception {
+
+		  initDislocWebServices();
 
 		  Fault[] faults=getFaultsFromDB();
 		  DislocParamsBean dislocParams=getDislocParamsFromDB();
@@ -457,7 +467,7 @@ public class DislocBean extends GenericSopacBean {
 				
 				String DB_RESPONSE_HEADER = "results of the query:";
 				SelectService ss = new SelectServiceLocator();
-				Select select = ss.getSelect(new URL(faultDBServiceUrl));
+				Select select = ss.getSelect(new URL(getFaultDBServiceUrl()));
 	    
 				// --------------------------------------------------
 				// Make queries.
@@ -543,7 +553,7 @@ public class DislocBean extends GenericSopacBean {
 		  
 		  try {
 				SelectService ss = new SelectServiceLocator();
-				Select select = ss.getSelect(new URL(faultDBServiceUrl));
+				Select select = ss.getSelect(new URL(getFaultDBServiceUrl()));
 				
 				// --------------------------------------------------
 				// Make queries.
@@ -1407,5 +1417,13 @@ public class DislocBean extends GenericSopacBean {
 		  return this.myArchivedDislocResultsList;
 	 }
 	 
+	 public String getDislocServiceUrl() {
+		  return dislocServiceUrl;
+	 }
+
+	 public void setDislocServiceUrl(String dislocServiceUrl) {
+		  this.dislocServiceUrl=dislocServiceUrl;
+	 }
+
 	 
 }

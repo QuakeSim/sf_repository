@@ -48,8 +48,9 @@ import com.db4o.*;
 
 public class RDAHMMBean extends GenericSopacBean{
 	 
-	 String rdahmmServiceUrl="http://gf19.ucs.indiana.edu:8080/rdahmmexec/services/RDAHMMExec";
-	 //    String rdahmmServiceUrl;
+	 //	 String rdahmmServiceUrl="http://gf19.ucs.indiana.edu:8080/rdahmmexec/services/RDAHMMExec";
+	 //This is magically set in faces-config.xml.
+	 String rdahmmServiceUrl;
 	 
     //Some properties with default values
 	 
@@ -116,15 +117,20 @@ public class RDAHMMBean extends GenericSopacBean{
 		  super();
 		  //Set the context manager.
 		  cm=getContextManagerImp();
-		  
-		  //Create the service stub.  
-		  System.out.println("Service to contact: "+rdahmmServiceUrl);
-		  rdservice=(new RDAHMMServiceServiceLocator()).
-				getRDAHMMExec(new URL(rdahmmServiceUrl));
 
 		  System.out.println("RDAHMM Bean Created");
     }
-    
+
+	 /**
+	  * Intialize the web service.
+	  */
+	 protected void initWebService() throws Exception {
+		  //Create the service stub.  
+		  System.out.println("Service to contact: "+getRdahmmServiceUrl());
+		  rdservice=(new RDAHMMServiceServiceLocator()).
+				getRDAHMMExec(new URL(rdahmmServiceUrl));
+	 }
+
     /**
      * These are methods associated with Faces
      * navigations.
@@ -216,6 +222,7 @@ public class RDAHMMBean extends GenericSopacBean{
 	  */ 
 	 public String runBlockingRDAHMM_Full() throws Exception {
 		  
+		  initWebService();
 		  newProject();
 		  RdahmmProjectBean localBean=getRdahmmProjectBean();
 		  RDAHMMResultsBean resultsBean=
@@ -239,6 +246,7 @@ public class RDAHMMBean extends GenericSopacBean{
 	  */ 
 	 public String runNonblockingRDAHMM_Full() throws Exception {
 		  System.out.println("Running RDAHMM");
+		  initWebService();
 		  RDAHMMResultsBean returnBean=
 				rdservice.runNonblockingRDAHMM2(siteCode,
 														 resource,
