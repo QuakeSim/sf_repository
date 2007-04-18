@@ -1,14 +1,9 @@
+
 var isFirst = true;
 
-function Update(seriesx)
+function xoo(seriesx)
 {
-	if (isFirst) {
-		document.forms.myStationCurrentParam['myStationCurrentParam:startDate'].value = bfgRound(bfgToDate2(seriesx),2);
-		isFirst = false;
-	} else {
-		document.forms.myStationCurrentParam['myStationCurrentParam:endDate'].value = bfgRound(bfgToDate2(seriesx),2);
-		isFirst = true;
-	}
+	alert('xoo');
 }
 
 function bfgToDate2(date)
@@ -28,3 +23,18 @@ function bfgToDate2(date)
     return result;
 }
 
+function EpisodicUpdate(seriesx)
+{
+	if (isFirst) {
+		document.forms.myStationCurrentParam['myStationCurrentParam:episodicStartDate'].value = bfgRound(bfgToDate2(seriesx),2);
+		isFirst = false;
+	} else {
+		document.forms.myStationCurrentParam['myStationCurrentParam:episodicEndDate'].value = bfgRound(bfgToDate2(seriesx),2);
+		isFirst = true;
+	}
+}
+
+function Update(seriesx)
+{
+	document.forms.myStationCurrentParam['myStationCurrentParam:startDate'].value = bfgRound(bfgToDate2(seriesx),2);
+}
