@@ -102,7 +102,7 @@ mapcenter_y = center_xy[1];
 %>
 <html>
   <head>
-    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAuZXFNqpWwSQD2wTwESuVIBRBrwnbnLbpn3Gq_e9fnTRzhOmcJRQo3xdLzghObGORYbtO3zTTnS6jqg"
+    <script src="put.google.map.key.here"
       type="text/javascript"></script>
   </head>
   <body>
