@@ -86,6 +86,9 @@ echo ""
 cd $RDAHMM_PORTLET_HOME
 mvn clean -Dtomcat.base.dir=$CATALINA_HOME -Dgoogle.key=$GOOGLE_KEY -Dportal.host.name=$PORTAL_HOST_NAME
 
+cd $SIMPLEX_PORTLET_HOME
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME -Dgoogle.key=$GOOGLE_KEY -Dportal.host.name=$PORTAL_HOST_NAME
+
 cd $STFILTER_PORTLET_HOME
 mvn clean -Dtomcat.base.dir=$CATALINA_HOME -Dgoogle.key=$GOOGLE_KEY -Dportal.host.name=$PORTAL_HOST_NAME
 
