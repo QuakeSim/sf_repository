@@ -274,7 +274,9 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 
 		pw.println(" 1   8"); // Need to make this more general.
 		// pw.println(siteCode+sopacDataFileExt);
-		pw.println(dataFileName);
+		File tmp = new File(dataFileName);
+		//pw.println(dataFileName);
+		pw.println(tmp.getName());
 		pw.close();
 	}
 
@@ -282,18 +284,43 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 	 * Create the stfilter driver file.
 	 */
 	private String createDriverFile() throws Exception {
+//		driverFileName = projectName + driverFileExtension;
+//		System.out.println("Writing input file: " + workDir + slash + driverFileName);
+//		PrintWriter pw = new PrintWriter(new FileWriter(workDir + slash + driverFileName), true);
+//		pw.println(twospace + "apriori value file:" + twospace + aprioriValueFile);
+//		pw.println(twospace + "input file:" + twospace + workDir + slash + projectName + mosesDataListExt);
+//		pw.println(twospace + "sit_list file:" + twospace + workDir + slash + projectName + mosesSiteListExt);
+//		pw.println(twospace + "est_parameter file:" + twospace + workDir + slash + projectName + mosesParamFileExt);
+//		// pw.println(twospace+"est_parameter
+//		// file:"+twospace+globalDataDir+mosesParamFile);
+//		pw.println(twospace + "output file:" + twospace + workDir + slash + projectName + outputFileExt);
+//		pw.println(twospace + "residual file:" + twospace + workDir + slash + projectName + residualFileExt);
+//		pw.println(twospace + "res_option:" + twospace + resOption);
+//		pw.println(twospace + "specific term_out file:" + twospace + workDir + slash + projectName + termOutFileExt);
+//		pw.println(twospace + "specific term_option:" + twospace + termOption);
+//		pw.println(twospace + "enu_correlation usage:" + twospace + "no");
+//		pw.println(twospace + "cutoff criterion (year):" + twospace + cutoffCriterion);
+//		pw.println(twospace + "span to est jump aper (est_jump_span):" + twospace + estJumpSpan);
+//		pw.println(twospace + "weak_obs (big sigma) criteria:" + twospace + weakObsCriteria.getEast() + twospace + weakObsCriteria.getNorth() + twospace + weakObsCriteria.getUp());
+//		pw.println(twospace + "outlier (big o-c) criteria mm:" + twospace + outlierCriteria.getEast() + twospace + outlierCriteria.getNorth() + twospace + outlierCriteria.getUp());
+//		pw.println(twospace + "very bad_obs criteria mm:" + twospace + badObsCriteria.getEast() + twospace + badObsCriteria.getNorth() + twospace + badObsCriteria.getUp());
+//		pw.println(twospace + "t_interval:" + twospace + timeInterval.getBeginTime() + twospace + timeInterval.getEndTime()); 
+//		pw.println(twospace + "end:");
+//		pw.println("---------- part 2 -- apriori information");
+//		pw.println(twospace + "exit:");
+//		pw.close();
+
 		driverFileName = projectName + driverFileExtension;
-		System.out.println("Writing input file: " + workDir + "/"
-				+ driverFileName);
-		PrintWriter pw = new PrintWriter(new FileWriter(workDir + "/" + driverFileName), true);
+		System.out.println("Writing input file: " + workDir + slash + driverFileName);
+		PrintWriter pw = new PrintWriter(new FileWriter(workDir + slash + driverFileName), true);
 		pw.println(twospace + "apriori value file:" + twospace + aprioriValueFile);
-		pw.println(twospace + "input file:" + twospace + workDir + slash + projectName + mosesDataListExt);
-		pw.println(twospace + "sit_list file:" + twospace + workDir + slash + projectName + mosesSiteListExt);
-		pw.println(twospace + "est_parameter file:" + twospace + workDir + slash + projectName + mosesParamFileExt);
+		pw.println(twospace + "input file:" + twospace + projectName + mosesDataListExt);
+		pw.println(twospace + "sit_list file:" + twospace + projectName + mosesSiteListExt);
+		pw.println(twospace + "est_parameter file:" + twospace + projectName + mosesParamFileExt);
 		// pw.println(twospace+"est_parameter
 		// file:"+twospace+globalDataDir+mosesParamFile);
-		pw.println(twospace + "output file:" + twospace + workDir + slash + projectName + outputFileExt);
-		pw.println(twospace + "residual file:" + twospace + workDir + slash + projectName + residualFileExt);
+		pw.println(twospace + "output file:" + twospace + projectName + outputFileExt);
+		pw.println(twospace + "residual file:" + twospace + projectName + residualFileExt);
 		pw.println(twospace + "res_option:" + twospace + resOption);
 		pw.println(twospace + "specific term_out file:" + twospace + workDir + slash + projectName + termOutFileExt);
 		pw.println(twospace + "specific term_option:" + twospace + termOption);
@@ -308,7 +335,6 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		pw.println("---------- part 2 -- apriori information");
 		pw.println(twospace + "exit:");
 		pw.close();
-
 		// Clean this up since it could be a memory drain.
 		// sopacDataFileContent=null;
 		return "input-file-created";
