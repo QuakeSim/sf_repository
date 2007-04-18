@@ -36,7 +36,7 @@
   <parameter name="className" value="org.apache.axis.Version"/>
  </service>
  <service name="AnalyzeTseriExec" provider="java:RPC">
-  <parameter name="allowedMethods" value="runBlockingAnalyzeTseri runNonblockingAnalyzeTseriExec execATS"/>
+  <parameter name="allowedMethods" value="runBlockingAnalyzeTseri runNonblockingAnalyzeTseriExec execATS execAnalyzeTseri"/>
   <parameter name="scope" value="Session"/>
   <parameter name="className" value="cgl.webservices.AnalyzeTseriService"/>
   <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns1:ArrayOf_soapenc_string" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:java.lang.String[]" xmlns:ns1="urn:GatewayWS"/>
