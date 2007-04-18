@@ -29,6 +29,14 @@
                 </configuration>
             </plugin>
 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                   <executions>
@@ -37,25 +45,34 @@
                            <configuration>
                              <tasks>
                                <replace dir="${basedir}/target/${pom.artifactId}" 
-                                        token="gf2.ucs.indiana.edu"
-                                        value="${portal.host.name}">
-			       <include name="**/*.jsp"/>
-			       <include name="**/*.xml"/>
-			       <include name="**/*.properties"/>
-			       </replace>
-
-                               <replace dir="${basedir}/target/${pom.artifactId}" 
-                                        token="/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/"
-                                        value="${tomcat.base.dir}">
-  			       <include name="**/*.jsp"/>
+                                        token="http://gf2.ucs.indiana.edu:8080/"
+                                        value="${portal.server.url}">
+                               <include name="**/*.jsp"/>
                                <include name="**/*.xml"/>
                                <include name="**/*.properties"/>
                                </replace>
 
                                <replace dir="${basedir}/target/${pom.artifactId}" 
-                                        token="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTCdqtmO6Kma7uYZgpagQkNe17MQhRS93QdZFchZ2Vy9IpcH0W3nbN34g"
+                                        token="gf2.ucs.indiana.edu"
+                                        value="${portal.host.name}">
+								<include name="**/*.jsp"/>
+								<include name="**/*.xml"/>
+								<include name="**/*.properties"/>
+								</replace>
+
+                               <replace dir="${basedir}/target/${pom.artifactId}" 
+                                        token="/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12"
+                                        value="${tomcat.base.dir}">
+								<include name="**/*.jsp"/>
+                               <include name="**/*.xml"/>
+                               <include name="**/*.properties"/>
+                               </replace>
+
+                                        <!--token="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTCdqtmO6Kma7uYZgpagQkNe17MQhRS93QdZFchZ2Vy9IpcH0W3nbN34g"-->
+                               <replace dir="${basedir}/target/${pom.artifactId}" 
+										token="put.google.map.key.here"
                                         value="${google.key}">
-			       <include name="**/*.jsp"/>
+								<include name="**/*.jsp"/>
                                <include name="**/*.xml"/>
                                <include name="**/*.properties"/>
                                </replace>

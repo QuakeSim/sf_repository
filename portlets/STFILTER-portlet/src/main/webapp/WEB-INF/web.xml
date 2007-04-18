@@ -61,17 +61,17 @@
   <!-- STFILTER-portlet Init Param -->
   <context-param>
     <param-name>analyze_tseri.service.url</param-name>
-    <param-value>http://gf3.ucs.indiana.edu:8888/analyze-tseri-exec/services/AnalyzeTseriExec</param-value>
+    <param-value>http://gf2.ucs.indiana.edu:8080/analyze-tseri-exec/services/AnalyzeTseriExec</param-value>
     <description>WebServer end point for AanalyzeTserieService </description>
   </context-param>
   <context-param>
     <param-name>work.dir</param-name>
-    <param-value>/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/STFILTER-portlet/WDIR/</param-value>
+    <param-value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/STFILTER-portlet/WDIR/</param-value>
     <description>Working dir which is accessible through httpd</description>
   </context-param>
   <context-param>
     <param-name>work.url</param-name>
-    <param-value>http://gf3.ucs.indiana.edu:8888/STFILTER-portlet/WDIR/</param-value>
+    <param-value>http://gf2.ucs.indiana.edu:8080/STFILTER-portlet/WDIR/</param-value>
     <description>URL of wor.dir</description>
   </context-param>
 

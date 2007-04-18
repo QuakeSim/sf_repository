@@ -20,11 +20,11 @@
                 <!-- Needed for the context service-->
                 <managed-property>
                    <property-name>contextUrl</property-name>
-                   <value>http://gf3.ucs.indiana.edu:8888/WebServices/services/ContextManager</value>
+                   <value>http://gf2.ucs.indiana.edu:8080/WebServices/services/ContextManager</value>
                  </managed-property>
                  <managed-property>
                    <property-name>contextBasePath</property-name>
-                   <value>/home/jychoi/apps/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users/</value>
+                   <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webapps/WebServices/WEB-INF/Descriptors/users/</value>
                 </managed-property>
 
                 <!-- These are execution host params -->
@@ -40,7 +40,7 @@
                 </managed-property>
                 <managed-property>
                    <property-name>baseWorkDir</property-name>
-                   <value>/home/gateway/STFILTER_WDIR</value>
+                   <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webaps/STFILTER-portlet/WDIR</value>
                 </managed-property>
                 <managed-property>
                    <property-name>fileServiceUrl</property-name>
