@@ -15,6 +15,7 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIData;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
 
@@ -75,7 +76,7 @@ public class STFILTERBean extends GenericSopacBean {
 	String twospace = "  "; // Used to format the driver file.
 
 	boolean projectCreated = false;
-
+	
 	// STFILTER properties
 	private String codeName = "STFILTER";
 
@@ -206,7 +207,6 @@ public class STFILTERBean extends GenericSopacBean {
 		allsites = new AllStationsContainer();
 		allsites.setEstParamVector(allsitesList.getStationParamList());
 		allsites.setMasterParamList(masterList.getStationParamList());
-		
 		
 		// Init. By Jong
 		setResource("procCoords");
@@ -378,6 +378,130 @@ public class STFILTERBean extends GenericSopacBean {
 		return "stfilter-launched";
 	}
 	
+	public String callAnalyzeTseriService() throws Exception {
+		// Do this here.
+		try {
+		
+			FacesContext fc = FacesContext.getCurrentInstance();
+			String endpoint = fc.getExternalContext().getInitParameter("analyze_tseri.service.url");
+			System.out.println("[!!] endpoint = "+endpoint);
+			
+			if ((endpoint == null) || (endpoint.equals(""))) {
+				System.out.println("[!!] Set init-param in web.xml");
+				return "";
+			}
+			
+			double[][] globalParam = new double[allsites.estParamVector.size()][5];
+			double[][] siteParam = new double[myStation.estParamVector.size()+episodicParams.size()][5];
+			
+		    setParam(allsites, globalParam);
+		    setParam(myStation, siteParam);
+		    
+		    allParams.clear();
+		    for (Iterator i = episodicParams.iterator();i.hasNext();) {
+		    	allParams.add((EstimateParameter) i.next());
+		    }
+		    for (Iterator i = annualAmpParams.iterator();i.hasNext();) {
+		    	allParams.add((EstimateParameter) i.next());
+		    }
+		    for (Iterator i = annualPhaseParams.iterator();i.hasNext();) {
+		    	allParams.add((EstimateParameter) i.next());
+		    }
+		    for (Iterator i = semiannualAmpParams.iterator();i.hasNext();) {
+		    	allParams.add((EstimateParameter) i.next());
+		    }
+		    
+		    // siteParam doesn't need anymore
+		    int init = myStation.estParamVector.size();
+		    for (int i = init; i < init + this.episodicParams.size(); i++) {
+				System.out.println("[!!]"+episodicParams.get(i-init).toString());
+				System.out.println("[!!]"+episodicParams.size());
+				EpisodicBias eb = (EpisodicBias) episodicParams.get(i-init);
+				globalParam[i][0] = eb.getParameterType();
+				globalParam[i][1] = eb.getAprioriConstraint().doubleValue(); 
+				globalParam[i][2] = eb.getAprioriValue().doubleValue();
+				globalParam[i][3] = eb.getStartDate().doubleValue();
+				globalParam[i][4] = eb.getEndDate().doubleValue();
+		    }
+		    
+		    init = init + episodicParams.size();
+		    for (int i = init; i < init + this.annualAmpParams.size(); i++) {
+				System.out.println("[!!]"+annualAmpParams.get(i-init).toString());
+				System.out.println("[!!]"+annualAmpParams.size());
+				AnnualAmpBias eb = (AnnualAmpBias) annualAmpParams.get(i-init);
+				globalParam[i][0] = eb.getParameterType();
+				globalParam[i][1] = eb.getAprioriConstraint().doubleValue(); 
+				globalParam[i][2] = eb.getAprioriValue().doubleValue();
+				globalParam[i][3] = eb.getStartDate().doubleValue();
+				globalParam[i][4] = eb.getPeriodLength().doubleValue();
+		    }
+
+		    init = init + this.annualAmpParams.size();
+		    for (int i = init; i < init + this.annualPhaseParams.size(); i++) {
+				System.out.println("[!!]"+annualPhaseParams.get(i-init).toString());
+				System.out.println("[!!]"+annualPhaseParams.size());
+				AnnualPhaseBias eb = (AnnualPhaseBias) annualPhaseParams.get(i-init);
+				globalParam[i][0] = eb.getParameterType();
+				globalParam[i][1] = eb.getAprioriConstraint().doubleValue(); 
+				globalParam[i][2] = eb.getAprioriValue().doubleValue();
+				globalParam[i][3] = eb.getStartDate().doubleValue();
+				globalParam[i][4] = eb.getPeriodLength().doubleValue();
+		    }
+
+		    init = init + this.annualPhaseParams.size();
+		    for (int i = init; i < init + this.semiannualAmpParams.size(); i++) {
+				System.out.println("[!!]"+semiannualAmpParams.get(i-init).toString());
+				System.out.println("[!!]"+semiannualAmpParams.size());
+				SemiannualAmpBias eb = (SemiannualAmpBias) semiannualAmpParams.get(i-init);
+				globalParam[i][0] = eb.getParameterType();
+				globalParam[i][1] = eb.getAprioriConstraint().doubleValue(); 
+				globalParam[i][2] = eb.getAprioriValue().doubleValue();
+				globalParam[i][3] = eb.getStartDate().doubleValue();
+				globalParam[i][4] = eb.getPeriodLength().doubleValue();
+		    }
+
+			Service service = new Service();
+			Call call = (Call) service.createCall();
+
+			call.setTargetEndpointAddress(new java.net.URL(endpoint));
+			call.setOperationName(new QName("http://soapinterop.org/", "execAnalyzeTseri"));
+
+			String[] ret = (String[]) call.invoke(new Object[] { siteCode,
+					new Integer(this.resOption), new Integer(this.termOption), 
+					new Double(this.cutoffCriterion), new Double(this.estJumpSpan),
+					new Double(this.weakObsCriteria.east), new Double(this.weakObsCriteria.north), new Double(this.weakObsCriteria.up),
+					new Double(this.outlierCriteria.east), new Double(this.outlierCriteria.north), new Double(this.outlierCriteria.up),
+					new Double(this.badObsCriteria.east), new Double(this.badObsCriteria.north), new Double(this.badObsCriteria.up),
+					new Double(this.timeInterval.beginTime), new Double(this.timeInterval.endTime),
+					sopacDataFileContent, globalParam, siteParam });
+			
+			System.out.println("Output: ");
+			for (int i = 0; i < ret.length; i++) {
+				System.out.println(ret[i]);
+			}
+
+			// Draw graphs
+			resiURL = ret[3];
+			
+			List filteredList = createFilteredList();
+			if (paramHistory.size() < maxHistory) {
+				paramHistory.add(0, filteredList);
+			} else {
+				paramHistory.add(0, filteredList);
+				for (int i = paramHistory.size(); i > maxHistory ; i--) {
+					paramHistory.remove(i-1);
+				}
+			}
+			
+			System.out.println("paramHistory.size() = "+paramHistory.size());
+
+			// System.out.println("Output: " + ret);
+		} catch (Exception e) {
+			System.err.println(e.toString());
+		}
+		return "stfilterws-launched";
+	}
+
 	public String launchSTFILTERWS() throws Exception {
 		// Do this here.
 		try {
@@ -413,20 +537,74 @@ public class STFILTERBean extends GenericSopacBean {
 			System.out.println("[!!] dataUrl = "+dataUrl);
 			
 			double[][] globalParam = new double[allsites.estParamVector.size()][5];
-			double[][] siteParam = new double[myStation.estParamVector.size()+EpisodicBiasParam.size()][5];
+			double[][] siteParam = new double[myStation.estParamVector.size()+episodicParams.size()][5];
 			
 		    setParam(allsites, globalParam);
 		    setParam(myStation, siteParam);
 		    
-		    for (int i = myStation.estParamVector.size(); i < myStation.estParamVector.size() + EpisodicBiasParam.size(); i++) {
-				System.out.println("[!!]"+EpisodicBiasParam.get(i-myStation.estParamVector.size()).toString());
-				System.out.println("[!!]"+EpisodicBiasParam.size());
-				EpisodicBias eb = (EpisodicBias) EpisodicBiasParam.get(i-myStation.estParamVector.size());
-				globalParam[i][0] = eb.parameterType;
-				globalParam[i][1] = eb.aprioriConstraint.doubleValue();
-				globalParam[i][2] = eb.aprioriValue.doubleValue();
-				globalParam[i][3] = eb.startDate.doubleValue();
-				globalParam[i][4] = eb.endDate.doubleValue();
+		    allParams.clear();
+		    allParams.add(new AnnualAmpNorth());
+		    allParams.add(new AnnualAmpUp());
+		    for (Iterator i = episodicParams.iterator();i.hasNext();) {
+		    	allParams.add((EstimateParameter) i.next());
+		    }
+		    for (Iterator i = annualAmpParams.iterator();i.hasNext();) {
+		    	allParams.add((EstimateParameter) i.next());
+		    }
+		    for (Iterator i = annualPhaseParams.iterator();i.hasNext();) {
+		    	allParams.add((EstimateParameter) i.next());
+		    }
+		    for (Iterator i = semiannualAmpParams.iterator();i.hasNext();) {
+		    	allParams.add((EstimateParameter) i.next());
+		    }
+		    
+		    // siteParam doesn't need anymore
+		    int init = myStation.estParamVector.size();
+		    for (int i = init; i < init + this.episodicParams.size(); i++) {
+				System.out.println("[!!]"+episodicParams.get(i-init).toString());
+				System.out.println("[!!]"+episodicParams.size());
+				EpisodicBias eb = (EpisodicBias) episodicParams.get(i-init);
+				globalParam[i][0] = eb.getParameterType();
+				globalParam[i][1] = eb.getAprioriConstraint().doubleValue(); 
+				globalParam[i][2] = eb.getAprioriValue().doubleValue();
+				globalParam[i][3] = eb.getStartDate().doubleValue();
+				globalParam[i][4] = eb.getEndDate().doubleValue();
+		    }
+		    
+		    init = init + episodicParams.size();
+		    for (int i = init; i < init + this.annualAmpParams.size(); i++) {
+				System.out.println("[!!]"+annualAmpParams.get(i-init).toString());
+				System.out.println("[!!]"+annualAmpParams.size());
+				AnnualAmpBias eb = (AnnualAmpBias) annualAmpParams.get(i-init);
+				globalParam[i][0] = eb.getParameterType();
+				globalParam[i][1] = eb.getAprioriConstraint().doubleValue(); 
+				globalParam[i][2] = eb.getAprioriValue().doubleValue();
+				globalParam[i][3] = eb.getStartDate().doubleValue();
+				globalParam[i][4] = eb.getPeriodLength().doubleValue();
+		    }
+
+		    init = init + this.annualAmpParams.size();
+		    for (int i = init; i < init + this.annualPhaseParams.size(); i++) {
+				System.out.println("[!!]"+annualPhaseParams.get(i-init).toString());
+				System.out.println("[!!]"+annualPhaseParams.size());
+				AnnualPhaseBias eb = (AnnualPhaseBias) annualPhaseParams.get(i-init);
+				globalParam[i][0] = eb.getParameterType();
+				globalParam[i][1] = eb.getAprioriConstraint().doubleValue(); 
+				globalParam[i][2] = eb.getAprioriValue().doubleValue();
+				globalParam[i][3] = eb.getStartDate().doubleValue();
+				globalParam[i][4] = eb.getPeriodLength().doubleValue();
+		    }
+
+		    init = init + this.annualPhaseParams.size();
+		    for (int i = init; i < init + this.semiannualAmpParams.size(); i++) {
+				System.out.println("[!!]"+semiannualAmpParams.get(i-init).toString());
+				System.out.println("[!!]"+semiannualAmpParams.size());
+				SemiannualAmpBias eb = (SemiannualAmpBias) semiannualAmpParams.get(i-init);
+				globalParam[i][0] = eb.getParameterType();
+				globalParam[i][1] = eb.getAprioriConstraint().doubleValue(); 
+				globalParam[i][2] = eb.getAprioriValue().doubleValue();
+				globalParam[i][3] = eb.getStartDate().doubleValue();
+				globalParam[i][4] = eb.getPeriodLength().doubleValue();
 		    }
 
 			Service service = new Service();
@@ -651,33 +829,33 @@ public class STFILTERBean extends GenericSopacBean {
 		// (sopacDataFileContent));
 	}
 
-	private void setParam(StationContainer station, double[][] globalParam) {
+	private void setParam(StationContainer station, double[][] param) {
 		for (int i = 0; i < station.estParamVector.size(); i++) {
 			EstimateParameter ep = (EstimateParameter) station.estParamVector.get(i);
-			globalParam[i][0] = ep.parameterType;
+			param[i][0] = ep.parameterType;
 			switch (ep.parameterType) {
 			case 1:
 			case 2:
 			case 3:
-				globalParam[i][1] = ((ConstantBias) ep).aprioriConstraint.doubleValue();
-				globalParam[i][2] = ((ConstantBias) ep).aprioriValue.doubleValue();
-				globalParam[i][3] = ((ConstantBias) ep).startDate.doubleValue();
+				param[i][1] = ((ConstantBias) ep).aprioriConstraint.doubleValue();
+				param[i][2] = ((ConstantBias) ep).aprioriValue.doubleValue();
+				param[i][3] = ((ConstantBias) ep).startDate.doubleValue();
 				break;
 			case 4:
 			case 5:
 			case 6:
-				globalParam[i][1] = ((VelocityBias) ep).aprioriConstraint.doubleValue();
-				globalParam[i][2] = ((VelocityBias) ep).aprioriValue.doubleValue();
-				globalParam[i][3] = ((VelocityBias) ep).startDate.doubleValue();
-				globalParam[i][4] = ((VelocityBias) ep).endDate.doubleValue();
+				param[i][1] = ((VelocityBias) ep).aprioriConstraint.doubleValue();
+				param[i][2] = ((VelocityBias) ep).aprioriValue.doubleValue();
+				param[i][3] = ((VelocityBias) ep).startDate.doubleValue();
+				param[i][4] = ((VelocityBias) ep).endDate.doubleValue();
 				break;
 			case 7:
 			case 8:
 			case 9:
-				globalParam[i][1] = ((EpisodicBias) ep).aprioriConstraint.doubleValue();
-				globalParam[i][2] = ((EpisodicBias) ep).aprioriValue.doubleValue();
-				globalParam[i][3] = ((EpisodicBias) ep).startDate.doubleValue();
-				globalParam[i][4] = ((EpisodicBias) ep).endDate.doubleValue();
+				param[i][1] = ((EpisodicBias) ep).aprioriConstraint.doubleValue();
+				param[i][2] = ((EpisodicBias) ep).aprioriValue.doubleValue();
+				param[i][3] = ((EpisodicBias) ep).startDate.doubleValue();
+				param[i][4] = ((EpisodicBias) ep).endDate.doubleValue();
 				break;
 			}
 		}
@@ -1152,7 +1330,7 @@ public class STFILTERBean extends GenericSopacBean {
 		return myStationParamList;
 	}
 
-	private int myStationParamListIndex = 0;
+	private int myStationParamListIndex = 7;
 	public int getMyStationParamListIndex() {
 		return myStationParamListIndex;
 	}
@@ -1163,71 +1341,285 @@ public class STFILTERBean extends GenericSopacBean {
 			// myStationParamListIndex =
 			// ((Integer)event.getNewValue()).intValue();
 			myStationParamListIndex = Integer.parseInt((String) event.getNewValue());
+			curEpisodicParamRendered = false;
+			curAnnualAmpParamRendered = false;
+			curAnnualPhaseParamRendered = false;
+			curSemiannualParamRendered = false;
+
 			switch (myStationParamListIndex) {
-			case 0:
-				currentParam = episodicEast; 
+			case 7:
+				curEpisodicParam = episodicEast;
+				curEpisodicParamRendered = true;
 				break;
-			case 1:
-				currentParam = episodicNorth; 
+			case 8:
+				curEpisodicParam = episodicNorth; 
+				curEpisodicParamRendered = true;
 				break;
-			case 2:
-				currentParam = episodicUp; 
+			case 9:
+				curEpisodicParam = episodicUp; 
+				curEpisodicParamRendered = true;
+				break;
+			case 16:
+				curAnnualAmpParam = annualAmpEast; 
+				curAnnualAmpParamRendered = true;
+				break;
+			case 17:
+				curAnnualAmpParam = annualAmpNorth; 
+				curAnnualAmpParamRendered = true;
+				break;
+			case 18:
+				curAnnualPhaseParam = annualPhaseUp; 
+				curAnnualPhaseParamRendered = true;
+				break;
+			case 19:
+				curAnnualPhaseParam = annualPhaseEast; 
+				curAnnualPhaseParamRendered = true;
+				break;
+			case 20:
+				curAnnualPhaseParam = annualPhaseNorth; 
+				curAnnualPhaseParamRendered = true;
+				break;
+			case 21:
+				curAnnualAmpParam = annualAmpUp; 
+				curAnnualAmpParamRendered = true;
+				break;
+			case 22:
+				curSemiannualAmpParam = semiannualAmpEast; 
+				curSemiannualParamRendered = true;
+				break;
+			case 23:
+				curSemiannualAmpParam = semiannualAmpNorth; 
+				curSemiannualParamRendered = true;
+				break;
+			case 24:
+				curSemiannualAmpParam = semiannualAmpUp; 
+				curSemiannualParamRendered = true;
 				break;
 			}
 		}
-		System.out.println("[!!] currentParam = "+currentParam.getParameterFullName());
+//		System.out.println("[!!] curEpisodicParam = "+curEpisodicParam.getParameterFullName());
+//		System.out.println("[!!] curAnnualAmpParam = "+curAnnualAmpParam.getParameterFullName());
+//		System.out.println("[!!] curAnnualPhaseParam = "+curAnnualPhaseParam.getParameterFullName());
+//		System.out.println("[!!] curSemiannualAmpParam = "+curSemiannualAmpParam.getParameterFullName());
 	}
 	
-	public void aprioriValueChanged(ValueChangeEvent event) {
+	
+	public void curEpisodicAprioriValueChanged(ValueChangeEvent event) {
 		System.out.println("[!!] aprioriValueChanged = "+event.getNewValue());
 		if (event.getNewValue() != null) {
-			currentParam.setAprioriValue((Double) event.getNewValue());
+			curEpisodicParam.setAprioriValue((Double) event.getNewValue());
+			addCurEpisodicParam();
 		}
 	}
 	
-	public void aprioriConstraintChanged(ValueChangeEvent event) {
+	public void curEpisodicAprioriConstraintChanged(ValueChangeEvent event) {
 		System.out.println("[!!] aprioriConstraintChanged = "+event.getNewValue());
 		if (event.getNewValue() != null) {
-			currentParam.setAprioriConstraint((Double) event.getNewValue());
-			addEpisodicBiasParamVector();
+			curEpisodicParam.setAprioriConstraint((Double) event.getNewValue());
+			addCurEpisodicParam();
 		}
 	}
 
-	private void addEpisodicBiasParamVector() {
-		if (!EpisodicBiasParam.contains(currentParam)) {
-			EpisodicBiasParam.add(currentParam);
-		}
-	}
-	
-	public void startDateChanged(ValueChangeEvent event) {
+	public void curEpisodicStartDateChanged(ValueChangeEvent event) {
 		System.out.println("[!!] startDateChanged = "+event.getNewValue());
 		if (event.getNewValue() != null) {
-			currentParam.setStartDate((Double) event.getNewValue());
-			addEpisodicBiasParamVector();
+			curEpisodicParam.setStartDate((Double) event.getNewValue());
+			addCurEpisodicParam();
 		}
 	}
 	
-	public void endDateChanged(ValueChangeEvent event) {
+	public void curEpisodicEndDateChanged(ValueChangeEvent event) {
 		System.out.println("[!!] endDateChanged = "+event.getNewValue());
 		if (event.getNewValue() != null) {
-			currentParam.setEndDate((Double) event.getNewValue());
-			addEpisodicBiasParamVector();
+			curEpisodicParam.setEndDate((Double) event.getNewValue());
+			addCurEpisodicParam();
 		}
 	}
 	
-	Vector EpisodicBiasParam = new Vector();
+	private void addCurEpisodicParam() {
+		if (!episodicParams.contains(curEpisodicParam)) {
+			episodicParams.add(curEpisodicParam);
+		}
+	}
+	
+	Vector episodicParams = new Vector();
 	EpisodicBias episodicEast = new EpisodicEast(); 
 	EpisodicBias episodicNorth = new EpisodicNorth();
 	EpisodicBias episodicUp = new EpisodicUp();
+	EpisodicBias curEpisodicParam = episodicEast;
+	boolean curEpisodicParamRendered = true;
 
-	EpisodicBias currentParam = episodicEast; 
-	
-	public EstimateParameter getCurrentParam() {
-		return currentParam;
+	public void curAnnualAmpAprioriValueChanged(ValueChangeEvent event) {
+		System.out.println("[!!] aprioriValueChanged = "+event.getNewValue());
+		if (event.getNewValue() != null) {
+			curAnnualAmpParam.setAprioriValue((Double) event.getNewValue());
+			addCurAnnualAmpParam();
+		}
 	}
 	
+	public void curAnnualAmpAprioriConstraintChanged(ValueChangeEvent event) {
+		System.out.println("[!!] aprioriConstraintChanged = "+event.getNewValue());
+		if (event.getNewValue() != null) {
+			curAnnualAmpParam.setAprioriConstraint((Double) event.getNewValue());
+			addCurAnnualAmpParam();
+		}
+	}
+
+	public void curAnnualAmpStartDateChanged(ValueChangeEvent event) {
+		System.out.println("[!!] startDateChanged = "+event.getNewValue());
+		if (event.getNewValue() != null) {
+			curAnnualAmpParam.setStartDate((Double) event.getNewValue());
+			addCurAnnualAmpParam();
+		}
+	}
+	
+	public void curAnnualAmpPeriodLengthChanged(ValueChangeEvent event) {
+		System.out.println("[!!] endDateChanged = "+event.getNewValue());
+		if (event.getNewValue() != null) {
+			curAnnualAmpParam.setPeriodLength((Double) event.getNewValue());
+			addCurAnnualAmpParam();
+		}
+	}
+	
+	private void addCurAnnualAmpParam() {
+		if (!annualAmpParams.contains(curAnnualAmpParam)) {
+			annualAmpParams.add(curAnnualAmpParam);
+		}
+	}
+	
+	Vector annualAmpParams = new Vector();
+	AnnualAmpBias annualAmpEast = new AnnualAmpEast(); 
+	AnnualAmpBias annualAmpNorth = new AnnualAmpNorth();
+	AnnualAmpBias annualAmpUp = new AnnualAmpUp();
+	AnnualAmpBias curAnnualAmpParam = annualAmpEast;
+	boolean curAnnualAmpParamRendered = false;
+	
+	public void curAnnualPhaseAprioriValueChanged(ValueChangeEvent event) {
+		System.out.println("[!!] aprioriValueChanged = "+event.getNewValue());
+		if (event.getNewValue() != null) {
+			curAnnualPhaseParam.setAprioriValue((Double) event.getNewValue());
+			addCurAnnualPhaseParam();
+		}
+	}
+	
+	public void curAnnualPhaseAprioriConstraintChanged(ValueChangeEvent event) {
+		System.out.println("[!!] aprioriConstraintChanged = "+event.getNewValue());
+		if (event.getNewValue() != null) {
+			curAnnualPhaseParam.setAprioriConstraint((Double) event.getNewValue());
+			addCurAnnualAmpParam();
+		}
+	}
+
+	public void curAnnualPhaseStartDateChanged(ValueChangeEvent event) {
+		System.out.println("[!!] startDateChanged = "+event.getNewValue());
+		if (event.getNewValue() != null) {
+			curAnnualPhaseParam.setStartDate((Double) event.getNewValue());
+			addCurAnnualAmpParam();
+		}
+	}
+	
+	public void curAnnualPhasePeriodLengthChanged(ValueChangeEvent event) {
+		System.out.println("[!!] endDateChanged = "+event.getNewValue());
+		if (event.getNewValue() != null) {
+			curAnnualPhaseParam.setPeriodLength((Double) event.getNewValue());
+			addCurAnnualAmpParam();
+		}
+	}
+	
+	private void addCurAnnualPhaseParam() {
+		if (!annualPhaseParams.contains(curAnnualPhaseParam)) {
+			annualPhaseParams.add(curAnnualPhaseParam);
+		}
+	}
+	
+	Vector annualPhaseParams = new Vector();
+	AnnualPhaseBias annualPhaseEast = new AnnualPhaseEast(); 
+	AnnualPhaseBias annualPhaseNorth = new AnnualPhaseNorth();
+	AnnualPhaseBias annualPhaseUp = new AnnualPhaseUp();
+	AnnualPhaseBias curAnnualPhaseParam = annualPhaseEast;
+	boolean curAnnualPhaseParamRendered = false;
+	
+	public void curSemiannualAmpAprioriValueChanged(ValueChangeEvent event) {
+		System.out.println("[!!] aprioriValueChanged = "+event.getNewValue());
+		if (event.getNewValue() != null) {
+			curSemiannualAmpParam.setAprioriValue((Double) event.getNewValue());
+			addCurSemiannualAmpParam();
+		}
+	}
+	
+	public void curSemiannualAmpAprioriConstraintChanged(ValueChangeEvent event) {
+		System.out.println("[!!] aprioriConstraintChanged = "+event.getNewValue());
+		if (event.getNewValue() != null) {
+			curSemiannualAmpParam.setAprioriConstraint((Double) event.getNewValue());
+			addCurSemiannualAmpParam();
+		}
+	}
+
+	public void curSemiannualAmpStartDateChanged(ValueChangeEvent event) {
+		System.out.println("[!!] startDateChanged = "+event.getNewValue());
+		if (event.getNewValue() != null) {
+			curSemiannualAmpParam.setStartDate((Double) event.getNewValue());
+			addCurSemiannualAmpParam();
+		}
+	}
+	
+	public void curSemiannualAmpPeriodLengthChanged(ValueChangeEvent event) {
+		System.out.println("[!!] endDateChanged = "+event.getNewValue());
+		if (event.getNewValue() != null) {
+			curSemiannualAmpParam.setPeriodLength((Double) event.getNewValue());
+			addCurSemiannualAmpParam();
+		}
+	}
+	
+	private void addCurSemiannualAmpParam() {
+		if (!semiannualAmpParams.contains(curSemiannualAmpParam)) {
+			semiannualAmpParams.add(curSemiannualAmpParam);
+		}
+	}
+	
+	Vector semiannualAmpParams = new Vector();
+	AnnualAmpBias semiannualAmpEast = new AnnualAmpEast(); 
+	AnnualAmpBias semiannualAmpNorth = new AnnualAmpNorth();
+	AnnualAmpBias semiannualAmpUp = new AnnualAmpUp();
+	AnnualAmpBias curSemiannualAmpParam = semiannualAmpEast;
+	boolean curSemiannualParamRendered = false;
+	
+	Vector<EstimateParameter> allParams = new Vector<EstimateParameter>();
+	UIData allParamsTable;
+	
+    public void removeParamListener(ActionEvent actionEvent) {
+		if(allParamsTable.getRowData() instanceof EstimateParameter){
+			EstimateParameter ep = (EstimateParameter) allParamsTable.getRowData();
+			allParams.remove(ep);
+		    switch (ep.getParameterType()) {
+		    case 7:
+		    case 8:
+		    case 9:
+		    	episodicParams.remove(ep);
+		    	break;
+		    case 16:
+		    case 17:
+		    case 18:
+		    	annualAmpParams.remove(ep);
+		    	break;
+		    case 19:
+		    case 20:
+		    case 21:
+		    	annualPhaseParams.remove(ep);
+		    	break;
+		    case 22:
+		    case 23:
+		    case 24:
+		    	semiannualAmpParams.remove(ep);
+		    	break;
+		    }
+		}
+    }
+	
+	
 	public String setEstimatedParams() throws Exception {
-		launchSTFILTERWS();
+		//launchSTFILTERWS();
+		callAnalyzeTseriService();
 		return "set-estimated-params";
 	}
 	
@@ -1570,5 +1962,116 @@ public class STFILTERBean extends GenericSopacBean {
 	public void set_weakObsCriteria(WeakObsCriteria obsCriteria) {
 		_weakObsCriteria = obsCriteria;
 	}
-	
+
+	public AnnualAmpBias getCurAnnualAmpParam() {
+		return curAnnualAmpParam;
+	}
+
+	public void setCurAnnualAmpParam(AnnualAmpBias curAnnualAmpParam) {
+		this.curAnnualAmpParam = curAnnualAmpParam;
+	}
+
+	public boolean isCurAnnualAmpParamRendered() {
+		return curAnnualAmpParamRendered;
+	}
+
+	public void setCurAnnualAmpParamRendered(boolean curAnnualAmpParamRendered) {
+		this.curAnnualAmpParamRendered = curAnnualAmpParamRendered;
+	}
+
+	public AnnualPhaseBias getCurAnnualPhaseParam() {
+		return curAnnualPhaseParam;
+	}
+
+	public void setCurAnnualPhaseParam(AnnualPhaseBias curAnnualPhaseParam) {
+		this.curAnnualPhaseParam = curAnnualPhaseParam;
+	}
+
+	public boolean isCurAnnualPhaseParamRendered() {
+		return curAnnualPhaseParamRendered;
+	}
+
+	public void setCurAnnualPhaseParamRendered(boolean curAnnualPhaseParamRendered) {
+		this.curAnnualPhaseParamRendered = curAnnualPhaseParamRendered;
+	}
+
+	public EpisodicBias getCurEpisodicParam() {
+		return curEpisodicParam;
+	}
+
+	public void setCurEpisodicParam(EpisodicBias curEpisodicParam) {
+		this.curEpisodicParam = curEpisodicParam;
+	}
+
+	public boolean isCurEpisodicParamRendered() {
+		return curEpisodicParamRendered;
+	}
+
+	public void setCurEpisodicParamRendered(boolean curEpisodicParamRendered) {
+		this.curEpisodicParamRendered = curEpisodicParamRendered;
+	}
+
+	public AnnualAmpBias getCurSemiannualAmpParam() {
+		return curSemiannualAmpParam;
+	}
+
+	public void setCurSemiannualAmpParam(AnnualAmpBias curSemiannualAmpParam) {
+		this.curSemiannualAmpParam = curSemiannualAmpParam;
+	}
+
+	public boolean isCurSemiannualParamRendered() {
+		return curSemiannualParamRendered;
+	}
+
+	public void setCurSemiannualParamRendered(boolean curSemiannualParamRendered) {
+		this.curSemiannualParamRendered = curSemiannualParamRendered;
+	}
+
+	public Vector getAnnualAmpParams() {
+		return annualAmpParams;
+	}
+
+	public void setAnnualAmpParams(Vector annualAmpParams) {
+		this.annualAmpParams = annualAmpParams;
+	}
+
+	public Vector getAnnualPhaseParams() {
+		return annualPhaseParams;
+	}
+
+	public void setAnnualPhaseParams(Vector annualPhaseParams) {
+		this.annualPhaseParams = annualPhaseParams;
+	}
+
+	public Vector getEpisodicParams() {
+		return episodicParams;
+	}
+
+	public void setEpisodicParams(Vector episodicParams) {
+		this.episodicParams = episodicParams;
+	}
+
+	public Vector getSemiannualAmpParams() {
+		return semiannualAmpParams;
+	}
+
+	public void setSemiannualAmpParams(Vector semiannualAmpParams) {
+		this.semiannualAmpParams = semiannualAmpParams;
+	}
+
+	public Vector getAllParams() {
+		return allParams;
+	}
+
+	public void setAllParams(Vector allParams) {
+		this.allParams = allParams;
+	}
+
+	public UIData getAllParamsTable() {
+		return allParamsTable;
+	}
+
+	public void setAllParamsTable(UIData allParamsTable) {
+		this.allParamsTable = allParamsTable;
+	}
 }

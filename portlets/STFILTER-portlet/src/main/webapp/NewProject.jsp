@@ -262,14 +262,14 @@ mapcenter_y = center_xy[1];
     <h:panelGrid columns="2" border="1">
 		<h:outputText value="Project Name:"/>
 		<h:panelGroup>
-			<h:inputText id="projectName" value="#{stfilterBean.projectName}" required="true"/>
-			<h:message for="projectName" showDetail="true" showSummary="true" errorStyle="color: red"/>
+			<h:inputText id="inPorject" value="#{stfilterBean.projectName}" required="true"/>
+			<h:message id="msgProject" for="projectName" showDetail="true" showSummary="true" errorStyle="color: red"/>
 		</h:panelGroup>
 		
 		<h:outputText value="Station Code:"/>
 		<h:panelGroup>
-			<h:inputText id="station_name" value="#{stfilterBean.siteCode}" required="true"/>
-			<h:message for="station_name" showDetail="true" showSummary="true" errorStyle="color: red"/>
+			<h:inputText id="inStation" value="#{stfilterBean.siteCode}" required="true"/>
+			<h:message id="msgStationName" for="station_name" showDetail="true" showSummary="true" errorStyle="color: red"/>
 		</h:panelGroup>
 
 		<h:outputText value="Begin Date:"/>
