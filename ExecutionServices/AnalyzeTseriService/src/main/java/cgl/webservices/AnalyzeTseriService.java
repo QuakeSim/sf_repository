@@ -322,7 +322,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		pw.println(twospace + "output file:" + twospace + projectName + outputFileExt);
 		pw.println(twospace + "residual file:" + twospace + projectName + residualFileExt);
 		pw.println(twospace + "res_option:" + twospace + resOption);
-		pw.println(twospace + "specific term_out file:" + twospace + workDir + slash + projectName + termOutFileExt);
+		pw.println(twospace + "specific term_out file:" + twospace + projectName + termOutFileExt);
 		pw.println(twospace + "specific term_option:" + twospace + termOption);
 		pw.println(twospace + "enu_correlation usage:" + twospace + "no");
 		pw.println(twospace + "cutoff criterion (year):" + twospace + cutoffCriterion);
