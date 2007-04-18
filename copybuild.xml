@@ -23,6 +23,27 @@
    </copy>
 </target>
 
+<target name="copy-meshgen-to-portlet">
+   <property name="newmeshgen.dest.dir" value="./portlets/NewMeshGen-portlet/"/>
+   <property name="newmeshgen.source.dir" value="./jsf_standalone/NewMeshGen2"/>
+   <echo message="${newmeshgen.dest.dir}"/>
+   <echo message="${newmeshgen.source.dir}"/>
+   <copy toDir="${newmeshgen.dest.dir}"
+         overwrite="true">
+      <fileset dir="${newmeshgen.source.dir}">
+         <include name="**/*.java"/>
+      </fileset>
+      <fileset dir="${newmeshgen.source.dir}">
+         <include name="**/*.xml"/>
+         <include name="**/*.class"/>
+         <include name="**/*.jar"/>
+         <include name="**/*.jsp"/>
+         <include name="**/*.properties"/>
+         <exclude name="pom.xml"/>
+         <exclude name="**/web.xml"/>
+      </fileset>
+   </copy>
+</target>
 <target name="copy-stfilter-to-portlet">
    <property name="stfilter.dest.dir" value="./portlets/STFILTER-portlet/"/>
    <property name="stfilter.source.dir" value="./jsf_standalone/st_filter"/>

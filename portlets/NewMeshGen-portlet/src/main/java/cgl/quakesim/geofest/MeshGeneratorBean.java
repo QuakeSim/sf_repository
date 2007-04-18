@@ -37,7 +37,6 @@ import org.servogrid.genericproject.Utility;
 //Import stuff from db4o
 import com.db4o.*;
 
-
 /**
  * Everything you need to set up and run MeshGenerator.
  */
@@ -114,6 +113,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
     MeshViewer myMeshViewer; 
 
+    String mesh_gen_viz_fileServiceUrl = 
+		  "http://gf2.ucs.indiana.edu:6060/jetspeed/services/FileService";
     String mesh_gen_viz_base_dir = new String("/home/gateway/yan_offscreen/offscreen/");
     String myLayersParamForJnlp = new String("");
     String myFaultsParamForJnlp = new String("");
@@ -126,19 +127,10 @@ public class MeshGeneratorBean extends GenericSopacBean {
     String meshResolution="rare";
 
     //These should be populated from faces-config.xml
-//     String mesh_gen_viz_fileServiceUrl = 
-// 		  "http://gf2.ucs.indiana.edu:6060/jetspeed/services/FileService";
-
-// 	 String meshViewerServerUrl="http://gf2.ucs.indiana.edu:18084";
-//     String faultDBServiceUrl="http://gf2.ucs.indiana.edu:9090/axis/services/Select";
-// 	 String geoFESTBaseUrl="http://gf19.ucs.indiana.edu:8080/geofestexec/";
-
-	 String meshViewerServerUrl; //="http://gf2.ucs.indiana.edu:18084";
-    String faultDBServiceUrl; //="http://gf2.ucs.indiana.edu:9090/axis/services/Select";
-	 String geoFESTBaseUrl; //="http://gf19.ucs.indiana.edu:8080/geofestexec/";
-
-	 String mesh_gen_viz_fileServiceUrl;
-    String geoFESTServiceUrl; //=geoFESTBaseUrl+"/"+"services/GeoFESTExec";
+    String meshViewerServerUrl="http://gf2.ucs.indiana.edu:18084";
+    String faultDBServiceUrl="http://gf2.ucs.indiana.edu:9090/axis/services/Select";
+	 String geoFESTBaseUrl="http://gf19.ucs.indiana.edu:8080/geofestexec/";
+    String geoFESTServiceUrl=geoFESTBaseUrl+"/"+"services/GeoFESTExec";
 	 String geoFESTBaseUrlForJnlp=getGeoFESTBaseUrlForJnlp();
 
     //This is our geofest service stub.
@@ -171,10 +163,14 @@ public class MeshGeneratorBean extends GenericSopacBean {
     public MeshGeneratorBean() throws Exception {
 		  super();
 
-		  //Obsolete code, need to clean up.
+
 		  gfutils.initLayerInteger();
 		  cm = getContextManagerImp();
-		  //		  myMeshViewer = new MeshViewer(meshViewerServerUrl);
+		  
+		  geofestService=
+				new GeoFESTServiceServiceLocator().getGeoFESTExec(new URL(geoFESTServiceUrl));
+		  
+		  myMeshViewer = new MeshViewer(meshViewerServerUrl);
 
 		  //We are done.
 		  System.out.println("MeshGenerator Bean Created");
@@ -268,7 +264,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  mega.setGeoFESTBaseUrlForJnlp(getGeoFESTBaseUrlForJnlp());
  		  mega.setJnlpLayers(getMyLayersParamForJnlp(null, projectName));
  		  mega.setJnlpFaults(getMyFaultsParamForJnlp(null,projectName));
-		  mega.setCreationDate((new Date()).toString());
 						  
 		  //Set up the database.  This open/close routine may need to be improved later.
 		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");	 
@@ -277,6 +272,14 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  db.close(); 
 	 }
 	 
+// 	 protected MeshRunBean restoreMeshRunInstance(String projectName, 
+// 																 String jobUIDStamp) 
+// 		  throws Exception {
+// 		  //		  return (MeshRunBean)results.next();
+		  
+//  		  MeshRunBean mrb=new MeshRunBean();
+// 		  return mrb;
+// 	 }
 
     /**
      * This is a JSF compatible method for running the mesh generator
@@ -288,10 +291,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  
 		  Layer[] layers=getLayersFromDB();
 		  Fault[] faults=getFaultsFromDB();
-		  		  
-		  geofestService=
-				new GeoFESTServiceServiceLocator().getGeoFESTExec(new URL(geoFESTServiceUrl));
-
+		  
 		  projectMeshRunBean=geofestService.runBlockingMeshGenerator(userName,
 																						 projectName,
 																						 faults,
@@ -316,10 +316,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  Layer[] layers=getLayersFromDB();
 		  Fault[] faults=getFaultsFromDB();
 		  
-		  
-		  geofestService=
-				new GeoFESTServiceServiceLocator().getGeoFESTExec(new URL(geoFESTServiceUrl));
-
 		  projectMeshRunBean=geofestService.runNonBlockingMeshGenerator(userName,
 																							 projectName,
 																							 faults,
@@ -639,7 +635,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				
 				String DB_RESPONSE_HEADER = "results of the query:";
 				SelectService ss = new SelectServiceLocator();
-				Select select = ss.getSelect(new URL(getFaultDBServiceUrl()));
+				Select select = ss.getSelect(new URL(faultDBServiceUrl));
 	    
 				// --------------------------------------------------
 				// Make queries.
@@ -725,7 +721,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  
 		  try {
 				SelectService ss = new SelectServiceLocator();
-				Select select = ss.getSelect(new URL(getFaultDBServiceUrl()));
+				Select select = ss.getSelect(new URL(faultDBServiceUrl));
 				
 				// --------------------------------------------------
 				// Make queries.
@@ -780,7 +776,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  Layer tmp_layer = new Layer();
 		  try {
 				SelectService ss = new SelectServiceLocator();
-				Select select = ss.getSelect(new URL(getFaultDBServiceUrl()));
+				Select select = ss.getSelect(new URL(faultDBServiceUrl));
 				
 				// --------------------------------------------------
 				// Make queries.
@@ -840,7 +836,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
      * This is used to handle the forms for editing a fault's params.
      */ 
     public String handleFaultEntryEdit(ActionEvent ev) {
-		  
 		  try {
 				// Catch the MyData item during the third phase of the JSF
 				// lifecycle.
@@ -1288,7 +1283,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
     }
     
-    //Method needs to be either re-writteb or deleted.
+    //Method needs to be either re-written or deleted.
     public void toggleRefineMesh(ActionEvent ev) {
     }
 
@@ -1415,19 +1410,18 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				ex.printStackTrace();
 		  }
 		  try {
-				db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");
 				if (deleteProjectsList != null) {
 					 for (int i = 0; i < deleteProjectsList.length; i++) {
+						  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");
 						  ProjectBean delproj=new ProjectBean();
-						  delproj.setProjectName((String)deleteProjectsList[i]);
 						  ObjectSet results=db.get(delproj);
 						  if(results.hasNext()){
 								delproj=(ProjectBean)results.next();
 								db.delete(delproj);
 						  }
+						  db.close();
 					 }
 				}
-				db.close();
 		  } catch (Exception ex) {
 				ex.printStackTrace();
 		  }
@@ -2017,19 +2011,19 @@ public class MeshGeneratorBean extends GenericSopacBean {
     }
     
     public String getFaultLonEnd() {
-		  return this.faultLonEnd;
+	return this.faultLonEnd;
     }
     
     public void setFaultLonEnd(String tmp_str) {
-		  this.faultLonEnd = tmp_str;
+	this.faultLonEnd = tmp_str;
     }
     
     public List getMyFaultDBEntryList() {
-		  return myFaultDBEntryList;
+	return myFaultDBEntryList;
     }
     
     public List getMyLayerDBEntryList() {
-		  return myLayerDBEntryList;
+	return myLayerDBEntryList;
     }
     // Getters ----------------------------------------------------------
     
@@ -2163,19 +2157,19 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	}
     
     public boolean getRenderAddFaultSelectionForm() {
-		  return renderAddFaultSelectionForm;
+	return renderAddFaultSelectionForm;
     }
     
     public void setRenderAddFaultSelectionForm(boolean tmp_boolean) {
-		  this.renderAddFaultSelectionForm = tmp_boolean;
+	this.renderAddFaultSelectionForm = tmp_boolean;
     }
-	 
+
     public void setJobToken(String jobToken){
-		  this.jobToken=jobToken;
+	this.jobToken=jobToken;
     }
     
     public String getJobToken(){
-		  return jobToken;
+	return jobToken;
     }
 
     public void setUserName(String userName){
@@ -2239,7 +2233,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  return geoFESTBaseUrl;
 	 }
 
-	 public void setGeoFESTBaseUrl(String geoFESTBaseUrl){
+	 public void setGeoFESTBaseUrl(){
 		  this.geoFESTBaseUrl=geoFESTBaseUrl;
 	 }
 
@@ -2266,14 +2260,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 	 public GeotransParamsBean getCurrentGeotransParamsBean(){
 		  return this.currentGeotransParamsBean;
-	 }
-
-	 public String getMeshViewerServerUrl() { 
-		  return meshViewerServerUrl; 
-	 }
-
-	 public void setMeshViewerServerUrl(String meshViewerServerUrl) {
-		  this.meshViewerServerUrl=meshViewerServerUrl;
 	 }
 
     //--------------------------------------------------

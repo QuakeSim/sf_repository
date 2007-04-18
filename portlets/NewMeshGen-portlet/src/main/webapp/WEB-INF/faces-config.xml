@@ -16,26 +16,14 @@
                    <property-name>codeName</property-name>
                    <value>MeshGenerator</value>
                 </managed-property>
-
                  <managed-property>
                    <property-name>faultDBServiceUrl</property-name>
                    <value>http://gf2.ucs.indiana.edu:9090/axis/services/Select</value>
                  </managed-property>
-
-                 <managed-property>
-                   <property-name>geoFESTBaseUrl</property-name>
-                   <value>Http://gf19.ucs.indiana.edu:8080/geofestexec/</value>
-                 </managed-property>
-
                  <managed-property>
                    <property-name>geoFESTServiceUrl</property-name>
                    <value>Http://gf19.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec</value>
                  </managed-property>
-                 <managed-property>
-                   <property-name>meshViewerServerUrl</property-name>
-                   <value>http://gf2.ucs.indiana.edu:18084</value>
-                 </managed-property>
-
                 <!-- Needed for the context service-->
                 <managed-property>
                    <property-name>contextUrl</property-name>
