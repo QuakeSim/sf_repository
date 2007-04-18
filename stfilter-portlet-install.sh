@@ -15,7 +15,7 @@ echo "Installing STFILTER Portlet"
 echo "######################################"
 cd $STFILTER_PORTLET_HOME
 export PORTLET_NAME=STFILTER-portlet
-if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME -Dgoogle.key=$GOOGLE_KEY -Dportal.host.name=$PORTAL_HOST_NAME 
+if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME -Danalyze_tseri.service.url=$PORTAL_SERVER_URL/analyze-tseri-exec -Dportal.host.name=$PORTAL_HOST_NAME -Dportal.server.url=$PORTAL_SERVER_URL -Dgoogle.key=$GOOGLE_KEY
 then
     echo Install complete
 else

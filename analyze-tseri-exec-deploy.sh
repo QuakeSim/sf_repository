@@ -20,13 +20,13 @@ echo "######################################"
 echo "Deploying ANALYZETSERI Execution Service"
 echo "######################################"
 cd $ANALYZE_TSERI_EXECUTION_HOME
-if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME -Danalyze_tseri.service.url=$PORTAL_SERVER_URL/analyze-tseri-exec
+if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME -Danalyze_tseri.service.url=$PORTAL_SERVER_URL/analyze-tseri-exec -Dportal.host.name=$PORTAL_HOST_NAME -Dportal.server.url=$PORTAL_SERVER_URL
 then
     echo Ant exec install complete.
 else
     exit 1
 fi
-cp -r target/analyze-tseri-exec $CATALINA_HOME/webapps
+cp -rf target/analyze-tseri-exec $CATALINA_HOME/webapps
 
 # Copy over the ANALYZE_TSERI Executable
 if 
