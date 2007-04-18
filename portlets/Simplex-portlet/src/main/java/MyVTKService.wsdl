@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="MyVTKService"
+ xmlns="http://schemas.xmlsoap.org/wsdl/"
+ xmlns:SOAP="http://schemas.xmlsoap.org/wsdl/soap/"
+ xmlns:WSDL="http://schemas.xmlsoap.org/wsdl/"
+ targetNamespace="urn:vtk"
+ xmlns:tns="urn:vtk"
+ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:impl="urn:vtk">
+
+<types>
+ <schema targetNamespace="urn:vtk"
+  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:impl="urn:vtk"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="unqualified"
+  attributeFormDefault="unqualified">
+
+  <complexType name="exitResponse">
+   <sequence>
+   </sequence>
+  </complexType>
+
+  <complexType name="plotResponse">
+   <sequence>
+    <element name="plotReturn" type="xsd:base64Binary" minOccurs="1" maxOccurs="1" nillable="true"/>
+    <element name="width" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+    <element name="height" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+
+  <complexType name="meshResponse">
+   <sequence>
+    <element name="meshReturn" type="xsd:base64Binary" minOccurs="1" maxOccurs="1" nillable="true"/>
+    <element name="width" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+    <element name="height" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+
+  <complexType name="nullResponse">
+   <sequence>
+   </sequence>
+  </complexType>
+
+ </schema>
+</types>
+
+<message name="addFaultRequest">
+ <part name="in0" type="xsd:string"/>
+ <part name="in1" type="xsd:float"/>
+ <part name="in2" type="xsd:float"/>
+ <part name="in3" type="xsd:float"/>
+ <part name="in4" type="xsd:float"/>
+ <part name="in5" type="xsd:float"/>
+ <part name="in6" type="xsd:float"/>
+ <part name="in7" type="xsd:float"/>
+</message>
+
+<message name="nullResponse">
+</message>
+
+<message name="zoomInRequest">
+ <part name="in0" type="xsd:float"/>
+ <part name="in1" type="xsd:float"/>
+ <part name="in2" type="xsd:float"/>
+</message>
+
+<message name="removeFaultRequest">
+ <part name="in0" type="xsd:string"/>
+</message>
+
+<message name="plotRequest">
+</message>
+
+<message name="plotResponse">
+ <part name="plotReturn" type="xsd:base64Binary"/>
+ <part name="width" type="xsd:int"/>
+ <part name="height" type="xsd:int"/>
+</message>
+
+<message name="meshRequest">
+ <part name="m" type="xsd:int"/>
+ <part name="n" type="xsd:string"/>
+</message>
+
+<message name="meshResponse">
+ <part name="meshReturn" type="xsd:base64Binary"/>
+ <part name="width" type="xsd:int"/>
+ <part name="height" type="xsd:int"/>
+</message>
+
+<message name="rotateRequest">
+ <part name="in0" type="xsd:float"/>
+ <part name="in1" type="xsd:float"/>
+ <part name="in2" type="xsd:float"/>
+</message>
+
+<message name="addLayerRequest">
+ <part name="in0" type="xsd:string"/>
+ <part name="in1" type="xsd:float"/>
+ <part name="in2" type="xsd:float"/>
+ <part name="in3" type="xsd:float"/>
+ <part name="in4" type="xsd:float"/>
+ <part name="in5" type="xsd:float"/>
+ <part name="in6" type="xsd:float"/>
+</message>
+
+<message name="exitRequest">
+</message>
+
+<message name="exitResponse">
+</message>
+
+<message name="removeLayerRequest">
+ <part name="in0" type="xsd:string"/>
+</message>
+
+<message name="setWindowRequest">
+ <part name="w" type="xsd:int"/>
+ <part name="h" type="xsd:int"/>
+</message>
+
+<portType name="MyVTKServicePortType">
+ <operation name="addFault">
+  <documentation>Service definition of function impl__addFault</documentation>
+  <input message="tns:addFaultRequest"/>
+  <output message="tns:nullResponse"/>
+ </operation>
+ <operation name="zoomIn">
+  <documentation>Service definition of function impl__zoomIn</documentation>
+  <input message="tns:zoomInRequest"/>
+  <output message="tns:nullResponse"/>
+ </operation>
+ <operation name="removeFault">
+  <documentation>Service definition of function impl__removeFault</documentation>
+  <input message="tns:removeFaultRequest"/>
+  <output message="tns:nullResponse"/>
+ </operation>
+ <operation name="plot">
+  <documentation>Service definition of function impl__plot</documentation>
+  <input message="tns:plotRequest"/>
+  <output message="tns:plotResponse"/>
+ </operation>
+ <operation name="mesh">
+  <documentation>Service definition of function impl__mesh</documentation>
+  <input message="tns:meshRequest"/>
+  <output message="tns:meshResponse"/>
+ </operation>
+ <operation name="rotate">
+  <documentation>Service definition of function impl__rotate</documentation>
+  <input message="tns:rotateRequest"/>
+  <output message="tns:nullResponse"/>
+ </operation>
+ <operation name="addLayer">
+  <documentation>Service definition of function impl__addLayer</documentation>
+  <input message="tns:addLayerRequest"/>
+  <output message="tns:nullResponse"/>
+ </operation>
+ <operation name="exit">
+  <documentation>Service definition of function impl__exit</documentation>
+  <input message="tns:exitRequest"/>
+  <output message="tns:exitResponse"/>
+ </operation>
+ <operation name="removeLayer">
+  <documentation>Service definition of function impl__removeLayer</documentation>
+  <input message="tns:removeLayerRequest"/>
+  <output message="tns:nullResponse"/>
+ </operation>
+ <operation name="setWindow">
+  <documentation>Service definition of function impl__setWindow</documentation>
+  <input message="tns:setWindowRequest"/>
+  <output message="tns:nullResponse"/>
+ </operation>
+</portType>
+
+<binding name="MyVTKServiceBinding" type="tns:MyVTKServicePortType">
+ <SOAP:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+ <operation name="addFault">
+  <SOAP:operation soapAction=""/>
+  <input>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="zoomIn">
+  <SOAP:operation soapAction=""/>
+  <input>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="removeFault">
+  <SOAP:operation soapAction=""/>
+  <input>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="plot">
+  <SOAP:operation soapAction=""/>
+  <input>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="mesh">
+  <SOAP:operation soapAction=""/>
+  <input>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="rotate">
+  <SOAP:operation soapAction=""/>
+  <input>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="addLayer">
+  <SOAP:operation soapAction=""/>
+  <input>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="exit">
+  <SOAP:operation soapAction=""/>
+  <input>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="removeLayer">
+  <SOAP:operation soapAction=""/>
+  <input>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="setWindow">
+  <SOAP:operation soapAction=""/>
+  <input>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+   <SOAP:body use="encoded" namespace="urn:vtk" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+</binding>
+
+<service name="MyVTKService">
+ <documentation>gSOAP 2.2.3b generated service definition</documentation>
+ <port name="MyVTKService" binding="tns:MyVTKServiceBinding">
+  <SOAP:address location="http://kamet.ucs.indiana.edu:18084"/>
+ </port>
+</service>
+
+</definitions>

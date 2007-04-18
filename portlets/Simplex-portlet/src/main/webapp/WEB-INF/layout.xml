@@ -1,0 +1,21 @@
+<portlet-tabbed-pane>
+    <portlet-tab label="Simplex-Portlet">
+        <title lang="en">Simplex-Portlet</title>
+        <portlet-tabbed-pane style="sub-menu">
+            <portlet-tab label="Simplex-portlet">
+                <title lang="en">Simplex Portlet</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="Simplex-PF">
+                                <portlet-class>Simplex-portlet#Simplex-portlet </portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+        </portlet-tabbed-pane>
+    </portlet-tab>
+</portlet-tabbed-pane>
+
+
