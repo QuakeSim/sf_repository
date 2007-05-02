@@ -10,9 +10,9 @@
       set output "$1"
       set grid
       set ylabel "Coordinate(m)"
-      set xlabel "Time(days [$4 $5])"
+      set xlabel "Time(days)"
       show label
-      set size 0.7,0.7
+      set size 1.7,0.65
       #set key left
       set nokey
       set yrange [y_min:y_max]

@@ -52,12 +52,24 @@
 </target>
 
 <target name="ExecGnuplot" depends="CopyOutput">
+   <exec executable="${bindir.prop}/plot_go.sh"
+         dir="${bindir.prop}">
+      <arg line="${RDAHMMBaseName.prop}.input"/>
+      <arg line="${RDAHMMBaseName.prop}.Q"/>
+      <env key="PATH" path="${bindir.prop}:/bin/:/usr/bin/:$PATH"/>
+   </exec>
+   <move todir="${outputDestDir.prop}">
+     <fileset file="*.png"/>
+   </move>
+</target>
+
+<target name="ExecMultiGnuplot" depends="CopyOutput">
    <exec executable="${bindir.prop}/plot_multisite.sh"
          dir="${bindir.prop}">
       <arg line="-x ${RDAHMMBaseName.prop}.input"/>
       <arg line="-q ${RDAHMMBaseName.prop}.Q"/>
       <arg line="-w ${workDir.prop}"/>
-      <arg line="-l \"${stationList.prop}\""/>
+      <arg line="-l '${stationList.prop}'"/>
       <env key="PATH" path="${bindir.prop}:/bin/:/usr/bin/:$PATH"/>
    </exec>
    <move todir="${outputDestDir.prop}">
