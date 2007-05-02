@@ -57,8 +57,8 @@ source ./genericproject-install.sh
 #----------------------------------------------------------------------
 # Buid the standalone (SA) web applications.
 #----------------------------------------------------------------------
-cd $BUILD_DIR
-source ./simplex-sa-install.sh
+#cd $BUILD_DIR
+#source ./simplex-sa-install.sh
 
 # Uncommented since we only need for development.
 #cd $BUILD_DIR
