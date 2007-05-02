@@ -23,7 +23,7 @@
    <echo message="Annealing step size: ${annealStep.prop}"/>
    <exec executable="${bindir.prop}/rdahmm" 
          output="${workDir.prop}/${RDAHMMBaseName.prop}.stdout"
-	 dir="${workDir.prop}">
+			dir="${workDir.prop}">
       <arg line="-data ${workDir.prop}/${RDAHMMBaseName.prop}.input"/>
       <arg line="-T ${nobsv.prop}"/>
       <arg line="-D ${ndim.prop}"/>
@@ -49,14 +49,15 @@
          todir="${bindir.prop}"/>
    <copy file="${workDir.prop}/${RDAHMMBaseName.prop}.Q" 
          todir="${bindir.prop}"/>
-
 </target>
 
 <target name="ExecGnuplot" depends="CopyOutput">
-   <exec executable="${bindir.prop}/plot_go.sh"
+   <exec executable="${bindir.prop}/plot_multisite.sh"
          dir="${bindir.prop}">
-      <arg line="${RDAHMMBaseName.prop}.input"/>
-      <arg line="${RDAHMMBaseName.prop}.Q"/>
+      <arg line="-x ${RDAHMMBaseName.prop}.input"/>
+      <arg line="-q ${RDAHMMBaseName.prop}.Q"/>
+      <arg line="-w ${workDir.prop}"/>
+      <arg line="-l \"${stationList.prop}\""/>
       <env key="PATH" path="${bindir.prop}:/bin/:/usr/bin/:$PATH"/>
    </exec>
    <move todir="${outputDestDir.prop}">
