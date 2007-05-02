@@ -413,6 +413,22 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  gfoutput.setToptrisUrl(baseUrl+"/"+projectName+".toptris");
 		  gfoutput.setCghistUrl(baseUrl+"/"+"cghist.txt");
 		  gfoutput.setJobStatusUrl(baseUrl+"/"+"jobstatus.log");
+
+		  System.out.println(gfoutput.getJobUIDStamp());
+		  System.out.println(gfoutput.getTarOfEverythingUrl());
+		  System.out.println(gfoutput.getInputUrl());
+		  System.out.println(gfoutput.getOutputUrl());
+		  System.out.println(gfoutput.getLogUrl());
+		  System.out.println(gfoutput.getIndexUrl());
+		  System.out.println(gfoutput.getNodeUrl());
+		  System.out.println(gfoutput.getTetraUrl());
+		  System.out.println(gfoutput.getTetvolsUrl());
+		  System.out.println(gfoutput.getToptrisUrl());
+		  System.out.println(gfoutput.getCghistUrl());
+		  System.out.println(gfoutput.getJobStatusUrl());
+
+		  
+
 		  return gfoutput;
 	 }
 	 

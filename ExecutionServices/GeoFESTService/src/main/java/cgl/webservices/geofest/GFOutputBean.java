@@ -85,7 +85,7 @@ public class GFOutputBean {
 		  return indexUrl;
 	 }
 
-	 public void setCghistUrl(String CghistUrl) {
+	 public void setCghistUrl(String cghistUrl) {
 		  this.cghistUrl=cghistUrl;
 	 }
 	 public String getCghistUrl() {

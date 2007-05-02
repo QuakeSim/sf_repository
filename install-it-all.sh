@@ -91,9 +91,6 @@ cd $BUILD_DIR
 source ./rdahmm-portlet-install.sh
 
 cd $BUILD_DIR
-source ./stationmonitor-sa-install.sh
-
-cd $BUILD_DIR
 source ./simplex-portlet-install.sh
 
 cd $BUILD_DIR
@@ -106,10 +103,10 @@ cd $BUILD_DIR
 source ./stationmonitor-portlet-install.sh
 
 cd $BUILD_DIR
-source ./realtime-rdahmm-portlet-install.sh
+source ./disloc-portlet-install.sh
 
 cd $BUILD_DIR
-source ./disloc-portlet-install.sh
+source ./simplex-portlet-install.sh
 
 # Portlet version has bugs, so don't install
 #cd $BUILD_DIR
