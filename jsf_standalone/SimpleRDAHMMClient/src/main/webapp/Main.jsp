@@ -76,7 +76,6 @@
   The input data URL is obtained directly from the GRWS web service
   as a return type.
 	
-
   <f:view>        
 
     <h:form id="form1">

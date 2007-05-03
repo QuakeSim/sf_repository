@@ -16,7 +16,7 @@ import java.net.URL;
 
 public class SimpleRdahmmClient {
     //The value for this property is set in faces-config.xml.
-    String rdahmmServiceUrl="http://gf2.ucs.indiana.edu:8080/rdahmmexec/services/RDAHMMExec";
+    String rdahmmServiceUrl="http://gf19.ucs.indiana.edu:8080/rdahmmexec/services/RDAHMMExec";
 
     //Some properties with default values
     int numModelStates=2;

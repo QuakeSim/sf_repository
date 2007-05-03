@@ -22,7 +22,7 @@ public class RDAHMMServiceServiceLocator extends org.apache.axis.client.Service 
     }
 
     // Use to get a proxy class for RDAHMMExec
-    private java.lang.String RDAHMMExec_address = "http://gf2.ucs.indiana.edu:8080/rdahmmexec/services/RDAHMMExec";
+    private java.lang.String RDAHMMExec_address = "http://gf19.ucs.indiana.edu:8080/rdahmmexec/services/RDAHMMExec";
 
     public java.lang.String getRDAHMMExecAddress() {
         return RDAHMMExec_address;
@@ -105,7 +105,7 @@ public class RDAHMMServiceServiceLocator extends org.apache.axis.client.Service 
     }
 
     public javax.xml.namespace.QName getServiceName() {
-        return new javax.xml.namespace.QName("http://gf2.ucs.indiana.edu:8080/rdahmmexec/services/RDAHMMExec", "RDAHMMServiceService");
+        return new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/rdahmmexec/services/RDAHMMExec", "RDAHMMServiceService");
     }
 
     private java.util.HashSet ports = null;
@@ -113,7 +113,7 @@ public class RDAHMMServiceServiceLocator extends org.apache.axis.client.Service 
     public java.util.Iterator getPorts() {
         if (ports == null) {
             ports = new java.util.HashSet();
-            ports.add(new javax.xml.namespace.QName("http://gf2.ucs.indiana.edu:8080/rdahmmexec/services/RDAHMMExec", "RDAHMMExec"));
+            ports.add(new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/rdahmmexec/services/RDAHMMExec", "RDAHMMExec"));
         }
         return ports.iterator();
     }

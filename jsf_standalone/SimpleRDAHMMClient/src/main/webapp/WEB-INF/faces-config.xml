@@ -14,7 +14,7 @@
 
                 <managed-property>
                    <property-name>rdahmmServiceUrl</property-name>
-                   <value>http://gf2.ucs.indiana.edu:8080/rdahmmexec/services/RDAHMMExec</value>
+                   <value>http://gf19.ucs.indiana.edu:8080/rdahmmexec/services/RDAHMMExec</value>
                 </managed-property>
 
 
