@@ -137,9 +137,6 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 
 	MasterParamList masterList;
 
-	// String stamp=(new Date()).getTime()+"";
-	String stamp = "TEST";
-
 	/**
 	 * Fun begins here. This is the workhorse constructor.
 	 */
@@ -206,7 +203,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		aprioriValueFile = properties.getProperty("apriori.value.file");
 
 		// Put a time stamp on the project name:
-		projectName += "-" + stamp;
+		projectName += "-" + (new Date()).getTime();
 
 		outputDestDir = baseDestDir + "/" + projectName;
 		workDir = baseWorkDir + File.separator + projectName;
@@ -667,12 +664,12 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 	 * This is the simplified API that uses default values.
 	 */
 
-	public String[] execBlockingAnalyzeTseri(String siteCode, String data)
+	public String[] execBlockingAnalyzeTseri(String siteCode, String inputFileUrlString)
 			throws Exception {
-		System.out.println("Running blocking execution");
-		System.out.println(data);
+		debug("Running blocking execution");
+		debug(inputFileUrlString);
 
-		String[] returnVals = execBlockingAnalyzeTseri(siteCode, data,
+		String[] returnVals = execBlockingAnalyzeTseri(siteCode, inputFileUrlString,
 				baseWorkDir, outputDestDir, projectName, binPath,
 				buildFilePath, antTarget);
 		return returnVals;
@@ -683,7 +680,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 	 * executing. This is the full API.
 	 */
 	public String[] execBlockingAnalyzeTseri(String siteCode,
-			String data, String baseWorkDir,
+			String inputFileUrlString, String baseWorkDir,
 			String outputDestDir, String projectName, String binPath,
 			String buildFilePath, String antTarget) throws Exception {
 
@@ -697,35 +694,14 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		System.out.println("[!!]antTarget="+antTarget);
 		makeWorkDir(workDir, buildFilePath);
 
+		makeWorkDir(workDir, buildFilePath);
+
 		// Copy the input file to the working directory, if necessary.
-		//String localFile = downloadInputFile(inputFileUrlString, workDir);
-		//String fileSimpleName = extractSimpleName(inputFileUrl.getFile());
-		//System.out.println(fileSimpleName);
+		String localFile = downloadInputFile(inputFileUrlString, workDir);
 
-		// File names for SOPAC data and filtered data
-		String localDataFilename = workDir + File.separator + projectName + sopacDataFileExt;
+		// Filter the file
 		String localFileFiltered = workDir + File.separator + projectName + filteredDataFileExt;
-
-		try {
-			// Stream to write file
-			FileOutputStream fout;
-
-			// Open an output stream
-			fout = new FileOutputStream(localDataFilename);
-
-			// Print a line of text
-			new PrintStream(fout).print(data);
-
-			// Close our output stream
-			fout.close();
-		}
-		// Catches any error conditions
-		catch (IOException e) {
-			System.err.println("[Error] Unable to write to file: "+localDataFilename);
-			return null;
-		}
-
-		filterResults(localDataFilename, localFileFiltered, -1, -1);
+		filterResults(localFile, localFileFiltered, -1, -1);
 
 		// Make the input files.
 		createSiteListFile(siteCode);
@@ -747,6 +723,74 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		return getTheReturnFiles();
 	}
 
+	// public String[] execBlockingAnalyzeTseri(String siteCode,
+	// String data, String baseWorkDir,
+	// String outputDestDir, String projectName, String binPath,
+	// String buildFilePath, String antTarget) throws Exception {
+	//
+	// // Set up the work directory
+	// // String workDir=baseWorkDir+File.separator+projectName;
+	// System.out.println("[!!]baseWorkDir="+baseWorkDir);
+	// System.out.println("[!!]workDir="+workDir);
+	// System.out.println("[!!]outputDestDir="+outputDestDir);
+	// System.out.println("[!!]binPath="+binPath);
+	// System.out.println("[!!]buildFilePath="+buildFilePath);
+	// System.out.println("[!!]antTarget="+antTarget);
+	// makeWorkDir(workDir, buildFilePath);
+	//
+	// // Copy the input file to the working directory, if necessary.
+	// //String localFile = downloadInputFile(inputFileUrlString, workDir);
+	// //String fileSimpleName = extractSimpleName(inputFileUrl.getFile());
+	// //System.out.println(fileSimpleName);
+	//
+	// // File names for SOPAC data and filtered data
+	// String localDataFilename = workDir + File.separator + projectName +
+	// sopacDataFileExt;
+	// String localFileFiltered = workDir + File.separator + projectName +
+	// filteredDataFileExt;
+	//
+	// try {
+	// // Stream to write file
+	// FileOutputStream fout;
+	//
+	// // Open an output stream
+	// fout = new FileOutputStream(localDataFilename);
+	//
+	// // Print a line of text
+	// new PrintStream(fout).print(data);
+	//
+	// // Close our output stream
+	// fout.close();
+	// }
+	// // Catches any error conditions
+	// catch (IOException e) {
+	// System.err.println("[Error] Unable to write to file:
+	// "+localDataFilename);
+	// return null;
+	// }
+	//
+	// filterResults(localDataFilename, localFileFiltered, -1, -1);
+	//
+	// // Make the input files.
+	// createSiteListFile(siteCode);
+	// createEstimatedParamFile();
+	// createDataListFile(siteCode, localFileFiltered);
+	// createDriverFile();
+	//
+	// // //Get the dimensions and number of observations.
+	// // int ndim=getFileDimension(localFileFiltered);
+	// // int nobsv=getLineCount(localFileFiltered);
+	//
+	// // ? localFileFiltered? localFile?
+	// String[] args = setUpArgArray(localFileFiltered, workDir,
+	// outputDestDir, projectName, binPath, buildFilePath, antTarget);
+	//
+	// // Methods inherited from parent
+	// setArgs(args);
+	//		run();
+	//		return getTheReturnFiles();
+	//	}
+	
 	/**
 	 * This version immediately returns and is used for programs that take
 	 * longer to run. This is the full API.
@@ -793,7 +837,8 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 	protected String[] getTheReturnFiles() {
 
 		String[] extensions = { ".input.xyz.X.png", ".input.xyz.Y.png",
-				".input.xyz.Z.png", ".resi" };
+				".input.xyz.Z.png", ".resi", ".data", ".drv", ".input",
+				".list", ".mdl", ".out", ".para", ".site" };
 
 		String[] returnFiles = new String[extensions.length];
 		for (int i = 0; i < extensions.length; i++) {
@@ -997,7 +1042,10 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		return rtn;
 	}
 	
-
+	public static String execAnalyzeTseriSimpleBean(AnalyzeTseriSimpleBean bean) {
+		return Integer.toString(bean.getId());
+	}
+	
 	public static String[] execAnalyzeTseri(AnalyzeTseriBean bean) {
 		return AnalyzeTseriService.execAnalyzeTseri(bean.getSiteCode(), 
 				bean.getResOption(), bean.getTermOption(), bean.getCutoffCriterion(), bean.getEstJumpSpan(), 
@@ -1005,7 +1053,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 				bean.getOutlierCriteriaEast(), bean.getOutlierCriteriaNorth(), bean.getBadObsCriteriaUp(), 
 				bean.getBadObsCriteriaEast(), bean.getBadObsCriteriaNorth(), bean.getBadObsCriteriaUp(), 
 				bean.getTimeIntervalBeginTime(), bean.getTimeIntervalEndTime(), 
-				bean.getData(), bean.getGlobalParam(), bean.getSiteParam());
+				bean.getSopacDataFileUrl(), bean.getGlobalParam(), bean.getSiteParam());
 	}
 	
 	public static String[] execAnalyzeTseri(String siteCode,  
@@ -1014,7 +1062,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 			double outlierCriteriaEast, double outlierCriteriaNorth, double outlierCriteriaUp,
 			double badObsCriteriaEast, double badObsCriteriaNorth, double badObsCriteriaUp,
 			double timeIntervalBeginTime, double timeIntervalEndTime,
-			String data, double[][] globalParam, double[][] siteParam) {
+			String inputFileUrlString, double[][] globalParam, double[][] siteParam) {
 		
 		AnalyzeTseriService ats;
 		
@@ -1145,7 +1193,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 
 			System.out.println("----------------------------------");
 			System.out.println("Executing runBlockingAnalyzeTseri ... ");
-			String[] returnVals = ats.execBlockingAnalyzeTseri(siteCode, data);
+			String[] returnVals = ats.execBlockingAnalyzeTseri(siteCode, inputFileUrlString);
 
 			for (int i = 0; i < returnVals.length; i++) {
 				System.out.println(returnVals[i]);
@@ -1450,70 +1498,6 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 
 	}
 	
-	public static void main(String[] args) {
-		String siteCode = "dhlg";
-		String dataUrl = "http://gf3.ucs.indiana.edu:8888/inputTest.xyz";
-		double[][] globalParam = { { 7, 0.0, 50.0, 2005.0, 2008.0 },
-				{ 9, 0.0, 50.0, 2005.0, 2008.0 } };
-		double[][] siteParam = { { 8, 0.0, 50.0, 2005.0, 2008.0 } };
-		execATS(siteCode, dataUrl, globalParam, siteParam);
-	}
-
-	public static void mainTest2(String[] args) {
-		String siteCode = "dhlg";
-		String dataUrl = "http://gf3.ucs.indiana.edu:8888/inputTest.xyz";
-		double[][] globalParam = { { 7, 0.0, 50.0, 2005.0, 2008.0 },
-				{ 9, 0.0, 50.0, 2005.0, 2008.0 } };
-		double[][] siteParam = { { 8, 0.0, 50.0, 2005.0, 2008.0 } };
-		execATS(siteCode, dataUrl, globalParam, siteParam);
-	}
-
-	public static void mainTest1(String[] args) {
-		// Test Set #1 : moose
-		String dataUrl = "http://gf3.ucs.indiana.edu:8888/inputTest.xyz";
-		String siteCode = "dhlg";
-
-		// Test Set #2
-		// String dataUrl =
-		// "http://geoapp.ucsd.edu/xml/geodesy/reason/grws/resources/output/procCoords/4-47353-20061008100245.txt";
-		// String siteCode = "sio3";
-
-		// int numModelStates = 2;
-		try {
-			// Since we are running on the command line, use
-			// the classloader to find the property files
-			AnalyzeTseriService ats = new AnalyzeTseriService(true);
-			ats.myStation.setSiteName(siteCode);
-
-			/* Need user interface for inputs */
-			addEpisodicBias(ats.myStation, ats.myStationList, 7, 0.0, 50.0,
-					2005.0, 2008.0);
-			addEpisodicBias(ats.allsites, ats.allsitesList, 8, 0.0, 50.0,
-					2005.0, 2008.0);
-
-			System.out.println("----------------------------------");
-			System.out.println("Testing blocking version");
-			String[] returnVals = ats
-					.runBlockingAnalyzeTseri(siteCode, dataUrl);
-
-			for (int i = 0; i < returnVals.length; i++) {
-				System.out.println(returnVals[i]);
-			}
-
-			System.out.println("----------------------------------");
-			System.out.println("Testing non-blocking version");
-			String[] returnVals2 = ats.runNonblockingAnalyzeTseri(siteCode,
-					dataUrl);
-
-			for (int i = 0; i < returnVals2.length; i++) {
-				System.out.println(returnVals[i]);
-			}
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
-
 	public static void debug(String msg) {
 		System.out.println("[DEBUG] " + msg);
 	}

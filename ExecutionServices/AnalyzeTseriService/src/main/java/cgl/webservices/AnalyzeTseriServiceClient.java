@@ -5,6 +5,7 @@ import org.apache.axis.client.Service;
 import javax.xml.namespace.QName;
 
 public class AnalyzeTseriServiceClient {
+	public static String sopacDataFileUrl = "http://geoapp02.ucsd.edu/xml/geodesy/reason/grws/resources/output/procCoords/4-94488-20070505080435.txt";
 	public static String data = 
 		"dhlg 2004-01-01T12:00:00 -2319099.2349 -4799846.5086 3490090.4483 0.0035 0.0050 0.0038\n"+
 		"dhlg 2004-01-02T12:00:00 -2319099.2377 -4799846.5114 3490090.4537 0.0031 0.0042 0.0033\n"+
@@ -102,7 +103,7 @@ public class AnalyzeTseriServiceClient {
 		"dhlg 2004-04-03T12:00:00 -2319099.2419 -4799846.5042 3490090.4427 0.0028 0.0039 0.0032\n"+
 		"dhlg 2004-04-04T12:00:00 -2319099.2405 -4799846.5044 3490090.4407 0.0027 0.0039 0.0032\n";
 
-	public static void main(String[] args) {
+	public static void execAnalyzeTseriTest(String[] args) {
 		try {
 			//String endpoint = "http://gf3.ucs.indiana.edu:8888/analyze-tseri-exec/services/AnalyzeTseriExec";
 			
@@ -149,7 +150,7 @@ public class AnalyzeTseriServiceClient {
 					new Double(outlierCriteriaEast), new Double(outlierCriteriaNorth), new Double(outlierCriteriaUp),
 					new Double(badObsCriteriaEast), new Double(badObsCriteriaNorth), new Double(badObsCriteriaUp),
 					new Double(timeIntervalBeginTime), new Double(timeIntervalEndTime),
-					data, globalParam, siteParam });
+					sopacDataFileUrl, globalParam, siteParam });
 			
 			System.out.println("Output: ");
 			for (int i = 0; i < ret.length; i++) {
@@ -159,5 +160,121 @@ public class AnalyzeTseriServiceClient {
 		} catch (Exception e) {
 			System.err.println(e.toString());
 		}
+	}
+	
+	public static void execAnalyzeTseriBeanTest(String[] args) {
+		try {
+			//String endpoint = "http://gf3.ucs.indiana.edu:8888/analyze-tseri-exec/services/AnalyzeTseriExec";
+			
+			if (args.length < 1) {
+				System.out.println("Usage : AnalyzeTseriServiceClient endpoint_url");
+				return;
+			}
+			
+			String endpoint = args[0];
+			String siteCode = "dhlg";
+			double[][] globalParam = { 
+					{ 7, 0.0, 50.0, 2004.0, 2008.0 },
+					{ 9, 0.0, 50.0, 2004.0, 2008.0 } };
+			double[][] siteParam = { 
+					{ 8, 0.0, 50.0, 2004.0, 2008.0 } };
+
+			Service service = new Service();
+			Call call = (Call) service.createCall();
+			QName qn  = new QName ("urn:BeanService", "AnalyzeTseriBean");
+	        call.registerTypeMapping(AnalyzeTseriBean.class, qn,
+                    new org.apache.axis.encoding.ser.BeanSerializerFactory(AnalyzeTseriBean.class, qn),
+                    new org.apache.axis.encoding.ser.BeanDeserializerFactory(AnalyzeTseriBean.class, qn));			
+
+			call.setTargetEndpointAddress(new java.net.URL(endpoint));
+			call.setOperationName(new QName("execAnalyzeTseri", "execAnalyzeTseri"));
+			
+			int resOption = 1; 
+			int termOption = 556; 
+			double cutoffCriterion = 1.0; 
+			double estJumpSpan = 1.0;
+			double weakObsCriteriaEast = 30.0; 
+			double weakObsCriteriaNorth = 30.0; 
+			double weakObsCriteriaUp = 50.0;
+			double outlierCriteriaEast = 800.0; 
+			double outlierCriteriaNorth = 800.0; 
+			double outlierCriteriaUp = 800.0;
+			double badObsCriteriaEast = 10000.0; 
+			double badObsCriteriaNorth = 10000.0; 
+			double badObsCriteriaUp = 10000.0;
+			double timeIntervalBeginTime = 2004.0; 
+			double timeIntervalEndTime = 2005.0;
+
+			AnalyzeTseriBean bean = new AnalyzeTseriBean();
+			bean.setSiteCode(siteCode);
+			bean.setResOption(resOption);
+			bean.setTermOption(termOption);
+			bean.setCutoffCriterion(cutoffCriterion);
+			bean.setEstJumpSpan(estJumpSpan);
+			bean.setWeakObsCriteriaEast(weakObsCriteriaEast);
+			bean.setWeakObsCriteriaNorth(weakObsCriteriaNorth);
+			bean.setWeakObsCriteriaUp(weakObsCriteriaUp);
+			bean.setOutlierCriteriaEast(outlierCriteriaEast);
+			bean.setOutlierCriteriaNorth(outlierCriteriaNorth);
+			bean.setOutlierCriteriaUp(outlierCriteriaUp);
+			bean.setBadObsCriteriaEast(badObsCriteriaEast);
+			bean.setBadObsCriteriaNorth(badObsCriteriaNorth);
+			bean.setBadObsCriteriaUp(badObsCriteriaUp);
+			bean.setTimeIntervalBeginTime(timeIntervalBeginTime);
+			bean.setTimeIntervalEndTime(timeIntervalEndTime);
+			bean.setGlobalParam(globalParam);
+			bean.setSiteParam(siteParam);
+			bean.setSopacDataFileUrl(sopacDataFileUrl);
+			
+			String[] ret = (String[]) call.invoke(new Object[] { bean });
+			
+			System.out.println("Output: ");
+			for (int i = 0; i < ret.length; i++) {
+				System.out.println(ret[i]);
+			}
+
+		} catch (Exception e) {
+			System.err.println(e.toString());
+		}
+	}
+	
+	public static void execAnalyzeTseriSimpleBeanTest(String[] args) {
+		try {
+			//String endpoint = "http://gf3.ucs.indiana.edu:8888/analyze-tseri-exec/services/AnalyzeTseriExec";
+			
+			if (args.length < 1) {
+				System.out.println("Usage : AnalyzeTseriServiceClient endpoint_url");
+				return;
+			}
+			String endpoint = args[0];
+			System.out.println(endpoint);
+
+			Service service = new Service();
+			Call call = (Call) service.createCall();
+			QName qn  = new QName ("urn:BeanService", "AnalyzeTseriSimpleBean");
+	        call.registerTypeMapping(AnalyzeTseriBean.class, qn,
+                    new org.apache.axis.encoding.ser.BeanSerializerFactory(AnalyzeTseriSimpleBean.class, qn),
+                    new org.apache.axis.encoding.ser.BeanDeserializerFactory(AnalyzeTseriSimpleBean.class, qn));			
+
+			call.setTargetEndpointAddress(new java.net.URL(endpoint));
+			call.setOperationName(new QName("execAnalyzeTseriSimpleBean", "execAnalyzeTseriSimpleBean"));
+			
+
+			AnalyzeTseriSimpleBean bean = new AnalyzeTseriSimpleBean();
+			bean.setId(10);
+			
+			String ret = (String) call.invoke(new Object[] { bean });
+			
+			System.out.println("Output: " + ret);
+
+		} catch (Exception e) {
+			System.err.println(e.toString());
+		}
+	}
+
+	public static void main(String[] args) {
+		execAnalyzeTseriTest(args);
+		//execAnalyzeTseriBeanTest(args);
+		//execAnalyzeTseriSimpleBeanTest(args);
 	}
 }

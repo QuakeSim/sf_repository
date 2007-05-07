@@ -1,25 +1,27 @@
 package cgl.webservices;
 
 public class AnalyzeTseriBean {
-	private String siteCode;
-	private int resOption;
-	private int termOption;
-	private double cutoffCriterion;
-	private double estJumpSpan;
-	private double weakObsCriteriaEast;
-	private double weakObsCriteriaNorth;
-	private double weakObsCriteriaUp;
-	private double outlierCriteriaEast;
-	private double outlierCriteriaNorth;
-	private double outlierCriteriaUp;
-	private double badObsCriteriaEast;
-	private double badObsCriteriaNorth;
-	private double badObsCriteriaUp;
-	private double timeIntervalBeginTime;
-	private double timeIntervalEndTime;
-	private String data;
-	private double[][] globalParam;
-	private double[][] siteParam;
+	String siteCode;
+	int resOption;
+	int termOption;
+	double cutoffCriterion;
+	double estJumpSpan;
+	double weakObsCriteriaEast;
+	double weakObsCriteriaNorth;
+	double weakObsCriteriaUp;
+	double outlierCriteriaEast;
+	double outlierCriteriaNorth;
+	double outlierCriteriaUp;
+	double badObsCriteriaEast;
+	double badObsCriteriaNorth;
+	double badObsCriteriaUp;
+	double timeIntervalBeginTime;
+	double timeIntervalEndTime;
+	String sopacDataFileName;
+	String sopacDataFileContent;
+	String sopacDataFileUrl;
+	double[][] globalParam;
+	double[][] siteParam;
 	
 	public double getBadObsCriteriaEast() {
 		return badObsCriteriaEast;
@@ -44,12 +46,6 @@ public class AnalyzeTseriBean {
 	}
 	public void setCutoffCriterion(double cutoffCriterion) {
 		this.cutoffCriterion = cutoffCriterion;
-	}
-	public String getData() {
-		return data;
-	}
-	public void setData(String data) {
-		this.data = data;
 	}
 	public double getEstJumpSpan() {
 		return estJumpSpan;
@@ -99,6 +95,24 @@ public class AnalyzeTseriBean {
 	public void setSiteParam(double[][] siteParam) {
 		this.siteParam = siteParam;
 	}
+	public String getSopacDataFileContent() {
+		return sopacDataFileContent;
+	}
+	public void setSopacDataFileContent(String sopacDataFileContent) {
+		this.sopacDataFileContent = sopacDataFileContent;
+	}
+	public String getSopacDataFileName() {
+		return sopacDataFileName;
+	}
+	public void setSopacDataFileName(String sopacDataFileName) {
+		this.sopacDataFileName = sopacDataFileName;
+	}
+	public String getSopacDataFileUrl() {
+		return sopacDataFileUrl;
+	}
+	public void setSopacDataFileUrl(String sopacDataFileUrl) {
+		this.sopacDataFileUrl = sopacDataFileUrl;
+	}
 	public int getTermOption() {
 		return termOption;
 	}
@@ -135,5 +149,5 @@ public class AnalyzeTseriBean {
 	public void setWeakObsCriteriaUp(double weakObsCriteriaUp) {
 		this.weakObsCriteriaUp = weakObsCriteriaUp;
 	}
-
+	
 }

@@ -31,7 +31,15 @@
    </exec>
    <move todir="${outputDestDir.prop}">
     <fileset file="${workDir.prop}/*.png"/>
+    <fileset file="${workDir.prop}/*.data"/>
+    <fileset file="${workDir.prop}/*.drv"/>
+    <fileset file="${workDir.prop}/*.input"/>
+    <fileset file="${workDir.prop}/*.list"/>
+    <fileset file="${workDir.prop}/*.mdl"/>
+    <fileset file="${workDir.prop}/*.out"/>
+    <fileset file="${workDir.prop}/*.para"/>
     <fileset file="${workDir.prop}/*.resi"/>
+    <fileset file="${workDir.prop}/*.site"/>
    </move>
 </target>
 
