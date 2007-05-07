@@ -67,7 +67,7 @@
 <% System.out.println("[!!] Begin ... "); %>
 
 <%
-	ValueBinding binding = app.createValueBinding("#{stfilterBean.resiURL != null}");
+	ValueBinding binding = app.createValueBinding("#{stfilterBean.resultsBean.resiUrl != null}");
 	boolean isTrue = ((Boolean) binding.getValue(context)).booleanValue();
 	System.out.println("[!!] isTrue = "+isTrue);
 %>
@@ -219,6 +219,10 @@
 					value="#{stfilterBean.curAnnualAmpParam.periodLength}"/>
 		</h:panelGrid>
 	    <h:commandButton value="Run STFILTER" action="#{stfilterBean.callAnalyzeTseriService}"/>
+        <h:commandButton id="save" value="Save to Archive"
+        	rendered="#{(stfilterBean.resultsBean!=null)}"
+        	action="#{stfilterBean.saveProject}"/>
+        <h:messages style="color: red"/>
 	</h:form>
 	<%--
 	
@@ -241,25 +245,58 @@
 	
 	--%>
 	<h:form id="myStationCurrentAppliedFilter" rendered="#{!empty stfilterBean.allParams}">
-		<h:outputText value="Applied filters"/>
+	<h:outputText  escape="false" value="<b>Output Values</b>"/>
 		<h:dataTable var="p"
-		    border="1"
+		    border="0"
 		    value="#{stfilterBean.allParams}"
 		    binding="#{stfilterBean.allParamsTable}">
 			<h:column>
-				<f:facet name="header">
-					<h:outputText value="Parameter Full Name"/>
-				</f:facet>
 				<h:outputText value="#{p.parameterFullName}"/>
            </h:column>
            <h:column>
-				<f:facet name="header">
-					<h:outputText value=""/>
-				</f:facet>
            		<h:commandButton value="Remove" actionListener="#{stfilterBean.removeParamListener}"/>
            </h:column>
         </h:dataTable>
 	</h:form>
+
+
+      <h:panelGrid id="OutputGridPanel" rendered="#{(stfilterBean.resultsBean!=null)}">
+       <h:outputText  escape="false" value="<b>Applied Filters</b>"/>
+
+       <h:outputLink target="_blank" value="#{stfilterBean.resultsBean.drvUrl}">
+       <h:outputText value="Driver File"/>
+       </h:outputLink>
+
+       <h:outputLink target="_blank" value="#{stfilterBean.resultsBean.listUrl}">
+       <h:outputText value="List File"/>
+       </h:outputLink>
+
+       <h:outputLink target="_blank" value="#{stfilterBean.resultsBean.inputUrl}">
+       <h:outputText value="Input List File"/>
+       </h:outputLink>
+
+       <h:outputLink target="_blank" value="#{stfilterBean.resultsBean.siteUrl}">
+       <h:outputText value="Site List File"/>
+       </h:outputLink>
+
+       <h:outputLink target="_blank" value="#{stfilterBean.resultsBean.paraUrl}">
+       <h:outputText value="Parameter File"/>
+       </h:outputLink>
+
+       <h:outputLink target="_blank" value="#{stfilterBean.resultsBean.outUrl}">
+       <h:outputText value="Output File"/>
+       </h:outputLink>
+
+       <h:outputLink target="_blank" value="#{stfilterBean.resultsBean.resiUrl}">
+       <h:outputText value="Residual File"/>
+       </h:outputLink>
+
+       <h:outputLink target="_blank" value="#{stfilterBean.resultsBean.mdlUrl}">
+       <h:outputText value="Model File"/>
+       </h:outputLink>
+
+      </h:panelGrid>
+   
     </td>
     </tr>
     </table>
