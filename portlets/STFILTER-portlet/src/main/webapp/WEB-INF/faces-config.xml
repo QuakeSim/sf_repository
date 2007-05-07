@@ -40,7 +40,7 @@
                 </managed-property>
                 <managed-property>
                    <property-name>baseWorkDir</property-name>
-                   <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webaps/STFILTER-portlet/WDIR</value>
+				   <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/webaps/STFILTER-portlet/WDIR</value>
                 </managed-property>
                 <managed-property>
                    <property-name>fileServiceUrl</property-name>
@@ -194,6 +194,14 @@
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>project-removed</from-outcome>
+			<to-view-id>/LoadProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>project-populated</from-outcome>
+			<to-view-id>/NewProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>project-populated-error</from-outcome>
 			<to-view-id>/LoadProject.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
