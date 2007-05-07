@@ -18,15 +18,15 @@
               <h:panelGrid id="grid" columns="2" border="1">
           
                 <h:commandButton id="button1" value="New Project" 
-	                      action="#{stfilterBean.newProject}"/>
- 		<h:outputFormat id="output1" escape="false"
+	                      action="#{stfilterBean.createNewProject}"/>
+		 		<h:outputFormat id="output1" escape="false"
                               value="<b>New Project:</b> Create a new project"/>
-				<%--
                 <h:commandButton id="button2" value="Load Project" 
 	                      action="#{stfilterBean.loadProject}"/>
                 <h:outputFormat id="output2" escape="false"
   			       value="<b>Load Project:</b> Load old projects"/>
 
+				<%--
                 <h:commandButton id="button3" value="Delete Project" 
 	                      action="#{stfilterBean.loadProjectKillList}"/>
                 <h:outputFormat id="output3" escape="false"

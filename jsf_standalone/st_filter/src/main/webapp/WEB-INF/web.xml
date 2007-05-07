@@ -134,6 +134,7 @@
 
 
     <!-- Extensions Filter -->
+	<!--
     <filter>
         <filter-name>extensionsFilter</filter-name>
     <filter-class>org.apache.myfaces.component.html.util.ExtensionsFilter</filter-class>
@@ -168,6 +169,7 @@
         <filter-name>extensionsFilter</filter-name>
         <url-pattern>/faces/*</url-pattern>
     </filter-mapping>
+	-->
 
     <!-- Listener, to allow Jetty serving MyFaces apps -->
     <listener>

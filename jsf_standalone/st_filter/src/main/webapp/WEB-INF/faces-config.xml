@@ -196,6 +196,14 @@
 			<from-outcome>project-removed</from-outcome>
 			<to-view-id>/LoadProject.jsp</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>project-populated</from-outcome>
+			<to-view-id>/NewProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>project-populated-error</from-outcome>
+			<to-view-id>/LoadProject.jsp</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 
 	<navigation-rule>
