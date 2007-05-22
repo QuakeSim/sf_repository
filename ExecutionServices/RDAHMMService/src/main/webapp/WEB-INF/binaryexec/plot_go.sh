@@ -22,7 +22,8 @@ if [ $# == 2 ]; then
   sed -e 's/INPUT.xyz/'$tmp1'/g;s/INPUT.Q/'$tmp2'/g' plot_go.plt > $1.plt
   sed -e 's/INPUT.xyz/'$tmp1'/g;s/INPUT.Q/'$tmp2'/g' plot_xyz.plt > $1plot.plt
   sed -e 's/INPUT.xyz/'$tmp1'/g;s/INPUT.Q/'$tmp2'/g' plot_func.plt > $1plot_func.plt
-  `which gnuplot` < $1.plt
+#  `which gnuplot` < $1.plt
+  /usr/local/bin/gnuplot < $1.plt
   rm $1.plt
   rm $1plot.plt
   rm $1plot_func.plt
