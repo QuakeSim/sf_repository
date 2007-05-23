@@ -152,10 +152,8 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		myStation = new MyStationContainer("LBC1");
 		myStation.setEstParamVector(myStationList.getStationParamList());
 		myStation.setMasterParamList(masterList.getStationParamList());
-		System.out.println("[!!] myStationList size = "
-				+ myStationList.getStationParamList().size());
-		System.out.println("[!!] masterList size = "
-				+ masterList.getStationParamList().size());
+		debug("AnalyzeTseriService", "myStationList size = " + myStationList.getStationParamList().size());
+		debug("AnalyzeTseriService", "masterList size = " + masterList.getStationParamList().size());
 
 		// Set up the default station list.
 		allsites = new AllStationsContainer();
@@ -208,15 +206,15 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		outputDestDir = baseDestDir + "/" + projectName;
 		workDir = baseWorkDir + File.separator + projectName;
 
-		debug("Here are some property values");
-		debug("serverUrl", serverUrl);
-		debug("baseWorkDir", baseWorkDir);
-		debug("baseDestDir", baseDestDir);
-		debug("projectName", projectName);
-		debug("binPath", binPath);
-		debug("buildFilePath", buildFilePath);
-		debug("antTarget", antTarget);
-		debug("aprioriValueFile", aprioriValueFile);
+		debug("AnalyzeTseriService", "Here are some property values");
+		debug("AnalyzeTseriService", "serverUrl", serverUrl);
+		debug("AnalyzeTseriService", "baseWorkDir", baseWorkDir);
+		debug("AnalyzeTseriService", "baseDestDir", baseDestDir);
+		debug("AnalyzeTseriService", "projectName", projectName);
+		debug("AnalyzeTseriService", "binPath", binPath);
+		debug("AnalyzeTseriService", "buildFilePath", buildFilePath);
+		debug("AnalyzeTseriService", "antTarget", antTarget);
+		debug("AnalyzeTseriService", "aprioriValueFile", aprioriValueFile);
 	}
 
 	/**
@@ -240,6 +238,25 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 
 		pw.println("  1"); // Need to make this more general.
 		pw.println(siteCode.toUpperCase() + "_GPS");
+		pw.close();
+	}
+
+	/**
+	 * Create the site list file. Currently we only support one site and the XYZ
+	 * format (ie "1 8").
+	 */
+	private void createSiteListFile(String[] siteCodeArr) throws Exception {
+
+		siteListFile = projectName + mosesSiteListExt;
+		System.out.println("Writing input file: " + workDir + "/"
+				+ siteListFile);
+		PrintWriter pw = new PrintWriter(new FileWriter(workDir + "/"
+				+ siteListFile), true);
+
+		pw.println("  "+siteCodeArr.length); // Need to make this more general.
+		for (String siteCode : siteCodeArr) {
+			pw.println(siteCode.toUpperCase() + "_GPS");
+		}
 		pw.close();
 	}
 
@@ -277,6 +294,24 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		pw.close();
 	}
 
+	private void createDataListFile(String[] siteCode, String[] dataFileName)
+			throws Exception {
+
+		dataListFile = projectName + mosesDataListExt;
+		System.out.println("Writing input file: " + workDir + "/"
+				+ dataListFile);
+		PrintWriter pw = new PrintWriter(new FileWriter(workDir + "/"
+				+ dataListFile), true);
+
+		pw.println(" "+dataFileName.length+"   8"); // Need to make this more general.
+		for (int i = 0; i < dataFileName.length; i++) {
+			File tmp = new File(dataFileName[i]);
+			// pw.println(dataFileName);
+			pw.println(tmp.getName());
+		}
+		pw.close();
+	}
+	
 	/**
 	 * Create the stfilter driver file.
 	 */
@@ -476,7 +511,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 
 	}
 
-	private String[] setUpArgArray(String inputFileUrlString, String workDir,
+	private String[] setUpArgArray(String workDir,
 			String outputDestDir, String projectName, String binPath,
 			String buildFilePath, String antTarget) throws Exception {
 
@@ -651,7 +686,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		// int nobsv=getLineCount(localFileFiltered);
 
 		// ? localFileFiltered? localFile?
-		String[] args = setUpArgArray(localFileFiltered, workDir,
+		String[] args = setUpArgArray(workDir,
 				outputDestDir, projectName, binPath, buildFilePath, antTarget);
 
 		// Methods inherited from parent
@@ -666,10 +701,25 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 
 	public String[] execBlockingAnalyzeTseri(String siteCode, String inputFileUrlString)
 			throws Exception {
-		debug("Running blocking execution");
-		debug(inputFileUrlString);
+		debug("execBlockingAnalyzeTseri", "Running blocking execution");
+		debug("execBlockingAnalyzeTseri", inputFileUrlString);
 
 		String[] returnVals = execBlockingAnalyzeTseri(siteCode, inputFileUrlString,
+				baseWorkDir, outputDestDir, projectName, binPath,
+				buildFilePath, antTarget);
+		return returnVals;
+	}
+
+	/**
+	 * This is the simplified API that uses default values.
+	 */
+
+	public String[] execBlockingAnalyzeTseri(String[] siteCodeArr, String[] inputFileUrlStringArr)
+			throws Exception {
+		debug("execBlockingAnalyzeTseri", "Running blocking execution");
+		debug("execBlockingAnalyzeTseri", inputFileUrlStringArr.toString());
+
+		String[] returnVals = execBlockingAnalyzeTseri(siteCodeArr, inputFileUrlStringArr,
 				baseWorkDir, outputDestDir, projectName, binPath,
 				buildFilePath, antTarget);
 		return returnVals;
@@ -686,14 +736,12 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 
 		// Set up the work directory
 		// String workDir=baseWorkDir+File.separator+projectName;
-		System.out.println("[!!]baseWorkDir="+baseWorkDir);
-		System.out.println("[!!]workDir="+workDir);
-		System.out.println("[!!]outputDestDir="+outputDestDir);
-		System.out.println("[!!]binPath="+binPath);
-		System.out.println("[!!]buildFilePath="+buildFilePath);
-		System.out.println("[!!]antTarget="+antTarget);
-		makeWorkDir(workDir, buildFilePath);
-
+		debug("execBlockingAnalyzeTseri", "baseWorkDir="+baseWorkDir);
+		debug("execBlockingAnalyzeTseri", "workDir="+workDir);
+		debug("execBlockingAnalyzeTseri", "outputDestDir="+outputDestDir);
+		debug("execBlockingAnalyzeTseri", "binPath="+binPath);
+		debug("execBlockingAnalyzeTseri", "buildFilePath="+buildFilePath);
+		debug("execBlockingAnalyzeTseri", "antTarget="+antTarget);
 		makeWorkDir(workDir, buildFilePath);
 
 		// Copy the input file to the working directory, if necessary.
@@ -714,7 +762,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		// int nobsv=getLineCount(localFileFiltered);
 
 		// ? localFileFiltered? localFile?
-		String[] args = setUpArgArray(localFileFiltered, workDir,
+		String[] args = setUpArgArray(workDir,
 				outputDestDir, projectName, binPath, buildFilePath, antTarget);
 
 		// Methods inherited from parent
@@ -723,73 +771,54 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		return getTheReturnFiles();
 	}
 
-	// public String[] execBlockingAnalyzeTseri(String siteCode,
-	// String data, String baseWorkDir,
-	// String outputDestDir, String projectName, String binPath,
-	// String buildFilePath, String antTarget) throws Exception {
-	//
-	// // Set up the work directory
-	// // String workDir=baseWorkDir+File.separator+projectName;
-	// System.out.println("[!!]baseWorkDir="+baseWorkDir);
-	// System.out.println("[!!]workDir="+workDir);
-	// System.out.println("[!!]outputDestDir="+outputDestDir);
-	// System.out.println("[!!]binPath="+binPath);
-	// System.out.println("[!!]buildFilePath="+buildFilePath);
-	// System.out.println("[!!]antTarget="+antTarget);
-	// makeWorkDir(workDir, buildFilePath);
-	//
-	// // Copy the input file to the working directory, if necessary.
-	// //String localFile = downloadInputFile(inputFileUrlString, workDir);
-	// //String fileSimpleName = extractSimpleName(inputFileUrl.getFile());
-	// //System.out.println(fileSimpleName);
-	//
-	// // File names for SOPAC data and filtered data
-	// String localDataFilename = workDir + File.separator + projectName +
-	// sopacDataFileExt;
-	// String localFileFiltered = workDir + File.separator + projectName +
-	// filteredDataFileExt;
-	//
-	// try {
-	// // Stream to write file
-	// FileOutputStream fout;
-	//
-	// // Open an output stream
-	// fout = new FileOutputStream(localDataFilename);
-	//
-	// // Print a line of text
-	// new PrintStream(fout).print(data);
-	//
-	// // Close our output stream
-	// fout.close();
-	// }
-	// // Catches any error conditions
-	// catch (IOException e) {
-	// System.err.println("[Error] Unable to write to file:
-	// "+localDataFilename);
-	// return null;
-	// }
-	//
-	// filterResults(localDataFilename, localFileFiltered, -1, -1);
-	//
-	// // Make the input files.
-	// createSiteListFile(siteCode);
-	// createEstimatedParamFile();
-	// createDataListFile(siteCode, localFileFiltered);
-	// createDriverFile();
-	//
-	// // //Get the dimensions and number of observations.
-	// // int ndim=getFileDimension(localFileFiltered);
-	// // int nobsv=getLineCount(localFileFiltered);
-	//
-	// // ? localFileFiltered? localFile?
-	// String[] args = setUpArgArray(localFileFiltered, workDir,
-	// outputDestDir, projectName, binPath, buildFilePath, antTarget);
-	//
-	// // Methods inherited from parent
-	// setArgs(args);
-	//		run();
-	//		return getTheReturnFiles();
-	//	}
+	/**
+	 * This version is used to to hold response until AnalyzeTseri finished
+	 * executing. This is the full API.
+	 */
+	public String[] execBlockingAnalyzeTseri(String[] siteCodeArr,
+			String[] inputFileUrlStringArr, String baseWorkDir,
+			String outputDestDir, String projectName, String binPath,
+			String buildFilePath, String antTarget) throws Exception {
+
+		// Set up the work directory
+		// String workDir=baseWorkDir+File.separator+projectName;
+		debug("execBlockingAnalyzeTseri", "baseWorkDir="+baseWorkDir);
+		debug("execBlockingAnalyzeTseri", "workDir="+workDir);
+		debug("execBlockingAnalyzeTseri", "outputDestDir="+outputDestDir);
+		debug("execBlockingAnalyzeTseri", "binPath="+binPath);
+		debug("execBlockingAnalyzeTseri", "buildFilePath="+buildFilePath);
+		debug("execBlockingAnalyzeTseri", "antTarget="+antTarget);
+		makeWorkDir(workDir, buildFilePath);
+		
+		String[] localFileFilteredArr = new String[inputFileUrlStringArr.length];
+		for (int i = 0; i < inputFileUrlStringArr.length; i++) {
+			// Copy the input file to the working directory, if necessary.
+			String localFile = downloadInputFile(inputFileUrlStringArr[i], workDir);
+
+			// Filter the file
+			localFileFilteredArr[i] = workDir + File.separator + projectName + "." + i + filteredDataFileExt;
+			filterResults(localFile, localFileFilteredArr[i], -1, -1);
+		}
+
+		// Make the input files.
+		createSiteListFile(siteCodeArr);
+		createEstimatedParamFile();
+		createDataListFile(siteCodeArr, localFileFilteredArr);
+		createDriverFile();
+
+		// //Get the dimensions and number of observations.
+		// int ndim=getFileDimension(localFileFiltered);
+		// int nobsv=getLineCount(localFileFiltered);
+
+		// ? localFileFiltered? localFile?
+		String[] args = setUpArgArray(workDir,
+				outputDestDir, projectName, binPath, buildFilePath, antTarget);
+
+		// Methods inherited from parent
+		setArgs(args);
+		run();
+		return getTheReturnFiles();
+	}
 	
 	/**
 	 * This version immediately returns and is used for programs that take
@@ -820,7 +849,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		createDataListFile(siteCode, localFileFiltered);
 		createDriverFile();
 
-		String[] args = setUpArgArray(localFileFiltered, workDir,
+		String[] args = setUpArgArray(workDir,
 				outputDestDir, projectName, binPath, buildFilePath, antTarget);
 
 		// Methods inherited from parent
@@ -1046,154 +1075,38 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		return Integer.toString(bean.getId());
 	}
 	
-	public static String[] execAnalyzeTseri(AnalyzeTseriBean bean) {
-		return AnalyzeTseriService.execAnalyzeTseri(bean.getSiteCode(), 
-				bean.getResOption(), bean.getTermOption(), bean.getCutoffCriterion(), bean.getEstJumpSpan(), 
-				bean.getWeakObsCriteriaEast(), bean.getWeakObsCriteriaNorth(), bean.getWeakObsCriteriaUp(), 
-				bean.getOutlierCriteriaEast(), bean.getOutlierCriteriaNorth(), bean.getBadObsCriteriaUp(), 
-				bean.getBadObsCriteriaEast(), bean.getBadObsCriteriaNorth(), bean.getBadObsCriteriaUp(), 
-				bean.getTimeIntervalBeginTime(), bean.getTimeIntervalEndTime(), 
-				bean.getSopacDataFileUrl(), bean.getGlobalParam(), bean.getSiteParam());
-	}
-	
-	public static String[] execAnalyzeTseri(String siteCode,  
+//	public String[] execAnalyzeTseri(AnalyzeTseriBean bean) {
+//		return execAnalyzeTseri(bean.getSiteCode(), 
+//				bean.getResOption(), bean.getTermOption(), bean.getCutoffCriterion(), bean.getEstJumpSpan(), 
+//				bean.getWeakObsCriteriaEast(), bean.getWeakObsCriteriaNorth(), bean.getWeakObsCriteriaUp(), 
+//				bean.getOutlierCriteriaEast(), bean.getOutlierCriteriaNorth(), bean.getBadObsCriteriaUp(), 
+//				bean.getBadObsCriteriaEast(), bean.getBadObsCriteriaNorth(), bean.getBadObsCriteriaUp(), 
+//				bean.getTimeIntervalBeginTime(), bean.getTimeIntervalEndTime(), 
+//				bean.getSopacDataFileUrl(), bean.getGlobalParam(), bean.getSiteParam());
+//	}
+
+	public String[] execAnalyzeTseri(String[] siteCodeArr,  
 			int resOption, int termOption, double cutoffCriterion, double estJumpSpan,
 			double weakObsCriteriaEast, double weakObsCriteriaNorth, double weakObsCriteriaUp,
 			double outlierCriteriaEast, double outlierCriteriaNorth, double outlierCriteriaUp,
 			double badObsCriteriaEast, double badObsCriteriaNorth, double badObsCriteriaUp,
 			double timeIntervalBeginTime, double timeIntervalEndTime,
-			String inputFileUrlString, double[][] globalParam, double[][] siteParam) {
-		
-		AnalyzeTseriService ats;
+			String[] inputFileUrlStringArr, double[][] globalParam, double[][] siteParam) {
+
+		debug("execAnalyzeTseri", "Just called");
+		//AnalyzeTseriService ats;
 		
 		try {
-			ats = new AnalyzeTseriService(false);
-			ats.myStation.setSiteName(siteCode);
-			ats.resOption = resOption;
-			ats.termOption = termOption;
-			ats.cutoffCriterion = cutoffCriterion;
-			ats.estJumpSpan = estJumpSpan;
-			ats.weakObsCriteria.east = weakObsCriteriaEast;
-			ats.weakObsCriteria.north = weakObsCriteriaNorth;
-			ats.weakObsCriteria.up = weakObsCriteriaUp;
-			ats.outlierCriteria.east = outlierCriteriaEast;
-			ats.outlierCriteria.north = outlierCriteriaNorth;
-			ats.outlierCriteria.up = outlierCriteriaUp;
-			ats.badObsCriteria.east = badObsCriteriaEast;
-			ats.badObsCriteria.north = badObsCriteriaNorth;
-			ats.badObsCriteria.up = badObsCriteriaUp;
-			ats.timeInterval.beginTime = timeIntervalBeginTime;
-			ats.timeInterval.endTime = timeIntervalEndTime;
-			
-
-			System.out.println("Size : " + globalParam.length);
-			System.out.println("Size : " + siteParam.length);
-			for (int i = 0; i < globalParam.length; i++) {
-				switch ((int) globalParam[i][0]) {
-				case 1:
-				case 2:
-				case 3:
-					addConstantBias(ats.allsites, ats.allsitesList,
-							(int) globalParam[i][0], globalParam[i][1],
-							globalParam[i][2], globalParam[i][3], true);
-					break;
-				case 4:
-				case 5:
-				case 6:
-					addVelocityBias(ats.allsites, ats.allsitesList,
-							(int) globalParam[i][0], globalParam[i][1],
-							globalParam[i][2], globalParam[i][3],
-							globalParam[i][4], true);
-					break;
-				case 7:
-				case 8:
-				case 9:
-					addEpisodicBias(ats.allsites, ats.allsitesList,
-							(int) globalParam[i][0], globalParam[i][1],
-							globalParam[i][2], globalParam[i][3],
-							globalParam[i][4]);
-					break;
-				case 16:
-				case 17:
-				case 18:
-					addAnnualAmpBias(ats.allsites, ats.allsitesList,
-							(int) globalParam[i][0], globalParam[i][1],
-							globalParam[i][2], globalParam[i][3],
-							globalParam[i][4]);
-					break;
-				case 19:
-				case 20:
-				case 21:
-					addAnnualPhaseBias(ats.allsites, ats.allsitesList,
-							(int) globalParam[i][0], globalParam[i][1],
-							globalParam[i][2], globalParam[i][3],
-							globalParam[i][4]);
-					break;
-				case 22:
-				case 23:
-				case 24:
-					addSemiannualAmpBias(ats.allsites, ats.allsitesList,
-							(int) globalParam[i][0], globalParam[i][1],
-							globalParam[i][2], globalParam[i][3],
-							globalParam[i][4]);
-					break;
-				}
+			String siteCode = "";
+			for (String code: siteCodeArr) {
+				siteCode += code + " ";
 			}
-
-			for (int i = 0; i < siteParam.length; i++) {
-				switch ((int) siteParam[i][0]) {
-				case 1:
-				case 2:
-				case 3:
-					addConstantBias(ats.myStation, ats.myStationList,
-							(int) siteParam[i][0], siteParam[i][1],
-							siteParam[i][2], siteParam[i][3], false);
-					break;
-				case 4:
-				case 5:
-				case 6:
-					addVelocityBias(ats.myStation, ats.myStationList,
-							(int) siteParam[i][0], siteParam[i][1],
-							siteParam[i][2], siteParam[i][3], siteParam[i][4],
-							false);
-					break;
-				case 7:
-				case 8:
-				case 9:
-					addEpisodicBias(ats.myStation, ats.myStationList,
-							(int) siteParam[i][0], siteParam[i][1],
-							siteParam[i][2], siteParam[i][3], siteParam[i][4]);
-					break;
-				case 16:
-				case 17:
-				case 18:
-					addAnnualAmpBias(ats.myStation, ats.myStationList,
-							(int) siteParam[i][0], siteParam[i][1],
-							siteParam[i][2], siteParam[i][3],
-							siteParam[i][4]);
-					break;
-				case 19:
-				case 20:
-				case 21:
-					addAnnualPhaseBias(ats.allsites, ats.allsitesList,
-							(int) siteParam[i][0], siteParam[i][1],
-							siteParam[i][2], siteParam[i][3],
-							siteParam[i][4]);
-					break;
-				case 22:
-				case 23:
-				case 24:
-					addSemiannualAmpBias(ats.allsites, ats.allsitesList,
-							(int) siteParam[i][0], siteParam[i][1],
-							siteParam[i][2], siteParam[i][3],
-							siteParam[i][4]);
-					break;
-				}
-			}
+			resetParams(siteCode, resOption, termOption, cutoffCriterion, estJumpSpan, weakObsCriteriaEast, weakObsCriteriaNorth, weakObsCriteriaUp, outlierCriteriaEast, outlierCriteriaNorth, outlierCriteriaUp, badObsCriteriaEast, badObsCriteriaNorth, badObsCriteriaUp, timeIntervalBeginTime, timeIntervalEndTime);
+			resetArr(globalParam, siteParam);
 
 			System.out.println("----------------------------------");
 			System.out.println("Executing runBlockingAnalyzeTseri ... ");
-			String[] returnVals = ats.execBlockingAnalyzeTseri(siteCode, inputFileUrlString);
+			String[] returnVals = this.execBlockingAnalyzeTseri(siteCodeArr, inputFileUrlStringArr);
 
 			for (int i = 0; i < returnVals.length; i++) {
 				System.out.println(returnVals[i]);
@@ -1207,6 +1120,177 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 			return null;
 		}
 
+		
+	}
+	
+	public String[] execAnalyzeTseri(String siteCode,  
+			int resOption, int termOption, double cutoffCriterion, double estJumpSpan,
+			double weakObsCriteriaEast, double weakObsCriteriaNorth, double weakObsCriteriaUp,
+			double outlierCriteriaEast, double outlierCriteriaNorth, double outlierCriteriaUp,
+			double badObsCriteriaEast, double badObsCriteriaNorth, double badObsCriteriaUp,
+			double timeIntervalBeginTime, double timeIntervalEndTime,
+			String inputFileUrlString, double[][] globalParam, double[][] siteParam) {
+		
+		debug("execAnalyzeTseri", "Just called");
+		//AnalyzeTseriService ats;
+		
+		try {
+			resetParams(siteCode, resOption, termOption, cutoffCriterion, estJumpSpan, weakObsCriteriaEast, weakObsCriteriaNorth, weakObsCriteriaUp, outlierCriteriaEast, outlierCriteriaNorth, outlierCriteriaUp, badObsCriteriaEast, badObsCriteriaNorth, badObsCriteriaUp, timeIntervalBeginTime, timeIntervalEndTime);
+			resetArr(globalParam, siteParam);
+
+			System.out.println("----------------------------------");
+			System.out.println("Executing runBlockingAnalyzeTseri ... ");
+			String[] returnVals = this.execBlockingAnalyzeTseri(siteCode, inputFileUrlString);
+
+			for (int i = 0; i < returnVals.length; i++) {
+				System.out.println(returnVals[i]);
+			}
+			
+			return returnVals;
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	private void resetArr(double[][] globalParam, double[][] siteParam) {
+		debug("execAnalyzeTseri", "globalParam Size : " + globalParam.length);
+		debug("execAnalyzeTseri", "siteParam Size : " + siteParam.length);
+		debug("execAnalyzeTseri", "this.allsites.printContents : " + this.allsites.printContents());
+		
+		for (int i = 0; i < globalParam.length; i++) {
+			debug("execAnalyzeTseri", "globalParam type : " + globalParam[i][0]);
+			switch ((int) globalParam[i][0]) {
+			case 1:
+			case 2:
+			case 3:
+				addConstantBias(this.allsites, this.allsitesList,
+						(int) globalParam[i][0], globalParam[i][1],
+						globalParam[i][2], globalParam[i][3], true);
+				break;
+			case 4:
+			case 5:
+			case 6:
+				addVelocityBias(this.allsites, this.allsitesList,
+						(int) globalParam[i][0], globalParam[i][1],
+						globalParam[i][2], globalParam[i][3],
+						globalParam[i][4], true);
+				break;
+			case 7:
+			case 8:
+			case 9:
+				addEpisodicBias(this.allsites, this.allsitesList,
+						(int) globalParam[i][0], globalParam[i][1],
+						globalParam[i][2], globalParam[i][3],
+						globalParam[i][4]);
+				break;
+			case 16:
+			case 17:
+			case 18:
+				addAnnualAmpBias(this.allsites, this.allsitesList,
+						(int) globalParam[i][0], globalParam[i][1],
+						globalParam[i][2], globalParam[i][3],
+						globalParam[i][4]);
+				break;
+			case 19:
+			case 20:
+			case 21:
+				addAnnualPhaseBias(this.allsites, this.allsitesList,
+						(int) globalParam[i][0], globalParam[i][1],
+						globalParam[i][2], globalParam[i][3],
+						globalParam[i][4]);
+				break;
+			case 22:
+			case 23:
+			case 24:
+				addSemiannualAmpBias(this.allsites, this.allsitesList,
+						(int) globalParam[i][0], globalParam[i][1],
+						globalParam[i][2], globalParam[i][3],
+						globalParam[i][4]);
+				break;
+			default:
+				debug("execAnalyzeTseri", "No defined type");
+				break;
+			}
+		}
+
+		for (int i = 0; i < siteParam.length; i++) {
+			debug("execAnalyzeTseri", "siteParam type : " + siteParam[i][0]);
+			switch ((int) siteParam[i][0]) {
+			case 1:
+			case 2:
+			case 3:
+				addConstantBias(this.myStation, this.myStationList,
+						(int) siteParam[i][0], siteParam[i][1],
+						siteParam[i][2], siteParam[i][3], false);
+				break;
+			case 4:
+			case 5:
+			case 6:
+				addVelocityBias(this.myStation, this.myStationList,
+						(int) siteParam[i][0], siteParam[i][1],
+						siteParam[i][2], siteParam[i][3], siteParam[i][4],
+						false);
+				break;
+			case 7:
+			case 8:
+			case 9:
+				addEpisodicBias(this.myStation, this.myStationList,
+						(int) siteParam[i][0], siteParam[i][1],
+						siteParam[i][2], siteParam[i][3], siteParam[i][4]);
+				break;
+			case 16:
+			case 17:
+			case 18:
+				addAnnualAmpBias(this.myStation, this.myStationList,
+						(int) siteParam[i][0], siteParam[i][1],
+						siteParam[i][2], siteParam[i][3],
+						siteParam[i][4]);
+				break;
+			case 19:
+			case 20:
+			case 21:
+				addAnnualPhaseBias(this.myStation, this.myStationList,
+						(int) siteParam[i][0], siteParam[i][1],
+						siteParam[i][2], siteParam[i][3],
+						siteParam[i][4]);
+				break;
+			case 22:
+			case 23:
+			case 24:
+				addSemiannualAmpBias(this.myStation, this.myStationList,
+						(int) siteParam[i][0], siteParam[i][1],
+						siteParam[i][2], siteParam[i][3],
+						siteParam[i][4]);
+				break;
+			default:
+				debug("execAnalyzeTseri", "No defined type");
+				break;
+			}
+		}
+	}
+
+	private void resetParams(String siteCode, int resOption, int termOption, double cutoffCriterion, double estJumpSpan, double weakObsCriteriaEast, double weakObsCriteriaNorth, double weakObsCriteriaUp, double outlierCriteriaEast, double outlierCriteriaNorth, double outlierCriteriaUp, double badObsCriteriaEast, double badObsCriteriaNorth, double badObsCriteriaUp, double timeIntervalBeginTime, double timeIntervalEndTime) {
+		//ats = new AnalyzeTseriService(false);
+		this.myStation.siteName = siteCode;
+		this.resOption = resOption;
+		this.termOption = termOption;
+		this.cutoffCriterion = cutoffCriterion;
+		this.estJumpSpan = estJumpSpan;
+		this.weakObsCriteria.east = weakObsCriteriaEast;
+		this.weakObsCriteria.north = weakObsCriteriaNorth;
+		this.weakObsCriteria.up = weakObsCriteriaUp;
+		this.outlierCriteria.east = outlierCriteriaEast;
+		this.outlierCriteria.north = outlierCriteriaNorth;
+		this.outlierCriteria.up = outlierCriteriaUp;
+		this.badObsCriteria.east = badObsCriteriaEast;
+		this.badObsCriteria.north = badObsCriteriaNorth;
+		this.badObsCriteria.up = badObsCriteriaUp;
+		this.timeInterval.beginTime = timeIntervalBeginTime;
+		this.timeInterval.endTime = timeIntervalEndTime;
 	}
 	
 	
@@ -1498,12 +1582,12 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 
 	}
 	
-	public static void debug(String msg) {
-		System.out.println("[DEBUG] " + msg);
+	public static void debug(String func, String msg) {
+		System.out.println("[DEBUG][AnalyzeTseriService:"+func+"] " + msg);
 	}
 
-	public static void debug(String name, String value) {
-		System.out.println("[DEBUG] " + name + " = " + value);
+	public static void debug(String func, String name, String value) {
+		System.out.println("[DEBUG][AnalyzeTseriService:"+func+"] " + name + " = " + value);
 	}
 
 }
