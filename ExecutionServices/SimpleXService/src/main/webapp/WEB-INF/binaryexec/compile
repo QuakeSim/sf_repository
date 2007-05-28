@@ -1,0 +1,1 @@
+cc -Aa -o simplex -g simplexfd.c ran.c lower_cholesky_factor.c inverse_check.c  invert_upper_triangle_matrix.c square_upper_triangle_matrix.c -lm

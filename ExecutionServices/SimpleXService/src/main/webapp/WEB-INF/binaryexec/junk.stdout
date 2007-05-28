@@ -1,0 +1,70 @@
+/home/gateway/GEMCodes/Simplex/simplex.fault
+# of faults = 2
+# of free parameters = 12
+# of data points = 363
+temperature = 0.000000 , iterations = 1000000, 'trials' = 1
+Simplex filled...
+chisq(0) = 24739.968719
+chisq(1) = 26759.150732
+chisq(2) = 23083.462594
+chisq(3) = 27378.797313
+chisq(4) = 26929.219740
+chisq(5) = 36991404.633469
+chisq(6) = 27366357.196970
+chisq(7) = 26759.150732
+chisq(8) = 23083.462594
+chisq(9) = 27378.797313
+chisq(10) = 26929.219740
+chisq(11) = 36991404.633469
+chisq(12) = 27366357.196970
+functions initialized...
+start temp = 0.000000
+count = 101, chi-squared per dof = 183.428645
+count = 201, chi-squared per dof = 6.974674
+count = 300, chi-squared per dof = 5.027977
+count = 400, chi-squared per dof = 1.528219
+count = 500, chi-squared per dof = 0.288341
+count = 600, chi-squared per dof = 0.221608
+count = 700, chi-squared per dof = 0.129993
+count = 800, chi-squared per dof = 0.092687
+count = 900, chi-squared per dof = 0.079403
+count = 1000, chi-squared per dof = 0.020600
+count = 1100, chi-squared per dof = 0.001611
+count = 1201, chi-squared per dof = 0.001216
+count = 1300, chi-squared per dof = 0.001210
+count = 1400, chi-squared per dof = 0.001210
+count = 1500, chi-squared per dof = 0.001207
+count = 1601, chi-squared per dof = 0.001183
+count = 1700, chi-squared per dof = 0.000995
+count = 1800, chi-squared per dof = 0.000603
+count = 1900, chi-squared per dof = 0.000447
+count = 2000, chi-squared per dof = 0.000376
+count = 2100, chi-squared per dof = 0.000358
+count = 2200, chi-squared per dof = 0.000356
+count = 2301, chi-squared per dof = 0.000356
+count = 2400, chi-squared per dof = 0.000356
+count = 2501, chi-squared per dof = 0.000356
+count = 2600, chi-squared per dof = 0.000356
+count = 2701, chi-squared per dof = 0.000356
+count = 2800, chi-squared per dof = 0.000356
+count = 2900, chi-squared per dof = 0.000356
+count = 3000, chi-squared per dof = 0.000355
+count = 3101, chi-squared per dof = 0.000353
+count = 3200, chi-squared per dof = 0.000350
+count = 3300, chi-squared per dof = 0.000331
+count = 3400, chi-squared per dof = 0.000306
+count = 3500, chi-squared per dof = 0.000296
+count = 3600, chi-squared per dof = 0.000284
+count = 3700, chi-squared per dof = 0.000282
+count = 3800, chi-squared per dof = 0.000282
+count = 3900, chi-squared per dof = 0.000282
+count = 4000, chi-squared per dof = 0.000282
+count = 4100, chi-squared per dof = 0.000282
+count = 4200, chi-squared per dof = 0.000282
+Amebsa has met convergence criterion.
+number of steps taken: 4200
+Matrix factorization failed at row 11
+
+
+******* best-ever solution ********
+best-ever chi-square (yb) = 0.000282282

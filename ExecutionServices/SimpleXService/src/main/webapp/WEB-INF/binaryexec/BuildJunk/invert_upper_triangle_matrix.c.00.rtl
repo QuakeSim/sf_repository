@@ -1,0 +1,6739 @@
+
+;; Function __sgn
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:DF 42)
+        (mem/f:DF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (nil))
+
+(note 5 4 11 NOTE_INSN_FUNCTION_BEG 0)
+
+(insn 11 5 12 (set (reg:DF 44)
+        (mem/u/f:DF (symbol_ref/u:SI ("*.LC0")) 0)) -1 (nil)
+    (expr_list:REG_EQUAL (const_double:DF (mem/u/f:DF (symbol_ref/u:SI ("*.LC0")) 0) 0 [0x0] 0 [0x0] 0 [0x0])
+        (nil)))
+
+(jump_insn 12 11 13 (parallel[ 
+            (set (pc)
+                (if_then_else (ne:CCFPU (reg/v:DF 42)
+                        (reg:DF 44))
+                    (label_ref 15)
+                    (pc)))
+            (clobber (reg:CCFP 18 fpsr))
+            (clobber (reg:CCFP 17 flags))
+            (clobber (scratch:HI))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn 13 12 14 (set (pc)
+        (label_ref 32)) -1 (nil)
+    (nil))
+
+(barrier 14 13 15)
+
+(code_label 15 14 17 5 "" "" [0 uses])
+
+(insn 17 15 18 (set (reg:DF 45)
+        (mem/u/f:DF (symbol_ref/u:SI ("*.LC0")) 0)) -1 (nil)
+    (expr_list:REG_EQUAL (const_double:DF (mem/u/f:DF (symbol_ref/u:SI ("*.LC0")) 0) 0 [0x0] 0 [0x0] 0 [0x0])
+        (nil)))
+
+(jump_insn 18 17 19 (parallel[ 
+            (set (pc)
+                (if_then_else (gt:CCFPU (reg/v:DF 42)
+                        (reg:DF 45))
+                    (label_ref 21)
+                    (pc)))
+            (clobber (reg:CCFP 18 fpsr))
+            (clobber (reg:CCFP 17 flags))
+            (clobber (scratch:HI))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn 19 18 20 (set (pc)
+        (label_ref 26)) -1 (nil)
+    (nil))
+
+(barrier 20 19 21)
+
+(code_label 21 20 23 8 "" "" [0 uses])
+
+(insn 23 21 24 (set (reg:DF 43)
+        (mem/u/f:DF (symbol_ref/u:SI ("*.LC1")) 0)) -1 (nil)
+    (nil))
+
+(jump_insn 24 23 25 (set (pc)
+        (label_ref 29)) -1 (nil)
+    (nil))
+
+(barrier 25 24 26)
+
+(code_label 26 25 28 6 "" "" [0 uses])
+
+(insn 28 26 29 (set (reg:DF 43)
+        (mem/u/f:DF (symbol_ref/u:SI ("*.LC2")) 0)) -1 (nil)
+    (nil))
+
+(code_label 29 28 30 7 "" "" [0 uses])
+
+(jump_insn 30 29 31 (set (pc)
+        (label_ref 35)) -1 (nil)
+    (nil))
+
+(barrier 31 30 32)
+
+(code_label 32 31 34 3 "" "" [0 uses])
+
+(insn 34 32 35 (set (reg:DF 43)
+        (mem/u/f:DF (symbol_ref/u:SI ("*.LC0")) 0)) -1 (nil)
+    (nil))
+
+(code_label 35 34 37 4 "" "" [0 uses])
+
+(insn 37 35 38 (set (reg/i:DF 8 st(0))
+        (reg:DF 43)) -1 (nil)
+    (nil))
+
+(jump_insn 38 37 39 (set (pc)
+        (label_ref 43)) -1 (nil)
+    (nil))
+
+(barrier 39 38 40)
+
+(note 40 39 42 NOTE_INSN_FUNCTION_END 0)
+
+(insn 42 40 43 (clobber (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 43 42 44 2 "" "" [0 uses])
+
+(insn 44 43 0 (use (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function __sgnf
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:SF 42)
+        (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 11 NOTE_INSN_FUNCTION_BEG 0)
+
+(insn 11 5 13 (set (reg:DF 44)
+        (float_extend:DF (reg/v:SF 42))) -1 (nil)
+    (nil))
+
+(insn 13 11 14 (set (reg:DF 45)
+        (mem/u/f:DF (symbol_ref/u:SI ("*.LC3")) 0)) -1 (nil)
+    (expr_list:REG_EQUAL (const_double:DF (mem/u/f:DF (symbol_ref/u:SI ("*.LC3")) 0) 0 [0x0] 0 [0x0] 0 [0x0])
+        (nil)))
+
+(jump_insn 14 13 15 (parallel[ 
+            (set (pc)
+                (if_then_else (ne:CCFPU (reg:DF 44)
+                        (reg:DF 45))
+                    (label_ref 17)
+                    (pc)))
+            (clobber (reg:CCFP 18 fpsr))
+            (clobber (reg:CCFP 17 flags))
+            (clobber (scratch:HI))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn 15 14 16 (set (pc)
+        (label_ref 36)) -1 (nil)
+    (nil))
+
+(barrier 16 15 17)
+
+(code_label 17 16 19 12 "" "" [0 uses])
+
+(insn 19 17 21 (set (reg:DF 46)
+        (float_extend:DF (reg/v:SF 42))) -1 (nil)
+    (nil))
+
+(insn 21 19 22 (set (reg:DF 47)
+        (mem/u/f:DF (symbol_ref/u:SI ("*.LC3")) 0)) -1 (nil)
+    (expr_list:REG_EQUAL (const_double:DF (mem/u/f:DF (symbol_ref/u:SI ("*.LC3")) 0) 0 [0x0] 0 [0x0] 0 [0x0])
+        (nil)))
+
+(jump_insn 22 21 23 (parallel[ 
+            (set (pc)
+                (if_then_else (gt:CCFPU (reg:DF 46)
+                        (reg:DF 47))
+                    (label_ref 25)
+                    (pc)))
+            (clobber (reg:CCFP 18 fpsr))
+            (clobber (reg:CCFP 17 flags))
+            (clobber (scratch:HI))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn 23 22 24 (set (pc)
+        (label_ref 30)) -1 (nil)
+    (nil))
+
+(barrier 24 23 25)
+
+(code_label 25 24 27 15 "" "" [0 uses])
+
+(insn 27 25 28 (set (reg:SF 43)
+        (mem/u/f:SF (symbol_ref/u:SI ("*.LC4")) 0)) -1 (nil)
+    (nil))
+
+(jump_insn 28 27 29 (set (pc)
+        (label_ref 33)) -1 (nil)
+    (nil))
+
+(barrier 29 28 30)
+
+(code_label 30 29 32 13 "" "" [0 uses])
+
+(insn 32 30 33 (set (reg:SF 43)
+        (mem/u/f:SF (symbol_ref/u:SI ("*.LC5")) 0)) -1 (nil)
+    (nil))
+
+(code_label 33 32 34 14 "" "" [0 uses])
+
+(jump_insn 34 33 35 (set (pc)
+        (label_ref 39)) -1 (nil)
+    (nil))
+
+(barrier 35 34 36)
+
+(code_label 36 35 38 10 "" "" [0 uses])
+
+(insn 38 36 39 (set (reg:SF 43)
+        (mem/u/f:SF (symbol_ref/u:SI ("*.LC6")) 0)) -1 (nil)
+    (nil))
+
+(code_label 39 38 41 11 "" "" [0 uses])
+
+(insn 41 39 42 (set (reg/i:SF 8 st(0))
+        (reg:SF 43)) -1 (nil)
+    (nil))
+
+(jump_insn 42 41 43 (set (pc)
+        (label_ref 47)) -1 (nil)
+    (nil))
+
+(barrier 43 42 44)
+
+(note 44 43 46 NOTE_INSN_FUNCTION_END 0)
+
+(insn 46 44 47 (clobber (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 47 46 48 9 "" "" [0 uses])
+
+(insn 48 47 0 (use (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function __sgnl
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:XF 42)
+        (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 11 NOTE_INSN_FUNCTION_BEG 0)
+
+(insn 11 5 12 (set (reg:XF 44)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC7")) 0)) -1 (nil)
+    (expr_list:REG_EQUAL (const_double:XF (mem/u/f:XF (symbol_ref/u:SI ("*.LC7")) 0) 0 [0x0] 0 [0x0] 0 [0x0])
+        (nil)))
+
+(jump_insn 12 11 13 (parallel[ 
+            (set (pc)
+                (if_then_else (ne:CCFPU (reg/v:XF 42)
+                        (reg:XF 44))
+                    (label_ref 15)
+                    (pc)))
+            (clobber (reg:CCFP 18 fpsr))
+            (clobber (reg:CCFP 17 flags))
+            (clobber (scratch:HI))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn 13 12 14 (set (pc)
+        (label_ref 32)) -1 (nil)
+    (nil))
+
+(barrier 14 13 15)
+
+(code_label 15 14 17 19 "" "" [0 uses])
+
+(insn 17 15 18 (set (reg:XF 45)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC7")) 0)) -1 (nil)
+    (expr_list:REG_EQUAL (const_double:XF (mem/u/f:XF (symbol_ref/u:SI ("*.LC7")) 0) 0 [0x0] 0 [0x0] 0 [0x0])
+        (nil)))
+
+(jump_insn 18 17 19 (parallel[ 
+            (set (pc)
+                (if_then_else (gt:CCFPU (reg/v:XF 42)
+                        (reg:XF 45))
+                    (label_ref 21)
+                    (pc)))
+            (clobber (reg:CCFP 18 fpsr))
+            (clobber (reg:CCFP 17 flags))
+            (clobber (scratch:HI))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn 19 18 20 (set (pc)
+        (label_ref 26)) -1 (nil)
+    (nil))
+
+(barrier 20 19 21)
+
+(code_label 21 20 23 22 "" "" [0 uses])
+
+(insn 23 21 24 (set (reg:XF 43)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC8")) 0)) -1 (nil)
+    (nil))
+
+(jump_insn 24 23 25 (set (pc)
+        (label_ref 29)) -1 (nil)
+    (nil))
+
+(barrier 25 24 26)
+
+(code_label 26 25 28 20 "" "" [0 uses])
+
+(insn 28 26 29 (set (reg:XF 43)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC9")) 0)) -1 (nil)
+    (nil))
+
+(code_label 29 28 30 21 "" "" [0 uses])
+
+(jump_insn 30 29 31 (set (pc)
+        (label_ref 35)) -1 (nil)
+    (nil))
+
+(barrier 31 30 32)
+
+(code_label 32 31 34 17 "" "" [0 uses])
+
+(insn 34 32 35 (set (reg:XF 43)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC7")) 0)) -1 (nil)
+    (nil))
+
+(code_label 35 34 37 18 "" "" [0 uses])
+
+(insn 37 35 38 (set (reg/i:XF 8 st(0))
+        (reg:XF 43)) -1 (nil)
+    (nil))
+
+(jump_insn 38 37 39 (set (pc)
+        (label_ref 43)) -1 (nil)
+    (nil))
+
+(barrier 39 38 40)
+
+(note 40 39 42 NOTE_INSN_FUNCTION_END 0)
+
+(insn 42 40 43 (clobber (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 43 42 44 16 "" "" [0 uses])
+
+(insn 44 43 0 (use (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function atan2
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 6 (set (reg/v:DF 42)
+        (mem/f:DF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (nil))
+
+(insn 6 4 7 (set (reg/v:DF 43)
+        (mem/f:DF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 8 [0x8])) 0)) -1 (nil)
+    (nil))
+
+(note 7 6 10 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 10 7 12 0x4008d260 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 12 10 14 (parallel[ 
+            (set (reg/v:XF 44)
+                (asm_operands/v ("fpatan") ("=t") 0[ 
+                        (reg/v:DF 43)
+                        (reg/v:DF 42)
+                    ] 
+                    [ 
+                        (asm_input:DF ("0"))
+                        (asm_input:DF ("u"))
+                    ]  ("/usr/include/bits/mathinline.h") 426))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+            (clobber (reg:QI 9 st(1)))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 14 12 16 (parallel[ 
+            (set (reg:DF 45)
+                (float_truncate:DF (reg/v:XF 44)))
+            (clobber (mem:DF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -8 [0xfffffff8])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 16 14 17 (set (reg/i:DF 8 st(0))
+        (reg:DF 45)) -1 (nil)
+    (nil))
+
+(jump_insn 17 16 18 (set (pc)
+        (label_ref 23)) -1 (nil)
+    (nil))
+
+(barrier 18 17 19)
+
+(note 19 18 20 0x4008d260 NOTE_INSN_BLOCK_END 0)
+
+(note 20 19 22 NOTE_INSN_FUNCTION_END 0)
+
+(insn 22 20 23 (clobber (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 23 22 24 23 "" "" [0 uses])
+
+(insn 24 23 0 (use (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function atan2f
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 6 (set (reg/v:SF 42)
+        (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(insn 6 4 7 (set (reg/v:SF 43)
+        (mem/f:SF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 4 [0x4])) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 4 [0x4])) 0)
+        (nil)))
+
+(note 7 6 10 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 10 7 12 0x4008df60 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 12 10 14 (parallel[ 
+            (set (reg/v:XF 44)
+                (asm_operands/v ("fpatan") ("=t") 0[ 
+                        (reg/v:SF 43)
+                        (reg/v:SF 42)
+                    ] 
+                    [ 
+                        (asm_input:SF ("0"))
+                        (asm_input:SF ("u"))
+                    ]  ("/usr/include/bits/mathinline.h") 426))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+            (clobber (reg:QI 9 st(1)))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 14 12 16 (parallel[ 
+            (set (reg:SF 45)
+                (float_truncate:SF (reg/v:XF 44)))
+            (clobber (mem:SF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -4 [0xfffffffc])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 16 14 17 (set (reg/i:SF 8 st(0))
+        (reg:SF 45)) -1 (nil)
+    (nil))
+
+(jump_insn 17 16 18 (set (pc)
+        (label_ref 23)) -1 (nil)
+    (nil))
+
+(barrier 18 17 19)
+
+(note 19 18 20 0x4008df60 NOTE_INSN_BLOCK_END 0)
+
+(note 20 19 22 NOTE_INSN_FUNCTION_END 0)
+
+(insn 22 20 23 (clobber (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 23 22 24 24 "" "" [0 uses])
+
+(insn 24 23 0 (use (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function atan2l
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 6 (set (reg/v:XF 42)
+        (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(insn 6 4 7 (set (reg/v:XF 43)
+        (mem/f:XF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 12 [0xc])) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 12 [0xc])) 0)
+        (nil)))
+
+(note 7 6 10 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 10 7 12 0x4008ec60 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 12 10 14 (parallel[ 
+            (set (reg/v:XF 44)
+                (asm_operands/v ("fpatan") ("=t") 0[ 
+                        (reg/v:XF 43)
+                        (reg/v:XF 42)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                        (asm_input:XF ("u"))
+                    ]  ("/usr/include/bits/mathinline.h") 426))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+            (clobber (reg:QI 9 st(1)))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 14 12 15 (set (reg/i:XF 8 st(0))
+        (reg/v:XF 44)) -1 (nil)
+    (nil))
+
+(jump_insn 15 14 16 (set (pc)
+        (label_ref 21)) -1 (nil)
+    (nil))
+
+(barrier 16 15 17)
+
+(note 17 16 18 0x4008ec60 NOTE_INSN_BLOCK_END 0)
+
+(note 18 17 20 NOTE_INSN_FUNCTION_END 0)
+
+(insn 20 18 21 (clobber (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 21 20 22 25 "" "" [0 uses])
+
+(insn 22 21 0 (use (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function __atan2l
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 6 (set (reg/v:XF 42)
+        (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(insn 6 4 7 (set (reg/v:XF 43)
+        (mem/f:XF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 12 [0xc])) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 12 [0xc])) 0)
+        (nil)))
+
+(note 7 6 10 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 10 7 12 0x400919c0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 12 10 14 (parallel[ 
+            (set (reg/v:XF 44)
+                (asm_operands/v ("fpatan") ("=t") 0[ 
+                        (reg/v:XF 43)
+                        (reg/v:XF 42)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                        (asm_input:XF ("u"))
+                    ]  ("/usr/include/bits/mathinline.h") 427))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+            (clobber (reg:QI 9 st(1)))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 14 12 15 (set (reg/i:XF 8 st(0))
+        (reg/v:XF 44)) -1 (nil)
+    (nil))
+
+(jump_insn 15 14 16 (set (pc)
+        (label_ref 21)) -1 (nil)
+    (nil))
+
+(barrier 16 15 17)
+
+(note 17 16 18 0x400919c0 NOTE_INSN_BLOCK_END 0)
+
+(note 18 17 20 NOTE_INSN_FUNCTION_END 0)
+
+(insn 20 18 21 (clobber (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 21 20 22 26 "" "" [0 uses])
+
+(insn 22 21 0 (use (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function fmod
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 6 (set (reg/v:DF 42)
+        (mem/f:DF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (nil))
+
+(insn 6 4 7 (set (reg/v:DF 43)
+        (mem/f:DF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 8 [0x8])) 0)) -1 (nil)
+    (nil))
+
+(note 7 6 10 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 10 7 12 0x40094920 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 12 10 14 (parallel[ 
+            (set (reg/v:XF 44)
+                (asm_operands/v ("1:	fprem
+	fnstsw	%%ax
+	sahf
+	jp	1b") ("=t") 0[ 
+                        (reg/v:DF 42)
+                        (reg/v:DF 43)
+                    ] 
+                    [ 
+                        (asm_input:DF ("0"))
+                        (asm_input:DF ("u"))
+                    ]  ("/usr/include/bits/mathinline.h") 430))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+            (clobber (reg:QI 0 al))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 14 12 16 (parallel[ 
+            (set (reg:DF 45)
+                (float_truncate:DF (reg/v:XF 44)))
+            (clobber (mem:DF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -8 [0xfffffff8])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 16 14 17 (set (reg/i:DF 8 st(0))
+        (reg:DF 45)) -1 (nil)
+    (nil))
+
+(jump_insn 17 16 18 (set (pc)
+        (label_ref 23)) -1 (nil)
+    (nil))
+
+(barrier 18 17 19)
+
+(note 19 18 20 0x40094920 NOTE_INSN_BLOCK_END 0)
+
+(note 20 19 22 NOTE_INSN_FUNCTION_END 0)
+
+(insn 22 20 23 (clobber (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 23 22 24 27 "" "" [0 uses])
+
+(insn 24 23 0 (use (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function fmodf
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 6 (set (reg/v:SF 42)
+        (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(insn 6 4 7 (set (reg/v:SF 43)
+        (mem/f:SF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 4 [0x4])) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 4 [0x4])) 0)
+        (nil)))
+
+(note 7 6 10 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 10 7 12 0x400967a0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 12 10 14 (parallel[ 
+            (set (reg/v:XF 44)
+                (asm_operands/v ("1:	fprem
+	fnstsw	%%ax
+	sahf
+	jp	1b") ("=t") 0[ 
+                        (reg/v:SF 42)
+                        (reg/v:SF 43)
+                    ] 
+                    [ 
+                        (asm_input:SF ("0"))
+                        (asm_input:SF ("u"))
+                    ]  ("/usr/include/bits/mathinline.h") 430))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+            (clobber (reg:QI 0 al))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 14 12 16 (parallel[ 
+            (set (reg:SF 45)
+                (float_truncate:SF (reg/v:XF 44)))
+            (clobber (mem:SF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -4 [0xfffffffc])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 16 14 17 (set (reg/i:SF 8 st(0))
+        (reg:SF 45)) -1 (nil)
+    (nil))
+
+(jump_insn 17 16 18 (set (pc)
+        (label_ref 23)) -1 (nil)
+    (nil))
+
+(barrier 18 17 19)
+
+(note 19 18 20 0x400967a0 NOTE_INSN_BLOCK_END 0)
+
+(note 20 19 22 NOTE_INSN_FUNCTION_END 0)
+
+(insn 22 20 23 (clobber (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 23 22 24 28 "" "" [0 uses])
+
+(insn 24 23 0 (use (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function fmodl
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 6 (set (reg/v:XF 42)
+        (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(insn 6 4 7 (set (reg/v:XF 43)
+        (mem/f:XF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 12 [0xc])) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 12 [0xc])) 0)
+        (nil)))
+
+(note 7 6 10 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 10 7 12 0x40097620 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 12 10 14 (parallel[ 
+            (set (reg/v:XF 44)
+                (asm_operands/v ("1:	fprem
+	fnstsw	%%ax
+	sahf
+	jp	1b") ("=t") 0[ 
+                        (reg/v:XF 42)
+                        (reg/v:XF 43)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                        (asm_input:XF ("u"))
+                    ]  ("/usr/include/bits/mathinline.h") 430))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+            (clobber (reg:QI 0 al))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 14 12 15 (set (reg/i:XF 8 st(0))
+        (reg/v:XF 44)) -1 (nil)
+    (nil))
+
+(jump_insn 15 14 16 (set (pc)
+        (label_ref 21)) -1 (nil)
+    (nil))
+
+(barrier 16 15 17)
+
+(note 17 16 18 0x40097620 NOTE_INSN_BLOCK_END 0)
+
+(note 18 17 20 NOTE_INSN_FUNCTION_END 0)
+
+(insn 20 18 21 (clobber (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 21 20 22 29 "" "" [0 uses])
+
+(insn 22 21 0 (use (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function sqrt
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:DF 42)
+        (mem/f:DF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (nil))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x400990a0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 10 8 12 (parallel[ 
+            (set (reg/v:DF 43)
+                (asm_operands/v ("fsqrt") ("=t") 0[ 
+                        (reg/v:DF 42)
+                    ] 
+                    [ 
+                        (asm_input:DF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 441))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 12 10 13 (set (reg/i:DF 8 st(0))
+        (reg/v:DF 43)) -1 (nil)
+    (nil))
+
+(jump_insn 13 12 14 (set (pc)
+        (label_ref 19)) -1 (nil)
+    (nil))
+
+(barrier 14 13 15)
+
+(note 15 14 16 0x400990a0 NOTE_INSN_BLOCK_END 0)
+
+(note 16 15 18 NOTE_INSN_FUNCTION_END 0)
+
+(insn 18 16 19 (clobber (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 19 18 20 30 "" "" [0 uses])
+
+(insn 20 19 0 (use (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function sqrtf
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:SF 42)
+        (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x40099aa0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 10 8 12 (parallel[ 
+            (set (reg/v:SF 43)
+                (asm_operands/v ("fsqrt") ("=t") 0[ 
+                        (reg/v:SF 42)
+                    ] 
+                    [ 
+                        (asm_input:SF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 441))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 12 10 13 (set (reg/i:SF 8 st(0))
+        (reg/v:SF 43)) -1 (nil)
+    (nil))
+
+(jump_insn 13 12 14 (set (pc)
+        (label_ref 19)) -1 (nil)
+    (nil))
+
+(barrier 14 13 15)
+
+(note 15 14 16 0x40099aa0 NOTE_INSN_BLOCK_END 0)
+
+(note 16 15 18 NOTE_INSN_FUNCTION_END 0)
+
+(insn 18 16 19 (clobber (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 19 18 20 31 "" "" [0 uses])
+
+(insn 20 19 0 (use (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function sqrtl
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:XF 42)
+        (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x4009b500 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 10 8 12 (parallel[ 
+            (set (reg/v:XF 43)
+                (asm_operands/v ("fsqrt") ("=t") 0[ 
+                        (reg/v:XF 42)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 441))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 12 10 13 (set (reg/i:XF 8 st(0))
+        (reg/v:XF 43)) -1 (nil)
+    (nil))
+
+(jump_insn 13 12 14 (set (pc)
+        (label_ref 19)) -1 (nil)
+    (nil))
+
+(barrier 14 13 15)
+
+(note 15 14 16 0x4009b500 NOTE_INSN_BLOCK_END 0)
+
+(note 16 15 18 NOTE_INSN_FUNCTION_END 0)
+
+(insn 18 16 19 (clobber (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 19 18 20 32 "" "" [0 uses])
+
+(insn 20 19 0 (use (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function __sqrtl
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:XF 42)
+        (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x4009bf60 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 10 8 12 (parallel[ 
+            (set (reg/v:XF 43)
+                (asm_operands/v ("fsqrt") ("=t") 0[ 
+                        (reg/v:XF 42)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 442))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 12 10 13 (set (reg/i:XF 8 st(0))
+        (reg/v:XF 43)) -1 (nil)
+    (nil))
+
+(jump_insn 13 12 14 (set (pc)
+        (label_ref 19)) -1 (nil)
+    (nil))
+
+(barrier 14 13 15)
+
+(note 15 14 16 0x4009bf60 NOTE_INSN_BLOCK_END 0)
+
+(note 16 15 18 NOTE_INSN_FUNCTION_END 0)
+
+(insn 18 16 19 (clobber (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 19 18 20 33 "" "" [0 uses])
+
+(insn 20 19 0 (use (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function fabs
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:DF 42)
+        (mem/f:DF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (nil))
+
+(note 5 4 11 NOTE_INSN_FUNCTION_BEG 0)
+
+(insn 11 5 13 (parallel[ 
+            (set (reg:DF 43)
+                (abs:DF (reg/v:DF 42)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 13 11 14 (set (reg/i:DF 8 st(0))
+        (reg:DF 43)) -1 (nil)
+    (nil))
+
+(jump_insn 14 13 15 (set (pc)
+        (label_ref 19)) -1 (nil)
+    (nil))
+
+(barrier 15 14 16)
+
+(note 16 15 18 NOTE_INSN_FUNCTION_END 0)
+
+(insn 18 16 19 (clobber (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 19 18 20 34 "" "" [0 uses])
+
+(insn 20 19 0 (use (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function fabsf
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:SF 42)
+        (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 11 NOTE_INSN_FUNCTION_BEG 0)
+
+(insn 11 5 13 (parallel[ 
+            (set (reg:SF 43)
+                (abs:SF (reg/v:SF 42)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 13 11 14 (set (reg/i:SF 8 st(0))
+        (reg:SF 43)) -1 (nil)
+    (nil))
+
+(jump_insn 14 13 15 (set (pc)
+        (label_ref 19)) -1 (nil)
+    (nil))
+
+(barrier 15 14 16)
+
+(note 16 15 18 NOTE_INSN_FUNCTION_END 0)
+
+(insn 18 16 19 (clobber (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 19 18 20 35 "" "" [0 uses])
+
+(insn 20 19 0 (use (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function fabsl
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:XF 42)
+        (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 11 NOTE_INSN_FUNCTION_BEG 0)
+
+(insn 11 5 13 (parallel[ 
+            (set (reg:XF 43)
+                (abs:XF (reg/v:XF 42)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 13 11 14 (set (reg/i:XF 8 st(0))
+        (reg:XF 43)) -1 (nil)
+    (nil))
+
+(jump_insn 14 13 15 (set (pc)
+        (label_ref 19)) -1 (nil)
+    (nil))
+
+(barrier 15 14 16)
+
+(note 16 15 18 NOTE_INSN_FUNCTION_END 0)
+
+(insn 18 16 19 (clobber (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 19 18 20 36 "" "" [0 uses])
+
+(insn 20 19 0 (use (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function __fabsl
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:XF 42)
+        (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 11 NOTE_INSN_FUNCTION_BEG 0)
+
+(insn 11 5 13 (parallel[ 
+            (set (reg:XF 43)
+                (abs:XF (reg/v:XF 42)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 13 11 14 (set (reg/i:XF 8 st(0))
+        (reg:XF 43)) -1 (nil)
+    (nil))
+
+(jump_insn 14 13 15 (set (pc)
+        (label_ref 19)) -1 (nil)
+    (nil))
+
+(barrier 15 14 16)
+
+(note 16 15 18 NOTE_INSN_FUNCTION_END 0)
+
+(insn 18 16 19 (clobber (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 19 18 20 37 "" "" [0 uses])
+
+(insn 20 19 0 (use (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function atan
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:DF 42)
+        (mem/f:DF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (nil))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x400a1840 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 10 8 12 (parallel[ 
+            (set (reg/v:DF 43)
+                (asm_operands/v ("fld1; fpatan") ("=t") 0[ 
+                        (reg/v:DF 42)
+                    ] 
+                    [ 
+                        (asm_input:DF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 467))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+            (clobber (reg:QI 9 st(1)))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 12 10 13 (set (reg/i:DF 8 st(0))
+        (reg/v:DF 43)) -1 (nil)
+    (nil))
+
+(jump_insn 13 12 14 (set (pc)
+        (label_ref 19)) -1 (nil)
+    (nil))
+
+(barrier 14 13 15)
+
+(note 15 14 16 0x400a1840 NOTE_INSN_BLOCK_END 0)
+
+(note 16 15 18 NOTE_INSN_FUNCTION_END 0)
+
+(insn 18 16 19 (clobber (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 19 18 20 38 "" "" [0 uses])
+
+(insn 20 19 0 (use (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function atanf
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:SF 42)
+        (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x400a3340 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 10 8 12 (parallel[ 
+            (set (reg/v:SF 43)
+                (asm_operands/v ("fld1; fpatan") ("=t") 0[ 
+                        (reg/v:SF 42)
+                    ] 
+                    [ 
+                        (asm_input:SF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 467))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+            (clobber (reg:QI 9 st(1)))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 12 10 13 (set (reg/i:SF 8 st(0))
+        (reg/v:SF 43)) -1 (nil)
+    (nil))
+
+(jump_insn 13 12 14 (set (pc)
+        (label_ref 19)) -1 (nil)
+    (nil))
+
+(barrier 14 13 15)
+
+(note 15 14 16 0x400a3340 NOTE_INSN_BLOCK_END 0)
+
+(note 16 15 18 NOTE_INSN_FUNCTION_END 0)
+
+(insn 18 16 19 (clobber (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 19 18 20 39 "" "" [0 uses])
+
+(insn 20 19 0 (use (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function atanl
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:XF 42)
+        (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x400a3ea0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 10 8 12 (parallel[ 
+            (set (reg/v:XF 43)
+                (asm_operands/v ("fld1; fpatan") ("=t") 0[ 
+                        (reg/v:XF 42)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 467))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+            (clobber (reg:QI 9 st(1)))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 12 10 13 (set (reg/i:XF 8 st(0))
+        (reg/v:XF 43)) -1 (nil)
+    (nil))
+
+(jump_insn 13 12 14 (set (pc)
+        (label_ref 19)) -1 (nil)
+    (nil))
+
+(barrier 14 13 15)
+
+(note 15 14 16 0x400a3ea0 NOTE_INSN_BLOCK_END 0)
+
+(note 16 15 18 NOTE_INSN_FUNCTION_END 0)
+
+(insn 18 16 19 (clobber (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 19 18 20 40 "" "" [0 uses])
+
+(insn 20 19 0 (use (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function __sgn1l
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:XF 42)
+        (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x400a8480 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 10 8 12 (clobber (mem/s:BLK (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)) -1 (nil)
+    (nil))
+
+(insn 12 10 14 (set (mem/s:XF (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)
+        (reg/v:XF 42)) -1 (nil)
+    (nil))
+
+(insn 14 12 15 (set (reg:SI 44)
+        (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -8 [0xfffffff8])) 0)) -1 (nil)
+    (nil))
+
+(insn 15 14 17 (parallel[ 
+            (set (reg:SI 43)
+                (and:SI (reg:SI 44)
+                    (const_int 32768 [0x8000])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (and:SI (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                    (const_int -8 [0xfffffff8])) 0)
+            (const_int 32768 [0x8000]))
+        (nil)))
+
+(insn 17 15 19 (parallel[ 
+            (set (reg:SI 45)
+                (ior:SI (reg:SI 43)
+                    (const_int 16383 [0x3fff])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 19 17 21 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -8 [0xfffffff8])) 0)
+        (reg:SI 45)) -1 (nil)
+    (nil))
+
+(insn 21 19 23 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -12 [0xfffffff4])) 0)
+        (const_int -2147483648 [0x80000000])) -1 (nil)
+    (nil))
+
+(insn 23 21 25 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)
+        (const_int 0 [0x0])) -1 (nil)
+    (nil))
+
+(insn 25 23 27 (set (reg:XF 47)
+        (mem/s:XF (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)) -1 (nil)
+    (nil))
+
+(insn 27 25 28 (set (reg/i:XF 8 st(0))
+        (reg:XF 47)) -1 (nil)
+    (nil))
+
+(jump_insn 28 27 29 (set (pc)
+        (label_ref 34)) -1 (nil)
+    (nil))
+
+(barrier 29 28 30)
+
+(note 30 29 31 0x400a8480 NOTE_INSN_BLOCK_END 0)
+
+(note 31 30 33 NOTE_INSN_FUNCTION_END 0)
+
+(insn 33 31 34 (clobber (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 34 33 35 41 "" "" [0 uses])
+
+(insn 35 34 0 (use (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function floor
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:DF 42)
+        (mem/f:DF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (nil))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x400a9b20 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 10 8 12 (parallel[ 
+            (set (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -2 [0xfffffffe])) 0)
+                (asm_operands/v ("fnstcw %0") ("=m") 0[ ] 
+                    [ ]  ("/usr/include/bits/mathinline.h") 493))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 12 10 14 (set (reg:HI 45)
+        (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -2 [0xfffffffe])) 0)) -1 (nil)
+    (nil))
+
+(insn 14 12 16 (parallel[ 
+            (set (reg:HI 44)
+                (and:HI (reg:HI 45)
+                    (const_int 62463 [0xf3ff])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 16 14 18 (parallel[ 
+            (set (reg:HI 46)
+                (ior:HI (reg:HI 44)
+                    (const_int 1024 [0x400])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 18 16 19 (set (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -4 [0xfffffffc])) 0)
+        (reg:HI 46)) -1 (nil)
+    (nil))
+
+(insn 19 18 20 (parallel[ 
+            (asm_operands/v ("fldcw %0") ("") 0[ 
+                    (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                            (const_int -4 [0xfffffffc])) 0)
+                ] 
+                [ 
+                    (asm_input:HI ("m"))
+                ]  ("/usr/include/bits/mathinline.h") 493)
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 20 19 21 (parallel[ 
+            (set (reg/v:XF 43)
+                (asm_operands/v ("frndint") ("=t") 0[ 
+                        (reg/v:DF 42)
+                    ] 
+                    [ 
+                        (asm_input:DF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 493))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 21 20 23 (parallel[ 
+            (asm_operands/v ("fldcw %0") ("") 0[ 
+                    (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                            (const_int -2 [0xfffffffe])) 0)
+                ] 
+                [ 
+                    (asm_input:HI ("m"))
+                ]  ("/usr/include/bits/mathinline.h") 493)
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 23 21 25 (parallel[ 
+            (set (reg:DF 47)
+                (float_truncate:DF (reg/v:XF 43)))
+            (clobber (mem:DF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -16 [0xfffffff0])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 25 23 26 (set (reg/i:DF 8 st(0))
+        (reg:DF 47)) -1 (nil)
+    (nil))
+
+(jump_insn 26 25 27 (set (pc)
+        (label_ref 32)) -1 (nil)
+    (nil))
+
+(barrier 27 26 28)
+
+(note 28 27 29 0x400a9b20 NOTE_INSN_BLOCK_END 0)
+
+(note 29 28 31 NOTE_INSN_FUNCTION_END 0)
+
+(insn 31 29 32 (clobber (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 32 31 33 42 "" "" [0 uses])
+
+(insn 33 32 0 (use (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function floorf
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:SF 42)
+        (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x400ad140 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 10 8 12 (parallel[ 
+            (set (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -2 [0xfffffffe])) 0)
+                (asm_operands/v ("fnstcw %0") ("=m") 0[ ] 
+                    [ ]  ("/usr/include/bits/mathinline.h") 493))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 12 10 14 (set (reg:HI 45)
+        (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -2 [0xfffffffe])) 0)) -1 (nil)
+    (nil))
+
+(insn 14 12 16 (parallel[ 
+            (set (reg:HI 44)
+                (and:HI (reg:HI 45)
+                    (const_int 62463 [0xf3ff])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 16 14 18 (parallel[ 
+            (set (reg:HI 46)
+                (ior:HI (reg:HI 44)
+                    (const_int 1024 [0x400])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 18 16 19 (set (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -4 [0xfffffffc])) 0)
+        (reg:HI 46)) -1 (nil)
+    (nil))
+
+(insn 19 18 20 (parallel[ 
+            (asm_operands/v ("fldcw %0") ("") 0[ 
+                    (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                            (const_int -4 [0xfffffffc])) 0)
+                ] 
+                [ 
+                    (asm_input:HI ("m"))
+                ]  ("/usr/include/bits/mathinline.h") 493)
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 20 19 21 (parallel[ 
+            (set (reg/v:XF 43)
+                (asm_operands/v ("frndint") ("=t") 0[ 
+                        (reg/v:SF 42)
+                    ] 
+                    [ 
+                        (asm_input:SF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 493))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 21 20 23 (parallel[ 
+            (asm_operands/v ("fldcw %0") ("") 0[ 
+                    (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                            (const_int -2 [0xfffffffe])) 0)
+                ] 
+                [ 
+                    (asm_input:HI ("m"))
+                ]  ("/usr/include/bits/mathinline.h") 493)
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 23 21 25 (parallel[ 
+            (set (reg:SF 47)
+                (float_truncate:SF (reg/v:XF 43)))
+            (clobber (mem:SF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -8 [0xfffffff8])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 25 23 26 (set (reg/i:SF 8 st(0))
+        (reg:SF 47)) -1 (nil)
+    (nil))
+
+(jump_insn 26 25 27 (set (pc)
+        (label_ref 32)) -1 (nil)
+    (nil))
+
+(barrier 27 26 28)
+
+(note 28 27 29 0x400ad140 NOTE_INSN_BLOCK_END 0)
+
+(note 29 28 31 NOTE_INSN_FUNCTION_END 0)
+
+(insn 31 29 32 (clobber (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 32 31 33 43 "" "" [0 uses])
+
+(insn 33 32 0 (use (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function floorl
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:XF 42)
+        (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x400af740 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 10 8 12 (parallel[ 
+            (set (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -2 [0xfffffffe])) 0)
+                (asm_operands/v ("fnstcw %0") ("=m") 0[ ] 
+                    [ ]  ("/usr/include/bits/mathinline.h") 493))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 12 10 14 (set (reg:HI 45)
+        (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -2 [0xfffffffe])) 0)) -1 (nil)
+    (nil))
+
+(insn 14 12 16 (parallel[ 
+            (set (reg:HI 44)
+                (and:HI (reg:HI 45)
+                    (const_int 62463 [0xf3ff])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 16 14 18 (parallel[ 
+            (set (reg:HI 46)
+                (ior:HI (reg:HI 44)
+                    (const_int 1024 [0x400])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 18 16 19 (set (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -4 [0xfffffffc])) 0)
+        (reg:HI 46)) -1 (nil)
+    (nil))
+
+(insn 19 18 20 (parallel[ 
+            (asm_operands/v ("fldcw %0") ("") 0[ 
+                    (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                            (const_int -4 [0xfffffffc])) 0)
+                ] 
+                [ 
+                    (asm_input:HI ("m"))
+                ]  ("/usr/include/bits/mathinline.h") 493)
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 20 19 21 (parallel[ 
+            (set (reg/v:XF 43)
+                (asm_operands/v ("frndint") ("=t") 0[ 
+                        (reg/v:XF 42)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 493))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 21 20 23 (parallel[ 
+            (asm_operands/v ("fldcw %0") ("") 0[ 
+                    (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                            (const_int -2 [0xfffffffe])) 0)
+                ] 
+                [ 
+                    (asm_input:HI ("m"))
+                ]  ("/usr/include/bits/mathinline.h") 493)
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 23 21 24 (set (reg/i:XF 8 st(0))
+        (reg/v:XF 43)) -1 (nil)
+    (nil))
+
+(jump_insn 24 23 25 (set (pc)
+        (label_ref 30)) -1 (nil)
+    (nil))
+
+(barrier 25 24 26)
+
+(note 26 25 27 0x400af740 NOTE_INSN_BLOCK_END 0)
+
+(note 27 26 29 NOTE_INSN_FUNCTION_END 0)
+
+(insn 29 27 30 (clobber (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 30 29 31 44 "" "" [0 uses])
+
+(insn 31 30 0 (use (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function ceil
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:DF 42)
+        (mem/f:DF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (nil))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x400b1de0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 10 8 12 (parallel[ 
+            (set (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -2 [0xfffffffe])) 0)
+                (asm_operands/v ("fnstcw %0") ("=m") 0[ ] 
+                    [ ]  ("/usr/include/bits/mathinline.h") 504))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 12 10 14 (set (reg:HI 45)
+        (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -2 [0xfffffffe])) 0)) -1 (nil)
+    (nil))
+
+(insn 14 12 16 (parallel[ 
+            (set (reg:HI 44)
+                (and:HI (reg:HI 45)
+                    (const_int 62463 [0xf3ff])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 16 14 18 (parallel[ 
+            (set (reg:HI 46)
+                (ior:HI (reg:HI 44)
+                    (const_int 2048 [0x800])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 18 16 19 (set (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -4 [0xfffffffc])) 0)
+        (reg:HI 46)) -1 (nil)
+    (nil))
+
+(insn 19 18 20 (parallel[ 
+            (asm_operands/v ("fldcw %0") ("") 0[ 
+                    (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                            (const_int -4 [0xfffffffc])) 0)
+                ] 
+                [ 
+                    (asm_input:HI ("m"))
+                ]  ("/usr/include/bits/mathinline.h") 504)
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 20 19 21 (parallel[ 
+            (set (reg/v:XF 43)
+                (asm_operands/v ("frndint") ("=t") 0[ 
+                        (reg/v:DF 42)
+                    ] 
+                    [ 
+                        (asm_input:DF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 504))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 21 20 23 (parallel[ 
+            (asm_operands/v ("fldcw %0") ("") 0[ 
+                    (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                            (const_int -2 [0xfffffffe])) 0)
+                ] 
+                [ 
+                    (asm_input:HI ("m"))
+                ]  ("/usr/include/bits/mathinline.h") 504)
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 23 21 25 (parallel[ 
+            (set (reg:DF 47)
+                (float_truncate:DF (reg/v:XF 43)))
+            (clobber (mem:DF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -16 [0xfffffff0])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 25 23 26 (set (reg/i:DF 8 st(0))
+        (reg:DF 47)) -1 (nil)
+    (nil))
+
+(jump_insn 26 25 27 (set (pc)
+        (label_ref 32)) -1 (nil)
+    (nil))
+
+(barrier 27 26 28)
+
+(note 28 27 29 0x400b1de0 NOTE_INSN_BLOCK_END 0)
+
+(note 29 28 31 NOTE_INSN_FUNCTION_END 0)
+
+(insn 31 29 32 (clobber (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 32 31 33 45 "" "" [0 uses])
+
+(insn 33 32 0 (use (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function ceilf
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:SF 42)
+        (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x400b3400 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 10 8 12 (parallel[ 
+            (set (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -2 [0xfffffffe])) 0)
+                (asm_operands/v ("fnstcw %0") ("=m") 0[ ] 
+                    [ ]  ("/usr/include/bits/mathinline.h") 504))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 12 10 14 (set (reg:HI 45)
+        (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -2 [0xfffffffe])) 0)) -1 (nil)
+    (nil))
+
+(insn 14 12 16 (parallel[ 
+            (set (reg:HI 44)
+                (and:HI (reg:HI 45)
+                    (const_int 62463 [0xf3ff])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 16 14 18 (parallel[ 
+            (set (reg:HI 46)
+                (ior:HI (reg:HI 44)
+                    (const_int 2048 [0x800])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 18 16 19 (set (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -4 [0xfffffffc])) 0)
+        (reg:HI 46)) -1 (nil)
+    (nil))
+
+(insn 19 18 20 (parallel[ 
+            (asm_operands/v ("fldcw %0") ("") 0[ 
+                    (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                            (const_int -4 [0xfffffffc])) 0)
+                ] 
+                [ 
+                    (asm_input:HI ("m"))
+                ]  ("/usr/include/bits/mathinline.h") 504)
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 20 19 21 (parallel[ 
+            (set (reg/v:XF 43)
+                (asm_operands/v ("frndint") ("=t") 0[ 
+                        (reg/v:SF 42)
+                    ] 
+                    [ 
+                        (asm_input:SF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 504))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 21 20 23 (parallel[ 
+            (asm_operands/v ("fldcw %0") ("") 0[ 
+                    (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                            (const_int -2 [0xfffffffe])) 0)
+                ] 
+                [ 
+                    (asm_input:HI ("m"))
+                ]  ("/usr/include/bits/mathinline.h") 504)
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 23 21 25 (parallel[ 
+            (set (reg:SF 47)
+                (float_truncate:SF (reg/v:XF 43)))
+            (clobber (mem:SF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -8 [0xfffffff8])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 25 23 26 (set (reg/i:SF 8 st(0))
+        (reg:SF 47)) -1 (nil)
+    (nil))
+
+(jump_insn 26 25 27 (set (pc)
+        (label_ref 32)) -1 (nil)
+    (nil))
+
+(barrier 27 26 28)
+
+(note 28 27 29 0x400b3400 NOTE_INSN_BLOCK_END 0)
+
+(note 29 28 31 NOTE_INSN_FUNCTION_END 0)
+
+(insn 31 29 32 (clobber (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 32 31 33 46 "" "" [0 uses])
+
+(insn 33 32 0 (use (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function ceill
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:XF 42)
+        (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x400b5a00 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 10 8 12 (parallel[ 
+            (set (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -2 [0xfffffffe])) 0)
+                (asm_operands/v ("fnstcw %0") ("=m") 0[ ] 
+                    [ ]  ("/usr/include/bits/mathinline.h") 504))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 12 10 14 (set (reg:HI 45)
+        (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -2 [0xfffffffe])) 0)) -1 (nil)
+    (nil))
+
+(insn 14 12 16 (parallel[ 
+            (set (reg:HI 44)
+                (and:HI (reg:HI 45)
+                    (const_int 62463 [0xf3ff])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 16 14 18 (parallel[ 
+            (set (reg:HI 46)
+                (ior:HI (reg:HI 44)
+                    (const_int 2048 [0x800])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 18 16 19 (set (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -4 [0xfffffffc])) 0)
+        (reg:HI 46)) -1 (nil)
+    (nil))
+
+(insn 19 18 20 (parallel[ 
+            (asm_operands/v ("fldcw %0") ("") 0[ 
+                    (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                            (const_int -4 [0xfffffffc])) 0)
+                ] 
+                [ 
+                    (asm_input:HI ("m"))
+                ]  ("/usr/include/bits/mathinline.h") 504)
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 20 19 21 (parallel[ 
+            (set (reg/v:XF 43)
+                (asm_operands/v ("frndint") ("=t") 0[ 
+                        (reg/v:XF 42)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 504))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 21 20 23 (parallel[ 
+            (asm_operands/v ("fldcw %0") ("") 0[ 
+                    (mem/v/f:HI (plus:SI (reg:SI 38 virtual-stack-vars)
+                            (const_int -2 [0xfffffffe])) 0)
+                ] 
+                [ 
+                    (asm_input:HI ("m"))
+                ]  ("/usr/include/bits/mathinline.h") 504)
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 23 21 24 (set (reg/i:XF 8 st(0))
+        (reg/v:XF 43)) -1 (nil)
+    (nil))
+
+(jump_insn 24 23 25 (set (pc)
+        (label_ref 30)) -1 (nil)
+    (nil))
+
+(barrier 25 24 26)
+
+(note 26 25 27 0x400b5a00 NOTE_INSN_BLOCK_END 0)
+
+(note 27 26 29 NOTE_INSN_FUNCTION_END 0)
+
+(insn 29 27 30 (clobber (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 30 29 31 47 "" "" [0 uses])
+
+(insn 31 30 0 (use (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function ldexp
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 6 (set (reg/v:DF 42)
+        (mem/f:DF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (nil))
+
+(insn 6 4 7 (set (reg/v:SI 43)
+        (mem/f:SI (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 8 [0x8])) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SI (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 8 [0x8])) 0)
+        (nil)))
+
+(note 7 6 10 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 10 7 12 0x400b8720 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 12 10 13 (set (reg:XF 45)
+        (float:XF (reg/v:SI 43))) -1 (nil)
+    (nil))
+
+(insn 13 12 15 (parallel[ 
+            (set (reg/v:XF 44)
+                (asm_operands/v ("fscale") ("=t") 0[ 
+                        (reg/v:DF 42)
+                        (reg:XF 45)
+                    ] 
+                    [ 
+                        (asm_input:DF ("0"))
+                        (asm_input:XF ("u"))
+                    ]  ("/usr/include/bits/mathinline.h") 525))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 15 13 17 (parallel[ 
+            (set (reg:DF 46)
+                (float_truncate:DF (reg/v:XF 44)))
+            (clobber (mem:DF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -8 [0xfffffff8])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 17 15 18 (set (reg/i:DF 8 st(0))
+        (reg:DF 46)) -1 (nil)
+    (nil))
+
+(jump_insn 18 17 19 (set (pc)
+        (label_ref 25)) -1 (nil)
+    (nil))
+
+(barrier 19 18 21)
+
+(note 21 19 22 0x400b8720 NOTE_INSN_BLOCK_END 0)
+
+(note 22 21 24 NOTE_INSN_FUNCTION_END 0)
+
+(insn 24 22 25 (clobber (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 25 24 26 48 "" "" [0 uses])
+
+(insn 26 25 0 (use (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function log1p
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:DF 42)
+        (mem/f:DF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (nil))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 11 0x400b9b60 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 11 8 13 (set (reg:XF 44)
+        (float_extend:XF (reg/v:DF 42))) -1 (nil)
+    (nil))
+
+(insn 13 11 14 (set (reg/v:XF 45)
+        (reg:XF 44)) -1 (nil)
+    (nil))
+
+(note 14 13 16 0x400b9100 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 16 14 17 (parallel[ 
+            (set (reg:XF 47)
+                (abs:XF (reg/v:XF 45)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 17 16 18 (set (reg:XF 46)
+        (reg:XF 47)) -1 (nil)
+    (nil))
+
+(jump_insn/i 18 17 19 (set (pc)
+        (label_ref 21)) -1 (nil)
+    (nil))
+
+(barrier/i 19 18 20)
+
+(insn/i 20 19 21 (clobber (reg:XF 46)) -1 (nil)
+    (nil))
+
+(code_label/i 21 20 22 51 "" "" [0 uses])
+
+(note 22 21 24 0x400b9100 NOTE_INSN_BLOCK_END 0)
+
+(insn 24 22 25 (set (reg:XF 48)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC10")) 0)) -1 (nil)
+    (expr_list:REG_EQUAL (const_double:XF (mem/u/f:XF (symbol_ref/u:SI ("*.LC10")) 0) 922222592 [0x36f80000] 429395011 [0x19980c43] 1073583606 [0x3ffd95f6])
+        (nil)))
+
+(jump_insn 25 24 26 (parallel[ 
+            (set (pc)
+                (if_then_else (ge:CCFPU (reg:XF 46)
+                        (reg:XF 48))
+                    (label_ref 28)
+                    (pc)))
+            (clobber (reg:CCFP 18 fpsr))
+            (clobber (reg:CCFP 17 flags))
+            (clobber (scratch:HI))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn 26 25 27 (set (pc)
+        (label_ref 45)) -1 (nil)
+    (nil))
+
+(barrier 27 26 28)
+
+(code_label 28 27 30 52 "" "" [0 uses])
+
+(insn 30 28 32 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int -4 [0xfffffffc])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 32 30 33 (set (reg:DF 50)
+        (mem/u/f:DF (symbol_ref/u:SI ("*.LC11")) 0)) -1 (nil)
+    (nil))
+
+(insn 33 32 35 (set (reg:DF 49)
+        (plus:DF (reg/v:DF 42)
+            (reg:DF 50))) -1 (nil)
+    (nil))
+
+(insn 35 33 37 (set (reg:XF 51)
+        (float_extend:XF (reg:DF 49))) -1 (nil)
+    (nil))
+
+(insn 37 35 38 (set (mem/f:XF (pre_dec:SI (reg:SI 7 esp)) 0)
+        (reg:XF 51)) -1 (nil)
+    (nil))
+
+(call_insn 38 37 40 (set (reg:XF 8 st(0))
+        (call (mem:QI (symbol_ref:SI ("logl")) 0)
+            (const_int 16 [0x10]))) -1 (nil)
+    (nil)
+    (nil))
+
+(insn 40 38 42 (set (reg/v:XF 43)
+        (reg:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(insn 42 40 43 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int 16 [0x10])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn 43 42 44 (set (pc)
+        (label_ref 47)) -1 (nil)
+    (nil))
+
+(barrier 44 43 45)
+
+(code_label 45 44 46 50 "" "" [0 uses])
+
+(insn 46 45 47 (parallel[ 
+            (set (reg/v:XF 43)
+                (asm_operands/v ("fldln2
+	fxch
+	fyl2xp1") ("=t") 0[ 
+                        (reg/v:DF 42)
+                    ] 
+                    [ 
+                        (asm_input:DF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 540))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+            (clobber (reg:QI 9 st(1)))
+        ] ) -1 (nil)
+    (nil))
+
+(code_label 47 46 49 53 "" "" [0 uses])
+
+(insn 49 47 51 (parallel[ 
+            (set (reg:DF 52)
+                (float_truncate:DF (reg/v:XF 43)))
+            (clobber (mem:DF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -8 [0xfffffff8])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 51 49 52 (set (reg/i:DF 8 st(0))
+        (reg:DF 52)) -1 (nil)
+    (nil))
+
+(jump_insn 52 51 53 (set (pc)
+        (label_ref 58)) -1 (nil)
+    (nil))
+
+(barrier 53 52 54)
+
+(note 54 53 55 0x400b9b60 NOTE_INSN_BLOCK_END 0)
+
+(note 55 54 57 NOTE_INSN_FUNCTION_END 0)
+
+(insn 57 55 58 (clobber (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 58 57 59 49 "" "" [0 uses])
+
+(insn 59 58 0 (use (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function log1pf
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:SF 42)
+        (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 11 0x400bcf20 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 11 8 13 (set (reg:XF 44)
+        (float_extend:XF (reg/v:SF 42))) -1 (nil)
+    (nil))
+
+(insn 13 11 14 (set (reg/v:XF 45)
+        (reg:XF 44)) -1 (nil)
+    (nil))
+
+(note 14 13 16 0x400bc4c0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 16 14 17 (parallel[ 
+            (set (reg:XF 47)
+                (abs:XF (reg/v:XF 45)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 17 16 18 (set (reg:XF 46)
+        (reg:XF 47)) -1 (nil)
+    (nil))
+
+(jump_insn/i 18 17 19 (set (pc)
+        (label_ref 21)) -1 (nil)
+    (nil))
+
+(barrier/i 19 18 20)
+
+(insn/i 20 19 21 (clobber (reg:XF 46)) -1 (nil)
+    (nil))
+
+(code_label/i 21 20 22 56 "" "" [0 uses])
+
+(note 22 21 24 0x400bc4c0 NOTE_INSN_BLOCK_END 0)
+
+(insn 24 22 25 (set (reg:XF 48)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC12")) 0)) -1 (nil)
+    (expr_list:REG_EQUAL (const_double:XF (mem/u/f:XF (symbol_ref/u:SI ("*.LC12")) 0) 922222592 [0x36f80000] 429395011 [0x19980c43] 1073583606 [0x3ffd95f6])
+        (nil)))
+
+(jump_insn 25 24 26 (parallel[ 
+            (set (pc)
+                (if_then_else (ge:CCFPU (reg:XF 46)
+                        (reg:XF 48))
+                    (label_ref 28)
+                    (pc)))
+            (clobber (reg:CCFP 18 fpsr))
+            (clobber (reg:CCFP 17 flags))
+            (clobber (scratch:HI))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn 26 25 27 (set (pc)
+        (label_ref 47)) -1 (nil)
+    (nil))
+
+(barrier 27 26 28)
+
+(code_label 28 27 30 57 "" "" [0 uses])
+
+(insn 30 28 32 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int -4 [0xfffffffc])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 32 30 34 (set (reg:DF 49)
+        (float_extend:DF (reg/v:SF 42))) -1 (nil)
+    (nil))
+
+(insn 34 32 35 (set (reg:DF 51)
+        (mem/u/f:DF (symbol_ref/u:SI ("*.LC13")) 0)) -1 (nil)
+    (nil))
+
+(insn 35 34 37 (set (reg:DF 50)
+        (plus:DF (reg:DF 49)
+            (reg:DF 51))) -1 (nil)
+    (nil))
+
+(insn 37 35 39 (set (reg:XF 52)
+        (float_extend:XF (reg:DF 50))) -1 (nil)
+    (nil))
+
+(insn 39 37 40 (set (mem/f:XF (pre_dec:SI (reg:SI 7 esp)) 0)
+        (reg:XF 52)) -1 (nil)
+    (nil))
+
+(call_insn 40 39 42 (set (reg:XF 8 st(0))
+        (call (mem:QI (symbol_ref:SI ("logl")) 0)
+            (const_int 16 [0x10]))) -1 (nil)
+    (nil)
+    (nil))
+
+(insn 42 40 44 (set (reg/v:XF 43)
+        (reg:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(insn 44 42 45 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int 16 [0x10])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn 45 44 46 (set (pc)
+        (label_ref 49)) -1 (nil)
+    (nil))
+
+(barrier 46 45 47)
+
+(code_label 47 46 48 55 "" "" [0 uses])
+
+(insn 48 47 49 (parallel[ 
+            (set (reg/v:XF 43)
+                (asm_operands/v ("fldln2
+	fxch
+	fyl2xp1") ("=t") 0[ 
+                        (reg/v:SF 42)
+                    ] 
+                    [ 
+                        (asm_input:SF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 540))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+            (clobber (reg:QI 9 st(1)))
+        ] ) -1 (nil)
+    (nil))
+
+(code_label 49 48 51 58 "" "" [0 uses])
+
+(insn 51 49 53 (parallel[ 
+            (set (reg:SF 53)
+                (float_truncate:SF (reg/v:XF 43)))
+            (clobber (mem:SF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -4 [0xfffffffc])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 53 51 54 (set (reg/i:SF 8 st(0))
+        (reg:SF 53)) -1 (nil)
+    (nil))
+
+(jump_insn 54 53 55 (set (pc)
+        (label_ref 60)) -1 (nil)
+    (nil))
+
+(barrier 55 54 56)
+
+(note 56 55 57 0x400bcf20 NOTE_INSN_BLOCK_END 0)
+
+(note 57 56 59 NOTE_INSN_FUNCTION_END 0)
+
+(insn 59 57 60 (clobber (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 60 59 61 54 "" "" [0 uses])
+
+(insn 61 60 0 (use (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function log1pl
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:XF 42)
+        (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x400c11a0 NOTE_INSN_BLOCK_BEG 0)
+
+(note 10 8 12 0x400bd820 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 12 10 13 (parallel[ 
+            (set (reg:XF 45)
+                (abs:XF (reg/v:XF 42)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 13 12 14 (set (reg:XF 44)
+        (reg:XF 45)) -1 (nil)
+    (nil))
+
+(jump_insn/i 14 13 15 (set (pc)
+        (label_ref 17)) -1 (nil)
+    (nil))
+
+(barrier/i 15 14 16)
+
+(insn/i 16 15 17 (clobber (reg:XF 44)) -1 (nil)
+    (nil))
+
+(code_label/i 17 16 18 61 "" "" [0 uses])
+
+(note 18 17 20 0x400bd820 NOTE_INSN_BLOCK_END 0)
+
+(insn 20 18 21 (set (reg:XF 46)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC14")) 0)) -1 (nil)
+    (expr_list:REG_EQUAL (const_double:XF (mem/u/f:XF (symbol_ref/u:SI ("*.LC14")) 0) 922222592 [0x36f80000] 429395011 [0x19980c43] 1073583606 [0x3ffd95f6])
+        (nil)))
+
+(jump_insn 21 20 22 (parallel[ 
+            (set (pc)
+                (if_then_else (ge:CCFPU (reg:XF 44)
+                        (reg:XF 46))
+                    (label_ref 24)
+                    (pc)))
+            (clobber (reg:CCFP 18 fpsr))
+            (clobber (reg:CCFP 17 flags))
+            (clobber (scratch:HI))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn 22 21 23 (set (pc)
+        (label_ref 39)) -1 (nil)
+    (nil))
+
+(barrier 23 22 24)
+
+(code_label 24 23 26 62 "" "" [0 uses])
+
+(insn 26 24 28 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int -4 [0xfffffffc])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 28 26 29 (set (reg:XF 48)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC15")) 0)) -1 (nil)
+    (nil))
+
+(insn 29 28 31 (set (reg:XF 47)
+        (plus:XF (reg/v:XF 42)
+            (reg:XF 48))) -1 (nil)
+    (nil))
+
+(insn 31 29 32 (set (mem/f:XF (pre_dec:SI (reg:SI 7 esp)) 0)
+        (reg:XF 47)) -1 (nil)
+    (nil))
+
+(call_insn 32 31 34 (set (reg:XF 8 st(0))
+        (call (mem:QI (symbol_ref:SI ("logl")) 0)
+            (const_int 16 [0x10]))) -1 (nil)
+    (nil)
+    (nil))
+
+(insn 34 32 36 (set (reg/v:XF 43)
+        (reg:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(insn 36 34 37 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int 16 [0x10])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn 37 36 38 (set (pc)
+        (label_ref 41)) -1 (nil)
+    (nil))
+
+(barrier 38 37 39)
+
+(code_label 39 38 40 60 "" "" [0 uses])
+
+(insn 40 39 41 (parallel[ 
+            (set (reg/v:XF 43)
+                (asm_operands/v ("fldln2
+	fxch
+	fyl2xp1") ("=t") 0[ 
+                        (reg/v:XF 42)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 540))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+            (clobber (reg:QI 9 st(1)))
+        ] ) -1 (nil)
+    (nil))
+
+(code_label 41 40 43 63 "" "" [0 uses])
+
+(insn 43 41 44 (set (reg/i:XF 8 st(0))
+        (reg/v:XF 43)) -1 (nil)
+    (nil))
+
+(jump_insn 44 43 45 (set (pc)
+        (label_ref 50)) -1 (nil)
+    (nil))
+
+(barrier 45 44 46)
+
+(note 46 45 47 0x400c11a0 NOTE_INSN_BLOCK_END 0)
+
+(note 47 46 49 NOTE_INSN_FUNCTION_END 0)
+
+(insn 49 47 50 (clobber (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 50 49 51 59 "" "" [0 uses])
+
+(insn 51 50 0 (use (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function asinh
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:DF 42)
+        (mem/f:DF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (nil))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 11 0x400c28e0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 11 8 13 (set (reg:XF 44)
+        (float_extend:XF (reg/v:DF 42))) -1 (nil)
+    (nil))
+
+(insn 13 11 14 (set (reg/v:XF 45)
+        (reg:XF 44)) -1 (nil)
+    (nil))
+
+(note 14 13 16 0x400c19a0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 16 14 17 (parallel[ 
+            (set (reg:XF 46)
+                (abs:XF (reg/v:XF 45)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 17 16 18 (set (reg/v:XF 43)
+        (reg:XF 46)) -1 (nil)
+    (nil))
+
+(jump_insn/i 18 17 19 (set (pc)
+        (label_ref 21)) -1 (nil)
+    (nil))
+
+(barrier/i 19 18 20)
+
+(insn/i 20 19 21 (clobber (reg/v:XF 43)) -1 (nil)
+    (nil))
+
+(code_label/i 21 20 22 65 "" "" [0 uses])
+
+(note 22 21 23 0x400c19a0 NOTE_INSN_BLOCK_END 0)
+
+(insn 23 22 25 (set (reg:XF 48)
+        (mult:XF (reg/v:XF 43)
+            (reg/v:XF 43))) -1 (nil)
+    (nil))
+
+(insn 25 23 26 (set (reg:XF 50)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC16")) 0)) -1 (nil)
+    (nil))
+
+(insn 26 25 28 (set (reg:XF 49)
+        (plus:XF (reg:XF 48)
+            (reg:XF 50))) -1 (nil)
+    (nil))
+
+(insn 28 26 29 (set (reg/v:XF 51)
+        (reg:XF 49)) -1 (nil)
+    (nil))
+
+(note 29 28 31 0x400c1f60 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 31 29 32 0x400c1f80 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 32 31 33 (parallel[ 
+            (set (reg/v:XF 53)
+                (asm_operands/v ("fsqrt") ("=t") 0[ 
+                        (reg/v:XF 51)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 442))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 33 32 34 (set (reg:XF 52)
+        (reg/v:XF 53)) -1 (nil)
+    (nil))
+
+(jump_insn/i 34 33 35 (set (pc)
+        (label_ref 38)) -1 (nil)
+    (nil))
+
+(barrier/i 35 34 36)
+
+(note/i 36 35 37 0x400c1f80 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 37 36 38 (clobber (reg:XF 52)) -1 (nil)
+    (nil))
+
+(code_label/i 38 37 39 66 "" "" [0 uses])
+
+(note 39 38 40 0x400c1f60 NOTE_INSN_BLOCK_END 0)
+
+(insn 40 39 42 (set (reg:XF 54)
+        (mult:XF (reg/v:XF 43)
+            (reg/v:XF 43))) -1 (nil)
+    (nil))
+
+(insn 42 40 43 (set (reg:XF 56)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC16")) 0)) -1 (nil)
+    (nil))
+
+(insn 43 42 44 (set (reg:XF 55)
+        (plus:XF (reg:XF 52)
+            (reg:XF 56))) -1 (nil)
+    (nil))
+
+(insn 44 43 45 (set (reg:XF 57)
+        (div:XF (reg:XF 54)
+            (reg:XF 55))) -1 (nil)
+    (nil))
+
+(insn 45 44 47 (set (reg:XF 58)
+        (plus:XF (reg:XF 57)
+            (reg/v:XF 43))) -1 (nil)
+    (nil))
+
+(insn 47 45 48 (set (reg/v:XF 59)
+        (reg:XF 58)) -1 (nil)
+    (nil))
+
+(note 48 47 50 0x400c21e0 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 50 48 51 0x400c2200 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 51 50 52 0x400c2220 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 52 51 53 (parallel[ 
+            (set (reg:XF 62)
+                (abs:XF (reg/v:XF 59)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 53 52 54 (set (reg:XF 63)
+        (reg:XF 62)) -1 (nil)
+    (nil))
+
+(jump_insn/i 54 53 55 (set (pc)
+        (label_ref 57)) -1 (nil)
+    (nil))
+
+(barrier/i 55 54 56)
+
+(insn/i 56 55 57 (clobber (reg:XF 63)) -1 (nil)
+    (nil))
+
+(code_label/i 57 56 58 67 "" "" [0 uses])
+
+(note/i 58 57 59 0x400c2220 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 59 58 60 (set (reg:XF 64)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC17")) 0)) -1 (nil)
+    (expr_list:REG_EQUAL (const_double:XF (mem/u/f:XF (symbol_ref/u:SI ("*.LC17")) 0) 922222592 [0x36f80000] 429395011 [0x19980c43] 1073583606 [0x3ffd95f6])
+        (nil)))
+
+(jump_insn/i 60 59 61 (parallel[ 
+            (set (pc)
+                (if_then_else (ge:CCFPU (reg:XF 63)
+                        (reg:XF 64))
+                    (label_ref 63)
+                    (pc)))
+            (clobber (reg:CCFP 18 fpsr))
+            (clobber (reg:CCFP 17 flags))
+            (clobber (scratch:HI))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn/i 61 60 62 (set (pc)
+        (label_ref 73)) -1 (nil)
+    (nil))
+
+(barrier/i 62 61 63)
+
+(code_label/i 63 62 64 68 "" "" [0 uses])
+
+(insn/i 64 63 65 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int -4 [0xfffffffc])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 65 64 66 (set (reg:XF 65)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC16")) 0)) -1 (nil)
+    (nil))
+
+(insn/i 66 65 67 (set (reg:XF 66)
+        (plus:XF (reg/v:XF 59)
+            (reg:XF 65))) -1 (nil)
+    (nil))
+
+(insn/i 67 66 68 (set (mem/f:XF (pre_dec:SI (reg:SI 7 esp)) 0)
+        (reg:XF 66)) -1 (nil)
+    (nil))
+
+(call_insn/i 68 67 69 (set (reg:XF 8 st(0))
+        (call (mem:QI (symbol_ref:SI ("logl")) 0)
+            (const_int 16 [0x10]))) -1 (nil)
+    (nil)
+    (nil))
+
+(insn/i 69 68 70 (set (reg/v:XF 61)
+        (reg:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(insn/i 70 69 71 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int 16 [0x10])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn/i 71 70 72 (set (pc)
+        (label_ref 75)) -1 (nil)
+    (nil))
+
+(barrier/i 72 71 73)
+
+(code_label/i 73 72 74 69 "" "" [0 uses])
+
+(insn/i 74 73 75 (parallel[ 
+            (set (reg/v:XF 61)
+                (asm_operands/v ("fldln2
+	fxch
+	fyl2xp1") ("=t") 0[ 
+                        (reg/v:XF 59)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 540))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+            (clobber (reg:QI 9 st(1)))
+        ] ) -1 (nil)
+    (nil))
+
+(code_label/i 75 74 76 70 "" "" [0 uses])
+
+(insn/i 76 75 77 (set (reg:XF 60)
+        (reg/v:XF 61)) -1 (nil)
+    (nil))
+
+(jump_insn/i 77 76 78 (set (pc)
+        (label_ref 81)) -1 (nil)
+    (nil))
+
+(barrier/i 78 77 79)
+
+(note/i 79 78 80 0x400c2200 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 80 79 81 (clobber (reg:XF 60)) -1 (nil)
+    (nil))
+
+(code_label/i 81 80 82 71 "" "" [0 uses])
+
+(note 82 81 84 0x400c21e0 NOTE_INSN_BLOCK_END 0)
+
+(insn 84 82 86 (set (reg:XF 67)
+        (float_extend:XF (reg/v:DF 42))) -1 (nil)
+    (nil))
+
+(insn 86 84 87 (set (reg/v:XF 68)
+        (reg:XF 67)) -1 (nil)
+    (nil))
+
+(note 87 86 89 0x400c25e0 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 89 87 90 0x400c2600 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 90 89 91 (clobber (mem/s:BLK (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)) -1 (nil)
+    (nil))
+
+(insn/i 91 90 92 (set (mem/s:XF (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)
+        (reg/v:XF 68)) -1 (nil)
+    (nil))
+
+(insn/i 92 91 93 (set (reg:SI 70)
+        (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -8 [0xfffffff8])) 0)) -1 (nil)
+    (nil))
+
+(insn/i 93 92 94 (parallel[ 
+            (set (reg:SI 71)
+                (and:SI (reg:SI 70)
+                    (const_int 32768 [0x8000])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (and:SI (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                    (const_int -8 [0xfffffff8])) 0)
+            (const_int 32768 [0x8000]))
+        (nil)))
+
+(insn/i 94 93 95 (parallel[ 
+            (set (reg:SI 72)
+                (ior:SI (reg:SI 71)
+                    (const_int 16383 [0x3fff])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 95 94 96 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -8 [0xfffffff8])) 0)
+        (reg:SI 72)) -1 (nil)
+    (nil))
+
+(insn/i 96 95 97 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -12 [0xfffffff4])) 0)
+        (const_int -2147483648 [0x80000000])) -1 (nil)
+    (nil))
+
+(insn/i 97 96 98 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)
+        (const_int 0 [0x0])) -1 (nil)
+    (nil))
+
+(insn/i 98 97 99 (set (reg:XF 73)
+        (mem/s:XF (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)) -1 (nil)
+    (nil))
+
+(insn/i 99 98 100 (set (reg:XF 69)
+        (reg:XF 73)) -1 (nil)
+    (nil))
+
+(jump_insn/i 100 99 101 (set (pc)
+        (label_ref 104)) -1 (nil)
+    (nil))
+
+(barrier/i 101 100 102)
+
+(note/i 102 101 103 0x400c2600 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 103 102 104 (clobber (reg:XF 69)) -1 (nil)
+    (nil))
+
+(code_label/i 104 103 105 72 "" "" [0 uses])
+
+(note 105 104 106 0x400c25e0 NOTE_INSN_BLOCK_END 0)
+
+(insn 106 105 108 (set (reg:XF 74)
+        (mult:XF (reg:XF 60)
+            (reg:XF 69))) -1 (nil)
+    (nil))
+
+(insn 108 106 110 (parallel[ 
+            (set (reg:DF 47)
+                (float_truncate:DF (reg:XF 74)))
+            (clobber (mem:DF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -24 [0xffffffe8])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 110 108 111 (set (reg/i:DF 8 st(0))
+        (reg:DF 47)) -1 (nil)
+    (nil))
+
+(jump_insn 111 110 112 (set (pc)
+        (label_ref 117)) -1 (nil)
+    (nil))
+
+(barrier 112 111 113)
+
+(note 113 112 114 0x400c28e0 NOTE_INSN_BLOCK_END 0)
+
+(note 114 113 116 NOTE_INSN_FUNCTION_END 0)
+
+(insn 116 114 117 (clobber (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 117 116 118 64 "" "" [0 uses])
+
+(insn 118 117 0 (use (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function asinhf
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:SF 42)
+        (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 11 0x400c4fa0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 11 8 13 (set (reg:XF 44)
+        (float_extend:XF (reg/v:SF 42))) -1 (nil)
+    (nil))
+
+(insn 13 11 14 (set (reg/v:XF 45)
+        (reg:XF 44)) -1 (nil)
+    (nil))
+
+(note 14 13 16 0x400c4060 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 16 14 17 (parallel[ 
+            (set (reg:XF 46)
+                (abs:XF (reg/v:XF 45)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 17 16 18 (set (reg/v:XF 43)
+        (reg:XF 46)) -1 (nil)
+    (nil))
+
+(jump_insn/i 18 17 19 (set (pc)
+        (label_ref 21)) -1 (nil)
+    (nil))
+
+(barrier/i 19 18 20)
+
+(insn/i 20 19 21 (clobber (reg/v:XF 43)) -1 (nil)
+    (nil))
+
+(code_label/i 21 20 22 74 "" "" [0 uses])
+
+(note 22 21 23 0x400c4060 NOTE_INSN_BLOCK_END 0)
+
+(insn 23 22 25 (set (reg:XF 48)
+        (mult:XF (reg/v:XF 43)
+            (reg/v:XF 43))) -1 (nil)
+    (nil))
+
+(insn 25 23 26 (set (reg:XF 50)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC18")) 0)) -1 (nil)
+    (nil))
+
+(insn 26 25 28 (set (reg:XF 49)
+        (plus:XF (reg:XF 48)
+            (reg:XF 50))) -1 (nil)
+    (nil))
+
+(insn 28 26 29 (set (reg/v:XF 51)
+        (reg:XF 49)) -1 (nil)
+    (nil))
+
+(note 29 28 31 0x400c4620 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 31 29 32 0x400c4640 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 32 31 33 (parallel[ 
+            (set (reg/v:XF 53)
+                (asm_operands/v ("fsqrt") ("=t") 0[ 
+                        (reg/v:XF 51)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 442))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 33 32 34 (set (reg:XF 52)
+        (reg/v:XF 53)) -1 (nil)
+    (nil))
+
+(jump_insn/i 34 33 35 (set (pc)
+        (label_ref 38)) -1 (nil)
+    (nil))
+
+(barrier/i 35 34 36)
+
+(note/i 36 35 37 0x400c4640 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 37 36 38 (clobber (reg:XF 52)) -1 (nil)
+    (nil))
+
+(code_label/i 38 37 39 75 "" "" [0 uses])
+
+(note 39 38 40 0x400c4620 NOTE_INSN_BLOCK_END 0)
+
+(insn 40 39 42 (set (reg:XF 54)
+        (mult:XF (reg/v:XF 43)
+            (reg/v:XF 43))) -1 (nil)
+    (nil))
+
+(insn 42 40 43 (set (reg:XF 56)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC18")) 0)) -1 (nil)
+    (nil))
+
+(insn 43 42 44 (set (reg:XF 55)
+        (plus:XF (reg:XF 52)
+            (reg:XF 56))) -1 (nil)
+    (nil))
+
+(insn 44 43 45 (set (reg:XF 57)
+        (div:XF (reg:XF 54)
+            (reg:XF 55))) -1 (nil)
+    (nil))
+
+(insn 45 44 47 (set (reg:XF 58)
+        (plus:XF (reg:XF 57)
+            (reg/v:XF 43))) -1 (nil)
+    (nil))
+
+(insn 47 45 48 (set (reg/v:XF 59)
+        (reg:XF 58)) -1 (nil)
+    (nil))
+
+(note 48 47 50 0x400c48a0 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 50 48 51 0x400c48c0 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 51 50 52 0x400c48e0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 52 51 53 (parallel[ 
+            (set (reg:XF 62)
+                (abs:XF (reg/v:XF 59)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 53 52 54 (set (reg:XF 63)
+        (reg:XF 62)) -1 (nil)
+    (nil))
+
+(jump_insn/i 54 53 55 (set (pc)
+        (label_ref 57)) -1 (nil)
+    (nil))
+
+(barrier/i 55 54 56)
+
+(insn/i 56 55 57 (clobber (reg:XF 63)) -1 (nil)
+    (nil))
+
+(code_label/i 57 56 58 76 "" "" [0 uses])
+
+(note/i 58 57 59 0x400c48e0 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 59 58 60 (set (reg:XF 64)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC19")) 0)) -1 (nil)
+    (expr_list:REG_EQUAL (const_double:XF (mem/u/f:XF (symbol_ref/u:SI ("*.LC19")) 0) 922222592 [0x36f80000] 429395011 [0x19980c43] 1073583606 [0x3ffd95f6])
+        (nil)))
+
+(jump_insn/i 60 59 61 (parallel[ 
+            (set (pc)
+                (if_then_else (ge:CCFPU (reg:XF 63)
+                        (reg:XF 64))
+                    (label_ref 63)
+                    (pc)))
+            (clobber (reg:CCFP 18 fpsr))
+            (clobber (reg:CCFP 17 flags))
+            (clobber (scratch:HI))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn/i 61 60 62 (set (pc)
+        (label_ref 73)) -1 (nil)
+    (nil))
+
+(barrier/i 62 61 63)
+
+(code_label/i 63 62 64 77 "" "" [0 uses])
+
+(insn/i 64 63 65 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int -4 [0xfffffffc])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 65 64 66 (set (reg:XF 65)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC18")) 0)) -1 (nil)
+    (nil))
+
+(insn/i 66 65 67 (set (reg:XF 66)
+        (plus:XF (reg/v:XF 59)
+            (reg:XF 65))) -1 (nil)
+    (nil))
+
+(insn/i 67 66 68 (set (mem/f:XF (pre_dec:SI (reg:SI 7 esp)) 0)
+        (reg:XF 66)) -1 (nil)
+    (nil))
+
+(call_insn/i 68 67 69 (set (reg:XF 8 st(0))
+        (call (mem:QI (symbol_ref:SI ("logl")) 0)
+            (const_int 16 [0x10]))) -1 (nil)
+    (nil)
+    (nil))
+
+(insn/i 69 68 70 (set (reg/v:XF 61)
+        (reg:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(insn/i 70 69 71 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int 16 [0x10])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn/i 71 70 72 (set (pc)
+        (label_ref 75)) -1 (nil)
+    (nil))
+
+(barrier/i 72 71 73)
+
+(code_label/i 73 72 74 78 "" "" [0 uses])
+
+(insn/i 74 73 75 (parallel[ 
+            (set (reg/v:XF 61)
+                (asm_operands/v ("fldln2
+	fxch
+	fyl2xp1") ("=t") 0[ 
+                        (reg/v:XF 59)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 540))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+            (clobber (reg:QI 9 st(1)))
+        ] ) -1 (nil)
+    (nil))
+
+(code_label/i 75 74 76 79 "" "" [0 uses])
+
+(insn/i 76 75 77 (set (reg:XF 60)
+        (reg/v:XF 61)) -1 (nil)
+    (nil))
+
+(jump_insn/i 77 76 78 (set (pc)
+        (label_ref 81)) -1 (nil)
+    (nil))
+
+(barrier/i 78 77 79)
+
+(note/i 79 78 80 0x400c48c0 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 80 79 81 (clobber (reg:XF 60)) -1 (nil)
+    (nil))
+
+(code_label/i 81 80 82 80 "" "" [0 uses])
+
+(note 82 81 84 0x400c48a0 NOTE_INSN_BLOCK_END 0)
+
+(insn 84 82 86 (set (reg:XF 67)
+        (float_extend:XF (reg/v:SF 42))) -1 (nil)
+    (nil))
+
+(insn 86 84 87 (set (reg/v:XF 68)
+        (reg:XF 67)) -1 (nil)
+    (nil))
+
+(note 87 86 89 0x400c4ca0 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 89 87 90 0x400c4cc0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 90 89 91 (clobber (mem/s:BLK (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)) -1 (nil)
+    (nil))
+
+(insn/i 91 90 92 (set (mem/s:XF (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)
+        (reg/v:XF 68)) -1 (nil)
+    (nil))
+
+(insn/i 92 91 93 (set (reg:SI 70)
+        (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -8 [0xfffffff8])) 0)) -1 (nil)
+    (nil))
+
+(insn/i 93 92 94 (parallel[ 
+            (set (reg:SI 71)
+                (and:SI (reg:SI 70)
+                    (const_int 32768 [0x8000])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (and:SI (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                    (const_int -8 [0xfffffff8])) 0)
+            (const_int 32768 [0x8000]))
+        (nil)))
+
+(insn/i 94 93 95 (parallel[ 
+            (set (reg:SI 72)
+                (ior:SI (reg:SI 71)
+                    (const_int 16383 [0x3fff])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 95 94 96 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -8 [0xfffffff8])) 0)
+        (reg:SI 72)) -1 (nil)
+    (nil))
+
+(insn/i 96 95 97 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -12 [0xfffffff4])) 0)
+        (const_int -2147483648 [0x80000000])) -1 (nil)
+    (nil))
+
+(insn/i 97 96 98 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)
+        (const_int 0 [0x0])) -1 (nil)
+    (nil))
+
+(insn/i 98 97 99 (set (reg:XF 73)
+        (mem/s:XF (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)) -1 (nil)
+    (nil))
+
+(insn/i 99 98 100 (set (reg:XF 69)
+        (reg:XF 73)) -1 (nil)
+    (nil))
+
+(jump_insn/i 100 99 101 (set (pc)
+        (label_ref 104)) -1 (nil)
+    (nil))
+
+(barrier/i 101 100 102)
+
+(note/i 102 101 103 0x400c4cc0 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 103 102 104 (clobber (reg:XF 69)) -1 (nil)
+    (nil))
+
+(code_label/i 104 103 105 81 "" "" [0 uses])
+
+(note 105 104 106 0x400c4ca0 NOTE_INSN_BLOCK_END 0)
+
+(insn 106 105 108 (set (reg:XF 74)
+        (mult:XF (reg:XF 60)
+            (reg:XF 69))) -1 (nil)
+    (nil))
+
+(insn 108 106 110 (parallel[ 
+            (set (reg:SF 47)
+                (float_truncate:SF (reg:XF 74)))
+            (clobber (mem:SF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -20 [0xffffffec])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 110 108 111 (set (reg/i:SF 8 st(0))
+        (reg:SF 47)) -1 (nil)
+    (nil))
+
+(jump_insn 111 110 112 (set (pc)
+        (label_ref 117)) -1 (nil)
+    (nil))
+
+(barrier 112 111 113)
+
+(note 113 112 114 0x400c4fa0 NOTE_INSN_BLOCK_END 0)
+
+(note 114 113 116 NOTE_INSN_FUNCTION_END 0)
+
+(insn 116 114 117 (clobber (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 117 116 118 73 "" "" [0 uses])
+
+(insn 118 117 0 (use (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function asinhl
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:XF 42)
+        (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x400c9500 NOTE_INSN_BLOCK_BEG 0)
+
+(note 10 8 12 0x400c66c0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 12 10 13 (parallel[ 
+            (set (reg:XF 44)
+                (abs:XF (reg/v:XF 42)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 13 12 14 (set (reg/v:XF 43)
+        (reg:XF 44)) -1 (nil)
+    (nil))
+
+(jump_insn/i 14 13 15 (set (pc)
+        (label_ref 17)) -1 (nil)
+    (nil))
+
+(barrier/i 15 14 16)
+
+(insn/i 16 15 17 (clobber (reg/v:XF 43)) -1 (nil)
+    (nil))
+
+(code_label/i 17 16 18 83 "" "" [0 uses])
+
+(note 18 17 19 0x400c66c0 NOTE_INSN_BLOCK_END 0)
+
+(insn 19 18 21 (set (reg:XF 46)
+        (mult:XF (reg/v:XF 43)
+            (reg/v:XF 43))) -1 (nil)
+    (nil))
+
+(insn 21 19 22 (set (reg:XF 48)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC20")) 0)) -1 (nil)
+    (nil))
+
+(insn 22 21 24 (set (reg:XF 47)
+        (plus:XF (reg:XF 46)
+            (reg:XF 48))) -1 (nil)
+    (nil))
+
+(insn 24 22 25 (set (reg/v:XF 49)
+        (reg:XF 47)) -1 (nil)
+    (nil))
+
+(note 25 24 27 0x400c6c40 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 27 25 28 0x400c6c60 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 28 27 29 (parallel[ 
+            (set (reg/v:XF 51)
+                (asm_operands/v ("fsqrt") ("=t") 0[ 
+                        (reg/v:XF 49)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 442))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 29 28 30 (set (reg:XF 50)
+        (reg/v:XF 51)) -1 (nil)
+    (nil))
+
+(jump_insn/i 30 29 31 (set (pc)
+        (label_ref 34)) -1 (nil)
+    (nil))
+
+(barrier/i 31 30 32)
+
+(note/i 32 31 33 0x400c6c60 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 33 32 34 (clobber (reg:XF 50)) -1 (nil)
+    (nil))
+
+(code_label/i 34 33 35 84 "" "" [0 uses])
+
+(note 35 34 36 0x400c6c40 NOTE_INSN_BLOCK_END 0)
+
+(insn 36 35 38 (set (reg:XF 52)
+        (mult:XF (reg/v:XF 43)
+            (reg/v:XF 43))) -1 (nil)
+    (nil))
+
+(insn 38 36 39 (set (reg:XF 54)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC20")) 0)) -1 (nil)
+    (nil))
+
+(insn 39 38 40 (set (reg:XF 53)
+        (plus:XF (reg:XF 50)
+            (reg:XF 54))) -1 (nil)
+    (nil))
+
+(insn 40 39 41 (set (reg:XF 55)
+        (div:XF (reg:XF 52)
+            (reg:XF 53))) -1 (nil)
+    (nil))
+
+(insn 41 40 43 (set (reg:XF 56)
+        (plus:XF (reg:XF 55)
+            (reg/v:XF 43))) -1 (nil)
+    (nil))
+
+(insn 43 41 44 (set (reg/v:XF 57)
+        (reg:XF 56)) -1 (nil)
+    (nil))
+
+(note 44 43 46 0x400c6ec0 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 46 44 47 0x400c6ee0 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 47 46 48 0x400c6f00 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 48 47 49 (parallel[ 
+            (set (reg:XF 60)
+                (abs:XF (reg/v:XF 57)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 49 48 50 (set (reg:XF 61)
+        (reg:XF 60)) -1 (nil)
+    (nil))
+
+(jump_insn/i 50 49 51 (set (pc)
+        (label_ref 53)) -1 (nil)
+    (nil))
+
+(barrier/i 51 50 52)
+
+(insn/i 52 51 53 (clobber (reg:XF 61)) -1 (nil)
+    (nil))
+
+(code_label/i 53 52 54 85 "" "" [0 uses])
+
+(note/i 54 53 55 0x400c6f00 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 55 54 56 (set (reg:XF 62)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC21")) 0)) -1 (nil)
+    (expr_list:REG_EQUAL (const_double:XF (mem/u/f:XF (symbol_ref/u:SI ("*.LC21")) 0) 922222592 [0x36f80000] 429395011 [0x19980c43] 1073583606 [0x3ffd95f6])
+        (nil)))
+
+(jump_insn/i 56 55 57 (parallel[ 
+            (set (pc)
+                (if_then_else (ge:CCFPU (reg:XF 61)
+                        (reg:XF 62))
+                    (label_ref 59)
+                    (pc)))
+            (clobber (reg:CCFP 18 fpsr))
+            (clobber (reg:CCFP 17 flags))
+            (clobber (scratch:HI))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn/i 57 56 58 (set (pc)
+        (label_ref 69)) -1 (nil)
+    (nil))
+
+(barrier/i 58 57 59)
+
+(code_label/i 59 58 60 86 "" "" [0 uses])
+
+(insn/i 60 59 61 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int -4 [0xfffffffc])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 61 60 62 (set (reg:XF 63)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC20")) 0)) -1 (nil)
+    (nil))
+
+(insn/i 62 61 63 (set (reg:XF 64)
+        (plus:XF (reg/v:XF 57)
+            (reg:XF 63))) -1 (nil)
+    (nil))
+
+(insn/i 63 62 64 (set (mem/f:XF (pre_dec:SI (reg:SI 7 esp)) 0)
+        (reg:XF 64)) -1 (nil)
+    (nil))
+
+(call_insn/i 64 63 65 (set (reg:XF 8 st(0))
+        (call (mem:QI (symbol_ref:SI ("logl")) 0)
+            (const_int 16 [0x10]))) -1 (nil)
+    (nil)
+    (nil))
+
+(insn/i 65 64 66 (set (reg/v:XF 59)
+        (reg:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(insn/i 66 65 67 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int 16 [0x10])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn/i 67 66 68 (set (pc)
+        (label_ref 71)) -1 (nil)
+    (nil))
+
+(barrier/i 68 67 69)
+
+(code_label/i 69 68 70 87 "" "" [0 uses])
+
+(insn/i 70 69 71 (parallel[ 
+            (set (reg/v:XF 59)
+                (asm_operands/v ("fldln2
+	fxch
+	fyl2xp1") ("=t") 0[ 
+                        (reg/v:XF 57)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 540))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+            (clobber (reg:QI 9 st(1)))
+        ] ) -1 (nil)
+    (nil))
+
+(code_label/i 71 70 72 88 "" "" [0 uses])
+
+(insn/i 72 71 73 (set (reg:XF 58)
+        (reg/v:XF 59)) -1 (nil)
+    (nil))
+
+(jump_insn/i 73 72 74 (set (pc)
+        (label_ref 77)) -1 (nil)
+    (nil))
+
+(barrier/i 74 73 75)
+
+(note/i 75 74 76 0x400c6ee0 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 76 75 77 (clobber (reg:XF 58)) -1 (nil)
+    (nil))
+
+(code_label/i 77 76 78 89 "" "" [0 uses])
+
+(note 78 77 79 0x400c6ec0 NOTE_INSN_BLOCK_END 0)
+
+(note 79 78 81 0x400c9240 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 81 79 82 0x400c9260 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 82 81 83 (clobber (mem/s:BLK (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)) -1 (nil)
+    (nil))
+
+(insn/i 83 82 84 (set (mem/s:XF (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)
+        (reg/v:XF 42)) -1 (nil)
+    (nil))
+
+(insn/i 84 83 85 (set (reg:SI 66)
+        (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -8 [0xfffffff8])) 0)) -1 (nil)
+    (nil))
+
+(insn/i 85 84 86 (parallel[ 
+            (set (reg:SI 67)
+                (and:SI (reg:SI 66)
+                    (const_int 32768 [0x8000])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (and:SI (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                    (const_int -8 [0xfffffff8])) 0)
+            (const_int 32768 [0x8000]))
+        (nil)))
+
+(insn/i 86 85 87 (parallel[ 
+            (set (reg:SI 68)
+                (ior:SI (reg:SI 67)
+                    (const_int 16383 [0x3fff])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 87 86 88 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -8 [0xfffffff8])) 0)
+        (reg:SI 68)) -1 (nil)
+    (nil))
+
+(insn/i 88 87 89 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -12 [0xfffffff4])) 0)
+        (const_int -2147483648 [0x80000000])) -1 (nil)
+    (nil))
+
+(insn/i 89 88 90 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)
+        (const_int 0 [0x0])) -1 (nil)
+    (nil))
+
+(insn/i 90 89 91 (set (reg:XF 69)
+        (mem/s:XF (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)) -1 (nil)
+    (nil))
+
+(insn/i 91 90 92 (set (reg:XF 65)
+        (reg:XF 69)) -1 (nil)
+    (nil))
+
+(jump_insn/i 92 91 93 (set (pc)
+        (label_ref 96)) -1 (nil)
+    (nil))
+
+(barrier/i 93 92 94)
+
+(note/i 94 93 95 0x400c9260 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 95 94 96 (clobber (reg:XF 65)) -1 (nil)
+    (nil))
+
+(code_label/i 96 95 97 90 "" "" [0 uses])
+
+(note 97 96 98 0x400c9240 NOTE_INSN_BLOCK_END 0)
+
+(insn 98 97 100 (set (reg:XF 45)
+        (mult:XF (reg:XF 58)
+            (reg:XF 65))) -1 (nil)
+    (nil))
+
+(insn 100 98 101 (set (reg/i:XF 8 st(0))
+        (reg:XF 45)) -1 (nil)
+    (nil))
+
+(jump_insn 101 100 102 (set (pc)
+        (label_ref 107)) -1 (nil)
+    (nil))
+
+(barrier 102 101 103)
+
+(note 103 102 104 0x400c9500 NOTE_INSN_BLOCK_END 0)
+
+(note 104 103 106 NOTE_INSN_FUNCTION_END 0)
+
+(insn 106 104 107 (clobber (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 107 106 108 82 "" "" [0 uses])
+
+(insn 108 107 0 (use (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function acosh
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:DF 42)
+        (mem/f:DF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (nil))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 11 0x400cb500 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 11 8 13 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int -4 [0xfffffffc])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 13 11 14 (set (reg:DF 45)
+        (mem/u/f:DF (symbol_ref/u:SI ("*.LC22")) 0)) -1 (nil)
+    (nil))
+
+(insn 14 13 16 (set (reg:DF 44)
+        (minus:DF (reg/v:DF 42)
+            (reg:DF 45))) -1 (nil)
+    (nil))
+
+(insn 16 14 18 (set (reg:XF 46)
+        (float_extend:XF (reg:DF 44))) -1 (nil)
+    (nil))
+
+(insn 18 16 19 (set (reg/v:XF 47)
+        (reg:XF 46)) -1 (nil)
+    (nil))
+
+(note 19 18 21 0x400c9f40 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 21 19 22 0x400c9f60 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 22 21 23 (parallel[ 
+            (set (reg/v:XF 49)
+                (asm_operands/v ("fsqrt") ("=t") 0[ 
+                        (reg/v:XF 47)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 442))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 23 22 24 (set (reg:XF 48)
+        (reg/v:XF 49)) -1 (nil)
+    (nil))
+
+(jump_insn/i 24 23 25 (set (pc)
+        (label_ref 28)) -1 (nil)
+    (nil))
+
+(barrier/i 25 24 26)
+
+(note/i 26 25 27 0x400c9f60 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 27 26 28 (clobber (reg:XF 48)) -1 (nil)
+    (nil))
+
+(code_label/i 28 27 29 92 "" "" [0 uses])
+
+(note 29 28 31 0x400c9f40 NOTE_INSN_BLOCK_END 0)
+
+(insn 31 29 32 (set (reg:DF 51)
+        (mem/u/f:DF (symbol_ref/u:SI ("*.LC22")) 0)) -1 (nil)
+    (nil))
+
+(insn 32 31 34 (set (reg:DF 50)
+        (plus:DF (reg/v:DF 42)
+            (reg:DF 51))) -1 (nil)
+    (nil))
+
+(insn 34 32 36 (set (reg:XF 52)
+        (float_extend:XF (reg:DF 50))) -1 (nil)
+    (nil))
+
+(insn 36 34 37 (set (reg/v:XF 53)
+        (reg:XF 52)) -1 (nil)
+    (nil))
+
+(note 37 36 39 0x400cb1a0 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 39 37 40 0x400cb1c0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 40 39 41 (parallel[ 
+            (set (reg/v:XF 55)
+                (asm_operands/v ("fsqrt") ("=t") 0[ 
+                        (reg/v:XF 53)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 442))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 41 40 42 (set (reg:XF 54)
+        (reg/v:XF 55)) -1 (nil)
+    (nil))
+
+(jump_insn/i 42 41 43 (set (pc)
+        (label_ref 46)) -1 (nil)
+    (nil))
+
+(barrier/i 43 42 44)
+
+(note/i 44 43 45 0x400cb1c0 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 45 44 46 (clobber (reg:XF 54)) -1 (nil)
+    (nil))
+
+(code_label/i 46 45 47 93 "" "" [0 uses])
+
+(note 47 46 49 0x400cb1a0 NOTE_INSN_BLOCK_END 0)
+
+(insn 49 47 50 (set (reg:XF 56)
+        (float_extend:XF (reg/v:DF 42))) -1 (nil)
+    (nil))
+
+(insn 50 49 51 (set (reg:XF 57)
+        (mult:XF (reg:XF 48)
+            (reg:XF 54))) -1 (nil)
+    (nil))
+
+(insn 51 50 53 (set (reg:XF 58)
+        (plus:XF (reg:XF 56)
+            (reg:XF 57))) -1 (nil)
+    (nil))
+
+(insn 53 51 54 (set (mem/f:XF (pre_dec:SI (reg:SI 7 esp)) 0)
+        (reg:XF 58)) -1 (nil)
+    (nil))
+
+(call_insn 54 53 56 (set (reg:XF 8 st(0))
+        (call (mem:QI (symbol_ref:SI ("logl")) 0)
+            (const_int 16 [0x10]))) -1 (nil)
+    (nil)
+    (nil))
+
+(insn 56 54 58 (set (reg:XF 59)
+        (reg:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(insn 58 56 60 (parallel[ 
+            (set (reg:DF 43)
+                (float_truncate:DF (reg:XF 59)))
+            (clobber (mem:DF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -8 [0xfffffff8])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 60 58 62 (set (reg/i:DF 8 st(0))
+        (reg:DF 43)) -1 (nil)
+    (nil))
+
+(insn 62 60 63 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int 16 [0x10])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn 63 62 64 (set (pc)
+        (label_ref 69)) -1 (nil)
+    (nil))
+
+(barrier 64 63 65)
+
+(note 65 64 66 0x400cb500 NOTE_INSN_BLOCK_END 0)
+
+(note 66 65 68 NOTE_INSN_FUNCTION_END 0)
+
+(insn 68 66 69 (clobber (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 69 68 70 91 "" "" [0 uses])
+
+(insn 70 69 0 (use (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function acoshf
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:SF 42)
+        (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 11 0x400cd5c0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 11 8 13 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int -4 [0xfffffffc])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 13 11 15 (set (reg:DF 44)
+        (float_extend:DF (reg/v:SF 42))) -1 (nil)
+    (nil))
+
+(insn 15 13 16 (set (reg:DF 46)
+        (mem/u/f:DF (symbol_ref/u:SI ("*.LC23")) 0)) -1 (nil)
+    (nil))
+
+(insn 16 15 18 (set (reg:DF 45)
+        (minus:DF (reg:DF 44)
+            (reg:DF 46))) -1 (nil)
+    (nil))
+
+(insn 18 16 20 (set (reg:XF 47)
+        (float_extend:XF (reg:DF 45))) -1 (nil)
+    (nil))
+
+(insn 20 18 21 (set (reg/v:XF 48)
+        (reg:XF 47)) -1 (nil)
+    (nil))
+
+(note 21 20 23 0x400cbfc0 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 23 21 24 0x400cbfe0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 24 23 25 (parallel[ 
+            (set (reg/v:XF 50)
+                (asm_operands/v ("fsqrt") ("=t") 0[ 
+                        (reg/v:XF 48)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 442))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 25 24 26 (set (reg:XF 49)
+        (reg/v:XF 50)) -1 (nil)
+    (nil))
+
+(jump_insn/i 26 25 27 (set (pc)
+        (label_ref 30)) -1 (nil)
+    (nil))
+
+(barrier/i 27 26 28)
+
+(note/i 28 27 29 0x400cbfe0 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 29 28 30 (clobber (reg:XF 49)) -1 (nil)
+    (nil))
+
+(code_label/i 30 29 31 95 "" "" [0 uses])
+
+(note 31 30 33 0x400cbfc0 NOTE_INSN_BLOCK_END 0)
+
+(insn 33 31 35 (set (reg:DF 51)
+        (float_extend:DF (reg/v:SF 42))) -1 (nil)
+    (nil))
+
+(insn 35 33 36 (set (reg:DF 53)
+        (mem/u/f:DF (symbol_ref/u:SI ("*.LC23")) 0)) -1 (nil)
+    (nil))
+
+(insn 36 35 38 (set (reg:DF 52)
+        (plus:DF (reg:DF 51)
+            (reg:DF 53))) -1 (nil)
+    (nil))
+
+(insn 38 36 40 (set (reg:XF 54)
+        (float_extend:XF (reg:DF 52))) -1 (nil)
+    (nil))
+
+(insn 40 38 41 (set (reg/v:XF 55)
+        (reg:XF 54)) -1 (nil)
+    (nil))
+
+(note 41 40 43 0x400cd260 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 43 41 44 0x400cd280 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 44 43 45 (parallel[ 
+            (set (reg/v:XF 57)
+                (asm_operands/v ("fsqrt") ("=t") 0[ 
+                        (reg/v:XF 55)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 442))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 45 44 46 (set (reg:XF 56)
+        (reg/v:XF 57)) -1 (nil)
+    (nil))
+
+(jump_insn/i 46 45 47 (set (pc)
+        (label_ref 50)) -1 (nil)
+    (nil))
+
+(barrier/i 47 46 48)
+
+(note/i 48 47 49 0x400cd280 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 49 48 50 (clobber (reg:XF 56)) -1 (nil)
+    (nil))
+
+(code_label/i 50 49 51 96 "" "" [0 uses])
+
+(note 51 50 53 0x400cd260 NOTE_INSN_BLOCK_END 0)
+
+(insn 53 51 54 (set (reg:XF 58)
+        (float_extend:XF (reg/v:SF 42))) -1 (nil)
+    (nil))
+
+(insn 54 53 55 (set (reg:XF 59)
+        (mult:XF (reg:XF 49)
+            (reg:XF 56))) -1 (nil)
+    (nil))
+
+(insn 55 54 57 (set (reg:XF 60)
+        (plus:XF (reg:XF 58)
+            (reg:XF 59))) -1 (nil)
+    (nil))
+
+(insn 57 55 58 (set (mem/f:XF (pre_dec:SI (reg:SI 7 esp)) 0)
+        (reg:XF 60)) -1 (nil)
+    (nil))
+
+(call_insn 58 57 60 (set (reg:XF 8 st(0))
+        (call (mem:QI (symbol_ref:SI ("logl")) 0)
+            (const_int 16 [0x10]))) -1 (nil)
+    (nil)
+    (nil))
+
+(insn 60 58 62 (set (reg:XF 61)
+        (reg:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(insn 62 60 64 (parallel[ 
+            (set (reg:SF 43)
+                (float_truncate:SF (reg:XF 61)))
+            (clobber (mem:SF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -4 [0xfffffffc])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 64 62 66 (set (reg/i:SF 8 st(0))
+        (reg:SF 43)) -1 (nil)
+    (nil))
+
+(insn 66 64 67 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int 16 [0x10])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn 67 66 68 (set (pc)
+        (label_ref 73)) -1 (nil)
+    (nil))
+
+(barrier 68 67 69)
+
+(note 69 68 70 0x400cd5c0 NOTE_INSN_BLOCK_END 0)
+
+(note 70 69 72 NOTE_INSN_FUNCTION_END 0)
+
+(insn 72 70 73 (clobber (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 73 72 74 94 "" "" [0 uses])
+
+(insn 74 73 0 (use (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function acoshl
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:XF 42)
+        (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 11 0x400cf500 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 11 8 13 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int -4 [0xfffffffc])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 13 11 14 (set (reg:XF 45)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC24")) 0)) -1 (nil)
+    (nil))
+
+(insn 14 13 16 (set (reg:XF 44)
+        (minus:XF (reg/v:XF 42)
+            (reg:XF 45))) -1 (nil)
+    (nil))
+
+(insn 16 14 17 (set (reg/v:XF 46)
+        (reg:XF 44)) -1 (nil)
+    (nil))
+
+(note 17 16 19 0x400cf000 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 19 17 20 0x400cf020 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 20 19 21 (parallel[ 
+            (set (reg/v:XF 48)
+                (asm_operands/v ("fsqrt") ("=t") 0[ 
+                        (reg/v:XF 46)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 442))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 21 20 22 (set (reg:XF 47)
+        (reg/v:XF 48)) -1 (nil)
+    (nil))
+
+(jump_insn/i 22 21 23 (set (pc)
+        (label_ref 26)) -1 (nil)
+    (nil))
+
+(barrier/i 23 22 24)
+
+(note/i 24 23 25 0x400cf020 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 25 24 26 (clobber (reg:XF 47)) -1 (nil)
+    (nil))
+
+(code_label/i 26 25 27 98 "" "" [0 uses])
+
+(note 27 26 29 0x400cf000 NOTE_INSN_BLOCK_END 0)
+
+(insn 29 27 30 (set (reg:XF 50)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC24")) 0)) -1 (nil)
+    (nil))
+
+(insn 30 29 32 (set (reg:XF 49)
+        (plus:XF (reg/v:XF 42)
+            (reg:XF 50))) -1 (nil)
+    (nil))
+
+(insn 32 30 33 (set (reg/v:XF 51)
+        (reg:XF 49)) -1 (nil)
+    (nil))
+
+(note 33 32 35 0x400cf220 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 35 33 36 0x400cf240 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 36 35 37 (parallel[ 
+            (set (reg/v:XF 53)
+                (asm_operands/v ("fsqrt") ("=t") 0[ 
+                        (reg/v:XF 51)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 442))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 37 36 38 (set (reg:XF 52)
+        (reg/v:XF 53)) -1 (nil)
+    (nil))
+
+(jump_insn/i 38 37 39 (set (pc)
+        (label_ref 42)) -1 (nil)
+    (nil))
+
+(barrier/i 39 38 40)
+
+(note/i 40 39 41 0x400cf240 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 41 40 42 (clobber (reg:XF 52)) -1 (nil)
+    (nil))
+
+(code_label/i 42 41 43 99 "" "" [0 uses])
+
+(note 43 42 44 0x400cf220 NOTE_INSN_BLOCK_END 0)
+
+(insn 44 43 45 (set (reg:XF 54)
+        (mult:XF (reg:XF 47)
+            (reg:XF 52))) -1 (nil)
+    (nil))
+
+(insn 45 44 47 (set (reg:XF 55)
+        (plus:XF (reg/v:XF 42)
+            (reg:XF 54))) -1 (nil)
+    (nil))
+
+(insn 47 45 48 (set (mem/f:XF (pre_dec:SI (reg:SI 7 esp)) 0)
+        (reg:XF 55)) -1 (nil)
+    (nil))
+
+(call_insn 48 47 50 (set (reg:XF 8 st(0))
+        (call (mem:QI (symbol_ref:SI ("logl")) 0)
+            (const_int 16 [0x10]))) -1 (nil)
+    (nil)
+    (nil))
+
+(insn 50 48 52 (set (reg:XF 43)
+        (reg:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(insn 52 50 54 (set (reg/i:XF 8 st(0))
+        (reg:XF 43)) -1 (nil)
+    (nil))
+
+(insn 54 52 55 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int 16 [0x10])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn 55 54 56 (set (pc)
+        (label_ref 61)) -1 (nil)
+    (nil))
+
+(barrier 56 55 57)
+
+(note 57 56 58 0x400cf500 NOTE_INSN_BLOCK_END 0)
+
+(note 58 57 60 NOTE_INSN_FUNCTION_END 0)
+
+(insn 60 58 61 (clobber (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 61 60 62 97 "" "" [0 uses])
+
+(insn 62 61 0 (use (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function atanh
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:DF 42)
+        (mem/f:DF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (nil))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 11 0x400d19e0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 11 8 13 (set (reg:XF 44)
+        (float_extend:XF (reg/v:DF 42))) -1 (nil)
+    (nil))
+
+(insn 13 11 14 (set (reg/v:XF 45)
+        (reg:XF 44)) -1 (nil)
+    (nil))
+
+(note 14 13 16 0x400cfc80 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 16 14 17 (parallel[ 
+            (set (reg:XF 46)
+                (abs:XF (reg/v:XF 45)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 17 16 18 (set (reg/v:XF 43)
+        (reg:XF 46)) -1 (nil)
+    (nil))
+
+(jump_insn/i 18 17 19 (set (pc)
+        (label_ref 21)) -1 (nil)
+    (nil))
+
+(barrier/i 19 18 20)
+
+(insn/i 20 19 21 (clobber (reg/v:XF 43)) -1 (nil)
+    (nil))
+
+(code_label/i 21 20 22 101 "" "" [0 uses])
+
+(note 22 21 23 0x400cfc80 NOTE_INSN_BLOCK_END 0)
+
+(insn 23 22 25 (set (reg:XF 48)
+        (plus:XF (reg/v:XF 43)
+            (reg/v:XF 43))) -1 (nil)
+    (nil))
+
+(insn 25 23 27 (parallel[ 
+            (set (reg:XF 49)
+                (neg:XF (reg:XF 48)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 27 25 28 (set (reg:XF 51)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC25")) 0)) -1 (nil)
+    (nil))
+
+(insn 28 27 29 (set (reg:XF 50)
+        (plus:XF (reg/v:XF 43)
+            (reg:XF 51))) -1 (nil)
+    (nil))
+
+(insn 29 28 31 (set (reg:XF 52)
+        (div:XF (reg:XF 49)
+            (reg:XF 50))) -1 (nil)
+    (nil))
+
+(insn 31 29 32 (set (reg/v:XF 53)
+        (reg:XF 52)) -1 (nil)
+    (nil))
+
+(note 32 31 34 0x400d1240 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 34 32 35 0x400d1260 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 35 34 36 0x400d1280 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 36 35 37 (parallel[ 
+            (set (reg:XF 56)
+                (abs:XF (reg/v:XF 53)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 37 36 38 (set (reg:XF 57)
+        (reg:XF 56)) -1 (nil)
+    (nil))
+
+(jump_insn/i 38 37 39 (set (pc)
+        (label_ref 41)) -1 (nil)
+    (nil))
+
+(barrier/i 39 38 40)
+
+(insn/i 40 39 41 (clobber (reg:XF 57)) -1 (nil)
+    (nil))
+
+(code_label/i 41 40 42 102 "" "" [0 uses])
+
+(note/i 42 41 43 0x400d1280 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 43 42 44 (set (reg:XF 58)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC26")) 0)) -1 (nil)
+    (expr_list:REG_EQUAL (const_double:XF (mem/u/f:XF (symbol_ref/u:SI ("*.LC26")) 0) 922222592 [0x36f80000] 429395011 [0x19980c43] 1073583606 [0x3ffd95f6])
+        (nil)))
+
+(jump_insn/i 44 43 45 (parallel[ 
+            (set (pc)
+                (if_then_else (ge:CCFPU (reg:XF 57)
+                        (reg:XF 58))
+                    (label_ref 47)
+                    (pc)))
+            (clobber (reg:CCFP 18 fpsr))
+            (clobber (reg:CCFP 17 flags))
+            (clobber (scratch:HI))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn/i 45 44 46 (set (pc)
+        (label_ref 57)) -1 (nil)
+    (nil))
+
+(barrier/i 46 45 47)
+
+(code_label/i 47 46 48 103 "" "" [0 uses])
+
+(insn/i 48 47 49 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int -4 [0xfffffffc])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 49 48 50 (set (reg:XF 59)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC25")) 0)) -1 (nil)
+    (nil))
+
+(insn/i 50 49 51 (set (reg:XF 60)
+        (plus:XF (reg/v:XF 53)
+            (reg:XF 59))) -1 (nil)
+    (nil))
+
+(insn/i 51 50 52 (set (mem/f:XF (pre_dec:SI (reg:SI 7 esp)) 0)
+        (reg:XF 60)) -1 (nil)
+    (nil))
+
+(call_insn/i 52 51 53 (set (reg:XF 8 st(0))
+        (call (mem:QI (symbol_ref:SI ("logl")) 0)
+            (const_int 16 [0x10]))) -1 (nil)
+    (nil)
+    (nil))
+
+(insn/i 53 52 54 (set (reg/v:XF 55)
+        (reg:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(insn/i 54 53 55 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int 16 [0x10])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn/i 55 54 56 (set (pc)
+        (label_ref 59)) -1 (nil)
+    (nil))
+
+(barrier/i 56 55 57)
+
+(code_label/i 57 56 58 104 "" "" [0 uses])
+
+(insn/i 58 57 59 (parallel[ 
+            (set (reg/v:XF 55)
+                (asm_operands/v ("fldln2
+	fxch
+	fyl2xp1") ("=t") 0[ 
+                        (reg/v:XF 53)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 540))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+            (clobber (reg:QI 9 st(1)))
+        ] ) -1 (nil)
+    (nil))
+
+(code_label/i 59 58 60 105 "" "" [0 uses])
+
+(insn/i 60 59 61 (set (reg:XF 54)
+        (reg/v:XF 55)) -1 (nil)
+    (nil))
+
+(jump_insn/i 61 60 62 (set (pc)
+        (label_ref 65)) -1 (nil)
+    (nil))
+
+(barrier/i 62 61 63)
+
+(note/i 63 62 64 0x400d1260 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 64 63 65 (clobber (reg:XF 54)) -1 (nil)
+    (nil))
+
+(code_label/i 65 64 66 106 "" "" [0 uses])
+
+(note 66 65 68 0x400d1240 NOTE_INSN_BLOCK_END 0)
+
+(insn 68 66 70 (set (reg:XF 61)
+        (float_extend:XF (reg/v:DF 42))) -1 (nil)
+    (nil))
+
+(insn 70 68 71 (set (reg/v:XF 62)
+        (reg:XF 61)) -1 (nil)
+    (nil))
+
+(note 71 70 73 0x400d1640 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 73 71 74 0x400d1660 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 74 73 75 (clobber (mem/s:BLK (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)) -1 (nil)
+    (nil))
+
+(insn/i 75 74 76 (set (mem/s:XF (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)
+        (reg/v:XF 62)) -1 (nil)
+    (nil))
+
+(insn/i 76 75 77 (set (reg:SI 64)
+        (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -8 [0xfffffff8])) 0)) -1 (nil)
+    (nil))
+
+(insn/i 77 76 78 (parallel[ 
+            (set (reg:SI 65)
+                (and:SI (reg:SI 64)
+                    (const_int 32768 [0x8000])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (and:SI (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                    (const_int -8 [0xfffffff8])) 0)
+            (const_int 32768 [0x8000]))
+        (nil)))
+
+(insn/i 78 77 79 (parallel[ 
+            (set (reg:SI 66)
+                (ior:SI (reg:SI 65)
+                    (const_int 16383 [0x3fff])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 79 78 80 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -8 [0xfffffff8])) 0)
+        (reg:SI 66)) -1 (nil)
+    (nil))
+
+(insn/i 80 79 81 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -12 [0xfffffff4])) 0)
+        (const_int -2147483648 [0x80000000])) -1 (nil)
+    (nil))
+
+(insn/i 81 80 82 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)
+        (const_int 0 [0x0])) -1 (nil)
+    (nil))
+
+(insn/i 82 81 83 (set (reg:XF 67)
+        (mem/s:XF (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)) -1 (nil)
+    (nil))
+
+(insn/i 83 82 84 (set (reg:XF 63)
+        (reg:XF 67)) -1 (nil)
+    (nil))
+
+(jump_insn/i 84 83 85 (set (pc)
+        (label_ref 88)) -1 (nil)
+    (nil))
+
+(barrier/i 85 84 86)
+
+(note/i 86 85 87 0x400d1660 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 87 86 88 (clobber (reg:XF 63)) -1 (nil)
+    (nil))
+
+(code_label/i 88 87 89 107 "" "" [0 uses])
+
+(note 89 88 91 0x400d1640 NOTE_INSN_BLOCK_END 0)
+
+(insn 91 89 92 (set (reg:XF 69)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC27")) 0)) -1 (nil)
+    (nil))
+
+(insn 92 91 93 (set (reg:XF 68)
+        (mult:XF (reg:XF 54)
+            (reg:XF 69))) -1 (nil)
+    (nil))
+
+(insn 93 92 95 (set (reg:XF 70)
+        (mult:XF (reg:XF 68)
+            (reg:XF 63))) -1 (nil)
+    (nil))
+
+(insn 95 93 97 (parallel[ 
+            (set (reg:DF 47)
+                (float_truncate:DF (reg:XF 70)))
+            (clobber (mem:DF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -24 [0xffffffe8])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 97 95 98 (set (reg/i:DF 8 st(0))
+        (reg:DF 47)) -1 (nil)
+    (nil))
+
+(jump_insn 98 97 99 (set (pc)
+        (label_ref 104)) -1 (nil)
+    (nil))
+
+(barrier 99 98 100)
+
+(note 100 99 101 0x400d19e0 NOTE_INSN_BLOCK_END 0)
+
+(note 101 100 103 NOTE_INSN_FUNCTION_END 0)
+
+(insn 103 101 104 (clobber (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 104 103 105 100 "" "" [0 uses])
+
+(insn 105 104 0 (use (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function atanhf
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:SF 42)
+        (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 11 0x400d2ec0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 11 8 13 (set (reg:XF 44)
+        (float_extend:XF (reg/v:SF 42))) -1 (nil)
+    (nil))
+
+(insn 13 11 14 (set (reg/v:XF 45)
+        (reg:XF 44)) -1 (nil)
+    (nil))
+
+(note 14 13 16 0x400d2160 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 16 14 17 (parallel[ 
+            (set (reg:XF 46)
+                (abs:XF (reg/v:XF 45)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 17 16 18 (set (reg/v:XF 43)
+        (reg:XF 46)) -1 (nil)
+    (nil))
+
+(jump_insn/i 18 17 19 (set (pc)
+        (label_ref 21)) -1 (nil)
+    (nil))
+
+(barrier/i 19 18 20)
+
+(insn/i 20 19 21 (clobber (reg/v:XF 43)) -1 (nil)
+    (nil))
+
+(code_label/i 21 20 22 109 "" "" [0 uses])
+
+(note 22 21 23 0x400d2160 NOTE_INSN_BLOCK_END 0)
+
+(insn 23 22 25 (set (reg:XF 48)
+        (plus:XF (reg/v:XF 43)
+            (reg/v:XF 43))) -1 (nil)
+    (nil))
+
+(insn 25 23 27 (parallel[ 
+            (set (reg:XF 49)
+                (neg:XF (reg:XF 48)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 27 25 28 (set (reg:XF 51)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC28")) 0)) -1 (nil)
+    (nil))
+
+(insn 28 27 29 (set (reg:XF 50)
+        (plus:XF (reg/v:XF 43)
+            (reg:XF 51))) -1 (nil)
+    (nil))
+
+(insn 29 28 31 (set (reg:XF 52)
+        (div:XF (reg:XF 49)
+            (reg:XF 50))) -1 (nil)
+    (nil))
+
+(insn 31 29 32 (set (reg/v:XF 53)
+        (reg:XF 52)) -1 (nil)
+    (nil))
+
+(note 32 31 34 0x400d2720 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 34 32 35 0x400d2740 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 35 34 36 0x400d2760 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 36 35 37 (parallel[ 
+            (set (reg:XF 56)
+                (abs:XF (reg/v:XF 53)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 37 36 38 (set (reg:XF 57)
+        (reg:XF 56)) -1 (nil)
+    (nil))
+
+(jump_insn/i 38 37 39 (set (pc)
+        (label_ref 41)) -1 (nil)
+    (nil))
+
+(barrier/i 39 38 40)
+
+(insn/i 40 39 41 (clobber (reg:XF 57)) -1 (nil)
+    (nil))
+
+(code_label/i 41 40 42 110 "" "" [0 uses])
+
+(note/i 42 41 43 0x400d2760 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 43 42 44 (set (reg:XF 58)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC29")) 0)) -1 (nil)
+    (expr_list:REG_EQUAL (const_double:XF (mem/u/f:XF (symbol_ref/u:SI ("*.LC29")) 0) 922222592 [0x36f80000] 429395011 [0x19980c43] 1073583606 [0x3ffd95f6])
+        (nil)))
+
+(jump_insn/i 44 43 45 (parallel[ 
+            (set (pc)
+                (if_then_else (ge:CCFPU (reg:XF 57)
+                        (reg:XF 58))
+                    (label_ref 47)
+                    (pc)))
+            (clobber (reg:CCFP 18 fpsr))
+            (clobber (reg:CCFP 17 flags))
+            (clobber (scratch:HI))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn/i 45 44 46 (set (pc)
+        (label_ref 57)) -1 (nil)
+    (nil))
+
+(barrier/i 46 45 47)
+
+(code_label/i 47 46 48 111 "" "" [0 uses])
+
+(insn/i 48 47 49 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int -4 [0xfffffffc])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 49 48 50 (set (reg:XF 59)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC28")) 0)) -1 (nil)
+    (nil))
+
+(insn/i 50 49 51 (set (reg:XF 60)
+        (plus:XF (reg/v:XF 53)
+            (reg:XF 59))) -1 (nil)
+    (nil))
+
+(insn/i 51 50 52 (set (mem/f:XF (pre_dec:SI (reg:SI 7 esp)) 0)
+        (reg:XF 60)) -1 (nil)
+    (nil))
+
+(call_insn/i 52 51 53 (set (reg:XF 8 st(0))
+        (call (mem:QI (symbol_ref:SI ("logl")) 0)
+            (const_int 16 [0x10]))) -1 (nil)
+    (nil)
+    (nil))
+
+(insn/i 53 52 54 (set (reg/v:XF 55)
+        (reg:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(insn/i 54 53 55 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int 16 [0x10])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn/i 55 54 56 (set (pc)
+        (label_ref 59)) -1 (nil)
+    (nil))
+
+(barrier/i 56 55 57)
+
+(code_label/i 57 56 58 112 "" "" [0 uses])
+
+(insn/i 58 57 59 (parallel[ 
+            (set (reg/v:XF 55)
+                (asm_operands/v ("fldln2
+	fxch
+	fyl2xp1") ("=t") 0[ 
+                        (reg/v:XF 53)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 540))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+            (clobber (reg:QI 9 st(1)))
+        ] ) -1 (nil)
+    (nil))
+
+(code_label/i 59 58 60 113 "" "" [0 uses])
+
+(insn/i 60 59 61 (set (reg:XF 54)
+        (reg/v:XF 55)) -1 (nil)
+    (nil))
+
+(jump_insn/i 61 60 62 (set (pc)
+        (label_ref 65)) -1 (nil)
+    (nil))
+
+(barrier/i 62 61 63)
+
+(note/i 63 62 64 0x400d2740 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 64 63 65 (clobber (reg:XF 54)) -1 (nil)
+    (nil))
+
+(code_label/i 65 64 66 114 "" "" [0 uses])
+
+(note 66 65 68 0x400d2720 NOTE_INSN_BLOCK_END 0)
+
+(insn 68 66 70 (set (reg:XF 61)
+        (float_extend:XF (reg/v:SF 42))) -1 (nil)
+    (nil))
+
+(insn 70 68 71 (set (reg/v:XF 62)
+        (reg:XF 61)) -1 (nil)
+    (nil))
+
+(note 71 70 73 0x400d2b20 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 73 71 74 0x400d2b40 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 74 73 75 (clobber (mem/s:BLK (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)) -1 (nil)
+    (nil))
+
+(insn/i 75 74 76 (set (mem/s:XF (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)
+        (reg/v:XF 62)) -1 (nil)
+    (nil))
+
+(insn/i 76 75 77 (set (reg:SI 64)
+        (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -8 [0xfffffff8])) 0)) -1 (nil)
+    (nil))
+
+(insn/i 77 76 78 (parallel[ 
+            (set (reg:SI 65)
+                (and:SI (reg:SI 64)
+                    (const_int 32768 [0x8000])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (and:SI (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                    (const_int -8 [0xfffffff8])) 0)
+            (const_int 32768 [0x8000]))
+        (nil)))
+
+(insn/i 78 77 79 (parallel[ 
+            (set (reg:SI 66)
+                (ior:SI (reg:SI 65)
+                    (const_int 16383 [0x3fff])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 79 78 80 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -8 [0xfffffff8])) 0)
+        (reg:SI 66)) -1 (nil)
+    (nil))
+
+(insn/i 80 79 81 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -12 [0xfffffff4])) 0)
+        (const_int -2147483648 [0x80000000])) -1 (nil)
+    (nil))
+
+(insn/i 81 80 82 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)
+        (const_int 0 [0x0])) -1 (nil)
+    (nil))
+
+(insn/i 82 81 83 (set (reg:XF 67)
+        (mem/s:XF (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)) -1 (nil)
+    (nil))
+
+(insn/i 83 82 84 (set (reg:XF 63)
+        (reg:XF 67)) -1 (nil)
+    (nil))
+
+(jump_insn/i 84 83 85 (set (pc)
+        (label_ref 88)) -1 (nil)
+    (nil))
+
+(barrier/i 85 84 86)
+
+(note/i 86 85 87 0x400d2b40 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 87 86 88 (clobber (reg:XF 63)) -1 (nil)
+    (nil))
+
+(code_label/i 88 87 89 115 "" "" [0 uses])
+
+(note 89 88 91 0x400d2b20 NOTE_INSN_BLOCK_END 0)
+
+(insn 91 89 92 (set (reg:XF 69)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC30")) 0)) -1 (nil)
+    (nil))
+
+(insn 92 91 93 (set (reg:XF 68)
+        (mult:XF (reg:XF 54)
+            (reg:XF 69))) -1 (nil)
+    (nil))
+
+(insn 93 92 95 (set (reg:XF 70)
+        (mult:XF (reg:XF 68)
+            (reg:XF 63))) -1 (nil)
+    (nil))
+
+(insn 95 93 97 (parallel[ 
+            (set (reg:SF 47)
+                (float_truncate:SF (reg:XF 70)))
+            (clobber (mem:SF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -20 [0xffffffec])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 97 95 98 (set (reg/i:SF 8 st(0))
+        (reg:SF 47)) -1 (nil)
+    (nil))
+
+(jump_insn 98 97 99 (set (pc)
+        (label_ref 104)) -1 (nil)
+    (nil))
+
+(barrier 99 98 100)
+
+(note 100 99 101 0x400d2ec0 NOTE_INSN_BLOCK_END 0)
+
+(note 101 100 103 NOTE_INSN_FUNCTION_END 0)
+
+(insn 103 101 104 (clobber (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 104 103 105 108 "" "" [0 uses])
+
+(insn 105 104 0 (use (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function atanhl
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:XF 42)
+        (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x400d8240 NOTE_INSN_BLOCK_BEG 0)
+
+(note 10 8 12 0x400d65e0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 12 10 13 (parallel[ 
+            (set (reg:XF 44)
+                (abs:XF (reg/v:XF 42)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 13 12 14 (set (reg/v:XF 43)
+        (reg:XF 44)) -1 (nil)
+    (nil))
+
+(jump_insn/i 14 13 15 (set (pc)
+        (label_ref 17)) -1 (nil)
+    (nil))
+
+(barrier/i 15 14 16)
+
+(insn/i 16 15 17 (clobber (reg/v:XF 43)) -1 (nil)
+    (nil))
+
+(code_label/i 17 16 18 117 "" "" [0 uses])
+
+(note 18 17 19 0x400d65e0 NOTE_INSN_BLOCK_END 0)
+
+(insn 19 18 21 (set (reg:XF 46)
+        (plus:XF (reg/v:XF 43)
+            (reg/v:XF 43))) -1 (nil)
+    (nil))
+
+(insn 21 19 23 (parallel[ 
+            (set (reg:XF 47)
+                (neg:XF (reg:XF 46)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 23 21 24 (set (reg:XF 49)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC31")) 0)) -1 (nil)
+    (nil))
+
+(insn 24 23 25 (set (reg:XF 48)
+        (plus:XF (reg/v:XF 43)
+            (reg:XF 49))) -1 (nil)
+    (nil))
+
+(insn 25 24 27 (set (reg:XF 50)
+        (div:XF (reg:XF 47)
+            (reg:XF 48))) -1 (nil)
+    (nil))
+
+(insn 27 25 28 (set (reg/v:XF 51)
+        (reg:XF 50)) -1 (nil)
+    (nil))
+
+(note 28 27 30 0x400d6b60 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 30 28 31 0x400d6b80 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 31 30 32 0x400d6ba0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 32 31 33 (parallel[ 
+            (set (reg:XF 54)
+                (abs:XF (reg/v:XF 51)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 33 32 34 (set (reg:XF 55)
+        (reg:XF 54)) -1 (nil)
+    (nil))
+
+(jump_insn/i 34 33 35 (set (pc)
+        (label_ref 37)) -1 (nil)
+    (nil))
+
+(barrier/i 35 34 36)
+
+(insn/i 36 35 37 (clobber (reg:XF 55)) -1 (nil)
+    (nil))
+
+(code_label/i 37 36 38 118 "" "" [0 uses])
+
+(note/i 38 37 39 0x400d6ba0 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 39 38 40 (set (reg:XF 56)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC32")) 0)) -1 (nil)
+    (expr_list:REG_EQUAL (const_double:XF (mem/u/f:XF (symbol_ref/u:SI ("*.LC32")) 0) 922222592 [0x36f80000] 429395011 [0x19980c43] 1073583606 [0x3ffd95f6])
+        (nil)))
+
+(jump_insn/i 40 39 41 (parallel[ 
+            (set (pc)
+                (if_then_else (ge:CCFPU (reg:XF 55)
+                        (reg:XF 56))
+                    (label_ref 43)
+                    (pc)))
+            (clobber (reg:CCFP 18 fpsr))
+            (clobber (reg:CCFP 17 flags))
+            (clobber (scratch:HI))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn/i 41 40 42 (set (pc)
+        (label_ref 53)) -1 (nil)
+    (nil))
+
+(barrier/i 42 41 43)
+
+(code_label/i 43 42 44 119 "" "" [0 uses])
+
+(insn/i 44 43 45 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int -4 [0xfffffffc])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 45 44 46 (set (reg:XF 57)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC31")) 0)) -1 (nil)
+    (nil))
+
+(insn/i 46 45 47 (set (reg:XF 58)
+        (plus:XF (reg/v:XF 51)
+            (reg:XF 57))) -1 (nil)
+    (nil))
+
+(insn/i 47 46 48 (set (mem/f:XF (pre_dec:SI (reg:SI 7 esp)) 0)
+        (reg:XF 58)) -1 (nil)
+    (nil))
+
+(call_insn/i 48 47 49 (set (reg:XF 8 st(0))
+        (call (mem:QI (symbol_ref:SI ("logl")) 0)
+            (const_int 16 [0x10]))) -1 (nil)
+    (nil)
+    (nil))
+
+(insn/i 49 48 50 (set (reg/v:XF 53)
+        (reg:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(insn/i 50 49 51 (parallel[ 
+            (set (reg:SI 7 esp)
+                (plus:SI (reg:SI 7 esp)
+                    (const_int 16 [0x10])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn/i 51 50 52 (set (pc)
+        (label_ref 55)) -1 (nil)
+    (nil))
+
+(barrier/i 52 51 53)
+
+(code_label/i 53 52 54 120 "" "" [0 uses])
+
+(insn/i 54 53 55 (parallel[ 
+            (set (reg/v:XF 53)
+                (asm_operands/v ("fldln2
+	fxch
+	fyl2xp1") ("=t") 0[ 
+                        (reg/v:XF 51)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 540))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+            (clobber (reg:QI 9 st(1)))
+        ] ) -1 (nil)
+    (nil))
+
+(code_label/i 55 54 56 121 "" "" [0 uses])
+
+(insn/i 56 55 57 (set (reg:XF 52)
+        (reg/v:XF 53)) -1 (nil)
+    (nil))
+
+(jump_insn/i 57 56 58 (set (pc)
+        (label_ref 61)) -1 (nil)
+    (nil))
+
+(barrier/i 58 57 59)
+
+(note/i 59 58 60 0x400d6b80 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 60 59 61 (clobber (reg:XF 52)) -1 (nil)
+    (nil))
+
+(code_label/i 61 60 62 122 "" "" [0 uses])
+
+(note 62 61 63 0x400d6b60 NOTE_INSN_BLOCK_END 0)
+
+(note 63 62 65 0x400d6ee0 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 65 63 66 0x400d6f00 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 66 65 67 (clobber (mem/s:BLK (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)) -1 (nil)
+    (nil))
+
+(insn/i 67 66 68 (set (mem/s:XF (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)
+        (reg/v:XF 42)) -1 (nil)
+    (nil))
+
+(insn/i 68 67 69 (set (reg:SI 60)
+        (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -8 [0xfffffff8])) 0)) -1 (nil)
+    (nil))
+
+(insn/i 69 68 70 (parallel[ 
+            (set (reg:SI 61)
+                (and:SI (reg:SI 60)
+                    (const_int 32768 [0x8000])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (and:SI (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                    (const_int -8 [0xfffffff8])) 0)
+            (const_int 32768 [0x8000]))
+        (nil)))
+
+(insn/i 70 69 71 (parallel[ 
+            (set (reg:SI 62)
+                (ior:SI (reg:SI 61)
+                    (const_int 16383 [0x3fff])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 71 70 72 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -8 [0xfffffff8])) 0)
+        (reg:SI 62)) -1 (nil)
+    (nil))
+
+(insn/i 72 71 73 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -12 [0xfffffff4])) 0)
+        (const_int -2147483648 [0x80000000])) -1 (nil)
+    (nil))
+
+(insn/i 73 72 74 (set (mem/s:SI (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)
+        (const_int 0 [0x0])) -1 (nil)
+    (nil))
+
+(insn/i 74 73 75 (set (reg:XF 63)
+        (mem/s:XF (plus:SI (reg:SI 38 virtual-stack-vars)
+                (const_int -16 [0xfffffff0])) 0)) -1 (nil)
+    (nil))
+
+(insn/i 75 74 76 (set (reg:XF 59)
+        (reg:XF 63)) -1 (nil)
+    (nil))
+
+(jump_insn/i 76 75 77 (set (pc)
+        (label_ref 80)) -1 (nil)
+    (nil))
+
+(barrier/i 77 76 78)
+
+(note/i 78 77 79 0x400d6f00 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 79 78 80 (clobber (reg:XF 59)) -1 (nil)
+    (nil))
+
+(code_label/i 80 79 81 123 "" "" [0 uses])
+
+(note 81 80 83 0x400d6ee0 NOTE_INSN_BLOCK_END 0)
+
+(insn 83 81 84 (set (reg:XF 64)
+        (mem/u/f:XF (symbol_ref/u:SI ("*.LC33")) 0)) -1 (nil)
+    (nil))
+
+(insn 84 83 85 (set (reg:XF 45)
+        (mult:XF (reg:XF 52)
+            (reg:XF 64))) -1 (nil)
+    (nil))
+
+(insn 85 84 87 (set (reg:XF 45)
+        (mult:XF (reg:XF 45)
+            (reg:XF 59))) -1 (nil)
+    (nil))
+
+(insn 87 85 88 (set (reg/i:XF 8 st(0))
+        (reg:XF 45)) -1 (nil)
+    (nil))
+
+(jump_insn 88 87 89 (set (pc)
+        (label_ref 94)) -1 (nil)
+    (nil))
+
+(barrier 89 88 90)
+
+(note 90 89 91 0x400d8240 NOTE_INSN_BLOCK_END 0)
+
+(note 91 90 93 NOTE_INSN_FUNCTION_END 0)
+
+(insn 93 91 94 (clobber (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 94 93 95 116 "" "" [0 uses])
+
+(insn 95 94 0 (use (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function hypot
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 6 (set (reg/v:DF 42)
+        (mem/f:DF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (nil))
+
+(insn 6 4 7 (set (reg/v:DF 43)
+        (mem/f:DF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 8 [0x8])) 0)) -1 (nil)
+    (nil))
+
+(note 7 6 10 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 10 7 12 0x400d8dc0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 12 10 13 (set (reg:DF 45)
+        (mult:DF (reg/v:DF 42)
+            (reg/v:DF 42))) -1 (nil)
+    (nil))
+
+(insn 13 12 14 (set (reg:DF 46)
+        (mult:DF (reg/v:DF 43)
+            (reg/v:DF 43))) -1 (nil)
+    (nil))
+
+(insn 14 13 16 (set (reg:DF 47)
+        (plus:DF (reg:DF 45)
+            (reg:DF 46))) -1 (nil)
+    (nil))
+
+(insn 16 14 18 (set (reg:XF 48)
+        (float_extend:XF (reg:DF 47))) -1 (nil)
+    (nil))
+
+(insn 18 16 19 (set (reg/v:XF 49)
+        (reg:XF 48)) -1 (nil)
+    (nil))
+
+(note 19 18 21 0x400d8ba0 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 21 19 22 0x400d8bc0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 22 21 23 (parallel[ 
+            (set (reg/v:XF 51)
+                (asm_operands/v ("fsqrt") ("=t") 0[ 
+                        (reg/v:XF 49)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 442))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 23 22 24 (set (reg:XF 50)
+        (reg/v:XF 51)) -1 (nil)
+    (nil))
+
+(jump_insn/i 24 23 25 (set (pc)
+        (label_ref 28)) -1 (nil)
+    (nil))
+
+(barrier/i 25 24 26)
+
+(note/i 26 25 27 0x400d8bc0 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 27 26 28 (clobber (reg:XF 50)) -1 (nil)
+    (nil))
+
+(code_label/i 28 27 29 125 "" "" [0 uses])
+
+(note 29 28 31 0x400d8ba0 NOTE_INSN_BLOCK_END 0)
+
+(insn 31 29 33 (parallel[ 
+            (set (reg:DF 44)
+                (float_truncate:DF (reg:XF 50)))
+            (clobber (mem:DF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -8 [0xfffffff8])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 33 31 34 (set (reg/i:DF 8 st(0))
+        (reg:DF 44)) -1 (nil)
+    (nil))
+
+(jump_insn 34 33 35 (set (pc)
+        (label_ref 40)) -1 (nil)
+    (nil))
+
+(barrier 35 34 36)
+
+(note 36 35 37 0x400d8dc0 NOTE_INSN_BLOCK_END 0)
+
+(note 37 36 39 NOTE_INSN_FUNCTION_END 0)
+
+(insn 39 37 40 (clobber (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 40 39 41 124 "" "" [0 uses])
+
+(insn 41 40 0 (use (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function hypotf
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 6 (set (reg/v:SF 42)
+        (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(insn 6 4 7 (set (reg/v:SF 43)
+        (mem/f:SF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 4 [0x4])) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 4 [0x4])) 0)
+        (nil)))
+
+(note 7 6 10 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 10 7 12 0x400da940 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 12 10 13 (set (reg:SF 45)
+        (mult:SF (reg/v:SF 42)
+            (reg/v:SF 42))) -1 (nil)
+    (nil))
+
+(insn 13 12 14 (set (reg:SF 46)
+        (mult:SF (reg/v:SF 43)
+            (reg/v:SF 43))) -1 (nil)
+    (nil))
+
+(insn 14 13 16 (set (reg:SF 47)
+        (plus:SF (reg:SF 45)
+            (reg:SF 46))) -1 (nil)
+    (nil))
+
+(insn 16 14 18 (set (reg:XF 48)
+        (float_extend:XF (reg:SF 47))) -1 (nil)
+    (nil))
+
+(insn 18 16 19 (set (reg/v:XF 49)
+        (reg:XF 48)) -1 (nil)
+    (nil))
+
+(note 19 18 21 0x400da720 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 21 19 22 0x400da740 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 22 21 23 (parallel[ 
+            (set (reg/v:XF 51)
+                (asm_operands/v ("fsqrt") ("=t") 0[ 
+                        (reg/v:XF 49)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 442))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 23 22 24 (set (reg:XF 50)
+        (reg/v:XF 51)) -1 (nil)
+    (nil))
+
+(jump_insn/i 24 23 25 (set (pc)
+        (label_ref 28)) -1 (nil)
+    (nil))
+
+(barrier/i 25 24 26)
+
+(note/i 26 25 27 0x400da740 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 27 26 28 (clobber (reg:XF 50)) -1 (nil)
+    (nil))
+
+(code_label/i 28 27 29 127 "" "" [0 uses])
+
+(note 29 28 31 0x400da720 NOTE_INSN_BLOCK_END 0)
+
+(insn 31 29 33 (parallel[ 
+            (set (reg:SF 44)
+                (float_truncate:SF (reg:XF 50)))
+            (clobber (mem:SF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -4 [0xfffffffc])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 33 31 34 (set (reg/i:SF 8 st(0))
+        (reg:SF 44)) -1 (nil)
+    (nil))
+
+(jump_insn 34 33 35 (set (pc)
+        (label_ref 40)) -1 (nil)
+    (nil))
+
+(barrier 35 34 36)
+
+(note 36 35 37 0x400da940 NOTE_INSN_BLOCK_END 0)
+
+(note 37 36 39 NOTE_INSN_FUNCTION_END 0)
+
+(insn 39 37 40 (clobber (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 40 39 41 126 "" "" [0 uses])
+
+(insn 41 40 0 (use (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function hypotl
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 6 (set (reg/v:XF 42)
+        (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(insn 6 4 7 (set (reg/v:XF 43)
+        (mem/f:XF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 12 [0xc])) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 12 [0xc])) 0)
+        (nil)))
+
+(note 7 6 10 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 10 7 12 0x400dd460 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 12 10 13 (set (reg:XF 45)
+        (mult:XF (reg/v:XF 42)
+            (reg/v:XF 42))) -1 (nil)
+    (nil))
+
+(insn 13 12 14 (set (reg:XF 46)
+        (mult:XF (reg/v:XF 43)
+            (reg/v:XF 43))) -1 (nil)
+    (nil))
+
+(insn 14 13 16 (set (reg:XF 47)
+        (plus:XF (reg:XF 45)
+            (reg:XF 46))) -1 (nil)
+    (nil))
+
+(insn 16 14 17 (set (reg/v:XF 48)
+        (reg:XF 47)) -1 (nil)
+    (nil))
+
+(note 17 16 19 0x400dd280 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 19 17 20 0x400dd2a0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 20 19 21 (parallel[ 
+            (set (reg/v:XF 49)
+                (asm_operands/v ("fsqrt") ("=t") 0[ 
+                        (reg/v:XF 48)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 442))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 21 20 22 (set (reg:XF 44)
+        (reg/v:XF 49)) -1 (nil)
+    (nil))
+
+(jump_insn/i 22 21 23 (set (pc)
+        (label_ref 26)) -1 (nil)
+    (nil))
+
+(barrier/i 23 22 24)
+
+(note/i 24 23 25 0x400dd2a0 NOTE_INSN_BLOCK_END 0)
+
+(insn/i 25 24 26 (clobber (reg:XF 44)) -1 (nil)
+    (nil))
+
+(code_label/i 26 25 27 129 "" "" [0 uses])
+
+(note 27 26 29 0x400dd280 NOTE_INSN_BLOCK_END 0)
+
+(insn 29 27 30 (set (reg/i:XF 8 st(0))
+        (reg:XF 44)) -1 (nil)
+    (nil))
+
+(jump_insn 30 29 31 (set (pc)
+        (label_ref 36)) -1 (nil)
+    (nil))
+
+(barrier 31 30 32)
+
+(note 32 31 33 0x400dd460 NOTE_INSN_BLOCK_END 0)
+
+(note 33 32 35 NOTE_INSN_FUNCTION_END 0)
+
+(insn 35 33 36 (clobber (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 36 35 37 128 "" "" [0 uses])
+
+(insn 37 36 0 (use (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function logb
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:DF 42)
+        (mem/f:DF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (nil))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x400ddfe0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 10 8 12 (parallel[ 
+            (set (reg/v:XF 44)
+                (asm_operands/v ("fxtract
+	") ("=t") 0[ 
+                        (reg/v:DF 42)
+                    ] 
+                    [ 
+                        (asm_input:DF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 569))
+            (set (reg/v:XF 43)
+                (asm_operands/v ("fxtract
+	") ("=u") 1[ 
+                        (reg/v:DF 42)
+                    ] 
+                    [ 
+                        (asm_input:DF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 569))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 12 10 14 (parallel[ 
+            (set (reg:DF 45)
+                (float_truncate:DF (reg/v:XF 43)))
+            (clobber (mem:DF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -8 [0xfffffff8])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 14 12 15 (set (reg/i:DF 8 st(0))
+        (reg:DF 45)) -1 (nil)
+    (nil))
+
+(jump_insn 15 14 16 (set (pc)
+        (label_ref 21)) -1 (nil)
+    (nil))
+
+(barrier 16 15 17)
+
+(note 17 16 18 0x400ddfe0 NOTE_INSN_BLOCK_END 0)
+
+(note 18 17 20 NOTE_INSN_FUNCTION_END 0)
+
+(insn 20 18 21 (clobber (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 21 20 22 130 "" "" [0 uses])
+
+(insn 22 21 0 (use (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function logbf
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:SF 42)
+        (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x400deb60 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 10 8 12 (parallel[ 
+            (set (reg/v:XF 44)
+                (asm_operands/v ("fxtract
+	") ("=t") 0[ 
+                        (reg/v:SF 42)
+                    ] 
+                    [ 
+                        (asm_input:SF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 569))
+            (set (reg/v:XF 43)
+                (asm_operands/v ("fxtract
+	") ("=u") 1[ 
+                        (reg/v:SF 42)
+                    ] 
+                    [ 
+                        (asm_input:SF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 569))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 12 10 14 (parallel[ 
+            (set (reg:SF 45)
+                (float_truncate:SF (reg/v:XF 43)))
+            (clobber (mem:SF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -4 [0xfffffffc])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 14 12 15 (set (reg/i:SF 8 st(0))
+        (reg:SF 45)) -1 (nil)
+    (nil))
+
+(jump_insn 15 14 16 (set (pc)
+        (label_ref 21)) -1 (nil)
+    (nil))
+
+(barrier 16 15 17)
+
+(note 17 16 18 0x400deb60 NOTE_INSN_BLOCK_END 0)
+
+(note 18 17 20 NOTE_INSN_FUNCTION_END 0)
+
+(insn 20 18 21 (clobber (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 21 20 22 131 "" "" [0 uses])
+
+(insn 22 21 0 (use (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function logbl
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:XF 42)
+        (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 10 0x400e06c0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 10 8 12 (parallel[ 
+            (set (reg/v:XF 44)
+                (asm_operands/v ("fxtract
+	") ("=t") 0[ 
+                        (reg/v:XF 42)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 569))
+            (set (reg/v:XF 43)
+                (asm_operands/v ("fxtract
+	") ("=u") 1[ 
+                        (reg/v:XF 42)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 569))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 12 10 13 (set (reg/i:XF 8 st(0))
+        (reg/v:XF 43)) -1 (nil)
+    (nil))
+
+(jump_insn 13 12 14 (set (pc)
+        (label_ref 19)) -1 (nil)
+    (nil))
+
+(barrier 14 13 15)
+
+(note 15 14 16 0x400e06c0 NOTE_INSN_BLOCK_END 0)
+
+(note 16 15 18 NOTE_INSN_FUNCTION_END 0)
+
+(insn 18 16 19 (clobber (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 19 18 20 132 "" "" [0 uses])
+
+(insn 20 19 0 (use (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function drem
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 6 (set (reg/v:DF 42)
+        (mem/f:DF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (nil))
+
+(insn 6 4 7 (set (reg/v:DF 43)
+        (mem/f:DF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 8 [0x8])) 0)) -1 (nil)
+    (nil))
+
+(note 7 6 10 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 10 7 12 0x400e3520 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 12 10 14 (parallel[ 
+            (set (reg/v:DF 44)
+                (asm_operands/v ("1:	fprem1
+	fstsw	%%ax
+	sahf
+	jp	1b") ("=t") 0[ 
+                        (reg/v:DF 42)
+                        (reg/v:DF 43)
+                    ] 
+                    [ 
+                        (asm_input:DF ("0"))
+                        (asm_input:DF ("u"))
+                    ]  ("/usr/include/bits/mathinline.h") 653))
+            (set (reg/v:SI 45)
+                (asm_operands/v ("1:	fprem1
+	fstsw	%%ax
+	sahf
+	jp	1b") ("=&a") 1[ 
+                        (reg/v:DF 42)
+                        (reg/v:DF 43)
+                    ] 
+                    [ 
+                        (asm_input:DF ("0"))
+                        (asm_input:DF ("u"))
+                    ]  ("/usr/include/bits/mathinline.h") 653))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 14 12 15 (set (reg/i:DF 8 st(0))
+        (reg/v:DF 44)) -1 (nil)
+    (nil))
+
+(jump_insn 15 14 16 (set (pc)
+        (label_ref 21)) -1 (nil)
+    (nil))
+
+(barrier 16 15 17)
+
+(note 17 16 18 0x400e3520 NOTE_INSN_BLOCK_END 0)
+
+(note 18 17 20 NOTE_INSN_FUNCTION_END 0)
+
+(insn 20 18 21 (clobber (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 21 20 22 133 "" "" [0 uses])
+
+(insn 22 21 0 (use (reg/i:DF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function dremf
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 6 (set (reg/v:SF 42)
+        (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(insn 6 4 7 (set (reg/v:SF 43)
+        (mem/f:SF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 4 [0x4])) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 4 [0x4])) 0)
+        (nil)))
+
+(note 7 6 10 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 10 7 12 0x400e4360 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 12 10 14 (parallel[ 
+            (set (reg/v:DF 44)
+                (asm_operands/v ("1:	fprem1
+	fstsw	%%ax
+	sahf
+	jp	1b") ("=t") 0[ 
+                        (reg/v:SF 42)
+                        (reg/v:SF 43)
+                    ] 
+                    [ 
+                        (asm_input:SF ("0"))
+                        (asm_input:SF ("u"))
+                    ]  ("/usr/include/bits/mathinline.h") 653))
+            (set (reg/v:SI 45)
+                (asm_operands/v ("1:	fprem1
+	fstsw	%%ax
+	sahf
+	jp	1b") ("=&a") 1[ 
+                        (reg/v:SF 42)
+                        (reg/v:SF 43)
+                    ] 
+                    [ 
+                        (asm_input:SF ("0"))
+                        (asm_input:SF ("u"))
+                    ]  ("/usr/include/bits/mathinline.h") 653))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 14 12 16 (parallel[ 
+            (set (reg:SF 46)
+                (float_truncate:SF (reg/v:DF 44)))
+            (clobber (mem:SF (plus:SI (reg:SI 38 virtual-stack-vars)
+                        (const_int -4 [0xfffffffc])) 0))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 16 14 17 (set (reg/i:SF 8 st(0))
+        (reg:SF 46)) -1 (nil)
+    (nil))
+
+(jump_insn 17 16 18 (set (pc)
+        (label_ref 23)) -1 (nil)
+    (nil))
+
+(barrier 18 17 19)
+
+(note 19 18 20 0x400e4360 NOTE_INSN_BLOCK_END 0)
+
+(note 20 19 22 NOTE_INSN_FUNCTION_END 0)
+
+(insn 22 20 23 (clobber (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 23 22 24 134 "" "" [0 uses])
+
+(insn 24 23 0 (use (reg/i:SF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function dreml
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 6 (set (reg/v:XF 42)
+        (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(insn 6 4 7 (set (reg/v:XF 43)
+        (mem/f:XF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 12 [0xc])) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:XF (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 12 [0xc])) 0)
+        (nil)))
+
+(note 7 6 10 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 10 7 12 0x400e6200 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 12 10 14 (parallel[ 
+            (set (reg/v:DF 44)
+                (asm_operands/v ("1:	fprem1
+	fstsw	%%ax
+	sahf
+	jp	1b") ("=t") 0[ 
+                        (reg/v:XF 42)
+                        (reg/v:XF 43)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                        (asm_input:XF ("u"))
+                    ]  ("/usr/include/bits/mathinline.h") 653))
+            (set (reg/v:SI 45)
+                (asm_operands/v ("1:	fprem1
+	fstsw	%%ax
+	sahf
+	jp	1b") ("=&a") 1[ 
+                        (reg/v:XF 42)
+                        (reg/v:XF 43)
+                    ] 
+                    [ 
+                        (asm_input:XF ("0"))
+                        (asm_input:XF ("u"))
+                    ]  ("/usr/include/bits/mathinline.h") 653))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 14 12 16 (set (reg:XF 46)
+        (float_extend:XF (reg/v:DF 44))) -1 (nil)
+    (nil))
+
+(insn 16 14 17 (set (reg/i:XF 8 st(0))
+        (reg:XF 46)) -1 (nil)
+    (nil))
+
+(jump_insn 17 16 18 (set (pc)
+        (label_ref 23)) -1 (nil)
+    (nil))
+
+(barrier 18 17 19)
+
+(note 19 18 20 0x400e6200 NOTE_INSN_BLOCK_END 0)
+
+(note 20 19 22 NOTE_INSN_FUNCTION_END 0)
+
+(insn 22 20 23 (clobber (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+(code_label 23 22 24 135 "" "" [0 uses])
+
+(insn 24 23 0 (use (reg/i:XF 8 st(0))) -1 (nil)
+    (nil))
+
+;; Function __finite
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 5 (set (reg/v:DF 42)
+        (mem/f:DF (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (nil))
+
+(note 5 4 8 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 8 5 11 0x400e81c0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 11 8 13 (clobber (reg:DI 44)) -1 (nil)
+    (nil))
+
+(insn 13 11 15 (set (subreg:DF (reg:DI 44) 0)
+        (reg/v:DF 42)) -1 (nil)
+    (nil))
+
+(insn 15 13 17 (parallel[ 
+            (set (reg:SI 43)
+                (ior:SI (subreg:SI (reg:DI 44) 4)
+                    (const_int -2146435073 [0x800fffff])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 17 15 19 (parallel[ 
+            (set (reg:SI 43)
+                (plus:SI (reg:SI 43)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 19 17 21 (parallel[ 
+            (set (reg:SI 43)
+                (lshiftrt:SI (reg:SI 43)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 21 19 22 (set (reg/i:SI 0 eax)
+        (reg:SI 43)) -1 (nil)
+    (nil))
+
+(jump_insn 22 21 23 (set (pc)
+        (label_ref 29)) -1 (nil)
+    (nil))
+
+(barrier 23 22 25)
+
+(note 25 23 26 0x400e81c0 NOTE_INSN_BLOCK_END 0)
+
+(note 26 25 28 NOTE_INSN_FUNCTION_END 0)
+
+(insn 28 26 29 (clobber (reg/i:SI 0 eax)) -1 (nil)
+    (nil))
+
+(code_label 29 28 30 136 "" "" [0 uses])
+
+(insn 30 29 0 (use (reg/i:SI 0 eax)) -1 (nil)
+    (nil))
+
+;; Function invert_upper_triangle_matrix
+
+(note 2 0 4 NOTE_INSN_DELETED 0)
+
+(insn 4 2 6 (set (reg/v:SI 42)
+        (mem/f:SI (reg:SI 37 virtual-incoming-args) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SI (reg:SI 37 virtual-incoming-args) 0)
+        (nil)))
+
+(insn 6 4 8 (set (reg/v:SI 43)
+        (mem/f:SI (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 4 [0x4])) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SI (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 4 [0x4])) 0)
+        (nil)))
+
+(insn 8 6 9 (set (reg/v:SI 44)
+        (mem/f:SI (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 8 [0x8])) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SI (plus:SI (reg:SI 37 virtual-incoming-args)
+                (const_int 8 [0x8])) 0)
+        (nil)))
+
+(note 9 8 12 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 12 9 15 0x400f46a0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 15 12 16 (parallel[ 
+            (set (reg:SI 46)
+                (plus:SI (reg/v:SI 44)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 16 15 18 (parallel[ 
+            (set (reg/v:SI 45)
+                (mult:SI (reg/v:SI 44)
+                    (reg:SI 46)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 18 16 20 (parallel[ 
+            (set (reg:SI 48)
+                (ashiftrt:SI (reg/v:SI 45)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 20 18 22 (parallel[ 
+            (set (reg:SI 49)
+                (lshiftrt:SI (reg:SI 48)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 22 20 24 (parallel[ 
+            (set (reg:SI 50)
+                (plus:SI (reg/v:SI 45)
+                    (reg:SI 49)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 24 22 26 (parallel[ 
+            (set (reg:SI 47)
+                (ashiftrt:SI (reg:SI 50)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (div:SI (reg/v:SI 45)
+            (const_int 2 [0x2]))
+        (nil)))
+
+(insn 26 24 27 (parallel[ 
+            (set (reg/v:SI 45)
+                (plus:SI (reg:SI 47)
+                    (reg/v:SI 44)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 27 26 29 (parallel[ 
+            (set (reg/v:SI 45)
+                (mult:SI (reg/v:SI 45)
+                    (const_int 8 [0x8])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 29 27 32 (parallel[ 
+            (set (reg/v:SI 45)
+                (plus:SI (reg/v:SI 45)
+                    (reg/v:SI 42)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 32 29 35 (set (reg/v:SI 51)
+        (reg/v:SI 42)) -1 (nil)
+    (nil))
+
+(insn 35 32 38 (parallel[ 
+            (set (reg/v:SI 52)
+                (plus:SI (reg/v:SI 42)
+                    (const_int -8 [0xfffffff8])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 38 35 41 (set (reg/v:SI 55)
+        (reg/v:SI 43)) -1 (nil)
+    (nil))
+
+(insn 41 38 44 (set (reg/v:SI 59)
+        (const_int 0 [0x0])) -1 (nil)
+    (nil))
+
+(insn 44 41 46 (set (reg/v:SI 60)
+        (const_int 1 [0x1])) -1 (nil)
+    (nil))
+
+(note 46 44 199 NOTE_INSN_LOOP_BEG 0)
+
+(jump_insn 199 46 200 (set (pc)
+        (label_ref 47)) -1 (nil)
+    (nil))
+
+(barrier 200 199 198)
+
+(code_label 198 200 52 155 "" "" [0 uses])
+
+(code_label 52 198 57 140 "" "" [0 uses])
+
+(insn 57 52 58 (set (reg/v:DF 62)
+        (mem:DF (reg/v:SI 51) 0)) -1 (nil)
+    (nil))
+
+(note 58 57 60 0x400f0960 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 60 58 61 (parallel[ 
+            (set (reg:DF 64)
+                (abs:DF (reg/v:DF 62)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 61 60 62 (set (reg:DF 63)
+        (reg:DF 64)) -1 (nil)
+    (nil))
+
+(jump_insn/i 62 61 63 (set (pc)
+        (label_ref 65)) -1 (nil)
+    (nil))
+
+(barrier/i 63 62 64)
+
+(insn/i 64 63 65 (clobber (reg:DF 63)) -1 (nil)
+    (nil))
+
+(code_label/i 65 64 66 142 "" "" [0 uses])
+
+(note 66 65 68 0x400f0960 NOTE_INSN_BLOCK_END 0)
+
+(insn 68 66 69 (set (reg:DF 65)
+        (mem/u/f:DF (symbol_ref/u:SI ("*.LC34")) 0)) -1 (nil)
+    (expr_list:REG_EQUAL (const_double:DF (mem/u/f:DF (symbol_ref/u:SI ("*.LC34")) 0) 0 [0x0] 0 [0x0] 1070712832 [0x3fd1c800])
+        (nil)))
+
+(jump_insn 69 68 70 (parallel[ 
+            (set (pc)
+                (if_then_else (lt:CCFPU (reg:DF 63)
+                        (reg:DF 65))
+                    (label_ref 72)
+                    (pc)))
+            (clobber (reg:CCFP 18 fpsr))
+            (clobber (reg:CCFP 17 flags))
+            (clobber (scratch:HI))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn 70 69 71 (set (pc)
+        (label_ref 81)) -1 (nil)
+    (nil))
+
+(barrier 71 70 72)
+
+(code_label 72 71 77 143 "" "" [0 uses])
+
+(insn 77 72 79 (parallel[ 
+            (set (reg/v:SI 59)
+                (plus:SI (reg/v:SI 59)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(jump_insn 79 77 80 (set (pc)
+        (label_ref 182)) -1 (nil)
+    (nil))
+
+(barrier 80 79 81)
+
+(code_label 81 80 86 141 "" "" [0 uses])
+
+(insn 86 81 87 (set (reg:DF 67)
+        (mem/u/f:DF (symbol_ref/u:SI ("*.LC35")) 0)) -1 (nil)
+    (nil))
+
+(insn 87 86 89 (set (reg:DF 66)
+        (div:DF (reg:DF 67)
+            (mem:DF (reg/v:SI 51) 0))) -1 (nil)
+    (nil))
+
+(insn 89 87 92 (set (mem:DF (reg/v:SI 55) 0)
+        (reg:DF 66)) -1 (nil)
+    (nil))
+
+(insn 92 89 94 (parallel[ 
+            (set (reg/v:SI 56)
+                (plus:SI (reg/v:SI 43)
+                    (const_int -8 [0xfffffff8])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 94 92 95 (parallel[ 
+            (set (reg/v:SI 54)
+                (plus:SI (reg/v:SI 52)
+                    (const_int 8 [0x8])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(note 95 94 175 NOTE_INSN_LOOP_BEG 0)
+
+(jump_insn 175 95 176 (set (pc)
+        (label_ref 96)) -1 (nil)
+    (nil))
+
+(barrier 176 175 174)
+
+(code_label 174 176 102 154 "" "" [0 uses])
+
+(code_label 102 174 107 148 "" "" [0 uses])
+
+(insn 107 102 109 (parallel[ 
+            (set (reg:SI 68)
+                (minus:SI (reg/v:SI 54)
+                    (reg/v:SI 52)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 109 107 111 (set (reg:SI 69)
+        (reg:SI 68)) -1 (nil)
+    (nil))
+
+(insn 111 109 113 (parallel[ 
+            (set (reg:SI 70)
+                (ashiftrt:SI (reg:SI 69)
+                    (const_int 3 [0x3])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (div:SI (reg:SI 68)
+            (const_int 8 [0x8]))
+        (nil)))
+
+(insn 113 111 115 (set (reg/v:SI 61)
+        (reg:SI 70)) -1 (nil)
+    (nil))
+
+(insn 115 113 117 (parallel[ 
+            (set (reg:SI 71)
+                (mult:SI (reg/v:SI 61)
+                    (const_int 8 [0x8])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 117 115 120 (parallel[ 
+            (set (reg/v:SI 56)
+                (plus:SI (reg/v:SI 56)
+                    (reg:SI 71)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 120 117 123 (set (reg/v:DF 58)
+        (mem/u/f:DF (symbol_ref/u:SI ("*.LC36")) 0)) -1 (nil)
+    (nil))
+
+(insn 123 120 125 (set (reg/v:SI 57)
+        (reg/v:SI 56)) -1 (nil)
+    (nil))
+
+(insn 125 123 126 (set (reg/v:SI 53)
+        (reg/v:SI 54)) -1 (nil)
+    (nil))
+
+(note 126 125 156 NOTE_INSN_LOOP_BEG 0)
+
+(jump_insn 156 126 157 (set (pc)
+        (label_ref 127)) -1 (nil)
+    (nil))
+
+(barrier 157 156 155)
+
+(code_label 155 157 133 153 "" "" [0 uses])
+
+(code_label 133 155 138 152 "" "" [0 uses])
+
+(insn 138 133 139 (set (reg:DF 73)
+        (mem:DF (reg/v:SI 57) 0)) -1 (nil)
+    (nil))
+
+(insn 139 138 140 (set (reg:DF 72)
+        (mult:DF (reg:DF 73)
+            (mem:DF (reg/v:SI 53) 0))) -1 (nil)
+    (nil))
+
+(insn 140 139 143 (set (reg/v:DF 58)
+        (plus:DF (reg/v:DF 58)
+            (reg:DF 72))) -1 (nil)
+    (nil))
+
+(note 143 140 144 NOTE_INSN_LOOP_CONT 0)
+
+(code_label 144 143 146 151 "" "" [0 uses])
+
+(insn 146 144 149 (parallel[ 
+            (set (reg/v:SI 53)
+                (plus:SI (reg/v:SI 53)
+                    (const_int 8 [0x8])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 149 146 151 (set (reg:SI 74)
+        (reg/v:SI 61)) -1 (nil)
+    (nil))
+
+(insn 151 149 153 (parallel[ 
+            (set (reg:SI 75)
+                (ashift:SI (reg:SI 74)
+                    (const_int 3 [0x3])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (mult:SI (reg/v:SI 61)
+            (const_int 8 [0x8]))
+        (nil)))
+
+(insn 153 151 154 (parallel[ 
+            (set (reg/v:SI 57)
+                (plus:SI (reg/v:SI 57)
+                    (reg:SI 75)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 154 153 127 (parallel[ 
+            (set (reg/v:SI 61)
+                (plus:SI (reg/v:SI 61)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(code_label 127 154 129 149 "" "" [0 uses])
+
+(insn 129 127 130 (set (reg:CC 17 flags)
+        (compare:CC (reg/v:SI 53)
+            (reg/v:SI 51))) -1 (nil)
+    (nil))
+
+(jump_insn 130 129 131 (set (pc)
+        (if_then_else (ltu (reg:CC 17 flags)
+                (const_int 0 [0x0]))
+            (label_ref 133)
+            (pc))) -1 (nil)
+    (nil))
+
+(jump_insn 131 130 132 (set (pc)
+        (label_ref 161)) -1 (nil)
+    (nil))
+
+(barrier 132 131 158)
+
+(jump_insn 158 132 159 (set (pc)
+        (label_ref 155)) -1 (nil)
+    (nil))
+
+(barrier 159 158 160)
+
+(note 160 159 161 NOTE_INSN_LOOP_END 0)
+
+(code_label 161 160 164 150 "" "" [0 uses])
+
+(insn 164 161 165 (parallel[ 
+            (set (reg:DF 76)
+                (neg:DF (reg/v:DF 58)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 165 164 167 (set (reg:DF 77)
+        (mult:DF (reg:DF 76)
+            (mem:DF (reg/v:SI 55) 0))) -1 (nil)
+    (nil))
+
+(insn 167 165 170 (set (mem:DF (reg/v:SI 57) 0)
+        (reg:DF 77)) -1 (nil)
+    (nil))
+
+(note 170 167 171 NOTE_INSN_LOOP_CONT 0)
+
+(code_label 171 170 173 147 "" "" [0 uses])
+
+(insn 173 171 96 (parallel[ 
+            (set (reg/v:SI 54)
+                (plus:SI (reg/v:SI 54)
+                    (const_int 8 [0x8])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(code_label 96 173 98 145 "" "" [0 uses])
+
+(insn 98 96 99 (set (reg:CC 17 flags)
+        (compare:CC (reg/v:SI 54)
+            (reg/v:SI 51))) -1 (nil)
+    (nil))
+
+(jump_insn 99 98 100 (set (pc)
+        (if_then_else (ltu (reg:CC 17 flags)
+                (const_int 0 [0x0]))
+            (label_ref 102)
+            (pc))) -1 (nil)
+    (nil))
+
+(jump_insn 100 99 101 (set (pc)
+        (label_ref 180)) -1 (nil)
+    (nil))
+
+(barrier 101 100 177)
+
+(jump_insn 177 101 178 (set (pc)
+        (label_ref 174)) -1 (nil)
+    (nil))
+
+(barrier 178 177 179)
+
+(note 179 178 180 NOTE_INSN_LOOP_END 0)
+
+(code_label 180 179 182 146 "" "" [0 uses])
+
+(code_label 182 180 185 144 "" "" [0 uses])
+
+(insn 185 182 188 (set (reg/v:SI 52)
+        (reg/v:SI 51)) -1 (nil)
+    (nil))
+
+(insn 188 185 189 (parallel[ 
+            (set (reg/v:SI 60)
+                (plus:SI (reg/v:SI 60)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 189 188 191 (parallel[ 
+            (set (reg:SI 78)
+                (mult:SI (reg/v:SI 60)
+                    (const_int 8 [0x8])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 191 189 193 (parallel[ 
+            (set (reg/v:SI 51)
+                (plus:SI (reg/v:SI 51)
+                    (reg:SI 78)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 193 191 195 (parallel[ 
+            (set (reg:SI 79)
+                (mult:SI (reg/v:SI 60)
+                    (const_int 8 [0x8])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 195 193 197 (parallel[ 
+            (set (reg/v:SI 55)
+                (plus:SI (reg/v:SI 55)
+                    (reg:SI 79)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(note 197 195 47 NOTE_INSN_LOOP_CONT 0)
+
+(code_label 47 197 48 138 "" "" [0 uses])
+
+(insn 48 47 49 (set (reg:CCZ 17 flags)
+        (compare:CCZ (reg/v:SI 51)
+            (reg/v:SI 45))) -1 (nil)
+    (nil))
+
+(jump_insn 49 48 50 (set (pc)
+        (if_then_else (ne (reg:CCZ 17 flags)
+                (const_int 0 [0x0]))
+            (label_ref 52)
+            (pc))) -1 (nil)
+    (nil))
+
+(jump_insn 50 49 51 (set (pc)
+        (label_ref 204)) -1 (nil)
+    (nil))
+
+(barrier 51 50 201)
+
+(jump_insn 201 51 202 (set (pc)
+        (label_ref 198)) -1 (nil)
+    (nil))
+
+(barrier 202 201 203)
+
+(note 203 202 204 NOTE_INSN_LOOP_END 0)
+
+(code_label 204 203 207 139 "" "" [0 uses])
+
+(insn 207 204 208 (set (reg/i:SI 0 eax)
+        (reg/v:SI 59)) -1 (nil)
+    (nil))
+
+(jump_insn 208 207 209 (set (pc)
+        (label_ref 215)) -1 (nil)
+    (nil))
+
+(barrier 209 208 211)
+
+(note 211 209 212 0x400f46a0 NOTE_INSN_BLOCK_END 0)
+
+(note 212 211 214 NOTE_INSN_FUNCTION_END 0)
+
+(insn 214 212 215 (clobber (reg/i:SI 0 eax)) -1 (nil)
+    (nil))
+
+(code_label 215 214 216 137 "" "" [0 uses])
+
+(insn 216 215 0 (use (reg/i:SI 0 eax)) -1 (nil)
+    (nil))

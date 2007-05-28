@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<project name="" default="makepdf" basedir=".">
+   
+   <!-- These are default values-->
+   <property name="workDir_prop" value="/tmp"/>
+   <property name="bin-dir" value="/home/gateway/GEM/GMT/GMT3.4.3/bin/"/>
+   <property name="outfile" value="junk"/>
+   <property file="${workDir_prop}/${outfile}.properties"/>  
+
+
+<!--
+   <property name="plot.causative" value="true"/>
+   <property name="plot.background" value="true"/>
+-->
+
+<property name="vectormag_prop" value="0.1"/>
+
+<target name="clean">
+   <echo message="${workDir_prop}"/>
+   <echo message="${outfile}"/>
+   <delete>
+      <fileset dir="${workDir_prop}">
+         <include name="**/*.pdf"/>
+         <include name="**/*.ps"/>
+         <include name="**/*.eps"/>
+      </fileset>
+   </delete>
+</target>
+
+<!-- Plot the area map -->
+<target name="pscoast" depends="clean">
+   <echo message="Plot coast"/>
+   <echo message="${area_prop}"/>
+   <echo message="${scale_prop}"/>
+   <echo message="${mapticks_prop}"/>
+   <exec executable="${bin-dir}pscoast" 
+         output="${workDir_prop}/${outfile}.ps"  
+	 error="${workDir_prop}/${outfile}.error"       
+	 append="true"
+	 dir="${workDir_prop}">
+	 <arg line="-R${area_prop}"/>
+	 <arg line="-Jm${scale_prop}"/>
+	 <arg line="-B${mapticks_prop}f${mapticks_prop}"/>
+	 <arg line="-Df"/>
+	 <arg line="-Ia"/>
+	 <arg line="-K"/>
+	 <arg line="-W3/0/0/0"/>
+	 <arg line="-Na/1"/>
+	 <arg line="-S0/190/255"/>
+	 <arg line="-G255/255/255"/>
+   </exec>
+</target>
+
+<!-- Plot background faults -->
+<target name="psxy_background" depends="pscoast" if="plot_background">
+   <echo message="Plot background"/>
+   <exec executable="${bin-dir}psxy" 
+         output="${workDir_prop}/${outfile}.ps"
+	 append="true"
+	 error="${workDir_prop}/${outfile}.error"       
+	 dir="${workDir_prop}">
+	 <arg line="/home/gateway/GEM/Dbase/faults/CAfaults"/>
+	 <arg line="-R${area_prop}"/>
+	 <arg line="-Jm${scale_prop}"/>
+	 <arg line="-M"/>
+	 <arg line="-K"/>
+	 <arg line="-O"/>
+	 <arg line="-W2/0/200/0"/>
+   </exec>
+</target>
+
+<!--Plot the causative fault -->
+<target name="psxy_causative" depends="pscoast" if="plot_causative">
+   <echo message="Plot causative"/>
+   <exec executable="${bin-dir}psxy" 
+         output="${workDir_prop}/${outfile}.ps"
+	 append="true"
+	 error="${workDir_prop}/${outfile}.error"       
+	 dir="${workDir_prop}">
+	 <arg line="${workDir_prop}/Simplex_fault.gmt"/>
+	 <arg line="-R${area_prop}"/>
+	 <arg line="-Jm${scale_prop}"/>
+	 <arg line="-M"/>
+	 <arg line="-K"/>
+	 <arg line="-O"/>
+	 <arg line="-W2/255/0/0"/>
+   </exec>
+</target>
+
+<target name="plot_faults" depends="psxy_background,psxy_causative"/>
+
+<!--Plot Residual Vectors -->
+<target name="psvelo_resid" depends="pscoast" if="plot_resid">
+   <echo message="Plot residual"/>
+   <exec executable="${bin-dir}psvelo" 
+         output="${workDir_prop}/${outfile}.ps"
+	 append="true"
+	 error="${workDir_prop}/${outfile}.error"       
+	 dir="${workDir_prop}">
+	 <arg line="${workDir_prop}/Simplex_resid_vectors.gmt"/>
+	 <arg line="-R${area_prop}"/>
+	 <arg line="-Jm${scale_prop}"/>
+	 <arg line="-H2"/>
+	 <arg line="-K"/>
+	 <arg line="-O"/>
+	 <arg line="-Se${vectormag_prop}/0.95/8"/>
+	 <arg line="-G255/0/0/"/>
+   </exec>
+</target>
+
+<!--Plot Observed Vectors -->
+<target name="psvelo_obs" depends="pscoast" if="plot_obs">
+   <echo message="Plot obsv"/>
+   <exec executable="${bin-dir}psvelo" 
+         output="${workDir_prop}/${outfile}.ps"
+	 append="true"
+	 error="${workDir_prop}/${outfile}.error"       
+	 dir="${workDir_prop}">
+	 <arg line="${workDir_prop}/Simplex_obs_vectors.gmt"/>
+	 <arg line="-R${area_prop}"/>
+	 <arg line="-Jm${scale_prop}"/>
+	 <arg line="-H2"/>
+	 <arg line="-K"/>
+	 <arg line="-O"/>
+	 <arg line="-Se${vectormag_prop}/0.95/8"/>
+	 <arg line="-G0/255/0/"/>
+   </exec>
+</target>
+
+<!--Plot Calculated Vectors -->
+<target name="psvelo_calc" depends="pscoast" if="plot_calc">
+   <echo message="Plot calc"/>
+   <exec executable="${bin-dir}psvelo" 
+         output="${workDir_prop}/${outfile}.ps"
+	 append="true"
+	 error="${workDir_prop}/${outfile}.error"       
+	 dir="${workDir_prop}">
+	 <arg line="${workDir_prop}/Simplex_calc_vectors.gmt"/>
+	 <arg line="-R${area_prop}"/>
+	 <arg line="-Jm${scale_prop}"/>
+	 <arg line="-H2"/>
+	 <arg line="-K"/>
+	 <arg line="-O"/>
+	 <arg line="-Se${vectormag_prop}/0.95/8"/>
+	 <arg line="-G0/0/255/"/>
+   </exec>
+</target>
+
+<target name="psvelo_all" depends="psvelo_resid,psvelo_obs,psvelo_calc">
+</target>
+
+
+<target name="makepdf" depends="psvelo_all,plot_faults">
+   <echo message="Make PDF"/>
+   <exec executable="ps2epsi" 
+         output="${workDir_prop}/junk"
+	 dir="${workDir_prop}">
+	 <arg line="${workDir_prop}/${outfile}.ps"/>
+	 <arg line="${workDir_prop}/${outfile}.eps"/>
+   </exec>
+   <exec executable="epstopdf" 
+         output="${workDir_prop}/junk"
+	 dir="${workDir_prop}">
+	 <arg line="${workDir_prop}/${outfile}.eps"/>
+   </exec>
+</target>
+
+</project>
+
+
+

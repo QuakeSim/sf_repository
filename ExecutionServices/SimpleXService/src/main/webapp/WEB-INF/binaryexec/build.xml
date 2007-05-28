@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<project name="Simplex" default="all" basedir=".">
+
+<target name="mkdir">
+   <echo message="Making project directory"/>
+   <echo message="${workDir.prop}"/>
+   <mkdir dir="${workDir.prop}"/> 
+</target>
+
+<target name="ExecSimplex">
+   <exec executable="${bindir.prop}/simplex" 
+         output="${workDir.prop}/${projectName.prop}.stdout"
+	 dir="${workDir.prop}">
+      <arg value="${workDir.prop}/${projectName.prop}.input"/>
+      <arg value="${workDir.prop}/${projectName.prop}.output"/>
+      <env key="PATH" path="${bindir.prop}:/bin/:$PATH"/>
+   </exec>
+</target>
+
+<target name="ExecPrePlotGMT">
+   <exec executable="${bindir.prop}/map_simplex.prl"
+         output="${workDir.prop}/${projectName.prop}_map_simplex.stdout"
+         dir="${workDir.prop}">
+      <arg value="--origin_lat" />
+      <arg value="${origin_lat.prop}" />
+      <arg value="--origin_lon" />
+      <arg value="${origin_lon.prop}" />
+      <arg value="${workDir.prop}/${projectName.prop}.output" />
+      <arg value="${workDir.prop}/" />
+      <arg value="${baseImageName.prop}" />
+      <env key="PATH" path="${bindir.prop}:/bin/:$PATH:/usr/bin/"/>
+   </exec>
+</target>
+
+<target name="RunSimplex" depends="ExecSimplex">
+   <echo message="Simplex run completed"/>
+</target>
+
+<target name="RunPrePlotGMT" depends="ExecPrePlotGMT">
+   <echo message="PLotGMT run clopleted"/>
+</target>
+
+</project>
+
+
+

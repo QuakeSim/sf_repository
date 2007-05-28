@@ -1,0 +1,526 @@
+#! /usr/bin/perl 
+# $Id: map_simplex_fault.prl,v 1.1 2005/10/09 18:17:31 gateway Exp $
+# 2003-07-05
+# takes simplex output, and runs it through GMT to make a map of the 
+# displacement field.
+
+# KJH 11/03
+
+# simplex output format
+
+# Note that the units are determined by the units in the input to simplex
+# it is assumed here that spatial coordinates are in km and displacements
+# are in mm
+
+use Getopt::Long;
+use Env;
+
+# Some stuff --Marlon
+$ENV{GEM}="/home/gateway/GEM";
+$ENV{PATH}=$PATH.":".$GEM."/bin".":".$GMT."/bin";
+$ENV{GMTHOME}="/home/gateway/GEM/GMT/etc";
+
+$GEM = $ENV{'GEM'};
+$GMT=$ENV{'GMT'};
+$ENV{PATH}=$PATH.":".$GEM."/bin".":".$GMT."/bin";
+
+chomp($ps2pdf=`which ps2pdf`);
+
+#define paper size
+$paper_d1=11.0*2.54;  #cm paper size
+$paper_d2=8.5*2.54;   #cm paper size
+
+if ($#ARGV < 0) {
+  die "map_simplex [--faults] [--obs] [--cal] [--res] simplex_output_file base_image_name
+	--faults	plot background faults in green
+	--obs 		plot observed horizontal vector displacement
+	--cal 		plot calculated horizontal vector displacement
+	--res 		plot residual horizontal vector displacement
+
+The fault database for plotting is derived from hand-digitized fault 
+maps from CIT/USGS. At the time of writing it only covers Southern California. 
+The format consists of 3 lines per fault segment:
+    lon0  lat0 optional comments
+    lon1  lat1
+    >
+The > symbol separates the fault segments.
+	\n";
+
+}
+
+#--------------------------------------------------
+# Hard code the georeference for testing
+#--------------------------------------------------
+$x0=0.0;
+$y0=0.0;
+$zone=11;
+
+&GetOptions("decimate=i", "faults", "obs", "cal", "res", "orig_lat=f", "orig_lon=f", "tz=i");
+
+$x0=$opt_orig_lat;
+$y0=$opt_orig_lon;
+$zone=$opt_tz;
+
+print "Values from the args: $x0 $y0 $zone \n";
+
+
+#--------------------------------------------------
+# Start stuff.
+#--------------------------------------------------
+if ($x0 == 0.0 && $y0 == 0.0) {
+  $geo_referenced=0;
+  $proj='x'; # x/y projection if simple cartesian
+} 
+else {
+    $geo_referenced=1;
+    $proj='m';
+    if ($zone != -99) {
+	($jnk,$n0,$jnk,$e0,$jnk,$utm_zone,$jnk)=split (' ',`gd2utm -lon $x0 -lat $y0 -zone $zone`);
+	print "forcing zone $zone\n";
+    } 
+    else {
+	($jnk,$n0,$jnk,$e0,$jnk,$utm_zone,$jnk)=split (' ',`gd2utm -lon $x0 -lat $y0`);
+    }
+}    
+
+
+$pi = 4.0*atan2(1.0,1.0);
+$d2r = $pi/180.0;
+
+$output_name=$ARGV[$#ARGV];
+if(!defined($output_name)){
+    $output_name="map";
+}
+
+$title = $ARGV[$#ARGV-1];
+open (SMPLX, "$title") || die "ERROR Can not open simplex output file $title for input\n";
+
+if ($opt_obs) { $title = $title . " Obs";}
+if ($opt_cal) { $title = $title . " Calc";}
+if ($opt_res) { $title = $title . " Resid";}
+
+$lat_min=9999999.0;
+$lat_max=-9999999.0;
+$lon_min=$lat_min;
+$lon_max=$lat_max;
+$dmin_obs=$lat_min;
+$dmin_cal=$lat_min;
+$dmin_res=$lat_min;
+$dmax_obs=$lat_max;
+$dmax_cal=$lat_max;
+$dmax_res=$lat_max;
+
+
+#$dav=0;
+#$v[0]='q';
+open (VOFILE, ">Simplex_obs_vectors.gmt") || die "ERROR Can not open Simplex_obs_vectors.gmt output file\n";
+open (VCFILE, ">Simplex_calc_vectors.gmt") || die "ERROR Can not open Simplex_calc_vectors.gmt output file\n";
+open (VRFILE, ">Simplex_resid_vectors.gmt") || die "ERROR Can not open Simplex_resid_vectors.gmt output file\n";
+open (STAFILE, ">Simplex_station_names.gmt") || die "ERROR Can not open Simplex_station_names.gmt output file\n";
+
+$zone=-99;
+
+if ($geo_referenced) {
+    printf VOFILE "Longitude\t\t Latitude\t\t  LonV\t  LatV\t  LonVer\t  LatVer\t  corr    \n";
+    printf VOFILE "  deg\t\t\t        deg\t\t         mm/a\t\t      mm/a\t\t   mm/a\t\t    mm/a\n";
+    printf VCFILE "Longitude\t\t  Latitude\t\t  LonV\t    LatV\t   LonVer\t  LatVer\t  corr\t    \n";
+    printf VCFILE "  deg\t\t        deg\t\t         mm/a\t\t      mm/a\t\t   mm/a\t\t    mm/a\n";
+    printf VRFILE "Longitude\t\t  Latitude\t\t  LonV\t    LatV\t LonVer\t  LatVer\t\t  corr    \n";
+    printf VRFILE "  deg\t\t        deg\t\t         mm/a\t\t      mm/a\t\t   mm/a\t\t    mm/a\n";
+} 
+else {
+    printf VOFILE "Longitude  Latitude     LonV      LatV  LonVer  LatVer  corr    \n";
+    printf VOFILE "  km         km          mm/a      mm/a   mm/a    mm/a\n";
+    printf VCFILE "Longitude  Latitude     LonV      LatV  LonVer  LatVer  corr    \n";
+    printf VCFILE "  km         km          mm/a      mm/a   mm/a    mm/a\n";
+    printf VRFILE "Longitude  Latitude     LonV      LatV  LonVer  LatVer  corr    \n";
+    printf VRFILE "  km         km          mm/a      mm/a   mm/a    mm/a\n";
+}
+
+open (FAULT, ">Simplex_fault.gmt") || die "ERROR Can not open fault output file\n";
+
+#--------------------------------------------------
+# First, get through the first residual displacements
+#--------------------------------------------------
+while (<SMPLX>) {
+    if (/Residual displacements:/) {last}   
+}
+
+#--------------------------------------------------
+# Next, extract the faults.
+#--------------------------------------------------
+while (<SMPLX>) {
+
+ if (/Fault/) {
+
+  ($jnk,$jnk,$faultx0) =split(' ',$_=<SMPLX>);
+  ($jnk,$jnk,$faulty0) =split(' ',$_=<SMPLX>);
+  ($jnk,$jnk,$f_strike)=split(' ',$_=<SMPLX>);
+  #($jnk,$jnk,$f_dip,$jnk)   =split(' ',$_=<SMPLX>);
+  $_=<SMPLX>;
+  #($jnk,$jnk,$f_depth,$jnk) =split(' ',$_=<SMPLX>);
+  $_=<SMPLX>;
+  #($jnk,$jnk,$f_width,$jnk) =split(' ',$_=<SMPLX>);
+  $_=<SMPLX>;
+  ($jnk,$jnk,$f_length)=split(' ',$_=<SMPLX>);
+  #($jnk,$jnk,$f_sslip,$jnk) =split(' ',$_=<SMPLX>);
+  $_=<SMPLX>;
+  #($jnk,$jnk,$f_dslip,$jnk) =split(' ',$_=<SMPLX>);
+  $_=<SMPLX>;
+
+
+  $f_strike=((360.0-$f_strike+90.0)%360)*$d2r;
+#  $faultx1=$faultx0-$f_length*cos($f_strike);
+#  $faulty1=$faulty0-$f_length*sin($f_strike);
+  $faultx1=$faultx0+$f_length*cos($f_strike);
+  $faulty1=$faulty0+$f_length*sin($f_strike);
+
+  if ($geo_referenced) {
+      $faultx0=$faultx0*1000.0+$e0;
+      $faulty0=$faulty0*1000.0+$n0;
+      $faultx1=$faultx1*1000.0+$e0;
+      $faulty1=$faulty1*1000.0+$n0;
+      ($faulty0,$jnk,$faultx0,$jnk)=split(' ',`utm2gd -n $faulty0 -e $faultx0 -z $utm_zone`);
+      ($faulty1,$jnk,$faultx1,$jnk)=split(' ',`utm2gd -n $faulty1 -e $faultx1 -z $utm_zone`);
+      
+  }
+  print "$faultx0 $faulty0\n$faultx1 $faulty1\n>\n";
+  print FAULT "$faultx0 $faulty0\n$faultx1 $faulty1\n>\n";
+}
+
+
+#We are done, so bail out.  This is the second "Residual displacements".
+if (/Residual displacements:/) {last}
+
+}
+
+#print "Created the fault file, moving on...\n";
+
+#--------------------------------------------------
+# Use this trick to move down to the second 
+# "Residual displacements:" section.
+#--------------------------------------------------
+# while(<SMPLX>) {
+# if (/Residual displacements:/) {last}
+#}
+
+#--------------------------------------------------
+# Next, extract the residual displacements.
+#--------------------------------------------------
+#This is the column header line.
+$_=<SMPLX>;
+
+# This is a blank line.
+$_=<SMPLX>;
+
+$nl=0;
+$plon=$plat=$prlon=$prlat=-9999999999.999;
+
+#--------------------------------------------------
+# Extract the Simplex residual lines.  
+# NOTE only types 1, 2, and 3 are supported.
+#--------------------------------------------------
+while(<SMPLX>) {
+
+    $nl++;
+    if ($_ eq "\n") {  #blank line denotes end of data
+	&print_en_vector;
+	last;
+    }
+    
+    chomp;
+    s/^\s*//;
+    ($typ, $jnk) = split(/\s+/);
+    
+    if ($typ <= 3) {
+	($typ, $lon, $lat, $obs, $cal, $res, $err) = split(/\s+/);
+#	    print "Reading line $obs $cal $res\n";
+    }
+    else {
+	print "Type $type has not been implemented.\n"
+	}
+    
+    # Now handle each type.
+    if (($typ == 1)) {	# x (east) component of deformation
+	if (($lon != $plon || $lat != $plat) && $nl > 1) {
+	    &print_en_vector;
+	}
+
+	$plon = $lon;
+	$plat = $lat;
+	$de_obs = $obs;
+	$de_cal = $cal;
+	$de_res = $res;
+	$de_obs_er=0.0;
+	$ne_obs_cor=0.0;
+	
+	if ($dmin_obs > $de_obs) {$dmin_obs = $de_obs;}
+	if ($dmin_cal > $de_cal) {$dmin_cal = $de_cal;}
+	if ($dmin_res > $de_res) {$dmin_res = $de_res;}
+	if ($dmax_obs < $de_obs) {$dmax_obs = $de_obs;}
+	if ($dmax_cal < $de_cal) {$dmax_cal = $de_cal;}
+	if ($dmax_res < $de_res) {$dmax_res = $de_res;}
+    }
+    
+    elsif (($typ == 2)) {	# y component of deformation
+	$dn_obs = $obs;
+	$dn_cal = $cal;
+	$dn_res = $res;
+	$dn_obs_er=0.0;
+	if ($dmin_obs > $dn_obs) {$dmin_obs = $dn_obs;}
+	if ($dmin_cal > $dn_cal) {$dmin_cal = $dn_cal;}
+	if ($dmin_res > $dn_res) {$dmin_res = $dn_res;}
+	if ($dmax_obs < $dn_obs) {$dmax_obs = $dn_obs;}
+	if ($dmax_cal < $dn_cal) {$dmax_cal = $dn_cal;}
+	if ($dmax_res < $dn_res) {$dmax_res = $dn_res;}
+    }
+    
+    elsif (($typ == 3)) {	# z component of deformation
+	$dv_obs = $obs;
+	$dv_cal = $cal;
+	$dv_res = $res;
+	$dn_obs_er=0.0;
+    }
+}
+
+$i=$i+1;
+print "$i Lat and Lon: $lon_min $lon_max $lat_min $lat_max\n";
+
+# find the minimum and maximum data to be plotted
+$dmin=99999999.99;
+$dmax=-99999999.99;
+if ($opt_cal) {
+    $dmin = $dmin_cal;
+    $dmax = $dmax_cal;
+    print "plotting calc $dmin $dmax\n";
+}
+if ($opt_obs) {
+    $dmin = ($dmin < $dmin_obs) ? $dmin : $dmin_obs;
+    $dmax = ($dmax > $dmax_obs) ? $dmax : $dmax_obs;
+    print "plotting observation $dmin $dmax $dmin_obs $dmax_obs\n";
+}
+if ($opt_res) {
+    $dmin = ($dmin < $dmin_res) ? $dmin : $dmin_res;
+    $dmax = ($dmax > $dmax_res) ? $dmax : $dmax_res;
+    print "plotting resids $dmin $dmax $dmin_res $dmax_res\n";
+}
+
+# define the area of the map
+$i=$i+1;
+print "$i Lat and Lon: $lon_min $lon_max $lat_min $lat_max\n";
+
+$wr=$lon_min - ($lon_max-$lon_min)/20.0;
+$er=$lon_max + ($lon_max-$lon_min)/20.0;
+$sr=$lat_min - ($lat_max-$lat_min)/20.0;
+$nr=$lat_max + ($lat_max-$lat_min)/20.0;
+$area = $wr . '/' . $er . '/' . $sr . '/' . $nr;
+print "area = $area\n";
+
+# define the scale
+#landscape
+$image_height=$paper_d2-10.0;  #cm note: was 5.0
+$image_wide=$paper_d1-5.0;   #cm note: was 8.25
+$s1 = ($image_height/($nr-$sr)); # allow room for caption
+$s2 = $image_wide/($er-$wr);
+$sL = $s1; if ($s2 < $s1) {$sL=$s2;}
+print "land $s1 $s2 $sL\n";
+
+#portrait
+$image_height=$paper_d1-10.0;  #cm note: was 7.5
+$image_wide=$paper_d2-5.0;   #cm note: was 5.5
+$s1 = ($image_height/($nr-$sr)); # allow room for caption
+$s2 = $image_wide/($er-$wr);
+$sP = $s1; if ($s2 < $s1) {$sP=$s2;}
+print "port $s1 $s2 $sP\n";
+
+$scale = $sL;
+$view = " "; 
+if ($sP > $sL) {$view = "-P"; $scale = $sP;}
+print "view $view  scale $scale\n";
+
+$tick = int(2.0/$scale);
+if ($tick < 1) {$tick = int(60.0*2.0/$scale); $tick = $tick . "m";}
+elsif ($tick > 10) {$tick = int($tick/10)*10;}
+print "tick = $tick\n";
+
+# scale to use for arrows - aim for largest arrow to be about 1 cm
+$vscale = ($dmax < abs($dmin)) ? abs($dmin) : $dmax;
+$m=1.0;
+while ($vscale < 1) {$m*=10; $vscale*=10; }
+$vscale=$m/int($vscale);
+
+# key scale (legend) for vectors (use a legend vector that is 
+# the length of largest vectors)
+$dmedian=(abs($dmax)+abs($dmin))/2;
+$m=1;
+while ($dmedian > 10) {$m*=10; $dmedian/=10}
+while ($dmedian < 1)  {$m/=10; $dmedian*=10}
+$vscale_arrow= int($dmedian)*$m;
+
+$ev=int(100*($er-(2.5/$scale)))/100;  
+$sv=int(100*($sr+(0.7/$scale)))/100;
+printf VOFILE "$ev\t\t\t  $sv\t\t     $vscale_arrow\t\t   0.0   0.0   0.0   0.1 $vscale_arrow  mm\n";
+printf VCFILE "$ev\t\t\t  $sv\t\t     $vscale_arrow\t\t   0.0   0.0   0.0   0.1 $vscale_arrow  mm\n";
+printf VRFILE "$ev\t\t\t  $sv\t\t\t  $vscale_arrow\t\t   0.0   0.0   0.0   0.1 $vscale_arrow  mm\n";
+close VOFILE;
+close VCFILE;
+close VRFILE;
+close STAFILE;
+
+#map scale location
+$skm=int(100*($sv+(2.0/$scale)))/100;
+$midns=($nr+$sr)/2.0;
+
+
+#--------------------------------------------------
+# write a csh script to run the GMT programs
+# The script is likely to generate a rough draft of the desired figure
+# By writing and executing a script, the user can then modify the script 
+# to generate the final figure.
+#--------------------------------------------------
+
+open (SCPT, ">Simplex_map.csh") || die "ERROR Can not open script output file Simplex_map.csh\n";
+
+print SCPT "#!/bin/csh \n";
+print SCPT "set area = $area #W/E/S/N\n";
+print SCPT "set scale = $scale\n";
+
+if ($geo_referenced) {
+   #decide on resolution of coastline if in georeferenced mode
+   if ($scale > 16) {
+     # f - full resolution (may be very slow for large regions) [>16]
+     $c_res="f"
+   } elsif ($scale > 2) {
+     # h - high resolution (may be slow for large regions) [2-16]
+     $c_res="h"
+   }elsif ($scale > 0.5) {
+     # i - intermediate resolution [0.5-2]
+     $c_res="i"
+   }else {
+     # l - low resolution [Default] [<0.5]
+     $c_res="l"
+   }
+
+  # want km scale to occupy about 4 cm  (110 km/deg, scale=cm/deg)
+  $slength = 4.0/$scale*110.0;
+  $nmul=$slen=1.0;
+  while ($slen*2.0 < $slength) {
+    if ($nmul*1.0 < $slength) {
+      $slen=$nmul*1.0;
+    }
+    if ($nmul*2.0 < $slength) {
+      $slen=$nmul*2.0;
+    }
+    if ($nmul*5.0 < $slength) {
+      $slen=$nmul*5.0;
+    }
+    $nmul = $nmul*10.0;
+  }
+
+
+  print SCPT "\n# plot coastlines and political boundaries\n";
+  print SCPT "set map_ticks = ${tick}\n";
+  print SCPT "pscoast -R\$area -Jm\$scale -B{\$map_ticks}f{\$map_ticks}:\".$title\": -D$c_res -Ia -K -W3/0/0/0 -Na/1 -S0/190/255 -G255/255/255 $view -Lf$ev/$skm/$midns/$slen > $output_name.ps\n";
+  print SCPT "#   -D coastal resolution (options = f,h,i,l,c)\n";
+  print SCPT "#   -I plot rivers (a=all, 1,2,3,4=permenant rivers, 5,6,7=intermitant rivers, 8,9,10=canals)\n";
+  print SCPT "#   -L make (fancy) map scale at x0/y0/lat/length sized for lat\n";
+  print SCPT "#   -N plot boundaries (a=all, 1=national, 2=state, 3=marine)\n";
+  print SCPT "#   -W plot shorelines\n";
+  print SCPT "#   -S paint wet areas with specified color\n";
+  print SCPT "#   -G paint dry areas with specified color\n";
+
+  if ($opt_faults) {
+  print SCPT "\n# plot background fault(s) in green\n";
+  print SCPT "psxy \$GEM/Dbase/faults/CAfaults -R\$area -Jm\$scale -M -K -O $view -W2/0/200/0 >> $output_name.ps\n";
+  }
+
+  print SCPT "\n# plot causative fault(s) in red\n";
+  print SCPT "psxy Simplex_fault.gmt -R\$area -Jm\$scale -M -K -O $view -W2/255/0/0 >> $output_name.ps\n";
+
+# NOTE - need errors for obs 
+  print SCPT "\n# plot velocities\n";
+  if (! $opt_obs) {
+    print SCPT "# ";
+  }
+  print SCPT "psvelo Simplex_obs_vectors.gmt -R\$area -Jm\$scale -H2 -O $view -Se$vscale/0.95/8 >> $output_name.ps\n";
+# NOTE - errors set to zero for calc
+  if (! $opt_cal) {
+    print SCPT "# ";
+  }
+  print SCPT "psvelo Simplex_calc_vectors.gmt -R\$area -Jm\$scale -H2 -O $view -Se$vscale/0.95/8 >> $output_name.ps\n";
+  if (! $opt_res) {
+    print SCPT "# ";
+  }
+  print SCPT "psvelo Simplex_resid_vectors.gmt -R\$area -Jm\$scale -H2 -O $view -Se$vscale/0.95/8 >> $output_name.ps\n";
+ 
+   if(defined($ps2pdf)) {
+       print SCPT "\n# Convert postscript to PDF\n";
+       print SCPT "$ps2pdf $output_name.ps $output_name.pdf\n";
+   }
+
+ 
+
+} else { #CARTESIAN plot
+
+  print SCPT "\n# set up cartesian basemap\n";
+  print SCPT "psbasemap -R\$area -Jx\$scale -B${tick}f${tick}:.$title: -K $view > $output_name.ps\n";
+
+  print SCPT "\n# plot causative fault(s) in red\n";
+  print SCPT "#BUT In cartesian plots the strike is not right anywhere except at the equator\n#so dont plot faults by default since they are likely to be misleading\n";
+  print SCPT "#psxy Simplex_fault.gmt -R\$area -Jx\$scale -K -O $view -W2/255/0/0 >> $output_name.ps\n";
+
+  print SCPT "\n# plot velocities\n";
+  if (! $opt_obs) {
+    print SCPT "# ";
+  }else {
+    #if ($have_v_cor) {
+    #  print SCPT "psvelo Simplex_obs_vectors.gmt -R\$area -Jx\$scale  -H2 -O $view -Se$vscale/0.95/8 >> $output_name.ps\n";
+    #} else {
+      print SCPT "psvelo Simplex_obs_vectors.gmt -R\$area -Jx\$scale -H2 -O $view -Se$vscale/0.95/8 >> $output_name.ps\n";
+    #}
+  }
+# NOTE - errors set to zero for calc
+  if (! $opt_cal) {
+    print SCPT "# ";
+  }
+  print SCPT "psvelo Simplex_calc_vectors.gmt -R\$area -Jx\$scale -H2 -O $view -Se$vscale/0.95/8 >> $output_name.ps\n";
+  if (! $opt_res) {
+    print SCPT "# ";
+  }
+  print SCPT "psvelo Simplex_resid_vectors.gmt -R\$area -Jx\$scale -H2 -O $view -Se$vscale/0.95/8 >> $output_name.ps\n";
+
+   if(defined($ps2pdf)) {
+       print SCPT "\n# Convert postscript to PDF\n";
+       print SCPT "$ps2pdf $output_name.ps $output_name.pdf\n";
+   }
+
+
+}
+
+close SCPT;
+
+$done=`csh Simplex_map.csh`;
+print "$done\n";
+
+print "Output map should be in $output_name.ps\nEdit Simplex_map.csh to and rerun it to modify map\n";
+
+exit;
+
+#====================== SUBROUTINES ==================
+
+sub print_en_vector {
+  if ($geo_referenced) {
+    $n = $n0+$plat*1000.0; # convert from km to m
+    $e = $e0+$plon*1000.0; # convert from km to m
+    ($plat,$jnk,$plon,$jnk)=split(' ',`utm2gd -n $n -e $e -z $utm_zone`);
+  }
+  if ($lon_min > $plon) {$lon_min=$plon;}
+  if ($lon_max < $plon) {$lon_max=$plon;}
+  if ($lat_min > $plat) {$lat_min=$plat;}
+  if ($lat_max < $plat) {$lat_max=$plat;}
+
+  printf VOFILE "$plon\t  $plat\t $de_obs\t\t $dn_obs\t\t $de_obs_er\t\t $dn_obs_er\t\t $ne_obs_cor \n";
+  printf VCFILE "$plon\t $plat\t $de_cal\t\t $dn_cal\t\t 0.0\t\t 0.0\t\t 0.0\t\t  $pstanam\n";
+  printf VRFILE "$plon\t $plat\t $de_res\t\t $de_res\t\t $de_obs_er\t\t $dn_obs_er\t\t  $ne_obs_cor \n";
+
+}

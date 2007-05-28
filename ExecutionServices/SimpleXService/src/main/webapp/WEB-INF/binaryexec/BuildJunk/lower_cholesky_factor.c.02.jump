@@ -1,0 +1,1094 @@
+
+;; Function lower_cholesky_factor
+
+
+IF-THEN-ELSE block found, start 8, then 9, else 10, join 11
+
+1 possible IF blocks searched.
+0 IF blocks converted.
+0 basic blocks deleted.
+
+
+(note 2 0 353 NOTE_INSN_DELETED 0)
+
+(note 353 2 4 [bb 0] NOTE_INSN_BASIC_BLOCK 0)
+
+(insn 4 353 6 (set (reg/v:SI 42)
+        (mem/f:SI (reg:SI 16 argp) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SI (reg:SI 16 argp) 0)
+        (nil)))
+
+(insn 6 4 8 (set (reg/v:SI 43)
+        (mem/f:SI (plus:SI (reg:SI 16 argp)
+                (const_int 4 [0x4])) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SI (plus:SI (reg:SI 16 argp)
+                (const_int 4 [0x4])) 0)
+        (nil)))
+
+(insn 8 6 9 (set (reg/v:SI 44)
+        (mem/f:SI (plus:SI (reg:SI 16 argp)
+                (const_int 8 [0x8])) 0)) -1 (nil)
+    (expr_list:REG_EQUIV (mem/f:SI (plus:SI (reg:SI 16 argp)
+                (const_int 8 [0x8])) 0)
+        (nil)))
+
+(note 9 8 12 NOTE_INSN_FUNCTION_BEG 0)
+
+(note 12 9 16 0x40144920 NOTE_INSN_BLOCK_BEG 0)
+
+(insn 16 12 337 (set (reg/v:SI 47)
+        (const_int 0 [0x0])) -1 (nil)
+    (nil))
+
+(insn 337 16 338 (parallel[ 
+            (set (reg:SI 149)
+                (plus:SI (reg/v:SI 44)
+                    (const_int -1 [0xffffffff])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 338 337 339 (set (reg:CCGC 17 flags)
+        (compare:CCGC (reg/v:SI 47)
+            (reg:SI 149))) -1 (nil)
+    (nil))
+
+(jump_insn 339 338 17 (set (pc)
+        (if_then_else (ge (reg:CCGC 17 flags)
+                (const_int 0 [0x0]))
+            (label_ref 252)
+            (pc))) 288 {*jcc_1} (nil)
+    (nil))
+
+(note 17 339 25 NOTE_INSN_LOOP_BEG 0)
+
+(code_label 25 17 354 156 "" "" [1 uses])
+
+(note 354 25 30 [bb 1] NOTE_INSN_BASIC_BLOCK 0)
+
+(insn 30 354 31 (parallel[ 
+            (set (reg:SI 52)
+                (plus:SI (reg/v:SI 47)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 31 30 33 (parallel[ 
+            (set (reg:SI 53)
+                (mult:SI (reg/v:SI 47)
+                    (reg:SI 52)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 33 31 35 (parallel[ 
+            (set (reg:SI 55)
+                (ashiftrt:SI (reg:SI 53)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 35 33 37 (parallel[ 
+            (set (reg:SI 56)
+                (lshiftrt:SI (reg:SI 55)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 37 35 39 (parallel[ 
+            (set (reg:SI 57)
+                (plus:SI (reg:SI 53)
+                    (reg:SI 56)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 39 37 41 (parallel[ 
+            (set (reg:SI 54)
+                (ashiftrt:SI (reg:SI 57)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (div:SI (reg:SI 53)
+            (const_int 2 [0x2]))
+        (nil)))
+
+(insn 41 39 43 (parallel[ 
+            (set (reg:SI 58)
+                (plus:SI (reg:SI 54)
+                    (reg/v:SI 47)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 43 41 45 (set (reg:DF 59)
+        (mem:DF (plus:SI (mult:SI (reg:SI 58)
+                    (const_int 8 [0x8]))
+                (reg/v:SI 42)) 0)) -1 (nil)
+    (nil))
+
+(insn 45 43 46 (set (reg:DF 60)
+        (mem/u/f:DF (symbol_ref/u:SI ("*.LC34")) 0)) -1 (nil)
+    (expr_list:REG_EQUAL (const_double:DF (mem/u/f:DF (symbol_ref/u:SI ("*.LC34")) 0) 0 [0x0] 0 [0x0] 0 [0x0])
+        (nil)))
+
+(jump_insn 46 45 355 (parallel[ 
+            (set (pc)
+                (if_then_else (le:CCFPU (reg:DF 59)
+                        (reg:DF 60))
+                    (pc)
+                    (label_ref 58)))
+            (clobber (reg:CCFP 18 fpsr))
+            (clobber (reg:CCFP 17 flags))
+            (clobber (scratch:HI))
+        ] ) 295 {*fp_jcc_6} (nil)
+    (nil))
+
+(note 355 46 54 [bb 2] NOTE_INSN_BASIC_BLOCK 0)
+
+(insn 54 355 55 (set (reg/i:SI 0 eax)
+        (reg/v:SI 47)) -1 (nil)
+    (nil))
+
+(jump_insn 55 54 56 (set (pc)
+        (label_ref 335)) -1 (nil)
+    (nil))
+
+(barrier 56 55 58)
+
+(code_label 58 56 356 157 "" "" [1 uses])
+
+(note 356 58 61 [bb 3] NOTE_INSN_BASIC_BLOCK 0)
+
+(insn 61 356 62 (parallel[ 
+            (set (reg:SI 62)
+                (plus:SI (reg/v:SI 47)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 62 61 64 (parallel[ 
+            (set (reg:SI 63)
+                (mult:SI (reg/v:SI 47)
+                    (reg:SI 62)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 64 62 66 (parallel[ 
+            (set (reg:SI 65)
+                (ashiftrt:SI (reg:SI 63)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 66 64 68 (parallel[ 
+            (set (reg:SI 66)
+                (lshiftrt:SI (reg:SI 65)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 68 66 70 (parallel[ 
+            (set (reg:SI 67)
+                (plus:SI (reg:SI 63)
+                    (reg:SI 66)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 70 68 72 (parallel[ 
+            (set (reg:SI 64)
+                (ashiftrt:SI (reg:SI 67)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (div:SI (reg:SI 63)
+            (const_int 2 [0x2]))
+        (nil)))
+
+(insn 72 70 74 (parallel[ 
+            (set (reg:SI 68)
+                (plus:SI (reg:SI 64)
+                    (reg/v:SI 47)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 74 72 75 (set (reg/v:DF 69)
+        (mem:DF (plus:SI (mult:SI (reg:SI 68)
+                    (const_int 8 [0x8]))
+                (reg/v:SI 42)) 0)) -1 (nil)
+    (nil))
+
+(note 75 74 77 0x4013f6a0 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 77 75 78 0x4013f6c0 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 78 77 79 (parallel[ 
+            (set (reg/v:DF 71)
+                (asm_operands/v ("fsqrt") ("=t") 0[ 
+                        (reg/v:DF 69)
+                    ] 
+                    [ 
+                        (asm_input:DF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 441))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 79 78 82 (set (reg:DF 70)
+        (reg/v:DF 71)) -1 (nil)
+    (nil))
+
+(note/i 82 79 85 0x4013f6c0 NOTE_INSN_BLOCK_END 0)
+
+(note 85 82 87 0x4013f6a0 NOTE_INSN_BLOCK_END 0)
+
+(insn 87 85 88 (parallel[ 
+            (set (reg:SI 72)
+                (plus:SI (reg/v:SI 47)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 88 87 90 (parallel[ 
+            (set (reg:SI 73)
+                (mult:SI (reg/v:SI 47)
+                    (reg:SI 72)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 90 88 92 (parallel[ 
+            (set (reg:SI 75)
+                (ashiftrt:SI (reg:SI 73)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 92 90 94 (parallel[ 
+            (set (reg:SI 76)
+                (lshiftrt:SI (reg:SI 75)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 94 92 96 (parallel[ 
+            (set (reg:SI 77)
+                (plus:SI (reg:SI 73)
+                    (reg:SI 76)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 96 94 98 (parallel[ 
+            (set (reg:SI 74)
+                (ashiftrt:SI (reg:SI 77)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (div:SI (reg:SI 73)
+            (const_int 2 [0x2]))
+        (nil)))
+
+(insn 98 96 100 (parallel[ 
+            (set (reg:SI 78)
+                (plus:SI (reg:SI 74)
+                    (reg/v:SI 47)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 100 98 103 (set (mem:DF (plus:SI (mult:SI (reg:SI 78)
+                    (const_int 8 [0x8]))
+                (reg/v:SI 43)) 0)
+        (reg:DF 70)) -1 (nil)
+    (nil))
+
+(insn 103 100 104 (parallel[ 
+            (set (reg:SI 79)
+                (plus:SI (reg/v:SI 47)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 104 103 106 (parallel[ 
+            (set (reg:SI 80)
+                (mult:SI (reg/v:SI 47)
+                    (reg:SI 79)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 106 104 108 (parallel[ 
+            (set (reg:SI 82)
+                (ashiftrt:SI (reg:SI 80)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 108 106 110 (parallel[ 
+            (set (reg:SI 83)
+                (lshiftrt:SI (reg:SI 82)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 110 108 112 (parallel[ 
+            (set (reg:SI 84)
+                (plus:SI (reg:SI 80)
+                    (reg:SI 83)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 112 110 114 (parallel[ 
+            (set (reg:SI 81)
+                (ashiftrt:SI (reg:SI 84)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (div:SI (reg:SI 80)
+            (const_int 2 [0x2]))
+        (nil)))
+
+(insn 114 112 116 (parallel[ 
+            (set (reg:SI 85)
+                (plus:SI (reg:SI 81)
+                    (reg/v:SI 47)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 116 114 117 (set (reg:DF 86)
+        (mem/u/f:DF (symbol_ref/u:SI ("*.LC35")) 0)) -1 (nil)
+    (nil))
+
+(insn 117 116 120 (set (reg/v:DF 49)
+        (div:DF (reg:DF 86)
+            (mem:DF (plus:SI (mult:SI (reg:SI 85)
+                        (const_int 8 [0x8]))
+                    (reg/v:SI 43)) 0))) -1 (nil)
+    (nil))
+
+(insn 120 117 343 (parallel[ 
+            (set (reg/v:SI 45)
+                (plus:SI (reg/v:SI 44)
+                    (const_int -1 [0xffffffff])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 343 120 344 (set (reg:CCGC 17 flags)
+        (compare:CCGC (reg/v:SI 45)
+            (reg/v:SI 47))) -1 (nil)
+    (nil))
+
+(jump_insn 344 343 121 (set (pc)
+        (if_then_else (le (reg:CCGC 17 flags)
+                (const_int 0 [0x0]))
+            (label_ref 243)
+            (pc))) 288 {*jcc_1} (nil)
+    (nil))
+
+(note 121 344 127 NOTE_INSN_LOOP_BEG 0)
+
+(code_label 127 121 357 163 "" "" [1 uses])
+
+(note 357 127 132 [bb 4] NOTE_INSN_BASIC_BLOCK 0)
+
+(insn 132 357 133 (parallel[ 
+            (set (reg:SI 87)
+                (plus:SI (reg/v:SI 45)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 133 132 135 (parallel[ 
+            (set (reg:SI 88)
+                (mult:SI (reg/v:SI 45)
+                    (reg:SI 87)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 135 133 137 (parallel[ 
+            (set (reg:SI 90)
+                (ashiftrt:SI (reg:SI 88)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 137 135 139 (parallel[ 
+            (set (reg:SI 91)
+                (lshiftrt:SI (reg:SI 90)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 139 137 141 (parallel[ 
+            (set (reg:SI 92)
+                (plus:SI (reg:SI 88)
+                    (reg:SI 91)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 141 139 143 (parallel[ 
+            (set (reg:SI 89)
+                (ashiftrt:SI (reg:SI 92)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (div:SI (reg:SI 88)
+            (const_int 2 [0x2]))
+        (nil)))
+
+(insn 143 141 145 (parallel[ 
+            (set (reg:SI 93)
+                (plus:SI (reg:SI 89)
+                    (reg/v:SI 47)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 145 143 146 (parallel[ 
+            (set (reg:SI 94)
+                (plus:SI (reg/v:SI 45)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 146 145 148 (parallel[ 
+            (set (reg:SI 95)
+                (mult:SI (reg/v:SI 45)
+                    (reg:SI 94)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 148 146 150 (parallel[ 
+            (set (reg:SI 97)
+                (ashiftrt:SI (reg:SI 95)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 150 148 152 (parallel[ 
+            (set (reg:SI 98)
+                (lshiftrt:SI (reg:SI 97)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 152 150 154 (parallel[ 
+            (set (reg:SI 99)
+                (plus:SI (reg:SI 95)
+                    (reg:SI 98)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 154 152 156 (parallel[ 
+            (set (reg:SI 96)
+                (ashiftrt:SI (reg:SI 99)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (div:SI (reg:SI 95)
+            (const_int 2 [0x2]))
+        (nil)))
+
+(insn 156 154 157 (parallel[ 
+            (set (reg:SI 100)
+                (plus:SI (reg:SI 96)
+                    (reg/v:SI 47)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 157 156 159 (set (reg:DF 101)
+        (mult:DF (reg/v:DF 49)
+            (mem:DF (plus:SI (mult:SI (reg:SI 100)
+                        (const_int 8 [0x8]))
+                    (reg/v:SI 42)) 0))) -1 (nil)
+    (nil))
+
+(insn 159 157 161 (set (reg:DF 102)
+        (reg:DF 101)) -1 (nil)
+    (nil))
+
+(insn 161 159 163 (set (mem:DF (plus:SI (mult:SI (reg:SI 93)
+                    (const_int 8 [0x8]))
+                (reg/v:SI 43)) 0)
+        (reg:DF 102)) -1 (nil)
+    (nil))
+
+(insn 163 161 166 (set (reg/v:DF 50)
+        (reg:DF 102)) -1 (nil)
+    (nil))
+
+(insn 166 163 169 (set (reg/v:SI 48)
+        (reg/v:SI 45)) -1 (nil)
+    (nil))
+
+(insn 169 166 348 (set (reg/v:SI 46)
+        (reg/v:SI 45)) -1 (nil)
+    (nil))
+
+(insn 348 169 349 (set (reg:CCGC 17 flags)
+        (compare:CCGC (reg/v:SI 46)
+            (reg/v:SI 44))) -1 (nil)
+    (nil))
+
+(jump_insn 349 348 170 (set (pc)
+        (if_then_else (ge (reg:CCGC 17 flags)
+                (const_int 0 [0x0]))
+            (label_ref 230)
+            (pc))) 288 {*jcc_1} (nil)
+    (nil))
+
+(note 170 349 176 NOTE_INSN_LOOP_BEG 0)
+
+(code_label 176 170 358 167 "" "" [1 uses])
+
+(note 358 176 181 [bb 5] NOTE_INSN_BASIC_BLOCK 0)
+
+(insn 181 358 182 (parallel[ 
+            (set (reg:SI 104)
+                (plus:SI (reg/v:SI 46)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 182 181 184 (parallel[ 
+            (set (reg:SI 105)
+                (mult:SI (reg/v:SI 46)
+                    (reg:SI 104)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 184 182 186 (parallel[ 
+            (set (reg:SI 106)
+                (ashiftrt:SI (reg:SI 105)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 186 184 188 (parallel[ 
+            (set (reg:SI 107)
+                (lshiftrt:SI (reg:SI 106)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 188 186 190 (parallel[ 
+            (set (reg:SI 108)
+                (plus:SI (reg:SI 105)
+                    (reg:SI 107)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 190 188 192 (parallel[ 
+            (set (reg:SI 103)
+                (ashiftrt:SI (reg:SI 108)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (div:SI (reg:SI 105)
+            (const_int 2 [0x2]))
+        (nil)))
+
+(insn 192 190 194 (parallel[ 
+            (set (reg:SI 109)
+                (plus:SI (reg:SI 103)
+                    (reg/v:SI 48)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 194 192 196 (parallel[ 
+            (set (reg:SI 110)
+                (plus:SI (reg:SI 103)
+                    (reg/v:SI 48)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 196 194 197 (parallel[ 
+            (set (reg:SI 111)
+                (plus:SI (reg/v:SI 46)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 197 196 199 (parallel[ 
+            (set (reg:SI 112)
+                (mult:SI (reg/v:SI 46)
+                    (reg:SI 111)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 199 197 201 (parallel[ 
+            (set (reg:SI 114)
+                (ashiftrt:SI (reg:SI 112)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 201 199 203 (parallel[ 
+            (set (reg:SI 115)
+                (lshiftrt:SI (reg:SI 114)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 203 201 205 (parallel[ 
+            (set (reg:SI 116)
+                (plus:SI (reg:SI 112)
+                    (reg:SI 115)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 205 203 207 (parallel[ 
+            (set (reg:SI 113)
+                (ashiftrt:SI (reg:SI 116)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (div:SI (reg:SI 112)
+            (const_int 2 [0x2]))
+        (nil)))
+
+(insn 207 205 208 (parallel[ 
+            (set (reg:SI 117)
+                (plus:SI (reg:SI 113)
+                    (reg/v:SI 47)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 208 207 210 (set (reg:DF 118)
+        (mult:DF (reg/v:DF 50)
+            (mem:DF (plus:SI (mult:SI (reg:SI 117)
+                        (const_int 8 [0x8]))
+                    (reg/v:SI 43)) 0))) -1 (nil)
+    (nil))
+
+(insn 210 208 211 (set (reg:DF 120)
+        (mem:DF (plus:SI (mult:SI (reg:SI 110)
+                    (const_int 8 [0x8]))
+                (reg/v:SI 42)) 0)) -1 (nil)
+    (nil))
+
+(insn 211 210 213 (set (reg:DF 119)
+        (minus:DF (reg:DF 120)
+            (reg:DF 118))) -1 (nil)
+    (nil))
+
+(insn 213 211 216 (set (mem:DF (plus:SI (mult:SI (reg:SI 109)
+                    (const_int 8 [0x8]))
+                (reg/v:SI 42)) 0)
+        (reg:DF 119)) -1 (nil)
+    (nil))
+
+(note 216 213 219 NOTE_INSN_LOOP_CONT 0)
+
+(insn 219 216 352 (parallel[ 
+            (set (reg/v:SI 46)
+                (plus:SI (reg/v:SI 46)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(note 352 219 172 NOTE_INSN_LOOP_VTOP 0)
+
+(insn 172 352 173 (set (reg:CCGC 17 flags)
+        (compare:CCGC (reg/v:SI 46)
+            (reg/v:SI 44))) -1 (nil)
+    (nil))
+
+(jump_insn 173 172 225 (set (pc)
+        (if_then_else (lt (reg:CCGC 17 flags)
+                (const_int 0 [0x0]))
+            (label_ref 176)
+            (pc))) -1 (nil)
+    (nil))
+
+(note 225 173 229 NOTE_INSN_LOOP_END 0)
+
+(note 229 225 230 NOTE_INSN_LOOP_CONT 0)
+
+(code_label 230 229 359 162 "" "" [1 uses])
+
+(note 359 230 232 [bb 6] NOTE_INSN_BASIC_BLOCK 0)
+
+(insn 232 359 347 (parallel[ 
+            (set (reg/v:SI 45)
+                (plus:SI (reg/v:SI 45)
+                    (const_int -1 [0xffffffff])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(note 347 232 123 NOTE_INSN_LOOP_VTOP 0)
+
+(insn 123 347 124 (set (reg:CCGC 17 flags)
+        (compare:CCGC (reg/v:SI 45)
+            (reg/v:SI 47))) -1 (nil)
+    (nil))
+
+(jump_insn 124 123 238 (set (pc)
+        (if_then_else (gt (reg:CCGC 17 flags)
+                (const_int 0 [0x0]))
+            (label_ref 127)
+            (pc))) -1 (nil)
+    (nil))
+
+(note 238 124 242 NOTE_INSN_LOOP_END 0)
+
+(note 242 238 243 NOTE_INSN_LOOP_CONT 0)
+
+(code_label 243 242 360 155 "" "" [1 uses])
+
+(note 360 243 245 [bb 7] NOTE_INSN_BASIC_BLOCK 0)
+
+(insn 245 360 342 (parallel[ 
+            (set (reg/v:SI 47)
+                (plus:SI (reg/v:SI 47)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(note 342 245 20 NOTE_INSN_LOOP_VTOP 0)
+
+(insn 20 342 21 (parallel[ 
+            (set (reg/s:SI 51)
+                (plus:SI (reg/v:SI 44)
+                    (const_int -1 [0xffffffff])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 21 20 22 (set (reg:CCGC 17 flags)
+        (compare:CCGC (reg/v:SI 47)
+            (reg/s:SI 51))) -1 (nil)
+    (nil))
+
+(jump_insn 22 21 251 (set (pc)
+        (if_then_else (lt (reg:CCGC 17 flags)
+                (const_int 0 [0x0]))
+            (label_ref 25)
+            (pc))) -1 (nil)
+    (nil))
+
+(note 251 22 252 NOTE_INSN_LOOP_END 0)
+
+(code_label 252 251 361 154 "" "" [1 uses])
+
+(note 361 252 255 [bb 8] NOTE_INSN_BASIC_BLOCK 0)
+
+(insn 255 361 258 (parallel[ 
+            (set (reg/v:SI 47)
+                (plus:SI (reg/v:SI 44)
+                    (const_int -1 [0xffffffff])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 258 255 259 (parallel[ 
+            (set (reg:SI 121)
+                (plus:SI (reg/v:SI 47)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 259 258 261 (parallel[ 
+            (set (reg:SI 122)
+                (mult:SI (reg/v:SI 47)
+                    (reg:SI 121)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 261 259 263 (parallel[ 
+            (set (reg:SI 124)
+                (ashiftrt:SI (reg:SI 122)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 263 261 265 (parallel[ 
+            (set (reg:SI 125)
+                (lshiftrt:SI (reg:SI 124)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 265 263 267 (parallel[ 
+            (set (reg:SI 126)
+                (plus:SI (reg:SI 122)
+                    (reg:SI 125)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 267 265 269 (parallel[ 
+            (set (reg:SI 123)
+                (ashiftrt:SI (reg:SI 126)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (div:SI (reg:SI 122)
+            (const_int 2 [0x2]))
+        (nil)))
+
+(insn 269 267 271 (parallel[ 
+            (set (reg:SI 127)
+                (plus:SI (reg:SI 123)
+                    (reg/v:SI 47)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 271 269 273 (set (reg:DF 128)
+        (mem:DF (plus:SI (mult:SI (reg:SI 127)
+                    (const_int 8 [0x8]))
+                (reg/v:SI 42)) 0)) -1 (nil)
+    (nil))
+
+(insn 273 271 274 (set (reg:DF 129)
+        (mem/u/f:DF (symbol_ref/u:SI ("*.LC34")) 0)) -1 (nil)
+    (expr_list:REG_EQUAL (const_double:DF (mem/u/f:DF (symbol_ref/u:SI ("*.LC34")) 0) 0 [0x0] 0 [0x0] 0 [0x0])
+        (nil)))
+
+(jump_insn 274 273 362 (parallel[ 
+            (set (pc)
+                (if_then_else (le:CCFPU (reg:DF 128)
+                        (reg:DF 129))
+                    (pc)
+                    (label_ref 282)))
+            (clobber (reg:CCFP 18 fpsr))
+            (clobber (reg:CCFP 17 flags))
+            (clobber (scratch:HI))
+        ] ) 295 {*fp_jcc_6} (nil)
+    (nil))
+
+(note 362 274 279 [bb 9] NOTE_INSN_BASIC_BLOCK 0)
+
+(insn 279 362 280 (set (reg/i:SI 0 eax)
+        (reg/v:SI 47)) -1 (nil)
+    (nil))
+
+(jump_insn 280 279 281 (set (pc)
+        (label_ref 335)) -1 (nil)
+    (nil))
+
+(barrier 281 280 282)
+
+(code_label 282 281 363 171 "" "" [1 uses])
+
+(note 363 282 285 [bb 10] NOTE_INSN_BASIC_BLOCK 0)
+
+(insn 285 363 286 (parallel[ 
+            (set (reg:SI 131)
+                (plus:SI (reg/v:SI 47)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 286 285 288 (parallel[ 
+            (set (reg:SI 132)
+                (mult:SI (reg/v:SI 47)
+                    (reg:SI 131)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 288 286 290 (parallel[ 
+            (set (reg:SI 134)
+                (ashiftrt:SI (reg:SI 132)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 290 288 292 (parallel[ 
+            (set (reg:SI 135)
+                (lshiftrt:SI (reg:SI 134)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 292 290 294 (parallel[ 
+            (set (reg:SI 136)
+                (plus:SI (reg:SI 132)
+                    (reg:SI 135)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 294 292 296 (parallel[ 
+            (set (reg:SI 133)
+                (ashiftrt:SI (reg:SI 136)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (div:SI (reg:SI 132)
+            (const_int 2 [0x2]))
+        (nil)))
+
+(insn 296 294 298 (parallel[ 
+            (set (reg:SI 137)
+                (plus:SI (reg:SI 133)
+                    (reg/v:SI 47)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 298 296 299 (set (reg/v:DF 138)
+        (mem:DF (plus:SI (mult:SI (reg:SI 137)
+                    (const_int 8 [0x8]))
+                (reg/v:SI 42)) 0)) -1 (nil)
+    (nil))
+
+(note 299 298 301 0x40144420 NOTE_INSN_BLOCK_BEG 0)
+
+(note/i 301 299 302 0x40144440 NOTE_INSN_BLOCK_BEG 0)
+
+(insn/i 302 301 303 (parallel[ 
+            (set (reg/v:DF 140)
+                (asm_operands/v ("fsqrt") ("=t") 0[ 
+                        (reg/v:DF 138)
+                    ] 
+                    [ 
+                        (asm_input:DF ("0"))
+                    ]  ("/usr/include/bits/mathinline.h") 441))
+            (clobber (reg:QI 19 dirflag))
+            (clobber (reg:QI 18 fpsr))
+            (clobber (reg:QI 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn/i 303 302 306 (set (reg:DF 139)
+        (reg/v:DF 140)) -1 (nil)
+    (nil))
+
+(note/i 306 303 309 0x40144440 NOTE_INSN_BLOCK_END 0)
+
+(note 309 306 311 0x40144420 NOTE_INSN_BLOCK_END 0)
+
+(insn 311 309 312 (parallel[ 
+            (set (reg:SI 141)
+                (plus:SI (reg/v:SI 47)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 312 311 314 (parallel[ 
+            (set (reg:SI 142)
+                (mult:SI (reg/v:SI 47)
+                    (reg:SI 141)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 314 312 316 (parallel[ 
+            (set (reg:SI 144)
+                (ashiftrt:SI (reg:SI 142)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 316 314 318 (parallel[ 
+            (set (reg:SI 145)
+                (lshiftrt:SI (reg:SI 144)
+                    (const_int 31 [0x1f])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 318 316 320 (parallel[ 
+            (set (reg:SI 146)
+                (plus:SI (reg:SI 142)
+                    (reg:SI 145)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 320 318 322 (parallel[ 
+            (set (reg:SI 143)
+                (ashiftrt:SI (reg:SI 146)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (expr_list:REG_EQUAL (div:SI (reg:SI 142)
+            (const_int 2 [0x2]))
+        (nil)))
+
+(insn 322 320 324 (parallel[ 
+            (set (reg:SI 147)
+                (plus:SI (reg:SI 143)
+                    (reg/v:SI 47)))
+            (clobber (reg:CC 17 flags))
+        ] ) -1 (nil)
+    (nil))
+
+(insn 324 322 327 (set (mem:DF (plus:SI (mult:SI (reg:SI 147)
+                    (const_int 8 [0x8]))
+                (reg/v:SI 43)) 0)
+        (reg:DF 139)) -1 (nil)
+    (nil))
+
+(insn 327 324 331 (set (reg/i:SI 0 eax)
+        (const_int -1 [0xffffffff])) -1 (nil)
+    (nil))
+
+(note 331 327 335 0x40144920 NOTE_INSN_BLOCK_END 0)
+
+(code_label 335 331 364 152 "" "" [2 uses])
+
+(note 364 335 336 [bb 11] NOTE_INSN_BASIC_BLOCK 0)
+
+(insn 336 364 0 (use (reg/i:SI 0 eax)) -1 (nil)
+    (nil))
