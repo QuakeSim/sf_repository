@@ -478,14 +478,16 @@ public class SimpleXService extends AntVisco implements Runnable {
 	/**
 	 * Actually runs PlotGMT. Always runs in non-blocking mode. return pdf Url.
 	 */
-	public String runPlotGMT(String userName, String projectName,
+	public GMTViewForm runPlotGMT(String userName, String projectName,
 			String origin_lat, String origin_lon, String timeStamp) {
 		String locfilename = prefabPlotGMTCall(projectName, userName,
 				origin_lat, origin_lon, timeStamp);
 		GMTViewForm myGMTViewForm = new GMTViewForm();
 		myGMTViewForm.reset();
 		processPropsFile(locfilename, myGMTViewForm);
-		return runRePlotGMT(projectName, userName, myGMTViewForm, timeStamp);
+		String pdfurl=runRePlotGMT(userName, projectName, myGMTViewForm, timeStamp);
+		myGMTViewForm.setGmtPlotPdfUrl(pdfurl);
+		return myGMTViewForm;
 	}
 
 	protected String[] setPreRePlotGMTPlotArgs(String projectName,

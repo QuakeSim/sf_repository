@@ -59,6 +59,7 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
      <element name="bplot_causative" type="xsd:boolean"/>
      <element name="bplot_obs" type="xsd:boolean"/>
      <element name="bplot_resid" type="xsd:boolean"/>
+     <element name="gmtPlotPdfUrl" nillable="true" type="soapenc:string"/>
      <element name="mapticks_prop" nillable="true" type="soapenc:string"/>
      <element name="plot_background" nillable="true" type="soapenc:string"/>
      <element name="plot_calc" nillable="true" type="soapenc:string"/>
@@ -164,7 +165,7 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
 
    <wsdl:message name="runPlotGMTResponse">
 
-      <wsdl:part name="runPlotGMTReturn" type="soapenc:string"/>
+      <wsdl:part name="runPlotGMTReturn" type="tns1:GMTViewForm"/>
 
    </wsdl:message>
 

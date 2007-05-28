@@ -15,6 +15,7 @@ public class GMTViewForm {
 	boolean bplot_calc;
 	String plot_resid;
 	boolean bplot_resid;
+	String gmtPlotPdfUrl;
 	
 	public GMTViewForm() {
 		
@@ -35,8 +36,17 @@ public class GMTViewForm {
 		bplot_calc = false;
 		plot_resid = "";
 		bplot_resid = false;
+		gmtPlotPdfUrl="";
 	}
 
+	public void setGmtPlotPdfUrl(String tmp_str) {
+		this.gmtPlotPdfUrl=tmp_str;
+	}
+	
+	public String getGmtPlotPdfUrl() {
+		return this.gmtPlotPdfUrl;
+	}
+	
 	public boolean getBplot_resid() {
 		if (this.plot_resid.equals("")) {
 			this.bplot_resid=false;
