@@ -1,3 +1,7 @@
+/*
+ *  a Coordinate class to contain x,y
+ */
+
 package cgl.webservices.simplex;
 
 public class Coordinate implements Comparable {

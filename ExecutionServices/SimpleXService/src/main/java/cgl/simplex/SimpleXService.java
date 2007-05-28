@@ -60,7 +60,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 		Fault[] faults = new Fault[1];
 		faults[0] = new Fault();
 
-		// Create layer.
+		// Create observations.
 		Observation[] observations = new Observation[1];
 		observations[0] = new Observation();
 
@@ -90,7 +90,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 		super();
 
 		if (useClassLoader) {
-			System.out.println("Using classloader");
+			//System.out.println("Using classloader");
 			// This is useful for command line clients but does not work
 			// inside Tomcat.
 			ClassLoader loader = ClassLoader.getSystemClassLoader();
@@ -102,7 +102,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 					.getResourceAsStream("simplexconfig.properties"));
 		} else {
 			// Extract the Servlet Context
-			System.out.println("Using Servlet Context");
+			//System.out.println("Using Servlet Context");
 			MessageContext msgC = MessageContext.getCurrentContext();
 			ServletContext context = ((HttpServlet) msgC
 					.getProperty(HTTPConstants.MC_HTTP_SERVLET))
@@ -110,7 +110,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 
 			String propertyFile = context.getRealPath("/")
 					+ "/WEB-INF/classes/simplexconfig.properties";
-			System.out.println("Prop file location " + propertyFile);
+			//System.out.println("Prop file location " + propertyFile);
 
 			properties = new Properties();
 			properties.load(new FileInputStream(propertyFile));
@@ -124,9 +124,6 @@ public class SimpleXService extends AntVisco implements Runnable {
 		projectName = properties.getProperty("project.name");
 		binDir = properties.getProperty("bin.path");
 		buildFilePath = properties.getProperty("build.file.path");
-		System.out.println("2342423432****************************");
-		System.out.println(binDir);
-		System.out.println(buildFilePath);
 		antTarget = properties.getProperty("ant.target");
 		baseOutputDestDir = properties.getProperty("output.dest.dir");
 	}
@@ -384,12 +381,12 @@ public class SimpleXService extends AntVisco implements Runnable {
 		sxoutput.setLogUrl(baseUrl + "/" + projectName + ".stdout");
 		sxoutput.setFaultUrl(baseUrl + "/" + projectName + ".fault");
 
-		System.out.println(sxoutput.getProjectName());
-		System.out.println(sxoutput.getJobUIDStamp());
-		System.out.println(sxoutput.getInputUrl());
-		System.out.println(sxoutput.getOutputUrl());
-		System.out.println(sxoutput.getLogUrl());
-		System.out.println(sxoutput.getFaultUrl());
+//		System.out.println(sxoutput.getProjectName());
+//		System.out.println(sxoutput.getJobUIDStamp());
+//		System.out.println(sxoutput.getInputUrl());
+//		System.out.println(sxoutput.getOutputUrl());
+//		System.out.println(sxoutput.getLogUrl());
+//		System.out.println(sxoutput.getFaultUrl());
 
 		return sxoutput;
 	}
@@ -447,7 +444,6 @@ public class SimpleXService extends AntVisco implements Runnable {
 				st = new StringTokenizer(line, "=");
 				String name = st.nextToken();
 				String val = st.nextToken();
-				System.out.println("Props processed:" + name + " " + val);
 				val = removeSpaces(val);
 				if (name.equals("area_prop")) {
 					currentGMTViewForm.area_prop = val;

@@ -1,9 +1,13 @@
 package cgl.webservices.simplex;
 
+/**
+ * This is a bean for modeling observations.
+ */
+
 public class Observation {
 
 	String obsvName;
-	
+
 	String obsvType;
 
 	String obsvValue;
@@ -15,16 +19,14 @@ public class Observation {
 	String obsvLocationNorth;
 
 	String obsvRefSite;
-	
-	public Observation() {
-		
-	}
-	
 
-	public void reset()
-	{
+	public Observation() {
+
+	}
+
+	public void reset() {
 		obsvName = "";
-		
+
 		obsvType = "";
 
 		obsvValue = "";
@@ -37,15 +39,15 @@ public class Observation {
 
 		obsvRefSite = "";
 	}
-	
+
 	public void setObsvName(String tmp_str) {
 		this.obsvName = tmp_str;
 	}
 
 	public String getObsvName() {
 		return obsvName;
-	}	
-	
+	}
+
 	public void setObsvType(String tmp_str) {
 		this.obsvType = tmp_str;
 	}
@@ -53,7 +55,7 @@ public class Observation {
 	public String getObsvType() {
 		return obsvType;
 	}
-	
+
 	public void setObsvValue(String tmp_str) {
 		this.obsvValue = tmp_str;
 	}
@@ -69,7 +71,7 @@ public class Observation {
 	public String getObsvError() {
 		return obsvError;
 	}
-	
+
 	public void setObsvLocationEast(String tmp_str) {
 		this.obsvLocationEast = tmp_str;
 	}
@@ -77,7 +79,6 @@ public class Observation {
 	public String getObsvLocationEast() {
 		return obsvLocationEast;
 	}
-
 
 	public void setObsvLocationNorth(String tmp_str) {
 		this.obsvLocationNorth = tmp_str;

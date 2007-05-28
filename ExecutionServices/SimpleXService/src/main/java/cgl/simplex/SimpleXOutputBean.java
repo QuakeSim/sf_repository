@@ -1,8 +1,10 @@
 package cgl.webservices.simplex;
-
+/**
+ * This bean holds the metadata of a simplex run, including urls to output.
+ */
 public class SimpleXOutputBean {
 
-	//Member property fields
+	// Member property fields
 	String projectName;
 
 	String jobUIDStamp;

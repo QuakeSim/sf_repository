@@ -25,29 +25,10 @@ import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 public class GmapDataXml {
 
 	// private Document doc;
-	private String workDir;
-
-	private String xmlFileName;
 
 	private double original_lat = 37.0;
 
 	private double original_lon = -122.157675;
-
-	private long width;
-
-	private long height;
-
-	private String mouseonimage;
-
-	private String mouseoutimage;
-
-	private String textimage;
-
-	private String windowhtml;
-
-	private String tiphtml;
-
-	private String label;
 
 	private Hashtable MyObsPoints = new Hashtable();
 
@@ -70,7 +51,7 @@ public class GmapDataXml {
 		dw.CalculateMarker();
 		Document doc = dw.makeDoc();
 		dw.printToConsole(doc);
-		dw.printToFile(doc,"googleMapPoints.xml");
+		dw.printToFile(doc, "googleMapPoints.xml");
 
 	}
 
@@ -416,19 +397,19 @@ public class GmapDataXml {
 	}
 
 	/**
-	 * This method uses Xerces specific classes
-	 * prints the XML document to file.
+	 * This method uses Xerces specific classes prints the XML document to file.
 	 */
 	public void printToFile(Document dom, String xmlfilename) {
 		try {
-			//print
+			// print
 			OutputFormat format = new OutputFormat(dom);
 			format.setIndenting(true);
 
-			//to generate output to console use this serializer
-			//XMLSerializer serializer = new XMLSerializer(System.out, format);
+			// to generate output to console use this serializer
+			// XMLSerializer serializer = new XMLSerializer(System.out, format);
 
-			//to generate a file output use fileoutputstream instead of system.out
+			// to generate a file output use fileoutputstream instead of
+			// system.out
 			XMLSerializer serializer = new XMLSerializer(new FileOutputStream(
 					new File(xmlfilename)), format);
 

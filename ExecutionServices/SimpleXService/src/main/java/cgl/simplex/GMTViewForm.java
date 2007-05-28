@@ -1,4 +1,7 @@
 package cgl.webservices.simplex;
+/**
+ * This is a bean for GMT Form data.
+ */
 
 public class GMTViewForm {
 	String area_prop;

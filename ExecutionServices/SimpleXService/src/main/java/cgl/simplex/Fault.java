@@ -1,4 +1,7 @@
 package cgl.webservices.simplex;
+/**
+ * This is a bean for modeling Faults.
+ */
 
 public class Fault {
 	

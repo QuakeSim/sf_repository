@@ -1,4 +1,7 @@
 package cgl.webservices.simplex;
+/**
+ * This is a bean for modeling google map Marker element.
+ */
 
 public class googleMapMarker {
 	

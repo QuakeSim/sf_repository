@@ -1,4 +1,8 @@
 package cgl.webservices.simplex;
+/**
+ * This is a bean for modeling Observation Point in google map.
+ */
+
 
 public class ObservationPoint {
 	public double xloc;
