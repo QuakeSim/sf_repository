@@ -85,11 +85,11 @@ public class editProjectForm {
 	public void toggleProjectSelection(ActionEvent ev) {
 		initEditFormsSelection();
 		if (projectSelectionCode.equals("ShowObservation")) {
-			currentObservation.reset();
+			currentObservation=new Observation();
 			renderCreateObservationForm = !renderCreateObservationForm;
 		}
 		if (projectSelectionCode.equals("CreateNewFault")) {
-			currentFault.reset();
+			currentFault= new Fault();
 			renderCreateNewFaultForm = !renderCreateNewFaultForm;
 		}
 		if (projectSelectionCode.equals("ShowDislocList")) {
@@ -112,7 +112,7 @@ public class editProjectForm {
 			FaultDBEntry tmp_FaultDBEntry = (FaultDBEntry) getMyFaultDataTable()
 					.getRowData();
 			SelectItem tmp_SelectItem = tmp_FaultDBEntry.getFaultName();
-			currentFault.faultName = tmp_SelectItem.getValue().toString();
+			currentFault.setFaultName(tmp_SelectItem.getValue().toString()) ;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -126,14 +126,14 @@ public class editProjectForm {
 			FaultDBEntry tmp_FaultDBEntry = (FaultDBEntry) getMyFaultDataTable()
 					.getRowData();
 			SelectItem tmp_SelectItem = tmp_FaultDBEntry.getFaultName();
-			currentFault.faultName = tmp_SelectItem.getValue().toString();
+			currentFault.setFaultName(tmp_SelectItem.getValue().toString()) ;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		initEditFormsSelection();
-		currentFault.faultName = currentFault.faultName.trim();
-		if (!currentFault.faultName.equals("")) {
-			currentFault = QueryFaultFromDB(currentFault.faultName.trim());
+		currentFault.setFaultName( currentFault.getFaultName().trim() );
+		if (!currentFault.getFaultName().equals("")) {
+			currentFault = QueryFaultFromDB(currentFault.getFaultName().trim());
 		}
 		renderCreateNewFaultForm = !renderCreateNewFaultForm;
 
@@ -164,9 +164,9 @@ public class editProjectForm {
 
 	public void toggleSelectFaultDBEntry(ActionEvent ev) {
 		initEditFormsSelection();
-		currentFault.faultName = currentFault.faultName.trim();
-		if (!currentFault.faultName.equals("")) {
-			currentFault = QueryFaultFromDB(currentFault.faultName.trim());
+		currentFault.setFaultName( currentFault.getFaultName().trim() );
+		if (!currentFault.getFaultName().equals("")) {
+			currentFault = QueryFaultFromDB(currentFault.getFaultName().trim());
 		}
 		renderCreateNewFaultForm = !renderCreateNewFaultForm;
 	}
@@ -313,16 +313,16 @@ public class editProjectForm {
 			double x = (lonEnd - lonStart) * factor;
 			double y = (latEnd - latStart) * 111.32;
 			String length = format.format(Math.sqrt(x * x + y * y));
-			tmp_fault.faultName = theFault;
-			tmp_fault.faultLocationX = "0.0";
-			tmp_fault.faultLocationY = "0.0";
-			tmp_fault.faultLength = length;
-			tmp_fault.faultWidth = width;
-			tmp_fault.faultDepth = depth;
-			tmp_fault.faultDipAngle = dip;
-			tmp_fault.faultStrikeAngle = strike;
-			tmp_fault.faultSlip = "";
-			tmp_fault.faultRakeAngle = "";
+			tmp_fault.setFaultName( theFault );
+			tmp_fault.setFaultLocationX("0.0" );
+			tmp_fault.setFaultLocationY ("0.0");
+			tmp_fault.setFaultLength(length);
+			tmp_fault.setFaultWidth( width);
+			tmp_fault.setFaultDepth (depth);
+			tmp_fault.setFaultDipAngle( dip);
+			tmp_fault.setFaultStrikeAngle( strike);
+			tmp_fault.setFaultSlip ("" ); 
+			tmp_fault.setFaultRakeAngle("");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
