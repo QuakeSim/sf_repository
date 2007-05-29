@@ -129,6 +129,10 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
 
       <wsdl:part name="projectName" type="soapenc:string"/>
 
+      <wsdl:part name="origin_lat" type="soapenc:string"/>
+
+      <wsdl:part name="origin_lon" type="soapenc:string"/>
+
       <wsdl:part name="jobUIDStamp" type="soapenc:string"/>
 
    </wsdl:message>
@@ -171,7 +175,7 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
 
    <wsdl:portType name="SimpleXService">
 
-      <wsdl:operation name="runMakeMapXml" parameterOrder="userName projectName jobUIDStamp">
+      <wsdl:operation name="runMakeMapXml" parameterOrder="userName projectName origin_lat origin_lon jobUIDStamp">
 
          <wsdl:input message="impl:runMakeMapXmlRequest" name="runMakeMapXmlRequest"/>
 

@@ -54,6 +54,14 @@ public class GmapDataXml {
 		dw.printToFile(doc, "googleMapPoints.xml");
 
 	}
+	
+	public void setOriginal_lat (String tmp_str) {
+		this.original_lat = Double.valueOf(tmp_str.trim() ).doubleValue();
+	}
+	
+	public void setOriginal_lon (String tmp_str) {
+		this.original_lon = Double.valueOf(tmp_str.trim() ).doubleValue();
+	}
 
 	//
 	public void LoadDataFromFile(String InputFileName) {
@@ -207,8 +215,10 @@ public class GmapDataXml {
 	private googleMapMarker makeMarker(double x, double y, int A, int B,
 			int degs, String thtml, String whtml) {
 		googleMapMarker tmp_marker = new googleMapMarker();
-		tmp_marker.setLat(x / 100 + this.original_lat);
-		tmp_marker.setLon(y / 100 + this.original_lon);
+		//tmp_marker.setLat(x / 100 + this.original_lat);
+		//tmp_marker.setLon(y / 100 + this.original_lon);
+		tmp_marker.setLat(x);
+		tmp_marker.setLon(y);
 		tmp_marker.setWidth(A);
 		tmp_marker.setHeight(B);
 		tmp_marker.setMouseoutimage("icon/base_green" + degs + ".png");
@@ -228,6 +238,8 @@ public class GmapDataXml {
 			Document doc = parser.newDocument();
 
 			Element root = doc.createElement("markers");
+			root.setAttribute("original_lat", this.original_lat	+ "");
+			root.setAttribute("original_lon", this.original_lon	+ "");
 			// root.setAttribute("gender", "f");
 			doc.appendChild(root);
 

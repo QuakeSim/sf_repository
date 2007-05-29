@@ -90,7 +90,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 		super();
 
 		if (useClassLoader) {
-			//System.out.println("Using classloader");
+			// System.out.println("Using classloader");
 			// This is useful for command line clients but does not work
 			// inside Tomcat.
 			ClassLoader loader = ClassLoader.getSystemClassLoader();
@@ -102,7 +102,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 					.getResourceAsStream("simplexconfig.properties"));
 		} else {
 			// Extract the Servlet Context
-			//System.out.println("Using Servlet Context");
+			// System.out.println("Using Servlet Context");
 			MessageContext msgC = MessageContext.getCurrentContext();
 			ServletContext context = ((HttpServlet) msgC
 					.getProperty(HTTPConstants.MC_HTTP_SERVLET))
@@ -110,7 +110,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 
 			String propertyFile = context.getRealPath("/")
 					+ "/WEB-INF/classes/simplexconfig.properties";
-			//System.out.println("Prop file location " + propertyFile);
+			// System.out.println("Prop file location " + propertyFile);
 
 			properties = new Properties();
 			properties.load(new FileInputStream(propertyFile));
@@ -132,28 +132,31 @@ public class SimpleXService extends AntVisco implements Runnable {
 		this(false);
 	}
 
-	public String runMakeMapXml(String userName, String projectName, String jobUIDStamp) throws Exception {
+	public String runMakeMapXml(String userName, String projectName,
+			String origin_lat, String origin_lon, String jobUIDStamp)
+			throws Exception {
 
 		String baseUrl = generateBaseUrl(userName, projectName, jobUIDStamp);
 		String destDir = generateOutputDestDir(userName, projectName,
 				jobUIDStamp);
 		String workDir = generateWorkDir(userName, projectName, jobUIDStamp);
 		makeWorkDir(destDir);
-		
+
 		String outputfilename = workDir + "/" + projectName + ".output";
 		String xmlfilename = destDir + "/" + projectName + jobUIDStamp + ".xml";
 		GmapDataXml dw = new GmapDataXml();
+		dw.setOriginal_lat(origin_lat);
+		dw.setOriginal_lon(origin_lon);
 		dw.LoadDataFromFile(outputfilename);
 		dw.CalculateMarker();
 		Document doc = dw.makeDoc();
 		dw.printToConsole(doc);
-		dw.printToFile(doc,xmlfilename);
+		dw.printToFile(doc, xmlfilename);
 
-		String mapxmlUrl = baseUrl + "/" + projectName + jobUIDStamp
-		+ ".xml";
+		String mapxmlUrl = baseUrl + "/" + projectName + jobUIDStamp + ".xml";
 		return mapxmlUrl;
 	}
-	
+
 	/*
 	 * bool to string :false to 0, true to 1.
 	 */
@@ -381,12 +384,12 @@ public class SimpleXService extends AntVisco implements Runnable {
 		sxoutput.setLogUrl(baseUrl + "/" + projectName + ".stdout");
 		sxoutput.setFaultUrl(baseUrl + "/" + projectName + ".fault");
 
-//		System.out.println(sxoutput.getProjectName());
-//		System.out.println(sxoutput.getJobUIDStamp());
-//		System.out.println(sxoutput.getInputUrl());
-//		System.out.println(sxoutput.getOutputUrl());
-//		System.out.println(sxoutput.getLogUrl());
-//		System.out.println(sxoutput.getFaultUrl());
+		// System.out.println(sxoutput.getProjectName());
+		// System.out.println(sxoutput.getJobUIDStamp());
+		// System.out.println(sxoutput.getInputUrl());
+		// System.out.println(sxoutput.getOutputUrl());
+		// System.out.println(sxoutput.getLogUrl());
+		// System.out.println(sxoutput.getFaultUrl());
 
 		return sxoutput;
 	}
@@ -481,7 +484,8 @@ public class SimpleXService extends AntVisco implements Runnable {
 		GMTViewForm myGMTViewForm = new GMTViewForm();
 		myGMTViewForm.reset();
 		processPropsFile(locfilename, myGMTViewForm);
-		String pdfurl=runRePlotGMT(userName, projectName, myGMTViewForm, timeStamp);
+		String pdfurl = runRePlotGMT(userName, projectName, myGMTViewForm,
+				timeStamp);
 		myGMTViewForm.setGmtPlotPdfUrl(pdfurl);
 		return myGMTViewForm;
 	}
