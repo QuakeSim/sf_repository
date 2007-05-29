@@ -68,11 +68,10 @@
 
 <%
 	ValueBinding binding = app.createValueBinding("#{stfilterBean.resultsBean.resiUrl != null}");
-	boolean isTrue = ((Boolean) binding.getValue(context)).booleanValue();
-	System.out.println("[!!] isTrue = "+isTrue);
+	boolean isResiUrlNotNull = ((Boolean) binding.getValue(context)).booleanValue();
+	System.out.println("[!!] isResiUrlNotNull = "+isResiUrlNotNull);
 %>
-	<c:if test="<%= isTrue %>">
-<% System.out.println("[!!] True ... "); %>
+	<c:if test="<%= isResiUrlNotNull %>">
 
 	<bfg:axesgraph width="800" height="400" 
 		backgroundcolor="#ededed"
@@ -82,16 +81,16 @@
 	
 <%
 	ValueBinding vbName = app.createValueBinding("#{stfilterBean.graphName}");
-	String[] strName = (String[]) vbName.getValue(context);
-	System.out.println("[!!] strName[0] = "+strName[0]);
+	String[] graphName = (String[]) vbName.getValue(context);
+	// System.out.println("[!!] graphName[0] = "+graphName[0]);
 
 	ValueBinding vbHistory = app.createValueBinding("#{stfilterBean.paramHistory}");
 	Vector vecHistory = (Vector) vbHistory.getValue(context);
-	System.out.println("[!!] vecHistory.size() = "+vecHistory.size());
+	// System.out.println("[!!] vecHistory.size() = "+vecHistory.size());
 
 	ValueBinding vbIndex = app.createValueBinding("#{stfilterBean.myStationParamListIndex}");
 	int intParamIndex = ((Integer) vbIndex.getValue(context)).intValue();
-	//System.out.println("[!!] intParamIndex = "+ intParamIndex);
+	// System.out.println("[!!] intParamIndex = "+ intParamIndex);
 	int intGraphIndex = 2;
 	switch(intParamIndex) {
 		case 7:
@@ -118,35 +117,57 @@
 	ValueBinding vbSize = app.createValueBinding("#{stfilterBean.paramHistorySize}");
 	int intSize = ((Integer) vbSize.getValue(context)).intValue();
 
+	ValueBinding vbSiteCodeArr = app.createValueBinding("#{stfilterBean.siteCodeArr}");
+	String[] siteCodeArr = ((String[]) vbSiteCodeArr.getValue(context));
+
 	
 	ValueBinding vbFormType = app.createValueBinding("#{stfilterBean.curEpisodicParamRendered}");
 	boolean isEpisodicParam = ((Boolean) vbFormType.getValue(context)).booleanValue();
+	vbFormType = app.createValueBinding("#{stfilterBean.curAnnualAmpParamRendered}");
+	boolean isAnnualAmpParam = ((Boolean) vbFormType.getValue(context)).booleanValue();
+	vbFormType = app.createValueBinding("#{stfilterBean.curAnnualPhaseParamRendered}");
+	boolean isAnnualPhaseParam = ((Boolean) vbFormType.getValue(context)).booleanValue();
+	vbFormType = app.createValueBinding("#{stfilterBean.curSemiannualAmpParamRendered}");
+	boolean isSemiannualAmpParam = ((Boolean) vbFormType.getValue(context)).booleanValue();
 
 	//System.out.println("[!!] intVal = "+intSize);
 	// Begin of outer loop
 	for (int idx = 0; idx < intSize; idx++) {
 %>
-<% System.out.println("[!!] Outer loop ... "); %>
+<% System.out.println("[!!] Outer loop (History loop)... "); %>
 <% 		
 		String funcName = null;
 		if (isEpisodicParam) { 
 			funcName = "EpisodicUpdate(seriesx)";
+		} else if (isAnnualAmpParam) {
+			funcName = "AnnualAmpUpdate(seriesx)";
+		} else if (isAnnualPhaseParam) {
+			funcName = "AnnualPhaseUpdate(seriesx)";
+		} else if (isSemiannualAmpParam) {
+			funcName = "SemiannualAmpUpdate(seriesx)";
 		} else {
-			funcName = "Update(seriesx)";
+			funcName = "EpisodicUpdate(seriesx)";
 		}
+		
+		
+		System.out.println("[!!] Middle loop (SiteCode loop)... "); 
+		for (int siteIdx = 0; siteIdx < siteCodeArr.length; siteIdx++) {
 %>
-		<bfg:lineseries name="<%= strName[idx] %>"
+		<bfg:lineseries name="<%= siteCodeArr[siteIdx] + " (" + graphName[idx] + ")" %>"
 			linethickness="2" 
 			onmousemove="bfgShowPopup('('+bfgToDate(seriesx, 'yyyy-MM-dd') +','+bfgRound(seriesy,2)+')', event)" 
 			onmouseout="bfgHidePopup()" 
 			onclick="<%= funcName %>">
 <%
 		// Begin of inner loop
-		System.out.println("[!!] Inner loop ... ");
-		ArrayList list = (ArrayList) vecHistory.get(idx);
+		System.out.println("[!!] Inner loop (Each value loop)... ");
+		//ArrayList list = (ArrayList) vecHistory.get(idx);
+		ArrayList[] listArr = (ArrayList[]) vecHistory.get(idx);
 		ArrayList row = null;
-		for (int i = 0; i < list.size(); i++) {
-			row = (ArrayList) list.get(i);
+		//for (int i = 0; i < list.size(); i++) {
+		for (int i = 0; i < listArr[siteIdx].size(); i++) {
+			//row = (ArrayList) list.get(i);
+			row = (ArrayList) listArr[siteIdx].get(i);
 			//System.out.println("[!!] row.getClass().toString() ="+row.getClass().toString());
 			//System.out.println("[!!] row.get(1).getClass().toString() ="+row.get(1).getClass().toString());
 			//System.out.println("[!!] row.get(intGraphIndex).getClass().toString() ="+row.get(intGraphIndex).getClass().toString());
@@ -157,18 +178,25 @@
 				<bfg:data x="<%= ((Date) row.get(1)).toString() %>" 
 						y="<%= (String) row.get(intGraphIndex) %>"/>
 <%
-		// End of inner loop
-		}
+		} // End of inner loop
 %>
 		</bfg:lineseries>
 <%
-	// End of outer loop
-	}
+		} // End of middle loop
+	} // End of outer loop
 %>
+		
 		<bfg:key align="bottom" color="#ffffff">
-		<c:forEach var="idx" begin="0" end="<%= intSize %>">
-			<bfg:keyitem series="${stfilterBean.graphName[idx]}"/>
-		</c:forEach>
+
+<%
+		for (int idx = 0; idx < intSize; idx++) {
+			for (int siteIdx = 0; siteIdx < siteCodeArr.length; siteIdx++) {
+%>
+			<bfg:keyitem series="<%= siteCodeArr[siteIdx] + " (" + graphName[idx] + ")" %>"/>
+<%
+			}
+		}
+%>
 		</bfg:key>
 
     </bfg:axesgraph>
@@ -200,7 +228,7 @@
 					valueChangeListener="#{stfilterBean.curEpisodicEndDateChanged}"
 					value="#{stfilterBean.curEpisodicParam.endDate}"/>
 		</h:panelGrid>
-		<h:panelGrid columns="2" rendered="#{! stfilterBean.curEpisodicParamRendered}">
+		<h:panelGrid columns="2" rendered="#{stfilterBean.curAnnualAmpParamRendered}">
 				<h:outputText value="Apriori Value"/>
 				<h:inputText id="AnnualAmpAprioriValue" 
 					valueChangeListener="#{stfilterBean.curAnnualAmpAprioriValueChanged}"
@@ -210,13 +238,49 @@
 					valueChangeListener="#{stfilterBean.curAnnualAmpAprioriConstraintChanged}"
 					value="#{stfilterBean.curAnnualAmpParam.aprioriConstraint}"/>
 				<h:outputText value="Start Date"/>
-				<h:inputText id="startDate" 
+				<h:inputText id="annualAmpStartDate" 
 					valueChangeListener="#{stfilterBean.curAnnualAmpStartDateChanged}"
 					value="#{stfilterBean.curAnnualAmpParam.startDate}"/>
 				<h:outputText value="Period Length"/>
-				<h:inputText id="periodLength" 
+				<h:inputText id="annualAmpPeriodLength" 
 					valueChangeListener="#{stfilterBean.curAnnualAmpPeriodLengthChanged}"
 					value="#{stfilterBean.curAnnualAmpParam.periodLength}"/>
+		</h:panelGrid>
+		<h:panelGrid columns="2" rendered="#{stfilterBean.curAnnualPhaseParamRendered}">
+				<h:outputText value="Apriori Value"/>
+				<h:inputText id="AnnualPhaseAprioriValue" 
+					valueChangeListener="#{stfilterBean.curAnnualPhaseAprioriValueChanged}"
+					value="#{stfilterBean.curAnnualPhaseParam.aprioriValue}"/>
+				<h:outputText value="Apriori Constraint"/>
+				<h:inputText id="AnnualPhaseAprioriConstraint" 
+					valueChangeListener="#{stfilterBean.curAnnualPhaseAprioriConstraintChanged}"
+					value="#{stfilterBean.curAnnualPhaseParam.aprioriConstraint}"/>
+				<h:outputText value="Start Date"/>
+				<h:inputText id="annualPhaseStartDate" 
+					valueChangeListener="#{stfilterBean.curAnnualPhaseStartDateChanged}"
+					value="#{stfilterBean.curAnnualPhaseParam.startDate}"/>
+				<h:outputText value="Period Length"/>
+				<h:inputText id="annualPhasePeriodLength" 
+					valueChangeListener="#{stfilterBean.curAnnualPhasePeriodLengthChanged}"
+					value="#{stfilterBean.curAnnualPhaseParam.periodLength}"/>
+		</h:panelGrid>
+		<h:panelGrid columns="2" rendered="#{stfilterBean.curSemiannualAmpParamRendered}">
+				<h:outputText value="Apriori Value"/>
+				<h:inputText id="SemiannualAmpAprioriValue" 
+					valueChangeListener="#{stfilterBean.curSemiannualAmpAprioriValueChanged}"
+					value="#{stfilterBean.curSemiannualAmpParam.aprioriValue}"/>
+				<h:outputText value="Apriori Constraint"/>
+				<h:inputText id="SemiannualAmpAprioriConstraint" 
+					valueChangeListener="#{stfilterBean.curSemiannualAmpAprioriConstraintChanged}"
+					value="#{stfilterBean.curSemiannualAmpParam.aprioriConstraint}"/>
+				<h:outputText value="Start Date"/>
+				<h:inputText id="semiannualAmpStartDate" 
+					valueChangeListener="#{stfilterBean.curSemiannualAmpStartDateChanged}"
+					value="#{stfilterBean.curSemiannualAmpParam.startDate}"/>
+				<h:outputText value="Period Length"/>
+				<h:inputText id="semiannualAmpPeriodLength" 
+					valueChangeListener="#{stfilterBean.curSemiannualAmpPeriodLengthChanged}"
+					value="#{stfilterBean.curSemiannualAmpParam.periodLength}"/>
 		</h:panelGrid>
 	    <h:commandButton value="Run STFILTER" action="#{stfilterBean.callAnalyzeTseriService}"/>
         <h:commandButton id="save" value="Save to Archive"
@@ -245,7 +309,7 @@
 	
 	--%>
 	<h:form id="myStationCurrentAppliedFilter" rendered="#{!empty stfilterBean.allParams}">
-	<h:outputText  escape="false" value="<b>Output Values</b>"/>
+		<h:outputText  escape="false" value="<b>Applied Filters</b>"/>
 		<h:dataTable var="p"
 		    border="0"
 		    value="#{stfilterBean.allParams}"
@@ -260,42 +324,42 @@
 	</h:form>
 
 
-      <h:panelGrid id="OutputGridPanel" rendered="#{(stfilterBean.resultsBean!=null)}">
-       <h:outputText  escape="false" value="<b>Applied Filters</b>"/>
+	<h:panelGrid id="OutputGridPanel" rendered="#{(stfilterBean.resultsBean!=null)}">
+		<h:outputText  escape="false" value="<b>Input/Output Files</b>"/>
 
-       <h:outputLink target="_blank" value="#{stfilterBean.resultsBean.drvUrl}">
-       <h:outputText value="Driver File"/>
-       </h:outputLink>
+		<h:outputLink target="_blank" value="#{stfilterBean.resultsBean.drvUrl}">
+		<h:outputText value="Driver File"/>
+		</h:outputLink>
 
-       <h:outputLink target="_blank" value="#{stfilterBean.resultsBean.listUrl}">
-       <h:outputText value="List File"/>
-       </h:outputLink>
+		<h:outputLink target="_blank" value="#{stfilterBean.resultsBean.listUrl}">
+		<h:outputText value="List File"/>
+		</h:outputLink>
 
-       <h:outputLink target="_blank" value="#{stfilterBean.resultsBean.inputUrl}">
-       <h:outputText value="Input List File"/>
-       </h:outputLink>
+		<h:outputLink target="_blank" value="#{stfilterBean.resultsBean.inputUrl}">
+		<h:outputText value="Input List File"/>
+		</h:outputLink>
 
-       <h:outputLink target="_blank" value="#{stfilterBean.resultsBean.siteUrl}">
-       <h:outputText value="Site List File"/>
-       </h:outputLink>
+		<h:outputLink target="_blank" value="#{stfilterBean.resultsBean.siteUrl}">
+		<h:outputText value="Site List File"/>
+		</h:outputLink>
 
-       <h:outputLink target="_blank" value="#{stfilterBean.resultsBean.paraUrl}">
-       <h:outputText value="Parameter File"/>
-       </h:outputLink>
+		<h:outputLink target="_blank" value="#{stfilterBean.resultsBean.paraUrl}">
+		<h:outputText value="Parameter File"/>
+		</h:outputLink>
 
-       <h:outputLink target="_blank" value="#{stfilterBean.resultsBean.outUrl}">
-       <h:outputText value="Output File"/>
-       </h:outputLink>
+		<h:outputLink target="_blank" value="#{stfilterBean.resultsBean.outUrl}">
+		<h:outputText value="Output File"/>
+		</h:outputLink>
 
-       <h:outputLink target="_blank" value="#{stfilterBean.resultsBean.resiUrl}">
-       <h:outputText value="Residual File"/>
-       </h:outputLink>
+		<h:outputLink target="_blank" value="#{stfilterBean.resultsBean.resiUrl}">
+		<h:outputText value="Residual File"/>
+		</h:outputLink>
 
-       <h:outputLink target="_blank" value="#{stfilterBean.resultsBean.mdlUrl}">
-       <h:outputText value="Model File"/>
-       </h:outputLink>
+		<h:outputLink target="_blank" value="#{stfilterBean.resultsBean.mdlUrl}">
+		<h:outputText value="Model File"/>
+		</h:outputLink>
 
-      </h:panelGrid>
+	</h:panelGrid>
    
     </td>
     </tr>
