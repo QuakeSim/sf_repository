@@ -152,15 +152,14 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		myStation = new MyStationContainer("LBC1");
 		myStation.setEstParamVector(myStationList.getStationParamList());
 		myStation.setMasterParamList(masterList.getStationParamList());
-		debug("AnalyzeTseriService", "myStationList size = " + myStationList.getStationParamList().size());
-		debug("AnalyzeTseriService", "masterList size = " + masterList.getStationParamList().size());
+		//debug("AnalyzeTseriService", "myStationList size = " + myStationList.getStationParamList().size());
+		//debug("AnalyzeTseriService", "masterList size = " + masterList.getStationParamList().size());
 
 		// Set up the default station list.
 		allsites = new AllStationsContainer();
 		allsites.setEstParamVector(allsitesList.getStationParamList());
 		allsites.setMasterParamList(masterList.getStationParamList());
-		System.out.println("[!!] allsitesList size = "
-				+ allsitesList.getStationParamList().size());
+		//debug("AnalyzeTseriService", "allsitesList size = " + allsitesList.getStationParamList().size());
 
 		if (useClassLoader) {
 			System.out.println("Using classloader");
@@ -622,9 +621,6 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 
 	public String[] runBlockingAnalyzeTseri(String siteCode,
 			String inputFileUrlString) throws Exception {
-		System.out.println("Running blocking execution");
-		System.out.println(inputFileUrlString);
-
 		String[] returnVals = runBlockingAnalyzeTseri(siteCode,
 				inputFileUrlString, baseWorkDir, outputDestDir, projectName,
 				binPath, buildFilePath, antTarget);
@@ -701,9 +697,6 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 
 	public String[] execBlockingAnalyzeTseri(String siteCode, String inputFileUrlString)
 			throws Exception {
-		debug("execBlockingAnalyzeTseri", "Running blocking execution");
-		debug("execBlockingAnalyzeTseri", inputFileUrlString);
-
 		String[] returnVals = execBlockingAnalyzeTseri(siteCode, inputFileUrlString,
 				baseWorkDir, outputDestDir, projectName, binPath,
 				buildFilePath, antTarget);
@@ -716,9 +709,6 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 
 	public String[] execBlockingAnalyzeTseri(String[] siteCodeArr, String[] inputFileUrlStringArr)
 			throws Exception {
-		debug("execBlockingAnalyzeTseri", "Running blocking execution");
-		debug("execBlockingAnalyzeTseri", inputFileUrlStringArr.toString());
-
 		String[] returnVals = execBlockingAnalyzeTseri(siteCodeArr, inputFileUrlStringArr,
 				baseWorkDir, outputDestDir, projectName, binPath,
 				buildFilePath, antTarget);
@@ -782,15 +772,16 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 
 		// Set up the work directory
 		// String workDir=baseWorkDir+File.separator+projectName;
-		debug("execBlockingAnalyzeTseri", "baseWorkDir="+baseWorkDir);
-		debug("execBlockingAnalyzeTseri", "workDir="+workDir);
-		debug("execBlockingAnalyzeTseri", "outputDestDir="+outputDestDir);
-		debug("execBlockingAnalyzeTseri", "binPath="+binPath);
-		debug("execBlockingAnalyzeTseri", "buildFilePath="+buildFilePath);
-		debug("execBlockingAnalyzeTseri", "antTarget="+antTarget);
+		// debug("execBlockingAnalyzeTseri", "baseWorkDir="+baseWorkDir);
+		// debug("execBlockingAnalyzeTseri", "workDir="+workDir);
+		// debug("execBlockingAnalyzeTseri", "outputDestDir="+outputDestDir);
+		// debug("execBlockingAnalyzeTseri", "binPath="+binPath);
+		// debug("execBlockingAnalyzeTseri", "buildFilePath="+buildFilePath);
+		// debug("execBlockingAnalyzeTseri", "antTarget="+antTarget);
 		makeWorkDir(workDir, buildFilePath);
 		
 		String[] localFileFilteredArr = new String[inputFileUrlStringArr.length];
+		
 		for (int i = 0; i < inputFileUrlStringArr.length; i++) {
 			// Copy the input file to the working directory, if necessary.
 			String localFile = downloadInputFile(inputFileUrlStringArr[i], workDir);
@@ -1093,7 +1084,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 			double timeIntervalBeginTime, double timeIntervalEndTime,
 			String[] inputFileUrlStringArr, double[][] globalParam, double[][] siteParam) {
 
-		debug("execAnalyzeTseri", "Just called");
+		//debug("execAnalyzeTseri", "Just called");
 		//AnalyzeTseriService ats;
 		
 		try {
@@ -1157,12 +1148,11 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 	}
 
 	private void resetArr(double[][] globalParam, double[][] siteParam) {
-		debug("execAnalyzeTseri", "globalParam Size : " + globalParam.length);
-		debug("execAnalyzeTseri", "siteParam Size : " + siteParam.length);
-		debug("execAnalyzeTseri", "this.allsites.printContents : " + this.allsites.printContents());
+		//debug("execAnalyzeTseri", "globalParam Size : " + globalParam.length);
+		//debug("execAnalyzeTseri", "siteParam Size : " + siteParam.length);
 		
 		for (int i = 0; i < globalParam.length; i++) {
-			debug("execAnalyzeTseri", "globalParam type : " + globalParam[i][0]);
+			//debug("execAnalyzeTseri", "globalParam type : " + globalParam[i][0]);
 			switch ((int) globalParam[i][0]) {
 			case 1:
 			case 2:
@@ -1218,7 +1208,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		}
 
 		for (int i = 0; i < siteParam.length; i++) {
-			debug("execAnalyzeTseri", "siteParam type : " + siteParam[i][0]);
+			//debug("execAnalyzeTseri", "siteParam type : " + siteParam[i][0]);
 			switch ((int) siteParam[i][0]) {
 			case 1:
 			case 2:
