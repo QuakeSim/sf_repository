@@ -59,64 +59,24 @@ function dataTableSelectOneRadio(radio) {
 				</h:column>
 				<h:column>
 					<f:facet name="header">
-						<h:outputText escape="false" value="<b>Creation Date</b>" />
+						<h:outputText escape="false" value="<b>	Archived DATA File</b>" />
 					</f:facet>
-					<h:outputText value="#{myentry3.creationDate}" />
-
-				</h:column>
-				<h:column>
-					<f:facet name="header">
-						<h:outputText escape="false" value="<b>	Storage Host</b>" />
-					</f:facet>
-					<h:outputText value="#{myentry3.meshHost}" />
-				</h:column>
-				<h:column>
-					<f:facet name="header">
-						<h:outputText escape="false" value="<b>	Mesh File</b>" />
-					</f:facet>
-					<h:panelGrid columns="3" border="1">
-
-						<h:outputLink id="link1"
-							value="#{facesContext.externalContext.requestContextPath}/DownloadDataFile.jsp"
-							target="_blank">
-							<f:param name="ProjectSelect" value="#{myentry3.projectName}" />
-							<f:param name="MeshChoice" value=".input" />
-							<f:param name="codeName" value="#{SimplexBean.codeName}" />
-							<f:param name="baseWorkDir" value="#{SimplexBean.baseWorkDir}" />
-							<f:param name="userName" value="#{SimplexBean.userName}" />
-							<f:param name="fileServiceUrl"
-								value="#{SimplexBean.fileServiceUrl}" />
-
+					<h:panelGrid columns="4" border="1">
+						<h:outputLink id="link1" value="#{myentry3.inputUrl}" target="_blank">
 							<h:outputText value="input" />
 						</h:outputLink>
-						<h:outputLink id="link2"
-							value="#{facesContext.externalContext.requestContextPath}/DownloadDataFile.jsp"
-							target="_blank">
-							<f:param name="ProjectSelect" value="#{myentry3.projectName}" />
-							<f:param name="MeshChoice" value=".stdout" />
-							<f:param name="codeName" value="#{SimplexBean.codeName}" />
-							<f:param name="baseWorkDir" value="#{SimplexBean.baseWorkDir}" />
-							<f:param name="userName" value="#{SimplexBean.userName}" />
-							<f:param name="fileServiceUrl"
-								value="#{SimplexBean.fileServiceUrl}" />
-
+						<h:outputLink id="link2" value="#{myentry3.logUrl}" target="_blank">
 							<h:outputText value="stdout" />
 						</h:outputLink>
-						<h:outputLink id="link3"
-							value="#{facesContext.externalContext.requestContextPath}/DownloadDataFile.jsp"
-							target="_blank">
-							<f:param name="ProjectSelect" value="#{myentry3.projectName}" />
-							<f:param name="MeshChoice" value=".output" />
-							<f:param name="codeName" value="#{SimplexBean.codeName}" />
-							<f:param name="baseWorkDir" value="#{SimplexBean.baseWorkDir}" />
-							<f:param name="userName" value="#{SimplexBean.userName}" />
-							<f:param name="fileServiceUrl"
-								value="#{SimplexBean.fileServiceUrl}" />
-
+						<h:outputLink id="link3" value="#{myentry3.outputUrl}" target="_blank">
 							<h:outputText value="output" />
+						</h:outputLink>
+						<h:outputLink id="link4" value="#{myentry3.faultUrl}" target="_blank">
+							<h:outputText value="fault" />
 						</h:outputLink>
 					</h:panelGrid>
 				</h:column>
+
 				<h:column>
 					<f:facet name="header">
 						<h:outputText escape="false" value="<b>Select to Plot</b>" />
@@ -132,6 +92,8 @@ function dataTableSelectOneRadio(radio) {
 		</h:panelGrid>
 		<h:commandButton id="gmt4plot" value="GMT Plot"
 			action="#{SimplexBean.toggleGMTPlot}" />
+		<h:commandButton id="gmt4map" value="Google map plot"
+			action="#{SimplexBean.toggleMakeMap}" />
 	</h:form>
 
 	<h:form>
