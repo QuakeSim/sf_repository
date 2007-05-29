@@ -238,11 +238,15 @@ public class GmapDataXml {
 			Document doc = parser.newDocument();
 
 			Element root = doc.createElement("markers");
-			root.setAttribute("original_lat", this.original_lat	+ "");
-			root.setAttribute("original_lon", this.original_lon	+ "");
 			// root.setAttribute("gender", "f");
 			doc.appendChild(root);
 
+			Element mapinfo = doc.createElement("mapinfo");
+			mapinfo.setAttribute("original_lat", this.original_lat	+ "");
+			mapinfo.setAttribute("original_lon", this.original_lon	+ "");
+			root.appendChild(mapinfo);
+			
+			
 			for (int i = 0; i < ObservMarkers.size(); i++) {
 				Element marker = doc.createElement("obsmarker");
 				marker.setAttribute("lat", ((googleMapMarker) ObservMarkers
