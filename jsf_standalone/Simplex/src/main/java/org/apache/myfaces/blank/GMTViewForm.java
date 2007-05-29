@@ -1,20 +1,25 @@
 package org.apache.myfaces.blank;
 
 public class GMTViewForm {
-	String area_prop= "";
-	String scale_prop="";
-	String mapticks_prop="";
-	String vectormag_prop="";
-	String plot_background="";
-	boolean bplot_background=false;
-	String plot_causative="";
-	boolean bplot_causative=false;
-	String plot_obs="";
-	boolean bplot_obs=false;
-	String plot_calc="";
-	boolean bplot_calc=false;
-	String plot_resid="";
-	boolean bplot_resid=false;
+	String area_prop;
+	String scale_prop;
+	String mapticks_prop;
+	String vectormag_prop;
+	String plot_background;
+	boolean bplot_background;
+	String plot_causative;
+	boolean bplot_causative;
+	String plot_obs;
+	boolean bplot_obs;
+	String plot_calc;
+	boolean bplot_calc;
+	String plot_resid;
+	boolean bplot_resid;
+	String gmtPlotPdfUrl;
+	
+	public GMTViewForm() {
+		
+	}
 	
 	public void reset() {
 		area_prop = "";
@@ -31,8 +36,17 @@ public class GMTViewForm {
 		bplot_calc = false;
 		plot_resid = "";
 		bplot_resid = false;
+		gmtPlotPdfUrl="";
 	}
 
+	public void setGmtPlotPdfUrl(String tmp_str) {
+		this.gmtPlotPdfUrl=tmp_str;
+	}
+	
+	public String getGmtPlotPdfUrl() {
+		return this.gmtPlotPdfUrl;
+	}
+	
 	public boolean getBplot_resid() {
 		if (this.plot_resid.equals("")) {
 			this.bplot_resid=false;
