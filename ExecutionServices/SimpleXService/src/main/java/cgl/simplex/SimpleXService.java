@@ -348,7 +348,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 		String[] args = prefabSimpleXCall(userName, projectName, faults, obsv,
 				startTemp, maxIters, timeStamp);
 		setArgs(args);
-		execute();
+		run();
 		return getAllTheSimpleXFiles(userName, projectName, timeStamp);
 	}
 
