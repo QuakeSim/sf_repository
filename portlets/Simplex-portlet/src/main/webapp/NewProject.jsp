@@ -38,7 +38,7 @@
 
 			<h:outputText value="Specify the latitude of the problem origin:" />
 			<h:panelGroup>
-			<h:inputText id="origin_lat" value="#{SimplexBean.currentProjectEntry.origin_lon}"
+			<h:inputText id="origin_lat" value="#{SimplexBean.currentProjectEntry.origin_lat}"
 				required="true" />
 			<h:message for="origin_lat" showDetail="true" showSummary="true"
 				errorStyle="color: red" />
@@ -46,7 +46,7 @@
 
 			<h:outputText value="Specify the longitude of the problem origin:" />
 			<h:panelGroup>
-			<h:inputText id="origin_lon" value="#{SimplexBean.currentProjectEntry.origin_lat}"
+			<h:inputText id="origin_lon" value="#{SimplexBean.currentProjectEntry.origin_lon}"
 				required="true" />
 			<h:message for="origin_lon" showDetail="true" showSummary="true"
 				errorStyle="color: red" />
