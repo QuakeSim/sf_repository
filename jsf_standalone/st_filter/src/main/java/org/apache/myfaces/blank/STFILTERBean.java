@@ -42,6 +42,9 @@ import org.servogrid.genericproject.*;
  */
 
 public class STFILTERBean extends GenericSopacBean {
+	String[] siteCodeArr;
+	String[] sopacDataFileUrlArr;
+	
 	String contextUrl;
 
 	boolean projectCreated = false;
@@ -202,7 +205,7 @@ public class STFILTERBean extends GenericSopacBean {
 	protected void loadPrefs() {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		if (facesContext.getExternalContext().getRequest() instanceof PortletRequest) {
-			debug("request is PortletRequest. Pref. will be loaded.");
+			debug("loadPrefs", "request is PortletRequest. Pref. will be loaded.");
 			PortletRequest pRequest = (PortletRequest) facesContext
 					.getExternalContext().getRequest();
 			PortletPreferences prefs = pRequest.getPreferences();
@@ -272,7 +275,7 @@ public class STFILTERBean extends GenericSopacBean {
 					"_timeInterval.endTime", Double.toString(projectBean
 							.getTimeInterval().getEndTime())));
 		} else {
-			debug("request is NOT PortletRequest. Pref. will NOT be loaded.");
+			debug("loadPrefs", "request is NOT PortletRequest. Pref. will NOT be loaded.");
 		}
 	}
 
@@ -280,10 +283,10 @@ public class STFILTERBean extends GenericSopacBean {
 		try {
 			File projectDir = new File(workDir + File.separator + userName
 					+ File.separator);
-			debug("make dir : " + projectDir.getCanonicalPath());
+			debug("makeProjectDirectory", "make dir : " + projectDir.getCanonicalPath());
 			projectDir.mkdirs();
 		} catch (IOException e) {
-			debug("Failure on makeProjectDirectory()");
+			debug("makeProjectDirectory", "Failure on makeProjectDirectory()");
 			e.printStackTrace();
 		}
 	}
@@ -329,12 +332,12 @@ public class STFILTERBean extends GenericSopacBean {
 	 * Method that is backed to a submit button of a form.
 	 */
 	public String createNewProject() throws Exception {
-		debug("contextUrl = " + contextUrl);
+		// Clear history
+		paramHistory.clear();
+		
 //		if (!isInitialized) {
 //			initWebServices();
 //		}
-		debug("createNewProject()");
-
 		//updateWithPrefs();
 		return ("new-project-created");
 	}
@@ -411,7 +414,6 @@ public class STFILTERBean extends GenericSopacBean {
 	 public String loadProject() throws Exception {
 		projectArchive.clear();
 		try {
-			debug("DB_FILE_NANME : " + DB_FILE_NANME);
 			Db4o.configure().lockDatabaseFile(false);
 			db = Db4o.openFile(DB_FILE_NANME);
 
@@ -419,7 +421,6 @@ public class STFILTERBean extends GenericSopacBean {
 			query.constrain(STFILTERProjectBean.class);
 			// query.descend("creationDate").orderAscending();
 			ObjectSet results = query.execute();
-			debug("results size : " + results.size());
 			while (results.hasNext()) {
 				projectArchive.add((STFILTERProjectBean) results.next());
 			}
@@ -470,20 +471,24 @@ public class STFILTERBean extends GenericSopacBean {
 		// Do this here.
 		try {
 
-			debug("endpoint = " + endpoint);
+			debug("callAnalyzeTseriService", "endpoint = " + endpoint);
 
 			if ((endpoint == null) || (endpoint.equals(""))) {
-				debug("Set init-param in web.xml");
+				debug("callAnalyzeTseriService", "Set init-param in web.xml");
 				return "";
 			}
 			
-			projectBean.globalParam = new double[allsites.estParamVector.size()][5];
-			projectBean.siteParam = new double[myStation.estParamVector.size()
-					+ episodicParams.size()][5];
+			int globalParamSize = allsites.estParamVector.size()
+					+ episodicParams.size() + annualAmpParams.size()
+					+ annualPhaseParams.size() + semiannualAmpParams.size();
+			int siteParamSize = myStation.estParamVector.size();
+			projectBean.globalParam = new double[globalParamSize][5];
+			projectBean.siteParam = new double[siteParamSize][5];
 
 			setParam(allsites, projectBean.globalParam);
 			setParam(myStation, projectBean.siteParam);
 
+			// For "Applied Filter List"
 			allParams.clear();
 			for (Iterator i = episodicParams.iterator(); i.hasNext();) {
 				allParams.add((EstimateParameter) i.next());
@@ -499,53 +504,53 @@ public class STFILTERBean extends GenericSopacBean {
 			}
 
 			// siteParam doesn't need anymore
-			int init = myStation.estParamVector.size();
+			int init = allsites.estParamVector.size();
+			debug("callAnalyzeTseriService", "episodicParams.size = " + episodicParams.size());
 			for (int i = init; i < init + this.episodicParams.size(); i++) {
-				debug(episodicParams.get(i - init).toString());
-				System.out.println("[!!]" + episodicParams.size());
+				debug("callAnalyzeTseriService", episodicParams.get(i - init).toString());
 				EpisodicBias eb = (EpisodicBias) episodicParams.get(i - init);
 				projectBean.globalParam[i][0] = eb.getParameterType();
-				projectBean.globalParam[i][1] = eb.getAprioriConstraint().doubleValue();
-				projectBean.globalParam[i][2] = eb.getAprioriValue().doubleValue();
+				projectBean.globalParam[i][1] = eb.getAprioriValue().doubleValue();
+				projectBean.globalParam[i][2] = eb.getAprioriConstraint().doubleValue();
 				projectBean.globalParam[i][3] = eb.getStartDate().doubleValue();
 				projectBean.globalParam[i][4] = eb.getEndDate().doubleValue();
 			}
 
 			init = init + episodicParams.size();
+			debug("callAnalyzeTseriService", "annualAmpParams.size = " + annualAmpParams.size());
 			for (int i = init; i < init + this.annualAmpParams.size(); i++) {
-				debug(annualAmpParams.get(i - init).toString());
-				System.out.println("[!!]" + annualAmpParams.size());
+				debug("callAnalyzeTseriService", annualAmpParams.get(i - init).toString());
 				AnnualAmpBias eb = (AnnualAmpBias) annualAmpParams
 						.get(i - init);
 				projectBean.globalParam[i][0] = eb.getParameterType();
-				projectBean.globalParam[i][1] = eb.getAprioriConstraint().doubleValue();
-				projectBean.globalParam[i][2] = eb.getAprioriValue().doubleValue();
+				projectBean.globalParam[i][1] = eb.getAprioriValue().doubleValue();
+				projectBean.globalParam[i][2] = eb.getAprioriConstraint().doubleValue();
 				projectBean.globalParam[i][3] = eb.getStartDate().doubleValue();
 				projectBean.globalParam[i][4] = eb.getPeriodLength().doubleValue();
 			}
 
 			init = init + this.annualAmpParams.size();
+			debug("callAnalyzeTseriService", "annualPhaseParams.size = " + annualPhaseParams.size());
 			for (int i = init; i < init + this.annualPhaseParams.size(); i++) {
-				debug(annualPhaseParams.get(i - init).toString());
-				System.out.println("[!!]" + annualPhaseParams.size());
+				debug("callAnalyzeTseriService", annualPhaseParams.get(i - init).toString());
 				AnnualPhaseBias eb = (AnnualPhaseBias) annualPhaseParams.get(i
 						- init);
 				projectBean.globalParam[i][0] = eb.getParameterType();
-				projectBean.globalParam[i][1] = eb.getAprioriConstraint().doubleValue();
-				projectBean.globalParam[i][2] = eb.getAprioriValue().doubleValue();
+				projectBean.globalParam[i][1] = eb.getAprioriValue().doubleValue();
+				projectBean.globalParam[i][2] = eb.getAprioriConstraint().doubleValue();
 				projectBean.globalParam[i][3] = eb.getStartDate().doubleValue();
 				projectBean.globalParam[i][4] = eb.getPeriodLength().doubleValue();
 			}
 
 			init = init + this.annualPhaseParams.size();
+			debug("callAnalyzeTseriService", "semiannualAmpParams.size = " + semiannualAmpParams.size());
 			for (int i = init; i < init + this.semiannualAmpParams.size(); i++) {
-				debug(semiannualAmpParams.get(i - init).toString());
-				System.out.println("[!!]" + semiannualAmpParams.size());
+				debug("callAnalyzeTseriService", semiannualAmpParams.get(i - init).toString());
 				SemiannualAmpBias eb = (SemiannualAmpBias) semiannualAmpParams
 						.get(i - init);
 				projectBean.globalParam[i][0] = eb.getParameterType();
-				projectBean.globalParam[i][1] = eb.getAprioriConstraint().doubleValue();
-				projectBean.globalParam[i][2] = eb.getAprioriValue().doubleValue();
+				projectBean.globalParam[i][1] = eb.getAprioriValue().doubleValue();
+				projectBean.globalParam[i][2] = eb.getAprioriConstraint().doubleValue();
 				projectBean.globalParam[i][3] = eb.getStartDate().doubleValue();
 				projectBean.globalParam[i][4] = eb.getPeriodLength().doubleValue();
 			}
@@ -557,7 +562,10 @@ public class STFILTERBean extends GenericSopacBean {
 			call.setOperationName(new QName("http://soapinterop.org/",
 					"execAnalyzeTseri"));
 
-			String[] ret = (String[]) call.invoke(new Object[] { this.siteCode,
+			debug("callAnalyzeTseriService", "projectBean.globalParam.length = "+projectBean.globalParam.length);
+			debug("callAnalyzeTseriService", "projectBean.siteParam.length = "+projectBean.siteParam.length);
+
+			String[] ret = (String[]) call.invoke(new Object[] { this.siteCodeArr,
 					new Integer(this.projectBean.resOption),
 					new Integer(this.projectBean.termOption),
 					new Double(this.projectBean.cutoffCriterion),
@@ -573,7 +581,7 @@ public class STFILTERBean extends GenericSopacBean {
 					new Double(this.projectBean.badObsCriteria.up),
 					new Double(this.projectBean.timeInterval.beginTime),
 					new Double(this.projectBean.timeInterval.endTime),
-					this.sopacDataFileUrl, projectBean.globalParam,
+					this.sopacDataFileUrlArr, projectBean.globalParam,
 					projectBean.siteParam });
 
 			System.out.println("Output: ");
@@ -585,7 +593,6 @@ public class STFILTERBean extends GenericSopacBean {
 			// String[] extensions = { ".input.xyz.X.png", ".input.xyz.Y.png",
 			// ".input.xyz.Z.png", ".resi", ".data", ".drv", ".input",
 			// ".list", ".mdl", ".out", ".para", ".site" };
-
 			resultsBean = new AnalyzeTseriResultsBean();
 			resultsBean.setXPngUrl(ret[0]);
 			resultsBean.setYPngUrl(ret[1]);
@@ -603,17 +610,18 @@ public class STFILTERBean extends GenericSopacBean {
 			// Draw graphs
 			// resiURL = ret[3];
 
-			List filteredList = createFilteredList();
+			//List filteredList = createFilteredList();
+			List[] filteredListArr = createFilteredListArr();
+			
 			if (paramHistory.size() < maxHistory) {
-				paramHistory.add(0, filteredList);
+				paramHistory.add(0, filteredListArr);
 			} else {
-				paramHistory.add(0, filteredList);
+				paramHistory.add(0, filteredListArr);
 				for (int i = paramHistory.size(); i > maxHistory; i--) {
 					paramHistory.remove(i - 1);
 				}
 			}
-
-			System.out.println("paramHistory.size() = " + paramHistory.size());
+			//debug("callAnalyzeTseriService", "paramHistory.size() = " + paramHistory.size());
 
 			// System.out.println("Output: " + ret);
 		} catch (Exception e) {
@@ -890,13 +898,10 @@ public class STFILTERBean extends GenericSopacBean {
 		try {
 
 			url = new URL(resultsBean.getResiUrl());
-			BufferedReader in = new BufferedReader(new InputStreamReader(url
-					.openStream()));
+			debug("createFilteredList", "resultsBean.getResiUrl() = " +resultsBean.getResiUrl());
+			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 
 			String line;
-
-			line = in.readLine();
-			line = in.readLine();
 
 			Calendar thisYear = Calendar.getInstance();
 			Calendar nextYear = Calendar.getInstance();
@@ -906,6 +911,9 @@ public class STFILTERBean extends GenericSopacBean {
 			int idx = 1;
 			StringTokenizer st;
 			while ((line = in.readLine()) != null) {
+				if (line.startsWith("*")) {
+					continue;
+				}
 				st = new StringTokenizer(line);
 				row = new ArrayList();
 				row.add(String.valueOf(idx)); // idx
@@ -944,6 +952,79 @@ public class STFILTERBean extends GenericSopacBean {
 		// (sopacDataFileContent));
 	}
 
+	public List[] createFilteredListArr() {
+		URL url;
+		ArrayList[] listArr = new ArrayList[siteCodeArr.length];
+		ArrayList row = null;
+
+		try {
+
+			url = new URL(resultsBean.getResiUrl());
+			debug("createFilteredList", "resultsBean.getResiUrl() = " +resultsBean.getResiUrl());
+			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+
+			String line;
+
+			Calendar thisYear = Calendar.getInstance();
+			Calendar nextYear = Calendar.getInstance();
+			Calendar cur = Calendar.getInstance();
+
+			double time;
+			int listIdx = -1;
+			int idx = 1;
+			StringTokenizer st;
+			while ((line = in.readLine()) != null) {
+				if (line.startsWith("*")) {
+					if (line.startsWith("*   residuals for site")) {
+						listIdx++;
+						listArr[listIdx] = new ArrayList();
+					}
+					continue;
+				}
+				st = new StringTokenizer(line);
+				row = new ArrayList();
+				row.add(String.valueOf(idx)); // idx
+
+				time = Double.parseDouble(st.nextToken());
+				thisYear.set((int) Math.floor(time), 0, 1, 0, 0, 0);
+				nextYear.set((int) Math.ceil(time), 0, 1, 0, 0, 0);
+				cur = Calendar.getInstance();
+				cur
+						.setTimeInMillis(thisYear.getTimeInMillis()
+								+ (long) ((time - Math.floor(time)) * (nextYear
+										.getTimeInMillis() - thisYear
+										.getTimeInMillis())));
+				// debug("["+idx+"] time = "+time+", cur
+				// ="+DateFormat.getDateInstance().format(cur.getTime()));
+				row.add(cur.getTime()); // time
+				row.add(st.nextToken()); // E
+				row.add(st.nextToken()); // N
+				st.nextToken(); // Se
+				st.nextToken(); // Sn
+				st.nextToken(); // Ren
+				row.add(st.nextToken()); // U
+//				debug("createFilteredListArr", "OK1");
+//				debug("createFilteredListArr", "listArr.length = "+listArr.length);
+//				debug("createFilteredListArr", "listArr[0].size = "+listArr[0].size());
+				
+				listArr[listIdx].add(row);
+//				debug("createFilteredListArr", "OK2. idx = " + idx);
+				idx++;
+			}
+			in.close();
+
+		} catch (MalformedURLException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+		debug("createFilteredListArr", "listArr.length = "+ listArr.length);
+		return listArr;
+		// BufferedReader rd = new BufferedReader( new StringReader
+		// (sopacDataFileContent));
+	}
+
 	public List getSopacDataList() {
 		ArrayList list = new ArrayList();
 		ArrayList row = null;
@@ -977,26 +1058,23 @@ public class STFILTERBean extends GenericSopacBean {
 			case 1:
 			case 2:
 			case 3:
-				param[i][1] = ((ConstantBias) ep).aprioriConstraint
-						.doubleValue();
-				param[i][2] = ((ConstantBias) ep).aprioriValue.doubleValue();
+				param[i][1] = ((ConstantBias) ep).aprioriValue.doubleValue();
+				param[i][2] = ((ConstantBias) ep).aprioriConstraint.doubleValue();
 				param[i][3] = ((ConstantBias) ep).startDate.doubleValue();
 				break;
 			case 4:
 			case 5:
 			case 6:
-				param[i][1] = ((VelocityBias) ep).aprioriConstraint
-						.doubleValue();
-				param[i][2] = ((VelocityBias) ep).aprioriValue.doubleValue();
+				param[i][1] = ((VelocityBias) ep).aprioriValue.doubleValue();
+				param[i][2] = ((VelocityBias) ep).aprioriConstraint.doubleValue();
 				param[i][3] = ((VelocityBias) ep).startDate.doubleValue();
 				param[i][4] = ((VelocityBias) ep).endDate.doubleValue();
 				break;
 			case 7:
 			case 8:
 			case 9:
-				param[i][1] = ((EpisodicBias) ep).aprioriConstraint
-						.doubleValue();
-				param[i][2] = ((EpisodicBias) ep).aprioriValue.doubleValue();
+				param[i][1] = ((EpisodicBias) ep).aprioriValue.doubleValue();
+				param[i][2] = ((EpisodicBias) ep).aprioriConstraint.doubleValue();
 				param[i][3] = ((EpisodicBias) ep).startDate.doubleValue();
 				param[i][4] = ((EpisodicBias) ep).endDate.doubleValue();
 				break;
@@ -1207,7 +1285,7 @@ public class STFILTERBean extends GenericSopacBean {
 
 	private List<STFILTERProjectBean> queryDB(ObjectContainer db4o) {
 		final String queryDate = getChoosenProject();
-		debug("queryDate = "+queryDate);
+		debug("queryDB", "queryDate = "+queryDate);
 		
 		List <STFILTERProjectBean> result = db4o.query( new Predicate<STFILTERProjectBean> () {
 			public boolean match (STFILTERProjectBean bean) {
@@ -1220,7 +1298,7 @@ public class STFILTERBean extends GenericSopacBean {
 		// query.constrain(STFILTERProjectBean.class);
 		// query.descend("projectName").constrain(chosenProject);
 		// ObjectSet result = query.execute();
-		debug("result.size() = " + result.size());
+		debug("queryDB", "result.size() = " + result.size());
 		//db.close();
 		
 		return result;
@@ -1244,7 +1322,7 @@ public class STFILTERBean extends GenericSopacBean {
 			}
 		}
 		chosenProject = (String) (requestParams.get(key));
-		debug("chosenProject = " + chosenProject);
+		debug("getChoosenProject", "chosenProject = " + chosenProject);
 		// debug("requestParams.size() = "+requestParams.size());
 		return chosenProject;
 	}
@@ -1527,7 +1605,7 @@ public class STFILTERBean extends GenericSopacBean {
 	private SelectItem[] myStationParamList;
 
 	public SelectItem[] getMyStationParamList() {
-		debug("Size = " + myStation.getMasterParamList().size());
+		debug("getMyStationParamList", "Size = " + myStation.getMasterParamList().size());
 		myStationParamList = new SelectItem[myStation.getMasterParamList()
 				.size()];
 		for (int i = 0; i < myStation.getMasterParamList().size(); i++) {
@@ -1546,7 +1624,7 @@ public class STFILTERBean extends GenericSopacBean {
 
 	public void myStationParamListChanged(ValueChangeEvent event) {
 		if (event.getNewValue() != null) {
-			debug("ValueChangeEvent = " + event.getNewValue());
+			debug("myStationParamListChanged", "ValueChangeEvent = " + event.getNewValue());
 			// myStationParamListIndex =
 			// ((Integer)event.getNewValue()).intValue();
 			myStationParamListIndex = Integer.parseInt((String) event
@@ -1554,56 +1632,73 @@ public class STFILTERBean extends GenericSopacBean {
 			curEpisodicParamRendered = false;
 			curAnnualAmpParamRendered = false;
 			curAnnualPhaseParamRendered = false;
-			curSemiannualParamRendered = false;
+			curSemiannualAmpParamRendered = false;
 
 			switch (myStationParamListIndex) {
 			case 7:
 				curEpisodicParam = episodicEast;
-				curEpisodicParamRendered = true;
 				break;
 			case 8:
 				curEpisodicParam = episodicNorth;
-				curEpisodicParamRendered = true;
 				break;
 			case 9:
 				curEpisodicParam = episodicUp;
-				curEpisodicParamRendered = true;
 				break;
+				
 			case 16:
 				curAnnualAmpParam = annualAmpEast;
-				curAnnualAmpParamRendered = true;
 				break;
 			case 17:
 				curAnnualAmpParam = annualAmpNorth;
-				curAnnualAmpParamRendered = true;
 				break;
 			case 18:
-				curAnnualPhaseParam = annualPhaseUp;
-				curAnnualPhaseParamRendered = true;
+				curAnnualAmpParam = annualAmpUp;
 				break;
+				
 			case 19:
 				curAnnualPhaseParam = annualPhaseEast;
-				curAnnualPhaseParamRendered = true;
 				break;
 			case 20:
 				curAnnualPhaseParam = annualPhaseNorth;
-				curAnnualPhaseParamRendered = true;
 				break;
 			case 21:
-				curAnnualAmpParam = annualAmpUp;
-				curAnnualAmpParamRendered = true;
+				curAnnualPhaseParam = annualPhaseUp;
 				break;
+				
 			case 22:
 				curSemiannualAmpParam = semiannualAmpEast;
-				curSemiannualParamRendered = true;
 				break;
 			case 23:
 				curSemiannualAmpParam = semiannualAmpNorth;
-				curSemiannualParamRendered = true;
 				break;
 			case 24:
 				curSemiannualAmpParam = semiannualAmpUp;
-				curSemiannualParamRendered = true;
+				break;
+			}
+
+			switch (myStationParamListIndex) {
+			case 7:
+			case 8:
+			case 9:
+				curEpisodicParamRendered = true;
+				break;
+				
+			case 16:
+			case 17:
+			case 18:
+				curAnnualAmpParamRendered = true;
+				break;
+				
+			case 19:
+			case 20:
+			case 21:
+				curAnnualPhaseParamRendered = true;
+				break;
+				
+			case 22:
+			case 23:
+			case 24:
+				curSemiannualAmpParamRendered = true;
 				break;
 			}
 		}
@@ -1618,7 +1713,7 @@ public class STFILTERBean extends GenericSopacBean {
 	}
 
 	public void curEpisodicAprioriValueChanged(ValueChangeEvent event) {
-		debug("aprioriValueChanged = " + event.getNewValue());
+		debug("curEpisodicAprioriValueChanged", "ValueChanged = " + event.getNewValue());
 		if (event.getNewValue() != null) {
 			curEpisodicParam.setAprioriValue((Double) event.getNewValue());
 			addCurEpisodicParam();
@@ -1626,7 +1721,7 @@ public class STFILTERBean extends GenericSopacBean {
 	}
 
 	public void curEpisodicAprioriConstraintChanged(ValueChangeEvent event) {
-		debug("aprioriConstraintChanged = " + event.getNewValue());
+		debug("curEpisodicAprioriConstraintChanged", "ValueChanged = " + event.getNewValue());
 		if (event.getNewValue() != null) {
 			curEpisodicParam.setAprioriConstraint((Double) event.getNewValue());
 			addCurEpisodicParam();
@@ -1634,7 +1729,7 @@ public class STFILTERBean extends GenericSopacBean {
 	}
 
 	public void curEpisodicStartDateChanged(ValueChangeEvent event) {
-		debug("startDateChanged = " + event.getNewValue());
+		debug("curEpisodicStartDateChanged", "ValueChanged = " + event.getNewValue());
 		if (event.getNewValue() != null) {
 			curEpisodicParam.setStartDate((Double) event.getNewValue());
 			addCurEpisodicParam();
@@ -1642,7 +1737,7 @@ public class STFILTERBean extends GenericSopacBean {
 	}
 
 	public void curEpisodicEndDateChanged(ValueChangeEvent event) {
-		debug("endDateChanged = " + event.getNewValue());
+		debug("curEpisodicEndDateChanged", "ValueChanged = " + event.getNewValue());
 		if (event.getNewValue() != null) {
 			curEpisodicParam.setEndDate((Double) event.getNewValue());
 			addCurEpisodicParam();
@@ -1668,7 +1763,7 @@ public class STFILTERBean extends GenericSopacBean {
 	boolean curEpisodicParamRendered = true;
 
 	public void curAnnualAmpAprioriValueChanged(ValueChangeEvent event) {
-		debug("aprioriValueChanged = " + event.getNewValue());
+		debug("curAnnualAmpAprioriValueChanged", "ValueChanged = " + event.getNewValue());
 		if (event.getNewValue() != null) {
 			curAnnualAmpParam.setAprioriValue((Double) event.getNewValue());
 			addCurAnnualAmpParam();
@@ -1676,7 +1771,7 @@ public class STFILTERBean extends GenericSopacBean {
 	}
 
 	public void curAnnualAmpAprioriConstraintChanged(ValueChangeEvent event) {
-		debug("aprioriConstraintChanged = " + event.getNewValue());
+		debug("curAnnualAmpAprioriConstraintChanged", "ValueChanged = " + event.getNewValue());
 		if (event.getNewValue() != null) {
 			curAnnualAmpParam
 					.setAprioriConstraint((Double) event.getNewValue());
@@ -1685,7 +1780,7 @@ public class STFILTERBean extends GenericSopacBean {
 	}
 
 	public void curAnnualAmpStartDateChanged(ValueChangeEvent event) {
-		debug("startDateChanged = " + event.getNewValue());
+		debug("curAnnualAmpStartDateChanged", "ValueChanged = " + event.getNewValue());
 		if (event.getNewValue() != null) {
 			curAnnualAmpParam.setStartDate((Double) event.getNewValue());
 			addCurAnnualAmpParam();
@@ -1693,7 +1788,7 @@ public class STFILTERBean extends GenericSopacBean {
 	}
 
 	public void curAnnualAmpPeriodLengthChanged(ValueChangeEvent event) {
-		debug("endDateChanged = " + event.getNewValue());
+		debug("curAnnualAmpPeriodLengthChanged", "ValueChanged = " + event.getNewValue());
 		if (event.getNewValue() != null) {
 			curAnnualAmpParam.setPeriodLength((Double) event.getNewValue());
 			addCurAnnualAmpParam();
@@ -1719,7 +1814,7 @@ public class STFILTERBean extends GenericSopacBean {
 	boolean curAnnualAmpParamRendered = false;
 
 	public void curAnnualPhaseAprioriValueChanged(ValueChangeEvent event) {
-		debug("aprioriValueChanged = " + event.getNewValue());
+		debug("curAnnualPhaseAprioriValueChanged", "ValueChanged = " + event.getNewValue());
 		if (event.getNewValue() != null) {
 			curAnnualPhaseParam.setAprioriValue((Double) event.getNewValue());
 			addCurAnnualPhaseParam();
@@ -1727,27 +1822,27 @@ public class STFILTERBean extends GenericSopacBean {
 	}
 
 	public void curAnnualPhaseAprioriConstraintChanged(ValueChangeEvent event) {
-		debug("aprioriConstraintChanged = " + event.getNewValue());
+		debug("curAnnualPhaseAprioriConstraintChanged", "ValueChanged = " + event.getNewValue());
 		if (event.getNewValue() != null) {
 			curAnnualPhaseParam.setAprioriConstraint((Double) event
 					.getNewValue());
-			addCurAnnualAmpParam();
+			addCurAnnualPhaseParam();
 		}
 	}
 
 	public void curAnnualPhaseStartDateChanged(ValueChangeEvent event) {
-		debug("startDateChanged = " + event.getNewValue());
+		debug("curAnnualPhaseStartDateChanged", "ValueChanged = " + event.getNewValue());
 		if (event.getNewValue() != null) {
 			curAnnualPhaseParam.setStartDate((Double) event.getNewValue());
-			addCurAnnualAmpParam();
+			addCurAnnualPhaseParam();
 		}
 	}
 
 	public void curAnnualPhasePeriodLengthChanged(ValueChangeEvent event) {
-		debug("endDateChanged = " + event.getNewValue());
+		debug("curAnnualPhasePeriodLengthChanged", "ValueChanged = " + event.getNewValue());
 		if (event.getNewValue() != null) {
 			curAnnualPhaseParam.setPeriodLength((Double) event.getNewValue());
-			addCurAnnualAmpParam();
+			addCurAnnualPhaseParam();
 		}
 	}
 
@@ -1770,7 +1865,7 @@ public class STFILTERBean extends GenericSopacBean {
 	boolean curAnnualPhaseParamRendered = false;
 
 	public void curSemiannualAmpAprioriValueChanged(ValueChangeEvent event) {
-		debug("aprioriValueChanged = " + event.getNewValue());
+		debug("curSemiannualAmpAprioriValueChanged", "ValueChanged = " + event.getNewValue());
 		if (event.getNewValue() != null) {
 			curSemiannualAmpParam.setAprioriValue((Double) event.getNewValue());
 			addCurSemiannualAmpParam();
@@ -1778,7 +1873,7 @@ public class STFILTERBean extends GenericSopacBean {
 	}
 
 	public void curSemiannualAmpAprioriConstraintChanged(ValueChangeEvent event) {
-		debug("aprioriConstraintChanged = " + event.getNewValue());
+		debug("curSemiannualAmpAprioriConstraintChanged", "ValueChanged = " + event.getNewValue());
 		if (event.getNewValue() != null) {
 			curSemiannualAmpParam.setAprioriConstraint((Double) event
 					.getNewValue());
@@ -1787,7 +1882,7 @@ public class STFILTERBean extends GenericSopacBean {
 	}
 
 	public void curSemiannualAmpStartDateChanged(ValueChangeEvent event) {
-		debug("startDateChanged = " + event.getNewValue());
+		debug("curSemiannualAmpStartDateChanged", "ValueChanged = " + event.getNewValue());
 		if (event.getNewValue() != null) {
 			curSemiannualAmpParam.setStartDate((Double) event.getNewValue());
 			addCurSemiannualAmpParam();
@@ -1795,7 +1890,7 @@ public class STFILTERBean extends GenericSopacBean {
 	}
 
 	public void curSemiannualAmpPeriodLengthChanged(ValueChangeEvent event) {
-		debug("endDateChanged = " + event.getNewValue());
+		debug("curSemiannualAmpPeriodLengthChanged", "ValueChanged = " + event.getNewValue());
 		if (event.getNewValue() != null) {
 			curSemiannualAmpParam.setPeriodLength((Double) event.getNewValue());
 			addCurSemiannualAmpParam();
@@ -1810,15 +1905,15 @@ public class STFILTERBean extends GenericSopacBean {
 
 	Vector semiannualAmpParams = new Vector();
 
-	AnnualAmpBias semiannualAmpEast = new AnnualAmpEast();
+	SemiannualAmpBias semiannualAmpEast = new SemiannualAmpEast();
 
-	AnnualAmpBias semiannualAmpNorth = new AnnualAmpNorth();
+	SemiannualAmpBias semiannualAmpNorth = new SemiannualAmpNorth();
 
-	AnnualAmpBias semiannualAmpUp = new AnnualAmpUp();
+	SemiannualAmpBias semiannualAmpUp = new SemiannualAmpUp();
 
-	AnnualAmpBias curSemiannualAmpParam = semiannualAmpEast;
+	SemiannualAmpBias curSemiannualAmpParam = semiannualAmpEast;
 
-	boolean curSemiannualParamRendered = false;
+	boolean curSemiannualAmpParamRendered = false;
 
 	Vector<EstimateParameter> allParams = new Vector<EstimateParameter>();
 
@@ -1888,8 +1983,24 @@ public class STFILTERBean extends GenericSopacBean {
 		// setParameterValues();
 		createNewProject();
 		//querySOPAC();
-		querySOPACGetURL();
-		debug("getSopacDataFileUrl = "+super.getSopacDataFileUrl());
+
+		StringTokenizer parser = new StringTokenizer(siteCode);
+		siteCodeArr = new String[parser.countTokens()];
+		sopacDataFileUrlArr = new String[parser.countTokens()];
+		
+		String tmpSiteCode = siteCode;
+		int i = 0;
+	    while (parser.hasMoreTokens()) {
+	        siteCode = parser.nextToken();
+	        siteCodeArr[i] = siteCode;
+	        querySOPACGetURL();
+	        sopacDataFileUrlArr[i] = sopacDataFileUrl; 
+	        debug("createNewAndQuery", "sopacDataFileUrlArr["+i+"] =" + sopacDataFileUrlArr[i]);
+	        i++;
+	    }
+	    siteCode = tmpSiteCode;
+	    
+		//debug("createNewAndQuery", "getSopacDataFileUrl = "+super.getSopacDataFileUrl());
 		return setEstimatedParams();
 	}
 
@@ -1968,7 +2079,7 @@ public class STFILTERBean extends GenericSopacBean {
 	private void savePrefs() {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		if (facesContext.getExternalContext().getRequest() instanceof PortletRequest) {
-			debug("Request is PortletRequest. Pref. will save.");
+			debug("savePrefs", "Request is PortletRequest. Pref. will save.");
 			PortletRequest pRequest = (PortletRequest) facesContext
 					.getExternalContext().getRequest();
 			PortletPreferences prefs = pRequest.getPreferences();
@@ -2018,7 +2129,7 @@ public class STFILTERBean extends GenericSopacBean {
 						.toString(_timeInterval.endTime));
 
 				prefs.store();
-				debug("Pref. saved.");
+				debug("savePrefs", "Pref. saved.");
 			} catch (ReadOnlyException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -2030,7 +2141,7 @@ public class STFILTERBean extends GenericSopacBean {
 				e.printStackTrace();
 			}
 		} else {
-			debug("request is NOT PortletRequest. Pref. will NOT save.");
+			debug("savePrefs", "request is NOT PortletRequest. Pref. will NOT save.");
 		}
 	}
 
@@ -2068,14 +2179,6 @@ public class STFILTERBean extends GenericSopacBean {
 
 		projectBean.timeInterval.beginTime = _timeInterval.beginTime;
 		projectBean.timeInterval.endTime = _timeInterval.endTime;
-	}
-
-	public static void debug(String msg) {
-		System.out.println("[DEBUG] " + msg);
-	}
-
-	public static void debug(String name, String value) {
-		System.out.println("[DEBUG] " + name + " = " + value);
 	}
 
 	public BadObsCriteria get_badObsCriteria() {
@@ -2279,20 +2382,20 @@ public class STFILTERBean extends GenericSopacBean {
 		this.curEpisodicParamRendered = curEpisodicParamRendered;
 	}
 
-	public AnnualAmpBias getCurSemiannualAmpParam() {
+	public SemiannualAmpBias getCurSemiannualAmpParam() {
 		return curSemiannualAmpParam;
 	}
 
-	public void setCurSemiannualAmpParam(AnnualAmpBias curSemiannualAmpParam) {
+	public void setCurSemiannualAmpParam(SemiannualAmpBias curSemiannualAmpParam) {
 		this.curSemiannualAmpParam = curSemiannualAmpParam;
 	}
 
-	public boolean isCurSemiannualParamRendered() {
-		return curSemiannualParamRendered;
+	public boolean isCurSemiannualAmpParamRendered() {
+		return curSemiannualAmpParamRendered;
 	}
 
-	public void setCurSemiannualParamRendered(boolean curSemiannualParamRendered) {
-		this.curSemiannualParamRendered = curSemiannualParamRendered;
+	public void setCurSemiannualAmpParamRendered(boolean curSemiannualAmpParamRendered) {
+		this.curSemiannualAmpParamRendered = curSemiannualAmpParamRendered;
 	}
 
 	public Vector getAnnualAmpParams() {
@@ -2535,27 +2638,27 @@ public class STFILTERBean extends GenericSopacBean {
 		this.renderMySite = renderMySite;
 	}
 
-	public AnnualAmpBias getSemiannualAmpEast() {
+	public SemiannualAmpBias getSemiannualAmpEast() {
 		return semiannualAmpEast;
 	}
 
-	public void setSemiannualAmpEast(AnnualAmpBias semiannualAmpEast) {
+	public void setSemiannualAmpEast(SemiannualAmpBias semiannualAmpEast) {
 		this.semiannualAmpEast = semiannualAmpEast;
 	}
 
-	public AnnualAmpBias getSemiannualAmpNorth() {
+	public SemiannualAmpBias getSemiannualAmpNorth() {
 		return semiannualAmpNorth;
 	}
 
-	public void setSemiannualAmpNorth(AnnualAmpBias semiannualAmpNorth) {
+	public void setSemiannualAmpNorth(SemiannualAmpBias semiannualAmpNorth) {
 		this.semiannualAmpNorth = semiannualAmpNorth;
 	}
 
-	public AnnualAmpBias getSemiannualAmpUp() {
+	public SemiannualAmpBias getSemiannualAmpUp() {
 		return semiannualAmpUp;
 	}
 
-	public void setSemiannualAmpUp(AnnualAmpBias semiannualAmpUp) {
+	public void setSemiannualAmpUp(SemiannualAmpBias semiannualAmpUp) {
 		this.semiannualAmpUp = semiannualAmpUp;
 	}
 
@@ -2615,8 +2718,28 @@ public class STFILTERBean extends GenericSopacBean {
 		return projectArchive;
 	}
     
-    public static void main(String[] args) {
-    	Calendar cal = new GregorianCalendar();
-    	System.out.println(cal.getTime());
-    }
+	public static void debug(String func, String msg) {
+		System.out.println("[DEBUG][STFILTERBean:"+func+"] " + msg);
+	}
+
+	public static void debug(String func, String name, String value) {
+		System.out.println("[DEBUG][STFILTERBean:"+func+"] " + name + " = " + value);
+	}
+	
+	public String[] getSiteCodeArr() {
+		return siteCodeArr;
+	}
+
+	public void setSiteCodeArr(String[] siteCodeArr) {
+		this.siteCodeArr = siteCodeArr;
+	}
+
+	public String[] getSopacDataFileUrlArr() {
+		return sopacDataFileUrlArr;
+	}
+
+	public void setSopacDataFileUrlArr(String[] sopacDataFileUrlArr) {
+		this.sopacDataFileUrlArr = sopacDataFileUrlArr;
+	}
+    
 }

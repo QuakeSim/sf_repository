@@ -34,7 +34,17 @@ function EpisodicUpdate(seriesx)
 	}
 }
 
-function Update(seriesx)
+function AnnualAmpUpdate(seriesx)
 {
-	document.forms.myStationCurrentParam['myStationCurrentParam:startDate'].value = bfgRound(bfgToDate2(seriesx),2);
+	document.forms.myStationCurrentParam['myStationCurrentParam:annualAmpStartDate'].value = bfgRound(bfgToDate2(seriesx),2);
+}
+
+function AnnualPhaseUpdate(seriesx)
+{
+	document.forms.myStationCurrentParam['myStationCurrentParam:annualPhaseStartDate'].value = bfgRound(bfgToDate2(seriesx),2);
+}
+
+function SemiannualAmpUpdate(seriesx)
+{
+	document.forms.myStationCurrentParam['myStationCurrentParam:semiannualAmpStartDate'].value = bfgRound(bfgToDate2(seriesx),2);
 }

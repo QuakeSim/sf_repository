@@ -76,13 +76,13 @@ function init()
 	YAHOO.example.calendar.beginDate = new YAHOO.widget.Calendar("beginDate","beginDateContainer", { title:"Choose a start date:", close:true, pagedate:beginDateObj.format('MM/yyyy'), selected:beginDateObj.format('MM/dd/yyyy') } );
 	YAHOO.example.calendar.beginDate.selectEvent.subscribe(beginDateHandler, YAHOO.example.calendar.beginDate, true);
 	YAHOO.example.calendar.beginDate.render();
-	YAHOO.util.Event.addListener("form1:beginDateImg", "mouseover", YAHOO.example.calendar.beginDate.show, YAHOO.example.calendar.beginDate, true); 
+	YAHOO.util.Event.addListener("form1:beginDateImg", "click", YAHOO.example.calendar.beginDate.show, YAHOO.example.calendar.beginDate, true); 
 
 	var endDateObj = Date.parseString(document.forms.form1["form1:endDate"].value, 'yyyy-M-d');
 	YAHOO.example.calendar.endDate = new YAHOO.widget.Calendar("endDate","endDateContainer", { title:"Choose an end date:", close:true, pagedate:endDateObj.format('MM/yyyy'), selected:endDateObj.format('MM/dd/yyyy') } );
 	YAHOO.example.calendar.endDate.selectEvent.subscribe(endDateHandler, YAHOO.example.calendar.endDate, true);
 	YAHOO.example.calendar.endDate.render();
-	YAHOO.util.Event.addListener("form1:endDateImg", "mouseover", YAHOO.example.calendar.endDate.show, YAHOO.example.calendar.endDate, true); 
+	YAHOO.util.Event.addListener("form1:endDateImg", "click", YAHOO.example.calendar.endDate.show, YAHOO.example.calendar.endDate, true); 
 }
 
 // Listener 
@@ -214,9 +214,15 @@ mapcenter_y = center_xy[1];
             marker.openInfoWindowHtml(html);});
 
           GEvent.addListener(marker, "click", function() {
-		var newElement=document.getElementById("form1:station_name");
-		newElement.setAttribute("value",name);
-	  });
+            var newElement=document.getElementById("form1:station_name");
+            if (newElement.value == '') {
+              newElement.value = name;
+              //newElement.setAttribute("value",name);
+            } else {
+              newElement.value = newElement.value + ' ' + name;
+              //newElement.setAttribute("value",newElement.value + ' ' + name);
+            }
+            });
 
           return marker;
           }
@@ -269,6 +275,7 @@ mapcenter_y = center_xy[1];
 		<h:outputText value="Station Code:"/>
 		<h:panelGroup>
 			<h:inputText id="station_name" value="#{stfilterBean.siteCode}" required="true"/>
+			<h:graphicImage id="imgStationName" value="/delete.gif" onclick="javascript:document.getElementById('form1:station_name').value='';"/>
 			<h:message id="msgStationName" for="station_name" showDetail="true" showSummary="true" errorStyle="color: red"/>
 		</h:panelGroup>
 
