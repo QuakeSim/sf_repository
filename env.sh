@@ -7,8 +7,8 @@
 # The following variables must be set for your 
 # individual installation.
 #--------------------------------------------------
-#export PORTAL_HOST_NAME=gf19.ucs.indiana.edu 
-export PORTAL_HOST_NAME=`/bin/hostname`
+#export PORTAL_HOST_NAME=localhost
+export PORTAL_HOST_NAME=localhost
 export PORTAL_SERVER_URL=http://$PORTAL_HOST_NAME:8080/
 export GOOGLE_KEY="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBSPTG4M0VeHMNoDOKS2I0IJH6WVtRT4Ye3YMLMmOKDiX0HJAySVruBU5g"
 
@@ -41,12 +41,14 @@ export GNUPLOT_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/GnuplotService
 export ANALYZE_TSERI_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/AnalyzeTseriService
 export GEOFEST_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/GeoFESTService
 export DISLOC_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/DislocService
+export SIMPLEX_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/SimpleXService
 
 # These are directory locations for binaries that we should not put in
 # SourceForge
 export RDAHMM_BIN_HOME=$HOME/GEMCodes/RDAHMM2/bin/
 export GEOFEST_BIN_HOME=$HOME/GEMCodes/GeoFEST/bin/
 export DISLOC_BIN_HOME=$HOME/GEMCodes/Disloc/
+export SIMPLEX_BIN_HOME=$HOME/GEMCodes/Simplex/
 
 #Generic project code
 export GENERIC_PROJECT_HOME=$BUILD_DIR/GenericQuakeSimProject
