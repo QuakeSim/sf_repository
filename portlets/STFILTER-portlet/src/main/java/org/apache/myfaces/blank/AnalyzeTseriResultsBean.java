@@ -14,6 +14,7 @@ public class AnalyzeTseriResultsBean implements java.io.Serializable {
 	private String dataUrl;
 	private String drvUrl;
 	private String inputUrl;
+	private String[] inputUrlArr;
 	private String listUrl;
 	private String mdlUrl;
 	private String outUrl;
@@ -92,6 +93,12 @@ public class AnalyzeTseriResultsBean implements java.io.Serializable {
 	}
 	public void setZPngUrl(String pngUrl) {
 		ZPngUrl = pngUrl;
+	}
+	public String[] getInputUrlArr() {
+		return inputUrlArr;
+	}
+	public void setInputUrlArr(String[] inputUrlArr) {
+		this.inputUrlArr = inputUrlArr;
 	}
 
 }
