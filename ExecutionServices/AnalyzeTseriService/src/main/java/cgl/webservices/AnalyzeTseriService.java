@@ -808,7 +808,7 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 		// Methods inherited from parent
 		setArgs(args);
 		run();
-		return getTheReturnFiles();
+		return getTheReturnFilesArr(inputFileUrlStringArr.length);
 	}
 	
 	/**
@@ -866,6 +866,31 @@ public class AnalyzeTseriService extends AntVisco implements Runnable {
 					+ extensions[i];
 		}
 
+		return returnFiles;
+	}
+
+	protected String[] getTheReturnFilesArr(int numOfInput) {
+		
+		String[] extensions1 = { ".input.xyz.X.png", ".input.xyz.Y.png",
+				".input.xyz.Z.png", ".resi", ".data", ".drv"};
+		String[] extensions2 = { ".list", ".mdl", ".out", ".para", ".site" };
+
+		String[] returnFiles = new String[extensions1.length + numOfInput + extensions2.length];
+		for (int i = 0; i < extensions1.length; i++) {
+			returnFiles[i] = serverUrl + "/" + projectName + "/" + projectName
+					+ extensions1[i];
+		}
+		
+		for (int i = 0; i < numOfInput; i++) {
+			returnFiles[extensions1.length + i] = serverUrl + "/" + projectName + "/" + projectName
+					+ "." + i +".input";
+		}
+
+		for (int i = 0; i < extensions2.length; i++) {
+			returnFiles[extensions1.length + numOfInput + i] = serverUrl + "/" + projectName + "/" + projectName
+					+ extensions2[i];
+		}
+		
 		return returnFiles;
 	}
 
