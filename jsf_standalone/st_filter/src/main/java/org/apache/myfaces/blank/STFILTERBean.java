@@ -601,11 +601,17 @@ public class STFILTERBean extends GenericSopacBean {
 			resultsBean.setDataUrl(ret[4]);
 			resultsBean.setDrvUrl(ret[5]);
 			resultsBean.setInputUrl(ret[6]);
-			resultsBean.setListUrl(ret[7]);
-			resultsBean.setMdlUrl(ret[8]);
-			resultsBean.setOutUrl(ret[9]);
-			resultsBean.setParaUrl(ret[10]);
-			resultsBean.setSiteUrl(ret[11]);
+			resultsBean.setListUrl(ret[6+siteCodeArr.length]);
+			resultsBean.setMdlUrl(ret[7+siteCodeArr.length]);
+			resultsBean.setOutUrl(ret[8+siteCodeArr.length]);
+			resultsBean.setParaUrl(ret[9+siteCodeArr.length]);
+			resultsBean.setSiteUrl(ret[10+siteCodeArr.length]);
+
+			String[] inputUrlArr = new String[siteCodeArr.length];
+			for (int i = 0; i < siteCodeArr.length; i++) {
+				inputUrlArr[i] = ret[6 + i];
+			}
+			resultsBean.setInputUrlArr(inputUrlArr);
 
 			// Draw graphs
 			// resiURL = ret[3];
