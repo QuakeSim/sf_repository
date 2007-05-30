@@ -334,10 +334,12 @@
 		<h:outputLink target="_blank" value="#{stfilterBean.resultsBean.listUrl}">
 		<h:outputText value="List File"/>
 		</h:outputLink>
-
+		
+		<%--
 		<h:outputLink target="_blank" value="#{stfilterBean.resultsBean.inputUrl}">
 		<h:outputText value="Input List File"/>
 		</h:outputLink>
+		--%>
 
 		<h:outputLink target="_blank" value="#{stfilterBean.resultsBean.siteUrl}">
 		<h:outputText value="Site List File"/>
@@ -360,7 +362,15 @@
 		</h:outputLink>
 
 	</h:panelGrid>
-   
+   	
+   	<h:dataTable value="#{stfilterBean.resultsBean.inputUrlArr}" var="url">
+   		<h:column>
+		<h:outputLink target="_blank" value="#{url}">
+		<h:outputText value="Input List File"/>
+		</h:outputLink>
+   		</h:column>
+   	</h:dataTable>
+   	
     </td>
     </tr>
     </table>
