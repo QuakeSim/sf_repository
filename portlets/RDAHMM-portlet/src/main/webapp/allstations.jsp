@@ -19,9 +19,8 @@ mapcenter_y = center_xy[1];
 %>
 <html>
   <head>
-  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTwM0brOpm-All5BF6PoaKBxRWWERS5kaQBLplD6GDaf1-YuioaBH35uw"
+ <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBQozjQdf4FEuMBqpopduISAOADS4xTilRYX9d1ZU0uvBJwyY4gerC4Gog"
       type="text/javascript"></script>
-  </head>
   <body>
 
   <script type="text/javascript" src="/yui_0.12.2/build/yahoo/yahoo.js"></script>

@@ -14,7 +14,7 @@
 %>
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <script src="put.google.map.key.here"
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBQozjQdf4FEuMBqpopduISAOADS4xTilRYX9d1ZU0uvBJwyY4gerC4Gog"
 	type="text/javascript"></script><script type="text/javascript">
 
       //<![CDATA[

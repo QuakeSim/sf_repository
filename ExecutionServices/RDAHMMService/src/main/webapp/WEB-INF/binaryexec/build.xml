@@ -56,7 +56,7 @@
          dir="${bindir.prop}">
       <arg line="${RDAHMMBaseName.prop}.input"/>
       <arg line="${RDAHMMBaseName.prop}.Q"/>
-      <env key="PATH" path="${bindir.prop}:/bin/:/usr/bin/:$PATH"/>
+      <env key="PATH" path="${bindir.prop}:/usr/local/bin/:/bin/:/usr/bin/:$PATH"/>
    </exec>
    <move todir="${outputDestDir.prop}">
      <fileset file="*.png"/>
