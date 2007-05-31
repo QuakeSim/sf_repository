@@ -8,9 +8,6 @@
 <head>
 <title>Google Maps</title>
 <script
-    // for localhost:8080
-	//src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAKcOFua2izv3xh_wg-gvdExTwM0brOpm-All5BF6PoaKBxRWWERSuloaaEd_xG7GcMj-en4-yGAJ8tg"
-	// for gf1.ucs.indiana.edu:13080
 	src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAKcOFua2izv3xh_wg-gvdExRh1JQEJS7hgeRDDBK9HlFLesVumhSaPjYigtcpAWT943Ea8LX9vszTgw"
 	type="text/javascript"></script>
 
@@ -18,8 +15,15 @@
 
 </head>
 <body onunload="GUnload()">
-<script src="googleMapTooltips.js"></script>
-<script src="markermanager.js"></script>
+<f:view>
+<script type="text/javascript">
+var googleMapTooltips_src='<h:outputText value="#{facesContext.externalContext.requestContextPath}/googleMapTooltips.js"/>';
+var markermanager_src='<h:outputText value="#{facesContext.externalContext.requestContextPath}/markermanager.js"/>';
+
+</script>
+
+<script src='<h:outputText value="#{facesContext.externalContext.requestContextPath}/googleMapTooltips.js"/>'></script>
+<script src='<h:outputText value="#{facesContext.externalContext.requestContextPath}/markermanager.js"/>'></script>
 
 
 <style type="text/css">
@@ -60,7 +64,7 @@
       	color: #333;
       }
     </style>
-<f:view>
+
 	<table border="1">
 		<tr>
 
@@ -124,7 +128,7 @@
         labelContainer.style.Color = "#000000";
         labelContainer.style.font = "small arial";
         labelContainer.style.border = "1px solid black";
-        labelContainer.style.height="50px";
+        labelContainer.style.height="65px";
         labelContainer.style.width="160px";
         labelContainer.style.paddingLeft="5px";
 
@@ -240,9 +244,9 @@
             var lng =( parseFloat(markers[i].getAttribute("lon")) )/100 + parseFloat(original_lon);
 						var iconwidth=parseInt(markers[i].getAttribute("width"));
 						var iconheight=parseInt(markers[i].getAttribute("height"));
-						var mouseonimage=markers[i].getAttribute("mouseonimage");
-						var mouseoutimage=markers[i].getAttribute("mouseoutimage");
-						var textimage=markers[i].getAttribute("textimage");
+						var mouseonimage='<h:outputText value="#{facesContext.externalContext.requestContextPath}/"/>'+markers[i].getAttribute("mouseonimage");
+						var mouseoutimage='<h:outputText value="#{facesContext.externalContext.requestContextPath}/"/>'+markers[i].getAttribute("mouseoutimage");
+						var textimage='<h:outputText value="#{facesContext.externalContext.requestContextPath}/"/>'+markers[i].getAttribute("textimage");
 
 
             var pt = new GLatLng(lat,lng);
