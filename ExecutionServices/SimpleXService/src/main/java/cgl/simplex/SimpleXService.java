@@ -402,11 +402,12 @@ public class SimpleXService extends AntVisco implements Runnable {
 		args[1] = "-DprojectName.prop=" + projectName;
 		args[2] = "-Dbindir.prop=" + binDir;
 		args[3] = "-Dorigin_lat.prop=" + origin_lat;
-		args[4] = "-Dorigin_lon.prop" + origin_lon;
-		args[5] = "-DbaseImageName.prop" + projectName + timeStamp;
+		args[4] = "-Dorigin_lon.prop=" + origin_lon;
+		args[5] = "-DbaseImageName.prop=" + projectName + timeStamp;
 		args[6] = "-buildfile";
 		args[7] = buildFilePath;
-		args[8] = "RunSimplex";
+		args[8] = "RunPrePlotGMT";
+	
 		return args;
 	}
 
@@ -428,10 +429,10 @@ public class SimpleXService extends AntVisco implements Runnable {
 			String[] args = setPrePlotGMTPlotArgs(workDir, projectName,
 					origin_lat, origin_lon, timeStamp);
 			setArgs(args);
-			execute();
+			run();
 
 		} catch (Exception ex) {
-			System.out.println("doSjPlotForGMT failed");
+			System.out.println("prefabPlotGMTCall failed");
 			ex.printStackTrace();
 		}
 		return workDir + "/" + projectName + timeStamp + ".properties";
@@ -528,7 +529,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 	}
 
 	/**
-	 * Actually runs RePlotGMT. Always runs in non-blocking mode. return pdf
+	 * Actually runs RePlotGMT. Always runs in blocking mode. return pdf
 	 * Url.
 	 */
 
@@ -547,7 +548,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			String[] args = setPreRePlotGMTPlotArgs(projectName, workDir,
 					bf_loc, currentGMTViewForm, jobUIDStamp);
 			setArgs(args);
-			execute();
+			run();
 			// Get the generated image.
 			makeWorkDir(destDir);
 			copyFileToFile(new File(workDir + "/" + projectName + jobUIDStamp
