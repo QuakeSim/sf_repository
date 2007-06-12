@@ -38,6 +38,17 @@
     <url-pattern>/services/*</url-pattern>
   </servlet-mapping>
 
+    <mime-mapping>
+        <extension>output</extension>
+        <mime-type>text/plain</mime-type>
+    </mime-mapping>
+
+    <mime-mapping>
+        <extension>input</extension>
+        <mime-type>text/plain</mime-type>
+    </mime-mapping>
+
+
  <!-- uncomment this if you want the admin servlet -->
  <!--
   <servlet-mapping>
