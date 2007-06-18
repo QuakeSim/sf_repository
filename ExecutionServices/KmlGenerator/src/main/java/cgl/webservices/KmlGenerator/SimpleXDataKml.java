@@ -429,7 +429,7 @@ public class SimpleXDataKml {
 		} else {
 			container = root;
 		}
-		String linestyleid=LineColor+LineWidth;
+		String linestyleid=faultName+"Style";
 		setLineStyle(container, linestyleid, LineColor, LineWidth);
 		Placemark mark1 = new Placemark();
 		mark1.setName(faultName);
