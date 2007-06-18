@@ -196,8 +196,8 @@ public class SimpleXDataKml {
 	}
 
 	public void set360IconStyle(String href_prefix, String href_postfix, String id_prefix) {
-		int i=1;
-		for (i=1;i<=360;i++) {
+		int i=0;
+		for (i=0;i<=360;i++) {
 			setIconStyle(id_prefix+i,href_prefix+i+href_postfix);
 		}
 	}
