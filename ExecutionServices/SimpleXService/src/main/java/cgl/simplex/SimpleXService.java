@@ -422,7 +422,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 		kmlService.setDatalist( tmp_pointentrylist );
 		kmlService.setOriginalCoordinate(lon, lat);
 		kmlService.setCoordinateUnit("1000");
-		kmlService=setfaultplot(kmlService,faults);
+		//kmlService=setfaultplot(kmlService,faults);
 		kmlService.setPointPlacemark("Icon Layer");
 		kmlService.setArrowPlacemark("Arrow Layer", "aaeeffcc", 2);
 		String calcKmlUrl=kmlService.runMakeKml("", userName, projectName, "calc");
@@ -435,7 +435,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 		kmlService.setDatalist( tmp_pointentrylist );
 		kmlService.setOriginalCoordinate(lon, lat);
 		kmlService.setCoordinateUnit("1000");
-		kmlService=setfaultplot(kmlService,faults);
+		//kmlService=setfaultplot(kmlService,faults);
 		kmlService.setPointPlacemark("Icon Layer");
 		kmlService.setArrowPlacemark("Arrow Layer", "aaeeffcc", 2);
 		String o_cKmlUrl=kmlService.runMakeKml("", userName, projectName, "o_c");
@@ -448,7 +448,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 		kmlService.setDatalist( tmp_pointentrylist );
 		kmlService.setOriginalCoordinate(lon, lat);
 		kmlService.setCoordinateUnit("1000");
-		kmlService=setfaultplot(kmlService,faults);
+		//kmlService=setfaultplot(kmlService,faults);
 		kmlService.setPointPlacemark("o_c Icon Layer");
 		kmlService.setArrowPlacemark("o_c Arrow Layer", "aaeeffcc", 2);
 		tmp_pointentrylist=dw.getCalcList();
@@ -482,8 +482,17 @@ public class SimpleXService extends AntVisco implements Runnable {
 	
 		for (int i = 0; i < fts.length; i++) {
 			try {
+				
+				System.out.println("***********************************************");
+				System.out.println(fts[i].getFaultLonStarts());
+				System.out.println(fts[i].getFaultLatStarts());
+				System.out.println(fts[i].getFaultLonEnds());
+				System.out.println(fts[i].getFaultLatEnds());
+							
+				
 				if ( !(fts[i].getFaultLonStarts()).equals("") && !(fts[i].getFaultLatStarts()).equals("") && !(fts[i].getFaultLonEnds()).equals("") && !(fts[i].getFaultLatEnds()).equals("") ) {
-					kmlserv.setFaultPlot("Fault list", "fault"+i, fts[i].getFaultLonStarts(),fts[i].getFaultLatStarts(), fts[i].getFaultLonEnds(), fts[i].getFaultLatEnds(), "red", 4);
+					System.out.println("###################################################");
+					kmlserv.setFaultPlot("Fault list", fts[i].getFaultName(), fts[i].getFaultLonStarts(),fts[i].getFaultLatStarts(), fts[i].getFaultLonEnds(), fts[i].getFaultLatEnds(), "red", 4);
 				}
 			}catch ( Exception e) {
 				e.printStackTrace();
