@@ -482,7 +482,9 @@ public class SimpleXService extends AntVisco implements Runnable {
 	
 		for (int i = 0; i < fts.length; i++) {
 			try {
-				kmlserv.setFaultPlot("Fault list", "fault"+i, fts[i].getFaultLonStarts(),fts[i].getFaultLatStarts(), fts[i].getFaultLonEnds(), fts[i].getFaultLatEnds(), "red", 4);	
+				if ( !(fts[i].getFaultLonStarts()).equals("") && !(fts[i].getFaultLatStarts()).equals("") && !(fts[i].getFaultLonEnds()).equals("") && !(fts[i].getFaultLatEnds()).equals("") ) {
+					kmlserv.setFaultPlot("Fault list", "fault"+i, fts[i].getFaultLonStarts(),fts[i].getFaultLatStarts(), fts[i].getFaultLonEnds(), fts[i].getFaultLatEnds(), "red", 4);
+				}
 			}catch ( Exception e) {
 				e.printStackTrace();
 			}
