@@ -476,7 +476,7 @@ public class SimpleXDataKml {
 		} else {
 			container = root;
 		}
-		String linestyleid=LineColor+LineWidth;
+		String linestyleid=LineColor+(int)(LineWidth);
 		setLineStyle(container, linestyleid, LineColor, LineWidth);
 		for (int i = 0; i < datalist.length; i++) {
 			// create and add a Placemark containing a Point
