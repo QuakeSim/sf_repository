@@ -2,9 +2,6 @@ package cgl.webservices.simplex;
 
 //Need to import this parent.
 import cgl.webservices.AntVisco;
-import cgl.webservices.client.PointEntry;
-import cgl.webservices.client.SimpleXDataKml;
-import cgl.webservices.client.SimpleXDataKmlServiceLocator;
 
 //Not explicitly naming these because they are famous.
 import java.util.*;
