@@ -506,25 +506,25 @@ public class SimpleXDataKml {
 			double lat = new_lonlat.getY();
 			double lon = new_lonlat.getX();
 			
-			String descriptionValue = "<![CDATA[ <br/> <hr/>";
+			String descriptionValue = "<![CDATA[";
 			descriptionValue = descriptionValue
-					+ "<font color=blue>lat:</font>" + lat + "<br/>";
+					+ "<font color=blue>lat:</font>" + lat + "";
 			descriptionValue = descriptionValue
-					+ "<font color=blue>lon:</font>" + lon + "<br/>";
+					+ "<font color=blue>lon:</font>" + lon + "";
 			descriptionValue = descriptionValue
-					+ "<font color=blue>length:</font>" + length + "<br/>";
+					+ "<font color=blue>length:</font>" + length + "";
 			descriptionValue = descriptionValue
-					+ "<font color=blue>degree:</font>" + degs + "<br/>";
+					+ "<font color=blue>degree:</font>" + degs + "";
 			descriptionValue = descriptionValue + datalist[i].getDeltaXName()
-					+ ":" + datalist[i].getDeltaXValue() + "<br/>";
+					+ ":" + datalist[i].getDeltaXValue() + "";
 			descriptionValue = descriptionValue + datalist[i].getDeltaYName()
-					+ ":" + datalist[i].getDeltaYValue() + "<br/>";
+					+ ":" + datalist[i].getDeltaYValue() + "";
 			descriptionValue = descriptionValue + datalist[i].getDeltaZName()
-					+ ":" + datalist[i].getDeltaZValue() + "<br/>";
+					+ ":" + datalist[i].getDeltaZValue() + "";
 			descriptionValue = descriptionValue
 					+ "<font color=blue>tag name:</font>"
 					+ datalist[i].getFolderTag();
-			descriptionValue = descriptionValue + "<br/>]]>";
+			descriptionValue = descriptionValue + "]]>";
 			mark1.setDescription(descriptionValue);
 
 			LineString newline = new LineString();
