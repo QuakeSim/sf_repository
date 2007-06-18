@@ -1,12 +1,13 @@
 package cgl.webservices.simplex;
+
 /**
  * This is a bean for modeling Faults.
  */
 
 public class Fault {
-	
+
 	String faultName;
-	
+
 	String faultLocationX;
 
 	String faultLocationY;
@@ -25,24 +26,39 @@ public class Fault {
 
 	String faultRakeAngle;
 
+	String faultLonStarts;
+
+	String faultLatStarts;
+
+	String faultLonEnds;
+
+	String faultLatEnds;
+
 	boolean faultOriginXVary;
+
 	boolean faultOriginYVary;
+
 	boolean faultLengthVary;
+
 	boolean faultWidthVary;
+
 	boolean faultDepthVary;
+
 	boolean faultDipAngleVary;
+
 	boolean faultStrikeAngleVary;
+
 	boolean faultDipSlipVary;
+
 	boolean faultStrikeSlipVary;
-	
-	public Fault () {
-		
+
+	public Fault() {
+
 	}
 
-	public void reset()
-	{
+	public void reset() {
 		faultName = "";
-		
+
 		faultLocationX = "";
 
 		faultLocationY = "";
@@ -60,7 +76,12 @@ public class Fault {
 		faultSlip = "";
 
 		faultRakeAngle = "";
-		
+
+		faultLonStarts = "";
+		faultLatStarts = "";
+		faultLonEnds = "";
+		faultLatEnds = "";
+
 		faultOriginXVary = false;
 		faultOriginYVary = false;
 		faultLengthVary = false;
@@ -69,90 +90,123 @@ public class Fault {
 		faultDipAngleVary = false;
 		faultStrikeAngleVary = false;
 		faultDipSlipVary = false;
-		faultStrikeSlipVary =  false;
+		faultStrikeSlipVary = false;
 
 	}
+
+	public void setFaultLatEnds(String tmp_str) {
+		this.faultLatEnds = tmp_str;
+	}
+
+	public String getFaultLatEnds() {
+		return this.faultLatEnds;
+	}	
 	
+	public void setFaultLonEnds(String tmp_str) {
+		this.faultLonEnds = tmp_str;
+	}
+
+	public String getFaultLonEnds() {
+		return this.faultLonEnds;
+	}		
+
+	public void setFaultLatStarts(String tmp_str) {
+		this.faultLatStarts = tmp_str;
+	}
+
+	public String getFaultLatStarts() {
+		return this.faultLatStarts;
+	}	
+	
+	
+	public void setFaultLonStarts(String tmp_str) {
+		this.faultLonStarts = tmp_str;
+	}
+
+	public String getFaultLonStarts() {
+		return this.faultLonStarts;
+	}
+
 	public void setFaultOriginXVary(boolean tmp) {
 		this.faultOriginXVary = tmp;
 	}
-	
+
 	public boolean getFaultOriginXVary() {
-		return this.faultOriginXVary ;
+		return this.faultOriginXVary;
 	}
-	
+
 	public void setFaultOriginYVary(boolean tmp) {
 		this.faultOriginYVary = tmp;
 	}
-	
+
 	public boolean getFaultOriginYVary() {
-		return this.faultOriginYVary ;
+		return this.faultOriginYVary;
 	}
-	
+
 	public void setFaultLengthVary(boolean tmp) {
 		this.faultLengthVary = tmp;
 	}
-	
+
 	public boolean getFaultLengthVary() {
-		return this.faultLengthVary ;
+		return this.faultLengthVary;
 	}
-	
+
 	public void setFaultWidthVary(boolean tmp) {
 		this.faultWidthVary = tmp;
 	}
-	
+
 	public boolean getFaultWidthVary() {
-		return this.faultWidthVary ;
+		return this.faultWidthVary;
 	}
-	
+
 	public void setFaultDepthVary(boolean tmp) {
 		this.faultDepthVary = tmp;
 	}
-	
+
 	public boolean getFaultDepthVary() {
-		return this.faultDepthVary ;
+		return this.faultDepthVary;
 	}
-	
+
 	public void setFaultDipAngleVary(boolean tmp) {
 		this.faultDipAngleVary = tmp;
 	}
-	
+
 	public boolean getFaultDipAngleVary() {
-		return this.faultDipAngleVary ;
+		return this.faultDipAngleVary;
 	}
-	
+
 	public void setFaultStrikeAngleVary(boolean tmp) {
 		this.faultStrikeAngleVary = tmp;
 	}
-	
+
 	public boolean getFaultStrikeAngleVary() {
-		return this.faultStrikeAngleVary ;
+		return this.faultStrikeAngleVary;
 	}
-	
+
 	public void setFaultDipSlipVary(boolean tmp) {
 		this.faultDipSlipVary = tmp;
 	}
-	
+
 	public boolean getFaultDipSlipVary() {
-		return this.faultDipSlipVary ;
+		return this.faultDipSlipVary;
 	}
-	
+
 	public void setFaultStrikeSlipVary(boolean tmp) {
 		this.faultStrikeSlipVary = tmp;
 	}
-	
+
 	public boolean getFaultStrikeSlipVary() {
-		return this.faultStrikeSlipVary ;
+		return this.faultStrikeSlipVary;
 	}
-	
+
 	public void setFaultName(String tmp_str) {
 		this.faultName = tmp_str;
 	}
 
 	public String getFaultName() {
 		return faultName;
-	}	
-	
+	}
+
 	public void setFaultLocationX(String tmp_str) {
 		this.faultLocationX = tmp_str;
 	}
@@ -160,7 +214,7 @@ public class Fault {
 	public String getFaultLocationX() {
 		return faultLocationX;
 	}
-	
+
 	public void setFaultLocationY(String tmp_str) {
 		this.faultLocationY = tmp_str;
 	}
@@ -176,7 +230,7 @@ public class Fault {
 	public String getFaultLength() {
 		return faultLength;
 	}
-	
+
 	public void setFaultWidth(String tmp_str) {
 		this.faultWidth = tmp_str;
 	}
@@ -184,7 +238,6 @@ public class Fault {
 	public String getFaultWidth() {
 		return faultWidth;
 	}
-
 
 	public void setFaultDepth(String tmp_str) {
 		this.faultDepth = tmp_str;
@@ -201,7 +254,7 @@ public class Fault {
 	public String getFaultDipAngle() {
 		return faultDipAngle;
 	}
-	
+
 	public void setFaultStrikeAngle(String tmp_str) {
 		this.faultStrikeAngle = tmp_str;
 	}
@@ -209,7 +262,7 @@ public class Fault {
 	public String getFaultStrikeAngle() {
 		return faultStrikeAngle;
 	}
-	
+
 	public void setFaultSlip(String tmp_str) {
 		this.faultSlip = tmp_str;
 	}
@@ -225,5 +278,5 @@ public class Fault {
 	public String getFaultRakeAngle() {
 		return faultRakeAngle;
 	}
-	
+
 }

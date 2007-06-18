@@ -16,6 +16,8 @@ public class SimpleXOutputBean {
 	String logUrl;
 
 	String faultUrl;
+	
+	String[] kmlUrls;
 
 	boolean view;
 
@@ -74,4 +76,13 @@ public class SimpleXOutputBean {
 	public String getLogUrl() {
 		return logUrl;
 	}
+	
+	public void setKmlUrls(String[] tmp_str) {
+		this.kmlUrls=tmp_str;
+	}
+	
+	public String[] getKmlUrls() {
+		return this.kmlUrls;
+	}
+	
 }

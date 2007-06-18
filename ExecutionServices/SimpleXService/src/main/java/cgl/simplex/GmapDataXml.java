@@ -16,6 +16,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import cgl.webservices.client.PointEntry;
+
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
@@ -175,6 +177,85 @@ public class GmapDataXml {
 
 		// MyMarkers.add(arg0);
 	}
+
+	public PointEntry[] getO_cList() {
+		Object obj;
+		ArrayList dataset = new ArrayList();
+		Enumeration e = MyObsPoints.keys();
+		ObservationPoint tmp_obs = new ObservationPoint();
+		while (e.hasMoreElements()) {
+			obj = e.nextElement();
+
+			PointEntry tempPoint = new PointEntry();			
+			tmp_obs = (ObservationPoint) MyObsPoints.get(obj);
+
+			tempPoint.setX(tmp_obs.xloc+"");
+			tempPoint.setY(tmp_obs.yloc+"");
+			tempPoint.setDeltaXName("dx");
+			tempPoint.setDeltaXValue(tmp_obs.EastVec.o_c+"");
+			tempPoint.setDeltaYName("dy");
+			tempPoint.setDeltaYValue(tmp_obs.NorthVec.o_c+"");
+			tempPoint.setDeltaZName("dz");
+			tempPoint.setDeltaZValue(tmp_obs.UpVec.o_c+"");
+			tempPoint.setFolderTag("o_c");
+			dataset.add(tempPoint);			
+			
+		}		
+		return (PointEntry[]) (dataset.toArray(new PointEntry[dataset.size()]));
+	}
+	
+	public PointEntry[] getCalcList() {
+		Object obj;
+		ArrayList dataset = new ArrayList();
+		Enumeration e = MyObsPoints.keys();
+		ObservationPoint tmp_obs = new ObservationPoint();
+		while (e.hasMoreElements()) {
+			obj = e.nextElement();
+
+			PointEntry tempPoint = new PointEntry();			
+			tmp_obs = (ObservationPoint) MyObsPoints.get(obj);
+
+			tempPoint.setX(tmp_obs.xloc+"");
+			tempPoint.setY(tmp_obs.yloc+"");
+			tempPoint.setDeltaXName("dx");
+			tempPoint.setDeltaXValue(tmp_obs.EastVec.calc+"");
+			tempPoint.setDeltaYName("dy");
+			tempPoint.setDeltaYValue(tmp_obs.NorthVec.calc+"");
+			tempPoint.setDeltaZName("dz");
+			tempPoint.setDeltaZValue(tmp_obs.UpVec.calc+"");
+			tempPoint.setFolderTag("calc");
+			dataset.add(tempPoint);			
+			
+		}		
+		return (PointEntry[]) (dataset.toArray(new PointEntry[dataset.size()]));
+	}
+	
+	public PointEntry[] getObservList() {
+		Object obj;
+		ArrayList dataset = new ArrayList();
+		Enumeration e = MyObsPoints.keys();
+		ObservationPoint tmp_obs = new ObservationPoint();
+		while (e.hasMoreElements()) {
+			obj = e.nextElement();
+
+			PointEntry tempPoint = new PointEntry();			
+			tmp_obs = (ObservationPoint) MyObsPoints.get(obj);
+
+			tempPoint.setX(tmp_obs.xloc+"");
+			tempPoint.setY(tmp_obs.yloc+"");
+			tempPoint.setDeltaXName("dx");
+			tempPoint.setDeltaXValue(tmp_obs.EastVec.observ+"");
+			tempPoint.setDeltaYName("dy");
+			tempPoint.setDeltaYValue(tmp_obs.NorthVec.observ+"");
+			tempPoint.setDeltaZName("dz");
+			tempPoint.setDeltaZValue(tmp_obs.UpVec.observ+"");
+			tempPoint.setFolderTag("observ");
+			dataset.add(tempPoint);			
+			
+		}		
+		return (PointEntry[]) (dataset.toArray(new PointEntry[dataset.size()]));
+	}
+
 
 	private googleMapMarker calDegsAndMakeMarker(double xloc, double yloc,
 			double eastobserv, double northobserv, ObservationPoint tmp_obs) {
