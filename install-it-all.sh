@@ -48,6 +48,9 @@ source ./geofestexec-deploy.sh
 cd $BUILD_DIR
 source ./dislocexec-deploy.sh
 
+cd $BUILD_DIR
+source ./kmlgenerator-deploy.sh
+
 #----------------------------------------------------------------------
 # Build the generic project classes.
 #----------------------------------------------------------------------
@@ -57,8 +60,8 @@ source ./genericproject-install.sh
 #----------------------------------------------------------------------
 # Buid the standalone (SA) web applications.
 #----------------------------------------------------------------------
-#cd $BUILD_DIR
-#source ./simplex-sa-install.sh
+cd $BUILD_DIR
+source ./simplex-sa-install.sh
 
 # Uncommented since we only need for development.
 #cd $BUILD_DIR
@@ -90,8 +93,8 @@ source ./stfilter-portlet-install.sh
 cd $BUILD_DIR
 source ./rdahmm-portlet-install.sh
 
-#cd $BUILD_DIR
-#source ./simplex-portlet-install.sh
+cd $BUILD_DIR
+source ./simplex-portlet-install.sh
 
 cd $BUILD_DIR
 source ./newmeshgen-portlet-install.sh
