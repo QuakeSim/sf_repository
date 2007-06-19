@@ -323,6 +323,11 @@ public class editProjectForm {
 			tmp_fault.setFaultStrikeAngle( strike);
 			tmp_fault.setFaultSlip ("" ); 
 			tmp_fault.setFaultRakeAngle("");
+			tmp_fault.setFaultLonStarts(lonStart+"");
+			tmp_fault.setFaultLatStarts(latStart+"");
+			tmp_fault.setFaultLonEnds(lonEnd+"");
+			tmp_fault.setFaultLatEnds(latEnd+"");
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
