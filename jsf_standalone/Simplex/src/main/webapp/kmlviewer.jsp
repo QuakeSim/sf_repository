@@ -156,7 +156,7 @@ function toggleGeoXML(id, checked) {
     </table>
     </div>
     <div id="send_kml_googlemap" style="width:100%;height:20px ;float:left;border: 1px solidblack;">
-						<h:outputLink id="link6" value="http://maps.google.com/maps?q=#{myentry3.kmlUrls[0]}" target="_blank">
+						<h:outputLink id="link6" value="http://maps.google.com/maps?q=#{SimplexBean.projectSimpleXOutput.kmlUrls[0]}" target="_blank">
 							<h:outputText value="[<font size=1px>View In Google map</font>]" escape="false" />
 						</h:outputLink>
   </div>
