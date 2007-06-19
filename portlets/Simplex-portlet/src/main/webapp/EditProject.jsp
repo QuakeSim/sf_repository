@@ -298,6 +298,36 @@ vertical-align:top;
 						</h:panelGroup>
 						<h:selectBooleanCheckbox id="faultStrikeSlipVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultStrikeSlipVary}" />
+
+
+						<h:outputText value="Fault Lon Starts:" />
+						<h:panelGroup>
+							<h:inputText id="FaultLonStarts"
+								value="#{SimplexBean.currentEditProjectForm.currentFault.faultLonStarts}" />
+						</h:panelGroup>
+						<h:outputText value="opitional" />
+
+						<h:outputText value="Fault Lat Starts:" />
+						<h:panelGroup>
+							<h:inputText id="FaultLatStarts"
+								value="#{SimplexBean.currentEditProjectForm.currentFault.faultLatStarts}" />
+						</h:panelGroup>
+						<h:outputText value="opitional" />
+
+						<h:outputText value="Fault Lon Ends:" />
+						<h:panelGroup>
+							<h:inputText id="FaultLonEnds"
+								value="#{SimplexBean.currentEditProjectForm.currentFault.faultLonEnds}" />
+						</h:panelGroup>
+						<h:outputText value="opitional" />
+
+						<h:outputText value="Fault Lat Ends:" />
+						<h:panelGroup>
+							<h:inputText id="FaultLatEnds"
+								value="#{SimplexBean.currentEditProjectForm.currentFault.faultLatEnds}" />
+						</h:panelGroup>
+						<h:outputText value="opitional" />
+
 						<h:commandButton id="addfault" value="select"
 							actionListener="#{SimplexBean.toggleAddFaultForProject}" />
 

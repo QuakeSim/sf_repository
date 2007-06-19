@@ -76,6 +76,20 @@ function dataTableSelectOneRadio(radio) {
 						</h:outputLink>
 					</h:panelGrid>
 				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText escape="false" value="<b>Kml file</b>" />
+					</f:facet>
+						<h:panelGroup>
+						<h:outputLink id="link5" value="#{myentry3.kmlUrls[0]}" target="_blank">
+							<h:outputText value="[<b>Download</b>]" escape="false" />
+						</h:outputLink>
+						<h:outputText escape="false" value="<b> </b>" />
+						<h:outputLink id="link6" value="http://maps.google.com/maps?q=#{myentry3.kmlUrls[0]}" target="_blank">
+							<h:outputText value="[<font size=1px>View In Google map</font>]" escape="false" />
+						</h:outputLink>
+						</h:panelGroup>
+				</h:column>
 
 
 			</h:dataTable>

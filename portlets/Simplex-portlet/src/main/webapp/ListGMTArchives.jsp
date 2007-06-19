@@ -76,7 +76,20 @@ function dataTableSelectOneRadio(radio) {
 						</h:outputLink>
 					</h:panelGrid>
 				</h:column>
-
+				<h:column>
+					<f:facet name="header">
+						<h:outputText escape="false" value="<b>Kml file</b>" />
+					</f:facet>
+						<h:panelGroup>
+						<h:outputLink id="link5" value="#{myentry3.kmlUrls[0]}" target="_blank">
+							<h:outputText value="[<b>Download</b>]" escape="false" />
+						</h:outputLink>
+						<h:outputText escape="false" value="<b> </b>" />
+						<h:outputLink id="link6" value="http://maps.google.com/maps?q=#{myentry3.kmlUrls[0]}" target="_blank">
+							<h:outputText value="[<font size=1px>View In Google map</font>]" escape="false" />
+						</h:outputLink>
+						</h:panelGroup>
+				</h:column>
 				<h:column>
 					<f:facet name="header">
 						<h:outputText escape="false" value="<b>Select to Plot</b>" />
@@ -90,10 +103,12 @@ function dataTableSelectOneRadio(radio) {
 
 			</h:dataTable>
 		</h:panelGrid>
-		<h:commandButton id="gmt4plot" value="GMT Plot"
+		<h:commandButton id="gmt4plot" value="[GMT Plot]"
 			action="#{SimplexBean.toggleGMTPlot}" />
-		<h:commandButton id="gmt4map" value="Google map plot"
+		<h:commandButton id="gmt4map" value="[Map plot]"
 			action="#{SimplexBean.toggleMakeMap}" />
+		<h:commandButton id="loadkml" value="[Multi Kml Loader]"
+			action="#{SimplexBean.toggleViewKml}" />
 	</h:form>
 
 	<h:form>

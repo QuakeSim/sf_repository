@@ -30,7 +30,7 @@
                  </managed-property>
                  <managed-property>
                    <property-name>contextBasePath</property-name>
-                   <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/WebServices/WEB-INF/Descriptors/users/</value>
+                   <value>/home/zhigang/dest1/users/</value>
                 </managed-property>
 
                 <!-- Needed for the simplex service-->
@@ -38,6 +38,13 @@
                    <property-name>simpleXServiceUrl</property-name>
                    <value>http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec</value>
                  </managed-property>
+                 
+                 <!--  Needed for the kmlGenerator service -->
+                 <managed-property>
+                 	<property-name>kmlGeneratorUrl</property-name>
+                 	<value>http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator</value>
+                 </managed-property>
+                 
 
 	</managed-bean>
 
@@ -122,11 +129,28 @@
 			<to-view-id>/gmt_googlemap.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>Simplex2-kml-viewer</from-outcome>
+			<to-view-id>/kmlviewer.jsp</to-view-id>
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>Simplex2-back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 
+	<navigation-rule>
+		<from-view-id>/kmlviewer.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>Simplex2-this</from-outcome>
+			<to-view-id>/kmlviewer.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
 	<navigation-rule>
 		<from-view-id>/gmt_googlemap.jsp</from-view-id>
 		<navigation-case>
