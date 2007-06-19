@@ -74,7 +74,8 @@ public class SimpleXService extends AntVisco implements Runnable {
 			String timeStamp = gfs.generateTimeStamp();
 			System.out.println("Running blocking version");
 			SimpleXOutputBean sxb = gfs.runSimplex(userName, projectName,
-					faults, observations, "1", "2","12","23","Url" ,timeStamp);
+					faults, observations, "1", "2", "12", "23", "Url",
+					timeStamp);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -342,18 +343,21 @@ public class SimpleXService extends AntVisco implements Runnable {
 	 */
 	public SimpleXOutputBean runSimplex(String userName, String projectName,
 			Fault[] faults, Observation[] obsv, String startTemp,
-			String maxIters, String origin_lon, String origin_lat, String KmlGeneratorUrl , String timeStamp) throws Exception {
+			String maxIters, String origin_lon, String origin_lat,
+			String KmlGeneratorUrl, String timeStamp) throws Exception {
 
 		// The target is always "tar.all".
 		String[] args = prefabSimpleXCall(userName, projectName, faults, obsv,
 				startTemp, maxIters, timeStamp);
 		setArgs(args);
 		run();
-		return getAllTheSimpleXFiles(KmlGeneratorUrl, userName, projectName,origin_lon,origin_lat,faults ,timeStamp);
+		return getAllTheSimpleXFiles(KmlGeneratorUrl, userName, projectName,
+				origin_lon, origin_lat, faults, timeStamp);
 	}
 
-	protected SimpleXOutputBean getAllTheSimpleXFiles(String KmlGeneratorServiceUrl,String userName,
-			String projectName,String lon, String lat,Fault[] faults ,String jobUIDStamp) {
+	protected SimpleXOutputBean getAllTheSimpleXFiles(
+			String KmlGeneratorServiceUrl, String userName, String projectName,
+			String lon, String lat, Fault[] faults, String jobUIDStamp) {
 
 		SimpleXOutputBean sxoutput = new SimpleXOutputBean();
 		String baseUrl = generateBaseUrl(userName, projectName, jobUIDStamp);
@@ -377,7 +381,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 		catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		String[] kmlurls=new String[4];
+		String[] kmlurls = new String[4];
 
 		sxoutput.setProjectName(projectName);
 		sxoutput.setJobUIDStamp(jobUIDStamp);
@@ -393,108 +397,116 @@ public class SimpleXService extends AntVisco implements Runnable {
 		// System.out.println(sxoutput.getLogUrl());
 		// System.out.println(sxoutput.getFaultUrl());
 		try {
-		String outputfilename = workDir + "/" + projectName + ".output";
-		GmapDataXml dw = new GmapDataXml();
-		dw.LoadDataFromFile(outputfilename);
-		
-		// get observ kml
-		SimpleXDataKml kmlService;
-		SimpleXDataKmlServiceLocator locator = new SimpleXDataKmlServiceLocator();
-	    locator.setMaintainSession(true);
-		kmlService = locator.getKmlGenerator(new URL(KmlGeneratorServiceUrl));
-		
-		PointEntry[] tmp_pointentrylist=dw.getObservList();
+			String outputfilename = workDir + "/" + projectName + ".output";
+			GmapDataXml dw = new GmapDataXml();
+			dw.LoadDataFromFile(outputfilename);
 
-		kmlService.setDatalist( tmp_pointentrylist );
-		kmlService.setOriginalCoordinate(lon, lat);
-		kmlService.setCoordinateUnit("1000");
-		kmlService=setfaultplot(kmlService,faults);
-		kmlService.setPointPlacemark("Icon Layer");
-		kmlService.setArrowPlacemark("Arrow Layer", "aaeeffcc", 2);
-		
-		String observKmlUrl=kmlService.runMakeKml("", userName, projectName, "observ");
-		System.out.println(observKmlUrl);		
-		//get calc kml
-		locator = new SimpleXDataKmlServiceLocator();
-	    locator.setMaintainSession(true);
-		kmlService = locator.getKmlGenerator(new URL(KmlGeneratorServiceUrl));
-		tmp_pointentrylist=dw.getCalcList();
-		kmlService.setDatalist( tmp_pointentrylist );
-		kmlService.setOriginalCoordinate(lon, lat);
-		kmlService.setCoordinateUnit("1000");
-		//kmlService=setfaultplot(kmlService,faults);
-		kmlService.setPointPlacemark("Icon Layer");
-		kmlService.setArrowPlacemark("Arrow Layer", "aaeeffcc", 2);
-		String calcKmlUrl=kmlService.runMakeKml("", userName, projectName, "calc");
+			// get observ kml
+			SimpleXDataKml kmlService;
+			SimpleXDataKmlServiceLocator locator = new SimpleXDataKmlServiceLocator();
+			locator.setMaintainSession(true);
+			kmlService = locator
+					.getKmlGenerator(new URL(KmlGeneratorServiceUrl));
 
-		//get o_c kml
-		locator = new SimpleXDataKmlServiceLocator();
-	    locator.setMaintainSession(true);
-		kmlService = locator.getKmlGenerator(new URL(KmlGeneratorServiceUrl));
-		tmp_pointentrylist=dw.getO_cList();
-		kmlService.setDatalist( tmp_pointentrylist );
-		kmlService.setOriginalCoordinate(lon, lat);
-		kmlService.setCoordinateUnit("1000");
-		//kmlService=setfaultplot(kmlService,faults);
-		kmlService.setPointPlacemark("Icon Layer");
-		kmlService.setArrowPlacemark("Arrow Layer", "aaeeffcc", 2);
-		String o_cKmlUrl=kmlService.runMakeKml("", userName, projectName, "o_c");
-		
-		// get total kml
-		locator = new SimpleXDataKmlServiceLocator();
-	    locator.setMaintainSession(true);
-		kmlService = locator.getKmlGenerator(new URL(KmlGeneratorServiceUrl));
-		tmp_pointentrylist=dw.getO_cList();
-		kmlService.setDatalist( tmp_pointentrylist );
-		kmlService.setOriginalCoordinate(lon, lat);
-		kmlService.setCoordinateUnit("1000");
-		//kmlService=setfaultplot(kmlService,faults);
-		kmlService.setPointPlacemark("o_c Icon Layer");
-		kmlService.setArrowPlacemark("o_c Arrow Layer", "aaeeffcc", 2);
-		tmp_pointentrylist=dw.getCalcList();
-		kmlService.setDatalist( tmp_pointentrylist );
-		kmlService.setPointPlacemark("calc Icon Layer");
-		kmlService.setArrowPlacemark("calc Arrow Layer", "aaeeffcc", 2);
-		tmp_pointentrylist=dw.getObservList();
-		kmlService.setDatalist( tmp_pointentrylist );
-		kmlService.setPointPlacemark("observ Icon Layer");
-		kmlService.setArrowPlacemark("observ Arrow Layer", "aaeeffcc", 2);
-		String totalKmlUrl=kmlService.runMakeKml("", userName, projectName, "");
-		
-		
-		kmlurls[0]=totalKmlUrl;
-		kmlurls[1]=observKmlUrl;
-		kmlurls[2]=calcKmlUrl;
-		kmlurls[3]=o_cKmlUrl;
-		
-		
+			PointEntry[] tmp_pointentrylist = dw.getObservList();
+
+			kmlService.setDatalist(tmp_pointentrylist);
+			kmlService.setOriginalCoordinate(lon, lat);
+			kmlService.setCoordinateUnit("1000");
+			kmlService = setfaultplot(kmlService, faults);
+			kmlService.setPointPlacemark("Icon Layer");
+			kmlService.setArrowPlacemark("Arrow Layer", "ff66a1cc", 2);
+
+			String observKmlUrl = kmlService.runMakeKml("", userName,
+					projectName, "observ");
+			System.out.println(observKmlUrl);
+			// get calc kml
+			locator = new SimpleXDataKmlServiceLocator();
+			locator.setMaintainSession(true);
+			kmlService = locator
+					.getKmlGenerator(new URL(KmlGeneratorServiceUrl));
+			tmp_pointentrylist = dw.getCalcList();
+			kmlService.setDatalist(tmp_pointentrylist);
+			kmlService.setOriginalCoordinate(lon, lat);
+			kmlService.setCoordinateUnit("1000");
+			kmlService=setfaultplot(kmlService,faults);
+			kmlService.setPointPlacemark("Icon Layer");
+			kmlService.setArrowPlacemark("Arrow Layer", "ff00ccff", 2);
+			String calcKmlUrl = kmlService.runMakeKml("", userName,
+					projectName, "calc");
+
+			// get o_c kml
+			locator = new SimpleXDataKmlServiceLocator();
+			locator.setMaintainSession(true);
+			kmlService = locator
+					.getKmlGenerator(new URL(KmlGeneratorServiceUrl));
+			tmp_pointentrylist = dw.getO_cList();
+			kmlService.setDatalist(tmp_pointentrylist);
+			kmlService.setOriginalCoordinate(lon, lat);
+			kmlService.setCoordinateUnit("1000");
+			kmlService=setfaultplot(kmlService,faults);
+			kmlService.setPointPlacemark("Icon Layer");
+			kmlService.setArrowPlacemark("Arrow Layer", "ff61f2f2", 2);
+			String o_cKmlUrl = kmlService.runMakeKml("", userName, projectName,
+					"o_c");
+
+			// get total kml
+			locator = new SimpleXDataKmlServiceLocator();
+			locator.setMaintainSession(true);
+			kmlService = locator
+					.getKmlGenerator(new URL(KmlGeneratorServiceUrl));
+			tmp_pointentrylist = dw.getO_cList();
+			kmlService.setDatalist(tmp_pointentrylist);
+			kmlService.setOriginalCoordinate(lon, lat);
+			kmlService.setCoordinateUnit("1000");
+			kmlService=setfaultplot(kmlService,faults);
+			kmlService.setPointPlacemark("'Residual Displacements Icon Layer");
+			kmlService.setArrowPlacemark("'Residual Displacements Arrow Layer", "ff61f2f2", 2);
+			tmp_pointentrylist = dw.getCalcList();
+			kmlService.setDatalist(tmp_pointentrylist);
+			kmlService.setPointPlacemark("Calculated Displacements Icon Layer");
+			kmlService.setArrowPlacemark("Calculated Displacements Arrow Layer", "ff00ccff", 2);
+			tmp_pointentrylist = dw.getObservList();
+			kmlService.setDatalist(tmp_pointentrylist);
+			kmlService.setPointPlacemark("Observed Displacements Icon Layer");
+			kmlService.setArrowPlacemark("Observed Displacements Arrow Layer", "ff66a1cc", 2);
+			String totalKmlUrl = kmlService.runMakeKml("", userName,
+					projectName, "");
+
+			kmlurls[0] = totalKmlUrl;
+			kmlurls[1] = observKmlUrl;
+			kmlurls[2] = calcKmlUrl;
+			kmlurls[3] = o_cKmlUrl;
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		sxoutput.setKmlUrls(kmlurls);
-		
-		
+
 		return sxoutput;
 	}
-	
+
 	private SimpleXDataKml setfaultplot(SimpleXDataKml kmlserv, Fault[] fts) {
-	
+
 		for (int i = 0; i < fts.length; i++) {
 			try {
-				
-				System.out.println("***********************************************");
-				System.out.println(fts[i].getFaultLonStarts());
-				System.out.println(fts[i].getFaultLatStarts());
-				System.out.println(fts[i].getFaultLonEnds());
-				System.out.println(fts[i].getFaultLatEnds());
-							
-				
-				if ( !(fts[i].getFaultLonStarts()).equals("") && !(fts[i].getFaultLatStarts()).equals("") && !(fts[i].getFaultLonEnds()).equals("") && !(fts[i].getFaultLatEnds()).equals("") ) {
-					System.out.println("###################################################");
-					kmlserv.setFaultPlot("Fault list", fts[i].getFaultName(), fts[i].getFaultLonStarts(),fts[i].getFaultLatStarts(), fts[i].getFaultLonEnds(), fts[i].getFaultLatEnds(), "red", 4);
+				if (fts[i].getFaultLonStarts() != null
+						&& fts[i].getFaultLatStarts() != null
+						&& fts[i].getFaultLonEnds() != null
+						&& fts[i].getFaultLatEnds() != null) {
+					if (!(fts[i].getFaultLonStarts()).equals("")
+							&& !(fts[i].getFaultLatStarts()).equals("")
+							&& !(fts[i].getFaultLonEnds()).equals("")
+							&& !(fts[i].getFaultLatEnds()).equals("")) {
+						kmlserv.setFaultPlot("", fts[i]
+								.getFaultName(), fts[i].getFaultLonStarts(),
+								fts[i].getFaultLatStarts(), fts[i]
+										.getFaultLonEnds(), fts[i]
+										.getFaultLatEnds(), "ff0000ff", 5);
+					}
 				}
-			}catch ( Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -514,7 +526,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 		args[6] = "-buildfile";
 		args[7] = buildFilePath;
 		args[8] = "RunPrePlotGMT";
-	
+
 		return args;
 	}
 
@@ -636,8 +648,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 	}
 
 	/**
-	 * Actually runs RePlotGMT. Always runs in blocking mode. return pdf
-	 * Url.
+	 * Actually runs RePlotGMT. Always runs in blocking mode. return pdf Url.
 	 */
 
 	public String runRePlotGMT(String userName, String projectName,
