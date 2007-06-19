@@ -49,6 +49,9 @@ cd $BUILD_DIR
 source ./dislocexec-deploy.sh
 
 cd $BUILD_DIR
+source ./simplexexec-deploy.sh
+
+cd $BUILD_DIR
 source ./kmlgenerator-deploy.sh
 
 #----------------------------------------------------------------------
