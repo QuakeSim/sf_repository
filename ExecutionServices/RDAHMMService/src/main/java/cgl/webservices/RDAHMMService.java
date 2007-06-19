@@ -14,10 +14,8 @@ import org.apache.axis.transport.http.HTTPConstants;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 
-
 //SOPAC Client Stuff
 import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
-
 
 /**
  * A simple wrapper for Ant.
@@ -1057,7 +1055,6 @@ public class RDAHMMService extends AntVisco implements Runnable{
 		  rrb.setInputXPngUrl(results[11]);
 		  rrb.setInputYPngUrl(results[12]);
 		  rrb.setInputZPngUrl(results[13]);
-
 		  return rrb;
 	 }
 	 

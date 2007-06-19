@@ -19,11 +19,11 @@ public class RDAHMMResultsBean  implements java.io.Serializable {
 
     private java.lang.String inputUrl;
 
-    private java.lang.String[] inputXPngUrl;
+    private java.lang.String inputXPngUrl;
 
-    private java.lang.String[] inputYPngUrl;
+    private java.lang.String inputYPngUrl;
 
-    private java.lang.String[] inputZPngUrl;
+    private java.lang.String inputZPngUrl;
 
     private java.lang.String maxvalUrl;
 
@@ -44,9 +44,9 @@ public class RDAHMMResultsBean  implements java.io.Serializable {
            java.lang.String LUrl,
            java.lang.String QUrl,
            java.lang.String inputUrl,
-           java.lang.String[] inputXPngUrl,
-           java.lang.String[] inputYPngUrl,
-           java.lang.String[] inputZPngUrl,
+           java.lang.String inputXPngUrl,
+           java.lang.String inputYPngUrl,
+           java.lang.String inputZPngUrl,
            java.lang.String maxvalUrl,
            java.lang.String minvalUrl,
            java.lang.String piUrl,
@@ -176,7 +176,7 @@ public class RDAHMMResultsBean  implements java.io.Serializable {
      * 
      * @return inputXPngUrl
      */
-    public java.lang.String[] getInputXPngUrl() {
+    public java.lang.String getInputXPngUrl() {
         return inputXPngUrl;
     }
 
@@ -186,8 +186,8 @@ public class RDAHMMResultsBean  implements java.io.Serializable {
      * 
      * @param inputXPngUrl
      */
-    public void setInputXPngUrl(java.lang.String[] inputXPngUrl) {
-		  //        this.inputXPngUrl = inputXPngUrl;
+    public void setInputXPngUrl(java.lang.String inputXPngUrl) {
+		  this.inputXPngUrl = inputXPngUrl;
 		  
     }
 
@@ -197,7 +197,7 @@ public class RDAHMMResultsBean  implements java.io.Serializable {
      * 
      * @return inputYPngUrl
      */
-    public java.lang.String[] getInputYPngUrl() {
+    public java.lang.String getInputYPngUrl() {
         return inputYPngUrl;
     }
 
@@ -207,8 +207,8 @@ public class RDAHMMResultsBean  implements java.io.Serializable {
      * 
      * @param inputYPngUrl
      */
-    public void setInputYPngUrl(java.lang.String[] inputYPngUrl) {
-		  //        this.inputYPngUrl = inputYPngUrl;
+    public void setInputYPngUrl(java.lang.String inputYPngUrl) {
+		  this.inputYPngUrl = inputYPngUrl;
     }
 
 
@@ -217,7 +217,7 @@ public class RDAHMMResultsBean  implements java.io.Serializable {
      * 
      * @return inputZPngUrl
      */
-    public java.lang.String[] getInputZPngUrl() {
+    public java.lang.String getInputZPngUrl() {
         return inputZPngUrl;
     }
 
@@ -227,8 +227,8 @@ public class RDAHMMResultsBean  implements java.io.Serializable {
      * 
      * @param inputZPngUrl
      */
-    public void setInputZPngUrl(java.lang.String[] inputZPngUrl) {
-		  //        this.inputZPngUrl = inputZPngUrl;
+    public void setInputZPngUrl(java.lang.String inputZPngUrl) {
+		  this.inputZPngUrl = inputZPngUrl;
     }
 
 
