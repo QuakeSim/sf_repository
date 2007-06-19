@@ -71,10 +71,6 @@ mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 cd $DISLOC_SA_HOME
 mvn clean -Dtomcat.base.dir=$CATALINA_HOME
 
-#Clean up portlet stuff
-#cd $SIMPLEX_PORTLET_HOME
-#mvn clean
-
 #--------------------------------------------------
 # Clean up the portlets.
 #--------------------------------------------------

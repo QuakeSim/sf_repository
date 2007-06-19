@@ -231,7 +231,6 @@ public class RDAHMMResultsBean  implements java.io.Serializable {
 		  this.inputZPngUrl = inputZPngUrl;
     }
 
-
     /**
      * Gets the maxvalUrl value for this RDAHMMResultsBean.
      * 
