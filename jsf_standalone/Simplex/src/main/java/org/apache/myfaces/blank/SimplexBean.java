@@ -84,6 +84,10 @@ public class SimplexBean extends GenericSopacBean {
 	String simpleXBaseUrl = "http://gf19.ucs.indiana.edu:8080/simplexexec/";
 
 	String simpleXServiceUrl = "http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec";
+	
+	String kmlGeneratorBaseurl= "http://gf1.ucs.indiana.edu:13080/KmlGenerator/";
+	
+	String kmlGeneratorUrl = "http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator";
 
 	SimpleXOutputBean projectSimpleXOutput;
 
@@ -158,6 +162,14 @@ public class SimplexBean extends GenericSopacBean {
 		return returnObservations;
 	}
 
+	public void setKmlGeneratorUrl(String tmp_str) {
+		this.kmlGeneratorUrl=tmp_str;
+	}
+	
+	public String getKmlGeneratorUrl() {
+		return this.kmlGeneratorUrl;
+	}
+	
 	// set and get data staff
 
 	public void setGmtPlotPdfUrl(String tmp_str) {
@@ -508,7 +520,7 @@ public class SimplexBean extends GenericSopacBean {
 		System.out.println("ProjectName:" + projectName);
 		projectSimpleXOutput = simplexService.runSimplex(userName, projectName,
 				faults, obsv, currentProjectEntry.startTemp,
-				currentProjectEntry.maxIters, timeStamp);
+				currentProjectEntry.maxIters,currentProjectEntry.origin_lon, currentProjectEntry.origin_lat,this.kmlGeneratorUrl, timeStamp);
 
 		System.out.println(projectSimpleXOutput.getProjectName());
 		System.out.println(projectSimpleXOutput.getInputUrl());
@@ -543,6 +555,8 @@ public class SimplexBean extends GenericSopacBean {
 		mega.setLogUrl(projectSimpleXOutput.getLogUrl());
 		mega.setOutputUrl(projectSimpleXOutput.getOutputUrl());
 		mega.setFaultUrl(projectSimpleXOutput.getFaultUrl());
+		String[] kmlurls=projectSimpleXOutput.getKmlUrls();
+		mega.setKmlUrls(kmlurls);
 		db.set(mega);
 		db.commit();
 		db.close();
@@ -849,9 +863,74 @@ public class SimplexBean extends GenericSopacBean {
 			e.printStackTrace();
 		}
 		return ("Simplex2-google-map");
-
 	}
+	
+	public String toggleViewKml() {
 
+		System.out.println("Kml viewer");
+		if (!isInitialized) {
+			initWebServices();
+		}
+		try {
+			setContextList();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		try {
+
+			// Catch the MyData item during the third phase of the JSF
+			// lifecycle.
+			SimpleXOutputBean tmp_loadMeshTableEntry = new SimpleXOutputBean();
+			for (int i = 0; i < myarchivedFileEntryList.size(); i++) {
+				tmp_loadMeshTableEntry = (SimpleXOutputBean) myarchivedFileEntryList
+						.get(i);
+				if ((tmp_loadMeshTableEntry.getView() == true)) {
+					break;
+				}
+			}
+
+			String tmp_projectName = tmp_loadMeshTableEntry.getProjectName();
+			projectName = tmp_projectName;
+			boolean tmp_view = tmp_loadMeshTableEntry.getView();
+			if ((tmp_view == true)) {
+				SimpleXOutputBean mega = new SimpleXOutputBean();
+				mega.setProjectName(projectName);
+				// System.out.println("ProjectName: "+projectName);
+				db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+						+ codeName + "/" + projectName + ".db");
+				ObjectSet results=db.get(mega);
+				// System.out.println("Matches for
+				// "+projectName+":"+results.size());
+				if (results.hasNext()) {
+					projectSimpleXOutput = (SimpleXOutputBean) results.next();
+				}else {
+					System.out.println("error: can not find this project for SimpleXOutputBean");
+				}
+				db.close();
+				
+				db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+						+ codeName + ".db");
+				projectEntry tmp_proj = new projectEntry();
+				tmp_proj.projectName = this.projectName;
+				ObjectSet results2 = db.get(tmp_proj);
+				if (results2.hasNext()) {
+					this.currentProjectEntry = (projectEntry) results2.next();
+				} else {
+					System.out.println("error: can not find this project");
+				}
+				db.close();
+				System.out.println(currentProjectEntry.origin_lat);
+				System.out.println(currentProjectEntry.origin_lon);
+				
+				
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ("Simplex2-kml-viewer");
+	}
 	public void toggleUpdateFaultProjectEntry(ActionEvent ev) {
 
 		String faultStatus = "Update";

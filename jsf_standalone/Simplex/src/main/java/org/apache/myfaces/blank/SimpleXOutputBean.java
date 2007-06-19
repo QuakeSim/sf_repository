@@ -14,6 +14,8 @@ public class SimpleXOutputBean  implements java.io.Serializable {
 
     private java.lang.String jobUIDStamp;
 
+    private java.lang.String[] kmlUrls;
+
     private java.lang.String logUrl;
 
     private java.lang.String outputUrl;
@@ -29,6 +31,7 @@ public class SimpleXOutputBean  implements java.io.Serializable {
            java.lang.String faultUrl,
            java.lang.String inputUrl,
            java.lang.String jobUIDStamp,
+           java.lang.String[] kmlUrls,
            java.lang.String logUrl,
            java.lang.String outputUrl,
            java.lang.String projectName,
@@ -36,6 +39,7 @@ public class SimpleXOutputBean  implements java.io.Serializable {
            this.faultUrl = faultUrl;
            this.inputUrl = inputUrl;
            this.jobUIDStamp = jobUIDStamp;
+           this.kmlUrls = kmlUrls;
            this.logUrl = logUrl;
            this.outputUrl = outputUrl;
            this.projectName = projectName;
@@ -100,6 +104,26 @@ public class SimpleXOutputBean  implements java.io.Serializable {
      */
     public void setJobUIDStamp(java.lang.String jobUIDStamp) {
         this.jobUIDStamp = jobUIDStamp;
+    }
+
+
+    /**
+     * Gets the kmlUrls value for this SimpleXOutputBean.
+     * 
+     * @return kmlUrls
+     */
+    public java.lang.String[] getKmlUrls() {
+        return kmlUrls;
+    }
+
+
+    /**
+     * Sets the kmlUrls value for this SimpleXOutputBean.
+     * 
+     * @param kmlUrls
+     */
+    public void setKmlUrls(java.lang.String[] kmlUrls) {
+        this.kmlUrls = kmlUrls;
     }
 
 
@@ -169,7 +193,7 @@ public class SimpleXOutputBean  implements java.io.Serializable {
      * @return view
      */
     public boolean getView() {
-        return this.view;
+        return view;
     }
 
 
@@ -203,6 +227,9 @@ public class SimpleXOutputBean  implements java.io.Serializable {
             ((this.jobUIDStamp==null && other.getJobUIDStamp()==null) || 
              (this.jobUIDStamp!=null &&
               this.jobUIDStamp.equals(other.getJobUIDStamp()))) &&
+            ((this.kmlUrls==null && other.getKmlUrls()==null) || 
+             (this.kmlUrls!=null &&
+              java.util.Arrays.equals(this.kmlUrls, other.getKmlUrls()))) &&
             ((this.logUrl==null && other.getLogUrl()==null) || 
              (this.logUrl!=null &&
               this.logUrl.equals(other.getLogUrl()))) &&
@@ -232,6 +259,17 @@ public class SimpleXOutputBean  implements java.io.Serializable {
         }
         if (getJobUIDStamp() != null) {
             _hashCode += getJobUIDStamp().hashCode();
+        }
+        if (getKmlUrls() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getKmlUrls());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getKmlUrls(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         if (getLogUrl() != null) {
             _hashCode += getLogUrl().hashCode();
@@ -268,6 +306,12 @@ public class SimpleXOutputBean  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("jobUIDStamp");
         elemField.setXmlName(new javax.xml.namespace.QName("", "jobUIDStamp"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("kmlUrls");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "kmlUrls"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

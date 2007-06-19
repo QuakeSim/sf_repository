@@ -18,6 +18,10 @@ public class Fault  implements java.io.Serializable {
 
     private boolean faultDipSlipVary;
 
+    private java.lang.String faultLatEnds;
+
+    private java.lang.String faultLatStarts;
+
     private java.lang.String faultLength;
 
     private boolean faultLengthVary;
@@ -25,6 +29,10 @@ public class Fault  implements java.io.Serializable {
     private java.lang.String faultLocationX;
 
     private java.lang.String faultLocationY;
+
+    private java.lang.String faultLonEnds;
+
+    private java.lang.String faultLonStarts;
 
     private java.lang.String faultName;
 
@@ -55,10 +63,14 @@ public class Fault  implements java.io.Serializable {
            java.lang.String faultDipAngle,
            boolean faultDipAngleVary,
            boolean faultDipSlipVary,
+           java.lang.String faultLatEnds,
+           java.lang.String faultLatStarts,
            java.lang.String faultLength,
            boolean faultLengthVary,
            java.lang.String faultLocationX,
            java.lang.String faultLocationY,
+           java.lang.String faultLonEnds,
+           java.lang.String faultLonStarts,
            java.lang.String faultName,
            boolean faultOriginXVary,
            boolean faultOriginYVary,
@@ -74,10 +86,14 @@ public class Fault  implements java.io.Serializable {
            this.faultDipAngle = faultDipAngle;
            this.faultDipAngleVary = faultDipAngleVary;
            this.faultDipSlipVary = faultDipSlipVary;
+           this.faultLatEnds = faultLatEnds;
+           this.faultLatStarts = faultLatStarts;
            this.faultLength = faultLength;
            this.faultLengthVary = faultLengthVary;
            this.faultLocationX = faultLocationX;
            this.faultLocationY = faultLocationY;
+           this.faultLonEnds = faultLonEnds;
+           this.faultLonStarts = faultLonStarts;
            this.faultName = faultName;
            this.faultOriginXVary = faultOriginXVary;
            this.faultOriginYVary = faultOriginYVary;
@@ -116,7 +132,7 @@ public class Fault  implements java.io.Serializable {
      * 
      * @return faultDepthVary
      */
-    public boolean isFaultDepthVary() {
+    public boolean getFaultDepthVary() {
         return faultDepthVary;
     }
 
@@ -156,7 +172,7 @@ public class Fault  implements java.io.Serializable {
      * 
      * @return faultDipAngleVary
      */
-    public boolean isFaultDipAngleVary() {
+    public boolean getFaultDipAngleVary() {
         return faultDipAngleVary;
     }
 
@@ -176,7 +192,7 @@ public class Fault  implements java.io.Serializable {
      * 
      * @return faultDipSlipVary
      */
-    public boolean isFaultDipSlipVary() {
+    public boolean getFaultDipSlipVary() {
         return faultDipSlipVary;
     }
 
@@ -188,6 +204,46 @@ public class Fault  implements java.io.Serializable {
      */
     public void setFaultDipSlipVary(boolean faultDipSlipVary) {
         this.faultDipSlipVary = faultDipSlipVary;
+    }
+
+
+    /**
+     * Gets the faultLatEnds value for this Fault.
+     * 
+     * @return faultLatEnds
+     */
+    public java.lang.String getFaultLatEnds() {
+        return faultLatEnds;
+    }
+
+
+    /**
+     * Sets the faultLatEnds value for this Fault.
+     * 
+     * @param faultLatEnds
+     */
+    public void setFaultLatEnds(java.lang.String faultLatEnds) {
+        this.faultLatEnds = faultLatEnds;
+    }
+
+
+    /**
+     * Gets the faultLatStarts value for this Fault.
+     * 
+     * @return faultLatStarts
+     */
+    public java.lang.String getFaultLatStarts() {
+        return faultLatStarts;
+    }
+
+
+    /**
+     * Sets the faultLatStarts value for this Fault.
+     * 
+     * @param faultLatStarts
+     */
+    public void setFaultLatStarts(java.lang.String faultLatStarts) {
+        this.faultLatStarts = faultLatStarts;
     }
 
 
@@ -216,7 +272,7 @@ public class Fault  implements java.io.Serializable {
      * 
      * @return faultLengthVary
      */
-    public boolean isFaultLengthVary() {
+    public boolean getFaultLengthVary() {
         return faultLengthVary;
     }
 
@@ -272,6 +328,46 @@ public class Fault  implements java.io.Serializable {
 
 
     /**
+     * Gets the faultLonEnds value for this Fault.
+     * 
+     * @return faultLonEnds
+     */
+    public java.lang.String getFaultLonEnds() {
+        return faultLonEnds;
+    }
+
+
+    /**
+     * Sets the faultLonEnds value for this Fault.
+     * 
+     * @param faultLonEnds
+     */
+    public void setFaultLonEnds(java.lang.String faultLonEnds) {
+        this.faultLonEnds = faultLonEnds;
+    }
+
+
+    /**
+     * Gets the faultLonStarts value for this Fault.
+     * 
+     * @return faultLonStarts
+     */
+    public java.lang.String getFaultLonStarts() {
+        return faultLonStarts;
+    }
+
+
+    /**
+     * Sets the faultLonStarts value for this Fault.
+     * 
+     * @param faultLonStarts
+     */
+    public void setFaultLonStarts(java.lang.String faultLonStarts) {
+        this.faultLonStarts = faultLonStarts;
+    }
+
+
+    /**
      * Gets the faultName value for this Fault.
      * 
      * @return faultName
@@ -296,7 +392,7 @@ public class Fault  implements java.io.Serializable {
      * 
      * @return faultOriginXVary
      */
-    public boolean isFaultOriginXVary() {
+    public boolean getFaultOriginXVary() {
         return faultOriginXVary;
     }
 
@@ -316,7 +412,7 @@ public class Fault  implements java.io.Serializable {
      * 
      * @return faultOriginYVary
      */
-    public boolean isFaultOriginYVary() {
+    public boolean getFaultOriginYVary() {
         return faultOriginYVary;
     }
 
@@ -396,7 +492,7 @@ public class Fault  implements java.io.Serializable {
      * 
      * @return faultStrikeAngleVary
      */
-    public boolean isFaultStrikeAngleVary() {
+    public boolean getFaultStrikeAngleVary() {
         return faultStrikeAngleVary;
     }
 
@@ -416,7 +512,7 @@ public class Fault  implements java.io.Serializable {
      * 
      * @return faultStrikeSlipVary
      */
-    public boolean isFaultStrikeSlipVary() {
+    public boolean getFaultStrikeSlipVary() {
         return faultStrikeSlipVary;
     }
 
@@ -456,7 +552,7 @@ public class Fault  implements java.io.Serializable {
      * 
      * @return faultWidthVary
      */
-    public boolean isFaultWidthVary() {
+    public boolean getFaultWidthVary() {
         return faultWidthVary;
     }
 
@@ -485,27 +581,39 @@ public class Fault  implements java.io.Serializable {
             ((this.faultDepth==null && other.getFaultDepth()==null) || 
              (this.faultDepth!=null &&
               this.faultDepth.equals(other.getFaultDepth()))) &&
-            this.faultDepthVary == other.isFaultDepthVary() &&
+            this.faultDepthVary == other.getFaultDepthVary() &&
             ((this.faultDipAngle==null && other.getFaultDipAngle()==null) || 
              (this.faultDipAngle!=null &&
               this.faultDipAngle.equals(other.getFaultDipAngle()))) &&
-            this.faultDipAngleVary == other.isFaultDipAngleVary() &&
-            this.faultDipSlipVary == other.isFaultDipSlipVary() &&
+            this.faultDipAngleVary == other.getFaultDipAngleVary() &&
+            this.faultDipSlipVary == other.getFaultDipSlipVary() &&
+            ((this.faultLatEnds==null && other.getFaultLatEnds()==null) || 
+             (this.faultLatEnds!=null &&
+              this.faultLatEnds.equals(other.getFaultLatEnds()))) &&
+            ((this.faultLatStarts==null && other.getFaultLatStarts()==null) || 
+             (this.faultLatStarts!=null &&
+              this.faultLatStarts.equals(other.getFaultLatStarts()))) &&
             ((this.faultLength==null && other.getFaultLength()==null) || 
              (this.faultLength!=null &&
               this.faultLength.equals(other.getFaultLength()))) &&
-            this.faultLengthVary == other.isFaultLengthVary() &&
+            this.faultLengthVary == other.getFaultLengthVary() &&
             ((this.faultLocationX==null && other.getFaultLocationX()==null) || 
              (this.faultLocationX!=null &&
               this.faultLocationX.equals(other.getFaultLocationX()))) &&
             ((this.faultLocationY==null && other.getFaultLocationY()==null) || 
              (this.faultLocationY!=null &&
               this.faultLocationY.equals(other.getFaultLocationY()))) &&
+            ((this.faultLonEnds==null && other.getFaultLonEnds()==null) || 
+             (this.faultLonEnds!=null &&
+              this.faultLonEnds.equals(other.getFaultLonEnds()))) &&
+            ((this.faultLonStarts==null && other.getFaultLonStarts()==null) || 
+             (this.faultLonStarts!=null &&
+              this.faultLonStarts.equals(other.getFaultLonStarts()))) &&
             ((this.faultName==null && other.getFaultName()==null) || 
              (this.faultName!=null &&
               this.faultName.equals(other.getFaultName()))) &&
-            this.faultOriginXVary == other.isFaultOriginXVary() &&
-            this.faultOriginYVary == other.isFaultOriginYVary() &&
+            this.faultOriginXVary == other.getFaultOriginXVary() &&
+            this.faultOriginYVary == other.getFaultOriginYVary() &&
             ((this.faultRakeAngle==null && other.getFaultRakeAngle()==null) || 
              (this.faultRakeAngle!=null &&
               this.faultRakeAngle.equals(other.getFaultRakeAngle()))) &&
@@ -515,12 +623,12 @@ public class Fault  implements java.io.Serializable {
             ((this.faultStrikeAngle==null && other.getFaultStrikeAngle()==null) || 
              (this.faultStrikeAngle!=null &&
               this.faultStrikeAngle.equals(other.getFaultStrikeAngle()))) &&
-            this.faultStrikeAngleVary == other.isFaultStrikeAngleVary() &&
-            this.faultStrikeSlipVary == other.isFaultStrikeSlipVary() &&
+            this.faultStrikeAngleVary == other.getFaultStrikeAngleVary() &&
+            this.faultStrikeSlipVary == other.getFaultStrikeSlipVary() &&
             ((this.faultWidth==null && other.getFaultWidth()==null) || 
              (this.faultWidth!=null &&
               this.faultWidth.equals(other.getFaultWidth()))) &&
-            this.faultWidthVary == other.isFaultWidthVary();
+            this.faultWidthVary == other.getFaultWidthVary();
         __equalsCalc = null;
         return _equals;
     }
@@ -535,27 +643,39 @@ public class Fault  implements java.io.Serializable {
         if (getFaultDepth() != null) {
             _hashCode += getFaultDepth().hashCode();
         }
-        _hashCode += (isFaultDepthVary() ? Boolean.TRUE : Boolean.FALSE).hashCode();
+        _hashCode += (getFaultDepthVary() ? Boolean.TRUE : Boolean.FALSE).hashCode();
         if (getFaultDipAngle() != null) {
             _hashCode += getFaultDipAngle().hashCode();
         }
-        _hashCode += (isFaultDipAngleVary() ? Boolean.TRUE : Boolean.FALSE).hashCode();
-        _hashCode += (isFaultDipSlipVary() ? Boolean.TRUE : Boolean.FALSE).hashCode();
+        _hashCode += (getFaultDipAngleVary() ? Boolean.TRUE : Boolean.FALSE).hashCode();
+        _hashCode += (getFaultDipSlipVary() ? Boolean.TRUE : Boolean.FALSE).hashCode();
+        if (getFaultLatEnds() != null) {
+            _hashCode += getFaultLatEnds().hashCode();
+        }
+        if (getFaultLatStarts() != null) {
+            _hashCode += getFaultLatStarts().hashCode();
+        }
         if (getFaultLength() != null) {
             _hashCode += getFaultLength().hashCode();
         }
-        _hashCode += (isFaultLengthVary() ? Boolean.TRUE : Boolean.FALSE).hashCode();
+        _hashCode += (getFaultLengthVary() ? Boolean.TRUE : Boolean.FALSE).hashCode();
         if (getFaultLocationX() != null) {
             _hashCode += getFaultLocationX().hashCode();
         }
         if (getFaultLocationY() != null) {
             _hashCode += getFaultLocationY().hashCode();
         }
+        if (getFaultLonEnds() != null) {
+            _hashCode += getFaultLonEnds().hashCode();
+        }
+        if (getFaultLonStarts() != null) {
+            _hashCode += getFaultLonStarts().hashCode();
+        }
         if (getFaultName() != null) {
             _hashCode += getFaultName().hashCode();
         }
-        _hashCode += (isFaultOriginXVary() ? Boolean.TRUE : Boolean.FALSE).hashCode();
-        _hashCode += (isFaultOriginYVary() ? Boolean.TRUE : Boolean.FALSE).hashCode();
+        _hashCode += (getFaultOriginXVary() ? Boolean.TRUE : Boolean.FALSE).hashCode();
+        _hashCode += (getFaultOriginYVary() ? Boolean.TRUE : Boolean.FALSE).hashCode();
         if (getFaultRakeAngle() != null) {
             _hashCode += getFaultRakeAngle().hashCode();
         }
@@ -565,12 +685,12 @@ public class Fault  implements java.io.Serializable {
         if (getFaultStrikeAngle() != null) {
             _hashCode += getFaultStrikeAngle().hashCode();
         }
-        _hashCode += (isFaultStrikeAngleVary() ? Boolean.TRUE : Boolean.FALSE).hashCode();
-        _hashCode += (isFaultStrikeSlipVary() ? Boolean.TRUE : Boolean.FALSE).hashCode();
+        _hashCode += (getFaultStrikeAngleVary() ? Boolean.TRUE : Boolean.FALSE).hashCode();
+        _hashCode += (getFaultStrikeSlipVary() ? Boolean.TRUE : Boolean.FALSE).hashCode();
         if (getFaultWidth() != null) {
             _hashCode += getFaultWidth().hashCode();
         }
-        _hashCode += (isFaultWidthVary() ? Boolean.TRUE : Boolean.FALSE).hashCode();
+        _hashCode += (getFaultWidthVary() ? Boolean.TRUE : Boolean.FALSE).hashCode();
         __hashCodeCalc = false;
         return _hashCode;
     }
@@ -612,6 +732,18 @@ public class Fault  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("faultLatEnds");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "faultLatEnds"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("faultLatStarts");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "faultLatStarts"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("faultLength");
         elemField.setXmlName(new javax.xml.namespace.QName("", "faultLength"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
@@ -632,6 +764,18 @@ public class Fault  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("faultLocationY");
         elemField.setXmlName(new javax.xml.namespace.QName("", "faultLocationY"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("faultLonEnds");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "faultLonEnds"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("faultLonStarts");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "faultLonStarts"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
