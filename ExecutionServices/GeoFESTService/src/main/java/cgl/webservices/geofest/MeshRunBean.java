@@ -87,7 +87,7 @@ public class MeshRunBean {
 	 }
 	 
 	 public void setRefinerLog(String refinerLog){
-		  this.indexUrl=indexUrl;
+		  this.refinerLog=refinerLog;
 	 }
 	 public String getRefinerLog() {
 		  return refinerLog;
@@ -114,7 +114,7 @@ public class MeshRunBean {
 		  return junkBox;
 	 }
 
-	 public void setViscoTarUrl(String viscoTarURL) {
+	 public void setViscoTarUrl(String viscoTarUrl) {
 		  this.viscoTarUrl=viscoTarUrl;
 	 }
 
