@@ -63,7 +63,7 @@
 <target name="geotrans.tar" depends="geotrans">
    <tstamp/>
    <echo append="true" 
-         file="${workdir.prop}/jobstatus.log">Tarring geotrans files: ${TSTAMP}.${DSTAMP}" 
+         file="${workdir.prop}/jobstatus.log">Tarring geotrans files: ${TSTAMP}.${DSTAMP}
    </echo>
 
    <delete file="${workdir.prop}/${projectName.prop}.tar.gz"/>
