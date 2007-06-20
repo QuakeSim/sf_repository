@@ -3,7 +3,9 @@ package cgl.quakesim.disloc;
 //Imports from the mother ship
 import java.io.*;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.text.*;
 
 import javax.faces.context.ExternalContext;
@@ -91,6 +93,13 @@ public class DislocBean extends GenericSopacBean {
 	 DislocService dislocService;
 	 String dislocServiceUrl="http://gf19.ucs.indiana.edu:8080/dislocexec/services/DislocExec";
     String faultDBServiceUrl="http://gf2.ucs.indiana.edu:9090/axis/services/Select";
+	String kmlGeneratorBaseurl= "http://gf1.ucs.indiana.edu:13080/KmlGenerator/";
+	String kmlGeneratorUrl = "http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator";
+
+	
+	 String origin_lat;
+	 String origin_lon;
+
 
     /**
      * The client constructor.
@@ -151,7 +160,7 @@ public class DislocBean extends GenericSopacBean {
 													  String projectName,
 													  String jobUIDStamp,
 													  DislocParamsBean paramsBean,
-													  DislocResultsBean dislocResultsBean) 
+													  DislocResultsBean dislocResultsBean,String kml_url) 
 		  throws Exception {
 		  DislocProjectSummaryBean summaryBean=new DislocProjectSummaryBean();
 		  summaryBean.setUserName(userName);
@@ -160,6 +169,7 @@ public class DislocBean extends GenericSopacBean {
 		  summaryBean.setParamsBean(paramsBean);
 		  summaryBean.setResultsBean(dislocResultsBean);
 		  summaryBean.setCreationDate(new Date().toString());
+		  summaryBean.setKmlurl(kml_url);
 
  		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");	
 		  db.set(summaryBean);
@@ -187,13 +197,30 @@ public class DislocBean extends GenericSopacBean {
 																									 dislocParams,
 																									 null);
 		  setJobToken(dislocResultsBean.getJobUIDStamp());
+			// get my  kml
+			SimpleXDataKml kmlService;
+			SimpleXDataKmlServiceLocator locator = new SimpleXDataKmlServiceLocator();
+			locator.setMaintainSession(true);
+			kmlService = locator
+					.getKmlGenerator(new URL(kmlGeneratorUrl));
 
+			PointEntry[] tmp_pointentrylist = LoadDataFromUrl(dislocResultsBean.getOutputFileUrl());;
+
+			kmlService.setDatalist(tmp_pointentrylist);
+			kmlService.setOriginalCoordinate(this.origin_lon, this.origin_lat);
+			kmlService.setCoordinateUnit("1000");
+			kmlService.setPointPlacemark("Icon Layer");
+			kmlService.setArrowPlacemark("Arrow Layer", "ff66a1cc", 2);
+
+			String myKmlUrl = kmlService.runMakeKml("", userName,
+					projectName, (dislocResultsBean.getJobUIDStamp()).hashCode()+"");
+			System.out.println(myKmlUrl);
 		  
 		  storeProjectInContext(userName,
 										projectName,
 										dislocResultsBean.getJobUIDStamp(),
 										dislocParams,
-										dislocResultsBean);
+										dislocResultsBean,myKmlUrl);
 		  return DISLOC_NAV_STRING;
     }
     
@@ -219,17 +246,102 @@ public class DislocBean extends GenericSopacBean {
 																										 faults,
 																										 dislocParams,
 																										 null);
-		  setJobToken(dislocResultsBean.getJobUIDStamp());
-		  System.out.println("Output file url:"+dislocResultsBean.getOutputFileUrl());
+			// get my  kml
+			SimpleXDataKml kmlService;
+			SimpleXDataKmlServiceLocator locator = new SimpleXDataKmlServiceLocator();
+			locator.setMaintainSession(true);
+			kmlService = locator
+					.getKmlGenerator(new URL(kmlGeneratorUrl));
+
+			PointEntry[] tmp_pointentrylist = LoadDataFromUrl(dislocResultsBean.getOutputFileUrl());;
+
+			kmlService.setDatalist(tmp_pointentrylist);
+			kmlService.setOriginalCoordinate(this.origin_lon, this.origin_lat);
+			kmlService.setCoordinateUnit("1000");
+			
+			double start_x,start_y,end_x,end_y,xiterationsNumber,yiterationsNumber;
+			start_x=Double.valueOf(dislocParams.getGridMinXValue() ).doubleValue();
+			start_y=Double.valueOf(dislocParams.getGridMinYValue() ).doubleValue();
+			xiterationsNumber=Double.valueOf(dislocParams.getGridXIterations() ).doubleValue();
+			yiterationsNumber=Double.valueOf(dislocParams.getGridYIterations() ).doubleValue();
+			int xinterval= (int)(Double.valueOf(dislocParams.getGridXSpacing()).doubleValue() );
+			int yinterval=(int)(Double.valueOf(dislocParams.getGridYSpacing()).doubleValue() );
+			end_x=start_x+xinterval*(xiterationsNumber-1);
+			end_y=start_y+yinterval*(yiterationsNumber-1);
+			
+			System.out.println(start_x);
+			System.out.println(start_y);
+			System.out.println(end_x);
+			System.out.println(end_y);
+			System.out.println(xinterval);
+			System.out.println(yinterval);
+			
+			kmlService.setGridLine("Grid Line", start_x, start_y, end_x, end_y, xinterval,yinterval);
+			kmlService.setPointPlacemark("Icon Layer");
+			kmlService.setArrowPlacemark("Arrow Layer", "ff66a1cc", 2);
+	
+			String myKmlUrl = kmlService.runMakeKml("", userName,
+					projectName, (dislocResultsBean.getJobUIDStamp()).hashCode()+"");
+			setJobToken(dislocResultsBean.getJobUIDStamp());
 		  storeProjectInContext(userName,
 										projectName,
 										dislocResultsBean.getJobUIDStamp(),
 										dislocParams,
-										dislocResultsBean);
+										dislocResultsBean,myKmlUrl);
 
 		  return DISLOC_NAV_STRING;
     }
 
+	/**
+	 * Another famous method that I googled. This downloads contents from the
+	 * given URL to a local file.
+	 */
+
+
+	public PointEntry[] LoadDataFromUrl(String InputUrl) {
+		ArrayList dataset = new ArrayList();
+		try {
+			String line = new String();
+			int skipthreelines = 1;
+			
+			URL inUrl= new URL(InputUrl);
+			URLConnection uconn = inUrl.openConnection();
+			InputStream instream = inUrl.openStream();
+
+		        BufferedReader in =
+		          new BufferedReader(new InputStreamReader(instream)); 
+			while ((line = in.readLine()) != null) {
+				if (skipthreelines <= 4) {
+
+				} else {
+					if (!line.trim().equalsIgnoreCase("")) {
+						PointEntry tempPoint = new PointEntry();
+						Pattern p = Pattern.compile(" {1,20}");
+						String tmp[] = p.split(line);
+						tempPoint.setX(tmp[1].trim());
+						tempPoint.setY(tmp[2].trim());
+						tempPoint.setDeltaXName("dx");
+						tempPoint.setDeltaXValue(tmp[3].trim());
+						tempPoint.setDeltaYName("dy");
+						tempPoint.setDeltaYValue(tmp[4].trim());
+						tempPoint.setDeltaZName("dz");
+						tempPoint.setDeltaZValue(tmp[5].trim());
+						tempPoint.setFolderTag("point");
+						dataset.add(tempPoint);
+					} else {
+						break;
+					}
+				}
+				skipthreelines++;
+			}
+			in.close();
+			instream.close();
+		} catch (IOException ex1) {
+			ex1.printStackTrace();
+		}
+		return (PointEntry[]) (dataset.toArray(new PointEntry[dataset.size()]));
+	}	
+    
 	 // End main execution method section.
 	 //--------------------------------------------------
 
@@ -671,6 +783,26 @@ public class DislocBean extends GenericSopacBean {
 				}
 		  }
 
+			db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");		  
+			DislocProjectBean project=new DislocProjectBean();
+
+			project.setProjectName(projectName);
+			ObjectSet results=db.get(project);
+
+			//System.out.println("Got results:"+results.size());
+			if(results.hasNext()) {
+				project=(DislocProjectBean)results.next();
+				this.origin_lat=project.getOrigin_lat();
+				this.origin_lon=project.getOrigin_lon();
+
+			}else{
+				this.origin_lat="0";
+				this.origin_lon="0";
+			}
+			db.close();
+			System.out.println("origin_lat:"+this.origin_lat);
+			System.out.println("origin_lon:"+this.origin_lon);
+			  
 		  //Reconstruct the fault and layer object collections from the context
 		  myFaultCollection=populateFaultCollection(projectName);
 		  
@@ -1018,6 +1150,12 @@ public class DislocBean extends GenericSopacBean {
  		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");		  		  
 		  DislocProjectBean project=new DislocProjectBean();
 		  project.setProjectName(projectName);
+		  ObjectSet results=db.get(project);
+		  if(results.hasNext()){
+			  project=(DislocProjectBean)results.next();
+		  }
+		  project.setOrigin_lon(this.origin_lon);
+		  project.setOrigin_lat(this.origin_lat);
 		  db.set(project);
 		  db.commit();
 		  db.close();
@@ -1048,7 +1186,7 @@ public class DislocBean extends GenericSopacBean {
 				//System.out.println("Got results:"+results.size());
 				while(results.hasNext()) {
 					 project=(DislocProjectBean)results.next();
-					 //System.out.println(project.getProjectName());
+					 System.out.println("get project name list:"+project.getProjectName());
 					 myProjectNameList.add(new SelectItem(project.getProjectName(),
 																	  project.getProjectName()));
 				}
@@ -1347,6 +1485,19 @@ public class DislocBean extends GenericSopacBean {
 		  this.currentFault=currentFault;
 	 }
 
+	 public void setOrigin_lat(String tmp_str) {
+		 this.origin_lat=tmp_str;
+	 }
+	 public String getOrigin_lat() {
+		 return this.origin_lat;
+	 }
+	 public void setOrigin_lon(String tmp_str) {
+		 this.origin_lon=tmp_str;
+	 }
+	 public String getOrigin_lon() {
+		 return this.origin_lon;
+	 }
+	 
 	 protected Fault populateFaultFromContext(String tmp_faultName) throws Exception {
 		  String faultStatus="Update";
 
@@ -1407,5 +1558,13 @@ public class DislocBean extends GenericSopacBean {
 		  return this.myArchivedDislocResultsList;
 	 }
 	 
+		public void setKmlGeneratorUrl(String tmp_str) {
+			this.kmlGeneratorUrl=tmp_str;
+		}
+		
+		public String getKmlGeneratorUrl() {
+			return this.kmlGeneratorUrl;
+		}
+		
 	 
 }
