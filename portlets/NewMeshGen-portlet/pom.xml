@@ -75,6 +75,11 @@
 
 
     <repositories>
+        <!-- This is our local repository -->
+        <repository>
+            <id>crisisgrid-maven-repo</id>
+            <url>http://www.crisisgrid.org/maven2</url>
+        </repository>
         <repository>
             <releases>
                 <enabled>false</enabled>
@@ -96,12 +101,6 @@
             <url>http://cvs.apache.org/repository</url>
         </repository>
 
-        <!-- This is our local repository -->
-        <repository>
-            <id>crisisgrid-maven-repo</id>
-            <url>http://www.crisisgrid.org/maven2</url>
-        </repository>
-
     </repositories>
 
     <!-- Repositories for plugins -->
@@ -121,21 +120,21 @@
         <dependency>
             <groupId>myfaces</groupId>
             <artifactId>myfaces-api</artifactId>
-            <version>1.1.0</version>
+            <version>1.1.1</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>myfaces</groupId>
             <artifactId>myfaces-impl</artifactId>
-            <version>1.1.0</version>
+            <version>1.1.1</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>myfaces</groupId>
             <artifactId>tomahawk</artifactId>
-            <version>1.1.0</version>
+            <version>1.1.1</version>
             <scope>compile</scope>
         </dependency>
 

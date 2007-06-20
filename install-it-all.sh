@@ -111,8 +111,8 @@ source ./stationmonitor-portlet-install.sh
 cd $BUILD_DIR
 source ./disloc-portlet-install.sh
 
-#cd $BUILD_DIR
-#source ./simplex-portlet-install.sh
+cd $BUILD_DIR
+source ./simplex-portlet-install.sh
 
 # Portlet version has bugs, so don't install
 #cd $BUILD_DIR
