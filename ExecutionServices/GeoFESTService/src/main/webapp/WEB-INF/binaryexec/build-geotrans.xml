@@ -29,6 +29,10 @@
       <arg value="${mode.prop}"/>
       <env key="PATH" path="${bindir.prop}:/bin:/usr/bin/:$PATH"/>
    </exec>
+   <delete file="${workdir.prop}/${projectName.prop}-visco.tar.gz"/>
+   <delete file="${workdir.prop}/${projectName.prop}-visco.tar"/>
+   <tar tarfile="${workdir.prop}/${projectName.prop}-visco.tar.gz" basedir="${workdir.prop}" compression="gzip"/>
+
    <echo append="true" file="${workdir.prop}/jobstatus.log">Autoref complete: ${TSTAMP}.${DSTAMP}
    </echo>
 

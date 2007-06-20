@@ -20,10 +20,12 @@ public class MeshRunBean {
 	 String tagbigfltLog;
 	 String tstout;
 	 String junkBox;
+	 String viscoTarUrl;
 
 	 public void setJobUIDStamp(String jobUIDStamp){
 		  this.jobUIDStamp=jobUIDStamp;
 	 }
+
 	 public String getJobUIDStamp() {
 		  return jobUIDStamp;
 	 }
@@ -111,5 +113,13 @@ public class MeshRunBean {
 	 public String getJunkBox() {
 		  return junkBox;
 	 }
-	 
+
+	 public void setViscoTarUrl(String viscoTarURL) {
+		  this.viscoTarUrl=viscoTarUrl;
+	 }
+
+	 public String getViscoTarUrl() {
+		  return viscoTarUrl;
+	 }
+
 }

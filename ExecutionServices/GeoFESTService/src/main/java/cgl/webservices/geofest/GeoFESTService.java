@@ -276,6 +276,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  mrb.setLeeRefinerLog(baseUrl+"/"+"LeeRefiner.log");
 		  mrb.setRefinerLog(baseUrl+"/"+"refiner.log");
 		  mrb.setTagbigfltLog(baseUrl+"/"+"tagbigflt.log");
+		  mrb.setViscoTarUrl(baseUrl+"/"+projectName+"-visco.tar.gz");
 		  
 		  return mrb;
 	 }
