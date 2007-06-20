@@ -203,9 +203,9 @@ public class SimpleXDataKml {
 	}
 	
 	public void setGridLine(String folderName, double start_x, double start_y,
-			double end_x, double end_y, double interval) {
+			double end_x, double end_y, double xinterval,double yinterval) {
 
-		if (interval <= 0) {
+		if (xinterval <= 0 || yinterval<=0) {
 			return;
 		}
 
@@ -224,7 +224,8 @@ public class SimpleXDataKml {
 		double smally = Math.min(start_y, end_y) * coordinateUnit;
 		double bigx = Math.max(start_x, end_x) * coordinateUnit;
 		double bigy = Math.max(start_y, end_y) * coordinateUnit;
-		interval = interval * coordinateUnit;
+		xinterval = xinterval * coordinateUnit;
+		yinterval = yinterval * coordinateUnit;
 
 		Placemark mark1 = new Placemark();
 		mark1.setName("gridline");
@@ -259,7 +260,7 @@ public class SimpleXDataKml {
 //					+ mercator_lonlat.getY() + ",0 \n";
 			line_value=line_value +tmp_lonlat.getX() + "," +
 			 tmp_lonlat.getY() + ",0 \n";
-			tmp_x = tmp_x + interval;
+			tmp_x = tmp_x + xinterval;
 			odd_flg++;
 		}
 		// rollback
@@ -311,7 +312,7 @@ public class SimpleXDataKml {
 //					+ mercator_lonlat.getY() + ",0 \n";
 			 line_value=line_value +tmp_lonlat.getX() + "," +
 			 tmp_lonlat.getY() + ",0 \n";
-			tmp_y = tmp_y + interval;
+			tmp_y = tmp_y + yinterval;
 			odd_flg++;
 		}
 		// rollback
