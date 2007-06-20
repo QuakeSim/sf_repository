@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions targetNamespace="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" xmlns:intf="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="urn:SimpleXDataKml" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-<!--WSDL created by Apache Axis version: 1.4
-Built on Apr 22, 2006 (06:55:48 PDT)-->
+<!--WSDL created by Apache Axis version: 1.2.1
+Built on Jun 14, 2005 (09:15:57 EDT)-->
  <wsdl:types>
   <schema targetNamespace="urn:SimpleXDataKml" xmlns="http://www.w3.org/2001/XMLSchema">
    <import namespace="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator"/>
@@ -81,7 +81,9 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       <wsdl:part name="end_y" type="xsd:double"/>
 
-      <wsdl:part name="interval" type="xsd:double"/>
+      <wsdl:part name="xinterval" type="xsd:double"/>
+
+      <wsdl:part name="yinterval" type="xsd:double"/>
 
    </wsdl:message>
 
@@ -115,14 +117,6 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
    </wsdl:message>
 
-   <wsdl:message name="setRefCoordinateRequest">
-
-      <wsdl:part name="lon" type="soapenc:string"/>
-
-      <wsdl:part name="lat" type="soapenc:string"/>
-
-   </wsdl:message>
-
    <wsdl:message name="setFaultPlotRequest">
 
       <wsdl:part name="folderName" type="soapenc:string"/>
@@ -143,19 +137,15 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
    </wsdl:message>
 
-   <wsdl:message name="runMakeKmlResponse">
-
-      <wsdl:part name="runMakeKmlReturn" type="soapenc:string"/>
-
-   </wsdl:message>
-
    <wsdl:message name="setPointPlacemarkRequest">
 
       <wsdl:part name="folderName" type="soapenc:string"/>
 
    </wsdl:message>
 
-   <wsdl:message name="setRefCoordinateResponse">
+   <wsdl:message name="runMakeKmlResponse">
+
+      <wsdl:part name="runMakeKmlReturn" type="soapenc:string"/>
 
    </wsdl:message>
 
@@ -173,19 +163,19 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
-      <wsdl:operation name="runMakeKml" parameterOrder="ServerTag UserName ProjectName JobUID">
+      <wsdl:operation name="setOriginalCoordinate" parameterOrder="lon lat">
 
-         <wsdl:input message="impl:runMakeKmlRequest" name="runMakeKmlRequest"/>
+         <wsdl:input message="impl:setOriginalCoordinateRequest" name="setOriginalCoordinateRequest"/>
 
-         <wsdl:output message="impl:runMakeKmlResponse" name="runMakeKmlResponse"/>
+         <wsdl:output message="impl:setOriginalCoordinateResponse" name="setOriginalCoordinateResponse"/>
 
       </wsdl:operation>
 
-      <wsdl:operation name="setGridLine" parameterOrder="folderName start_x start_y end_x end_y interval">
+      <wsdl:operation name="setCoordinateUnit" parameterOrder="Unit">
 
-         <wsdl:input message="impl:setGridLineRequest" name="setGridLineRequest"/>
+         <wsdl:input message="impl:setCoordinateUnitRequest" name="setCoordinateUnitRequest"/>
 
-         <wsdl:output message="impl:setGridLineResponse" name="setGridLineResponse"/>
+         <wsdl:output message="impl:setCoordinateUnitResponse" name="setCoordinateUnitResponse"/>
 
       </wsdl:operation>
 
@@ -205,11 +195,11 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
-      <wsdl:operation name="setCoordinateUnit" parameterOrder="Unit">
+      <wsdl:operation name="runMakeKml" parameterOrder="ServerTag UserName ProjectName JobUID">
 
-         <wsdl:input message="impl:setCoordinateUnitRequest" name="setCoordinateUnitRequest"/>
+         <wsdl:input message="impl:runMakeKmlRequest" name="runMakeKmlRequest"/>
 
-         <wsdl:output message="impl:setCoordinateUnitResponse" name="setCoordinateUnitResponse"/>
+         <wsdl:output message="impl:runMakeKmlResponse" name="runMakeKmlResponse"/>
 
       </wsdl:operation>
 
@@ -221,19 +211,11 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
-      <wsdl:operation name="setOriginalCoordinate" parameterOrder="lon lat">
+      <wsdl:operation name="setGridLine" parameterOrder="folderName start_x start_y end_x end_y xinterval yinterval">
 
-         <wsdl:input message="impl:setOriginalCoordinateRequest" name="setOriginalCoordinateRequest"/>
+         <wsdl:input message="impl:setGridLineRequest" name="setGridLineRequest"/>
 
-         <wsdl:output message="impl:setOriginalCoordinateResponse" name="setOriginalCoordinateResponse"/>
-
-      </wsdl:operation>
-
-      <wsdl:operation name="setRefCoordinate" parameterOrder="lon lat">
-
-         <wsdl:input message="impl:setRefCoordinateRequest" name="setRefCoordinateRequest"/>
-
-         <wsdl:output message="impl:setRefCoordinateResponse" name="setRefCoordinateResponse"/>
+         <wsdl:output message="impl:setGridLineResponse" name="setGridLineResponse"/>
 
       </wsdl:operation>
 
@@ -261,17 +243,17 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
-      <wsdl:operation name="runMakeKml">
+      <wsdl:operation name="setOriginalCoordinate">
 
          <wsdlsoap:operation soapAction=""/>
 
-         <wsdl:input name="runMakeKmlRequest">
+         <wsdl:input name="setOriginalCoordinateRequest">
 
             <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://KmlGenerator.webservices.cgl" use="encoded"/>
 
          </wsdl:input>
 
-         <wsdl:output name="runMakeKmlResponse">
+         <wsdl:output name="setOriginalCoordinateResponse">
 
             <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" use="encoded"/>
 
@@ -279,17 +261,17 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
-      <wsdl:operation name="setGridLine">
+      <wsdl:operation name="setCoordinateUnit">
 
          <wsdlsoap:operation soapAction=""/>
 
-         <wsdl:input name="setGridLineRequest">
+         <wsdl:input name="setCoordinateUnitRequest">
 
             <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://KmlGenerator.webservices.cgl" use="encoded"/>
 
          </wsdl:input>
 
-         <wsdl:output name="setGridLineResponse">
+         <wsdl:output name="setCoordinateUnitResponse">
 
             <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" use="encoded"/>
 
@@ -333,17 +315,17 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
-      <wsdl:operation name="setCoordinateUnit">
+      <wsdl:operation name="runMakeKml">
 
          <wsdlsoap:operation soapAction=""/>
 
-         <wsdl:input name="setCoordinateUnitRequest">
+         <wsdl:input name="runMakeKmlRequest">
 
             <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://KmlGenerator.webservices.cgl" use="encoded"/>
 
          </wsdl:input>
 
-         <wsdl:output name="setCoordinateUnitResponse">
+         <wsdl:output name="runMakeKmlResponse">
 
             <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" use="encoded"/>
 
@@ -369,35 +351,17 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
-      <wsdl:operation name="setOriginalCoordinate">
+      <wsdl:operation name="setGridLine">
 
          <wsdlsoap:operation soapAction=""/>
 
-         <wsdl:input name="setOriginalCoordinateRequest">
+         <wsdl:input name="setGridLineRequest">
 
             <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://KmlGenerator.webservices.cgl" use="encoded"/>
 
          </wsdl:input>
 
-         <wsdl:output name="setOriginalCoordinateResponse">
-
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" use="encoded"/>
-
-         </wsdl:output>
-
-      </wsdl:operation>
-
-      <wsdl:operation name="setRefCoordinate">
-
-         <wsdlsoap:operation soapAction=""/>
-
-         <wsdl:input name="setRefCoordinateRequest">
-
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://KmlGenerator.webservices.cgl" use="encoded"/>
-
-         </wsdl:input>
-
-         <wsdl:output name="setRefCoordinateResponse">
+         <wsdl:output name="setGridLineResponse">
 
             <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" use="encoded"/>
 
