@@ -8,6 +8,7 @@ public class DislocProjectSummaryBean {
 	 String projectName;
 	 String jobUIDStamp;
 	 String creationDate;
+	 String kmlurl;
 
 	 public DislocProjectSummaryBean() {
 	 }
@@ -15,6 +16,12 @@ public class DislocProjectSummaryBean {
 	 public String getCreationDate() { return this.creationDate; }
 	 public void setCreationDate(String creationDate) { this.creationDate=creationDate; }
 
+     public void setKmlurl(String tmp_str) {
+         this.kmlurl=tmp_str;
+     }
+     public String getKmlurl() {
+         return this.kmlurl;
+     }
 	 public String getUserName(){
 		  return userName;
 	 }
