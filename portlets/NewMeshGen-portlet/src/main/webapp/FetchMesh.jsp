@@ -172,6 +172,15 @@ function dataTableSelectOneRadio(radio) {
 					
 					<h:column>
 					<f:facet name="header">
+						    <h:outputText value="Project Input Files"/>
+				   </f:facet>
+				       <h:outputLink value="#{mrb.meshRunBean.viscoTarUrl}" target="_blank">
+						    <h:outputText value="Project Tar"/>
+						 </h:outputLink>
+					</h:column>
+					
+					<h:column>
+					<f:facet name="header">
 						    <h:outputText value="Plot Mesh"/>
 				   </f:facet>
 					<h:outputLink value="#{facesContext.externalContext.requestContextPath}/painter.jsp">

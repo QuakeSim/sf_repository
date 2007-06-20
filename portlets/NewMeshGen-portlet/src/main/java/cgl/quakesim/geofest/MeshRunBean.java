@@ -34,6 +34,8 @@ public class MeshRunBean  implements java.io.Serializable {
 
     private java.lang.String tstout;
 
+    private java.lang.String viscoTarUrl;
+
     public MeshRunBean() {
     }
 
@@ -50,7 +52,8 @@ public class MeshRunBean  implements java.io.Serializable {
            java.lang.String refinerLog,
            java.lang.String tagbigfltLog,
            java.lang.String tetraUrl,
-           java.lang.String tstout) {
+           java.lang.String tstout,
+           java.lang.String viscoTarUrl) {
            this.autoref = autoref;
            this.autorefError = autorefError;
            this.bcUrl = bcUrl;
@@ -64,6 +67,7 @@ public class MeshRunBean  implements java.io.Serializable {
            this.tagbigfltLog = tagbigfltLog;
            this.tetraUrl = tetraUrl;
            this.tstout = tstout;
+           this.viscoTarUrl = viscoTarUrl;
     }
 
 
@@ -326,6 +330,26 @@ public class MeshRunBean  implements java.io.Serializable {
         this.tstout = tstout;
     }
 
+
+    /**
+     * Gets the viscoTarUrl value for this MeshRunBean.
+     * 
+     * @return viscoTarUrl
+     */
+    public java.lang.String getViscoTarUrl() {
+        return viscoTarUrl;
+    }
+
+
+    /**
+     * Sets the viscoTarUrl value for this MeshRunBean.
+     * 
+     * @param viscoTarUrl
+     */
+    public void setViscoTarUrl(java.lang.String viscoTarUrl) {
+        this.viscoTarUrl = viscoTarUrl;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof MeshRunBean)) return false;
@@ -376,7 +400,10 @@ public class MeshRunBean  implements java.io.Serializable {
               this.tetraUrl.equals(other.getTetraUrl()))) &&
             ((this.tstout==null && other.getTstout()==null) || 
              (this.tstout!=null &&
-              this.tstout.equals(other.getTstout())));
+              this.tstout.equals(other.getTstout()))) &&
+            ((this.viscoTarUrl==null && other.getViscoTarUrl()==null) || 
+             (this.viscoTarUrl!=null &&
+              this.viscoTarUrl.equals(other.getViscoTarUrl())));
         __equalsCalc = null;
         return _equals;
     }
@@ -426,6 +453,9 @@ public class MeshRunBean  implements java.io.Serializable {
         }
         if (getTstout() != null) {
             _hashCode += getTstout().hashCode();
+        }
+        if (getViscoTarUrl() != null) {
+            _hashCode += getViscoTarUrl().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -512,6 +542,12 @@ public class MeshRunBean  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("tstout");
         elemField.setXmlName(new javax.xml.namespace.QName("", "tstout"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("viscoTarUrl");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "viscoTarUrl"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

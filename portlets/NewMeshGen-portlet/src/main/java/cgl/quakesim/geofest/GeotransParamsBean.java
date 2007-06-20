@@ -4,122 +4,79 @@
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
+
 package cgl.quakesim.geofest;
 
 public class GeotransParamsBean  implements java.io.Serializable {
-	//input params
-	String number_space_dimensions="3";
-	String number_degrees_freedom="3";
-	String nrates ="0";
-	String shape_flag = "1";
-	String solver_flag = "2";
-	String number_time_groups = "1";
-	String reform_steps ="1";
-	String backup_steps="5000";
-	String fault_interval="5000.0";
-	String end_time="50.0";
-	String alpha ="1.0";
-	String time_step="0.5";
-	
-	//cordinate boundary
-	
-	String top_bc="locked node";
-	String top_bc_value="0 0. 0. 0. 1. ";
-	String east_bc="locked node";
-	String east_bc_value="0 0. 0. 0. 1. ";
-	String west_bc="locked node";
-	String west_bc_value="0 0. 0. 0. 1. ";
-	String north_bc="locked node";
-	String north_bc_value="0 0. 0. 0. 1. ";
-	String south_bc="locked node";
-	String south_bc_value="0 0. 0. 0. 1. ";
-	String bottom_bc="locked node";
-	String bottom_bc_value="0 0. 0. 0. 1. ";
+    private java.lang.String alpha;
 
-	//Output Parameters and Formatting
-	
-	String reportingNodes="All";
-	String reportingElements="All";
-	String printTimesType="Steps";
-	String numberofPrintTimes="5";
-	String printTimesInterval="1.0";
-	String restartFile="NO_RESTART";
-	String checkpointFile="NO_SAVE";
-	
-	String inputFileName="";
-	String outputFileName="";
-	String logFileName="";
-	String run_choice="";
+    private java.lang.String backup_steps;
 
-//     private java.lang.String alpha;
+    private java.lang.String bottom_bc;
 
-//     private java.lang.String backup_steps;
+    private java.lang.String bottom_bc_value;
 
-//     private java.lang.String bottom_bc;
+    private java.lang.String checkpointFile;
 
-//     private java.lang.String bottom_bc_value;
+    private java.lang.String east_bc;
 
-//     private java.lang.String checkpointFile;
+    private java.lang.String east_bc_value;
 
-//     private java.lang.String east_bc;
+    private java.lang.String end_time;
 
-//     private java.lang.String east_bc_value;
+    private java.lang.String fault_interval;
 
-//     private java.lang.String end_time;
+    private java.lang.String inputFileName;
 
-//     private java.lang.String fault_interval;
+    private java.lang.String logFileName;
 
-//     private java.lang.String inputFileName;
+    private java.lang.String north_bc;
 
-//     private java.lang.String logFileName;
+    private java.lang.String north_bc_value;
 
-//     private java.lang.String north_bc;
+    private java.lang.String nrates;
 
-//     private java.lang.String north_bc_value;
+    private java.lang.String number_degrees_freedom;
 
-//     private java.lang.String nrates;
+    private java.lang.String number_space_dimensions;
 
-//     private java.lang.String number_degrees_freedom;
+    private java.lang.String number_time_groups;
 
-//     private java.lang.String number_space_dimensions;
+    private java.lang.String numberofPrintTimes;
 
-//     private java.lang.String number_time_groups;
+    private java.lang.String outputFileName;
 
-//     private java.lang.String numberofPrintTimes;
+    private java.lang.String printTimesInterval;
 
-//     private java.lang.String outputFileName;
+    private java.lang.String printTimesType;
 
-//     private java.lang.String printTimesInterval;
+    private java.lang.String reform_steps;
 
-//     private java.lang.String printTimesType;
+    private java.lang.String reportingElements;
 
-//     private java.lang.String reform_steps;
+    private java.lang.String reportingNodes;
 
-//     private java.lang.String reportingElements;
+    private java.lang.String restartFile;
 
-//     private java.lang.String reportingNodes;
+    private java.lang.String run_choice;
 
-//     private java.lang.String restartFile;
+    private java.lang.String shape_flag;
 
-//     private java.lang.String run_choice;
+    private java.lang.String solver_flag;
 
-//     private java.lang.String shape_flag;
+    private java.lang.String south_bc;
 
-//     private java.lang.String solver_flag;
+    private java.lang.String south_bc_value;
 
-//     private java.lang.String south_bc;
+    private java.lang.String time_step;
 
-//     private java.lang.String south_bc_value;
+    private java.lang.String top_bc;
 
-//     private java.lang.String time_step;
+    private java.lang.String top_bc_value;
 
-//     private java.lang.String top_bc;
+    private java.lang.String west_bc;
 
-//     private java.lang.String top_bc_value;
-
-//     private java.lang.String west_bc;
-
-//     private java.lang.String west_bc_value;
+    private java.lang.String west_bc_value;
 
     public GeotransParamsBean() {
     }

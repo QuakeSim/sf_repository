@@ -109,7 +109,7 @@ function dataTableSelectOneRadio(radio) {
 					<h:panelGroup  id="stuff7">
 						<h:inputText id="LayerName"
 							value="#{MGBean.currentLayer.layerName}" required="true" />
-						<h:message  id="stuff7" 
+						<h:message  id="stuff77" 
 							for="LayerName" showDetail="true" showSummary="true"
 							errorStyle="color: red" />
 					</h:panelGroup>
@@ -128,7 +128,7 @@ function dataTableSelectOneRadio(radio) {
 						<h:inputText id="LayerOriginY"
 							value="#{MGBean.currentLayer.layerOriginY}" required="true" />
 						<h:message for="LayerOriginY" showDetail="true" showSummary="true"
-									   id="stuff12"
+									   id="stuff123"
 							errorStyle="color: red" />
 					</h:panelGroup>
 
@@ -331,7 +331,7 @@ function dataTableSelectOneRadio(radio) {
 							<h:outputText escape="false" value="<b>LayerName</b>" />
 						</f:facet>
 						<h:selectOneRadio layout="pageDirection"
-						     id="der2"
+						     id="der23"
 							valueChangeListener="#{MGBean.handleLayersRadioValueChange}"
 							onchange="dataTableSelectOneRadio(this)"
 							onclick="dataTableSelectOneRadio(this)">
