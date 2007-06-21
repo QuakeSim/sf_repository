@@ -1,0 +1,107 @@
+<faults>
+<fault faultName="Northridge2" segmentName="Northridge2" latStart="34.243" latEnd="34.176" lonStart="-118.72" lonEnd="-118.591" />
+<fault faultName="Sierra Madre" segmentName="San Fernando 1971" latStart="34.28" latEnd="34.3" lonStart="-118.3" lonEnd="-118.48" />
+<fault faultName="Sierra Madre" segmentName="San Fernando" latStart="34.28" latEnd="34.3" lonStart="-118.3" lonEnd="-118.48" />
+<fault faultName="Sierra Madre" segmentName="San Fernando" latStart="34.28" latEnd="34.3" lonStart="-118.3" lonEnd="-118.48" />
+<fault faultName="Sierra Madre" segmentName="San Fernando" latStart="34.28" latEnd="34.3" lonStart="-118.3" lonEnd="-118.48" />
+<fault faultName="White Wolf" segmentName="White Wolf #5" latStart="35.26" latEnd="35.31" lonStart="-118.65" lonEnd="-118.56" />
+<fault faultName="White Wolf" segmentName="White Wolf #4" latStart="35.21" latEnd="35.26" lonStart="-118.73" lonEnd="-118.65" />
+<fault faultName="White Wolf" segmentName="White Wolf #3" latStart="35.15" latEnd="35.21" lonStart="-118.82" lonEnd="-118.73" />
+<fault faultName="White Wolf" segmentName="White Wolf #2" latStart="35.1" latEnd="35.15" lonStart="-118.9" lonEnd="-118.82" />
+<fault faultName="White Wolf" segmentName="White Wolf #1" latStart="35.05" latEnd="35.1" lonStart="-118.99" lonEnd="-118.9" />
+<fault faultName="White Mountains" segmentName="White Mountains #10" latStart="37.14" latEnd="37.05" lonStart="-118.19" lonEnd="-118.17" />
+<fault faultName="White Mountains" segmentName="White Mountains #9" latStart="37.23" latEnd="37.14" lonStart="-118.2" lonEnd="-118.19" />
+<fault faultName="White Mountains" segmentName="White Mountains #8" latStart="37.32" latEnd="37.23" lonStart="-118.22" lonEnd="-118.2" />
+<fault faultName="White Mountains" segmentName="White Mountains #7" latStart="37.41" latEnd="37.32" lonStart="-118.24" lonEnd="-118.22" />
+<fault faultName="White Mountains" segmentName="White Mountains #6" latStart="37.5" latEnd="37.41" lonStart="-118.25" lonEnd="-118.24" />
+<fault faultName="White Mountains" segmentName="White Mountains #5" latStart="37.58" latEnd="37.5" lonStart="-118.27" lonEnd="-118.25" />
+<fault faultName="White Mountains" segmentName="White Mountains #4" latStart="37.67" latEnd="37.58" lonStart="-118.29" lonEnd="-118.27" />
+<fault faultName="White Mountains" segmentName="White Mountains #3" latStart="37.76" latEnd="37.67" lonStart="-118.31" lonEnd="-118.29" />
+<fault faultName="White Mountains" segmentName="White Mountains #2" latStart="37.85" latEnd="37.76" lonStart="-118.32" lonEnd="-118.31" />
+<fault faultName="White Mountains" segmentName="White Mountains #1" latStart="37.94" latEnd="37.85" lonStart="-118.34" lonEnd="-118.32" />
+<fault faultName="West Napa" segmentName="West Napa #3" latStart="38.24" latEnd="38.16" lonStart="-122.28" lonEnd="-122.24" />
+<fault faultName="West Napa" segmentName="West Napa #2" latStart="38.33" latEnd="38.24" lonStart="-122.33" lonEnd="-122.28" />
+<fault faultName="West Napa" segmentName="West Napa #1" latStart="38.41" latEnd="38.33" lonStart="-122.37" lonEnd="-122.33" />
+<fault faultName="Tunnel Ridge" segmentName="Tunnel Ridge #2" latStart="34.35" latEnd="34.42" lonStart="-117.18" lonEnd="-117.12" />
+<fault faultName="Tunnel Ridge" segmentName="Tunnel Ridge #1" latStart="34.27" latEnd="34.35" lonStart="-117.23" lonEnd="-117.18" />
+<fault faultName="Sargent" segmentName="Sargent #5" latStart="36.92" latEnd="36.87" lonStart="-121.55" lonEnd="-121.45" />
+<fault faultName="Sargent" segmentName="Sargent #4" latStart="36.98" latEnd="36.92" lonStart="-121.65" lonEnd="-121.55" />
+<fault faultName="Sargent" segmentName="Sargent #3" latStart="37.03" latEnd="36.98" lonStart="-121.74" lonEnd="-121.65" />
+<fault faultName="Sargent" segmentName="Sargent #2" latStart="37.09" latEnd="37.03" lonStart="-121.84" lonEnd="-121.74" />
+<fault faultName="Sargent" segmentName="Sargent #1" latStart="37.14" latEnd="37.09" lonStart="-121.94" lonEnd="-121.84" />
+<fault faultName="Santa Monica" segmentName="Santa Monica #11" latStart="34.09" latEnd="34.08" lonStart="-118.26" lonEnd="-118.38" />
+<fault faultName="Santa Monica" segmentName="Santa Monica #10" latStart="34.11" latEnd="34.09" lonStart="-118.14" lonEnd="-118.26" />
+<fault faultName="Santa Monica" segmentName="Santa Monica #9" latStart="34.05" latEnd="34.02" lonStart="-118.5" lonEnd="-118.63" />
+<fault faultName="Santa Monica" segmentName="Santa Monica #8" latStart="34.08" latEnd="34.05" lonStart="-118.38" lonEnd="-118.5" />
+<fault faultName="Santa Monica" segmentName="Santa Monica #7" latStart="34.03" latEnd="34.04" lonStart="-118.75" lonEnd="-118.87" />
+<fault faultName="Santa Monica" segmentName="Santa Monica #6" latStart="34.02" latEnd="34.03" lonStart="-118.63" lonEnd="-118.75" />
+<fault faultName="Santa Monica" segmentName="Santa Monica #5" latStart="34.04" latEnd="34.04" lonStart="-119" lonEnd="-119.12" />
+<fault faultName="Santa Monica" segmentName="Santa Monica #4" latStart="34.04" latEnd="34.04" lonStart="-118.87" lonEnd="-119" />
+<fault faultName="Santa Monica" segmentName="Santa Monica #3" latStart="34" latEnd="33.98" lonStart="-119.32" lonEnd="-119.42" />
+<fault faultName="Santa Monica" segmentName="Santa Monica #2" latStart="34.02" latEnd="34" lonStart="-119.22" lonEnd="-119.32" />
+<fault faultName="Santa Monica" segmentName="Santa Monica #1" latStart="34.04" latEnd="34.02" lonStart="-119.12" lonEnd="-119.22" />
+<fault faultName="Santa Cruz Island" segmentName="Santa Cruz Island #5" latStart="33.99" latEnd="33.98" lonStart="-119.53" lonEnd="-119.42" />
+<fault faultName="Santa Cruz Island" segmentName="Santa Cruz Island #4" latStart="34.01" latEnd="33.99" lonStart="-119.64" lonEnd="-119.53" />
+<fault faultName="Santa Cruz Island" segmentName="Santa Cruz Island #3" latStart="34.02" latEnd="34.01" lonStart="-119.76" lonEnd="-119.64" />
+<fault faultName="Santa Cruz Island" segmentName="Santa Cruz Island #2" latStart="34.04" latEnd="34.02" lonStart="-119.87" lonEnd="-119.76" />
+<fault faultName="Santa Cruz Island" segmentName="Santa Cruz Island #1" latStart="34.05" latEnd="34.04" lonStart="-119.99" lonEnd="-119.87" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #29" latStart="32.95" latEnd="32.89" lonStart="-115.74" lonEnd="-115.64" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #28" latStart="33.01" latEnd="32.95" lonStart="-115.84" lonEnd="-115.74" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #27" latStart="32.94" latEnd="32.89" lonStart="-115.81" lonEnd="-115.7" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #26" latStart="32.99" latEnd="32.94" lonStart="-115.92" lonEnd="-115.81" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #25" latStart="33.09" latEnd="33.01" lonStart="-116.06" lonEnd="-115.98" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #24" latStart="33.16" latEnd="33.09" lonStart="-116.14" lonEnd="-116.06" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #23" latStart="33.21" latEnd="33.16" lonStart="-116.22" lonEnd="-116.14" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #22" latStart="33.27" latEnd="33.22" lonStart="-116.28" lonEnd="-116.22" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #21" latStart="33.32" latEnd="33.27" lonStart="-116.33" lonEnd="-116.28" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #20" latStart="33.37" latEnd="33.32" lonStart="-116.4" lonEnd="-116.33" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #19" latStart="33.43" latEnd="33.37" lonStart="-116.46" lonEnd="-116.4" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #18" latStart="33.48" latEnd="33.43" lonStart="-116.52" lonEnd="-116.46" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #17" latStart="33.32" latEnd="33.27" lonStart="-116.21" lonEnd="-116.13" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #16" latStart="33.37" latEnd="33.32" lonStart="-116.3" lonEnd="-116.21" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #15" latStart="33.42" latEnd="33.37" lonStart="-116.39" lonEnd="-116.3" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #14" latStart="33.47" latEnd="33.42" lonStart="-116.46" lonEnd="-116.39" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #13" latStart="33.51" latEnd="33.47" lonStart="-116.53" lonEnd="-116.46" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #12" latStart="33.56" latEnd="33.51" lonStart="-116.61" lonEnd="-116.53" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #11" latStart="33.6" latEnd="33.56" lonStart="-116.68" lonEnd="-116.61" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #10" latStart="33.64" latEnd="33.6" lonStart="-116.75" lonEnd="-116.68" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #9" latStart="33.69" latEnd="33.64" lonStart="-116.82" lonEnd="-116.75" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #8" latStart="33.74" latEnd="33.69" lonStart="-116.92" lonEnd="-116.82" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #7" latStart="33.83" latEnd="33.74" lonStart="-117.03" lonEnd="-116.92" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #6" latStart="33.89" latEnd="33.83" lonStart="-117.1" lonEnd="-117.03" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #5" latStart="33.94" latEnd="33.89" lonStart="-117.16" lonEnd="-117.1" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #4" latStart="34" latEnd="33.94" lonStart="-117.22" lonEnd="-117.16" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #3" latStart="34.09" latEnd="34.02" lonStart="-117.31" lonEnd="-117.23" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #2" latStart="34.17" latEnd="34.09" lonStart="-117.39" lonEnd="-117.31" />
+<fault faultName="San Jacinto" segmentName="San Jacinto #1" latStart="34.25" latEnd="34.17" lonStart="-117.51" lonEnd="-117.39" />
+<fault faultName="San Jacinto" segmentName="San Bernardino" latStart="34.02" latEnd="34.25" lonStart="-117.24" lonEnd="-117.51" />
+<fault faultName="San Jacinto" segmentName="San Jacinto Valley" latStart="33.74" latEnd="34.02" lonStart="-116.92" lonEnd="-117.24" />
+<fault faultName="San Jacinto" segmentName="Borrego" latStart="33.01" latEnd="33.2" lonStart="-115.98" lonEnd="-116.19" />
+<fault faultName="San Jacinto" segmentName="Anza" latStart="33.26" latEnd="33.74" lonStart="-116.12" lonEnd="-116.92" />
+<fault faultName="San Jacinto" segmentName="Coyote Creek" latStart="33.2" latEnd="33.46" lonStart="-116.19" lonEnd="-116.51" />
+<fault faultName="San Gregorio" segmentName="San Gregorio #9" latStart="36.89" latEnd="36.81" lonStart="-122.17" lonEnd="-122.13" />
+<fault faultName="San Gregorio" segmentName="San Gregorio #8" latStart="36.98" latEnd="36.89" lonStart="-122.21" lonEnd="-122.17" />
+<fault faultName="San Gregorio" segmentName="San Gregorio #7" latStart="37.06" latEnd="36.98" lonStart="-122.25" lonEnd="-122.21" />
+<fault faultName="San Gregorio" segmentName="San Gregorio #6" latStart="37.14" latEnd="37.06" lonStart="-122.29" lonEnd="-122.25" />
+<fault faultName="San Gregorio" segmentName="San Gregorio #5" latStart="37.23" latEnd="37.14" lonStart="-122.34" lonEnd="-122.29" />
+<fault faultName="San Gregorio" segmentName="San Gregorio #4" latStart="37.31" latEnd="37.23" lonStart="-122.38" lonEnd="-122.34" />
+<fault faultName="San Gregorio" segmentName="San Gregorio #3" latStart="37.39" latEnd="37.31" lonStart="-122.42" lonEnd="-122.38" />
+<fault faultName="San Gregorio" segmentName="San Gregorio #2" latStart="37.47" latEnd="37.39" lonStart="-122.46" lonEnd="-122.42" />
+<fault faultName="San Gregorio" segmentName="San Gregorio #1" latStart="37.56" latEnd="37.47" lonStart="-122.5" lonEnd="-122.46" />
+<fault faultName="San Gregorio" segmentName="North" latStart="36.85" latEnd="37.77" lonStart="-122.16" lonEnd="-122.62" />
+<fault faultName="San Gregorio" segmentName="South" latStart="36.13" latEnd="36.85" lonStart="-121.86" lonEnd="-122.16" />
+<fault faultName="San Gabriel" segmentName="San Gabriel #14" latStart="34.25" latEnd="34.25" lonStart="-117.75" lonEnd="-117.65" />
+<fault faultName="San Gabriel" segmentName="San Gabriel #13" latStart="34.26" latEnd="34.25" lonStart="-117.86" lonEnd="-117.75" />
+<fault faultName="San Gabriel" segmentName="San Gabriel #12" latStart="34.26" latEnd="34.26" lonStart="-117.96" lonEnd="-117.86" />
+<fault faultName="San Gabriel" segmentName="San Gabriel #11" latStart="34.26" latEnd="34.26" lonStart="-118.07" lonEnd="-117.96" />
+<fault faultName="San Gabriel" segmentName="San Gabriel #10" latStart="34.29" latEnd="34.26" lonStart="-118.16" lonEnd="-118.07" />
+<fault faultName="San Gabriel" segmentName="San Gabriel #9" latStart="34.32" latEnd="34.29" lonStart="-118.25" lonEnd="-118.16" />
+<fault faultName="San Gabriel" segmentName="San Gabriel #8" latStart="34.35" latEnd="34.32" lonStart="-118.35" lonEnd="-118.25" />
+<fault faultName="San Gabriel" segmentName="San Gabriel #7" latStart="34.38" latEnd="34.35" lonStart="-118.44" lonEnd="-118.35" />
+<fault faultName="San Gabriel" segmentName="San Gabriel #6" latStart="34.41" latEnd="34.38" lonStart="-118.53" lonEnd="-118.44" />
+<fault faultName="San Gabriel" segmentName="San Gabriel #5" latStart="34.47" latEnd="34.41" lonStart="-118.6" lonEnd="-118.53" />
+<fault faultName="San Gabriel" segmentName="San Gabriel #4" latStart="34.53" latEnd="34.47" lonStart="-118.67" lonEnd="-118.6" />
+<fault faultName="San Gabriel" segmentName="San Gabriel #3" latStart="34.59" latEnd="34.53" lonStart="-118.74" lonEnd="-118.67" />
+<fault faultName="San Gabriel" segmentName="San Gabriel #2" latStart="34.65" latEnd="34.59" lonStart="-118.81" lonEnd="-118.74" />
+<fault faultName="San Gabriel" segmentName="San Gabriel #1" latStart="34.71" latEnd="34.65" lonStart="-118.88" lonEnd="-118.81" />
+</faults>
