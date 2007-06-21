@@ -19,10 +19,20 @@ public class MeshDataMegaBean {
 	 String projectName;
 	 String userName;
 	 String jobUIDStamp;
+	 String creationDate;
 	 
 	 public MeshDataMegaBean() {
 	 }
 	 
+
+	 public void setCreationDate(String creationDate){
+		  this.creationDate=creationDate;
+	 }
+
+	 public String getCreationDate() {
+		  return creationDate;
+	 }
+
 	 public void setGeofestOutputBean(GFOutputBean geofestOutputBean){
 		  //System.out.println("gfoutputbean set");
 		  this.geofestOutputBean=geofestOutputBean;

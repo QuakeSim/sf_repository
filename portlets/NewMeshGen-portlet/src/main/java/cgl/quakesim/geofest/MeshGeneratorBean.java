@@ -254,6 +254,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  System.out.println("Storing meshrun");
 		  System.out.println(mrb.getProjectName());
 		  System.out.println(mrb.getJobUIDStamp());
+		  System.out.println(mrb.getViscoTarUrl());
 		  
 		  //Store the mesh run in a meshrun megabean.
 		  MeshDataMegaBean mega=new MeshDataMegaBean();
@@ -264,6 +265,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  mega.setGeoFESTBaseUrlForJnlp(getGeoFESTBaseUrlForJnlp());
  		  mega.setJnlpLayers(getMyLayersParamForJnlp(null, projectName));
  		  mega.setJnlpFaults(getMyFaultsParamForJnlp(null,projectName));
+		  mega.setCreationDate(new Date().toString());
 						  
 		  //Set up the database.  This open/close routine may need to be improved later.
 		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");	 

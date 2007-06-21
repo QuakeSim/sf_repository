@@ -76,6 +76,13 @@ function dataTableSelectOneRadio(radio) {
 
 					<h:column>
 					    <f:facet name="header">
+					    <h:outputText value="Creation Date"/>
+						 </f:facet>
+				       <h:outputText value="#{mrb.creationDate}"/>
+					</h:column>
+
+					<h:column>
+					    <f:facet name="header">
 					    <h:outputText value="Job UID Stamp"/>
 						 </f:facet>
 				       <h:outputText value="#{mrb.meshRunBean.jobUIDStamp}"/>
