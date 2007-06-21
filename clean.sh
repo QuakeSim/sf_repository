@@ -134,6 +134,12 @@ mvn clean -Dtomcat.base.dir=/tmp -Dgeofest.service.url=/tmp
 
 cd $DISLOC_EXECUTION_HOME
 mvn clean -Dtomcat.base.dir=/tmp -Ddisloc.service.url=/tmp
+
+cd $SIMPLEX_EXECUTION_HOME
+mvn clean -Dtomcat.base.dir=/tmp -Dsimplex.service.url=/tmp
+
+cd $KMLGENERATOR_EXECUTION_HOME
+mvn clean -Dtomcat.base.dir=/tmp -DKmlGenerator.service.url=/tmp
  
 
 #--------------------------------------------------
