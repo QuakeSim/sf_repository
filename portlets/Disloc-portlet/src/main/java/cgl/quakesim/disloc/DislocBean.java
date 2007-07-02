@@ -107,9 +107,6 @@ public class DislocBean extends GenericSopacBean {
     public DislocBean() throws Exception {
 		  super();
 
-		  dislocService=new DislocServiceServiceLocator().getDislocExec(new URL(dislocServiceUrl));
-		  System.out.println("Binding to: "+dislocServiceUrl);
-
 		  dislocParams.setObservationPointStyle(1);
 
 		  //We are done.
@@ -123,6 +120,11 @@ public class DislocBean extends GenericSopacBean {
     /**
      * Protected convenience method. 
      */ 
+
+	 protected void initDislocService() throws Exception {
+		  dislocService=new DislocServiceServiceLocator().getDislocExec(new URL(dislocServiceUrl));
+		  System.out.println("Binding to: "+dislocServiceUrl);
+	 }
 	 
 	 protected void makeProjectDirectory() {
 		  File projectDir=new File(getContextBasePath()+"/"+userName+"/"+codeName+"/");
@@ -191,6 +193,7 @@ public class DislocBean extends GenericSopacBean {
 		  // This will be fixed at "1" for now.
 		  dislocParams.setObservationPointStyle(1);
 		  
+		  initDislocService();
 		  DislocResultsBean dislocResultsBean=dislocService.runBlockingDisloc(userName,
 																									 projectName,
 																									 faults,
@@ -241,6 +244,7 @@ public class DislocBean extends GenericSopacBean {
 		  System.out.println(dislocParams.getGridXIterations());
 		  System.out.println(dislocParams.getGridXSpacing());
 
+		  initDislocService();
 		  DislocResultsBean dislocResultsBean=dislocService.runNonBlockingDisloc(userName,
 																										 projectName,
 																										 faults,
@@ -1100,6 +1104,7 @@ public class DislocBean extends GenericSopacBean {
      * These are methods associated with Faces navigations.
      */
     public String newProject() throws Exception {
+		  initDislocService();
 		  isInitialized = getIsInitialized();
 		  if (!isInitialized) {
 				initWebServices();

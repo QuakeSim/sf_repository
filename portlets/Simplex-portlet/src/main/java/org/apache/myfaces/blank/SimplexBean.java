@@ -465,11 +465,13 @@ public class SimplexBean extends GenericSopacBean {
 	public SimplexBean() throws Exception {
 		super();
 		cm = getContextManagerImp();
-		simplexService = new SimpleXServiceServiceLocator()
-				.getSimpleXExec(new URL(simpleXServiceUrl));
-
 		System.out.println("Simplex Bean Created");
 	}
+
+	 protected void initSimplexService() throws Exception {
+		simplexService = new SimpleXServiceServiceLocator()
+				.getSimpleXExec(new URL(simpleXServiceUrl));
+	 }
 
 	/**
 	 * These are methods associated with Faces navigations.
@@ -518,6 +520,7 @@ public class SimplexBean extends GenericSopacBean {
 		Fault[] faults = getFaultsFromDB();
 		String timeStamp = "";
 		System.out.println("ProjectName:" + projectName);
+		initSimplexService();
 		projectSimpleXOutput = simplexService.runSimplex(userName, projectName,
 				faults, obsv, currentProjectEntry.startTemp,
 				currentProjectEntry.maxIters,currentProjectEntry.origin_lon, currentProjectEntry.origin_lat,this.kmlGeneratorUrl, timeStamp);
@@ -795,6 +798,7 @@ public class SimplexBean extends GenericSopacBean {
 				System.out.println(currentProjectEntry.origin_lat);
 				System.out.println(currentProjectEntry.origin_lon);
 
+				initSimplexService();
 				this.currentGMTViewForm = simplexService.runPlotGMT(userName,
 						projectName, currentProjectEntry.origin_lat,
 						currentProjectEntry.origin_lon, timeStamp);
@@ -852,6 +856,8 @@ public class SimplexBean extends GenericSopacBean {
 				db.close();
 				System.out.println(currentProjectEntry.origin_lat);
 				System.out.println(currentProjectEntry.origin_lon);
+
+				initSimplexService();
 				this.mapXmlUrl = simplexService.runMakeMapXml(userName,
 						projectName, currentProjectEntry.origin_lat,
 						currentProjectEntry.origin_lon, timeStamp);
@@ -1037,6 +1043,7 @@ public class SimplexBean extends GenericSopacBean {
 
 		try {
 
+			 initSimplexService();
 			this.gmtPlotPdfUrl = simplexService.runRePlotGMT(userName,
 					projectName, currentGMTViewForm, this.gmtPlotPdf_timeStamp);
 

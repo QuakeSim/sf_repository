@@ -166,10 +166,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 		  gfutils.initLayerInteger();
 		  cm = getContextManagerImp();
-		  
-		  geofestService=
-				new GeoFESTServiceServiceLocator().getGeoFESTExec(new URL(geoFESTServiceUrl));
-		  
 		  myMeshViewer = new MeshViewer(meshViewerServerUrl);
 
 		  //We are done.
@@ -184,6 +180,11 @@ public class MeshGeneratorBean extends GenericSopacBean {
      * Protected convenience method. 
      */ 
 	 
+	 protected void initGeofestService() throws Exception {
+		  geofestService=
+				new GeoFESTServiceServiceLocator().getGeoFESTExec(new URL(geoFESTServiceUrl));
+	 }
+
 	 protected void makeProjectDirectory() {
 		  File projectDir=new File(getContextBasePath()+"/"+userName+"/"+codeName+"/");
 		  projectDir.mkdirs();
@@ -294,6 +295,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  Layer[] layers=getLayersFromDB();
 		  Fault[] faults=getFaultsFromDB();
 		  
+		  initGeofestService();
 		  projectMeshRunBean=geofestService.runBlockingMeshGenerator(userName,
 																						 projectName,
 																						 faults,
@@ -317,7 +319,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 		  Layer[] layers=getLayersFromDB();
 		  Fault[] faults=getFaultsFromDB();
-		  
+
+		  initGeofestService();		  
 		  projectMeshRunBean=geofestService.runNonBlockingMeshGenerator(userName,
 																							 projectName,
 																							 faults,
@@ -342,6 +345,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  GeotransParamsBean currentGeotransParamsBean=getCurrentGeotransParamsBean();
 		  System.out.println("ProjectName:"+projectName);
 		  System.out.println("tokenName:"+tokenName);
+
+		  initGeofestService();
 		  projectGeoFestOutput=geofestService.runGeoFEST(userName,
 																		 projectName,
 																		 currentGeotransParamsBean,
