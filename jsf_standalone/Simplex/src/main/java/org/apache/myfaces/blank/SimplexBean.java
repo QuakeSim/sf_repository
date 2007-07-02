@@ -48,8 +48,8 @@ public class SimplexBean extends GenericSopacBean {
 	// member for Simplex
 	projectEntry currentProjectEntry = new projectEntry();
 
-	String selectdbURL = new String(
-			"http://gf2.ucs.indiana.edu:9090/axis/services/" + "/Select");
+	 String selectdbURL = new String(
+												"http://gf2.ucs.indiana.edu:9090/axis/services/" + "/Select");
 
 	editProjectForm currentEditProjectForm = new editProjectForm(selectdbURL);
 
@@ -81,13 +81,10 @@ public class SimplexBean extends GenericSopacBean {
 	// This is our geofest service stub.
 	SimpleXService simplexService;
 
-	String simpleXBaseUrl = "http://gf19.ucs.indiana.edu:8080/simplexexec/";
-
-	String simpleXServiceUrl = "http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec";
-	
-	String kmlGeneratorBaseurl= "http://gf1.ucs.indiana.edu:13080/KmlGenerator/";
-	
-	String kmlGeneratorUrl = "http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator";
+ 	String simpleXBaseUrl = "http://gf19.ucs.indiana.edu:8080/simplexexec/";
+ 	String simpleXServiceUrl = "http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec";
+ 	String kmlGeneratorBaseurl= "http://gf1.ucs.indiana.edu:13080/KmlGenerator/";
+ 	String kmlGeneratorUrl = "http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator";
 
 	SimpleXOutputBean projectSimpleXOutput;
 
@@ -460,22 +457,30 @@ public class SimplexBean extends GenericSopacBean {
 	}
 
 	/**
-	 * default empty constructor
+	 * default empty arg constructor
 	 */
 	public SimplexBean() throws Exception {
 		super();
 		cm = getContextManagerImp();
-		simplexService = new SimpleXServiceServiceLocator()
-				.getSimpleXExec(new URL(simpleXServiceUrl));
+// 		simplexService = new SimpleXServiceServiceLocator()
+// 				.getSimpleXExec(new URL(simpleXServiceUrl));
 
 		System.out.println("Simplex Bean Created");
 	}
+	 
+	 private void initSimplexService() throws Exception {
+		  System.out.println("Service URL is "+simpleXServiceUrl);
+		  simplexService = new SimpleXServiceServiceLocator()
+				.getSimpleXExec(new URL(simpleXServiceUrl));
+	 }
+	 
 
 	/**
 	 * These are methods associated with Faces navigations.
 	 */
 	public String newProject() throws Exception {
-		isInitialized = getIsInitialized();
+		 initSimplexService();
+		 isInitialized = getIsInitialized();
 		if (!isInitialized) {
 			initWebServices();
 		}
@@ -486,6 +491,7 @@ public class SimplexBean extends GenericSopacBean {
 
 	public String loadProject() throws Exception {
 		System.out.println("Loading project");
+		 initSimplexService();
 		if (!isInitialized) {
 			initWebServices();
 		}
