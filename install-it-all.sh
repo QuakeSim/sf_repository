@@ -3,7 +3,6 @@
 source ./env.sh
 
 echo "Build home is $BUILD_DIR"
-
 #----------------------------------------------------------------------
 # Unpack various third party jars for tomcat, gridsphere, etc.
 #----------------------------------------------------------------------
