@@ -30,7 +30,7 @@
                  </managed-property>
                  <managed-property>
                    <property-name>contextBasePath</property-name>
-                   <value>/home/zhigang/dest1/users/</value>
+                   <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/WebServices/WEB-INF/Descriptors/users/users/</value>
                 </managed-property>
 
                 <!-- Needed for the simplex service-->
