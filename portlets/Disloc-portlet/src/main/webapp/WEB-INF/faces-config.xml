@@ -16,13 +16,23 @@
                    <property-name>codeName</property-name>
                    <value>Disloc</value>
                 </managed-property>
+
+                <managed-property>
+                   <property-name>origin_lat</property-name>
+                   <value>0.0</value>
+                </managed-property>
+                <managed-property>
+                   <property-name>origin_lon</property-name>
+                   <value>0.0</value>
+                </managed-property>
+
                  <managed-property>
                    <property-name>faultDBServiceUrl</property-name>
                    <value>http://gf2.ucs.indiana.edu:9090/axis/services/Select</value>
                  </managed-property> 
                 <managed-property>
                    <property-name>contextBasePath</property-name>
-                   <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/WebServices/WEB-INF/Descriptors/users/users/</value>
+                   <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/WebServices/WEB-INF/Descriptors/users/</value>
                 </managed-property>
                  <!--  Needed for the kmlGenerator service -->
                  <managed-property>

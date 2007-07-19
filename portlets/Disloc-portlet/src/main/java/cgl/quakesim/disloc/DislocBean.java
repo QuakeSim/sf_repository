@@ -200,6 +200,11 @@ public class DislocBean extends GenericSopacBean {
 																									 dislocParams,
 																									 null);
 		  setJobToken(dislocResultsBean.getJobUIDStamp());
+
+		  //Make sure lat and lon are set to something.
+		  if(origin_lat.equals("")) origin_lat="0.0";
+		  if(origin_lon.equals("")) origin_lon="0.0";
+
 			// get my  kml
 			SimpleXDataKml kmlService;
 			SimpleXDataKmlServiceLocator locator = new SimpleXDataKmlServiceLocator();
@@ -207,24 +212,69 @@ public class DislocBean extends GenericSopacBean {
 			kmlService = locator
 					.getKmlGenerator(new URL(kmlGeneratorUrl));
 
-			PointEntry[] tmp_pointentrylist = LoadDataFromUrl(dislocResultsBean.getOutputFileUrl());;
+			PointEntry[] tmp_pointentrylist = LoadDataFromUrl(dislocResultsBean.getOutputFileUrl());
 
 			kmlService.setDatalist(tmp_pointentrylist);
 			kmlService.setOriginalCoordinate(this.origin_lon, this.origin_lat);
 			kmlService.setCoordinateUnit("1000");
+			
+			double start_x,start_y,end_x,end_y,xiterationsNumber,yiterationsNumber;
+			start_x=Double.valueOf(dislocParams.getGridMinXValue() ).doubleValue();
+			start_y=Double.valueOf(dislocParams.getGridMinYValue() ).doubleValue();
+			xiterationsNumber=Double.valueOf(dislocParams.getGridXIterations() ).doubleValue();
+			yiterationsNumber=Double.valueOf(dislocParams.getGridYIterations() ).doubleValue();
+			int xinterval= (int)(Double.valueOf(dislocParams.getGridXSpacing()).doubleValue() );
+			int yinterval=(int)(Double.valueOf(dislocParams.getGridYSpacing()).doubleValue() );
+			end_x=start_x+xinterval*(xiterationsNumber-1);
+			end_y=start_y+yinterval*(yiterationsNumber-1);
+			
+			System.out.println(start_x);
+			System.out.println(start_y);
+			System.out.println(end_x);
+			System.out.println(end_y);
+			System.out.println(xinterval);
+			System.out.println(yinterval);
+			
+			kmlService.setGridLine("Grid Line", start_x, start_y, end_x, end_y, xinterval,yinterval);
 			kmlService.setPointPlacemark("Icon Layer");
 			kmlService.setArrowPlacemark("Arrow Layer", "ff66a1cc", 2);
-
+	
 			String myKmlUrl = kmlService.runMakeKml("", userName,
 					projectName, (dislocResultsBean.getJobUIDStamp()).hashCode()+"");
-			System.out.println(myKmlUrl);
-		  
+			setJobToken(dislocResultsBean.getJobUIDStamp());
 		  storeProjectInContext(userName,
 										projectName,
 										dislocResultsBean.getJobUIDStamp(),
 										dislocParams,
 										dislocResultsBean,myKmlUrl);
+
 		  return DISLOC_NAV_STRING;
+
+		  // get my  kml
+// 		  SimpleXDataKml kmlService;
+// 			SimpleXDataKmlServiceLocator locator = new SimpleXDataKmlServiceLocator();
+// 			locator.setMaintainSession(true);
+// 			kmlService = locator
+// 					.getKmlGenerator(new URL(kmlGeneratorUrl));
+
+// 			PointEntry[] tmp_pointentrylist = LoadDataFromUrl(dislocResultsBean.getOutputFileUrl());;
+
+// 			kmlService.setDatalist(tmp_pointentrylist);
+// 			kmlService.setOriginalCoordinate(this.origin_lon, this.origin_lat);
+// 			kmlService.setCoordinateUnit("1000");
+// 			kmlService.setPointPlacemark("Icon Layer");
+// 			kmlService.setArrowPlacemark("Arrow Layer", "ff66a1cc", 2);
+
+// 			String myKmlUrl = kmlService.runMakeKml("", userName,
+// 					projectName, (dislocResultsBean.getJobUIDStamp()).hashCode()+"");
+// 			System.out.println(myKmlUrl);
+		  
+// 		  storeProjectInContext(userName,
+// 										projectName,
+// 										dislocResultsBean.getJobUIDStamp(),
+// 										dislocParams,
+// 										dislocResultsBean,myKmlUrl);
+// 		  return DISLOC_NAV_STRING;
     }
     
     /**
