@@ -124,14 +124,14 @@ public class SimplexBean extends GenericSopacBean {
 	}
 
 	protected void makeProjectDirectory() {
-		File projectDir = new File(getContextBasePath() + "/" + userName + "/"
+		File projectDir = new File(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 				+ codeName + "/");
 		projectDir.mkdirs();
 	}
 
 	protected Fault[] getFaultsFromDB() {
 		Fault[] returnFaults = null;
-		db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+		db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 				+ codeName + "/" + projectName + ".db");
 		Fault faultToGet = new Fault();
 		ObjectSet results = db.get(faultToGet);
@@ -147,7 +147,7 @@ public class SimplexBean extends GenericSopacBean {
 
 	protected Observation[] getObservationsFromDB() {
 		Observation[] returnObservations = null;
-		db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+		db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 				+ codeName + "/" + projectName + ".db");
 		Observation ObservationToGet = new Observation();
 		ObjectSet results = db.get(ObservationToGet);
@@ -205,7 +205,7 @@ public class SimplexBean extends GenericSopacBean {
 				SimpleXOutputBean mega = new SimpleXOutputBean();
 				mega.setProjectName(projectName);
 				// System.out.println("ProjectName: "+projectName);
-				db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+				db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 						+ codeName + "/" + projectName + ".db");
 				// ObjectSet results=db.get(mega);
 				ObjectSet results = db.get(SimpleXOutputBean.class);
@@ -237,8 +237,8 @@ public class SimplexBean extends GenericSopacBean {
 	public List getMyProjectNameList() {
 		this.myProjectNameList.clear();
 		try {
-			// System.out.println(getContextBasePath()+"/"+userName+"/"+codeName+".db");
-			db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+			// System.out.println(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");
+			db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 					+ codeName + ".db");
 			projectEntry project = new projectEntry();
 			ObjectSet results = db.get(projectEntry.class);
@@ -253,7 +253,7 @@ public class SimplexBean extends GenericSopacBean {
 
 		} catch (Exception ex) {
 			// ex.printStackTrace();
-			System.err.println("Could not open " + getContextBasePath() + "/"
+			System.err.println("Could not open " + getBasePath()+"/"+getContextBasePath() + "/"
 					+ userName + "/" + codeName + ".db");
 			System.err.println("Returning empty list.");
 		}
@@ -277,7 +277,7 @@ public class SimplexBean extends GenericSopacBean {
 			String projectName) {
 		this.myObservationEntryForProjectList.clear();
 		try {
-			db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+			db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 					+ codeName + "/" + projectName + ".db");
 
 			Observation tmpobser = new Observation();
@@ -333,7 +333,7 @@ public class SimplexBean extends GenericSopacBean {
 				+ projectName);
 		String observationStatus = "Update";
 
-		db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+		db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 				+ codeName + "/" + projectName + ".db");
 
 		Observation observationToGet = new Observation();
@@ -354,7 +354,7 @@ public class SimplexBean extends GenericSopacBean {
 	protected List reconstructMyFaultEntryForProjectList(String projectName) {
 		this.myFaultEntryForProjectList.clear();
 		try {
-			db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+			db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 					+ codeName + "/" + projectName + ".db");
 
 			Fault tmpfault = new Fault();
@@ -407,7 +407,7 @@ public class SimplexBean extends GenericSopacBean {
 			throws Exception {
 		String faultStatus = "Update";
 
-		db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+		db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 				+ codeName + "/" + projectName + ".db");
 		Fault faultToGet = new Fault();
 		faultToGet.setFaultName(tmp_faultName);
@@ -540,7 +540,7 @@ public class SimplexBean extends GenericSopacBean {
 		mega.setProjectName(projectSimpleXOutput.getProjectName());
 		mega.setJobUIDStamp(projectSimpleXOutput.getJobUIDStamp());
 		// Find the matching bean
-		db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+		db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 				+ codeName + "/" + projectName + ".db");
 		ObjectSet results = db.get(mega);
 		System.out.println("SimpleXOutputBean to update found? "
@@ -589,7 +589,7 @@ public class SimplexBean extends GenericSopacBean {
 		try {
 			if (deleteProjectsList != null) {
 				for (int i = 0; i < deleteProjectsList.length; i++) {
-					db = Db4o.openFile(getContextBasePath() + "/" + userName
+					db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName
 							+ "/" + codeName + ".db");
 					projectEntry delproj = new projectEntry();
 					delproj.setProjectName((String) deleteProjectsList[i]);
@@ -637,7 +637,7 @@ public class SimplexBean extends GenericSopacBean {
 			myFaultCollection = populateFaultCollection(myFaultEntryForProjectList);
 			myObservationCollection = populateObservationCollection(myObservationEntryForProjectList);
 
-			db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+			db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 					+ codeName + ".db");
 			projectEntry tmp_proj = new projectEntry();
 			tmp_proj.projectName = this.projectName;
@@ -666,7 +666,7 @@ public class SimplexBean extends GenericSopacBean {
 		// Do real logic
 		System.out.println("Creating new project");
 		makeProjectDirectory();
-		db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+		db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 				+ codeName + ".db");
 		projectEntry project = new projectEntry();
 		project.projectName = this.projectName;
@@ -735,7 +735,7 @@ public class SimplexBean extends GenericSopacBean {
 				// and then delete the specific value that we get back.
 				System.out.println("Deleteing " + tmp_ObservationName
 						+ "from db");
-				db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+				db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 						+ codeName + "/" + projectName + ".db");
 
 				Observation todelete = new Observation();
@@ -784,7 +784,7 @@ public class SimplexBean extends GenericSopacBean {
 			String timeStamp = "";
 			this.gmtPlotPdf_timeStamp = timeStamp;
 			if ((tmp_view == true)) {
-				db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+				db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 						+ codeName + ".db");
 				projectEntry tmp_proj = new projectEntry();
 				tmp_proj.projectName = this.projectName;
@@ -843,7 +843,7 @@ public class SimplexBean extends GenericSopacBean {
 			boolean tmp_view = tmp_loadMeshTableEntry.getView();
 			String timeStamp = "";
 			if ((tmp_view == true)) {
-				db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+				db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 						+ codeName + ".db");
 				projectEntry tmp_proj = new projectEntry();
 				tmp_proj.projectName = this.projectName;
@@ -903,7 +903,7 @@ public class SimplexBean extends GenericSopacBean {
 				SimpleXOutputBean mega = new SimpleXOutputBean();
 				mega.setProjectName(projectName);
 				// System.out.println("ProjectName: "+projectName);
-				db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+				db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 						+ codeName + "/" + projectName + ".db");
 				ObjectSet results=db.get(mega);
 				// System.out.println("Matches for
@@ -915,7 +915,7 @@ public class SimplexBean extends GenericSopacBean {
 				}
 				db.close();
 				
-				db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+				db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 						+ codeName + ".db");
 				projectEntry tmp_proj = new projectEntry();
 				tmp_proj.projectName = this.projectName;
@@ -980,7 +980,7 @@ public class SimplexBean extends GenericSopacBean {
 				// This requires we first search for the desired object
 				// and then delete the specific value that we get back.
 				System.out.println("Deleteing " + tmp_faultName + "from db");
-				db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+				db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 						+ codeName + "/" + projectName + ".db");
 
 				Fault todelete = new Fault();
@@ -1002,7 +1002,7 @@ public class SimplexBean extends GenericSopacBean {
 	public void toggleAddObservationForProject(ActionEvent ev) {
 
 		currentEditProjectForm.initEditFormsSelection();
-		db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+		db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 				+ codeName + "/" + projectName + ".db");
 
 		Observation tmpObservation = new Observation();
@@ -1022,7 +1022,7 @@ public class SimplexBean extends GenericSopacBean {
 
 	public void toggleAddFaultForProject(ActionEvent ev) {
 		currentEditProjectForm.initEditFormsSelection();
-		db = Db4o.openFile(getContextBasePath() + "/" + userName + "/"
+		db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 				+ codeName + "/" + projectName + ".db");
 
 		Fault tmpfault = new Fault();
