@@ -30,14 +30,21 @@
                    <property-name>faultDBServiceUrl</property-name>
                    <value>http://gf2.ucs.indiana.edu:9090/axis/services/Select</value>
                  </managed-property> 
+
+                 <managed-property>
+                   <property-name>dislocServiceUrl</property-name>
+                   <value>http://gf19.ucs.indiana.edu:8080/dislocexec/services/DislocExec</value>
+                 </managed-property> 
+
                 <managed-property>
                    <property-name>contextBasePath</property-name>
                    <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/WebServices/WEB-INF/Descriptors/users/</value>
                 </managed-property>
+
                  <!--  Needed for the kmlGenerator service -->
                  <managed-property>
                  	<property-name>kmlGeneratorUrl</property-name>
-                 	<value>http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator</value>
+                 	<value>http://gf7.ucs.indiana.edu:8080/KmlGenerator/services/KmlGenerator</value>
                  </managed-property>
 
 	</managed-bean>

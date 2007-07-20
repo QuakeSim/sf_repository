@@ -91,11 +91,16 @@ public class DislocBean extends GenericSopacBean {
 
 	 //Service information
 	 DislocService dislocService;
-	 String dislocServiceUrl="http://gf19.ucs.indiana.edu:8080/dislocexec/services/DislocExec";
-    String faultDBServiceUrl="http://gf2.ucs.indiana.edu:9090/axis/services/Select";
-	String kmlGeneratorBaseurl= "http://gf1.ucs.indiana.edu:13080/KmlGenerator/";
-	String kmlGeneratorUrl = "http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator";
+// 	 String dislocServiceUrl="http://gf19.ucs.indiana.edu:8080/dislocexec/services/DislocExec";
+//     String faultDBServiceUrl="http://gf2.ucs.indiana.edu:9090/axis/services/Select";
+// 	 String kmlGeneratorBaseurl= "http://gf1.ucs.indiana.edu:13080/KmlGenerator/";
+// 	 String kmlGeneratorUrl = "http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator";
 
+	 String dislocServiceUrl;
+    String faultDBServiceUrl;
+	 String kmlGeneratorBaseurl;
+	 String kmlGeneratorUrl;
+	 
 	
 	 String origin_lat;
 	 String origin_lon;
@@ -202,8 +207,10 @@ public class DislocBean extends GenericSopacBean {
 		  setJobToken(dislocResultsBean.getJobUIDStamp());
 
 		  //Make sure lat and lon are set to something.
-		  if(origin_lat.equals("")) origin_lat="0.0";
-		  if(origin_lon.equals("")) origin_lon="0.0";
+		  if(origin_lat==null || origin_lat.equals("")) origin_lat="0.0";
+		  if(origin_lon==null || origin_lon.equals("")) origin_lon="0.0";
+
+		  System.out.println("Origin: "+origin_lon+" "+origin_lat);
 
 			// get my  kml
 			SimpleXDataKml kmlService;
@@ -237,12 +244,13 @@ public class DislocBean extends GenericSopacBean {
 			
 			kmlService.setGridLine("Grid Line", start_x, start_y, end_x, end_y, xinterval,yinterval);
 			kmlService.setPointPlacemark("Icon Layer");
-			kmlService.setArrowPlacemark("Arrow Layer", "ff66a1cc", 2);
+			//			kmlService.setArrowPlacemark("Arrow Layer", "ff66a1cc", 2);
+			kmlService.setArrowPlacemark("Arrow Layer", "fffffff", 2);
 	
 			String myKmlUrl = kmlService.runMakeKml("", userName,
 					projectName, (dislocResultsBean.getJobUIDStamp()).hashCode()+"");
 			setJobToken(dislocResultsBean.getJobUIDStamp());
-		  storeProjectInContext(userName,
+			storeProjectInContext(userName,
 										projectName,
 										dislocResultsBean.getJobUIDStamp(),
 										dislocParams,
@@ -300,6 +308,10 @@ public class DislocBean extends GenericSopacBean {
 																										 faults,
 																										 dislocParams,
 																										 null);
+		  //Make sure lat and lon are set to something.
+		  if(origin_lat==null || origin_lat.equals("")) origin_lat="0.0";
+		  if(origin_lon==null || origin_lon.equals("")) origin_lon="0.0";
+
 			// get my  kml
 			SimpleXDataKml kmlService;
 			SimpleXDataKmlServiceLocator locator = new SimpleXDataKmlServiceLocator();
@@ -353,6 +365,7 @@ public class DislocBean extends GenericSopacBean {
 
 
 	public PointEntry[] LoadDataFromUrl(String InputUrl) {
+		 System.out.println("Creating Point Entry");
 		ArrayList dataset = new ArrayList();
 		try {
 			String line = new String();
@@ -372,6 +385,15 @@ public class DislocBean extends GenericSopacBean {
 						PointEntry tempPoint = new PointEntry();
 						Pattern p = Pattern.compile(" {1,20}");
 						String tmp[] = p.split(line);
+						
+						//Look for NaN or other problems.
+						for(int i=0;i<tmp.length;i++) {
+							 String oldtmp=tmp[i];
+							 if(tmp[i].trim().equalsIgnoreCase("nan")) {
+								  tmp[i]="0.0";
+							 }
+						}
+
 						tempPoint.setX(tmp[1].trim());
 						tempPoint.setY(tmp[2].trim());
 						tempPoint.setDeltaXName("dx");
@@ -1621,5 +1643,13 @@ public class DislocBean extends GenericSopacBean {
 			return this.kmlGeneratorUrl;
 		}
 		
+
+	 public void setDislocServiceUrl(String dislocServiceUrl){
+		  this.dislocServiceUrl=dislocServiceUrl;
+	 }
+
+	 public String getDislocServiceUrl() {
+		  return dislocServiceUrl;
+	 }
 	 
 }
