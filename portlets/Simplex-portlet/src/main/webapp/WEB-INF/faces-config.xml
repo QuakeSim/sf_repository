@@ -30,7 +30,7 @@
                  </managed-property>
                  <managed-property>
                    <property-name>contextBasePath</property-name>
-                   <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/WebServices/WEB-INF/Descriptors/users/users/</value>
+                   <value>/WebServices/WEB-INF/Descriptors/users/users/</value>
                 </managed-property>
 
                 <!-- Needed for the simplex service-->
@@ -44,8 +44,6 @@
                  	<property-name>kmlGeneratorUrl</property-name>
                  	<value>http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator</value>
                  </managed-property>
-                 
-
 	</managed-bean>
 
 	<navigation-rule>
@@ -132,7 +130,6 @@
 			<from-outcome>Simplex2-kml-viewer</from-outcome>
 			<to-view-id>/kmlviewer.jsp</to-view-id>
 		</navigation-case>
-		
 		<navigation-case>
 			<from-outcome>Simplex2-back</from-outcome>
 			<to-view-id>/Main.jsp</to-view-id>

@@ -31,7 +31,7 @@
                  </managed-property>
                  <managed-property>
                    <property-name>contextBasePath</property-name>
-                   <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/WebServices/WEB-INF/Descriptors/users/</value>
+                   <value>/WebServices/WEB-INF/Descriptors/users/</value>
                 </managed-property>
 
                 <!-- These are execution host params -->
@@ -155,10 +155,6 @@
 	</navigation-rule>
 	
 	<navigation-rule>
-		<navigation-case>
-			<from-outcome>error</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
 		<from-view-id>/ViewMesh.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>MG-ant-run</from-outcome>
@@ -171,10 +167,6 @@
 	</navigation-rule>	
 
 	<navigation-rule>
-		<navigation-case>
-			<from-outcome>error</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
 		<from-view-id>/LoadProject.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>MG-edit-project</from-outcome>
@@ -191,10 +183,6 @@
 	</navigation-rule>
 
 	<navigation-rule>
-		<navigation-case>
-			<from-outcome>error</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
 		<from-view-id>/ChooseMesh.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>MG-this</from-outcome>
@@ -211,10 +199,6 @@
 	</navigation-rule>	
 
 	<navigation-rule>
-		<navigation-case>
-			<from-outcome>error</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
 		<from-view-id>/FetchMesh.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>MG-back</from-outcome>
@@ -223,10 +207,6 @@
 	</navigation-rule>
 	
 	<navigation-rule>
-		<navigation-case>
-			<from-outcome>error</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
 		<from-view-id>/GfProject.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>MG-gf-archived-data</from-outcome>
@@ -243,10 +223,6 @@
 	</navigation-rule>
 
 	<navigation-rule>
-		<navigation-case>
-			<from-outcome>error</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
 		<from-view-id>/GeotransParams.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>MG-back</from-outcome>
@@ -259,10 +235,6 @@
 	</navigation-rule>
 
 	<navigation-rule>
-		<navigation-case>
-			<from-outcome>error</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
 		<from-view-id>/gfarchivedData.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>MG-back</from-outcome>
@@ -271,10 +243,6 @@
 	</navigation-rule>
 
 	<navigation-rule>
-		<navigation-case>
-			<from-outcome>error</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
 		<from-view-id>/gfGraphOutput.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>MG-contour-plot</from-outcome>
@@ -287,10 +255,6 @@
 	</navigation-rule>
 	
 	<navigation-rule>
-		<navigation-case>
-			<from-outcome>error</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
 		<from-view-id>/ContourPlot.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>MG-back</from-outcome>

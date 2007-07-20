@@ -105,6 +105,7 @@ public class DislocBean extends GenericSopacBean {
 	 String origin_lat;
 	 String origin_lon;
 
+	 String realPath;
 
     /**
      * The client constructor.
@@ -114,6 +115,7 @@ public class DislocBean extends GenericSopacBean {
 
 		  dislocParams.setObservationPointStyle(1);
 
+					 
 		  //We are done.
 		  System.out.println("Primary Disloc Bean Created");
     }
@@ -132,13 +134,13 @@ public class DislocBean extends GenericSopacBean {
 	 }
 	 
 	 protected void makeProjectDirectory() {
-		  File projectDir=new File(getContextBasePath()+"/"+userName+"/"+codeName+"/");
+		  File projectDir=new File(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/");
 		  projectDir.mkdirs();
 	 }
 	 
 	 protected Fault[] getFaultsFromDB(){
 		  Fault[] returnFaults=null;
- 		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
+ 		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
 		  Fault faultToGet=new Fault();
 		  ObjectSet results=db.get(faultToGet);
 		  if(results.hasNext()) {
@@ -153,7 +155,7 @@ public class DislocBean extends GenericSopacBean {
 
 	 protected DislocParamsBean getDislocParamsFromDB(){
 		  DislocParamsBean paramsBean=new DislocParamsBean();
- 		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
+ 		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
 		  ObjectSet results=db.get(paramsBean);
 		  if(results.hasNext()) {
 				paramsBean=(DislocParamsBean)results.next();
@@ -178,7 +180,7 @@ public class DislocBean extends GenericSopacBean {
 		  summaryBean.setCreationDate(new Date().toString());
 		  summaryBean.setKmlurl(kml_url);
 
- 		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");	
+ 		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");	
 		  db.set(summaryBean);
 		  db.commit();
 		  db.close();
@@ -859,7 +861,7 @@ public class DislocBean extends GenericSopacBean {
 				}
 		  }
 
-			db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");		  
+			db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");		  
 			DislocProjectBean project=new DislocProjectBean();
 
 			project.setProjectName(projectName);
@@ -970,7 +972,7 @@ public class DislocBean extends GenericSopacBean {
 				//This is the deletion case.
 				if ((tmp_update == true) && (tmp_view == false)) {
 					 System.out.println("We are deleteing the observations");
-					 db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
+					 db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
 
 					 //There is only one of these
 					 ObjectSet result1=db.get(DislocParamsBean.class);
@@ -1031,7 +1033,7 @@ public class DislocBean extends GenericSopacBean {
 					 //This requires we first search for the desired object
 					 //and then delete the specific value that we get back.
 					 System.out.println("Deleteing "+tmp_faultName+"from db");
-					 db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
+					 db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
 				 
 					 Fault todelete=new Fault();
 					 todelete.setFaultName(tmp_faultName);
@@ -1090,7 +1092,7 @@ public class DislocBean extends GenericSopacBean {
 	  */
 	 protected List populateFaultCollection(String projectName) throws Exception {
 		  List myFaultCollection=new ArrayList();
-		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
+		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
 		  ObjectSet results=db.get(Fault.class);
 		  //Should only have one value.
 		  Fault currentFault=null;
@@ -1104,7 +1106,7 @@ public class DislocBean extends GenericSopacBean {
 
 	 protected List populateParamsCollection(String projectName) throws Exception {
 		  List myDislocParamsCollection=new ArrayList();
-		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
+		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
 		  ObjectSet results=db.get(DislocParamsBean.class);
 		  //Should only have one value.
 		  DislocParamsBean dislocParams=null;
@@ -1129,7 +1131,7 @@ public class DislocBean extends GenericSopacBean {
         
     public void toggleAddFaultForProject(ActionEvent ev) throws Exception {
 		  initEditFormsSelection();
-		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
+		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
 				 
 		  Fault tmpfault=new Fault();
 		  tmpfault.setFaultName(currentFault.getFaultName());
@@ -1145,7 +1147,7 @@ public class DislocBean extends GenericSopacBean {
 
     public void toggleAddObservationsForProject(ActionEvent ev) throws Exception {
 		  initEditFormsSelection();
-		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
+		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
 				 
 		  System.out.println("Adding an observation");
 
@@ -1201,7 +1203,7 @@ public class DislocBean extends GenericSopacBean {
     
     public String toggleDeleteProject() {
 		  try {
-				db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");
+				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");
 				if (deleteProjectsArray != null) {
 					 for (int i = 0; i < deleteProjectsArray.length; i++) {
 						  DislocProjectBean delproj=new DislocProjectBean();
@@ -1224,7 +1226,7 @@ public class DislocBean extends GenericSopacBean {
     public String storeProjectName() throws Exception {
 		  System.out.println("Creating new project");
 		  makeProjectDirectory();
- 		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");		  		  
+ 		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");		  		  
 		  DislocProjectBean project=new DislocProjectBean();
 		  project.setProjectName(projectName);
 		  ObjectSet results=db.get(project);
@@ -1257,7 +1259,7 @@ public class DislocBean extends GenericSopacBean {
     public List getMyProjectNameList() {
 		  this.myProjectNameList.clear();
 		  try {
-				db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");		  
+				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");		  
 				DislocProjectBean project=new DislocProjectBean();
 				ObjectSet results=db.get(DislocProjectBean.class);
 				//System.out.println("Got results:"+results.size());
@@ -1271,7 +1273,7 @@ public class DislocBean extends GenericSopacBean {
 				
 		  } catch (Exception ex) {
 				//ex.printStackTrace();
-				System.err.println("Could not open "+getContextBasePath()
+				System.err.println("Could not open "+getBasePath()+"/"+getContextBasePath()
 										 +"/"+userName+"/"+codeName+".db");		
 				//				System.err.println("Returning empty list.");  
 		  }
@@ -1445,7 +1447,7 @@ public class DislocBean extends GenericSopacBean {
 		  String projectFullName = codeName + SEPARATOR + projectName;
 		  this.myFaultEntryForProjectList.clear();
 		  try {
-				db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
+				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
 				 
 				Fault tmpfault=new Fault();
 				ObjectSet results=db.get(tmpfault);
@@ -1472,7 +1474,7 @@ public class DislocBean extends GenericSopacBean {
 		  //		  List myObsvEntryForProjectList=new ArrayList();
 		  this.myObsvEntryForProjectList.clear();
 		  try {
-				db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
+				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
 				
 
 				//Unlike faults, there will only be one project bean.
@@ -1498,7 +1500,7 @@ public class DislocBean extends GenericSopacBean {
 		  //		  List myObsvEntryForProjectList=new ArrayList();
 		  this.myObsvEntryForProjectList.clear();
 		  try {
-				db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
+				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
 				
 				//Unlike faults, there will only be one project bean.
 				ObjectSet results=db.get(new DislocParamsBean());
@@ -1578,7 +1580,7 @@ public class DislocBean extends GenericSopacBean {
 	 protected Fault populateFaultFromContext(String tmp_faultName) throws Exception {
 		  String faultStatus="Update";
 
-		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
+		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
 		  Fault faultToGet=new Fault();
 		  faultToGet.setFaultName(tmp_faultName);
 		  ObjectSet results=db.get(faultToGet);
@@ -1594,7 +1596,7 @@ public class DislocBean extends GenericSopacBean {
 
 	 protected DislocParamsBean populateParamsFromContext(String projectName) throws Exception {
 		  
-		  db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
+		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
 		  System.out.println("Populating params from context.");
 		  ObjectSet results=db.get(DislocParamsBean.class);
 		  //Should only have one value.
@@ -1621,7 +1623,7 @@ public class DislocBean extends GenericSopacBean {
 	 public List getMyArchivedDislocResultsList() {
 		  myArchivedDislocResultsList.clear();
 		  try {
-				db=Db4o.openFile(getContextBasePath()+"/"+userName+"/"+codeName+".db");		  
+				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");		  
 				ObjectSet results=db.get(new DislocProjectSummaryBean());
 				while(results.hasNext()) {
 					 DislocProjectSummaryBean dpsb=(DislocProjectSummaryBean)results.next();

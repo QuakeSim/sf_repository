@@ -11,8 +11,8 @@
    <exec executable="${bindir.prop}/simplex" 
          output="${workDir.prop}/${projectName.prop}.stdout"
 	 dir="${workDir.prop}">
-      <arg value="${workDir.prop}/${projectName.prop}.input"/>
-      <arg value="${workDir.prop}/${projectName.prop}.output"/>
+      <arg value="${projectName.prop}.input"/>
+      <arg value="${projectName.prop}.output"/>
       <env key="PATH" path="${bindir.prop}:/bin/:$PATH"/>
    </exec>
 </target>

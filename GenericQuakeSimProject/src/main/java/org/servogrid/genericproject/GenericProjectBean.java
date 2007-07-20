@@ -328,4 +328,32 @@ public class GenericProjectBean {
 	long longDate=Long.parseLong(longIntForm);
 	return (new Date(longDate).toString());
     }
+
+	 /**
+	  * This returns the real path to the webapps directory on the host server.
+	  */
+	 protected String getBasePath() {
+		  String realPath="";
+		  //		  System.out.println("Here is the real path from context");
+		  FacesContext fc=FacesContext.getCurrentInstance();
+		  ExternalContext ec=fc.getExternalContext();
+		  Object context=ec.getContext();
+		 
+		  if(context instanceof PortletContext) {
+				realPath=((PortletContext)context).getRealPath("");
+		  }
+		  else if(context instanceof ServletContext) {
+				realPath=((ServletContext)context).getRealPath("");
+		  }
+		  else {
+				realPath="/tmp/";
+		  }
+
+		  //Remove any of the trailing web app specific name.
+		  if(realPath.indexOf("/webapps/")>-1) {
+				realPath=realPath.substring(0,realPath.indexOf("/webapps/")+"/webapps/".length());
+		  }
+		  //		  System.out.println("realPath is "+realPath);
+		  return realPath;
+	 }
 }
