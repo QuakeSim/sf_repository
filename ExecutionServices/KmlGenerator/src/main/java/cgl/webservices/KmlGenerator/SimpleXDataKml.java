@@ -143,7 +143,9 @@ public class SimpleXDataKml {
 	}
 
 	public void init() {
-
+		 System.out.println("----------------------------------");
+		 System.out.println("Initializing KML service.");
+		 System.out.println("----------------------------------");
 
 		try {
 			// Extract the Servlet Context
@@ -154,7 +156,7 @@ public class SimpleXDataKml {
 					.getServletContext();
 			String propertyFile = context.getRealPath("/")
 					+ "/WEB-INF/classes/kmlgenerator.properties";
-			//System.out.println("Prop file location " + propertyFile);
+			System.out.println("Prop file location " + propertyFile);
 			properties = new Properties();
 			properties.load(new FileInputStream(propertyFile));
 			// Note these will be "global" for this class, so
