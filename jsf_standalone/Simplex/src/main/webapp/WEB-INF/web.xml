@@ -105,19 +105,10 @@
     <load-on-startup>1</load-on-startup> 
   </servlet>
 
-    <servlet>
-        <servlet-name>PortletServlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet</servlet-class>
-    </servlet>
-
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/Simplex-portlet/*</url-pattern>
+        <url-pattern>/Simplex/*</url-pattern>
     </servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>PortletServlet</servlet-name>
-        <url-pattern>/jsr/Simplex-portlet</url-pattern>
-    </servlet-mapping>
 </web-app> 
  
