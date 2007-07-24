@@ -3,6 +3,26 @@
 
 <target name="copy-all-to-portlet" depends="copy-rdahmm-to-portlet,copy-stfilter-to-portlet,copy-stationmonitor-to-portlet,copy-realtimerdahmm-to-portlet"/>
 
+<target name="copy-simplex-to-portlet">
+   <property name="simplex.dest.dir" value="./portlets/Simplex-portlet/"/>
+   <property name="simplex.source.dir" value="./jsf_standalone/Simplex"/>
+   <copy toDir="${simplex.dest.dir}"
+         overwrite="true">
+      <fileset dir="${simplex.source.dir}">
+         <include name="**/*.java"/>
+      </fileset>
+      <fileset dir="${simplex.source.dir}">
+         <include name="**/*.xml"/>
+         <include name="**/*.class"/>
+         <include name="**/*.jar"/>
+         <include name="**/*.jsp"/>
+         <include name="**/*.properties"/>
+         <exclude name="pom.xml"/>
+         <exclude name="**/web.xml"/>
+      </fileset>
+   </copy>
+</target>
+
 <target name="copy-rdahmm-to-portlet">
    <property name="rdahmm.dest.dir" value="./portlets/RDAHMM-portlet/"/>
    <property name="rdahmm.source.dir" value="./jsf_standalone/RDAHMM"/>

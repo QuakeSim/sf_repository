@@ -14,7 +14,7 @@ echo "######################################"
 echo "Installing Simplex"
 echo "######################################"
 cd $SIMPLEX_SA_HOME
-if mvn clean package -Dportal.server.url=$PORTAL_SERVER_URL -Dbuild.dir=$BUILD_DIR -Dtomcat.base.dir=$CATALINA_HOME
+if mvn clean package -Dportal.host.name=$PORTAL_HOST_NAME -Dbuild.dir=$BUILD_DIR -Dtomcat.base.dir=$CATALINA_HOME
 
 then
     echo Install complete
@@ -22,6 +22,7 @@ else
     exit 1
 fi
 cp -r target/Simplex $CATALINA_HOME/webapps
+
 
 
 

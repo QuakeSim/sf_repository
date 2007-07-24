@@ -55,7 +55,7 @@ export SIMPLEX_BIN_HOME=$HOME/GEMCodes/Simplex/
 export GENERIC_PROJECT_HOME=$BUILD_DIR/GenericQuakeSimProject
 
 #Standalone JSF (for development).
-export SIMPLEX_SA_HOME=$BUILD_DIR/jsf_standalone/Simplex
+export SIMPLEX_SA_HOME=$BUILD_DIR/jsf_standalone/Simplex/
 export RDAHMM_SA_HOME=$BUILD_DIR/jsf_standalone/RDAHMM/
 export STFILTER_SA_HOME=$BUILD_DIR/jsf_standalone/st_filter/
 export SENSORGRID_SA_HOME=$BUILD_DIR/jsf_standalone/sensorgrid
