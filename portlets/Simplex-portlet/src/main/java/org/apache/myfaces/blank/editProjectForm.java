@@ -68,25 +68,27 @@ public class editProjectForm {
 	/**
 	 * default empty constructor
 	 */
-	public editProjectForm( String tmp) {
-		super();
-		selectdbURL=tmp;
-		System.out.println("editProjectForm Created");
-	}
-	
+	 public editProjectForm( String tmp) {
+		 super();
+		 selectdbURL=tmp;
+		 System.out.println("editProjectForm Created");
+	 }
+	 
 	public void initEditFormsSelection() {
-		renderSearchByFaultNameForm = false;
-		renderSearchByAuthorForm = false;
-		renderSearchByLatLonForm = false;
-		renderViewAllFaultsForm = false;
-		renderCreateObservationForm = false;
-		renderCreateNewFaultForm = false;
-		renderDislocListForm = false;
-		renderAddFaultSelectionForm = false;
-		renderAddFaultFromDBForm = false;
-
+		 renderCreateObsvCutPaste=false;
+		 renderSearchByFaultNameForm = false;
+		 renderSearchByAuthorForm = false;
+		 renderSearchByLatLonForm = false;
+		 renderViewAllFaultsForm = false;
+		 renderCreateObservationForm = false;
+		 renderCreateNewFaultForm = false;
+		 renderDislocListForm = false;
+		 renderAddFaultSelectionForm = false;
+		 renderAddFaultFromDBForm = false;
+		 
 	}	
-	public void toggleProjectSelection(ActionEvent ev) {
+	 
+	 public void toggleProjectSelection(ActionEvent ev) {
 		initEditFormsSelection();
 		if (projectSelectionCode.equals("ShowObservation")) {
 			currentObservation=new Observation();

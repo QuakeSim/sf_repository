@@ -6,6 +6,7 @@ import java.net.URL;
 import java.rmi.server.UID;
 import java.util.ArrayList;
 import java.util.List;
+import java .util.StringTokenizer;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -31,7 +32,8 @@ public class SimplexBean extends GenericSopacBean {
 	// boolean isInitialized=false;
 
 	// Simplex Bean staff
-	protected String codeName = "Simplex2";
+	 protected String codeName = "Simplex2";
+	 private int SIMPLEX_OBSV_COUNT=5;
 
 	// This is the db4o database
 	ObjectContainer db = null;
@@ -998,6 +1000,45 @@ public class SimplexBean extends GenericSopacBean {
 		}
 
 	}
+
+	 public void toggleAddObsvTextAreaForProject(ActionEvent ev) {
+		  currentEditProjectForm.initEditFormsSelection();
+		  db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
+									+ codeName + "/" + projectName + ".db");
+		  System.out.println("Parsing Output");
+		  Observation tmpObsv = new Observation();
+		  ObjectSet result = db.get(tmpObsv);
+		  int obsvCount=result.size();
+		 
+		  StringTokenizer st1, st2;
+		  st1=new StringTokenizer(currentEditProjectForm.getObsvTextArea().trim(),"\n");
+		  String line;
+
+		  while(st1.hasMoreTokens()) {
+				line=st1.nextToken();
+				st2=new StringTokenizer(line.trim(),"\t , ");  //Should accept spaces, tabs, commas
+				if(st2.countTokens()==SIMPLEX_OBSV_COUNT) {
+					 tmpObsv = new Observation();
+					 while(st2.hasMoreTokens()){
+						  tmpObsv.setObsvName(projectName+obsvCount);
+						  tmpObsv.setObsvType(st2.nextToken());
+						  tmpObsv.setObsvLocationEast(st2.nextToken());
+						  tmpObsv.setObsvLocationNorth(st2.nextToken());
+						  tmpObsv.setObsvValue(st2.nextToken());
+						  tmpObsv.setObsvError(st2.nextToken());
+						  tmpObsv.setObsvRefSite("1");						  
+					 }
+					 System.out.println("\n");
+				}
+				else {
+					 System.out.println("Line malformed: "+line);
+				}
+				obsvCount++;
+				db.set(tmpObsv);
+		  }
+		  db.commit();
+		  db.close();
+	 }
 
 	public void toggleAddObservationForProject(ActionEvent ev) {
 
