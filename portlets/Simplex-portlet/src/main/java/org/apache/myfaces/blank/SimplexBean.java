@@ -524,48 +524,49 @@ public class SimplexBean extends GenericSopacBean {
 		System.out.println("ProjectName:" + projectName);
 		initSimplexService();
 		projectSimpleXOutput = simplexService.runSimplex(userName, projectName,
-				faults, obsv, currentProjectEntry.startTemp,
-				currentProjectEntry.maxIters,currentProjectEntry.origin_lon, currentProjectEntry.origin_lat,this.kmlGeneratorUrl, timeStamp);
-
+																		 faults, obsv, currentProjectEntry.startTemp,
+																		 currentProjectEntry.maxIters,
+																		 currentProjectEntry.origin_lon, 
+																		 currentProjectEntry.origin_lat,
+																		 this.kmlGeneratorUrl, timeStamp);
+		
 		System.out.println(projectSimpleXOutput.getProjectName());
 		System.out.println(projectSimpleXOutput.getInputUrl());
 		saveSimpleXOutputBeanToDB(projectSimpleXOutput);
-
+		
 		return ("Simplex2-back");
 	}
-
-	protected void saveSimpleXOutputBeanToDB(
-			SimpleXOutputBean projectSimpleXOutput) {
-
-		// Set up the bean template for searching.
-		SimpleXOutputBean mega = new SimpleXOutputBean();
-		mega.setProjectName(projectSimpleXOutput.getProjectName());
-		mega.setJobUIDStamp(projectSimpleXOutput.getJobUIDStamp());
-		// Find the matching bean
-		db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
-				+ codeName + "/" + projectName + ".db");
-		ObjectSet results = db.get(mega);
-		System.out.println("SimpleXOutputBean to update found? "
-				+ results.size());
-		System.out.println("Saving SimpleXOutputBean getProjectName:"
-				+ projectSimpleXOutput.getProjectName());
-		System.out.println("Saving getInputUrl url:"
-				+ projectSimpleXOutput.getInputUrl());
-		if (results.hasNext()) {
-			// Reassign the bean. Should only be one match.
-			mega = (SimpleXOutputBean) results.next();
-
-		}
-		mega.setInputUrl(projectSimpleXOutput.getInputUrl());
-		mega.setLogUrl(projectSimpleXOutput.getLogUrl());
-		mega.setOutputUrl(projectSimpleXOutput.getOutputUrl());
-		mega.setFaultUrl(projectSimpleXOutput.getFaultUrl());
-		String[] kmlurls=projectSimpleXOutput.getKmlUrls();
-		mega.setKmlUrls(kmlurls);
-		db.set(mega);
-		db.commit();
-		db.close();
-
+	 
+	 protected void saveSimpleXOutputBeanToDB(SimpleXOutputBean projectSimpleXOutput) {
+		  
+		  // Set up the bean template for searching.
+		  SimpleXOutputBean mega = new SimpleXOutputBean();
+		  mega.setProjectName(projectSimpleXOutput.getProjectName());
+		  mega.setJobUIDStamp(projectSimpleXOutput.getJobUIDStamp());
+		  // Find the matching bean
+		  db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
+									+ codeName + "/" + projectName + ".db");
+		  ObjectSet results = db.get(mega);
+		  System.out.println("SimpleXOutputBean to update found? "
+									+ results.size());
+		  System.out.println("Saving SimpleXOutputBean getProjectName:"
+									+ projectSimpleXOutput.getProjectName());
+		  System.out.println("Saving getInputUrl url:"
+									+ projectSimpleXOutput.getInputUrl());
+		  if (results.hasNext()) {
+				// Reassign the bean. Should only be one match.
+				mega = (SimpleXOutputBean) results.next();
+				
+		  }
+		  mega.setInputUrl(projectSimpleXOutput.getInputUrl());
+		  mega.setLogUrl(projectSimpleXOutput.getLogUrl());
+		  mega.setOutputUrl(projectSimpleXOutput.getOutputUrl());
+		  mega.setFaultUrl(projectSimpleXOutput.getFaultUrl());
+		  String[] kmlurls=projectSimpleXOutput.getKmlUrls();
+		  mega.setKmlUrls(kmlurls);
+		  db.set(mega);
+		  db.commit();
+		  db.close();
 	}
 
 	public String NewProjectThenEditProject() throws Exception {
