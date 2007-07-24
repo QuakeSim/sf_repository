@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>QuakeSim2</groupId>
-    <artifactId>Simplex-portlet</artifactId>
+    <artifactId>Simplex</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>A custom project using myfaces</name>
     <url>http://www.myorganization.org</url>
 
     <build>
-        <finalName>Simplex-portlet</finalName>
+        <finalName>Simplex</finalName>
         <resources>
            <resource>
                <directory>src/main/resources</directory>

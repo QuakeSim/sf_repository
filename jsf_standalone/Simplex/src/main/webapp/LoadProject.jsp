@@ -4,6 +4,17 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <html>
+<style>
+	.alignTop {
+		vertical-align:top;
+	}
+	.header2 {
+		font-family: Arial, sans-serif;
+		font-size: 18pt;
+		font: bold;
+	}
+</style>
+
 <head>
 
 <title>Simplex2 Load and Delete Project</title>
@@ -44,7 +55,14 @@ function dataTableSelectOneRadio(radio) {
 
 <f:view>
 	<h:form>
-		<h:panelGrid columns="2" border="1">
+	<h:outputText styleClass="header2" value="Project Manager"/>
+        <p/>
+		  <h:outputText value="You don't have any archived projects. Fill out the forms below to create one."
+							 rendered="#{empty SimplexBean.myProjectNameList}"/>
+
+		<h:panelGrid columns="2" 
+						 rendered="#{!(empty SimplexBean.myProjectNameList)}"		 
+						 border="1">
 			<h:panelGrid columns="1" border="0">
 				<h:outputText escape="false" value="<b>Select Projects</b><br><br>" />
 				<h:outputText escape="false"
@@ -75,6 +93,7 @@ function dataTableSelectOneRadio(radio) {
 	</h:form>
 
 	<h:form>
+		<b>New Project Name</b>
 		<h:panelGrid columns="2" border="0">
 			<h:outputText value="Provide a Project Name:" />
 			<h:panelGroup>

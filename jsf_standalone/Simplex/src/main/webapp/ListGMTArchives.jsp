@@ -4,6 +4,17 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <html>
+<style>
+	.alignTop {
+		vertical-align:top;
+	}
+	.header2 {
+		font-family: Arial, sans-serif;
+		font-size: 18pt;
+		font: bold;
+	}
+</style>
+
 <head>
 
 <title>Select Project Files</title>
@@ -44,7 +55,12 @@ function dataTableSelectOneRadio(radio) {
 </script>
 <f:view>
 	<h:form>
-		<h:panelGrid columns="1" border="0">
+		  <h:outputText value="You don't have any archived projects."
+							 rendered="#{empty SimplexBean.myProjectNameList}"/>
+
+		<h:panelGrid columns="1" 
+						 rendered="#{!(empty SimplexBean.myarchivedFileEntryList)}"/>
+						 border="0">
 			<h:outputText escape="false" value="<h3>Archived Data</h3><br>" />
 			<h:outputText escape="false"
 				value="You have the following archived data files. Select the radio button to create GMT plots. Download the input and output files for more information on the data.<br>" />

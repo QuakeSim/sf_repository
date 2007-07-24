@@ -44,7 +44,8 @@ function dataTableSelectOneRadio(radio) {
 </script>
 <f:view>
 	<h:form id="linkDummyForm">
-		<h:panelGrid columns="1" border="0">
+		<h:panelGrid columns="1" 
+						 border="0">
 			<h:panelGroup>
 				<h:outputText escape="false" value="Click " />
 				<h:outputLink id="link1" value="#{SimplexBean.gmtPlotPdfUrl}">

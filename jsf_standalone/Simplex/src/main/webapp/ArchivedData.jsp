@@ -44,7 +44,12 @@ function dataTableSelectOneRadio(radio) {
 </script>
 <f:view>
 	<h:form>
-		<h:panelGrid columns="1" border="0">
+	   <h:outputText value="You don't have any archived projects."
+							 rendered="#{empty SimplexBean.myarchivedFileEntryList}"/>
+
+		<h:panelGrid columns="1" 
+						 rendered="#{!(empty SimplexBean.myarchivedFileEntryList)}"		 
+						 border="0">
 			<h:outputText escape="false" value="<h3>Archived Data</h3><br>" />
 			<h:outputText escape="false"
 				value="You have the following archived data files. Download the input and output files for more information on the data.<br>" />
