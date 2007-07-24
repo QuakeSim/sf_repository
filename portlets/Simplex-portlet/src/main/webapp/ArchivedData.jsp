@@ -4,6 +4,17 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <html>
+<style>
+	.alignTop {
+		vertical-align:top;
+	}
+	.header2 {
+		font-family: Arial, sans-serif;
+		font-size: 18pt;
+		font: bold;
+	}
+</style>
+
 <head>
 
 <title>Select Project Files</title>

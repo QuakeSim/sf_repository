@@ -4,6 +4,17 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <html>
+<style>
+	.alignTop {
+		vertical-align:top;
+	}
+	.header2 {
+		font-family: Arial, sans-serif;
+		font-size: 18pt;
+		font: bold;
+	}
+</style>
+
 <head>
 <link rel="stylesheet" type="text/css"
 	href='<%= request.getContextPath() + "/stylesheet.css" %>'>
@@ -49,12 +60,13 @@ vertical-align:top;
 }
 </style>
 <f:view>
+	<h:outputText styleClass="header2" value="Project Component Manager"/>   
+	<h:outputText value="You must provide at least one fault and one observation point before you can run Simplex"/>
 	<h:panelGrid id="panelgrid" columns="2" border="0"
 		columnClasses="alignTop, alignTop">
 		<h:panelGrid id="EditProject" columns="1" border="1">
 			<h:form id="selectproj">
 				<h:panelGroup>
-
 					<h:outputFormat escape="false"
 						value="<b>Project Name:</b> #{SimplexBean.projectName} <br>" />
 					<h:outputFormat escape="false"
@@ -71,24 +83,31 @@ vertical-align:top;
 						<f:selectItem id="item1"
 							itemLabel="Add an Observation Point: Click to specify observation point parameters."
 							itemValue="ShowObservation" />
+						<f:selectItem id="item0"
+							itemLabel="Add Observation List (Advanced): Cut and paste a list of observation points. "
+							itemValue="ShowObsvCutPaste" />
 						<f:selectItem id="item2"
 							itemLabel="Create New Fault: Click to specify geometry for a fault segment."
 							itemValue="CreateNewFault" />
 						<f:selectItem id="item4"
 							itemLabel="Add Fault from DB: Click to select a fault segment from the database."
 							itemValue="AddFaultSelection" />
-						<f:selectItem id="item3"
-							itemLabel="Import Disloc Output: Click to select Disloc file to import."
-							itemValue="ShowDislocList" />
 					</h:selectOneRadio>
 					<h:commandButton id="button1" value="Make Selection"
 						actionListener="#{SimplexBean.currentEditProjectForm.toggleProjectSelection}">
 					</h:commandButton>
-
-
 				</h:panelGroup>
 			</h:form>
 
+			<h:panelGroup>
+					 <h:form id="obsvCutPaste"
+					 			rendered="#{SimplexBean.currentEditProjectForm.renderCreateObsvCutPaste}">
+						<h:inputTextarea id="obsvTextArea"
+							 	value="#{SimplexBean.currentEditProjectForm.obsvTextArea}"/>
+					   <h:commandButton id="addObsvTextArea" value="select"
+							actionListener="#{SimplexBean.toggleAddObsvTextAreaForProject}" />
+					 </h:form>
+			</h:panelGroup>
 
 
 			<h:panelGroup>
@@ -643,7 +662,7 @@ vertical-align:top;
 		<h:form>
 		<h:commandButton id="runSimplex2" value="Run Simplex2"
 			action="#{SimplexBean.toggleRunSimplex2}" />
-		</h:form>
+		</h:form>2
 
 	</h:panelGrid>
 

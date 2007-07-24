@@ -4,6 +4,17 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <html>
+<style>
+	.alignTop {
+		vertical-align:top;
+	}
+	.header2 {
+		font-family: Arial, sans-serif;
+		font-size: 18pt;
+		font: bold;
+	}
+</style>
+
 <head>
 
 <title>Simplex2 Load and Delete Project</title>
@@ -44,7 +55,14 @@ function dataTableSelectOneRadio(radio) {
 
 <f:view>
 	<h:form>
-		<h:panelGrid columns="2" border="1">
+	<h:outputText styleClass="header2" value="Project Archive"/>
+        <p/>
+		  <h:outputText value="You don't have any archived projects."
+							 rendered="#{empty SimplexBean.myProjectNameList}"/>
+
+		<h:panelGrid columns="2" 
+						 rendered="#{!(empty SimplexBean.myProjectNameList)}"		 
+						 border="1">
 			<h:panelGrid columns="1" border="0">
 				<h:outputText escape="false" value="<b>Select Projects</b><br><br>" />
 				<h:outputText escape="false"
@@ -71,6 +89,55 @@ function dataTableSelectOneRadio(radio) {
 					action="#{SimplexBean.toggleDeleteProject}" />
 			</h:panelGrid>
 		</h:panelGrid>
+
+	</h:form>
+
+	<h:form>
+		<b>New Project Name</b>
+		<h:panelGrid columns="2" border="0">
+			<h:outputText value="Provide a Project Name:" />
+			<h:panelGroup>
+			<h:inputText id="projectName" value="#{SimplexBean.projectName}"
+				required="true" />
+			<h:message for="projectName" showDetail="true" showSummary="true"
+				errorStyle="color: red" />
+			</h:panelGroup>
+			
+			<h:outputText value="Problem starting temperature:" />
+			<h:panelGroup>
+			<h:inputText id="startTemp" value="#{SimplexBean.currentProjectEntry.startTemp}"
+				required="true" />
+			<h:message for="startTemp" showDetail="true" showSummary="true"
+				errorStyle="color: red" />
+			</h:panelGroup>
+
+			<h:outputText value="Specify the maximum number of iterations:" />
+			<h:panelGroup>
+			<h:inputText id="maxIters" value="#{SimplexBean.currentProjectEntry.maxIters}"
+				required="true" />
+			<h:message for="maxIters" showDetail="true" showSummary="true"
+				errorStyle="color: red" />
+			</h:panelGroup>
+
+			<h:outputText value="Specify the latitude of the problem origin:" />
+			<h:panelGroup>
+			<h:inputText id="origin_lat" value="#{SimplexBean.currentProjectEntry.origin_lat}"
+				required="true" />
+			<h:message for="origin_lat" showDetail="true" showSummary="true"
+				errorStyle="color: red" />
+			</h:panelGroup>
+
+			<h:outputText value="Specify the longitude of the problem origin:" />
+			<h:panelGroup>
+			<h:inputText id="origin_lon" value="#{SimplexBean.currentProjectEntry.origin_lon}"
+				required="true" />
+			<h:message for="origin_lon" showDetail="true" showSummary="true"
+				errorStyle="color: red" />
+			</h:panelGroup>
+			
+		</h:panelGrid>
+		<h:commandButton value="Create Project"
+			action="#{SimplexBean.NewProjectThenEditProject}" />
 
 	</h:form>
 

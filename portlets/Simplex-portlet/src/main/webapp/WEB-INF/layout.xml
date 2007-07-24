@@ -3,12 +3,36 @@
         <title lang="en">Simplex-Portlet</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab label="Simplex-portlet">
-                <title lang="en">Simplex Portlet</title>
+                <title lang="en">Simplex Project Manager</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
                             <portlet-frame label="Simplex-PF">
-                                <portlet-class>Simplex-portlet#Simplex-portlet </portlet-class>
+                                <portlet-class>Simplex-portlet#Simplex-portlet</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+            <portlet-tab label="Fetch-simplex-results">
+                <title lang="en">Fetch Simplex Results</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="Simplex-fetchdata-PF">
+                                <portlet-class>Simplex-portlet#Simplex-archive-portlet</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+            <portlet-tab label="Simplex-plots-portlet">
+                <title lang="en">Simplex Plot Portlet</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="Simplex-plots-PF">
+                                <portlet-class>Simplex-portlet#Simplex-plots-portlet</portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>

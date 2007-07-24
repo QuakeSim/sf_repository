@@ -69,18 +69,6 @@
 	</navigation-rule>
 
 	<navigation-rule>
-		<from-view-id>/NewProject.jsp</from-view-id>
-		<navigation-case>
-			<from-outcome>Simplex2-edit-project</from-outcome>
-			<to-view-id>/EditProject.jsp</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>Simplex2-back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-
-	<navigation-rule>
 		<from-view-id>/EditProject.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>Simplex2-this</from-outcome>
@@ -88,7 +76,7 @@
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>Simplex2-back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
+			<to-view-id>/LoadProject.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 
@@ -104,7 +92,7 @@
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>Simplex2-back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
+			<to-view-id>/LoadProject.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 
@@ -112,7 +100,7 @@
 		<from-view-id>/ArchivedData.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>Simplex2-back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
+			<to-view-id>/ArchivedData.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 
@@ -132,7 +120,7 @@
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>Simplex2-back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
+			<to-view-id>/ListGMTArchives.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 
@@ -144,7 +132,7 @@
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>Simplex2-back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
+			<to-view-id>/kmlviewer.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	
@@ -156,7 +144,7 @@
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>Simplex2-back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
+			<to-view-id>/gmt_googlemap.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	
@@ -168,7 +156,7 @@
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>Simplex2-back</from-outcome>
-			<to-view-id>/Main.jsp</to-view-id>
+			<to-view-id>/GMTView.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 

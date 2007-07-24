@@ -19,12 +19,16 @@ import WebFlowClient.ViscoViz.MyVTKServicePortType;
 
 public class editProjectForm {
 
+	 String obsvTextArea="";
+
 	Fault currentFault = new Fault();
 
 	Observation currentObservation = new Observation();
 
 	String projectSelectionCode = "";
 	
+	 boolean renderCreateObsvCutPaste=false;
+
 	boolean renderCreateObservationForm = false;
 
 	boolean renderCreateNewFaultForm = false;
@@ -88,6 +92,11 @@ public class editProjectForm {
 			currentObservation=new Observation();
 			renderCreateObservationForm = !renderCreateObservationForm;
 		}
+
+		if (projectSelectionCode.equals("ShowObsvCutPaste")) {
+			renderCreateObsvCutPaste = !renderCreateObsvCutPaste;
+		}
+
 		if (projectSelectionCode.equals("CreateNewFault")) {
 			currentFault= new Fault();
 			renderCreateNewFaultForm = !renderCreateNewFaultForm;
@@ -695,4 +704,20 @@ public class editProjectForm {
 	public void setMyFaultDataTable(HtmlDataTable tmp_DataTable) {
 		this.myFaultDataTable = tmp_DataTable;
 	}
+
+	 public void setRenderCreateObsvCutPaste(boolean renderCreateObsvCutPaste){
+		  this.renderCreateObsvCutPaste=renderCreateObsvCutPaste;
+	 }
+	 
+	 public boolean getRenderCreateObsvCutPaste() {
+		  return renderCreateObsvCutPaste;
+	 }
+	 
+	 public void setObsvTextArea(String obsvTextArea) {
+		  this.obsvTextArea=obsvTextArea;
+	 }
+	 
+	 public String getObsvTextArea() {
+		  return obsvTextArea;
+	 }
 }
