@@ -763,7 +763,7 @@ public class RDAHMMService extends AntVisco implements Runnable{
 				convertInputUrlStringToArray(inputFileUrlString);
 		  
 		  String[] localFileArray=downloadInputFile(inputFileUrlArray,workDir);
-		  String[] localFileArrayFiltered=filterResults(localFileArray, 2, 3);
+		  String[] localFileArrayFiltered=filterResults(localFileArray, 4, 3);
 		  String rdahmmInputFile=workDir+"/"+projectName+".input";
 		  mergeInputFiles(localFileArrayFiltered,rdahmmInputFile);
 		  
