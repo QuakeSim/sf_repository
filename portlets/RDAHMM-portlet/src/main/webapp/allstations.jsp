@@ -103,11 +103,12 @@ mapcenter_y = center_xy[1];
       <f:view>
        <h:form id="form1">
 
-	    <b>Input Parameters</b>
+       <h:outputText id="head" escape="false" value="<b>Input Parameter</b>"/>
+		 <h:outputText id="uhrur" value="#{rdahmmBean.warningMessage}"/>
 
+		 <h:messages style="color:red" id="errorMsg"/>
    	 <h:panelGrid id="InputGridPanel" columns="4" border="1">
-
-      	 <h:outputText value="Project Name:"/>
+      	<h:outputText value="Project Name:"/>
        	<h:inputText id="projectName" 
 							value="#{rdahmmBean.rdahmmProjectBean.projectName}" 
        	 	         required="true"/>

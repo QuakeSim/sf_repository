@@ -25,7 +25,8 @@
   </ul>
   <f:view>        
     <h:form>
-    <b>Input Parameter</b>
+    <h:outputText id="head" escape="false" value="<b>Input Parameter</b>"/>
+	 <h:outputText id="uhrur" value="Some blah #{rdahmmBean.warningMessage}"/>
     <h:panelGrid columns="3" border="1">
        <h:outputText value="Project Name:"/>
        <h:inputText id="projectName" value="#{rdahmmBean.projectName}" 

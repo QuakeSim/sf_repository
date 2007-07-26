@@ -1632,11 +1632,9 @@ public class DislocBean extends GenericSopacBean {
 		  }
 		  db.close();
 		  return currentFault;
-		  
 	 }
 
 	 protected DislocParamsBean populateParamsFromContext(String projectName) throws Exception {
-		  
 		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
 		  System.out.println("Populating params from context.");
 		  ObjectSet results=db.get(DislocParamsBean.class);

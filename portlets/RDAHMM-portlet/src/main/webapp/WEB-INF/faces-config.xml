@@ -10,6 +10,12 @@
 		<managed-bean-class>cgl.webservices.RDAHMMBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 
+                <managed-property>
+                   <property-name>defaultWarningMessage</property-name>
+                   <value>A network problem prevented RDAHMM from executing correctly.  Please notify the QuakeSim portal administrator.</value>
+                </managed-property>
+		        
+
                 <!--Who we are-->
                 <managed-property>
                    <property-name>codeName</property-name>

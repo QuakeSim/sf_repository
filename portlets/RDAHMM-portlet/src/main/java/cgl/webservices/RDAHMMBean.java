@@ -110,6 +110,8 @@ public class RDAHMMBean extends GenericSopacBean{
 	 ObjectContainer db;
 	 List projectArchive=new ArrayList();
 
+	 String warningMessage,defaultWarningMessage;
+
     /**
      * default empty constructor
      */
@@ -220,12 +222,13 @@ public class RDAHMMBean extends GenericSopacBean{
 	  * This is the nonblocking version of the full invocation.
 	  * It uses the results bean rather than the string array.
 	  */ 
-	 public String runBlockingRDAHMM_Full() throws Exception {
-		  
-		  initWebService();
-		  newProject();
-		  RdahmmProjectBean localBean=getRdahmmProjectBean();
-		  RDAHMMResultsBean resultsBean=
+	 public String runBlockingRDAHMM_Full() { 
+		  warningMessage="";
+		  try {		  
+				initWebService();
+				newProject();
+				RdahmmProjectBean localBean=getRdahmmProjectBean();
+				RDAHMMResultsBean resultsBean=
 				rdservice.runBlockingRDAHMM2(localBean.getSiteCode(),
 													  localBean.getResource(),
 													  localBean.getContextGroup(),
@@ -234,31 +237,45 @@ public class RDAHMMBean extends GenericSopacBean{
 													  localBean.getBeginDate(),
 													  localBean.getEndDate(),
 													  localBean.getNumModelStates());
-		  setResultsBean(resultsBean);
-		  //		  setPropertyVals(projectName, returnBean);
-		  //		  setParameterValues(projectName);
+				setResultsBean(resultsBean);
+				//		  setPropertyVals(projectName, returnBean);
+				//		  setParameterValues(projectName);
+		  }
+		  catch (Exception ex) {
+				warningMessage=getDefaultWarningMessage();
+				System.out.println(warningMessage);
+				ex.printStackTrace();
+		  }
 		  return "rdahmm-output-display";
 	 }
-
+	 
 	 /**
 	  * This is the nonblocking version of the full invocation.
 	  * It uses the results bean rather than the string array.
 	  */ 
-	 public String runNonblockingRDAHMM_Full() throws Exception {
-		  System.out.println("Running RDAHMM");
-		  initWebService();
-		  RDAHMMResultsBean returnBean=
-				rdservice.runNonblockingRDAHMM2(siteCode,
-														 resource,
-														 contextGroup,
-														 contextId,
-														 minMaxLatLon,
-														 beginDate,
-														 endDate,
-														 numModelStates);
-		  setResultsBean(resultsBean);
-		  //		  setPropertyVals(projectName,returnBean);
-		  //		  setParameterValues();
+	 public String runNonblockingRDAHMM_Full() { 
+		  warningMessage="";
+		  try {
+				System.out.println("Running RDAHMM");
+				initWebService();
+				RDAHMMResultsBean returnBean=
+					 rdservice.runNonblockingRDAHMM2(siteCode,
+																resource,
+																contextGroup,
+																contextId,
+																minMaxLatLon,
+																beginDate,
+																endDate,
+																numModelStates);
+				setResultsBean(resultsBean);
+				//		  setPropertyVals(projectName,returnBean);
+				//		  setParameterValues();
+		  }
+		  catch (Exception ex) {
+				warningMessage=getDefaultWarningMessage();
+				System.out.println(warningMessage);
+				ex.printStackTrace();
+		  }
 		  return "rdahmm-output-display";
 	 }
 	 
@@ -489,5 +506,21 @@ public class RDAHMMBean extends GenericSopacBean{
 		  }
 		  
 		  return projectArchive;
+	 }
+
+	 public String getDefaultWarningMessage(){
+		  return defaultWarningMessage;
+	 }
+
+	 public void setDefaultWarningMessage(String defaultWarningMessage){
+		  this.defaultWarningMessage=defaultWarningMessage;
+	 }
+
+	 public String getWarningMessage(){
+		  return warningMessage;
+	 }
+
+	 public void setWarningMessage(String warningMessage){
+		  this.warningMessage=warningMessage;
 	 }
 }
