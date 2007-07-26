@@ -16,6 +16,7 @@ import javax.faces.component.html.HtmlSelectOneRadio;
 import javax.faces.event.*;
 import javax.faces.component.UIData;
 import javax.faces.event.ActionEvent;
+import javax.faces.component.UIComponent;
 
 import javax.portlet.PortletContext;
 import javax.servlet.ServletContext;
@@ -84,7 +85,7 @@ public class DislocBean extends GenericSopacBean {
 	 List myObsvEntryForProjectList=new ArrayList();
 	 List myArchivedDislocResultsList=new ArrayList();
 
-	 HtmlDataTable myFaultDataTable;
+	 HtmlDataTable myFaultDataTable, myProjectSummaryDataTable;
 	 
 	 //Create the database
 	 ObjectContainer db=null;
@@ -501,9 +502,7 @@ public class DislocBean extends GenericSopacBean {
 					 + faultLonStarts.get(i).toString() + ","
 					 + faultLonEnds.get(i).toString() + ")";
 				myFaultDBEntryList.add(tmp_FaultDBEntry);
-				
-		  }
-		  
+		  }		  
     }
     
     /**
@@ -1087,8 +1086,32 @@ public class DislocBean extends GenericSopacBean {
 		  renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
     }
 
+	 /**
+	  * This will delete projects
+	  */
+    public void toggleDeleteProjectSummary(ActionEvent ev) {
+		  try {
+				DislocProjectSummaryBean dpsb=
+					 (DislocProjectSummaryBean)getMyProjectSummaryDataTable().getRowData();
+				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");		  
+				System.out.println("Found project:"+dpsb.getProjectName()+" "+dpsb.getJobUIDStamp());
+				ObjectSet results=db.get(dpsb);
+				System.out.println("Result size: "+results.size());
+				//Should only have one value.
+				if(results.hasNext()){
+					 dpsb=(DislocProjectSummaryBean)results.next();
+					 db.delete(dpsb);
+				}
+				db.close();
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  
+    }
+
     /**
-	  * This will return all of the faults in the db for a given project.
+	  * 
 	  */
 	 protected List populateFaultCollection(String projectName) throws Exception {
 		  List myFaultCollection=new ArrayList();
@@ -1200,12 +1223,14 @@ public class DislocBean extends GenericSopacBean {
 		  init_edit_project();
 		  return "disloc-edit-project";
     }
-    
+
     public String toggleDeleteProject() {
 		  try {
 				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");
 				if (deleteProjectsArray != null) {
 					 for (int i = 0; i < deleteProjectsArray.length; i++) {
+						  //Delete the project input data
+						  System.out.println("Deleting project input junk");
 						  DislocProjectBean delproj=new DislocProjectBean();
 						  delproj.setProjectName(deleteProjectsArray[i]);
 						  ObjectSet results=db.get(delproj);
@@ -1213,6 +1238,15 @@ public class DislocBean extends GenericSopacBean {
 								delproj=(DislocProjectBean)results.next();
 								db.delete(delproj);
 						  }
+						  //Delete the results summary bean also.
+						  System.out.println("Deleting project summaries");
+						  DislocProjectSummaryBean delprojsum=new DislocProjectSummaryBean();
+						  delprojsum.setProjectName(deleteProjectsArray[i]);
+						  ObjectSet results2=db.get(delprojsum);
+						  while(results2.hasNext()){
+								delprojsum=(DislocProjectSummaryBean)results2.next();
+								db.delete(delprojsum);
+						  }						  
 					 }
 				}
 				db.close();
@@ -1338,6 +1372,13 @@ public class DislocBean extends GenericSopacBean {
     }
     public void setMyFaultDataTable(HtmlDataTable tmp_DataTable) {
 		  this.myFaultDataTable = tmp_DataTable;
+    }
+
+    public HtmlDataTable getMyProjectSummaryDataTable() {
+		  return myProjectSummaryDataTable;
+    }
+    public void setMyProjectSummaryDataTable(HtmlDataTable myProjectSummaryDataTable) {
+		  this.myProjectSummaryDataTable=myProjectSummaryDataTable;
     }
 
     public List getMyFaultDBEntryList() {
