@@ -187,7 +187,7 @@ mapcenter_y = center_xy[1];
 				rendered="#{(rdahmmBean.resultsBean!=null)}">
 
        <h:outputText  escape="false" value="<b>Output Values</b>"/>
-       <h:outputLink value="#{rdahmmBean.projectInput}" target="_blank">
+       <h:outputLink value="#{rdahmmBean.resultsBean.inputUrl}" target="_blank">
        <h:outputText value="Input File"/>
        </h:outputLink>
 

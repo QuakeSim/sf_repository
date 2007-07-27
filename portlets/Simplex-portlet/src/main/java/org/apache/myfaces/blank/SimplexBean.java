@@ -11,6 +11,7 @@ import java .util.StringTokenizer;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
+import javax.faces.component.html.HtmlDataTable;
 
 import org.servogrid.genericproject.GenericSopacBean;
 
@@ -92,6 +93,8 @@ public class SimplexBean extends GenericSopacBean {
 	String kmlGeneratorUrl = "http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator";
 
 	SimpleXOutputBean projectSimpleXOutput;
+	 
+	 HtmlDataTable myArchiveDataTable;
 
 	public String getMapXmlUrl() {
 		return this.mapXmlUrl;
@@ -590,28 +593,38 @@ public class SimplexBean extends GenericSopacBean {
 		}
 
 		try {
-			if (deleteProjectsList != null) {
-				for (int i = 0; i < deleteProjectsList.length; i++) {
-					db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName
-							+ "/" + codeName + ".db");
-					projectEntry delproj = new projectEntry();
-					delproj.setProjectName((String) deleteProjectsList[i]);
-					ObjectSet results = db.get(delproj);
-					if (results.hasNext()) {
-						delproj = (projectEntry) results.next();
-						db.delete(delproj);
-					}
-					db.close();
-
-				}
-			}
+			 db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName
+									  + "/" + codeName + ".db");
+			 if (deleteProjectsList != null) {
+				  for (int i = 0; i < deleteProjectsList.length; i++) {
+						//Delete the input bean
+						projectEntry delproj = new projectEntry();
+						delproj.setProjectName((String) deleteProjectsList[i]);
+						ObjectSet results = db.get(delproj);
+						if (results.hasNext()) {
+							 delproj = (projectEntry) results.next();
+							 db.delete(delproj);
+						}
+		
+						//Delete the output bean
+						SimpleXOutputBean sxob = new SimpleXOutputBean();
+						sxob.setProjectName((String) deleteProjectsList[i]);
+						results = db.get(sxob);
+						if (results.hasNext()) {
+							 sxob = (SimpleXOutputBean) results.next();
+							 db.delete(sxob);
+						}
+				  }
+				  db.close();
+				  
+			 }
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			 ex.printStackTrace();
 		}
-
+		
 		return "Simplex2-this";
 	}
-
+	 
 	public String toggleSelectProject() {
 		if (!isInitialized) {
 			initWebServices();
@@ -1131,5 +1144,42 @@ public class SimplexBean extends GenericSopacBean {
 		String stringDate = (new UID().toString());
 		return stringDate;
 	}
+
+	 /**
+	  * This will delete projects
+	  */
+    public void toggleDeleteProjectSummary(ActionEvent ev) {
+		  try {
+				SimpleXOutputBean dpsb=
+					 (SimpleXOutputBean)getMyArchiveDataTable().getRowData();
+
+				db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
+										 + codeName + "/" + dpsb.getProjectName() + ".db");
+				System.out.println(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
+										 + codeName + "/" + dpsb.getProjectName() + ".db");
+				
+				System.out.println("Found project:"+dpsb.getProjectName()+" "+dpsb.getJobUIDStamp());
+				ObjectSet results=db.get(dpsb);
+				System.out.println("Result size: "+results.size());
+				//Should only have one value.
+				if(results.hasNext()){
+					 dpsb=(SimpleXOutputBean)results.next();
+					 db.delete(dpsb);
+				}
+				db.close();
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  
+    }
+	 
+	 public HtmlDataTable getMyArchiveDataTable() {
+		  return myArchiveDataTable;
+	 }
+
+	 public void setMyArchiveDataTable(HtmlDataTable myArchiveDataTable){
+		  this.myArchiveDataTable=myArchiveDataTable;
+	 }
 
 }

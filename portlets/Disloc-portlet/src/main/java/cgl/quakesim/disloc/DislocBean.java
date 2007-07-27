@@ -35,7 +35,6 @@ import org.servogrid.genericproject.Utility;
 //Import stuff from db4o
 import com.db4o.*;
 
-
 /**
  * Everything you need to set up and run MeshGenerator.
  */
@@ -1662,6 +1661,9 @@ public class DislocBean extends GenericSopacBean {
 	 public List getMyArchivedDislocResultsList() {
 		  myArchivedDislocResultsList.clear();
 		  try {
+		  db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
+									+ codeName + "/" + projectName + ".db");
+
 				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");		  
 				ObjectSet results=db.get(new DislocProjectSummaryBean());
 				while(results.hasNext()) {

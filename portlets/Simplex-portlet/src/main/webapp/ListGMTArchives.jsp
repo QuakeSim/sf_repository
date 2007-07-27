@@ -47,10 +47,17 @@ function dataTableSelectOneRadio(radio) {
 		<h:panelGrid columns="1" border="0">
 			<h:outputText escape="false" value="<h3>Archived Data</h3><br>" />
 			<h:outputText escape="false"
-				value="You have the following archived data files. Select the radio button to create GMT plots. Download the input and output files for more information on the data.<br>" />
+							  value="You don't have any archived results."
+							  rendered="#{empty SimplexBean.myarchivedFileEntryList}"/>
+
+			<h:outputText escape="false"
+  						 	 rendered="#{!(empty SimplexBean.myarchivedFileEntryList)}"
+							 value="You have the following archived data files. Select the radio button to create GMT plots. Download the input and output files for more information on the data.<br>" />
+
 
 			<h:dataTable border="1"
-				value="#{SimplexBean.myarchivedFileEntryList}" var="myentry3">
+  						 	 rendered="#{!(empty SimplexBean.myarchivedFileEntryList)}"
+						 	 value="#{SimplexBean.myarchivedFileEntryList}" var="myentry3">
 				<h:column>
 					<f:facet name="header">
 						<h:outputText escape="false" value="<b>Project Name</b>" />
@@ -104,11 +111,14 @@ function dataTableSelectOneRadio(radio) {
 			</h:dataTable>
 		</h:panelGrid>
 		<h:commandButton id="gmt4plot" value="[GMT Plot]"
-			action="#{SimplexBean.toggleGMTPlot}" />
+  						 	  rendered="#{!(empty SimplexBean.myarchivedFileEntryList)}"
+							  action="#{SimplexBean.toggleGMTPlot}" />
 		<h:commandButton id="gmt4map" value="[Map plot]"
-			action="#{SimplexBean.toggleMakeMap}" />
+  						 	  rendered="#{!(empty SimplexBean.myarchivedFileEntryList)}"
+							  action="#{SimplexBean.toggleMakeMap}" />
 		<h:commandButton id="loadkml" value="[Multi Kml Loader]"
-			action="#{SimplexBean.toggleViewKml}" />
+  						 	  rendered="#{!(empty SimplexBean.myarchivedFileEntryList)}"
+							  action="#{SimplexBean.toggleViewKml}" />
 	</h:form>
 
 	<h:form>

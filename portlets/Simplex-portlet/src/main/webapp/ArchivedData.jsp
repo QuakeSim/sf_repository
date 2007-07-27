@@ -58,49 +58,65 @@ function dataTableSelectOneRadio(radio) {
 		<h:panelGrid columns="1" border="0">
 			<h:outputText escape="false" value="<h3>Archived Data</h3><br>" />
 			<h:outputText escape="false"
-				value="You have the following archived data files. Download the input and output files for more information on the data.<br>" />
-
-			<h:dataTable border="1" value="#{SimplexBean.myarchivedFileEntryList}"
+							  rendered="#{!(empty SimplexBean.myarchivedFileEntryList)}"
+							  value="You have the following archived data files. Download the input and output files for more information on the data.<br>" />
+			<h:outputText escape="false"
+							  value="You don't have any archived results."
+							  rendered="#{empty SimplexBean.myarchivedFileEntryList}"/>
+			<h:dataTable border="1"
+							 binding="#{SimplexBean.myArchiveDataTable}" 
+							 rendered="#{!(empty SimplexBean.myarchivedFileEntryList)}"
+							 value="#{SimplexBean.myarchivedFileEntryList}"
 				var="myentry3">
 				<h:column>
 					<f:facet name="header">
-						<h:outputText escape="false" value="<b>Project Name</b>" />
+						<h:outputText  id="kjb16" escape="false" value="<b>Project Name</b>" />
 					</f:facet>
-					<h:outputText value="#{myentry3.projectName}" />
+					<h:outputText id="kjb15" value="#{myentry3.projectName}" />
 				</h:column>
 				<h:column>
 					<f:facet name="header">
-						<h:outputText escape="false" value="<b>	Archived DATA File</b>" />
+						<h:outputText  id="kjb14" escape="false" value="<b>	Archived DATA File</b>" />
 					</f:facet>
 					<h:panelGrid columns="4" border="1">
 						<h:outputLink id="link1" value="#{myentry3.inputUrl}" target="_blank">
-							<h:outputText value="input" />
+							<h:outputText id="kjb13" value="input" />
 						</h:outputLink>
 						<h:outputLink id="link2" value="#{myentry3.logUrl}" target="_blank">
-							<h:outputText value="stdout" />
+							<h:outputText id="kjb12" value="stdout" />
 						</h:outputLink>
 						<h:outputLink id="link3" value="#{myentry3.outputUrl}" target="_blank">
-							<h:outputText value="output" />
+							<h:outputText  id="kjb11" value="output" />
 						</h:outputLink>
 						<h:outputLink id="link4" value="#{myentry3.faultUrl}" target="_blank">
-							<h:outputText value="fault" />
+							<h:outputText  id="kjb10" value="fault" />
 						</h:outputLink>
 					</h:panelGrid>
 				</h:column>
 				<h:column>
 					<f:facet name="header">
-						<h:outputText escape="false" value="<b>Kml file</b>" />
+						<h:outputText  id="kjb3" escape="false" value="<b>Kml file</b>" />
 					</f:facet>
-						<h:panelGroup>
+						<h:panelGroup  id="kjb4">
 						<h:outputLink id="link5" value="#{myentry3.kmlUrls[0]}" target="_blank">
-							<h:outputText value="[<b>Download</b>]" escape="false" />
+							<h:outputText  id="kjb6" value="[<b>Download</b>]" escape="false" />
 						</h:outputLink>
-						<h:outputText escape="false" value="<b> </b>" />
+						<h:outputText  id="kjb2" escape="false" value="<b> </b>" />
 						<h:outputLink id="link6" value="http://maps.google.com/maps?q=#{myentry3.kmlUrls[0]}" target="_blank">
-							<h:outputText value="[<font size=1px>View In Google map</font>]" escape="false" />
+							<h:outputText id="kjb1" value="[<font size=1px>View In Google map</font>]" escape="false" />
 						</h:outputLink>
 						</h:panelGroup>
 				</h:column>
+
+				<h:column>
+					<f:facet name="header">
+						<h:outputText id="blah18" escape="false" value="<b>Delete</b>" />
+					</f:facet>
+						<h:panelGroup id="deletepanel">
+							<h:commandButton id="DeleteSummary" value="Delete"
+												  actionListener="#{SimplexBean.toggleDeleteProjectSummary}"/>
+						</h:panelGroup>
+				</h:column>					
 
 
 			</h:dataTable>
