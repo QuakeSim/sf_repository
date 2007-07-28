@@ -32,7 +32,7 @@
                     <row-layout>
                         <column-layout>
                             <portlet-frame label="Simplex-plots-PF">
-                                <portlet-class>Simplex-portlet#Simplex-plots-portlet</portlet-class>
+                                <portlet-class>Simplex-portlet#Simplex-plot-portlet</portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>

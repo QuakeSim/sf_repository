@@ -67,7 +67,7 @@ function dataTableSelectOneRadio(radio) {
 							 binding="#{SimplexBean.myArchiveDataTable}" 
 							 rendered="#{!(empty SimplexBean.myarchivedFileEntryList)}"
 							 value="#{SimplexBean.myarchivedFileEntryList}"
-				var="myentry3">
+							 var="myentry3">
 				<h:column>
 					<f:facet name="header">
 						<h:outputText  id="kjb16" escape="false" value="<b>Project Name</b>" />

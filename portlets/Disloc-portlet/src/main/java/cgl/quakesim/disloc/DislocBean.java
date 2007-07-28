@@ -107,7 +107,7 @@ public class DislocBean extends GenericSopacBean {
 
 	 String realPath;
 	 String codeName;
-	 String kmlProjectFile="kml/network0.kml";
+	 String kmlProjectFile="network0.kml";
 
     /**
      * The client constructor.

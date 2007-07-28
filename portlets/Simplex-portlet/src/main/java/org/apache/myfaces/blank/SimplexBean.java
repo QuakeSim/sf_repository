@@ -1,8 +1,8 @@
 package org.apache.myfaces.blank;
 
 //Imports from the mother ship
-import java.io.File;
-import java.net.URL;
+import java.io.*;
+import java.net.*;
 import java.rmi.server.UID;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +95,8 @@ public class SimplexBean extends GenericSopacBean {
 	SimpleXOutputBean projectSimpleXOutput;
 	 
 	 HtmlDataTable myArchiveDataTable;
+
+	 String kmlProjectFile="network0.kml";
 
 	public String getMapXmlUrl() {
 		return this.mapXmlUrl;
@@ -201,6 +203,7 @@ public class SimplexBean extends GenericSopacBean {
 		List myprojectlist = getMyProjectNameList();
 
 		myarchivedFileEntryList.clear();
+		System.out.println("Project list size:"+myprojectlist.size());
 
 		if (myprojectlist.size() > 0) {
 			for (int i = 0; i < myprojectlist.size(); i++) {
@@ -212,6 +215,8 @@ public class SimplexBean extends GenericSopacBean {
 				// System.out.println("ProjectName: "+projectName);
 				db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 						+ codeName + "/" + projectName + ".db");
+				System.out.println(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
+										 + codeName + "/" + projectName + ".db");
 				// ObjectSet results=db.get(mega);
 				ObjectSet results = db.get(SimpleXOutputBean.class);
 				// System.out.println("Matches for
@@ -242,15 +247,15 @@ public class SimplexBean extends GenericSopacBean {
 	public List getMyProjectNameList() {
 		this.myProjectNameList.clear();
 		try {
-			// System.out.println(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");
-			db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
+			 System.out.println(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");
+			 db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 					+ codeName + ".db");
 			projectEntry project = new projectEntry();
 			ObjectSet results = db.get(projectEntry.class);
 			// System.out.println("Got results:"+results.size());
 			while (results.hasNext()) {
 				project = (projectEntry) results.next();
-				// System.out.println(project.getProjectName());
+				System.out.println(project.getProjectName());
 				myProjectNameList.add(new SelectItem(project.getProjectName(),
 						project.getProjectName()));
 			}
@@ -1181,5 +1186,65 @@ public class SimplexBean extends GenericSopacBean {
 	 public void setMyArchiveDataTable(HtmlDataTable myArchiveDataTable){
 		  this.myArchiveDataTable=myArchiveDataTable;
 	 }
+
+	 /**
+	  * Used for selecting the data to plot
+	  */
+    public void togglePlotProject(ActionEvent ev) {
+		  try {
+				SimpleXOutputBean dpsb=
+					 (SimpleXOutputBean)getMyArchiveDataTable().getRowData();
+				
+				System.out.println("Found project:"+dpsb.getProjectName()+" "
+										 +dpsb.getKmlUrls()[0]);
+				String kmlUrlString=dpsb.getKmlUrls()[0];
+				String kmlName=
+					 kmlUrlString.substring(kmlUrlString.lastIndexOf("/")+1,kmlUrlString.length());
+
+				downloadKmlFile(kmlUrlString,
+									 this.getBasePath()+"/"+"gridsphere"+"/"+kmlName);
+
+				System.out.println(kmlName);
+				setKmlProjectFile(kmlName);
+				
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  
+    }
+
+	 public void setKmlProjectFile(String kmlProjectFile){
+		  this.kmlProjectFile=kmlProjectFile;
+	 }
+	 
+	 public String getKmlProjectFile(){
+		  return this.kmlProjectFile;
+	 }
+	 protected void downloadKmlFile(String kmlUrlString, String localDestination) {
+		  try {
+				URL kmlUrl=new URL(kmlUrlString);
+				URLConnection uconn=kmlUrl.openConnection();
+				InputStream in=kmlUrl.openStream();
+				OutputStream out=new FileOutputStream(localDestination);
+				
+				//Extract the name of the file from the url.
+				
+				byte[] buf=new byte[1024];
+				int length;
+				while((length=in.read(buf))>0) {
+					 out.write(buf,0,length);
+				}
+				in.close();
+				out.close();
+		  }
+		  catch(Exception ex) {
+				System.out.println("Unable to download kml file");
+				ex.printStackTrace();
+		  }
+
+		  
+	 }
+
 
 }

@@ -30,7 +30,7 @@
                  </managed-property>
                  <managed-property>
                    <property-name>contextBasePath</property-name>
-                   <value>/WebServices/WEB-INF/Descriptors/users/users/</value>
+                   <value>/WebServices/WEB-INF/Descriptors/users/</value>
                 </managed-property>
 
                 <!-- Needed for the simplex service-->
