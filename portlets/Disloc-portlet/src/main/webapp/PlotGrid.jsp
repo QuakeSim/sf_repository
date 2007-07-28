@@ -25,6 +25,7 @@
    <tr>
    <td>
     <div id="map" style="width: 800px; height: 600px; "></div>
+    <div id="dropboxdiv"></div>
 
     <script type="text/javascript">
     //<![CDATA[
@@ -44,8 +45,11 @@
         mgr.addMarker(marker,0,17);
     }
    
-    var exml = new EGeoXml("exml", map, ["<%= fileName %>"], {addmarker:addMark});
+    var exml = new EGeoXml("exml", map, ["<%= fileName %>"], {dropboxid:"dropboxdiv",addmarker:addMark});
     exml.parse();
+    GEvent.addListener(exml,"parse",function(){
+        mgr.refresh();
+     });
 
     //]]>
     </script>
