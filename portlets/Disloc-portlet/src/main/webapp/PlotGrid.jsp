@@ -16,17 +16,21 @@
   <%
 	  DislocBean dislocBean=(DislocBean)session.getAttribute("DislocBean");
 	  String fileName=dislocBean.getKmlProjectFile();
+	  dislocBean.setCodeName("Disloc");
+	  dislocBean.setContextBasePath("/WebServices/WEB-INF/Descriptors/users/");
+
   %>
 
-	 <f:view>
-    <h:outputText value="#{DislocBean.kmlProjectFile}" rendered="true"/>
+   <table>
+   <tr>
+   <td>
     <div id="map" style="width: 800px; height: 600px; "></div>
 
     <script type="text/javascript">
     //<![CDATA[
 
     var map=new GMap2(document.getElementById("map"));
-//    map.setCenter(new GLatLng(32,-118),7);
+    map.setCenter(new GLatLng(32,-118),7);
     map.addControl(new GLargeMapControl());
     map.addControl(new GMapTypeControl());
 
@@ -45,9 +49,49 @@
 
     //]]>
     </script>
-	 
-	 </f:view>
+    </td>
+    <td valign="top">
 
+	<f:view>    
+    <h:form>
+	 <h:dataTable id="projectlist" 
+					  border="1"
+					  binding="#{DislocBean.myProjectSummaryDataTable}"
+					  var="summaryBean"
+					  value="#{DislocBean.myArchivedDislocResultsList}">
+					<h:column>
+					    <f:facet name="header">
+					    <h:outputText  id="blah0" value="Project Name"/>
+						 </f:facet>
+				       <h:outputText  id="blah1" value="#{summaryBean.projectName}"/>
+					</h:column>
+					<h:column>
+					    <f:facet name="header">
+					    <h:outputText id="blah3" value="Creation Date"/>
+						 </f:facet>
+				       <h:outputText id="blah2" value="#{summaryBean.creationDate}"/>
+					</h:column>
 
+					<h:column>
+					    <f:facet name="header">
+					    <h:outputText id="blah4" value="Job UID Stamp"/>
+						 </f:facet>
+				       <h:outputText  id="blah5" value="#{summaryBean.jobUIDStamp}"/>
+					</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText id="blah18" escape="false" value="<b>Select</b>" />
+					</f:facet>
+						<h:panelGroup id="pgselect">
+							<h:commandButton id="SelectProject" value="Plot"
+												  actionListener="#{DislocBean.togglePlotProject}"/>
+						</h:panelGroup>
+				</h:column>					
+
+	 </h:dataTable>
+    </h:form>
+   </f:view>
+    </td>
+	 </table>
   </body>
 </html>

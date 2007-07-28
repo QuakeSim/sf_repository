@@ -106,7 +106,7 @@ public class DislocBean extends GenericSopacBean {
 	 String origin_lon;
 
 	 String realPath;
-	 
+	 String codeName;
 	 String kmlProjectFile="kml/network0.kml";
 
     /**
@@ -246,9 +246,9 @@ public class DislocBean extends GenericSopacBean {
 			System.out.println(xinterval);
 			System.out.println(yinterval);
 			
-			//kmlService.setGridLine("Grid Line", start_x, start_y, end_x, end_y, xinterval,yinterval);
+			kmlService.setGridLine("Grid Line", start_x, start_y, end_x, end_y, xinterval,yinterval);
 			kmlService.setPointPlacemark("Icon Layer");
-			//			kmlService.setArrowPlacemark("Arrow Layer", "ff66a1cc", 2);
+			//kmlService.setArrowPlacemark("Arrow Layer", "ff66a1cc", 2);
 			kmlService.setArrowPlacemark("Arrow Layer", "fffffff", 2);
 	
 			String myKmlUrl = kmlService.runMakeKml("", userName,
@@ -1112,6 +1112,40 @@ public class DislocBean extends GenericSopacBean {
 		  }
 		  
     }
+	 /**
+	  * Used for selecting the data to plot
+	  */
+    public void togglePlotProject(ActionEvent ev) {
+		  try {
+				//				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");		  
+				DislocProjectSummaryBean dpsb=
+					 (DislocProjectSummaryBean)getMyProjectSummaryDataTable().getRowData();
+				
+				System.out.println("Found project:"+dpsb.getProjectName()+" "
+										 +dpsb.getJobUIDStamp()
+										 +dpsb.getKmlurl());
+				String kmlName=
+					 dpsb.getKmlurl().substring(dpsb.getKmlurl().lastIndexOf("/")+1,dpsb.getKmlurl().length());
+
+				downloadKmlFile(dpsb.getKmlurl(),
+									 this.getBasePath()+"/"+"gridsphere"+"/"+kmlName);
+
+				System.out.println(kmlName);
+				setKmlProjectFile(kmlName);
+				
+				//				ObjectSet results=db.get(dpsb);
+// 				if(results.hasNext()) {
+// 				//Reconstitute the bean from the db
+// 				//Find the URL of the kml and download it.
+// 				//Set the kml project file.
+// 				}
+// 				db.close();
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  
+    }
 
     /**
 	  * 
@@ -1704,4 +1738,35 @@ public class DislocBean extends GenericSopacBean {
 		  return this.kmlProjectFile;
 	 }
 	 
+	 public String getCodeName(){
+		  return codeName;
+	 }
+	 public void setCodeName(String codeName){
+		  this.codeName=codeName;
+	 }
+	 
+	 protected void downloadKmlFile(String kmlUrlString, String localDestination) {
+		  try {
+				URL kmlUrl=new URL(kmlUrlString);
+				URLConnection uconn=kmlUrl.openConnection();
+				InputStream in=kmlUrl.openStream();
+				OutputStream out=new FileOutputStream(localDestination);
+				
+				//Extract the name of the file from the url.
+				
+				byte[] buf=new byte[1024];
+				int length;
+				while((length=in.read(buf))>0) {
+					 out.write(buf,0,length);
+				}
+				in.close();
+				out.close();
+		  }
+		  catch(Exception ex) {
+				System.out.println("Unable to download kml file");
+				ex.printStackTrace();
+		  }
+
+		  
+	 }
 }
