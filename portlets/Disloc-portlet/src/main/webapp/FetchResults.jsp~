@@ -44,7 +44,7 @@ function dataTableSelectOneRadio(radio) {
 </script>
 <f:view>
 	<h:form>
-		<h:panelGrid id="pgridmain" columns="1" border="0">
+		<h:panelGrid columns="1" border="0">
 			<h:outputText id="header" escape="false" value="<h3>Archived Results</h3><br>" />
 			<h:outputText id="dosomework" escape="false"
 				value="You have the following archived disloc runs. Click the link to download the desired file to your desk top. To save directly to your desktop, click your mouse's right button over the link and select<br>" />
@@ -96,7 +96,7 @@ function dataTableSelectOneRadio(radio) {
 					<f:facet name="header">
 						    <h:outputText id="blah12" value="Standard Out and Error"/>
 				   </f:facet>
-				       <h:outputLink id="blah13" value="#{summaryBean.resultsBean.stdoutUrl}" target="_blank">
+				       <h:outputLink  id="blah13" value="#{summaryBean.resultsBean.stdoutUrl}" target="_blank">
 						    <h:outputText id="blah14" value="Stdout"/>
 						 </h:outputLink>
 					</h:column>
@@ -104,7 +104,7 @@ function dataTableSelectOneRadio(radio) {
 					<f:facet name="header">
 						<h:outputText  id="blah15" escape="false" value="<b>Kml file</b>" />
 					</f:facet>
-						<h:panelGroup id="pgkml">
+						<h:panelGroup>
 						<h:outputLink id="link5" value="#{summaryBean.kmlurl}" target="_blank">
 							<h:outputText value="[<b>Download</b>]" escape="false" />
 						</h:outputLink>
@@ -119,7 +119,7 @@ function dataTableSelectOneRadio(radio) {
 					<f:facet name="header">
 						<h:outputText id="blah18" escape="false" value="<b>Delete</b>" />
 					</f:facet>
-						<h:panelGroup id="pgdelete">
+						<h:panelGroup>
 							<h:commandButton id="DeleteSummary" value="Delete"
 												  actionListener="#{DislocBean.toggleDeleteProjectSummary}"/>
 						</h:panelGroup>
