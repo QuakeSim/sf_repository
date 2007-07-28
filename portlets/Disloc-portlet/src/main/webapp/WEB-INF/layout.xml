@@ -26,6 +26,18 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
+              <portlet-tab label="Plot-disloc-results">
+                <title lang="en">Plot Disloc Results</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="Disloc-plot-grid-PF">
+                                <portlet-class>Disloc-portlet#plot-results-portlet</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
         </portlet-tabbed-pane>
     </portlet-tab>
 </portlet-tabbed-pane>

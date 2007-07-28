@@ -106,6 +106,8 @@ public class DislocBean extends GenericSopacBean {
 	 String origin_lon;
 
 	 String realPath;
+	 
+	 String kmlProjectFile="kml/network0.kml";
 
     /**
      * The client constructor.
@@ -244,19 +246,21 @@ public class DislocBean extends GenericSopacBean {
 			System.out.println(xinterval);
 			System.out.println(yinterval);
 			
-			kmlService.setGridLine("Grid Line", start_x, start_y, end_x, end_y, xinterval,yinterval);
+			//kmlService.setGridLine("Grid Line", start_x, start_y, end_x, end_y, xinterval,yinterval);
 			kmlService.setPointPlacemark("Icon Layer");
 			//			kmlService.setArrowPlacemark("Arrow Layer", "ff66a1cc", 2);
 			kmlService.setArrowPlacemark("Arrow Layer", "fffffff", 2);
 	
 			String myKmlUrl = kmlService.runMakeKml("", userName,
-					projectName, (dislocResultsBean.getJobUIDStamp()).hashCode()+"");
+																 projectName, 
+																 (dislocResultsBean.getJobUIDStamp()).hashCode()+"");
 			setJobToken(dislocResultsBean.getJobUIDStamp());
 			storeProjectInContext(userName,
-										projectName,
-										dislocResultsBean.getJobUIDStamp(),
-										dislocParams,
-										dislocResultsBean,myKmlUrl);
+										 projectName,
+										 dislocResultsBean.getJobUIDStamp(),
+										 dislocParams,
+										 dislocResultsBean,
+										 myKmlUrl);
 
 		  return DISLOC_NAV_STRING;
 
@@ -1661,9 +1665,6 @@ public class DislocBean extends GenericSopacBean {
 	 public List getMyArchivedDislocResultsList() {
 		  myArchivedDislocResultsList.clear();
 		  try {
-		  db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
-									+ codeName + "/" + projectName + ".db");
-
 				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");		  
 				ObjectSet results=db.get(new DislocProjectSummaryBean());
 				while(results.hasNext()) {
@@ -1693,6 +1694,14 @@ public class DislocBean extends GenericSopacBean {
 
 	 public String getDislocServiceUrl() {
 		  return dislocServiceUrl;
+	 }
+
+	 public void setKmlProjectFile(String kmlProjectFile){
+		  this.kmlProjectFile=kmlProjectFile;
+	 }
+	 
+	 public String getKmlProjectFile(){
+		  return this.kmlProjectFile;
 	 }
 	 
 }

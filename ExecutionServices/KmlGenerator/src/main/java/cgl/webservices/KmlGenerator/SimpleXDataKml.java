@@ -82,28 +82,29 @@ public class SimpleXDataKml {
 	}
 
 	public static void main(String[] av) throws IOException {
-		SimpleXDataKml dw = new SimpleXDataKml();
-		dw.runMakeKml("","","nice","111");
+		 SimpleXDataKml dw = new SimpleXDataKml();
+		 dw.runMakeKml("","","nice","111");
 	}
-
-	public void setDatalist(PointEntry[] InputDataList) {
-		datalist = InputDataList;
-	}
-
-	public String runMakeKml (String ServerTag,String UserName, String ProjectName, String JobUID) {
-		
-		String destDir=generateOutputDestDir(ServerTag,UserName,ProjectName,JobUID);
-		String baseUrl=generateBaseUrl(ServerTag,UserName,ProjectName,JobUID);
-		try{
-			makeWorkDir(destDir);	
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		this.printToFile(this.doc.toKML(), destDir + "/" + ProjectName + JobUID +".kml");	
-		return baseUrl + "/" + ProjectName + JobUID +".kml" ;
-	}
-	
-	//
+	 
+	 public void setDatalist(PointEntry[] InputDataList) {
+		  datalist = InputDataList;
+	 }
+	 
+	 public String runMakeKml (String ServerTag,String UserName, String ProjectName, String JobUID) {
+		  
+		  String destDir=generateOutputDestDir(ServerTag,UserName,ProjectName,JobUID);
+		  String baseUrl=generateBaseUrl(ServerTag,UserName,ProjectName,JobUID);
+		  try{
+				makeWorkDir(destDir);	
+		  }
+		  catch (Exception e) {
+				e.printStackTrace();
+		  }
+		  this.printToFile(this.doc.toKML(), destDir + "/" + ProjectName + JobUID +".kml");	
+		  return baseUrl + "/" + ProjectName + JobUID +".kml" ;
+	 }
+	 
+	 //
 	public PointEntry[] LoadDataFromFile(String InputFileName) {
 		ArrayList dataset = new ArrayList();
 		try {
@@ -163,14 +164,14 @@ public class SimpleXDataKml {
 			// I will not explicitly pass them around.
 			serverUrl = properties.getProperty("KmlGenerator.service.url");
 			baseOutputDestDir = properties.getProperty("output.dest.dir");
-		}catch (Exception e ) {
-			e.printStackTrace();
+		}
+		catch (Exception e ) {
+			 e.printStackTrace();
 		}
 		root.setName("root Folder");
 		root.setDescription("This is the root folder");
 		kmlDocument.addFolder(root);
 		doc.addDocument(kmlDocument);
-		
 	}
 
 	public void setLineStyle(Folder curfolder, String id, String Color_value,
@@ -347,7 +348,6 @@ public class SimpleXDataKml {
 		newline.setCoordinates(line_value);
 		mark1.addLineString(newline);
 		container.addPlacemark(mark1);
-
 	}
 
 	public void setPointPlacemark(String folderName) {
@@ -421,7 +421,14 @@ public class SimpleXDataKml {
 		}
 	}
 	
-	public void setFaultPlot(String folderName ,String faultName ,String lonstart ,String latstart ,String lonend ,String latend,String LineColor ,double LineWidth){
+	public void setFaultPlot(String folderName,
+									 String faultName,
+									 String lonstart,
+									 String latstart,
+									 String lonend,
+									 String latend,
+									 String LineColor,
+									 double LineWidth){
 		Folder container = new Folder();
 		if (!folderName.equals("") && !folderName.equals("null")) {
 			// create and add another folder to root
@@ -466,15 +473,13 @@ public class SimpleXDataKml {
 		container.addPlacemark(mark1);		
 	}
 	
-	public void setArrowPlacemark(String folderName,
-			String LineColor, double LineWidth) {
-
+	 public void setArrowPlacemark(String folderName, String LineColor, double LineWidth) {
+		  
 		Folder container = new Folder();
 		if (!folderName.equals("") && !folderName.equals("null")) {
 			// create and add another folder to root
 			container.setName(folderName);
-			container
-					.setDescription("This is the a folder contained by the root");
+			container.setDescription("This is the a folder contained by the root");
 			root.addFolder(container);
 		} else {
 			container = root;
