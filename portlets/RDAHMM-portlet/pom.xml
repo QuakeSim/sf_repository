@@ -130,7 +130,7 @@
         </repository>
         <repository>
             <id>SOPAC</id>
-            <url>Http://sopac.ucsd.edu/repositories/maven2</url>
+            <url>http://sopac.ucsd.edu/repositories/maven2</url>
         </repository>
         <!-- This is our local repository -->
         <repository>
