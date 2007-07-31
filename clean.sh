@@ -33,7 +33,7 @@ echo "#################################"
 echo ""
 
 cd $SIMPLEX_SA_HOME
-mvn clean -Dtomcat.base.dir=$CATALINA_HOME
+mvn clean -Dportal.host.name=$PORTAL_HOST_NAME -Dbuild.dir=$BUILD_DIR -Dtomcat.base.dir=$CATALINA_HOME
 
 cd $RDAHMM_SA_HOME
 mvn clean -Dtomcat.base.dir=$CATALINA_HOME -Dportal.host.name=$PORTAL_HOST_NAME -Dgoogle.key=$GOOGLE_KEY
