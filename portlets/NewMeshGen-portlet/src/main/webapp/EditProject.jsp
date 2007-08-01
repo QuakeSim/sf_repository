@@ -702,8 +702,15 @@ function dataTableSelectOneRadio(radio) {
                  id="pg32" 
 					value="Click the button below to generate a mesh for the geometry.<br><br>" />
 			  
-           <h:outputText   id="pg33" value="Mesh Refinement Level"/>
-			  <h:inputText id="refinement" required="true" value="#{MGBean.meshResolution}"/>
+           <h:outputText  id="pg33" value="Mesh Refinement Level"/>
+			  <h:selectOneListbox title="Mesh Refinement Level"
+			  		      size="1"
+			  		      id="refinement" 
+					      required="true" value="#{MGBean.meshResolution}">
+			     <f:selectItem id="rare" itemValue="rare"/>
+			     <f:selectItem id="orig" itemValue="original"/>
+			     <f:selectItem id="extra" itemValue="extra"/>
+		 	  </h:selectOneListbox>
 					
 				<h:panelGrid   id="pg34" columns="2" border="0">
 					<h:commandButton id="meshgencb" value="Generate Mesh"
