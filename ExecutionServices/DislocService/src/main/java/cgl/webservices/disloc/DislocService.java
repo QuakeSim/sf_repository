@@ -218,54 +218,54 @@ public class DislocService extends AntVisco implements Runnable {
 		  return (new UID().toString());
 	 }
 
-	 protected String generateBaseUrl(String userName,
-												 String projectName,
-												 String timeStamp) {
-
-		  //Need to be careful here because this must follow
-		  //the workDir convention also.
-		  String baseUrl=serverUrl+"/"+userName+"/"
-				+projectName+"/"+"/"+timeStamp;
-
-		  return baseUrl;
-	 }
-
-	 protected DislocResultsBean createDislocResultsBean(String userName,
-																		  String projectName,
-																		  String jobUIDStamp) {
-		  DislocResultsBean drb=new DislocResultsBean();
-		  
-		  String baseUrl=generateBaseUrl(userName,projectName,jobUIDStamp);
-		  
-		  drb.setJobUIDStamp(jobUIDStamp);
-		  drb.setProjectName(projectName);
-		  drb.setInputFileUrl(baseUrl+"/"+projectName+".input");
-		  drb.setOutputFileUrl(baseUrl+"/"+projectName+".output");
-		  drb.setStdoutUrl(baseUrl+"/"+projectName+".stdout");
-		  
-		  return drb;
-	 }
-
+    protected String generateBaseUrl(String userName,
+				     String projectName,
+				     String timeStamp) {
+	
+	//Need to be careful here because this must follow
+	//the workDir convention also.
+	String baseUrl=serverUrl+"/"+userName+"/"
+	    +projectName+"/"+"/"+timeStamp;
+	
+	return baseUrl;
+    }
+    
+    protected DislocResultsBean createDislocResultsBean(String userName,
+							String projectName,
+							String jobUIDStamp) {
+	DislocResultsBean drb=new DislocResultsBean();
+	
+	String baseUrl=generateBaseUrl(userName,projectName,jobUIDStamp);
+	
+	drb.setJobUIDStamp(jobUIDStamp);
+	drb.setProjectName(projectName);
+	drb.setInputFileUrl(baseUrl+"/"+projectName+".input");
+	drb.setOutputFileUrl(baseUrl+"/"+projectName+".output");
+	drb.setStdoutUrl(baseUrl+"/"+projectName+".stdout");
+	
+	return drb;
+    }
+    
 	 protected void printGridObservationSites(PrintWriter pw, 
-															DislocParamsBean dislocParams) 
-		  throws Exception {
-		  
-		  pw.println(dislocParams.getGridMinXValue()
-						 +space+dislocParams.getGridXSpacing()
-						 +space+dislocParams.getGridXIterations()
-						 +space+dislocParams.getGridMinYValue()
-						 +space+dislocParams.getGridYSpacing()
-						 +space+dislocParams.getGridYIterations());
-		  
+						  DislocParamsBean dislocParams) 
+	     throws Exception {
+	     
+	     pw.println(dislocParams.getGridMinXValue()
+			+space+dislocParams.getGridXSpacing()
+			+space+dislocParams.getGridXIterations()
+			+space+dislocParams.getGridMinYValue()
+			+space+dislocParams.getGridYSpacing()
+			+space+dislocParams.getGridYIterations());
+	     
 	 }
-	 protected void printScatterObservationSites(PrintWriter pw, 
-																DislocParamsBean dislocParams)  
-		  throws Exception {
-		  //Doesn't do anything yet.
-	 }
-
-   private void makeWorkDir(String workDir) 
-		  throws Exception {
+    protected void printScatterObservationSites(PrintWriter pw, 
+						DislocParamsBean dislocParams)  
+	throws Exception {
+	//Doesn't do anything yet.
+    }
+    
+    private void makeWorkDir(String workDir) 
+	throws Exception {
 				
 		  System.out.println("Working Directory is "+workDir);
 
