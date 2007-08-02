@@ -1,6 +1,6 @@
-package cgl.webservices.disloc;
+package cgl.webservices.queueservice;
 
-public class DislocResultsBean {
+public class QueueResponseBean {
 	 String jobUIDStamp;
 	 String projectName;
 	 String inputFileUrl;
@@ -13,15 +13,6 @@ public class DislocResultsBean {
 	 public String getProjectName(){
 		  return projectName;
 	 }
-	 public String getInputFileUrl() {
-		  return inputFileUrl;
-	 }
-	 public String getOutputFileUrl() {
-		  return outputFileUrl;
-	 }
-	 public String getStdoutUrl() {
-		  return stdoutUrl;
-	 }
 	 
 	 public void setJobUIDStamp(String jobUIDStamp) {
 		  this.jobUIDStamp=jobUIDStamp;
@@ -31,15 +22,4 @@ public class DislocResultsBean {
 		  this.projectName=projectName;
 	 }
 	 
-	 public void setInputFileUrl(String inputFileUrl) {
-		  this.inputFileUrl=inputFileUrl;
-	 }
-
-	 public void setOutputFileUrl(String outputFileUrl) {
-		  this.outputFileUrl=outputFileUrl;
-	 }
-
-	 public void setStdoutUrl(String stdoutUrl) {
-		  this.stdoutUrl=stdoutUrl;
-	 }
 }

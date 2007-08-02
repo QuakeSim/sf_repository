@@ -8,7 +8,6 @@ import java.util.*;
 import java.io.*;
 import java.net.*;
 
-import org.apache.tools.ant.Main;
 import org.apache.log4j.*;
 
 //Needed to get the ServletContext to read the properties.
@@ -22,10 +21,6 @@ import java.text.*;
 
 //Needed for a unique id
 import java.rmi.server.UID;
-
-/**
- * A simple wrapper for Ant.
- */
 
 public class QueueService {
     
