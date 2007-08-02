@@ -128,33 +128,13 @@
              <version>1.2.8</version>
         </dependency>
 
-
-        <!-- These are ant jars -->
+	<!--
+	    db4o dependency
+	  -->
         <dependency>
-             <groupId>ant</groupId>
-             <artifactId>ant</artifactId>
-             <version>1.6.5</version>
-        </dependency>
-
-        <dependency>
-             <groupId>ant</groupId>
-             <artifactId>ant-launcher</artifactId>
-             <version>1.6.5</version>
-        </dependency>
-
-        <!--
-        SOPAC Jars
-        -->
-        <dependency>
-             <groupId>SOPAC</groupId>
-             <artifactId>GRWS_SubmitQuery</artifactId>
-             <version>4.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-             <groupId>SOPAC</groupId>
-             <artifactId>grwsXmlBeansSchemas</artifactId>
-             <version>1.0</version>
+             <groupId>QuakeSim2</groupId>
+             <artifactId>db4o-java5</artifactId>
+             <version>6.1</version>
         </dependency>
 
 
