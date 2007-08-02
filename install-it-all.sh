@@ -77,8 +77,8 @@ source ./genericproject-install.sh
 #source ./simple-stfilter-sa-install.sh
 
 # Development version
-cd $BUILD_DIR
-source ./stfilter-sa-install.sh
+#cd $BUILD_DIR
+#source ./stfilter-sa-install.sh
 
 cd $BUILD_DIR
 source ./plotgrws-timeseries-sa-install.sh

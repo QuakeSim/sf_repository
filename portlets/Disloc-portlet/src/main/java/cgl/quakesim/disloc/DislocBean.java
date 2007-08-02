@@ -694,7 +694,7 @@ public class DislocBean extends GenericSopacBean {
     }
     
     public String getDBValue(Select select, String param, String theFault,
-									  String theSegment) throws Exception {
+			     String theSegment) throws Exception {
 		  
 		  String DB_RESPONSE_HEADER = "results of the query:";
 		  System.out.println("SQL Query on:" + param);
@@ -729,58 +729,58 @@ public class DislocBean extends GenericSopacBean {
 		  
 		  String theFault = tmp_str.substring(0, tmp_str.indexOf("@"));
 		  String theSegment = tmp_str.substring(tmp_str.indexOf("@") + 1, tmp_str
-															 .length());
+							.length());
 		  tmp_str = "";
 		  Fault tmp_fault = new Fault();
 		  
 		  try {
-				SelectService ss = new SelectServiceLocator();
-				Select select = ss.getSelect(new URL(faultDBServiceUrl));
-				
-				// --------------------------------------------------
-				// Make queries.
-				// --------------------------------------------------
-				double dip = Double.parseDouble(getDBValue(select, "Dip", theFault, theSegment));
-				double strike = Double.parseDouble(getDBValue(select, "Strike", theFault, theSegment));
-				double depth = Double.parseDouble(getDBValue(select, "Depth", theFault, theSegment));
-				double width = Double.parseDouble(getDBValue(select, "Width", theFault, theSegment));
-				
-				// Get the length and width
-				double latEnd = Double.parseDouble(getDBValue(select, "LatEnd",
-																			 theFault, theSegment));
-				double latStart = Double.parseDouble(getDBValue(select, "LatStart",
-																				theFault, theSegment));
-				double lonStart = Double.parseDouble(getDBValue(select, "LonStart",
-																				theFault, theSegment));
-				double lonEnd = Double.parseDouble(getDBValue(select, "LonEnd",
-																			 theFault, theSegment));
-				// Calculate the length
-				NumberFormat format = NumberFormat.getInstance();
-				double d2r = Math.acos(-1.0) / 180.0;
-				double factor = d2r
-					 * Math.cos(d2r * latStart)
-					 * (6378.139 * (1.0 - Math.sin(d2r * latStart)
-										 * Math.sin(d2r * latStart) / 298.247));
-				
-				double x = (lonEnd - lonStart) * factor;
-				double y = (latEnd - latStart) * 111.32;
-				//				String length = format.format(Math.sqrt(x * x + y * y));
-				//				double length = Math.sqrt(x * x + y * y);
-				double length=Double.parseDouble(format.format(Math.sqrt(x * x + y * y)));
-				tmp_fault.setFaultName (theFault);
-				tmp_fault.setFaultLocationX(0.0);
-				tmp_fault.setFaultLocationY(0.0);
-				tmp_fault.setFaultLength(length);
-				tmp_fault.setFaultWidth(width);
-				tmp_fault.setFaultDepth(depth);
-				tmp_fault.setFaultDipAngle(dip);
-				tmp_fault.setFaultStrikeAngle(strike);
+		      SelectService ss = new SelectServiceLocator();
+		      Select select = ss.getSelect(new URL(faultDBServiceUrl));
+		      
+		      // --------------------------------------------------
+		      // Make queries.
+		      // --------------------------------------------------
+		      double dip = Double.parseDouble(getDBValue(select, "Dip", theFault, theSegment));
+		      double strike = Double.parseDouble(getDBValue(select, "Strike", theFault, theSegment));
+		      double depth = Double.parseDouble(getDBValue(select, "Depth", theFault, theSegment));
+		      double width = Double.parseDouble(getDBValue(select, "Width", theFault, theSegment));
+		      
+		      // Get the length and width
+		      double latEnd = Double.parseDouble(getDBValue(select, "LatEnd",
+								    theFault, theSegment));
+		      double latStart = Double.parseDouble(getDBValue(select, "LatStart",
+								      theFault, theSegment));
+		      double lonStart = Double.parseDouble(getDBValue(select, "LonStart",
+								      theFault, theSegment));
+		      double lonEnd = Double.parseDouble(getDBValue(select, "LonEnd",
+								    theFault, theSegment));
+		      // Calculate the length
+		      NumberFormat format = NumberFormat.getInstance();
+		      double d2r = Math.acos(-1.0) / 180.0;
+		      double factor = d2r
+			  * Math.cos(d2r * latStart)
+			  * (6378.139 * (1.0 - Math.sin(d2r * latStart)
+					 * Math.sin(d2r * latStart) / 298.247));
+		      
+		      double x = (lonEnd - lonStart) * factor;
+		      double y = (latEnd - latStart) * 111.32;
+		      //				String length = format.format(Math.sqrt(x * x + y * y));
+		      //				double length = Math.sqrt(x * x + y * y);
+		      double length=Double.parseDouble(format.format(Math.sqrt(x * x + y * y)));
+		      tmp_fault.setFaultName (theFault);
+		      tmp_fault.setFaultLocationX(0.0);
+		      tmp_fault.setFaultLocationY(0.0);
+		      tmp_fault.setFaultLength(length);
+		      tmp_fault.setFaultWidth(width);
+		      tmp_fault.setFaultDepth(depth);
+		      tmp_fault.setFaultDipAngle(dip);
+		      tmp_fault.setFaultStrikeAngle(strike);
 		  } catch (Exception ex) {
-				ex.printStackTrace();
+		      ex.printStackTrace();
 		  }
 		  return tmp_fault;
     }
-	 
+    
     //--------------------------------------------------
     // End of the fault db section
     //--------------------------------------------------
@@ -790,16 +790,16 @@ public class DislocBean extends GenericSopacBean {
     //--------------------------------------------------
 
     public void handleFaultsRadioValueChange(ValueChangeEvent event) {
-		  try {
-				// Catch the MyData item during the third phase of the JSF
-				// lifecycle.
-				FaultDBEntry tmp_FaultDBEntry = (FaultDBEntry) getMyFaultDataTable()
-					 .getRowData();
-				SelectItem tmp_SelectItem = tmp_FaultDBEntry.getFaultName();
-				currentFault.setFaultName(tmp_SelectItem.getValue().toString());
-		  } catch (Exception e) {
-				e.printStackTrace();
-		  }
+	try {
+	    // Catch the MyData item during the third phase of the JSF
+	    // lifecycle.
+	    FaultDBEntry tmp_FaultDBEntry = (FaultDBEntry) getMyFaultDataTable()
+		.getRowData();
+	    SelectItem tmp_SelectItem = tmp_FaultDBEntry.getFaultName();
+	    currentFault.setFaultName(tmp_SelectItem.getValue().toString());
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
     }
     
     /**
