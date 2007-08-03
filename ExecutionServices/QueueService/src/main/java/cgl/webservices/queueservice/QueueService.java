@@ -22,6 +22,9 @@ import java.text.*;
 //Needed for a unique id
 import java.rmi.server.UID;
 
+//Import stuff from db4o
+import com.db4o.*;
+
 public class QueueService {
     
     Properties properties;
@@ -32,71 +35,150 @@ public class QueueService {
     String buildFilePath;
     String antTarget;
     String workDir;
-    
+	 String dbFullName;
+
+	 String NULL_QUEUE_NAME="Null queue name";
+	 String NO_SUCH_QUEUE="No such queue";
+
     //Usefull variable;
     final String space=" ";
+
+	 ObjectContainer db=null;
     
     public QueueService() throws Exception {
-	this(false);
+		  this(false);
     }
     
     public QueueService(boolean useClassLoader) throws Exception {
-	super();
-	
-	if(useClassLoader) {
-	    System.out.println("Using classloader");
-	    //This is useful for command line clients but does not work
-	    //inside Tomcat.
-	    ClassLoader loader=ClassLoader.getSystemClassLoader();
-	    properties=new Properties();
-	    
-	    //This works if you are using the classloader but not inside
-	    //Tomcat.
-	    properties.load(loader.getResourceAsStream("queueconfig.properties"));
-	}
-	else {
-	    //Extract the Servlet Context
-	    System.out.println("Using Servlet Context");
-	    MessageContext msgC=MessageContext.getCurrentContext();
-	    ServletContext context=((HttpServlet)msgC.getProperty(HTTPConstants.MC_HTTP_SERVLET)).getServletContext();
-	    
-	    String propertyFile=context.getRealPath("/")
-		+"/WEB-INF/classes/queueconfig.properties";
-	    System.out.println("Prop file location "+propertyFile);
-	    
-	    properties=new Properties();	    
-	    properties.load(new FileInputStream(propertyFile));
-	}
+		  super();
+		  
+		  if(useClassLoader) {
+				System.out.println("Using classloader");
+				//This is useful for command line clients but does not work
+				//inside Tomcat.
+				ClassLoader loader=ClassLoader.getSystemClassLoader();
+				properties=new Properties();
+				
+				//This works if you are using the classloader but not inside
+				//Tomcat.
+				properties.load(loader.getResourceAsStream("queueservice.properties"));
+		  }
+		  else {
+				//Extract the Servlet Context
+				System.out.println("Using Servlet Context");
+				MessageContext msgC=MessageContext.getCurrentContext();
+				ServletContext context=
+					 ((HttpServlet)msgC.getProperty(HTTPConstants.MC_HTTP_SERVLET)).getServletContext();
+				
+				String propertyFile=context.getRealPath("/")
+					 +"/WEB-INF/classes/queueconfig.properties";
+				System.out.println("Prop file location "+propertyFile);
+				
+				properties=new Properties();	    
+				properties.load(new FileInputStream(propertyFile));
+		  }
 
-	serverUrl=properties.getProperty("queue.service.url");
-	baseWorkDir=properties.getProperty("base.workdir");
-	projectName=properties.getProperty("project.name");
+		  serverUrl=properties.getProperty("queue.service.url");
+		  baseWorkDir=properties.getProperty("base.workdir");
+		  projectName=properties.getProperty("project.name");
+		  dbFullName=properties.getProperty("db.fullname");
     }
-    
+
+	 /**
+	  * Create a new queue. 
+	  * If the queue name is null or empty, bad things happen.
+	  */
+	 public void createQueue(String queueBaseName) throws Exception {
+ 		  db=Db4o.openFile(dbFullName);
+		  if(queueBaseName==null || queueBaseName.equals("")){
+ 				System.out.println(NULL_QUEUE_NAME);
+				throw new Exception(NULL_QUEUE_NAME);
+		  }
+		  else {
+				QueueBean qb=new QueueBean();
+				qb.setQueueName(queueBaseName);
+				db.set(qb);
+		  }
+		  db.commit();
+		  db.close();
+	 }
+
+	 /**
+	  * Write the message
+	  */ 
+    public void writeQueueMessage(String queueBaseName,
+											 String message) throws Exception {
+		  db=Db4o.openFile(dbFullName);
+		  QueueBean qb=new QueueBean();
+		  qb.setQueueName(queueBaseName);
+		  ObjectSet results=db.get(qb);
+		  if(results.hasNext()) {
+				qb=(QueueBean)results.next();
+				qb.setQueueMessage(message);
+				qb.setQueueTime((new Date()).toString());
+				db.set(qb);
+		  }
+		  else {
+				System.out.println(NO_SUCH_QUEUE);
+				throw new Exception(NO_SUCH_QUEUE);
+		  }
+		  db.commit();
+		  db.close();
+	 }
+	 
+	 /**
+	  * Delete the queue
+	  */
+	 public void deleteQueue(String queueBaseName) throws Exception {
+		  db=Db4o.openFile(dbFullName);
+		  QueueBean qb=new QueueBean();
+		  qb.setQueueName(queueBaseName);
+		  ObjectSet results=db.get(qb);
+		  while(results.hasNext()) {
+				qb=(QueueBean)results.next();
+				db.delete(qb);
+		  }
+		  db.commit();
+		  db.close();
+	 }
+
+	 /**
+	  * Get back some or all of the messages in the specified queue.
+	  */
+	 public String readQueueMessage(String queueBaseName) throws Exception {
+		  String theMessage="";
+		  db=Db4o.openFile(dbFullName);
+		  QueueBean qb=new QueueBean();
+		  qb.setQueueName(queueBaseName);
+		  ObjectSet results=db.get(qb);
+		  if(results.hasNext()) {
+				qb=(QueueBean)results.next();
+				theMessage=qb.getQueueMessage();
+		  }
+		  db.commit();
+		  db.close();
+		  return theMessage;
+	 }
+
+	 public String getQueueUpdateTime(String queueBaseName) {
+		  String updateTime="";
+		  db=Db4o.openFile(dbFullName);
+		  QueueBean qb=new QueueBean();
+		  qb.setQueueName(queueBaseName);
+		  ObjectSet results=db.get(qb);
+		  if(results.hasNext()) {
+				qb=(QueueBean)results.next();
+				updateTime=qb.getQueueTime();
+		  }
+		  db.commit();
+		  db.close();
+		  return updateTime;
+	 }
+
+	 /**
+	  * This creates a UID.
+	  */
     protected String generateJobStamp(){
-	return (new UID().toString());
-    }
-    
-    protected String generateBaseUrl(String userName,
-				     String projectName,
-				     String timeStamp) {
-	
-	//Need to be careful here because this must follow
-	//the workDir convention also.
-	String baseUrl=serverUrl+"/"+userName+"/"
-	    +projectName+"/"+"/"+timeStamp;
-	
-		  return baseUrl;
-    }
-    
-    protected QueueResponseBean createQueueResponseBean(String userName,
-							String projectName,
-							String jobUIDStamp) {
-	QueueResponseBean drb=new QueueResponseBean();
-	String baseUrl=generateBaseUrl(userName,projectName,jobUIDStamp);
-	
-	drb.setJobUIDStamp(jobUIDStamp);
-	drb.setProjectName(projectName);
-	return drb;
-    }
+		  return (new UID().toString());
+    }    
 }  

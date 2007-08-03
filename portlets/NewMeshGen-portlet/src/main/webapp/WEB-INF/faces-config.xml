@@ -22,7 +22,7 @@
                  </managed-property>
                  <managed-property>
                    <property-name>geoFESTServiceUrl</property-name>
-                   <value>http://gf19.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec</value>
+                   <value>http://localhost:8080/geofestexec/services/GeoFESTExec</value>
                  </managed-property>
                 <!-- Needed for the context service-->
                 <managed-property>

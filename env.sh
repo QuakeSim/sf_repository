@@ -43,6 +43,7 @@ export GEOFEST_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/GeoFESTService
 export DISLOC_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/DislocService
 export SIMPLEX_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/SimpleXService
 export KMLGENERATOR_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/KmlGenerator
+export QUEUE_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/QueueService
 
 # These are directory locations for binaries that we should not put in
 # SourceForge

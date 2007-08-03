@@ -11,8 +11,15 @@
 <property name="tomcatdir.prop" value=""/>
 -->
 
+
+
+<target name="test">
+  <taskdef name="queuetask" classname="cgl.webservices.geofest.QueueTask"/>
+  <queuetask queueName="test" message="test" queueServiceUrl="http://localhost:8080/queueservice/services/QueueExec"/>
+</target>
+
 <!-- This is used to create the mesh from the input geometry -->
-<target name="MakeWorkDir">
+<target name="MakeWorkDir" depends="test">
    <echo message="Creating ${workdir.prop}" />
    <mkdir dir="${workdir.prop}" />
 </target>

@@ -1112,10 +1112,12 @@ public class DislocBean extends GenericSopacBean {
 		  }
 		  
     }
+
 	 /**
 	  * Used for selecting the data to plot
 	  */
     public void togglePlotProject(ActionEvent ev) {
+		  System.out.println("Plotting project");
 		  try {
 				//				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");		  
 				DislocProjectSummaryBean dpsb=
