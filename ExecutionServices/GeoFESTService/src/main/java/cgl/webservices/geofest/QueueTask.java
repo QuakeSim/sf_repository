@@ -44,7 +44,5 @@ public class QueueTask extends Task {
 	 
 	 public void setMessage(String message) {
 		  this.message=message;
-	 }
-	 
-
+	 }	 
 }

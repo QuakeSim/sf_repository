@@ -14,17 +14,25 @@
 
 
 <target name="test">
-  <taskdef name="queuetask" classname="cgl.webservices.geofest.QueueTask"/>
-  <queuetask queueName="test" message="test" queueServiceUrl="http://localhost:8080/queueservice/services/QueueExec"/>
 </target>
 
 <!-- This is used to create the mesh from the input geometry -->
-<target name="MakeWorkDir" depends="test">
+<target name="MakeWorkDir">
+  <taskdef name="queuetask" classname="cgl.webservices.geofest.QueueTask"/>
+  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
+				 message="MakeWorkDir" 
+				 queueServiceUrl="${queueServiceUrl.prop}"/>
+
    <echo message="Creating ${workdir.prop}" />
    <mkdir dir="${workdir.prop}" />
 </target>
 
 <target name="autoref" depends="MakeWorkDir">
+  <taskdef name="queuetask" classname="cgl.webservices.geofest.QueueTask"/>
+  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
+				 message="autoref.start" 
+				 queueServiceUrl="${queueServiceUrl.prop}"/>
+
    <tstamp/>
    <echo append="true" file="${workdir.prop}/jobstatus.log">Autoref running: ${TSTAMP}.${DSTAMP}
    </echo>
@@ -43,6 +51,11 @@
    <echo append="true" file="${workdir.prop}/jobstatus.log">Autoref complete: ${TSTAMP}.${DSTAMP}
    </echo>
 
+  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
+				 message="autoref.done" 
+				 queueServiceUrl="${queueServiceUrl.prop}"/>
+
+
 <!--
    <copy todir="${outputdest.prop}">
       <fileset dir="${workdir.prop}"/>
@@ -53,6 +66,11 @@
 <!--This is used to create the GeoFEST input file. -->
 <target name="geotrans">
    <tstamp/>
+  <taskdef name="queuetask" classname="cgl.webservices.geofest.QueueTask"/>
+  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
+				 message="geotrans.start" 
+				 queueServiceUrl="${queueServiceUrl.prop}"/>
+
    <echo append="true" 
          file="${workdir.prop}/jobstatus.log">Geotrans running: ${TSTAMP}.${DSTAMP}
    </echo>
@@ -68,10 +86,17 @@
    </exec>   
    <echo append="true" file="${workdir.prop}/jobstatus.log">Geotrans complete: ${TSTAMP}.${DSTAMP}
    </echo>
+  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
+				 message="geotrans.done" 
+				 queueServiceUrl="${queueServiceUrl.prop}"/>
 
 </target>
 
 <target name="geotrans.tar" depends="geotrans">
+  <taskdef name="queuetask" classname="cgl.webservices.geofest.QueueTask"/>
+  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
+				 message="geotrans.tar.start" 
+				 queueServiceUrl="${queueServiceUrl.prop}"/>
    <tstamp/>
    <echo append="true" 
          file="${workdir.prop}/jobstatus.log">Tarring geotrans files: ${TSTAMP}.${DSTAMP}
@@ -89,10 +114,17 @@
          todir="${outputdest.prop}">
    </copy>
 -->
+  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
+				 message="geotrans.tar.done" 
+				 queueServiceUrl="${queueServiceUrl.prop}"/>
 
 </target>
 
 <target name="GeoFEST" depends="geotrans">
+  <taskdef name="queuetask" classname="cgl.webservices.geofest.QueueTask"/>
+  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
+				 message="geofest.start" 
+				 queueServiceUrl="${queueServiceUrl.prop}"/>
    <tstamp/>
    <echo append="true"  
            file="${workdir.prop}/jobstatus.log">GeoFEST running: ${TSTAMP}.${DSTAMP}
@@ -108,10 +140,17 @@
    </exec>
    <echo append="true"  file="${workdir.prop}/jobstatus.log">GeoFEST complete: ${TSTAMP}.${DSTAMP}
    </echo>
+  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
+				 message="geofest.done" 
+				 queueServiceUrl="${queueServiceUrl.prop}"/>
 
 </target>
 
 <target name="tar.all" depends="GeoFEST">
+  <taskdef name="queuetask" classname="cgl.webservices.geofest.QueueTask"/>
+  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
+				 message="tar.all.start" 
+				 queueServiceUrl="${queueServiceUrl.prop}"/>
    <tstamp/>
    <echo append="true" file="${workdir.prop}/jobstatus.log">Creating tar of output: ${TSTAMP}.${DSTAMP}
    </echo>
@@ -123,6 +162,9 @@
    <echo append="true" file="${workdir.prop}/jobstatus.log">GeoFEST complete: ${TSTAMP}.${DSTAMP}
    </echo>
 
+  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
+				 message="tar.all.done" 
+				 queueServiceUrl="${queueServiceUrl.prop}"/>
 
 <!--
    <copy todir="${outputdest.prop}">

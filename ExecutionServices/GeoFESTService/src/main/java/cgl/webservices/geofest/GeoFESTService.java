@@ -47,6 +47,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
     String binDir;
     String buildFilePath;
     String antTarget;
+	 String queueServiceUrl;
     
 	 /**
 	  * This is a main() for testing.
@@ -142,6 +143,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  buildFilePath=properties.getProperty("build.file.path");
 		  antTarget=properties.getProperty("ant.target");
 		  baseOutputDestDir=properties.getProperty("output.dest.dir");
+		  queueServiceUrl=properties.getProperty("queue.service.url");
 	 }
     
     public GeoFESTService() throws Exception{
@@ -173,7 +175,9 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  String[] args=setUpMeshArgs(workDir,
 												projectName,
 												autoref_mode,
-												outputDestDir);
+												outputDestDir,
+												timeStamp,
+												queueServiceUrl);
 		  //Methods from parent
 		  setArgs(args);
 		  
@@ -347,7 +351,9 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  String[] args=setUpGeoFESTArgs(workDir,
 													projectName,
 													targetName,
-													outputDestDir);
+													outputDestDir,
+													timeStamp,
+													queueServiceUrl);
 		  return args;
 	 }
 
@@ -1214,16 +1220,20 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	 protected String[] setUpMeshArgs(String workDir,
 												 String projectName,
 												 String autoref_mode,
-												 String outputDestDir) {
-		  String[] args=new String[8];
+												 String outputDestDir,
+												 String jobUID,
+												 String queueServiceUrl) {
+		  String[] args=new String[10];
 		  args[0]="-Dbindir.prop="+binDir;
 		  args[1]="-Dworkdir.prop="+workDir;
 		  args[2]="-DprojectName.prop="+projectName;
 		  args[3]="-Dmode.prop="+autoref_mode;
 		  args[4]="-Doutputdest.prop="+outputDestDir;
-        args[5]="-buildfile";
-        args[6]=buildFilePath;
-        args[7]="autoref";
+		  args[5]="-DjobUID.prop="+jobUID;
+		  args[6]="-DqueueServiceUrl.prop="+queueServiceUrl;
+        args[7]="-buildfile";
+        args[8]=buildFilePath;
+        args[9]="autoref";
 		  return args;
 	 }
 
@@ -1235,9 +1245,11 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	 protected String[] setUpGeoFESTArgs(String workDir,
 													 String projectName,
 													 String targetName,
-													 String outputDestDir) {
+													 String outputDestDir,
+													 String jobUID,
+													 String queueServiceUrl) {
 		  
-		  String[] args=new String[10];
+		  String[] args=new String[12];
 		  args[0]="-Dbindir.prop="+binDir;
 		  args[1]="-Dworkdir.prop="+workDir;
 		  args[2]="-DprojectName.prop="+projectName;
@@ -1245,9 +1257,11 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  args[4]="-DGFOutput.prop="+projectName+".out";
 		  args[5]="-DGFLog.prop="+projectName+".log";
 		  args[6]="-Doutputdest.prop="+outputDestDir;
-        args[7]="-buildfile";
-        args[8]=buildFilePath;
-        args[9]=targetName;
+		  args[7]="-DjobUID.prop="+jobUID;
+		  args[8]="-DqueueServiceUrl.prop="+queueServiceUrl;
+        args[9]="-buildfile";
+        args[10]=buildFilePath;
+        args[11]=targetName;
 		  return args;
 	 }
 }

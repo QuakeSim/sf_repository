@@ -71,7 +71,7 @@ public class QueueService {
 					 ((HttpServlet)msgC.getProperty(HTTPConstants.MC_HTTP_SERVLET)).getServletContext();
 				
 				String propertyFile=context.getRealPath("/")
-					 +"/WEB-INF/classes/queueconfig.properties";
+					 +"/WEB-INF/classes/queueservice.properties";
 				System.out.println("Prop file location "+propertyFile);
 				
 				properties=new Properties();	    

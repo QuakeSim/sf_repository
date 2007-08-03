@@ -39,6 +39,7 @@
        <bin.path>${tomcat.base.dir}/webapps/${pom.artifactId}/WEB-INF/binaryexec</bin.path>
        <user.home>${user.home}</user.home>
        <geofest.service.url>${geofest.service.url}</geofest.service.url>
+       <queue.service.url>${queue.service.url}</queue.service.url>
     </properties>
 
     <repositories>

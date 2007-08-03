@@ -19,7 +19,7 @@ echo "######################################"
 echo "Deploying GeoFEST Execution Service"
 echo "######################################"
 cd $GEOFEST_EXECUTION_HOME
-if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME -Dgeofest.service.url=$PORTAL_SERVER_URL/geofestexec
+if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME -Dgeofest.service.url=$PORTAL_SERVER_URL/geofestexec -Dqueue.service.url=$PORTAL_SERVER_URL/queueservice/services/QueueExec
 then
     echo GeoFEST exec install complete.
 else
