@@ -10,7 +10,7 @@
     <title>Google Maps Example</title>
  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBQozjQdf4FEuMBqpopduISAOADS4xTilRYX9d1ZU0uvBJwyY4gerC4Gog"
       type="text/javascript"></script>
-  <script src="Http://localhost:8080/Disloc-portlet/egeoxml.js" type="text/javascript"></script>
+  <script src="http://localhost:8080/Disloc-portlet/egeoxml.js" type="text/javascript"></script>
   </head>
   <body>
   <%
@@ -54,8 +54,8 @@
     //]]>
     </script>
     </td>
-    <td valign="top">
 
+    <td valign="top">
 	<f:view>    
     <h:form>
 	 <h:dataTable id="projectlist" 
