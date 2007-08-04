@@ -163,7 +163,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
     public MeshGeneratorBean() throws Exception {
 		  super();
 
-
 		  gfutils.initLayerInteger();
 		  cm = getContextManagerImp();
 		  myMeshViewer = new MeshViewer(meshViewerServerUrl);
@@ -2272,5 +2271,9 @@ public class MeshGeneratorBean extends GenericSopacBean {
     //--------------------------------------------------
     // End the accessor method section.
     //--------------------------------------------------
+
+	 public String checkMeshStatus(ActionEvent ev) {
+		  return "";
+	 }
 
 }

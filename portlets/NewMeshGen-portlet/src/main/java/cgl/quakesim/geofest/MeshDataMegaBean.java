@@ -20,6 +20,7 @@ public class MeshDataMegaBean {
 	 String userName;
 	 String jobUIDStamp;
 	 String creationDate;
+	 String meshStatus="submitted";
 	 
 	 public MeshDataMegaBean() {
 	 }
@@ -101,5 +102,13 @@ public class MeshDataMegaBean {
 	 public void setGeoFESTBaseUrlForJnlp(String geoFESTBaseUrlForJnlp) {
 		  //System.out.println("geofestbaseurlforjnlp in mega: "+geoFESTBaseUrlForJnlp);
 		  this.geoFESTBaseUrlForJnlp=geoFESTBaseUrlForJnlp;
+	 }
+
+	 public void setMeshStatus(String meshStatus) {
+		  this.meshStatus=meshStatus;
+	 }
+
+	 public String getMeshStatus() {
+		  return this.meshStatus;
 	 }
 }

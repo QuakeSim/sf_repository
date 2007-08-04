@@ -3,6 +3,8 @@
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
+ *
+ * Additional sweetener manually/manfully added.
  */
 
 package cgl.quakesim.geofest;
@@ -78,7 +80,48 @@ public class GeotransParamsBean  implements java.io.Serializable {
 
     private java.lang.String west_bc_value;
 
+
+	 /**
+	  * Provide with default values.
+	  */ 
     public GeotransParamsBean() {
+		number_space_dimensions="3";
+		number_degrees_freedom="3";
+		nrates ="0";
+		shape_flag = "1";
+		solver_flag = "2";
+		number_time_groups = "1";
+		reform_steps ="1";
+		backup_steps="5000";
+		fault_interval="5000.0";
+		end_time="500.0";
+		alpha ="1.0";
+		time_step="0.5";
+		//cordinate boundary
+		
+		top_bc="Locked Node";
+		top_bc_value="0 0. 0. 0. 1.";
+		east_bc="Locked Node";
+		east_bc_value="0 0. 0. 0. 1.";
+		west_bc="Locked Node";
+		west_bc_value="0 0. 0. 0. 1.";
+		north_bc="Locked Node";
+		north_bc_value="0 0. 0. 0. 1.";
+		south_bc="Locked Node";
+		south_bc_value="0 0. 0. 0. 1.";
+		bottom_bc="Locked Node";
+		bottom_bc_value="0 0. 0. 0. 1.";
+		
+		//Output Parameters and Formatting
+		
+		reportingNodes="All";
+		reportingElements="All";
+		printTimesType="Steps";
+		numberofPrintTimes="20";
+		printTimesInterval="1.0";
+		restartFile="NO_RESTART";
+		checkpointFile="NO_SAVE";	
+
     }
 
     public GeotransParamsBean(

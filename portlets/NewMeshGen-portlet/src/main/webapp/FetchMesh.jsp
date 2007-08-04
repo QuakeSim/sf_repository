@@ -202,7 +202,17 @@ function dataTableSelectOneRadio(radio) {
 					</h:outputLink>
 					</h:column>
 
+					<h:column>
+					<f:facet name="header">
+						    <h:outputText value="Status"/>
+				   </f:facet>
+						    <h:outputText value="#{mrb.meshStatus}"/>
+					</h:column>
 			</h:dataTable>
+		<h:commandLink actionListener="#{MGBean.checkMeshStatus}">
+			<h:outputText value="Check Status" />
+		</h:commandLink>
+
  	</h:form>
    </h:panelGrid>
 	<h:form>

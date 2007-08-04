@@ -40,14 +40,6 @@
 						<h:message for="logFileName" showDetail="true" showSummary="true"
 							errorStyle="color: red" />
 					</h:panelGroup>
-<!--
-					<h:outputText value="Email Address:" />
-					<h:panelGroup>
-						<h:inputText id="emailAddress" value="" required="true" />
-						<h:message for="emailAddress" showDetail="true" showSummary="true"
-							errorStyle="color: red" />
-					</h:panelGroup>
--->
 				</h:panelGrid>
 			</h:panelGrid>
 			<h:panelGrid columns="2" border="1">
