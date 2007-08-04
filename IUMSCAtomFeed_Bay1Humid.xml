@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>urn:uuid:52e04263:1142bf891ce:-55f3</id>
+  <updated>2007-08-03T11:00:51.138-05:00</updated>
+  <title type="text">IUMSC Bay1Humid Atom Feed</title>
+  <author>
+    <name>Yu(Carol) Deng</name>
+  </author>
+  <link rel="self" type="application/atom+xml" href="http://hagar.cs.indiana.edu:8181/IUMSCAtomFeed_Bay1Humid.xml"/>
+  <entry>
+    <id>urn:uuid:52e04263:1142bf891ce:-55f2</id>
+    <updated>2007-08-03T11:00:51.138-05:00</updated>
+    <title type="text">SensorName, TimeStamp, DoubleData</title>
+    <author>
+      <name>Yu(Carol) Deng</name>
+    </author>
+    <content>Bay1Humid  2007-08-03 14:57:47Z  62.6&lt;br&gt;Bay1Humid  2007-08-03 14:58:07Z  62.6&lt;br&gt;Bay1Humid  2007-08-03 14:58:27Z  62.5&lt;br&gt;Bay1Humid  2007-08-03 14:58:48Z  62.6&lt;br&gt;Bay1Humid  2007-08-03 14:59:08Z  62.6&lt;br&gt;Bay1Humid  2007-08-03 14:59:29Z  62.5&lt;br&gt;Bay1Humid  2007-08-03 14:59:49Z  62.6&lt;br&gt;Bay1Humid  2007-08-03 15:00:09Z  62.7&lt;br&gt;Bay1Humid  2007-08-03 15:00:30Z  62.6&lt;br&gt;Bay1Humid  2007-08-03 15:00:50Z  62.7</content>
+  </entry>
+</feed>
