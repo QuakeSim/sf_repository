@@ -66,8 +66,10 @@ function dataTableSelectOneRadio(radio) {
 	<h:outputText value="Here are your archived projects."/>
 	<h:form>
 
-  				<h:dataTable value="#{MGBean.myArchivedMeshRunList2}"					  
-								 var="mrb" id="MeshOutputPanel" border="1">
+  				<h:dataTable value="#{MGBean.myArchivedMeshRunList2}"	
+								 binding="#{MGBean.archivedMeshTable}"				  
+								 var="mrb" id="MeshOutputPanel" 
+								 border="1">
 					<h:column>
 					    <f:facet name="header">
 					    <h:outputText value="Project Name"/>
@@ -151,6 +153,15 @@ function dataTableSelectOneRadio(radio) {
 				       <h:outputLink value="#{mrb.geofestOutputBean.tarOfEverythingUrl}" target="_blank">
 						    <h:outputText value="Project Tar"/>
 						 </h:outputLink>
+					</h:column>
+
+					<h:column>
+					<f:facet name="header">
+						    <h:outputText value="Status (Click to Update)"/>
+				   </f:facet>
+					<h:commandLink actionListener="#{MGBean.checkMeshStatus}">
+								<h:outputText value="#{mrb.meshStatus}"/>
+					</h:commandLink>
 					</h:column>
 
 					<h:column>

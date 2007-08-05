@@ -102,6 +102,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
     String[] selectProjectsList;    
     private HtmlDataTable myLayerDataTable;    
     private HtmlDataTable myFaultDataTable;    
+	 private HtmlDataTable archivedMeshTable;
+
 	 UIData myMeshDataTable, myMeshDataTable2;
     String forSearchStr = new String();    
     String faultLatStart = new String();    
@@ -132,9 +134,11 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	 String geoFESTBaseUrl="http://gf19.ucs.indiana.edu:8080/geofestexec/";
     String geoFESTServiceUrl=geoFESTBaseUrl+"/"+"services/GeoFESTExec";
 	 String geoFESTBaseUrlForJnlp=getGeoFESTBaseUrlForJnlp();
+	 String queueServiceUrl;
 
     //This is our geofest service stub.
     GeoFESTService geofestService;
+	 QueueService queueService;
 
 	 //This is the db4o database
 	 ObjectContainer db=null;
@@ -947,7 +951,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  //Default will be an empty bean
 		  
 		  //Recover the mega bean.
-		  MeshDataMegaBean mega=(MeshDataMegaBean)myMeshDataTable.getRowData();
+		  //		  MeshDataMegaBean mega=(MeshDataMegaBean)myMeshDataTable.getRowData();
+		  MeshDataMegaBean mega=(MeshDataMegaBean)getArchivedMeshTable().getRowData();
 		  String selectedMeshName=mega.getMeshRunBean().getProjectName();
 		  String selectedMeshStamp=mega.getMeshRunBean().getJobUIDStamp();
 		  
@@ -2272,8 +2277,65 @@ public class MeshGeneratorBean extends GenericSopacBean {
     // End the accessor method section.
     //--------------------------------------------------
 
+	 /**
+	  * These are methods for checking status of the mesh generator.
+	  */
 	 public String checkMeshStatus(ActionEvent ev) {
-		  return "";
+		  String statusString="Unknown";
+
+		  //Construct the queueName
+		  MeshDataMegaBean mdmb=(MeshDataMegaBean)getArchivedMeshTable().getRowData();
+		  String projectName=mdmb.getProjectName();
+		  String jobUID=mdmb.getJobUIDStamp();
+		  String queueName=projectName+"."+jobUID;
+		  
+		  //DB
+		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"
+								 +userName+"/"+codeName+"/"+projectName+".db");		  
+				
+		  
+		  //Get the client together
+		  try {
+				System.out.println("Connecting to "+queueServiceUrl);
+				queueService=new QueueServiceServiceLocator().getQueueExec(new URL(queueServiceUrl));
+				statusString=queueService.readQueueMessage(queueName);
+
+				//Update the status
+				System.out.println("Stuff:"+queueName+" "+statusString);
+
+				//Drop it back in the DB
+				ObjectSet results=db.get(mdmb);
+				//Replace the clone with the original
+				System.out.println("Has object:"+results.hasNext());
+				if(results.hasNext()){
+					 mdmb=(MeshDataMegaBean)results.next();
+					 mdmb.setMeshStatus(statusString);
+					 db.set(mdmb);
+					 db.commit();
+				}
+				
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  
+		  db.close();
+		  return statusString;
 	 }
 
+	 public void setArchivedMeshTable(HtmlDataTable archivedMeshTable){
+		  this.archivedMeshTable=archivedMeshTable;
+	 }
+	 
+	 public HtmlDataTable getArchivedMeshTable(){
+		  return archivedMeshTable;
+	 }
+
+	 public String getQueueServiceUrl(){
+		  return queueServiceUrl;
+	 }
+
+	 public void setQueueServiceUrl(String queueServiceUrl){
+		  this.queueServiceUrl=queueServiceUrl;
+	 }
 }

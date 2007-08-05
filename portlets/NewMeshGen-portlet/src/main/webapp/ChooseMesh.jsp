@@ -67,7 +67,7 @@ function dataTableSelectOneRadio(radio) {
 	<h:form>
 
   				<h:dataTable value="#{MGBean.myArchivedMeshRunList}"					  
-								 binding="#{MGBean.myMeshDataTable}"
+								 binding="#{MGBean.archivedMeshTable}"
 								 var="mrb" id="MeshOutputPanel" border="1">
 					<h:column>
 					    <f:facet name="header">
@@ -124,6 +124,15 @@ function dataTableSelectOneRadio(radio) {
 					</h:outputLink>
 					</h:column>
 					
+					<h:column>
+					<f:facet name="header">
+						    <h:outputText value="Status (Click to Update)"/>
+				   </f:facet>
+					<h:commandLink actionListener="#{MGBean.checkMeshStatus}">
+								<h:outputText value="#{mrb.meshStatus}"/>
+					</h:commandLink>
+					</h:column>
+
 					<h:column>
 					<f:facet name="header">
 						    <h:outputText value="Run GeoFEST"/>

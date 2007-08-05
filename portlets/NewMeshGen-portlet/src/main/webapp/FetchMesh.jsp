@@ -66,7 +66,11 @@ function dataTableSelectOneRadio(radio) {
 	<h:outputText value="Here are your archived projects."/>
 	<h:form>
 
-  				<h:dataTable value="#{MGBean.myArchivedMeshRunList}" var="mrb" id="MeshOutputPanel" border="1">
+  				<h:dataTable value="#{MGBean.myArchivedMeshRunList}" 
+								 binding="#{MGBean.archivedMeshTable}"
+								 var="mrb" 
+								 id="MeshOutputPanel" 
+								 border="1">
 					<h:column>
 					    <f:facet name="header">
 					    <h:outputText value="Project Name"/>
@@ -204,14 +208,13 @@ function dataTableSelectOneRadio(radio) {
 
 					<h:column>
 					<f:facet name="header">
-						    <h:outputText value="Status"/>
+						    <h:outputText value="Status (Click to Update)"/>
 				   </f:facet>
-						    <h:outputText value="#{mrb.meshStatus}"/>
+					<h:commandLink actionListener="#{MGBean.checkMeshStatus}">
+								<h:outputText value="#{mrb.meshStatus}"/>
+					</h:commandLink>
 					</h:column>
 			</h:dataTable>
-		<h:commandLink actionListener="#{MGBean.checkMeshStatus}">
-			<h:outputText value="Check Status" />
-		</h:commandLink>
 
  	</h:form>
    </h:panelGrid>
