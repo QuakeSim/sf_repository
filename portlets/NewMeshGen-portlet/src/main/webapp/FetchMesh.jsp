@@ -221,7 +221,7 @@ function dataTableSelectOneRadio(radio) {
 	<h:form>
 		<hr />
 		<h:commandLink action="MG-back">
-			<h:outputText value="#{MGBean.codeName} Main Menu" />
+			<h:outputText value="Refresh Page" />
 		</h:commandLink>
 	</h:form>
 

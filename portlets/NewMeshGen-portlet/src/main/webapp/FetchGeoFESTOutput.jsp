@@ -56,17 +56,17 @@ function dataTableSelectOneRadio(radio) {
 </script>
 
 <f:view>
-	<h:panelGrid rendered="#{empty MGBean.myArchivedMeshRunList2}">
+	<h:panelGrid rendered="#{empty MGBean.myArchivedMeshRunList}">
 	<h:outputText styleClass="header2" value="GeoFEST Output"/>
 	<h:outputText value="You don't have any archived projects."/>
    </h:panelGrid>
 
-	<h:panelGrid rendered="#{!empty MGBean.myArchivedMeshRunList2}">
+	<h:panelGrid rendered="#{!empty MGBean.myArchivedMeshRunList}">
 	<h:outputText styleClass="header2" value="Mesh Refinement"/>
 	<h:outputText value="Here are your archived projects."/>
 	<h:form>
 
-  				<h:dataTable value="#{MGBean.myArchivedMeshRunList2}"	
+  				<h:dataTable value="#{MGBean.myArchivedMeshRunList}"	
 								 binding="#{MGBean.archivedMeshTable}"				  
 								 var="mrb" id="MeshOutputPanel" 
 								 border="1">
@@ -185,7 +185,7 @@ function dataTableSelectOneRadio(radio) {
 	<h:form>
 		<hr />
 		<h:commandLink action="MG-back">
-			<h:outputText value="#{MGBean.codeName} Main Menu" />
+			<h:outputText value="Refresh Page" />
 		</h:commandLink>
 	</h:form>
 

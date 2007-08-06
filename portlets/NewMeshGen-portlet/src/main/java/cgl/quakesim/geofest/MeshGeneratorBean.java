@@ -1412,19 +1412,14 @@ public class MeshGeneratorBean extends GenericSopacBean {
     }
 
     public String toggleDeleteProject() {
-		  if (!isInitialized) {
-				initWebServices();
-		  }
-		  try {
-				setContextList();
-		  } catch (Exception ex) {
-				ex.printStackTrace();
-		  }
+		  System.out.println("Deleting projects");
 		  try {
 				if (deleteProjectsList != null) {
 					 for (int i = 0; i < deleteProjectsList.length; i++) {
+						  System.out.println("Deleting: "+deleteProjectsList[i]);
 						  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");
 						  ProjectBean delproj=new ProjectBean();
+						  delproj.setProjectName(deleteProjectsList[i]);
 						  ObjectSet results=db.get(delproj);
 						  if(results.hasNext()){
 								delproj=(ProjectBean)results.next();
@@ -1760,38 +1755,97 @@ public class MeshGeneratorBean extends GenericSopacBean {
     }
 	 
 	 /**
+	  * Sort the list by date
+	  */
+	 protected List sortByDate(List fullList) {
+		  if(fullList==null) return null;
+		  int size=fullList.size();
+		  if(size<2) {
+				return fullList;
+		  }
+		  //Ordered list is originally empty and reducedlist is full.
+		  List orderedList=new ArrayList();
+		  List reducedList=new ArrayList();
+		  myListToVectorCopy(reducedList,fullList);
+		  
+		  orderedList=setListOrder(orderedList, reducedList, fullList);
+
+		  return orderedList;
+	 }
+
+	 protected void myListToVectorCopy(List dest, List src) {
+		  for(int i=0;i<src.size();i++) {
+				dest.add(new Integer(i));
+		  }
+	 }
+	 
+	 protected List setListOrder(List orderedList, List reducedList, List fullList) {
+		  
+		  if(reducedList==null) return null;
+		  int size=reducedList.size();
+		  if(size<2) {
+				return fullList;
+		  }
+		  while(reducedList!=null && reducedList.size()>0) {
+				int first=getFirst(reducedList, fullList);
+				orderedList.add((MeshDataMegaBean)fullList.get(((Integer)reducedList.get(first)).intValue()));
+				reducedList.remove(first);
+		  }
+		  return orderedList;
+	 }
+	 
+	 protected int getFirst(List reducedList, List fullList) {
+		  int first=0;
+		  for(int i=1;i<reducedList.size();i++) {
+				MeshDataMegaBean mb1=(MeshDataMegaBean)fullList.get(((Integer)reducedList.get(first)).intValue());
+				MeshDataMegaBean mb2=(MeshDataMegaBean)fullList.get(((Integer)reducedList.get(i)).intValue());
+				Date date1=new Date(mb1.getCreationDate());
+				Date date2=new Date(mb2.getCreationDate());			  
+				if(date2.before(date1)) first=i;
+		  }
+
+		  return first;
+	 }
+
+	 /**
 	  * A muscular getter, this reconstructs the list of MeshRunBean instances from the context.
 	  * Note it depends on several class-scoped variables.
 	  */
 	 public List getMyArchivedMeshRunList() throws Exception {
 		  List myprojectlist=getMyProjectNameList();
-
-		  myArchivedMeshRunList.clear();
+		  List tmpList=new ArrayList();
 		  
-		  //System.out.println("Creating archived mesh list");
+		  //		  myArchivedMeshRunList.clear();
 
-		  //		  String[] tmp_contextlist = cm.listContext(codeName);
 		  if (myprojectlist.size() > 0) {
 				for(int i=0;i<myprojectlist.size();i++){
 					 String projectName=((SelectItem)myprojectlist.get(i)).getLabel();
 
 					 MeshDataMegaBean mega=new MeshDataMegaBean();
 					 mega.setProjectName(projectName);
-					 //System.out.println("ProjectName: "+projectName);
+					 //					 System.out.println("ProjectName: "+projectName);
 					 db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
 					 //					 ObjectSet results=db.get(mega);
 					 ObjectSet results=db.get(MeshDataMegaBean.class);
 					 //System.out.println("Matches for "+projectName+":"+results.size());
 					 while(results.hasNext()){						  
 						  mega=(MeshDataMegaBean)results.next();
-						  myArchivedMeshRunList.add(mega);
+						  //						  myArchivedMeshRunList.add(mega);
+						
+						  tmpList.add(mega);
 					 }
 					 db.close();
 				}
-		  }
-		  return this.myArchivedMeshRunList;
-    }
+				//				myArchivedMeshRunList=sortByDate(myArchivedMeshRunList);
+				myArchivedMeshRunList=sortByDate(tmpList);
 
+		  }
+		  return myArchivedMeshRunList;
+    }
+	 
+	 /**
+	  * May want to get rid of this redundant method.
+	  */
 	 public List getMyArchivedMeshRunList2() throws Exception {
 		  List myprojectlist=getMyProjectNameList();
 
@@ -1937,8 +1991,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 						  String layerDef = "addLayer" + space;
 						  layerDef+=layerToGet.getLayerName()+space;
 						  layerDef += layerToGet.getLayerOriginX()+space;
-						  layerDef +=layerToGet.getLayerOriginY() + space
-;						  layerDef +=layerToGet.getLayerOriginZ() + space;
+						  layerDef +=layerToGet.getLayerOriginY() + space;
+						  layerDef +=layerToGet.getLayerOriginZ() + space;
 						  layerDef +=layerToGet.getLayerLength() + space;
 						  layerDef +=layerToGet.getLayerWidth() + space;
 						  layerDef +=layerToGet.getLayerDepth() + space;
@@ -2278,31 +2332,48 @@ public class MeshGeneratorBean extends GenericSopacBean {
     //--------------------------------------------------
 
 	 /**
-	  * These are methods for checking status of the mesh generator.
+	  * These are methods for checking status of the mesh generator.  This depends on the JSF
+	  * event system, so we will do the work in a separate method.
 	  */
 	 public String checkMeshStatus(ActionEvent ev) {
 		  String statusString="Unknown";
-
-		  //Construct the queueName
-		  MeshDataMegaBean mdmb=(MeshDataMegaBean)getArchivedMeshTable().getRowData();
-		  String projectName=mdmb.getProjectName();
-		  String jobUID=mdmb.getJobUIDStamp();
-		  String queueName=projectName+"."+jobUID;
-		  
-		  //DB
-		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"
-								 +userName+"/"+codeName+"/"+projectName+".db");		  
-				
-		  
-		  //Get the client together
 		  try {
+				//Construct the queueName
+				MeshDataMegaBean mdmb=(MeshDataMegaBean)getArchivedMeshTable().getRowData();
+				statusString=checkTheStatusQueue(mdmb,statusString);
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  return statusString;
+	 }
+	 
+
+	 /**
+	  * This method does not depend explicitly on the JSF event system.  Note it depends on several
+	  * global session variables: username, queueservice.
+	  */
+	 protected String checkTheStatusQueue(MeshDataMegaBean mdmb, String statusString) {
+		  try {
+				String projectName=mdmb.getProjectName();
+				String jobUID=mdmb.getJobUIDStamp();
+				String queueName=projectName+"."+jobUID;
+			
+
+				//DB, get going
+				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"
+									  +getUserName()+"/"+getCodeName()+"/"+projectName+".db");		  
+				
+				
+				//Get the client together
+				
 				System.out.println("Connecting to "+queueServiceUrl);
 				queueService=new QueueServiceServiceLocator().getQueueExec(new URL(queueServiceUrl));
 				statusString=queueService.readQueueMessage(queueName);
-
+				
 				//Update the status
 				System.out.println("Stuff:"+queueName+" "+statusString);
-
+				
 				//Drop it back in the DB
 				ObjectSet results=db.get(mdmb);
 				//Replace the clone with the original
@@ -2328,6 +2399,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	 }
 	 
 	 public HtmlDataTable getArchivedMeshTable(){
+		  //		  System.out.println("Calling htmldatatable object archivedMeshTable");
 		  return archivedMeshTable;
 	 }
 

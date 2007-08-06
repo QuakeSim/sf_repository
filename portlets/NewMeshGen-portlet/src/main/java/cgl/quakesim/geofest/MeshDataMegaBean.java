@@ -20,7 +20,7 @@ public class MeshDataMegaBean {
 	 String userName;
 	 String jobUIDStamp;
 	 String creationDate;
-	 String meshStatus="submitted";
+	 String meshStatus="Unknown";
 	 
 	 public MeshDataMegaBean() {
 	 }
