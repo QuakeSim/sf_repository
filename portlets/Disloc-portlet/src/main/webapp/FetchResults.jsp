@@ -51,7 +51,9 @@ function dataTableSelectOneRadio(radio) {
 
   				<h:dataTable value="#{DislocBean.myArchivedDislocResultsList}" 
 								 binding="#{DislocBean.myProjectSummaryDataTable}"
-								 var="summaryBean" id="DislocOutputPanel" border="1">
+								 var="summaryBean" 
+								 id="DislocOutputPanel" 
+								 border="1">
 					<h:column>
 					    <f:facet name="header">
 					    <h:outputText  id="blah0" value="Project Name"/>
@@ -106,7 +108,7 @@ function dataTableSelectOneRadio(radio) {
 					</f:facet>
 						<h:panelGroup id="pgkml">
 						<h:outputLink id="link5" value="#{summaryBean.kmlurl}" target="_blank">
-							<h:outputText value="[<b>Download</b>]" escape="false" />
+							<h:outputText id="kdjfjk" value="[<b>Download</b>]" escape="false" />
 						</h:outputLink>
 						<h:outputText id="blah16" escape="false" value="<b> </b>" />
 						<h:outputLink id="link6" value="http://maps.google.com/maps?q=#{summaryBean.kmlurl}" target="_blank">

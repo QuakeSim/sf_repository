@@ -7,6 +7,8 @@
 
 package org.apache.myfaces.blank;
 
+import java.util.Date;
+
 public class SimpleXOutputBean  implements java.io.Serializable {
     private java.lang.String faultUrl;
 

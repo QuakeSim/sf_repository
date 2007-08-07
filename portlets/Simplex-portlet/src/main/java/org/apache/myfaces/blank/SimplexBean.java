@@ -201,6 +201,7 @@ public class SimplexBean extends GenericSopacBean {
 
 	public List getMyarchivedFileEntryList() {
 		List myprojectlist = getMyProjectNameList();
+		List tmpList=new ArrayList();
 
 		myarchivedFileEntryList.clear();
 		System.out.println("Project list size:"+myprojectlist.size());
@@ -223,12 +224,14 @@ public class SimplexBean extends GenericSopacBean {
 				// "+projectName+":"+results.size());
 				while (results.hasNext()) {
 					mega = (SimpleXOutputBean) results.next();
-					myarchivedFileEntryList.add(mega);
+					//					myarchivedFileEntryList.add(mega);
+					tmpList.add(mega);
 				}
 				db.close();
+				myarchivedFileEntryList=sortByDate(tmpList);
 			}
 		}
-		return this.myarchivedFileEntryList;
+		return myarchivedFileEntryList;
 	}
 
 	public void setDeleteProjectsList(String[] tmp_str) {
@@ -1242,9 +1245,79 @@ public class SimplexBean extends GenericSopacBean {
 				System.out.println("Unable to download kml file");
 				ex.printStackTrace();
 		  }
-
-		  
 	 }
 
+	 /**
+	  * Some of the stuff below should be abstracted to the generic project classes.
+	  */
+ 
+	 /**
+	  * Do nothing for now.
+	  */
+	 protected List sortByDate(List fullList) {
+		  return fullList;
+	 }
+
+
+
+	 /**
+	  * Sort the list by date
+	  */
+
+// 	 protected List sortByDate(List fullList) {
+// 		  if(fullList==null) return null;
+// 		  int size=fullList.size();
+// 		  if(size<2) {
+// 				return fullList;
+// 		  }
+// 		  //Ordered list is originally empty and reducedlist is full.
+// 		  List orderedList=new ArrayList();
+// 		  List reducedList=new ArrayList();
+// 		  myListToVectorCopy(reducedList,fullList);
+		  
+// 		  orderedList=setListOrder(orderedList, reducedList, fullList);
+
+// 		  return orderedList;
+// 	 }
+
+// 	 protected void myListToVectorCopy(List dest, List src) {
+// 		  for(int i=0;i<src.size();i++) {
+// 				dest.add(new Integer(i));
+// 		  }
+// 	 }
+	 
+// 	 protected List setListOrder(List orderedList, List reducedList, List fullList) {
+		  
+// 		  if(reducedList==null) return null;
+// 		  int size=reducedList.size();
+// 		  if(size<2) {
+// 				return fullList;
+// 		  }
+// 		  while(reducedList!=null && reducedList.size()>0) {
+// 				int first=getFirst(reducedList, fullList);
+// 				orderedList.add((SimpleXOutputBean)fullList.get(((Integer)reducedList.get(first)).intValue()));
+// 				reducedList.remove(first);
+// 		  }
+// 		  return orderedList;
+// 	 }
+	 
+// 	 protected int getFirst(List reducedList, List fullList) {
+// 		  int first=0;
+// 		  for(int i=1;i<reducedList.size();i++) {
+// 				SimpleXOutputBean mb1=(SimpleXOutputBean)fullList.get(((Integer)reducedList.get(first)).intValue());
+// 				SimpleXOutputBean mb2=(SimpleXOutputBean)fullList.get(((Integer)reducedList.get(i)).intValue());
+// 				if(mb1.getCreationDate()==null||mb1.getCreationDate().equals("")) { 
+// 					 mb1.setCreationDate((new Date()).toString());
+// 				}
+// 				if(mb2.getCreationDate()==null||mb2.getCreationDate().equals("")) { 
+// 					 mb2.setCreationDate((new Date()).toString());
+// 				}
+// 				Date date1=new Date(mb1.getCreationDate());
+// 				Date date2=new Date(mb2.getCreationDate());			  
+// 				if(date2.before(date1)) first=i;
+// 		  }
+
+// 		  return first;
+// 	 }
 
 }

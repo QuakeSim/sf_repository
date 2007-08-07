@@ -1700,19 +1700,22 @@ public class DislocBean extends GenericSopacBean {
 	 
 	 public List getMyArchivedDislocResultsList() {
 		  myArchivedDislocResultsList.clear();
+		  List tmpList=new ArrayList();
 		  try {
 				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");		  
 				ObjectSet results=db.get(new DislocProjectSummaryBean());
 				while(results.hasNext()) {
 					 DislocProjectSummaryBean dpsb=(DislocProjectSummaryBean)results.next();
-					 myArchivedDislocResultsList.add(dpsb);
+					 //					 myArchivedDislocResultsList.add(dpsb);
+					 tmpList.add(dpsb);
 				}
 				db.close();
+				myArchivedDislocResultsList=sortByDate(tmpList);
 		  }
 		  catch (Exception ex){
 				ex.printStackTrace();
 		  }
-		  return this.myArchivedDislocResultsList;
+		  return myArchivedDislocResultsList;
 	 }
 	 
 		public void setKmlGeneratorUrl(String tmp_str) {
@@ -1768,7 +1771,69 @@ public class DislocBean extends GenericSopacBean {
 				System.out.println("Unable to download kml file");
 				ex.printStackTrace();
 		  }
-
-		  
 	 }
+
+	 /**
+	  * Some of the stuff below should be abstracted to the generic project classes.
+	  */
+
+	 /**
+	  * Sort the list by date
+	  */
+	 protected List sortByDate(List fullList) {
+		  if(fullList==null) return null;
+		  int size=fullList.size();
+		  if(size<2) {
+				return fullList;
+		  }
+		  //Ordered list is originally empty and reducedlist is full.
+		  List orderedList=new ArrayList();
+		  List reducedList=new ArrayList();
+		  myListToVectorCopy(reducedList,fullList);
+		  
+		  orderedList=setListOrder(orderedList, reducedList, fullList);
+
+		  return orderedList;
+	 }
+
+	 protected void myListToVectorCopy(List dest, List src) {
+		  for(int i=0;i<src.size();i++) {
+				dest.add(new Integer(i));
+		  }
+	 }
+	 
+	 protected List setListOrder(List orderedList, List reducedList, List fullList) {
+		  
+		  if(reducedList==null) return null;
+		  int size=reducedList.size();
+		  if(size<2) {
+				return fullList;
+		  }
+		  while(reducedList!=null && reducedList.size()>0) {
+				int first=getFirst(reducedList, fullList);
+				orderedList.add((DislocProjectSummaryBean)fullList.get(((Integer)reducedList.get(first)).intValue()));
+				reducedList.remove(first);
+		  }
+		  return orderedList;
+	 }
+	 
+	 protected int getFirst(List reducedList, List fullList) {
+		  int first=0;
+		  for(int i=1;i<reducedList.size();i++) {
+				DislocProjectSummaryBean mb1=(DislocProjectSummaryBean)fullList.get(((Integer)reducedList.get(first)).intValue());
+				DislocProjectSummaryBean mb2=(DislocProjectSummaryBean)fullList.get(((Integer)reducedList.get(i)).intValue());
+				if(mb1.getCreationDate()==null||mb1.getCreationDate().equals("")) { 
+					 mb1.setCreationDate((new Date()).toString());
+				}
+				if(mb2.getCreationDate()==null||mb2.getCreationDate().equals("")) { 
+					 mb2.setCreationDate((new Date()).toString());
+				}
+				Date date1=new Date(mb1.getCreationDate());
+				Date date2=new Date(mb2.getCreationDate());			  
+				if(date2.before(date1)) first=i;
+		  }
+
+		  return first;
+	 }
+
 }
