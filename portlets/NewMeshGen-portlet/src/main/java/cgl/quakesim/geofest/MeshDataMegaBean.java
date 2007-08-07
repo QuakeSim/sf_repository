@@ -1,5 +1,7 @@
 package cgl.quakesim.geofest;
 
+import java.util.Date;
+
 /**
  * This is a mesh bean convenient class, holds the web service response's mesh bean and adds
  * some additional methods.
@@ -23,6 +25,7 @@ public class MeshDataMegaBean {
 	 String meshStatus="Unknown";
 	 
 	 public MeshDataMegaBean() {
+		  creationDate=(new Date()).toString();
 	 }
 	 
 

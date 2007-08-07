@@ -1799,6 +1799,12 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  for(int i=1;i<reducedList.size();i++) {
 				MeshDataMegaBean mb1=(MeshDataMegaBean)fullList.get(((Integer)reducedList.get(first)).intValue());
 				MeshDataMegaBean mb2=(MeshDataMegaBean)fullList.get(((Integer)reducedList.get(i)).intValue());
+				if(mb1.getCreationDate()==null||mb1.getCreationDate().equals("")) { 
+					 mb1.setCreationDate((new Date()).toString());
+				}
+				if(mb2.getCreationDate()==null||mb2.getCreationDate().equals("")) { 
+					 mb2.setCreationDate((new Date()).toString());
+				}
 				Date date1=new Date(mb1.getCreationDate());
 				Date date2=new Date(mb2.getCreationDate());			  
 				if(date2.before(date1)) first=i;
