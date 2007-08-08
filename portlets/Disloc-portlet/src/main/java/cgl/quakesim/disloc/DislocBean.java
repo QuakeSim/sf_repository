@@ -940,58 +940,58 @@ public class DislocBean extends GenericSopacBean {
 		  faultSelectionCode = "";
     }
 	 
-	 public void toggleUpdateProjectObservations(ActionEvent ev) {
-		  System.out.println("Updating observation entry for project");
-		  try {
-				obsvEntryForProject tmp_ObsvEntryForProject = new obsvEntryForProject();				
-
-				//Find out which one was selected
-				for (int i = 0; i < myFaultEntryForProjectList.size(); i++) {
-					 tmp_ObsvEntryForProject = (obsvEntryForProject) myObsvEntryForProjectList
-						  .get(i);
-					 if ((tmp_ObsvEntryForProject.getView() == true)
-						  || (tmp_ObsvEntryForProject.getDelete() == true)) {
-						  break;
-					 }
-				}
-				
-
-				boolean tmp_view = tmp_ObsvEntryForProject.getView();
-				boolean tmp_update = tmp_ObsvEntryForProject.getDelete();
-				
-				initEditFormsSelection();
-				if ((tmp_view == true) && (tmp_update == true)) {
-					 System.out.println("error");
-				}
-				//This is the edit case.
-				if ((tmp_view == true) && (tmp_update == false)) {
-					 System.out.println("We are adding/editing the observations");
-					 dislocParams=populateParamsFromContext(projectName);
-					 renderDislocGridParamsForm = !renderDislocGridParamsForm;
-					 System.out.println("Rendering:"+ renderDislocGridParamsForm);
-				}
-
-				//This is the deletion case.
-				if ((tmp_update == true) && (tmp_view == false)) {
-					 System.out.println("We are deleteing the observations");
-					 db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
-
-					 //There is only one of these
-					 ObjectSet result1=db.get(DislocParamsBean.class);
-					 if(result1.hasNext()) {
-						  DislocParamsBean todelete=(DislocParamsBean)result1.next();
-						  //Now that we have the specific object, we can delete it.
-						  db.delete(todelete);
-					 }
-					 db.close();
-				}
-				
-		  } catch (Exception e) {
-				e.printStackTrace();
-		  }
-		  
-	 }
-
+    public void toggleUpdateProjectObservations(ActionEvent ev) {
+	System.out.println("Updating observation entry for project");
+	try {
+	    obsvEntryForProject tmp_ObsvEntryForProject = new obsvEntryForProject();				
+	    
+	    //Find out which one was selected
+	    for (int i = 0; i < myObsvEntryForProjectList.size(); i++) {
+		tmp_ObsvEntryForProject = (obsvEntryForProject) myObsvEntryForProjectList
+		    .get(i);
+		if ((tmp_ObsvEntryForProject.getView() == true)
+		    || (tmp_ObsvEntryForProject.getDelete() == true)) {
+		    break;
+		}
+	    }
+	    
+	    
+	    boolean tmp_view = tmp_ObsvEntryForProject.getView();
+	    boolean tmp_update = tmp_ObsvEntryForProject.getDelete();
+	    
+	    initEditFormsSelection();
+	    if ((tmp_view == true) && (tmp_update == true)) {
+		System.out.println("error");
+	    }
+	    //This is the edit case.
+	    if ((tmp_view == true) && (tmp_update == false)) {
+		System.out.println("We are adding/editing the observations");
+		dislocParams=populateParamsFromContext(projectName);
+		renderDislocGridParamsForm = !renderDislocGridParamsForm;
+		System.out.println("Rendering:"+ renderDislocGridParamsForm);
+	    }
+	    
+	    //This is the deletion case.
+	    if ((tmp_update == true) && (tmp_view == false)) {
+		System.out.println("We are deleteing the observations");
+		db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
+		
+		//There is only one of these
+		ObjectSet result1=db.get(DislocParamsBean.class);
+		if(result1.hasNext()) {
+		    DislocParamsBean todelete=(DislocParamsBean)result1.next();
+		    //Now that we have the specific object, we can delete it.
+		    db.delete(todelete);
+		}
+		db.close();
+	    }
+	    
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	
+    }
+    
     public void toggleUpdateFaultProjectEntry(ActionEvent ev) {
 		  String faultStatus = "Update";
 		  System.out.println("Updating fault entry for project");
