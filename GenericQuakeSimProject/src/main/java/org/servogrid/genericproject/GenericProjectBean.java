@@ -234,51 +234,51 @@ public class GenericProjectBean {
 		  projectsToDelete=new ArrayList();
     }
 	 
-    public void initWebServices() {
-		  System.out.println("Initializing web services");
-		  
-		  try {
-				//--------------------------------------------------
-				//Set up the context manager service.
-				//--------------------------------------------------	
-				String base_userpath=getContextBasePath()+
-					 File.separator+userName+File.separator+codeName;
-				System.out.println("baseuserpath:"+base_userpath);
-				
-				
-				cm=(new ContextManagerImpServiceLocator()).
-					 getContextManager(new URL(contextUrl));
-				((ContextManagerSoapBindingStub) cm).setMaintainSession(true);
-				System.out.println("Stub initialized");
-				
-				cm.setContextStorage(FS);
-				cm.init(userName,base_userpath);
-				cm.addContext(codeName);
-				
-				System.out.println("We're done, take it home.");
-				
-				isInitialized=true;
-		  }
-		  catch(Exception ex) {
-				System.out.println("We got an exception");
-				ex.printStackTrace();
-		  }
-    }
+//     public void initWebServices() {
+// 	System.out.println("Initializing web services");
+	
+// 	try {
+// 	    //--------------------------------------------------
+// 	    //Set up the context manager service.
+// 	    //--------------------------------------------------	
+// 	    String base_userpath=getContextBasePath()+
+// 		File.separator+userName+File.separator+codeName;
+// 	    System.out.println("baseuserpath:"+base_userpath);
+	    
+	    
+// 	    cm=(new ContextManagerImpServiceLocator()).
+// 		getContextManager(new URL(contextUrl));
+// 	    ((ContextManagerSoapBindingStub) cm).setMaintainSession(true);
+// 	    System.out.println("Stub initialized");
+	    
+// 	    cm.setContextStorage(FS);
+// 	    cm.init(userName,base_userpath);
+// 	    cm.addContext(codeName);
+	    
+// 	    System.out.println("We're done, take it home.");
+	    
+// 	    isInitialized=true;
+// 	}
+// 	catch(Exception ex) {
+// 	    System.out.println("We got an exception");
+// 	    ex.printStackTrace();
+// 	}
+//     }
     
-    protected void setContextList() throws Exception {
-		  contextList=cm.listContext(codeName);
-		  if(contextList==null || contextList.length<=0) {
-				System.out.println(contextList.toString());
-				System.out.println("No archived projects");
-		  }
-		  else {
-				convertContextList();
-				System.out.println("Context has "+contextList.length+" elements");
-				for(int i=0;i<contextList.length;i++) {
-					 System.out.println(contextList[i]);
-				}
-		  }
-    }
+//     protected void setContextList() throws Exception {
+// 		  contextList=cm.listContext(codeName);
+// 		  if(contextList==null || contextList.length<=0) {
+// 				System.out.println(contextList.toString());
+// 				System.out.println("No archived projects");
+// 		  }
+// 		  else {
+// 				convertContextList();
+// 				System.out.println("Context has "+contextList.length+" elements");
+// 				for(int i=0;i<contextList.length;i++) {
+// 					 System.out.println(contextList[i]);
+// 				}
+// 		  }
+//     }
 	 
     
     public String getPortalUserName() {
@@ -301,29 +301,29 @@ public class GenericProjectBean {
 	return line;
     }
 
-    protected void convertContextList() throws Exception {
-	Hashtable returnHash=new Hashtable();
-	String creationDate=null;
-	String contextname=null;
-	ProjectBean projectBean;
-	contextListVector.clear();
-	if(contextList!=null && contextList.length>0) {
-	    for(int i=0;i<contextList.length;i++) {
-		projectBean=new ProjectBean();
+//     protected void convertContextList() throws Exception {
+// 	Hashtable returnHash=new Hashtable();
+// 	String creationDate=null;
+// 	String contextname=null;
+// 	ProjectBean projectBean;
+// 	contextListVector.clear();
+// 	if(contextList!=null && contextList.length>0) {
+// 	    for(int i=0;i<contextList.length;i++) {
+// 		projectBean=new ProjectBean();
 		
-		contextName=codeName+"/"+contextList[i];
-		creationDate=cm.getCurrentProperty(contextName,"LastTime");
-		projectBean.setProjectName(contextList[i]);
-		projectBean.setCreationDate(convertDate(creationDate));
-		projectBean.setHostName(hostName);
-		projectBean.setBaseWorkDir(baseWorkDir);
-		projectBean.setFileServiceUrl(fileServiceUrl);
-		contextListVector.add(projectBean);
-		returnHash.put(contextList[i],contextList[i]);
-	    }
-	}
-	setContextListHash(returnHash);
-    }
+// 		contextName=codeName+"/"+contextList[i];
+// 		creationDate=cm.getCurrentProperty(contextName,"LastTime");
+// 		projectBean.setProjectName(contextList[i]);
+// 		projectBean.setCreationDate(convertDate(creationDate));
+// 		projectBean.setHostName(hostName);
+// 		projectBean.setBaseWorkDir(baseWorkDir);
+// 		projectBean.setFileServiceUrl(fileServiceUrl);
+// 		contextListVector.add(projectBean);
+// 		returnHash.put(contextList[i],contextList[i]);
+// 	    }
+// 	}
+// 	setContextListHash(returnHash);
+//     }
 
     protected String convertDate(String longIntForm){
 	long longDate=Long.parseLong(longIntForm);
