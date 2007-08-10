@@ -93,6 +93,7 @@ public class QueueService {
 				db=Db4o.openFile(dbFullName);
 				if(queueBaseName==null || queueBaseName.equals("")){
 					 System.out.println(NULL_QUEUE_NAME);
+					 db.close();
 					 throw new Exception(NULL_QUEUE_NAME);
 				}
 				else {
