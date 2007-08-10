@@ -130,28 +130,33 @@ public class DislocBean extends GenericSopacBean {
      */ 
     
     protected void initDislocService() throws Exception {
-	dislocService=new DislocServiceServiceLocator().getDislocExec(new URL(dislocServiceUrl));
-	System.out.println("Binding to: "+dislocServiceUrl);
+		  dislocService=new DislocServiceServiceLocator().getDislocExec(new URL(dislocServiceUrl));
+		  System.out.println("Binding to: "+dislocServiceUrl);
     }
     
     protected void makeProjectDirectory() {
-	File projectDir=new File(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/");
-	projectDir.mkdirs();
+		  File projectDir=new File(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/");
+		  projectDir.mkdirs();
     }
     
     protected Fault[] getFaultsFromDB(){
-	Fault[] returnFaults=null;
-	db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
-	Fault faultToGet=new Fault();
-	ObjectSet results=db.get(faultToGet);
-	if(results.hasNext()) {
-	    returnFaults=new Fault[results.size()];
-	    for(int i=0;i<results.size();i++){
-		returnFaults[i]=(Fault)results.next();
-	    }
-	}
-	db.close();
-	return returnFaults;
+		  Fault[] returnFaults=null;
+		  db=Db4o.openFile(getBasePath()
+								 +"/"+getContextBasePath()
+								 +"/"+userName
+								 +"/"+codeName
+								 +"/"+projectName
+								 +".db");		  
+		  Fault faultToGet=new Fault();
+		  ObjectSet results=db.get(faultToGet);
+		  if(results.hasNext()) {
+				returnFaults=new Fault[results.size()];
+				for(int i=0;i<results.size();i++){
+					 returnFaults[i]=(Fault)results.next();
+				}
+		  }
+		  db.close();
+		  return returnFaults;
     }
     
     protected DislocParamsBean getDislocParamsFromDB(){
@@ -245,7 +250,7 @@ public class DislocBean extends GenericSopacBean {
 	System.out.println(xinterval);
 	System.out.println(yinterval);
 	
-	kmlService.setGridLine("Grid Line", start_x, start_y, end_x, end_y, xinterval,yinterval);
+	//	kmlService.setGridLine("Grid Line", start_x, start_y, end_x, end_y, xinterval,yinterval);
 	kmlService.setPointPlacemark("Icon Layer");
 	//kmlService.setArrowPlacemark("Arrow Layer", "ff66a1cc", 2);
 	kmlService.setArrowPlacemark("Arrow Layer", "fffffff", 2);
@@ -1216,10 +1221,11 @@ public class DislocBean extends GenericSopacBean {
     public String newProject() throws Exception {
 		  initDislocService();
 		  isInitialized = getIsInitialized();
-		  if (!isInitialized) {
-				initWebServices();
-		  }
-		  setContextList();
+// 		  if (!isInitialized) {
+// 				initWebServices();
+// 		  }
+// 		  setContextList();
+
 		  makeProjectDirectory();
 		  return ("disloc-new-project");
     }
@@ -1290,10 +1296,11 @@ public class DislocBean extends GenericSopacBean {
     }
     
     public String loadProjectList() throws Exception {
-		  if (!isInitialized) {
-				initWebServices();
-		  }
-		  setContextList();
+// 		  if (!isInitialized) {
+// 				initWebServices();
+// 		  }
+// 		  setContextList();
+
 		  makeProjectDirectory();
 
 		  return ("disloc-list-project");

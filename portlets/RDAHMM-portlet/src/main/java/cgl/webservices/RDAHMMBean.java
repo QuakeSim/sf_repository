@@ -126,7 +126,7 @@ public class RDAHMMBean extends GenericSopacBean{
 	 /**
 	  * Intialize the web service.
 	  */
-	 protected void initWebService() throws Exception {
+	 protected void initRDAHMMService() throws Exception {
 		  //Create the service stub.  
 		  System.out.println("Service to contact: "+getRdahmmServiceUrl());
 		  rdservice=(new RDAHMMServiceServiceLocator()).
@@ -141,7 +141,7 @@ public class RDAHMMBean extends GenericSopacBean{
 		  System.out.println("New project created");
 		  isInitialized=getIsInitialized();
 		  if(!isInitialized) {
-				initWebServices();
+				//initWebServices();
 		  }
 		  
 // 		  RdahmmProjectBean localBean=getRdahmmProjectBean();
@@ -192,29 +192,29 @@ public class RDAHMMBean extends GenericSopacBean{
 	 }
     
     public String loadDataArchive()throws Exception{
-		  System.out.println("Loading project");
-		  if(!isInitialized) {
-				initWebServices();
-		  }
-		  setContextList();
+// 		  System.out.println("Loading project");
+// 		  if(!isInitialized) {
+// 				initWebServices();
+// 		  }
+// 		  setContextList();
         return ("rdahmm-load-data-archive");
     }
     
     public String loadProject() throws Exception {
-		  System.out.println("Loading project");
-		  if(!isInitialized) {
-				initWebServices();
-		  }
-		  setContextList();
+// 		  System.out.println("Loading project");
+// 		  if(!isInitialized) {
+// 				initWebServices();
+// 		  }
+// 		  setContextList();
         return ("rdahmm-list-old-projects");
     }
 	 
     public String loadProjectPlots() throws Exception {
 		  System.out.println("Loading project");
-		  if(!isInitialized) {
-				initWebServices();
-		  }
-		  setContextList();
+// 		  if(!isInitialized) {
+// 				//initWebServices();
+// 		  }
+// 		  setContextList();
         return ("rdahmm-list-project-plots");
     }
     
@@ -225,7 +225,7 @@ public class RDAHMMBean extends GenericSopacBean{
 	 public String runBlockingRDAHMM_Full() { 
 		  warningMessage="";
 		  try {		  
-				initWebService();
+				initRDAHMMService();
 				newProject();
 				RdahmmProjectBean localBean=getRdahmmProjectBean();
 				RDAHMMResultsBean resultsBean=
@@ -257,7 +257,7 @@ public class RDAHMMBean extends GenericSopacBean{
 		  warningMessage="";
 		  try {
 				System.out.println("Running RDAHMM");
-				initWebService();
+				initRDAHMMService();
 				RDAHMMResultsBean returnBean=
 					 rdservice.runNonblockingRDAHMM2(siteCode,
 																resource,

@@ -233,14 +233,13 @@ public class SimplexBean extends GenericSopacBean {
 		}
 		return myarchivedFileEntryList;
 	}
-
-	public void setDeleteProjectsList(String[] tmp_str) {
-		this.deleteProjectsList = tmp_str;
+	 
+	 public void setDeleteProjectsList(String[] tmp_str) {
+		 this.deleteProjectsList = tmp_str;
 	}
 
-	public String[] getDeleteProjectsList() {
-
-		return this.deleteProjectsList;
+	 public String[] getDeleteProjectsList() {
+		 return this.deleteProjectsList;
 	}
 
 	public void setMyProjectNameList(List tmp_str) {
@@ -271,7 +270,6 @@ public class SimplexBean extends GenericSopacBean {
 			System.err.println("Returning empty list.");
 		}
 		return this.myProjectNameList;
-
 	}
 
 	public void setSelectProjectsList(String[] tmp_str) {
@@ -286,8 +284,7 @@ public class SimplexBean extends GenericSopacBean {
 	/**
 	 * Reconstruct the Observation list from the context.
 	 */
-	protected List reconstructMyObservationEntryForProjectList(
-			String projectName) {
+	protected List reconstructMyObservationEntryForProjectList(String projectName) {
 		this.myObservationEntryForProjectList.clear();
 		try {
 			db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
@@ -316,78 +313,75 @@ public class SimplexBean extends GenericSopacBean {
 	public List getMyObservationEntryForProjectList() {
 		String projectName = getProjectName();
 		return reconstructMyObservationEntryForProjectList(projectName);
-
 	}
-
-	public void setMyObservationEntryForProjectList(List tmp_list) {
-		this.myObservationEntryForProjectList = tmp_list;
-	}
-
-	/**
-	 * Create the Observation collection
-	 */
-	protected List populateObservationCollection(
-			List myObservationEntryProjectList) throws Exception {
-		List myObservationCollection = new ArrayList();
-		for (int i = 0; i < myObservationEntryProjectList.size(); i++) {
-			observationEntryForProject tmp_ObservationEntryForProject = (observationEntryForProject) myObservationEntryForProjectList
-					.get(i);
-			String tmp_observationName = tmp_ObservationEntryForProject
-					.getObservationName();
-			myObservationCollection
-					.add(populateObservationFromContext(tmp_observationName));
-		}
-		return myObservationCollection;
-	}
-
-	protected Observation populateObservationFromContext(
-			String tmp_observationName) throws Exception {
-		System.out.print("Populating Layer " + tmp_observationName + " for  "
-				+ projectName);
-		String observationStatus = "Update";
-
-		db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
-				+ codeName + "/" + projectName + ".db");
-
-		Observation observationToGet = new Observation();
-		observationToGet.setObsvName(tmp_observationName);
-		ObjectSet results = db.get(observationToGet);
-		// Should only have one value.
-		Observation currentObservation = null;
-		if (results.hasNext()) {
-			currentObservation = (Observation) results.next();
-		}
-		db.close();
-		return currentObservation;
-	}
-
+	 
+	 public void setMyObservationEntryForProjectList(List tmp_list) {
+		  this.myObservationEntryForProjectList = tmp_list;
+	 }
+	 
+	 /**
+	  * Create the Observation collection
+	  */
+	 protected List populateObservationCollection(List myObservationEntryProjectList) throws Exception {
+		  List myObservationCollection = new ArrayList();
+		  for (int i = 0; i < myObservationEntryProjectList.size(); i++) {
+				observationEntryForProject tmp_ObservationEntryForProject = 
+					 (observationEntryForProject) myObservationEntryForProjectList.get(i);
+				String tmp_observationName = tmp_ObservationEntryForProject
+					 .getObservationName();
+				myObservationCollection
+					 .add(populateObservationFromContext(tmp_observationName));
+		  }
+		  return myObservationCollection;
+	 }
+	 
+	 protected Observation populateObservationFromContext(String tmp_observationName) throws Exception {
+		  System.out.print("Populating Layer " + tmp_observationName + " for  "
+								 + projectName);
+		  String observationStatus = "Update";
+		  
+		  db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
+									+ codeName + "/" + projectName + ".db");
+		  
+		  Observation observationToGet = new Observation();
+		  observationToGet.setObsvName(tmp_observationName);
+		  ObjectSet results = db.get(observationToGet);
+		  // Should only have one value.
+		  Observation currentObservation = null;
+		  if (results.hasNext()) {
+				currentObservation = (Observation) results.next();
+		  }
+		  db.close();
+		  return currentObservation;
+	 }
+	 
 	/**
 	 * Reconstructs the fault entry list.
 	 */
 	protected List reconstructMyFaultEntryForProjectList(String projectName) {
 		this.myFaultEntryForProjectList.clear();
 		try {
-			db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
-					+ codeName + "/" + projectName + ".db");
-
-			Fault tmpfault = new Fault();
-			ObjectSet results = db.get(tmpfault);
-			while (results.hasNext()) {
-				tmpfault = (Fault) results.next();
-				faultEntryForProject tmp_myFaultEntryForProject = new faultEntryForProject();
-				tmp_myFaultEntryForProject
+			 db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
+									  + codeName + "/" + projectName + ".db");
+			 
+			 Fault tmpfault = new Fault();
+			 ObjectSet results = db.get(tmpfault);
+			 while (results.hasNext()) {
+				  tmpfault = (Fault) results.next();
+				  faultEntryForProject tmp_myFaultEntryForProject = new faultEntryForProject();
+				  tmp_myFaultEntryForProject
 						.setFaultName(tmpfault.getFaultName());
-				tmp_myFaultEntryForProject.view = false;
-				tmp_myFaultEntryForProject.delete = false;
-				this.myFaultEntryForProjectList.add(tmp_myFaultEntryForProject);
-			}
-			db.close();
-
+				  tmp_myFaultEntryForProject.view = false;
+				  tmp_myFaultEntryForProject.delete = false;
+				  this.myFaultEntryForProjectList.add(tmp_myFaultEntryForProject);
+			 }
+			 db.close();
+			 
 		} catch (Exception ex) {
-			ex.printStackTrace();
-			db.close();
+			 ex.printStackTrace();
+			 db.close();
 		}
-
+		
 		return this.myFaultEntryForProjectList;
 	}
 
@@ -490,41 +484,41 @@ public class SimplexBean extends GenericSopacBean {
 	 * These are methods associated with Faces navigations.
 	 */
 	public String newProject() throws Exception {
-		isInitialized = getIsInitialized();
-		if (!isInitialized) {
-			initWebServices();
-		}
-		makeProjectDirectory();
-		setContextList();
+// 		isInitialized = getIsInitialized();
+// 		if (!isInitialized) {
+// 			initWebServices();
+// 		}
+// 		makeProjectDirectory();
+// 		setContextList();
 		return ("Simplex2-new-project");
 	}
 
 	public String loadProject() throws Exception {
-		System.out.println("Loading project");
-		if (!isInitialized) {
-			initWebServices();
-		}
-		makeProjectDirectory();
-		setContextList();
+// 		System.out.println("Loading project");
+// 		if (!isInitialized) {
+// 			initWebServices();
+// 		}
+// 		makeProjectDirectory();
+// 		setContextList();
 		return ("Simplex2-load-project");
 	}
 
 	public String archivedData() throws Exception {
-		System.out.println("load archived Data");
-		if (!isInitialized) {
-			initWebServices();
-		}
-		setContextList();
+// 		System.out.println("load archived Data");
+// 		if (!isInitialized) {
+// 			initWebServices();
+// 		}
+// 		setContextList();
 		return ("Simplex2-archived-data");
 	}
 
 	public String GMTDataPlots() throws Exception {
-		System.out.println("Plot Data");
-		if (!isInitialized) {
-			initWebServices();
-		}
-		setContextList();
-		return ("Simplex2-listgmt-archives");
+// 		 System.out.println("Plot Data");
+// 		 if (!isInitialized) {
+// 			  initWebServices();
+// 		 }
+// 		 setContextList();
+		 return ("Simplex2-listgmt-archives");
 	}
 
 	public String toggleRunSimplex2() throws Exception {
@@ -579,26 +573,27 @@ public class SimplexBean extends GenericSopacBean {
 		  db.commit();
 		  db.close();
 	}
+	 
+	 public String NewProjectThenEditProject() throws Exception {
+//  		  if (!isInitialized) {
+// 				initWebServices();
+// 		  }
+// 		  setContextList();
 
-	public String NewProjectThenEditProject() throws Exception {
-		if (!isInitialized) {
-			initWebServices();
-		}
-		setContextList();
-		setProjectname();
-		currentEditProjectForm.init_edit_project();
-		return "Simplex2-edit-project";
+		  setProjectname();
+		  currentEditProjectForm.init_edit_project();
+		  return "Simplex2-edit-project";
 	}
 
 	public String toggleDeleteProject() {
-		if (!isInitialized) {
-			initWebServices();
-		}
-		try {
-			setContextList();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+// 		if (!isInitialized) {
+// 			initWebServices();
+// 		}
+// 		try {
+// 			setContextList();
+// 		} catch (Exception ex) {
+// 			ex.printStackTrace();
+// 		}
 
 		try {
 			 db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName
@@ -634,14 +629,14 @@ public class SimplexBean extends GenericSopacBean {
 	}
 	 
 	public String toggleSelectProject() {
-		if (!isInitialized) {
-			initWebServices();
-		}
-		try {
-			setContextList();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+// 		if (!isInitialized) {
+// 			initWebServices();
+// 		}
+// 		try {
+// 			setContextList();
+// 		} catch (Exception ex) {
+// 			ex.printStackTrace();
+// 		}
 
 		currentEditProjectForm.initEditFormsSelection();
 		if (selectProjectsList != null) {
@@ -780,16 +775,16 @@ public class SimplexBean extends GenericSopacBean {
 	}
 
 	public String toggleGMTPlot() {
+// 		 System.out.println("GMT Plot");
+// 		 if (!isInitialized) {
+// 			  initWebServices();
+// 		 }
+// 		 try {
+// 			  setContextList();
+// 		 } catch (Exception ex) {
+// 			  ex.printStackTrace();
+// 		 }
 
-		System.out.println("GMT Plot");
-		if (!isInitialized) {
-			initWebServices();
-		}
-		try {
-			setContextList();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
 		try {
 
 			// Catch the MyData item during the third phase of the JSF
@@ -840,14 +835,14 @@ public class SimplexBean extends GenericSopacBean {
 	public String toggleMakeMap() {
 
 		System.out.println("GMT Plot");
-		if (!isInitialized) {
-			initWebServices();
-		}
-		try {
-			setContextList();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+// 		if (!isInitialized) {
+// 			initWebServices();
+// 		}
+// 		try {
+// 			setContextList();
+// 		} catch (Exception ex) {
+// 			ex.printStackTrace();
+// 		}
 
 		try {
 
@@ -898,14 +893,14 @@ public class SimplexBean extends GenericSopacBean {
 	public String toggleViewKml() {
 
 		System.out.println("Kml viewer");
-		if (!isInitialized) {
-			initWebServices();
-		}
-		try {
-			setContextList();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+// 		if (!isInitialized) {
+// 			initWebServices();
+// 		}
+// 		try {
+// 			setContextList();
+// 		} catch (Exception ex) {
+// 			ex.printStackTrace();
+// 		}
 
 		try {
 
@@ -1027,7 +1022,7 @@ public class SimplexBean extends GenericSopacBean {
 		  currentEditProjectForm.initEditFormsSelection();
 		  db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 									+ codeName + "/" + projectName + ".db");
-		  System.out.println("Parsing Output");
+		  //		  System.out.println("Parsing Output");
 		  Observation tmpObsv = new Observation();
 		  ObjectSet result = db.get(tmpObsv);
 		  int obsvCount=result.size();
@@ -1050,7 +1045,7 @@ public class SimplexBean extends GenericSopacBean {
 						  tmpObsv.setObsvError(st2.nextToken());
 						  tmpObsv.setObsvRefSite("1");						  
 					 }
-					 System.out.println("\n");
+					 //					 System.out.println("\n");
 				}
 				else {
 					 System.out.println("Line malformed: "+line);
