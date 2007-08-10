@@ -94,7 +94,7 @@ public class GeotransParamsBean  implements java.io.Serializable {
 		reform_steps ="1";
 		backup_steps="5000";
 		fault_interval="5000.0";
-		end_time="500.0";
+		end_time="50.0";
 		alpha ="1.0";
 		time_step="0.5";
 		//cordinate boundary

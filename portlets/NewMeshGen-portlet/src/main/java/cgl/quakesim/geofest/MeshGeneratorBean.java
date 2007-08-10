@@ -373,26 +373,32 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 		  //Set up the bean template for searching.
 		  MeshDataMegaBean mega=new MeshDataMegaBean();
-		  mega.setUserName(userName);
+		  //		  mega.setUserName(userName);
+		  System.out.println("Bean coordinates: "+projectName+" "+tokenName);
 		  mega.setProjectName(projectName);
 		  mega.setJobUIDStamp(tokenName);
 		  //Find the matching bean
+		  System.out.println("Opening: "+getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
 		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
-		  ObjectSet results=db.get(mega);
+		  //		  ObjectSet results=db.get(mega);
+		  ObjectSet results=db.get(MeshDataMegaBean.class);
 		  System.out.println("Megabean to update found? "+results.size());
 		  System.out.println("Saving Geofest cghist url:"+projectGeoFestOutput.getCghistUrl());
 		  System.out.println("Saving index url:"+projectGeoFestOutput.getIndexUrl());
-		  if(results.hasNext()) {
+		  while (results.hasNext()) {
 				//Reassign the bean.  Should only be one match.
 				mega=(MeshDataMegaBean)results.next();
-				//Update the geotrans params
-				mega.setGeotransParamsBean(currentGeotransParamsBean);
-				mega.setGeofestOutputBean(projectGeoFestOutput);
-				db.set(mega);
-				db.commit();
-				System.out.println("Mega Saving Geofest cghist url:"+mega.getGeofestOutputBean().getCghistUrl());
-				System.out.println("Mega Saving index url:"+mega.getGeofestOutputBean().getIndexUrl());
-
+				if(mega.getProjectName().equals(projectName) && mega.getJobUIDStamp().equals(tokenName)) {
+					 System.out.println("Found the bean");
+					 //Update the geotrans params
+					 mega.setGeotransParamsBean(currentGeotransParamsBean);
+					 mega.setGeofestOutputBean(projectGeoFestOutput);
+					 db.set(mega);
+					 db.commit();
+					 System.out.println("Mega Saving Geofest cghist url:"+mega.getGeofestOutputBean().getCghistUrl());
+					 System.out.println("Mega Saving index url:"+mega.getGeofestOutputBean().getIndexUrl());
+					 break;
+				}
 		  }
 		  db.close();
 		  
@@ -1353,11 +1359,11 @@ public class MeshGeneratorBean extends GenericSopacBean {
      * These are methods associated with Faces navigations.
      */
     public String newProject() throws Exception {
-		  isInitialized = getIsInitialized();
-		  if (!isInitialized) {
-				initWebServices();
-		  }
-		  setContextList();
+// 		  isInitialized = getIsInitialized();
+// 		  if (!isInitialized) {
+// 				initWebServices();
+// 		  }
+// 		  setContextList();
 		  makeProjectDirectory();
 		  return ("MG-new-project");
     }
@@ -1370,24 +1376,25 @@ public class MeshGeneratorBean extends GenericSopacBean {
     
 
     public String NewProjectThenEditProject() throws Exception {
-		  if (!isInitialized) {
-				initWebServices();
-		  }
-		  setContextList();
+// 		  if (!isInitialized) {
+// 				initWebServices();
+// 		  }
+// 		  setContextList();
+
 		  setProjectname();
 		  init_edit_project();
 		  return "MG-edit-project";
     }
     
     public String toggleSelectProject() throws Exception  {
-		  if (!isInitialized) {
-				initWebServices();
-		  }
-		  try {
-				setContextList();
-		  } catch (Exception ex) {
-				ex.printStackTrace();
-		  }
+// 		  if (!isInitialized) {
+// 				initWebServices();
+// 		  }
+// 		  try {
+// 				setContextList();
+// 		  } catch (Exception ex) {
+// 				ex.printStackTrace();
+// 		  }
 		  
 		  initEditFormsSelection();
 		  //This is implemented as a selectmanycheckbox on the client side (LoadProject.jsp),
@@ -1469,19 +1476,20 @@ public class MeshGeneratorBean extends GenericSopacBean {
     }
     
     public String loadDataArchive() throws Exception {
-		  if (!isInitialized) {
-				initWebServices();
-		  }
-		  setContextList();
+// 		  if (!isInitialized) {
+// 				initWebServices();
+// 		  }
+// 		  setContextList();
 		  return ("rdahmm-load-data-archive");
     }
     
     public String loadProjectList() throws Exception {
-		  if (!isInitialized) {
-				initWebServices();
-		  }
-		  setContextList();
+// 		  if (!isInitialized) {
+// 				initWebServices();
+// 		  }
+// 		  setContextList();
 		  makeProjectDirectory();
+
 
 		  return ("MG-list-project");
     }
@@ -1546,21 +1554,21 @@ public class MeshGeneratorBean extends GenericSopacBean {
     }
    
      public String loadMesh() throws Exception {
-		  if (!isInitialized) {
-				initWebServices();
-		  }
-		  setContextList();
+// 		  if (!isInitialized) {
+// 				initWebServices();
+// 		  }
+// 		  setContextList();
 		  
 		  return ("MG-load-mesh");
     }
     
     public String fetchMesh() throws Exception {
-		  if (!isInitialized) {
-				initWebServices();
-		  }
-		  setContextList();
-		  this.ListGeoFESTData = false;
+// 		  if (!isInitialized) {
+// 				initWebServices();
+// 		  }
+// 		  setContextList();
 
+		  this.ListGeoFESTData = false;
 		  return ("MG-fetch-mesh");
     }
     
@@ -1569,30 +1577,31 @@ public class MeshGeneratorBean extends GenericSopacBean {
     }
     
     public String gfarchivedData() throws Exception {
-		  if (!isInitialized) {
-				initWebServices();
-		  }
-		  setContextList();
+// 		  if (!isInitialized) {
+// 				initWebServices();
+// 		  }
+// 		  setContextList();
+
 		  this.ListGeoFESTData = true;
 		  return ("MG-gf-archived-data");
     }
     
     public String gfGraphOutput() throws Exception {
 		  //System.out.println("gf Graph Output");
-		  if (!isInitialized) {
-				initWebServices();
-		  }
-		  setContextList();
+// 		  if (!isInitialized) {
+// 				initWebServices();
+// 		  }
+// 		  setContextList();
 		  this.ListGeoFESTData = true;
 		  return ("MG-gf-graph-output");
     }
     
     public String ContourPlot() throws Exception {
 		  //System.out.println("Contour Plot");
-		  if (!isInitialized) {
-				initWebServices();
-		  }
-		  setContextList();
+// 		  if (!isInitialized) {
+// 				initWebServices();
+// 		  }
+// 		  setContextList();
 		  FacesContext fc = FacesContext.getCurrentInstance();
 		  this.selectedProject = (String) fc.getExternalContext()
 				.getRequestParameterMap().get("ProjectSelect");

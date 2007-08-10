@@ -165,8 +165,8 @@
 							value="#{MGBean.currentGeotransParamsBean.top_bc}">
 							<f:selectItem id="top_bcitem1" itemLabel="Locked Node"
 								itemValue="locked node" />
-							<f:selectItem id="top_bcitem2" itemLabel="free node"
-								itemValue="Free Node" />
+							<f:selectItem id="top_bcitem2" itemLabel="Free Node"
+								itemValue="free node" />
 						</h:selectOneMenu>
 						<h:outputText value="BC Values:" />
 						<h:panelGroup>
@@ -183,7 +183,7 @@
 							<f:selectItem id="east_bcitem1" itemLabel="Locked Node"
 								itemValue="locked node" />
 							<f:selectItem id="east_bcitem2" itemLabel="Free Node"
-								itemValue="Free Node" />
+								itemValue="free node" />
 						</h:selectOneMenu>
 						<h:outputText value="BC Values:" />
 						<h:panelGroup>
@@ -200,7 +200,7 @@
 							<f:selectItem id="west_bcitem1" itemLabel="Locked Node"
 								itemValue="locked node" />
 							<f:selectItem id="west_bcitem2" itemLabel="Free Node"
-								itemValue="Free Node" />
+								itemValue="free node" />
 						</h:selectOneMenu>
 						<h:outputText value="BC Values:" />
 						<h:panelGroup>
@@ -217,7 +217,7 @@
 							<f:selectItem id="north_bcitem1" itemLabel="Locked Node"
 								itemValue="locked node" />
 							<f:selectItem id="north_bcitem2" itemLabel="Free Node"
-								itemValue="Free Node" />
+								itemValue="free node" />
 						</h:selectOneMenu>
 						<h:outputText value="BC Values:" />
 						<h:panelGroup>
@@ -234,7 +234,7 @@
 							<f:selectItem id="south_bcitem1" itemLabel="Locked Node"
 								itemValue="locked node" />
 							<f:selectItem id="south_bcitem2" itemLabel="Free Node"
-								itemValue="Free Node" />
+								itemValue="free node" />
 						</h:selectOneMenu>
 						<h:outputText value="BC Values:" />
 						<h:panelGroup>
@@ -251,7 +251,7 @@
 							<f:selectItem id="bottom_bcitem1" itemLabel="Locked Node"
 								itemValue="locked node" />
 							<f:selectItem id="bottom_bcitem2" itemLabel="Free Node"
-								itemValue="Free Node" />
+								itemValue="free node" />
 						</h:selectOneMenu>
 						<h:outputText value="BC Values:" />
 						<h:panelGroup>
