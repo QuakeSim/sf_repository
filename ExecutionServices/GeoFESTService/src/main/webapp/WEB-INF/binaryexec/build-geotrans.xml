@@ -18,11 +18,6 @@
 
 <!-- This is used to create the mesh from the input geometry -->
 <target name="MakeWorkDir">
-  <taskdef name="queuetask" classname="cgl.webservices.geofest.QueueTask"/>
-  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
-				 message="MakeWorkDir" 
-				 queueServiceUrl="${queueServiceUrl.prop}"/>
-
    <echo message="Creating ${workdir.prop}" />
    <mkdir dir="${workdir.prop}" />
 </target>

@@ -3,7 +3,7 @@ package cgl.webservices.queueservice;
 //Need to import this parent.
 import cgl.webservices.*;
 
-//Not explicitly naming these because they are famous.
+//Not explicitly naming these because tey are famous.
 import java.util.*;
 import java.io.*;
 import java.net.*;
@@ -89,18 +89,24 @@ public class QueueService {
 	  * If the queue name is null or empty, bad things happen.
 	  */
 	 public void createQueue(String queueBaseName) throws Exception {
- 		  db=Db4o.openFile(dbFullName);
-		  if(queueBaseName==null || queueBaseName.equals("")){
- 				System.out.println(NULL_QUEUE_NAME);
-				throw new Exception(NULL_QUEUE_NAME);
+		  try {
+				db=Db4o.openFile(dbFullName);
+				if(queueBaseName==null || queueBaseName.equals("")){
+					 System.out.println(NULL_QUEUE_NAME);
+					 throw new Exception(NULL_QUEUE_NAME);
+				}
+				else {
+					 QueueBean qb=new QueueBean();
+					 qb.setQueueName(queueBaseName);
+					 db.set(qb);
+				}
+				db.commit();
+				db.close();
 		  }
-		  else {
-				QueueBean qb=new QueueBean();
-				qb.setQueueName(queueBaseName);
-				db.set(qb);
+		  catch (Exception ex){
+				ex.printStackTrace();
+				if(db!=null) db.close();
 		  }
-		  db.commit();
-		  db.close();
 	 }
 
 	 /**
@@ -108,70 +114,97 @@ public class QueueService {
 	  */ 
     public void writeQueueMessage(String queueBaseName,
 											 String message) throws Exception {
-		  db=Db4o.openFile(dbFullName);
-		  QueueBean qb=new QueueBean();
-		  qb.setQueueName(queueBaseName);
-		  ObjectSet results=db.get(qb);
-		  if(results.hasNext()) {
-				qb=(QueueBean)results.next();
-				qb.setQueueMessage(message);
-				qb.setQueueTime((new Date()).toString());
-				db.set(qb);
+		  try {
+				db=Db4o.openFile(dbFullName);
+				QueueBean qb=new QueueBean();
+				qb.setQueueName(queueBaseName);
+				
+				ObjectSet results=db.get(qb);
+				if(results.hasNext()) {
+					 qb=(QueueBean)results.next();
+					 qb.setQueueMessage(message);
+					 qb.setQueueTime((new Date()).toString());
+					 db.set(qb);
+				}
+				else {
+					 System.out.println(NO_SUCH_QUEUE);
+					 throw new Exception(NO_SUCH_QUEUE);
+				}
+				db.commit();
+				db.close();
 		  }
-		  else {
-				System.out.println(NO_SUCH_QUEUE);
-				throw new Exception(NO_SUCH_QUEUE);
+		  catch(Exception ex) {
+				ex.printStackTrace();
+				if(db!=null) db.close();
 		  }
-		  db.commit();
-		  db.close();
 	 }
 	 
 	 /**
 	  * Delete the queue
 	  */
 	 public void deleteQueue(String queueBaseName) throws Exception {
-		  db=Db4o.openFile(dbFullName);
-		  QueueBean qb=new QueueBean();
-		  qb.setQueueName(queueBaseName);
-		  ObjectSet results=db.get(qb);
-		  while(results.hasNext()) {
-				qb=(QueueBean)results.next();
-				db.delete(qb);
+		  try {
+				db=Db4o.openFile(dbFullName);
+				QueueBean qb=new QueueBean();
+				qb.setQueueName(queueBaseName);
+				ObjectSet results=db.get(qb);
+				while(results.hasNext()) {
+					 qb=(QueueBean)results.next();
+					 db.delete(qb);
+				}
+				db.commit();
+				db.close();
 		  }
-		  db.commit();
-		  db.close();
+		  catch(Exception ex) {
+				ex.printStackTrace();
+				if(db!=null) db.close();
+		  }
+		  
 	 }
 
 	 /**
 	  * Get back some or all of the messages in the specified queue.
 	  */
-	 public String readQueueMessage(String queueBaseName) throws Exception {
+	 public String readQueueMessage(String queueBaseName) throws Exception {				
 		  String theMessage="";
-		  db=Db4o.openFile(dbFullName);
-		  QueueBean qb=new QueueBean();
-		  qb.setQueueName(queueBaseName);
-		  ObjectSet results=db.get(qb);
-		  if(results.hasNext()) {
-				qb=(QueueBean)results.next();
-				theMessage=qb.getQueueMessage();
+		  try {
+				db=Db4o.openFile(dbFullName);
+				QueueBean qb=new QueueBean();
+				qb.setQueueName(queueBaseName);
+				ObjectSet results=db.get(qb);
+				if(results.hasNext()) {
+					 qb=(QueueBean)results.next();
+					 theMessage=qb.getQueueMessage();
+				}
+				db.commit();
+				db.close();
 		  }
-		  db.commit();
-		  db.close();
+		  catch(Exception ex) {
+				ex.printStackTrace();
+				if(db!=null) db.close();
+		  }
 		  return theMessage;
 	 }
 
 	 public String getQueueUpdateTime(String queueBaseName) {
 		  String updateTime="";
-		  db=Db4o.openFile(dbFullName);
-		  QueueBean qb=new QueueBean();
-		  qb.setQueueName(queueBaseName);
-		  ObjectSet results=db.get(qb);
-		  if(results.hasNext()) {
-				qb=(QueueBean)results.next();
-				updateTime=qb.getQueueTime();
+		  try {
+				db=Db4o.openFile(dbFullName);
+				QueueBean qb=new QueueBean();
+				qb.setQueueName(queueBaseName);
+				ObjectSet results=db.get(qb);
+				if(results.hasNext()) {
+					 qb=(QueueBean)results.next();
+					 updateTime=qb.getQueueTime();
+				}
+				db.commit();
+				db.close();
 		  }
-		  db.commit();
-		  db.close();
+		  catch(Exception ex) {
+				ex.printStackTrace();
+				if(db!=null) db.close();
+		  }
+
 		  return updateTime;
 	 }
 
