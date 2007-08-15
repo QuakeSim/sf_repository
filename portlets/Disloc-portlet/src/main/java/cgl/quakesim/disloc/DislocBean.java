@@ -108,13 +108,12 @@ public class DislocBean extends GenericSopacBean {
      * The client constructor.
      */
     public DislocBean() throws Exception {
-	super();
-	
-	dislocParams.setObservationPointStyle(1);
-	
-	
-	//We are done.
-	System.out.println("Primary Disloc Bean Created");
+		  super();
+		  
+		  dislocParams.setObservationPointStyle(1);
+		  
+		  //We are done.
+		  System.out.println("Primary Disloc Bean Created");
     }
     
     //--------------------------------------------------
@@ -204,6 +203,10 @@ public class DislocBean extends GenericSopacBean {
 		  // This will be fixed at "1" for now.
 		  dislocParams.setObservationPointStyle(1);
 		  
+		  //Set the project origin to be the first fault's starting lat/lon.
+		  dislocParams.setOriginLat(faults[0].getFaultLatStart());
+		  dislocParams.setOriginLon(faults[0].getFaultLonStart());
+ 
 		  initDislocService();
 		  DislocResultsBean dislocResultsBean=dislocService.runBlockingDisloc(userName,
 																									 projectName,
@@ -214,7 +217,7 @@ public class DislocBean extends GenericSopacBean {
 		  
 		  String myKmlUrl="";
 		  try {
-				myKmlUrl=createKml(faults[0], dislocResultsBean);
+				myKmlUrl=createKml(dislocParams, dislocResultsBean);
 		  }
 		  catch (Exception ex) {
 				ex.printStackTrace();
@@ -227,16 +230,15 @@ public class DislocBean extends GenericSopacBean {
 										dislocResultsBean,
 										myKmlUrl);
 		  
-		  return DISLOC_NAV_STRING;
-		  
+		  return DISLOC_NAV_STRING;		  
     }
 
-	 protected String createKml(Fault firstFault,
+	 protected String createKml(DislocParamsBean dislocParams,
 										 DislocResultsBean dislocResultsBean) throws Exception {
 
 		  //Get the project lat/lon origin.  It is the lat/lon origin of the first fault.
-		  origin_lat=firstFault.getFaultLatStart()+"";
-		  origin_lon=firstFault.getFaultLonStart()+"";
+		  origin_lat=dislocParams.getOriginLat()+"";
+		  origin_lon=dislocParams.getOriginLon()+"";
 
 		  System.out.println("Origin: "+origin_lon+" "+origin_lat);
 		  
@@ -305,7 +307,7 @@ public class DislocBean extends GenericSopacBean {
 																										 null);
 		  String myKmlUrl="";
 		  try {
-				myKmlUrl=createKml(faults[0],dislocResultsBean);
+				myKmlUrl=createKml(dislocParams,dislocResultsBean);
 		  }
 		  catch (Exception ex) {
 				ex.printStackTrace();
@@ -328,56 +330,58 @@ public class DislocBean extends GenericSopacBean {
 
 	public PointEntry[] LoadDataFromUrl(String InputUrl) {
 		 System.out.println("Creating Point Entry");
-		ArrayList dataset = new ArrayList();
-		try {
-			String line = new String();
-			int skipthreelines = 1;
-			
-			URL inUrl= new URL(InputUrl);
-			URLConnection uconn = inUrl.openConnection();
-			InputStream instream = inUrl.openStream();
-
-		        BufferedReader in =
-		          new BufferedReader(new InputStreamReader(instream)); 
-			while ((line = in.readLine()) != null) {
-				if (skipthreelines <= 4) {
-
-				} else {
-					if (!line.trim().equalsIgnoreCase("")) {
-						PointEntry tempPoint = new PointEntry();
-						Pattern p = Pattern.compile(" {1,20}");
-						String tmp[] = p.split(line);
-						
-						//Look for NaN or other problems.
-						for(int i=0;i<tmp.length;i++) {
-							 String oldtmp=tmp[i];
-							 if(tmp[i].trim().equalsIgnoreCase("nan")) {
-								  tmp[i]="0.0";
-							 }
-						}
-
-						tempPoint.setX(tmp[1].trim());
-						tempPoint.setY(tmp[2].trim());
-						tempPoint.setDeltaXName("dx");
-						tempPoint.setDeltaXValue(tmp[3].trim());
-						tempPoint.setDeltaYName("dy");
-						tempPoint.setDeltaYValue(tmp[4].trim());
-						tempPoint.setDeltaZName("dz");
-						tempPoint.setDeltaZValue(tmp[5].trim());
-						tempPoint.setFolderTag("point");
-						dataset.add(tempPoint);
+		 ArrayList dataset = new ArrayList();
+		 try {
+			  String line = new String();
+			  int skipthreelines = 1;
+			  
+			  URL inUrl= new URL(InputUrl);
+			  URLConnection uconn = inUrl.openConnection();
+			  InputStream instream = inUrl.openStream();
+			  
+			  BufferedReader in =
+					new BufferedReader(new InputStreamReader(instream)); 
+			  
+			  //Need to make sure this will work with multiple faults.
+			  while ((line = in.readLine()) != null) {
+					if (skipthreelines <= 4) {
+						 
 					} else {
-						break;
+						 if (!line.trim().equalsIgnoreCase("")) {
+							  PointEntry tempPoint = new PointEntry();
+							  Pattern p = Pattern.compile(" {1,20}");
+							  String tmp[] = p.split(line);
+							  
+							  //Look for NaN or other problems.
+							  for(int i=0;i<tmp.length;i++) {
+									String oldtmp=tmp[i];
+									if(tmp[i].trim().equalsIgnoreCase("nan")) {
+										 tmp[i]="0.0";
+									}
+							  }
+
+							  tempPoint.setX(tmp[1].trim());
+							  tempPoint.setY(tmp[2].trim());
+							  tempPoint.setDeltaXName("dx");
+							  tempPoint.setDeltaXValue(tmp[3].trim());
+							  tempPoint.setDeltaYName("dy");
+							  tempPoint.setDeltaYValue(tmp[4].trim());
+							  tempPoint.setDeltaZName("dz");
+							  tempPoint.setDeltaZValue(tmp[5].trim());
+							  tempPoint.setFolderTag("point");
+							  dataset.add(tempPoint);
+						 } else {
+							  break;
+						 }
 					}
-				}
-				skipthreelines++;
-			}
-			in.close();
-			instream.close();
-		} catch (IOException ex1) {
-			ex1.printStackTrace();
-		}
-		return (PointEntry[]) (dataset.toArray(new PointEntry[dataset.size()]));
+					skipthreelines++;
+			  }
+			  in.close();
+			  instream.close();
+		 } catch (IOException ex1) {
+			  ex1.printStackTrace();
+		 }
+		 return (PointEntry[]) (dataset.toArray(new PointEntry[dataset.size()]));
 	}	
     
 	 // End main execution method section.
