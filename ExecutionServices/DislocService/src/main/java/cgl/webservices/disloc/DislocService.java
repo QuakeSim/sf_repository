@@ -160,14 +160,10 @@ public class DislocService extends AntVisco implements Runnable {
 		  //Create the input file.  First create the grid points
 		  
 		  //Print the header line
-// 		  pw.println(dislocParams.getOriginLat()
-// 						 +space+dislocParams.getOriginLon()
-// 						 +space+dislocParams.getObservationPointStyle());
-
-		  //The project origin is the lat/lon start values of the first fault.
-		  pw.println(faults[0].getFaultLatStart()
-						 +space+faults[0].getFaultLatStart()
+		  pw.println(dislocParams.getOriginLat()
+						 +space+dislocParams.getOriginLon()
 						 +space+dislocParams.getObservationPointStyle());
+
 		  
 		  //Print the observation point information
 		  if(dislocParams.getObservationPointStyle()==DislocConstants.GRID_OBSERVATION_STYLE) {
@@ -270,10 +266,10 @@ public class DislocService extends AntVisco implements Runnable {
     }
     
     private void makeWorkDir(String workDir) 
-	throws Exception {
-				
+		  throws Exception {
+		  
 		  System.out.println("Working Directory is "+workDir);
-
+		  
 		  String[] args0=new String[4];
         args0[0]="-DworkDir.prop="+workDir;
         args0[1]="-buildfile";
