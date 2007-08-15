@@ -48,10 +48,10 @@ public class DislocService extends AntVisco implements Runnable {
 	 public DislocService() throws Exception {
 		  this(false);
 	 }
-
+	 
 	 public DislocService(boolean useClassLoader) throws Exception {
 		  super();
-
+		  
 		  if(useClassLoader) {
 				System.out.println("Using classloader");
 				//This is useful for command line clients but does not work
@@ -83,7 +83,6 @@ public class DislocService extends AntVisco implements Runnable {
 		  binDir=properties.getProperty("bin.path");
 		  buildFilePath=properties.getProperty("build.file.path");
 		  antTarget=properties.getProperty("ant.target");
-		  
 	 }
 	 
 	 public DislocResultsBean runNonBlockingDisloc(String userName,
@@ -106,7 +105,7 @@ public class DislocService extends AntVisco implements Runnable {
 		  execute();
 		  return createDislocResultsBean(userName,projectName,jobStamp);
 	 }
-
+	 
 	 public DislocResultsBean runBlockingDisloc(String userName,
 															 String projectName,
 															 Fault[] faults,
@@ -159,12 +158,17 @@ public class DislocService extends AntVisco implements Runnable {
 		  PrintWriter pw=new PrintWriter(new FileWriter(inputFile),true);
 
 		  //Create the input file.  First create the grid points
-
+		  
 		  //Print the header line
-		  pw.println(dislocParams.getOriginLat()
-						 +space+dislocParams.getOriginLon()
-						 +space+dislocParams.getObservationPointStyle());
+// 		  pw.println(dislocParams.getOriginLat()
+// 						 +space+dislocParams.getOriginLon()
+// 						 +space+dislocParams.getObservationPointStyle());
 
+		  //The project origin is the lat/lon start values of the first fault.
+		  pw.println(faults[0].getFaultLatStart()
+						 +space+faults[0].getFaultLatStart()
+						 +space+dislocParams.getObservationPointStyle());
+		  
 		  //Print the observation point information
 		  if(dislocParams.getObservationPointStyle()==DislocConstants.GRID_OBSERVATION_STYLE) {
 				printGridObservationSites(pw, dislocParams);
@@ -219,49 +223,50 @@ public class DislocService extends AntVisco implements Runnable {
 	 }
 
     protected String generateBaseUrl(String userName,
-				     String projectName,
-				     String timeStamp) {
-	
-	//Need to be careful here because this must follow
-	//the workDir convention also.
-	String baseUrl=serverUrl+"/"+userName+"/"
-	    +projectName+"/"+"/"+timeStamp;
-	
-	return baseUrl;
+												 String projectName,
+												 String timeStamp) {
+		  
+		  //Need to be careful here because this must follow
+		  //the workDir convention also.
+		  String baseUrl=serverUrl+"/"+userName+"/"
+				+projectName+"/"+"/"+timeStamp;
+		  
+		  return baseUrl;
     }
     
     protected DislocResultsBean createDislocResultsBean(String userName,
-							String projectName,
-							String jobUIDStamp) {
-	DislocResultsBean drb=new DislocResultsBean();
-	
-	String baseUrl=generateBaseUrl(userName,projectName,jobUIDStamp);
-	
-	drb.setJobUIDStamp(jobUIDStamp);
-	drb.setProjectName(projectName);
-	drb.setInputFileUrl(baseUrl+"/"+projectName+".input");
-	drb.setOutputFileUrl(baseUrl+"/"+projectName+".output");
-	drb.setStdoutUrl(baseUrl+"/"+projectName+".stdout");
-	
-	return drb;
+																		  String projectName,
+																		  String jobUIDStamp) {
+		  DislocResultsBean drb=new DislocResultsBean();
+		  
+		  String baseUrl=generateBaseUrl(userName,projectName,jobUIDStamp);
+		  
+		  drb.setJobUIDStamp(jobUIDStamp);
+		  drb.setProjectName(projectName);
+		  drb.setInputFileUrl(baseUrl+"/"+projectName+".input");
+		  drb.setOutputFileUrl(baseUrl+"/"+projectName+".output");
+		  drb.setStdoutUrl(baseUrl+"/"+projectName+".stdout");
+		  
+		  return drb;
     }
     
 	 protected void printGridObservationSites(PrintWriter pw, 
-						  DislocParamsBean dislocParams) 
+															DislocParamsBean dislocParams) 
 	     throws Exception {
 	     
 	     pw.println(dislocParams.getGridMinXValue()
-			+space+dislocParams.getGridXSpacing()
-			+space+dislocParams.getGridXIterations()
-			+space+dislocParams.getGridMinYValue()
-			+space+dislocParams.getGridYSpacing()
-			+space+dislocParams.getGridYIterations());
+						 +space+dislocParams.getGridXSpacing()
+						 +space+dislocParams.getGridXIterations()
+						 +space+dislocParams.getGridMinYValue()
+						 +space+dislocParams.getGridYSpacing()
+						 +space+dislocParams.getGridYIterations());
 	     
 	 }
+
     protected void printScatterObservationSites(PrintWriter pw, 
-						DislocParamsBean dislocParams)  
-	throws Exception {
-	//Doesn't do anything yet.
+																DislocParamsBean dislocParams)  
+		  throws Exception {
+		  //Doesn't do anything yet.
     }
     
     private void makeWorkDir(String workDir) 
