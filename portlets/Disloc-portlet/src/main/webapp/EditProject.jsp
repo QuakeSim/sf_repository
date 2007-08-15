@@ -172,6 +172,18 @@ function dataTableSelectOneRadio(radio) {
 						<h:inputText id="FaultLocationY" 
 							value="#{DislocBean.currentFault.faultLocationY}" required="true" /> 
 					</h:panelGroup> 
+
+					<h:outputText value="Fault Origin Latitude:" />
+			      <h:panelGroup>
+						<h:inputText id="faultLat" value="#{DislocBean.currentFault.faultLatStart}"
+										 required="true" />
+					</h:panelGroup>
+
+					<h:outputText value="Fault Origin Longitude" />
+					<h:panelGroup>
+					<h:inputText id="faultLon" value="#{DislocBean.currentFault.faultLonStart}"
+									 required="true" />
+					</h:panelGroup>
  
 					<h:outputText  id="stuff21" value="Length:" /> 
 					<h:panelGroup  id="stuff22"> 

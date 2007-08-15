@@ -103,21 +103,6 @@ function dataTableSelectOneRadio(radio) {
 				errorStyle="color: red" />
 			</h:panelGroup>
 			
-			<h:outputText value="Specify the latitude of the problem origin:" />
-			<h:panelGroup>
-			<h:inputText id="origin_lat" value="#{DislocBean.origin_lat}"
-				required="true" />
-			<h:message for="origin_lat" showDetail="true" showSummary="true"
-				errorStyle="color: red" />
-			</h:panelGroup>
-
-			<h:outputText value="Specify the longitude of the problem origin:" />
-			<h:panelGroup>
-			<h:inputText id="origin_lon" value="#{DislocBean.origin_lon}"
-				required="true" />
-			<h:message for="origin_lon" showDetail="true" showSummary="true"
-				errorStyle="color: red" />
-			</h:panelGroup>
 			
 		</h:panelGrid>
 		<h:commandButton value="Make Selection"
