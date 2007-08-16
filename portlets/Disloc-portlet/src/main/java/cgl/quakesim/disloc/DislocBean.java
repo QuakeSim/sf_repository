@@ -97,8 +97,8 @@ public class DislocBean extends GenericSopacBean {
     String kmlGeneratorBaseurl;
     String kmlGeneratorUrl;
     
-    String origin_lat;
-    String origin_lon;
+    String origin_lat="0.0";
+    String origin_lon="0.0";
     
     String realPath;
     String codeName;
@@ -236,6 +236,8 @@ public class DislocBean extends GenericSopacBean {
 	 protected String createKml(DislocParamsBean dislocParams,
 										 DislocResultsBean dislocResultsBean) throws Exception {
 
+		  System.out.println("Creating the KML file");
+
 		  //Get the project lat/lon origin.  It is the lat/lon origin of the first fault.
 		  origin_lat=dislocParams.getOriginLat()+"";
 		  origin_lon=dislocParams.getOriginLon()+"";
@@ -343,38 +345,49 @@ public class DislocBean extends GenericSopacBean {
 					new BufferedReader(new InputStreamReader(instream)); 
 			  
 			  //Need to make sure this will work with multiple faults.
+			  Pattern p = Pattern.compile(" {1,20}");
 			  while ((line = in.readLine()) != null) {
-					if (skipthreelines <= 4) {
-						 
-					} else {
-						 if (!line.trim().equalsIgnoreCase("")) {
-							  PointEntry tempPoint = new PointEntry();
-							  Pattern p = Pattern.compile(" {1,20}");
-							  String tmp[] = p.split(line);
-							  
-							  //Look for NaN or other problems.
-							  for(int i=0;i<tmp.length;i++) {
-									String oldtmp=tmp[i];
-									if(tmp[i].trim().equalsIgnoreCase("nan")) {
-										 tmp[i]="0.0";
-									}
-							  }
+					String tmp[] = p.split(line);
 
-							  tempPoint.setX(tmp[1].trim());
-							  tempPoint.setY(tmp[2].trim());
-							  tempPoint.setDeltaXName("dx");
-							  tempPoint.setDeltaXValue(tmp[3].trim());
-							  tempPoint.setDeltaYName("dy");
-							  tempPoint.setDeltaYValue(tmp[4].trim());
-							  tempPoint.setDeltaZName("dz");
-							  tempPoint.setDeltaZValue(tmp[5].trim());
-							  tempPoint.setFolderTag("point");
-							  dataset.add(tempPoint);
-						 } else {
-							  break;
-						 }
+					System.out.println(line);
+					System.out.println("one:"+tmp[1].trim()+" two:"+tmp[2].trim());
+
+					if(tmp[1].trim().equals("x") 
+						&& tmp[2].trim().equals("y")) { 
+						 System.out.println("Past the faults");
+						 break;
 					}
-					skipthreelines++;
+			  }
+			  
+			  while ((line = in.readLine()) != null) {
+					if (!line.trim().equalsIgnoreCase("")) {
+						 System.out.println(line);
+						 PointEntry tempPoint = new PointEntry();
+
+						 String tmp[] = p.split(line);
+						 
+						 //Look for NaN or other problems.
+						 for(int i=0;i<tmp.length;i++) {
+							  String oldtmp=tmp[i];
+							  if(tmp[i].trim().equalsIgnoreCase("nan")) {
+									tmp[i]="0.0";
+							  }
+						 }
+						 
+						 tempPoint.setX(tmp[1].trim());
+						 tempPoint.setY(tmp[2].trim());
+						 tempPoint.setDeltaXName("dx");
+						 tempPoint.setDeltaXValue(tmp[3].trim());
+						 tempPoint.setDeltaYName("dy");
+						 tempPoint.setDeltaYValue(tmp[4].trim());
+						 tempPoint.setDeltaZName("dz");
+						 tempPoint.setDeltaZValue(tmp[5].trim());
+						 tempPoint.setFolderTag("point");
+						 dataset.add(tempPoint);
+					} 
+					else {
+						 break;
+					}
 			  }
 			  in.close();
 			  instream.close();
@@ -736,8 +749,11 @@ public class DislocBean extends GenericSopacBean {
 		      tmp_fault.setFaultStrikeAngle(strike);
 
 				//Now determine the fault's location in cartesian coordinates
-		      tmp_fault.setFaultLocationX(0.0);
-		      tmp_fault.setFaultLocationY(0.0);
+				double x1=(lonStart-Double.parseDouble(origin_lon))*factor;
+				double y1=(latStart-Double.parseDouble(origin_lat))*111.32;
+				System.out.println("Fault origin: "+x1+" "+y1);
+		      tmp_fault.setFaultLocationX(x1);
+		      tmp_fault.setFaultLocationY(y1);
 
 		  } catch (Exception ex) {
 		      ex.printStackTrace();
@@ -1371,7 +1387,6 @@ public class DislocBean extends GenericSopacBean {
 				//System.out.println("Got results:"+results.size());
 				while(results.hasNext()) {
 					 project=(DislocProjectBean)results.next();
-					 System.out.println("get project name list:"+project.getProjectName());
 					 myProjectNameList.add(new SelectItem(project.getProjectName(),
 																	  project.getProjectName()));
 				}

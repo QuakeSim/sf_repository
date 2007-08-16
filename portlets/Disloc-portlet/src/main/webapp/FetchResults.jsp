@@ -43,9 +43,15 @@ function dataTableSelectOneRadio(radio) {
 
 </script>
 <f:view>
-	<h:form>
+	<h:form id="f1">
+		<h:commandLink id="blah203" action="disloc-this">
+			<h:outputText id="blah129" value="Refresh Page" />
+		</h:commandLink>
+	</h:form>
+
+	<h:form id="f2">
 		<h:panelGrid id="pgridmain" columns="1" border="0">
-			<h:outputText id="header" escape="false" value="<h3>Archived Results</h3><br>" />
+			<h:outputText id="header" escape="false" value="<h2>Archived Results</h2><br>" />
 			<h:outputText id="dosomework" escape="false"
 				value="You have the following archived disloc runs. Click the link to download the desired file to your desk top. To save directly to your desktop, click your mouse's right button over the link and select<br>" />
 
@@ -131,8 +137,9 @@ function dataTableSelectOneRadio(radio) {
       </h:panelGrid>
 	</h:form>
 
-	<h:form>
 		<hr />
+	<h:form id="f3">
+
 		<h:commandLink id="blah20" action="disloc-this">
 			<h:outputText id="blah19" value="Refresh Page" />
 		</h:commandLink>

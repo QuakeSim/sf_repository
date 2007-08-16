@@ -58,33 +58,33 @@
     <td valign="top">
 	<f:view>    
     <h:form>
-	 <h:dataTable id="projectlist" 
+	 <h:dataTable id="projectlistdfe" 
 					  border="1"
 					  binding="#{DislocBean.myProjectSummaryDataTable}"
 					  var="summaryBean"
 					  value="#{DislocBean.myArchivedDislocResultsList}">
 					<h:column>
 					    <f:facet name="header">
-					    <h:outputText  id="blah0" value="Project Name"/>
+					    <h:outputText  id="dlkjfe0" value="Project Name"/>
 						 </f:facet>
-				       <h:outputText  id="blah1" value="#{summaryBean.projectName}"/>
+				       <h:outputText  id="dlkjfe1" value="#{summaryBean.projectName}"/>
 					</h:column>
 					<h:column>
 					    <f:facet name="header">
-					    <h:outputText id="blah3" value="Creation Date"/>
+					    <h:outputText id="dlkjfe3" value="Creation Date"/>
 						 </f:facet>
-				       <h:outputText id="blah2" value="#{summaryBean.creationDate}"/>
+				       <h:outputText id="dlkjfe2" value="#{summaryBean.creationDate}"/>
 					</h:column>
 
 					<h:column>
 					    <f:facet name="header">
-					    <h:outputText id="blah4" value="Job UID Stamp"/>
+					    <h:outputText id="dlkjfe4" value="Job UID Stamp"/>
 						 </f:facet>
-				       <h:outputText  id="blah5" value="#{summaryBean.jobUIDStamp}"/>
+				       <h:outputText  id="dlkjfe5" value="#{summaryBean.jobUIDStamp}"/>
 					</h:column>
 				<h:column>
 					<f:facet name="header">
-						<h:outputText id="blah18" escape="false" value="<b>Select</b>" />
+						<h:outputText id="dlkjfe18" escape="false" value="<b>Select</b>" />
 					</f:facet>
 						<h:panelGroup id="pgselect">
 							<h:commandButton id="SelectProject" value="Plot"
@@ -94,6 +94,12 @@
 
 	 </h:dataTable>
     </h:form>
+		<hr />
+	<h:form id="df3">
+		<h:commandLink id="dlkjfe2df0" action="disloc-this">
+			<h:outputText id="dlkjfe1dfe9" value="Refresh Page" />
+		</h:commandLink>
+	</h:form>
    </f:view>
     </td>
 	 </table>
