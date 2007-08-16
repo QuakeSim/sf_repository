@@ -730,10 +730,9 @@ public class DislocBean extends GenericSopacBean {
 		      // Calculate the length
 		      NumberFormat format = NumberFormat.getInstance();
 		      double d2r = Math.acos(-1.0) / 180.0;
-		      double factor = d2r* Math.cos(d2r * latStart)
-					 * (6378.139 * (1.0 - Math.sin(d2r * latStart) * Math.sin(d2r * latStart) / 298.247));
+				double flatten=1.0/298.247;
 		      
-		      double x = (lonEnd - lonStart) * factor;
+		      double x = (lonEnd - lonStart) * factor(lonStart,latStart);
 		      double y = (latEnd - latStart) * 111.32;
 		      //				String length = format.format(Math.sqrt(x * x + y * y));
 		      //				double length = Math.sqrt(x * x + y * y);
@@ -746,14 +745,20 @@ public class DislocBean extends GenericSopacBean {
 		      tmp_fault.setFaultWidth(width);
 		      tmp_fault.setFaultDepth(depth);
 		      tmp_fault.setFaultDipAngle(dip);
-		      tmp_fault.setFaultStrikeAngle(strike);
 
-				//Now determine the fault's location in cartesian coordinates
-				double x1=(lonStart-Double.parseDouble(origin_lon))*factor;
-				double y1=(latStart-Double.parseDouble(origin_lat))*111.32;
+				//This is the fault's strike angle
+ 				strike=Math.atan2(x,y)/d2r;
+ 		      tmp_fault.setFaultStrikeAngle(Double.parseDouble(format.format(strike)));				
+
+				//This is the (x,y) of the fault relative to the project's origin
+				//The project origin is the lower left lat/lon of the first fault.
+				double dorigin_lon=Double.parseDouble(origin_lon);
+				double dorigin_lat=Double.parseDouble(origin_lat);
+				double x1=(lonStart-dorigin_lon)*factor(dorigin_lon,dorigin_lat);
+				double y1=(latStart-dorigin_lat)*111.32;
 				System.out.println("Fault origin: "+x1+" "+y1);
-		      tmp_fault.setFaultLocationX(x1);
-		      tmp_fault.setFaultLocationY(y1);
+		      tmp_fault.setFaultLocationX(Double.parseDouble(format.format(x1)));
+				tmp_fault.setFaultLocationY(Double.parseDouble(format.format(y1)));
 
 		  } catch (Exception ex) {
 		      ex.printStackTrace();

@@ -161,6 +161,10 @@ public class MeshGeneratorBean extends GenericSopacBean {
     String plotTarget="";
     // --------------------------------------------------
 
+	 //Project origin placeholder, until I do a better job
+	 double origin_lon=0.0;
+	 double origin_lat=0.0;
+
     /**
      * The client constructor.
      */
@@ -764,24 +768,36 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				// Calculate the length
 				NumberFormat format = NumberFormat.getInstance();
 				double d2r = Math.acos(-1.0) / 180.0;
-				double factor = d2r
-					 * Math.cos(d2r * latStart)
-					 * (6378.139 * (1.0 - Math.sin(d2r * latStart)
-										 * Math.sin(d2r * latStart) / 298.247));
+				double flatten=1.0/298.247;
+// 				double factor = d2r
+// 					 * Math.cos(d2r * latStart)
+// 					 * (6378.139 * (1.0 - Math.sin(d2r * latStart)
+// 										 * Math.sin(d2r * latStart) / 298.247));
 				
-				double x = (lonEnd - lonStart) * factor;
+				double x = (lonEnd - lonStart) * factor(lonStart,latStart);
 				double y = (latEnd - latStart) * 111.32;
 				String length = format.format(Math.sqrt(x * x + y * y));
 				tmp_fault.setFaultName (theFault);
-				tmp_fault.setFaultLocationX("0.0");
-				tmp_fault.setFaultLocationY("0.0");
 				tmp_fault.setFaultLength(length);
 				tmp_fault.setFaultWidth(width);
 				tmp_fault.setFaultDepth(depth);
 				tmp_fault.setFaultDipAngle(dip);
-				tmp_fault.setFaultStrikeAngle(strike);
 				tmp_fault.setFaultSlip("");
 				tmp_fault.setFaultRakeAngle("");
+
+				//This is the fault's strike angle
+ 				double dstrike=Math.atan2(x,y)/d2r;
+ 		      tmp_fault.setFaultStrikeAngle(format.format(dstrike));				
+
+				//This is the (x,y) of the fault relative to the project's origin
+				//The project origin is the lower left lat/lon of the first fault.
+				double x1=(lonStart-origin_lon)*factor(origin_lon,origin_lat);
+				double y1=(latStart-origin_lat)*111.32;
+				System.out.println("Fault origin: "+x1+" "+y1);
+		      tmp_fault.setFaultLocationX(format.format(x1));
+				tmp_fault.setFaultLocationY(format.format(y1));
+				
+
 		  } catch (Exception ex) {
 				ex.printStackTrace();
 		  }
