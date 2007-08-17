@@ -45,11 +45,13 @@
         mgr.addMarker(marker,0,17);
     }
    
-    var exml = new EGeoXml("exml", map, ["<%= fileName %>"], {dropboxid:"dropboxdiv",addmarker:addMark});
+  //  var exml = new EGeoXml("exml", map, ["<%= fileName %>"], {dropboxid:"dropboxdiv",addmarker:addMark});
+  var exml = new EGeoXml("exml", map, ["<%= fileName %>"], {dropboxid:"dropboxdiv"});
     exml.parse();
-    GEvent.addListener(exml,"parse",function(){
-        mgr.refresh();
-     });
+
+//    GEvent.addListener(exml,"parse",function(){
+//        mgr.refresh();
+//     });
 
     //]]>
     </script>
