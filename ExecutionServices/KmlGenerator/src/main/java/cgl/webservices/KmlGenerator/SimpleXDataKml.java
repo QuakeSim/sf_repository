@@ -175,14 +175,14 @@ public class SimpleXDataKml {
 	}
 
 	public void setLineStyle(Folder curfolder, String id, String Color_value,
-			double line_width) {
-		Style gridlineStyle = new Style();
-		gridlineStyle.setId(id);
-		LineStyle newlineStyle = new LineStyle();
-		newlineStyle.setWidth((float) (line_width));
-		newlineStyle.setColor(Color_value);
-		gridlineStyle.addLineStyle(newlineStyle);
-		curfolder.addStyle(gridlineStyle);
+									 double line_width) {
+		 Style gridlineStyle = new Style();
+		 gridlineStyle.setId(id);
+		 LineStyle newlineStyle = new LineStyle();
+		 newlineStyle.setWidth((float) (line_width));
+		 newlineStyle.setColor(Color_value);
+		 gridlineStyle.addLineStyle(newlineStyle);
+		 curfolder.addStyle(gridlineStyle);
 	}
 
 	public void setIconStyle(String id, String iconhref) {
@@ -484,7 +484,10 @@ public class SimpleXDataKml {
 		} else {
 			container = root;
 		}
-		String linestyleid=LineColor+(int)(LineWidth);
+		
+		//This isn't done correctly so disable in anticipation of future brilliance.
+		//		String linestyleid=LineColor+(int)(LineWidth)
+		String linestyleid="";
 		setLineStyle(container, linestyleid, LineColor, LineWidth);
 		for (int i = 0; i < datalist.length; i++) {
 			// create and add a Placemark containing a Point
@@ -536,7 +539,7 @@ public class SimpleXDataKml {
 			mark1.setDescription(descriptionValue);
 
 			LineString newline = new LineString();
-			mark1.setStyleUrl("#" + linestyleid);
+			mark1.setStyleUrl(linestyleid);
 			String line_value = "";
 			double startx = original_xy.getX() + x * coordinateUnit;
 			double starty = original_xy.getY() + y * coordinateUnit;
