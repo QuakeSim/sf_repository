@@ -358,9 +358,6 @@ public class DislocBean extends GenericSopacBean {
 			  while ((line = in.readLine()) != null) {
 					String tmp[] = p.split(line);
 
-					System.out.println(line);
-					System.out.println("one:"+tmp[1].trim()+" two:"+tmp[2].trim());
-
 					if(tmp[1].trim().equals("x") 
 						&& tmp[2].trim().equals("y")) { 
 						 System.out.println("Past the faults");
@@ -370,7 +367,6 @@ public class DislocBean extends GenericSopacBean {
 			  
 			  while ((line = in.readLine()) != null) {
 					if (!line.trim().equalsIgnoreCase("")) {
-						 System.out.println(line);
 						 PointEntry tempPoint = new PointEntry();
 
 						 String tmp[] = p.split(line);

@@ -17,15 +17,6 @@
                    <value>Disloc</value>
                 </managed-property>
 
-                <managed-property>
-                   <property-name>origin_lat</property-name>
-                   <value>0.0</value>
-                </managed-property>
-                <managed-property>
-                   <property-name>origin_lon</property-name>
-                   <value>0.0</value>
-                </managed-property>
-
                  <managed-property>
                    <property-name>faultDBServiceUrl</property-name>
                    <value>http://gf2.ucs.indiana.edu:9090/axis/services/Select</value>
