@@ -69,9 +69,6 @@ function dataTableSelectOneRadio(radio) {
  
 				<h:outputFormat id="stuff1" escape="false" 
 					value="<b>Project Name: #{DislocBean.projectName} </b>" /> 
-
-			   <h:outputFormat escape="false" value="<b>Original lon: #{DislocBean.origin_lon} </b>" />
- 				<h:outputFormat escape="false" value="<b>Original lat: #{DislocBean.origin_lat} </b>" />
  
 				<h:selectOneRadio layout="pageDirection" id="subscriptions" 
 					value="#{DislocBean.projectSelectionCode}"> 
@@ -140,8 +137,7 @@ function dataTableSelectOneRadio(radio) {
  
 					<h:commandButton id="addobservation" value="select" 
 						actionListener="#{DislocBean.toggleAddObservationsForProject}" /> 
- 
- 
+
 				</h:panelGrid> 
 			</h:form> 
  

@@ -58,8 +58,8 @@
 
     <td valign="top">
 	<f:view>    
-    <h:form>
-	 <h:dataTable id="projectlistdfe" 
+    <h:form id="elkrheh">
+	 <h:dataTable id="projectlistdfeer" 
 					  border="1"
 					  binding="#{DislocBean.myProjectSummaryDataTable}"
 					  var="summaryBean"
@@ -87,7 +87,7 @@
 					<f:facet name="header">
 						<h:outputText id="dlkjfe18" escape="false" value="<b>Select</b>" />
 					</f:facet>
-						<h:panelGroup id="pgselect">
+						<h:panelGroup id="pgselecerert">
 							<h:commandButton id="SelectProject" value="Plot"
 												  actionListener="#{DislocBean.togglePlotProject}"/>
 						</h:panelGroup>

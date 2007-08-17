@@ -22,9 +22,17 @@ public class DislocParamsBean  implements java.io.Serializable {
 
     private int observationPointStyle;
 
-    private double originLat;
+	 //These are some impossible values that are used to indicate the proper values have not yet
+	 //been set.
+	 static double DEFAULT_LON=-9999.99;
+	 static double DEFAULT_LAT=-9999.99;
+	 
+	 double originLon=DEFAULT_LON;
+	 double originLat=DEFAULT_LAT;
 
-    private double originLon;
+//     private double originLat;
+
+//     private double originLon;
 
     public DislocParamsBean() {
     }

@@ -44,8 +44,8 @@ function dataTableSelectOneRadio(radio) {
 </script>
 <f:view>
 	<h:form id="f1">
-		<h:commandLink id="blah203" action="disloc-this">
-			<h:outputText id="blah129" value="Refresh Page" />
+		<h:commandLink id="blaheoru203" action="disloc-this">
+			<h:outputText id="blaheoru129" value="Refresh Page" />
 		</h:commandLink>
 	</h:form>
 
@@ -62,70 +62,69 @@ function dataTableSelectOneRadio(radio) {
 								 border="1">
 					<h:column>
 					    <f:facet name="header">
-					    <h:outputText  id="blah0" value="Project Name"/>
+					    <h:outputText  id="blaheoru0" value="Project Name"/>
 						 </f:facet>
-				       <h:outputText  id="blah1" value="#{summaryBean.projectName}"/>
+				       <h:outputText  id="blaheoru1" value="#{summaryBean.projectName}"/>
 					</h:column>
 
 					<h:column>
 					    <f:facet name="header">
-					    <h:outputText id="blah3" value="Creation Date"/>
+					    <h:outputText id="blaheoru3" value="Creation Date"/>
 						 </f:facet>
-				       <h:outputText id="blah2" value="#{summaryBean.creationDate}"/>
+				       <h:outputText id="blaheoru2" value="#{summaryBean.creationDate}"/>
 					</h:column>
 
 					<h:column>
 					    <f:facet name="header">
-					    <h:outputText id="blah4" value="Job UID Stamp"/>
+					    <h:outputText id="blaheoru4" value="Job UID Stamp"/>
 						 </f:facet>
-				       <h:outputText  id="blah5" value="#{summaryBean.jobUIDStamp}"/>
+				       <h:outputText  id="blaheoru5" value="#{summaryBean.jobUIDStamp}"/>
 					</h:column>
 	
 					<h:column>
 					<f:facet name="header">	 
-						    <h:outputText  id="blah6" value="Input File"/>
+						    <h:outputText  id="blaheoru6" value="Input File"/>
 				   </f:facet>
-				       <h:outputLink id="blah7" value="#{summaryBean.resultsBean.inputFileUrl}" target="_blank">
-						    <h:outputText id="blah8" value="Input"/>
-						 </h:outputLink>
-					</h:column>
-
-	
-					<h:column>
-					<f:facet name="header">
-						    <h:outputText id="blah9" value="Output File"/>
-				   </f:facet>
-				       <h:outputLink id="blah10" value="#{summaryBean.resultsBean.outputFileUrl}" target="_blank">
-						    <h:outputText id="blah11" value="Output"/>
+				       <h:outputLink id="blaheoru7" value="#{summaryBean.resultsBean.inputFileUrl}" target="_blank">
+						    <h:outputText id="blaheoru8" value="Input"/>
 						 </h:outputLink>
 					</h:column>
 
 					<h:column>
 					<f:facet name="header">
-						    <h:outputText id="blah12" value="Standard Out and Error"/>
+						    <h:outputText id="blaheoru9" value="Output File"/>
 				   </f:facet>
-				       <h:outputLink id="blah13" value="#{summaryBean.resultsBean.stdoutUrl}" target="_blank">
-						    <h:outputText id="blah14" value="Stdout"/>
+				       <h:outputLink id="blaheoru10" value="#{summaryBean.resultsBean.outputFileUrl}" target="_blank">
+						    <h:outputText id="blaheoru11" value="Output"/>
+						 </h:outputLink>
+					</h:column>
+
+					<h:column>
+					<f:facet name="header">
+						    <h:outputText id="blaheoru12" value="Standard Out and Error"/>
+				   </f:facet>
+				       <h:outputLink id="blaheoru13" value="#{summaryBean.resultsBean.stdoutUrl}" target="_blank">
+						    <h:outputText id="blaheoru14" value="Stdout"/>
 						 </h:outputLink>
 					</h:column>
 				<h:column>
 					<f:facet name="header">
-						<h:outputText  id="blah15" escape="false" value="<b>Kml file</b>" />
+						<h:outputText  id="blaheoru15" escape="false" value="<b>Kml file</b>" />
 					</f:facet>
 						<h:panelGroup id="pgkml">
-						<h:outputLink id="link5" value="#{summaryBean.kmlurl}" target="_blank">
+						<h:outputLink id="linkdre5" value="#{summaryBean.kmlurl}" target="_blank">
 							<h:outputText id="kdjfjk" value="[<b>Download</b>]" escape="false" />
 						</h:outputLink>
-						<h:outputText id="blah16" escape="false" value="<b> </b>" />
-						<h:outputLink id="link6" value="http://maps.google.com/maps?q=#{summaryBean.kmlurl}" target="_blank">
-							<h:outputText id="blah17" value="[<font size=1px>View In Google map</font>]" escape="false" />
+						<h:outputText id="blaheoru16" escape="false" value="<b> </b>" />
+						<h:outputLink id="linkdre6" value="http://maps.google.com/maps?q=#{summaryBean.kmlurl}" target="_blank">
+							<h:outputText id="blaheoru17" value="[<font size=1px>View In Google map</font>]" escape="false" />
 						</h:outputLink>
 						</h:panelGroup>
 				</h:column>					
 
 				<h:column>
 					<f:facet name="header">
-						<h:outputText id="blah18" escape="false" value="<b>Delete</b>" />
+						<h:outputText id="blaheoru18" escape="false" value="<b>Delete</b>" />
 					</f:facet>
 						<h:panelGroup id="pgdelete">
 							<h:commandButton id="DeleteSummary" value="Delete"
@@ -140,8 +139,8 @@ function dataTableSelectOneRadio(radio) {
 		<hr />
 	<h:form id="f3">
 
-		<h:commandLink id="blah20" action="disloc-this">
-			<h:outputText id="blah19" value="Refresh Page" />
+		<h:commandLink id="blaheoru20" action="disloc-this">
+			<h:outputText id="blaheoru19" value="Refresh Page" />
 		</h:commandLink>
 	</h:form>
 
