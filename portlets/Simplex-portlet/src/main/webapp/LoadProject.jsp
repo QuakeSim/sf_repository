@@ -54,80 +54,83 @@ function dataTableSelectOneRadio(radio) {
 </script>
 
 <f:view>
-	<h:form>
-	<h:outputText styleClass="header2" value="Project Archive"/>
+	<h:form id="lkdjf1">
+	<h:outputText  id="lkdjf2" styleClass="header2" value="Project Archive"/>
         <p/>
-		  <h:outputText value="You don't have any archived projects."
+		  <h:outputText  id="lkdjf3" value="You don't have any archived projects."
 							 rendered="#{empty SimplexBean.myProjectNameList}"/>
 
-		<h:panelGrid columns="2" 
+		<h:panelGrid id="lkdjf4"
+						 columns="2" 
 						 rendered="#{!(empty SimplexBean.myProjectNameList)}"		 
 						 border="1">
-			<h:panelGrid columns="1" border="0">
-				<h:outputText escape="false" value="<b>Select Projects</b><br><br>" />
-				<h:outputText escape="false"
-					value="Please select from one of the previous projects." />
-				<h:selectManyCheckbox id="projectlistforload" value="#{SimplexBean.selectProjectsList}"
-					onchange="dataTableSelectOneRadio(this)"
-					onclick="dataTableSelectOneRadio(this)"
-					layout="pageDirection">
+			<h:panelGrid  id="lkdjf5" columns="1" border="0">
+				<h:outputText  id="lkdjf6" escape="false" value="<b>Select Projects</b><br><br>" />
+				<h:outputText id="lkdjf7" 
+								  escape="false"
+								value="Please select from one of the previous projects." />
+				<h:selectManyCheckbox id="projectlistforload" 
+											 value="#{SimplexBean.selectProjectsList}"
+											 onchange="dataTableSelectOneRadio(this)"
+											 onclick="dataTableSelectOneRadio(this)"
+											 layout="pageDirection">
 					
 					<f:selectItems value="#{SimplexBean.myProjectNameList}" />
 				</h:selectManyCheckbox>
-				<h:commandButton value="Select"
-					action="#{SimplexBean.toggleSelectProject}" />
+				<h:commandButton id="lkdjf8" value="Select"
+									  action="#{SimplexBean.toggleSelectProject}" />
 			</h:panelGrid>
-			<h:panelGrid columns="1" border="0">
-				<h:outputText escape="false" value="<b>Select Projects</b><br><br>" />
-				<h:outputText escape="false"
+			<h:panelGrid id="lkdjf9" columns="1" border="0">
+				<h:outputText id="lkdjf10" escape="false" value="<b>Select Projects</b><br><br>" />
+				<h:outputText  id="lkdjf11" escape="false"
 					value="Please select from one of the previous projects." />
 				<h:selectManyCheckbox id="projectfordelete" value="#{SimplexBean.deleteProjectsList}"
 					layout="pageDirection">
 					<f:selectItems value="#{SimplexBean.myProjectNameList}" />
 				</h:selectManyCheckbox>
-				<h:commandButton value="Delete"
+				<h:commandButton id="lkdjf12" value="Delete"
 					action="#{SimplexBean.toggleDeleteProject}" />
 			</h:panelGrid>
 		</h:panelGrid>
 
 	</h:form>
 
-	<h:form>
+	<h:form id="lkdjf13">
 		<b>New Project Name</b>
-		<h:panelGrid columns="2" border="0">
-			<h:outputText value="Provide a Project Name:" />
-			<h:panelGroup>
+		<h:panelGrid id="lkdjf14" columns="2" border="0">
+			<h:outputText id="lkdjf15" value="Provide a Project Name:" />
+			<h:panelGroup id="lkdjf16">
 			<h:inputText id="projectName" value="#{SimplexBean.projectName}"
 				required="true" />
 			<h:message for="projectName" showDetail="true" showSummary="true"
 				errorStyle="color: red" />
 			</h:panelGroup>
 			
-			<h:outputText value="Problem starting temperature:" />
-			<h:panelGroup>
+			<h:outputText id="lkdjf17" value="Problem starting temperature:" />
+			<h:panelGroup id="lkdjf18">
 			<h:inputText id="startTemp" value="#{SimplexBean.currentProjectEntry.startTemp}"
 				required="true" />
 			<h:message for="startTemp" showDetail="true" showSummary="true"
 				errorStyle="color: red" />
 			</h:panelGroup>
 
-			<h:outputText value="Specify the maximum number of iterations:" />
-			<h:panelGroup>
+			<h:outputText id="lkdjf19" value="Specify the maximum number of iterations:" />
+			<h:panelGroup id="lkdjf111">
 			<h:inputText id="maxIters" value="#{SimplexBean.currentProjectEntry.maxIters}"
 				required="true" />
-			<h:message for="maxIters" showDetail="true" showSummary="true"
+			<h:message  id="lkdjf112" for="maxIters" showDetail="true" showSummary="true"
 				errorStyle="color: red" />
 			</h:panelGroup>			
 		</h:panelGrid>
 		
-		<h:commandButton value="Create Project"
+		<h:commandButton id="lkdjf113" value="Create Project"
 							action="#{SimplexBean.NewProjectThenEditProject}" />
 	</h:form>	
 
-	<h:form>
+	<h:form id="lkdjf114">
 		<hr />
-		<h:commandLink action="Simplex2-back">
-			<h:outputText value="#{SimplexBean.codeName} Main Menu" />
+		<h:commandLink  id="lkdjf115" action="Simplex2-back">
+			<h:outputText id="lkdjf116" value="#{SimplexBean.codeName} Main Menu" />
 		</h:commandLink>
 	</h:form>
 </f:view>

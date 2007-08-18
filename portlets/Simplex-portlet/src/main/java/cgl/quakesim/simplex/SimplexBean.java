@@ -53,7 +53,7 @@ public class SimplexBean extends GenericSopacBean {
 	 
 	 String selectdbURL="";
 	 
-	 editProjectForm currentEditProjectForm = new editProjectForm(selectdbURL);
+	 editProjectForm currentEditProjectForm;
 	 
 	 List myFaultEntryForProjectList = new ArrayList();
 	 
@@ -577,6 +577,7 @@ public class SimplexBean extends GenericSopacBean {
 	 
 	 public String NewProjectThenEditProject() throws Exception {
 		  createNewProject();
+		  currentEditProjectForm=new editProjectForm(selectdbURL);
 		  currentEditProjectForm.init_edit_project();
 		  return "Simplex2-edit-project";
 	}
@@ -620,6 +621,7 @@ public class SimplexBean extends GenericSopacBean {
 	  * 
 	  */ 
 	 public String toggleSelectProject() {
+		  currentEditProjectForm=new editProjectForm(selectdbURL);
 		  currentEditProjectForm.initEditFormsSelection();
 		  if (selectProjectsList != null) {
 				for (int i = 0; i < 1; i++) {
