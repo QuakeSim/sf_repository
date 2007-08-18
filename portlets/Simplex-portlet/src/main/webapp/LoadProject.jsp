@@ -117,29 +117,12 @@ function dataTableSelectOneRadio(radio) {
 				required="true" />
 			<h:message for="maxIters" showDetail="true" showSummary="true"
 				errorStyle="color: red" />
-			</h:panelGroup>
-
-			<h:outputText value="Specify the latitude of the problem origin:" />
-			<h:panelGroup>
-			<h:inputText id="origin_lat" value="#{SimplexBean.currentProjectEntry.origin_lat}"
-				required="true" />
-			<h:message for="origin_lat" showDetail="true" showSummary="true"
-				errorStyle="color: red" />
-			</h:panelGroup>
-
-			<h:outputText value="Specify the longitude of the problem origin:" />
-			<h:panelGroup>
-			<h:inputText id="origin_lon" value="#{SimplexBean.currentProjectEntry.origin_lon}"
-				required="true" />
-			<h:message for="origin_lon" showDetail="true" showSummary="true"
-				errorStyle="color: red" />
-			</h:panelGroup>
-			
+			</h:panelGroup>			
 		</h:panelGrid>
+		
 		<h:commandButton value="Create Project"
-			action="#{SimplexBean.NewProjectThenEditProject}" />
-
-	</h:form>
+							action="#{SimplexBean.NewProjectThenEditProject}" />
+	</h:form>	
 
 	<h:form>
 		<hr />

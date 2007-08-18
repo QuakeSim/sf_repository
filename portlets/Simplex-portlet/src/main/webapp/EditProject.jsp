@@ -73,10 +73,6 @@ vertical-align:top;
 						value="<b>Starting Temperature:</b> #{SimplexBean.currentProjectEntry.startTemp} <br>" />
 					<h:outputFormat escape="false"
 						value="<b>Maximum Iterations:</b> #{SimplexBean.currentProjectEntry.maxIters} <br>" />
-					<h:outputFormat escape="false"
-						value="<b>Latitude of Problem Origin:</b> #{SimplexBean.currentProjectEntry.origin_lat} <br>" />
-					<h:outputFormat escape="false"
-						value="<b>Longitude of Problem Origin:</b> #{SimplexBean.currentProjectEntry.origin_lon} <br><br><br>" />
 
 					<h:selectOneRadio layout="pageDirection" id="subscriptions"
 						value="#{SimplexBean.currentEditProjectForm.projectSelectionCode}">

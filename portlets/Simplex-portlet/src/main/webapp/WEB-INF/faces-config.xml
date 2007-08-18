@@ -9,7 +9,7 @@
 	<!-- managed beans of the simple hello world app -->
 	<managed-bean>
 		<managed-bean-name>SimplexBean</managed-bean-name>
-		<managed-bean-class>org.apache.myfaces.blank.SimplexBean</managed-bean-class>
+		<managed-bean-class>cgl.quakesim.simplex.SimplexBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
                 <!--Who we are-->
                 <managed-property>
@@ -24,10 +24,6 @@
                  </managed-property>
  
                 <!-- Needed for the context service-->
-                <managed-property>
-                   <property-name>contextUrl</property-name>
-                   <value>http://gf7.ucs.indiana.edu:8080/WebServices/services/ContextManager</value>
-                 </managed-property>
                  <managed-property>
                    <property-name>contextBasePath</property-name>
                    <value>/WebServices/WEB-INF/Descriptors/users/</value>
@@ -36,13 +32,13 @@
                 <!-- Needed for the simplex service-->
                 <managed-property>
                    <property-name>simpleXServiceUrl</property-name>
-                   <value>http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec</value>
+                   <value>http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec</value>
                  </managed-property>
                  
                  <!--  Needed for the kmlGenerator service -->
                  <managed-property>
                  	<property-name>kmlGeneratorUrl</property-name>
-                 	<value>http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator</value>
+                 	<value>http://gf19.ucs.indiana.edu:8080/KmlGenerator/services/KmlGenerator</value>
                  </managed-property>
 	</managed-bean>
 
