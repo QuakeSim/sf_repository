@@ -26,31 +26,25 @@ import java.rmi.server.UID;
  */
 
 public class SimpleXService extends AntVisco implements Runnable {
-	static Logger logger = Logger.getLogger(SimpleXService.class);
-
-	final String FILE_PROTOCOL = "file";
-
-	final String HTTP_PROTOCOL = "http";
-
-	// These are the system properties that may have
-	// default values.
-	Properties properties;
-
-	String serverUrl;
-
-	String baseWorkDir;
-
-	String baseDestDir;
-
-	String baseOutputDestDir;
-
-	String projectName;
-
-	String binDir;
-
-	String buildFilePath;
-
-	String antTarget;
+	 static Logger logger = Logger.getLogger(SimpleXService.class);
+	 
+	 final String FILE_PROTOCOL = "file";
+	 
+	 final String HTTP_PROTOCOL = "http";
+	 
+	 // These are the system properties that may have
+	 // default values.
+	 Properties properties;
+	 
+	 String serverUrl;
+	 String baseWorkDir;
+	 String baseDestDir;
+	 String baseOutputDestDir;
+	 String projectName;
+	 String binDir;
+	 String buildFilePath;
+	 String antTarget;
+	 String creationDate;
 
 	/**
 	 * This is a main() for testing.
@@ -66,30 +60,28 @@ public class SimpleXService extends AntVisco implements Runnable {
 
 		String userName = "duhFaultUser";
 		String projectName = "faultsatmyfeet";
-
+		
 		try {
-			// Make the mesh.
-			SimpleXService gfs = new SimpleXService(true);
-
-			String timeStamp = gfs.generateTimeStamp();
-			System.out.println("Running blocking version");
-			SimpleXOutputBean sxb = gfs.runSimplex(userName, projectName,
-					faults, observations, "1", "2", "12", "23", "Url",
-					timeStamp);
-
+			 // Make the mesh.
+			 SimpleXService gfs = new SimpleXService(true);
+			 
+			 String timeStamp = gfs.generateTimeStamp();
+			 System.out.println("Running blocking version");
+			 SimpleXOutputBean sxb = gfs.runSimplex(userName, projectName,
+																 faults, observations, "1", "2", "12", "23", "Url",
+																 timeStamp);
+			 
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			 ex.printStackTrace();
 		}
 	}
-
+	 
 	/**
 	 * The constructor. Set useClassLoader=true when running on the command
 	 * line.
 	 */
 	public SimpleXService(boolean useClassLoader) throws Exception {
-
 		super();
-
 		if (useClassLoader) {
 			// System.out.println("Using classloader");
 			// This is useful for command line clients but does not work
@@ -341,23 +333,36 @@ public class SimpleXService extends AntVisco implements Runnable {
 	 * output file. String [3] is the standard output of geofest. String [4] is
 	 * the simplex log file.
 	 */
-	public SimpleXOutputBean runSimplex(String userName, String projectName,
-			Fault[] faults, Observation[] obsv, String startTemp,
-			String maxIters, String origin_lon, String origin_lat,
-			String KmlGeneratorUrl, String timeStamp) throws Exception {
+	 public SimpleXOutputBean runSimplex(String userName, String projectName,
+													 Fault[] faults, Observation[] obsv, String startTemp,
+													 String maxIters, String origin_lon, String origin_lat,
+													 String KmlGeneratorUrl, String timeStamp) throws Exception {
+		  
+		  // The target is always "tar.all".
 
-		// The target is always "tar.all".
-		String[] args = prefabSimpleXCall(userName, projectName, faults, obsv,
-				startTemp, maxIters, timeStamp);
-		setArgs(args);
-		run();
-		return getAllTheSimpleXFiles(KmlGeneratorUrl, userName, projectName,
-				origin_lon, origin_lat, faults, timeStamp);
-	}
+		  String[] args = prefabSimpleXCall(userName, projectName, faults, obsv,
+														startTemp, maxIters, timeStamp);
+		  setArgs(args);
+		  run();
+		  creationDate=createCreationDate();
+		  return getAllTheSimpleXFiles(KmlGeneratorUrl, 
+												 userName, 
+												 projectName,
+												 origin_lon, 
+												 origin_lat, 
+												 faults, 
+												 timeStamp,
+												 creationDate);
+	 }
 
-	protected SimpleXOutputBean getAllTheSimpleXFiles(
-			String KmlGeneratorServiceUrl, String userName, String projectName,
-			String lon, String lat, Fault[] faults, String jobUIDStamp) {
+	protected SimpleXOutputBean getAllTheSimpleXFiles(String KmlGeneratorServiceUrl, 
+																	  String userName, 
+																	  String projectName,
+																	  String lon, 
+																	  String lat, 
+																	  Fault[] faults, 
+																	  String jobUIDStamp, 
+																	  String creationDate) {
 
 		SimpleXOutputBean sxoutput = new SimpleXOutputBean();
 		String baseUrl = generateBaseUrl(userName, projectName, jobUIDStamp);
@@ -389,6 +394,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 		sxoutput.setOutputUrl(baseUrl + "/" + projectName + ".output");
 		sxoutput.setLogUrl(baseUrl + "/" + projectName + ".stdout");
 		sxoutput.setFaultUrl(baseUrl + "/" + projectName + ".fault");
+		sxoutput.setCreationDate(creationDate);
 
 		// System.out.println(sxoutput.getProjectName());
 		// System.out.println(sxoutput.getJobUIDStamp());
@@ -1016,33 +1022,38 @@ public class SimpleXService extends AntVisco implements Runnable {
 		return returnFiles;
 	}
 
-	/**
-	 * Generate a ticket. This can be used to make "gentle" status queries
-	 * later.
-	 */
-	protected String generateTimeStamp() {
-		// String stringDate=(new Date().getTime())+"";
-		// String stringDate="NOW";
-		// short s=1;
-		String stringDate = (new UID().toString());
-		return stringDate;
-	}
-
-	// --------------------------------------------------
-	// Substitutes underscores for blanks in the
-	// provided string.
-	// --------------------------------------------------
-	protected String removeSpaces(String spacyString) {
-		spacyString = spacyString.trim();
-		// Get rid of spaces
-		while (spacyString.indexOf(" ") > -1) {
-			spacyString = spacyString.substring(0, spacyString.indexOf(" "))
-					+ ""
-					+ spacyString.substring(spacyString.indexOf(" ") + 1,
-							spacyString.length());
-
-		}
-		return spacyString;
-	}
-
+	 /**
+	  * Generate a ticket. This can be used to make "gentle" status queries
+	  * later.
+	  */
+	 protected String generateTimeStamp() {
+		  // String stringDate=(new Date().getTime())+"";
+		  // String stringDate="NOW";
+		  // short s=1;
+		  String stringDate = (new UID().toString());
+		  return stringDate;
+	 }
+	 
+	 // --------------------------------------------------
+	 // Substitutes underscores for blanks in the
+	 // provided string.
+	 // --------------------------------------------------
+	 protected String removeSpaces(String spacyString) {
+		  spacyString = spacyString.trim();
+		  // Get rid of spaces
+		  while (spacyString.indexOf(" ") > -1) {
+				spacyString = spacyString.substring(0, spacyString.indexOf(" "))
+					 + ""
+					 + spacyString.substring(spacyString.indexOf(" ") + 1,
+													 spacyString.length());
+				
+		  }
+		  return spacyString;
+	 }
+	 
+	 //This is not to be confused with a getter/setter.
+	 protected String createCreationDate() {
+		  creationDate=(new Date()).toString();
+		  return creationDate;
+	 }
 }

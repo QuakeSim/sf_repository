@@ -3,27 +3,37 @@ package cgl.webservices.simplex;
  * This bean holds the metadata of a simplex run, including urls to output.
  */
 public class SimpleXOutputBean {
+	 
+	 // Member property fields
+	 String projectName;
+	 
+	 String jobUIDStamp;
+	 
+	 String inputUrl;
+	 
+	 String outputUrl;
+	 
+	 String logUrl;
+	 
+	 String faultUrl;
+	 
+	 String[] kmlUrls;
+	 
+	 boolean view;
+	 
+	 String creationDate;
 
-	// Member property fields
-	String projectName;
+	 public void setCreationDate(String creationDate) {
+		  this.creationDate=creationDate;
+	 }
+	 
+	 public String getCreationDate() {
+		  return creationDate;
+	 }
 
-	String jobUIDStamp;
-
-	String inputUrl;
-
-	String outputUrl;
-
-	String logUrl;
-
-	String faultUrl;
-	
-	String[] kmlUrls;
-
-	boolean view;
-
-	public void setView(boolean tmp_str) {
-		this.view = tmp_str;
-	}
+	 public void setView(boolean tmp_str) {
+		  this.view = tmp_str;
+	 }
 
 	public boolean getView() {
 		return view;
