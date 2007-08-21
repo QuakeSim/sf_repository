@@ -358,4 +358,17 @@ public class GenericProjectBean {
 		  return realPath;
 	 }
 
+	 /**
+	  * The "factor" is used in numerous calculations to convert between cartesian and lat/lon
+	  * coordinates.
+	  */
+	 public double factor(double refLon, double refLat) {
+		  double d2r = Math.acos(-1.0) / 180.0;
+		  double flatten=1.0/298.247;
+		  
+		  double theFactor = d2r* Math.cos(d2r * refLat)
+				* 6378.139 * (1.0 - Math.sin(d2r * refLon) * Math.sin(d2r * refLon) * flatten);
+
+		  return theFactor;
+	 }
 }
