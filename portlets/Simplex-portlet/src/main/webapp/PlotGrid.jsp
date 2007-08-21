@@ -2,8 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 
-<%@ page import="org.apache.myfaces.blank.SimplexBean" %>
-<jsp:useBean id="SimplexBean" scope="session" class="org.apache.myfaces.blank.SimplexBean"/>
+<%@ page import="cgl.quakesim.simplex.SimplexBean" %>
+<jsp:useBean id="SimplexBean" scope="session" class="cgl.quakesim.simplex.SimplexBean"/>
 
 <html xmlns="http://www.w3.org/1999/xhtml">  <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
@@ -18,7 +18,6 @@
 	  String fileName=simplexBean.getKmlProjectFile();
 	  simplexBean.setCodeName("Simplex2");
 	  simplexBean.setContextBasePath("/WebServices/WEB-INF/Descriptors/users/");
-
   %>
 
    <table>
@@ -67,15 +66,23 @@
 					  var="summaryBean">
 					<h:column>
 					    <f:facet name="header">
-					    <h:outputText  id="blah0" value="Project Name"/>
+					    <h:outputText  id="blaher0er" value="Project Name"/>
 						 </f:facet>
-				       <h:outputText  id="blah1" value="#{summaryBean.projectName}"/>
+				       <h:outputText  id="blah1ere34" value="#{summaryBean.projectName}"/>
 					</h:column>
+
 				<h:column>
 					<f:facet name="header">
-						<h:outputText id="blah18" escape="false" value="<b>Select</b>" />
+						<h:outputText  id="kjb132623d" escape="false" value="<b>Creation Date</b>" />
 					</f:facet>
-						<h:panelGroup id="pgselect">
+					<h:outputText id="kj45rb15123cr4d" value="#{summaryBean.creationDate}" />
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">
+						<h:outputText id="blah1er8er" escape="false" value="<b>Select</b>" />
+					</f:facet>
+						<h:panelGroup id="pgselect34cd">
 							<h:commandButton id="SelectProject" value="Plot"
 												  actionListener="#{SimplexBean.togglePlotProject}"/>
 						</h:panelGroup>

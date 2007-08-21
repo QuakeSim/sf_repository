@@ -66,14 +66,18 @@ vertical-align:top;
 	<h:panelGrid id="panelgrid" columns="2" border="0"
 					 columnClasses="alignTop, alignTop">
 		<h:panelGrid id="EditProject" columns="1" border="1">
-			<h:form id="selectproj">
-				<h:panelGroup id="lkdrq3">
+			<h:panelGroup id="lkdrq3">
+			   <h:form id="selectproj">
 					<h:outputFormat id="lkdrq4" escape="false"
 						value="<b>Project Name:</b> #{SimplexBean.projectName} <br>" />
 					<h:outputFormat id="lkdrq5" escape="false"
 						value="<b>Starting Temperature:</b> #{SimplexBean.currentProjectEntry.startTemp} <br>" />
 					<h:outputFormat id="lkdrq6" escape="false"
 						value="<b>Maximum Iterations:</b> #{SimplexBean.currentProjectEntry.maxIters} <br>" />
+					<h:outputText id="lkj3034f" escape="false"
+					   value="<b>Project Lat/Lon Origin:</b> 
+						(#{SimplexBean.currentProjectEntry.origin_lat},
+						#{SimplexBean.currentProjectEntry.origin_lon})"/>
 
 					<h:selectOneRadio layout="pageDirection" id="subscriptions"
 						value="#{SimplexBean.currentEditProjectForm.projectSelectionCode}">
@@ -93,8 +97,15 @@ vertical-align:top;
 					<h:commandButton id="button1" value="Make Selection"
 						actionListener="#{SimplexBean.currentEditProjectForm.toggleProjectSelection}">
 					</h:commandButton>
-				</h:panelGroup>
-			</h:form>
+			   </h:form>
+  		      <h:form id="dflelerkljk185">
+            <h:outputText value="Simplex is ready to run.  Click the button below to launch."/>
+		      <h:commandButton rendered="#{!empty SimplexBean.myObservationEntryForProjectList
+							  				  && !empty SimplexBean.myFaultEntryForProjectList}"
+							  				  id="runSimplex2" value="Run Simplex2"
+							  				  action="#{SimplexBean.toggleRunSimplex2}" />
+			   </h:form>
+		   </h:panelGroup>
 
 			<h:panelGroup id="lkdrq7">
 					 <h:form id="obsvCutPaste"
@@ -110,7 +121,6 @@ vertical-align:top;
 						</h:panelGrid>
 					 </h:form>
 			</h:panelGroup>
-
 
 			<h:panelGroup id="lkdrq8">
 				<h:form id="observationform"
@@ -216,6 +226,7 @@ vertical-align:top;
 							<h:message for="FaultName" showDetail="true" showSummary="true"
 								errorStyle="color: red" />
 						</h:panelGroup>
+						<h:outputText value=""/>
 
 						<h:outputText id="lkdrq119" value="Location X:" />
 						<h:panelGroup id="lkdrq1181">
@@ -239,7 +250,6 @@ vertical-align:top;
 						<h:selectBooleanCheckbox id="faultOriginYVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultOriginYVary}" />
 
-
 						<h:outputText id="lkdrq1186" value="Length:" />
 						<h:panelGroup id="lkdrq1187">
 							<h:inputText id="FaultLength"
@@ -251,7 +261,6 @@ vertical-align:top;
 						<h:selectBooleanCheckbox id="faultLengthVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLengthVary}" />
 
-
 						<h:outputText id="lkdrq1189" value="Width:" />
 						<h:panelGroup id="lkdrq11811">
 							<h:inputText id="FaultWidth"
@@ -262,7 +271,6 @@ vertical-align:top;
 						</h:panelGroup>
 						<h:selectBooleanCheckbox id="faultWidthVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultWidthVary}" />
-
 
 						<h:outputText id="lkdrq11813" value="Depth:" />
 						<h:panelGroup id="lkdrq11814">
@@ -590,9 +598,7 @@ vertical-align:top;
 									<f:facet name="header">
 										<h:outputText id="dflelerkljk171" escape="false" value="<b>Remove</b>" />
 									</f:facet>
-									<h:selectBooleanCheckbox id="dflelerkljk172" value="#{myentry3.delete}"
-										onchange="selectOne(this.form,this)"
-										onclick="selectOne(this.form,this)" />
+									<h:selectBooleanCheckbox id="dflelerkljk172" value="#{myentry3.delete}"/>
 								</h:column>
 							</h:dataTable>
 						</h:panelGroup>
@@ -647,11 +653,6 @@ vertical-align:top;
 				</h:form>
 			</h:panelGroup>
 		</h:panelGrid>
-		
-		<h:form id="dflelerkljk185">
-		<h:commandButton id="runSimplex2" value="Run Simplex2"
-			action="#{SimplexBean.toggleRunSimplex2}" />
-		</h:form>
 	</h:panelGrid>
 
 		<hr />

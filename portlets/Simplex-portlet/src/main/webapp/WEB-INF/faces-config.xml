@@ -32,13 +32,13 @@
                 <!-- Needed for the simplex service-->
                 <managed-property>
                    <property-name>simpleXServiceUrl</property-name>
-                   <value>http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec</value>
+                   <value>http://localhost:8080/simplexexec/services/SimpleXExec</value>
                  </managed-property>
                  
                  <!--  Needed for the kmlGenerator service -->
                  <managed-property>
                  	<property-name>kmlGeneratorUrl</property-name>
-                 	<value>http://gf19.ucs.indiana.edu:8080/KmlGenerator/services/KmlGenerator</value>
+                 	<value>http://localhost:8080/KmlGenerator/services/KmlGenerator</value>
                  </managed-property>
 	</managed-bean>
 

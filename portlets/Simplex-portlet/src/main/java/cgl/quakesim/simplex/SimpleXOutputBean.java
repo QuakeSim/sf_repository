@@ -2,14 +2,14 @@
  * SimpleXOutputBean.java
  *
  * This file was auto-generated from WSDL
- * by the Apache Axis 1.3 Oct 05, 2005 (05:23:37 EDT) WSDL2Java emitter.
+ * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
 package cgl.quakesim.simplex;
 
-import java.util.Date;
-
 public class SimpleXOutputBean  implements java.io.Serializable {
+    private java.lang.String creationDate;
+
     private java.lang.String faultUrl;
 
     private java.lang.String inputUrl;
@@ -30,6 +30,7 @@ public class SimpleXOutputBean  implements java.io.Serializable {
     }
 
     public SimpleXOutputBean(
+           java.lang.String creationDate,
            java.lang.String faultUrl,
            java.lang.String inputUrl,
            java.lang.String jobUIDStamp,
@@ -38,6 +39,7 @@ public class SimpleXOutputBean  implements java.io.Serializable {
            java.lang.String outputUrl,
            java.lang.String projectName,
            boolean view) {
+           this.creationDate = creationDate;
            this.faultUrl = faultUrl;
            this.inputUrl = inputUrl;
            this.jobUIDStamp = jobUIDStamp;
@@ -46,6 +48,26 @@ public class SimpleXOutputBean  implements java.io.Serializable {
            this.outputUrl = outputUrl;
            this.projectName = projectName;
            this.view = view;
+    }
+
+
+    /**
+     * Gets the creationDate value for this SimpleXOutputBean.
+     * 
+     * @return creationDate
+     */
+    public java.lang.String getCreationDate() {
+        return creationDate;
+    }
+
+
+    /**
+     * Sets the creationDate value for this SimpleXOutputBean.
+     * 
+     * @param creationDate
+     */
+    public void setCreationDate(java.lang.String creationDate) {
+        this.creationDate = creationDate;
     }
 
 
@@ -194,7 +216,7 @@ public class SimpleXOutputBean  implements java.io.Serializable {
      * 
      * @return view
      */
-    public boolean getView() {
+    public boolean isView() {
         return view;
     }
 
@@ -220,6 +242,9 @@ public class SimpleXOutputBean  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
+            ((this.creationDate==null && other.getCreationDate()==null) || 
+             (this.creationDate!=null &&
+              this.creationDate.equals(other.getCreationDate()))) &&
             ((this.faultUrl==null && other.getFaultUrl()==null) || 
              (this.faultUrl!=null &&
               this.faultUrl.equals(other.getFaultUrl()))) &&
@@ -241,7 +266,7 @@ public class SimpleXOutputBean  implements java.io.Serializable {
             ((this.projectName==null && other.getProjectName()==null) || 
              (this.projectName!=null &&
               this.projectName.equals(other.getProjectName()))) &&
-            this.view == other.getView();
+            this.view == other.isView();
         __equalsCalc = null;
         return _equals;
     }
@@ -253,6 +278,9 @@ public class SimpleXOutputBean  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
+        if (getCreationDate() != null) {
+            _hashCode += getCreationDate().hashCode();
+        }
         if (getFaultUrl() != null) {
             _hashCode += getFaultUrl().hashCode();
         }
@@ -282,7 +310,7 @@ public class SimpleXOutputBean  implements java.io.Serializable {
         if (getProjectName() != null) {
             _hashCode += getProjectName().hashCode();
         }
-        _hashCode += (getView() ? Boolean.TRUE : Boolean.FALSE).hashCode();
+        _hashCode += (isView() ? Boolean.TRUE : Boolean.FALSE).hashCode();
         __hashCodeCalc = false;
         return _hashCode;
     }
@@ -294,6 +322,12 @@ public class SimpleXOutputBean  implements java.io.Serializable {
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("urn:SimpleXService", "SimpleXOutputBean"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("creationDate");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "creationDate"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("faultUrl");
         elemField.setXmlName(new javax.xml.namespace.QName("", "faultUrl"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));

@@ -4,9 +4,7 @@ package cgl.quakesim.simplex;
 import java.io.*;
 import java.net.*;
 import java.rmi.server.UID;
-import java.util.ArrayList;
-import java.util.List;
-import java .util.StringTokenizer;
+import java.util.*;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -82,12 +80,7 @@ public class SimplexBean extends GenericSopacBean {
 	 
 	 // This is our geofest service stub.
 	 SimpleXService simplexService;
-	 
-	 // 	String simpleXBaseUrl = "http://gf19.ucs.indiana.edu:8080/simplexexec/";
-	 // 	String simpleXServiceUrl = "http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec";
-	 // 	String kmlGeneratorBaseurl= "http://gf1.ucs.indiana.edu:13080/KmlGenerator/";
-	 // 	String kmlGeneratorUrl = "http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator";
-	 
+	 	 
 	 String simpleXBaseUrl = "";
 	 String simpleXServiceUrl = "";
 	 String kmlGeneratorBaseurl= "";
@@ -207,31 +200,26 @@ public class SimplexBean extends GenericSopacBean {
 		myarchivedFileEntryList.clear();
 		System.out.println("Project list size:"+myprojectlist.size());
 
-		if (myprojectlist.size() > 0) {
-			for (int i = 0; i < myprojectlist.size(); i++) {
-				String projectName = ((SelectItem) myprojectlist.get(i))
-						.getLabel();
-
-				SimpleXOutputBean mega = new SimpleXOutputBean();
-				mega.setProjectName(projectName);
-				// System.out.println("ProjectName: "+projectName);
-				db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
-						+ codeName + "/" + projectName + ".db");
-				System.out.println(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
-										 + codeName + "/" + projectName + ".db");
-				// ObjectSet results=db.get(mega);
-				ObjectSet results = db.get(SimpleXOutputBean.class);
-				// System.out.println("Matches for
-				// "+projectName+":"+results.size());
-				while (results.hasNext()) {
-					mega = (SimpleXOutputBean) results.next();
-					//					myarchivedFileEntryList.add(mega);
-					tmpList.add(mega);
-				}
-				db.close();
-				myarchivedFileEntryList=sortByDate(tmpList);
-			}
+		for (int i = 0; i < myprojectlist.size(); i++) {
+			 String projectName = ((SelectItem) myprojectlist.get(i)).getLabel();
+			 
+			 SimpleXOutputBean mega = new SimpleXOutputBean();
+			 mega.setProjectName(projectName);
+			 // System.out.println("ProjectName: "+projectName);
+			 db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
+									  + codeName + "/" + projectName + ".db");
+			 // ObjectSet results=db.get(mega);
+			 ObjectSet results = db.get(SimpleXOutputBean.class);
+			 System.out.println("Matches for "+projectName+":"+results.size());
+			 while (results.hasNext()) {
+				  mega = (SimpleXOutputBean) results.next();
+				  //					myarchivedFileEntryList.add(mega);
+				  tmpList.add(mega);
+			 }
+			 db.close();
+			 myarchivedFileEntryList=sortByDate(tmpList);
 		}
+		
 		return myarchivedFileEntryList;
 	}
 	 
@@ -240,46 +228,47 @@ public class SimplexBean extends GenericSopacBean {
 	}
 
 	 public String[] getDeleteProjectsList() {
-		 return this.deleteProjectsList;
-	}
-
-	public void setMyProjectNameList(List tmp_str) {
-		this.myProjectNameList = tmp_str;
-	}
-
-	public List getMyProjectNameList() {
-		this.myProjectNameList.clear();
-		try {
-			 System.out.println(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");
-			 db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
-					+ codeName + ".db");
-			projectEntry project = new projectEntry();
-			ObjectSet results = db.get(projectEntry.class);
-			// System.out.println("Got results:"+results.size());
-			while (results.hasNext()) {
-				project = (projectEntry) results.next();
-				System.out.println(project.getProjectName());
-				myProjectNameList.add(new SelectItem(project.getProjectName(),
-						project.getProjectName()));
-			}
-			db.close();
-		} 
-		catch (Exception ex) {
-			// ex.printStackTrace();
-			System.err.println("Could not open " + getBasePath()+"/"+getContextBasePath() + "/"
-					+ userName + "/" + codeName + ".db");
-			System.err.println("Returning empty list.");
-		}
-		return this.myProjectNameList;
-	}
+		  return this.deleteProjectsList;
+	 }
+	 
+	 public void setMyProjectNameList(List tmp_str) {
+		  this.myProjectNameList = tmp_str;
+	 }
+	 
+	 public List getMyProjectNameList() {
+		  System.out.println("Reconstructing the project name list");
+		  myProjectNameList.clear();
+		  try {
+				db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
+										 + codeName + ".db");
+				projectEntry project = new projectEntry();
+				ObjectSet results = db.get(projectEntry.class);
+				// System.out.println("Got results:"+results.size());
+				while (results.hasNext()) {
+					 project = (projectEntry) results.next();
+					 System.out.println(project.getProjectName());
+					 myProjectNameList.add(new SelectItem(project.getProjectName(),
+																	  project.getProjectName()));
+				}
+				db.close();
+		  } 
+		  catch (Exception ex) {
+				// ex.printStackTrace();
+				if(db!=null) db.close();
+				System.err.println("Could not open " + getBasePath()+"/"+getContextBasePath() + "/"
+										 + userName + "/" + codeName + ".db");
+				System.err.println("Returning empty list.");
+		  }
+		  return this.myProjectNameList;
+	 }
 	 
 	 public void setSelectProjectsList(String[] tmp_str) {
 		  this.selectProjectsList = tmp_str;
 	 }
 	 
-	public String[] getSelectProjectsList() {
-		return this.selectProjectsList;
-	}
+	 public String[] getSelectProjectsList() {
+		  return this.selectProjectsList;
+	 }
 
 	 /**
 	  * Reconstruct the Observation list from the context.
@@ -337,8 +326,8 @@ public class SimplexBean extends GenericSopacBean {
 	 }
 	 
 	 protected Observation populateObservationFromContext(String tmp_observationName) throws Exception {
-		  System.out.print("Populating Layer " + tmp_observationName + " for  "
-								 + projectName);
+// 		  System.out.println("Populating Layer " + tmp_observationName + " for  "
+// 								 + projectName);
 		  String observationStatus = "Update";
 		  
 		  db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
@@ -434,187 +423,239 @@ public class SimplexBean extends GenericSopacBean {
 		  this.currentProjectEntry = tmp;
 	 }
 
-	public projectEntry getCurrentProjectEntry() {
-		return this.currentProjectEntry;
-	}
-
-	public void setCurrentEditProjectForm(editProjectForm tmp) {
-		this.currentEditProjectForm = tmp;
-	}
-
-	public editProjectForm getCurrentEditProjectForm() {
-		return this.currentEditProjectForm;
-	}
-
-	public void setSelectdbURL(String tmp_url) {
-		this.selectdbURL = tmp_url;
-	}
-
-	public String getSelectdbURL() {
-		return this.selectdbURL;
-	}
-
-	// common function for Simplex Bean.
-
-	public String getBASE64(String s) {
-		if (s == null)
-			return null;
-		String tmp_str = (new BASE64Encoder()).encode(s.getBytes());
-		return tmp_str;
-	}
-
-	public static void main(String[] args) {
-
-	}
-
-	/**
-	 * default empty constructor
-	 */
-	public SimplexBean() throws Exception {
-		super();
-		cm = getContextManagerImp();
-		System.out.println("Simplex Bean Created");
-	}
-
+	 public projectEntry getCurrentProjectEntry() {
+		  return this.currentProjectEntry;
+	 }
+	 
+	 public void setCurrentEditProjectForm(editProjectForm tmp) {
+		  this.currentEditProjectForm = tmp;
+	 }
+	 
+	 public editProjectForm getCurrentEditProjectForm() {
+		  return this.currentEditProjectForm;
+	 }
+	 
+	 public void setSelectdbURL(String tmp_url) {
+		  this.selectdbURL = tmp_url;
+	 }
+	 
+	 public String getSelectdbURL() {
+		  return this.selectdbURL;
+	 }
+	 
+	 // common function for Simplex Bean.	 
+	 public String getBASE64(String s) {
+		  if (s == null)
+				return null;
+		  String tmp_str = (new BASE64Encoder()).encode(s.getBytes());
+		  return tmp_str;
+	 }
+	 
+	 /**
+	  * This is a placeholder main method that may be used for commandline testing.
+	  */ 
+	 public static void main(String[] args) {
+		  
+	 }
+	 
+	 /**
+	  * default empty constructor
+	  */
+	 public SimplexBean() throws Exception {
+		  super();
+		  cm = getContextManagerImp();
+		  System.out.println("Simplex Bean Created");
+	 }
+	 
 	 protected void initSimplexService() throws Exception {
-		simplexService = new SimpleXServiceServiceLocator()
+		  simplexService = new SimpleXServiceServiceLocator()
 				.getSimpleXExec(new URL(simpleXServiceUrl));
 	 }
-
-	/**
-	 * These are methods associated with Faces navigations.
-	 */
-	public String newProject() throws Exception {
-// 		isInitialized = getIsInitialized();
-// 		if (!isInitialized) {
-// 			initWebServices();
-// 		}
-// 		makeProjectDirectory();
-// 		setContextList();
-		return ("Simplex2-new-project");
-	}
-
-	public String loadProject() throws Exception {
+	 
+	 /**
+	  * These are methods associated with Faces navigations from Main.jsp.  They are
+	  * probably obsolete and may be removed.
+	  */
+// 	 public String newProject() throws Exception {
+// 		  		isInitialized = getIsInitialized();
+// 		  		if (!isInitialized) {
+// 		  			initWebServices();
+// 		  		}
+// 		  		makeProjectDirectory();
+// 		  		setContextList();
+// 		  return ("Simplex2-new-project");
+// 	 }
+	 
+// 	 public String loadProject() throws Exception {
 // 		System.out.println("Loading project");
 // 		if (!isInitialized) {
 // 			initWebServices();
 // 		}
 // 		makeProjectDirectory();
 // 		setContextList();
-		return ("Simplex2-load-project");
-	}
+// 		  return ("Simplex2-load-project");
+// 	}
 
-	public String archivedData() throws Exception {
+// 	 public String archivedData() throws Exception {
 // 		System.out.println("load archived Data");
 // 		if (!isInitialized) {
 // 			initWebServices();
 // 		}
 // 		setContextList();
-		return ("Simplex2-archived-data");
-	}
+// 		  return ("Simplex2-archived-data");
+// 	}
 
-	public String GMTDataPlots() throws Exception {
+// 	 public String GMTDataPlots() throws Exception {
 // 		 System.out.println("Plot Data");
 // 		 if (!isInitialized) {
 // 			  initWebServices();
 // 		 }
 // 		 setContextList();
-		 return ("Simplex2-listgmt-archives");
-	}
-
-	public String toggleRunSimplex2() throws Exception {
-
-		Observation[] obsv = getObservationsFromDB();
-		Fault[] faults = getFaultsFromDB();
-		String timeStamp = "";
-		System.out.println("ProjectName:" + projectName);
-		initSimplexService();
-		projectSimpleXOutput = simplexService.runSimplex(userName, projectName,
-																		 faults, obsv, currentProjectEntry.startTemp,
-																		 currentProjectEntry.maxIters,
-																		 currentProjectEntry.getOrigin_lon()+"", 
-																		 currentProjectEntry.getOrigin_lat()+"",
-																		 this.kmlGeneratorUrl, timeStamp);
-		
-		System.out.println(projectSimpleXOutput.getProjectName());
-		System.out.println(projectSimpleXOutput.getInputUrl());
-		saveSimpleXOutputBeanToDB(projectSimpleXOutput);
-		
-		return ("Simplex2-back");
-	}
+// 		  return ("Simplex2-listgmt-archives");
+// 	}
 	 
-	 protected void saveSimpleXOutputBeanToDB(SimpleXOutputBean projectSimpleXOutput) {
+	 public String toggleRunSimplex2() {
 		  
+		  Observation[] obsv = getObservationsFromDB();
+		  Fault[] faults = getFaultsFromDB();
+		  String timeStamp = "";
+		  System.out.println("ProjectName:" + projectName);
+		  try {
+				initSimplexService();
+				
+				projectSimpleXOutput=simplexService.runSimplex(userName, projectName,
+																			  faults, obsv, currentProjectEntry.startTemp,
+																			  currentProjectEntry.maxIters,
+																			  currentProjectEntry.getOrigin_lon()+"", 
+																			  currentProjectEntry.getOrigin_lat()+"",
+																			  this.kmlGeneratorUrl, timeStamp);
+				
+				System.out.println(projectSimpleXOutput.getProjectName());
+				System.out.println(projectSimpleXOutput.getInputUrl());
+				saveSimpleXOutputBeanToDB(projectSimpleXOutput);
+				saveSimplexProjectEntry(currentProjectEntry);
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  return ("Simplex2-back");
+	 }
+
+	 /**
+	  * Save and if necessary reassign the project entry.
+	  */
+	 protected void saveSimplexProjectEntry(projectEntry currentProjectEntry) {
+		  db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
+									+ codeName +  ".db");
+		  
+		  ObjectSet results=db.get(projectEntry.class);
+		  
+		  while(results.hasNext()) {
+				projectEntry tmp=(projectEntry)results.next();
+				if(tmp==null 
+					|| tmp.getProjectName()==null
+					|| tmp.getProjectName().equals(currentProjectEntry.getProjectName())) {
+					 System.out.println("Updating/deleting project");
+					 db.delete(tmp);
+				}
+		  }
+		  db.set(currentProjectEntry);
+		  db.close();
+	 }
+	 
+	 /**
+	  * Saves the simplex output to the db.
+	  */
+	 //	 protected void saveSimpleXOutputBeanToDB(SimpleXOutputBean projectSimpleXOutput) {
+	 protected void saveSimpleXOutputBeanToDB(SimpleXOutputBean mega) {
 		  // Set up the bean template for searching.
-		  SimpleXOutputBean mega = new SimpleXOutputBean();
-		  mega.setProjectName(projectSimpleXOutput.getProjectName());
-		  mega.setJobUIDStamp(projectSimpleXOutput.getJobUIDStamp());
+		  //		  SimpleXOutputBean mega = new SimpleXOutputBean();
+		  // 		  mega.setProjectName(projectSimpleXOutput.getProjectName());
+		  // 		  mega.setJobUIDStamp(projectSimpleXOutput.getJobUIDStamp());
 		  // Find the matching bean
 		  db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
-									+ codeName + "/" + projectName + ".db");
-		  ObjectSet results = db.get(mega);
-		  System.out.println("SimpleXOutputBean to update found? "
-									+ results.size());
-		  System.out.println("Saving SimpleXOutputBean getProjectName:"
-									+ projectSimpleXOutput.getProjectName());
-		  System.out.println("Saving getInputUrl url:"
-									+ projectSimpleXOutput.getInputUrl());
-		  if (results.hasNext()) {
-				// Reassign the bean. Should only be one match.
-				mega = (SimpleXOutputBean) results.next();
-				
-		  }
-		  mega.setInputUrl(projectSimpleXOutput.getInputUrl());
-		  mega.setLogUrl(projectSimpleXOutput.getLogUrl());
-		  mega.setOutputUrl(projectSimpleXOutput.getOutputUrl());
-		  mega.setFaultUrl(projectSimpleXOutput.getFaultUrl());
-		  String[] kmlurls=projectSimpleXOutput.getKmlUrls();
-		  mega.setKmlUrls(kmlurls);
+									+ codeName + "/" + projectName  +".db");
+		  // 				ObjectSet results = db.get(mega);
+		  
+		  // 				if (results.hasNext()) {
+		  // 					 // Reassign the bean. Should only be one match.
+		  // 					 mega = (SimpleXOutputBean) results.next();
+		  // 				}
+		  // 		  mega.setInputUrl(projectSimpleXOutput.getInputUrl());
+		  // 		  mega.setLogUrl(projectSimpleXOutput.getLogUrl());
+		  // 		  mega.setOutputUrl(projectSimpleXOutput.getOutputUrl());
+		  // 		  mega.setFaultUrl(projectSimpleXOutput.getFaultUrl());
+		  // 		  String[] kmlurls=projectSimpleXOutput.getKmlUrls();
+		  // 		  mega.setKmlUrls(kmlurls);
 		  db.set(mega);
 		  db.commit();
 		  db.close();
-	}
+		  
+	 }
 	 
-	 public String NewProjectThenEditProject() throws Exception {
-		  createNewProject();
-		  currentEditProjectForm=new editProjectForm(selectdbURL);
-		  currentEditProjectForm.init_edit_project();
-		  return "Simplex2-edit-project";
-	}
+	 /**
+	  * This creates a new project and related session bean objects. It is called by
+	  * a JSF action method and so must return a navigation string.
+	  */
+	 public String NewProjectThenEditProject() {
+		  String returnMessage="";
+		  try {
+				currentEditProjectForm=new editProjectForm(selectdbURL);
+				createNewProject();
+				currentEditProjectForm.init_edit_project();
+				returnMessage="Simplex2-edit-project";
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  //The default value is blank, will load the original page.
+		  return returnMessage;
+	 }
 
-	public String toggleDeleteProject() {
-		try {
-			 db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName
-									  + "/" + codeName + ".db");
-			 if (deleteProjectsList != null) {
-				  for (int i = 0; i < deleteProjectsList.length; i++) {
-						//Delete the input bean
-						projectEntry delproj = new projectEntry();
-						delproj.setProjectName((String) deleteProjectsList[i]);
-						ObjectSet results = db.get(delproj);
-						if (results.hasNext()) {
-							 delproj = (projectEntry) results.next();
-							 db.delete(delproj);
-						}
-		
-						//Delete the output bean
-						SimpleXOutputBean sxob = new SimpleXOutputBean();
-						sxob.setProjectName((String) deleteProjectsList[i]);
-						results = db.get(sxob);
-						if (results.hasNext()) {
-							 sxob = (SimpleXOutputBean) results.next();
-							 db.delete(sxob);
-						}
-				  }
-				  db.close();
-				  
-			 }
-		} catch (Exception ex) {
-			 ex.printStackTrace();
-		}
-		
-		return "Simplex2-this";
-	}
+	 /**
+	  * Delete the selected project.  This is called by a JSF page.  Projects are
+	  * deleted by name.
+	  */
+	 public String toggleDeleteProject() {
+		  try {
+				db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName
+										 + "/" + codeName + ".db");
+				if (deleteProjectsList != null) {
+					 for (int i = 0; i < deleteProjectsList.length; i++) {
+						  System.out.println("Deleting:"+deleteProjectsList[i]);
+						  //Delete the input bean
+						  projectEntry delproj = new projectEntry();
+						  ObjectSet results = db.get(projectEntry.class);
+						  System.out.println("results size:"+results.size());
+						  while (results.hasNext()) {
+								delproj = (projectEntry) results.next();
+								if(delproj.getProjectName().equals((String)deleteProjectsList[i])) {
+									 System.out.println("Deleting:"+delproj.getProjectName());
+									 db.delete(delproj);
+								}
+						  }
+						  
+						  //Delete the output bean
+						  SimpleXOutputBean sxob = new SimpleXOutputBean();
+						  sxob.setProjectName((String) deleteProjectsList[i]);
+						  results = db.get(sxob);
+						  if (results.hasNext()) {
+								sxob = (SimpleXOutputBean) results.next();
+								db.delete(sxob);
+						  }
+					 }
+					 db.close();
+				}
+				else {
+					 System.out.println("No projects selected for deletion.");
+				}
+		  } 
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  
+		  return "Simplex2-this";
+	 }
 	 
 	 /**
 	  * Loads the selected project from the database, sets the current project session variable.
@@ -631,8 +672,8 @@ public class SimplexBean extends GenericSopacBean {
 		  
 		  try {
 				// Reconstruct the project lists
-				myFaultEntryForProjectList = reconstructMyFaultEntryForProjectList(projectName);
-				myObservationEntryForProjectList = reconstructMyObservationEntryForProjectList(projectName);
+				myFaultEntryForProjectList=reconstructMyFaultEntryForProjectList(projectName);
+				myObservationEntryForProjectList=reconstructMyObservationEntryForProjectList(projectName);
 				
 				// Reconstruct the fault and layer object collections from the
 				// context
@@ -642,13 +683,17 @@ public class SimplexBean extends GenericSopacBean {
 				db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 										 + codeName + ".db");
 				projectEntry tmp_proj = new projectEntry();
-				tmp_proj.projectName = this.projectName;
-				ObjectSet results = db.get(tmp_proj);
-				if (results.hasNext()) {
-					 this.currentProjectEntry = (projectEntry) results.next();
-					 currentEditProjectForm.setProjectEntry(currentProjectEntry);
-				} else {
-					 System.out.println("Error: cannot find this project");
+				tmp_proj.setProjectName(projectName);
+				ObjectSet results = db.get(projectEntry.class);
+				while (results.hasNext()) {
+					 tmp_proj=(projectEntry)results.next();
+					 if(tmp_proj.getProjectName()!=null 
+						 && tmp_proj.getProjectName().equals(projectName)) {
+						  System.out.println("Found project, reassigning");
+						  this.currentProjectEntry=tmp_proj;
+						  currentEditProjectForm.setProjectEntry(currentProjectEntry);
+						  break;
+					 } 
 				}
 				db.close();
 				
@@ -661,7 +706,6 @@ public class SimplexBean extends GenericSopacBean {
 		  catch (Exception ex) {
 				ex.printStackTrace();
 		  }
-		  
 		  currentEditProjectForm.projectSelectionCode = "";
 		  currentEditProjectForm.faultSelectionCode = "";
 		  return "Simplex2-edit-project";
@@ -670,29 +714,45 @@ public class SimplexBean extends GenericSopacBean {
 	 /**
 	  * This creates a new projectEntry object, stores it in the DB, and sets the currentProject
 	  */
-	 public String createNewProject() throws Exception {
-		  // Do real logic
+	 protected String createNewProject() throws Exception {
 		  System.out.println("Creating new project");
 		  makeProjectDirectory();
 		  db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 									+ codeName + ".db");
-		  projectEntry project = new projectEntry();
-		  project.projectName = this.projectName;
+// 		  projectEntry project = new projectEntry();
+// 		  project.projectName = this.projectName;
+
 		  projectEntry tmp_project = new projectEntry();
 		  tmp_project.projectName = this.projectName;
-		  ObjectSet result = db.get(tmp_project);
+		  ObjectSet result = db.get(projectEntry.class);
 		  
-		  if (result.hasNext()) {
+		  while (result.hasNext()) {
 				tmp_project = (projectEntry) result.next();
-				db.delete(tmp_project);
+				//Clean up any null projects
+				if(tmp_project==null 
+					|| tmp_project.getProjectName()==null) {
+					 db.delete(tmp_project);
+				}
+				//This is an existing project, so load it and replace
+				else if (tmp_project.getProjectName().equals(projectName)) {
+					 db.delete(tmp_project);
+					 currentProjectEntry=tmp_project;
+					 currentProjectEntry.setMaxIters(currentProjectEntry.maxIters);
+					 currentProjectEntry.setStartTemp(currentProjectEntry.startTemp);
+					 break;
+				}
+				else {
+					 //Create the new project
+					 currentProjectEntry.setProjectName(projectName);
+					 currentProjectEntry.setMaxIters(currentProjectEntry.maxIters);
+					 currentProjectEntry.setStartTemp(currentProjectEntry.startTemp);
+					 break;
+				}
 		  }
-		  project.setMaxIters(currentProjectEntry.maxIters);
-		  project.setStartTemp(currentProjectEntry.startTemp);
-		  this.currentProjectEntry=project;
-		  db.set(project);
+		  db.set(currentProjectEntry);
 		  db.commit();
 		  db.close();
-
+		  
 		  currentEditProjectForm.setProjectEntry(currentProjectEntry);
 		  
 		  return "MG-set-project";
@@ -773,13 +833,13 @@ public class SimplexBean extends GenericSopacBean {
 			for (int i = 0; i < myarchivedFileEntryList.size(); i++) {
 				tmp_loadMeshTableEntry = (SimpleXOutputBean) myarchivedFileEntryList
 						.get(i);
-				if ((tmp_loadMeshTableEntry.getView() == true)) {
+				if ((tmp_loadMeshTableEntry.isView() == true)) {
 					break;
 				}
 			}
 			String tmp_projectName = tmp_loadMeshTableEntry.getProjectName();
 			projectName = tmp_projectName;
-			boolean tmp_view = tmp_loadMeshTableEntry.getView();
+			boolean tmp_view = tmp_loadMeshTableEntry.isView();
 			String timeStamp = "";
 			this.gmtPlotPdf_timeStamp = timeStamp;
 			if ((tmp_view == true)) {
@@ -826,14 +886,14 @@ public class SimplexBean extends GenericSopacBean {
 			for (int i = 0; i < myarchivedFileEntryList.size(); i++) {
 				tmp_loadMeshTableEntry = (SimpleXOutputBean) myarchivedFileEntryList
 						.get(i);
-				if ((tmp_loadMeshTableEntry.getView() == true)) {
+				if ((tmp_loadMeshTableEntry.isView() == true)) {
 					break;
 				}
 			}
 
 			String tmp_projectName = tmp_loadMeshTableEntry.getProjectName();
 			projectName = tmp_projectName;
-			boolean tmp_view = tmp_loadMeshTableEntry.getView();
+			boolean tmp_view = tmp_loadMeshTableEntry.isView();
 			String timeStamp = "";
 			if ((tmp_view == true)) {
 				db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
@@ -877,14 +937,14 @@ public class SimplexBean extends GenericSopacBean {
 			for (int i = 0; i < myarchivedFileEntryList.size(); i++) {
 				tmp_loadMeshTableEntry = (SimpleXOutputBean) myarchivedFileEntryList
 						.get(i);
-				if ((tmp_loadMeshTableEntry.getView() == true)) {
+				if ((tmp_loadMeshTableEntry.isView() == true)) {
 					break;
 				}
 			}
 
 			String tmp_projectName = tmp_loadMeshTableEntry.getProjectName();
 			projectName = tmp_projectName;
-			boolean tmp_view = tmp_loadMeshTableEntry.getView();
+			boolean tmp_view = tmp_loadMeshTableEntry.isView();
 			if ((tmp_view == true)) {
 				SimpleXOutputBean mega = new SimpleXOutputBean();
 				mega.setProjectName(projectName);
@@ -1219,9 +1279,9 @@ public class SimplexBean extends GenericSopacBean {
 	 /**
 	  * Do nothing for now.
 	  */
-	 protected List sortByDate(List fullList) {
-		  return fullList;
-	 }
+// 	 protected List sortByDate(List fullList) {
+// 		  return fullList;
+// 	 }
 
 
 
@@ -1229,60 +1289,60 @@ public class SimplexBean extends GenericSopacBean {
 	  * Sort the list by date
 	  */
 
-// 	 protected List sortByDate(List fullList) {
-// 		  if(fullList==null) return null;
-// 		  int size=fullList.size();
-// 		  if(size<2) {
-// 				return fullList;
-// 		  }
-// 		  //Ordered list is originally empty and reducedlist is full.
-// 		  List orderedList=new ArrayList();
-// 		  List reducedList=new ArrayList();
-// 		  myListToVectorCopy(reducedList,fullList);
+	 protected List sortByDate(List fullList) {
+		  if(fullList==null) return null;
+		  int size=fullList.size();
+		  if(size<2) {
+				return fullList;
+		  }
+		  //Ordered list is originally empty and reducedlist is full.
+		  List orderedList=new ArrayList();
+		  List reducedList=new ArrayList();
+		  myListToVectorCopy(reducedList,fullList);
 		  
-// 		  orderedList=setListOrder(orderedList, reducedList, fullList);
+		  orderedList=setListOrder(orderedList, reducedList, fullList);
 
-// 		  return orderedList;
-// 	 }
+		  return orderedList;
+	 }
 
-// 	 protected void myListToVectorCopy(List dest, List src) {
-// 		  for(int i=0;i<src.size();i++) {
-// 				dest.add(new Integer(i));
-// 		  }
-// 	 }
+	 protected void myListToVectorCopy(List dest, List src) {
+		  for(int i=0;i<src.size();i++) {
+				dest.add(new Integer(i));
+		  }
+	 }
 	 
-// 	 protected List setListOrder(List orderedList, List reducedList, List fullList) {
+	 protected List setListOrder(List orderedList, List reducedList, List fullList) {
 		  
-// 		  if(reducedList==null) return null;
-// 		  int size=reducedList.size();
-// 		  if(size<2) {
-// 				return fullList;
-// 		  }
-// 		  while(reducedList!=null && reducedList.size()>0) {
-// 				int first=getFirst(reducedList, fullList);
-// 				orderedList.add((SimpleXOutputBean)fullList.get(((Integer)reducedList.get(first)).intValue()));
-// 				reducedList.remove(first);
-// 		  }
-// 		  return orderedList;
-// 	 }
+		  if(reducedList==null) return null;
+		  int size=reducedList.size();
+		  if(size<2) {
+				return fullList;
+		  }
+		  while(reducedList!=null && reducedList.size()>0) {
+				int first=getFirst(reducedList, fullList);
+				orderedList.add((SimpleXOutputBean)fullList.get(((Integer)reducedList.get(first)).intValue()));
+				reducedList.remove(first);
+		  }
+		  return orderedList;
+	 }
 	 
-// 	 protected int getFirst(List reducedList, List fullList) {
-// 		  int first=0;
-// 		  for(int i=1;i<reducedList.size();i++) {
-// 				SimpleXOutputBean mb1=(SimpleXOutputBean)fullList.get(((Integer)reducedList.get(first)).intValue());
-// 				SimpleXOutputBean mb2=(SimpleXOutputBean)fullList.get(((Integer)reducedList.get(i)).intValue());
-// 				if(mb1.getCreationDate()==null||mb1.getCreationDate().equals("")) { 
-// 					 mb1.setCreationDate((new Date()).toString());
-// 				}
-// 				if(mb2.getCreationDate()==null||mb2.getCreationDate().equals("")) { 
-// 					 mb2.setCreationDate((new Date()).toString());
-// 				}
-// 				Date date1=new Date(mb1.getCreationDate());
-// 				Date date2=new Date(mb2.getCreationDate());			  
-// 				if(date2.before(date1)) first=i;
-// 		  }
+	 protected int getFirst(List reducedList, List fullList) {
+		  int first=0;
+		  for(int i=1;i<reducedList.size();i++) {
+				SimpleXOutputBean mb1=(SimpleXOutputBean)fullList.get(((Integer)reducedList.get(first)).intValue());
+				SimpleXOutputBean mb2=(SimpleXOutputBean)fullList.get(((Integer)reducedList.get(i)).intValue());
+				if(mb1.getCreationDate()==null||mb1.getCreationDate().equals("")) { 
+					 mb1.setCreationDate((new Date()).toString());
+				}
+				if(mb2.getCreationDate()==null||mb2.getCreationDate().equals("")) { 
+					 mb2.setCreationDate((new Date()).toString());
+				}
+				Date date1=new Date(mb1.getCreationDate());
+				Date date2=new Date(mb2.getCreationDate());			  
+				if(date2.before(date1)) first=i;
+		  }
 
-// 		  return first;
-// 	 }
+		  return first;
+	 }
 
 }

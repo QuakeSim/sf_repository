@@ -2,12 +2,12 @@
  * SimpleXServiceServiceLocator.java
  *
  * This file was auto-generated from WSDL
- * by the Apache Axis 1.3 Oct 05, 2005 (05:23:37 EDT) WSDL2Java emitter.
+ * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
 package cgl.quakesim.simplex;
 
-public class SimpleXServiceServiceLocator extends org.apache.axis.client.Service implements SimpleXServiceService {
+public class SimpleXServiceServiceLocator extends org.apache.axis.client.Service implements cgl.quakesim.simplex.SimpleXServiceService {
 
     public SimpleXServiceServiceLocator() {
     }
@@ -22,7 +22,7 @@ public class SimpleXServiceServiceLocator extends org.apache.axis.client.Service
     }
 
     // Use to get a proxy class for SimpleXExec
-    private java.lang.String SimpleXExec_address = "http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec";
+    private java.lang.String SimpleXExec_address = "http://localhost:8080/simplexexec/services/SimpleXExec";
 
     public java.lang.String getSimpleXExecAddress() {
         return SimpleXExec_address;
@@ -39,7 +39,7 @@ public class SimpleXServiceServiceLocator extends org.apache.axis.client.Service
         SimpleXExecWSDDServiceName = name;
     }
 
-    public SimpleXService getSimpleXExec() throws javax.xml.rpc.ServiceException {
+    public cgl.quakesim.simplex.SimpleXService getSimpleXExec() throws javax.xml.rpc.ServiceException {
        java.net.URL endpoint;
         try {
             endpoint = new java.net.URL(SimpleXExec_address);
@@ -50,9 +50,9 @@ public class SimpleXServiceServiceLocator extends org.apache.axis.client.Service
         return getSimpleXExec(endpoint);
     }
 
-    public SimpleXService getSimpleXExec(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
+    public cgl.quakesim.simplex.SimpleXService getSimpleXExec(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
         try {
-            SimpleXExecSoapBindingStub _stub = new SimpleXExecSoapBindingStub(portAddress, this);
+            cgl.quakesim.simplex.SimpleXExecSoapBindingStub _stub = new cgl.quakesim.simplex.SimpleXExecSoapBindingStub(portAddress, this);
             _stub.setPortName(getSimpleXExecWSDDServiceName());
             return _stub;
         }
@@ -72,8 +72,8 @@ public class SimpleXServiceServiceLocator extends org.apache.axis.client.Service
      */
     public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         try {
-            if (SimpleXService.class.isAssignableFrom(serviceEndpointInterface)) {
-                SimpleXExecSoapBindingStub _stub = new SimpleXExecSoapBindingStub(new java.net.URL(SimpleXExec_address), this);
+            if (cgl.quakesim.simplex.SimpleXService.class.isAssignableFrom(serviceEndpointInterface)) {
+                cgl.quakesim.simplex.SimpleXExecSoapBindingStub _stub = new cgl.quakesim.simplex.SimpleXExecSoapBindingStub(new java.net.URL(SimpleXExec_address), this);
                 _stub.setPortName(getSimpleXExecWSDDServiceName());
                 return _stub;
             }
@@ -105,7 +105,7 @@ public class SimpleXServiceServiceLocator extends org.apache.axis.client.Service
     }
 
     public javax.xml.namespace.QName getServiceName() {
-        return new javax.xml.namespace.QName("http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec", "SimpleXServiceService");
+        return new javax.xml.namespace.QName("http://localhost:8080/simplexexec/services/SimpleXExec", "SimpleXServiceService");
     }
 
     private java.util.HashSet ports = null;
@@ -113,7 +113,7 @@ public class SimpleXServiceServiceLocator extends org.apache.axis.client.Service
     public java.util.Iterator getPorts() {
         if (ports == null) {
             ports = new java.util.HashSet();
-            ports.add(new javax.xml.namespace.QName("http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec", "SimpleXExec"));
+            ports.add(new javax.xml.namespace.QName("http://localhost:8080/simplexexec/services/SimpleXExec", "SimpleXExec"));
         }
         return ports.iterator();
     }

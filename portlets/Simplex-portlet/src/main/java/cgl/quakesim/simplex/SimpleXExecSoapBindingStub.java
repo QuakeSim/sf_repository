@@ -2,12 +2,12 @@
  * SimpleXExecSoapBindingStub.java
  *
  * This file was auto-generated from WSDL
- * by the Apache Axis 1.3 Oct 05, 2005 (05:23:37 EDT) WSDL2Java emitter.
+ * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
 package cgl.quakesim.simplex;
 
-public class SimpleXExecSoapBindingStub extends org.apache.axis.client.Stub implements SimpleXService {
+public class SimpleXExecSoapBindingStub extends org.apache.axis.client.Stub implements cgl.quakesim.simplex.SimpleXService {
     private java.util.Vector cachedSerClasses = new java.util.Vector();
     private java.util.Vector cachedSerQNames = new java.util.Vector();
     private java.util.Vector cachedSerFactories = new java.util.Vector();
@@ -29,9 +29,9 @@ public class SimpleXExecSoapBindingStub extends org.apache.axis.client.Stub impl
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "projectName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "faults"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec", "ArrayOf_tns1_Fault"), Fault[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "faults"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://localhost:8080/simplexexec/services/SimpleXExec", "ArrayOf_tns1_Fault"), cgl.quakesim.simplex.Fault[].class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "obsv"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec", "ArrayOf_tns1_Observation"), Observation[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "obsv"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://localhost:8080/simplexexec/services/SimpleXExec", "ArrayOf_tns1_Observation"), cgl.quakesim.simplex.Observation[].class, false, false);
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "startTemp"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
@@ -46,7 +46,7 @@ public class SimpleXExecSoapBindingStub extends org.apache.axis.client.Stub impl
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "timeStamp"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
         oper.setReturnType(new javax.xml.namespace.QName("urn:SimpleXService", "SimpleXOutputBean"));
-        oper.setReturnClass(SimpleXOutputBean.class);
+        oper.setReturnClass(cgl.quakesim.simplex.SimpleXOutputBean.class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "runSimplexReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -65,7 +65,7 @@ public class SimpleXExecSoapBindingStub extends org.apache.axis.client.Stub impl
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "timeStamp"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
         oper.setReturnType(new javax.xml.namespace.QName("urn:SimpleXService", "GMTViewForm"));
-        oper.setReturnClass(GMTViewForm.class);
+        oper.setReturnClass(cgl.quakesim.simplex.GMTViewForm.class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "runPlotGMTReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -96,7 +96,7 @@ public class SimpleXExecSoapBindingStub extends org.apache.axis.client.Stub impl
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "projectName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "currentGMTViewForm"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn:SimpleXService", "GMTViewForm"), GMTViewForm.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "currentGMTViewForm"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn:SimpleXService", "GMTViewForm"), cgl.quakesim.simplex.GMTViewForm.class, false, false);
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "jobUIDStamp"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
@@ -138,18 +138,18 @@ public class SimpleXExecSoapBindingStub extends org.apache.axis.client.Stub impl
             java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
             java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
             java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
-            qName = new javax.xml.namespace.QName("http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec", "ArrayOf_tns1_Fault");
+            qName = new javax.xml.namespace.QName("http://localhost:8080/simplexexec/services/SimpleXExec", "ArrayOf_tns1_Fault");
             cachedSerQNames.add(qName);
-            cls = Fault[].class;
+            cls = cgl.quakesim.simplex.Fault[].class;
             cachedSerClasses.add(cls);
             qName = new javax.xml.namespace.QName("urn:SimpleXService", "Fault");
             qName2 = null;
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec", "ArrayOf_tns1_Observation");
+            qName = new javax.xml.namespace.QName("http://localhost:8080/simplexexec/services/SimpleXExec", "ArrayOf_tns1_Observation");
             cachedSerQNames.add(qName);
-            cls = Observation[].class;
+            cls = cgl.quakesim.simplex.Observation[].class;
             cachedSerClasses.add(cls);
             qName = new javax.xml.namespace.QName("urn:SimpleXService", "Observation");
             qName2 = null;
@@ -167,28 +167,28 @@ public class SimpleXExecSoapBindingStub extends org.apache.axis.client.Stub impl
 
             qName = new javax.xml.namespace.QName("urn:SimpleXService", "Fault");
             cachedSerQNames.add(qName);
-            cls = Fault.class;
+            cls = cgl.quakesim.simplex.Fault.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("urn:SimpleXService", "GMTViewForm");
             cachedSerQNames.add(qName);
-            cls = GMTViewForm.class;
+            cls = cgl.quakesim.simplex.GMTViewForm.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("urn:SimpleXService", "Observation");
             cachedSerQNames.add(qName);
-            cls = Observation.class;
+            cls = cgl.quakesim.simplex.Observation.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("urn:SimpleXService", "SimpleXOutputBean");
             cachedSerQNames.add(qName);
-            cls = SimpleXOutputBean.class;
+            cls = cgl.quakesim.simplex.SimpleXOutputBean.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -260,7 +260,7 @@ public class SimpleXExecSoapBindingStub extends org.apache.axis.client.Stub impl
         }
     }
 
-    public SimpleXOutputBean runSimplex(java.lang.String userName, java.lang.String projectName, Fault[] faults, Observation[] obsv, java.lang.String startTemp, java.lang.String maxIters, java.lang.String origin_lon, java.lang.String origin_lat, java.lang.String kmlGeneratorUrl, java.lang.String timeStamp) throws java.rmi.RemoteException {
+    public cgl.quakesim.simplex.SimpleXOutputBean runSimplex(java.lang.String userName, java.lang.String projectName, cgl.quakesim.simplex.Fault[] faults, cgl.quakesim.simplex.Observation[] obsv, java.lang.String startTemp, java.lang.String maxIters, java.lang.String origin_lon, java.lang.String origin_lat, java.lang.String kmlGeneratorUrl, java.lang.String timeStamp) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -281,9 +281,9 @@ public class SimpleXExecSoapBindingStub extends org.apache.axis.client.Stub impl
         else {
             extractAttachments(_call);
             try {
-                return (SimpleXOutputBean) _resp;
+                return (cgl.quakesim.simplex.SimpleXOutputBean) _resp;
             } catch (java.lang.Exception _exception) {
-                return (SimpleXOutputBean) org.apache.axis.utils.JavaUtils.convert(_resp, SimpleXOutputBean.class);
+                return (cgl.quakesim.simplex.SimpleXOutputBean) org.apache.axis.utils.JavaUtils.convert(_resp, cgl.quakesim.simplex.SimpleXOutputBean.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -291,7 +291,7 @@ public class SimpleXExecSoapBindingStub extends org.apache.axis.client.Stub impl
 }
     }
 
-    public GMTViewForm runPlotGMT(java.lang.String userName, java.lang.String projectName, java.lang.String origin_lat, java.lang.String origin_lon, java.lang.String timeStamp) throws java.rmi.RemoteException {
+    public cgl.quakesim.simplex.GMTViewForm runPlotGMT(java.lang.String userName, java.lang.String projectName, java.lang.String origin_lat, java.lang.String origin_lon, java.lang.String timeStamp) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -312,9 +312,9 @@ public class SimpleXExecSoapBindingStub extends org.apache.axis.client.Stub impl
         else {
             extractAttachments(_call);
             try {
-                return (GMTViewForm) _resp;
+                return (cgl.quakesim.simplex.GMTViewForm) _resp;
             } catch (java.lang.Exception _exception) {
-                return (GMTViewForm) org.apache.axis.utils.JavaUtils.convert(_resp, GMTViewForm.class);
+                return (cgl.quakesim.simplex.GMTViewForm) org.apache.axis.utils.JavaUtils.convert(_resp, cgl.quakesim.simplex.GMTViewForm.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -353,7 +353,7 @@ public class SimpleXExecSoapBindingStub extends org.apache.axis.client.Stub impl
 }
     }
 
-    public java.lang.String runRePlotGMT(java.lang.String userName, java.lang.String projectName, GMTViewForm currentGMTViewForm, java.lang.String jobUIDStamp) throws java.rmi.RemoteException {
+    public java.lang.String runRePlotGMT(java.lang.String userName, java.lang.String projectName, cgl.quakesim.simplex.GMTViewForm currentGMTViewForm, java.lang.String jobUIDStamp) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }

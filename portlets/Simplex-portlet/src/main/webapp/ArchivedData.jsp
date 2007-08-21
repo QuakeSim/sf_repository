@@ -74,9 +74,17 @@ function dataTableSelectOneRadio(radio) {
 					</f:facet>
 					<h:outputText id="kjb15" value="#{myentry3.projectName}" />
 				</h:column>
+
 				<h:column>
 					<f:facet name="header">
-						<h:outputText  id="kjb14" escape="false" value="<b>	Archived DATA File</b>" />
+						<h:outputText  id="kjb1623" escape="false" value="<b>Creation Date</b>" />
+					</f:facet>
+					<h:outputText id="kjb15123c" value="#{myentry3.creationDate}" />
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">
+						<h:outputText  id="kjb14" escape="false" value="<b>	Archived Data File</b>" />
 					</f:facet>
 					<h:panelGrid columns="4" border="1">
 						<h:outputLink id="link1" value="#{myentry3.inputUrl}" target="_blank">
@@ -93,6 +101,7 @@ function dataTableSelectOneRadio(radio) {
 						</h:outputLink>
 					</h:panelGrid>
 				</h:column>
+
 				<h:column>
 					<f:facet name="header">
 						<h:outputText  id="kjb3" escape="false" value="<b>Kml file</b>" />
@@ -126,8 +135,8 @@ function dataTableSelectOneRadio(radio) {
 
 	<h:form>
 		<hr />
-		<h:commandLink action="Simplex2-back">
-			<h:outputText value="#{SimplexBean.codeName} Main Menu" />
+		<h:commandLink action="">
+			<h:outputText value="Refresh Page" />
 		</h:commandLink>
 	</h:form>
 </f:view>

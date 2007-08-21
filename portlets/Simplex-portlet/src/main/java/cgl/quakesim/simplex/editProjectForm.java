@@ -331,7 +331,11 @@ public class editProjectForm extends GenericProjectBean {
 			//This is the (x,y) of the fault relative to the project's origin
 			//The project origin is the lower left lat/lon of the first fault.
 			//If any of these conditions hold, we need to reset.
-
+			
+			System.out.println("Check Project Origin: "
+									 +currentProject.getOrigin_lat()
+									 +currentProject.getOrigin_lon());
+			
 			if(currentProject.getOrigin_lat()==projectEntry.DEFAULT_LAT
 				|| currentProject.getOrigin_lon()==projectEntry.DEFAULT_LON ) {
 				 currentProject.setOrigin_lat(latStart);
@@ -339,6 +343,10 @@ public class editProjectForm extends GenericProjectBean {
 			}
 			double projectOriginLat=currentProject.getOrigin_lat();
 			double projectOriginLon=currentProject.getOrigin_lon();
+
+			System.out.println("Confirm Project Origin: "
+									 +currentProject.getOrigin_lat()
+									 +currentProject.getOrigin_lon());
 						
 			//The following should be done in any case.  If the origin was just (re)set above,
 			//we will get a harmless (0,0);
