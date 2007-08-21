@@ -247,8 +247,13 @@ public class SimplexBean extends GenericSopacBean {
 				while (results.hasNext()) {
 					 project = (projectEntry) results.next();
 					 System.out.println(project.getProjectName());
-					 myProjectNameList.add(new SelectItem(project.getProjectName(),
-																	  project.getProjectName()));
+					 if(project==null || project.getProjectName()==null) {
+						  db.delete(project);
+					 }
+					 else {
+						  myProjectNameList.add(new SelectItem(project.getProjectName(),
+																			project.getProjectName()));
+					 }
 				}
 				db.close();
 		  } 
@@ -550,6 +555,7 @@ public class SimplexBean extends GenericSopacBean {
 		  
 		  ObjectSet results=db.get(projectEntry.class);
 		  
+		  System.out.println("Project entry: "+currentProjectEntry.getProjectName());
 		  while(results.hasNext()) {
 				projectEntry tmp=(projectEntry)results.next();
 				if(tmp==null 
@@ -725,6 +731,12 @@ public class SimplexBean extends GenericSopacBean {
 		  projectEntry tmp_project = new projectEntry();
 		  tmp_project.projectName = this.projectName;
 		  ObjectSet result = db.get(projectEntry.class);
+
+		  //Create the new project.  These may be overwritten below.
+		  currentProjectEntry=new projectEntry();
+		  currentProjectEntry.setProjectName(projectName);
+		  currentProjectEntry.setMaxIters(currentProjectEntry.maxIters);
+		  currentProjectEntry.setStartTemp(currentProjectEntry.startTemp);
 		  
 		  while (result.hasNext()) {
 				tmp_project = (projectEntry) result.next();
@@ -737,13 +749,6 @@ public class SimplexBean extends GenericSopacBean {
 				else if (tmp_project.getProjectName().equals(projectName)) {
 					 db.delete(tmp_project);
 					 currentProjectEntry=tmp_project;
-					 currentProjectEntry.setMaxIters(currentProjectEntry.maxIters);
-					 currentProjectEntry.setStartTemp(currentProjectEntry.startTemp);
-					 break;
-				}
-				else {
-					 //Create the new project
-					 currentProjectEntry.setProjectName(projectName);
 					 currentProjectEntry.setMaxIters(currentProjectEntry.maxIters);
 					 currentProjectEntry.setStartTemp(currentProjectEntry.startTemp);
 					 break;

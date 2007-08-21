@@ -8,17 +8,18 @@
 package cgl.quakesim.disloc;
 
 public class DislocParamsBean  implements java.io.Serializable {
-    private double gridMinXValue;
 
-    private double gridMinYValue;
+    private double gridMinXValue=-20.0;
 
-    private int gridXIterations;
+    private double gridMinYValue=-20.0;
 
-    private double gridXSpacing;
+    private int gridXIterations=5;
 
-    private int gridYIterations;
+    private double gridXSpacing=10.0;
 
-    private double gridYSpacing;
+    private int gridYIterations=5;
+
+    private double gridYSpacing=-10.;
 
     private int observationPointStyle;
 

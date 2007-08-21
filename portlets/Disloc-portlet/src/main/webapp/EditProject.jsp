@@ -58,8 +58,10 @@ function dataTableSelectOneRadio(radio) {
 </script> 
 <f:view> 
 	<h:outputText styleClass="header2" value="Project Input"/> 
- 
-	<p>Create your geometry out of observation points and faults.</p> 
+   <h:outputText escape="false" 
+					  value="<p>Create your geometry out of observation points and faults.  
+                        <br/> The project origin 
+	                     will be the starting lat/lon of the first fault.</p>"/> 
  
 	<h:panelGrid id="EditProject"  
 		columnClasses="alignTop,alignTop" 
@@ -68,7 +70,10 @@ function dataTableSelectOneRadio(radio) {
 			<h:panelGroup id="pg1"> 
  
 				<h:outputFormat id="stuff1" escape="false" 
-					value="<b>Project Name: #{DislocBean.projectName} </b>" /> 
+					value="<b>Project Name: #{DislocBean.projectName} </b><br>" /> 
+				<h:outputFormat id="stuffe3io4" escape="false" 
+					value="<b>Project Origin (lat/lon):</b> (#{DislocBean.currentParams.originLat}, 
+											        #{DislocBean.currentParams.originLon}) <br>" /> 
  
 				<h:selectOneRadio layout="pageDirection" id="subscriptions" 
 					value="#{DislocBean.projectSelectionCode}"> 
@@ -102,37 +107,37 @@ function dataTableSelectOneRadio(radio) {
 					<h:outputText  id="stuff2" value="Grid Minimum X Value:" /> 
 					<h:panelGroup  id="stuff5"> 
 						<h:inputText id="minx" 
-							value="#{DislocBean.dislocParams.gridMinXValue}" required="true" /> 
+							value="#{DislocBean.currentParams.gridMinXValue}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff3" value="X Spacing:" /> 
 					<h:panelGroup  id="stuff6"> 
 						<h:inputText id="xspacing" 
-							value="#{DislocBean.dislocParams.gridXSpacing}" required="true" /> 
+							value="#{DislocBean.currentParams.gridXSpacing}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff7" value="X Iterations" /> 
 					<h:panelGroup  id="stuff8"> 
 						<h:inputText id="xiterations" 
-							value="#{DislocBean.dislocParams.gridXIterations}" required="true" /> 
+							value="#{DislocBean.currentParams.gridXIterations}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff9" value="Grid Minimum Y Value:" /> 
 					<h:panelGroup  id="stuff10"> 
 						<h:inputText id="miny" 
-							value="#{DislocBean.dislocParams.gridMinYValue}" required="true" /> 
+							value="#{DislocBean.currentParams.gridMinYValue}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff11" value="Y Spacing:" /> 
 					<h:panelGroup   id="pg2"> 
 						<h:inputText id="yspacing" 
-							value="#{DislocBean.dislocParams.gridYSpacing}" required="true" /> 
+							value="#{DislocBean.currentParams.gridYSpacing}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff12" value="Y Iterations" /> 
 					<h:panelGroup  id="stuff13"> 
 						<h:inputText id="yiterations" 
-							value="#{DislocBean.dislocParams.gridYIterations}" required="true" /> 
+							value="#{DislocBean.currentParams.gridYIterations}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:commandButton id="addobservation" value="select" 

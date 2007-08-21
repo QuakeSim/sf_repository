@@ -51,7 +51,7 @@ function dataTableSelectOneRadio(radio) {
 
 	<h:form id="f2">
 		<h:panelGrid id="pgridmain" columns="1" border="0">
-			<h:outputText id="header" escape="false" value="<h2>Archived Results</h2><br>" />
+			<h:outputText id="header" escape="false" value="<h2>Archived Results</h2>" />
 			<h:outputText id="dosomework" escape="false"
 				value="You have the following archived disloc runs. Click the link to download the desired file to your desk top. To save directly to your desktop, click your mouse's right button over the link and select<br>" />
 
