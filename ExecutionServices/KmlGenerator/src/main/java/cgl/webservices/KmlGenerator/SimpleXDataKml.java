@@ -439,7 +439,8 @@ public class SimpleXDataKml {
 		} else {
 			container = root;
 		}
-		String linestyleid=faultName+"Style";
+		//		String linestyleid=faultName+"Style";
+		String linestyleid="";
 		setLineStyle(container, linestyleid, LineColor, LineWidth);
 		Placemark mark1 = new Placemark();
 		mark1.setName(faultName);
@@ -467,7 +468,8 @@ public class SimpleXDataKml {
 		descriptionValue=descriptionValue + "latend:"+tmp_lonlat.getY()+" ";
 
 		mark1.setDescription(descriptionValue);
-		mark1.setStyleUrl("#" + linestyleid);
+		//		mark1.setStyleUrl("#" + linestyleid);
+		mark1.setStyleUrl(linestyleid);
 		newline.setCoordinates(line_value);
 		mark1.addLineString(newline);
 		container.addPlacemark(mark1);		
