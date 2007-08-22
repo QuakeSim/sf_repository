@@ -19,22 +19,10 @@ import cgl.webclients.*;
 import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
 
 //Usual java stuff.
-import java.net.URL;
-import java.io.File;
-import java.io.LineNumberReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.File;
-import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.io.StringReader;
+import java.net.*;
+import java.io.*;
 
-import java.util.Hashtable;
-import java.util.Vector;
-import java.util.StringTokenizer;
-import java.util.Date;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Everything you need to set up and run RDAHMM.
@@ -194,6 +182,13 @@ public class GenericProjectBean {
     }
 	 
     public void setProjectName(String projectName){
+		  //Get rid of dubious characters
+		  projectName=filterTheBadGuys(projectName);
+		  
+		  //Remove spaces and less dubious stuff.
+		  projectName=URLDecoder.decode(projectName);
+		  projectName=URLEncoder.encode(projectName);
+		  
 		  this.projectName=projectName;
     }
     
@@ -370,5 +365,13 @@ public class GenericProjectBean {
 				* 6378.139 * (1.0 - Math.sin(d2r * refLon) * Math.sin(d2r * refLon) * flatten);
 
 		  return theFactor;
+	 }
+
+	 /**
+	  * This gets rid of the dubious characters that may be used as input.
+	  */
+	 public String filterTheBadGuys(String toFilter) {
+		  String badguys="[~!@#$%^&*()_+=/<>?]";
+		  return toFilter.replaceAll(badguys,"");
 	 }
 }

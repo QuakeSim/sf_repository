@@ -103,8 +103,20 @@ function dataTableSelectOneRadio(radio) {
 						<h:outputFormat id="output2" escape="false" 
 							value="<b>Define Grid of Observation Points </b>" /> 
 					</f:facet> 
- 
-					<h:outputText  id="stuff2" value="Grid Minimum X Value:" /> 
+
+ 					<h:outputText  id="stuff223" value="Project Origin Lat:" /> 
+					<h:panelGroup  id="stuff543"> 
+						<h:inputText id="origin_latlieew" 
+							value="#{DislocBean.currentParams.origin_lat}" required="true" /> 
+					</h:panelGroup> 
+
+ 					<h:outputText  id="stuff2434" value="Project Origin Lon:" /> 
+					<h:panelGroup  id="stuff24sx5"> 
+						<h:inputText id="origin_lonlkd" 
+							value="#{DislocBean.currentParams.origin_lon}" required="true" /> 
+					</h:panelGroup> 
+
+ 					<h:outputText  id="stuff2" value="Grid Minimum X Value:" /> 
 					<h:panelGroup  id="stuff5"> 
 						<h:inputText id="minx" 
 							value="#{DislocBean.currentParams.gridMinXValue}" required="true" /> 

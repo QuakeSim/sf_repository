@@ -2,7 +2,7 @@ package cgl.quakesim.geofest;
 
 //Imports from the mother ship
 import java.io.*;
-import java.net.URL;
+import java.net.*;
 import java.util.*;
 import java.text.*;
 
@@ -2276,8 +2276,15 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  String userName=Utility.getUserName(DEFAULT_USER_NAME);
 		  return userName;
     }
-	 
+
     public void setProjectName(String projectName){
+		  //Get rid of dubious characters
+		  projectName=filterTheBadGuys(projectName);
+		  
+		  //Remove spaces and less dubious stuff.
+		  projectName=URLDecoder.decode(projectName);
+		  projectName=URLEncoder.encode(projectName);
+
 		  this.projectName=projectName;
     }
     

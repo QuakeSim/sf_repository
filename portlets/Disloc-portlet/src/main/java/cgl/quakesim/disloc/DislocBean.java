@@ -2,8 +2,7 @@ package cgl.quakesim.disloc;
 
 //Imports from the mother ship
 import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.text.*;
@@ -1112,12 +1111,13 @@ public class DislocBean extends GenericSopacBean {
      */
     public void toggleSelectFaultDBEntry(ActionEvent ev) {
 		  initEditFormsSelection();
-		  currentFault.setFaultName(currentFault.getFaultName().trim());
+		  //		  currentFault.setFaultName(currentFault.getFaultName().trim());
 		  if (!currentFault.getFaultName().equals("")) {
 				currentFault = QueryFaultFromDB(currentFault.getFaultName().trim());
 		  }
 		  renderCreateNewFaultForm = !renderCreateNewFaultForm;
     }
+
     public void toggleFaultSearchByName(ActionEvent ev) {
 		  initEditFormsSelection();
 		  this.forSearchStr = this.forSearchStr.trim();
@@ -1579,6 +1579,12 @@ public class DislocBean extends GenericSopacBean {
 	 }
 	 
 	 public void setProjectName(String projectName){
+		  //Get rid of dubious characters
+		  projectName=filterTheBadGuys(projectName);
+		  
+		  //Remove spaces and less dubious stuff.
+		  projectName=URLDecoder.decode(projectName);
+		  projectName=URLEncoder.encode(projectName);
 		  this.projectName=projectName;
 	 }
 	 
