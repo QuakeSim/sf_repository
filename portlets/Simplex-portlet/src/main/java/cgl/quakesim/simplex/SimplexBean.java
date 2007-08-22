@@ -733,10 +733,12 @@ public class SimplexBean extends GenericSopacBean {
 		  ObjectSet result = db.get(projectEntry.class);
 
 		  //Create the new project.  These may be overwritten below.
-		  currentProjectEntry=new projectEntry();
+		  //		  currentProjectEntry=new projectEntry();
 		  currentProjectEntry.setProjectName(projectName);
-		  currentProjectEntry.setMaxIters(currentProjectEntry.maxIters);
-		  currentProjectEntry.setStartTemp(currentProjectEntry.startTemp);
+		  currentProjectEntry.setOrigin_lon(currentProjectEntry.DEFAULT_LON);
+		  currentProjectEntry.setOrigin_lat(currentProjectEntry.DEFAULT_LAT);
+// 		  currentProjectEntry.setMaxIters(currentProjectEntry.maxIters);
+// 		  currentProjectEntry.setStartTemp(currentProjectEntry.startTemp);
 		  
 		  while (result.hasNext()) {
 				tmp_project = (projectEntry) result.next();
@@ -749,8 +751,8 @@ public class SimplexBean extends GenericSopacBean {
 				else if (tmp_project.getProjectName().equals(projectName)) {
 					 db.delete(tmp_project);
 					 currentProjectEntry=tmp_project;
-					 currentProjectEntry.setMaxIters(currentProjectEntry.maxIters);
-					 currentProjectEntry.setStartTemp(currentProjectEntry.startTemp);
+// 					 currentProjectEntry.setMaxIters(tmp_project.maxIters);
+// 					 currentProjectEntry.setStartTemp(tmp_project.startTemp);
 					 break;
 				}
 		  }

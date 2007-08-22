@@ -61,8 +61,8 @@ vertical-align:top;
 </style>
 <f:view>
 	<h:outputText id="lkdrq1" styleClass="header2" value="Project Component Manager"/>   
-	<h:outputText id="lkdrq2"
-					  value="You must provide at least one fault and one observation point before you can run Simplex"/>
+	<h:outputText id="lkdrq2" escape="false"
+					  value="<br>You must provide at least one fault and one observation point before you can run Simplex"/>
 	<h:panelGrid id="panelgrid" columns="2" border="0"
 					 columnClasses="alignTop, alignTop">
 		<h:panelGrid id="EditProject" columns="1" border="1">
