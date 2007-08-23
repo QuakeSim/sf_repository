@@ -21,8 +21,10 @@ import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
 //Usual java stuff.
 import java.net.*;
 import java.io.*;
-
 import java.util.*;
+
+//Import stuff from db4o
+import com.db4o.*;
 
 /**
  * Everything you need to set up and run RDAHMM.
@@ -60,6 +62,8 @@ public class GenericProjectBean {
     //    protected String gnuplotHostName="gf2.ucs.indiana.edu";
 
     protected ArrayList projectsToDelete;
+
+    ObjectContainer db=null;
 
     //--------------------------------------------------
     // These are universal accessor methods.
@@ -296,30 +300,6 @@ public class GenericProjectBean {
 	return line;
     }
 
-//     protected void convertContextList() throws Exception {
-// 	Hashtable returnHash=new Hashtable();
-// 	String creationDate=null;
-// 	String contextname=null;
-// 	ProjectBean projectBean;
-// 	contextListVector.clear();
-// 	if(contextList!=null && contextList.length>0) {
-// 	    for(int i=0;i<contextList.length;i++) {
-// 		projectBean=new ProjectBean();
-		
-// 		contextName=codeName+"/"+contextList[i];
-// 		creationDate=cm.getCurrentProperty(contextName,"LastTime");
-// 		projectBean.setProjectName(contextList[i]);
-// 		projectBean.setCreationDate(convertDate(creationDate));
-// 		projectBean.setHostName(hostName);
-// 		projectBean.setBaseWorkDir(baseWorkDir);
-// 		projectBean.setFileServiceUrl(fileServiceUrl);
-// 		contextListVector.add(projectBean);
-// 		returnHash.put(contextList[i],contextList[i]);
-// 	    }
-// 	}
-// 	setContextListHash(returnHash);
-//     }
-
     protected String convertDate(String longIntForm){
 	long longDate=Long.parseLong(longIntForm);
 	return (new Date(longDate).toString());
@@ -374,4 +354,54 @@ public class GenericProjectBean {
 		  String badguys="[~!@#$%^&*()_+=/<>?]";
 		  return toFilter.replaceAll(badguys,"");
 	 }
+
+
+    /**
+     * Delete object instance from the object store.  
+     * "details" is some helper string (like project name) that may be
+     * useful for deletion. It can be null.
+     */ 
+    public void deletePersistentObj(String dbFilePath, 
+				    Object obj, 
+				    String details) {
+	db=Db4o.openFile(dbFilePath);
+	db.close();
+    }
+
+    public void deletePersistentObj(String dbFilePath, Object obj) {
+	db=Db4o.openFile(dbFilePath);
+	ObjectSet results=db.get(obj);
+	System.out.println("Delete result seet: "+results.size());
+	if(results.hasNext()){
+	    db.delete(obj);
+	}
+	db.close();
+    }
+
+    public void updatePersistentObj(String dbFilePath, Object obj) {
+	db=Db4o.openFile(dbFilePath);
+	db.set(obj);
+	db.close();
+    }
+
+    public void addPersistentObj(String dbFilePath, Object obj) {
+	db=Db4o.openFile(dbFilePath);
+	db.set(obj);
+	db.close();
+    }
+
+    /**
+     * Return an array of objects matching the template object's pattern.
+     */ 
+    public ArrayList fetchPersistentObj(String dbFilePath, 
+					Object template) {
+	ArrayList objectList=new ArrayList();
+	db=Db4o.openFile(dbFilePath);
+	ObjectSet results=db.get(template);
+	while(results.hasNext()) {
+	    objectList.add(results.next());
+	}
+	return objectList;
+	
+    }
 }

@@ -157,5 +157,15 @@
              <version>1.0</version>
         </dependency>
 
+	<!--
+	db40 dependency
+	-->
+        <dependency>
+             <groupId>QuakeSim2</groupId>
+             <artifactId>db4o-java5</artifactId>
+             <version>6.1</version>
+        </dependency>
+
+
   </dependencies>
 </project>
