@@ -107,13 +107,13 @@ function dataTableSelectOneRadio(radio) {
  					<h:outputText  id="stuff223" value="Project Origin Lat:" /> 
 					<h:panelGroup  id="stuff543"> 
 						<h:inputText id="origin_latlieew" 
-							value="#{DislocBean.currentParams.origin_lat}" required="true" /> 
+							value="#{DislocBean.currentParams.originLat}" required="true" /> 
 					</h:panelGroup> 
 
  					<h:outputText  id="stuff2434" value="Project Origin Lon:" /> 
 					<h:panelGroup  id="stuff24sx5"> 
 						<h:inputText id="origin_lonlkd" 
-							value="#{DislocBean.currentParams.origin_lon}" required="true" /> 
+							value="#{DislocBean.currentParams.originLon}" required="true" /> 
 					</h:panelGroup> 
 
  					<h:outputText  id="stuff2" value="Grid Minimum X Value:" /> 
@@ -197,6 +197,19 @@ function dataTableSelectOneRadio(radio) {
 					<h:inputText id="faultLon" value="#{DislocBean.currentFault.faultLonStart}"
 									 required="true" />
 					</h:panelGroup>
+
+					<h:outputText value="Fault End Latitude:" />
+			      <h:panelGroup>
+						<h:inputText id="faultLatendere" value="#{DislocBean.currentFault.faultLatEnd}"
+										 required="true" />
+					</h:panelGroup>
+
+					<h:outputText value="Fault End Longitude" />
+					<h:panelGroup>
+					<h:inputText id="faultLonende3r" value="#{DislocBean.currentFault.faultLonEnd}"
+									 required="true" />
+					</h:panelGroup>
+
  
 					<h:outputText  id="stuff21" value="Length:" /> 
 					<h:panelGroup  id="stuff22"> 

@@ -19,7 +19,7 @@ public class DislocParamsBean  implements java.io.Serializable {
 
     private int gridYIterations=5;
 
-    private double gridYSpacing=-10.;
+    private double gridYSpacing=10.;
 
     private int observationPointStyle;
 

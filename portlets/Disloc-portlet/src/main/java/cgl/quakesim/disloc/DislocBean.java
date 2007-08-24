@@ -243,7 +243,7 @@ public class DislocBean extends GenericSopacBean {
 		  
 		  String myKmlUrl="";
 		  try {
-				myKmlUrl=createKml(currentParams, dislocResultsBean);
+				myKmlUrl=createKml(currentParams, dislocResultsBean, faults);
 		  }
 		  catch (Exception ex) {
 				ex.printStackTrace();
@@ -260,7 +260,8 @@ public class DislocBean extends GenericSopacBean {
     }
 
 	 protected String createKml(DislocParamsBean dislocParams,
-										 DislocResultsBean dislocResultsBean)throws Exception {
+										 DislocResultsBean dislocResultsBean,
+										 Fault[] faults) throws Exception {
 
 		  System.out.println("Creating the KML file");
 
@@ -292,17 +293,28 @@ public class DislocBean extends GenericSopacBean {
 		  end_x=start_x+xinterval*(xiterationsNumber-1);
 		  end_y=start_y+yinterval*(yiterationsNumber-1);
 		  
-		  System.out.println(start_x);
-		  System.out.println(start_y);
-		  System.out.println(end_x);
-		  System.out.println(end_y);
-		  System.out.println(xinterval);
-		  System.out.println(yinterval);
+// 		  System.out.println(start_x);
+// 		  System.out.println(start_y);
+// 		  System.out.println(end_x);
+// 		  System.out.println(end_y);
+// 		  System.out.println(xinterval);
+// 		  System.out.println(yinterval);
 		  
 		  //	kmlService.setGridLine("Grid Line", start_x, start_y, end_x, end_y, xinterval,yinterval);
 		  kmlService.setPointPlacemark("Icon Layer");
 		  //kmlService.setArrowPlacemark("Arrow Layer", "ff66a1cc", 2);
 		  kmlService.setArrowPlacemark("Arrow Layer","",0.2);
+		  
+		  //Plot the faults
+		  for (int i = 0; i < faults.length; i++) {
+				kmlService.setFaultPlot("", 
+												faults[i].getFaultName()+"", 
+												faults[i].getFaultLonStart()+"",
+												faults[i].getFaultLatStart()+"", 
+												faults[i].getFaultLonEnd()+"", 
+												faults[i].getFaultLatEnd()+"", 
+												"ff0000ff", 5);
+		  }
 		  
 		  String myKmlUrl = kmlService.runMakeKml("", userName,
 																projectName, 
@@ -335,7 +347,7 @@ public class DislocBean extends GenericSopacBean {
 																										 null);
 		  String myKmlUrl="";
 		  try {
-				myKmlUrl=createKml(currentParams,dislocResultsBean);
+				myKmlUrl=createKml(currentParams,dislocResultsBean,faults);
 		  }
 		  catch (Exception ex) {
 				ex.printStackTrace();
@@ -770,6 +782,8 @@ public class DislocBean extends GenericSopacBean {
 		      tmp_fault.setFaultName (theFault);
 				tmp_fault.setFaultLatStart(latStart);
 				tmp_fault.setFaultLonStart(lonStart);
+				tmp_fault.setFaultLonEnd(lonEnd);
+				tmp_fault.setFaultLatEnd(latEnd);
 		      tmp_fault.setFaultLength(length);
 		      tmp_fault.setFaultWidth(width);
 		      tmp_fault.setFaultDepth(depth);
