@@ -251,18 +251,18 @@ public class SimpleXDataKml {
 //			mercator_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(),
 //					tmp_lonlat.getY());
 //			line_value = line_value + mercator_lonlat.getX() + ","
-//					+ mercator_lonlat.getY() + ",0 \n";
-			 line_value=line_value +tmp_lonlat.getX() + "," +
-			 tmp_lonlat.getY() + ",0 \n";
+//					+ mercator_lonlat.getY() + ",0  ";
+			line_value=line_value +tmp_lonlat.getX() + "," +
+				 tmp_lonlat.getY() + ",0  ";
 			mapy = original_xy.getY() + bigy * (odd_flg % 2) + smally
 					* ((odd_flg + 1) % 2);
 			tmp_lonlat = ConverterUTM.UTMtoLL(23,mapx, mapy, UTMZone);
 //			mercator_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(),
 //					tmp_lonlat.getY());
 //			line_value = line_value + mercator_lonlat.getX() + ","
-//					+ mercator_lonlat.getY() + ",0 \n";
+//					+ mercator_lonlat.getY() + ",0  ";
 			line_value=line_value +tmp_lonlat.getX() + "," +
-			 tmp_lonlat.getY() + ",0 \n";
+			 tmp_lonlat.getY() + ",0  ";
 			tmp_x = tmp_x + xinterval;
 			odd_flg++;
 		}
@@ -273,25 +273,25 @@ public class SimpleXDataKml {
 //		mercator_lonlat = MapFunction.MercatorProject(tmp_lonlat1.getX(),
 //				tmp_lonlat1.getY());
 //		line_value = line_value + mercator_lonlat.getX() + ","
-//				+ mercator_lonlat.getY() + ",0 \n";
+//				+ mercator_lonlat.getY() + ",0  ";
 		 line_value=line_value +tmp_lonlat1.getX() + "," + tmp_lonlat1.getY()
-		 + ",0 \n";
+		 + ",0  ";
 		mapy1 = original_xy.getY() + bigy;
 		tmp_lonlat1 = ConverterUTM.UTMtoLL(23,mapx1, mapy1, UTMZone);
 //		mercator_lonlat = MapFunction.MercatorProject(tmp_lonlat1.getX(),
 //				tmp_lonlat1.getY());
 //		line_value = line_value + mercator_lonlat.getX() + ","
-//				+ mercator_lonlat.getY() + ",0 \n";
+//				+ mercator_lonlat.getY() + ",0  ";
 		 line_value=line_value +tmp_lonlat1.getX() + "," + tmp_lonlat1.getY()
-		 + ",0 \n";
+		 + ",0  ";
 		mapy1 = original_xy.getY() + smally;
 		tmp_lonlat1 = ConverterUTM.UTMtoLL(23,mapx1, mapy1, UTMZone);
 //		mercator_lonlat = MapFunction.MercatorProject(tmp_lonlat1.getX(),
 //				tmp_lonlat1.getY());
 //		line_value = line_value + mercator_lonlat.getX() + ","
-//				+ mercator_lonlat.getY() + ",0 \n";
+//				+ mercator_lonlat.getY() + ",0  ";
 		 line_value=line_value +tmp_lonlat1.getX() + "," + tmp_lonlat1.getY()
-		 + ",0 \n";
+		 + ",0  ";
 
 		double tmp_y = smally;
 		odd_flg = 1;
@@ -303,18 +303,18 @@ public class SimpleXDataKml {
 //			mercator_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(),
 //					tmp_lonlat.getY());
 //			line_value = line_value + mercator_lonlat.getX() + ","
-//					+ mercator_lonlat.getY() + ",0 \n";
+//					+ mercator_lonlat.getY() + ",0  ";
 			 line_value=line_value +tmp_lonlat.getX() + "," +
-			 tmp_lonlat.getY() + ",0 \n";
+			 tmp_lonlat.getY() + ",0  ";
 			mapx = original_xy.getX() + bigx * (odd_flg % 2) + smallx
 					* ((odd_flg + 1) % 2);
 			tmp_lonlat = ConverterUTM.UTMtoLL(23,mapx, mapy, UTMZone);
 //			mercator_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(),
 //					tmp_lonlat.getY());
 //			line_value = line_value + mercator_lonlat.getX() + ","
-//					+ mercator_lonlat.getY() + ",0 \n";
+//					+ mercator_lonlat.getY() + ",0  ";
 			 line_value=line_value +tmp_lonlat.getX() + "," +
-			 tmp_lonlat.getY() + ",0 \n";
+			 tmp_lonlat.getY() + ",0  ";
 			tmp_y = tmp_y + yinterval;
 			odd_flg++;
 		}
@@ -325,25 +325,25 @@ public class SimpleXDataKml {
 //		mercator_lonlat = MapFunction.MercatorProject(tmp_lonlat2.getX(),
 //				tmp_lonlat2.getY());
 //		line_value = line_value + mercator_lonlat.getX() + ","
-//				+ mercator_lonlat.getY() + ",0 \n";
+//				+ mercator_lonlat.getY() + ",0  ";
 		 line_value=line_value +tmp_lonlat2.getX() + "," + tmp_lonlat2.getY()
-		 + ",0 \n";
+		 + ",0  ";
 		mapx2 = original_xy.getX() + bigx;
 		tmp_lonlat2 = ConverterUTM.UTMtoLL(23,mapx2, mapy2, UTMZone);
 //		mercator_lonlat = MapFunction.MercatorProject(tmp_lonlat2.getX(),
 //				tmp_lonlat2.getY());
 //		line_value = line_value + mercator_lonlat.getX() + ","
-//				+ mercator_lonlat.getY() + ",0 \n";
+//				+ mercator_lonlat.getY() + ",0  ";
 		 line_value=line_value +tmp_lonlat2.getX() + "," + tmp_lonlat2.getY()
-		 + ",0 \n";
+		 + ",0  ";
 		mapx2 = original_xy.getX() + smallx;
 		tmp_lonlat2 = ConverterUTM.UTMtoLL(23,mapx2, mapy2, UTMZone);
 //		mercator_lonlat = MapFunction.MercatorProject(tmp_lonlat2.getX(),
 //				tmp_lonlat2.getY());
 //		line_value = line_value + mercator_lonlat.getX() + ","
-//				+ mercator_lonlat.getY() + ",0 \n";
+//				+ mercator_lonlat.getY() + ",0  ";
 		 line_value=line_value +tmp_lonlat2.getX() + "," + tmp_lonlat2.getY()
-		 + ",0 \n";
+		 + ",0  ";
 
 		newline.setCoordinates(line_value);
 		mark1.addLineString(newline);
@@ -445,7 +445,6 @@ public class SimpleXDataKml {
 		Placemark mark1 = new Placemark();
 		mark1.setName(faultName);
 		
-
 		LineString newline = new LineString();
 		String line_value = "";		
 		
@@ -455,7 +454,7 @@ public class SimpleXDataKml {
 //		tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(),
 //				tmp_lonlat.getY());
 		line_value = line_value + tmp_lonlat.getX() + ","
-				+ tmp_lonlat.getY() + ",0 \n";
+				+ tmp_lonlat.getY() + ",0  ";
 		String descriptionValue= "lonstart:"+tmp_lonlat.getX()+" ";
 		descriptionValue=descriptionValue + "latstart:"+tmp_lonlat.getY()+" ";
 		// plot end point
@@ -463,7 +462,7 @@ public class SimpleXDataKml {
 //		tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(),
 //				tmp_lonlat.getY());
 		line_value = line_value + tmp_lonlat.getX() + ","
-				+ tmp_lonlat.getY() + ",0 \n";	
+				+ tmp_lonlat.getY() + ",0  ";	
 		descriptionValue=descriptionValue + "lonend:"+tmp_lonlat.getX()+" ";
 		descriptionValue=descriptionValue + "latend:"+tmp_lonlat.getY()+" ";
 
@@ -559,7 +558,7 @@ public class SimpleXDataKml {
 //			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(),
 //					tmp_lonlat.getY());
 			line_value = line_value + tmp_lonlat.getX() + ","
-					+ tmp_lonlat.getY() + ",0 \n";
+					+ tmp_lonlat.getY() + ",0  ";
 			// plot end point
 			mapx = curarrow.getEndPoint().getX();
 			mapy = curarrow.getEndPoint().getY();
@@ -567,7 +566,7 @@ public class SimpleXDataKml {
 //			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(),
 //					tmp_lonlat.getY());
 			line_value = line_value + tmp_lonlat.getX() + ","
-					+ tmp_lonlat.getY() + ",0 \n";
+					+ tmp_lonlat.getY() + ",0  ";
 			// plot arrow tail1
 			mapx = curarrow.getArrowTail1().getX();
 			mapy = curarrow.getArrowTail1().getY();
@@ -575,7 +574,7 @@ public class SimpleXDataKml {
 //			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(),
 //					tmp_lonlat.getY());
 			line_value = line_value + tmp_lonlat.getX() + ","
-					+ tmp_lonlat.getY() + ",0 \n";
+					+ tmp_lonlat.getY() + ",0  ";
 			// roll back to end point
 			mapx = curarrow.getEndPoint().getX();
 			mapy = curarrow.getEndPoint().getY();
@@ -583,7 +582,7 @@ public class SimpleXDataKml {
 //			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(),
 //					tmp_lonlat.getY());
 			line_value = line_value + tmp_lonlat.getX() + ","
-					+ tmp_lonlat.getY() + ",0 \n";
+					+ tmp_lonlat.getY() + ",0  ";
 			// plot arrow tail2
 			mapx = curarrow.getArrowTail2().getX();
 			mapy = curarrow.getArrowTail2().getY();
@@ -591,7 +590,7 @@ public class SimpleXDataKml {
 //			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(),
 //					tmp_lonlat.getY());
 			line_value = line_value + tmp_lonlat.getX() + ","
-					+ tmp_lonlat.getY() + ",0 \n";
+					+ tmp_lonlat.getY() + ",0  ";
 			// roll back to end point
 			mapx = curarrow.getEndPoint().getX();
 			mapy = curarrow.getEndPoint().getY();
@@ -599,7 +598,7 @@ public class SimpleXDataKml {
 //			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(),
 //					tmp_lonlat.getY());
 			line_value = line_value + tmp_lonlat.getX() + ","
-					+ tmp_lonlat.getY() + ",0 \n";
+					+ tmp_lonlat.getY() + ",0  ";
 
 			newline.setCoordinates(line_value);
 			mark1.addLineString(newline);

@@ -193,7 +193,7 @@ public class LineString extends Geometry
       }
       if(this.coordinates!=null)
       {
-            kml+="<coordinates>"+SpecialCaseFormatter.toKMLString(this.getCoordinates())+"</coordinates>\n";
+            kml+="<coordinates>\n"+SpecialCaseFormatter.toKMLString(this.getCoordinates())+"\n</coordinates>\n";
       }
         if(!suppressEnclosingTags)
         {
