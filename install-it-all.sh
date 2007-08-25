@@ -24,9 +24,9 @@ source ./install-web-services.sh
 #----------------------------------------------------------------------
 # Build the Ant execution services
 #----------------------------------------------------------------------
-# Not installed, probably obsolete.
-#cd $BUILD_DIR
-#source ./antvisco-deploy.sh
+# Compile the parent service class.
+cd $BUILD_DIR
+source ./antvisco-deploy.sh
 
 cd $BUILD_DIR
 source ./rdahmmexec-deploy.sh
