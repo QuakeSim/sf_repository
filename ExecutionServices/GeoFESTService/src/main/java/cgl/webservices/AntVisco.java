@@ -21,77 +21,67 @@ public class AntVisco implements Runnable{
     Thread background;
 
     public AntVisco() {
- 	BasicConfigurator.configure();
-// 	publisher=new NBPublisher();
-// 	try {
-// 	    publisher.initializeNB("jpl.antservice");
-// 	}
-// 	catch(Exception ex) {
-// 	    ex.printStackTrace();
-// 	}
+		  BasicConfigurator.configure();
     }
-
+	 
     public void setArgs(String[] args) {
-	//Create a dummy array if the args are empty.
-	if(args==null) {
-	    logger.info("Received null argument array");
-	    args=new String[1];
-	    args[0]="";
-	}
-	else {
-// 	    for(int i=0;i<args.length;i++) {
-// 		logger.info(args[i]);
-// 	    }
-	    this.args=args;
-	}
+		  //Create a dummy array if the args are empty.
+		  if(args==null) {
+				logger.info("Received null argument array");
+				args=new String[1];
+				args[0]="";
+		  }
+		  else {
+				this.args=args;
+		  }
     }
     
     public void stop() {
-	if(background!=null) {
-	    background.interrupt();
-	    background=null;
-	}
+		  if(background!=null) {
+				background.interrupt();
+				background=null;
+		  }
     }
     
     public String[] getArgs() {
-	System.out.println(args.length);
-	return args;
+		  System.out.println(args.length);
+		  return args;
     }
-
+	 
     public void setBuildFile(String filename) {
-	buildfile=filename;
+		  buildfile=filename;
     }
-
+	 
     public void run(){
-	try {
-	    cgl.webservices.MyMain2.main(getArgs());
-	}
-	catch (Exception ex){
-	    System.err.println(ex.toString());
-	    throw new RuntimeException();
-	}
+		  try {
+				cgl.webservices.MyMain2.main(getArgs());
+		  }
+		  catch (Exception ex){
+				System.err.println(ex.toString());
+				throw new RuntimeException();
+		  }
     }
     
     public String getStatus(){
-	return status;
+		  return status;
     }
-
+	 
     public void execute() throws Exception{
-	background=new Thread(this);
-	//	logger.info("Executing thread");
-	background.start();
+		  background=new Thread(this);
+		  //	logger.info("Executing thread");
+		  background.start();
     }
-
+	 
     
     public static void main(String[] args) {
-	AntVisco at=new AntVisco();
-	at.setArgs(args);
-	try{
-	    //	at.execute();
-	    at.run();
-	}
-	catch(Exception ex) {
-	    ex.printStackTrace();
-	}
+		  AntVisco at=new AntVisco();
+		  at.setArgs(args);
+		  try{
+				//	at.execute();
+				at.run();
+		  }
+		  catch(Exception ex) {
+				ex.printStackTrace();
+		  }
     }
 }
