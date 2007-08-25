@@ -70,23 +70,23 @@ public class GenericProjectBean {
     //--------------------------------------------------
 
     public ArrayList getProjectsToDelete() {
-	return projectsToDelete;
+		  return projectsToDelete;
     }
     
     public void setProjectsToDelete(ArrayList projectsToDelete) {
-	this.projectsToDelete=projectsToDelete;
+		  this.projectsToDelete=projectsToDelete;
     }
 
     public ContextManagerImp getContextManagerImp() {
-	return cm;
+		  return cm;
     }
 
     public void setContextManagerImp(ContextManagerImp cm) {
-	this.cm=cm;
+		  this.cm=cm;
     }
-
+	 
     public String getContextName() {
-	return contextName;
+		  return contextName;
     }
 	 
     public void setContextName(String contextName) {
@@ -106,81 +106,81 @@ public class GenericProjectBean {
     }
 
     public void setBinPath(String binPath){
-	this.binPath=binPath;
+		  this.binPath=binPath;
     }
 
     public String getBaseWorkDir() {
-	return baseWorkDir;
+		  return baseWorkDir;
     }
 
     public void setBaseWorkDir(String baseWorkDir){
-	this.baseWorkDir=baseWorkDir;
+		  this.baseWorkDir=baseWorkDir;
     }
 
     public String getAntUrl() {
-	return antUrl;
+		  return antUrl;
     }
 
     public void setAntUrl(String antUrl){
-	this.antUrl=antUrl;
+		  this.antUrl=antUrl;
     }
 
     public String getFileServiceUrl(){
-	return fileServiceUrl;
+		  return fileServiceUrl;
     }
 
     public void setFileServiceUrl(String fileServiceUrl){
-	this.fileServiceUrl=fileServiceUrl;
+		  this.fileServiceUrl=fileServiceUrl;
     }
    
     public String getChosenProject() {
-	return chosenProject;
+		  return chosenProject;
     }
 
     public void setChosenProject(String chosenProject) {
-	this.chosenProject=chosenProject;
+		  this.chosenProject=chosenProject;
     }
 
     public Hashtable getContextListHash() {
-	return contextListHash;
+		  return contextListHash;
     }
 
     public void setContextListHash(Hashtable contextListHash) {
-	this.contextListHash=contextListHash;
+		  this.contextListHash=contextListHash;
     }
 
     public Vector getContextListVector() {
-	return contextListVector;
+		  return contextListVector;
     }
 
     public void setContextListVector(Vector contextListVector) {
-	this.contextListVector=contextListVector;
+		  this.contextListVector=contextListVector;
     }
     
     public void setContextList(String[] cl) {
-	System.arraycopy(cl,0,this.contextList,0,cl.length);
+		  System.arraycopy(cl,0,this.contextList,0,cl.length);
     }
-
+	 
     public String[] getContextList() {
-	return this.contextList;
+		  return this.contextList;
     }
     
-     public void setHostName(String hostName){
-	this.hostName=hostName;
+	 public void setHostName(String hostName){
+		  this.hostName=hostName;
     }
-
+	 
     public String getHostName() {
-	return this.hostName;
+		  return this.hostName;
     }
-
+	 
     public boolean getIsInitialized() {
-	return isInitialized;
+		  return isInitialized;
     }
     
     public void setIsInitialized(boolean isInitialized) {
-	this.isInitialized=isInitialized;
+		  this.isInitialized=isInitialized;
     }
-
+	 
     public String getProjectName() {
 		  return projectName;
     }
@@ -231,54 +231,7 @@ public class GenericProjectBean {
 		  contextListVector=new Vector();
 		  contextListHash=new Hashtable();
 		  projectsToDelete=new ArrayList();
-    }
-	 
-//     public void initWebServices() {
-// 	System.out.println("Initializing web services");
-	
-// 	try {
-// 	    //--------------------------------------------------
-// 	    //Set up the context manager service.
-// 	    //--------------------------------------------------	
-// 	    String base_userpath=getContextBasePath()+
-// 		File.separator+userName+File.separator+codeName;
-// 	    System.out.println("baseuserpath:"+base_userpath);
-	    
-	    
-// 	    cm=(new ContextManagerImpServiceLocator()).
-// 		getContextManager(new URL(contextUrl));
-// 	    ((ContextManagerSoapBindingStub) cm).setMaintainSession(true);
-// 	    System.out.println("Stub initialized");
-	    
-// 	    cm.setContextStorage(FS);
-// 	    cm.init(userName,base_userpath);
-// 	    cm.addContext(codeName);
-	    
-// 	    System.out.println("We're done, take it home.");
-	    
-// 	    isInitialized=true;
-// 	}
-// 	catch(Exception ex) {
-// 	    System.out.println("We got an exception");
-// 	    ex.printStackTrace();
-// 	}
-//     }
-    
-//     protected void setContextList() throws Exception {
-// 		  contextList=cm.listContext(codeName);
-// 		  if(contextList==null || contextList.length<=0) {
-// 				System.out.println(contextList.toString());
-// 				System.out.println("No archived projects");
-// 		  }
-// 		  else {
-// 				convertContextList();
-// 				System.out.println("Context has "+contextList.length+" elements");
-// 				for(int i=0;i<contextList.length;i++) {
-// 					 System.out.println(contextList[i]);
-// 				}
-// 		  }
-//     }
-	 
+    }	 
     
     public String getPortalUserName() {
 		  userName=Utility.getUserName(defaultName);
@@ -288,23 +241,23 @@ public class GenericProjectBean {
 
     //This is the command that runs the thing.
     public String launchProject() {
-	return "project-launched";
+		  return "project-launched";
     }
-
+	 
     protected String trimLine(String line) {
-	String endLine="\015";
-	while(line.lastIndexOf(endLine)>0) {
-	    line=line.substring(line.lastIndexOf(endLine));
-	}
-	
-	return line;
+		  String endLine="\015";
+		  while(line.lastIndexOf(endLine)>0) {
+				line=line.substring(line.lastIndexOf(endLine));
+		  }
+		  
+		  return line;
     }
-
+	 
     protected String convertDate(String longIntForm){
-	long longDate=Long.parseLong(longIntForm);
-	return (new Date(longDate).toString());
+		  long longDate=Long.parseLong(longIntForm);
+		  return (new Date(longDate).toString());
     }
-
+	 
 	 /**
 	  * This returns the real path to the webapps directory on the host server.
 	  */
@@ -364,44 +317,43 @@ public class GenericProjectBean {
     public void deletePersistentObj(String dbFilePath, 
 				    Object obj, 
 				    String details) {
-	db=Db4o.openFile(dbFilePath);
-	db.close();
+		  db=Db4o.openFile(dbFilePath);
+		  db.close();
     }
 
     public void deletePersistentObj(String dbFilePath, Object obj) {
-	db=Db4o.openFile(dbFilePath);
-	ObjectSet results=db.get(obj);
-	System.out.println("Delete result seet: "+results.size());
-	if(results.hasNext()){
-	    db.delete(obj);
-	}
-	db.close();
+		  db=Db4o.openFile(dbFilePath);
+		  ObjectSet results=db.get(obj);
+		  System.out.println("Delete result seet: "+results.size());
+		  if(results.hasNext()){
+				db.delete(obj);
+		  }
+		  db.close();
     }
-
+	 
     public void updatePersistentObj(String dbFilePath, Object obj) {
-	db=Db4o.openFile(dbFilePath);
-	db.set(obj);
-	db.close();
+		  db=Db4o.openFile(dbFilePath);
+		  db.set(obj);
+		  db.close();
     }
-
+	 
     public void addPersistentObj(String dbFilePath, Object obj) {
-	db=Db4o.openFile(dbFilePath);
-	db.set(obj);
-	db.close();
+		  db=Db4o.openFile(dbFilePath);
+		  db.set(obj);
+		  db.close();
     }
-
+	 
     /**
      * Return an array of objects matching the template object's pattern.
      */ 
     public ArrayList fetchPersistentObj(String dbFilePath, 
-					Object template) {
-	ArrayList objectList=new ArrayList();
-	db=Db4o.openFile(dbFilePath);
-	ObjectSet results=db.get(template);
-	while(results.hasNext()) {
-	    objectList.add(results.next());
-	}
-	return objectList;
-	
+													 Object template) {
+		  ArrayList objectList=new ArrayList();
+		  db=Db4o.openFile(dbFilePath);
+		  ObjectSet results=db.get(template);
+		  while(results.hasNext()) {
+				objectList.add(results.next());
+		  }
+		  return objectList;
     }
 }

@@ -14,13 +14,13 @@ echo "######################################"
 echo "Deploying Ant Execution Service"
 echo "######################################"
 cd $ANT_EXECUTION_HOME
-if mvn clean package
+if mvn clean install
 then
     echo Ant exec install complete.
 else
     exit 1
 fi
-cp -r target/antexec $CATALINA_HOME/webapps
+cp -r target/AntVisco $CATALINA_HOME/webapps
 
 
 
