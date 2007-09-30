@@ -789,14 +789,28 @@ public class MeshGeneratorBean extends GenericSopacBean {
  				double dstrike=Math.atan2(x,y)/d2r;
  		      tmp_fault.setFaultStrikeAngle(format.format(dstrike));				
 
+				//Get the origin of the first fault.
+				Fault[] faults=getFaultsFromDB();
+				if(faults!=null 
+					&& faults[0]!=null
+					&& faults[0].getFaultLonStart()!=null
+					&& faults[0].getFaultLatStart()!=null) {
+					 origin_lon=Double.parseDouble(faults[0].getFaultLonStart());
+					 origin_lat=Double.parseDouble(faults[0].getFaultLatStart());
+				}
+				//No fault, so set the p
+				else {
+					 origin_lon=lonStart;
+					 origin_lat=latStart;
+				}
+				
 				//This is the (x,y) of the fault relative to the project's origin
 				//The project origin is the lower left lat/lon of the first fault.
 				double x1=(lonStart-origin_lon)*factor(origin_lon,origin_lat);
 				double y1=(latStart-origin_lat)*111.32;
 				System.out.println("Fault origin: "+x1+" "+y1);
 		      tmp_fault.setFaultLocationX(format.format(x1));
-				tmp_fault.setFaultLocationY(format.format(y1));
-				
+				tmp_fault.setFaultLocationY(format.format(y1));				
 
 		  } catch (Exception ex) {
 				ex.printStackTrace();

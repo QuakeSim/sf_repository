@@ -17,7 +17,7 @@ source ./env.sh
 
 echo ""
 echo "######################################"
-echo "Deploying ANALYZETSERI Execution Service"
+echo "Deploying ANALYZETSERI Execution Serv
 echo "######################################"
 cd $ANALYZE_TSERI_EXECUTION_HOME
 if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME -Danalyze_tseri.service.url=$PORTAL_SERVER_URL/analyze-tseri-exec -Dportal.host.name=$PORTAL_HOST_NAME -Dportal.server.url=$PORTAL_SERVER_URL
