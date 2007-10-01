@@ -13,6 +13,7 @@
 
     <build>
         <finalName>AntVisco</finalName>
+<!--
         <plugins>
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
@@ -22,6 +23,7 @@
                 </configuration>
             </plugin>
         </plugins>
+-->
     </build>
 
     <repositories>
