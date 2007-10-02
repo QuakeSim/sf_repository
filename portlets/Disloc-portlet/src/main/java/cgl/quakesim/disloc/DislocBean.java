@@ -1351,13 +1351,21 @@ public class DislocBean extends GenericSopacBean {
 		  System.out.println("Disloc params are " + currentParams.getGridXIterations());
 		  System.out.println("Disloc params are also " + currentParams.getGridYIterations());
 		  db.set(currentParams);
-
-		  //This is just some junk for testing.
-// 		  ObjectSet results2=db.get(dislocParams);
-// 		  DislocParamsBean junk=(DislocParamsBean)results2.next();
-// 		  System.out.println("Disloc params are " + junk.getGridXIterations());
-// 		  System.out.println("Disloc params are also " + junk.getGridYIterations());
-
+		  
+		  NumberFormat format = NumberFormat.getInstance();
+		  ObjectSet faultResults=db.get(Fault.class);
+		  while(faultResults.hasNext()) {
+				Fault tmp_fault=(Fault)faultResults.next();
+				System.out.println("Updating fault origins for "+tmp_fault.getFaultName());
+				
+				double x1=(tmp_fault.getFaultLonStart()-currentParams.getOriginLon())
+					 *factor(currentParams.getOriginLon(),currentParams.getOriginLat());
+				double y1=(tmp_fault.getFaultLatStart()-currentParams.getOriginLat())*111.32;
+				System.out.println("New fault origin: "+x1+" "+y1);
+				tmp_fault.setFaultLocationX(Double.parseDouble(format.format(x1)));
+				tmp_fault.setFaultLocationY(Double.parseDouble(format.format(y1)));
+				db.set(tmp_fault);
+		  }
 		  db.commit();
 		  db.close();
 		  
