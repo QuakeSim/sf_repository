@@ -225,52 +225,52 @@ public class DislocBean extends GenericSopacBean {
      */ 
     public String runBlockingDislocJSF() 
 		  throws Exception {
-	
-	try { 
+		  
+		  try { 
+				
+				Fault[] faults=getFaultsFromDB();
+				//		  currentParams=getDislocParamsFromDB();
+				// This will be fixed at "1" for now.
+				currentParams.setObservationPointStyle(1);
+				
+				//Set the project origin to be the first fault's starting lat/lon.
+				// 		  currentParams.setOriginLat(faults[0].getFaultLatStart());
+				// 		  currentParams.setOriginLon(faults[0].getFaultLonStart());
 	    
-	    Fault[] faults=getFaultsFromDB();
-	    //		  currentParams=getDislocParamsFromDB();
-	    // This will be fixed at "1" for now.
-	    currentParams.setObservationPointStyle(1);
-	    
-	    //Set the project origin to be the first fault's starting lat/lon.
-	    // 		  currentParams.setOriginLat(faults[0].getFaultLatStart());
-	    // 		  currentParams.setOriginLon(faults[0].getFaultLonStart());
-	    
-	    initDislocService();
-	    DislocResultsBean dislocResultsBean=dislocService.runBlockingDisloc(userName,
-										projectName,
-									    faults,
-										currentParams,
-										null);
-	    setJobToken(dislocResultsBean.getJobUIDStamp());
-	    
-	    String myKmlUrl="";
-	    myKmlUrl=createKml(currentParams, dislocResultsBean, faults);
-	    setJobToken(dislocResultsBean.getJobUIDStamp());
-	    storeProjectInContext(userName,
-				  projectName,
-				  dislocResultsBean.getJobUIDStamp(),
-				  currentParams,
-				  dislocResultsBean,
+				initDislocService();
+				DislocResultsBean dislocResultsBean=dislocService.runBlockingDisloc(userName,
+																										  projectName,
+																										  faults,
+																										  currentParams,
+																										  null);
+				setJobToken(dislocResultsBean.getJobUIDStamp());
+				
+				String myKmlUrl="";
+				myKmlUrl=createKml(currentParams, dislocResultsBean, faults);
+				setJobToken(dislocResultsBean.getJobUIDStamp());
+				storeProjectInContext(userName,
+											 projectName,
+											 dislocResultsBean.getJobUIDStamp(),
+											 currentParams,
+											 dislocResultsBean,
 				  myKmlUrl);
-	}
-	catch (Exception ex) {
-	    ex.printStackTrace();
-	}
-	return DISLOC_NAV_STRING;		  
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  return DISLOC_NAV_STRING;		  
     }
     
     protected String createKml(DislocParamsBean dislocParams,
 			       DislocResultsBean dislocResultsBean,
 			       Fault[] faults) throws Exception {
 	
-	System.out.println("Creating the KML file");
-	
-	//Get the project lat/lon origin.  It is the lat/lon origin of the first fault.
+		  System.out.println("Creating the KML file");
+		  
+		  //Get the project lat/lon origin.  It is the lat/lon origin of the first fault.
 		  String origin_lat=dislocParams.getOriginLat()+"";
 		  String origin_lon=dislocParams.getOriginLon()+"";
-
+		  
 		  System.out.println("Origin: "+origin_lon+" "+origin_lat);
 		  
 		  // get my  kml
@@ -310,12 +310,12 @@ public class DislocBean extends GenericSopacBean {
 		  //Plot the faults
 		  for (int i = 0; i < faults.length; i++) {
 		      kmlService.setFaultPlot("", 
-					      faults[i].getFaultName()+"", 
-					      faults[i].getFaultLonStart()+"",
-					      faults[i].getFaultLatStart()+"", 
-					      faults[i].getFaultLonEnd()+"", 
-					      faults[i].getFaultLatEnd()+"", 
-					      "ff0000ff", 5);
+												faults[i].getFaultName()+"", 
+												faults[i].getFaultLonStart()+"",
+												faults[i].getFaultLatStart()+"", 
+												faults[i].getFaultLonEnd()+"", 
+												faults[i].getFaultLatEnd()+"", 
+												"00000000", 5);
 		  }
 		  
 		  String myKmlUrl = kmlService.runMakeKml("", userName,

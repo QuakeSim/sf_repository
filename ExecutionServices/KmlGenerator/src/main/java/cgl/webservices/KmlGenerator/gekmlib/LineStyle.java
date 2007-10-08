@@ -37,7 +37,6 @@ public class LineStyle extends ColorStyle
     }
 
 
-
     public String toKML()
     {
         return toKML(false);

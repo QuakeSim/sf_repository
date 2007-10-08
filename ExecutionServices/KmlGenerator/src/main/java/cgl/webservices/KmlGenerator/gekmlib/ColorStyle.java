@@ -34,6 +34,7 @@ abstract public class ColorStyle extends ObjectNode
     {
         if(hexValue.length()!=8)
         {
+				System.out.println("Color is screwed up");
              return;
         }
         int alpha = Integer.valueOf(hexValue.substring(0, 2), 16).intValue();
@@ -44,6 +45,7 @@ abstract public class ColorStyle extends ObjectNode
         this.color = newCol;
         this.isColorDirty = true;
         setDirty();
+		  System.out.println("Color:"+alpha+" "+r+" "+g+" "+b);
     }
 
     public void setColor(java.awt.Color aColor)

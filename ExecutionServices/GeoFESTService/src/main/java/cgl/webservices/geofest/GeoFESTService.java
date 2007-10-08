@@ -1039,7 +1039,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  String EXT = ".flt";
 		  String outputFile=projectDir+File.separator+fault.getFaultName()+EXT;
 		  
-		  double locX, locY;
+		  //		  double locX, locY;
 		  
 		  //Do this for backward compatibility.  You will
 		  //get a number format exception for old style
@@ -1066,8 +1066,11 @@ public class GeoFESTService extends AntVisco implements Runnable{
 									* Math.sin(d2r * layerLatOrigin) / 298.247));
 		  
 		  //These are the (x,y) for the fault's start.
-		  locX = (lonstart - layerLonOrigin) * factor;
-		  locY = (latstart - layerLatOrigin) * 111.32;
+// 		  locX = (lonstart - layerLonOrigin) * factor;
+// 		  locY = (latstart - layerLatOrigin) * 111.32;
+
+		  double locX=Double.parseDouble(fault.getFaultLocationX());
+		  double locY=Double.parseDouble(fault.getFaultLocationY());
 		  
 		  //Get out the stuff directly stored in the context.
 		  double locZ = Double.parseDouble(fault.getFaultLocationZ());
