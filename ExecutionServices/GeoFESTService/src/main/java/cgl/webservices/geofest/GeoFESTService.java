@@ -451,11 +451,11 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  
 		  makeWorkDir(workDir);
 		  writeGroupFile(workDir,projectName,faults,layers);
+		  writeBCProjectFile(workDir,projectName,faults);
 		  writeAllFaultParamFiles(workDir,faults,layers[0]);
 		  writeAllMaterialsFiles(workDir,layers);
 		  writeAllFaultOutputFiles(workDir,faults,layers[0]);
 		  writeAllLayerOutputFiles(workDir,layers);
-		  writeBCProjectFile(workDir,projectName,faults);
 	 }
 
 	 /**
@@ -1016,14 +1016,15 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	 /**
 	  * This writes the BC file required by the meshing codes.
 	  */
-	 public void writeBCProjectFile(String projectName,
-											  String projectDir,
+	 public void writeBCProjectFile(String projectDir,
+											  String projectName,
 											  Fault[] faults) throws Exception {
 		  
 		  String EXT=".bc";
 		  String SPC=" ";
 		  String outputFile=projectDir+File.separator+projectName+EXT;
 		  System.out.println("Project file:"+projectName+EXT);
+		  System.out.println("Project Dir:"+projectDir);
 		  PrintWriter pw = new PrintWriter(new FileWriter(outputFile));
 		  pw.println(faults.length+1);
 		  pw.println("0"+SPC+"none");
