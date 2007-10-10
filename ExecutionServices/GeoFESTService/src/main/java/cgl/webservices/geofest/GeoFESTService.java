@@ -1023,6 +1023,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  String EXT=".bc";
 		  String SPC=" ";
 		  String outputFile=projectDir+File.separator+projectName+EXT;
+		  System.out.println("Project file:"+projectName+EXT);
 		  PrintWriter pw = new PrintWriter(new FileWriter(outputFile));
 		  pw.println(faults.length+1);
 		  pw.println("0"+SPC+"none");
