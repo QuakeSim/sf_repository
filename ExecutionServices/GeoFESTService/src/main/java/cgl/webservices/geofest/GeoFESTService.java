@@ -455,6 +455,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  writeAllMaterialsFiles(workDir,layers);
 		  writeAllFaultOutputFiles(workDir,faults,layers[0]);
 		  writeAllLayerOutputFiles(workDir,layers);
+		  writeBCProjectFile(workDir,projectName,faults);
 	 }
 
 	 /**
@@ -972,7 +973,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 										  i);
 		  }
 	 }
-	 
+
 	 public void writeFaultParamFile(String projectDir,
 												Fault fault,
 												Layer layer,
@@ -1011,6 +1012,30 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  pw.close();
 	 }
 
+
+	 /**
+	  * This writes the BC file required by the meshing codes.
+	  */
+	 public void writeBCProjectFile(String projectName,
+											  String projectDir,
+											  Fault[] faults) throws Exception {
+		  
+		  String EXT=".bc";
+		  String SPC=" ";
+		  String outputFile=projectDir+File.separator+projectName+EXT;
+		  PrintWriter pw = new PrintWriter(new FileWriter(outputFile));
+		  pw.println(faults.length+1);
+		  pw.println("0"+SPC+"none");
+		  for (int i=0;i<faults.length;i++) {
+				int index=i+1;
+				pw.println(index+SPC+faults[i].getFaultName());
+		  }
+		  pw.flush();
+		  pw.close();
+	 }
+	 
+
+
 	/**
 	 * Write out the fault to the context using guiVisco/geoFEST format.
 	 * This calculates the fault origin in cartesian coordinates
@@ -1026,6 +1051,11 @@ public class GeoFESTService extends AntVisco implements Runnable{
 											faults[i],
 											layer,
 											i);
+				
+				writeFaultSLDOutputFile(projectDir,
+												faults[i],
+												layer,
+												i);
 		  }
 	 }													  
 
@@ -1037,6 +1067,102 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  
 		  String SPC=" ";
 		  String EXT = ".flt";
+		  String outputFile=projectDir+File.separator+fault.getFaultName()+EXT;
+		  
+		  //		  double locX, locY;
+		  
+		  //Do this for backward compatibility.  You will
+		  //get a number format exception for old style
+		  //fault contexts.
+		  //Get out the lat and lon from the context.
+		  double latstart = Double.parseDouble(fault.getFaultLatStart());
+		  double lonstart = Double.parseDouble(fault.getFaultLonStart());
+		  double latend = Double.parseDouble(fault.getFaultLatEnd());
+		  double lonend = Double.parseDouble(fault.getFaultLonEnd());
+		  
+		  //Get the layer origin's lat and lon
+		  double layerLatOrigin = Double.parseDouble(layer.getLayerLatOrigin());
+		  double layerLonOrigin = Double.parseDouble(layer.getLayerLonOrigin());
+		  
+		  //Calculate the fault start in cartesian coordinates relative to 
+		  //the layer origin.  Layer origin cart coordinates are (0,0,0) 
+		  //of course.
+		  //Calculate the length
+		  NumberFormat format = NumberFormat.getInstance();
+		  double d2r = Math.acos(-1.0) / 180.0;
+		  double factor = d2r
+				* Math.cos(d2r * layerLatOrigin)
+				* (6378.139 * (1.0 - Math.sin(d2r * layerLatOrigin)
+									* Math.sin(d2r * layerLatOrigin) / 298.247));
+		  
+		  //These are the (x,y) for the fault's start.
+// 		  locX = (lonstart - layerLonOrigin) * factor;
+// 		  locY = (latstart - layerLatOrigin) * 111.32;
+
+		  double locX=Double.parseDouble(fault.getFaultLocationX());
+		  double locY=Double.parseDouble(fault.getFaultLocationY());
+		  
+		  //Get out the stuff directly stored in the context.
+		  double locZ = Double.parseDouble(fault.getFaultLocationZ());
+		  double length = Double.parseDouble(fault.getFaultLength());
+		  double width = Double.parseDouble(fault.getFaultWidth());
+		  double depth = Double.parseDouble(fault.getFaultDepth());
+		  
+		  double dip = Double.parseDouble(fault.getFaultDipAngle());
+		  double strike = Double.parseDouble(fault.getFaultStrikeAngle());
+		  
+		  //Useful math.  See guiVisco documents for details.
+		  double minus_depth = -depth;
+		  double strike_deg = strike * Math.PI / 180.0;
+		  double dip_deg = dip * Math.PI / 180.0;
+		  
+		  double P00 = locX;
+		  double P01 = locY;
+		  double P02 = minus_depth;
+		  
+		  double P10 = locX + length * Math.sin(strike_deg);
+		  double P11 = locY + length * Math.cos(strike_deg);
+		  double P12 = minus_depth;
+		  
+		  double P20 = locX + length * Math.sin(strike_deg) - width
+				* Math.cos(strike_deg) * Math.cos(dip_deg);
+		  double P21 = locY + length * Math.cos(strike_deg) + width
+				* Math.sin(strike_deg) * Math.cos(dip_deg);
+		  double P22 = minus_depth + width * Math.sin(dip_deg);
+		  
+		  double P30 = locX - width * Math.cos(strike_deg) * Math.cos(dip_deg);
+		  double P31 = locY + width * Math.sin(strike_deg) * Math.cos(dip_deg);
+		  double P32 = minus_depth + width * Math.sin(dip_deg);
+		  
+		  //Write it to file.
+		  PrintWriter pw = new PrintWriter(new FileWriter(outputFile));
+		  pw.println("4");
+		  pw.println(P00 + SPC + P01 + SPC + P02);
+		  pw.println(P10 + SPC + P11 + SPC + P12);
+		  pw.println(P20 + SPC + P21 + SPC + P22);
+		  pw.println(P30 + SPC + P31 + SPC + P32);
+		  
+		  //Finally, write the following stuff
+		  
+		  pw.println("1");
+		  pw.println(faultInt + " 1");
+		  pw.println("\t 4 1 2 3 4");
+		  
+		  pw.flush();
+		  pw.close();
+	 }
+	 
+	 /**
+	  * This is identical to the .flt files but needed for compatibility.
+	  */
+	 public void writeFaultSLDOutputFile(String projectDir,
+												 Fault fault,
+												 Layer layer,
+												 int faultInt)
+		  throws Exception {
+		  
+		  String SPC=" ";
+		  String EXT = ".sld";
 		  String outputFile=projectDir+File.separator+fault.getFaultName()+EXT;
 		  
 		  //		  double locX, locY;
