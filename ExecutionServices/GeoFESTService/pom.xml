@@ -62,6 +62,10 @@
             <id>crisisgrid-maven-repo</id>
             <url>http://www.crisisgrid.org/maven2</url>
         </repository>
+        <repository>
+            <id>ogce-maven-repo</id>
+            <url>http://www.collab-ogce.org/maven2</url>
+        </repository>
 
         <repository>
             <id>apache-maven</id>
@@ -130,6 +134,17 @@
              <version>1.2.8</version>
         </dependency>
 
+        <dependency>
+             <groupId>condor.birdbath</groupId>
+             <artifactId>birdbath</artifactId>
+             <version>6.8</version>
+        </dependency>
+
+        <dependency>
+             <groupId>condor.birdbath</groupId>
+             <artifactId>birdbath1</artifactId>
+             <version>6.8</version>
+        </dependency>
 
         <!-- These are ant jars -->
         <dependency>

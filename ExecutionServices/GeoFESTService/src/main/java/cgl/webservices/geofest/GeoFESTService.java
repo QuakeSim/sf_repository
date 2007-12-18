@@ -26,6 +26,16 @@ import java.text.*;
 //Needed for a unique id
 import java.rmi.server.UID;
 
+//Condor classes
+import condor.ClassAdStructAttr;
+import condor.ClassAdAttrType;
+import condor.UniverseType;
+import condor.CondorCollectorLocator;
+import condor.CondorCollectorPortType;
+import condor.ClassAdStructAttr;
+import condor.FileInfo;
+import birdbath.*;
+
 /**
  * A simple wrapper for Ant.
  */
@@ -35,6 +45,10 @@ public class GeoFESTService extends AntVisco implements Runnable{
 
     final String FILE_PROTOCOL="file";
     final String HTTP_PROTOCOL="http";
+
+    //Set the universe type for condor.  Probably OK to assume it is always
+    //Globus for now.
+    UniverseType universeType = UniverseType.GLOBUS;
 
     //These are the system properties that may have
     //default values.
@@ -47,256 +61,408 @@ public class GeoFESTService extends AntVisco implements Runnable{
     String binDir;
     String buildFilePath;
     String antTarget;
-	 String queueServiceUrl;
+    String queueServiceUrl;
+    String collectorUrl;
+
     
-	 /**
-	  * This is a main() for testing.
-	  */
-	 public static void main(String[] args) {
-		  //Create fault.
-		  Fault[] faults=new Fault[1];
-		  faults[0]=new Fault();
-
-		  //Create layer.
-		  Layer[] layers=new Layer[1];
-		  layers[0]=new Layer();
-
-		  //Create geotrans params
-		  GeotransParamsBean gpb=new GeotransParamsBean();
-
-		  String userName="duhFaultUser";
-		  String projectName="faultsatmyfeet";
-
-		  try {
-				//Make the mesh.
-				GeoFESTService gfs=new GeoFESTService(true);
-				
-				//This will actually return before the job is 
-				//finished, so we'll use ticket2 in later calculations.
-// 				System.out.println("Running non-blocking version");
-//  				String ticket1=gfs.runNonBlockingMeshGenerator(userName,
-// 																			  projectName,
-// 																			  faults,
-// 																			  layers,
-// 																			  "rare");
-				
-				System.out.println("Running blocking version");
- 				MeshRunBean mrb=gfs.runBlockingMeshGenerator(userName,
-																			projectName,
-																			faults,
-																			layers,
-																			"rare");
-				
-				// 				System.out.println("Packing input files");
-				// 				gfs.runPackageGeoFESTFiles(userName,projectName,gpb,ticket2);
-				
-				System.out.println("Running GeoFEST");
-				gfs.runGeoFEST(userName,projectName,gpb,mrb.getJobUIDStamp());
-				
-		  }
-		  catch (Exception ex) {
-				ex.printStackTrace();
-		  }
-	 }
-
     /**
-	  * The constructor. Set useClassLoader=true when running
-	  * on the command line.
-	  */
+     * This is a main() for testing.
+     */
+    public static void main(String[] args) {
+	//Create fault.
+	Fault[] faults=new Fault[1];
+	faults[0]=new Fault();
+	
+	//Create layer.
+	Layer[] layers=new Layer[1];
+	layers[0]=new Layer();
+	
+	//Create geotrans params
+	GeotransParamsBean gpb=new GeotransParamsBean();
+	
+	String userName="duhFaultUser";
+	String projectName="faultsatmyfeet";
+	
+	try {
+	    //Make the mesh.
+	    GeoFESTService gfs=new GeoFESTService(true);
+	    
+	    //This will actually return before the job is 
+	    //finished, so we'll use ticket2 in later calculations.
+	    // 				System.out.println("Running non-blocking version");
+	    //  				String ticket1=gfs.runNonBlockingMeshGenerator(userName,
+	    // 																			  projectName,
+	    // 																			  faults,
+	    // 																			  layers,
+	    // 																			  "rare");
+	    
+	    System.out.println("Running blocking version");
+	    MeshRunBean mrb=gfs.runBlockingMeshGenerator(userName,
+							 projectName,
+							 faults,
+							 layers,
+							 "rare");
+	    
+	    // 				System.out.println("Packing input files");
+	    // 				gfs.runPackageGeoFESTFiles(userName,projectName,gpb,ticket2);
+	    
+	    System.out.println("Running GeoFEST");
+	    gfs.runGeoFEST(userName,projectName,gpb,mrb.getJobUIDStamp());
+	    
+	}
+	catch (Exception ex) {
+	    ex.printStackTrace();
+	}
+    }
+    
+    /**
+     * The constructor. Set useClassLoader=true when running
+     * on the command line.
+     */
     public GeoFESTService(boolean useClassLoader) 
-		  throws Exception {
-		  
-		  super();
-		  
-		  if(useClassLoader) {
-				System.out.println("Using classloader");
-				//This is useful for command line clients but does not work
+	throws Exception {
+	
+	super();
+	
+	if(useClassLoader) {
+	    System.out.println("Using classloader");
+	    //This is useful for command line clients but does not work
 				//inside Tomcat.
-				ClassLoader loader=ClassLoader.getSystemClassLoader();
-				properties=new Properties();
-				
-				//This works if you are using the classloader but not inside
-				//Tomcat.
-				properties.load(loader.getResourceAsStream("geofestconfig.properties"));
-		  }
-		  else {
-				//Extract the Servlet Context
-				System.out.println("Using Servlet Context");
-				MessageContext msgC=MessageContext.getCurrentContext();
-				ServletContext context=((HttpServlet)msgC.getProperty(HTTPConstants.MC_HTTP_SERVLET)).getServletContext();
-				
-				String propertyFile=context.getRealPath("/")
-					 +"/WEB-INF/classes/geofestconfig.properties";
-				System.out.println("Prop file location "+propertyFile);
-				
-				properties=new Properties();	    
-				properties.load(new FileInputStream(propertyFile));
-		  }
-		  
-		  //Note these will be "global" for this class, so
-		  //I will not explicitly pass them around.
-		  serverUrl=properties.getProperty("geofest.service.url");
-		  baseWorkDir=properties.getProperty("base.workdir");
-		  baseDestDir=properties.getProperty("base.dest.dir");
-		  projectName=properties.getProperty("project.name");
-		  binDir=properties.getProperty("bin.path");
-		  buildFilePath=properties.getProperty("build.file.path");
-		  antTarget=properties.getProperty("ant.target");
-		  baseOutputDestDir=properties.getProperty("output.dest.dir");
-		  queueServiceUrl=properties.getProperty("queue.service.url");
-	 }
+	    ClassLoader loader=ClassLoader.getSystemClassLoader();
+	    properties=new Properties();
+	    
+	    //This works if you are using the classloader but not inside
+	    //Tomcat.
+	    properties.load(loader.getResourceAsStream("geofestconfig.properties"));
+	}
+	else {
+	    //Extract the Servlet Context
+	    System.out.println("Using Servlet Context");
+	    MessageContext msgC=MessageContext.getCurrentContext();
+	    ServletContext context=((HttpServlet)msgC.getProperty(HTTPConstants.MC_HTTP_SERVLET)).getServletContext();
+	    
+	    String propertyFile=context.getRealPath("/")
+		+"/WEB-INF/classes/geofestconfig.properties";
+	    System.out.println("Prop file location "+propertyFile);
+	    
+	    properties=new Properties();	    
+	    properties.load(new FileInputStream(propertyFile));
+	}
+	
+	//Note these will be "global" for this class, so
+	//I will not explicitly pass them around.
+	serverUrl=properties.getProperty("geofest.service.url");
+	baseWorkDir=properties.getProperty("base.workdir");
+	baseDestDir=properties.getProperty("base.dest.dir");
+	projectName=properties.getProperty("project.name");
+	binDir=properties.getProperty("bin.path");
+	buildFilePath=properties.getProperty("build.file.path");
+	antTarget=properties.getProperty("ant.target");
+	baseOutputDestDir=properties.getProperty("output.dest.dir");
+	queueServiceUrl=properties.getProperty("queue.service.url");
+	
+	//Good ol' condor 
+	collectorUrl=propoerties.getProperty("condor.collector.url");
+    }
     
     public GeoFESTService() throws Exception{
-		  this(false);
+	this(false);
     }
-	 
-	 /**
-	  * Does all the generic parts for setting up the 
-	  * mesh generator run.  
-	  * 
-	  * Returns the time stamp, which is needed for
-	  * later querying.	  *
-	  */ 
-	 protected String prefabMeshGenerator(String userName,
-													String projectName,
-													Fault[] faults,
-													Layer[] layers,
-													String autoref_mode) 
-		  throws Exception {
-		  
-		  String timeStamp=generateTimeStamp();
-		  
-		  String workDir=generateWorkDir(userName,projectName,timeStamp);
-		  String outputDestDir=generateOutputDestDir(userName,
-																	projectName,
-																	timeStamp);
-		  
-		  createGeometryFiles(workDir,projectName,faults,layers);
-		  String[] args=setUpMeshArgs(workDir,
-												projectName,
-												autoref_mode,
-												outputDestDir,
-												timeStamp,
-												queueServiceUrl);
-		  //Methods from parent
-		  setArgs(args);
-		  
-		  return timeStamp;
-	 }
-	 
-	 /**
-	  *
-	  */
-	 protected String generateOutputDestDir(String userName,
-														 String projectName,
-														 String timeStamp) {
-		  
-		  String outputDestDir=baseOutputDestDir+File.separator
-				+userName+File.separator
-				+projectName+File.separator+timeStamp;
-		  
-		  return outputDestDir;
-		  
-	 }
 
-	 /**
-	  *
-	  */
-	 protected String generateWorkDir(String userName,
-												 String projectName,
-												 String timeStamp) {
-		  
-		  String workDir=baseWorkDir+File.separator
-				+userName+File.separator
-				+projectName+File.separator+timeStamp;
-		  
-		  return workDir;
-		  
-	 }
+    /**
+     * This method gets the Schedd service's URL as a String from the
+     * Collector, which is a little obscure.  Note this method assumes you
+     * only have one scheduler for your system, which is co-located with
+     * the collector.  
+     */
+    protected String getScheddUrl(String collectorUrl) throws Exception {
+	
+	String scheddLocationStr = null;
+	URL collectorLocation = new URL(collectorUrl);
+	
+	//These are Axis-generated stubs to the 
+	//Collector web service.
+	CondorCollectorLocator collectorLocator=
+	    new CondorCollectorLocator();
+	System.out.println(collectorLocator.toString());
+	
+	CondorCollectorPortType collector = 
+	    collectorLocator.getcondorCollector(collectorLocation);
+	
+	ClassAdStructAttr[][] casArray = 
+	    collector.queryScheddAds("HasSOAPInterface=?=TRUE");
+	
+	//This will actually loop over all the schedds in the cluster, which may
+	//not be what you want.
+	for(int i=0; i<casArray.length; i++ ) {
+	    for (int j=0; j<casArray[i].length; j++) {
+		if(casArray[i][j].getName().equals("ScheddIpAddr")) {
+		    scheddLocationStr=casArray[i][j].getValue();
+		}
+	    }
+	}
+	
+	String tmpStr= "http://"
+	    +scheddLocationStr.substring(1,scheddLocationStr.length()-1);
+	
+	return tmpStr; 
+    }
+    
+    /**
+     * Does all the generic parts for setting up the 
+     * mesh generator run.  
+     * 
+     * Returns the time stamp, which is needed for
+     * later querying.	  *
+     */ 
+    protected String prefabMeshGenerator(String userName,
+					 String projectName,
+					 Fault[] faults,
+					 Layer[] layers,
+					 String autoref_mode) 
+	throws Exception {
+	
+	String timeStamp=generateTimeStamp();
+	
+	String workDir=generateWorkDir(userName,projectName,timeStamp);
+	String outputDestDir=generateOutputDestDir(userName,
+						   projectName,
+						   timeStamp);
+	
+	createGeometryFiles(workDir,projectName,faults,layers);
+	String[] args=setUpMeshArgs(workDir,
+				    projectName,
+				    autoref_mode,
+				    outputDestDir,
+				    timeStamp,
+				    queueServiceUrl);
+	//Methods from parent
+	setArgs(args);
+	
+	return timeStamp;
+    }
+    
+    /**
+     *
+     */
+    protected String generateOutputDestDir(String userName,
+					   String projectName,
+					   String timeStamp) {
+	
+	String outputDestDir=baseOutputDestDir+File.separator
+	    +userName+File.separator
+	    +projectName+File.separator+timeStamp;
+	
+	return outputDestDir;
+	
+    }
+    
+    /**
+     *
+     */
+    protected String generateWorkDir(String userName,
+				     String projectName,
+				     String timeStamp) {
+	
+	String workDir=baseWorkDir+File.separator
+	    +userName+File.separator
+	    +projectName+File.separator+timeStamp;
+	
+	return workDir;
+	
+    }
+    
+    /**
+     * These are some condor submission helper methods.
+     */ 
+    protected Transaction createNewTransaction(String collectorUrl) 
+	throws Exception {
+	//Set up the schedd
+	String condorScheddUrl = getScheddUrl(collectorUrl);
+	System.out.println("Schedd URL: "+condorScheddUrl);
+	Schedd schedd = new Schedd(new URL(condorScheddUrl));
+	
 
-	 /**
-	  * This runs the mesh generator code in blocking mode,
-	  * i.e., it does not return until the mesh is done.
-	  * 
-	  * Returns the time stamp, which is needed for
-	  * later querying.
-	  */
-	 public MeshRunBean runBlockingMeshGenerator(String userName,
-																String projectName,
-																Fault[] faults,
-																Layer[] layers,
-																String autoref_mode) 
-		  throws Exception {
-		  String timeStamp=prefabMeshGenerator(userName,
-															projectName,
-															faults,
-															layers,
-															autoref_mode);
-		  run();
-		  return getTheMeshGenReturnFiles(userName,projectName,timeStamp);
-	 }
-	 
-	 /**
-	  * Runs the meshgenerator in non-blocking mode, which
-	  * is necessary for large meshes. 
-	  * 
-	  * Returns a string array.  String[0] is a timestamp,
-	  * which is needed for later querying.  The rest of
-	  * the array consists of URLs for the project
-	  * 
-	  */
-	 public MeshRunBean runNonBlockingMeshGenerator(String userName,
-																		 String projectName,
-																		 Fault[] faults,
-																		 Layer[] layers,
-																		 String autoref_mode) 
-		  throws Exception{
-		  String timeStamp=prefabMeshGenerator(userName,
-															projectName,
-															faults,
-															layers,
-															autoref_mode);
-		  execute();
-		  return getTheMeshGenReturnFiles(userName,projectName,timeStamp);
-	 }
+	
+	//Use the schedd to create a transaction.
+	//Get the cluster and job ids.
+	Transaction xact = schedd.createTransaction();
+    }
 
-	 
-	 protected MeshRunBean getTheMeshGenReturnFiles(String userName,
-																		 String projectName,
-																		 String jobUIDStamp) {
-		  String baseUrl=generateBaseUrl(userName,projectName,jobUIDStamp);
+    /**
+     * Run things the condor way.
+     */ 
+    public MeshRunBean runGridMeshGenerator(String userName,
+					    String projectName,
+					    Faults[] faults,
+					    Layer[] layers,
+					    String autref_mode,
+					    String proxyLocation,
+					    String gridResourceVal,)
+	throws Exception {
+	
+	try {
+	    //This creates all the input files. 
+	    String timeStamp=generateTimeStamp();
+	    String workDir=generateWorkDir(userName,projectName,timeStamp);
+	    String outputDestDir=generateOutputDestDir(userName,
+						       projectName,
+						       timeStamp);
+	    
+	    createGeometryFiles(workDir,projectName,faults,layers);
+	    
+	    
+	    
+	    //Do the condor submission stuff
+	    Transaction xact = createNewTransaction();
+	    xact.begin(30);
+	    clusterId = xact.createCluster();
+	    jobId = xact.createJob(clusterId);
+	    
+	    //Create a classad for the job.
+	    ClassAdStructAttr[] extraAttributes =
+		{
+		    new ClassAdStructAttr("GridResource", ClassAdAttrType.value3,
+					  gridResourceVal),
+		    new ClassAdStructAttr("Out", ClassAdAttrType.value3,
+					  baseUrl+"/"+"autoref.out"),
+		    new ClassAdStructAttr("UserLog", ClassAdAttrType.value3,
+					  baseUrl+"/"+"autoref.log"),
+		    new ClassAdStructAttr("Err", ClassAdAttrType.value3,
+					  baseUrl+"/"+"autoref.err"),
+		    new ClassAdStructAttr("TransferExecutable",
+					  ClassAdAttrType.value4, 
+					  "FALSE"),
+		    new ClassAdStructAttr("when_to_transfer_output",
+					  ClassAdAttrType.value2, 
+					  "\"ON_EXIT\""),
+		    new ClassAdStructAttr("should_transfer_files",
+					  ClassAdAttrType.value2, 
+					  "\"YES\""),
+		    new ClassAdStructAttr("StreamOut",
+					  ClassAdAttrType.value4, 
+					  "FALSE"),
+		    new ClassAdStructAttr("StreamErr",
+					  ClassAdAttrType.value4, 
+					  "FALSE"),
+		    new ClassAdStructAttr("TransferOutput",
+					  ClassAdAttrType.value2, 
+					  projectOutput),
+		    new ClassAdStructAttr("x509userproxy", 
+					  ClassAdAttrType.value3, 
+					  proxyLocation)
+		};
+	    
+	    File[] files={ 
+		new File("/Users/marlonpierce/condor_test/Northridge2.flt"), 
+		new File("/Users/marlonpierce/condor_test/Northridge2.params"), 
+		new File("/Users/marlonpierce/condor_test/Northridge2.sld"), 
+		new File("/Users/marlonpierce/condor_test/NorthridgeAreaMantle.materials"), 
+		new File("/Users/marlonpierce/condor_test/NorthridgeAreaMantle.sld"), 
+		new File("/Users/marlonpierce/condor_test/NorthridgeAreaMidCrust.materials"), 
+		new File("/Users/marlonpierce/condor_test/NorthridgeAreaMidCrust.sld"),
+		new File("/Users/marlonpierce/condor_test/NorthridgeAreaUpper.materials"),
+		new File("/Users/marlonpierce/condor_test/NorthridgeAreaUpper.sld"),
+		new File("/Users/marlonpierce/condor_test/testgeoupdate.grp")
+	    };
+	    
+	    //Submit it all.
+	    xact.submit(clusterId, jobId, userName, universeType,
+			executable,arguments,"(TRUE)", extraAttributes, files);
+	    xact.commit();
+	    schedd.requestReschedule();				
+	}
+	catch (Exception ex) {
+	    warningMessage="Could not connect to Condor to submit job.";
+	    ex.printStackTrace();
+	}
+	
+	
+    }
 
-		  MeshRunBean mrb=new MeshRunBean();
-		  mrb.setJobUIDStamp(jobUIDStamp);
-		  mrb.setProjectName(projectName);
-		  mrb.setAutoref(baseUrl+"/"+"autoref.out");
-		  mrb.setAutorefError(baseUrl+"/"+"autoref.error");
-		  mrb.setNodeUrl(baseUrl+"/"+projectName+".node");
-		  mrb.setTetraUrl(baseUrl+"/"+projectName+".tetra");
-		  mrb.setBcUrl(baseUrl+"/"+projectName+".bcmap");
-		  mrb.setIndexUrl(baseUrl+"/"+projectName+".index");
-		  mrb.setJunkBox(baseUrl+"/"+"junk.box");
-		  mrb.setTstout(baseUrl+"/"+"tstout");
-		  mrb.setLeeRefinerLog(baseUrl+"/"+"LeeRefiner.log");
-		  mrb.setRefinerLog(baseUrl+"/"+"refiner.log");
-		  mrb.setTagbigfltLog(baseUrl+"/"+"tagbigflt.log");
-		  mrb.setViscoTarUrl(baseUrl+"/"+projectName+"-visco.tar.gz");
-		  
-		  return mrb;
-	 }
-
-	 protected String generateBaseUrl(String userName,
-												 String projectName,
-												 String timeStamp) {
-
-		  //Need to be careful here because this must follow
-		  //the workDir convention also.
-		  String baseUrl=serverUrl+"/"+userName+"/"
-				+projectName+"/"+"/"+timeStamp;
-
-		  return baseUrl;
-	 }
-
+    /**
+     * This runs the mesh generator code in blocking mode,
+     * i.e., it does not return until the mesh is done.
+     * 
+     * Returns the time stamp, which is needed for
+     * later querying.
+     */
+    public MeshRunBean runBlockingMeshGenerator(String userName,
+						String projectName,
+						Fault[] faults,
+						Layer[] layers,
+						String autoref_mode) 
+	throws Exception {
+	String timeStamp=prefabMeshGenerator(userName,
+					     projectName,
+					     faults,
+					     layers,
+					     autoref_mode);
+	run();
+	return getTheMeshGenReturnFiles(userName,projectName,timeStamp);
+    }
+    
+    /**
+     * Runs the meshgenerator in non-blocking mode, which
+     * is necessary for large meshes. 
+     * 
+     * Returns a string array.  String[0] is a timestamp,
+     * which is needed for later querying.  The rest of
+     * the array consists of URLs for the project
+     * 
+     */
+    public MeshRunBean runNonBlockingMeshGenerator(String userName,
+						   String projectName,
+						   Fault[] faults,
+						   Layer[] layers,
+						   String autoref_mode) 
+	throws Exception{
+	String timeStamp=prefabMeshGenerator(userName,
+					     projectName,
+					     faults,
+					     layers,
+					     autoref_mode);
+	execute();
+	return getTheMeshGenReturnFiles(userName,projectName,timeStamp);
+    }
+    
+    
+    protected MeshRunBean getTheMeshGenReturnFiles(String userName,
+						   String projectName,
+						   String jobUIDStamp) {
+	String baseUrl=generateBaseUrl(userName,projectName,jobUIDStamp);
+	
+	MeshRunBean mrb=new MeshRunBean();
+	mrb.setJobUIDStamp(jobUIDStamp);
+	mrb.setProjectName(projectName);
+	mrb.setAutoref(baseUrl+"/"+"autoref.out");
+	mrb.setAutorefError(baseUrl+"/"+"autoref.error");
+	mrb.setNodeUrl(baseUrl+"/"+projectName+".node");
+	mrb.setTetraUrl(baseUrl+"/"+projectName+".tetra");
+	mrb.setBcUrl(baseUrl+"/"+projectName+".bcmap");
+	mrb.setIndexUrl(baseUrl+"/"+projectName+".index");
+	mrb.setJunkBox(baseUrl+"/"+"junk.box");
+	mrb.setTstout(baseUrl+"/"+"tstout");
+	mrb.setLeeRefinerLog(baseUrl+"/"+"LeeRefiner.log");
+	mrb.setRefinerLog(baseUrl+"/"+"refiner.log");
+	mrb.setTagbigfltLog(baseUrl+"/"+"tagbigflt.log");
+	mrb.setViscoTarUrl(baseUrl+"/"+projectName+"-visco.tar.gz");
+	
+	return mrb;
+    }
+    
+    protected String generateBaseUrl(String userName,
+				     String projectName,
+				     String timeStamp) {
+	
+	//Need to be careful here because this must follow
+	//the workDir convention also.
+	String baseUrl=serverUrl+"/"+userName+"/"
+	    +projectName+"/"+"/"+timeStamp;
+	
+	return baseUrl;
+    }
+    
 	 /**
 	  * Checks the running Mesh Generator service.
 	  * Useful in non-blocking execution.
@@ -357,86 +523,84 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  return args;
 	 }
 
-	 /**
-	  * Actually runs GeoFEST.  Always runs in non-blocking mode.
-	  *
-	  * Returns the timestamp as String[0].  The rest are URLs
-	  * of various output files.  String[1] is everything in a
-	  * tar.gz.  String[2] is the GeoFEST input file.  String[3]
-	  * is the GeoFEST output file.  String [4] is the standard output
-	  * of geofest.  String [5] is the GeoFEST log file.
-	  */
-	 public GFOutputBean runGeoFEST(String userName,
-											  String projectName,
-											  GeotransParamsBean gpb,
-											  String timeStamp)
-		  throws Exception {
-		  
-		  //The target is always "tar.all".
-		  String[] args=
-				prefabGeoFESTCall(userName,projectName,gpb,timeStamp,"tar.all");
-		  setArgs(args);
-		  execute();
-		  return getAllTheGeoFESTFiles(userName,projectName,timeStamp);
-	 }
-
-	 /**
-	  * Checks the status of a running GeoFEST job.
-	  */
-	 public void queryGeoFESTStatus() 
-		  throws Exception {
-	 }
-
-	 /**
-	  * 
-	  */
-	 protected String[] getTheGeoFESTInputFiles(String userName,
-															  String projectName,
-															  String timeStamp) {
-		  String baseUrl=generateBaseUrl(userName,projectName,timeStamp);
-		  String[] gfUrls=new String[2];
-		  gfUrls[0]=timeStamp;
-		  gfUrls[1]=baseUrl+"/"+projectName+".tar.gz";
-
-		  return gfUrls;
-	 }
-	 
-	 protected GFOutputBean getAllTheGeoFESTFiles(String userName,
-																 String projectName,
-																 String jobUIDStamp) {
-
-		  GFOutputBean gfoutput=new GFOutputBean();
-		  String baseUrl=generateBaseUrl(userName,projectName,jobUIDStamp);
-		  
-		  gfoutput.setJobUIDStamp(jobUIDStamp);
-		  gfoutput.setTarOfEverythingUrl(baseUrl+"/"+projectName+".tar.gz");
-		  gfoutput.setInputUrl(baseUrl+"/"+projectName+".inp");
-		  gfoutput.setOutputUrl(baseUrl+"/"+projectName+".out");
-		  gfoutput.setLogUrl(baseUrl+"/"+projectName+".log");
-		  gfoutput.setIndexUrl(baseUrl+"/"+projectName+".index");
-		  gfoutput.setNodeUrl(baseUrl+"/"+projectName+".node");
-		  gfoutput.setTetraUrl(baseUrl+"/"+projectName+".tetra");
-		  gfoutput.setTetvolsUrl(baseUrl+"/"+projectName+".tetvols");
-		  gfoutput.setToptrisUrl(baseUrl+"/"+projectName+".toptris");
-		  gfoutput.setCghistUrl(baseUrl+"/"+"cghist.txt");
-		  gfoutput.setJobStatusUrl(baseUrl+"/"+"jobstatus.log");
-
-		  System.out.println(gfoutput.getJobUIDStamp());
-		  System.out.println(gfoutput.getTarOfEverythingUrl());
-		  System.out.println(gfoutput.getInputUrl());
-		  System.out.println(gfoutput.getOutputUrl());
-		  System.out.println(gfoutput.getLogUrl());
-		  System.out.println(gfoutput.getIndexUrl());
-		  System.out.println(gfoutput.getNodeUrl());
-		  System.out.println(gfoutput.getTetraUrl());
-		  System.out.println(gfoutput.getTetvolsUrl());
-		  System.out.println(gfoutput.getToptrisUrl());
-		  System.out.println(gfoutput.getCghistUrl());
-		  System.out.println(gfoutput.getJobStatusUrl());
-
-		  
-
-		  return gfoutput;
+    /**
+     * Actually runs GeoFEST.  Always runs in non-blocking mode.
+     *
+     * Returns the timestamp as String[0].  The rest are URLs
+     * of various output files.  String[1] is everything in a
+     * tar.gz.  String[2] is the GeoFEST input file.  String[3]
+     * is the GeoFEST output file.  String [4] is the standard output
+     * of geofest.  String [5] is the GeoFEST log file.
+     */
+    public GFOutputBean runGeoFEST(String userName,
+				   String projectName,
+				   GeotransParamsBean gpb,
+				   String timeStamp)
+	throws Exception {
+	
+	//The target is always "tar.all".
+	String[] args=
+	    prefabGeoFESTCall(userName,projectName,gpb,timeStamp,"tar.all");
+	setArgs(args);
+	execute();
+	return getAllTheGeoFESTFiles(userName,projectName,timeStamp);
+    }
+    
+    /**
+     * Checks the status of a running GeoFEST job.
+     */
+    public void queryGeoFESTStatus() 
+	throws Exception {
+    }
+    
+    /**
+     * 
+     */
+    protected String[] getTheGeoFESTInputFiles(String userName,
+					       String projectName,
+					       String timeStamp) {
+	String baseUrl=generateBaseUrl(userName,projectName,timeStamp);
+	String[] gfUrls=new String[2];
+	gfUrls[0]=timeStamp;
+	gfUrls[1]=baseUrl+"/"+projectName+".tar.gz";
+	
+	return gfUrls;
+    }
+    
+    protected GFOutputBean getAllTheGeoFESTFiles(String userName,
+						 String projectName,
+						 String jobUIDStamp) {
+	
+	GFOutputBean gfoutput=new GFOutputBean();
+	String baseUrl=generateBaseUrl(userName,projectName,jobUIDStamp);
+	
+	gfoutput.setJobUIDStamp(jobUIDStamp);
+	gfoutput.setTarOfEverythingUrl(baseUrl+"/"+projectName+".tar.gz");
+	gfoutput.setInputUrl(baseUrl+"/"+projectName+".inp");
+	gfoutput.setOutputUrl(baseUrl+"/"+projectName+".out");
+	gfoutput.setLogUrl(baseUrl+"/"+projectName+".log");
+	gfoutput.setIndexUrl(baseUrl+"/"+projectName+".index");
+	gfoutput.setNodeUrl(baseUrl+"/"+projectName+".node");
+	gfoutput.setTetraUrl(baseUrl+"/"+projectName+".tetra");
+	gfoutput.setTetvolsUrl(baseUrl+"/"+projectName+".tetvols");
+	gfoutput.setToptrisUrl(baseUrl+"/"+projectName+".toptris");
+	gfoutput.setCghistUrl(baseUrl+"/"+"cghist.txt");
+	gfoutput.setJobStatusUrl(baseUrl+"/"+"jobstatus.log");
+	
+	System.out.println(gfoutput.getJobUIDStamp());
+	System.out.println(gfoutput.getTarOfEverythingUrl());
+	System.out.println(gfoutput.getInputUrl());
+	System.out.println(gfoutput.getOutputUrl());
+	System.out.println(gfoutput.getLogUrl());
+	System.out.println(gfoutput.getIndexUrl());
+	System.out.println(gfoutput.getNodeUrl());
+	System.out.println(gfoutput.getTetraUrl());
+	System.out.println(gfoutput.getTetvolsUrl());
+	System.out.println(gfoutput.getToptrisUrl());
+	System.out.println(gfoutput.getCghistUrl());
+	System.out.println(gfoutput.getJobStatusUrl());
+	
+	return gfoutput;
 	 }
 	 
 	 /**
