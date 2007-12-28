@@ -49,6 +49,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
     //Set the universe type for condor.  Probably OK to assume it is always
     //Globus for now.
     UniverseType universeType = UniverseType.GLOBUS;
+    Schedd schedd;
 
     //These are the system properties that may have
     //default values.
@@ -64,6 +65,9 @@ public class GeoFESTService extends AntVisco implements Runnable{
     String queueServiceUrl;
     String collectorUrl;
 
+    //Some useful values
+    String comma=",";
+    String quote="\"";
     
     /**
      * This is a main() for testing.
@@ -162,7 +166,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	queueServiceUrl=properties.getProperty("queue.service.url");
 	
 	//Good ol' condor 
-	collectorUrl=propoerties.getProperty("condor.collector.url");
+	collectorUrl=properties.getProperty("condor.collector.url");
     }
     
     public GeoFESTService() throws Exception{
@@ -281,43 +285,112 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	String condorScheddUrl = getScheddUrl(collectorUrl);
 	System.out.println("Schedd URL: "+condorScheddUrl);
 	Schedd schedd = new Schedd(new URL(condorScheddUrl));
-	
 
+	setSchedd(schedd);
 	
 	//Use the schedd to create a transaction.
 	//Get the cluster and job ids.
 	Transaction xact = schedd.createTransaction();
+	return xact;
     }
 
     /**
-     * Run things the condor way.
+     * Run things the condor way.  
+     * @ userName is the portal user's name.
+     * @ projectName is the name of the project.
+     * @ faults are passed in from the portal, converted into
+     * input files here.
+     * @ layers are passed in from the portal, converted
+     * into input files here.
+     * @ proxyLocation is the location of the user's proxy credential
+     * on the local file system.
+     * @ gridResourceVal is the URL of the job manager.
+     * @ meshExec is the path of the autoref.pl script on the grid resource.
+     * Note we don't know this apriori. 
+     * 
+     * Here are some things we don't pass.
+     * - collectorUrl is the url of the co-installed condor server.
      */ 
     public MeshRunBean runGridMeshGenerator(String userName,
 					    String projectName,
-					    Faults[] faults,
+					    Fault[] faults,
 					    Layer[] layers,
-					    String autref_mode,
+					    String autoref_mode,
 					    String proxyLocation,
-					    String gridResourceVal,)
+					    String gridResourceVal,
+					    String meshExec)
 	throws Exception {
 	
+	String meshArgs=projectName+" "+autoref_mode; 
+	//This creates all the input files. 
+	String timeStamp=generateTimeStamp();
 	try {
-	    //This creates all the input files. 
-	    String timeStamp=generateTimeStamp();
 	    String workDir=generateWorkDir(userName,projectName,timeStamp);
+	    
+	    createGeometryFiles(workDir,projectName,faults,layers);
 	    String outputDestDir=generateOutputDestDir(userName,
 						       projectName,
 						       timeStamp);
 	    
-	    createGeometryFiles(workDir,projectName,faults,layers);
+	    String baseUrl=generateBaseUrl(userName,projectName,timeStamp);
 	    
+	    //These are the files needed for uploading.
+	    File[] files={ 
+		new File(workDir+"/"+"Northridge2.flt"), 
+		new File(workDir+"/"+"Northridge2.params"), 
+		new File(workDir+"/"+"Northridge2.sld"), 
+		new File(workDir+"/"+"NorthridgeAreaMantle.materials"), 
+		new File(workDir+"/"+"NorthridgeAreaMantle.sld"), 
+		new File(workDir+"/"+"NorthridgeAreaMidCrust.materials"), 
+		new File(workDir+"/"+"NorthridgeAreaMidCrust.sld"),
+		new File(workDir+"/"+"NorthridgeAreaUpper.materials"),
+		new File(workDir+"/"+"NorthridgeAreaUpper.sld"),
+		new File(workDir+"/"+"testgeoupdate.grp")
+	    };
 	    
-	    
+	    String projectOutput=createMeshProjectOutput(projectName);
+
+	    condorSubmit(userName,
+			 meshExec,
+			 meshArgs,
+			 workDir,
+			 projectOutput,
+			 collectorUrl,
+			 gridResourceVal,
+			 proxyLocation,
+			 files);
+	}
+	catch (Exception ex) {
+	    ex.printStackTrace();
+	}
+
+	return getTheMeshGenReturnFiles(userName,projectName,timeStamp); 
+    }
+    
+    protected String createMeshProjectOutput(String projectName) {
+	String returnString=quote+projectName+".index"+comma
+	    + projectName+".node"+comma
+	    + projectName+".tetra"+quote;
+	
+	return returnString;
+    }
+
+    protected void condorSubmit(String userName,
+				String meshExec,
+				String meshArgs,
+				String workDir,
+				String projectOutput,
+				String collectUrl,
+				String gridResourceVal,
+				String proxyLocation,
+				File[] files) throws Exception {
+	
+	try {
 	    //Do the condor submission stuff
-	    Transaction xact = createNewTransaction();
+	    Transaction xact = createNewTransaction(collectorUrl);
 	    xact.begin(30);
-	    clusterId = xact.createCluster();
-	    jobId = xact.createJob(clusterId);
+	    int clusterId = xact.createCluster();
+	    int jobId = xact.createJob(clusterId);
 	    
 	    //Create a classad for the job.
 	    ClassAdStructAttr[] extraAttributes =
@@ -325,11 +398,11 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		    new ClassAdStructAttr("GridResource", ClassAdAttrType.value3,
 					  gridResourceVal),
 		    new ClassAdStructAttr("Out", ClassAdAttrType.value3,
-					  baseUrl+"/"+"autoref.out"),
+					  workDir+"/"+"autoref.out"),
 		    new ClassAdStructAttr("UserLog", ClassAdAttrType.value3,
-					  baseUrl+"/"+"autoref.log"),
+					  workDir+"/"+"autoref.log"),
 		    new ClassAdStructAttr("Err", ClassAdAttrType.value3,
-					  baseUrl+"/"+"autoref.err"),
+					  workDir+"/"+"autoref.err"),
 		    new ClassAdStructAttr("TransferExecutable",
 					  ClassAdAttrType.value4, 
 					  "FALSE"),
@@ -352,32 +425,25 @@ public class GeoFESTService extends AntVisco implements Runnable{
 					  ClassAdAttrType.value3, 
 					  proxyLocation)
 		};
-	    
-	    File[] files={ 
-		new File("/Users/marlonpierce/condor_test/Northridge2.flt"), 
-		new File("/Users/marlonpierce/condor_test/Northridge2.params"), 
-		new File("/Users/marlonpierce/condor_test/Northridge2.sld"), 
-		new File("/Users/marlonpierce/condor_test/NorthridgeAreaMantle.materials"), 
-		new File("/Users/marlonpierce/condor_test/NorthridgeAreaMantle.sld"), 
-		new File("/Users/marlonpierce/condor_test/NorthridgeAreaMidCrust.materials"), 
-		new File("/Users/marlonpierce/condor_test/NorthridgeAreaMidCrust.sld"),
-		new File("/Users/marlonpierce/condor_test/NorthridgeAreaUpper.materials"),
-		new File("/Users/marlonpierce/condor_test/NorthridgeAreaUpper.sld"),
-		new File("/Users/marlonpierce/condor_test/testgeoupdate.grp")
-	    };
-	    
 	    //Submit it all.
 	    xact.submit(clusterId, jobId, userName, universeType,
-			executable,arguments,"(TRUE)", extraAttributes, files);
+			meshExec, meshArgs,"(TRUE)", extraAttributes, files);
 	    xact.commit();
-	    schedd.requestReschedule();				
+
+	    getSchedd().requestReschedule();				
 	}
 	catch (Exception ex) {
-	    warningMessage="Could not connect to Condor to submit job.";
 	    ex.printStackTrace();
 	}
 	
-	
+    }
+    
+    public void setSchedd(Schedd schedd) {
+	this.schedd=schedd;
+    }
+
+    public Schedd getSchedd() {
+	return schedd;
     }
 
     /**
