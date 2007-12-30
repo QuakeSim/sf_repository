@@ -105,6 +105,9 @@ cd $BUILD_DIR
 source ./realtime-rdahmm-portlet-install.sh
 
 cd $BUILD_DIR
+source ./daily-rdahmm-portlet-install.sh
+
+cd $BUILD_DIR
 source ./stationmonitor-portlet-install.sh
 
 cd $BUILD_DIR

@@ -75,6 +75,7 @@ export RDAHMM_PORTLET_HOME=$BUILD_DIR/portlets/RDAHMM-portlet
 export STFILTER_PORTLET_HOME=$BUILD_DIR/portlets/STFILTER-portlet
 export STATION_MONITOR_PORTLET_HOME=$BUILD_DIR/portlets/StationMonitor-portlet
 export REALTIME_RDAHMM_PORTLET_HOME=$BUILD_DIR/portlets/RealTimeRdahmm-portlet
+export DAILY_RDAHMM_PORTLET_HOME=$BUILD_DIR/portlets/DailyRdahmm-portlet
 export PLOT_GRWS_TIMESERIES_PORTLET_HOME=$BUILD_DIR/portlets/PlotGRWSTimeSeries-portlet
 export MESHGENERATOR_PORTLET_HOME=$BUILD_DIR/portlets/MeshGenerator-portlet
 export NEW_MESHGENERATOR_PORTLET_HOME=$BUILD_DIR/portlets/NewMeshGen-portlet
