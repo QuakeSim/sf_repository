@@ -561,7 +561,30 @@
         	return str;       		
         }
         
-        /* The status change xml file is formated like:
+        function xmlMicoxLoader(url){
+  				//by Micox: micoxjcg@yahoo.com.br.
+  				//http://elmicoxcodes.blogspot.com
+    			if(window.XMLHttpRequest){
+        		var Loader = new XMLHttpRequest();
+        		//assyncronous mode to load before the 'return' line
+        		Loader.open("GET", url ,false); 
+        		Loader.send(null);
+        		return Loader.responseXML;
+    			}else if(window.ActiveXObject){
+        		var Loader = new ActiveXObject("Msxml2.DOMDocument.3.0");
+        		//assyncronous mode to load before the 'return' line
+        		Loader.async = false;
+        		Loader.load(url);
+        		return Loader;
+    			}
+				}
+
+				/* var str_tabcontent = '<%=strTabContent%>'; */
+				var str_tabcontent = "";
+				//alert("str_tabcontent: " + str_tabcontent);
+				// now we load status change information from the xml file, and create markers for all stations
+				var changeXml = xmlMicoxLoader("/station-status-change-rss.xml");
+				/* The status change xml file is formated like:
 				<xml>
   				<output-pattern>
     				<server-url>http://156-56-104-131.dhcp-bl.indiana.edu:8080//rdahmmexec</server-url>
@@ -596,110 +619,135 @@
   				</station>
  				</xml>
 				*/
-<%
-				Document statusDoc = null;
-				try {
-					BufferedReader br = new BufferedReader( new FileReader(
-																											config.getServletContext().getRealPath("WEB-INF/config/station-status-change-rss.xml")) );
-					StringBuffer sb = new StringBuffer();
-					while (br.ready()) {
-						sb.append(br.readLine());
+				var xmlNode = changeXml.childNodes[0];
+				var outputNode = xmlNode.childNodes[0];
+				var urlPattern = outputNode.childNodes[0].firstChild.nodeValue;
+				var dirPattern = "daily/" + outputNode.childNodes[1].firstChild.nodeValue;
+				var aPattern = outputNode.childNodes[2].firstChild.nodeValue;
+				var bPattern = outputNode.childNodes[3].firstChild.nodeValue;
+				var inputPattern = outputNode.childNodes[4].firstChild.nodeValue;
+				var lPattern = outputNode.childNodes[5].firstChild.nodeValue;
+				var xPattern = outputNode.childNodes[6].firstChild.nodeValue;
+				var yPattern = outputNode.childNodes[7].firstChild.nodeValue;
+				var zPattern = outputNode.childNodes[8].firstChild.nodeValue;
+				var piPattern = outputNode.childNodes[9].firstChild.nodeValue;
+				var qPattern = outputNode.childNodes[10].firstChild.nodeValue;
+				var maxPattern = outputNode.childNodes[11].firstChild.nodeValue;
+				var minPattern = outputNode.childNodes[12].firstChild.nodeValue;
+				var rangePattern = outputNode.childNodes[13].firstChild.nodeValue;
+
+				var stationCount = xmlNode.childNodes.length - 2;
+				var stationArray = new Array(stationCount);
+				var saIdx = 0;
+				var mapcenter_y, mapcenter_x, xmin = 0, xmax = 0, ymin = 0, ymax = 0;
+				var loadInfoDiv = document.getElementById("loadInfo");
+				var stationNode = null;
+				var latStr = null;
+				var longStr = null;
+				var icon = null;
+				var changeCount = 0;
+				var changeIdx = 0;
+				var xmlChildCount = xmlNode.childNodes.length;
+				var stationChildCount = 0;
+				var changeStr = null;
+				var idx1 = -1;
+				var idx2 = -1;
+				var oneChange = null;
+				var idxCollon = -1;
+				var idxTo = -1;
+				var changeDate = null;
+				var oldStatus = null;
+				var newStatus = null;
+				var dateTmp = new Date();							
+				for (var i=2; i<xmlChildCount; i++, saIdx++) {
+					stationNode = xmlNode.childNodes[i];
+					// every station in the station array has 7 attributes: id, lat, long, status change table, output table, status change details, marker
+					// "status change details" is an array of 3*[status change count] elements; so there are 3 elements in the array for every change count: 
+					// the millisecond time value for the date of the change, the old status, and the new status
+					stationArray[saIdx] = new Array(7);
+					stationArray[saIdx][0] = stationNode.childNodes[0].firstChild.nodeValue;
+					latStr = stationNode.childNodes[1].firstChild.nodeValue;
+					longStr = stationNode.childNodes[2].firstChild.nodeValue;
+					stationArray[saIdx][1] = parseFloat(latStr);
+					stationArray[saIdx][2] = parseFloat(longStr);
+					
+					if (xmin == 0) {
+						xmin = stationArray[saIdx][1];
+					}	else {
+						if (stationArray[saIdx][1] < xmin)
+							xmin = stationArray[saIdx][1];
+					}					
+					if (xmax == 0) {
+						xmax = stationArray[saIdx][1];
+					}	else {
+						if (stationArray[saIdx][1] > xmax)
+							xmax = stationArray[saIdx][1];
+					}					
+					if (ymin == 0) {
+						ymin = stationArray[saIdx][2];
+					}	else {
+						if (stationArray[saIdx][2] < ymin)
+							ymin = stationArray[saIdx][2];
+					}			
+					if (ymax == 0) {
+						ymax = stationArray[saIdx][2];
+					}	else {
+						if (stationArray[saIdx][2] > ymax)
+							ymax = stationArray[saIdx][2];
 					}
-					SAXReader reader = new SAXReader();
-					statusDoc = reader.read( new StringReader(sb.toString()) );          
-				} catch (DocumentException ex) {
-					ex.printStackTrace();
-				}
-				Element eleXml = statusDoc.getRootElement();
-				Element eleOutput = eleXml.element("output-pattern");
-%>
-				var urlPattern = '<%=eleOutput.element("server-url").getText()%>';
-				var dirPattern = 'daily/' + '<%=eleOutput.element("pro-dir").getText()%>';
-				var aPattern = '<%=eleOutput.element("AFile").getText()%>';
-				var bPattern = '<%=eleOutput.element("BFile").getText()%>';
-				var inputPattern = '<%=eleOutput.element("InputFile").getText()%>';
-				var lPattern = '<%=eleOutput.element("LFile").getText()%>';
-				var xPattern = '<%=eleOutput.element("XPngFile").getText()%>';
-				var yPattern = '<%=eleOutput.element("YPngFile").getText()%>';
-				var zPattern = '<%=eleOutput.element("ZPngFile").getText()%>';
-				var piPattern = '<%=eleOutput.element("PiFile").getText()%>';
-				var qPattern = '<%=eleOutput.element("QFile").getText()%>';
-				var maxPattern = '<%=eleOutput.element("MaxValFile").getText()%>';
-				var minPattern = '<%=eleOutput.element("MinValFile").getText()%>';
-				var rangePattern = '<%=eleOutput.element("RangeFile").getText()%>';				
-<%				
-				List lStations = eleXml.elements("station");
-%>
-				// every station in the station array has 7 attributes: id, lat, long, null(for status change table), null(for output table), status change details, marker
-				// "status change details" is an array of 3*[status change count] elements; so there are 3 elements in the array for every change count: 
-				// the millisecond time value for the date of the change, the old status, and the new status
-				// we create the infoWindowTabs on the fly, cause they are eating up too much memory if created here
-				var stationArray = new Array(<%=lStations.size()%>);
-				var saIdx; var icon; var changeIdx = 0;	var dateTmp = new Date();
-<%
-				float mapcenter_y, mapcenter_x, xmin = 0, xmax = 0, ymin = 0, ymax = 0;
-				int changeCount = 0;
-				// now we load status change information from the xml file, and create markers for all stations
-				for (int i=0; i<lStations.size(); i++) {
-					Element eleStation = (Element)lStations.get(i);
-					float x = Float.parseFloat(eleStation.element("lat").getText());
-					float y = Float.parseFloat(eleStation.element("long").getText());
-					if (xmin == 0 || x < xmin)
-						xmin = x;
-					if (xmax == 0 || x > xmax)
-						xmax = x;
-					if (ymin == 0 || y < ymin)
-						ymin = y;
-					if (ymax == 0 || y > ymax)
-						ymax = y;
-					changeCount = Integer.parseInt(eleStation.element("change-count").getText());					
-%>
-					saIdx = <%=i%>;	stationArray[saIdx] = new Array(7);
-					stationArray[saIdx][0] = '<%=eleStation.element("id").getText()%>';
-					stationArray[saIdx][1] = <%=x%>;	stationArray[saIdx][2] = <%=y%>;	stationArray[saIdx][3] = null; stationArray[saIdx][4] = null;
-					icon = new GIcon(baseIcon);					
-					stationArray[saIdx][6] = createTabsInfoMarker(new GPoint('<%=y%>', '<%=x%>') , null, icon, saIdx, document.getElementById("stationSelect"));
-<%				
+					
+					// after some tests we decide not to save the tables here, but to create them on the fly. these fields are just reserved
+					stationArray[saIdx][3] = null;
+					stationArray[saIdx][4] = null;
+					  
+					icon = new GIcon(baseIcon);
+					// we also create the infoWindowTabs on the fly, cause they are eating up too much memory if created here
+					stationArray[saIdx][6] = createTabsInfoMarker(new GPoint(longStr, latStr) , null, icon, saIdx, document.getElementById("stationSelect"));
+					
+					changeCount = parseInt(stationNode.childNodes[stationNode.childNodes.length - 1].firstChild.nodeValue);
 					if (changeCount == 0) {
-						out.write("stationArray[saIdx][5] = null");
-					} else {
-						out.write("stationArray[saIdx][5] = new Array(" + changeCount + " * 3); ");	
-						out.write("changeIdx = 0;\n");
-						List lChanges = eleStation.elements("status-changes");
-						for (int j=0; j<lChanges.size(); j++) {
-							String changeStr = ((Element)lChanges.get(j)).getText();
-							int idx1 = 0;
-							int idx2 = changeStr.indexOf(';');
-							while (idx2 >= 0) {
-								String oneChange = changeStr.substring(idx1, idx2).trim();
-								int idxCollon = oneChange.indexOf(':');
-								int idxTo = oneChange.indexOf("to");
-								String changeDate = oneChange.substring(0, idxCollon);
-								String oldStatus = oneChange.substring(idxCollon + 1, idxTo);
-								String newStatus = oneChange.substring(idxTo + 2);
-%>								
-								setDateByString(dateTmp, '<%=changeDate%>');
-								stationArray[saIdx][5][changeIdx++] = dateTmp.getTime(); stationArray[saIdx][5][changeIdx++] = <%=oldStatus%>;	stationArray[saIdx][5][changeIdx++] = <%=newStatus%>;
-<%				
-								idx1 = idx2 + 1;
-								if (idx1 >= changeStr.length())
-										break;
-								else {
-									idx2 = changeStr.indexOf(';', idx1);
-									// if we set idx2 to changeStr.length(), idx1 will be larger than changeStr.length(), so we can break anyway, and this is just 
-									// for dealing with the case where there is not a ';' at the end of the changeStr
-									if (idx2 < 0)
-										idx2 = changeStr.length();
-								}
-							}		
-						}
+						stationArray[saIdx][5] = null;	
+						continue;
+					}	
+					stationArray[saIdx][5] = new Array(changeCount*3);
+					changeIdx = 0;
+					stationChildCount = stationNode.childNodes.length;
+					for (var j=3; j<stationChildCount - 1; j++) {
+						changeStr = stationNode.childNodes[j].firstChild.nodeValue;
+						idx1 = 0;
+						idx2 = changeStr.indexOf(';');
+						while (idx2 >= 0) {
+							oneChange = changeStr.substring(idx1, idx2);
+							idxCollon = oneChange.indexOf(':');
+							idxTo = oneChange.indexOf("to");
+							changeDate = oneChange.substring(0, idxCollon);
+							oldStatus = oneChange.substring(idxCollon + 1, idxTo);
+							newStatus = oneChange.substring(idxTo + 2);
+							
+							setDateByString(dateTmp, changeDate);
+							stationArray[saIdx][5][changeIdx++] = dateTmp.getTime();
+							stationArray[saIdx][5][changeIdx++] = parseInt(oldStatus);
+							stationArray[saIdx][5][changeIdx++] = parseInt(newStatus);
+			
+							idx1 = idx2 + 1;
+							if (idx1 >= changeStr.length)
+									break;
+							else {
+								idx2 = changeStr.indexOf(';', idx1);
+								// if we set idx2 to changeStr.length, idx1 will be larger than changeStr.length, so we can break anyway, and this is just 
+								// for dealing with the case where there is not a ';' at the end of the changeStr
+								if (idx2 < 0)
+									idx2 = changeStr.length;
+							}
+						}		
 					}
+					loadInfoDiv.innerHTML = "<b>Loading stations info..." + (saIdx+1) + " done</b>";
 				}
+				loadInfoDiv.innerHTML = "";
 				mapcenter_x = xmin + (xmax - xmin)/2;
-				mapcenter_y = ymin + (ymax - ymin)/2;				
-%>
-				map.centerAndZoom(new GPoint(<%=mapcenter_y%>, <%=mapcenter_x%>), 10);
-				
+				mapcenter_y = ymin + (ymax - ymin)/2;
+				map.centerAndZoom(new GPoint(mapcenter_y, mapcenter_x), 10);
+        
         // show the list for staus changes
         function printChangedStations() {
         	var idiv = window.document.getElementById("changeListDiv");
@@ -735,6 +783,7 @@
           
           var changeTable = "<table border='1'> <tr> <td><b>Date</b></td> <td><b>Old Status</b></td> <td><b>New Status</b></td> </tr>";
           var dateTmp = new Date();
+          alert("selected index: " + stationSlt.selectedIndex + "; id: " + stationArray[stationSlt.selectedIndex][0]);
           if (stationArray[stationSlt.selectedIndex][5] != null) {
           	var changeIdx = 0; 
           	var changeCount = stationArray[stationSlt.selectedIndex][5].length / 3;
