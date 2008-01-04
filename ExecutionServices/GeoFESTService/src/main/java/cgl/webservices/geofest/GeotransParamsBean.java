@@ -39,7 +39,7 @@ public class GeotransParamsBean {
 	
 	String reportingNodes="All";
 	String reportingElements="All";
-	String printTimesType="Steps";
+	String printTimesType="steps";
 	String numberofPrintTimes="5";
 	String printTimesInterval="1.0";
 	String restartFile="NO_RESTART";

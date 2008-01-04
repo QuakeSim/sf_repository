@@ -332,12 +332,17 @@ public class GeoFESTService extends AntVisco implements Runnable{
 																		 projectName,
 																		 timeStamp);
 				
+				//This is the output stuff.
+				String projectOutput=createMeshProjectOutput(projectName);
+
 				String baseUrl=generateBaseUrl(userName,projectName,timeStamp);
-				
+		
+				//--------------------------------------------------
 				//These are the files needed for uploading.
 				//Each fault has .flt, .params, and .sld file (hence 3* size).
 				//Each layer has a .sld file and a .materials file (hence 2*size).
 				//Finally, there is one group file for all the metadata (hence +1).
+				//--------------------------------------------------
 				int fileSize=3*faults.length+2*layers.length+1;
 				File[] files=new File[fileSize];
 				
@@ -359,53 +364,11 @@ public class GeoFESTService extends AntVisco implements Runnable{
 				}
 				//This is the group file.  Only one of these.
 				files[iter]=new File(workDir+"/"+projectName+".grp");
-				
-				//This is the output stuff.
-				String projectOutput=createMeshProjectOutput(projectName);
-				
-				condorSubmit(userName,
-								 meshExec,
-								 meshArgs,
-								 workDir,
-								 projectOutput,
-								 collectorUrl,
-								 gridResourceVal,
-								 proxyLocation,
-								 files);
-		  }
-		  catch (Exception ex) {
-				ex.printStackTrace();
-		  }
-		  
-		  return getTheMeshGenReturnFiles(userName,projectName,timeStamp); 
-    }
-    
-    protected String createMeshProjectOutput(String projectName) {
-		  String returnString=quote+projectName+".index"+comma
-				+ projectName+".node"+comma
-				+ projectName+".tetra"+quote;
-		  
-		  return returnString;
-    }
-	 
-    protected void condorSubmit(String userName,
-										  String meshExec,
-										  String meshArgs,
-										  String workDir,
-										  String projectOutput,
-										  String collectUrl,
-										  String gridResourceVal,
-										  String proxyLocation,
-										  File[] files) throws Exception {
-		  
-		  try {
-				//Do the condor submission stuff
-				Transaction xact = createNewTransaction(collectorUrl);
-				xact.begin(30);
-				int clusterId = xact.createCluster();
-				int jobId = xact.createJob(clusterId);
-				
-				//Create a classad for the job.
+
+
+				//--------------------------------------------------
+				//Create the classadds
+				//--------------------------------------------------
 				ClassAdStructAttr[] extraAttributes =
 					 {
 						  new ClassAdStructAttr("GridResource", ClassAdAttrType.value3,
@@ -438,28 +401,68 @@ public class GeoFESTService extends AntVisco implements Runnable{
 														ClassAdAttrType.value3, 
 														proxyLocation)
 					 };
-
-	    //Submit it all.
-	    xact.submit(clusterId, jobId, userName, universeType,
-			meshExec, meshArgs,"(TRUE)", extraAttributes, files);
-	    xact.commit();
-
-	    getSchedd().requestReschedule();				
-	}
-	catch (Exception ex) {
-	    ex.printStackTrace();
-	}
-	
+				
+				condorSubmit(userName,
+								 meshExec,
+								 meshArgs,
+								 workDir,
+								 collectorUrl,
+								 extraAttributes,
+								 files);
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  
+		  return getTheMeshGenReturnFiles(userName,projectName,timeStamp); 
+    }
+    
+    protected String createMeshProjectOutput(String projectName) {
+		  String returnString=quote+projectName+".index"+comma
+				+ projectName+".node"+comma
+				+ projectName+".tetra"+quote;
+		  
+		  return returnString;
+    }
+	 
+    protected void condorSubmit(String userName,
+										  String exec,
+										  String args,
+										  String workDir,
+										  String collectUrl,
+										  ClassAdStructAttr[] extraAttributes,
+										  File[] files) throws Exception {
+		  
+		  try {
+				//Do the condor submission stuff
+				Transaction xact = createNewTransaction(collectorUrl);
+				xact.begin(30);
+				int clusterId = xact.createCluster();
+				int jobId = xact.createJob(clusterId);
+				
+				//Create a classad for the job.
+				
+				//Submit it all.
+				xact.submit(clusterId, jobId, userName, universeType,
+								exec, args,"(TRUE)", extraAttributes, files);
+				xact.commit();
+				
+				getSchedd().requestReschedule();				
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  
     }
     
     public void setSchedd(Schedd schedd) {
-	this.schedd=schedd;
+		  this.schedd=schedd;
     }
-
+	 
     public Schedd getSchedd() {
-	return schedd;
+		  return schedd;
     }
-
+	 
     /**
      * This runs the mesh generator code in blocking mode,
      * i.e., it does not return until the mesh is done.
@@ -468,18 +471,18 @@ public class GeoFESTService extends AntVisco implements Runnable{
      * later querying.
      */
     public MeshRunBean runBlockingMeshGenerator(String userName,
-						String projectName,
-						Fault[] faults,
-						Layer[] layers,
-						String autoref_mode) 
-	throws Exception {
-	String timeStamp=prefabMeshGenerator(userName,
-					     projectName,
-					     faults,
-					     layers,
-					     autoref_mode);
-	run();
-	return getTheMeshGenReturnFiles(userName,projectName,timeStamp);
+																String projectName,
+																Fault[] faults,
+																Layer[] layers,
+																String autoref_mode) 
+		  throws Exception {
+		  String timeStamp=prefabMeshGenerator(userName,
+															projectName,
+															faults,
+															layers,
+															autoref_mode);
+		  run();
+		  return getTheMeshGenReturnFiles(userName,projectName,timeStamp);
     }
     
     /**
@@ -492,55 +495,55 @@ public class GeoFESTService extends AntVisco implements Runnable{
      * 
      */
     public MeshRunBean runNonBlockingMeshGenerator(String userName,
-						   String projectName,
-						   Fault[] faults,
-						   Layer[] layers,
-						   String autoref_mode) 
-	throws Exception{
-	String timeStamp=prefabMeshGenerator(userName,
-					     projectName,
-					     faults,
-					     layers,
-					     autoref_mode);
-	execute();
-	return getTheMeshGenReturnFiles(userName,projectName,timeStamp);
+																	String projectName,
+																	Fault[] faults,
+																	Layer[] layers,
+																	String autoref_mode) 
+		  throws Exception{
+		  String timeStamp=prefabMeshGenerator(userName,
+															projectName,
+															faults,
+															layers,
+															autoref_mode);
+		  execute();
+		  return getTheMeshGenReturnFiles(userName,projectName,timeStamp);
     }
     
     
     protected MeshRunBean getTheMeshGenReturnFiles(String userName,
-						   String projectName,
-						   String jobUIDStamp) {
-	String baseUrl=generateBaseUrl(userName,projectName,jobUIDStamp);
-	
-	MeshRunBean mrb=new MeshRunBean();
-	mrb.setJobUIDStamp(jobUIDStamp);
-	mrb.setProjectName(projectName);
-	mrb.setAutoref(baseUrl+"/"+"autoref.out");
-	mrb.setAutorefError(baseUrl+"/"+"autoref.error");
-	mrb.setNodeUrl(baseUrl+"/"+projectName+".node");
-	mrb.setTetraUrl(baseUrl+"/"+projectName+".tetra");
-	mrb.setBcUrl(baseUrl+"/"+projectName+".bcmap");
-	mrb.setIndexUrl(baseUrl+"/"+projectName+".index");
-	mrb.setJunkBox(baseUrl+"/"+"junk.box");
-	mrb.setTstout(baseUrl+"/"+"tstout");
-	mrb.setLeeRefinerLog(baseUrl+"/"+"LeeRefiner.log");
-	mrb.setRefinerLog(baseUrl+"/"+"refiner.log");
-	mrb.setTagbigfltLog(baseUrl+"/"+"tagbigflt.log");
-	mrb.setViscoTarUrl(baseUrl+"/"+projectName+"-visco.tar.gz");
-	
-	return mrb;
+																	String projectName,
+																	String jobUIDStamp) {
+		  String baseUrl=generateBaseUrl(userName,projectName,jobUIDStamp);
+		  
+		  MeshRunBean mrb=new MeshRunBean();
+		  mrb.setJobUIDStamp(jobUIDStamp);
+		  mrb.setProjectName(projectName);
+		  mrb.setAutoref(baseUrl+"/"+"autoref.out");
+		  mrb.setAutorefError(baseUrl+"/"+"autoref.error");
+		  mrb.setNodeUrl(baseUrl+"/"+projectName+".node");
+		  mrb.setTetraUrl(baseUrl+"/"+projectName+".tetra");
+		  mrb.setBcUrl(baseUrl+"/"+projectName+".bcmap");
+		  mrb.setIndexUrl(baseUrl+"/"+projectName+".index");
+		  mrb.setJunkBox(baseUrl+"/"+"junk.box");
+		  mrb.setTstout(baseUrl+"/"+"tstout");
+		  mrb.setLeeRefinerLog(baseUrl+"/"+"LeeRefiner.log");
+		  mrb.setRefinerLog(baseUrl+"/"+"refiner.log");
+		  mrb.setTagbigfltLog(baseUrl+"/"+"tagbigflt.log");
+		  mrb.setViscoTarUrl(baseUrl+"/"+projectName+"-visco.tar.gz");
+		  
+		  return mrb;
     }
     
     protected String generateBaseUrl(String userName,
-				     String projectName,
-				     String timeStamp) {
-	
-	//Need to be careful here because this must follow
-	//the workDir convention also.
-	String baseUrl=serverUrl+"/"+userName+"/"
-	    +projectName+"/"+"/"+timeStamp;
-	
-	return baseUrl;
+												 String projectName,
+												 String timeStamp) {
+		  
+		  //Need to be careful here because this must follow
+		  //the workDir convention also.
+		  String baseUrl=serverUrl+"/"+userName+"/"
+				+projectName+"/"+"/"+timeStamp;
+		  
+		  return baseUrl;
     }
     
 	 /**
@@ -551,6 +554,95 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  throws Exception {
 	 }
 	 
+	 /**
+	  * Run GeoFEST using Condor.
+	  */ 
+    public GFOutputBean runGridGeoFEST(String userName,
+													String projectName,
+													GeotransParamsBean gpb,
+													String exec,
+													String args,
+													String gridResourceVal,
+													String proxyLocation,
+													String timeStamp)
+		  throws Exception {
+
+		  try {
+				//Set up the stuff.
+				String workDir=generateWorkDir(userName,projectName,timeStamp);
+				createGeoFESTInputFile(workDir,projectName,gpb);
+				String outputDestDir=generateOutputDestDir(userName,projectName,timeStamp);
+			  				
+				//This is the output stuff.
+				String projectOutput=createGeoFESTOutput(projectName);
+
+				String baseUrl=generateBaseUrl(userName,projectName,timeStamp);
+		
+				//--------------------------------------------------
+				//These are the files needed for uploading.
+				//--------------------------------------------------
+				//Need to fix this temp stuff.
+				File[] files=new File[0];
+
+				//--------------------------------------------------
+				//Create the classadds
+				//--------------------------------------------------
+				ClassAdStructAttr[] extraAttributes =
+					 {
+						  new ClassAdStructAttr("GridResource", ClassAdAttrType.value3,
+														gridResourceVal),
+						  new ClassAdStructAttr("Out", ClassAdAttrType.value3,
+														workDir+"/"+"autoref.out"),
+						  new ClassAdStructAttr("UserLog", ClassAdAttrType.value3,
+														workDir+"/"+"autoref.log"),
+						  new ClassAdStructAttr("Err", ClassAdAttrType.value3,
+														workDir+"/"+"autoref.err"),
+						  new ClassAdStructAttr("TransferExecutable",
+														ClassAdAttrType.value4, 
+														"FALSE"),
+						  new ClassAdStructAttr("when_to_transfer_output",
+														ClassAdAttrType.value2, 
+														"\"ON_EXIT\""),
+						  new ClassAdStructAttr("should_transfer_files",
+														ClassAdAttrType.value2, 
+														"\"YES\""),
+						  new ClassAdStructAttr("StreamOut",
+														ClassAdAttrType.value4, 
+														"FALSE"),
+						  new ClassAdStructAttr("StreamErr",
+														ClassAdAttrType.value4, 
+														"FALSE"),
+						  new ClassAdStructAttr("TransferOutput",
+														ClassAdAttrType.value2, 
+														projectOutput),
+						  new ClassAdStructAttr("x509userproxy", 
+														ClassAdAttrType.value3, 
+														proxyLocation)
+					 };
+				
+				condorSubmit(userName,
+								 exec,
+								 args,
+								 workDir,
+								 collectorUrl,
+								 extraAttributes,
+								 files);
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+
+		  return getAllTheGeoFESTFiles(userName, projectName, timeStamp);
+
+    }
+
+	 /**
+	  * This creates the condor-style list of files to return.
+	  */
+	 protected String createGeoFESTOutput(String projectName) {
+		  //Empty for now.
+		  return "";
+	 }
 	 
 	 /**
 	  * This method is used to tar up the mesh and input files.
@@ -613,17 +705,17 @@ public class GeoFESTService extends AntVisco implements Runnable{
      * of geofest.  String [5] is the GeoFEST log file.
      */
     public GFOutputBean runGeoFEST(String userName,
-				   String projectName,
-				   GeotransParamsBean gpb,
-				   String timeStamp)
-	throws Exception {
-	
-	//The target is always "tar.all".
-	String[] args=
-	    prefabGeoFESTCall(userName,projectName,gpb,timeStamp,"tar.all");
-	setArgs(args);
-	execute();
-	return getAllTheGeoFESTFiles(userName,projectName,timeStamp);
+											  String projectName,
+											  GeotransParamsBean gpb,
+											  String timeStamp)
+		  throws Exception {
+		  
+		  //The target is always "tar.all".
+		  String[] args=
+				prefabGeoFESTCall(userName,projectName,gpb,timeStamp,"tar.all");
+		  setArgs(args);
+		  execute();
+		  return getAllTheGeoFESTFiles(userName,projectName,timeStamp);
     }
     
     /**
