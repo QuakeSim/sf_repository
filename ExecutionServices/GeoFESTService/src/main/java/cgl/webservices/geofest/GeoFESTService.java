@@ -386,7 +386,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 				prefabGeoFESTCall(userName,projectName,gpb,timeStamp,"tar.all");
 		  setArgs(args);
 		  execute();
-		  return getAllTheGeoFESTFiles(userName,projectName,timeStamp);
+		  return getAllTheGeoFESTFiles(userName,projectName,timeStamp,0,0);
     }
     
     /**
@@ -413,7 +413,9 @@ public class GeoFESTService extends AntVisco implements Runnable{
     
     protected GFOutputBean getAllTheGeoFESTFiles(String userName,
 																 String projectName,
-																 String jobUIDStamp) {
+																 String jobUIDStamp,
+																 String condorClusterId,
+																 String condorJobId) {
 		  
 		  GFOutputBean gfoutput=new GFOutputBean();
 		  String baseUrl=generateBaseUrl(userName,projectName,jobUIDStamp);
@@ -430,6 +432,10 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  gfoutput.setToptrisUrl(baseUrl+"/"+projectName+".toptris");
 		  gfoutput.setCghistUrl(baseUrl+"/"+"cghist.txt");
 		  gfoutput.setJobStatusUrl(baseUrl+"/"+"jobstatus.log");
+		  
+		  //These are new, needed for condor
+		  gfoutput.setCondorJobId(condorJobId);
+		  gfoutput.setCondorClusterId(condorClusterId);
 		  
 		  System.out.println(gfoutput.getJobUIDStamp());
 		  System.out.println(gfoutput.getTarOfEverythingUrl());

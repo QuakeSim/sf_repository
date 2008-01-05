@@ -46,6 +46,9 @@ public class GeoFESTGridService extends GeoFESTService{
     UniverseType universeType = UniverseType.GLOBUS;
     Schedd schedd;
     String collectorUrl;
+	 
+	 //Some useful constants
+	 String equals="=";	 
 
 	 public GeoFESTGridService() throws Exception {
 		  this(false);
@@ -154,6 +157,7 @@ public class GeoFESTGridService extends GeoFESTService{
 				
 				//This is the output stuff.
 				String projectOutput=createMeshProjectOutput(projectName);
+				String projectOutputRemaps=createMeshProjectOutputRemaps(projectName,workDir);
 
 				String baseUrl=generateBaseUrl(userName,projectName,timeStamp);
 		
@@ -217,6 +221,9 @@ public class GeoFESTGridService extends GeoFESTService{
 						  new ClassAdStructAttr("TransferOutput",
 														ClassAdAttrType.value2, 
 														projectOutput),
+						  new ClassAdStructAttr("TransferOutputRemaps",
+														ClassAdAttrType.value2, 
+														projectOutputRemaps),
 						  new ClassAdStructAttr("x509userproxy", 
 														ClassAdAttrType.value3, 
 														proxyLocation)
@@ -236,15 +243,8 @@ public class GeoFESTGridService extends GeoFESTService{
 		  
 		  return getTheMeshGenReturnFiles(userName,projectName,timeStamp); 
     }
-    protected String createMeshProjectOutput(String projectName) {
-		  String returnString=quote+projectName+".index"+comma
-				+ projectName+".node"+comma
-				+ projectName+".tetra"+quote;
-		  
-		  return returnString;
-    }
 	 
-    protected void condorSubmit(String userName,
+	 protected int[] condorSubmit(String userName,
 										  String exec,
 										  String args,
 										  String workDir,
@@ -272,6 +272,10 @@ public class GeoFESTGridService extends GeoFESTService{
 				ex.printStackTrace();
 		  }
 		  
+		  int[] jobstuff=new int[2];
+		  jobstuff[0]=clusterId;
+		  jobstuff[1]=jobId;
+		  return jobstuff;
     }
     
     public void setSchedd(Schedd schedd) {
@@ -301,8 +305,10 @@ public class GeoFESTGridService extends GeoFESTService{
 				createGeoFESTInputFile(workDir,projectName,gpb);
 				String outputDestDir=generateOutputDestDir(userName,projectName,timeStamp);
 			  				
-				//This is the output stuff.
+				//This is the condor-formatted output file list.  These are files to be
+				//transferred back to the server.
 				String projectOutput=createGeoFESTOutput(projectName);
+				String projectOutputRemaps=createGeoFESTOutputRemaps(projectName,workDir);
 
 				String baseUrl=generateBaseUrl(userName,projectName,timeStamp);
 		
@@ -320,11 +326,11 @@ public class GeoFESTGridService extends GeoFESTService{
 						  new ClassAdStructAttr("GridResource", ClassAdAttrType.value3,
 														gridResourceVal),
 						  new ClassAdStructAttr("Out", ClassAdAttrType.value3,
-														workDir+"/"+"autoref.out"),
+														workDir+"/"+projectName+".out"),
 						  new ClassAdStructAttr("UserLog", ClassAdAttrType.value3,
-														workDir+"/"+"autoref.log"),
+														workDir+"/"+projectName+".log"),
 						  new ClassAdStructAttr("Err", ClassAdAttrType.value3,
-														workDir+"/"+"autoref.err"),
+														workDir+"/"+projectName+".err"),
 						  new ClassAdStructAttr("TransferExecutable",
 														ClassAdAttrType.value4, 
 														"FALSE"),
@@ -343,40 +349,106 @@ public class GeoFESTGridService extends GeoFESTService{
 						  new ClassAdStructAttr("TransferOutput",
 														ClassAdAttrType.value2, 
 														projectOutput),
+						  new ClassAdStructAttr("TransferOutputRemaps",
+														ClassAdAttrType.value2, 
+														projectOutputRemaps),
 						  new ClassAdStructAttr("x509userproxy", 
 														ClassAdAttrType.value3, 
 														proxyLocation)
 					 };
 				
-				condorSubmit(userName,
-								 exec,
-								 args,
-								 workDir,
-								 collectorUrl,
-								 extraAttributes,
-								 files);
+				int[] jobStuff=condorSubmit(userName,
+													 exec,
+													 args,
+													 workDir,
+													 collectorUrl,
+													 extraAttributes,
+													 files);
 		  }
 		  catch (Exception ex) {
 				ex.printStackTrace();
 		  }
 
-		  return getAllTheGeoFESTFiles(userName, projectName, timeStamp);
+		  return getAllTheGeoFESTFiles(userName, projectName, timeStamp,jobStuff[0]+"",jobStuff[1]+"");
     }
 
 	 /**
-	  * This creates the condor-style list of files to return.
+	  * This creates the condor-style list of GeoFEST output files to return.
 	  */
 	 protected String createGeoFESTOutput(String projectName) {
-		  //Empty for now.
-		  return "";
+		  String returnString=quote+projectName+".out"+comma+"cghist.txt"+quote;
+		  System.out.println(returnString);
+		  return returnString;
 	 }
-	 
-	 public String queryGeoFESTStatus() {
-		  return " ";
+
+	 protected String createGeoFESTOutputRemaps(String projectName,String workDir) {
+		  String returnString=quote+projectName+".out" +equals+workDir+projectName+".out"
+				+comma+"cghist.txt"+equals+workDir+"cghist.txt"+quote;
+		  System.out.println(returnString);
+		  return returnString;
 	 }
-	 
-	 public String deleteGeoFESTJob() {
-		  return " ";
-	 }
- 
+
+	 /**
+	  * This method creates a string of files to be returned using condor's TransferOutput
+	  * parameter.
+	  */
+    protected String createMeshProjectOutput(String projectName) {
+		  String returnString=quote+projectName+".index"+comma
+				+ projectName+".node"+comma
+				+ projectName+".tetra"+quote;
+		  System.out.println(returnString);
+		  return returnString;
+    }
+
+    protected String createMeshProjectOutputRemaps(String projectName,String workDir) {
+		  String returnString=quote+projectName+".index"+equals+workDir+projectName+".index"
+				+comma
+				+ projectName+".node"+equals+workDir+projectName+".node"
+				+comma
+				+ projectName+".tetra"+equals+workDir+projectName+".tetra"
+				+quote;
+		  System.out.println(returnString);		  
+		  return returnString;
+    }
+
+	 	 
+     /**
+     * Remove the selected job. Note the URL for the collector is
+     * always the same, but the job and cluster IDs can change.
+     */
+    public void deleteGeoFESTJob(int clusterId, int jobId) throws Exception {
+		  
+		  String condorScheddUrl = getScheddUrl(collectorUrl);
+		  Schedd schedd = new Schedd(new URL(condorScheddUrl));
+		  
+		  Transaction xact1=schedd.createTransaction();
+		  xact1.closeSpool(clusterId,jobId);
+		  boolean flag=xact1.removeJob(clusterId,jobId,null);
+		  System.out.println("Remove job flag: "+flag);
+		  //	xact1.commit();
+    }
+
+
+    /**
+     * Get the job status.
+     */
+    public String queryGeoFESTStatus(int clusterId, int jobId) { 
+		  warningMessage="";
+		  int status = 0;
+		  
+		  try {		  
+				String condorScheddUrl = getScheddUrl(collectorUrl);
+				Schedd schedd = new Schedd(new URL(condorScheddUrl));
+				// Querying job code
+				
+				ClassAd ad = new ClassAd(schedd.getJobAd(clusterId, jobId));
+				status = Integer.parseInt(ad.get("JobStatus"));
+		  }
+		  catch (Exception ex) {
+				warningMessage="Could not connect to Condor to query job status";
+				ex.printStackTrace();
+		  }
+		  return statusName[status];
+    }	
+
 }
