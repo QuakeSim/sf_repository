@@ -46,6 +46,17 @@
         <beanMapping qname="myNS:MeshRunBean" xmlns:myNS="urn:GeoFESTService" languageSpecificType="java:cgl.webservices.geofest.MeshRunBean"/>
         <beanMapping qname="myNS:GFOutputBean" xmlns:myNS="urn:GeoFESTService" languageSpecificType="java:cgl.webservices.geofest.GFOutputBean"/>
  </service>
+ <service name="GeoFESTGridExec" provider="java:RPC">
+  <parameter name="allowedMethods" value="runGridMeshGenerator runGridGeoFEST queryGeoFESTStatus deleteGeoFESTJob"/>
+  <parameter name="scope" value="Session"/>
+  <parameter name="className" value="cgl.webservices.geofest.GeoFESTService"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns1:ArrayOf_soapenc_string" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:java.lang.String[]" xmlns:ns1="urn:GatewayWS"/>
+        <beanMapping qname="myNS:Fault" xmlns:myNS="urn:GeoFESTService" languageSpecificType="java:cgl.webservices.geofest.Fault"/>
+        <beanMapping qname="myNS:Layer" xmlns:myNS="urn:GeoFESTService" languageSpecificType="java:cgl.webservices.geofest.Layer"/>
+        <beanMapping qname="myNS:GeotransParamsBean" xmlns:myNS="urn:GeoFESTService" languageSpecificType="java:cgl.webservices.geofest.GeotransParamsBean"/>
+        <beanMapping qname="myNS:MeshRunBean" xmlns:myNS="urn:GeoFESTService" languageSpecificType="java:cgl.webservices.geofest.MeshRunBean"/>
+        <beanMapping qname="myNS:GFOutputBean" xmlns:myNS="urn:GeoFESTService" languageSpecificType="java:cgl.webservices.geofest.GFOutputBean"/>
+ </service>
  <transport name="http">
   <requestFlow>
    <handler type="URLMapper"/>
