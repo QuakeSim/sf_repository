@@ -41,12 +41,21 @@ import birdbath.*;
 
 public class GeoFESTGridService extends GeoFESTService{    
 
+    //Set the universe type for condor.  Probably OK to assume it is always
+    //Globus for now.
+    UniverseType universeType = UniverseType.GLOBUS;
+    Schedd schedd;
+    String collectorUrl;
+
 	 public GeoFESTGridService() throws Exception {
 		  this(false);
 	 }
 	 
 	 public GeoFESTGridService(boolean useClassLoader) throws Exception {
 		  super(useClassLoader);
+		  //Good ol' condor 
+		  collectorUrl=properties.getProperty("condor.collector.url");
+
 	 }
 
     /**

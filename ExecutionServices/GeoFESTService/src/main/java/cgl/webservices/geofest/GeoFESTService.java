@@ -37,11 +37,6 @@ public class GeoFESTService extends AntVisco implements Runnable{
     final String FILE_PROTOCOL="file";
     final String HTTP_PROTOCOL="http";
 
-    //Set the universe type for condor.  Probably OK to assume it is always
-    //Globus for now.
-    UniverseType universeType = UniverseType.GLOBUS;
-    Schedd schedd;
-
     //These are the system properties that may have
     //default values.
     Properties properties;
@@ -54,7 +49,6 @@ public class GeoFESTService extends AntVisco implements Runnable{
     String buildFilePath;
     String antTarget;
     String queueServiceUrl;
-    String collectorUrl;
 
     //Some useful values
     String comma=",";
@@ -156,8 +150,6 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  baseOutputDestDir=properties.getProperty("output.dest.dir");
 		  queueServiceUrl=properties.getProperty("queue.service.url");
 		  
-		  //Good ol' condor 
-		  collectorUrl=properties.getProperty("condor.collector.url");
     }
     
     public GeoFESTService() throws Exception{
@@ -400,8 +392,9 @@ public class GeoFESTService extends AntVisco implements Runnable{
     /**
      * Checks the status of a running GeoFEST job.
      */
-    public void queryGeoFESTStatus() 
-	throws Exception {
+    public String queryGeoFESTStatus() 
+		  throws Exception {
+		  return " ";
     }
     
     /**
