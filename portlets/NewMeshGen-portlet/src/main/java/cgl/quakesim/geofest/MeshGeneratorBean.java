@@ -705,6 +705,10 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  String DB_RESPONSE_HEADER = "results of the query:";
 		  System.out.println("SQL Query on:" + param);
 		  
+// 		  String sqlQuery = "select F." + param
+// 				+ " from FAULT AS F, REFERENCE AS R where F.FaultName=\'" + theFault
+// 				+ "\' and F.InterpId=R.InterpId;";
+
 		  String sqlQuery = "select " + param
 				+ " from SEGMENT, REFERENCE where FaultName=\'" + theFault
 				+ "\' and SegmentName=\'" + theSegment

@@ -459,13 +459,13 @@ function dataTableSelectOneRadio(radio) {
 						<h:outputText  id="pg10" value="#{myentry1.faultAuthor}" /> 
 					</h:column> 
  
-					<h:column  id="lid1"> 
+					<h:column  id="lereid1"> 
 						<f:facet name="header"> 
 							<h:outputText escape="false" value="<b>Segment Coordinates</b>" /> 
 						</f:facet> 
-						<h:outputText  id="lid1" value="#{myentry1.faultSegmentCoordinates}" /> 
+						<h:outputText  id="liered1" value="#{myentry1.faultSegmentCoordinates}" /> 
 					</h:column> 
-					<h:column  id="lid1"> 
+					<h:column  id="lieraed1"> 
 						<f:facet name="header"> 
 							<h:outputText escape="false" value="<b>Action</b>" /> 
 						</f:facet> 

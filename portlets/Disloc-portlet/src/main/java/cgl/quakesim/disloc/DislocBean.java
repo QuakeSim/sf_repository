@@ -684,7 +684,7 @@ public class DislocBean extends GenericSopacBean {
 		  throws Exception {
 		  
 		  String DB_RESPONSE_HEADER = "results of the query:";
-		  
+
 		  String sqlQuery = "select " + param
 				+ " from LAYER, LREFERENCE where LayerName=\'" + theLayer
 				+ "\' and LAYER.InterpId=LREFERENCE.InterpId;";
@@ -706,10 +706,17 @@ public class DislocBean extends GenericSopacBean {
 		  String DB_RESPONSE_HEADER = "results of the query:";
 		  System.out.println("SQL Query on:" + param);
 		  
+		  
 		  String sqlQuery = "select " + param
 				+ " from SEGMENT, REFERENCE where FaultName=\'" + theFault
 				+ "\' and SegmentName=\'" + theSegment
 				+ "\' and SEGMENT.InterpId=REFERENCE.InterpId;";
+		  
+// 		  String sqlQuery = "select F." + param
+// 				+ " from FAULT AS F, REFERENCE AS R where F.FaultName=\'" + theFault
+// 				+ "\' and F.InterpId=R.InterpId;";
+
+		  System.out.println("SQL Query is "+sqlQuery);
 		  
 		  String tmp = select.select(sqlQuery);
 		  if (tmp == null || tmp.equals("null") || tmp.equals("")) {

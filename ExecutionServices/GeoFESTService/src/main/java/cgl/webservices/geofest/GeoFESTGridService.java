@@ -20,9 +20,6 @@ import org.apache.axis.transport.http.HTTPConstants;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 
-//SOPAC Client Stuff
-import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
-
 //Needed for some number formatting.
 import java.text.*;
 
@@ -55,37 +52,38 @@ public class GeoFESTGridService extends GeoFESTService{
      * This is a main() for testing.
      */
     public static void main(String[] args) {
-	//Create fault.
-	Fault[] faults=new Fault[1];
-	faults[0]=new Fault();
-	
-	//Create layer.
-	Layer[] layers=new Layer[1];
-	layers[0]=new Layer();
-	
-	//Create geotrans params
-	GeotransParamsBean gpb=new GeotransParamsBean();
-	
-	String userName="duhFaultUser";
-	String projectName="faultsatmyfeet";
-	
-	try {
-	    //Make the mesh.
-	    GeoFESTGridService ggfs=new GeoFESTGridService(true);
-	    String proxyLocation="/tmp/x509up_u501";
-	    String gridResourceVal="gt2 tg-login.tacc.teragrid.org/jobmanager-fork";
-	    String meshExec="/home/teragrid/tg459247/bin/autoref.pl";
-	    MeshRunBean mrb=ggfs.runGridMeshGenerator(userName,
-						      projectName,
-						      faults,
-						      layers,
-						      "rare",
-						      proxyLocation,
-						      gridResourceVal,
-						      meshExec);
-	    
-// 	    System.out.println("Running GeoFEST");
-// 	    gfs.runGeoFEST(userName,projectName,gpb,mrb.getJobUIDStamp());
+		  System.out.println("GeoFEST Grid Service Main Method");
+		  //Create fault.
+		  Fault[] faults=new Fault[1];
+		  faults[0]=new Fault();
+		  
+		  //Create layer.
+		  Layer[] layers=new Layer[1];
+		  layers[0]=new Layer();
+		  
+		  //Create geotrans params
+		  GeotransParamsBean gpb=new GeotransParamsBean();
+		  
+		  String userName="duhFaultUser";
+		  String projectName="faultsatmyfeet";
+		  
+		  try {
+				//Make the mesh.
+				GeoFESTGridService ggfs=new GeoFESTGridService(true);
+				String proxyLocation="/tmp/x509up_u501";
+				String gridResourceVal="gt2 grid-w.ncsa.teragrid.org/jobmanager-fork";
+				String meshExec="/u/ac/quakesim/bin/autoref.pl";
+				MeshRunBean mrb=ggfs.runGridMeshGenerator(userName,
+																		projectName,
+																		faults,
+																		layers,
+																		"rare",
+																		proxyLocation,
+																		gridResourceVal,
+																		meshExec);
+				
+				// 	    System.out.println("Running GeoFEST");
+				// 	    gfs.runGeoFEST(userName,projectName,gpb,mrb.getJobUIDStamp());
 	    
 	}
 	catch (Exception ex) {
@@ -102,6 +100,7 @@ public class GeoFESTGridService extends GeoFESTService{
 		  super(useClassLoader);
 		  //Good ol' condor 
 		  collectorUrl=properties.getProperty("condor.collector.url");
+		  System.out.println("Collector URL:"+collectorUrl);
 
 	 }
 
@@ -233,6 +232,9 @@ public class GeoFESTGridService extends GeoFESTService{
 				//This is the group file.  Only one of these.
 				files[iter]=new File(workDir+"/"+projectName+".grp");
 
+				for(int i=0;i<faults.length;i++) {
+					 System.out.println("Input Files:"+files[i]);
+				}
 
 				//--------------------------------------------------
 				//Create the classadds
