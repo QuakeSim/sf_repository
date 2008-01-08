@@ -47,8 +47,52 @@ public class GeoFESTGridService extends GeoFESTService{
     Schedd schedd;
     String collectorUrl;
 	 
-	 //Some useful constants
-	 String equals="=";	 
+    //Some useful constants
+    String equals="=";	 
+    String[] statusName = { "", "Idle", "Running", "Removed", 				      "Completed", "Held" };
+
+    /**
+     * This is a main() for testing.
+     */
+    public static void main(String[] args) {
+	//Create fault.
+	Fault[] faults=new Fault[1];
+	faults[0]=new Fault();
+	
+	//Create layer.
+	Layer[] layers=new Layer[1];
+	layers[0]=new Layer();
+	
+	//Create geotrans params
+	GeotransParamsBean gpb=new GeotransParamsBean();
+	
+	String userName="duhFaultUser";
+	String projectName="faultsatmyfeet";
+	
+	try {
+	    //Make the mesh.
+	    GeoFESTGridService ggfs=new GeoFESTGridService(true);
+	    String proxyLocation="/tmp/x509up_u501";
+	    String gridResourceVal="gt2 tg-login.tacc.teragrid.org/jobmanager-fork";
+	    String meshExec="/home/teragrid/tg459247/bin/autoref.pl";
+	    MeshRunBean mrb=ggfs.runGridMeshGenerator(userName,
+						      projectName,
+						      faults,
+						      layers,
+						      "rare",
+						      proxyLocation,
+						      gridResourceVal,
+						      meshExec);
+	    
+// 	    System.out.println("Running GeoFEST");
+// 	    gfs.runGeoFEST(userName,projectName,gpb,mrb.getJobUIDStamp());
+	    
+	}
+	catch (Exception ex) {
+	    ex.printStackTrace();
+	}
+    }
+    
 
 	 public GeoFESTGridService() throws Exception {
 		  this(false);
@@ -244,38 +288,40 @@ public class GeoFESTGridService extends GeoFESTService{
 		  return getTheMeshGenReturnFiles(userName,projectName,timeStamp); 
     }
 	 
-	 protected int[] condorSubmit(String userName,
-										  String exec,
-										  String args,
-										  String workDir,
-										  String collectUrl,
-										  ClassAdStructAttr[] extraAttributes,
-										  File[] files) throws Exception {
-		  
-		  try {
-				//Do the condor submission stuff
-				Transaction xact = createNewTransaction(collectorUrl);
-				xact.begin(30);
-				int clusterId = xact.createCluster();
-				int jobId = xact.createJob(clusterId);
-				
-				//Create a classad for the job.
-				
-				//Submit it all.
-				xact.submit(clusterId, jobId, userName, universeType,
-								exec, args,"(TRUE)", extraAttributes, files);
-				xact.commit();
-				
-				getSchedd().requestReschedule();				
-		  }
-		  catch (Exception ex) {
-				ex.printStackTrace();
-		  }
-		  
-		  int[] jobstuff=new int[2];
-		  jobstuff[0]=clusterId;
-		  jobstuff[1]=jobId;
-		  return jobstuff;
+    protected int[] condorSubmit(String userName,
+				 String exec,
+				 String args,
+				 String workDir,
+				 String collectUrl,
+				 ClassAdStructAttr[] extraAttributes,
+				 File[] files) throws Exception {
+	int[] jobstuff=new int[2];		  
+	jobstuff[0]=0;
+	jobstuff[1]=0;
+	try {
+	    //Do the condor submission stuff
+	    Transaction xact = createNewTransaction(collectorUrl);
+	    xact.begin(30);
+	    int clusterId = xact.createCluster();
+	    int jobId = xact.createJob(clusterId);
+	    
+	    jobstuff[0]=clusterId;
+	    jobstuff[1]=jobId;
+	    
+	    //Create a classad for the job.
+	    
+	    //Submit it all.
+	    xact.submit(clusterId, jobId, userName, universeType,
+			exec, args,"(TRUE)", extraAttributes, files);
+	    xact.commit();
+	    
+	    getSchedd().requestReschedule();				
+	}
+	catch (Exception ex) {
+		      ex.printStackTrace();
+	}
+	
+	return jobstuff;
     }
     
     public void setSchedd(Schedd schedd) {
@@ -298,6 +344,9 @@ public class GeoFESTGridService extends GeoFESTService{
 													String proxyLocation,
 													String timeStamp)
 		  throws Exception {
+	int[] jobstuff=new int[2];
+	jobstuff[0]=0;
+	jobstuff[1]=1;
 
 		  try {
 				//Set up the stuff.
@@ -357,19 +406,19 @@ public class GeoFESTGridService extends GeoFESTService{
 														proxyLocation)
 					 };
 				
-				int[] jobStuff=condorSubmit(userName,
-													 exec,
-													 args,
-													 workDir,
-													 collectorUrl,
-													 extraAttributes,
-													 files);
+				jobstuff=condorSubmit(userName,
+						      exec,
+						      args,
+						      workDir,
+						      collectorUrl,
+						      extraAttributes,
+						      files);
 		  }
 		  catch (Exception ex) {
 				ex.printStackTrace();
 		  }
 
-		  return getAllTheGeoFESTFiles(userName, projectName, timeStamp,jobStuff[0]+"",jobStuff[1]+"");
+		  return getAllTheGeoFESTFiles(userName, projectName, timeStamp,jobstuff[0],jobstuff[1]);
     }
 
 	 /**
@@ -433,7 +482,6 @@ public class GeoFESTGridService extends GeoFESTService{
      * Get the job status.
      */
     public String queryGeoFESTStatus(int clusterId, int jobId) { 
-		  warningMessage="";
 		  int status = 0;
 		  
 		  try {		  
@@ -445,7 +493,6 @@ public class GeoFESTGridService extends GeoFESTService{
 				status = Integer.parseInt(ad.get("JobStatus"));
 		  }
 		  catch (Exception ex) {
-				warningMessage="Could not connect to Condor to query job status";
 				ex.printStackTrace();
 		  }
 		  return statusName[status];

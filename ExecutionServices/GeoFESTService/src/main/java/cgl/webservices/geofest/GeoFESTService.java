@@ -376,9 +376,9 @@ public class GeoFESTService extends AntVisco implements Runnable{
      * of geofest.  String [5] is the GeoFEST log file.
      */
     public GFOutputBean runGeoFEST(String userName,
-											  String projectName,
-											  GeotransParamsBean gpb,
-											  String timeStamp)
+				   String projectName,
+				   GeotransParamsBean gpb,
+				   String timeStamp)
 		  throws Exception {
 		  
 		  //The target is always "tar.all".
@@ -414,8 +414,8 @@ public class GeoFESTService extends AntVisco implements Runnable{
     protected GFOutputBean getAllTheGeoFESTFiles(String userName,
 																 String projectName,
 																 String jobUIDStamp,
-																 String condorClusterId,
-																 String condorJobId) {
+																 int condorClusterId,
+																 int condorJobId) {
 		  
 		  GFOutputBean gfoutput=new GFOutputBean();
 		  String baseUrl=generateBaseUrl(userName,projectName,jobUIDStamp);

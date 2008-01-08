@@ -21,22 +21,22 @@ public class GFOutputBean {
 	 String tetraUrl;
 	 String nodeUrl;
 	 String junkBox;
-	 String condorClusterId;
-	 String condorJobId;
+	 int condorClusterId;
+	 int condorJobId;
 	 
-	 public void setCondorClusterId(String condorClusterId){
+	 public void setCondorClusterId(int condorClusterId){
 		  this.condorClusterId=condorClusterId;
 	 }
 
-	 public String getCondorClusterId() {
+	 public int getCondorClusterId() {
 		  return this.condorClusterId;
 	 }
 
-	 public void setCondorJobId(String condorJobId){
+	 public void setCondorJobId(int condorJobId){
 		  this.condorJobId=condorJobId;
 	 }
 
-	 public String getCondorJobId() {
+	 public int getCondorJobId() {
 		  return this.condorJobId;
 	 }
 
