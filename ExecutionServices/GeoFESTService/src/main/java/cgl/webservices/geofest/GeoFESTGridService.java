@@ -46,6 +46,7 @@ public class GeoFESTGridService extends GeoFESTService{
 	 
     //Some useful constants
     String equals="=";	 
+	 String semicolon=";";
     String[] statusName = { "", "Idle", "Running", "Removed", 				      "Completed", "Held" };
 
     /**
@@ -71,8 +72,8 @@ public class GeoFESTGridService extends GeoFESTService{
 				//Make the mesh.
 				GeoFESTGridService ggfs=new GeoFESTGridService(true);
 				String proxyLocation="/tmp/x509up_u501";
-				String gridResourceVal="gt2 grid-w.ncsa.teragrid.org/jobmanager-fork";
-				String meshExec="/u/ac/quakesim/bin/autoref.pl";
+				String gridResourceVal="gt2 tg-login.ornl.teragrid.org/jobmanager-pbs";
+				String meshExec="/users/quakesim/bin/autoref.pl";
 				MeshRunBean mrb=ggfs.runGridMeshGenerator(userName,
 																		projectName,
 																		faults,
@@ -142,6 +143,7 @@ public class GeoFESTGridService extends GeoFESTService{
 		  
 		  return tmpStr; 
     }
+
     /**
      * These are some condor submission helper methods.
      */ 
@@ -203,6 +205,7 @@ public class GeoFESTGridService extends GeoFESTService{
 				String projectOutputRemaps=createMeshProjectOutputRemaps(projectName,workDir);
 
 				String baseUrl=generateBaseUrl(userName,projectName,timeStamp);
+				String envPathString=generateEnvPathString();
 		
 				//--------------------------------------------------
 				//These are the files needed for uploading.
@@ -267,9 +270,12 @@ public class GeoFESTGridService extends GeoFESTService{
 						  new ClassAdStructAttr("TransferOutput",
 														ClassAdAttrType.value2, 
 														projectOutput),
-						  new ClassAdStructAttr("TransferOutputRemaps",
+ 						  new ClassAdStructAttr("TransferOutputRemaps",
+ 														ClassAdAttrType.value2, 
+ 														projectOutputRemaps),
+						  new ClassAdStructAttr("Environment",
 														ClassAdAttrType.value2, 
-														projectOutputRemaps),
+														envPathString),
 						  new ClassAdStructAttr("x509userproxy", 
 														ClassAdAttrType.value3, 
 														proxyLocation)
@@ -289,6 +295,12 @@ public class GeoFESTGridService extends GeoFESTService{
 		  
 		  return getTheMeshGenReturnFiles(userName,projectName,timeStamp); 
     }
+
+	 protected String generateEnvPathString() {
+		  //Hardcoded now, need some better way to do this.
+		  String returnString=quote+"PATH=/users/quakesim/bin/:/bin/:/usr/bin/"+quote;
+		  return returnString;
+	 }
 	 
     protected int[] condorSubmit(String userName,
 				 String exec,
@@ -453,9 +465,9 @@ public class GeoFESTGridService extends GeoFESTService{
 
     protected String createMeshProjectOutputRemaps(String projectName,String workDir) {
 		  String returnString=quote+projectName+".index"+equals+workDir+projectName+".index"
-				+comma
+				+semicolon
 				+ projectName+".node"+equals+workDir+projectName+".node"
-				+comma
+				+semicolon
 				+ projectName+".tetra"+equals+workDir+projectName+".tetra"
 				+quote;
 		  System.out.println(returnString);		  

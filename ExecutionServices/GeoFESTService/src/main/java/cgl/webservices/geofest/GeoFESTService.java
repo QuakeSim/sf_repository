@@ -212,7 +212,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  
 		  String workDir=baseWorkDir+File.separator
 				+userName+File.separator
-				+projectName+File.separator+timeStamp;
+				+projectName+File.separator+timeStamp+File.separator;
 		  
 		  return workDir;
 		  
