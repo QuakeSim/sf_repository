@@ -67,16 +67,16 @@ public class GridInfoService extends GridInfoBean {
 				properties=new Properties();	    
 				properties.load(new FileInputStream(propertyFile));
 		  }
-		  hosts=populateHostList(props);
-		  populateDataObjects(props,hosts);
+		  hosts=populateHostList(properties);
+		  populateDataObjects(properties,hosts);
 	 }
 	 
-	 protected Host[] populateHostList(Properties props) {
+	 protected String[] populateHostList(Properties props) {
 		  String hostlist=props.getProperty("hostname.list");
 		  StringTokenizer st=new StringTokenizer(hostlist,",");
-		  Host[] hosts=new Host[st.countTokens()];
+		  String[] hosts=new String[st.countTokens()];
 		  for(int i=0;i<st.countTokens();i++) {
-				host[i].setHostName(st.nextToken());
+				hosts[i]=st.nextToken();
 		  }
 		  return hosts;
 	 }
@@ -84,9 +84,9 @@ public class GridInfoService extends GridInfoBean {
 	 protected void populateDataObjects(Properties props, String[] hosts){
 		  for(int i=0;i<hosts.length;i++) {
 				tgObject[i].setHostName(hosts[i]);
-				tgObject[i]setJobManager(props.getProperty(GRAM+DOT+hosts[i]));
+				tgObject[i].setJobManager(props.getProperty(GRAM+DOT+hosts[i]));
 
-				tgObject[i].setUserName(props.getProperty(USERS+DOT+hosts[i]));
+				tgObject[i].setUserName(props.getProperty(USERNAME+DOT+hosts[i]));
 				
 				tgObject[i].setUserHome(props.getProperty(HOME+DOT+hosts[i]));
 		  }
