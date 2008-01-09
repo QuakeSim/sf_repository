@@ -44,6 +44,7 @@ export DISLOC_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/DislocService
 export SIMPLEX_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/SimpleXService
 export KMLGENERATOR_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/KmlGenerator
 export QUEUE_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/QueueService
+export GRIDINFO_HOME=$BUILD_DIR/ExecutionServices/GridInfoService
 
 # These are directory locations for binaries that we should not put in
 # SourceForge
