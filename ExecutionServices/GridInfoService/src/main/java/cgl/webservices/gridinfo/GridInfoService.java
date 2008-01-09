@@ -29,6 +29,13 @@ public class GridInfoService extends GridInfoBean {
 	 
 	 Properties properties;
 	 String basePropertyFile="gridinfo.properties";
+	 String USERNAME="username";
+	 String HOME="home";
+	 String GRAM="gram";
+	 String DOT=".";
+	 
+	 String[] hosts;
+	 TeraGridObject[] tgObject;
 
 	 public GridInfoService() throws Exception {
 		  this(false);
@@ -60,5 +67,33 @@ public class GridInfoService extends GridInfoBean {
 				properties=new Properties();	    
 				properties.load(new FileInputStream(propertyFile));
 		  }
+		  hosts=populateHostList(props);
+		  populateDataObjects(props,hosts);
 	 }
+	 
+	 protected Host[] populateHostList(Properties props) {
+		  String hostlist=props.getProperty("hostname.list");
+		  StringTokenizer st=new StringTokenizer(hostlist,",");
+		  Host[] hosts=new Host[st.countTokens()];
+		  for(int i=0;i<st.countTokens();i++) {
+				host[i].setHostName(st.nextToken());
+		  }
+		  return hosts;
+	 }
+
+	 protected void populateDataObjects(Properties props, String[] hosts){
+		  for(int i=0;i<hosts.length;i++) {
+				tgObject[i].setHostName(hosts[i]);
+				tgObject[i]setJobManager(props.getProperty(GRAM+DOT+hosts[i]));
+
+				tgObject[i].setUserName(props.getProperty(USERS+DOT+hosts[i]));
+				
+				tgObject[i].setUserHome(props.getProperty(HOME+DOT+hosts[i]));
+		  }
+	 }
+	 
+	 public String getHomeDirectory() {
+		  return "";
+	 }
+
 }
