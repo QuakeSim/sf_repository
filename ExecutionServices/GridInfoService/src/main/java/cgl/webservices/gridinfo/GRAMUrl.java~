@@ -1,0 +1,15 @@
+package cgl.webservices.gridinfo;
+
+public GRAMUrl {
+
+	 String gramUrl;
+	 String[] queues;
+
+	 public String getGramUrl() {
+		  return gramUrl;
+	 }
+	 
+	 public void setGramUrl(String gramUrl){
+		  this.gramUrl=gramUrl;
+	 }
+}	 

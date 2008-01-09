@@ -1,0 +1,5 @@
+package cgl.webservices.gridinfo;
+
+public class Host {
+
+}

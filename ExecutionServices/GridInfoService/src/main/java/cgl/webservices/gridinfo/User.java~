@@ -1,0 +1,28 @@
+package cgl.webservices.gridinfo;
+
+public User {
+
+	 String userName;
+	 String proxyLocation;
+
+	 public String getUserName() {
+		  return userName;
+	 }
+	 
+	 public void setUserName(String userName) {
+		  this.userName=userName;
+	 }
+	 
+	 public String getUserName() {
+		  return userName;
+	 }
+	 
+	 public void setProxyLocation(String proxyLocation){
+		  this.proxyLocation=proxyLocation;
+	 }
+	 
+	 public String getProxyLocation() {
+		  return this.proxyLocation;
+	 }
+
+}
