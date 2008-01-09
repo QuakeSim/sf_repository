@@ -143,6 +143,9 @@ mvn clean -Dtomcat.base.dir=/tmp -DKmlGenerator.service.url=/tmp
 
 cd $QUEUE_EXECUTION_HOME
 mvn clean -Dtomcat.base.dir=/tmp -Dqueue.service.url=/tmp
+
+cd $GRIDINFO_HOME
+mvn clean -Dtomcat.base.dir=/tmp 
  
 
 #--------------------------------------------------
