@@ -1,0 +1,42 @@
+/** 
+ * This bean encapsulates some necessary grid info operations.  
+ */
+package cgl.webservices.geofest;
+
+public class GridInfoBean {
+	 public GridInfoBean() {
+		  this(false);
+	 }
+
+    public GridInfoBean(boolean useClassLoader) 
+		  throws Exception {
+	
+		  super();
+		  
+		  if(useClassLoader) {
+				System.out.println("Using classloader");
+				//This is useful for command line clients but does not work
+				//inside Tomcat.
+				ClassLoader loader=ClassLoader.getSystemClassLoader();
+				properties=new Properties();
+				
+				//This works if you are using the classloader but not inside
+				//Tomcat.
+				properties.load(loader.getResourceAsStream("geofestconfig.properties"));
+		  }
+		  else {
+				//Extract the Servlet Context
+				System.out.println("Using Servlet Context");
+				MessageContext msgC=MessageContext.getCurrentContext();
+				ServletContext context=((HttpServlet)msgC.getProperty(HTTPConstants.MC_HTTP_SERVLET)).getServletContext();
+				
+				String propertyFile=context.getRealPath("/")
+					 +"/WEB-INF/classes/geofestconfig.properties";
+				System.out.println("Prop file location "+propertyFile);
+				
+				properties=new Properties();	    
+				properties.load(new FileInputStream(propertyFile));
+		  }
+
+
+}
