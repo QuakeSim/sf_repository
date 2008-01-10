@@ -33,6 +33,7 @@ public class GridInfoService extends GridInfoBean {
 	 String HOME="home";
 	 String GRAM="gram";
 	 String DOT=".";
+	 String FORK="fork";
 	 
 	 String[] hosts;
 	 TeraGridObject[] tgObject;
@@ -40,6 +41,7 @@ public class GridInfoService extends GridInfoBean {
 	 Hashtable userName=new Hashtable();
 	 Hashtable jobManager=new Hashtable();
 	 Hashtable userHome=new Hashtable();
+	 Hashtable forkManager=new Hashtable();
 
 	 /**
 	  * This main method is for testing.
@@ -54,6 +56,7 @@ public class GridInfoService extends GridInfoBean {
 				System.out.println("Home:"+space+gis.getHomeDirectory(hosts[i]));
 				System.out.println("JM:"+space+gis.getJobManager(hosts[i]));
 				System.out.println("UserName"+space+gis.getUserName(hosts[i]));
+				System.out.println("Fork"+space+gis.getForkManager(hosts[i]));
 		  }
 	 }
 
@@ -107,10 +110,10 @@ public class GridInfoService extends GridInfoBean {
 
 	 protected void populateDataObjects(Properties props, String[] hosts){
 		  for(int i=0;i<hosts.length;i++) {
-				
 				jobManager.put(hosts[i],props.getProperty(GRAM+DOT+hosts[i]));
 				userName.put(hosts[i],props.getProperty(USERNAME+DOT+hosts[i]));
 				userHome.put(hosts[i],props.getProperty(HOME+DOT+hosts[i]));
+				forkManager.put(hosts[i],props.getProperty(FORK+DOT+hosts[i]));
 		  }
 	 }
 	 
@@ -124,6 +127,10 @@ public class GridInfoService extends GridInfoBean {
 
 	 public String getUserName(String host) {
 		  return (String)userName.get(host);
+	 }
+
+	 public String getForkManager(String host) {
+		  return (String)forkManager.get(host);
 	 }
 
 	 public String[] getHosts() {
