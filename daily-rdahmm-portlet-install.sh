@@ -25,3 +25,6 @@ fi
 cp -r target/$PORTLET_NAME $CATALINA_HOME/webapps
 touch $PORTAL_WEBAPP_DIR/WEB-INF/CustomPortal/portlets/$PORTLET_NAME
 
+mkdir $CATALINA_HOME/webapps/ROOT/yui_0.12.2/build/slider/assets
+cp -r yui-assets-plus/* $CATALINA_HOME/webapps/ROOT/yui_0.12.2/build/slider/assets/
+

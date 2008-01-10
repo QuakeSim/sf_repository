@@ -10,7 +10,7 @@
 #export PORTAL_HOST_NAME=localhost
 export PORTAL_HOST_NAME=`echo $HOSTNAME`
 export PORTAL_SERVER_URL=http://$PORTAL_HOST_NAME:8080/
-export GOOGLE_KEY="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBSPTG4M0VeHMNoDOKS2I0IJH6WVtRT4Ye3YMLMmOKDiX0HJAySVruBU5g"
+export GOOGLE_KEY="http://maps.google.com/maps?file=api&amp;v=2&amp;key=BQIAAAAlW-VacciIjziyRXAuwNEPRTHN3guvZVblLcC-EJwLBdWde6_phS7mdwrISgPOfAEOnp6MgtTVZLUNQ"
 
 #--------------------------------------------------
 # None of the variables below should be changed.

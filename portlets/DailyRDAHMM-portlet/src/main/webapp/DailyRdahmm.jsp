@@ -21,7 +21,7 @@
 
 <html>
   <head>
-  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAlW-VacciIjziyRXAuwNEPRRIzJT_coxGrJAin4PAyr5SOc_NDxQ9RiC4mmJj_BHI6uyRvudBgZ7wNw"
+  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAlW-VacciIjziyRXAuwNEPRTHN3guvZVblLcC-EJwLBdWde6_phS7mdwrISgPOfAEOnp6MgtTVZLUNQ"
       type="text/javascript"></script>
   </head>
   <body>
@@ -639,6 +639,7 @@
 <%
 				float mapcenter_y, mapcenter_x, xmin = 0, xmax = 0, ymin = 0, ymax = 0;
 				int changeCount = 0;
+				Calendar tmpCaldr = Calendar.getInstance();
 				// now we load status change information from the xml file, and create markers for all stations
 				for (int i=0; i<lStations.size(); i++) {
 					Element eleStation = (Element)lStations.get(i);
@@ -659,6 +660,7 @@
 					stationArray[saIdx][1] = <%=x%>;	stationArray[saIdx][2] = <%=y%>;	stationArray[saIdx][3] = null; stationArray[saIdx][4] = null;
 					icon = new GIcon(baseIcon);					
 					stationArray[saIdx][6] = createTabsInfoMarker(new GPoint('<%=y%>', '<%=x%>') , null, icon, saIdx, document.getElementById("stationSelect"));
+					//stationArray[saIdx][6] = null;
 <%				
 					if (changeCount == 0) {
 						out.write("stationArray[saIdx][5] = null");
@@ -677,9 +679,28 @@
 								String changeDate = oneChange.substring(0, idxCollon);
 								String oldStatus = oneChange.substring(idxCollon + 1, idxTo);
 								String newStatus = oneChange.substring(idxTo + 2);
+								
+								String str = changeDate;
+								String year, month, day;
+								int i1, i2;
+								i1 = str.indexOf("-");
+								i2 = str.indexOf("-", i1+1);
+								year = str.substring(0, i1);
+								month = str.substring(i1+1, i2);
+	  						day = str.substring(i2+1);
+	  	
+								tmpCaldr.set(Calendar.YEAR, Integer.parseInt(year, 10));
+								tmpCaldr.set(Calendar.MONTH, Integer.parseInt(month, 10)-1);
+								tmpCaldr.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day, 10));
+								tmpCaldr.set(Calendar.HOUR_OF_DAY, 12);
+								tmpCaldr.set(Calendar.MINUTE, 0);
+								tmpCaldr.set(Calendar.SECOND, 0);
+								tmpCaldr.set(Calendar.MILLISECOND, 0);
+								//if (eleStation.element("id").getText().equals("avry"))
+									//System.out.println(year + "," + month + "," + day + ";" + tmpCaldr.get(Calendar.YEAR) + " " 
+										//									+ tmpCaldr.get(Calendar.MONTH) + " " + tmpCaldr.get(Calendar.DAY_OF_MONTH) + ";" + tmpCaldr.getTimeInMillis());
 %>								
-								setDateByString(dateTmp, '<%=changeDate%>');
-								stationArray[saIdx][5][changeIdx++] = dateTmp.getTime(); stationArray[saIdx][5][changeIdx++] = <%=oldStatus%>;	stationArray[saIdx][5][changeIdx++] = <%=newStatus%>;
+								stationArray[saIdx][5][changeIdx++] = <%=tmpCaldr.getTimeInMillis()%>; stationArray[saIdx][5][changeIdx++] = <%=oldStatus%>; stationArray[saIdx][5][changeIdx++] = <%=newStatus%>;
 <%				
 								idx1 = idx2 + 1;
 								if (idx1 >= changeStr.length())
@@ -699,6 +720,13 @@
 				mapcenter_y = ymin + (ymax - ymin)/2;				
 %>
 				map.centerAndZoom(new GPoint(<%=mapcenter_y%>, <%=mapcenter_x%>), 10);
+				GEvent.addListener(map, "moveend", function() {
+						onMapMove(); } );
+				GEvent.addListener(map, "zoomend", function(oldLevel, newLevel) {
+						// zoomin: newLevel > oldLevel; zoomout: newLevel < oldLevel
+						if (newLevel < oldLevel)
+							onMapMove(); 
+						} );
 				
         // show the list for staus changes
         function printChangedStations() {
@@ -814,30 +842,87 @@
         	return color;
         }
         
-        function overlayMarkers(){        	
-   	 			var dateShowText = document.getElementById("dateText");	
-		    	var showDateStr = dateShowText.getAttribute("value");
-		    	var yellowcount = 0;
-		    	var redcount = 0;
-		    	if (showDateStr != "") {
-		    		map.clearOverlays();		    		
-		    		var theDate = getDateFromString(showDateStr);
-		    	 	
-		    	 	for (var i=0; i<stationArray.length; i++) { 
-		    	 		var color = "green";
-		    	 		if (stationArray[i][5] != null)
-		    	 			color = getMarkerColorForChanges(theDate, stationArray[i][5]);
+	// every station in the station array has 7 attributes: id, lat, long, hasColored(for the selected date), null(for output table), status change details, marker
+		function overlayMarkers(){        	
+			var dateShowText = document.getElementById("dateText");	
+			var showDateStr = dateShowText.getAttribute("value");
+			var yellowcount = 0;
+			var redcount = 0;
+			var icon;
+			if (showDateStr != "") {
+				map.clearOverlays();		    		
+				var theDate = getDateFromString(showDateStr);
+				//alert(showDateStr + ":" + theDate.getTime());		 	
+				var mapBounds = map.getBounds();
+				var sw = mapBounds.getSouthWest();
+				var ne = mapBounds.getNorthEast();
+				var colorCount = 0;
+			 	for (var i=0; i<stationArray.length; i++) {
+					stationArray[i][3] = false;				
+					if (stationArray[i][1] <= sw.lat() || stationArray[i][1] >= ne.lat() || stationArray[i][2] <= sw.lng() || stationArray[i][2] >= ne.lng())
+						continue;
+			 		var color = "green";
+		 			if (stationArray[i][5] != null)
+			 			color = getMarkerColorForChanges(theDate, stationArray[i][5]);
 		    	 		
-		    	 		if (color == "yellow")
-		    	 			yellowcount++;
-		    	 		if (color == "red")
-		    	 			redcount++;
+		 			if (color == "yellow")
+						yellowcount++;
+		 			if (color == "red")
+		 				redcount++;
 		    	 		
-		    	 		stationArray[i][6].getIcon().image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
-		    	 		map.addOverlay(stationArray[i][6]);
-		    	 	}		
-		    	}       
-        }
+		   	 	if (stationArray[i][6] != null)
+		   	 		stationArray[i][6].getIcon().image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
+		   	 	else {
+		   	 		icon = new GIcon(baseIcon);	
+		   	 		icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";			
+						stationArray[i][6] = createTabsInfoMarker(new GPoint(stationArray[i][2], stationArray[i][1]) , null, icon, i, document.getElementById("stationSelect"));
+		   	 	}
+		   	 	map.addOverlay(stationArray[i][6]);
+					stationArray[i][3] = true;
+					colorCount++;
+		    }
+			}       
+		}
+
+		function onMapMove() {
+			var dateShowText = document.getElementById("dateText");	
+			var showDateStr = dateShowText.getAttribute("value");
+			var yellowcount = 0;
+			var redcount = 0;
+			var icon;
+			if (showDateStr != "") {  		
+				var theDate = getDateFromString(showDateStr); 	
+				var mapBounds = map.getBounds();
+				var sw = mapBounds.getSouthWest();
+				var ne = mapBounds.getNorthEast();
+				var colorCount = 0;
+			 	for (var i=0; i<stationArray.length; i++) {									
+					if (stationArray[i][1] <= sw.lat() || stationArray[i][1] >= ne.lat() || stationArray[i][2] <= sw.lng() || stationArray[i][2] >= ne.lng())
+						continue;
+					if (stationArray[i][3] == true)
+						continue;
+			 		var color = "green";
+		 			if (stationArray[i][5] != null)
+			 			color = getMarkerColorForChanges(theDate, stationArray[i][5]);
+		    	 		
+		 			if (color == "yellow")
+						yellowcount++;
+		 			if (color == "red")
+		 				redcount++;
+		    	 		
+		   	 	if (stationArray[i][6] != null)
+		   	 		stationArray[i][6].getIcon().image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
+		   	 	else {
+		   	 		icon = new GIcon(baseIcon);	
+		   	 		icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";			
+						stationArray[i][6] = createTabsInfoMarker(new GPoint(stationArray[i][2], stationArray[i][1]) , null, icon, i, document.getElementById("stationSelect"));
+		   	 	}
+		   	 	map.addOverlay(stationArray[i][6]);
+					stationArray[i][3] = true;
+					colorCount++;
+		    }
+			}    	
+		}
 
         function createMarker(networkName, name, lon, lat, icon) {
           var marker = new GMarker(new GPoint(lon, lat),icon);

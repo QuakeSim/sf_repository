@@ -17,7 +17,7 @@ source ./env.sh
 
 echo ""
 echo "######################################"
-echo "Deploying ANALYZETSERI Execution Serv
+echo "Deploying ANALYZETSERI Execution Service"
 echo "######################################"
 cd $ANALYZE_TSERI_EXECUTION_HOME
 if mvn clean package -Dtomcat.base.dir=$CATALINA_HOME -Danalyze_tseri.service.url=$PORTAL_SERVER_URL/analyze-tseri-exec -Dportal.host.name=$PORTAL_HOST_NAME -Dportal.server.url=$PORTAL_SERVER_URL
@@ -32,7 +32,7 @@ cp -rf target/analyze-tseri-exec $CATALINA_HOME/webapps
 if 
     chmod +x $CATALINA_HOME/webapps/analyze-tseri-exec/WEB-INF/binaryexec/*
 then 
-    echo "ANALYZE_TSERI scripts installed."
+    echo ANALYZE_TSERI scripts installed.
 else 
     echo Could not install gnuplot binary.
     exit 1
