@@ -81,6 +81,7 @@ export PLOT_GRWS_TIMESERIES_PORTLET_HOME=$BUILD_DIR/portlets/PlotGRWSTimeSeries-
 export MESHGENERATOR_PORTLET_HOME=$BUILD_DIR/portlets/MeshGenerator-portlet
 export NEW_MESHGENERATOR_PORTLET_HOME=$BUILD_DIR/portlets/NewMeshGen-portlet
 export DISLOC_PORTLET_HOME=$BUILD_DIR/portlets/Disloc-portlet
+export GEOFEST_GRID_PORTLET_HOME=$BUILD_DIR/portlets/GeoFESTGrid-portlet
 
 #Set the path to include ant and maven.
 export PATH=$ANT_HOME/bin:$MAVEN_HOME/bin:$PATH

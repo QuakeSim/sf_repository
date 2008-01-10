@@ -113,6 +113,9 @@ source ./stationmonitor-portlet-install.sh
 cd $BUILD_DIR
 source ./disloc-portlet-install.sh
 
+cd $BUILD_DIR
+source ./geofestgrid-portlet-install.sh
+
 #cd $BUILD_DIR
 #source ./simplex-portlet-install.sh
 
