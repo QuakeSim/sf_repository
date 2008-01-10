@@ -21,24 +21,6 @@ public class GFOutputBean {
 	 String tetraUrl;
 	 String nodeUrl;
 	 String junkBox;
-	 int condorClusterId;
-	 int condorJobId;
-	 
-	 public void setCondorClusterId(int condorClusterId){
-		  this.condorClusterId=condorClusterId;
-	 }
-
-	 public int getCondorClusterId() {
-		  return this.condorClusterId;
-	 }
-
-	 public void setCondorJobId(int condorJobId){
-		  this.condorJobId=condorJobId;
-	 }
-
-	 public int getCondorJobId() {
-		  return this.condorJobId;
-	 }
 
 	 public void setJobUIDStamp(String jobUIDStamp){
 		  this.jobUIDStamp=jobUIDStamp;

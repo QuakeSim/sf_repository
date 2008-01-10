@@ -49,6 +49,11 @@ public class GeoFESTGridService extends GeoFESTService{
 	 String semicolon=";";
     String[] statusName = { "", "Idle", "Running", "Removed", 				      "Completed", "Held" };
 
+	 //These are constant strings for practical purposes.  They are the names of files that
+	 //store the condor job status info for the mesh gen and geofest steps.
+	 String geofestId="geoFestId";
+	 String meshgenId="meshgenId";
+
     /**
      * This is a main() for testing.
      */
@@ -281,13 +286,14 @@ public class GeoFESTGridService extends GeoFESTService{
 														proxyLocation)
 					 };
 				
-				condorSubmit(userName,
-								 meshExec,
-								 meshArgs,
-								 workDir,
-								 collectorUrl,
-								 extraAttributes,
-								 files);
+				int[] jobstuff=condorSubmit(userName,
+													 meshExec,
+													 meshArgs,
+													 workDir,
+													 collectorUrl,
+													 extraAttributes,
+													 files);				
+				writeCondorJobId(workDir, meshgenId,jobstuff[0],jobstuff[1]);
 		  }
 		  catch (Exception ex) {
 				ex.printStackTrace();
@@ -303,34 +309,34 @@ public class GeoFESTGridService extends GeoFESTService{
 	 }
 	 
     protected int[] condorSubmit(String userName,
-				 String exec,
-				 String args,
-				 String workDir,
-				 String collectUrl,
-				 ClassAdStructAttr[] extraAttributes,
-				 File[] files) throws Exception {
-	int[] jobstuff=new int[2];		  
-	jobstuff[0]=0;
-	jobstuff[1]=0;
-	try {
-	    //Do the condor submission stuff
-	    Transaction xact = createNewTransaction(collectorUrl);
-	    xact.begin(30);
-	    int clusterId = xact.createCluster();
-	    int jobId = xact.createJob(clusterId);
-	    
-	    jobstuff[0]=clusterId;
-	    jobstuff[1]=jobId;
-	    
+											String exec,
+											String args,
+											String workDir,
+											String collectUrl,
+											ClassAdStructAttr[] extraAttributes,
+											File[] files) throws Exception {
+		  int[] jobstuff=new int[2];		  
+		  jobstuff[0]=0;
+		  jobstuff[1]=0;
+		  try {
+				//Do the condor submission stuff
+				Transaction xact = createNewTransaction(collectorUrl);
+				xact.begin(30);
+				int clusterId = xact.createCluster();
+				int jobId = xact.createJob(clusterId);
+				
+				jobstuff[0]=clusterId;
+				jobstuff[1]=jobId;
+				
 	    //Create a classad for the job.
-	    
+				
 	    //Submit it all.
-	    xact.submit(clusterId, jobId, userName, universeType,
-			exec, args,"(TRUE)", extraAttributes, files);
-	    xact.commit();
+				xact.submit(clusterId, jobId, userName, universeType,
+								exec, args,"(TRUE)", extraAttributes, files);
+				xact.commit();
 	    
-	    getSchedd().requestReschedule();				
-	}
+				getSchedd().requestReschedule();				
+		  }
 	catch (Exception ex) {
 		      ex.printStackTrace();
 	}
@@ -358,10 +364,10 @@ public class GeoFESTGridService extends GeoFESTService{
 													String proxyLocation,
 													String timeStamp)
 		  throws Exception {
-	int[] jobstuff=new int[2];
-	jobstuff[0]=0;
-	jobstuff[1]=1;
-
+		  int[] jobstuff=new int[2];
+		  jobstuff[0]=0;
+		  jobstuff[1]=0;
+		  
 		  try {
 				//Set up the stuff.
 				String workDir=generateWorkDir(userName,projectName,timeStamp);
@@ -427,13 +433,47 @@ public class GeoFESTGridService extends GeoFESTService{
 						      collectorUrl,
 						      extraAttributes,
 						      files);
+				writeCondorJobId(workDir,geofestId,jobstuff[0],jobstuff[1]);
 		  }
 		  catch (Exception ex) {
 				ex.printStackTrace();
 		  }
 
-		  return getAllTheGeoFESTFiles(userName, projectName, timeStamp,jobstuff[0],jobstuff[1]);
+		  return getAllTheGeoFESTFiles(userName, projectName, timeStamp);
     }
+
+	 /**
+	  * 
+	  */
+	 protected void writeCondorJobId(String workDir,
+												String jobName,
+												int clusterId,
+												int jobId) 
+		  throws Exception {
+		  
+		  String fileName=workDir+File.separator+jobName;
+		  PrintWriter pw=new PrintWriter(new FileWriter(fileName),true);
+		  pw.println(clusterId);
+		  pw.println(jobId);
+		  pw.flush();
+		  pw.close();
+	 }
+
+	 protected int[] getCondorIds(String workDir, String jobName) {
+		  int[] jobInfo={0,0};
+		  String fileName=workDir+File.separator+jobName;
+				  
+		  try {
+				BufferedReader br=new BufferedReader(new FileReader(fileName));
+				jobInfo[0]=Integer.parseInt(br.readLine());
+				jobInfo[1]=Integer.parseInt(br.readLine());
+		  }
+		  catch (Exception ex) {
+				System.err.println("Condor ID file was lost or corrupted.");
+				ex.printStackTrace();
+		  }
+		  return jobInfo;
+	 }
 
 	 /**
 	  * This creates the condor-style list of GeoFEST output files to return.

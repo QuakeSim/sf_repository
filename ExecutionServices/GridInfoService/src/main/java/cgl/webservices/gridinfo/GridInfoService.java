@@ -37,6 +37,26 @@ public class GridInfoService extends GridInfoBean {
 	 String[] hosts;
 	 TeraGridObject[] tgObject;
 
+	 Hashtable userName=new Hashtable();
+	 Hashtable jobManager=new Hashtable();
+	 Hashtable userHome=new Hashtable();
+
+	 /**
+	  * This main method is for testing.
+	  */
+	 public static void main (String[] args) throws Exception {
+		  String space=" ";
+		  GridInfoService gis=new GridInfoService(true);
+		  String[] hosts=gis.getHosts();
+		  for(int i=0;i<hosts.length;i++) {
+				System.out.println("--------------------------------------------------");
+				System.out.println("Host:"+hosts[i]);
+				System.out.println("Home:"+space+gis.getHomeDirectory(hosts[i]));
+				System.out.println("JM:"+space+gis.getJobManager(hosts[i]));
+				System.out.println("UserName"+space+gis.getUserName(hosts[i]));
+		  }
+	 }
+
 	 public GridInfoService() throws Exception {
 		  this(false);
 	 }
@@ -73,27 +93,40 @@ public class GridInfoService extends GridInfoBean {
 	 
 	 protected String[] populateHostList(Properties props) {
 		  String hostlist=props.getProperty("hostname.list");
+		  System.out.println(hostlist);
 		  StringTokenizer st=new StringTokenizer(hostlist,",");
 		  String[] hosts=new String[st.countTokens()];
-		  for(int i=0;i<st.countTokens();i++) {
+		  int i=0;
+		  while(st.hasMoreTokens()){
 				hosts[i]=st.nextToken();
+				System.out.println(hosts[i]);
+				i++;
 		  }
 		  return hosts;
 	 }
 
 	 protected void populateDataObjects(Properties props, String[] hosts){
 		  for(int i=0;i<hosts.length;i++) {
-				tgObject[i].setHostName(hosts[i]);
-				tgObject[i].setJobManager(props.getProperty(GRAM+DOT+hosts[i]));
-
-				tgObject[i].setUserName(props.getProperty(USERNAME+DOT+hosts[i]));
 				
-				tgObject[i].setUserHome(props.getProperty(HOME+DOT+hosts[i]));
+				jobManager.put(hosts[i],props.getProperty(GRAM+DOT+hosts[i]));
+				userName.put(hosts[i],props.getProperty(USERNAME+DOT+hosts[i]));
+				userHome.put(hosts[i],props.getProperty(HOME+DOT+hosts[i]));
 		  }
 	 }
 	 
-	 public String getHomeDirectory() {
-		  return "";
+	 public String getHomeDirectory(String host) {
+		  return (String)userHome.get(host);
+	 }
+	 
+	 public String getJobManager(String host) {
+		  return (String)jobManager.get(host);
 	 }
 
+	 public String getUserName(String host) {
+		  return (String)userName.get(host);
+	 }
+
+	 public String[] getHosts() {
+		  return hosts;
+	 }
 }
