@@ -9,10 +9,14 @@
 #                                                       #
 #                                                       #
 #########################################################
-      system " sed = INPUT.xyz | sed 'N;s/\n/ /' > INPUT.xyz.combine.txt "
+			system " cut -c6-15 INPUT.raw | sed '/^$/d' > INPUT.raw.dates.txt "
+      system " paste INPUT.raw.dates.txt INPUT.xyz | sed 's/\t/ /' | sed 's/\n/ /' > INPUT.xyz.combine.txt "
+      #system " sed = INPUT.xyz | sed 'N;s/\n/ /' > INPUT.xyz.combine.txt "
       system " paste INPUT.Q INPUT.xyz.combine.txt | sed '/^$/d' >  INPUT.xyz.combine.tmp.txt"
       system " mv INPUT.xyz.combine.tmp.txt INPUT.xyz.combine.txt"
       system " sed '/^$/d' INPUT.Q | sort -u > INPUT.Q.class.txt "
+      system " sed -n '1p' INPUT.raw.dates.txt > INPUT.xyz.starttime "
+      system " sed -n '$p' INPUT.raw.dates.txt > INPUT.xyz.endtime "
       
       class_total =  ` wc -l INPUT.Q.class.txt | awk '{print $1}' `
       class_start = 0
@@ -82,5 +86,6 @@
 #                                                       #
 #                                                       #
 #########################################################
-      #system " rm INPUT.xyz.combine.txt "
-      #system " rm INPUT.Q.class.txt "
+      system " rm INPUT.xyz.combine.txt "
+      system " rm INPUT.Q.class.txt "
+      system " rm INPUT.raw.dates.txt "
