@@ -131,13 +131,16 @@ public class MeshGeneratorBean extends GenericSopacBean {
     //These should be populated from faces-config.xml
     String meshViewerServerUrl="http://gf2.ucs.indiana.edu:18084";
     String faultDBServiceUrl="http://gf2.ucs.indiana.edu:9090/axis/services/Select";
-	 String geoFESTBaseUrl="http://gf19.ucs.indiana.edu:8080/geofestexec/";
-    String geoFESTServiceUrl=geoFESTBaseUrl+"/"+"services/GeoFESTExec";
-	 String geoFESTBaseUrlForJnlp=getGeoFESTBaseUrlForJnlp();
+	 //	 String geoFESTBaseUrl="http://gf19.ucs.indiana.edu:8080/geofestexec/";
+	 String geoFESTBaseUrl="http://156.56.104.143:8080/geofestexec/";
+    String geoFESTServiceUrl;//=geoFESTBaseUrl+"/"+"services/GeoFESTExec";
+    String geoFESTGridServiceUrl;//=geoFESTBaseUrl+"/"+"services/GeoFESTGridExec";
+	 String geoFESTBaseUrlForJnlp;//=getGeoFESTBaseUrlForJnlp();
 	 String queueServiceUrl;
 
     //This is our geofest service stub.
     GeoFESTService geofestService;
+    GeoFESTGridService geofestGridService;
 	 QueueService queueService;
 
 	 //This is the db4o database
@@ -190,6 +193,11 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	 protected void initGeofestService() throws Exception {
 		  geofestService=
 				new GeoFESTServiceServiceLocator().getGeoFESTExec(new URL(geoFESTServiceUrl));
+	 }
+
+	 protected void initGeofestGridService() throws Exception {
+		  geofestGridService=
+				new GeoFESTGridServiceServiceLocator().getGeoFESTGridExec(new URL(geoFESTGridServiceUrl));
 	 }
 
 	 protected void makeProjectDirectory() {
@@ -327,12 +335,26 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  Layer[] layers=getLayersFromDB();
 		  Fault[] faults=getFaultsFromDB();
 
-		  initGeofestService();		  
-		  projectMeshRunBean=geofestService.runNonBlockingMeshGenerator(userName,
-																							 projectName,
-																							 faults,
-																							 layers,
-																							 meshResolution);
+		  initGeofestGridService();		 
+
+		  String proxyLocation="/tmp/x509up_u501";
+		  String gridResourceVal="gt2 tg-login.ornl.teragrid.org/jobmanager-fork";
+		  String userHome="/users/quakesim/";
+		  String meshExec=userHome+"/bin/autoref.pl";
+		  String envSettings="\""+"PATH="+userHome+"/bin/:/bin/:/usr/bin/"+"\"";
+		  String args=meshResolution;
+
+		  MeshRunBean projectMeshRunBean=geofestGridService.runGridMeshGenerator(userName,
+																										 projectName,
+																										 faults,
+																										 layers,
+																										 args,
+																										 proxyLocation,
+																										 gridResourceVal,
+																										 envSettings,
+																										 meshExec);
+		  
+		  
 		  setJobToken(projectMeshRunBean.getJobUIDStamp());
 		  storeMeshRunInContext(userName,
 										projectName, 
@@ -353,11 +375,24 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  System.out.println("ProjectName:"+projectName);
 		  System.out.println("tokenName:"+tokenName);
 
-		  initGeofestService();
-		  projectGeoFestOutput=geofestService.runGeoFEST(userName,
-																		 projectName,
-																		 currentGeotransParamsBean,
-																		 tokenName);
+		  initGeofestGridService();
+
+		  String proxyLocation="/tmp/x509up_u501";
+		  String gridResourceVal="gt2 tg-login.tacc.teragrid.org/jobmanager-lsf";
+		  String userHome="/home/teragrid/tg459247/";
+		  String exec=userHome+"/bin/GeoFEST";
+		  String args="";
+		  String envSettings="\""+"PATH="+userHome+"/bin/:/bin/:/usr/bin/"+"\"";
+
+		  projectGeoFestOutput=geofestGridService.runGridGeoFEST(userName,
+																					projectName,
+																					currentGeotransParamsBean,
+																					exec,
+																					args,
+																					gridResourceVal,
+																					proxyLocation,
+																					envSettings,
+																					tokenName);
 
 		  System.out.println(projectGeoFestOutput.getCghistUrl());
 		  System.out.println(projectGeoFestOutput.getIndexUrl());
@@ -2465,5 +2500,13 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 	 public void setQueueServiceUrl(String queueServiceUrl){
 		  this.queueServiceUrl=queueServiceUrl;
+	 }
+
+	 public String getGeoFESTGridServiceUrl() {
+		  return this.geoFESTGridServiceUrl;
+	 }
+
+	 public void setGeoFESTGridServiceUrl(String geoFESTGridServiceUrl){
+		  this.geoFESTGridServiceUrl=geoFESTGridServiceUrl;
 	 }
 }

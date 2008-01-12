@@ -20,10 +20,21 @@
                    <property-name>faultDBServiceUrl</property-name>
                    <value>http://gf2.ucs.indiana.edu:9090/axis/services/Select</value>
                  </managed-property>
+<!--
+                 <managed-property>
+                   <property-name>geoFESTBaseUrl</property-name>
+                   <value>http://156.56.104.143:8080/geofestexec/</value>
+                 </managed-property>
+-->
                  <managed-property>
                    <property-name>geoFESTServiceUrl</property-name>
-                   <value>http://gf19.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec</value>
+                   <value>http://156.56.104.143:8080/geofestexec/services/GeoFESTExec</value>
                  </managed-property>
+                 <managed-property>
+                   <property-name>geoFESTGridServiceUrl</property-name>
+                   <value>http://156.56.104.143:8080/geofestexec/services/GeoFESTGridExec</value>
+                 </managed-property>
+
                 <!-- Needed for the context service-->
                 <managed-property>
                    <property-name>contextUrl</property-name>
@@ -33,6 +44,7 @@
                    <property-name>queueServiceUrl</property-name>
                    <value>http://gf19.ucs.indiana.edu:8080/queueservice/services/QueueExec</value>
                  </managed-property>
+
                  <managed-property>
                    <property-name>contextBasePath</property-name>
                    <value>/WebServices/WEB-INF/Descriptors/users/</value>

@@ -3,82 +3,127 @@
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
+ *
+ * Additional sweetener manually/manfully added.
  */
 
 package cgl.quakesim.geofest;
 
 public class GeotransParamsBean  implements java.io.Serializable {
-    private java.lang.String alpha;
+    private java.lang.String alpha="1.0";
 
-    private java.lang.String backup_steps;
+    private java.lang.String backup_steps="5000";
 
-    private java.lang.String bottom_bc;
+    private java.lang.String bottom_bc="Locked Node";
 
-    private java.lang.String bottom_bc_value;
+    private java.lang.String bottom_bc_value="0 0. 0. 0. 1.";
 
-    private java.lang.String checkpointFile;
+    private java.lang.String checkpointFile="NO_SAVE";	;
 
-    private java.lang.String east_bc;
+    private java.lang.String east_bc="Locked Node";
 
-    private java.lang.String east_bc_value;
+    private java.lang.String east_bc_value="0 0. 0. 0. 1.";
 
-    private java.lang.String end_time;
+    private java.lang.String end_time="50.0";
 
-    private java.lang.String fault_interval;
+    private java.lang.String fault_interval="5000.0";
 
     private java.lang.String inputFileName;
 
     private java.lang.String logFileName;
 
-    private java.lang.String north_bc;
+    private java.lang.String north_bc="Locked Node";
 
-    private java.lang.String north_bc_value;
+    private java.lang.String north_bc_value="0 0. 0. 0. 1.";
 
-    private java.lang.String nrates;
+    private java.lang.String nrates="0";
 
-    private java.lang.String number_degrees_freedom;
+    private java.lang.String number_degrees_freedom="3";
 
-    private java.lang.String number_space_dimensions;
+    private java.lang.String number_space_dimensions="3";
 
-    private java.lang.String number_time_groups;
+    private java.lang.String number_time_groups="1";
 
-    private java.lang.String numberofPrintTimes;
+    private java.lang.String numberofPrintTimes="20";
 
     private java.lang.String outputFileName;
 
-    private java.lang.String printTimesInterval;
+    private java.lang.String printTimesInterval="1.0";
 
-    private java.lang.String printTimesType;
+    private java.lang.String printTimesType="steps";
 
-    private java.lang.String reform_steps;
+    private java.lang.String reform_steps="1";
 
-    private java.lang.String reportingElements;
+    private java.lang.String reportingElements="All";
 
-    private java.lang.String reportingNodes;
+    private java.lang.String reportingNodes="All";
 
-    private java.lang.String restartFile;
+    private java.lang.String restartFile="NO_RESTART";
 
     private java.lang.String run_choice;
 
-    private java.lang.String shape_flag;
+    private java.lang.String shape_flag="1";
 
-    private java.lang.String solver_flag;
+    private java.lang.String solver_flag="2";
 
-    private java.lang.String south_bc;
+    private java.lang.String south_bc="Locked Node";
 
-    private java.lang.String south_bc_value;
+    private java.lang.String south_bc_value="0 0. 0. 0. 1.";
 
-    private java.lang.String time_step;
+    private java.lang.String time_step="0.5";
 
-    private java.lang.String top_bc;
+    private java.lang.String top_bc="Free Node";
 
-    private java.lang.String top_bc_value;
+    private java.lang.String top_bc_value="0 0. 0. 0. 1.";
 
-    private java.lang.String west_bc;
+    private java.lang.String west_bc="Locked Node";
 
-    private java.lang.String west_bc_value;
+    private java.lang.String west_bc_value="0 0. 0. 0. 1.";
 
+
+	 /**
+	  * Provide with default values.
+	  */ 
     public GeotransParamsBean() {
+		  System.out.println("Initializing the GPB with default values.");
+		  System.out.println("I am "+this.toString());
+		this.number_space_dimensions="3";
+		this.number_degrees_freedom="3";
+		this.nrates ="0";
+		this.shape_flag = "1";
+		this.solver_flag = "2";
+		this.number_time_groups = "1";
+		this.reform_steps ="1";
+		this.backup_steps="5000";
+		this.fault_interval="5000.0";
+		this.end_time="50.0";
+		this.alpha ="1.0";
+		this.time_step="0.5";
+		//cordinate boundary
+		
+		this.top_bc="Free Node";
+		this.top_bc_value="0 0. 0. 0. 1.";
+		this.east_bc="Locked Node";
+		this.east_bc_value="0 0. 0. 0. 1.";
+		this.west_bc="Locked Node";
+		this.west_bc_value="0 0. 0. 0. 1.";
+		this.north_bc="Locked Node";
+		this.north_bc_value="0 0. 0. 0. 1.";
+		this.south_bc="Locked Node";
+		this.south_bc_value="0 0. 0. 0. 1.";
+		this.bottom_bc="Locked Node";
+		this.bottom_bc_value="0 0. 0. 0. 1.";
+		
+		//Output Parameters and Formatting
+		
+		this.reportingNodes="All";
+		this.reportingElements="All";
+		this.printTimesType="steps";
+		this.numberofPrintTimes="20";
+		this.printTimesInterval="1.0";
+		this.restartFile="NO_RESTART";
+		this.checkpointFile="NO_SAVE";	
+
     }
 
     public GeotransParamsBean(
@@ -117,6 +162,8 @@ public class GeotransParamsBean  implements java.io.Serializable {
            java.lang.String top_bc_value,
            java.lang.String west_bc,
            java.lang.String west_bc_value) {
+
+		  System.out.println("Welcome to the non-zero arg GPB.");
            this.alpha = alpha;
            this.backup_steps = backup_steps;
            this.bottom_bc = bottom_bc;
@@ -161,6 +208,8 @@ public class GeotransParamsBean  implements java.io.Serializable {
      * @return alpha
      */
     public java.lang.String getAlpha() {
+		  System.out.println("This is alpha getter:"+alpha);
+		  System.out.println("I am "+this.toString());
         return alpha;
     }
 
@@ -171,6 +220,7 @@ public class GeotransParamsBean  implements java.io.Serializable {
      * @param alpha
      */
     public void setAlpha(java.lang.String alpha) {
+		  System.out.println("This is alpha setter:"+alpha);
         this.alpha = alpha;
     }
 

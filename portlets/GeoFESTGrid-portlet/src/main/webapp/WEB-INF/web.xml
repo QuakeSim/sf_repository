@@ -176,7 +176,7 @@
 
     <servlet-mapping>
         <servlet-name>PortletServlet</servlet-name>
-        <url-pattern>/jsr/NewMeshGen-portlet</url-pattern>
+        <url-pattern>/jsr/GeoFESTGrid-portlet</url-pattern>
     </servlet-mapping>
 
     <!-- Welcome files -->

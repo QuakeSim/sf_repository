@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <portlet-group>
-    <group-name>NewMeshGen-portlet</group-name>
-    <group-description>NewMeshGen Portlet</group-description>
+    <group-name>GeoFESTGrid-portlet</group-name>
+    <group-description>GeoFESTGrid Portlet</group-description>
     <group-visibility>PUBLIC</group-visibility>
     <portlet-role-info>
-        <portlet-class>NewMeshGen-portlet#NewMeshGen-portlet</portlet-class>
+        <portlet-class>GeoFESTGrid-portlet#GeoFESTGrid-portlet</portlet-class>
         <required-role>USER</required-role>
     </portlet-role-info>
 </portlet-group>
