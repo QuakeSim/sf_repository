@@ -288,7 +288,7 @@
 						<h:selectOneMenu id="PrintTimesType"
 							value="#{MGBean.currentGeotransParamsBean.printTimesType}">
 							<f:selectItem id="printTimesTypeitem1" itemLabel="Steps"
-								itemValue="Steps" />
+								itemValue="steps" />
 						</h:selectOneMenu>
 
 						<h:outputText value="Number of Print Times:" />
