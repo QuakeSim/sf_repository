@@ -1,0 +1,57 @@
+<portlet-tabbed-pane>
+    <portlet-tab label="GeoFESTGrid-Portlet">
+        <title lang="en">GeoFESTGrid-Portlet</title>
+        <portlet-tabbed-pane style="sub-menu">
+            <portlet-tab label="Mesh-Generation-Setup">
+                <title lang="en">Mesh Generation</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="GeoFESTGrid-PF">
+                                <portlet-class>GeoFESTGrid-portlet#GeoFESTGrid-portlet </portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+              <portlet-tab label="Fetch-mesh-results">
+                <title lang="en">Fetch Mesh Results</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="GeoFESTGrid-fetchmesh-PF">
+                                <portlet-class>GeoFESTGrid-portlet#fetchmesh-portlet </portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+              <portlet-tab label="Choose-mesh-results">
+                <title lang="en">Run GeoFEST</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="GeoFESTGrid-choosemesh-PF">
+                                <portlet-class>GeoFESTGrid-portlet#choosemesh-portlet </portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+              <portlet-tab label="Fetch-gfout-results">
+                <title lang="en">GeoFEST Results</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="GeoFESTGrid-geofestoutput-PF">
+                                <portlet-class>GeoFESTGrid-portlet#fetch-geofest-output-portlet </portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+        </portlet-tabbed-pane>
+    </portlet-tab>
+</portlet-tabbed-pane>
+
+
