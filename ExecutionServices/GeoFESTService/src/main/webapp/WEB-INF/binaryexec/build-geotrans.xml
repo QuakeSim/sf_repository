@@ -61,10 +61,6 @@
 <!--This is used to create the GeoFEST input file. -->
 <target name="geotrans">
    <tstamp/>
-  <taskdef name="queuetask" classname="cgl.webservices.geofest.QueueTask"/>
-  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
-				 message="geotrans.start" 
-				 queueServiceUrl="${queueServiceUrl.prop}"/>
 
    <echo append="true" 
          file="${workdir.prop}/jobstatus.log">Geotrans running: ${TSTAMP}.${DSTAMP}
@@ -81,9 +77,6 @@
    </exec>   
    <echo append="true" file="${workdir.prop}/jobstatus.log">Geotrans complete: ${TSTAMP}.${DSTAMP}
    </echo>
-  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
-				 message="geotrans.done" 
-				 queueServiceUrl="${queueServiceUrl.prop}"/>
 
 </target>
 

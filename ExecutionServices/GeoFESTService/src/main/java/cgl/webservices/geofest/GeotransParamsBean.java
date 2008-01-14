@@ -82,7 +82,7 @@ public class GeotransParamsBean {
 		
 		reportingNodes="All";
 		reportingElements="All";
-		printTimesType="Steps";
+		printTimesType="steps";
 		numberofPrintTimes="20";
 		printTimesInterval="1.0";
 		restartFile="NO_RESTART";

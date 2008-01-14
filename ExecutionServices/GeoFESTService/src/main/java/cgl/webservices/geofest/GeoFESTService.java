@@ -470,11 +470,13 @@ public class GeoFESTService extends AntVisco implements Runnable{
 														String projectName,
 														GeotransParamsBean gpb) 
 		  throws Exception {
-		  
+
 		  // --------------------------------------------------
 		  // Set up the file to write.
 		  // --------------------------------------------------
 		  String geotrans_file = workDir+File.separator+projectName+".std";
+		  System.out.println("Creating Geofest input file:"+geotrans_file);
+
 		  PrintWriter pw = new PrintWriter(new FileWriter(geotrans_file), true);
 		  
 		  // --------------------------------------------------
@@ -567,6 +569,8 @@ public class GeoFESTService extends AntVisco implements Runnable{
 				pw.println("");
 				pw.println("number_print_times" + " " + (icount - 1));
 		  }
+		  pw.flush();
+		  pw.close();
 	 }
 	 
     /**
