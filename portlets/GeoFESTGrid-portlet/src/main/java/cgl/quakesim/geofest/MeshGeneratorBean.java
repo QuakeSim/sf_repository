@@ -25,8 +25,6 @@ import sun.misc.BASE64Encoder;
 import TestClient.Select.Select;
 import TestClient.Select.SelectService;
 import TestClient.Select.SelectServiceLocator;
-import WebFlowClient.ViscoViz.MyVTKServicePortType;
-import WebFlowClient.ViscoViz.MyVTKServiceLocator;
 import cgl.webclients.AntVisco;
 import cgl.webclients.AntViscoServiceLocator;
 import WebFlowClient.cm.*;
@@ -378,10 +376,12 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  initGeofestGridService();
 
 		  String proxyLocation="/tmp/x509up_u501";
-		  String gridResourceVal="gt2 tg-login.tacc.teragrid.org/jobmanager-lsf";
-		  String userHome="/home/teragrid/tg459247/";
+		  String gridResourceVal="gt2 tg-grid.uc.teragrid.org/jobmanager-pbs";
+		  String userHome="/home/quakesim/";
 		  String exec=userHome+"/bin/GeoFEST";
-		  String args="";
+		  String args=currentGeotransParamsBean.getInputFileName()+" "+
+				currentGeotransParamsBean.getOutputFileName();
+		  System.out.println("GeoFEST arguments:"+args);
 		  String envSettings="\""+"PATH="+userHome+"/bin/:/bin/:/usr/bin/"+"\"";
 
 		  projectGeoFestOutput=geofestGridService.runGridGeoFEST(userName,
@@ -1242,14 +1242,14 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 					 
 					 gfutils.updateGroupFile(cm, projectFullName, projectName);
-					 try {
-						  MyVTKServiceLocator service = new MyVTKServiceLocator();
-						  MyVTKServicePortType meshserv = service
-								.getMyVTKService(new URL(meshViewerServerUrl));
-						  meshserv.removeLayer(tmp_layerName);
-					 } catch (Exception ex) {
-						  ;
-					 }
+// 					 try {
+// 						  MyVTKServiceLocator service = new MyVTKServiceLocator();
+// 						  MyVTKServicePortType meshserv = service
+// 								.getMyVTKService(new URL(meshViewerServerUrl));
+// 						  meshserv.removeLayer(tmp_layerName);
+// 					 } catch (Exception ex) {
+// 						  ;
+// 					 }
 					 
 				}
 				
@@ -1344,14 +1344,14 @@ public class MeshGeneratorBean extends GenericSopacBean {
 						  + tmp_faultName;
 					 cm.removeContext(tmp);
 					 gfutils.updateGroupFile(cm, projectFullName, projectName);
-					 try {
-						  MyVTKServiceLocator service = new MyVTKServiceLocator();
-						  MyVTKServicePortType meshserv = service
-								.getMyVTKService(new URL(meshViewerServerUrl));
-						  meshserv.removeFault(tmp_faultName);
-					 } catch (Exception ex) {
-						  ;
-					 }
+// 					 try {
+// 						  MyVTKServiceLocator service = new MyVTKServiceLocator();
+// 						  MyVTKServicePortType meshserv = service
+// 								.getMyVTKService(new URL(meshViewerServerUrl));
+// 						  meshserv.removeFault(tmp_faultName);
+// 					 } catch (Exception ex) {
+// 						  ;
+// 					 }
 				}
 				
 		  } catch (Exception e) {

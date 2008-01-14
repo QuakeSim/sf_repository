@@ -85,8 +85,6 @@ public class GeotransParamsBean  implements java.io.Serializable {
 	  * Provide with default values.
 	  */ 
     public GeotransParamsBean() {
-		  System.out.println("Initializing the GPB with default values.");
-		  System.out.println("I am "+this.toString());
 		this.number_space_dimensions="3";
 		this.number_degrees_freedom="3";
 		this.nrates ="0";
@@ -163,7 +161,6 @@ public class GeotransParamsBean  implements java.io.Serializable {
            java.lang.String west_bc,
            java.lang.String west_bc_value) {
 
-		  System.out.println("Welcome to the non-zero arg GPB.");
            this.alpha = alpha;
            this.backup_steps = backup_steps;
            this.bottom_bc = bottom_bc;
@@ -208,8 +205,6 @@ public class GeotransParamsBean  implements java.io.Serializable {
      * @return alpha
      */
     public java.lang.String getAlpha() {
-		  System.out.println("This is alpha getter:"+alpha);
-		  System.out.println("I am "+this.toString());
         return alpha;
     }
 
