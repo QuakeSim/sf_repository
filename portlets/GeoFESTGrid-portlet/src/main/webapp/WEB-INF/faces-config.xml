@@ -40,9 +40,15 @@
                    <property-name>contextUrl</property-name>
                    <value>http://gf7.ucs.indiana.edu:8080/WebServices/services/ContextManager</value>
                  </managed-property>
+
                 <managed-property>
                    <property-name>queueServiceUrl</property-name>
                    <value>http://gf19.ucs.indiana.edu:8080/queueservice/services/QueueExec</value>
+                 </managed-property>
+
+                <managed-property>
+                   <property-name>gridInfoServiceUrl</property-name>
+                   <value>http://localhost:8080/gridinfo/services/GridInfoService</value>
                  </managed-property>
 
                  <managed-property>

@@ -22,6 +22,7 @@ import org.servogrid.genericproject.GenericSopacBean;
 
 import sun.misc.BASE64Encoder;
 
+//These are web service clients for various services.
 import TestClient.Select.Select;
 import TestClient.Select.SelectService;
 import TestClient.Select.SelectServiceLocator;
@@ -83,6 +84,10 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	 List myArchivedMeshRunList2=new ArrayList();
 	 List meshDataMegaList=new ArrayList();
 
+	 //This is used to store the grid host names.
+	 //	 List gridHostList=new ArrayList();
+	 SelectItem[] gridHostList;
+
 	 //These are used to store the actual layers and faults
 	 List myFaultCollection=new ArrayList();
 	 List myLayerCollection=new ArrayList();
@@ -135,11 +140,15 @@ public class MeshGeneratorBean extends GenericSopacBean {
     String geoFESTGridServiceUrl;//=geoFESTBaseUrl+"/"+"services/GeoFESTGridExec";
 	 String geoFESTBaseUrlForJnlp;//=getGeoFESTBaseUrlForJnlp();
 	 String queueServiceUrl;
-
+	 String gridInfoServiceUrl;
+	 String gridRefinerHost;
+	 String gridGeoFESTHost;
+	 
     //This is our geofest service stub.
     GeoFESTService geofestService;
     GeoFESTGridService geofestGridService;
 	 QueueService queueService;
+	 GridInfoService_PortType gridInfoService;
 
 	 //This is the db4o database
 	 ObjectContainer db=null;
@@ -336,8 +345,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  initGeofestGridService();		 
 
 		  String proxyLocation="/tmp/x509up_u501";
-		  String gridResourceVal="gt2 tg-login.ornl.teragrid.org/jobmanager-fork";
-		  String userHome="/users/quakesim/";
+		  String gridResourceVal=constructForkResource("gt2",gridRefinerHost);
+		  String userHome=constructUserHome(gridRefinerHost);
 		  String meshExec=userHome+"/bin/autoref.pl";
 		  String envSettings="\""+"PATH="+userHome+"/bin/:/bin/:/usr/bin/"+"\"";
 		  String args=meshResolution;
@@ -2509,4 +2518,72 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	 public void setGeoFESTGridServiceUrl(String geoFESTGridServiceUrl){
 		  this.geoFESTGridServiceUrl=geoFESTGridServiceUrl;
 	 }
+
+	 public String getGridInfoServiceUrl() {
+		  return gridInfoServiceUrl;
+	 }
+	 
+	 public void setGridInfoServiceUrl(String gridInfoServiceUrl) {
+		  this.gridInfoServiceUrl=gridInfoServiceUrl;
+	 }
+
+	 public SelectItem[] getGridHostList() {
+		  //Not the most efficient implementation, but we'll worry later.
+		  try {
+				String[] hosts=getGridInfoService().getHosts();
+				gridHostList=new SelectItem[hosts.length];
+				for(int i=0;i<hosts.length;i++) {
+					 System.out.println("Host: "+hosts[i]);
+					 gridHostList[i]=new SelectItem(hosts[i],hosts[i]);
+				}
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  return gridHostList;
+	 }
+	 
+	 public void setGridHostList(SelectItem[] gridHostList) {
+		  //Need to change to arraycopy.
+		  this.gridInfoService=gridInfoService;		  
+	 }
+
+	 protected GridInfoService_PortType getGridInfoService() throws Exception {
+		  GridInfoService_PortType gridInfoService=
+				new GridInfoServiceServiceLocator().getGridInfoService(new URL(gridInfoServiceUrl));
+		  
+		  return gridInfoService;
+	 }
+	 
+	 public void setGridRefinerHost(String gridRefinerHost){
+		  this.gridRefinerHost=gridRefinerHost;
+		  System.out.println(this.gridRefinerHost);
+	 }
+
+	 public String getGridRefinerHost() {
+		  return this.gridRefinerHost;
+	 }
+
+	 public void setGridGeoFESTHost(String gridGeoFESTHost){
+		  this.gridGeoFESTHost=gridGeoFESTHost;
+	 }
+
+	 public String getGridGeoFESTHost() {
+		  return this.gridGeoFESTHost;
+	 }
+
+	 public String constructForkResource(String provider, String gridHost) 
+		  throws Exception {
+		  GridInfoService_PortType gridInfoService=
+				new GridInfoServiceServiceLocator().getGridInfoService(new URL(gridInfoServiceUrl));
+		  String fork=provider+" "+gridInfoService.getForkManager(gridHost);
+		  return fork;
+	 }
+
+	 public String constructUserHome(String gridHost) throws Exception {
+		  GridInfoService_PortType gridInfoService=
+				new GridInfoServiceServiceLocator().getGridInfoService(new URL(gridInfoServiceUrl));
+		  return gridInfoService.getHomeDirectory(gridHost);
+	 }
+	 
 }

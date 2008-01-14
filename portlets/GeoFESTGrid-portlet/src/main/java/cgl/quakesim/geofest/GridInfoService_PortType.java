@@ -12,4 +12,5 @@ public interface GridInfoService_PortType extends java.rmi.Remote {
     public java.lang.String getUserName(java.lang.String host) throws java.rmi.RemoteException;
     public java.lang.String getHomeDirectory(java.lang.String host) throws java.rmi.RemoteException;
     public java.lang.String getJobManager(java.lang.String host) throws java.rmi.RemoteException;
+    public java.lang.String getForkManager(java.lang.String host) throws java.rmi.RemoteException;
 }
