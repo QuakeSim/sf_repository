@@ -47,7 +47,7 @@ public class GeoFESTGridService extends GeoFESTService{
     //Some useful constants
     String equals="=";	 
 	 String semicolon=";";
-    String[] statusName = { "", "Idle", "Running", "Removed","Completed", "Held" };
+    String[] statusName = { "Unknown", "Idle", "Running", "Removed","Completed", "Held" };
 
 	 //These are constant strings for practical purposes.  They are the names of files that
 	 //store the condor job status info for the mesh gen and geofest steps.
@@ -421,7 +421,7 @@ public class GeoFESTGridService extends GeoFESTService{
 						  new ClassAdStructAttr("GridResource", ClassAdAttrType.value3,
 														gridResourceVal),
 						  new ClassAdStructAttr("Out", ClassAdAttrType.value3,
-														workDir+"/"+projectName+".out"),
+														workDir+"/"+projectName+".stdout"),
 						  new ClassAdStructAttr("UserLog", ClassAdAttrType.value3,
 														workDir+"/"+projectName+".log"),
 						  new ClassAdStructAttr("Err", ClassAdAttrType.value3,
@@ -488,9 +488,13 @@ public class GeoFESTGridService extends GeoFESTService{
 		  pw.close();
 	 }
 
+	 /**
+	  * This method will return null if the condor ID file can't be found.
+	  */
 	 protected int[] getCondorIds(String workDir, String jobName) {
-		  int[] jobInfo={0,0};
+		  int[] jobInfo={-1,-1};
 		  String fileName=workDir+File.separator+jobName;
+		  System.out.println("Condor ID file:"+fileName);
 				  
 		  try {
 				BufferedReader br=new BufferedReader(new FileReader(fileName));
@@ -515,7 +519,7 @@ public class GeoFESTGridService extends GeoFESTService{
 
 	 protected String createGeoFESTOutputRemaps(String projectName,String workDir) {
 		  String returnString=quote+projectName+".out" +equals+workDir+projectName+".out"
-				+comma+"cghist.txt"+equals+workDir+"cghist.txt"+quote;
+				+semicolon+"cghist.txt"+equals+workDir+"cghist.txt"+quote;
 		  System.out.println(returnString);
 		  return returnString;
 	 }
@@ -548,7 +552,7 @@ public class GeoFESTGridService extends GeoFESTService{
      * Remove the selected job. Note the URL for the collector is
      * always the same, but the job and cluster IDs can change.
      */
-    public void deleteGeoFESTJob(int clusterId, int jobId) throws Exception {
+    public void deleteCondorJob(int clusterId, int jobId) throws Exception {
 		  
 		  String condorScheddUrl = getScheddUrl(collectorUrl);
 		  Schedd schedd = new Schedd(new URL(condorScheddUrl));
@@ -564,7 +568,7 @@ public class GeoFESTGridService extends GeoFESTService{
     /**
      * Get the job status.
      */
-    public String queryGeoFESTStatus(int clusterId, int jobId) { 
+    public String queryCondorStatus(int clusterId, int jobId) { 
 		  int status = 0;
 		  
 		  try {		  
@@ -581,4 +585,67 @@ public class GeoFESTGridService extends GeoFESTService{
 		  return statusName[status];
     }	
 
+	 public String queryGenericStatus(String userName,
+												String projectId, 
+												String jobStamp,
+												String queryType){
+		  
+		  String workDir=generateWorkDir(userName,projectId,jobStamp);
+		  int[] jobInfo=getCondorIds(workDir,queryType);
+		  if(jobInfo[0]>-1 && jobInfo[1]>-1) {
+				return queryCondorStatus(jobInfo[0],jobInfo[1]);
+		  }
+		  else {
+				return "Unknown";
+		  }
+	 }
+	 
+	 public String queryGeoFESTStatus(String userName,
+												 String projectId, 
+												 String jobStamp) {
+		  return queryGenericStatus(userName,projectId,jobStamp,geofestId);
+	 }
+	 
+	 public String queryMeshGeneratorStatus(String userName,
+														 String projectId, 
+														 String jobStamp) {
+		  return queryGenericStatus(userName,projectId,jobStamp,meshgenId);
+	 }	 
+	 
+	 /**
+	  * Delete the job if it is Idle, Held, Running, etc.  Don't delete if it is complete.
+	  */
+	 public void deleteMeshGeneratorJob(String userName,
+												 String projectId,
+												 String jobStamp) throws Exception {
+		  String status=queryMeshGeneratorStatus(userName,projectId,jobStamp);
+		  if(status!=statusName[3] && status!=statusName[4]) {
+				String workDir=generateWorkDir(userName,projectId,jobStamp);
+				int[] jobInfo=getCondorIds(workDir,meshgenId);
+				deleteCondorJob(jobInfo[0],jobInfo[1]);		  
+		  }
+		  else {
+				System.out.println("Job is already removed or completed");
+		  }
+
+	 }
+	 
+	 /**
+	  * Delete the job if it is Idle, Held, Running, etc.  Don't delete if it is complete.
+	  */
+	 public void deleteGeoFESTJob(String userName,
+											String projectId,
+											String jobStamp) throws Exception {
+		  
+		  String status=queryGeoFESTStatus(userName,projectId,jobStamp);
+		  System.out.println("Deleting GeoFEST Job");
+		  if(status!=statusName[3] && status!=statusName[4]) {
+				String workDir=generateWorkDir(userName,projectId,jobStamp);
+				int[] jobInfo=getCondorIds(workDir,geofestId);
+				deleteCondorJob(jobInfo[0],jobInfo[1]);
+		  }
+		  else {
+				System.out.println("Job is already removed or completed");
+		  }
+	 }
 }
