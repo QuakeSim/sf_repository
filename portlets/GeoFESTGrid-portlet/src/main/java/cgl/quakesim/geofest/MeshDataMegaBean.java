@@ -23,11 +23,19 @@ public class MeshDataMegaBean {
 	 String jobUIDStamp;
 	 String creationDate;
 	 String meshStatus="Unknown";
+	 String geoFestStatus="Unknown";
 	 
 	 public MeshDataMegaBean() {
 		  creationDate=(new Date()).toString();
 	 }
 	 
+	 public String getGeoFestStatus() {
+		  return geoFestStatus;
+	 }
+
+	 public void setGeoFestStatus(String geoFestStatus) {
+		  this.geoFestStatus=geoFestStatus;
+	 }
 
 	 public void setCreationDate(String creationDate){
 		  this.creationDate=creationDate;

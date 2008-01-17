@@ -157,10 +157,10 @@ function dataTableSelectOneRadio(radio) {
 
 					<h:column>
 					<f:facet name="header">
-						    <h:outputText value="Status (Click to Update)"/>
+						    <h:outputText value="Status"/>
 				   </f:facet>
-					<h:commandLink actionListener="#{MGBean.checkMeshStatus}">
-								<h:outputText value="#{mrb.meshStatus}"/>
+					<h:commandLink actionListener="#{MGBean.queryGeoFESTStatus}">
+								<h:outputText value="#{mrb.geoFestStatus}"/>
 					</h:commandLink>
 					</h:column>
 
@@ -179,6 +179,14 @@ function dataTableSelectOneRadio(radio) {
 						<h:outputText value="Plot"/>
 					</h:outputLink>
 					</h:column>
+					<h:column>
+					<f:facet name="header">
+						    <h:outputText value="Stop MeshGen Job"/>
+				   </f:facet>
+					<h:commandButton actionListener="#{MGBean.stopGeoFESTJob}"
+										  value="Stop"/>
+					</h:column>
+
 			</h:dataTable>
  	</h:form>
    </h:panelGrid>

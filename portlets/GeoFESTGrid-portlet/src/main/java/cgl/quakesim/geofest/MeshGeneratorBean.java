@@ -289,6 +289,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
  		  mega.setJnlpLayers(getMyLayersParamForJnlp(null, projectName));
  		  mega.setJnlpFaults(getMyFaultsParamForJnlp(null,projectName));
 		  mega.setCreationDate(new Date().toString());
+		  mega.setGeotransParamsBean(getCurrentGeotransParamsBean());
 						  
 		  //Set up the database.  This open/close routine may need to be improved later.
 		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");	 
@@ -385,8 +386,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  initGeofestGridService();
 
 		  String proxyLocation="/tmp/x509up_u501";
-		  String gridResourceVal="gt2 tg-grid.uc.teragrid.org/jobmanager-pbs";
-		  String userHome="/home/quakesim/";
+		  String gridResourceVal=constructGridResource("gt2",gridGeoFESTHost);
+		  String userHome=constructUserHome(gridGeoFESTHost);
 		  String exec=userHome+"/bin/GeoFEST";
 		  String args=currentGeotransParamsBean.getInputFileName()+" "+
 				currentGeotransParamsBean.getOutputFileName();
@@ -2580,10 +2581,126 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  return fork;
 	 }
 
+	 public String constructGridResource(String provider, String gridHost) 
+		  throws Exception {
+		  GridInfoService_PortType gridInfoService=
+				new GridInfoServiceServiceLocator().getGridInfoService(new URL(gridInfoServiceUrl));
+		  String queue=provider+" "+gridInfoService.getJobManager(gridHost);
+		  return queue;
+	 }
+
 	 public String constructUserHome(String gridHost) throws Exception {
 		  GridInfoService_PortType gridInfoService=
 				new GridInfoServiceServiceLocator().getGridInfoService(new URL(gridInfoServiceUrl));
 		  return gridInfoService.getHomeDirectory(gridHost);
 	 }
-	 
+
+	 /**
+	  * Note this method depends on externally set parameters for username, projectname, and projectId.
+	  */
+	 public String queryMeshGeneratorStatus(ActionEvent ev) {
+		  String statusString="MeshGen.Unknown";
+		  try {
+				MeshDataMegaBean mdmb=(MeshDataMegaBean)getArchivedMeshTable().getRowData();
+				String projectName=mdmb.getProjectName();
+				String jobUID=mdmb.getJobUIDStamp();
+				
+				//DB, get going
+				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"
+									  +getUserName()+"/"+getCodeName()+"/"+projectName+".db");		  
+				
+				
+				//Check geofest job.
+				initGeofestGridService();
+				statusString="MeshGen."+geofestGridService.queryMeshGeneratorStatus(userName,projectName,jobUID);
+
+				//Drop it back in the DB
+				ObjectSet results=db.get(mdmb);
+				//Replace the clone with the original
+				System.out.println("Has object:"+results.hasNext());
+				if(results.hasNext()){
+					 mdmb=(MeshDataMegaBean)results.next();
+					 mdmb.setMeshStatus(statusString);
+					 db.set(mdmb);
+					 db.commit();
+				}
+				db.close();
+		  }
+		  catch(Exception ex) {
+				db.close();
+				ex.printStackTrace();
+		  }
+		  System.out.println("Status:"+statusString);
+		  db.close();
+		  return statusString;
+	 }
+
+	 public String queryGeoFESTStatus(ActionEvent ev) {
+		  String statusString="GeoFEST.Unknown";
+		  try {
+				MeshDataMegaBean mdmb=(MeshDataMegaBean)getArchivedMeshTable().getRowData();
+				String projectName=mdmb.getProjectName();
+				String jobUID=mdmb.getJobUIDStamp();
+
+				//DB, get going
+				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"
+									  +getUserName()+"/"+getCodeName()+"/"+projectName+".db");		  
+
+				initGeofestGridService();
+				statusString=geofestGridService.queryGeoFESTStatus(userName,projectName,jobUID);
+				System.out.println("Status:"+statusString);
+				statusString="GeoFEST."+statusString;
+				
+				//Drop it back in the DB
+				ObjectSet results=db.get(mdmb);
+				//Replace the clone with the original
+				System.out.println("Has object:"+results.hasNext());
+				if(results.hasNext()){
+					 mdmb=(MeshDataMegaBean)results.next();
+					 mdmb.setGeoFestStatus(statusString);
+					 db.set(mdmb);
+					 db.commit();
+				}
+				db.close();
+		  }
+		  catch(Exception ex) {
+				db.close();
+				ex.printStackTrace();
+		  }
+		  db.close();
+		  System.out.println("Status:"+statusString);
+		  return statusString;
+	 }
+
+	 public String stopMeshGeneratorJob(ActionEvent ev) {
+		  String stopMeshStatus="Stop Mesh Failed";
+		  try {
+				MeshDataMegaBean mdmb=(MeshDataMegaBean)getArchivedMeshTable().getRowData();
+				String projectName=mdmb.getProjectName();
+				String jobUID=mdmb.getJobUIDStamp();
+				initGeofestGridService();
+				geofestGridService.deleteMeshGeneratorJob(userName,projectName,jobUID);
+				stopMeshStatus="Stop Mesh Succeeded";
+		  }
+		  catch(Exception ex) {
+				ex.printStackTrace();
+		  }
+		  return stopMeshStatus;
+	 }
+
+	 public String stopGeoFESTJob(ActionEvent ev) {
+		  String stopGeoFestStatus="Stop GeoFEST Failed";
+		  try {
+				MeshDataMegaBean mdmb=(MeshDataMegaBean)getArchivedMeshTable().getRowData();
+				String projectName=mdmb.getProjectName();
+				String jobUID=mdmb.getJobUIDStamp();
+				initGeofestGridService();
+				geofestGridService.deleteGeoFESTJob(userName,projectName,jobUID);
+				stopGeoFestStatus="Stop GeoFEST Succeeded";
+		  }
+		  catch(Exception ex) {
+				ex.printStackTrace();
+		  }
+		  return stopGeoFestStatus;
+	 }
 }

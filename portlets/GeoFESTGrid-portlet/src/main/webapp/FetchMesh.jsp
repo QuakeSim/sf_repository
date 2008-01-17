@@ -69,7 +69,7 @@ function dataTableSelectOneRadio(radio) {
   				<h:dataTable value="#{MGBean.myArchivedMeshRunList}" 
 								 binding="#{MGBean.archivedMeshTable}"
 								 var="mrb" 
-								 id="MeshOutputPanel" 
+								 id="MeshOutputpanel" 
 								 border="1">
 					<h:column>
 					    <f:facet name="header">
@@ -92,36 +92,14 @@ function dataTableSelectOneRadio(radio) {
 				       <h:outputText value="#{mrb.meshRunBean.jobUIDStamp}"/>
 					</h:column>
 
-	
 					<h:column>
-					<f:facet name="header">	 
+					<f:facet name="header">
 						    <h:outputText value="Autoref"/>
 				   </f:facet>
 				       <h:outputLink value="#{mrb.meshRunBean.autoref}" target="_blank">
-						    <h:outputText value="Autoref"/>
+						    <h:outputText value="Autoref.out"/>
 						 </h:outputLink>
 					</h:column>
-
-	
-					<h:column>
-					<f:facet name="header">
-						    <h:outputText value="Autoref Error"/>
-				   </f:facet>
-				       <h:outputLink value="#{mrb.meshRunBean.autorefError}" target="_blank">
-						    <h:outputText value="Autoref Error"/>
-						 </h:outputLink>
-					</h:column>
-
-
-					<h:column>
-					<f:facet name="header">
-						    <h:outputText value="BC File"/>
-				   </f:facet>
-				       <h:outputLink value="#{mrb.meshRunBean.bcUrl}" target="_blank">
-						    <h:outputText value="BC File"/>
-						 </h:outputLink>
-					</h:column>
-
 
 					<h:column>
 					<f:facet name="header">
@@ -152,32 +130,12 @@ function dataTableSelectOneRadio(radio) {
 						 </h:outputLink>
 					</h:column>
 
-
-					<h:column>
-					<f:facet name="header">
-						    <h:outputText value="Tagging Log"/>
-				   </f:facet>
-				       <h:outputLink value="#{mrb.meshRunBean.tagbigfltLog}" target="_blank">
-						    <h:outputText value="Tagging Log"/>
-						 </h:outputLink>
-					</h:column>
-
-
 					<h:column>
 					<f:facet name="header">
 						    <h:outputText value="Tetra Url"/>
 				   </f:facet>
 				       <h:outputLink value="#{mrb.meshRunBean.tetraUrl}" target="_blank">
 						    <h:outputText value="Tetra Url"/>
-						 </h:outputLink>
-					</h:column>
-
-					<h:column>
-					<f:facet name="header">
-						    <h:outputText value="Refiner Log"/>
-				   </f:facet>
-				       <h:outputLink value="#{mrb.meshRunBean.refinerLog}" target="_blank">
-						    <h:outputText value="refinerLog"/>
 						 </h:outputLink>
 					</h:column>
 					
@@ -208,11 +166,19 @@ function dataTableSelectOneRadio(radio) {
 
 					<h:column>
 					<f:facet name="header">
-						    <h:outputText value="Status (Click to Update)"/>
+						    <h:outputText value="Mesh Status"/>
 				   </f:facet>
-					<h:commandLink actionListener="#{MGBean.checkMeshStatus}">
+					<h:commandLink actionListener="#{MGBean.queryMeshGeneratorStatus}">
 								<h:outputText value="#{mrb.meshStatus}"/>
 					</h:commandLink>
+					</h:column>
+
+					<h:column>
+					<f:facet name="header">
+						    <h:outputText value="Stop MeshGen Job"/>
+				   </f:facet>
+					<h:commandButton actionListener="#{MGBean.stopMeshGeneratorJob}"
+										  value="Stop"/>
 					</h:column>
 			</h:dataTable>
 

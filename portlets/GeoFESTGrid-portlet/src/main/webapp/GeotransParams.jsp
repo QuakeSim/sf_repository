@@ -329,20 +329,25 @@
 				</h:panelGrid>
 
 
-
 			</h:panelGrid>
 		</h:panelGrid>
+		<h:panelGrid columns="1">
 		<h:outputText escape="false"
-			value="Click the <b>Launch GeoFEST</b> button if you want to run GeoFEST with the above parameter settings. ">
-		</h:outputText>
-		<h:outputText escape="false"
-			value="Click the <b>Create Input File</b> button if you only want to generate the input script. ">
+			value="Select a host and click the <b>Launch GeoFEST</b> button if you want to run GeoFEST with the above parameter settings. ">
 		</h:outputText>
 		<h:panelGroup>
+           <h:outputText  id="peedfg33ere" value="GeoFEST Execution Host"/>
+			  <h:selectOneListbox title="Mesh Refinement Host"
+			  		      size="1"
+			  		      id="refhostde3094" 
+					      required="true" value="#{MGBean.gridGeoFESTHost}">
+			     <f:selectItems id="ler3eihrc93" value="#{MGBean.gridHostList}"/>
+		 	  </h:selectOneListbox>
+		
 			<h:commandButton value="Launch GeoFEST"
 				action="#{MGBean.runGeoFESTJSF}" />
 		</h:panelGroup>
-
+		</h:panelGrid>
 	</h:form>
 
 	<h:form>
