@@ -442,6 +442,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 					 //Update the geotrans params
 					 mega.setGeotransParamsBean(currentGeotransParamsBean);
 					 mega.setGeofestOutputBean(projectGeoFestOutput);
+					 mega.setCreationDate(new Date().toString());
 					 db.set(mega);
 					 db.commit();
 					 System.out.println("Mega Saving Geofest cghist url:"+mega.getGeofestOutputBean().getCghistUrl());
