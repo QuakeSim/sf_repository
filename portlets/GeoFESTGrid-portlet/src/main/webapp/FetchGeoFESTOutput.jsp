@@ -93,24 +93,6 @@ function dataTableSelectOneRadio(radio) {
 
 					<h:column>
 					<f:facet name="header">
-						    <h:outputText value="Index File"/>
-				   </f:facet>
-				       <h:outputLink value="#{mrb.meshRunBean.indexUrl}" target="_blank">
-						    <h:outputText value="Index File"/>
-						 </h:outputLink>
-					</h:column>
-
-					<h:column>
-					<f:facet name="header">
-						    <h:outputText value="Node File"/>
-				   </f:facet>
-				       <h:outputLink value="#{mrb.meshRunBean.nodeUrl}" target="_blank">
-						    <h:outputText value="Node File"/>
-						 </h:outputLink>
-					</h:column>
-
-					<h:column>
-					<f:facet name="header">
 						    <h:outputText value="CG Hist File"/>
 				   </f:facet>
 				       <h:outputLink value="#{mrb.geofestOutputBean.cghistUrl}" target="_blank">
@@ -157,7 +139,7 @@ function dataTableSelectOneRadio(radio) {
 
 					<h:column>
 					<f:facet name="header">
-						    <h:outputText value="Status"/>
+						    <h:outputText value="GeoFEST Status"/>
 				   </f:facet>
 					<h:commandLink actionListener="#{MGBean.queryGeoFESTStatus}">
 								<h:outputText value="#{mrb.geoFestStatus}"/>
@@ -166,25 +148,18 @@ function dataTableSelectOneRadio(radio) {
 
 					<h:column>
 					<f:facet name="header">
-						    <h:outputText value="Plot Mesh"/>
-				   </f:facet>
-					<h:outputLink value="#{facesContext.externalContext.requestContextPath}/painter.jsp">
-						<f:param name="layers" value="#{mrb.jnlpLayers}" />
-						<f:param name="faults" value="#{mrb.jnlpFaults}" />
-						<f:param name="plotMesh" value="true" />
-						<f:param name="gfHostName" value="#{mrb.geoFESTBaseUrlForJnlp}" />
-						<f:param name="projectName" value="#{mrb.projectName}" />
-						<f:param name="userName" value="#{mrb.userName}" />
-						<f:param name="jobUIDStamp" value="#{mrb.meshRunBean.jobUIDStamp}" />
-						<h:outputText value="Plot"/>
-					</h:outputLink>
-					</h:column>
-					<h:column>
-					<f:facet name="header">
-						    <h:outputText value="Stop MeshGen Job"/>
+						    <h:outputText value="Stop GeoFEST Job"/>
 				   </f:facet>
 					<h:commandButton actionListener="#{MGBean.stopGeoFESTJob}"
 										  value="Stop"/>
+					</h:column>
+
+					<h:column>
+					<f:facet name="header">
+						    <h:outputText value="Delete Entry"/>
+				   </f:facet>
+					<h:commandButton actionListener="#{MGBean.deleteSessionEntry}"
+										  value="Delete"/>
 					</h:column>
 
 			</h:dataTable>

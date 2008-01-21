@@ -180,6 +180,13 @@ function dataTableSelectOneRadio(radio) {
 					<h:commandButton actionListener="#{MGBean.stopMeshGeneratorJob}"
 										  value="Stop"/>
 					</h:column>
+					<h:column>
+					<f:facet name="header">
+						    <h:outputText value="Delete Entry"/>
+				   </f:facet>
+					<h:commandButton actionListener="#{MGBean.deleteSessionEntry}"
+										  value="Delete"/>
+					</h:column>
 			</h:dataTable>
 
  	</h:form>

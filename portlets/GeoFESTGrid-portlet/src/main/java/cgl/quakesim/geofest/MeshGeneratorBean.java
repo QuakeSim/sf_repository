@@ -269,10 +269,10 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  return layers;
     }
 	 
-	 protected void storeMeshRunInContext(String userName,
-													  String projectName,
-													  String jobStamp,
-													  MeshRunBean mrb) throws Exception {
+	 protected MeshDataMegaBean storeMeshRunInContext(String userName,
+																	  String projectName,
+																	  String jobStamp,
+																	  MeshRunBean mrb) throws Exception {
 		  
 		  System.out.println("Storing meshrun");
 		  System.out.println(mrb.getProjectName());
@@ -290,12 +290,20 @@ public class MeshGeneratorBean extends GenericSopacBean {
  		  mega.setJnlpFaults(getMyFaultsParamForJnlp(null,projectName));
 		  mega.setCreationDate(new Date().toString());
 		  mega.setGeotransParamsBean(getCurrentGeotransParamsBean());
-						  
+			
+		  //Set the initial status
+		  initGeofestGridService();
+		  String statusString="MeshGen."+geofestGridService.queryMeshGeneratorStatus(userName,projectName,jobStamp);
+		  System.out.println("Status at Submission:"+statusString);
+		  mega.setMeshStatus(statusString);
+			  
 		  //Set up the database.  This open/close routine may need to be improved later.
 		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");	 
 		  db.set(mega);
 		  db.commit();
 		  db.close(); 
+
+		  return mega;
 	 }
 	 
 // 	 protected MeshRunBean restoreMeshRunInstance(String projectName, 
@@ -345,7 +353,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 		  initGeofestGridService();		 
 
-		  String proxyLocation="/tmp/x509up_u501";
+		  String proxyLocation=null;
 		  String gridResourceVal=constructForkResource("gt2",gridRefinerHost);
 		  String userHome=constructUserHome(gridRefinerHost);
 		  String meshExec=userHome+"/bin/autoref.pl";
@@ -364,10 +372,13 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  
 		  
 		  setJobToken(projectMeshRunBean.getJobUIDStamp());
-		  storeMeshRunInContext(userName,
-										projectName, 
-										projectMeshRunBean.getJobUIDStamp(),
-										projectMeshRunBean);
+		  MeshDataMegaBean mega=storeMeshRunInContext(userName,
+																	 projectName, 
+																	 projectMeshRunBean.getJobUIDStamp(),
+																	 projectMeshRunBean);
+		  
+		  
+		  
 		  return MESH_GENERATION_NAV_STRING;
     }
 
@@ -385,7 +396,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 		  initGeofestGridService();
 
-		  String proxyLocation="/tmp/x509up_u501";
+		  String proxyLocation=null;
 		  String gridResourceVal=constructGridResource("gt2",gridGeoFESTHost);
 		  String userHome=constructUserHome(gridGeoFESTHost);
 		  String exec=userHome+"/bin/GeoFEST";
@@ -418,22 +429,32 @@ public class MeshGeneratorBean extends GenericSopacBean {
 														String projectName, 
 														String tokenName, 
 														GeotransParamsBean currentGeotransParamsBean,
-														GFOutputBean projectGeoFestOtput) {
+														GFOutputBean projectGeoFestOtput) 
+		  throws Exception {
 
 		  //Set up the bean template for searching.
 		  MeshDataMegaBean mega=new MeshDataMegaBean();
 		  //		  mega.setUserName(userName);
-		  System.out.println("Bean coordinates: "+projectName+" "+tokenName);
+		  //		  System.out.println("Bean coordinates: "+projectName+" "+tokenName);
+
 		  mega.setProjectName(projectName);
 		  mega.setJobUIDStamp(tokenName);
+
+		  //Set the initial status
+		  initGeofestGridService();
+		  String statusString="GeoFEST."+geofestGridService.queryGeoFESTStatus(userName,projectName,tokenName);
+		  System.out.println("Status at Submission:"+statusString);
+
 		  //Find the matching bean
-		  System.out.println("Opening: "+getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
+		  //		  System.out.println("Opening: "+getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
 		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
 		  //		  ObjectSet results=db.get(mega);
 		  ObjectSet results=db.get(MeshDataMegaBean.class);
-		  System.out.println("Megabean to update found? "+results.size());
-		  System.out.println("Saving Geofest cghist url:"+projectGeoFestOutput.getCghistUrl());
-		  System.out.println("Saving index url:"+projectGeoFestOutput.getIndexUrl());
+
+		  // System.out.println("Megabean to update found? "+results.size());
+		  // System.out.println("Saving Geofest cghist url:"+projectGeoFestOutput.getCghistUrl());
+		  // System.out.println("Saving index url:"+projectGeoFestOutput.getIndexUrl());
+
 		  while (results.hasNext()) {
 				//Reassign the bean.  Should only be one match.
 				mega=(MeshDataMegaBean)results.next();
@@ -443,6 +464,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 					 mega.setGeotransParamsBean(currentGeotransParamsBean);
 					 mega.setGeofestOutputBean(projectGeoFestOutput);
 					 mega.setCreationDate(new Date().toString());
+					 mega.setGeoFestStatus(statusString);
 					 db.set(mega);
 					 db.commit();
 					 System.out.println("Mega Saving Geofest cghist url:"+mega.getGeofestOutputBean().getCghistUrl());
@@ -1896,7 +1918,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				}
 				Date date1=new Date(mb1.getCreationDate());
 				Date date2=new Date(mb2.getCreationDate());			  
-				if(date2.before(date1)) first=i;
+				if(date2.after(date1)) first=i;
 		  }
 
 		  return first;
@@ -1910,8 +1932,10 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  List myprojectlist=getMyProjectNameList();
 		  List tmpList=new ArrayList();
 		  
+		  //Initialize this just once.
+		  initGeofestGridService();
+		  
 		  //		  myArchivedMeshRunList.clear();
-
 		  if (myprojectlist.size() > 0) {
 				for(int i=0;i<myprojectlist.size();i++){
 					 String projectName=((SelectItem)myprojectlist.get(i)).getLabel();
@@ -1926,7 +1950,38 @@ public class MeshGeneratorBean extends GenericSopacBean {
 					 while(results.hasNext()){						  
 						  mega=(MeshDataMegaBean)results.next();
 						  //						  myArchivedMeshRunList.add(mega);
-						
+						  
+						  //Update the status.
+						  // String statusString="MeshGen."+geofestGridService.queryMeshGeneratorStatus(userName,mega.getProjectName(),mega.getJobUIDStamp());
+						  // System.out.println("Status:"+mega.getJobUIDStamp()+" "+statusString);
+						  // mega.setMeshStatus(statusString);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+						  
 						  tmpList.add(mega);
 					 }
 					 db.close();
@@ -2468,7 +2523,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				
 				
 				//Get the client together
-				
 				System.out.println("Connecting to "+queueServiceUrl);
 				queueService=new QueueServiceServiceLocator().getQueueExec(new URL(queueServiceUrl));
 				statusString=queueService.readQueueMessage(queueName);
@@ -2681,6 +2735,9 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				String jobUID=mdmb.getJobUIDStamp();
 				initGeofestGridService();
 				geofestGridService.deleteMeshGeneratorJob(userName,projectName,jobUID);
+				
+				queryMeshGeneratorStatus(ev);
+
 				stopMeshStatus="Stop Mesh Succeeded";
 		  }
 		  catch(Exception ex) {
@@ -2697,11 +2754,57 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				String jobUID=mdmb.getJobUIDStamp();
 				initGeofestGridService();
 				geofestGridService.deleteGeoFESTJob(userName,projectName,jobUID);
+				
+				queryGeoFESTStatus(ev);
+
 				stopGeoFestStatus="Stop GeoFEST Succeeded";
 		  }
 		  catch(Exception ex) {
 				ex.printStackTrace();
 		  }
 		  return stopGeoFestStatus;
+	 }
+
+	 public void deleteSessionEntry(ActionEvent ev) {
+		  MeshDataMegaBean mdmb=(MeshDataMegaBean)getArchivedMeshTable().getRowData();
+		  //First, try to delete the job.
+		  try {
+				initGeofestGridService();
+
+				
+				//Make sure there are no running jobs.  Would be 
+				//better to check status first but this is OK for now. 
+				geofestGridService.deleteMeshGeneratorJob(userName,
+																		mdmb.getProjectName(),
+																		mdmb.getJobUIDStamp());
+				geofestGridService.deleteGeoFESTJob(userName,
+																mdmb.getProjectName(),
+																mdmb.getJobUIDStamp());
+		  }
+		  catch (Exception ex) {
+				System.out.println(ex.getMessage());
+		  }
+
+		  try {
+				//DB, get going
+				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"
+									  +getUserName()+"/"+getCodeName()+"/"+mdmb.getProjectName()+".db");
+
+				ObjectSet results=db.get(mdmb);
+				System.out.println("Found deletion candidate object:"+results.hasNext());
+				System.out.println("Result set size:"+results.size());
+				if(results.hasNext()) {
+					 db.delete(results.next());
+					 System.out.println("Deleted session object");
+				}
+				db.commit();
+				db.close();
+				
+		  }
+		  catch(Exception ex) {
+				System.err.println("Couldn't delete the session entry from the DB.");
+				System.out.println(ex.getMessage());
+				//				ex.printStackTrace();
+		  }
 	 }
 }
