@@ -56,6 +56,11 @@
 							dest="${basedir}/">
              </gunzip>
 
+				 <gunzip src="${basedir}/${yui.version}.tar.gz" 
+							dest="${basedir}/">
+             </gunzip>
+
+
 				 <untar dest="${basedir}">
                 <fileset dir="${basedir}">
 						<include name="**/*.tar"/>
@@ -67,6 +72,13 @@
 						 dir="${basedir}/${tomcat.version}/bin/">
 					<include name="*.sh"/>
 				 </chmod>
+				 
+				 <!-- Copy the YUI libraries -->
+				<copy overwrite="true"
+						todir="${catalina.home}/webapps/ROOT/${yui.version}">
+				  <fileset dir="${basedir}/${yui.version}"/>
+            </copy>
+
            </tasks>
         </configuration>
         <goals>

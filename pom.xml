@@ -24,10 +24,11 @@
 	 <!--==================================================-->
     <project.home>${env.HOME}/QuakeSim2</project.home>
 	 <tomcat.bin.perm>755</tomcat.bin.perm>
-	 <tomcat.version>apache-tomcat-5.5.20</tomcat-version>
+	 <tomcat.version>apache-tomcat-5.5.20</tomcat.version>
+	 <yui.version>yui_0.12.2</yui.version>
     <catalina.home>${project.home}/portal_deploy/${tomcat.version}/</catalina.home>
 	 <dot.globus.home>${env.HOME}/.globus/</dot.globus.home>
-
+	 <gridsphere.version>gridsphere-2.1.4</gridsphere.version>
   </properties>
 
   <!-- The rest of this should not be edited --> 

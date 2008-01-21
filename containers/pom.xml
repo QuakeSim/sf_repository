@@ -5,9 +5,9 @@
   <packaging>pom</packaging>
   <version>1.0</version>
   <name>container-driver</name>
-  <url>http://www.google.com</url>
+  <url>http://www.quakesim.org</url>
   <parent>
-	 <groupId>container</groupId>
+	 <groupId>quakesim</groupId>
 	 <artifactId>main-driver</artifactId>
 	 <version>1.0</version>
 	 <relativePath>..</relativePath>

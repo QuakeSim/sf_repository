@@ -1,6 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.x0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
   <groupId>quakesim</groupId>
   <artifactId>gridsphere-lnf</artifactId>
   <packaging>pom</packaging>
@@ -52,7 +51,7 @@
 				<!-- Copy the theme -->
 				<copy overwrite="true"
 						todir="${catalina.home}/webapps/gridsphere/themes/default">
-				  <fileset dir="${basedir}/webapp/themes/default"/>
+				  <fileset dir="${catalina.home}/webapps/gridsphere/themes/monochrome"/>
             </copy>
 
 				<!-- Copy the images -->
@@ -71,7 +70,6 @@
 				<copy overwrite="true"
 						todir="${catalina.home}/webapps/gridsphere/WEB-INF/classes"
 				      file="${basedir}/log4j/log4j.properties"/>
-            </copy>
 
 
 				<!-- Copy the layouts -->
