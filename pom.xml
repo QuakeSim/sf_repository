@@ -54,7 +54,6 @@
   <modules>
 	 <module>portal_deploy</module>
     <module>containers</module>
-    <module>lnf_portal</module>
-	 <module>global-config</module>
+    <module>lnf4portal</module>
   </modules>
 </project>

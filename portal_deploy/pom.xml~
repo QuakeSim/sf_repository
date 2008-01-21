@@ -1,0 +1,80 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ogce.test</groupId>
+  <artifactId>portal_deploy</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0</version>
+  <name>portal_deploy</name>
+  <url>http://maven.apache.org</url>
+
+  <parent>
+	 <groupId>ogce.test</groupId>
+	 <artifactId>main-driver</artifactId>
+	 <version>1.0</version>
+	 <relativePath>..</relativePath>
+  </parent>
+
+  <build>
+	 <plugins>
+     <plugin>
+		<artifactId>maven-antrun-plugin</artifactId>
+      <executions>
+       <execution>
+        <id>Cleanup</id>
+		  <phase>clean</phase>
+        <configuration>
+			  <tasks>
+				 <echo message="Cleaning up ${basedir}"/>
+				 <delete includeemptydirs="true">
+					<fileset dir="${basedir}" >
+					   <exclude name="*.tar.gz"/>
+					   <exclude name="pom.xml"/>
+					   <exclude name="**/.svn"/>
+				   </fileset>
+             </delete>
+           </tasks>
+        </configuration>
+        <goals>
+			  <goal>run</goal>
+        </goals>
+       </execution>
+
+       <!-- Unpack the apache tomcat server and portal container -->
+       <execution>
+        <id>untar</id>
+		  <phase>process-resources</phase>
+        <configuration>
+			  <tasks>
+				 <echo message="Unpacking ${basedir}"/>
+				 <!-- These gunzips unfortunately must be done one at a time -->
+				 <gunzip src="${basedir}/apache-tomcat-5.5.12.tar.gz" 
+							dest="${basedir}/">
+             </gunzip>
+
+				 <gunzip src="${basedir}/apache-tomcat-5.5.12-compat.tar.gz" 
+							dest="${basedir}/">
+             </gunzip>
+
+				 <untar dest="${basedir}">
+                <fileset dir="${basedir}">
+						<include name="**/*.tar"/>
+                </fileset>
+             </untar>
+
+				 <echo message="Setting execute permissions on tomcat shell scripts"/>
+				 <chmod perm="${tomcat.bin.perm}"
+						 dir="${basedir}/apache-tomcat-5.5.12/bin/">
+					<include name="*.sh"/>
+				 </chmod>
+           </tasks>
+        </configuration>
+        <goals>
+			  <goal>run</goal>
+        </goals>
+       </execution>
+      </executions>       
+     </plugin>
+    </plugins>
+  </build>
+</project>

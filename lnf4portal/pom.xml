@@ -1,0 +1,92 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.x0</modelVersion>
+  <groupId>quakesim</groupId>
+  <artifactId>gridsphere-lnf</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0</version>
+  <name>gridsphere-lnf</name>
+  <url>http://maven.apache.org</url>
+  <parent>
+	 <groupId>quakesim</groupId>
+	 <artifactId>main-driver</artifactId>
+	 <version>1.0</version>
+	 <relativePath>..</relativePath>
+  </parent>
+  <build>
+	 <plugins>
+     <plugin>
+		<artifactId>maven-antrun-plugin</artifactId>
+      <executions>
+       <execution>
+        <id>Cleanup</id>
+		  <phase>clean</phase>
+        <configuration>
+			  <tasks>
+				 <echo message="Cleaning up ${basedir}"/>
+           </tasks>
+        </configuration>
+        <goals>
+			  <goal>run</goal>
+        </goals>
+       </execution>
+
+       <!-- Decorate the portal.  This is container-specific -->
+       <execution>
+        <id>QuakeSim Look and Feel</id>
+		  <phase>process-resources</phase>
+        <configuration>
+			 <tasks>
+				<!-- Backup the original default theme -->
+				<move failonerror="false"
+					todir="${catalina.home}/webapps/gridsphere/themes/default-orig">
+				  <fileset dir="${catalina.home}/webapps/gridsphere/themes/default"/>
+            </move>
+
+				<!-- Copy the tomcat conf -->
+				<copy overwrite="true"
+						todir="${catalina.home}/conf/">
+				  <fileset dir="${basedir}/conf/"/>
+            </copy>
+
+				<!-- Copy the theme -->
+				<copy overwrite="true"
+						todir="${catalina.home}/webapps/gridsphere/themes/default">
+				  <fileset dir="${basedir}/webapp/themes/default"/>
+            </copy>
+
+				<!-- Copy the images -->
+				<copy overwrite="true"
+						todir="${catalina.home}/webapps/gridsphere/images/">
+				  <fileset dir="${basedir}/images"/>
+            </copy>
+
+				<!-- Copy the html -->
+				<copy overwrite="true"
+						todir="${catalina.home}/webapps/gridsphere/html">
+				  <fileset dir="${basedir}/html"/>
+            </copy>
+
+				<!-- Copy the log4j props -->
+				<copy overwrite="true"
+						todir="${catalina.home}/webapps/gridsphere/WEB-INF/classes"
+				      file="${basedir}/log4j/log4j.properties"/>
+            </copy>
+
+
+				<!-- Copy the layouts -->
+				<copy overwrite="true"
+						todir="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/">
+				  <fileset dir="${basedir}/CustomPortal/"/>
+            </copy>
+          </tasks>
+        </configuration>
+        <goals>
+			 <goal>run</goal>
+        </goals>
+       </execution>
+      </executions>       
+     </plugin>
+    </plugins>
+  </build>
+</project>

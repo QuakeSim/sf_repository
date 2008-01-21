@@ -1,0 +1,101 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ogce.test</groupId>
+  <artifactId>gridsphere-builder</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0</version>
+  <name>gridsphere-builder</name>
+  <url>http://maven.apache.org</url>
+  <parent>
+	 <groupId>ogce.test</groupId>
+	 <artifactId>container-driver</artifactId>
+	 <version>1.0</version>
+	 <relativePath>..</relativePath>
+  </parent>
+
+  <build>
+	 <plugins>
+     <plugin>
+		<artifactId>maven-antrun-plugin</artifactId>
+      <executions>
+       <execution>
+        <id>Cleanup</id>
+		  <phase>clean</phase>
+        <configuration>
+			  <tasks>
+				 <echo message="Cleaning up ${basedir}"/>
+				 <delete includeemptydirs="true">
+					<fileset dir="${basedir}" >
+					   <exclude name="*.tar.gz"/>
+					   <exclude name="pom.xml"/>
+					   <exclude name="**/.svn"/>
+				   </fileset>
+             </delete>
+           </tasks>
+        </configuration>
+        <goals>
+			  <goal>run</goal>
+        </goals>
+       </execution>
+
+       <!-- Unpack the portal container -->
+       <execution>
+        <id>untar</id>
+		  <phase>process-resources</phase>
+        <configuration>
+			  <tasks>
+				 <echo message="This is the project home: ${project.home}"/>
+				 <!-- These gunzips unfortunately must be done one at a time -->
+				 <gunzip src="${basedir}/gridsphere-2.1.5-src.tar.gz"/>
+				 <gunzip src="${basedir}/apache-ant-1.6.5-bin.tar.gz"/>
+
+				 <untar dest="${basedir}">
+                <fileset dir="${basedir}">
+						<include name="**/*.tar"/>
+                </fileset>
+             </untar>
+           </tasks>
+        </configuration>
+        <goals>
+			  <goal>run</goal>
+        </goals>
+       </execution>
+
+       <!-- Install the portal container.  This will need to be 
+				overwritten for each container.
+			-->
+       <execution>
+        <id>gridsphere</id>
+		  <phase>process-resources</phase>
+        <configuration>
+			  <tasks>
+				 <echo message="Buiding gridpshere in ${basedir}"/>
+             <property name="build.compiler" value="extJavac"/>
+				 <ant antfile="build.xml"
+						dir="${basedir}/gridsphere-2.1.5"
+						target="deploy">
+					<property name="env.ANT_HOME" 
+								 value="${basedir}/apache-ant-1.6.5/"/>
+					<property name="env.CATALINA_HOME" 
+								 value="${project.home}/portal_deploy/apache-tomcat-5.5.12/"/>
+             </ant>
+				 <ant antfile="build.xml"
+						dir="${basedir}/gridsphere-2.1.5"
+						target="create-database">
+					<property name="env.ANT_HOME" 
+								 value="${basedir}/apache-ant-1.6.5/"/>
+					<property name="env.CATALINA_HOME" 
+								 value="${project.home}/portal_deploy/apache-tomcat-5.5.12/"/>
+             </ant>
+           </tasks>
+        </configuration>
+        <goals>
+			  <goal>run</goal>
+        </goals>
+       </execution>
+      </executions>       
+     </plugin>
+    </plugins>
+  </build>
+</project>
