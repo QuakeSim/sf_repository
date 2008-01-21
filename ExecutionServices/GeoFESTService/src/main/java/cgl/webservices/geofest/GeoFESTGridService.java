@@ -47,13 +47,14 @@ public class GeoFESTGridService extends GeoFESTService{
     //Some useful constants
     String equals="=";	 
 	 String semicolon=";";
-    String[] statusName = { "Unknown", "Idle", "Running", "Removed","Completed", "Held" };
+    String[] statusName = {"Unknown", "Idle", "Running", "Removed","Completed", "Held" };
 
 	 //These are constant strings for practical purposes.  They are the names of files that
 	 //store the condor job status info for the mesh gen and geofest steps.
 	 String geofestId="geoFestId";
 	 String meshgenId="meshgenId";
 
+	 String proxyLocation;
     /**
      * This is a main() for testing.
      */
@@ -77,7 +78,7 @@ public class GeoFESTGridService extends GeoFESTService{
 				//Make the mesh.
 				GeoFESTGridService ggfs=new GeoFESTGridService(true);
 
-				String proxyLocation="/tmp/x509up_u501";
+				String proxyLocation=ggfs.getProxyLocation();
  				String gridResourceVal="gt2 tg-login.ornl.teragrid.org/jobmanager-fork";
 				String userHome="/users/quakesim";
  				String meshExec=userHome+"/bin/autoref.pl";
@@ -102,8 +103,9 @@ public class GeoFESTGridService extends GeoFESTService{
 				// 	    gfs.runGeoFEST(userName,projectName,gpb,mrb.getJobUIDStamp());
 	    
 	}
-	catch (Exception ex) {
-	    ex.printStackTrace();
+		  catch (Exception ex) {
+				System.err.println(ex.getMessage());
+		 //	    ex.printStackTrace();
 	}
     }
     
@@ -116,8 +118,17 @@ public class GeoFESTGridService extends GeoFESTService{
 		  super(useClassLoader);
 		  //Good ol' condor 
 		  collectorUrl=properties.getProperty("condor.collector.url");
-		  System.out.println("Collector URL:"+collectorUrl);
+		  proxyLocation=properties.getProperty("proxy.location");
+	 }
 
+	 /**
+	  * Getter and setter for proxy location.  
+	  */
+	 public String getProxyLocation() {
+		  return proxyLocation;
+	 }
+	 public void setProxyLocation(String proxyLocation) {
+		  this.proxyLocation=proxyLocation;
 	 }
 
     /**
@@ -186,7 +197,7 @@ public class GeoFESTGridService extends GeoFESTService{
      * @ layers are passed in from the portal, converted
      * into input files here.
      * @ proxyLocation is the location of the user's proxy credential
-     * on the local file system.
+     * on the local file system.  If it is null, use the default.
      * @ gridResourceVal is the URL of the job manager.
      * @ meshExec is the path of the autoref.pl script on the grid resource.
      * Note we don't know this apriori. 
@@ -205,6 +216,8 @@ public class GeoFESTGridService extends GeoFESTService{
 														  String meshExec)
 		  throws Exception {
 		  
+		  if(proxyLocation==null) proxyLocation=getProxyLocation();
+
 		  String meshArgs=projectName+" "+autoref_mode; 
 		  //This creates all the input files. 
 		  String timeStamp=generateTimeStamp();
@@ -307,7 +320,8 @@ public class GeoFESTGridService extends GeoFESTService{
 				writeCondorJobId(workDir, meshgenId,jobstuff[0],jobstuff[1]);
 		  }
 		  catch (Exception ex) {
-				ex.printStackTrace();
+				System.err.println(ex.getMessage());
+				//ex.printStackTrace();
 		  }
 		  
 		  return getTheMeshGenReturnFiles(userName,projectName,timeStamp); 
@@ -365,6 +379,7 @@ public class GeoFESTGridService extends GeoFESTService{
 	
 	 /**
 	  * Run GeoFEST using Condor.
+	  * @proxyLocation: set to null if you want to use the default.
 	  */ 
     public GFOutputBean runGridGeoFEST(String userName,
 													String projectName,
@@ -376,6 +391,9 @@ public class GeoFESTGridService extends GeoFESTService{
 													String envSettings,
 													String timeStamp)
 		  throws Exception {
+		  
+		  if(proxyLocation==null) proxyLocation=getProxyLocation();
+
 		  int[] jobstuff=new int[2];
 		  jobstuff[0]=0;
 		  jobstuff[1]=0;
@@ -468,7 +486,8 @@ public class GeoFESTGridService extends GeoFESTService{
 				writeCondorJobId(workDir,geofestId,jobstuff[0],jobstuff[1]);
 		  }
 		  catch (Exception ex) {
-				ex.printStackTrace();
+				System.err.println(ex.getMessage());
+				//				ex.printStackTrace();
 		  }
 
 		  return getAllTheGeoFESTFiles(userName, projectName, timeStamp);
@@ -583,7 +602,8 @@ public class GeoFESTGridService extends GeoFESTService{
 				status = Integer.parseInt(ad.get("JobStatus"));
 		  }
 		  catch (Exception ex) {
-				ex.printStackTrace();
+				System.err.println(ex.getMessage());
+				//				ex.printStackTrace();
 		  }
 		  return statusName[status];
     }	
@@ -650,5 +670,14 @@ public class GeoFESTGridService extends GeoFESTService{
 		  else {
 				System.out.println("Job is already removed or completed");
 		  }
+	 }
+
+	 /**
+	  * This removes a specfic session directory.
+	  */
+	 public void removeProjectSession(String userName,
+												 String projectId,
+												 String jobStamp) {
+		  //Unimplemented.
 	 }
 }
