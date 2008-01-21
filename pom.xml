@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <properties>
+	 <!--==================================================-->
+	 <!-- These need to be edited by the deployer -->
+	 <!--==================================================-->
+	 <portal.server.ip>156.56.104.143</portal.server.ip>
+	 <host.base.url>http://${portal.server.ip}:8080/</host.base.url>
+
+	 <!--==================================================-->
+	 <!-- 
+			Specify your container.  Currently only gridsphere
+			is supported. See ogce-portal-only/containers for 
+			possible addional choices.
+		-->
+	 <!--==================================================-->
+    <portlet.container>gridsphere</portlet.container>
+
+	 <!--==================================================-->
+	 <!--These can be left as is for most builds, if you 
+		  have unpacked everything in $HOME, are using gridsphere,
+		  and done have any usualy .globus requirements.
+		  -->
+	 <!--==================================================-->
+    <project.home>${env.HOME}/QuakeSim2</project.home>
+	 <tomcat.bin.perm>755</tomcat.bin.perm>
+	 <tomcat.version>apache-tomcat-5.5.20</tomcat-version>
+    <catalina.home>${project.home}/portal_deploy/${tomcat.version}/</catalina.home>
+	 <dot.globus.home>${env.HOME}/.globus/</dot.globus.home>
+
+  </properties>
+
+  <!-- The rest of this should not be edited --> 
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>quakesim</groupId>
+  <artifactId>main-driver</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0</version>
+  <name>main-driver</name>
+  <url>http://www.quakesim.org</url>
+
+  <repositories>
+	 <repository>
+		<id>ogce-maven-repo</id>
+		<url>http://www.collab-ogce.org/maven2</url>
+	 </repository>
+	 <repository>
+      <id>ogce-maven1-legacy-repo</id>
+      <url>http://www.collab-ogce.org/maven</url>
+      <layout>legacy</layout>
+    </repository>
+  </repositories>
+  
+  <modules>
+	 <module>portal_deploy</module>
+    <module>containers</module>
+    <module>lnf_portal</module>
+	 <module>global-config</module>
+  </modules>
+</project>

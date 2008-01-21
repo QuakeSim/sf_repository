@@ -109,6 +109,9 @@ mvn clean -Dtomcat.base.dir=$CATALINA_HOME -Dgoogle.key=$GOOGLE_KEY -Dportal.hos
 cd $GEOFEST_GRID_PORTLET_HOME
 mvn clean -Dtomcat.base.dir=$CATALINA_HOME -Dportal.host.name=$PORTAL_HOST_NAME
 
+cd $DAILY_RDAHMM_PORTLET_HOME
+mvn clean -Dtomcat.base.dir=$CATALINA_HOME -Dgoogle.key=$GOOGLE_KEY -Dportal.host.name=$PORTAL_HOST_NAME
+
 #--------------------------------------------------
 # Clean up the execution services.
 #--------------------------------------------------
