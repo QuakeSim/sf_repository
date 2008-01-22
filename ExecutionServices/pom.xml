@@ -20,52 +20,50 @@
   <build>
 	 <plugins>
 		<plugin>
-		<artifactId>maven-antrun-plugin</artifactId>
-      <executions>
-       <execution>
-        <id>Clean ${pom.artifactId} portlet</id>
-		  <phase>clean</phase>
-        <configuration>
-			 <!-- 
-					Allow this to fail on error. This is not great, but we must do this
-					since the parent pom is not abstract and so will get executed along with
-					its children.
-				-->
-			 <tasks>			 
-				<echo message="Project home: ${project.home}"/>
-				<delete failonerror="false"
-						  dir="${catalina.home}/webapps/${pom.artifactId}"/>
-				
-          </tasks>
-        </configuration>
-        <goals>
-			 <goal>run</goal>
-        </goals>
-       </execution>
-       <execution>
-        <id>Install ${pom.artifactId} service</id>
-		  <phase>install</phase>
-        <configuration>
-			 <!-- 
-					Allow this to fail on error. This is not great, but we must do this
-					since the parent pom is not abstract and so will get executed along with
-					its children.
-				-->
-			 <tasks>			 
-				<copy overwrite="true" 
-						filtering="false"
-						failonerror="false"
-						todir="${catalina.home}/webapps/${pom.artifactId}">
-				  <fileset dir="${basedir}/target/${pom.artifactId}"/>
-				</copy>
-				
-          </tasks>
-        </configuration>
-        <goals>
-			 <goal>run</goal>
-        </goals>
-       </execution>
-      </executions>       
+		  <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+			 <execution>
+				<id>Clean ${pom.artifactId} portlet</id>
+				<phase>clean</phase>
+				<configuration>
+				  <!-- 
+						 Allow this to fail on error. This is not great, but we must do this
+						 since the parent pom is not abstract and so will get executed along with
+						 its children.
+					 -->
+				  <tasks>			 
+					 <echo message="Project home: ${project.home}"/>
+					 <delete failonerror="false"
+								dir="${catalina.home}/webapps/${pom.artifactId}"/>
+				  </tasks>
+				</configuration>
+				<goals>
+				  <goal>run</goal>
+				</goals>
+			 </execution>
+			 <execution>
+				<id>Install ${pom.artifactId} service</id>
+				<phase>install</phase>
+				<configuration>
+				  <!-- 
+						 Allow this to fail on error. This is not great, but we must do this
+						 since the parent pom is not abstract and so will get executed along with
+						 its children.
+					 -->
+				  <tasks>			 
+					 <copy overwrite="true" 
+							 filtering="false"
+							 failonerror="false"
+							 todir="${catalina.home}/webapps/${pom.artifactId}">
+						<fileset dir="${basedir}/target/${pom.artifactId}"/>
+					 </copy>
+				  </tasks>
+				</configuration>
+				<goals>
+				  <goal>run</goal>
+				</goals>
+			 </execution>
+        </executions>       
 		</plugin>
     </plugins>
 	 <!-- Need this to filter any resource files -->
