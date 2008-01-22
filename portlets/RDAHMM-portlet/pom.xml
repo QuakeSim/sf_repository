@@ -10,6 +10,12 @@
     <version>1.0-SNAPSHOT</version>
     <name>A custom project using myfaces</name>
     <url>http://www.myorganization.org</url>
+  <parent>
+	 <groupId>quakesim</groupId>
+	 <artifactId>portlets-driver</artifactId>
+	 <version>1.0</version>
+	 <relativePath>..</relativePath>
+  </parent>
 
     <build>
         <finalName>RDAHMM-portlet</finalName>
@@ -45,13 +51,12 @@
                                </replace>
 
                                <replace dir="${basedir}/target/${pom.artifactId}" 
-                                        token="/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.12/"
+                                        token="/home/gateway/QuakeSim2/portal_deploy/${tomcat.version}"
                                         value="${tomcat.base.dir}">
                                <include name="**/*.jsp"/>
                                <include name="**/*.xml"/>
                                <include name="**/*.properties"/>
                                </replace>
-
 
                                <replace dir="${basedir}/target/${pom.artifactId}" 
                                         token="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTCdqtmO6Kma7uYZgpagQkNe17MQhRS93QdZFchZ2Vy9IpcH0W3nbN34g"
@@ -60,7 +65,6 @@
                                <include name="**/*.xml"/>
                                <include name="**/*.properties"/>
                                </replace>
-
                              </tasks>
                            </configuration>
                            <goals>
@@ -76,9 +80,9 @@
     <!-- We get this from the command line and pass to the resources
          via filtering -->
     <properties>
-       <tomcat.base.dir>${tomcat.base.dir}</tomcat.base.dir>
-       <portal.host.name>${portal.host.name}</portal.host.name>
-       <google.key>${google.key}</google.key>
+       <tomcat.base.dir>${catalina.home}</tomcat.base.dir>
+       <portal.host.name>${portal.server.ip}</portal.host.name>
+       <google.key>${google.master.key}</google.key>
     </properties>
 
 

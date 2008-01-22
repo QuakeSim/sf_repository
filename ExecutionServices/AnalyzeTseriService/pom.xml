@@ -10,6 +10,12 @@
     <version>1.0-SNAPSHOT</version>
     <name>Ant Visco execution service</name>
     <url>http://www.myorganization.org</url>
+  <parent>
+	 <groupId>quakesim</groupId>
+	 <artifactId>services-driver</artifactId>
+	 <version>1.0</version>
+	 <relativePath>..</relativePath>
+  </parent>
 
     <build>
         <finalName>analyze-tseri-exec</finalName>
@@ -75,10 +81,8 @@
     <!-- We get this from the command line and pass to the resources
          via filtering -->
     <properties>
-       <tomcat.base.dir>${tomcat.base.dir}</tomcat.base.dir>
+       <tomcat.base.dir>${catalina.home}</tomcat.base.dir>
        <bin.path>${tomcat.base.dir}/webapps/${pom.artifactId}/WEB-INF/binaryexec</bin.path>
-       <user.home>${user.home}</user.home>
-       <analyze_tseri.service.url>${analyze_tseri.service.url}</analyze_tseri.service.url>
     </properties>
 
     <repositories>

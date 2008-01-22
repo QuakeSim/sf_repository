@@ -10,6 +10,12 @@
     <version>1.0-SNAPSHOT</version>
     <name>Ant Visco execution service</name>
     <url>http://www.myorganization.org</url>
+  <parent>
+	 <groupId>quakesim</groupId>
+	 <artifactId>services-driver</artifactId>
+	 <version>1.0</version>
+	 <relativePath>..</relativePath>
+  </parent>
 
     <build>
         <finalName>AntVisco</finalName>

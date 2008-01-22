@@ -29,6 +29,18 @@
     <catalina.home>${project.home}/portal_deploy/${tomcat.version}/</catalina.home>
 	 <dot.globus.home>${env.HOME}/.globus/</dot.globus.home>
 	 <gridsphere.version>gridsphere-2.1.4</gridsphere.version>
+	 <!--These are needed for backward compatiblity with old build system-->
+	 <tomcat.base.dir>${catalina.home}</tomcat.base.dir>
+
+       <user.home>${user.home}</user.home>
+       <analyze_tseri.service.url>${host.base.url}/analyze-tseri-exec</analyze_tseri.service.url>
+       <disloc.service.url>${host.base.url}/dislocexec</disloc.service.url>
+       <geofest.service.url>${host.base.url}/geofestexec</geofest.service.url>
+       <queue.service.url>${host.base.url}/QueueExec</queue.service.url>
+       <KmlGenerator.service.url>${host.base.url}/KmlGenerator</KmlGenerator.service.url>
+       <queue.service.url>${host.base.url}/queueservice</queue.service.url>
+       <rdahmm.service.url>${host.base.url}/rdahmmexec</rdahmm.service.url>
+
   </properties>
 
   <!-- The rest of this should not be edited --> 
@@ -51,10 +63,36 @@
       <layout>legacy</layout>
     </repository>
   </repositories>
-  
+ 
   <modules>
 	 <module>portal_deploy</module>
     <module>containers</module>
     <module>lnf4portal</module>
+    <module>GenericQuakeSimProject</module>
+    
+    <!--These are the portlets -->
+    <module>portlets/DailyRDAHMM-portlet</module>
+    <module>portlets/Disloc-portlet</module>
+    <module>portlets/GeoFESTGrid-portlet</module>
+    <module>portlets/NewMeshGen-portlet</module>
+    <module>portlets/RDAHMM-portlet</module>
+    <module>portlets/RealTimeRDAHMM-portlet</module>
+    <module>portlets/STFILTER-portlet</module>
+    <module>portlets/Simplex-portlet</module>
+    <module>portlets/StationMonitor-portlet</module>
+
+    <!-- These are services -->
+    <module>ExecutionServices/AnalyzeTseriService</module>
+    <module>ExecutionServices/AntVisco</module>
+    <module>ExecutionServices/DislocService</module>
+    <module>ExecutionServices/GeoFESTService</module>
+    <module>ExecutionServices/GridInfoService</module>
+    <module>ExecutionServices/KmlGenerator</module>
+    <module>ExecutionServices/QueueService</module>
+    <module>ExecutionServices/STFilterService</module>
+    <module>ExecutionServices/SimpleXService</module>
+    <!--
+    <module>ExecutionServices/RDAHMMService</module>
+    -->
   </modules>
 </project>
