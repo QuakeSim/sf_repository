@@ -39,12 +39,13 @@
 
     <!-- We get this from the command line and pass to the resources
          via filtering -->
+<!--
     <properties>
        <tomcat.base.dir>${catalina.home}</tomcat.base.dir>
        <bin.path>${tomcat.base.dir}/webapps/${pom.artifactId}/WEB-INF/binaryexec</bin.path>
        <user.home>${user.home}</user.home>
     </properties>
-
+-->
     <repositories>
         <repository>
             <releases>

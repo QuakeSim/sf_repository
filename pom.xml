@@ -26,11 +26,11 @@
 	 <tomcat.bin.perm>755</tomcat.bin.perm>
 	 <tomcat.version>apache-tomcat-5.5.20</tomcat.version>
 	 <yui.version>yui_0.12.2</yui.version>
-    <catalina.home>${project.home}/portal_deploy/${tomcat.version}/</catalina.home>
+    <catalina.home>/${env.HOME}/QuakeSim/portal_deploy/${tomcat.version}/</catalina.home>
+    <tomcat.base.dir>${env.HOME}/QuakeSim2/portal_deploy/${tomcat.version}/</tomcat.base.dir>
 	 <dot.globus.home>${env.HOME}/.globus/</dot.globus.home>
 	 <gridsphere.version>gridsphere-2.1.4</gridsphere.version>
 	 <!--These are needed for backward compatiblity with old build system-->
-	 <tomcat.base.dir>${catalina.home}</tomcat.base.dir>
 
        <user.home>${user.home}</user.home>
        <analyze_tseri.service.url>${host.base.url}/analyze-tseri-exec</analyze_tseri.service.url>
@@ -40,7 +40,7 @@
        <KmlGenerator.service.url>${host.base.url}/KmlGenerator</KmlGenerator.service.url>
        <queue.service.url>${host.base.url}/queueservice</queue.service.url>
        <rdahmm.service.url>${host.base.url}/rdahmmexec</rdahmm.service.url>
-
+       <bin.path>${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec</bin.path>
   </properties>
 
   <!-- The rest of this should not be edited --> 

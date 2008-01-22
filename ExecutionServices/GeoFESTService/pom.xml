@@ -4,7 +4,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>cgl.webservices</groupId>
+    <groupId>quakesim</groupId>
     <artifactId>geofestexec</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
@@ -17,7 +17,6 @@
 	 <relativePath>..</relativePath>
   </parent>
 
-
     <build>
         <finalName>geofestexec</finalName>
         <resources>
@@ -26,8 +25,8 @@
                <filtering>true</filtering>
            </resource>
         </resources>
-        <plugins>
 <!--
+        <plugins>
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>maven-jetty6-plugin</artifactId>
@@ -35,17 +34,12 @@
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                 </configuration>
             </plugin>
--->
         </plugins>
+-->
     </build>
 
     <!-- We get this from the command line and pass to the resources
          via filtering -->
-    <properties>
-       <tomcat.base.dir>${catalina.home}</tomcat.base.dir>
-       <bin.path>${tomcat.base.dir}/webapps/${pom.artifactId}/WEB-INF/binaryexec</bin.path>
-    </properties>
-
     <repositories>
         <repository>
             <releases>
