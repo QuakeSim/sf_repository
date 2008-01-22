@@ -16,7 +16,6 @@
 	 <relativePath>..</relativePath>
   </parent>
 
-
   <build>
 	 <plugins>
 		<plugin>
@@ -64,6 +63,7 @@
 				</goals>
 			 </execution>
         </executions>       
+
 		</plugin>
     </plugins>
 	 <!-- Need this to filter any resource files -->
