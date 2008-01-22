@@ -29,6 +29,7 @@
 				 <delete includeemptydirs="true">
 					<fileset dir="${basedir}" >
 					   <exclude name="*.tar.gz"/>
+					   <exclude name="*.tgz"/>
 					   <exclude name="pom.xml"/>
 					   <exclude name="**/.svn"/>
 				   </fileset>
