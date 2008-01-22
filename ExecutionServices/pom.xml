@@ -1,0 +1,89 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<!--
+	 This POM is intended to be "abstract" and will not be called directly.
+-->
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>quakesim</groupId>
+  <artifactId>services-driver</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0</version>
+  <name>portlets-driver</name>
+  <url>http://www.collab-ogce.com</url>
+  <parent>
+	 <groupId>quakesim</groupId>
+	 <artifactId>main-driver</artifactId>
+	 <version>1.0</version>
+	 <relativePath>..</relativePath>
+  </parent>
+
+  <build>
+	 <plugins>
+		<plugin>
+		<artifactId>maven-antrun-plugin</artifactId>
+      <executions>
+       <execution>
+        <id>Clean ${pom.artifactId} portlet</id>
+		  <phase>clean</phase>
+        <configuration>
+			 <!-- 
+					Allow this to fail on error. This is not great, but we must do this
+					since the parent pom is not abstract and so will get executed along with
+					its children.
+				-->
+			 <tasks>			 
+				<delete failonerror="false"
+						  dir="${catalina.home}/webapps/${pom.artifactId}"/>
+				
+          </tasks>
+        </configuration>
+        <goals>
+			 <goal>run</goal>
+        </goals>
+       </execution>
+       <execution>
+        <id>Install ${pom.artifactId} portlet</id>
+		  <phase>install</phase>
+        <configuration>
+			 <!-- 
+					Allow this to fail on error. This is not great, but we must do this
+					since the parent pom is not abstract and so will get executed along with
+					its children.
+				-->
+			 <tasks>			 
+				<copy overwrite="true" 
+						filtering="false"
+						failonerror="false"
+						todir="${catalina.home}/webapps/${pom.artifactId}">
+				  <fileset dir="${basedir}/target/${pom.artifactId}"/>
+				</copy>
+				
+				<!--
+					 Update the portlet.xml files
+				  -->
+				<copy overwrite="true" 
+						filtering="true"
+						failonerror="false"
+						todir="${catalina.home}/webapps/${pom.artifactId}">
+				  <fileset dir="${basedir}/target/${pom.artifactId}">
+					 <include name="**/portlet.xml"/>
+				  </fileset>
+				  
+				</copy>
+          </tasks>
+        </configuration>
+        <goals>
+			 <goal>run</goal>
+        </goals>
+       </execution>
+      </executions>       
+		</plugin>
+    </plugins>
+	 <!-- Need this to filter any resource files -->
+	 <resources>
+		<resource>
+		  <directory>src/main/resources</directory>
+		  <filtering>true</filtering>
+		</resource>
+	 </resources>
+  </build>
+</project>
