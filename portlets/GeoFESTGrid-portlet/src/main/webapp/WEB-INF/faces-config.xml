@@ -14,7 +14,7 @@
                 <!--Who we are-->
                 <managed-property>
                    <property-name>codeName</property-name>
-                   <value>MeshGenerator</value>
+                   <value>GridGeoFEST</value>
                 </managed-property>
                  <managed-property>
                    <property-name>faultDBServiceUrl</property-name>

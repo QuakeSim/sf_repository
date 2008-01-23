@@ -130,10 +130,10 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
     //These should be populated from faces-config.xml
     String meshViewerServerUrl="http://gf2.ucs.indiana.edu:18084";
-    String faultDBServiceUrl="http://gf2.ucs.indiana.edu:9090/axis/services/Select";
-	 String geoFESTBaseUrl="http://gf19.ucs.indiana.edu:8080/geofestexec/";
-    String geoFESTServiceUrl=geoFESTBaseUrl+"/"+"services/GeoFESTExec";
-	 String geoFESTBaseUrlForJnlp=getGeoFESTBaseUrlForJnlp();
+    String faultDBServiceUrl;//="http://gf2.ucs.indiana.edu:9090/axis/services/Select";
+	 String geoFESTBaseUrl;//="http://gf19.ucs.indiana.edu:8080/geofestexec/";
+    String geoFESTServiceUrl;//=geoFESTBaseUrl+"/"+"services/GeoFESTExec";
+	 String geoFESTBaseUrlForJnlp;//=getGeoFESTBaseUrlForJnlp();
 	 String queueServiceUrl;
 
     //This is our geofest service stub.
@@ -2354,7 +2354,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  return geoFESTBaseUrl;
 	 }
 
-	 public void setGeoFESTBaseUrl(){
+	 public void setGeoFESTBaseUrl(String geoFESTBaseUrl){
 		  this.geoFESTBaseUrl=geoFESTBaseUrl;
 	 }
 

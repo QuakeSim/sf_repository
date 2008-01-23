@@ -221,109 +221,102 @@ public class GeoFESTGridService extends GeoFESTService{
 		  String meshArgs=projectName+" "+autoref_mode; 
 		  //This creates all the input files. 
 		  String timeStamp=generateTimeStamp();
-		  try {
-				String workDir=generateWorkDir(userName,projectName,timeStamp);
-				
-				createGeometryFiles(workDir,projectName,faults,layers);
-				String outputDestDir=generateOutputDestDir(userName,
-																		 projectName,
-																		 timeStamp);
-				
-				//This is the output stuff.
-				String projectOutput=createMeshProjectOutput(projectName);
-				String projectOutputRemaps=createMeshProjectOutputRemaps(projectName,workDir);
-
-				String baseUrl=generateBaseUrl(userName,projectName,timeStamp);
-
-		
-				//--------------------------------------------------
-				//These are the files needed for uploading.
-				//Each fault has .flt, .params, and .sld file (hence 3* size).
-				//Each layer has a .sld file and a .materials file (hence 2*size).
-				//Finally, there is one group file for all the metadata (hence +1).
-				//--------------------------------------------------
-				int fileSize=3*faults.length+2*layers.length+1;
-				File[] files=new File[fileSize];
-				
-				int iter=0;
-				for(int i=0;i<faults.length;i++) {
-					 files[iter]=new File(workDir+"/"+faults[i].getFaultName()+".flt");
-					 iter++;
-					 files[iter]=new File(workDir+"/"+faults[i].getFaultName()+".params");
-					 iter++;
-					 files[iter]=new File(workDir+"/"+faults[i].getFaultName()+".sld");
-					 iter++;
-				}
-				
-				for (int i=0;i<layers.length;i++) {
-					 files[iter]=new File(workDir+"/"+layers[i].getLayerName()+".sld");
-					 iter++;
-					 files[iter]=new File(workDir+"/"+layers[i].getLayerName()+".materials");
-					 iter++;
-				}
-				//This is the group file.  Only one of these.
-				files[iter]=new File(workDir+"/"+projectName+".grp");
-
-				for(int i=0;i<faults.length;i++) {
-					 System.out.println("Input Files:"+files[i]);
-				}
-
-				//--------------------------------------------------
-				//Create the classadds
-				//--------------------------------------------------
-				ClassAdStructAttr[] extraAttributes =
-					 {
-						  new ClassAdStructAttr("GridResource", ClassAdAttrType.value3,
-														gridResourceVal),
-						  new ClassAdStructAttr("Out", ClassAdAttrType.value3,
-														workDir+"/"+"autoref.out"),
-						  new ClassAdStructAttr("UserLog", ClassAdAttrType.value3,
-														workDir+"/"+"autoref.log"),
-						  new ClassAdStructAttr("Err", ClassAdAttrType.value3,
-														workDir+"/"+"autoref.err"),
-						  new ClassAdStructAttr("TransferExecutable",
-														ClassAdAttrType.value4, 
-														"FALSE"),
-						  new ClassAdStructAttr("when_to_transfer_output",
-														ClassAdAttrType.value2, 
-														"\"ON_EXIT\""),
-						  new ClassAdStructAttr("should_transfer_files",
-														ClassAdAttrType.value2, 
-														"\"YES\""),
-						  new ClassAdStructAttr("StreamOut",
-														ClassAdAttrType.value4, 
-														"FALSE"),
-						  new ClassAdStructAttr("StreamErr",
-														ClassAdAttrType.value4, 
-														"FALSE"),
-						  new ClassAdStructAttr("TransferOutput",
-														ClassAdAttrType.value2, 
-														projectOutput),
- 						  new ClassAdStructAttr("TransferOutputRemaps",
- 														ClassAdAttrType.value2, 
- 														projectOutputRemaps),
-						  new ClassAdStructAttr("Environment",
-														ClassAdAttrType.value2, 
-														envSettings),
-						  new ClassAdStructAttr("x509userproxy", 
-														ClassAdAttrType.value3, 
-														proxyLocation)
-					 };
-				
-				int[] jobstuff=condorSubmit(userName,
-													 meshExec,
-													 meshArgs,
-													 workDir,
-													 collectorUrl,
-													 extraAttributes,
-													 files);				
-				writeCondorJobId(workDir, meshgenId,jobstuff[0],jobstuff[1]);
+		  String workDir=generateWorkDir(userName,projectName,timeStamp);
+		  
+		  createGeometryFiles(workDir,projectName,faults,layers);
+		  String outputDestDir=generateOutputDestDir(userName,
+																	projectName,
+																	timeStamp);
+		  
+		  //This is the output stuff.
+		  String projectOutput=createMeshProjectOutput(projectName);
+		  String projectOutputRemaps=createMeshProjectOutputRemaps(projectName,workDir);
+		  
+		  String baseUrl=generateBaseUrl(userName,projectName,timeStamp);
+		  
+		  
+		  //--------------------------------------------------
+		  //These are the files needed for uploading.
+		  //Each fault has .flt, .params, and .sld file (hence 3* size).
+		  //Each layer has a .sld file and a .materials file (hence 2*size).
+		  //Finally, there is one group file for all the metadata (hence +1).
+		  //--------------------------------------------------
+		  int fileSize=3*faults.length+2*layers.length+1;
+		  File[] files=new File[fileSize];
+		  
+		  int iter=0;
+		  for(int i=0;i<faults.length;i++) {
+				files[iter]=new File(workDir+"/"+faults[i].getFaultName()+".flt");
+				iter++;
+				files[iter]=new File(workDir+"/"+faults[i].getFaultName()+".params");
+				iter++;
+				files[iter]=new File(workDir+"/"+faults[i].getFaultName()+".sld");
+				iter++;
 		  }
-		  catch (Exception ex) {
-				System.err.println(ex.getMessage());
-				//ex.printStackTrace();
+				
+		  for (int i=0;i<layers.length;i++) {
+				files[iter]=new File(workDir+"/"+layers[i].getLayerName()+".sld");
+				iter++;
+				files[iter]=new File(workDir+"/"+layers[i].getLayerName()+".materials");
+				iter++;
+		  }
+		  //This is the group file.  Only one of these.
+		  files[iter]=new File(workDir+"/"+projectName+".grp");
+		  
+		  for(int i=0;i<faults.length;i++) {
+					 System.out.println("Input Files:"+files[i]);
 		  }
 		  
+		  //--------------------------------------------------
+		  //Create the classadds
+		  //--------------------------------------------------
+		  ClassAdStructAttr[] extraAttributes =
+				{
+					 new ClassAdStructAttr("GridResource", ClassAdAttrType.value3,
+												  gridResourceVal),
+					 new ClassAdStructAttr("Out", ClassAdAttrType.value3,
+												  workDir+"/"+"autoref.out"),
+					 new ClassAdStructAttr("UserLog", ClassAdAttrType.value3,
+												  workDir+"/"+"autoref.log"),
+					 new ClassAdStructAttr("Err", ClassAdAttrType.value3,
+												  workDir+"/"+"autoref.err"),
+					 new ClassAdStructAttr("TransferExecutable",
+												  ClassAdAttrType.value4, 
+												  "FALSE"),
+					 new ClassAdStructAttr("when_to_transfer_output",
+												  ClassAdAttrType.value2, 
+												  "\"ON_EXIT\""),
+					 new ClassAdStructAttr("should_transfer_files",
+														ClassAdAttrType.value2, 
+												  "\"YES\""),
+					 new ClassAdStructAttr("StreamOut",
+												  ClassAdAttrType.value4, 
+												  "FALSE"),
+					 new ClassAdStructAttr("StreamErr",
+														ClassAdAttrType.value4, 
+												  "FALSE"),
+					 new ClassAdStructAttr("TransferOutput",
+														ClassAdAttrType.value2, 
+												  projectOutput),
+					 new ClassAdStructAttr("TransferOutputRemaps",
+												  ClassAdAttrType.value2, 
+												  projectOutputRemaps),
+					 new ClassAdStructAttr("Environment",
+												  ClassAdAttrType.value2, 
+												  envSettings),
+					 new ClassAdStructAttr("x509userproxy", 
+												  ClassAdAttrType.value3, 
+												  proxyLocation)
+				};
+		  
+		  int[] jobstuff=condorSubmit(userName,
+												meshExec,
+												meshArgs,
+												workDir,
+												collectorUrl,
+												extraAttributes,
+												files);				
+		  writeCondorJobId(workDir, meshgenId,jobstuff[0],jobstuff[1]);
 		  return getTheMeshGenReturnFiles(userName,projectName,timeStamp); 
     }
 
@@ -343,30 +336,25 @@ public class GeoFESTGridService extends GeoFESTService{
 		  int[] jobstuff=new int[2];		  
 		  jobstuff[0]=0;
 		  jobstuff[1]=0;
-		  try {
-				//Do the condor submission stuff
-				Transaction xact = createNewTransaction(collectorUrl);
-				xact.begin(30);
-				int clusterId = xact.createCluster();
-				int jobId = xact.createJob(clusterId);
-				
-				jobstuff[0]=clusterId;
-				jobstuff[1]=jobId;
-				
-	    //Create a classad for the job.
-				
-	    //Submit it all.
-				xact.submit(clusterId, jobId, userName, universeType,
-								exec, args,"(TRUE)", extraAttributes, files);
-				xact.commit();
-	    
-				getSchedd().requestReschedule();				
-		  }
-	catch (Exception ex) {
-		      ex.printStackTrace();
-	}
-	
-	return jobstuff;
+		  //Do the condor submission stuff
+		  Transaction xact = createNewTransaction(collectorUrl);
+		  xact.begin(30);
+		  int clusterId = xact.createCluster();
+		  int jobId = xact.createJob(clusterId);
+		  
+		  jobstuff[0]=clusterId;
+		  jobstuff[1]=jobId;
+		  
+		  //Create a classad for the job.
+		  
+		  //Submit it all.
+		  xact.submit(clusterId, jobId, userName, universeType,
+						  exec, args,"(TRUE)", extraAttributes, files);
+		  xact.commit();
+		  
+		  getSchedd().requestReschedule();				
+		  
+		  return jobstuff;
     }
     
     public void setSchedd(Schedd schedd) {
@@ -397,102 +385,96 @@ public class GeoFESTGridService extends GeoFESTService{
 		  int[] jobstuff=new int[2];
 		  jobstuff[0]=0;
 		  jobstuff[1]=0;
+
+		  //Set up the stuff.
+		  String workDir=generateWorkDir(userName,projectName,timeStamp);
+		  //			createGeoFESTInputFile(workDir,projectName,gpb);
+				
+		  //Create the input file locally.  This will also generate the 
+		  //output destination directory.
+		  String[] geoArgs=prefabGeoFESTCall(userName,
+														 projectName,
+														 gpb,
+														 timeStamp,
+														 "geotrans");
+		  setArgs(geoArgs);
+		  run();
 		  
-		  try {
-				//Set up the stuff.
-				String workDir=generateWorkDir(userName,projectName,timeStamp);
-				//			createGeoFESTInputFile(workDir,projectName,gpb);
-				
-				//Create the input file locally.  This will also generate the 
-				//output destination directory.
-				String[] geoArgs=prefabGeoFESTCall(userName,
-															  projectName,
-															  gpb,
-															  timeStamp,
-															  "geotrans");
-				setArgs(geoArgs);
-				run();
-				
-
-				//String outputDestDir=generateOutputDestDir(userName,projectName,timeStamp);
-			  				
-				//This is the condor-formatted output file list.  These are files to be
-				//transferred back to the server.
-				String projectOutput=createGeoFESTOutput(projectName);
-				String projectOutputRemaps=createGeoFESTOutputRemaps(projectName,workDir);
-
-				String baseUrl=generateBaseUrl(userName,projectName,timeStamp);
-				//				String envPathString=generateEnvPathString(userHome);
-
-				//--------------------------------------------------
-				//These are the files needed for uploading.
-				//--------------------------------------------------
-				File[] files=new File[1];
-				files[0]=new File(workDir+"/"+projectName+".inp");
-				System.out.println("File is "+files[0].toString());
-
-				//--------------------------------------------------
-				//Create the classadds
-				//--------------------------------------------------
-				ClassAdStructAttr[] extraAttributes =
-					 {
-						  new ClassAdStructAttr("GridResource", ClassAdAttrType.value3,
-														gridResourceVal),
-						  new ClassAdStructAttr("Out", ClassAdAttrType.value3,
-														workDir+"/"+projectName+".stdout"),
-						  new ClassAdStructAttr("UserLog", ClassAdAttrType.value3,
-														workDir+"/"+projectName+".log"),
-						  new ClassAdStructAttr("Err", ClassAdAttrType.value3,
-														workDir+"/"+projectName+".err"),
-						  new ClassAdStructAttr("TransferExecutable",
-														ClassAdAttrType.value4, 
-														"FALSE"),
-						  new ClassAdStructAttr("when_to_transfer_output",
-														ClassAdAttrType.value2, 
-														"\"ON_EXIT\""),
-						  new ClassAdStructAttr("should_transfer_files",
-														ClassAdAttrType.value2, 
-														"\"YES\""),
-						  new ClassAdStructAttr("StreamOut",
-														ClassAdAttrType.value4, 
-														"FALSE"),
-						  new ClassAdStructAttr("StreamErr",
-														ClassAdAttrType.value4, 
-														"FALSE"),
-						  new ClassAdStructAttr("TransferOutput",
-														ClassAdAttrType.value2, 
-														projectOutput),
-						  new ClassAdStructAttr("TransferOutputRemaps",
-														ClassAdAttrType.value2, 
-														projectOutputRemaps),
-						  new ClassAdStructAttr("Environment",
-														ClassAdAttrType.value2, 
-														envSettings),
-						  new ClassAdStructAttr("GlobusRSL",
-														ClassAdAttrType.value2, 
-														"\"(maxWallTime=120)(maxTime=120)\""),
-						  new ClassAdStructAttr("x509userproxy", 
-														ClassAdAttrType.value3, 
-														proxyLocation)
-					 };
-				
-				jobstuff=condorSubmit(userName,
-											 exec,
-											 args,
-											 workDir,
-											 collectorUrl,
-											 extraAttributes,
-											 files);
-				writeCondorJobId(workDir,geofestId,jobstuff[0],jobstuff[1]);
-		  }
-		  catch (Exception ex) {
-				System.err.println(ex.getMessage());
-				//				ex.printStackTrace();
-		  }
-
+		  
+		  //String outputDestDir=generateOutputDestDir(userName,projectName,timeStamp);
+		  
+		  //This is the condor-formatted output file list.  These are files to be
+		  //transferred back to the server.
+		  String projectOutput=createGeoFESTOutput(projectName);
+		  String projectOutputRemaps=createGeoFESTOutputRemaps(projectName,workDir);
+		  
+		  String baseUrl=generateBaseUrl(userName,projectName,timeStamp);
+		  //				String envPathString=generateEnvPathString(userHome);
+		  
+		  //--------------------------------------------------
+		  //These are the files needed for uploading.
+		  //--------------------------------------------------
+		  File[] files=new File[1];
+		  files[0]=new File(workDir+"/"+projectName+".inp");
+		  System.out.println("File is "+files[0].toString());
+		  
+		  //--------------------------------------------------
+		  //Create the classadds
+		  //--------------------------------------------------
+		  ClassAdStructAttr[] extraAttributes =
+				{
+					 new ClassAdStructAttr("GridResource", ClassAdAttrType.value3,
+												  gridResourceVal),
+					 new ClassAdStructAttr("Out", ClassAdAttrType.value3,
+												  workDir+"/"+projectName+".stdout"),
+					 new ClassAdStructAttr("UserLog", ClassAdAttrType.value3,
+												  workDir+"/"+projectName+".log"),
+					 new ClassAdStructAttr("Err", ClassAdAttrType.value3,
+												  workDir+"/"+projectName+".err"),
+					 new ClassAdStructAttr("TransferExecutable",
+												  ClassAdAttrType.value4, 
+												  "FALSE"),
+					 new ClassAdStructAttr("when_to_transfer_output",
+												  ClassAdAttrType.value2, 
+												  "\"ON_EXIT\""),
+					 new ClassAdStructAttr("should_transfer_files",
+												  ClassAdAttrType.value2, 
+												  "\"YES\""),
+					 new ClassAdStructAttr("StreamOut",
+												  ClassAdAttrType.value4, 
+												  "FALSE"),
+					 new ClassAdStructAttr("StreamErr",
+												  ClassAdAttrType.value4, 
+												  "FALSE"),
+					 new ClassAdStructAttr("TransferOutput",
+												  ClassAdAttrType.value2, 
+												  projectOutput),
+					 new ClassAdStructAttr("TransferOutputRemaps",
+												  ClassAdAttrType.value2, 
+												  projectOutputRemaps),
+					 new ClassAdStructAttr("Environment",
+												  ClassAdAttrType.value2, 
+												  envSettings),
+					 new ClassAdStructAttr("GlobusRSL",
+												  ClassAdAttrType.value2, 
+												  "\"(maxWallTime=120)(maxTime=120)\""),
+					 new ClassAdStructAttr("x509userproxy", 
+												  ClassAdAttrType.value3, 
+												  proxyLocation)
+				};
+		  
+		  jobstuff=condorSubmit(userName,
+										exec,
+										args,
+										workDir,
+										collectorUrl,
+										extraAttributes,
+										files);
+		  writeCondorJobId(workDir,geofestId,jobstuff[0],jobstuff[1]);
+		  
 		  return getAllTheGeoFESTFiles(userName, projectName, timeStamp);
     }
-
+	 
 	 /**
 	  * 
 	  */

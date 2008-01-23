@@ -20,7 +20,7 @@
 	 <!--These can be left as is for most builds, if you 
 		  have unpacked everything in $HOME, are using gridsphere,
 		  and done have any usualy .globus requirements.
-		  -->
+		-->
 	 <!--==================================================-->
     <project.home>${env.HOME}/QuakeSim2</project.home>
 	 <tomcat.bin.perm>755</tomcat.bin.perm>
@@ -28,26 +28,31 @@
 	 <yui.version>yui_0.12.2</yui.version>
     <catalina.home>/${env.HOME}/QuakeSim2/portal_deploy/${tomcat.version}/</catalina.home>
     <tomcat.base.dir>${env.HOME}/QuakeSim2/portal_deploy/${tomcat.version}/</tomcat.base.dir>
-	 <dot.globus.home>${env.HOME}/.globus/</dot.globus.home>
 	 <gridsphere.version>gridsphere-2.1.4</gridsphere.version>
-	 <!--These are needed for backward compatiblity with old build system-->
+	 
+    <user.home>${user.home}</user.home>
 
-       <user.home>${user.home}</user.home>
-       <analyze_tseri.service.url>${host.base.url}/analyze-tseri-exec</analyze_tseri.service.url>
-       <disloc.service.url>${host.base.url}/dislocexec</disloc.service.url>
-       <geofest.service.url>${host.base.url}/geofestexec</geofest.service.url>
-       <queue.service.url>${host.base.url}/QueueExec</queue.service.url>
-       <KmlGenerator.service.url>${host.base.url}/KmlGenerator</KmlGenerator.service.url>
-       <queue.service.url>${host.base.url}/queueservice</queue.service.url>
-       <rdahmm.service.url>${host.base.url}/rdahmmexec</rdahmm.service.url>
-       <bin.path>${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec</bin.path>
-		 
-		 <geofest.bin.home>${env.HOME}/GEMCodes/GeoFEST/bin/</geofest.bin.home>
-		 <rdahmm.bin.home>${env.HOME}/GEMCodes/RDAHMM2/bin/</rdahmm.bin.home>
-		 <disloc.bin.home>${env.HOME}/GEMCodes/Disloc/</disloc.bin.home>
-		 <simplex.bin.home>${env.HOME}/GEMCodes/Simplex/</simplex.bin.home>
+	 <!-- These are the urls for the various services -->
+    <analyze_tseri.service.url>${host.base.url}/analyze-tseri-exec</analyze_tseri.service.url>
+    <disloc.service.url>${host.base.url}/dislocexec</disloc.service.url>
+    <geofest.service.url>${host.base.url}/geofestexec</geofest.service.url>
+    <queue.service.url>${host.base.url}/QueueExec</queue.service.url>
+    <KmlGenerator.service.url>${host.base.url}/KmlGenerator</KmlGenerator.service.url>
+    <queue.service.url>${host.base.url}/queueservice</queue.service.url>
+    <rdahmm.service.url>${host.base.url}/rdahmmexec</rdahmm.service.url>
+	
+	 <!-- These are locations of 'third party' binary files -->
+    <bin.path>${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec</bin.path>
+	 <geofest.bin.home>${env.HOME}/GEMCodes/GeoFEST/bin/</geofest.bin.home>
+	 <rdahmm.bin.home>${env.HOME}/GEMCodes/RDAHMM2/bin/</rdahmm.bin.home>
+	 <disloc.bin.home>${env.HOME}/GEMCodes/Disloc/</disloc.bin.home>
+	 <simplex.bin.home>${env.HOME}/GEMCodes/Simplex/</simplex.bin.home>
+
+	 <!-- Globus Stuff -->
+	 <grid.proxy.location>/tmp/x509up_u501</grid.proxy.location>
+	 <dot.globus.home>${env.HOME}/.globus/</dot.globus.home>
   </properties>
-
+  
   <!-- The rest of this should not be edited --> 
   <modelVersion>4.0.0</modelVersion>
   <groupId>quakesim</groupId>
@@ -83,12 +88,13 @@
   </repositories>
  
   <modules>
+	 <!-- Various set up stuff -->
 	 <module>portal_deploy</module>
     <module>containers</module>
     <module>lnf4portal</module>
     <module>GenericQuakeSimProject</module>
     
-    <!--These are the portlets -->
+    <!--These are the portlets.  Add new ones here. -->
     <module>portlets/DailyRDAHMM-portlet</module>
     <module>portlets/Disloc-portlet</module>
     <module>portlets/GeoFESTGrid-portlet</module>
@@ -99,7 +105,7 @@
     <module>portlets/Simplex-portlet</module>
     <module>portlets/StationMonitor-portlet</module>
 
-    <!-- These are services -->
+    <!-- These are services.  Add new ones here. -->
     <module>ExecutionServices/AnalyzeTseriService</module>
     <module>ExecutionServices/AntVisco</module>
     <module>ExecutionServices/DislocService</module>
