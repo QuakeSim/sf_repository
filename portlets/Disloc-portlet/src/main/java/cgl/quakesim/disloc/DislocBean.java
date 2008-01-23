@@ -2034,7 +2034,7 @@ public class DislocBean extends GenericSopacBean {
 				}
 				Date date1=new Date(mb1.getCreationDate());
 				Date date2=new Date(mb2.getCreationDate());			  
-				if(date2.before(date1)) first=i;
+				if(date2.after(date1)) first=i;
 		  }
 
 		  return first;
