@@ -285,7 +285,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  mega.setUserName(userName);
 		  mega.setJobUIDStamp(jobStamp);
 		  mega.setMeshRunBean(mrb);
-		  mega.setGeoFESTBaseUrlForJnlp(getGeoFESTBaseUrlForJnlp());
+		  //		  mega.setGeoFESTBaseUrlForJnlp(getGeoFESTBaseUrlForJnlp());
+		  mega.setGeoFESTBaseUrlForJnlp(getBASE64(geoFESTBaseUrl));
  		  mega.setJnlpLayers(getMyLayersParamForJnlp(null, projectName));
  		  mega.setJnlpFaults(getMyFaultsParamForJnlp(null,projectName));
 		  mega.setCreationDate(new Date().toString());
@@ -1956,32 +1957,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
 						  // System.out.println("Status:"+mega.getJobUIDStamp()+" "+statusString);
 						  // mega.setMeshStatus(statusString);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-						  
 						  tmpList.add(mega);
 					 }
 					 db.close();
@@ -2452,11 +2427,12 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	 }
 
 	 public String getGeoFESTBaseUrl() {
-		  return geoFESTBaseUrl;
+		  return this.geoFESTBaseUrl;
 	 }
 
-	 public void setGeoFESTBaseUrl(String geoFESTBaseURL){
+	 public void setGeoFESTBaseUrl(String geoFESTBaseUrl){
 		  this.geoFESTBaseUrl=geoFESTBaseUrl;
+		  System.out.println("GFBaseURL Set:"+this.geoFESTBaseUrl);
 	 }
 
 	 /**
