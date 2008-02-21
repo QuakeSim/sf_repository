@@ -32,6 +32,9 @@ cd $BUILD_DIR
 source ./rdahmmexec-deploy.sh
 
 cd $BUILD_DIR
+source ./daily-rdahmmexec-deploy.sh
+
+cd $BUILD_DIR
 source ./gnuplotexec-deploy.sh
 
 # Not installed, probably obsolete.

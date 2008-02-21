@@ -40,6 +40,7 @@
     <KmlGenerator.service.url>${host.base.url}/KmlGenerator</KmlGenerator.service.url>
     <queue.service.url>${host.base.url}/queueservice</queue.service.url>
     <rdahmm.service.url>${host.base.url}/rdahmmexec</rdahmm.service.url>
+	 <daily_rdahmm.service.url>${host.base.url}/daily_rdahmmexec</daily_rdahmm.service.url>
 	
 	 <!-- These are locations of 'third party' binary files -->
     <bin.path>${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec</bin.path>

@@ -36,6 +36,7 @@ export WEB_SERVICES_HOME=$BUILD_DIR/WebServices
 # Here is the AntVisco execution service.
 export ANT_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/AntVisco
 export RDAHMM_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/RDAHMMService
+export DAILY_RDAHMM_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/DailyRDAHMMService
 export STFILTER_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/STFilterService
 export GNUPLOT_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/GnuplotService
 export ANALYZE_TSERI_EXECUTION_HOME=$BUILD_DIR/ExecutionServices/AnalyzeTseriService
