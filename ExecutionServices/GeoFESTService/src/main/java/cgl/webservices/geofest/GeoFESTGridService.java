@@ -36,6 +36,30 @@ import condor.ClassAdStructAttr;
 import condor.FileInfo;
 import birdbath.*;
 
+//Google stuff
+import com.google.gdata.client.*;
+import com.google.gdata.client.youtube.*;
+import com.google.gdata.data.*;
+import com.google.gdata.data.geo.impl.*;
+import com.google.gdata.data.media.*;
+import com.google.gdata.data.media.mediarss.*;
+import com.google.gdata.data.youtube.*;
+import com.google.gdata.data.extensions.*;
+import com.google.gdata.util.*;
+
+import com.google.gdata.client.*;
+import com.google.gdata.data.*;
+import com.google.gdata.util.*;
+import java.io.IOException;
+import java.net.URL;
+
+//Google Calendar stuff
+import com.google.gdata.client.calendar.*;
+import com.google.gdata.data.acl.*;
+import com.google.gdata.data.calendar.*;
+import com.google.gdata.data.extensions.*;
+
+
 public class GeoFESTGridService extends GeoFESTService{    
 
     //Set the universe type for condor.  Probably OK to assume it is always
@@ -317,7 +341,21 @@ public class GeoFESTGridService extends GeoFESTService{
 												extraAttributes,
 												files);				
 		  writeCondorJobId(workDir, meshgenId,jobstuff[0],jobstuff[1]);
-		  return getTheMeshGenReturnFiles(userName,projectName,timeStamp); 
+		  MeshRunBean mrb=getTheMeshGenReturnFiles(userName,projectName,timeStamp); 		  
+
+		  //Update the blog but don't panic if it fails.
+		  String content=createMeshRunContent(faults, mrb);
+		  String title=createMeshRunTitle(userName,"MeshRun",projectName);
+		  try {
+				writeToBlog(userName,title,content);
+				writeToCalendar(title,content);
+		  }
+		  catch (Exception ex) {
+				System.out.println("Can't blog...");
+				ex.printStackTrace();
+		  }
+
+		  return mrb;
     }
 
 	 protected String generateEnvPathString(String userHome) {
@@ -399,7 +437,6 @@ public class GeoFESTGridService extends GeoFESTService{
 														 "geotrans");
 		  setArgs(geoArgs);
 		  run();
-		  
 		  
 		  //String outputDestDir=generateOutputDestDir(userName,projectName,timeStamp);
 		  
@@ -661,5 +698,72 @@ public class GeoFESTGridService extends GeoFESTService{
 												 String projectId,
 												 String jobStamp) {
 		  //Unimplemented.
+	 }
+
+	 protected String createMeshRunContent(Fault[] fault, MeshRunBean mrb) {
+		  String content="";
+		  String br="<br>";
+		  for(int i=0;i<fault.length;i++) {
+				content+="Fault:"+fault[i].getFaultName()+br;
+		  }
+		  content+="nodeUrl:"+makeUrl(mrb.getNodeUrl())+br;
+		  content+="autoref:"+makeUrl(mrb.getAutoref())+br;
+		  content+="tetraUrl:"+makeUrl(mrb.getTetraUrl())+br;
+		  content+="indexUrl:"+makeUrl(mrb.getIndexUrl())+br;
+		  return content;
+	 }
+
+	 protected String makeUrl(String urlString) {
+		  return "<a href=\""+urlString+"\">"+urlString+"</a>";
+	 }
+  
+
+	 protected String createMeshRunTitle(String userName,
+													 String jobType, 
+													 String projectName) {
+		  String title=jobType+":"+projectName;
+		  return title;
+	 }
+
+	 protected void writeToCalendar(String title, 
+											  String content) 
+		  throws Exception {
+		  URL postUrl =
+				new URL("http://www.google.com/calendar/feeds/"
+						  +gServiceUserName
+						  +"/private/full");
+		  CalendarEventEntry myEntry = new CalendarEventEntry();
+		  
+		  myEntry.setTitle(new PlainTextConstruct(title));
+		  myEntry.setContent(new PlainTextConstruct(content));
+								 
+		  DateTime startTime = new DateTime(new Date());
+		  When eventTimes = new When();
+		  eventTimes.setStartTime(startTime);
+		  myEntry.addTime(eventTimes);
+		  
+		  // Send the request and receive the response:
+		  CalendarEventEntry insertedEntry = calendarService.insert(postUrl, myEntry);
+
+	 }
+
+	 protected void writeToBlog(String authorName,
+										 String title,
+										 String content) throws Exception {
+		  String br="<br>";
+
+		  // Create the entry to insert
+		  Entry myEntry = new Entry();
+		  myEntry.setTitle(new PlainTextConstruct(title));
+		  myEntry.setContent(new PlainTextConstruct(content));
+		  Person author = new Person(authorName, null, gServiceUserName);
+		  myEntry.getAuthors().add(author);
+		  
+		  // Ask the service to insert the new entry
+		  URL postUrl = new URL("http://www.blogger.com/feeds/" 
+										+ googleBlogId 
+										+ "/posts/default");
+		  googleService.insert(postUrl, myEntry);
+		  return;
 	 }
 }

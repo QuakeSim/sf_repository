@@ -23,6 +23,29 @@ import java.text.*;
 //Needed for a unique id
 import java.rmi.server.UID;
 
+//Import Google GData
+import com.google.gdata.client.*;
+import com.google.gdata.client.youtube.*;
+import com.google.gdata.data.*;
+import com.google.gdata.data.geo.impl.*;
+import com.google.gdata.data.media.*;
+import com.google.gdata.data.media.mediarss.*;
+import com.google.gdata.data.youtube.*;
+import com.google.gdata.data.extensions.*;
+import com.google.gdata.util.*;
+
+import com.google.gdata.client.*;
+import com.google.gdata.data.*;
+import com.google.gdata.util.*;
+import java.io.IOException;
+import java.net.URL;
+
+//Google Calendar stuff
+import com.google.gdata.client.calendar.*;
+import com.google.gdata.data.acl.*;
+import com.google.gdata.data.calendar.*;
+import com.google.gdata.data.extensions.*;
+
 
 /**
  * A simple wrapper for Ant.
@@ -50,7 +73,16 @@ public class GeoFESTService extends AntVisco implements Runnable{
     //Some useful values
     String comma=",";
     String quote="\"";
-    
+
+	 //These are google service-related things.
+	 String clientId;
+	 String developerKey;
+	 GoogleService googleService;
+	 String gServiceUserName;
+	 String gServiceUserPass;
+	 String googleBlogId;
+	 CalendarService calendarService;
+
     /**
      * This is a main() for testing.
      */
@@ -146,7 +178,15 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  antTarget=properties.getProperty("ant.target");
 		  baseOutputDestDir=properties.getProperty("output.dest.dir");
 		  queueServiceUrl=properties.getProperty("queue.service.url");
-		  
+		  clientId=properties.getProperty("google.client.id");
+		  developerKey=properties.getProperty("google.developer.key");
+		  gServiceUserName=properties.getProperty("google.user.name");
+		  gServiceUserPass=properties.getProperty("google.user.pass");
+		  googleBlogId=properties.getProperty("google.blog.id");
+
+		  //Instantiate the Google Service
+		  instantiateGoogleService("blogger",gServiceUserName,gServiceUserPass);
+		  instantiateCalendarService();
     }
     
     public GeoFESTService() throws Exception{
@@ -1403,6 +1443,26 @@ public class GeoFESTService extends AntVisco implements Runnable{
         args[10]=buildFilePath;
         args[11]=targetName;
 		  return args;
+	 }
+
+	 /**
+	  * Instantiate google service, typically Blogger.
+	  */
+	 public void instantiateGoogleService(String serviceName,
+													  String serviceUserName,
+													  String serviceUserPass) 
+		  throws Exception {
+		  googleService=new GoogleService(serviceName,"");
+		  googleService.setUserCredentials(serviceUserName,
+													  serviceUserPass);
+		  
+	 }
+
+	 public void instantiateCalendarService() 
+		  throws Exception {
+		  calendarService=new CalendarService(clientId);
+		  calendarService.setUserCredentials(gServiceUserName,gServiceUserPass);
+		  
 	 }
 }
 

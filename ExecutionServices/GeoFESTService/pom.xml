@@ -88,6 +88,11 @@
             <url>http://www.crisisgrid.org/maven2</url>
         </repository>
         <repository>
+            <id>crisisgrid-maven-legacy-repo</id>
+            <url>http://www.crisisgrid.org/maven</url>
+				<layout>legacy</layout>
+        </repository>
+        <repository>
             <id>ogce-maven-repo</id>
             <url>http://www.collab-ogce.org/maven2</url>
         </repository>
@@ -184,27 +189,133 @@
              <version>1.6.5</version>
         </dependency>
 
-        <!--
-        SOPAC Jars
-        -->
-<!--
-        <dependency>
-             <groupId>SOPAC</groupId>
-             <artifactId>GRWS_SubmitQuery</artifactId>
-             <version>4.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-             <groupId>SOPAC</groupId>
-             <artifactId>grwsXmlBeansSchemas</artifactId>
-             <version>1.0</version>
-        </dependency>
--->
 		  <dependency>
 			 <groupId>cgl.webservices</groupId>
 			 <artifactId>AntVisco</artifactId>
 			 <version>1.0-SNAPSHOT</version>
         </dependency>
+
+		  <!-- GData Jars -->
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-appsforyourdomain</artifactId>
+			 <version>1.0</version>
+        </dependency>
+
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-appsforyourdomain-meta</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-base</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-calendar</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-client</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-client-meta</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-codesearch</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-codesearch-meta</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-contacts</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-contacts-meta</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-core</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-docs</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-docs-meta</artifactId>
+			 <version>1.0</version>
+        </dependency>		  
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-media</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-photos</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-photos-meta</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-spreadsheet</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-spreadsheet-meta</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-youtube</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-youtube-meta</artifactId>
+			 <version>1.0</version>
+        </dependency>
+
 
        </dependencies>
 
