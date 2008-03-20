@@ -49,15 +49,9 @@
             </copy>
 
 				<!-- Copy the theme -->
-				<!--
 				<copy overwrite="true"
 						todir="${catalina.home}/webapps/gridsphere/themes/default">
 				  <fileset dir="${catalina.home}/webapps/gridsphere/themes/monochrome"/>
-            </copy>
-				-->
-				<copy overwrite="true"
-						todir="${catalina.home}/webapps/gridsphere/themes/default">
-				  <fileset dir="${basedir}/themes"/>
             </copy>
 
 				<!-- Copy the images -->
@@ -83,7 +77,6 @@
 						todir="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/">
 				  <fileset dir="${basedir}/CustomPortal/"/>
             </copy>
-
           </tasks>
         </configuration>
         <goals>

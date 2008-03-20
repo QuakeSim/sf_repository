@@ -1,0 +1,24 @@
+/* Stylesheet */
+/*
+Part of the Gridsphere modern theme
+Author: Luca De Marco (demarco@dimi.uniud.it)
+Version: $Id: layout.css 4271 2005-09-26 10:26:24Z luca $
+*/
+
+/*-------------------------------------------------
+    rules for table-like layout
+-------------------------------------------------*/
+
+div.column {
+float: left;
+}
+
+div.row {
+/*clear: both*/;
+}
+
+div.table {
+clear: both;
+}
+
+
