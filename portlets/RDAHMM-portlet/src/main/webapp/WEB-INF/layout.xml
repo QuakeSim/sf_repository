@@ -1,4 +1,4 @@
-<portlet-tabbed-pane>
+<portlet-tabbed-pane selected="0" style="sub-menu">
     <portlet-tab label="RDAHMM-Portlet">
         <title lang="en">RDAHMM-Portlet</title>
         <portlet-tabbed-pane style="sub-menu">

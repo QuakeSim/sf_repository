@@ -56,7 +56,7 @@
             </copy>
 				-->
 				<copy overwrite="true"
-						todir="${catalina.home}/webapps/gridsphere/themes/default">
+						todir="${catalina.home}/webapps/gridsphere/themes/">
 				  <fileset dir="${basedir}/themes"/>
             </copy>
 

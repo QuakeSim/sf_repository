@@ -93,7 +93,7 @@ a.tab-sub-menu {
     text-decoration:none;
     font-size:11px;
     color: #000000;
-   border-right: 1px solid black;
+   border-right: 1px solid #ffffff;
 	padding-right: 5px;
 }
 
@@ -118,7 +118,7 @@ a.tab-sub-menu:active {
 a.tab-sub-menu-active {
     font-size:11px;
     color: white;
-   border-right: 1px solid black;
+   border-right: 1px solid #ffffff;
 	padding-right: 5px;
 }
 
