@@ -144,6 +144,19 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
                   </row-layout>
                 </table-layout>
               </portlet-tab>
+              <portlet-tab label="Pick-Location">
+                <title lang="en">Pick Location</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="Disloc-pick-location-PF">
+                                <portlet-class>Disloc-portlet#pick-location-portlet</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+
               <portlet-tab label="Fetch-disloc-results">
                 <title lang="en">Fetch Disloc Results</title>
                 <table-layout>

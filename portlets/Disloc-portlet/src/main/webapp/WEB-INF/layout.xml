@@ -38,6 +38,18 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
+              <portlet-tab label="Pick-Location">
+                <title lang="en">Pick Location</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="Disloc-pick-location-PF">
+                                <portlet-class>Disloc-portlet#pick-location-portlet</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
         </portlet-tabbed-pane>
     </portlet-tab>
 </portlet-tabbed-pane>

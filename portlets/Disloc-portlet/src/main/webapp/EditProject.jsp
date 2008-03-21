@@ -21,11 +21,13 @@
 <link rel="stylesheet" type="text/css" 
 	href='<%= request.getContextPath() + "/stylesheet.css" %>'> 
  
-<title>Edit Project</title> 
+<title>Edit Project</title>
+
 </head> 
-<body> 
+
+<body>
+
 <script language="JavaScript"> 
- 
 function selectOne(form , button) 
 { 
   turnOffRadioForForm(form); 
