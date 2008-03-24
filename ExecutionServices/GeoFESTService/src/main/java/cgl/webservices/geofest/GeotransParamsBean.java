@@ -57,6 +57,10 @@ public class GeotransParamsBean {
 	 String elastic2="0";
 	 String elasOut2="0";
 	 String visco="1";
+	 String velblock="1 0.0";
+	 //Ramp BC
+	 String[] ramp_bc;
+
 	
 	public void reset(String projectName) {
 		number_space_dimensions="3";
@@ -428,5 +432,21 @@ public class GeotransParamsBean {
 	 
 	 public String getVisco() {
 		  return visco;
+	 }
+
+	 public String[] getRampBC() {
+		  return ramp_bc;  
+	 }
+
+	 public void setRampBC(String[] ramp_bc) {
+		  java.lang.System.arraycopy(ramp_bc,0,this.ramp_bc,0,ramp_bc.length);
+	 }
+	 
+	 public String getVelblock() {
+		  return velblock;
+	 }
+	 
+	 public void setVelblock(String velblock) {
+		  this.velblock=velblock;
 	 }
 }

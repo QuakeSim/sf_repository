@@ -99,14 +99,6 @@ function dataTableSelectOneRadio(radio) {
 						 </h:outputLink>
 					</h:column>
 
-					<h:column>
-					<f:facet name="header">
-						    <h:outputText id="blaheoru12" value="Standard Out and Error"/>
-				   </f:facet>
-				       <h:outputLink id="blaheoru13" value="#{summaryBean.resultsBean.stdoutUrl}" target="_blank">
-						    <h:outputText id="blaheoru14" value="Stdout"/>
-						 </h:outputLink>
-					</h:column>
 				<h:column>
 					<f:facet name="header">
 						<h:outputText  id="blaheoru15" escape="false" value="<b>Kml file</b>" />
@@ -130,7 +122,16 @@ function dataTableSelectOneRadio(radio) {
 							<h:commandButton id="DeleteSummary" value="Delete"
 												  actionListener="#{DislocBean.toggleDeleteProjectSummary}"/>
 						</h:panelGroup>
+
 				</h:column>					
+					<h:column>
+					<f:facet name="header">
+						    <h:outputText id="blaheoru12" value="Stdout"/>
+				   </f:facet>
+				       <h:outputLink id="blaheoru13" value="#{summaryBean.resultsBean.stdoutUrl}" target="_blank">
+						    <h:outputText id="blaheoru14" value="Stdout"/>
+						 </h:outputLink>
+					</h:column>
 					
 			</h:dataTable>
       </h:panelGrid>

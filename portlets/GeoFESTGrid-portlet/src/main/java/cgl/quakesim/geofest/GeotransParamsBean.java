@@ -80,6 +80,17 @@ public class GeotransParamsBean  implements java.io.Serializable {
 
     private java.lang.String west_bc_value="0 0. 0. 0. 1.";
 
+	 //These are new parameters
+	 String elastic1="1";
+	 String elasOut1="1";
+	 String refine="0";
+	 String elastic2="0";
+	 String elasOut2="0";
+	 String visco="1";
+	 String velblock="1 0.0";
+	 //Ramp BC
+	 String[] ramp_bc=null;
+
 
 	 /**
 	  * Provide with default values.
@@ -1384,5 +1395,68 @@ public class GeotransParamsBean  implements java.io.Serializable {
           new  org.apache.axis.encoding.ser.BeanDeserializer(
             _javaType, _xmlType, typeDesc);
     }
+	 public String getElastic1() {
+		  return elastic1;
+	 }
+
+	 public void setElastic1(String elastic1) {
+		  this.elastic1=elastic1;
+	 }
+
+	 public String getElastic2() {
+		  return elastic2;
+	 }
+
+	 public void setElastic2(String elastic1) {
+		  this.elastic2=elastic2;
+	 }
+
+	 public String getRefine() {
+		  return refine;
+	 }
+	 
+	 public void setRefine(String refine) {
+		  this.refine=refine;
+	 }
+
+	 public String getElasOut1() {
+		  return elasOut1;
+	 }
+
+	 public void setElasOut1(String elasOut1) {
+		  this.elasOut1=elasOut1;
+	 }
+
+	 public String getElasOut2() {
+		  return elasOut2;
+	 }
+
+	 public void setElasOut2(String elasOut2) {
+		  this.elasOut2=elasOut2;
+	 }
+
+	 public void setVisco(String visco){
+		  this.visco=visco;
+	 }
+	 
+	 public String getVisco() {
+		  return visco;
+	 }
+
+	 public String[] getRampBC() {
+		  return ramp_bc;  
+	 }
+
+	 public void setRampBC(String[] ramp_bc) {
+		  java.lang.System.arraycopy(ramp_bc,0,this.ramp_bc,0,ramp_bc.length);
+	 }
+	 
+	 public String getVelblock() {
+		  return velblock;
+	 }
+	 
+	 public void setVelblock(String velblock) {
+		  this.velblock=velblock;
+	 }
 
 }

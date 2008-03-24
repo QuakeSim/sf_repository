@@ -125,7 +125,7 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
 
 		<!-- Deformation Group -->
 		<portlet-tab label="portal-deformation">
-		  <title lang="en">Deformation</title>
+		  <title lang="en">Deformation Analysis</title>
 		  <portlet-tabbed-pane selected="0" style="sub-menu">
 			 <portlet-tab label="Disloc-Portlet">
 				<title lang="en">Disloc-Portlet</title>
@@ -156,7 +156,6 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
                     </row-layout>
                 </table-layout>
             </portlet-tab>
-
               <portlet-tab label="Fetch-disloc-results">
                 <title lang="en">Fetch Disloc Results</title>
                 <table-layout>
