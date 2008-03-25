@@ -23,16 +23,16 @@
 
                  <managed-property>
                    <property-name>geoFESTBaseUrl</property-name>
-                   <value>http://156.56.104.143:8080/geofestexec/</value>
+                   <value>http://localhost:8080/geofestexec/</value>
                  </managed-property>
 
                  <managed-property>
                    <property-name>geoFESTServiceUrl</property-name>
-                   <value>http://156.56.104.143:8080/geofestexec/services/GeoFESTExec</value>
+                   <value>http://localhost:8080/geofestexec/services/GeoFESTExec</value>
                  </managed-property>
                  <managed-property>
                    <property-name>geoFESTGridServiceUrl</property-name>
-                   <value>http://156.56.104.143:8080/geofestexec/services/GeoFESTGridExec</value>
+                   <value>http://localhost:8080/geofestexec/services/GeoFESTGridExec</value>
                  </managed-property>
 
                 <!-- Needed for the context service-->

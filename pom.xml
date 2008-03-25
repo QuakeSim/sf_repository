@@ -4,7 +4,7 @@
 	 <!--==================================================-->
 	 <!-- These need to be edited by the deployer -->
 	 <!--==================================================-->
-	 <portal.server.ip>156.56.104.143</portal.server.ip>
+	 <portal.server.ip>localhost</portal.server.ip>
 	 <host.base.url>http://${portal.server.ip}:8080/</host.base.url>
 
 	 <!--==================================================-->

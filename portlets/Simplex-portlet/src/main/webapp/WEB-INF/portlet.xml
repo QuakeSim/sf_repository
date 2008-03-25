@@ -14,10 +14,13 @@ xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0"
       <name>ViewPage</name>
       <value>/LoadProject.jsp</value>
      </init-param>
+      <init-param>
+      <name>HelpPage</name>
+      <value>/SimplexHelp.jsp</value>
+     </init-param>
      <supports>
        <mime-type>text/html</mime-type>
        <portlet-mode>VIEW</portlet-mode>
-       <portlet-mode>EDIT</portlet-mode>
        <portlet-mode>HELP</portlet-mode>
      </supports>
      <portlet-info>
@@ -37,10 +40,13 @@ xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0"
       <name>ViewPage</name>
       <value>/ArchivedData.jsp</value>
      </init-param>
+      <init-param>
+      <name>HelpPage</name>
+      <value>/SimplexHelp.jsp</value>
+     </init-param>
      <supports>
        <mime-type>text/html</mime-type>
        <portlet-mode>VIEW</portlet-mode>
-       <portlet-mode>EDIT</portlet-mode>
        <portlet-mode>HELP</portlet-mode>
      </supports>
      <portlet-info>
@@ -60,10 +66,13 @@ xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0"
       <name>ViewPage</name>
       <value>/PlotGrid.jsp</value>
      </init-param>
+      <init-param>
+      <name>HelpPage</name>
+      <value>/SimplexHelp.jsp</value>
+     </init-param>
      <supports>
        <mime-type>text/html</mime-type>
        <portlet-mode>VIEW</portlet-mode>
-       <portlet-mode>EDIT</portlet-mode>
        <portlet-mode>HELP</portlet-mode>
      </supports>
      <portlet-info>
