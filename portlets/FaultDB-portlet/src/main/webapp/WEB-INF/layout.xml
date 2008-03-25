@@ -1,57 +1,33 @@
 <portlet-tabbed-pane>
-    <portlet-tab label="Disloc-Portlet">
-        <title lang="en">Disloc-Portlet</title>
-        <portlet-tabbed-pane style="sub-menu">
-            <portlet-tab label="Disloc-Setup">
-                <title lang="en">Run Disloc</title>
-                <table-layout>
-                    <row-layout>
-                        <column-layout>
-                            <portlet-frame label="Disloc-PF">
-                                <portlet-class>Disloc-portlet#Disloc-portlet</portlet-class>
-                            </portlet-frame>
-                        </column-layout>
-                    </row-layout>
-                </table-layout>
-            </portlet-tab>
-              <portlet-tab label="Fetch-disloc-results">
-                <title lang="en">Fetch Disloc Results</title>
-                <table-layout>
-                    <row-layout>
-                        <column-layout>
-                            <portlet-frame label="Disloc-fetchmesh-PF">
-                                <portlet-class>Disloc-portlet#fetchresults-portlet</portlet-class>
-                            </portlet-frame>
-                        </column-layout>
-                    </row-layout>
-                </table-layout>
-            </portlet-tab>
-              <portlet-tab label="Plot-disloc-results">
-                <title lang="en">Plot Disloc Results</title>
-                <table-layout>
-                    <row-layout>
-                        <column-layout>
-                            <portlet-frame label="Disloc-plot-grid-PF">
-                                <portlet-class>Disloc-portlet#plot-results-portlet</portlet-class>
-                            </portlet-frame>
-                        </column-layout>
-                    </row-layout>
-                </table-layout>
-            </portlet-tab>
-              <portlet-tab label="Pick-Location">
-                <title lang="en">Pick Location</title>
-                <table-layout>
-                    <row-layout>
-                        <column-layout>
-                            <portlet-frame label="Disloc-pick-location-PF">
-                                <portlet-class>Disloc-portlet#pick-location-portlet</portlet-class>
-                            </portlet-frame>
-                        </column-layout>
-                    </row-layout>
-                </table-layout>
-            </portlet-tab>
-        </portlet-tabbed-pane>
-    </portlet-tab>
+  <portlet-tab label="FaultDB">
+    <title lang="en">QuakeTables</title>
+    <portlet-tabbed-pane style="sub-menu">
+      <portlet-tab label="FaultDB-Login">
+        <title lang="en">FaultDB Login</title>
+        <table-layout>
+          <row-layout>
+            <column-layout>
+              <portlet-frame label="FaultDB-login-PF">
+                <portlet-class>FaultDB-portlet#FaultDB-Login</portlet-class>
+              </portlet-frame>
+            </column-layout>
+          </row-layout>
+        </table-layout>
+      </portlet-tab>
+      <portlet-tab label="FetchDB-Search">
+        <title lang="en">Search FaultDB</title>
+        <table-layout>
+          <row-layout>
+            <column-layout>
+              <portlet-frame label="FaultDB-search-PF">
+                <portlet-class>FaultDB-portlet#FaultDB-Search</portlet-class>
+              </portlet-frame>
+            </column-layout>
+          </row-layout>
+        </table-layout>
+      </portlet-tab>
+    </portlet-tabbed-pane>
+  </portlet-tab>
 </portlet-tabbed-pane>
 
 
