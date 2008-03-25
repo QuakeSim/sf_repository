@@ -4,7 +4,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:portlet="http://java.sun.com/xml/ns/portlet"
 xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0">
    <portlet>
-    <portlet-name>Disloc-portlet</portlet-name>
+    <portlet-name>FaultDB-Login</portlet-name>
     <portlet-class>org.apache.portals.bridges.jsf.FacesPortlet</portlet-class>
       <expiration-cache>0</expiration-cache>
       <init-param>
@@ -12,11 +12,11 @@ xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0"
       <name>default-view</name>
        -->
       <name>ViewPage</name>
-      <value>/LoadProject.jsp</value>
+      <value>/QuakeTablesLogin.jsp</value>
      </init-param>
       <init-param>
       <name>HelpPage</name>
-      <value>/DislocHelp.jsp</value>
+      <value>/QTHelp.jsp</value>
      </init-param>
      <supports>
        <mime-type>text/html</mime-type>
@@ -24,24 +24,25 @@ xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0"
        <portlet-mode>HELP</portlet-mode>
      </supports>
      <portlet-info>
-      <title>Disloc-Portlet</title>
-      <keywords>Disloc</keywords>
+      <title>QuakeTables Login</title>
+      <keywords>faults</keywords>
      </portlet-info>        
    </portlet>
-	<portlet>
-    <portlet-name>fetchresults-portlet</portlet-name>
-    <portlet-class>org.apache.portals.bridges.jsf.FacesPortlet</portlet-class>
-      <expiration-cache>0</expiration-cache>
-      <init-param>
-      <!--
-      <name>default-view</name>
-       -->
-      <name>ViewPage</name>
-      <value>/FetchResults.jsp</value>
+   
+   <portlet>
+     <portlet-name>FaultDB-Search</portlet-name>
+     <portlet-class>org.apache.portals.bridges.jsf.FacesPortlet</portlet-class>
+     <expiration-cache>0</expiration-cache>
+     <init-param>
+       <!--
+	   <name>default-view</name>
+	   -->
+       <name>ViewPage</name>
+       <value>/QuakeTablesSearch.jsp</value>
      </init-param>
-      <init-param>
-      <name>HelpPage</name>
-      <value>/DislocHelp.jsp</value>
+     <init-param>
+       <name>HelpPage</name>
+       <value>/QTHelp.jsp</value>
      </init-param>
      <supports>
        <mime-type>text/html</mime-type>
@@ -49,63 +50,10 @@ xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0"
        <portlet-mode>HELP</portlet-mode>
      </supports>
      <portlet-info>
-      <title>Disloc-Portlet</title>
-      <keywords>Disloc</keywords>
+       <title>QuakeTables Search</title>
+       <keywords>faults</keywords>
      </portlet-info>        
    </portlet>
-
-	<portlet>
-    <portlet-name>plot-results-portlet</portlet-name>
-    <portlet-class>org.apache.portals.bridges.jsf.FacesPortlet</portlet-class>
-      <expiration-cache>0</expiration-cache>
-      <init-param>
-      <!--
-      <name>default-view</name>
-       -->
-      <name>ViewPage</name>
-      <value>/PlotGrid.jsp</value>
-     </init-param>
-      <init-param>
-      <name>HelpPage</name>
-      <value>/DislocHelp.jsp</value>
-     </init-param>
-     <supports>
-       <mime-type>text/html</mime-type>
-       <portlet-mode>VIEW</portlet-mode>
-       <portlet-mode>HELP</portlet-mode>
-     </supports>
-     <portlet-info>
-      <title>Disloc-Portlet</title>
-      <keywords>Disloc</keywords>
-     </portlet-info>        
-   </portlet>
-
-	<portlet>
-    <portlet-name>pick-location-portlet</portlet-name>
-    <portlet-class>org.apache.portals.bridges.jsf.FacesPortlet</portlet-class>
-      <expiration-cache>0</expiration-cache>
-      <init-param>
-      <!--
-      <name>default-view</name>
-       -->
-      <name>ViewPage</name>
-      <value>/LocateProject.jsp</value>
-     </init-param>
-      <init-param>
-      <name>HelpPage</name>
-      <value>/DislocHelp.jsp</value>
-     </init-param>
-     <supports>
-       <mime-type>text/html</mime-type>
-       <portlet-mode>VIEW</portlet-mode>
-       <portlet-mode>HELP</portlet-mode>
-     </supports>
-     <portlet-info>
-      <title>Disloc-Portlet</title>
-      <keywords>Disloc</keywords>
-     </portlet-info>        
-   </portlet>
-
    <user-attribute>
     <description>User Name</description>
     <name>user.name</name>
