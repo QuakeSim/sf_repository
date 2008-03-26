@@ -338,43 +338,38 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
 		  </portlet-tabbed-pane>
 		</portlet-tab>
 
-		<!-- Deformation Group -->
-		<portlet-tab label="portal-fault-db">
+		<!-- Fault DB Group -->
+		<portlet-tab label="portal-faultdb">
 		  <title lang="en">Fault Database</title>
 		  <portlet-tabbed-pane selected="0" style="sub-menu">
-			 <portlet-tab label="FaultDB-Portlet">
-				<title lang="en">QuakeTables</title>
-				<portlet-tabbed-pane style="sub-menu">
-				  <portlet-tab label="FaultDB-Login">
-					 <title lang="en">FaultDB Login</title>
-					 <table-layout>
-						<row-layout>
-						  <column-layout>
-							 <portlet-frame label="FaultDB-login-PF">
-								<portlet-class>FaultDB-portlet#FaultDB-Login</portlet-class>
-							 </portlet-frame>
-						  </column-layout>
-						</row-layout>
-					 </table-layout>
-				  </portlet-tab>
-				  <portlet-tab label="FetchDB-Search">
-					 <title lang="en">Search FaultDB</title>
-					 <table-layout>
-						<row-layout>
-						  <column-layout>
-							 <portlet-frame label="FaultDB-search-PF">
-								<portlet-class>FaultDB-portlet#FaultDB-Search</portlet-class>
-							 </portlet-frame>
-						  </column-layout>
-						</row-layout>
-					 </table-layout>
-				  </portlet-tab>
-				</portlet-tabbed-pane>
+			 <portlet-tab label="FetchDB-Search">
+				<title lang="en">Search FaultDB</title>
+				<table-layout>
+				  <row-layout>
+					 <column-layout>
+						<portlet-frame label="FaultDB-search-PF">
+						  <portlet-class>FaultDB-portlet#FaultDB-Search</portlet-class>
+						</portlet-frame>
+					 </column-layout>
+				  </row-layout>
+				</table-layout>
+			 </portlet-tab>
+			 <portlet-tab label="FaultDB-Login">
+				<title lang="en">FaultDB Login</title>
+				<table-layout>
+				  <row-layout>
+					 <column-layout>
+						<portlet-frame label="FaultDB-login-PF">
+						  <portlet-class>FaultDB-portlet#FaultDB-Login</portlet-class>
+						</portlet-frame>
+					 </column-layout>
+				  </row-layout>
+				</table-layout>
 			 </portlet-tab>
 		  </portlet-tabbed-pane>
 		</portlet-tab>
 	 </portlet-tabbed-pane>
-	 
+
     <!-- Footer components (if any) -->
     <portlet-footer>
         <table-layout style="footer">
