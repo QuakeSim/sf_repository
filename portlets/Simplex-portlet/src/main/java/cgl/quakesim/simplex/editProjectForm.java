@@ -99,6 +99,7 @@ public class editProjectForm extends GenericProjectBean {
 //			QueryLayersList();
 			renderDislocListForm = !renderDislocListForm;
 		}
+
 		if (projectSelectionCode.equals("AddFaultSelection")) {
 			renderAddFaultSelectionForm = !renderAddFaultSelectionForm;
 		}
@@ -106,10 +107,11 @@ public class editProjectForm extends GenericProjectBean {
 		if (projectSelectionCode.equals("ShowGPSObsv")) {
 			 renderGPSStationMap=!renderGPSStationMap;
 		}
-		
-		if (projectSelectionCode.equals("AddFaultSelection")) {
-			 renderAddFaultSelectionForm = !renderAddFaultSelectionForm;
+
+		if (projectSelectionCode.equals("")) {
+			 ;
 		}
+
 	}
 
 	public void handleFaultsRadioValueChange(ValueChangeEvent event) {

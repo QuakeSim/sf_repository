@@ -104,7 +104,7 @@ vertical-align:top;
 						actionListener="#{SimplexBean.currentEditProjectForm.toggleProjectSelection}">
 					</h:commandButton>
 			   </h:form>
-  		      <h:form id="dflelerkljk185" rendered="#{!empty SimplexBean.myObservationEntryForProjectList && !empty SimplexBean.myFaultEntryForProjectList}"
+  		      <h:form id="dflelerkljk185" rendered="#{!empty SimplexBean.myObservationEntryForProjectList && !empty SimplexBean.myFaultEntryForProjectList}">
             <h:outputText value="Simplex is ready to run.  Click the button below to launch."/>
 		      <h:commandButton rendered="#{!empty SimplexBean.myObservationEntryForProjectList
 							  				  && !empty SimplexBean.myFaultEntryForProjectList}"
