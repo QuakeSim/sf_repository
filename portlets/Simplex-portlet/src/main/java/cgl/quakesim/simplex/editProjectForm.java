@@ -36,6 +36,7 @@ public class editProjectForm extends GenericProjectBean {
 	 boolean renderSearchByAuthorForm = false;
 	 boolean renderSearchByLatLonForm = false;	 
 	 boolean renderViewAllFaultsForm = false;
+	 boolean renderGPSStationMap = false;
 
 	 String faultSelectionCode = "";
 	 boolean renderAddFaultFromDBForm = false;
@@ -76,6 +77,7 @@ public class editProjectForm extends GenericProjectBean {
 		 renderDislocListForm = false;
 		 renderAddFaultSelectionForm = false;
 		 renderAddFaultFromDBForm = false;
+		 renderGPSStationMap = false;
 	}	
 	 
 	 public void toggleProjectSelection(ActionEvent ev) {
@@ -100,8 +102,13 @@ public class editProjectForm extends GenericProjectBean {
 		if (projectSelectionCode.equals("AddFaultSelection")) {
 			renderAddFaultSelectionForm = !renderAddFaultSelectionForm;
 		}
-		if (projectSelectionCode.equals("")) {
-			;
+
+		if (projectSelectionCode.equals("ShowGPSObsv")) {
+			 renderGPSStationMap=!renderGPSStationMap;
+		}
+		
+		if (projectSelectionCode.equals("AddFaultSelection")) {
+			 renderAddFaultSelectionForm = !renderAddFaultSelectionForm;
 		}
 	}
 

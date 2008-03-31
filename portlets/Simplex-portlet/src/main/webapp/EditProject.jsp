@@ -84,9 +84,15 @@ vertical-align:top;
 						<f:selectItem id="item1"
 							itemLabel="Add an Observation Point: Click to specify observation point parameters."
 							itemValue="ShowObservation" />
+
 						<f:selectItem id="item0"
 							itemLabel="Add Observation List (Advanced): Cut and paste a list of observation points. "
-							itemValue="ShowObsvCutPaste" />
+							itemValue="AddGPSObservation" />
+
+						<f:selectItem id="item021"
+							itemLabel="Add GPS Observation Point"
+							itemValue="ShowGPSObsv" />
+
 						<f:selectItem id="item2"
 							itemLabel="Create New Fault: Click to specify geometry for a fault segment."
 							itemValue="CreateNewFault" />
@@ -98,7 +104,7 @@ vertical-align:top;
 						actionListener="#{SimplexBean.currentEditProjectForm.toggleProjectSelection}">
 					</h:commandButton>
 			   </h:form>
-  		      <h:form id="dflelerkljk185">
+  		      <h:form id="dflelerkljk185" rendered="#{!empty SimplexBean.myObservationEntryForProjectList && !empty SimplexBean.myFaultEntryForProjectList}"
             <h:outputText value="Simplex is ready to run.  Click the button below to launch."/>
 		      <h:commandButton rendered="#{!empty SimplexBean.myObservationEntryForProjectList
 							  				  && !empty SimplexBean.myFaultEntryForProjectList}"
@@ -119,6 +125,14 @@ vertical-align:top;
 					     <h:commandButton id="addObsvTextArea" value="select"
 							   actionListener="#{SimplexBean.toggleAddObsvTextAreaForProject}" />
 						</h:panelGrid>
+					 </h:form>
+			</h:panelGroup>
+
+			<h:panelGroup id="lck093ks">
+					 <h:form id="obsvGPSMap"
+					 			rendered="#{SimplexBean.currentEditProjectForm.renderGPSStationMap">
+                <h:outputText id="clrlc093" escape="false"
+					    value="<b>Select Stations from Map:</b> Select the stations that you want to use as observation points."/>
 					 </h:form>
 			</h:panelGroup>
 
