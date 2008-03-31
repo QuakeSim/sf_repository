@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE faces-config PUBLIC
+    "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+    "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+
+<faces-config>
+
+	<!-- managed beans of the simple hello world app -->
+	<managed-bean>
+		<managed-bean-name>SimplexBean</managed-bean-name>
+		<managed-bean-class>cgl.quakesim.simplex.SimplexBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+                <!--Who we are-->
+                <managed-property>
+                   <property-name>codeName</property-name>
+                   <value>Simplex2</value>
+                </managed-property>
+                
+                <!-- Needed for the selectdbURL service-->
+                 <managed-property>
+                   <property-name>selectdbURL</property-name>
+                   <value>http://gf2.ucs.indiana.edu:9090/axis/services/Select</value>
+                 </managed-property>
+ 
+                <!-- Needed for the context service-->
+                 <managed-property>
+                   <property-name>contextBasePath</property-name>
+                   <value>/WebServices/WEB-INF/Descriptors/users/</value>
+                </managed-property>
+
+                <!-- Needed for the simplex service-->
+                <managed-property>
+                   <property-name>simpleXServiceUrl</property-name>
+                   <value>http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec</value>
+                 </managed-property>
+                 
+                 <!--  Needed for the kmlGenerator service -->
+                 <managed-property>
+                 	<property-name>kmlGeneratorUrl</property-name>
+                 	<value>http://gf19.ucs.indiana.edu:8080/KmlGenerator/services/KmlGenerator</value>
+                 </managed-property>
+	</managed-bean>
+
+	<navigation-rule>
+		<display-name>Simplex2 Main Page</display-name>
+		<from-view-id>/Main.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>Simplex2-new-project</from-outcome>
+			<to-view-id>/NewProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-load-project</from-outcome>
+			<to-view-id>/LoadProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-archived-data</from-outcome>
+			<to-view-id>/ArchivedData.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-listgmt-archives</from-outcome>
+			<to-view-id>/ListGMTArchives.jsp</to-view-id>
+		</navigation-case>
+
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/EditProject.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>Simplex2-this</from-outcome>
+			<to-view-id>/EditProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-back</from-outcome>
+			<to-view-id>/LoadProject.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/LoadProject.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>Simplex2-edit-project</from-outcome>
+			<to-view-id>/EditProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-this</from-outcome>
+			<to-view-id>/LoadProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-back</from-outcome>
+			<to-view-id>/LoadProject.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/ArchivedData.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>Simplex2-back</from-outcome>
+			<to-view-id>/ArchivedData.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/ListGMTArchives.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>Simplex2-gmt-view</from-outcome>
+			<to-view-id>/GMTView.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-google-map</from-outcome>
+			<to-view-id>/gmt_googlemap.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-kml-viewer</from-outcome>
+			<to-view-id>/kmlviewer.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-back</from-outcome>
+			<to-view-id>/ListGMTArchives.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/kmlviewer.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>Simplex2-this</from-outcome>
+			<to-view-id>/kmlviewer.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-back</from-outcome>
+			<to-view-id>/kmlviewer.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/gmt_googlemap.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>Simplex2-this</from-outcome>
+			<to-view-id>/gmt_googlemap.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-back</from-outcome>
+			<to-view-id>/gmt_googlemap.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/GMTView.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>Simplex2-this</from-outcome>
+			<to-view-id>/GMTView.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>Simplex2-back</from-outcome>
+			<to-view-id>/GMTView.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+
+</faces-config>
