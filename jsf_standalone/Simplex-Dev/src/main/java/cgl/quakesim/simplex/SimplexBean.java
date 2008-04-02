@@ -20,11 +20,15 @@ import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 
+import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
+
 /**
  * Everything you need to set up and run SimpleBean.
  */
 
 public class SimplexBean extends GenericSopacBean {
+    //These are properties needed if you want to include a query
+    //to the GRWS web service.
 
 	// Variables that we need to get from the parent.
 	// ContextManagerImp cm=null;
@@ -96,6 +100,16 @@ public class SimplexBean extends GenericSopacBean {
 	 String gpsStationLat="";
 	 String gpsStationLon="";
 	 
+	 //These are needed for the SOPAC GRWS query.
+	 //These dates are arbitrary but apparently needed.
+	 String beginDate="2006-01-10";
+	 String endDate="2008-04-10";
+	 String resource="procVels";
+	 String contextGroup="sopacGlobk";
+	 String minMaxLatLon="";
+	 String contextId="38";
+
+
 	 public String getGpsStationName() {
 		  return gpsStationName;
 	 }
@@ -1163,7 +1177,118 @@ public class SimplexBean extends GenericSopacBean {
 	}
 
 	 public void toggleAddGPSObsvForProject(ActionEvent ev) {
+		  String space=" ";
+		  System.out.println("Here are the choices:"+gpsStationName
+									+space+gpsStationLat
+									+space+gpsStationLon);
+
+		  //I'm not sure if these are even used, but they can't be blank.
+		  String dataUrl="";
+		  gpsStationName=gpsStationName.toLowerCase();
+
+		  db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
+									+ codeName + "/" + projectName + ".db");
+
+		  try {
+				GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
+				gsq.setFromServlet(gpsStationName, beginDate, endDate, resource,
+										 contextGroup, contextId, minMaxLatLon, false);
+				dataUrl+=gsq.getResource()+" ";
+				
+				System.out.println(dataUrl);
+				Observation[] obsv=makeGPSObservationPoints(gpsStationName,
+																			dataUrl);
+				obsv=setXYLocations(obsv,gpsStationLat,gpsStationLon);
+				for(int i=0;i<obsv.length;i++) {
+					 db.set(obsv[i]);
+				}
+				
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  db.commit();
+		  db.close();
+	 }
+	 
+	 private Observation[] setXYLocations(Observation[] obsv,
+													 String gpsStationLat,
+													 String gpsStationLon) {
+		  //Get project origin.
+		  double origin_lat=currentProjectEntry.getOrigin_lat();
+		  double origin_lon=currentProjectEntry.getOrigin_lon();
+
+		  //Make these conversions
+		  double gpsLat=Double.parseDouble(gpsStationLat);
+		  double gpsLon=Double.parseDouble(gpsStationLon);
+
+		  //Project origin is not set, so set it.
+		  if(origin_lat==projectEntry.DEFAULT_LAT 
+			  && origin_lon==projectEntry.DEFAULT_LON) {
+				currentProjectEntry.setOrigin_lat(gpsLat);
+				currentProjectEntry.setOrigin_lon(gpsLon);
+				for(int i=0;i<obsv.length;i++) {
+					 //We are at the origin.
+					 obsv[i].setObsvLocationEast("0.0");
+					 obsv[i].setObsvLocationNorth("0.0");
+				}
+		  }
+		  //Find where we are.
+		  else {
+				double x=(gpsLon-origin_lon)*factor(origin_lon,origin_lat);
+				double y=(gpsLat-origin_lat)*111.32;
+				for(int i=0;i<obsv.length;i++) {
+					 //We are at the origin.
+					 obsv[i].setObsvLocationEast(x+"");
+					 obsv[i].setObsvLocationNorth(y+"");
+				}
+		  }
+		  return obsv;
+	 }
+
+	 private Observation[] makeGPSObservationPoints(String stationName,
+																	String rawGRWSResponse) {
+
+		  Observation[] observations=new Observation[3];
+		  //Check the response and only take the latest value.
+		  StringTokenizer st=new StringTokenizer(rawGRWSResponse,"\n");
 		  
+		  int lastToken=st.countTokens();
+		  int icount=0;
+		  String space=" ";
+		  while(st.hasMoreTokens()) {
+				icount++;
+				String line=st.nextToken();
+				if(icount==lastToken) {
+					 //parse the line
+					 String[] neu=new String[3];
+					 String[] sig_neu=new String[3];
+					 //Simplex uses enu instead of neu order.
+					 String[] simplexObType={"2","1","3"};
+					 String[] simplexObsvName={"north","east","up"};
+
+					 StringTokenizer st2=new StringTokenizer(line," ");
+					 String station=st2.nextToken();
+					 String date=st2.nextToken();
+					 neu[0]=st2.nextToken();
+					 neu[1]=st2.nextToken();
+					 neu[2]=st2.nextToken();
+					 sig_neu[0]=st2.nextToken();
+					 sig_neu[1]=st2.nextToken();
+					 sig_neu[2]=st2.nextToken();
+					 
+					 for(int i=0;i<3;i++) {
+						  observations[i]=new Observation();
+						  observations[i].setObsvName(station+"_"+simplexObsvName[i]);
+						  observations[i].setObsvType(simplexObType[i]);
+						  observations[i].setObsvValue(neu[i]);
+						  observations[i].setObsvError(sig_neu[i]);
+						  observations[i].setObsvRefSite("1");
+					 }
+				}
+
+		  }
+		  return observations;
 	 }
 
 	 public void toggleCloseMap(ActionEvent ev) {
