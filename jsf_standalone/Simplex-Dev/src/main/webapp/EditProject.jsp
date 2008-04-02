@@ -47,7 +47,6 @@ mapcenter_y = center_xy[1];
 <script language="JavaScript">
 
 		  //These are various gmap definitions.
-	 var map=null;
 	 var geocoder=null;
 
         var req;
@@ -58,13 +57,6 @@ mapcenter_y = center_xy[1];
         baseIcon.iconAnchor = new GPoint(1, 10);
         baseIcon.infoWindowAnchor = new GPoint(5, 1);
         baseIcon.infoShadowAnchor = new GPoint(5, 5);
-
-        // Create the map
-        var map = new GMap(document.getElementById("map"));
-        map.addControl(new GLargeMapControl());
-        map.addControl(new GMapTypeControl());
-        map.addControl(new GScaleControl());
-        map.centerAndZoom(new GPoint(<%=mapcenter_y%>, <%=mapcenter_x%>), 10);
 
         var colors = new Array (6);
         colors[0]="red";
@@ -81,13 +73,19 @@ mapcenter_y = center_xy[1];
           networkInfo [i] = new Array (2);
         }
 
-	 
+
 function initialize() {
 	     map=new GMap2(document.getElementById("map"));
-    	  map.setCenter(new GLatLng(32,-118),7);
+    	  map.setCenter(new GLatLng(33,-117),7);
     	  map.addControl(new GLargeMapControl());
     	  map.addControl(new GMapTypeControl());
+        map.addControl(new GScaleControl());
+
 		  geocoder=new GClientGeocoder();
+
+		  //Create the network.
+        overlayNetworks();
+        printNetworkColors(networkInfo);
 }
 
 function selectOne(form , button) {
@@ -115,9 +113,9 @@ function dataTableSelectOneRadio(radio) {
         }
     }
     radio.checked = true;
-}
+}       
 
-        function overlayNetworks(){
+function overlayNetworks(){
           var icon = new GIcon(baseIcon);
           icon.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";
 
@@ -160,31 +158,28 @@ function dataTableSelectOneRadio(radio) {
             }
           }
           %>
-        }
+}
 
-        function createMarker(networkName, name, lon, lat, icon) {
+function createMarker(networkName, name, lon, lat, icon) {
           var marker = new GMarker(new GPoint(lon, lat),icon);
           // Show this marker's name in the info window when it is clicked
           var html = "<b>Station Name= </b>" + name + "<br><b>Lat=</b>" + lat + "<br><b>Lon= </b>" + lon + "<br><b>Network= </b>" + networkName;
 
 
           GEvent.addListener(marker, "click", function() {
-            marker.openInfoWindowHtml(html);});
-
-          GEvent.addListener(marker, "click", function() {
-		var newElement=document.getElementById("form1:station_name");
-		newElement.setAttribute("value",name);
-	  });
+            marker.openInfoWindowHtml(html);;
+			 		var newElement=document.getElementById("obsvGPSMap:stationName");
+					newElement.setAttribute("value",name);
+			 		var newElement2=document.getElementById("obsvGPSMap:stationLat");
+					newElement2.setAttribute("value",lat);
+			 		var newElement3=document.getElementById("obsvGPSMap:stationLon");
+					newElement3.setAttribute("value",lon);
+	       });
 
           return marker;
-          }
+}
 
-        overlayNetworks();
-
-
-
-        function printNetworkColors (array)
-        {
+function printNetworkColors (array) {
           var html = "<table border='0'><tr><td><b>Network</b></td><td nowrap><b>Icon Color<b></td></tr>";
 
           var row;
@@ -204,8 +199,8 @@ function dataTableSelectOneRadio(radio) {
            html = html + "</table>";
            var idiv = window.document.getElementById("networksDiv");
            idiv.innerHTML = html;
-         }
-         printNetworkColors(networkInfo);
+}
+
 
 	//Needed for Firefox 2.0 compatibility
 	function getScrolling() {
@@ -303,9 +298,27 @@ function dataTableSelectOneRadio(radio) {
 					 			rendered="#{SimplexBean.currentEditProjectForm.renderGPSStationMap}">
                 <h:outputText id="clrlc093" escape="false"
 					    value="<b>Select Stations from Map:</b> Select the stations that you want to use as observation points."/>
+						 <h:panelGrid id="mapsAndCrap" columns="2" columnClasses="alignTop,alignTop">
+						    <h:panelGroup id="mapncrap1">
 						 <f:verbatim>
 						 <div id="map" style="width: 600px; height: 600px"></div>
 						 </f:verbatim>
+                      </h:panelGroup>
+                      <h:panelGroup id="mapncrap2">
+							<h:panelGrid id="dfjdlkj" columns="2">
+						 <h:outputText id="dkl34rtjf" value="Station:"/>
+						 <h:inputText id="stationName" value="#{SimplexBean.gpsStationName}"/>
+						 <h:outputText id="dkljr3rf" value="Latitude:"/>
+						 <h:inputText id="stationLat" value="#{SimplexBean.gpsStationLat}"/>
+						 <h:outputText id="dkljfer4" value="Longitude:"/>
+						 <h:inputText id="stationLon" value="#{SimplexBean.gpsStationLon}"/>
+						 <h:commandButton id="addGPSObsv" value="Add Station"
+						 		actionListener="#{SimplexBean.toggleAddGPSObsvForProject}"/>
+						 <h:commandButton id="closeMap" value="Close Map"
+						 		actionListener="#{SimplexBean.toggleCloseMap}"/>
+								</h:panelGrid>
+						   </h:panelGroup>
+							</h:panelGrid>
 					 </h:form>
 			</h:panelGroup>
 

@@ -54,10 +54,11 @@ public class GeotransParamsBean {
 	 String elastic1="1";
 	 String elasOut1="1";
 	 String refine="0";
+	 String refineOut="0";
 	 String elastic2="0";
 	 String elasOut2="0";
 	 String visco="1";
-	 String velblock="1 0.0";
+	 String velblock=" ";
 	 //Ramp BC
 	 String[] ramp_bc;
 
@@ -77,7 +78,7 @@ public class GeotransParamsBean {
 		time_step="0.5";
 		//cordinate boundary
 		
-		top_bc="Locked Node";
+		top_bc="Free Node";
 		top_bc_value="0 0. 0. 0. 1.";
 		east_bc="Locked Node";
 		east_bc_value="0 0. 0. 0. 1.";
@@ -395,7 +396,7 @@ public class GeotransParamsBean {
 	 }
 
 	 public String getElastic2() {
-		  return elastic2;
+		  return notNull(elastic2);
 	 }
 
 	 public void setElastic2(String elastic1) {
@@ -403,15 +404,23 @@ public class GeotransParamsBean {
 	 }
 
 	 public String getRefine() {
-		  return refine;
+		  return notNull(refine);
 	 }
 	 
 	 public void setRefine(String refine) {
 		  this.refine=refine;
 	 }
 
+	 public String getRefineOut() {
+		  return notNull(refineOut);
+	 }
+	 
+	 public void setRefineOut(String refineOut) {
+		  this.refineOut=refineOut;
+	 }
+
 	 public String getElasOut1() {
-		  return elasOut1;
+		  return notNull(elasOut1);
 	 }
 
 	 public void setElasOut1(String elasOut1) {
@@ -419,7 +428,7 @@ public class GeotransParamsBean {
 	 }
 
 	 public String getElasOut2() {
-		  return elasOut2;
+		  return notNull(elasOut2);
 	 }
 
 	 public void setElasOut2(String elasOut2) {
@@ -431,7 +440,7 @@ public class GeotransParamsBean {
 	 }
 	 
 	 public String getVisco() {
-		  return visco;
+		  return notNull(visco);
 	 }
 
 	 public String[] getRampBC() {
@@ -443,10 +452,20 @@ public class GeotransParamsBean {
 	 }
 	 
 	 public String getVelblock() {
-		  return velblock;
+		  return notNull(velblock);
 	 }
 	 
 	 public void setVelblock(String velblock) {
 		  this.velblock=velblock;
+	 }
+
+	 private String notNull(String retString) {
+		  if(retString==null) {
+				return "";
+		  }
+		  else {
+				return retString;
+		  }
+				
 	 }
 }

@@ -32,7 +32,7 @@ public class GeotransParamsBean  implements java.io.Serializable {
 
     private java.lang.String logFileName;
 
-    private java.lang.String north_bc="Locked Node";
+    private java.lang.String north_bc="Free Node";
 
     private java.lang.String north_bc_value="0 0. 0. 0. 1.";
 
@@ -84,10 +84,11 @@ public class GeotransParamsBean  implements java.io.Serializable {
 	 String elastic1="1";
 	 String elasOut1="1";
 	 String refine="0";
+	 String refineOut="0";
 	 String elastic2="0";
 	 String elasOut2="0";
 	 String visco="1";
-	 String velblock="1 0.0";
+	 String velblock="";
 	 //Ramp BC
 	 String[] ramp_bc=null;
 
@@ -1457,6 +1458,14 @@ public class GeotransParamsBean  implements java.io.Serializable {
 	 
 	 public void setVelblock(String velblock) {
 		  this.velblock=velblock;
+	 }
+
+	 public String getRefineOut() {
+		  return refineOut;
+	 }
+	 
+	 public void setRefineOut(String refineOut) {
+		  this.refineOut=refineOut;
 	 }
 
 }

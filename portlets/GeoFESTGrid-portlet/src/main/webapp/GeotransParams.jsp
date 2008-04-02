@@ -163,10 +163,10 @@
 						<h:outputText value="top_bc" />
 						<h:selectOneMenu id="top_bc"
 							value="#{MGBean.currentGeotransParamsBean.top_bc}">
-							<f:selectItem id="top_bcitem1" itemLabel="Locked Node"
-								itemValue="locked node" />
 							<f:selectItem id="top_bcitem2" itemLabel="Free Node"
 								itemValue="free node" />
+							<f:selectItem id="top_bcitem1" itemLabel="Locked Node"
+								itemValue="locked node" />
 						</h:selectOneMenu>
 						<h:outputText value="BC Values:" />
 						<h:panelGroup>

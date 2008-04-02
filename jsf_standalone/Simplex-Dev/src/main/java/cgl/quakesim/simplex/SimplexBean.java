@@ -92,6 +92,34 @@ public class SimplexBean extends GenericSopacBean {
 	 
 	 String kmlProjectFile="network0.kml";
 	 
+	 String gpsStationName="";
+	 String gpsStationLat="";
+	 String gpsStationLon="";
+	 
+	 public String getGpsStationName() {
+		  return gpsStationName;
+	 }
+
+	 public void setGpsStationName(String gpsStationName) {
+		  this.gpsStationName=gpsStationName;
+	 }
+	 
+	 public String getGpsStationLat() {
+		  return gpsStationLat;
+	 }
+
+	 public void setGpsStationLat(String gpsStationLat) {
+		  this.gpsStationLat=gpsStationLat;
+	 }
+	 
+	 public String getGpsStationLon() {
+		  return gpsStationLon;
+	 }
+
+	 public void setGpsStationLon(String gpsStationLon) {
+		  this.gpsStationLon=gpsStationLon;
+	 }
+
 	 public String getMapXmlUrl() {
 		  return this.mapXmlUrl;
 	 }
@@ -1133,6 +1161,15 @@ public class SimplexBean extends GenericSopacBean {
 		db.close();
 
 	}
+
+	 public void toggleAddGPSObsvForProject(ActionEvent ev) {
+		  
+	 }
+
+	 public void toggleCloseMap(ActionEvent ev) {
+		  System.out.println("Turn off the map display");
+		  getCurrentEditProjectForm().setRenderGPSStationMap(false);		  
+	 }
 
 	public String toggleReplotGMT() {
 

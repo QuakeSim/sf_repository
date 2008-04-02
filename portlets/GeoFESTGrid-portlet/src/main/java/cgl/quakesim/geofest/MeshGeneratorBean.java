@@ -349,6 +349,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
     public String runNonBlockingMeshGenerartorJSF() 
 		  throws Exception {
 
+		  try {
 		  Layer[] layers=getLayersFromDB();
 		  Fault[] faults=getFaultsFromDB();
 
@@ -379,7 +380,11 @@ public class MeshGeneratorBean extends GenericSopacBean {
 																	 projectMeshRunBean);
 		  
 		  
-		  
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+				throw new Exception(ex.getMessage());
+		  }
 		  return MESH_GENERATION_NAV_STRING;
     }
 
@@ -653,7 +658,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				myFaultDBEntryList.add(tmp_FaultDBEntry);
 				
 		  }
-		  
     }
     
     /** 
@@ -694,7 +698,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				myFaultDBEntryList.add(tmp_FaultDBEntry);
 				
 		  }
-		  
     }
     
     public void QueryLayersList() {

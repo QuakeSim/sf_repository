@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
-<html>
+
 <style>
 	.alignTop {
 		vertical-align:top;
@@ -20,9 +20,22 @@
 	href='<%= request.getContextPath() + "/stylesheet.css" %>'>
 
 <title>Edit Project</title>
+
+  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBQozjQdf4FEuMBqpopduISAOADS4xTilRYX9d1ZU0uvBJwyY4gerC4Gog"
+      type="text/javascript"></script>
+
 </head>
 <body>
 <script language="JavaScript">
+
+	 var map=null;
+	 var geocoder=null;
+	 
+	     map=new GMap2(document.getElementById("map"));
+    	  map.setCenter(new GLatLng(32,-118),7);
+    	  map.addControl(new GLargeMapControl());
+    	  map.addControl(new GMapTypeControl());
+		  geocoder=new GClientGeocoder();
 
 function selectOne(form , button)
 {
@@ -87,7 +100,7 @@ vertical-align:top;
 
 						<f:selectItem id="item0"
 							itemLabel="Add Observation List (Advanced): Cut and paste a list of observation points. "
-							itemValue="AddGPSObservation" />
+							itemValue="ShowObsvCutPaste" />
 
 						<f:selectItem id="item021"
 							itemLabel="Add GPS Observation Point"
@@ -129,10 +142,13 @@ vertical-align:top;
 			</h:panelGroup>
 
 			<h:panelGroup id="lck093ks">
+                <h:outputText id="clrlc043" 
+					 					value="#{SimplexBean.currentEditProjectForm.renderGPSStationMap}"/>
 					 <h:form id="obsvGPSMap"
-					 			rendered="#{SimplexBean.currentEditProjectForm.renderGPSStationMap">
+					 			rendered="#{SimplexBean.currentEditProjectForm.renderGPSStationMap}">
                 <h:outputText id="clrlc093" escape="false"
 					    value="<b>Select Stations from Map:</b> Select the stations that you want to use as observation points."/>
+						 <div id="map" style="width: 800px; height: 800px"></div>
 					 </h:form>
 			</h:panelGroup>
 

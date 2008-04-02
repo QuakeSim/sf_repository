@@ -105,6 +105,7 @@ public class editProjectForm extends GenericProjectBean {
 		}
 
 		if (projectSelectionCode.equals("ShowGPSObsv")) {
+			 System.out.println("Showing Map");
 			 renderGPSStationMap=!renderGPSStationMap;
 		}
 
@@ -736,6 +737,14 @@ public class editProjectForm extends GenericProjectBean {
 	 
 	 public boolean getRenderCreateObsvCutPaste() {
 		  return renderCreateObsvCutPaste;
+	 }
+
+	 public void setRenderGPSStationMap(boolean renderGPSStationMap){
+		  this.renderGPSStationMap=renderGPSStationMap;
+	 }
+	 
+	 public boolean getRenderGPSStationMap() {
+		  return renderGPSStationMap;
 	 }
 	 
 	 public void setObsvTextArea(String obsvTextArea) {

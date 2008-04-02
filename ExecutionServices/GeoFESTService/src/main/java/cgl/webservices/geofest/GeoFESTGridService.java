@@ -239,7 +239,7 @@ public class GeoFESTGridService extends GeoFESTService{
 														  String envSettings,
 														  String meshExec)
 		  throws Exception {
-		  
+
 		  if(proxyLocation==null) proxyLocation=getProxyLocation();
 
 		  String meshArgs=projectName+" "+autoref_mode; 
