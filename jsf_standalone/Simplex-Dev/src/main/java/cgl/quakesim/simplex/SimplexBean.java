@@ -335,6 +335,16 @@ public class SimplexBean extends GenericSopacBean {
 						  .getObsvName();
 					 tmp_myObservationEntryForProject.view = false;
 					 tmp_myObservationEntryForProject.delete = false;
+					 if(tmpobser.getObsvRefSite().equals("-1")) {
+						  tmp_myObservationEntryForProject.refSite = "Yes";
+					 }
+					 else if(tmpobser.getObsvRefSite().equals("1")) {
+						  tmp_myObservationEntryForProject.refSite = "No";
+					 }
+					 //Just in case.
+					 else {
+						  tmp_myObservationEntryForProject.refSite = "No";
+					 }
 					 this.myObservationEntryForProjectList
 						  .add(tmp_myObservationEntryForProject);
 				}
@@ -872,8 +882,10 @@ public class SimplexBean extends GenericSopacBean {
 
 	}
 
+	 /**
+	  * This is obsolete.
+	  */ 
 	public String toggleGMTPlot() {
-
 		try {
 
 			// Catch the MyData item during the third phase of the JSF
@@ -923,6 +935,9 @@ public class SimplexBean extends GenericSopacBean {
 
 	}
 
+	 /**
+	  * This is an obsolete method.
+	  */ 
 	public String toggleMakeMap() {
 
 		System.out.println("GMT Plot");
@@ -1032,6 +1047,7 @@ public class SimplexBean extends GenericSopacBean {
 		}
 		return ("Simplex2-kml-viewer");
 	}
+	 
 	public void toggleUpdateFaultProjectEntry(ActionEvent ev) {
 
 		String faultStatus = "Update";
@@ -1152,6 +1168,7 @@ public class SimplexBean extends GenericSopacBean {
 		db.set(currentEditProjectForm.currentObservation);
 		db.commit();
 		db.close();
+		reconstructMyObservationEntryForProjectList(projectName);
 	}
 
 	 /**
@@ -1173,7 +1190,8 @@ public class SimplexBean extends GenericSopacBean {
 		db.set(currentEditProjectForm.currentFault);
 		db.commit();
 		db.close();
-
+		
+		saveSimplexProjectEntry(currentProjectEntry);
 	}
 
 	 public void toggleAddGPSObsvForProject(ActionEvent ev) {
@@ -1209,6 +1227,7 @@ public class SimplexBean extends GenericSopacBean {
 		  }
 		  db.commit();
 		  db.close();
+		  saveSimplexProjectEntry(currentProjectEntry);
 	 }
 	 
 	 private Observation[] setXYLocations(Observation[] obsv,
@@ -1243,6 +1262,7 @@ public class SimplexBean extends GenericSopacBean {
 					 obsv[i].setObsvLocationNorth(y+"");
 				}
 		  }
+		  //We have probably updated the origin, so save to db.
 		  return obsv;
 	 }
 

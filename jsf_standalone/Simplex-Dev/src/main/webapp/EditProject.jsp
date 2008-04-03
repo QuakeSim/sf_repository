@@ -218,8 +218,6 @@ function printNetworkColors (array) {
     		return x + "," + y;
 	}
 
-      </script>
-
 
 </script>
 
@@ -246,7 +244,7 @@ function printNetworkColors (array) {
 					<h:selectOneRadio layout="pageDirection" id="subscriptions"
 						value="#{SimplexBean.currentEditProjectForm.projectSelectionCode}">
 						<f:selectItem id="item1"
-							itemLabel="Add an Observation Point: Click to specify observation point parameters."
+							itemLabel="Add Observation Point: Click to specify observation point parameters."
 							itemValue="ShowObservation" />
 
 						<f:selectItem id="item0"
@@ -273,14 +271,14 @@ function printNetworkColors (array) {
             <h:outputText value="Simplex is ready to run.  Click the button below to launch."/>
 		      <h:commandButton rendered="#{!empty SimplexBean.myObservationEntryForProjectList
 							  				  && !empty SimplexBean.myFaultEntryForProjectList}"
-							  				  id="runSimplex2" value="Run Simplex2"
+							  				  id="runSimplex2" value="Run Simplex"
 							  				  action="#{SimplexBean.toggleRunSimplex2}" />
 			   </h:form>
 		   </h:panelGroup>
 
-			<h:panelGroup id="lkdrq7">
-					 <h:form id="obsvCutPaste"
-					 			rendered="#{SimplexBean.currentEditProjectForm.renderCreateObsvCutPaste}">
+			<h:panelGroup id="lkdrq7"
+				  rendered="#{SimplexBean.currentEditProjectForm.renderCreateObsvCutPaste}">
+					 <h:form id="obsvCutPaste">
                 <h:outputText id="cutinstruct1" escape="false"
 					    value="<b>Mass Observation Import:</b> Enter one observation point per line in following format: <br> ObservationType LocationEast LocationNorth Value Uncertainty <br> Values can be either space or comma separated."/>
 					   <h:panelGrid id="ObsvTextArea" columns="1">
@@ -293,9 +291,9 @@ function printNetworkColors (array) {
 					 </h:form>
 			</h:panelGroup>
 
-			<h:panelGroup id="lck093ks">
-					 <h:form id="obsvGPSMap"
-					 			rendered="#{SimplexBean.currentEditProjectForm.renderGPSStationMap}">
+			<h:panelGroup id="lck093ks"
+					rendered="#{SimplexBean.currentEditProjectForm.renderGPSStationMap}">
+					 <h:form id="obsvGPSMap">
                 <h:outputText id="clrlc093" escape="false"
 					    value="<b>Select Stations from Map:</b> Select the stations that you want to use as observation points."/>
 						 <h:panelGrid id="mapsAndCrap" columns="2" columnClasses="alignTop,alignTop">
@@ -322,10 +320,9 @@ function printNetworkColors (array) {
 					 </h:form>
 			</h:panelGroup>
 
-			<h:panelGroup id="lkdrq8">
-				<h:form id="observationform"
+			<h:panelGroup id="lkdrq8"
 					rendered="#{SimplexBean.currentEditProjectForm.renderCreateObservationForm}">
-
+				<h:form id="observationform">
 					<h:panelGrid id="LayerTable" columns="2" footerClass="subtitle"
 						headerClass="subtitlebig" styleClass="medium"
 						columnClasses="subtitle,medium">
@@ -770,11 +767,9 @@ function printNetworkColors (array) {
 					rendered="#{!empty SimplexBean.myFaultEntryForProjectList}">
 					<h:panelGrid id="dflelerkljk162" columns="1" border="1">
 						<h:panelGroup id="dflelerkljk163">
-							<h:panelGrid id="dflelerkljk164" columns="1" border="1">
 								<h:outputFormat id="dflelerkljk165" escape="false"
-									value="<b>Current Project Fault Components</b>">
+									value="<b>Fault Components</b>">
 								</h:outputFormat>
-							</h:panelGrid>
 
 							<h:dataTable border="1"
 											  id="dflelerkljk166"
@@ -809,15 +804,16 @@ function printNetworkColors (array) {
 
 				<h:form id="UpdateSelectObservationForm"
 					rendered="#{!empty SimplexBean.myObservationEntryForProjectList}">
-					<h:panelGrid id="dflelerkljk173" columns="1" border="1">
 						<h:panelGroup id="dflelerkljk174">
-							<h:panelGrid id="dflelerkljk175" columns="1" border="1">
+						  <h:panelGrid id="obsvpanelgrid" columns="1" border="1">
 								<h:outputFormat escape="false" id="dflelerkljk176"
-									value="<b>Current Project Observation Components</b>">
+									value="<b>Observation Components</b>">
 								</h:outputFormat>
-							</h:panelGrid>
+								<h:commandButton id="viewSimplexObsv" value="Display/Hide"
+									actionListener="#{SimplexBean.currentEditProjectForm.toggleShowObsvEntries}"/>
 
 							<h:dataTable border="1" id="dflelerkljk177"
+							   rendered="#{SimplexBean.currentEditProjectForm.renderObsvEntries}"
 								value="#{SimplexBean.myObservationEntryForProjectList}"
 								var="myentry4">
 								<h:column>
@@ -843,12 +839,18 @@ function printNetworkColors (array) {
 										onchange="selectOne(this.form,this)"
 										onclick="selectOne(this.form,this)" />
 								</h:column>
+								<h:column>
+									<f:facet name="header">
+										<h:outputText id="dflel332" escape="false" value="<b>Ref Site</b>" />
+									</f:facet>
+									<h:outputText id="dfl33rejk183" value="#{myentry4.refSite}"/>
+								</h:column>
 							</h:dataTable>
+						</h:panelGrid>
 						</h:panelGroup>
-
-					</h:panelGrid>
 					<h:commandButton id="SelectObservation4proj"
-						value="UpdateObservation"
+					   rendered="#{SimplexBean.currentEditProjectForm.renderObsvEntries}"
+						value="Update Observation"
 						actionListener="#{SimplexBean.toggleUpdateObservationProjectEntry}" />
 				</h:form>
 			</h:panelGroup>
