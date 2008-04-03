@@ -37,6 +37,7 @@ public class editProjectForm extends GenericProjectBean {
 	 boolean renderSearchByLatLonForm = false;	 
 	 boolean renderViewAllFaultsForm = false;
 	 boolean renderGPSStationMap = false;
+	 boolean renderObsvEntries= true;
 
 	 String faultSelectionCode = "";
 	 boolean renderAddFaultFromDBForm = false;
@@ -80,6 +81,10 @@ public class editProjectForm extends GenericProjectBean {
 		 renderGPSStationMap = false;
 	}	
 	 
+	 public void toggleShowObsvEntries(ActionEvent ev) {
+		  renderObsvEntries=!renderObsvEntries;
+	 }
+
 	 public void toggleProjectSelection(ActionEvent ev) {
 		initEditFormsSelection();
 		if (projectSelectionCode.equals("ShowObservation")) {
@@ -761,5 +766,13 @@ public class editProjectForm extends GenericProjectBean {
 	 
 	 public projectEntry getProjectEntry() {
 		  return currentProject;
+	 }
+
+	 public boolean getRenderObsvEntries() {
+		  return renderObsvEntries;
+	 }
+
+	 public void setRenderObsvEntries(boolean renderObsvEntries) {
+		  this.renderObsvEntries=renderObsvEntries;
 	 }
 }

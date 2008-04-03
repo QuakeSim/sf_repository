@@ -4,6 +4,24 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 
+<%@page import="java.util.*, cgl.sensorgrid.sopac.gps.GetStationsRSS,cgl.sensorgrid.gui.google.MapBean, java.io.*"%>
+
+<jsp:useBean id="RSSBeanID" scope="session" class="cgl.sensorgrid.sopac.gps.GetStationsRSS"/>
+
+<jsp:useBean id="MapperID" scope="session" class="cgl.sensorgrid.gui.google.Mapper"/>
+
+<%
+Vector networkNames = RSSBeanID.networkNames();
+
+//Vector stationsVec = RSSBeanID.getAllStationsVec();
+String mapcenter_x = "33.036";
+String mapcenter_y = "-117.24";
+
+String [] center_xy = RSSBeanID.getMapCenter();
+mapcenter_x = center_xy[0];
+mapcenter_y = center_xy[1];
+%>
+
 <style>
 	.alignTop {
 		vertical-align:top;
@@ -25,26 +43,57 @@
       type="text/javascript"></script>
 
 </head>
-<body>
+<body onload="initialize()" onunload="GUnload()">
 <script language="JavaScript">
 
-	 var map=null;
+		  //These are various gmap definitions.
 	 var geocoder=null;
-	 
+
+        var req;
+        var baseIcon = new GIcon();
+        baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
+        baseIcon.iconSize = new GSize(15, 20);
+        baseIcon.shadowSize = new GSize(10, 10);
+        baseIcon.iconAnchor = new GPoint(1, 10);
+        baseIcon.infoWindowAnchor = new GPoint(5, 1);
+        baseIcon.infoShadowAnchor = new GPoint(5, 5);
+
+        var colors = new Array (6);
+        colors[0]="red";
+        colors[1]="green";
+        colors[2]="blue";
+        colors[3]="black";
+        colors[4]="white";
+        colors[5]="yellow";
+        colors[6]="purple";
+        colors[7]="brown";
+
+        var networkInfo = new Array (<%=networkNames.size()%>);
+        for (i = 0; i < networkInfo.length; ++ i){
+          networkInfo [i] = new Array (2);
+        }
+
+
+function initialize() {
 	     map=new GMap2(document.getElementById("map"));
-    	  map.setCenter(new GLatLng(32,-118),7);
+    	  map.setCenter(new GLatLng(33,-117),7);
     	  map.addControl(new GLargeMapControl());
     	  map.addControl(new GMapTypeControl());
+        map.addControl(new GScaleControl());
+
 		  geocoder=new GClientGeocoder();
 
-function selectOne(form , button)
-{
+		  //Create the network.
+        overlayNetworks();
+        printNetworkColors(networkInfo);
+}
+
+function selectOne(form , button) {
   turnOffRadioForForm(form);
   button.checked = true;
 }
 
-function turnOffRadioForForm(form)
-{
+function turnOffRadioForForm(form) {
   for(var i=0; i<form.elements.length; i++)
   {
    form.elements[i].checked = false;
@@ -64,14 +113,114 @@ function dataTableSelectOneRadio(radio) {
         }
     }
     radio.checked = true;
+}       
+
+function overlayNetworks(){
+          var icon = new GIcon(baseIcon);
+          icon.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";
+
+          <%
+          for (int j = 0; j < networkNames.size(); j++) {
+            String networkName = (String)networkNames.get(j);
+            Vector stationsVec = RSSBeanID.getStationsVec(networkName);
+            %>
+            networkInfo [<%=j%>] [0] = "<%=networkName%>";
+
+            var k;
+            if(<%=j%>>=colors.length)
+            k = 0;
+            else
+            k=<%=j%>;
+            icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + colors[k] + ".png";
+            networkInfo [<%=j%>] [1] = "http://labs.google.com/ridefinder/images/mm_20_" + colors[k] + ".png";
+
+            var stationCount = <%=stationsVec.size()%>;
+            var stations = new Array (stationCount);
+            var Markers = new Array (stationCount);
+            for (i = 0; i < stations.length; ++ i){
+              stations [i] = new Array (3);
+            }
+
+            <%
+            for (int i = 0; i < stationsVec.size(); i++) {
+              String name = (String)stationsVec.get(i);
+              String lat = RSSBeanID.getStationInfo(name)[0];
+              String lon = RSSBeanID.getStationInfo(name)[1];
+              %>
+              stations [<%=i%>] [0] = "<%=name%>";
+              stations [<%=i%>] [1] = "<%=lat%>";
+              stations [<%=i%>] [2] = "<%=lon%>";
+
+              Markers[<%=i%>] = createMarker("<%=networkName%>", "<%=name%>", "<%=lon%>", "<%=lat%>", icon);
+              map.addOverlay(Markers[<%=i%>]);
+	
+              <%
+            }
+          }
+          %>
 }
 
-</script>
-<style>
-.alignTop {
-vertical-align:top;
+function createMarker(networkName, name, lon, lat, icon) {
+          var marker = new GMarker(new GPoint(lon, lat),icon);
+          // Show this marker's name in the info window when it is clicked
+          var html = "<b>Station Name= </b>" + name + "<br><b>Lat=</b>" + lat + "<br><b>Lon= </b>" + lon + "<br><b>Network= </b>" + networkName;
+
+
+          GEvent.addListener(marker, "click", function() {
+            marker.openInfoWindowHtml(html);;
+			 		var newElement=document.getElementById("obsvGPSMap:stationName");
+					newElement.setAttribute("value",name);
+			 		var newElement2=document.getElementById("obsvGPSMap:stationLat");
+					newElement2.setAttribute("value",lat);
+			 		var newElement3=document.getElementById("obsvGPSMap:stationLon");
+					newElement3.setAttribute("value",lon);
+	       });
+
+          return marker;
 }
-</style>
+
+function printNetworkColors (array) {
+          var html = "<table border='0'><tr><td><b>Network</b></td><td nowrap><b>Icon Color<b></td></tr>";
+
+          var row;
+          for (row = 0; row < array.length; ++ row)
+          {
+            html = html + " <tr>";
+            var col;
+            for (col = 0; col < array [row] . length; ++ col){
+              if(col==0)
+              html = html + "  <td>" + array [row] [col] + "</td>";
+              if(col==1)
+              html = html + "  <td align='center'><img border=0 src=" + array [row] [col] + "></td>";
+
+            }
+            html = html + " </tr>";
+          }
+           html = html + "</table>";
+           var idiv = window.document.getElementById("networksDiv");
+           idiv.innerHTML = html;
+}
+
+
+	//Needed for Firefox 2.0 compatibility
+	function getScrolling() {
+	    var x = 0; var y = 0;
+    		if (document.body && document.body.scrollLeft && !isNaN(document.body.scrollLeft)) {
+	        x = document.body.scrollLeft;
+    		} else if (window.pageXOffset && !isNaN(window.pageXOffset)) {
+        	x = window.pageXOffset;
+    		}
+    		if (document.body && document.body.scrollTop && !isNaN(document.body.scrollTop)) {
+        	y = document.body.scrollTop;
+    		} else if (window.pageYOffset && !isNaN(window.pageYOffset)) {
+        	y = window.pageYOffset;
+    		}
+    		return x + "," + y;
+	}
+
+
+</script>
+
 <f:view>
 	<h:outputText id="lkdrq1" styleClass="header2" value="Project Component Manager"/>   
 	<h:outputText id="lkdrq2" escape="false"
@@ -95,7 +244,7 @@ vertical-align:top;
 					<h:selectOneRadio layout="pageDirection" id="subscriptions"
 						value="#{SimplexBean.currentEditProjectForm.projectSelectionCode}">
 						<f:selectItem id="item1"
-							itemLabel="Add an Observation Point: Click to specify observation point parameters."
+							itemLabel="Add Observation Point: Click to specify observation point parameters."
 							itemValue="ShowObservation" />
 
 						<f:selectItem id="item0"
@@ -117,18 +266,19 @@ vertical-align:top;
 						actionListener="#{SimplexBean.currentEditProjectForm.toggleProjectSelection}">
 					</h:commandButton>
 			   </h:form>
+
   		      <h:form id="dflelerkljk185" rendered="#{!empty SimplexBean.myObservationEntryForProjectList && !empty SimplexBean.myFaultEntryForProjectList}">
             <h:outputText value="Simplex is ready to run.  Click the button below to launch."/>
 		      <h:commandButton rendered="#{!empty SimplexBean.myObservationEntryForProjectList
 							  				  && !empty SimplexBean.myFaultEntryForProjectList}"
-							  				  id="runSimplex2" value="Run Simplex2"
+							  				  id="runSimplex2" value="Run Simplex"
 							  				  action="#{SimplexBean.toggleRunSimplex2}" />
 			   </h:form>
 		   </h:panelGroup>
 
-			<h:panelGroup id="lkdrq7">
-					 <h:form id="obsvCutPaste"
-					 			rendered="#{SimplexBean.currentEditProjectForm.renderCreateObsvCutPaste}">
+			<h:panelGroup id="lkdrq7"
+				  rendered="#{SimplexBean.currentEditProjectForm.renderCreateObsvCutPaste}">
+					 <h:form id="obsvCutPaste">
                 <h:outputText id="cutinstruct1" escape="false"
 					    value="<b>Mass Observation Import:</b> Enter one observation point per line in following format: <br> ObservationType LocationEast LocationNorth Value Uncertainty <br> Values can be either space or comma separated."/>
 					   <h:panelGrid id="ObsvTextArea" columns="1">
@@ -141,21 +291,38 @@ vertical-align:top;
 					 </h:form>
 			</h:panelGroup>
 
-			<h:panelGroup id="lck093ks">
-                <h:outputText id="clrlc043" 
-					 					value="#{SimplexBean.currentEditProjectForm.renderGPSStationMap}"/>
-					 <h:form id="obsvGPSMap"
-					 			rendered="#{SimplexBean.currentEditProjectForm.renderGPSStationMap}">
+			<h:panelGroup id="lck093ks"
+					rendered="#{SimplexBean.currentEditProjectForm.renderGPSStationMap}">
+					 <h:form id="obsvGPSMap">
                 <h:outputText id="clrlc093" escape="false"
 					    value="<b>Select Stations from Map:</b> Select the stations that you want to use as observation points."/>
-						 <div id="map" style="width: 800px; height: 800px"></div>
+						 <h:panelGrid id="mapsAndCrap" columns="2" columnClasses="alignTop,alignTop">
+						    <h:panelGroup id="mapncrap1">
+						 <f:verbatim>
+						 <div id="map" style="width: 600px; height: 600px"></div>
+						 </f:verbatim>
+                      </h:panelGroup>
+                      <h:panelGroup id="mapncrap2">
+							<h:panelGrid id="dfjdlkj" columns="2">
+						 <h:outputText id="dkl34rtjf" value="Station:"/>
+						 <h:inputText id="stationName" value="#{SimplexBean.gpsStationName}"/>
+						 <h:outputText id="dkljr3rf" value="Latitude:"/>
+						 <h:inputText id="stationLat" value="#{SimplexBean.gpsStationLat}"/>
+						 <h:outputText id="dkljfer4" value="Longitude:"/>
+						 <h:inputText id="stationLon" value="#{SimplexBean.gpsStationLon}"/>
+						 <h:commandButton id="addGPSObsv" value="Add Station"
+						 		actionListener="#{SimplexBean.toggleAddGPSObsvForProject}"/>
+						 <h:commandButton id="closeMap" value="Close Map"
+						 		actionListener="#{SimplexBean.toggleCloseMap}"/>
+								</h:panelGrid>
+						   </h:panelGroup>
+							</h:panelGrid>
 					 </h:form>
 			</h:panelGroup>
 
-			<h:panelGroup id="lkdrq8">
-				<h:form id="observationform"
+			<h:panelGroup id="lkdrq8"
 					rendered="#{SimplexBean.currentEditProjectForm.renderCreateObservationForm}">
-
+				<h:form id="observationform">
 					<h:panelGrid id="LayerTable" columns="2" footerClass="subtitle"
 						headerClass="subtitlebig" styleClass="medium"
 						columnClasses="subtitle,medium">
@@ -600,11 +767,9 @@ vertical-align:top;
 					rendered="#{!empty SimplexBean.myFaultEntryForProjectList}">
 					<h:panelGrid id="dflelerkljk162" columns="1" border="1">
 						<h:panelGroup id="dflelerkljk163">
-							<h:panelGrid id="dflelerkljk164" columns="1" border="1">
 								<h:outputFormat id="dflelerkljk165" escape="false"
-									value="<b>Current Project Fault Components</b>">
+									value="<b>Fault Components</b>">
 								</h:outputFormat>
-							</h:panelGrid>
 
 							<h:dataTable border="1"
 											  id="dflelerkljk166"
@@ -639,15 +804,16 @@ vertical-align:top;
 
 				<h:form id="UpdateSelectObservationForm"
 					rendered="#{!empty SimplexBean.myObservationEntryForProjectList}">
-					<h:panelGrid id="dflelerkljk173" columns="1" border="1">
 						<h:panelGroup id="dflelerkljk174">
-							<h:panelGrid id="dflelerkljk175" columns="1" border="1">
+						  <h:panelGrid id="obsvpanelgrid" columns="1" border="1">
 								<h:outputFormat escape="false" id="dflelerkljk176"
-									value="<b>Current Project Observation Components</b>">
+									value="<b>Observation Components</b>">
 								</h:outputFormat>
-							</h:panelGrid>
+								<h:commandButton id="viewSimplexObsv" value="Display/Hide"
+									actionListener="#{SimplexBean.currentEditProjectForm.toggleShowObsvEntries}"/>
 
 							<h:dataTable border="1" id="dflelerkljk177"
+							   rendered="#{SimplexBean.currentEditProjectForm.renderObsvEntries}"
 								value="#{SimplexBean.myObservationEntryForProjectList}"
 								var="myentry4">
 								<h:column>
@@ -673,12 +839,18 @@ vertical-align:top;
 										onchange="selectOne(this.form,this)"
 										onclick="selectOne(this.form,this)" />
 								</h:column>
+								<h:column>
+									<f:facet name="header">
+										<h:outputText id="dflel332" escape="false" value="<b>Ref Site</b>" />
+									</f:facet>
+									<h:outputText id="dfl33rejk183" value="#{myentry4.refSite}"/>
+								</h:column>
 							</h:dataTable>
+						</h:panelGrid>
 						</h:panelGroup>
-
-					</h:panelGrid>
 					<h:commandButton id="SelectObservation4proj"
-						value="UpdateObservation"
+					   rendered="#{SimplexBean.currentEditProjectForm.renderObsvEntries}"
+						value="Update Observation"
 						actionListener="#{SimplexBean.toggleUpdateObservationProjectEntry}" />
 				</h:form>
 			</h:panelGroup>
