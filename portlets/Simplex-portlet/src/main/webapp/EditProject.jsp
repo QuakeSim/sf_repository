@@ -77,6 +77,7 @@ mapcenter_y = center_xy[1];
 function initialize() {
 	     map=new GMap2(document.getElementById("map"));
     	  map.setCenter(new GLatLng(33,-117),7);
+		  map.addMapType(G_PHYSICAL_MAP);
     	  map.addControl(new GLargeMapControl());
     	  map.addControl(new GMapTypeControl());
         map.addControl(new GScaleControl());
@@ -307,12 +308,15 @@ function printNetworkColors (array) {
 						 <h:panelGrid id="mapsAndCrap" columns="2" columnClasses="alignTop,alignTop">
 						    <h:panelGroup id="mapncrap1">
 						 <f:verbatim>
-						 <div id="map" style="width: 600px; height: 600px"></div>
+						 <div id="map" style="width: 600px; height: 400px"></div>
 						 </f:verbatim>
                       </h:panelGroup>
                       <h:panelGroup id="mapncrap2">
 							<h:panelGrid id="dfjdlkj" columns="2">
-						 <h:outputText id="dkl34rtjf" value="Station:"/>
+							<f:facet name="header">
+							Station Info: Click an Icon to Fill In
+							</f:facet>
+						 <h:outputText id="dkl34rtjf" value="Station Name:"/>
 						 <h:inputText id="stationName" value="#{SimplexBean.gpsStationName}"/>
 						 <h:outputText id="dkljr3rf" value="Latitude:"/>
 						 <h:inputText id="stationLat" value="#{SimplexBean.gpsStationLat}"/>
