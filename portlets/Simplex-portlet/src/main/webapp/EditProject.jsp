@@ -10,6 +10,7 @@
 <jsp:useBean id="RSSBeanID" scope="session" class="cgl.sensorgrid.sopac.gps.GetStationsRSS"/>
 
 <jsp:useBean id="MapperID" scope="session" class="cgl.sensorgrid.gui.google.Mapper"/>
+<jsp:useBean id="SimplexBean" scope="session" class="cgl.quakesim.simplex.SimplexBean"/>
 
 <%
 Vector networkNames = RSSBeanID.networkNames();
