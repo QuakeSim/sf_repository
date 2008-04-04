@@ -20,6 +20,14 @@ String mapcenter_y = "-117.24";
 String [] center_xy = RSSBeanID.getMapCenter();
 mapcenter_x = center_xy[0];
 mapcenter_y = center_xy[1];
+
+//Stuff for plotting the faults as KML
+SimplexBean simplexBean=(SimplexBean)session.getAttribute("SimplexBean");
+String userName=simplexBean.getUserName();
+String projectName=simplexBean.getProjectName();
+String codeName=simplexBean.getCodeName();
+String faultKmlUrl="http://localhost:8080"+"/Simplex-dev/"+"FaultKml.jsp";
+faultKmlUrl+="?userName="+userName+"&projectName="+projectName+"&codeName="+codeName;
 %>
 
 <style>
@@ -38,9 +46,13 @@ mapcenter_y = center_xy[1];
 	href='<%= request.getContextPath() + "/stylesheet.css" %>'>
 
 <title>Edit Project</title>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBRxYpIIOz9ynlSKjbx-4JMuN5JjrhR5gSOcKdieYppOZ4_yzZc_Ti15qw"
+      type="text/javascript"></script>
 
+<!--
   <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBQozjQdf4FEuMBqpopduISAOADS4xTilRYX9d1ZU0uvBJwyY4gerC4Gog"
       type="text/javascript"></script>
+-->
 
 </head>
 <body onload="initialize()" onunload="GUnload()">
@@ -48,6 +60,7 @@ mapcenter_y = center_xy[1];
 
 		  //These are various gmap definitions.
 	 var geocoder=null;
+	 var geoXml;
 
         var req;
         var baseIcon = new GIcon();
@@ -87,6 +100,11 @@ function initialize() {
 		  //Create the network.
         overlayNetworks();
         printNetworkColors(networkInfo);
+}
+
+function plotFaults(<%=faultKmlUrl%>) {
+			geoXml=new GGeoXml(url);
+			map.addOverlay(geoXml);			
 }
 
 function selectOne(form , button) {

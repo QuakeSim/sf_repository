@@ -172,7 +172,28 @@ public class SimplexBean extends GenericSopacBean {
 		  projectDir.mkdirs();
 	 }
 	 
-	 public Fault[] getFaultsFromDB() {
+	 public Fault[] getProjectFaultsFromDB(String userName,
+														String projectName,
+														String codeName,
+														String basePath,
+														String relPath) {
+		  Fault[] returnFaults = null;
+		  
+		  db = Db4o.openFile(basePath+"/"+relPath+ "/" + userName + "/"
+									+ codeName + "/" + projectName + ".db");
+		  Fault faultToGet = new Fault();
+		  ObjectSet results = db.get(faultToGet);
+		  if (results.hasNext()) {
+				returnFaults = new Fault[results.size()];
+				for (int i = 0; i < results.size(); i++) {
+					 returnFaults[i] = (Fault) results.next();
+				}
+		  }
+		  db.close();
+		  return returnFaults;
+	 }
+
+	 protected Fault[] getFaultsFromDB() {
 		  Fault[] returnFaults = null;
 		  db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 									+ codeName + "/" + projectName + ".db");
@@ -1534,4 +1555,50 @@ public class SimplexBean extends GenericSopacBean {
 		  return first;
 	 }
 
+	 /**
+	  *
+	  */
+	 public String createFaultKmlFile() {
+		  //Some KML constants.
+		  String xmlHead="<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+		  String kmlHead="<kml xmlns=\"http://earth.google.com/kml/2.2\">";
+		  String kmlEnd="</kml>";
+		  String pmBegin="<Placemark>";
+		  String pmEnd="</Placemark>";
+		  String lsBegin="<LineString>";
+		  String lsEnd="</LineString>";
+		  String coordBegin="<coordinates>";
+		  String coordEnd="</coordinates>";
+		  String docBegin="<Document>";
+		  String docEnd="</Document>";
+		  String comma=",";
+
+		  String localDestination=this.getBasePath()+"/"+"gridsphere"+"/"+"faults.kml";
+		  try {
+				Fault[] faults=getFaultsFromDB();
+				PrintWriter out=new PrintWriter(new FileWriter(localDestination));
+								
+				out.println(xmlHead);																 
+				out.println(kmlHead);
+				out.println(docBegin);
+				for(int i=0;i<faults.length;i++) {
+					 out.println(pmBegin);
+					 out.println(lsBegin);
+					 out.println(coordBegin);
+					 out.println(faults[i].getFaultLonStarts()+comma+faults[i].getFaultLatStarts()+comma+"0");
+					 out.println(faults[i].getFaultLonEnds()+comma+faults[i].getFaultLatEnds()+comma+"0");
+					 out.println(coordEnd);
+					 out.println(lsEnd);
+					 out.println(pmEnd);
+				}
+				out.println(docEnd);
+				out.println(kmlEnd);
+				out.flush();
+				out.close();
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  return "http://156.56.104.143:8080/gridsphere/faults.kml";
+	 }
 }

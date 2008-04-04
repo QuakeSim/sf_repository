@@ -1,5 +1,19 @@
 --------------------------------------------------
-This is localhost:8080 on the MEP mac desktop
+localhost:8080 on 143
+--------------------------------------------------
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTwM0brOpm-All5BF6PoaKBxRWWERS5kaQBLplD6GDaf1-YuioaBH35uw"
+      type="text/javascript"></script>
+    <script type="text/javascript">
+
+--------------------------------------------------
+156.56.104.143:8080
+--------------------------------------------------
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBRxYpIIOz9ynlSKjbx-4JMuN5JjrhR5gSOcKdieYppOZ4_yzZc_Ti15qw"
+      type="text/javascript"></script>
+--------------------------------------------------
+
+--------------------------------------------------
+This is localhost:8080 on the MEP mac desktop (same as above)
 --------------------------------------------------
   <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTwM0brOpm-All5BF6PoaKBxRWWERS5kaQBLplD6GDaf1-YuioaBH35uw"
       type="text/javascript"></script>
