@@ -5,6 +5,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 
 <%@page import="java.util.*, cgl.sensorgrid.sopac.gps.GetStationsRSS,cgl.sensorgrid.gui.google.MapBean, java.io.*"%>
+<%@page import="cgl.quakesim.simplex.*"%>
 
 <jsp:useBean id="RSSBeanID" scope="session" class="cgl.sensorgrid.sopac.gps.GetStationsRSS"/>
 
@@ -23,11 +24,8 @@ mapcenter_y = center_xy[1];
 
 //Stuff for plotting the faults as KML
 SimplexBean simplexBean=(SimplexBean)session.getAttribute("SimplexBean");
-String userName=simplexBean.getUserName();
-String projectName=simplexBean.getProjectName();
-String codeName=simplexBean.getCodeName();
-String faultKmlUrl="http://localhost:8080"+"/Simplex-dev/"+"FaultKml.jsp";
-faultKmlUrl+="?userName="+userName+"&projectName="+projectName+"&codeName="+codeName;
+String faultKmlUrl=simplexBean.createFaultKmlFile();
+out.println(faultKmlUrl);
 %>
 
 <style>
@@ -46,12 +44,12 @@ faultKmlUrl+="?userName="+userName+"&projectName="+projectName+"&codeName="+code
 	href='<%= request.getContextPath() + "/stylesheet.css" %>'>
 
 <title>Edit Project</title>
-    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBRxYpIIOz9ynlSKjbx-4JMuN5JjrhR5gSOcKdieYppOZ4_yzZc_Ti15qw"
-      type="text/javascript"></script>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTwM0brOpm-All5BF6PoaKBxRWWERS5kaQBLplD6GDaf1-YuioaBH35uw"
+type="text/javascript"></script>
 
 <!--
   <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBQozjQdf4FEuMBqpopduISAOADS4xTilRYX9d1ZU0uvBJwyY4gerC4Gog"
-      type="text/javascript"></script>
+type="text/javascript"></script>      
 -->
 
 </head>
@@ -86,11 +84,9 @@ faultKmlUrl+="?userName="+userName+"&projectName="+projectName+"&codeName="+code
           networkInfo [i] = new Array (2);
         }
 
-
 function initialize() {
 	     map=new GMap2(document.getElementById("map"));
     	  map.setCenter(new GLatLng(33,-117),7);
-		  map.addMapType(G_PHYSICAL_MAP);
     	  map.addControl(new GLargeMapControl());
     	  map.addControl(new GMapTypeControl());
         map.addControl(new GScaleControl());
@@ -100,11 +96,8 @@ function initialize() {
 		  //Create the network.
         overlayNetworks();
         printNetworkColors(networkInfo);
-}
-
-function plotFaults(<%=faultKmlUrl%>) {
-			geoXml=new GGeoXml(url);
-			map.addOverlay(geoXml);			
+		  geoXml=new GGeoXml("<%=faultKmlUrl%>");
+		  map.addOverlay(geoXml);			
 }
 
 function selectOne(form , button) {
@@ -133,6 +126,13 @@ function dataTableSelectOneRadio(radio) {
     }
     radio.checked = true;
 }       
+
+function addFault(latStart, latEnd, lonStart, lonEnd) {
+	 var polyline = new GPolyline([
+	     	      new GLatLng(latStart, lonStart),
+	     	      new GLatLng(latEnd, lonEnd)], "#ff0000", 10);
+	map.addOverlay(polyline);	 
+}
 
 function overlayNetworks(){
           var icon = new GIcon(baseIcon);
@@ -323,7 +323,7 @@ function printNetworkColors (array) {
 					 <h:form id="obsvGPSMap">
                 <h:outputText id="clrlc093" escape="false"
 					    value="<b>Select Stations from Map:</b> Select the stations that you want to use as observation points."/>
-						 <h:panelGrid id="mapsAndCrap" columns="2" columnClasses="alignTop,alignTop">
+						 <h:panelGrid id="mapsAndCrap" columns="3" columnClasses="alignTop,alignTop">
 						    <h:panelGroup id="mapncrap1">
 						 <f:verbatim>
 						 <div id="map" style="width: 600px; height: 400px"></div>
@@ -331,10 +331,7 @@ function printNetworkColors (array) {
                       </h:panelGroup>
                       <h:panelGroup id="mapncrap2">
 							<h:panelGrid id="dfjdlkj" columns="2">
-							<f:facet name="header">
-							Station Info: Click an Icon to Fill In
-							</f:facet>
-						 <h:outputText id="dkl34rtjf" value="Station Name:"/>
+						 <h:outputText id="dkl34rtjf" value="Station:"/>
 						 <h:inputText id="stationName" value="#{SimplexBean.gpsStationName}"/>
 						 <h:outputText id="dkljr3rf" value="Latitude:"/>
 						 <h:inputText id="stationLat" value="#{SimplexBean.gpsStationLat}"/>
@@ -345,6 +342,9 @@ function printNetworkColors (array) {
 						 <h:commandButton id="closeMap" value="Close Map"
 						 		actionListener="#{SimplexBean.toggleCloseMap}"/>
 								</h:panelGrid>
+                    <f:verbatim>
+						 <div id="networksDiv">
+						 </f:verbatim>
 						   </h:panelGroup>
 							</h:panelGrid>
 					 </h:form>
