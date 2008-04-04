@@ -172,7 +172,7 @@ public class SimplexBean extends GenericSopacBean {
 		  projectDir.mkdirs();
 	 }
 	 
-	 protected Fault[] getFaultsFromDB() {
+	 public Fault[] getFaultsFromDB() {
 		  Fault[] returnFaults = null;
 		  db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 									+ codeName + "/" + projectName + ".db");

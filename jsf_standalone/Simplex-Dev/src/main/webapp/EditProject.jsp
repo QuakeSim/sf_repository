@@ -115,6 +115,13 @@ function dataTableSelectOneRadio(radio) {
     radio.checked = true;
 }       
 
+function addFault(latStart, latEnd, lonStart, lonEnd) {
+	 var polyline = new GPolyline([
+	     	      new GLatLng(latStart, lonStart),
+	     	      new GLatLng(latEnd, lonEnd)], "#ff0000", 10);
+	map.addOverlay(polyline);	 
+}
+
 function overlayNetworks(){
           var icon = new GIcon(baseIcon);
           icon.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";

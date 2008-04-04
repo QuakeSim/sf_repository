@@ -1,0 +1,66 @@
+NB_HOME=C:/NB/NaradaBrokering
+
+#This specifies the location of the Fragmentation Directory needed by 
+FragmentationDirectory=D:/TempFiles/tmpFiles/fragment
+
+
+
+#This specifies the location of the coalescing directory
+CoalescingDirectory=D:/TempFiles/tmpFiles/coalesce
+
+
+
+#This specifies the location of the Security keystore
+SecurityKeyStore=D:/SecurityStores/keystore
+
+
+#This specifies the location of the Security truststore
+SecurityTrustStore=D:/SecurityStores/truststore
+
+
+
+#This specifies the cryptography provider within the system
+SecurityProvider=CryptixCrypto
+
+
+#Specifies the location of the stratum-1 time servers used by entities.
+#time-a.nist.gov,time-b.nist.gov,time-a.timefreq.bldrdoc.gov,time-b.timefreq.bldrdoc.gov,
+#time-c.timefreq.bldrdoc.gov,time.nist.gov,time-nw.nist.gov,utcnist.colorado.edu
+# ,131.107.1.10,128.138.140.44
+NTP_Servers = 129.6.15.28,129.6.15.29,132.163.4.101,132.163.4.102,132.163.4.103,192.43.244.18
+
+
+## This is the time interval (milliseconds) between successive runs of the NTP synchronization with an NTP time server,
+## The default value is 30 seconds.
+NTP_Interval=2000
+
+NTP_Debug=OFF
+
+#These pertain to Reliable Delivery Service Implementations (db=Database, file=FileStorage)
+Storage_Type=db
+
+Database_JDBC_Driver=org.gjt.mm.mysql.Driver
+Database_ConnectionProvider=jdbc:mysql
+Database_ConnectionHost=localhost
+Database_ConnectionPort=3306
+Database_ConnectionDatabase=NbPersistence
+
+FileStorage_BaseDirectory=C:/NBStorage/filebased/persistent
+
+
+
+TOB_MaximumTotalBufferSize=2500000
+
+TOB_MaximumNumberOfBufferEntries=10000
+
+#In milliseconds#
+TOB_MaximumBufferEntryDuration=50000
+TOB_BufferReleaseFactor=0.8
+
+
+# Comma seperated list of publicly known Broker Discovery Services
+# BDNDiscoveryList=http://www.idonotexist.com,http://trex.ucs.indiana.edu:8080/BDN/servlet/Discover,http://www.gridservicelocator.org/
+
+MulticastGroupHost=224.224.224.224
+MulticastGroupPort=0
+
