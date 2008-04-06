@@ -105,6 +105,7 @@
     <module>portlets/STFILTER-portlet</module>
     <module>portlets/Simplex-portlet</module>
     <module>portlets/StationMonitor-portlet</module>
+    <module>portlets/FaultDB-portlet</module>
 
     <!-- These are services.  Add new ones here. -->
     <module>ExecutionServices/AnalyzeTseriService</module>
