@@ -13,6 +13,11 @@
 		<managed-bean-scope>session</managed-bean-scope>
                 <!--Who we are-->
                 <managed-property>
+                   <property-name>portalBaseUrl</property-name>
+                   <value>http://156.56.104.143:8080</value>
+                </managed-property>
+
+                <managed-property>
                    <property-name>codeName</property-name>
                    <value>Simplex2</value>
                 </managed-property>

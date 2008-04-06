@@ -109,6 +109,15 @@ public class SimplexBean extends GenericSopacBean {
 	 String minMaxLatLon="";
 	 String contextId="38";
 
+	 String portalBaseUrl="";
+
+	 public String getPortalBaseUrl() {
+		  return portalBaseUrl;
+	 }
+	 
+	 public void setPortalBaseUrl(String portalBaseUrl) {
+		  this.portalBaseUrl=portalBaseUrl;
+	 }
 
 	 public String getGpsStationName() {
 		  return gpsStationName;
@@ -178,7 +187,8 @@ public class SimplexBean extends GenericSopacBean {
 														String basePath,
 														String relPath) {
 		  Fault[] returnFaults = null;
-		  
+		  System.out.println("Opening Fault DB:"+basePath+"/"+relPath+ "/" + userName + "/"	+ codeName + "/" + projectName + ".db");
+
 		  db = Db4o.openFile(basePath+"/"+relPath+ "/" + userName + "/"
 									+ codeName + "/" + projectName + ".db");
 		  Fault faultToGet = new Fault();
@@ -1558,7 +1568,9 @@ public class SimplexBean extends GenericSopacBean {
 	 /**
 	  *
 	  */
-	 public String createFaultKmlFile() {
+	 public String createFaultKmlFile(String hostUrl, 
+												 String contextPath,
+												 String projectName) {
 		  //Some KML constants.
 		  String xmlHead="<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 		  String kmlHead="<kml xmlns=\"http://earth.google.com/kml/2.2\">";
@@ -1575,30 +1587,45 @@ public class SimplexBean extends GenericSopacBean {
 
 		  String localDestination=this.getBasePath()+"/"+"gridsphere"+"/"+"faults.kml";
 		  try {
-				Fault[] faults=getFaultsFromDB();
+				System.out.println("Old fault kml file:"+localDestination);
+				File oldFile=new File(localDestination);
+				if (oldFile.exists()) {
+					 System.out.println("Deleting old fault kml file");
+					 oldFile.delete();
+				}
+				Fault[] faults=getProjectFaultsFromDB(userName,
+																  projectName,
+																  codeName,
+																  getBasePath(),
+																  contextPath);
 				PrintWriter out=new PrintWriter(new FileWriter(localDestination));
 								
-				out.println(xmlHead);																 
-				out.println(kmlHead);
-				out.println(docBegin);
-				for(int i=0;i<faults.length;i++) {
-					 out.println(pmBegin);
-					 out.println(lsBegin);
-					 out.println(coordBegin);
-					 out.println(faults[i].getFaultLonStarts()+comma+faults[i].getFaultLatStarts()+comma+"0");
-					 out.println(faults[i].getFaultLonEnds()+comma+faults[i].getFaultLatEnds()+comma+"0");
-					 out.println(coordEnd);
-					 out.println(lsEnd);
-					 out.println(pmEnd);
+				if(faults!=null && faults.length>0) {
+					 out.println(xmlHead); 														 
+					 out.println(kmlHead);
+					 out.println(docBegin);
+					 for(int i=0;i<faults.length;i++) {
+						  out.println(pmBegin);
+						  out.println(lsBegin);
+						  out.println(coordBegin);
+						  out.println(faults[i].getFaultLonStarts()+comma+faults[i].getFaultLatStarts()+comma+"0");
+						  out.println(faults[i].getFaultLonEnds()+comma+faults[i].getFaultLatEnds()+comma+"0");
+						  out.println(coordEnd);
+						  out.println(lsEnd);
+						  out.println(pmEnd);
+					 }
+					 out.println(docEnd);
+					 out.println(kmlEnd);
+					 out.flush();
+					 out.close();
 				}
-				out.println(docEnd);
-				out.println(kmlEnd);
-				out.flush();
-				out.close();
 		  }
 		  catch (Exception ex) {
 				ex.printStackTrace();
 		  }
-		  return "http://156.56.104.143:8080/gridsphere/faults.kml";
+		  
+		  String returnString=hostUrl+"/gridsphere/faults.kml";
+		  System.out.println("KML:"+returnString);
+		  return returnString;
 	 }
 }

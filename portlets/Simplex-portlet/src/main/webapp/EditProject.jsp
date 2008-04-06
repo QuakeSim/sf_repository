@@ -25,8 +25,10 @@ mapcenter_y = center_xy[1];
 
 //Stuff for plotting the faults as KML
 SimplexBean simplexBean=(SimplexBean)session.getAttribute("SimplexBean");
-String faultKmlUrl=simplexBean.createFaultKmlFile();
-out.println(faultKmlUrl);
+String hostUrl="http://156.56.104.143:8080/";
+String contextPath="/WebServices/WEB-INF/Descriptors/users/";
+String projectName=simplexBean.getProjectName();
+String faultKmlUrl=simplexBean.createFaultKmlFile(hostUrl,contextPath,projectName);
 %>
 
 <style>
@@ -48,10 +50,10 @@ out.println(faultKmlUrl);
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTwM0brOpm-All5BF6PoaKBxRWWERS5kaQBLplD6GDaf1-YuioaBH35uw"
 type="text/javascript"></script>
 
-<!--
+<%/*
   <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBQozjQdf4FEuMBqpopduISAOADS4xTilRYX9d1ZU0uvBJwyY4gerC4Gog"
 type="text/javascript"></script>      
--->
+*/%>
 
 </head>
 <body onload="initialize()" onunload="GUnload()">
@@ -245,14 +247,14 @@ function printNetworkColors (array) {
 	<h:outputText id="lkdrq1" styleClass="header2" value="Project Component Manager"/>   
 	<h:outputText id="lkdrq2" escape="false"
 					  value="<br>You must provide at least one fault and one observation point before you can run Simplex"/>
-   <!-- This is the main grid container -->					 
+   <%/* This is the main grid container */%>					 
 	<h:panelGrid id="panelgrid" columns="2" border="0"
 					 columnClasses="alignTop, alignTop">
 
-      <!-- This contains the left column -->
+      <%/* This contains the left column */%>
 		<h:panelGrid id="EditProject" columns="1" border="1">
 
-		   <!-- This panel is the main control board -->
+		   <%/* This panel is the main control board */%>
 			<h:panelGroup id="lkdrq3">
 			   <h:form id="selectproj">
 					<h:outputFormat id="lkdrq4" escape="false"
@@ -302,7 +304,7 @@ function printNetworkColors (array) {
 			   </h:form>
 		   </h:panelGroup>
 
-			<!-- This is the observation panel -->
+			<%/* This is the observation panel */%>
 			<h:panelGroup id="lkdrq7"
 				  rendered="#{SimplexBean.currentEditProjectForm.renderCreateObsvCutPaste}">
 					 <h:form id="obsvCutPaste">
@@ -318,7 +320,7 @@ function printNetworkColors (array) {
 					 </h:form>
 			</h:panelGroup>
 			
-			<!-- This is GPS station map -->
+			<%/* This is GPS station map */%>
 			<h:panelGroup id="lck093ks"
 					rendered="#{SimplexBean.currentEditProjectForm.renderGPSStationMap}">
 					 <h:form id="obsvGPSMap">
@@ -351,7 +353,7 @@ function printNetworkColors (array) {
 					 </h:form>
 			</h:panelGroup>
 			
-			<!-- This is the individual observations panel -->
+			<%/* This is the individual observations panel */%>
 			<h:panelGroup id="lkdrq8"
 					rendered="#{SimplexBean.currentEditProjectForm.renderCreateObservationForm}">
 				<h:form id="observationform">
@@ -436,7 +438,7 @@ function printNetworkColors (array) {
 				</h:form>
 			</h:panelGroup>
 
-			<!-- This shows the fault form -->
+			<%/* This shows the fault form */%>
 			<h:panelGroup id="kherl189"
 							  rendered="#{SimplexBean.currentEditProjectForm.renderCreateNewFaultForm}">
 				<h:form id="Faultform">
@@ -594,7 +596,7 @@ function printNetworkColors (array) {
 				</h:form>
          </h:panelGroup>
 
-         <!-- Fault selection control board panel -->
+         <%/* Fault selection control board panel */%>
 			<h:panelGroup id="fredfd23" rendered="#{SimplexBean.currentEditProjectForm.renderAddFaultSelectionForm}">
 				<h:form id="faultselection">
 					<h:panelGrid id="AddFaultSelection" columns="1"
@@ -629,7 +631,7 @@ function printNetworkColors (array) {
 				</h:form>
 			</h:panelGroup>
 
-			<!-- This is the fault name search -->
+			<%/* This is the fault name search */%>
 			<h:panelGroup id="erea3412" rendered="#{SimplexBean.currentEditProjectForm.renderSearchByFaultNameForm}">
 				<h:form id="faultsearchByNameform">
 					<h:panelGrid id="FaultSearchName" columns="1"
@@ -658,7 +660,7 @@ function printNetworkColors (array) {
 				</h:form>
 			</h:panelGroup>
 			
-			<!-- This is the lat/lon search -->
+			<%/* This is the lat/lon search */%>
 			<h:panelGroup id="erre3454" rendered="#{SimplexBean.currentEditProjectForm.renderSearchByLatLonForm}">
 				<h:form id="faultlatlonsearchform">
 
@@ -715,7 +717,7 @@ function printNetworkColors (array) {
 				</h:form>
          </h:panelGroup>
 
-			<!-- Fault author search -->
+			<%/* Fault author search */%>
          <h:panelGroup id="doierl323" rendered="#{SimplexBean.currentEditProjectForm.renderSearchByAuthorForm}">
 				<h:form id="FaultAuthorSearchform">
 					
@@ -745,7 +747,7 @@ function printNetworkColors (array) {
 				</h:form>
 			</h:panelGroup>
 
-			<!-- Fault search results -->
+			<%/* Fault search results */%>
 			<h:panelGroup id="ere43dr342d" rendered="#{SimplexBean.currentEditProjectForm.renderAddFaultFromDBForm}">
 				<h:form id="SelectFaultDBEntryForm">
 					
@@ -802,7 +804,7 @@ function printNetworkColors (array) {
 			</h:panelGroup>
 		</h:panelGrid>
 
-		<!--This is the right hand column -->
+		<%/*This is the right hand column */%>
 		<h:panelGrid id="ProjectComponentList" columns="1" border="0">
 			<h:panelGroup id="dflelerkljk161">
 				<h:form id="UpdateSelectFaultsForm"
