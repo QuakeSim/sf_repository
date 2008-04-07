@@ -24,11 +24,11 @@ mapcenter_x = center_xy[0];
 mapcenter_y = center_xy[1];
 
 //Stuff for plotting the faults as KML
-SimplexBean simplexBean=(SimplexBean)session.getAttribute("SimplexBean");
-String hostUrl="http://156.56.104.143:8080/";
-String contextPath="/WebServices/WEB-INF/Descriptors/users/";
-String projectName=simplexBean.getProjectName();
-String faultKmlUrl=simplexBean.createFaultKmlFile(hostUrl,contextPath,projectName);
+//SimplexBean simplexBean=(SimplexBean)session.getAttribute("SimplexBean");
+//String hostUrl="http://156.56.104.143:8080/";
+//String contextPath="/WebServices/WEB-INF/Descriptors/users/";
+//String projectName=simplexBean.getProjectName();
+//String faultKmlUrl=simplexBean.createFaultKmlFile(hostUrl,contextPath,projectName);
 %>
 
 <style>
@@ -99,8 +99,11 @@ function initialize() {
 		  //Create the network.
         overlayNetworks();
         printNetworkColors(networkInfo);
-		  geoXml=new GGeoXml("<%=faultKmlUrl%>");
-		  map.addOverlay(geoXml);			
+}
+
+function getFaultKml(faultKmlUrl) {	
+	  geoXml=new GGeoXml(faultKmlUrl);
+          map.addOverlay(geoXml);			
 }
 
 function selectOne(form , button) {
@@ -256,7 +259,8 @@ function printNetworkColors (array) {
 
 		   <%/* This panel is the main control board */%>
 			<h:panelGroup id="lkdrq3">
-			   <h:form id="selectproj">
+			   <h:form id="selectproj" 
+			   	   onsubmit="getFaultKml('#{SimplexBean.faultKmlUrl}')">
 					<h:outputFormat id="lkdrq4" escape="false"
 						value="<b>Project Name:</b> #{SimplexBean.projectName} <br>" />
 					<h:outputFormat id="lkdrq5" escape="false"

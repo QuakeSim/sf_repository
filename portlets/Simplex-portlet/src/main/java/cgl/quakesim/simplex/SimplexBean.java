@@ -109,7 +109,16 @@ public class SimplexBean extends GenericSopacBean {
 	 String minMaxLatLon="";
 	 String contextId="38";
 
-	 String portalBaseUrl="";
+	 String portalBaseUrl;
+    String faultKmlUrl;
+
+    public String getFaultKmlUrl(){
+	return faultKmlUrl;
+    }
+
+    public void setFaultKmlUrl(String faultKmlUrl) {
+	this.faultKmlUrl=faultKmlUrl;
+    }
 
 	 public String getPortalBaseUrl() {
 		  return portalBaseUrl;
@@ -1139,6 +1148,8 @@ public class SimplexBean extends GenericSopacBean {
 			e.printStackTrace();
 		}
 
+		//Print this out as KML
+		faultKmlUrl=createFaultKmlFile();
 	}
 
 	 public void toggleAddObsvTextAreaForProject(ActionEvent ev) {
@@ -1203,8 +1214,10 @@ public class SimplexBean extends GenericSopacBean {
 	}
 
 	 /**
-	  * This adds or updates the fault and saves to the db.  The fault form values are actually
+	  * This adds or updates the fault and saves to the db.  
+	  * The fault form values are actually
 	  * sent to the current editProjectForm object.
+	  * The faults are also printed out as KML.
 	  */
 	public void toggleAddFaultForProject(ActionEvent ev) {
 		currentEditProjectForm.initEditFormsSelection();
@@ -1223,6 +1236,10 @@ public class SimplexBean extends GenericSopacBean {
 		db.close();
 		
 		saveSimplexProjectEntry(currentProjectEntry);
+		//Print this out as KML
+		faultKmlUrl=createFaultKmlFile();
+
+
 	}
 
 	 public void toggleAddGPSObsvForProject(ActionEvent ev) {
@@ -1565,12 +1582,11 @@ public class SimplexBean extends GenericSopacBean {
 		  return first;
 	 }
 
-	 /**
-	  *
-	  */
-	 public String createFaultKmlFile(String hostUrl, 
-												 String contextPath,
-												 String projectName) {
+    /**
+     * Create a KML file of the faults.  The method assumes
+     * access to global variables.
+     */
+    public String createFaultKmlFile() { 
 		  //Some KML constants.
 		  String xmlHead="<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 		  String kmlHead="<kml xmlns=\"http://earth.google.com/kml/2.2\">";
@@ -1597,7 +1613,7 @@ public class SimplexBean extends GenericSopacBean {
 																  projectName,
 																  codeName,
 																  getBasePath(),
-																  contextPath);
+								      getContextBasePath());
 				PrintWriter out=new PrintWriter(new FileWriter(localDestination));
 								
 				if(faults!=null && faults.length>0) {
@@ -1624,7 +1640,7 @@ public class SimplexBean extends GenericSopacBean {
 				ex.printStackTrace();
 		  }
 		  
-		  String returnString=hostUrl+"/gridsphere/faults.kml";
+		  String returnString=portalBaseUrl+"/gridsphere/faults.kml";
 		  System.out.println("KML:"+returnString);
 		  return returnString;
 	 }
