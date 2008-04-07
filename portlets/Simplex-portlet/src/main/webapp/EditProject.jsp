@@ -10,8 +10,6 @@
 <jsp:useBean id="RSSBeanID" scope="session" class="cgl.sensorgrid.sopac.gps.GetStationsRSS"/>
 
 <jsp:useBean id="MapperID" scope="session" class="cgl.sensorgrid.gui.google.Mapper"/>
-<jsp:useBean id="SimplexBean" scope="session" class="cgl.quakesim.simplex.SimplexBean"/>
-
 <%
 Vector networkNames = RSSBeanID.networkNames();
 
@@ -24,7 +22,7 @@ mapcenter_x = center_xy[0];
 mapcenter_y = center_xy[1];
 
 //Stuff for plotting the faults as KML
-//SimplexBean simplexBean=(SimplexBean)session.getAttribute("SimplexBean");
+SimplexBean simplexBean=(SimplexBean)session.getAttribute("SimplexBean");
 //String hostUrl="http://156.56.104.143:8080/";
 //String contextPath="/WebServices/WEB-INF/Descriptors/users/";
 //String projectName=simplexBean.getProjectName();
@@ -47,20 +45,26 @@ mapcenter_y = center_xy[1];
 	href='<%= request.getContextPath() + "/stylesheet.css" %>'>
 
 <title>Edit Project</title>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBRxYpIIOz9ynlSKjbx-4JMuN5JjrhR5gSOcKdieYppOZ4_yzZc_Ti15qw"
+      type="text/javascript"></script>
+
+<%/*
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTwM0brOpm-All5BF6PoaKBxRWWERS5kaQBLplD6GDaf1-YuioaBH35uw"
 type="text/javascript"></script>
 
-<%/*
+
   <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBQozjQdf4FEuMBqpopduISAOADS4xTilRYX9d1ZU0uvBJwyY4gerC4Gog"
 type="text/javascript"></script>      
 */%>
 
 </head>
 <body onload="initialize()" onunload="GUnload()">
+<f:view>
 <script language="JavaScript">
 
 		  //These are various gmap definitions.
 	 var geocoder=null;
+	 var map;
 	 var geoXml;
 
         var req;
@@ -88,22 +92,24 @@ type="text/javascript"></script>
         }
 
 function initialize() {
-	     map=new GMap2(document.getElementById("map"));
+		  map=new GMap2(document.getElementById("map"));
     	  map.setCenter(new GLatLng(33,-117),7);
     	  map.addControl(new GLargeMapControl());
     	  map.addControl(new GMapTypeControl());
         map.addControl(new GScaleControl());
 
-		  geocoder=new GClientGeocoder();
-
 		  //Create the network.
+//		  alert("<%=simplexBean.getFaultKmlUrl()%>");
+//		  geoXml=new GGeoXml("<%=simplexBean.getFaultKmlUrl()%>");
+//		  map.addOverlay(geoXml);
         overlayNetworks();
         printNetworkColors(networkInfo);
 }
 
 function getFaultKml(faultKmlUrl) {	
-	  geoXml=new GGeoXml(faultKmlUrl);
-          map.addOverlay(geoXml);			
+//	  geoXml=new GGeoXml(faultKmlUrl);
+	  geoXml=new GGeoXml("http://156.56.104.143:8080/gridsphere/faults.kml");
+     map.addOverlay(geoXml);			
 }
 
 function selectOne(form , button) {
@@ -246,7 +252,6 @@ function printNetworkColors (array) {
 
 </script>
 
-<f:view>
 	<h:outputText id="lkdrq1" styleClass="header2" value="Project Component Manager"/>   
 	<h:outputText id="lkdrq2" escape="false"
 					  value="<br>You must provide at least one fault and one observation point before you can run Simplex"/>
@@ -259,8 +264,7 @@ function printNetworkColors (array) {
 
 		   <%/* This panel is the main control board */%>
 			<h:panelGroup id="lkdrq3">
-			   <h:form id="selectproj" 
-			   	   onsubmit="getFaultKml('#{SimplexBean.faultKmlUrl}')">
+			   <h:form id="selectproj">
 					<h:outputFormat id="lkdrq4" escape="false"
 						value="<b>Project Name:</b> #{SimplexBean.projectName} <br>" />
 					<h:outputFormat id="lkdrq5" escape="false"
