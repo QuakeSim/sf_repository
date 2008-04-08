@@ -22,7 +22,8 @@ mapcenter_x = center_xy[0];
 mapcenter_y = center_xy[1];
 
 //Stuff for plotting the faults as KML
-SimplexBean simplexBean=(SimplexBean)session.getAttribute("SimplexBean");
+//SimplexBean simplexBean=(SimplexBean)session.getAttribute("SimplexBean");
+//out.println(simplexBean.getProjectName());
 //String hostUrl="http://156.56.104.143:8080/";
 //String contextPath="/WebServices/WEB-INF/Descriptors/users/";
 //String projectName=simplexBean.getProjectName();
@@ -92,15 +93,16 @@ type="text/javascript"></script>
         }
 
 function initialize() {
-		  map=new GMap2(document.getElementById("map"));
+	 map=new GMap2(document.getElementById("map"));
     	  map.setCenter(new GLatLng(33,-117),7);
     	  map.addControl(new GLargeMapControl());
     	  map.addControl(new GMapTypeControl());
         map.addControl(new GScaleControl());
 
 		  //Create the network.
-//		  alert("<%=simplexBean.getFaultKmlUrl()%>");
-//		  geoXml=new GGeoXml("<%=simplexBean.getFaultKmlUrl()%>");
+		  var thing=document.getElementById("sneakyVal");
+		  alert(thing.value);
+//		  geoXml=new GGeoXml("#{SimplexBean.faultKmlUrl}");
 //		  map.addOverlay(geoXml);
         overlayNetworks();
         printNetworkColors(networkInfo);
@@ -253,6 +255,7 @@ function printNetworkColors (array) {
 </script>
 
 	<h:outputText id="lkdrq1" styleClass="header2" value="Project Component Manager"/>   
+	<h:outputText id="sneakyVal" value="#{SimplexBean.faultKmlUrl}" rendered="true"/>
 	<h:outputText id="lkdrq2" escape="false"
 					  value="<br>You must provide at least one fault and one observation point before you can run Simplex"/>
    <%/* This is the main grid container */%>					 
