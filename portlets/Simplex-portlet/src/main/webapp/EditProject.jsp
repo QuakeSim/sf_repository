@@ -100,18 +100,12 @@ function initialize() {
         map.addControl(new GScaleControl());
 
 		  //Create the network.
-		  var thing=document.getElementById("sneakyVal");
-		  alert(thing.value);
-//		  geoXml=new GGeoXml("#{SimplexBean.faultKmlUrl}");
-//		  map.addOverlay(geoXml);
+		  var faultKmlUrl=document.getElementById("faultKmlUrl");
+//		  alert(faultKmlUrl.value);	
+		  geoXml=new GGeoXml(faultKmlUrl.value);
+		  map.addOverlay(geoXml);
         overlayNetworks();
         printNetworkColors(networkInfo);
-}
-
-function getFaultKml(faultKmlUrl) {	
-//	  geoXml=new GGeoXml(faultKmlUrl);
-	  geoXml=new GGeoXml("http://156.56.104.143:8080/gridsphere/faults.kml");
-     map.addOverlay(geoXml);			
 }
 
 function selectOne(form , button) {
@@ -251,11 +245,10 @@ function printNetworkColors (array) {
     		return x + "," + y;
 	}
 
-
 </script>
 
 	<h:outputText id="lkdrq1" styleClass="header2" value="Project Component Manager"/>   
-	<h:outputText id="sneakyVal" value="#{SimplexBean.faultKmlUrl}" rendered="true"/>
+	<h:inputHidden id="faultKmlUrl" value="#{SimplexBean.faultKmlUrl}"/>
 	<h:outputText id="lkdrq2" escape="false"
 					  value="<br>You must provide at least one fault and one observation point before you can run Simplex"/>
    <%/* This is the main grid container */%>					 

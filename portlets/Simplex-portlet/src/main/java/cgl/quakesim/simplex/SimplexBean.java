@@ -113,7 +113,8 @@ public class SimplexBean extends GenericSopacBean {
     String faultKmlUrl;
 
     public String getFaultKmlUrl(){
-	return faultKmlUrl;
+		  faultKmlUrl=createFaultKmlFile();
+		  return faultKmlUrl;
     }
 
     public void setFaultKmlUrl(String faultKmlUrl) {
@@ -254,7 +255,6 @@ public class SimplexBean extends GenericSopacBean {
 	}
 	
 	// set and get data staff
-
 	public void setGmtPlotPdfUrl(String tmp_str) {
 		this.gmtPlotPdfUrl = tmp_str;
 	}
@@ -1600,8 +1600,12 @@ public class SimplexBean extends GenericSopacBean {
 		  String docBegin="<Document>";
 		  String docEnd="</Document>";
 		  String comma=",";
+		  
+		  String faultKmlFilename=userName+"-"+projectName+".kml";
 
-		  String localDestination=this.getBasePath()+"/"+"gridsphere"+"/"+"faults.kml";
+		  String localDestination=this.getBasePath()+"/"+"gridsphere"+"/"
+				+faultKmlFilename;
+
 		  try {
 				System.out.println("Old fault kml file:"+localDestination);
 				File oldFile=new File(localDestination);
@@ -1640,7 +1644,8 @@ public class SimplexBean extends GenericSopacBean {
 				ex.printStackTrace();
 		  }
 		  
-		  String returnString=portalBaseUrl+"/gridsphere/faults.kml";
+		  String returnString=portalBaseUrl+"/gridsphere/"
+				+faultKmlFilename;
 		  System.out.println("KML:"+returnString);
 		  return returnString;
 	 }
