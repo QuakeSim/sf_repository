@@ -21,13 +21,6 @@ String [] center_xy = RSSBeanID.getMapCenter();
 mapcenter_x = center_xy[0];
 mapcenter_y = center_xy[1];
 
-//Stuff for plotting the faults as KML
-//SimplexBean simplexBean=(SimplexBean)session.getAttribute("SimplexBean");
-//out.println(simplexBean.getProjectName());
-//String hostUrl="http://156.56.104.143:8080/";
-//String contextPath="/WebServices/WEB-INF/Descriptors/users/";
-//String projectName=simplexBean.getProjectName();
-//String faultKmlUrl=simplexBean.createFaultKmlFile(hostUrl,contextPath,projectName);
 %>
 
 <style>
