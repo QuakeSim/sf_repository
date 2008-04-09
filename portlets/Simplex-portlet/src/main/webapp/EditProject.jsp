@@ -95,7 +95,19 @@ function initialize() {
 		  //Create the network.
 		  var faultKmlUrl=document.getElementById("faultKmlUrl");
 //		  alert(faultKmlUrl.value);	
-		  geoXml=new GGeoXml(faultKmlUrl.value);
+//		  geoXml=new GGeoXml(faultKmlUrl.value);
+ 		  geoXml=new GGeoXml(faultKmlUrl.value, function() {
+		  		//var message=document.getElementById("message");
+        		while (!geoXml.hasLoaded()) {
+						//message.innerHTML="Loading...";
+		  		}
+				//message.innerHTML="";
+          	geoXml.gotoDefaultViewport(map);
+			 	//Show the map.
+	  		 	map.addOverlay(geoXml);
+        	 	overlayNetworks();
+      });
+
 		  map.addOverlay(geoXml);
         overlayNetworks();
         printNetworkColors(networkInfo);

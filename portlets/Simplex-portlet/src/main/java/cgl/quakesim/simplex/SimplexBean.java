@@ -46,7 +46,7 @@ public class SimplexBean extends GenericSopacBean {
 	// --------------------------------------------------
 	String FAULTS = "Faults";
 	 
-	 String SEPARATOR = "/";
+coim	 String SEPARATOR = "/";
 	 
 	 String OBSERVATIONS = "Observations";
 	 
@@ -111,6 +111,7 @@ public class SimplexBean extends GenericSopacBean {
 
 	 String portalBaseUrl;
     String faultKmlUrl;
+	 String faultKmlFilename;
 
     public String getFaultKmlUrl(){
 		  faultKmlUrl=createFaultKmlFile();
@@ -1600,19 +1601,30 @@ public class SimplexBean extends GenericSopacBean {
 		  String docBegin="<Document>";
 		  String docEnd="</Document>";
 		  String comma=",";
-		  
-		  String faultKmlFilename=userName+"-"+projectName+".kml";
 
-		  String localDestination=this.getBasePath()+"/"+"gridsphere"+"/"
-				+faultKmlFilename;
+		  String newFaultFilename="";
+		  String oldLocalDestination=this.getBasePath()+"/"+"gridsphere"+"/"
+				+getFaultKmlFilename();
+		  String localDestination="";
 
 		  try {
+				//Remove the previous file.
 				System.out.println("Old fault kml file:"+localDestination);
-				File oldFile=new File(localDestination);
+				File oldFile=new File(oldLocalDestination);
 				if (oldFile.exists()) {
 					 System.out.println("Deleting old fault kml file");
 					 oldFile.delete();
 				}
+
+				//Create the new file.
+				long timeStamp=(new Date()).getTime();
+				newFaultFilename=userName+"-"+codeName+"-"+projectName+"-"+timeStamp+".kml";
+				setFaultKmlFilename(newFaultFilename);
+				//This should be the new file name.
+				localDestination=this.getBasePath()+"/"+"gridsphere"+"/"
+					 +getFaultKmlFilename();
+
+
 				Fault[] faults=getProjectFaultsFromDB(userName,
 																  projectName,
 																  codeName,
@@ -1645,8 +1657,17 @@ public class SimplexBean extends GenericSopacBean {
 		  }
 		  
 		  String returnString=portalBaseUrl+"/gridsphere/"
-				+faultKmlFilename;
+				+getFaultKmlFilename();
 		  System.out.println("KML:"+returnString);
 		  return returnString;
 	 }
+	 
+	 public String getFaultKmlFilename() {
+		  return faultKmlFilename;
+	 }
+	 
+	 public void setFaultKmlFilename(String faultKmlFilename) {
+		  this.faultKmlFilename=faultKmlFilename;
+	 }
+
 }

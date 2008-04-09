@@ -43,7 +43,6 @@ public class DislocService extends AntVisco implements Runnable {
 
 	 //Usefull variable;
 	 final String space=" ";
-	 
 
 	 public DislocService() throws Exception {
 		  this(false);
@@ -263,6 +262,11 @@ public class DislocService extends AntVisco implements Runnable {
 																DislocParamsBean dislocParams)  
 		  throws Exception {
 		  //Doesn't do anything yet.
+		  XYPoint[] points=dislocParams.getXYPoints();
+
+		  for(int i=0;i<points.length;i++) {
+				pw.println(points[i].getX()+" "+points[i].getY());
+		  }
     }
     
     private void makeWorkDir(String workDir) 
