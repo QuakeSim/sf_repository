@@ -3,6 +3,28 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%> 
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%> 
+
+
+<%@page import="java.util.*, cgl.sensorgrid.sopac.gps.GetStationsRSS,cgl.sensorgrid.gui.google.MapBean, java.io.*"%>
+<%@page import="cgl.quakesim.simplex.*"%>
+
+<jsp:useBean id="RSSBeanID" scope="session" class="cgl.sensorgrid.sopac.gps.GetStationsRSS"/>
+
+<jsp:useBean id="MapperID" scope="session" class="cgl.sensorgrid.gui.google.Mapper"/>
+<%
+Vector networkNames = RSSBeanID.networkNames();
+
+//Vector stationsVec = RSSBeanID.getAllStationsVec();
+String mapcenter_x = "33.036";
+String mapcenter_y = "-117.24";
+
+String [] center_xy = RSSBeanID.getMapCenter();
+mapcenter_x = center_xy[0];
+mapcenter_y = center_xy[1];
+
+%>
+
+
  
 <style> 
 	.alignTop { 
@@ -22,10 +44,11 @@
 	href='<%= request.getContextPath() + "/stylesheet.css" %>'> 
  
 <title>Edit Project</title>
-
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBRxYpIIOz9ynlSKjbx-4JMuN5JjrhR5gSOcKdieYppOZ4_yzZc_Ti15qw"
+      type="text/javascript"></script>
 </head> 
 
-<body>
+<body onload="initialize()" onunload="GUnload()">
 
 <script language="JavaScript"> 
 function selectOne(form , button) 
@@ -42,6 +65,20 @@ function turnOffRadioForForm(form)
        
   } 
 } 
+
+function initialize() {
+	 map=new GMap2(document.getElementById("map"));
+    	  map.setCenter(new GLatLng(33,-117),7);
+    	  map.addControl(new GLargeMapControl());
+    	  map.addControl(new GMapTypeControl());
+        map.addControl(new GScaleControl());
+
+	  //Create the network.
+	  var faultKmlUrl=document.getElementById("faultKmlUrl");
+//		  alert(faultKmlUrl.value);	
+	  geoXml=new GGeoXml(faultKmlUrl.value);
+	  map.addOverlay(geoXml);
+}
  
 function dataTableSelectOneRadio(radio) { 
     var id = radio.name.substring(radio.name.lastIndexOf(':')); 
@@ -60,6 +97,7 @@ function dataTableSelectOneRadio(radio) {
 </script> 
 <f:view> 
 	<h:outputText styleClass="header2" value="Project Input"/> 
+	<h:inputHidden id="faultKmlUrl" value="#{DislocBean.faultKmlUrl}"/>
    <h:outputText escape="false" 
 					  value="<p>Create your geometry out of observation points and faults.  
                         <br/> The project origin 
@@ -85,15 +123,41 @@ function dataTableSelectOneRadio(radio) {
 					<f:selectItem id="item2" 
 						itemLabel="Create New Fault: Click to specify geometry for a fault segment." 
 						itemValue="CreateNewFault" /> 
+
 					<f:selectItem id="item4" 
 						itemLabel="Add Fault from DB: Click to select a fault segment from the database." 
 						itemValue="AddFaultSelection" /> 
+
+					<f:selectItem id="item021"
+						itemLabel="Show Map of Input"
+						itemValue="ShowMap" />
 				</h:selectOneRadio> 
 				<h:commandButton id="button1" value="Make Selection" 
 					actionListener="#{DislocBean.toggleProjectSelection}"> 
 				</h:commandButton> 
 			</h:panelGroup> 
 		</h:form> 
+
+			<h:panelGroup id="lck093ks"
+					rendered="#{DislocBean.renderMap}">
+					 <h:form id="obsvGPSMap">
+                <h:outputText id="clrlc093" escape="false"
+					    value="<b>Gaze upon the map:</b> and dispair."/>
+						 <h:panelGrid id="mapsAndCrap" columns="3" columnClasses="alignTop,alignTop">
+						    <h:panelGroup id="mapncrap1">
+						 <f:verbatim>
+						 <div id="map" style="width: 600px; height: 400px"></div>
+						 </f:verbatim>
+                      </h:panelGroup>
+                      <h:panelGroup id="mapncrap2">
+							<h:panelGrid id="dfjdlkj" columns="2">
+						 <h:commandButton id="closeMap" value="Close Map"
+						 		actionListener="#{DislocBean.toggleCloseMap}"/>
+								</h:panelGrid>
+						   </h:panelGroup>
+							</h:panelGrid>
+					 </h:form>
+			</h:panelGroup>
  
 		<h:panelGroup id="stuff4"> 
 			<h:form id="obsvform" rendered="#{DislocBean.renderDislocGridParamsForm}"> 

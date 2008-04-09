@@ -57,6 +57,7 @@ public class DislocBean extends GenericSopacBean {
     boolean renderSearchByLatLonForm = false;
     boolean renderViewAllFaultsForm = false;    
     boolean renderAddFaultFromDBForm = false;    
+    boolean renderMap=false;
 
     Fault currentFault = new Fault();    
 	 //    DislocParamsBean dislocParams=new DislocParamsBean();
@@ -103,7 +104,11 @@ public class DislocBean extends GenericSopacBean {
     String codeName;
     String kmlProjectFile="network0.kml";
 
-	 double originLon, originLat;
+    double originLon, originLat;
+    
+    String faultKmlUrl;
+    String portalBaseUrl;
+    
     
     /**
      * The client constructor.
@@ -910,6 +915,7 @@ public class DislocBean extends GenericSopacBean {
 		  renderAddFaultSelectionForm = false;
 		  renderAddFaultFromDBForm = false;
 		  renderDislocGridParamsForm = false;       
+		  renderMap=false;
     }
 
 	 /**
@@ -973,14 +979,17 @@ public class DislocBean extends GenericSopacBean {
 				renderDislocGridParamsForm = !renderDislocGridParamsForm;
 		  }
 
-		  if (projectSelectionCode.equals("CreateNewFault")) {
+		  else if (projectSelectionCode.equals("CreateNewFault")) {
 				currentFault=new Fault();
 				renderCreateNewFaultForm = !renderCreateNewFaultForm;
 		  }
-		  if (projectSelectionCode.equals("AddFaultSelection")) {
+		  else if (projectSelectionCode.equals("AddFaultSelection")) {
 				renderAddFaultSelectionForm = !renderAddFaultSelectionForm;
 		  }
-		  if (projectSelectionCode.equals("")) {
+		  else if (projectSelectionCode.equals("ShowMap")) {
+				renderMap = !renderMap;
+		  }
+		  else if (projectSelectionCode.equals("")) {
 				;
 		  }
     }
@@ -1188,6 +1197,13 @@ public class DislocBean extends GenericSopacBean {
 				ex.printStackTrace();
 		  }
 		  
+    }
+
+    /**
+     * Stop showing the map.
+     */
+    public void toggleCloseMap(ActionEvent ev) {
+	setRenderMap(false);	
     }
 
 	 /**
@@ -1717,6 +1733,14 @@ public class DislocBean extends GenericSopacBean {
     public void setRenderDislocGridParamsForm(boolean tmp_boolean) {
 		  this.renderDislocGridParamsForm = tmp_boolean;
     }
+
+    public boolean getRenderMap() {
+	return this.renderMap;
+    }
+    
+    public void setRenderMap(boolean renderMap) {
+	this.renderMap=renderMap;
+    }
     
     /**
      * Reconstructs the fault entry list.
@@ -2063,4 +2087,111 @@ public class DislocBean extends GenericSopacBean {
 	 public DislocParamsBean getCurrentParams() {
 		  return currentParams;
 	 }
+    /**
+     * Create a KML file of the faults.  The method assumes
+     * access to global variables.
+     */
+    public String createFaultKmlFile() { 
+		  //Some KML constants.
+		  String xmlHead="<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+		  String kmlHead="<kml xmlns=\"http://earth.google.com/kml/2.2\">";
+		  String kmlEnd="</kml>";
+		  String pmBegin="<Placemark>";
+		  String pmEnd="</Placemark>";
+		  String lsBegin="<LineString>";
+		  String lsEnd="</LineString>";
+		  String coordBegin="<coordinates>";
+		  String coordEnd="</coordinates>";
+		  String docBegin="<Document>";
+		  String docEnd="</Document>";
+		  String comma=",";
+		  
+		  String faultKmlFilename=userName+"-"
+		      +codeName+"-"+projectName+".kml";
+
+		  String localDestination=this.getBasePath()+"/"+"gridsphere"+"/"
+				+faultKmlFilename;
+
+		  try {
+				System.out.println("Old fault kml file:"+localDestination);
+				File oldFile=new File(localDestination);
+				if (oldFile.exists()) {
+					 System.out.println("Deleting old fault kml file");
+					 oldFile.delete();
+				}
+				Fault[] faults=getProjectFaultsFromDB(userName,
+																  projectName,
+																  codeName,
+																  getBasePath(),
+								      getContextBasePath());
+				PrintWriter out=new PrintWriter(new FileWriter(localDestination));
+								
+				if(faults!=null && faults.length>0) {
+					 out.println(xmlHead); 														 
+					 out.println(kmlHead);
+					 out.println(docBegin);
+					 for(int i=0;i<faults.length;i++) {
+						  out.println(pmBegin);
+						  out.println(lsBegin);
+						  out.println(coordBegin);
+						  out.println(faults[i].getFaultLonStart()+comma+faults[i].getFaultLatStart()+comma+"0");
+						  out.println(faults[i].getFaultLonEnd()+comma+faults[i].getFaultLatEnd()+comma+"0");
+						  out.println(coordEnd);
+						  out.println(lsEnd);
+						  out.println(pmEnd);
+					 }
+					 out.println(docEnd);
+					 out.println(kmlEnd);
+					 out.flush();
+					 out.close();
+				}
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  
+		  String returnString=portalBaseUrl+"/gridsphere/"
+				+faultKmlFilename;
+		  System.out.println("KML:"+returnString);
+		  return returnString;
+	 }
+    public String getFaultKmlUrl(){
+		  faultKmlUrl=createFaultKmlFile();
+		  return faultKmlUrl;
+    }
+
+    public void setFaultKmlUrl(String faultKmlUrl) {
+	this.faultKmlUrl=faultKmlUrl;
+    }
+	 public String getPortalBaseUrl() {
+		  return portalBaseUrl;
+	 }
+	 
+	 public void setPortalBaseUrl(String portalBaseUrl) {
+		  this.portalBaseUrl=portalBaseUrl;
+	 }
+
+	 public Fault[] getProjectFaultsFromDB(String userName,
+														String projectName,
+														String codeName,
+														String basePath,
+														String relPath) {
+		  Fault[] returnFaults = null;
+		  System.out.println("Opening Fault DB:"+basePath+"/"+relPath+ "/" + userName + "/"	+ codeName + "/" + projectName + ".db");
+
+		  db = Db4o.openFile(basePath+"/"+relPath+ "/" + userName + "/"
+									+ codeName + "/" + projectName + ".db");
+		  Fault faultToGet = new Fault();
+		  ObjectSet results = db.get(faultToGet);
+		  if (results.hasNext()) {
+				returnFaults = new Fault[results.size()];
+				for (int i = 0; i < results.size(); i++) {
+					 returnFaults[i] = (Fault) results.next();
+				}
+		  }
+		  db.close();
+		  return returnFaults;
+	 }
+
+
 }

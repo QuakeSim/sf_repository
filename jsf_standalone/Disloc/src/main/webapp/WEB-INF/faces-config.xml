@@ -11,6 +11,12 @@
 		<managed-bean-name>DislocBean</managed-bean-name>
 		<managed-bean-class>cgl.quakesim.disloc.DislocBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
+
+                <managed-property>
+                   <property-name>portalBaseUrl</property-name>
+                   <value>http://156.56.104.143:8080</value>
+                </managed-property>
+
                 <!--Who we are-->
                 <managed-property>
                    <property-name>codeName</property-name>
