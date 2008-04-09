@@ -95,8 +95,13 @@ function turnOffRadioForForm(form)
 } 
 
 function initialize() {
+	 map=null;
+	 geoXml=null;
+
 	 map=new GMap2(document.getElementById("map"));
+	 	  //This is the default center.
     	  map.setCenter(new GLatLng(33,-117),7);
+		  map.addMapType(G_PHYSICAL_MAP);
     	  map.addControl(new GLargeMapControl());
     	  map.addControl(new GMapTypeControl());
         map.addControl(new GScaleControl());
@@ -104,9 +109,30 @@ function initialize() {
 	  //Create the network.
 	  var faultKmlUrl=document.getElementById("faultKmlUrl");
 //		  alert(faultKmlUrl.value);	
-	  geoXml=new GGeoXml(faultKmlUrl.value);
-	  map.addOverlay(geoXml);
-        overlayNetworks();
+
+	  geoXml=new GGeoXml(faultKmlUrl.value, function() {
+		  	var message=document.getElementById("message");
+        while (!geoXml.hasLoaded()) {
+			message.innerHTML="Loading...";
+		  }
+			message.innerHTML="";
+         geoXml.gotoDefaultViewport(map);
+			//Show the map.
+	  		map.addOverlay(geoXml);
+        	overlayNetworks();
+//         printNetworkColors(networkInfo);
+      });
+	   GEvent.addListener(map,"click",addObsvMarker);
+}
+
+function addObsvMarker(overlay,point) {
+			var message="Lat: "+point.lat()+"<br>"+"Lon:"+point.lng()+")";
+	 		var newElement2=document.getElementById("obsvGPSMap:stationLat");
+			newElement2.setAttribute("value",point.lat());
+	 		var newElement3=document.getElementById("obsvGPSMap:stationLon");
+			newElement3.setAttribute("value",point.lng());
+			
+			map.openInfoWindow(point,message);			    
 }
  
 function dataTableSelectOneRadio(radio) { 
@@ -227,9 +253,9 @@ function getScrolling() {
 
  
 </script> 
-
 <f:view> 
 	<h:outputText styleClass="header2" value="Project Input"/> 
+	<h:outputText id="message" value=""/>
 	<h:inputHidden id="faultKmlUrl" value="#{DislocBean.faultKmlUrl}"/>
    <h:outputText escape="false" 
 					  value="<p>Create your geometry out of observation points and faults.  
@@ -262,7 +288,7 @@ function getScrolling() {
 						itemValue="AddFaultSelection" /> 
 
 					<f:selectItem id="item021"
-						itemLabel="Show Map of Input"
+						itemLabel="Show Map: View faults and pick observation points."
 						itemValue="ShowMap" />
 				</h:selectOneRadio> 
 				<h:commandButton id="button1" value="Make Selection" 
@@ -275,7 +301,7 @@ function getScrolling() {
 					rendered="#{DislocBean.renderMap}">
 					 <h:form id="obsvGPSMap">
                 <h:outputText id="clrlc093" escape="false"
-					    value="<b>Gaze upon the map:</b> and dispair."/>
+					    value="<b>Select Sites:</b>Click to choose scatter point."/>
 						 <h:panelGrid id="mapsAndCrap" columns="3" columnClasses="alignTop,alignTop">
 						    <h:panelGroup id="mapncrap1">
 						 <f:verbatim>
@@ -283,7 +309,16 @@ function getScrolling() {
 						 </f:verbatim>
                       </h:panelGroup>
                       <h:panelGroup id="mapncrap2">
-							<h:panelGrid id="dfjdlkj" columns="2">
+							<h:panelGrid id="dfjdlkj" columns="2" 
+							   rendered="#{empty DislocBean.usesGridPoints
+											 || !DislocBean.usesGridPoints}">
+						 <h:outputText id="dkljr3rf" value="Latitude:"/>
+						 <h:inputText id="stationLat" value="#{DislocBean.gpsStationLat}"/>
+						 <h:outputText id="dkljfer4" value="Longitude:"/>
+						 <h:inputText id="stationLon" value="#{DislocBean.gpsStationLon}"/>
+						 <h:commandButton id="addGPSObsv" value="Add Observation Point"
+						 		actionListener="#{DislocBean.toggleAddPointObsvForProject}"/>
+
 						 <h:commandButton id="closeMap" value="Close Map"
 						 		actionListener="#{DislocBean.toggleCloseMap}"/>
 								</h:panelGrid>
@@ -292,7 +327,7 @@ function getScrolling() {
 					 </h:form>
 			</h:panelGroup>
  
-		<h:panelGroup id="stuff4"> 
+		<h:panelGroup id="stuff4">
 			<h:form id="obsvform" rendered="#{DislocBean.renderDislocGridParamsForm}"> 
 				<h:panelGrid id="ObsvTable" columns="2" footerClass="subtitle" 
 					headerClass="subtitlebig" styleClass="medium" 
@@ -685,14 +720,15 @@ function getScrolling() {
 		rendered="#{!empty DislocBean.myFaultEntryForProjectList 
 					   || !empty DislocBean.myObsvEntryForProjectList}"> 
  
-	<h:outputText  id="stuff78" styleClass="header2" value="Current Project Components"/> 
+	<h:outputText  id="stuff78" styleClass="header2" value="Current Project Components"
+						rendered="#{!empty DislocBean.myFaultEntryForProjectList 
+					   || !empty DislocBean.myObsvEntryForProjectList}"/> 
  
 	<h:panelGrid id="ProjectComponentList" columns="2" border="1" 
 			columnClasses="alignTop, alignTop"> 
  
-		<h:panelGroup  id="stuff79"> 
-			<h:form id="UpdateSelectFaultsForm" 
-				rendered="#{!empty DislocBean.myFaultEntryForProjectList}"> 
+		<h:panelGroup id="stuff79" rendered="#{!empty DislocBean.myFaultEntryForProjectList}"> 
+			<h:form id="UpdateSelectFaultsForm">
 				<h:panelGrid columns="1" border="1"  id="stuff80"> 
 					<h:panelGroup  id="lid2"> 
 						<h:panelGrid  id="lid3" columns="1"> 
@@ -786,11 +822,11 @@ function getScrolling() {
 			</h:form> 
 		</h:panelGroup> 
  
-		<h:form id="RunDisloc"> 
+		<h:form id="RunDisloc"
+				rendered="#{!(empty DislocBean.myFaultEntryForProjectList) 
+							   && !(empty DislocBean.myObsvEntryForProjectList)}" > 
 			<h:panelGrid columns="1"  
              id="stuff89" 
-				rendered="#{!(empty DislocBean.myFaultEntryForProjectList) 
-							   && !(empty DislocBean.myObsvEntryForProjectList)}" 
 				footerClass="subtitle" 
 				headerClass="subtitlebig" styleClass="medium" 
 				columnClasses="subtitle,medium"> 

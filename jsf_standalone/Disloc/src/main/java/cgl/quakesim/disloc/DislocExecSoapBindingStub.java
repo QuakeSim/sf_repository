@@ -29,7 +29,7 @@ public class DislocExecSoapBindingStub extends org.apache.axis.client.Stub imple
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "projectName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "faults"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://localhost:8080/dislocexec/services/DislocExec", "ArrayOf_tns1_Fault"), cgl.quakesim.disloc.Fault[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "faults"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://156.56.104.143:8080/dislocexec/services/DislocExec", "ArrayOf_tns1_Fault"), cgl.quakesim.disloc.Fault[].class, false, false);
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "dislocParams"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn:DislocService", "DislocParamsBean"), cgl.quakesim.disloc.DislocParamsBean.class, false, false);
         oper.addParameter(param);
@@ -48,7 +48,7 @@ public class DislocExecSoapBindingStub extends org.apache.axis.client.Stub imple
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "projectName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "faults"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://localhost:8080/dislocexec/services/DislocExec", "ArrayOf_tns1_Fault"), cgl.quakesim.disloc.Fault[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "faults"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://156.56.104.143:8080/dislocexec/services/DislocExec", "ArrayOf_tns1_Fault"), cgl.quakesim.disloc.Fault[].class, false, false);
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "dislocParams"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn:DislocService", "DislocParamsBean"), cgl.quakesim.disloc.DislocParamsBean.class, false, false);
         oper.addParameter(param);
@@ -92,7 +92,7 @@ public class DislocExecSoapBindingStub extends org.apache.axis.client.Stub imple
             java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
             java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
             java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
-            qName = new javax.xml.namespace.QName("http://localhost:8080/dislocexec/services/DislocExec", "ArrayOf_tns1_Fault");
+            qName = new javax.xml.namespace.QName("http://156.56.104.143:8080/dislocexec/services/DislocExec", "ArrayOf_tns1_Fault");
             cachedSerQNames.add(qName);
             cls = cgl.quakesim.disloc.Fault[].class;
             cachedSerClasses.add(cls);
@@ -100,6 +100,22 @@ public class DislocExecSoapBindingStub extends org.apache.axis.client.Stub imple
             qName2 = null;
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("http://156.56.104.143:8080/dislocexec/services/DislocExec", "ArrayOfXYPoint");
+            cachedSerQNames.add(qName);
+            cls = cgl.quakesim.disloc.XYPoint[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://156.56.104.143:8080/dislocexec/services/DislocExec", "XYPoint");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("http://156.56.104.143:8080/dislocexec/services/DislocExec", "XYPoint");
+            cachedSerQNames.add(qName);
+            cls = cgl.quakesim.disloc.XYPoint.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("urn:DislocService", "DislocParamsBean");
             cachedSerQNames.add(qName);
