@@ -24,8 +24,6 @@ mapcenter_y = center_xy[1];
 
 %>
 
-
- 
 <style> 
 	.alignTop { 
 		vertical-align:top; 
@@ -50,7 +48,37 @@ mapcenter_y = center_xy[1];
 
 <body onload="initialize()" onunload="GUnload()">
 
-<script language="JavaScript"> 
+<script language="JavaScript">
+
+		  //These are various gmap definitions.
+	 var geocoder=null;
+	 var map;
+	 var geoXml;
+
+        var req;
+        var baseIcon = new GIcon();
+        baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
+        baseIcon.iconSize = new GSize(15, 20);
+        baseIcon.shadowSize = new GSize(10, 10);
+        baseIcon.iconAnchor = new GPoint(1, 10);
+        baseIcon.infoWindowAnchor = new GPoint(5, 1);
+        baseIcon.infoShadowAnchor = new GPoint(5, 5);
+
+        var colors = new Array (6);
+        colors[0]="red";
+        colors[1]="green";
+        colors[2]="blue";
+        colors[3]="black";
+        colors[4]="white";
+        colors[5]="yellow";
+        colors[6]="purple";
+        colors[7]="brown";
+
+        var networkInfo = new Array (<%=networkNames.size()%>);
+        for (i = 0; i < networkInfo.length; ++ i){
+          networkInfo [i] = new Array (2);
+        }
+
 function selectOne(form , button) 
 { 
   turnOffRadioForForm(form); 
@@ -78,6 +106,7 @@ function initialize() {
 //		  alert(faultKmlUrl.value);	
 	  geoXml=new GGeoXml(faultKmlUrl.value);
 	  map.addOverlay(geoXml);
+        overlayNetworks();
 }
  
 function dataTableSelectOneRadio(radio) { 
@@ -92,9 +121,113 @@ function dataTableSelectOneRadio(radio) {
         } 
     } 
     radio.checked = true; 
-} 
+}
+function overlayNetworks(){
+          var icon = new GIcon(baseIcon);
+          icon.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";
+
+          <%
+          for (int j = 0; j < networkNames.size(); j++) {
+            String networkName = (String)networkNames.get(j);
+            Vector stationsVec = RSSBeanID.getStationsVec(networkName);
+            %>
+            networkInfo [<%=j%>] [0] = "<%=networkName%>";
+
+            var k;
+            if(<%=j%>>=colors.length)
+            k = 0;
+            else
+            k=<%=j%>;
+            icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + colors[k] + ".png";
+            networkInfo [<%=j%>] [1] = "http://labs.google.com/ridefinder/images/mm_20_" + colors[k] + ".png";
+
+            var stationCount = <%=stationsVec.size()%>;
+            var stations = new Array (stationCount);
+            var Markers = new Array (stationCount);
+            for (i = 0; i < stations.length; ++ i){
+              stations [i] = new Array (3);
+            }
+
+            <%
+            for (int i = 0; i < stationsVec.size(); i++) {
+              String name = (String)stationsVec.get(i);
+              String lat = RSSBeanID.getStationInfo(name)[0];
+              String lon = RSSBeanID.getStationInfo(name)[1];
+              %>
+              stations [<%=i%>] [0] = "<%=name%>";
+              stations [<%=i%>] [1] = "<%=lat%>";
+              stations [<%=i%>] [2] = "<%=lon%>";
+
+              Markers[<%=i%>] = createMarker("<%=networkName%>", "<%=name%>", "<%=lon%>", "<%=lat%>", icon);
+              map.addOverlay(Markers[<%=i%>]);
+	
+              <%
+            }
+          }
+          %>
+}
+
+function createMarker(networkName, name, lon, lat, icon) {
+          var marker = new GMarker(new GPoint(lon, lat),icon);
+          // Show this marker's name in the info window when it is clicked
+          var html = "<b>Station Name= </b>" + name + "<br><b>Lat=</b>" + lat + "<br><b>Lon= </b>" + lon + "<br><b>Network= </b>" + networkName;
+
+
+          GEvent.addListener(marker, "click", function() {
+            marker.openInfoWindowHtml(html);;
+			 		var newElement=document.getElementById("obsvGPSMap:stationName");
+					newElement.setAttribute("value",name);
+			 		var newElement2=document.getElementById("obsvGPSMap:stationLat");
+					newElement2.setAttribute("value",lat);
+			 		var newElement3=document.getElementById("obsvGPSMap:stationLon");
+					newElement3.setAttribute("value",lon);
+	       });
+
+          return marker;
+}
+
+function printNetworkColors (array) {
+          var html = "<table border='0'><tr><td><b>Network</b></td><td nowrap><b>Icon Color<b></td></tr>";
+
+          var row;
+          for (row = 0; row < array.length; ++ row)
+          {
+            html = html + " <tr>";
+            var col;
+            for (col = 0; col < array [row] . length; ++ col){
+              if(col==0)
+              html = html + "  <td>" + array [row] [col] + "</td>";
+              if(col==1)
+              html = html + "  <td align='center'><img border=0 src=" + array [row] [col] + "></td>";
+
+            }
+            html = html + " </tr>";
+          }
+           html = html + "</table>";
+           var idiv = window.document.getElementById("networksDiv");
+           idiv.innerHTML = html;
+}
+
+
+//Needed for Firefox 2.0 compatibility
+function getScrolling() {
+    var x = 0; var y = 0;
+	if (document.body && document.body.scrollLeft && !isNaN(document.body.scrollLeft)) {
+	        x = document.body.scrollLeft;
+ 		} else if (window.pageXOffset && !isNaN(window.pageXOffset)) {
+        	x = window.pageXOffset;
+    		}
+    		if (document.body && document.body.scrollTop && !isNaN(document.body.scrollTop)) {
+        	y = document.body.scrollTop;
+    		} else if (window.pageYOffset && !isNaN(window.pageYOffset)) {
+        	y = window.pageYOffset;
+    		}
+    		return x + "," + y;
+}
+
  
 </script> 
+
 <f:view> 
 	<h:outputText styleClass="header2" value="Project Input"/> 
 	<h:inputHidden id="faultKmlUrl" value="#{DislocBean.faultKmlUrl}"/>
