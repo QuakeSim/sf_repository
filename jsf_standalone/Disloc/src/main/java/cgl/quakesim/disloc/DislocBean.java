@@ -59,6 +59,7 @@ public class DislocBean extends GenericSopacBean {
     boolean renderAddFaultFromDBForm = false;    
     boolean renderMap=false;
 	 boolean usesGridPoints;
+	 boolean renderChooseObsvStyleForm=false;
 
     Fault currentFault = new Fault();    
 	 //    DislocParamsBean dislocParams=new DislocParamsBean();
@@ -67,6 +68,7 @@ public class DislocBean extends GenericSopacBean {
 	 DislocProjectSummaryBean currentSummary=new DislocProjectSummaryBean();
     String faultSelectionCode = "";    
     String projectSelectionCode = "";    
+	 String obsvStyleSelectionCode="";
 
     //These are search parameter strings.
     String forSearchStr="";
@@ -147,7 +149,10 @@ public class DislocBean extends GenericSopacBean {
 											getContextBasePath()+"/"+userName+"/"+codeName+"/");
 		  projectDir.mkdirs();
     }
-    
+
+	 /**
+	  * This grabs the faults from the DB.
+	  */
     protected Fault[] getFaultsFromDB(){
 		  Fault[] returnFaults=null;
 		  db=Db4o.openFile(getBasePath()
@@ -169,13 +174,18 @@ public class DislocBean extends GenericSopacBean {
 		  db.close();
 		  return returnFaults;
     }
-    
+
     /**
      * Note this method assumes projectName has been set externally.  It will return a
      * new object if it can't locate one in the db.
      */
     protected DislocParamsBean getDislocParamsFromDB(){
+		  //Create an empyt params.  We will use this if we can't find one
+		  //in the DB.  Set the origin just in case.
 		  DislocParamsBean paramsBean=new DislocParamsBean();
+		  paramsBean.setOriginLat(DislocParamsBean.DEFAULT_LAT);
+		  paramsBean.setOriginLon(DislocParamsBean.DEFAULT_LON);
+
 		  db=Db4o.openFile(getBasePath()+"/"
 								 +getContextBasePath()
 								 +"/"+userName+"/"+codeName+"/"+projectName+".db");		  
@@ -184,7 +194,9 @@ public class DislocBean extends GenericSopacBean {
 		  if(results.hasNext()) {
 				paramsBean=(DislocParamsBean)results.next();
 		  }
-		  System.out.println("Project Origin:"+paramsBean.getOriginLat()+" "+paramsBean.getOriginLon());
+		  System.out.println("Project Origin:"
+									+paramsBean.getOriginLat()+" "
+									+paramsBean.getOriginLon());
 		  db.close();
 		  return paramsBean;
     }
@@ -195,39 +207,39 @@ public class DislocBean extends GenericSopacBean {
 					 DislocParamsBean paramsBean,
 					 DislocResultsBean dislocResultsBean,
 					 String kml_url) 
-	throws Exception {
-	DislocProjectSummaryBean summaryBean=new DislocProjectSummaryBean();
-	summaryBean.setUserName(userName);
-	summaryBean.setProjectName(projectName);
-	summaryBean.setJobUIDStamp(jobUIDStamp);
-	summaryBean.setParamsBean(paramsBean);
-	summaryBean.setResultsBean(dislocResultsBean);
-	summaryBean.setCreationDate(new Date().toString());
-	summaryBean.setKmlurl(kml_url);
-	
-	//Store the summary bean.
-	db=Db4o.openFile(getBasePath()+"/"
-			 +getContextBasePath()+"/"+userName+"/"+codeName+".db");	
-	db.set(summaryBean);
-	
-	//Say goodbye.
-	db.commit();
-	db.close();
-	
-	//Store the params bean for the current project, deleting any old one as necessary.
-	db=Db4o.openFile(getBasePath()+"/"
-			 +getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");	
-	ObjectSet result=db.get(DislocParamsBean.class);
-	if(result.hasNext()) {
-	    DislocParamsBean tmp=(DislocParamsBean)result.next();
-	    db.delete(tmp);
-	}
-	db.set(paramsBean);
-	
-	//Say goodbye.
-	db.commit();
-	db.close();
+		  throws Exception {
+
+		  DislocProjectSummaryBean summaryBean=new DislocProjectSummaryBean();
+		  summaryBean.setUserName(userName);
+		  summaryBean.setProjectName(projectName);
+		  summaryBean.setJobUIDStamp(jobUIDStamp);
+		  summaryBean.setParamsBean(paramsBean);
+		  summaryBean.setResultsBean(dislocResultsBean);
+		  summaryBean.setCreationDate(new Date().toString());
+		  summaryBean.setKmlurl(kml_url);
 		  
+		  //Store the summary bean.
+		  db=Db4o.openFile(getBasePath()+"/"
+								 +getContextBasePath()+"/"+userName+"/"+codeName+".db");	
+		  db.set(summaryBean);
+		  
+		  //Say goodbye.
+		  db.commit();
+		  db.close();
+		  
+		  //Store the params bean for the current project, deleting any old one as necessary.
+		  db=Db4o.openFile(getBasePath()+"/"
+								 +getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");	
+		  ObjectSet result=db.get(DislocParamsBean.class);
+		  if(result.hasNext()) {
+				DislocParamsBean tmp=(DislocParamsBean)result.next();
+				db.delete(tmp);
+		  }
+		  db.set(paramsBean);
+		  
+		  //Say goodbye.
+		  db.commit();
+		  db.close();
     }
     
     /**
@@ -250,11 +262,12 @@ public class DislocBean extends GenericSopacBean {
 				// 		  currentParams.setOriginLon(faults[0].getFaultLonStart());
 	    
 				initDislocService();
-				DislocResultsBean dislocResultsBean=dislocService.runBlockingDisloc(userName,
-																										  projectName,
-																										  faults,
-																										  currentParams,
-																										  null);
+				DislocResultsBean dislocResultsBean=
+					 dislocService.runBlockingDisloc(userName,
+																projectName,
+																faults,
+																currentParams,
+																null);
 				setJobToken(dislocResultsBean.getJobUIDStamp());
 				
 				String myKmlUrl="";
@@ -265,7 +278,7 @@ public class DislocBean extends GenericSopacBean {
 											 dislocResultsBean.getJobUIDStamp(),
 											 currentParams,
 											 dislocResultsBean,
-				  myKmlUrl);
+											 myKmlUrl);
 		  }
 		  catch (Exception ex) {
 				ex.printStackTrace();
@@ -296,7 +309,8 @@ public class DislocBean extends GenericSopacBean {
 		  kmlService.setDatalist(tmp_pointentrylist);
 		  kmlService.setOriginalCoordinate(origin_lon, origin_lat);
 		  kmlService.setCoordinateUnit("1000");
-		  
+
+		  //These plot grid lines.
 		  double start_x,start_y,end_x,end_y,xiterationsNumber,yiterationsNumber;
 		  start_x=Double.valueOf(dislocParams.getGridMinXValue() ).doubleValue();
 		  start_y=Double.valueOf(dislocParams.getGridMinYValue() ).doubleValue();
@@ -331,7 +345,7 @@ public class DislocBean extends GenericSopacBean {
 		  }
 		  
 		  String myKmlUrl = kmlService.runMakeKml("", userName,
-							  projectName, 
+																projectName, 
 																(dislocResultsBean.getJobUIDStamp()).hashCode()+"");
 		  return myKmlUrl;
 	 }
@@ -506,12 +520,12 @@ public class DislocBean extends GenericSopacBean {
 	
 	List faultSegmentNameList = QueryFaultsBySQL(getSegmentList);
 	List faultAuthorList = QueryFaultsBySQL(getAuthorList);
-		  List faultLatStarts = QueryFaultsBySQL(getLatStartList);
-		  List faultLatEnds = QueryFaultsBySQL(getLatEndList);
-		  List faultLonStarts = QueryFaultsBySQL(getLonStartList);
-		  List faultLonEnds = QueryFaultsBySQL(getLonEndList);
-		  List tmp_faultNameList = QueryFaultsBySQL(getFaultList);
-		  for (int i = 0; i < tmp_faultNameList.size(); i++) {
+	List faultLatStarts = QueryFaultsBySQL(getLatStartList);
+	List faultLatEnds = QueryFaultsBySQL(getLatEndList);
+	List faultLonStarts = QueryFaultsBySQL(getLonStartList);
+	List faultLonEnds = QueryFaultsBySQL(getLonEndList);
+	List tmp_faultNameList = QueryFaultsBySQL(getFaultList);
+	for (int i = 0; i < tmp_faultNameList.size(); i++) {
 				String tmp1 = tmp_faultNameList.get(i).toString();
 				FaultDBEntry tmp_FaultDBEntry = new FaultDBEntry();
 				tmp_FaultDBEntry.faultName=new SelectItem(tmp1 + "@"
@@ -823,7 +837,9 @@ public class DislocBean extends GenericSopacBean {
 					 currentParams.setOriginLon(lonStart);
 					 //Update the parameters
 					 db=Db4o.openFile(getBasePath()+"/"
-											+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");	
+											+getContextBasePath()
+											+"/"+userName
+											+"/"+codeName+"/"+projectName+".db");	
 					 ObjectSet result=db.get(DislocParamsBean.class);
 					 if(result.hasNext()) {
 						  DislocParamsBean tmp=(DislocParamsBean)result.next();
@@ -839,10 +855,12 @@ public class DislocBean extends GenericSopacBean {
 				System.out.println("Updated Origin:"+currentParams.getOriginLat()+" "
 										 +currentParams.getOriginLon());
 
-				//The following should be done in any case.  If the origin was just (re)set above,
+				//The following should be done in any case.  
+				//If the origin was just (re)set above,
 				//we will get a harmless (0,0);
-				double x1=(lonStart-currentParams.getOriginLon())*factor(currentParams.getOriginLon(),
-																						  currentParams.getOriginLat());
+				double x1=(lonStart-currentParams.getOriginLon())
+					 *factor(currentParams.getOriginLon(),
+								currentParams.getOriginLat());
 				double y1=(latStart-currentParams.getOriginLat())*111.32;
 				System.out.println("Fault origin: "+x1+" "+y1);
 				tmp_fault.setFaultLocationX(Double.parseDouble(format.format(x1)));
@@ -924,6 +942,7 @@ public class DislocBean extends GenericSopacBean {
 		  renderAddFaultFromDBForm = false;
 		  renderDislocGridParamsForm = false;       
 		  renderMap=false;
+		  renderChooseObsvStyleForm=false;
     }
 
 	 /**
@@ -997,10 +1016,34 @@ public class DislocBean extends GenericSopacBean {
 		  else if (projectSelectionCode.equals("ShowMap")) {
 				renderMap = !renderMap;
 		  }
+		  else if (projectSelectionCode.equals("ChooseObsvStyleForm")) {
+				renderChooseObsvStyleForm=!renderChooseObsvStyleForm;
+		  }
 		  else if (projectSelectionCode.equals("")) {
 				;
 		  }
     }
+
+	 /**
+	  * This is where we set the project's observation style.
+	  */
+	 public void toggleSetObsvStyle(ActionEvent ev) {
+		  initEditFormsSelection();
+		  if(obsvStyleSelectionCode.equals("GridStyle")) {
+				System.out.println("GridStyle");
+				usesGridPoints=true;
+				currentParams.setObservationPointStyle(1);
+		  }
+		  else if(obsvStyleSelectionCode.equals("ScatterStyle")) {
+				System.out.println("ScatterStyle");				
+				usesGridPoints=false;
+				currentParams.setObservationPointStyle(0);
+		  }
+		  else {
+				System.out.println("Unexpected obsv style");
+		  }
+		  obsvStyleSelectionCode="";
+	 }
     
     /**
      * Handle fault selection events.
@@ -1266,7 +1309,10 @@ public class DislocBean extends GenericSopacBean {
 
 	 protected List populateParamsCollection(String projectName) throws Exception {
 		  List myDislocParamsCollection=new ArrayList();
-		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
+		  db=Db4o.openFile(getBasePath()+"/"
+								 +getContextBasePath()+"/"
+								 +userName+"/"
+								 +codeName+"/"+projectName+".db");		  
 		  ObjectSet results=db.get(DislocParamsBean.class);
 		  //Should only have one value.
 		  DislocParamsBean dislocParams=null;
@@ -1290,39 +1336,39 @@ public class DislocBean extends GenericSopacBean {
     }
         
     public void toggleAddFaultForProject(ActionEvent ev) throws Exception {
-	try {
-	    initEditFormsSelection();
-	    System.out.println("Setting current fault");
-	    db=Db4o.openFile(getBasePath()
-			     +"/"+getContextBasePath()
-			     +"/"+userName
-			     +"/"+codeName
-			     +"/"+projectName+".db");
-	    
-	    //Add the fault to the DB.
-	    // 		  Fault tmpfault=new Fault();
-	    // 		  tmpfault.setFaultName(currentFault.getFaultName());
-	    //		  ObjectSet result=db.get(tmpfault);
-	    ObjectSet result=db.get(Fault.class);
-	    Fault tmpfault;
-	    //Remove any previous versions
-	    while(result.hasNext()) {
-		tmpfault=(Fault)result.next();
-		if(tmpfault.getFaultName().equals(currentFault.getFaultName())) {
-		    System.out.println("Deleting old fault: "+currentFault.getFaultName());
-		    db.delete(tmpfault);
-		}
-	    }
-	    db.set(currentFault);
-	    db.commit();
-	    db.close();
-	    
-	    //		  setProjectOrigin(projectName);
-	}
-	catch (Exception ex){
-	    if(db!=null) db.close();
-	    ex.printStackTrace();
-	}
+		  try {
+				initEditFormsSelection();
+				System.out.println("Setting current fault");
+				db=Db4o.openFile(getBasePath()
+									  +"/"+getContextBasePath()
+									  +"/"+userName
+									  +"/"+codeName
+									  +"/"+projectName+".db");
+				
+				//Add the fault to the DB.
+				// 		  Fault tmpfault=new Fault();
+				// 		  tmpfault.setFaultName(currentFault.getFaultName());
+				//		  ObjectSet result=db.get(tmpfault);
+				ObjectSet result=db.get(Fault.class);
+				Fault tmpfault;
+				//Remove any previous versions
+				while(result.hasNext()) {
+					 tmpfault=(Fault)result.next();
+					 if(tmpfault.getFaultName().equals(currentFault.getFaultName())) {
+						  System.out.println("Deleting old fault: "
+													+currentFault.getFaultName());
+						  db.delete(tmpfault);
+					 }
+				}
+				db.set(currentFault);
+				db.commit();
+				db.close();
+				//		  setProjectOrigin(projectName);
+		  }
+		  catch (Exception ex){
+				if(db!=null) db.close();
+				ex.printStackTrace();
+		  }
     }
     
     /**
@@ -1426,15 +1472,15 @@ public class DislocBean extends GenericSopacBean {
      * These are methods associated with Faces navigations.
      */
     public String newProject() throws Exception {
-	initDislocService();
-	isInitialized = getIsInitialized();
-	// 		  if (!isInitialized) {
-	// 				initWebServices();
-	// 		  }
-	// 		  setContextList();
-	
-	makeProjectDirectory();
-	return ("disloc-new-project");
+		  initDislocService();
+		  isInitialized = getIsInitialized();
+		  // 		  if (!isInitialized) {
+		  // 				initWebServices();
+		  // 		  }
+		  // 		  setContextList();
+		  
+		  makeProjectDirectory();
+		  return ("disloc-new-project");
     }
     
     public void init_edit_project() {
@@ -1448,15 +1494,15 @@ public class DislocBean extends GenericSopacBean {
      * Create the new project bean, store it in the db, and initialize.
      */ 
     public String NewProjectThenEditProject() throws Exception {
-	try {
-	    //		  dislocParams=new DislocParamsBean();
-	    createNewProject(projectName);
-	    init_edit_project();
-	}
-	catch (Exception ex) {
-	    ex.printStackTrace();
-	}
-	return "disloc-edit-project";
+		  try {
+				//		  dislocParams=new DislocParamsBean();
+				createNewProject(projectName);
+				init_edit_project();
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  return "disloc-edit-project";
     }
     
     public String toggleDeleteProject() {
@@ -1497,14 +1543,15 @@ public class DislocBean extends GenericSopacBean {
 	  * This method stores the new project in the DB and updates the currentProject
 	  */
     protected void createNewProject(String projectName) {
-	System.out.println("Creating new project");
-	makeProjectDirectory();
-	db=Db4o.openFile(getBasePath()
-			 +"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");		  		  
-	DislocProjectBean tmp=new DislocProjectBean();
-	ObjectSet results=db.get(DislocProjectBean.class);
-	
-	//Create a new project. This may be overwritten later
+		  System.out.println("Creating new project");
+		  makeProjectDirectory();
+		  db=Db4o.openFile(getBasePath()
+								 +"/"+getContextBasePath()
+								 +"/"+userName+"/"+codeName+".db");
+		  DislocProjectBean tmp=new DislocProjectBean();
+		  ObjectSet results=db.get(DislocProjectBean.class);
+		  
+		  //Create a new project. This may be overwritten later
 		  currentProject=new DislocProjectBean();
 		  currentProject.setProjectName(projectName);
 
@@ -1525,9 +1572,8 @@ public class DislocBean extends GenericSopacBean {
 		  db.set(currentProject);
 		  db.commit();
 		  db.close();
-
+		  
 		  currentParams=getDislocParamsFromDB();
-
     }
     
     public String loadProjectList() throws Exception {
@@ -1676,6 +1722,14 @@ public class DislocBean extends GenericSopacBean {
 
 	 public void setProjectSelectionCode(String projectSelectionCode){
 		  this.projectSelectionCode=projectSelectionCode;
+	 }
+
+	 public boolean getRenderChooseObsvStyleForm() {
+		  return this.renderChooseObsvStyleForm;
+	 }
+
+	 public void setRenderChooseObsvStyleForm(boolean renderChooseObsvStyleForm){
+		  this.renderChooseObsvStyleForm=renderChooseObsvStyleForm;
 	 }
 
 	 public boolean getRenderSearchByFaultNameForm() {
@@ -1874,6 +1928,14 @@ public class DislocBean extends GenericSopacBean {
 	 
 	 public void setFaultSelectionCode(String tmp_str) {
 		  this.faultSelectionCode = tmp_str;
+	 }
+
+	 public String getObsvStyleSelectionCode() {
+		  return obsvStyleSelectionCode;
+	 }
+
+	 public void setObsvStyleSelectionCode(String obsvStyleSelectionCode) {
+		  this.obsvStyleSelectionCode=obsvStyleSelectionCode;
 	 }
 
 	 public Fault getCurrentFault() {
@@ -2272,8 +2334,13 @@ public class DislocBean extends GenericSopacBean {
 											 Double.parseDouble(gpsStationLon),
 											 currentParams.getOriginLat(),
 											 currentParams.getOriginLon());
-
-		  getMyPointObservationList().add(point);
+		  
+		  //Update the current project
+		  XYPoint[] allpoints=currentParams.getXYPoints();
+		  XYPoint[] newpoints=new XYPoint[allpoints.length+1];
+		  System.arraycopy(allpoints,0,newpoints,0,0);
+		  newpoints[allpoints.length+1]=point;
+		  currentParams.setXYPoints(newpoints);
 	 }
 
 	 /**
