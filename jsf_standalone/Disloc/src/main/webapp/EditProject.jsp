@@ -257,12 +257,10 @@ function getScrolling() {
 	<h:outputText styleClass="header2" value="Project Input"/> 
 	<h:outputText id="message" value=""/>
 	<h:inputHidden id="faultKmlUrl" value="#{DislocBean.faultKmlUrl}"/>
-   <h:outputText escape="false" 
+        <h:outputText escape="false" 
 					  value="<p>Create your geometry out of observation points and faults.  
                         <br/> The project origin 
 	                     will be the starting lat/lon of the first fault.</p>"/> 
-
-   <%/* This is the main control board*/%>
 	<h:panelGrid id="EditProject"  
 		columnClasses="alignTop,alignTop" 
 		columns="2" border="1"> 
@@ -277,14 +275,13 @@ function getScrolling() {
  
 				<h:selectOneRadio layout="pageDirection" id="subscriptions" 
 					value="#{DislocBean.projectSelectionCode}"> 
-					<f:selectItem id="item0w3" 
+				<f:selectItem id="item0w3" 
 						itemLabel="Observation Style: Choose between grid and scatter points." 
 						itemValue="ChooseObsvStyleForm"/> 
 
 					<f:selectItem id="item1" 
-						itemLabel="Add Observations: Click to modify observation points." 
+						itemLabel="Add Observations: Click to specify observation points." 
 						itemValue="CreateObservationGrid" /> 
-
 					<f:selectItem id="item2" 
 						itemLabel="Create New Fault: Click to specify geometry for a fault segment." 
 						itemValue="CreateNewFault" /> 
@@ -302,12 +299,11 @@ function getScrolling() {
 				</h:commandButton> 
 			</h:panelGroup> 
 		</h:form> 
-
-        <%/* Choose the observation style you want */%>
-			<h:panelGroup id="lck0ere93ks"
+		
+		<h:panelGroup id="lck0ere93ks"
 					rendered="#{DislocBean.renderChooseObsvStyleForm}">
-					 <h:form id="obsvStyleForm">
-                <h:outputText id="clrr33asz3" escape="false"
+		      <h:form id="obsvStyleForm">
+                	<h:outputText id="clrr33asz3" escape="false"
 					    value="<b>Select Sites:</b>Click to choose scatter point."/>
 					  <h:selectOneRadio layout="pageDirection" id="ere34ionssss" 
 							value="#{DislocBean.obsvStyleSelectionCode}"> 
@@ -321,102 +317,109 @@ function getScrolling() {
 					  <h:commandButton id="chooseAStyle" value="Choose Style"
 						 		actionListener="#{DislocBean.toggleSetObsvStyle}"/>
 					 </h:form>
-			</h:panelGroup>
+		        </h:panelGroup>
 
-			<%/* Render the map */%>
 			<h:panelGroup id="lck093ks"
 					rendered="#{DislocBean.renderMap}">
-			  <h:form id="obsvGPSMap">
-             <h:outputText id="clrlc093" escape="false"
+					 <h:form id="obsvGPSMap">
+                <h:outputText id="clrlc093" escape="false"
 					    value="<b>Select Sites:</b>Click to choose scatter point."/>
-					<h:panelGrid id="mapsAndCrap" columns="3" 
-						 				  columnClasses="alignTop,alignTop">
-					   <h:panelGroup id="mapncrap1">
-						    <f:verbatim>
-						        <div id="map" style="width: 600px; height: 400px"></div>
-						    </f:verbatim>
-                  </h:panelGroup>
-                  <h:panelGroup id="mapncrap2">
+						 <h:panelGrid id="mapsAndCrap" columns="3" columnClasses="alignTop,alignTop">
+						    <h:panelGroup id="mapncrap1">
+						 <f:verbatim>
+						 <div id="map" style="width: 600px; height: 400px"></div>
+						 </f:verbatim>
+                      </h:panelGroup>
+                      <h:panelGroup id="mapncrap2">
 							<h:panelGrid id="dfjdlkj" columns="2" 
 							   rendered="#{empty DislocBean.usesGridPoints
 											 || !DislocBean.usesGridPoints}">
-						      <h:outputText id="dkljr3rf" value="Latitude:"/>
-						      <h:inputText id="stationLat" value="#{DislocBean.gpsStationLat}"/>
-						      <h:outputText id="dkljfer4" value="Longitude:"/>
-						      <h:inputText id="stationLon" value="#{DislocBean.gpsStationLon}"/>
-						      <h:commandButton id="addGPSObsv" value="Add Observation Point"
-						 		  actionListener="#{DislocBean.toggleAddPointObsvForProject}"/>
+						 <h:outputText id="dkljr3rf" value="Latitude:"/>
+						 <h:inputText id="stationLat" value="#{DislocBean.gpsStationLat}"/>
+						 <h:outputText id="dkljfer4" value="Longitude:"/>
+						 <h:inputText id="stationLon" value="#{DislocBean.gpsStationLon}"/>
+						 <h:commandButton id="addGPSObsv" value="Add Observation Point"
+						 		actionListener="#{DislocBean.toggleAddPointObsvForProject}"/>
 
-						      <h:commandButton id="closeMap" value="Close Map"
-						 		  actionListener="#{DislocBean.toggleCloseMap}"/>
+						 <h:commandButton id="closeMap" value="Close Map"
+						 		actionListener="#{DislocBean.toggleCloseMap}"/>
+								</h:panelGrid>
+						   </h:panelGroup>
 							</h:panelGrid>
-						</h:panelGroup>
-					</h:panelGrid>
-			   </h:form>
+					 </h:form>
 			</h:panelGroup>
- 		<%/* Displays the project params and observation points */%>
+ 
 		<h:panelGroup id="stuff4">
 			<h:form id="obsvform" rendered="#{DislocBean.renderDislocGridParamsForm}"> 
-
-         <%/* Origin and obsv style */%>
-				<h:panelGrid id="ObsvTableerere" columns="2" footerClass="subtitle" 
+				<h:panelGrid id="ObsvTable" columns="2" footerClass="subtitle" 
 					headerClass="subtitlebig" styleClass="medium" 
 					columnClasses="subtitle,medium"> 
+ 
+					<f:facet name="header"> 
+						<h:outputFormat id="output2" escape="false" 
+							value="<b>Define Grid of Observation Points </b>" /> 
+					</f:facet> 
 
  					<h:outputText  id="stuff223" value="Project Origin Lat:" /> 
-				   <h:inputText id="origin_latlieew" 
+					<h:panelGroup  id="stuff543"> 
+						<h:inputText id="origin_latlieew" 
 							value="#{DislocBean.currentParams.originLat}" required="true" /> 
+					</h:panelGroup> 
 
  					<h:outputText  id="stuff2434" value="Project Origin Lon:" /> 
-				   <h:inputText id="origin_lonlkd" 
+					<h:panelGroup  id="stuff24sx5"> 
+						<h:inputText id="origin_lonlkd" 
 							value="#{DislocBean.currentParams.originLon}" required="true" /> 
-
+					</h:panelGroup> 
+					
  					<h:outputText  id="stuf334" value="Observation Style:" /> 
+					<h:panelGroup>
 					<h:outputText id="origin_lonlkd" 
-									  value="#{DislocBean.currentParams.observationPointStyle}">
-				<%/*</h:panelGrid>*/%>
+					              value="#{DislocBean.currentParams.observationPointStyle}"/>
+					</h:panelGroup>	      
 
-         <%/* Grid obsv form */%>
-			<h:panelGroup id="lkje33rhl"
-							  rendered="#{DislocBean.usesGridPoints}">
-
-				<h:panelGrid id="ObsvTabldrere" columns="2" footerClass="subtitle" 
-					headerClass="subtitlebig" styleClass="medium" 
-					columnClasses="subtitle,medium"> 
-
-						<h:outputText  id="stuff2" value="Grid Minimum X Value:" /> 
+ 					<h:outputText  id="stuff2" value="Grid Minimum X Value:" /> 
+					<h:panelGroup  id="stuff5"> 
 						<h:inputText id="minx" 
 							value="#{DislocBean.currentParams.gridMinXValue}" required="true" /> 
+					</h:panelGroup> 
  
-					   <h:outputText  id="stuff3" value="X Spacing:" /> 
+					<h:outputText  id="stuff3" value="X Spacing:" /> 
+					<h:panelGroup  id="stuff6"> 
 						<h:inputText id="xspacing" 
 							value="#{DislocBean.currentParams.gridXSpacing}" required="true" /> 
+					</h:panelGroup> 
  
-					   <h:outputText  id="stuff7" value="X Iterations" /> 
+					<h:outputText  id="stuff7" value="X Iterations" /> 
+					<h:panelGroup  id="stuff8"> 
 						<h:inputText id="xiterations" 
-							value="#{DislocBean.currentParams.gridXIterations}" 
-							required="true" /> 
-
-					   <h:outputText  id="stuff9" value="Grid Minimum Y Value:" /> 
+							value="#{DislocBean.currentParams.gridXIterations}" required="true" /> 
+					</h:panelGroup> 
+ 
+					<h:outputText  id="stuff9" value="Grid Minimum Y Value:" /> 
+					<h:panelGroup  id="stuff10"> 
 						<h:inputText id="miny" 
 							value="#{DislocBean.currentParams.gridMinYValue}" required="true" /> 
+					</h:panelGroup> 
  
-					   <h:outputText  id="stuff11" value="Y Spacing:" /> 
+					<h:outputText  id="stuff11" value="Y Spacing:" /> 
+					<h:panelGroup   id="pg2"> 
 						<h:inputText id="yspacing" 
 							value="#{DislocBean.currentParams.gridYSpacing}" required="true" /> 
+					</h:panelGroup> 
  
-					   <h:outputText  id="stuff12" value="Y Iterations" /> 
+					<h:outputText  id="stuff12" value="Y Iterations" /> 
+					<h:panelGroup  id="stuff13"> 
 						<h:inputText id="yiterations" 
-							value="#{DislocBean.currentParams.gridYIterations}" 
-							required="true" /> 
-				  </h:panelGrid>
-			 </h:panelGroup> 
- 
-			 <h:commandButton id="addobservation" value="select" 
-									actionListener="#{DislocBean.toggleAddObservationsForProject}" /> 
-			</h:form> 
-         </panelGroup>
+							value="#{DislocBean.currentParams.gridYIterations}" required="true" /> 
+					</h:panelGroup> 
 
+ 
+					<h:commandButton id="addobservation" value="select" 
+						actionListener="#{DislocBean.toggleAddObservationsForProject}" /> 
+
+				</h:panelGrid> 
+			</h:form> 
  
 			<h:form id="Faultform" rendered="#{DislocBean.renderCreateNewFaultForm}"> 
 				<h:panelGrid id="FaultTable" columns="2" footerClass="subtitle" 
@@ -448,8 +451,7 @@ function getScrolling() {
 
 					<h:outputText value="Fault Origin Latitude:" />
 			      <h:panelGroup>
-						<h:inputText id="faultLat" 
-										 value="#{DislocBean.currentFault.faultLatStart}"
+						<h:inputText id="faultLat" value="#{DislocBean.currentFault.faultLatStart}"
 										 required="true" />
 					</h:panelGroup>
 
