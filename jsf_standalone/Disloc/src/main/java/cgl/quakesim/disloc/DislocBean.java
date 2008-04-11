@@ -1043,6 +1043,12 @@ public class DislocBean extends GenericSopacBean {
 				System.out.println("Unexpected obsv style");
 		  }
 		  obsvStyleSelectionCode="";
+		  try {
+		      storeParamsInDB();
+		  }
+		  catch (Exception ex) {
+		      ex.printStackTrace();
+		  }
 	 }
     
     /**
@@ -2341,18 +2347,47 @@ public class DislocBean extends GenericSopacBean {
 		  System.arraycopy(allpoints,0,newpoints,0,0);
 		  newpoints[allpoints.length+1]=point;
 		  currentParams.setXYPoints(newpoints);
+		  try {
+		      storeParamsInDB();
+		  }
+		  catch (Exception ex) {
+		  }
 	 }
+
+    protected void storeParamsInDB() throws Exception {
+	try {
+	    db=Db4o.openFile(getBasePath()+"/"
+			     +getContextBasePath()
+			     +"/"+userName
+			     +"/"+codeName+"/"+projectName+".db");	
+	    ObjectSet result=db.get(DislocParamsBean.class);
+	    if(result.hasNext()) {
+		DislocParamsBean tmp=(DislocParamsBean)result.next();
+		db.delete(tmp);
+	    }
+	    db.set(currentParams);
+	    
+	    //Say goodbye.
+	    db.commit();
+	    db.close();
+	}
+	catch (Exception ex) {
+	    db.close();
+	    throw new Exception();
+	}
+	db.close();
+    }
 
 	 /**
 	  * Converts the provided lat and lon into cartesian coordinates.
 	  */
 	 protected XYPoint convertLatLon(double lat, 
-												 double lon,
-												 double origin_lat,
-												 double origin_lon) {
-				double x=(lon-origin_lon)*factor(origin_lon,origin_lat);
-				double y=(lat-origin_lat)*111.32;
-				
-				return new XYPoint(x,y);
+					 double lon,
+					 double origin_lat,
+					 double origin_lon) {
+	     double x=(lon-origin_lon)*factor(origin_lon,origin_lat);
+	     double y=(lat-origin_lat)*111.32;
+	     
+	     return new XYPoint(x,y);
 	 }
 }

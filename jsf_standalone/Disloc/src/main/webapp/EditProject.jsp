@@ -272,6 +272,8 @@ function getScrolling() {
 				<h:outputFormat id="stuffe3io4" escape="false" 
 					value="<b>Project Origin (lat/lon):</b> (#{DislocBean.currentParams.originLat}, 
 											        #{DislocBean.currentParams.originLon}) <br>" /> 
+				<h:outputFormat id="stufw3f1" escape="false" 
+					value="<b>Observation Style: #{DislocBean.currentParams.observationPointStyle} </b><br>" /> 
  
 				<h:selectOneRadio layout="pageDirection" id="subscriptions" 
 					value="#{DislocBean.projectSelectionCode}"> 
@@ -349,8 +351,8 @@ function getScrolling() {
 					 </h:form>
 			</h:panelGroup>
  
-		<h:panelGroup id="stuff4">
-			<h:form id="obsvform" rendered="#{DislocBean.renderDislocGridParamsForm}"> 
+			<h:panelGroup id="stuff4">
+	          	   <h:form id="obsvform" rendered="#{DislocBean.renderDislocGridParamsForm}"> 
 				<h:panelGrid id="ObsvTable" columns="2" footerClass="subtitle" 
 					headerClass="subtitlebig" styleClass="medium" 
 					columnClasses="subtitle,medium"> 
@@ -374,7 +376,7 @@ function getScrolling() {
 					
  					<h:outputText  id="stuf334" value="Observation Style:" /> 
 					<h:panelGroup>
-					<h:outputText id="origin_lonlkd" 
+					<h:outputText id="stylejkrejonlkd" 
 					              value="#{DislocBean.currentParams.observationPointStyle}"/>
 					</h:panelGroup>	      
           			</h:panelGrid>
