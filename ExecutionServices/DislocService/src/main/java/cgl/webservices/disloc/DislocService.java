@@ -159,9 +159,22 @@ public class DislocService extends AntVisco implements Runnable {
 		  //Create the input file.  First create the grid points
 		  
 		  //Print the header line
-		  pw.println(dislocParams.getOriginLat()
-						 +space+dislocParams.getOriginLon()
-						 +space+dislocParams.getObservationPointStyle());
+		  if(dislocParams.getObservationPointStyle()==1) {
+				pw.println(dislocParams.getOriginLat()
+							  +space+dislocParams.getOriginLon()
+							  +space+dislocParams.getObservationPointStyle());
+		  }
+		  else if(dislocParams.getObservationPointStyle()==0) {
+				pw.println(dislocParams.getOriginLat()
+							  +space+dislocParams.getOriginLon()
+							  +space+dislocParams.getObservationPointStyle()
+							  +space+dislocParams.getXYPoints().length);
+		  }
+		  
+		  else {
+				System.out.println("Malformed disloc problem");
+				throw new Exception();
+		  }
 
 		  
 		  //Print the observation point information
