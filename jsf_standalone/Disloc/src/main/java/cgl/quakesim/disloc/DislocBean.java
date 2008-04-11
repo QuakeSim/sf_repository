@@ -1840,6 +1840,12 @@ public class DislocBean extends GenericSopacBean {
     }
     
 	 public boolean getUsesGridPoints() {
+		  if(currentParams.getObservationPointStyle()==1) {
+				usesGridPoints=true;
+		  }
+		  else {
+				usesGridPoints=false;
+		  }
 		  return usesGridPoints;
 	 }
 

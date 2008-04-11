@@ -80,6 +80,20 @@ mapcenter_y = center_xy[1];
           networkInfo [i] = new Array (2);
         }
 
+function dataTableSelectOneRadio(radio) { 
+    var id = radio.name.substring(radio.name.lastIndexOf(':')); 
+    var el = radio.form.elements; 
+     //alert (el.length); 
+    for (var i = 0; i < el.length; i++) { 
+        if (el[i].name.substring(el[i].name.lastIndexOf(':')) == id) { 
+        //alert (el[i].checked) 
+            el[i].checked = false; 
+            el[i].checked = false; 
+        } 
+    } 
+    radio.checked = true; 
+}
+
 function selectOne(form , button) 
 { 
   turnOffRadioForForm(form); 
@@ -122,7 +136,7 @@ function initialize() {
          geoXml.gotoDefaultViewport(map);
 			//Show the map.
 	  		map.addOverlay(geoXml);
-        	overlayNetworks();
+//        	overlayNetworks();
 //         printNetworkColors(networkInfo);
       });
 
@@ -133,6 +147,7 @@ function initialize() {
 			message.innerHTML="Loading...";
 		  }
 			message.innerHTML="";
+         geoObsvXml.gotoDefaultViewport(map);
 			//Show the map.
 	  		map.addOverlay(geoObsvXml);
       });
@@ -151,19 +166,6 @@ function addObsvMarker(overlay,point) {
 			map.openInfoWindow(point,message);			    
 }
  
-function dataTableSelectOneRadio(radio) { 
-    var id = radio.name.substring(radio.name.lastIndexOf(':')); 
-    var el = radio.form.elements; 
-     //alert (el.length); 
-    for (var i = 0; i < el.length; i++) { 
-        if (el[i].name.substring(el[i].name.lastIndexOf(':')) == id) { 
-        //alert (el[i].checked) 
-            el[i].checked = false; 
-            el[i].checked = false; 
-        } 
-    } 
-    radio.checked = true; 
-}
 function overlayNetworks(){
           var icon = new GIcon(baseIcon);
           icon.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";
@@ -398,7 +400,7 @@ function getScrolling() {
 					</h:panelGroup>	      
           			</h:panelGrid>
 
-				<h:panelGrid id="erep912e3">
+				<h:panelGrid id="erep912e3" rendered="#{!DislocBean.usesGridPoints}">
 					<f:facet name="header"> 
 						<h:outputFormat id="outputere2" escape="false" 
 							value="<b>Scatter-Style Observation Points </b>" /> 
