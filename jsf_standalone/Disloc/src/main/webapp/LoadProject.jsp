@@ -109,12 +109,8 @@ function dataTableSelectOneRadio(radio) {
 			action="#{DislocBean.NewProjectThenEditProject}" />
 
 	</h:form>
-	<h:form>
-		<hr />
-		<h:commandLink action="disloc-back">
-			<h:outputText value="#{DislocBean.codeName} Main Menu" />
-		</h:commandLink>
-	</h:form>
+
+   <%@ include file="footer.jsp" %>
 
 </f:view>
 </body>

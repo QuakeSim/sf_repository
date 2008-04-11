@@ -39,6 +39,25 @@ import com.db4o.*;
  */
 
 public class DislocBean extends GenericSopacBean {
+
+	 //KML stuff, need to move this to another place.
+	 String xmlHead="<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+	 String kmlHead="<kml xmlns=\"http://earth.google.com/kml/2.2\">";
+	 String kmlEnd="</kml>";
+	 String pmBegin="<Placemark>";
+	 String pmEnd="</Placemark>";
+	 String lsBegin="<LineString>";
+	 String lsEnd="</LineString>";
+	 String pointBegin="<Point>";
+	 String pointEnd="</Point>";
+	 String coordBegin="<coordinates>";
+	 String coordEnd="</coordinates>";
+	 String docBegin="<Document>";
+	 String docEnd="</Document>";
+	 String comma=", ";
+	 String descBegin="<description>";
+	 String descEnd="</description>";
+
 	 
     //Some navigation strings.
     static final String DEFAULT_USER_NAME="disloc_default_user";
@@ -91,7 +110,7 @@ public class DislocBean extends GenericSopacBean {
     List myArchivedDislocResultsList=new ArrayList();
 	 List myPointObservationList=new ArrayList();
 
-    HtmlDataTable myFaultDataTable, myProjectSummaryDataTable;
+    HtmlDataTable myFaultDataTable, myProjectSummaryDataTable,myScatterPointsTable;
     
     //Create the database
     ObjectContainer db=null;
@@ -113,6 +132,8 @@ public class DislocBean extends GenericSopacBean {
     String faultKmlUrl;
     String portalBaseUrl;
     String faultKmlFilename;
+	 String obsvKmlUrl;
+	 String obsvKmlFilename;
 	 
 	 String gpsStationName="";
 	 String gpsStationLat="";
@@ -125,7 +146,7 @@ public class DislocBean extends GenericSopacBean {
     public DislocBean() throws Exception {
 		  super();
 		  
-		  currentParams.setObservationPointStyle(1);
+		  //		  currentParams.setObservationPointStyle(1);
 		  
 		  //We are done.
 		  System.out.println("Primary Disloc Bean Created");
@@ -255,7 +276,7 @@ public class DislocBean extends GenericSopacBean {
 				Fault[] faults=getFaultsFromDB();
 				//		  currentParams=getDislocParamsFromDB();
 				// This will be fixed at "1" for now.
-				currentParams.setObservationPointStyle(1);
+				//				currentParams.setObservationPointStyle(1);
 				
 				//Set the project origin to be the first fault's starting lat/lon.
 				// 		  currentParams.setOriginLat(faults[0].getFaultLatStart());
@@ -361,7 +382,7 @@ public class DislocBean extends GenericSopacBean {
 		  try {
 				Fault[] faults=getFaultsFromDB();
 				//		  currentParams=getDislocParamsFromDB();
-				currentParams.setObservationPointStyle(1);
+				//				currentParams.setObservationPointStyle(1);
 				
 				System.out.println(currentParams.getObservationPointStyle());
 				System.out.println(currentParams.getGridMinXValue());
@@ -812,7 +833,7 @@ public class DislocBean extends GenericSopacBean {
 		      //				double length = Math.sqrt(x * x + y * y);
 
 		      double length=Double.parseDouble(format.format(Math.sqrt(x * x + y * y)));
-		      tmp_fault.setFaultName (theFault);
+		      tmp_fault.setFaultName(theFault);
 				tmp_fault.setFaultLatStart(latStart);
 				tmp_fault.setFaultLonStart(lonStart);
 				tmp_fault.setFaultLonEnd(lonEnd);
@@ -1431,47 +1452,47 @@ public class DislocBean extends GenericSopacBean {
 // 	 }
 
     public void toggleAddObservationsForProject(ActionEvent ev) throws Exception {
-	try {
-	    initEditFormsSelection();
-	    db=Db4o.openFile(getBasePath()
-			     +"/"+getContextBasePath()
-			     +"/"+userName+"/"+codeName+"/"+projectName+".db");
-	    
-	    System.out.println("Adding an observation");
-	    
-	    //There should only be one of these at most.
-	    //Delete the stored one and replace it with the new one.
-	    ObjectSet result=db.get(DislocParamsBean.class);
-	    if(result.hasNext()) {
-		DislocParamsBean tmp=(DislocParamsBean)result.next();
-		db.delete(tmp);
-	    }
-	    System.out.println("Disloc params are " + currentParams.getGridXIterations());
-	    System.out.println("Disloc params are also " + currentParams.getGridYIterations());
-	    db.set(currentParams);
-	    
-	    NumberFormat format = NumberFormat.getInstance();
-	    ObjectSet faultResults=db.get(Fault.class);
-	    while(faultResults.hasNext()) {
-				Fault tmp_fault=(Fault)faultResults.next();
-				System.out.println("Updating fault origins for "+tmp_fault.getFaultName());
+		  try {
+				initEditFormsSelection();
+				db=Db4o.openFile(getBasePath()
+									  +"/"+getContextBasePath()
+									  +"/"+userName+"/"+codeName+"/"+projectName+".db");
 				
-				double x1=(tmp_fault.getFaultLonStart()-currentParams.getOriginLon())
-				    *factor(currentParams.getOriginLon(),currentParams.getOriginLat());
-				double y1=(tmp_fault.getFaultLatStart()-currentParams.getOriginLat())*111.32;
-				System.out.println("New fault origin: "+x1+" "+y1);
-				tmp_fault.setFaultLocationX(Double.parseDouble(format.format(x1)));
-				tmp_fault.setFaultLocationY(Double.parseDouble(format.format(y1)));
-				db.set(tmp_fault);
-	    }
-	    db.commit();
-	    db.close();
-	    
-	}
-	catch (Exception ex) {
-	    if(db!=null) db.close();
-	    ex.printStackTrace();
-	}
+				System.out.println("Adding an observation");
+				
+				//There should only be one of these at most.
+				//Delete the stored one and replace it with the new one.
+				ObjectSet result=db.get(DislocParamsBean.class);
+				if(result.hasNext()) {
+					 DislocParamsBean tmp=(DislocParamsBean)result.next();
+					 db.delete(tmp);
+				}
+				System.out.println("Disloc params are " + currentParams.getGridXIterations());
+				System.out.println("Disloc params are also " + currentParams.getGridYIterations());
+				db.set(currentParams);
+				
+				NumberFormat format = NumberFormat.getInstance();
+				ObjectSet faultResults=db.get(Fault.class);
+				while(faultResults.hasNext()) {
+					 Fault tmp_fault=(Fault)faultResults.next();
+					 System.out.println("Updating fault origins for "+tmp_fault.getFaultName());
+					 
+					 double x1=(tmp_fault.getFaultLonStart()-currentParams.getOriginLon())
+						  *factor(currentParams.getOriginLon(),currentParams.getOriginLat());
+					 double y1=(tmp_fault.getFaultLatStart()-currentParams.getOriginLat())*111.32;
+					 System.out.println("New fault origin: "+x1+" "+y1);
+					 tmp_fault.setFaultLocationX(Double.parseDouble(format.format(x1)));
+					 tmp_fault.setFaultLocationY(Double.parseDouble(format.format(y1)));
+					 db.set(tmp_fault);
+				}
+				db.commit();
+				db.close();
+				
+		  }
+		  catch (Exception ex) {
+				if(db!=null) db.close();
+				ex.printStackTrace();
+		  }
     }
 
     /**
@@ -1688,6 +1709,14 @@ public class DislocBean extends GenericSopacBean {
 		  this.myProjectSummaryDataTable=myProjectSummaryDataTable;
     }
 
+	 public HtmlDataTable getMyScatterPointsTable() {
+		  return this.myScatterPointsTable;
+	 }
+
+	 public void setMyScatterPointsTable(HtmlDataTable myScatterPointsTable) {
+		  this.myScatterPointsTable=myScatterPointsTable;
+	 }
+
     public List getMyFaultDBEntryList() {
 		  return myFaultDBEntryList;
     }
@@ -1816,6 +1845,41 @@ public class DislocBean extends GenericSopacBean {
 
 	 public void setUsesGridPoints(boolean usesGridPoints) {
 		  this.usesGridPoints=usesGridPoints;
+	 }
+
+	 /**
+	  * Makes an array list out of the XYPoints of the current pararms.
+	  * Useful for the JSF datatable but not much else.
+	  */ 
+	 protected List reconstructMyPointObservationList(String projectName) {
+		  this.myPointObservationList.clear();
+		  try {
+				db=Db4o.openFile(getBasePath()+"/"
+									  +getContextBasePath()
+									  +"/"+userName+"/"
+									  +codeName+"/"+projectName+".db");
+
+				ObjectSet results=db.get(DislocParamsBean.class);
+				DislocParamsBean tmpbean;
+				if(results.hasNext()){
+					 tmpbean=(DislocParamsBean)results.next();
+					 XYPoint[] xypoints=tmpbean.getXYPoints();
+					 if(xypoints!=null && xypoints.length>0) {
+						  System.out.println(xypoints.length);
+						  for(int i=0;i<xypoints.length;i++) {
+								System.out.println(i+" "+xypoints[i].getX()+" "+xypoints[i].getY());
+								myPointObservationList.add(xypoints[i]);
+						  }
+					 }
+				}
+				db.close(); 
+				
+		  } catch (Exception ex) {
+				ex.printStackTrace();
+				if(db!=null) db.close();
+		  }
+		  
+		  return this.myPointObservationList;
 	 }
 
     /**
@@ -2006,7 +2070,7 @@ public class DislocBean extends GenericSopacBean {
 	  * This should read from the db.
 	  */
 	 public List getMyPointObservationList() {
-		  return myPointObservationList;
+		  return reconstructMyPointObservationList(projectName);
 	 }
 
 	 public void setMyArchivedDislocResultsList(List myArchivedDislocResultsList)  {
@@ -2175,6 +2239,97 @@ public class DislocBean extends GenericSopacBean {
 		  return currentParams;
 	 }
 	 
+	 public String getObsvKmlFilename() {
+		  return obsvKmlFilename;
+	 }
+	 
+	 public void setObsvKmlFilename(String obsvKmlFilename) {
+		  this.obsvKmlFilename=obsvKmlFilename;
+	 }
+	 
+	 public String getObsvKmlUrl() {
+		  obsvKmlUrl=createObsvKmlFile();
+		  return obsvKmlUrl;
+	 }
+	 
+	 public void setObsvKmlUrl(String obsvKmlUrl) {
+		  this.obsvKmlUrl=obsvKmlUrl;
+	 }
+
+    /**
+     * Create a KML file of the point observations.  The method assumes
+     * access to global variables.
+     */
+    public String createObsvKmlFile() { 
+		  String newObsvFilename="";
+		  String oldLocalDestination=this.getBasePath()+"/"+"gridsphere"+"/"
+				+getObsvKmlFilename();
+		  String localDestination="";
+
+		  try {
+				//Delete the old file.
+				System.out.println("Old fault kml file:"+localDestination);
+				File oldFile=new File(oldLocalDestination);
+				if (oldFile.exists()) {
+					 System.out.println("Deleting old fault kml file");
+					 oldFile.delete();
+				}
+				
+				long timeStamp=(new Date()).getTime();
+				newObsvFilename=userName+"-"+codeName+"-"+projectName+"-"+timeStamp+".kml";
+				setObsvKmlFilename(newObsvFilename);
+				//This should be the new file name.
+				localDestination=this.getBasePath()+"/"+"gridsphere"+"/"
+					 +getObsvKmlFilename();
+
+
+				if(currentParams.getObservationPointStyle()==1) {
+					 //Need to print the grid lines.
+				}
+				//Default to scatter style
+				else {
+					 XYPoint[] points=getProjectObsvFromDB(userName,
+																		projectName,
+																		codeName,
+																		getBasePath(),
+																		getContextBasePath());
+					 
+					 PrintWriter out=new PrintWriter(new FileWriter(localDestination));
+					 
+					 if(points!=null && points.length>0) {
+						  out.println(xmlHead); 														 
+						  out.println(kmlHead);
+						  out.println(docBegin);
+						  for(int i=0;i<points.length;i++) {
+						  out.println(pmBegin);
+						  out.println(descBegin);
+						  out.println("<b>Observation Point:</b> "
+										  +points[i].getLon()+comma+points[i].getLat());
+						  out.println(descEnd);
+						  out.println(pointBegin);
+						  out.println(coordBegin);
+						  out.println(points[i].getLon()+comma+points[i].getLat()+comma+"0");
+						  out.println(coordEnd);
+						  out.println(pointEnd);
+						  out.println(pmEnd);
+					 }
+						  out.println(docEnd);
+						  out.println(kmlEnd);
+						  out.flush();
+						  out.close();
+					 }
+				}
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  
+		  String returnString=portalBaseUrl+"/gridsphere/"
+				+getObsvKmlFilename();
+		  System.out.println("KML:"+returnString);
+		  return returnString;
+	 }
+
 	 public String getFaultKmlFilename() {
 		  return faultKmlFilename;
 	 }
@@ -2183,25 +2338,12 @@ public class DislocBean extends GenericSopacBean {
 		  this.faultKmlFilename=faultKmlFilename;
 	 }
 
+
     /**
      * Create a KML file of the faults.  The method assumes
      * access to global variables.
      */
     public String createFaultKmlFile() { 
-		  //Some KML constants.
-		  String xmlHead="<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-		  String kmlHead="<kml xmlns=\"http://earth.google.com/kml/2.2\">";
-		  String kmlEnd="</kml>";
-		  String pmBegin="<Placemark>";
-		  String pmEnd="</Placemark>";
-		  String lsBegin="<LineString>";
-		  String lsEnd="</LineString>";
-		  String coordBegin="<coordinates>";
-		  String coordEnd="</coordinates>";
-		  String docBegin="<Document>";
-		  String docEnd="</Document>";
-		  String comma=",";
-		  
 		  String newFaultFilename="";
 		  String oldLocalDestination=this.getBasePath()+"/"+"gridsphere"+"/"
 				+getFaultKmlFilename();
@@ -2238,6 +2380,9 @@ public class DislocBean extends GenericSopacBean {
 					 out.println(docBegin);
 					 for(int i=0;i<faults.length;i++) {
 						  out.println(pmBegin);
+						  out.println(descBegin);
+						  out.println("<b>Fault: </b>"+faults[i].getFaultName());
+						  out.println(descEnd);
 						  out.println(lsBegin);
 						  out.println(coordBegin);
 						  out.println(faults[i].getFaultLonStart()+comma+faults[i].getFaultLatStart()+comma+"0");
@@ -2261,13 +2406,14 @@ public class DislocBean extends GenericSopacBean {
 		  System.out.println("KML:"+returnString);
 		  return returnString;
 	 }
+
     public String getFaultKmlUrl(){
 		  faultKmlUrl=createFaultKmlFile();
 		  return faultKmlUrl;
     }
 
     public void setFaultKmlUrl(String faultKmlUrl) {
-	this.faultKmlUrl=faultKmlUrl;
+		  this.faultKmlUrl=faultKmlUrl;
     }
 	 public String getPortalBaseUrl() {
 		  return portalBaseUrl;
@@ -2297,6 +2443,33 @@ public class DislocBean extends GenericSopacBean {
 		  }
 		  db.close();
 		  return returnFaults;
+	 }
+
+	 /**
+	  * Gets the scatter points from the project.  We open the db to do this.
+	  */
+	 public XYPoint[] getProjectObsvFromDB(String userName,
+														 String projectName,
+														 String codeName,
+														 String basePath,
+														 String relPath) {
+		  XYPoint[] points = null;
+		  System.out.println("Opening DB:"+basePath+"/"
+									+relPath+ "/" 
+									+ userName + "/"	
+									+ codeName + "/" + projectName + ".db");
+		  
+		  db = Db4o.openFile(basePath+"/"+relPath+ "/" + userName + "/"
+									+ codeName + "/" + projectName + ".db");
+		  
+		  ObjectSet results = db.get(DislocParamsBean.class);
+		  DislocParamsBean tmpbean;
+		  if(results.hasNext()){
+				tmpbean=(DislocParamsBean)results.next();
+				points=tmpbean.getXYPoints();
+		  }
+		  db.close(); 
+		  return points;
 	 }
 
 	 public String getGpsStationName() {
@@ -2343,39 +2516,52 @@ public class DislocBean extends GenericSopacBean {
 		  
 		  //Update the current project
 		  XYPoint[] allpoints=currentParams.getXYPoints();
-		  XYPoint[] newpoints=new XYPoint[allpoints.length+1];
-		  System.arraycopy(allpoints,0,newpoints,0,0);
-		  newpoints[allpoints.length+1]=point;
+		  XYPoint[] newpoints;
+
+		  if(allpoints==null || allpoints.length<0) {
+				newpoints=new XYPoint[1];
+				newpoints[0]=point;
+		  }
+		  else {
+				newpoints=new XYPoint[allpoints.length+1];
+				System.arraycopy(allpoints,0,newpoints,0,allpoints.length);
+				newpoints[allpoints.length]=point;
+		  }
+
+		  //Set the points
 		  currentParams.setXYPoints(newpoints);
+
+		  //Update the DB.
 		  try {
 		      storeParamsInDB();
 		  }
 		  catch (Exception ex) {
+				ex.printStackTrace();
 		  }
 	 }
 
     protected void storeParamsInDB() throws Exception {
-	try {
-	    db=Db4o.openFile(getBasePath()+"/"
-			     +getContextBasePath()
-			     +"/"+userName
-			     +"/"+codeName+"/"+projectName+".db");	
-	    ObjectSet result=db.get(DislocParamsBean.class);
-	    if(result.hasNext()) {
-		DislocParamsBean tmp=(DislocParamsBean)result.next();
-		db.delete(tmp);
-	    }
-	    db.set(currentParams);
-	    
-	    //Say goodbye.
-	    db.commit();
-	    db.close();
-	}
-	catch (Exception ex) {
-	    db.close();
-	    throw new Exception();
-	}
-	db.close();
+		  try {
+				db=Db4o.openFile(getBasePath()+"/"
+									  +getContextBasePath()
+									  +"/"+userName
+									  +"/"+codeName+"/"+projectName+".db");	
+				ObjectSet result=db.get(DislocParamsBean.class);
+				if(result.hasNext()) {
+					 DislocParamsBean tmp=(DislocParamsBean)result.next();
+					 db.delete(tmp);
+				}
+				db.set(currentParams);
+				
+				//Say goodbye.
+				db.commit();
+				db.close();
+		  }
+		  catch (Exception ex) {
+				db.close();
+				throw new Exception();
+		  }
+		  db.close();
     }
 
 	 /**
@@ -2388,6 +2574,6 @@ public class DislocBean extends GenericSopacBean {
 	     double x=(lon-origin_lon)*factor(origin_lon,origin_lat);
 	     double y=(lat-origin_lat)*111.32;
 	     
-	     return new XYPoint(x,y);
+	     return new XYPoint(x,y,lat,lon);
 	 }
 }

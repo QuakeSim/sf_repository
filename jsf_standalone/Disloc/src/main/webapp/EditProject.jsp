@@ -54,6 +54,7 @@ mapcenter_y = center_xy[1];
 	 var geocoder=null;
 	 var map;
 	 var geoXml;
+	 var geoObsvXml;
 
         var req;
         var baseIcon = new GIcon();
@@ -97,6 +98,7 @@ function turnOffRadioForForm(form)
 function initialize() {
 	 map=null;
 	 geoXml=null;
+	 geoObsvXml=null;
 
 	 map=new GMap2(document.getElementById("map"));
 	 	  //This is the default center.
@@ -109,7 +111,8 @@ function initialize() {
 	  //Create the network.
 	  var faultKmlUrl=document.getElementById("faultKmlUrl");
 //		  alert(faultKmlUrl.value);	
-
+		  
+	  //This is the kml of the faults
 	  geoXml=new GGeoXml(faultKmlUrl.value, function() {
 		  	var message=document.getElementById("message");
         while (!geoXml.hasLoaded()) {
@@ -122,11 +125,24 @@ function initialize() {
         	overlayNetworks();
 //         printNetworkColors(networkInfo);
       });
+
+	  var obsvKmlUrl=document.getElementById("obsvKmlUrl");
+	  geoObsvXml=new GGeoXml(obsvKmlUrl.value, function() {
+		  	var message=document.getElementById("message");
+        while (!geoObsvXml.hasLoaded()) {
+			message.innerHTML="Loading...";
+		  }
+			message.innerHTML="";
+			//Show the map.
+	  		map.addOverlay(geoObsvXml);
+      });
+
+		//Listen for user clicks
 	   GEvent.addListener(map,"click",addObsvMarker);
 }
 
 function addObsvMarker(overlay,point) {
-			var message="Lat: "+point.lat()+"<br>"+"Lon:"+point.lng()+")";
+			var message="Lat: "+point.lat()+"<br>"+"Lon:"+point.lng();
 	 		var newElement2=document.getElementById("obsvGPSMap:stationLat");
 			newElement2.setAttribute("value",point.lat());
 	 		var newElement3=document.getElementById("obsvGPSMap:stationLon");
@@ -257,6 +273,7 @@ function getScrolling() {
 	<h:outputText styleClass="header2" value="Project Input"/> 
 	<h:outputText id="message" value=""/>
 	<h:inputHidden id="faultKmlUrl" value="#{DislocBean.faultKmlUrl}"/>
+	<h:inputHidden id="obsvKmlUrl" value="#{DislocBean.obsvKmlUrl}"/>
         <h:outputText escape="false" 
 					  value="<p>Create your geometry out of observation points and faults.  
                         <br/> The project origin 
@@ -326,7 +343,7 @@ function getScrolling() {
 					 <h:form id="obsvGPSMap">
                 <h:outputText id="clrlc093" escape="false"
 					    value="<b>Select Sites:</b>Click to choose scatter point."/>
-						 <h:panelGrid id="mapsAndCrap" columns="3" columnClasses="alignTop,alignTop">
+						 <h:panelGrid id="mapsAndCrap" columns="2" columnClasses="alignTop,alignTop">
 						    <h:panelGroup id="mapncrap1">
 						 <f:verbatim>
 						 <div id="map" style="width: 600px; height: 400px"></div>
@@ -380,6 +397,33 @@ function getScrolling() {
 					              value="#{DislocBean.currentParams.observationPointStyle}"/>
 					</h:panelGroup>	      
           			</h:panelGrid>
+
+				<h:panelGrid id="erep912e3">
+					<f:facet name="header"> 
+						<h:outputFormat id="outputere2" escape="false" 
+							value="<b>Scatter-Style Observation Points </b>" /> 
+					</f:facet> 
+					<h:dataTable value="#{DislocBean.myPointObservationList}"
+									 binding="#{DislocBean.myScatterPointsTable}"
+									 var="xypoints"
+									 id="xypointsq3u">
+ 						<h:column>
+					     <f:facet name="header"> 
+						   <h:outputFormat id="outputere2" escape="false" 
+							   value="<b>Lat</b>" /> 
+					     </f:facet> 
+
+						  <h:outputText id="akjlatelkr34je" value="#{xypoints.lat}"/>
+    					</h:column>
+						<h:column>
+					     <f:facet name="header"> 
+						   <h:outputFormat id="outputere2" escape="false" 
+							   value="<b>Lon</b>" /> 
+					     </f:facet> 
+						  <h:outputText id="rerdad62lon" value="#{xypoints.lon}"/>
+    					</h:column>
+					</h:dataTable>
+            </h:panelGrid>
 
 				<h:panelGrid id="eiurojd93" columns="2" rendered="#{DislocBean.usesGridPoints}">
 					<f:facet name="header"> 
@@ -880,12 +924,7 @@ function getScrolling() {
 	</h:panelGrid> 
    </h:panelGroup> 
  
-	<h:form> 
-		<hr /> 
-		<h:commandLink   id="stuff93" action="disloc-back"> 
-			<h:outputText value="#{DislocBean.codeName} Main Menu" /> 
-		</h:commandLink> 
-	</h:form> 
+   <%@ include file="footer.jsp" %>
  
 </f:view> 
  

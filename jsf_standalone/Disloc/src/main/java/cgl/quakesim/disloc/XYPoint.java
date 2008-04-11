@@ -12,15 +12,39 @@ public class XYPoint  implements java.io.Serializable {
 
     private double y;
 
+	 private double lon;
+	 
+	 private double lat;
+
     public XYPoint() {
     }
 
     public XYPoint(
-           double x,
-           double y) {
+						 double x,
+						 double y,
+						 double lat,
+						 double lon) {
            this.x = x;
            this.y = y;
+			  this.lat=lat;
+			  this.lon=lon;
     }
+
+	 public double getLon() {
+		  return lon;
+	 }
+	 
+	 public double getLat() {
+		  return lat;
+	 }
+
+	 public void setLon(double lon) {
+		  this.lon=lon;
+	 }
+
+	 public void setLat(double lat){
+		  this.lat=lat;
+	 }
 
 
     /**
