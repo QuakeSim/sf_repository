@@ -357,7 +357,7 @@ function getScrolling() {
  
 					<f:facet name="header"> 
 						<h:outputFormat id="output2" escape="false" 
-							value="<b>Define Grid of Observation Points </b>" /> 
+							value="<b>Project Origin and Style</b>" /> 
 					</f:facet> 
 
  					<h:outputText  id="stuff223" value="Project Origin Lat:" /> 
@@ -377,6 +377,13 @@ function getScrolling() {
 					<h:outputText id="origin_lonlkd" 
 					              value="#{DislocBean.currentParams.observationPointStyle}"/>
 					</h:panelGroup>	      
+          			</h:panelGrid>
+
+				<h:panelGrid id="eiurojd93" columns="2" rendered="#{DislocBean.usesGridPoints}">
+					<f:facet name="header"> 
+						<h:outputFormat id="outputere2" escape="false" 
+							value="<b>Define Grid of Observation Points </b>" /> 
+					</f:facet> 
 
  					<h:outputText  id="stuff2" value="Grid Minimum X Value:" /> 
 					<h:panelGroup  id="stuff5"> 
@@ -413,12 +420,11 @@ function getScrolling() {
 						<h:inputText id="yiterations" 
 							value="#{DislocBean.currentParams.gridYIterations}" required="true" /> 
 					</h:panelGroup> 
-
+				</h:panelGrid>
  
 					<h:commandButton id="addobservation" value="select" 
 						actionListener="#{DislocBean.toggleAddObservationsForProject}" /> 
 
-				</h:panelGrid> 
 			</h:form> 
  
 			<h:form id="Faultform" rendered="#{DislocBean.renderCreateNewFaultForm}"> 
