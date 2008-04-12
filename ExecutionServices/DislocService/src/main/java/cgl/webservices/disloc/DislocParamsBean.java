@@ -13,17 +13,17 @@ public class DislocParamsBean {
 
 	 int observationPointStyle=1;
 
-	 XYPoint[] XYPoints;
+	 XYPoint[] xyPoints;
 
 	 public DislocParamsBean() {
 	 }
 
-	 public void setXYPoints(XYPoint[] XYPoints) {
-		  System.arraycopy(XYPoints,0,this.XYPoints,0,XYPoints.length);
+	 public void setXyPoints(XYPoint[] xyPoints) {
+		  System.arraycopy(xyPoints,0,this.xyPoints,0,xyPoints.length);
 	 }
 
-	 public XYPoint[] getXYPoints(){
-		  return XYPoints;
+	 public XYPoint[] getXyPoints(){
+		  return xyPoints;
 	 }
 
 	 //Setters
