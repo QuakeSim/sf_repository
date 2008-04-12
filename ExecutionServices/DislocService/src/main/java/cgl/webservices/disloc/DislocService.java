@@ -168,7 +168,7 @@ public class DislocService extends AntVisco implements Runnable {
 				pw.println(dislocParams.getOriginLat()
 							  +space+dislocParams.getOriginLon()
 							  +space+dislocParams.getObservationPointStyle()
-							  +space+dislocParams.getXYPoints().length);
+							  +space+dislocParams.getXyPoints().length);
 		  }
 		  
 		  else {
@@ -275,7 +275,7 @@ public class DislocService extends AntVisco implements Runnable {
 																DislocParamsBean dislocParams)  
 		  throws Exception {
 		  //Doesn't do anything yet.
-		  XYPoint[] points=dislocParams.getXYPoints();
+		  XYPoint[] points=dislocParams.getXyPoints();
 
 		  for(int i=0;i<points.length;i++) {
 				pw.println(points[i].getX()+" "+points[i].getY());
