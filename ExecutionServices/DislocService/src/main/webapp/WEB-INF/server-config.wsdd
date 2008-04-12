@@ -40,6 +40,7 @@
   <parameter name="scope" value="Session"/>
   <parameter name="className" value="cgl.webservices.disloc.DislocService"/>
   <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns1:ArrayOf_soapenc_string" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:java.lang.String[]" xmlns:ns1="urn:GatewayWS"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="myNS:ArrayOf_tns1_XYPoint" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:cgl.webservices.disloc.XYPoint[]" xmlns:myNS="urn:DislocService"/>
  <beanMapping qname="myNS:DislocParamsBean" xmlns:myNS="urn:DislocService" languageSpecificType="java:cgl.webservices.disloc.DislocParamsBean"/>
   <beanMapping qname="myNS:Fault" xmlns:myNS="urn:DislocService" languageSpecificType="java:cgl.webservices.disloc.Fault"/>
   <beanMapping qname="myNS:XYPoint" xmlns:myNS="urn:DislocService" languageSpecificType="java:cgl.webservices.disloc.XYPoint"/>
