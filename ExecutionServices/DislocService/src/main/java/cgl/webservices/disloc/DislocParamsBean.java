@@ -18,12 +18,12 @@ public class DislocParamsBean {
 	 public DislocParamsBean() {
 	 }
 
-	 public void setXYPoints(XYPoint[] xyPoints) {
-		  System.arraycopy(xyPoints,0,this.xyPoints,0,xyPoints.length);
+	 public void setXYPoints(XYPoint[] XYPoints) {
+		  System.arraycopy(XYPoints,0,this.XYPoints,0,XYPoints.length);
 	 }
 
 	 public XYPoint[] getXYPoints(){
-		  return xyPoints;
+		  return XYPoints;
 	 }
 
 	 //Setters

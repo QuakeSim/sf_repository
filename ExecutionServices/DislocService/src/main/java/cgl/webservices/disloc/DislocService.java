@@ -30,7 +30,7 @@ import java.rmi.server.UID;
  * A simple wrapper for Ant.
  */
 
-public class DisloService extends AntVisco implements Runnable {  
+public class DislocService extends AntVisco implements Runnable {  
 
     Properties properties;
 	 String serverUrl;
