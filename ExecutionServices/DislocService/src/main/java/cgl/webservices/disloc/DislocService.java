@@ -30,7 +30,7 @@ import java.rmi.server.UID;
  * A simple wrapper for Ant.
  */
 
-public class DislocService extends AntVisco implements Runnable {  
+public class DislocExtendedService extends DislocService implements Runnable {  
 
     Properties properties;
 	 String serverUrl;
@@ -168,7 +168,7 @@ public class DislocService extends AntVisco implements Runnable {
 				pw.println(dislocParams.getOriginLat()
 							  +space+dislocParams.getOriginLon()
 							  +space+dislocParams.getObservationPointStyle()
-							  +space+dislocParams.getXyPoints().length);
+							  +space+dislocParams.getXYPoints().length);
 		  }
 		  
 		  else {
@@ -275,7 +275,7 @@ public class DislocService extends AntVisco implements Runnable {
 																DislocParamsBean dislocParams)  
 		  throws Exception {
 		  //Doesn't do anything yet.
-		  XYPoint[] points=dislocParams.getXyPoints();
+		  XYPoint[] points=dislocParams.getXYPoints();
 
 		  for(int i=0;i<points.length;i++) {
 				pw.println(points[i].getX()+" "+points[i].getY());
