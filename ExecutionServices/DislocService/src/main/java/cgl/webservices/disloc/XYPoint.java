@@ -4,9 +4,7 @@ public class XYPoint {
 	 double x;
 	 double y;
 	 private double lon;
-	 
 	 private double lat;
-
 
     public XYPoint(
 						 double lat,

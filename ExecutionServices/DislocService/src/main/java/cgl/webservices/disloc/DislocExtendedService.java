@@ -74,6 +74,13 @@ public class DislocExtendedService extends DislocService implements Runnable {
 					       XYPoint[] XYPoints,
 					       String targetName) 
 	throws Exception {
+		  for(int i=0;i<XYPoints.length;i++) {
+					 System.out.println("Service X:"+XYPoints[i].getX());
+					 System.out.println("Service Y:"+XYPoints[i].getY());
+					 System.out.println("Service Lat:"+XYPoints[i].getLat());
+					 System.out.println("Service Lon:"+XYPoints[i].getLon());
+		  }
+
 	if(targetName==null) targetName=DislocConstants.DISLOC_DEFAULT_TARGET;
 	String jobStamp=generateJobStamp();
 	String[] args=prefabDisloc(userName,
@@ -89,20 +96,14 @@ public class DislocExtendedService extends DislocService implements Runnable {
     }
     
     protected String[] prefabDisloc(String userName,
-				    String projectName,
-				    DislocParamsBean dislocParams,
-				    Fault[] faults,
-				    XYPoint[] XYPoints,
-				    String targetName,
-				    String jobStamp) 
-	throws Exception {
+												String projectName,
+												DislocParamsBean dislocParams,
+												Fault[] faults,
+												XYPoint[] XYPoints,
+												String targetName,
+												String jobStamp) 
+		  throws Exception {
 	
-		  for(int i=0;i<XYPoints.length;i++) {
-					 System.out.println("DB X:"+XYPoints[i].getX());
-					 System.out.println("DB Y:"+XYPoints[i].getY());
-					 System.out.println("DB Lat:"+XYPoints[i].getLat());
-					 System.out.println("DB Lon:"+XYPoints[i].getLon());
-		  }
 
 	workDir=generateWorkDir(userName,projectName,jobStamp);
 	makeWorkDir(workDir);
