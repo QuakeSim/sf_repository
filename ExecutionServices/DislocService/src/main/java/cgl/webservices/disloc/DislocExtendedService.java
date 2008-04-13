@@ -32,15 +32,6 @@ import java.rmi.server.UID;
 
 public class DislocExtendedService extends DislocService implements Runnable {  
 
-    Properties properties;
-	 String serverUrl;
-	 String baseWorkDir;
-	 String projectName;
-	 String binDir;
-	 String buildFilePath;
-	 String antTarget;
-	 String workDir;
-
 	 //Usefull variable;
 	 final String space=" ";
 
@@ -50,6 +41,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
     
     public DislocExtendedService(boolean useClassLoader) throws Exception {
 		  super(useClassLoader);
+		  System.out.println("Base:"+baseWorkDir);
     }
 	 
     public DislocResultsBean runNonBlockingDisloc(String userName,
