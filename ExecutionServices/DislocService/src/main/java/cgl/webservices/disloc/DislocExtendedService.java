@@ -48,7 +48,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 						  String projectName,
 						  Fault[] faults,
 						  DislocParamsBean dislocParams,
-						  XYPoint[] XYPoints,
+						  ObsvPoint[] ObsvPoints,
 						  String targetName) 
 	throws Exception {
 	System.out.println("RunNonBlocking called");
@@ -59,7 +59,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 				   projectName,
 				   dislocParams,
 				   faults,
-				   XYPoints,
+				   ObsvPoints,
 				   targetName,
 				   jobStamp);
 	setArgs(args);
@@ -71,14 +71,14 @@ public class DislocExtendedService extends DislocService implements Runnable {
 					       String projectName,
 					       Fault[] faults,
 					       DislocParamsBean dislocParams,
-					       XYPoint[] XYPoints,
+					       ObsvPoint[] ObsvPoints,
 					       String targetName) 
 	throws Exception {
-		  for(int i=0;i<XYPoints.length;i++) {
-					 System.out.println("Service X:"+XYPoints[i].getX());
-					 System.out.println("Service Y:"+XYPoints[i].getY());
-					 System.out.println("Service Lat:"+XYPoints[i].getLat());
-					 System.out.println("Service Lon:"+XYPoints[i].getLon());
+		  for(int i=0;i<ObsvPoints.length;i++) {
+					 System.out.println("Service X:"+ObsvPoints[i].getXPoint());
+					 System.out.println("Service Y:"+ObsvPoints[i].getYPoint());
+					 System.out.println("Service Lat:"+ObsvPoints[i].getLatPoint());
+					 System.out.println("Service Lon:"+ObsvPoints[i].getLonPoint());
 		  }
 
 	if(targetName==null) targetName=DislocConstants.DISLOC_DEFAULT_TARGET;
@@ -87,7 +87,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 				   projectName,
 				   dislocParams,
 				   faults,
-				   XYPoints,
+				   ObsvPoints,
 				   targetName,
 				   jobStamp);
 	setArgs(args);
@@ -99,7 +99,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 												String projectName,
 												DislocParamsBean dislocParams,
 												Fault[] faults,
-												XYPoint[] XYPoints,
+												ObsvPoint[] ObsvPoints,
 												String targetName,
 												String jobStamp) 
 		  throws Exception {
@@ -111,7 +111,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 			      projectName,
 			      dislocParams,
 			      faults,
-			      XYPoints);
+			      ObsvPoints);
 
 	String[] args=setUpArgs(workDir,
 				projectName,
@@ -124,7 +124,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 					 String projectName,
 					 DislocParamsBean dislocParams,
 					 Fault[] faults,
-					 XYPoint[] XYPoints) 
+					 ObsvPoint[] ObsvPoints) 
 	throws Exception {
 	
 	String inputFile=workDir+File.separator+projectName+".input";
@@ -143,7 +143,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 	    pw.println(dislocParams.getOriginLat()
 		       +space+dislocParams.getOriginLon()
 		       +space+dislocParams.getObservationPointStyle()
-		       +space+XYPoints.length);
+		       +space+ObsvPoints.length);
 	}
 	
 	else {
@@ -157,7 +157,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 	    printGridObservationSites(pw, dislocParams);
 	}
 	else if(dislocParams.getObservationPointStyle()==DislocConstants.SCATTER_OBSERVATION_STYLE) {
-	    printScatterObservationSites(pw,dislocParams,XYPoints);
+	    printScatterObservationSites(pw,dislocParams,ObsvPoints);
 	}
 	
 	//Now iterate over the faults.
@@ -247,12 +247,12 @@ public class DislocExtendedService extends DislocService implements Runnable {
 
     protected void printScatterObservationSites(PrintWriter pw, 
 						DislocParamsBean dislocParams,
-						XYPoint[] XYPoints)  
+						ObsvPoint[] ObsvPoints)  
 		  throws Exception {
 
-		  for(int i=0;i<XYPoints.length;i++) {
-				pw.println(XYPoints[i].getX()
-					   +" "+XYPoints[i].getY());
+		  for(int i=0;i<ObsvPoints.length;i++) {
+				pw.println(ObsvPoints[i].getXPoint()
+					   +" "+ObsvPoints[i].getYPoint());
 		  }
     }
     
