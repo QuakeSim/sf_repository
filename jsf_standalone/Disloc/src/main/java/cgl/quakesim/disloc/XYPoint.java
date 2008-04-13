@@ -151,30 +151,37 @@ public class XYPoint  implements java.io.Serializable {
 
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("urn:DislocExtendedService", "XYPoint"));
-        org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("lat");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "lat"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("lon");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "lon"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("x");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "x"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("y");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "y"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
+        org.apache.axis.description.ElementDesc elemField1 = new org.apache.axis.description.ElementDesc();        
+	org.apache.axis.description.ElementDesc elemField2 = new org.apache.axis.description.ElementDesc();
+        org.apache.axis.description.ElementDesc elemField3 = new org.apache.axis.description.ElementDesc();
+        org.apache.axis.description.ElementDesc elemField4 = new org.apache.axis.description.ElementDesc();
+
+        elemField1.setFieldName("lon");
+        elemField1.setXmlName(new javax.xml.namespace.QName("", "lon"));
+        elemField1.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));
+        elemField1.setNillable(false);
+        typeDesc.addFieldDesc(elemField1);
+
+	//        elemField = new org.apache.axis.description.ElementDesc();
+        elemField2.setFieldName("x");
+        elemField2.setXmlName(new javax.xml.namespace.QName("", "x"));
+        elemField2.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));
+        elemField2.setNillable(false);
+        typeDesc.addFieldDesc(elemField2);
+
+	//        elemField = new org.apache.axis.description.ElementDesc();
+        elemField3.setFieldName("y");
+        elemField3.setXmlName(new javax.xml.namespace.QName("", "y"));
+        elemField3.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));
+        elemField3.setNillable(false);
+        typeDesc.addFieldDesc(elemField3);
+
+	//        elemField = new org.apache.axis.description.ElementDesc();
+        elemField4.setFieldName("lat");
+        elemField4.setXmlName(new javax.xml.namespace.QName("", "lat"));
+        elemField4.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));
+        elemField4.setNillable(false);
+        typeDesc.addFieldDesc(elemField4);
     }
 
     /**
