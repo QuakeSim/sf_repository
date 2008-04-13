@@ -1,21 +1,21 @@
 package cgl.webservices.disloc;
 
 public class ObsvPoint {
-	 double xPoint;
-	 double yPoint;
+	 double xcartPoint;
+	 double ycartPoint;
 	 private double lonPoint;
 	 private double latPoint;
 
     public ObsvPoint(
 						 double latPoint,
 						 double lonPoint,
-						 double xPoint,
-						 double yPoint) {
-           this.xPoint = xPoint;
-           this.yPoint = yPoint;
+						 double xcartPoint,
+						 double ycartPoint) {
+           this.xcartPoint = xcartPoint;
+           this.ycartPoint = ycartPoint;
 			  this.latPoint=latPoint;
 			  this.lonPoint=lonPoint;
-			  System.out.println("XYPoints:"+latPoint+" "+lonPoint+" "+xPoint+" "+yPoint);
+			  System.out.println("XYPoints:"+latPoint+" "+lonPoint+" "+xcartPoint+" "+ycartPoint);
     }
 
 	 public double getLonPoint() {
@@ -38,23 +38,23 @@ public class ObsvPoint {
 		  this.latPoint=latPoint;
 	 }
 
-	 public double getXPoint() {
-		  System.out.println("X:"+xPoint);
-		  return xPoint;
+	 public double getXcartPoint() {
+		  System.out.println("X:"+xcartPoint);
+		  return xcartPoint;
 	 }
 
-	 public void setXPoint(double xPoint) {
-		  System.out.println("XPOINT:"+xPoint);
-		  this.xPoint=xPoint;
+	 public void setXcartPoint(double xcartPoint) {
+		  System.out.println("XPOINT:"+xcartPoint);
+		  this.xcartPoint=xcartPoint;
 	 }
 
-	 public double getYPoint() {
-		  System.out.println("Y:"+yPoint);
-		  return yPoint;
+	 public double getYcartPoint() {
+		  System.out.println("Y:"+ycartPoint);
+		  return ycartPoint;
 	 }
 	 
-	 public void setYPoint(double yPoint) {
-		  System.out.println("YPOINT:"+yPoint);
-		  this.yPoint=yPoint;
+	 public void setYcartPoint(double ycartPoint) {
+		  System.out.println("YPOINT:"+ycartPoint);
+		  this.ycartPoint=ycartPoint;
 	 }
 }

@@ -48,7 +48,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 						  String projectName,
 						  Fault[] faults,
 						  DislocParamsBean dislocParams,
-						  ObsvPoint[] ObsvPoints,
+						  ObsvPoint[] obsvPoints,
 						  String targetName) 
 	throws Exception {
 	System.out.println("RunNonBlocking called");
@@ -59,7 +59,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 				   projectName,
 				   dislocParams,
 				   faults,
-				   ObsvPoints,
+				   obsvPoints,
 				   targetName,
 				   jobStamp);
 	setArgs(args);
@@ -71,14 +71,14 @@ public class DislocExtendedService extends DislocService implements Runnable {
 					       String projectName,
 					       Fault[] faults,
 					       DislocParamsBean dislocParams,
-					       ObsvPoint[] ObsvPoints,
+					       ObsvPoint[] obsvPoints,
 					       String targetName) 
 	throws Exception {
-		  for(int i=0;i<ObsvPoints.length;i++) {
-					 System.out.println("Service X:"+ObsvPoints[i].getXPoint());
-					 System.out.println("Service Y:"+ObsvPoints[i].getYPoint());
-					 System.out.println("Service Lat:"+ObsvPoints[i].getLatPoint());
-					 System.out.println("Service Lon:"+ObsvPoints[i].getLonPoint());
+		  for(int i=0;i<obsvPoints.length;i++) {
+					 System.out.println("Service X:"+obsvPoints[i].getXcartPoint());
+					 System.out.println("Service Y:"+obsvPoints[i].getYcartPoint());
+					 System.out.println("Service Lat:"+obsvPoints[i].getLatPoint());
+					 System.out.println("Service Lon:"+obsvPoints[i].getLonPoint());
 		  }
 
 	if(targetName==null) targetName=DislocConstants.DISLOC_DEFAULT_TARGET;
@@ -87,7 +87,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 				   projectName,
 				   dislocParams,
 				   faults,
-				   ObsvPoints,
+				   obsvPoints,
 				   targetName,
 				   jobStamp);
 	setArgs(args);
@@ -99,7 +99,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 												String projectName,
 												DislocParamsBean dislocParams,
 												Fault[] faults,
-												ObsvPoint[] ObsvPoints,
+												ObsvPoint[] obsvPoints,
 												String targetName,
 												String jobStamp) 
 		  throws Exception {
@@ -111,7 +111,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 			      projectName,
 			      dislocParams,
 			      faults,
-			      ObsvPoints);
+			      obsvPoints);
 
 	String[] args=setUpArgs(workDir,
 				projectName,
@@ -124,7 +124,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 					 String projectName,
 					 DislocParamsBean dislocParams,
 					 Fault[] faults,
-					 ObsvPoint[] ObsvPoints) 
+					 ObsvPoint[] obsvPoints) 
 	throws Exception {
 	
 	String inputFile=workDir+File.separator+projectName+".input";
@@ -143,7 +143,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 	    pw.println(dislocParams.getOriginLat()
 		       +space+dislocParams.getOriginLon()
 		       +space+dislocParams.getObservationPointStyle()
-		       +space+ObsvPoints.length);
+		       +space+obsvPoints.length);
 	}
 	
 	else {
@@ -157,7 +157,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 	    printGridObservationSites(pw, dislocParams);
 	}
 	else if(dislocParams.getObservationPointStyle()==DislocConstants.SCATTER_OBSERVATION_STYLE) {
-	    printScatterObservationSites(pw,dislocParams,ObsvPoints);
+	    printScatterObservationSites(pw,dislocParams,obsvPoints);
 	}
 	
 	//Now iterate over the faults.
@@ -247,12 +247,12 @@ public class DislocExtendedService extends DislocService implements Runnable {
 
     protected void printScatterObservationSites(PrintWriter pw, 
 						DislocParamsBean dislocParams,
-						ObsvPoint[] ObsvPoints)  
+						ObsvPoint[] obsvPoints)  
 		  throws Exception {
 
-		  for(int i=0;i<ObsvPoints.length;i++) {
-				pw.println(ObsvPoints[i].getXPoint()
-					   +" "+ObsvPoints[i].getYPoint());
+		  for(int i=0;i<obsvPoints.length;i++) {
+				pw.println(obsvPoints[i].getXcartPoint()
+					   +" "+obsvPoints[i].getYcartPoint());
 		  }
     }
     
