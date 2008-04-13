@@ -209,23 +209,23 @@ public class DislocBean extends GenericSopacBean {
      * Grabs the scatter points from the DB.  This may be null.
      */ 
     protected XYPoint[] getXYPointsFromDB(){
-	XYPoint[] returnPoints=null;
-	db=Db4o.openFile(getBasePath()
-			 +"/"+getContextBasePath()
-			 +"/"+userName
-			 +"/"+codeName
-			 +"/"+projectName
-			 +".db");		  
-
-	ObjectSet results=db.get(XYPoint.class);
-	if(results.hasNext()) {
-	    returnPoints=new XYPoint[results.size()];
-	    for(int i=0;i<results.size();i++){
-		returnPoints[i]=(XYPoint)results.next();
-	    }
-	}
-	db.close();
-	return returnPoints;
+		  XYPoint[] returnPoints=null;
+		  db=Db4o.openFile(getBasePath()
+								 +"/"+getContextBasePath()
+								 +"/"+userName
+								 +"/"+codeName
+								 +"/"+projectName
+								 +".db");		  
+		  
+		  ObjectSet results=db.get(XYPoint.class);
+		  if(results.hasNext()) {
+				returnPoints=new XYPoint[results.size()];
+				for(int i=0;i<results.size();i++){
+					 returnPoints[i]=(XYPoint)results.next();
+				}
+		  }
+		  db.close();
+		  return returnPoints;
     }
 
     /**
@@ -311,15 +311,21 @@ public class DislocBean extends GenericSopacBean {
 	    
 	    Fault[] faults=getFaultsFromDB();
 	    XYPoint[] points=getXYPointsFromDB();
-
+				for(int i=0;i<points.length;i++){
+					 System.out.println("DB X:"+points[i].getX());
+					 System.out.println("DB Y:"+points[i].getY());
+					 System.out.println("DB Lat:"+points[i].getLat());
+					 System.out.println("DB Lon:"+points[i].getLon());
+				}
+		 
 	    initDislocExtendedService();
 	    DislocResultsBean dislocResultsBean=
-		dislocExtendedService.runBlockingDisloc(userName,
-							projectName,
-							faults,
-							currentParams,
-							points,
-							null);
+			  dislocExtendedService.runBlockingDislocExt(userName,
+																	projectName,
+																	faults,
+																	currentParams,
+																	points,
+																	null);
 	    setJobToken(dislocResultsBean.getJobUIDStamp());
 	    
 	    String myKmlUrl="";
@@ -416,7 +422,7 @@ public class DislocBean extends GenericSopacBean {
 	    
 	    initDislocExtendedService();
 	    DislocResultsBean dislocResultsBean=
-		dislocExtendedService.runNonBlockingDisloc(userName,
+		dislocExtendedService.runNonBlockingDislocExt(userName,
 							   projectName,
 							   faults,
 							   currentParams,
@@ -2536,12 +2542,20 @@ public class DislocBean extends GenericSopacBean {
 	  * Converts the provided lat and lon into cartesian coordinates.
 	  */
 	 protected XYPoint convertLatLon(double lat, 
-					 double lon,
-					 double origin_lat,
-					 double origin_lon) {
+												double lon,
+												double origin_lat,
+												double origin_lon) {
 	     double x=(lon-origin_lon)*factor(origin_lon,origin_lat);
 	     double y=(lat-origin_lat)*111.32;
-	     
-	     return new XYPoint(lat,lon,x,y);
+
+		  System.out.println("XYPoints:"+lat+" "+lon+" "+x+" "+y);
+
+		  XYPoint point=new XYPoint();
+		  point.setX(x);
+		  point.setY(y);
+		  point.setLat(lat);
+		  point.setLon(lon);
+
+	     return point;
 	 }
 }
