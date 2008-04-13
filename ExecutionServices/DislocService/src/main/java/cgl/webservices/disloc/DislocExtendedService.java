@@ -97,6 +97,13 @@ public class DislocExtendedService extends DislocService implements Runnable {
 				    String jobStamp) 
 	throws Exception {
 	
+		  for(int i=0;i<XYPoints.length;i++) {
+					 System.out.println("DB X:"+XYPoints[i].getX());
+					 System.out.println("DB Y:"+XYPoints[i].getY());
+					 System.out.println("DB Lat:"+XYPoints[i].getLat());
+					 System.out.println("DB Lon:"+XYPoints[i].getLon());
+		  }
+
 	workDir=generateWorkDir(userName,projectName,jobStamp);
 	makeWorkDir(workDir);
 	createDislocInputFile(userName,
