@@ -45,11 +45,11 @@ public class DislocExtendedService extends DislocService implements Runnable {
 	 final String space=" ";
 
     public DislocExtendedService() throws Exception {
-	this(false);
+		  this(false);
     }
     
     public DislocExtendedService(boolean useClassLoader) throws Exception {
-	super();
+		  super(useClassLoader);
     }
 	 
     public DislocResultsBean runNonBlockingDisloc(String userName,
