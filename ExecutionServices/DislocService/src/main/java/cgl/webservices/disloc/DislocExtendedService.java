@@ -44,7 +44,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 		  System.out.println("Base:"+baseWorkDir);
     }
 	 
-    public DislocResultsBean runNonBlockingDisloc(String userName,
+    public DislocResultsBean runNonBlockingDislocExt(String userName,
 						  String projectName,
 						  Fault[] faults,
 						  DislocParamsBean dislocParams,
@@ -67,7 +67,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 	return createDislocResultsBean(userName,projectName,jobStamp);
     }
     
-    public DislocResultsBean runBlockingDisloc(String userName,
+    public DislocResultsBean runBlockingDislocExt(String userName,
 					       String projectName,
 					       Fault[] faults,
 					       DislocParamsBean dislocParams,
