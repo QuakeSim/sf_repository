@@ -165,10 +165,7 @@ public class DislocService extends AntVisco implements Runnable {
 							  +space+dislocParams.getObservationPointStyle());
 		  }
 		  else if(dislocParams.getObservationPointStyle()==0) {
-				pw.println(dislocParams.getOriginLat()
-							  +space+dislocParams.getOriginLon()
-							  +space+dislocParams.getObservationPointStyle()
-							  +space+dislocParams.getXYPoints().length);
+		      //This is handled by the extended version of the service
 		  }
 		  
 		  else {
@@ -182,7 +179,7 @@ public class DislocService extends AntVisco implements Runnable {
 				printGridObservationSites(pw, dislocParams);
 		  }
 		  else if(dislocParams.getObservationPointStyle()==DislocConstants.SCATTER_OBSERVATION_STYLE) {
-				printScatterObservationSites(pw,dislocParams);
+		      //Doens't do anything
 		  }
 
 		  //Now iterate over the faults.
@@ -274,12 +271,6 @@ public class DislocService extends AntVisco implements Runnable {
     protected void printScatterObservationSites(PrintWriter pw, 
 																DislocParamsBean dislocParams)  
 		  throws Exception {
-		  //Doesn't do anything yet.
-		  XYPoint[] points=dislocParams.getXYPoints();
-
-		  for(int i=0;i<points.length;i++) {
-				pw.println(points[i].getX()+" "+points[i].getY());
-		  }
     }
     
     private void makeWorkDir(String workDir) 

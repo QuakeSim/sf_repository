@@ -143,7 +143,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 	    pw.println(dislocParams.getOriginLat()
 		       +space+dislocParams.getOriginLon()
 		       +space+dislocParams.getObservationPointStyle()
-		       +space+dislocParams.getXYPoints().length);
+		       +space+XYPoints.length);
 	}
 	
 	else {
@@ -157,7 +157,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 	    printGridObservationSites(pw, dislocParams);
 	}
 	else if(dislocParams.getObservationPointStyle()==DislocConstants.SCATTER_OBSERVATION_STYLE) {
-	    printScatterObservationSites(pw,dislocParams);
+	    printScatterObservationSites(pw,dislocParams,XYPoints);
 	}
 	
 	//Now iterate over the faults.
@@ -246,13 +246,13 @@ public class DislocExtendedService extends DislocService implements Runnable {
 	 }
 
     protected void printScatterObservationSites(PrintWriter pw, 
-																DislocParamsBean dislocParams)  
+						DislocParamsBean dislocParams,
+						XYPoint[] XYPoints)  
 		  throws Exception {
-		  //Doesn't do anything yet.
-		  XYPoint[] points=dislocParams.getXYPoints();
 
-		  for(int i=0;i<points.length;i++) {
-				pw.println(points[i].getX()+" "+points[i].getY());
+		  for(int i=0;i<XYPoints.length;i++) {
+				pw.println(XYPoints[i].getX()
+					   +" "+XYPoints[i].getY());
 		  }
     }
     
