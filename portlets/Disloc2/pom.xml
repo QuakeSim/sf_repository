@@ -5,7 +5,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>QuakeSim2</groupId>
-    <artifactId>Disloc</artifactId>
+    <artifactId>Disloc2</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>A custom project using myfaces</name>
@@ -14,12 +14,12 @@
 	 <groupId>quakesim</groupId>
 	 <artifactId>portlets-driver</artifactId>
 	 <version>1.0</version>
-	 <relativePath>../../portlets</relativePath>
+	 <relativePath>..</relativePath>
   </parent>
 
 
     <build>
-        <finalName>Disloc</finalName>
+        <finalName>Disloc2</finalName>
         <resources>
            <resource>
                <directory>src/main/resources</directory>
@@ -251,6 +251,20 @@
              <groupId>axis</groupId>
              <artifactId>axis-saaj</artifactId>
              <version>1.4</version>
+        </dependency>
+
+
+		  <!-- Needed by the JSF portlet bridge -->
+        <dependency>
+            <groupId>org.apache.portals.bridges</groupId>
+            <artifactId>portals-bridges-commons</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.portals.bridges</groupId>
+            <artifactId>portals-bridges-jsf</artifactId>
+            <version>1.0</version>
         </dependency>
 
 

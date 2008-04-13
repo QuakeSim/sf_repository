@@ -163,11 +163,22 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <servlet>
+        <servlet-name>PortletServlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet</servlet-class>
+    </servlet>
+
     <!-- Faces Servlet Mapping -->
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.jsf</url-pattern>
     </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PortletServlet</servlet-name>
+        <url-pattern>/jsr/Disloc2</url-pattern>
+    </servlet-mapping>
+
 
     <!-- Welcome files -->
     <welcome-file-list>

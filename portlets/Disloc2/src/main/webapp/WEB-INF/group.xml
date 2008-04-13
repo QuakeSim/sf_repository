@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <portlet-group>
-    <group-name>Disloc-portlet</group-name>
-    <group-description>Disloc Portlet</group-description>
+    <group-name>disloc2</group-name>
+    <group-description>Disloc2 Portlet</group-description>
     <group-visibility>PUBLIC</group-visibility>
     <portlet-role-info>
-        <portlet-class>Disloc-portlet#Disloc-portlet</portlet-class>
+        <portlet-class>disloc2#disloc2</portlet-class>
         <required-role>USER</required-role>
     </portlet-role-info>
 </portlet-group>

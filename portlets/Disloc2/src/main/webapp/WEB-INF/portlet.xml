@@ -4,7 +4,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:portlet="http://java.sun.com/xml/ns/portlet"
 xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0">
    <portlet>
-    <portlet-name>Disloc-portlet</portlet-name>
+    <portlet-name>Disloc2</portlet-name>
     <portlet-class>org.apache.portals.bridges.jsf.FacesPortlet</portlet-class>
       <expiration-cache>0</expiration-cache>
       <init-param>
@@ -24,7 +24,7 @@ xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0"
        <portlet-mode>HELP</portlet-mode>
      </supports>
      <portlet-info>
-      <title>Disloc-Portlet</title>
+      <title>Disloc2</title>
       <keywords>Disloc</keywords>
      </portlet-info>        
    </portlet>
@@ -49,7 +49,7 @@ xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0"
        <portlet-mode>HELP</portlet-mode>
      </supports>
      <portlet-info>
-      <title>Disloc-Portlet</title>
+      <title>Disloc2</title>
       <keywords>Disloc</keywords>
      </portlet-info>        
    </portlet>
@@ -75,7 +75,7 @@ xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0"
        <portlet-mode>HELP</portlet-mode>
      </supports>
      <portlet-info>
-      <title>Disloc-Portlet</title>
+      <title>Disloc2</title>
       <keywords>Disloc</keywords>
      </portlet-info>        
    </portlet>
@@ -101,7 +101,7 @@ xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0"
        <portlet-mode>HELP</portlet-mode>
      </supports>
      <portlet-info>
-      <title>Disloc-Portlet</title>
+      <title>Disloc2</title>
       <keywords>Disloc</keywords>
      </portlet-info>        
    </portlet>
