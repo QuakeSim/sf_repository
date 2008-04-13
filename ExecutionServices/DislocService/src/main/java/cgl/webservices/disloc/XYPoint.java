@@ -9,10 +9,10 @@ public class XYPoint {
 
 
     public XYPoint(
-						 double x,
-						 double y,
 						 double lat,
-						 double lon) {
+						 double lon,
+						 double x,
+						 double y) {
            this.x = x;
            this.y = y;
 			  this.lat=lat;
