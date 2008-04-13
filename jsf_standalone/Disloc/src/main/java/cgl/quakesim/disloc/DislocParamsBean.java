@@ -8,9 +8,7 @@
 package cgl.quakesim.disloc;
 
 public class DislocParamsBean  implements java.io.Serializable {
-    private cgl.quakesim.disloc.XYPoint[] XYPoints;
-
-    private double gridMinXValue=-20.0;
+   private double gridMinXValue=-20.0;
 
     private double gridMinYValue=-20.0;
 
@@ -24,16 +22,16 @@ public class DislocParamsBean  implements java.io.Serializable {
 
     private int observationPointStyle;
 
-	 static double DEFAULT_LON=-9999.99;
-	 static double DEFAULT_LAT=-9999.99;
+    static double DEFAULT_LON=-9999.99;
+    static double DEFAULT_LAT=-9999.99;
     private double originLat=DEFAULT_LAT;
     private double originLon=DEFAULT_LON;
+
 
     public DislocParamsBean() {
     }
 
     public DislocParamsBean(
-           cgl.quakesim.disloc.XYPoint[] XYPoints,
            double gridMinXValue,
            double gridMinYValue,
            int gridXIterations,
@@ -43,7 +41,6 @@ public class DislocParamsBean  implements java.io.Serializable {
            int observationPointStyle,
            double originLat,
            double originLon) {
-           this.XYPoints = XYPoints;
            this.gridMinXValue = gridMinXValue;
            this.gridMinYValue = gridMinYValue;
            this.gridXIterations = gridXIterations;
@@ -53,26 +50,6 @@ public class DislocParamsBean  implements java.io.Serializable {
            this.observationPointStyle = observationPointStyle;
            this.originLat = originLat;
            this.originLon = originLon;
-    }
-
-
-    /**
-     * Gets the XYPoints value for this DislocParamsBean.
-     * 
-     * @return XYPoints
-     */
-    public cgl.quakesim.disloc.XYPoint[] getXYPoints() {
-        return XYPoints;
-    }
-
-
-    /**
-     * Sets the XYPoints value for this DislocParamsBean.
-     * 
-     * @param XYPoints
-     */
-    public void setXYPoints(cgl.quakesim.disloc.XYPoint[] XYPoints) {
-        this.XYPoints = XYPoints;
     }
 
 
@@ -267,9 +244,6 @@ public class DislocParamsBean  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
-            ((this.XYPoints==null && other.getXYPoints()==null) || 
-             (this.XYPoints!=null &&
-              java.util.Arrays.equals(this.XYPoints, other.getXYPoints()))) &&
             this.gridMinXValue == other.getGridMinXValue() &&
             this.gridMinYValue == other.getGridMinYValue() &&
             this.gridXIterations == other.getGridXIterations() &&
@@ -290,17 +264,6 @@ public class DislocParamsBean  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
-        if (getXYPoints() != null) {
-            for (int i=0;
-                 i<java.lang.reflect.Array.getLength(getXYPoints());
-                 i++) {
-                java.lang.Object obj = java.lang.reflect.Array.get(getXYPoints(), i);
-                if (obj != null &&
-                    !obj.getClass().isArray()) {
-                    _hashCode += obj.hashCode();
-                }
-            }
-        }
         _hashCode += new Double(getGridMinXValue()).hashCode();
         _hashCode += new Double(getGridMinYValue()).hashCode();
         _hashCode += getGridXIterations();
@@ -319,14 +282,8 @@ public class DislocParamsBean  implements java.io.Serializable {
         new org.apache.axis.description.TypeDesc(DislocParamsBean.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("urn:DislocService", "DislocParamsBean"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("urn:DislocExtendedService", "DislocParamsBean"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("XYPoints");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "XYPoints"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://156.56.104.143:8080/dislocexec/services/DislocExec", "XYPoint"));
-        elemField.setNillable(true);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("gridMinXValue");
         elemField.setXmlName(new javax.xml.namespace.QName("", "gridMinXValue"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));

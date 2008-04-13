@@ -8,43 +8,67 @@
 package cgl.quakesim.disloc;
 
 public class XYPoint  implements java.io.Serializable {
+    private double lat;
+
+    private double lon;
+
     private double x;
 
     private double y;
-
-	 private double lon;
-	 
-	 private double lat;
 
     public XYPoint() {
     }
 
     public XYPoint(
-						 double x,
-						 double y,
-						 double lat,
-						 double lon) {
+           double lat,
+           double lon,
+           double x,
+           double y) {
+           this.lat = lat;
+           this.lon = lon;
            this.x = x;
            this.y = y;
-			  this.lat=lat;
-			  this.lon=lon;
     }
 
-	 public double getLon() {
-		  return lon;
-	 }
-	 
-	 public double getLat() {
-		  return lat;
-	 }
 
-	 public void setLon(double lon) {
-		  this.lon=lon;
-	 }
+    /**
+     * Gets the lat value for this XYPoint.
+     * 
+     * @return lat
+     */
+    public double getLat() {
+        return lat;
+    }
 
-	 public void setLat(double lat){
-		  this.lat=lat;
-	 }
+
+    /**
+     * Sets the lat value for this XYPoint.
+     * 
+     * @param lat
+     */
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+
+    /**
+     * Gets the lon value for this XYPoint.
+     * 
+     * @return lon
+     */
+    public double getLon() {
+        return lon;
+    }
+
+
+    /**
+     * Sets the lon value for this XYPoint.
+     * 
+     * @param lon
+     */
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
 
 
     /**
@@ -98,6 +122,8 @@ public class XYPoint  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
+            this.lat == other.getLat() &&
+            this.lon == other.getLon() &&
             this.x == other.getX() &&
             this.y == other.getY();
         __equalsCalc = null;
@@ -111,6 +137,8 @@ public class XYPoint  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
+        _hashCode += new Double(getLat()).hashCode();
+        _hashCode += new Double(getLon()).hashCode();
         _hashCode += new Double(getX()).hashCode();
         _hashCode += new Double(getY()).hashCode();
         __hashCodeCalc = false;
@@ -122,8 +150,20 @@ public class XYPoint  implements java.io.Serializable {
         new org.apache.axis.description.TypeDesc(XYPoint.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://156.56.104.143:8080/dislocexec/services/DislocExec", "XYPoint"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("urn:DislocExtendedService", "XYPoint"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("lat");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "lat"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("lon");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "lon"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("x");
         elemField.setXmlName(new javax.xml.namespace.QName("", "x"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));

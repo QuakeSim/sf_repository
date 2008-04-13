@@ -196,7 +196,7 @@ public class DislocResultsBean  implements java.io.Serializable {
         new org.apache.axis.description.TypeDesc(DislocResultsBean.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("urn:DislocService", "DislocResultsBean"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("urn:DislocExtendedService", "DislocResultsBean"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("inputFileUrl");
         elemField.setXmlName(new javax.xml.namespace.QName("", "inputFileUrl"));
