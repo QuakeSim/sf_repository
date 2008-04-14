@@ -96,13 +96,13 @@ public class DislocExtendedService extends DislocService implements Runnable {
     }
     
     protected String[] prefabDisloc(String userName,
-												String projectName,
-												DislocParamsBean dislocParams,
-												Fault[] faults,
-												ObsvPoint[] obsvPoints,
-												String targetName,
-												String jobStamp) 
-		  throws Exception {
+				    String projectName,
+				    DislocParamsBean dislocParams,
+				    Fault[] faults,
+				    ObsvPoint[] obsvPoints,
+				    String targetName,
+				    String jobStamp) 
+	throws Exception {
 	
 
 	workDir=generateWorkDir(userName,projectName,jobStamp);
