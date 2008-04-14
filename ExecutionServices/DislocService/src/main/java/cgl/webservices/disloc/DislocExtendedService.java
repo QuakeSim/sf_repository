@@ -18,13 +18,15 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 
 //SOPAC Client Stuff
-import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
+//import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
 
 //Needed for some number formatting.
 import java.text.*;
 
 //Needed for a unique id
 import java.rmi.server.UID;
+
+import org.apache.axis.*;
 
 /**
  * A simple wrapper for Ant.
@@ -48,10 +50,10 @@ public class DislocExtendedService extends DislocService implements Runnable {
 						  String projectName,
 						  ObsvPoint[] obsvPoints,
 						  Fault[] faults,
-						  DislocParamsBean dislocParams,
-						  String targetName) 
-	throws Exception {
-	System.out.println("RunNonBlocking called");
+																	  DislocParamsBean dislocParams,
+																	  String targetName) 
+		  throws Exception {
+		  System.out.println("RunNonBlocking called");
 	if(targetName==null) targetName=DislocConstants.DISLOC_DEFAULT_TARGET;
 	String jobStamp=generateJobStamp();
 	
@@ -74,6 +76,13 @@ public class DislocExtendedService extends DislocService implements Runnable {
 					       DislocParamsBean dislocParams,
 					       String targetName) 
 	throws Exception {
+
+		  try {
+				System.out.println(AxisEngine.getCurrentMessageContext().getRequestMessage().getSOAPPartAsString());
+		  } catch (AxisFault e) {
+				e.printStackTrace();
+		  }
+		  
 		  for(int i=0;i<obsvPoints.length;i++) {
 					 System.out.println("Service X:"+obsvPoints[i].getXcartPoint());
 					 System.out.println("Service Y:"+obsvPoints[i].getYcartPoint());
