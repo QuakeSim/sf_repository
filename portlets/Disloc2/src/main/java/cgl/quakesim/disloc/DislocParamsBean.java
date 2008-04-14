@@ -8,7 +8,8 @@
 package cgl.quakesim.disloc;
 
 public class DislocParamsBean  implements java.io.Serializable {
-   private double gridMinXValue=-20.0;
+
+    private double gridMinXValue=-20.0;
 
     private double gridMinYValue=-20.0;
 
@@ -26,7 +27,6 @@ public class DislocParamsBean  implements java.io.Serializable {
     static double DEFAULT_LAT=-9999.99;
     private double originLat=DEFAULT_LAT;
     private double originLon=DEFAULT_LON;
-
 
     public DislocParamsBean() {
     }
