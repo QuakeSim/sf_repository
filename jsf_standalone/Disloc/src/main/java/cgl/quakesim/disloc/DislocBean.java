@@ -208,8 +208,8 @@ public class DislocBean extends GenericSopacBean {
     /**
      * Grabs the scatter points from the DB.  This may be null.
      */ 
-    protected XYPoint[] getXYPointsFromDB(){
-		  XYPoint[] returnPoints=null;
+    protected ObsvPoint[] getObsvPointsFromDB(){
+		  ObsvPoint[] returnPoints=null;
 		  db=Db4o.openFile(getBasePath()
 								 +"/"+getContextBasePath()
 								 +"/"+userName
@@ -217,11 +217,11 @@ public class DislocBean extends GenericSopacBean {
 								 +"/"+projectName
 								 +".db");		  
 		  
-		  ObjectSet results=db.get(XYPoint.class);
+		  ObjectSet results=db.get(ObsvPoint.class);
 		  if(results.hasNext()) {
-				returnPoints=new XYPoint[results.size()];
+				returnPoints=new ObsvPoint[results.size()];
 				for(int i=0;i<results.size();i++){
-					 returnPoints[i]=(XYPoint)results.next();
+					 returnPoints[i]=(ObsvPoint)results.next();
 				}
 		  }
 		  db.close();
@@ -310,22 +310,22 @@ public class DislocBean extends GenericSopacBean {
 	try { 
 	    
 	    Fault[] faults=getFaultsFromDB();
-	    XYPoint[] points=getXYPointsFromDB();
+	    ObsvPoint[] points=getObsvPointsFromDB();
 				for(int i=0;i<points.length;i++){
-					 System.out.println("DB X:"+points[i].getX());
-					 System.out.println("DB Y:"+points[i].getY());
-					 System.out.println("DB Lat:"+points[i].getLat());
-					 System.out.println("DB Lon:"+points[i].getLon());
+					 System.out.println("DB X:"+points[i].getXcartPoint());
+					 System.out.println("DB Y:"+points[i].getYcartPoint());
+					 System.out.println("DB Lat:"+points[i].getLatPoint());
+					 System.out.println("DB Lon:"+points[i].getLonPoint());
 				}
 		 
 	    initDislocExtendedService();
 	    DislocResultsBean dislocResultsBean=
-			  dislocExtendedService.runBlockingDislocExt(userName,
-																	projectName,
-																	faults,
-																	currentParams,
-																	points,
-																	null);
+		dislocExtendedService.runBlockingDislocExt(userName,
+							   projectName,
+							   points,
+							   faults,
+							   currentParams,
+							   null);
 	    setJobToken(dislocResultsBean.getJobUIDStamp());
 	    
 	    String myKmlUrl="";
@@ -418,15 +418,15 @@ public class DislocBean extends GenericSopacBean {
 	
 	try {
 	    Fault[] faults=getFaultsFromDB();
-	    XYPoint[] points=getXYPointsFromDB();
+	    ObsvPoint[] points=getObsvPointsFromDB();
 	    
 	    initDislocExtendedService();
 	    DislocResultsBean dislocResultsBean=
 		dislocExtendedService.runNonBlockingDislocExt(userName,
 							   projectName,
+							   points,
 							   faults,
 							   currentParams,
-							   points,
 							   null);
 
 	    String myKmlUrl="";
@@ -1834,17 +1834,17 @@ public class DislocBean extends GenericSopacBean {
 	 }
 
 	 /**
-	  * Makes an array list out of the XYPoints of the current pararms.
+	  * Makes an array list out of the ObsvPoints of the current pararms.
 	  * Useful for the JSF datatable but not much else.
 	  */ 
     protected List reconstructMyPointObservationList(String projectName) {
 	this.myPointObservationList.clear();
 	try {
-	    XYPoint[] xypoints=getXYPointsFromDB();
+	    ObsvPoint[] xypoints=getObsvPointsFromDB();
 	    if(xypoints!=null && xypoints.length>0) {
 		System.out.println(xypoints.length);
 		for(int i=0;i<xypoints.length;i++) {
-		    System.out.println(i+" "+xypoints[i].getX()+" "+xypoints[i].getY());
+		    System.out.println(i+" "+xypoints[i].getXcartPoint()+" "+xypoints[i].getYcartPoint());
 		    myPointObservationList.add(xypoints[i]);
 		}
 	    }
@@ -2269,7 +2269,7 @@ public class DislocBean extends GenericSopacBean {
 				}
 				//Default to scatter style
 				else {
-				    XYPoint[] points=getXYPointsFromDB();
+				    ObsvPoint[] points=getObsvPointsFromDB();
 				    
 				    PrintWriter out=new PrintWriter(new FileWriter(localDestination));
 				    
@@ -2281,11 +2281,11 @@ public class DislocBean extends GenericSopacBean {
 						  out.println(pmBegin);
 						  out.println(descBegin);
 						  out.println("<b>Observation Point:</b> "
-										  +points[i].getLon()+comma+points[i].getLat());
+										  +points[i].getLonPoint()+comma+points[i].getLatPoint());
 						  out.println(descEnd);
 						  out.println(pointBegin);
 						  out.println(coordBegin);
-						  out.println(points[i].getLon()+comma+points[i].getLat()+comma+"0");
+						  out.println(points[i].getLonPoint()+comma+points[i].getLatPoint()+comma+"0");
 						  out.println(coordEnd);
 						  out.println(pointEnd);
 						  out.println(pmEnd);
@@ -2460,28 +2460,28 @@ public class DislocBean extends GenericSopacBean {
 				currentParams.setOriginLon(Double.parseDouble(gpsStationLon));
 		  }
 		  
-		  XYPoint point=convertLatLon(Double.parseDouble(gpsStationLat),
-												Double.parseDouble(gpsStationLon),
-												currentParams.getOriginLat(),
-												currentParams.getOriginLon());
+		  ObsvPoint point=convertLatLon(Double.parseDouble(gpsStationLat),
+						Double.parseDouble(gpsStationLon),
+						currentParams.getOriginLat(),
+						currentParams.getOriginLon());
 		  
 		  //Update the current project
-		  XYPoint[] allpoints=getXYPointsFromDB();
-		  XYPoint[] newpoints;
+		  ObsvPoint[] allpoints=getObsvPointsFromDB();
+		  ObsvPoint[] newpoints;
 
 		  if(allpoints==null || allpoints.length<0) {
-				newpoints=new XYPoint[1];
+				newpoints=new ObsvPoint[1];
 				newpoints[0]=point;
 		  }
 		  else {
-				newpoints=new XYPoint[allpoints.length+1];
+				newpoints=new ObsvPoint[allpoints.length+1];
 				System.arraycopy(allpoints,0,newpoints,0,allpoints.length);
 				newpoints[allpoints.length]=point;
 		  }
 
 		  //Update the DB.
 		  try {
-		      storeXYPointsInDB(newpoints);
+		      storeObsvPointsInDB(newpoints);
 		  }
 		  catch (Exception ex) {
 				ex.printStackTrace();
@@ -2512,15 +2512,15 @@ public class DislocBean extends GenericSopacBean {
 	db.close();
     }
 
-    protected void storeXYPointsInDB(XYPoint[] points) throws Exception {
+    protected void storeObsvPointsInDB(ObsvPoint[] points) throws Exception {
 	try {
 	    db=Db4o.openFile(getBasePath()+"/"
 			     +getContextBasePath()
 			     +"/"+userName
 			     +"/"+codeName+"/"+projectName+".db");	
-	    ObjectSet result=db.get(XYPoint.class);
+	    ObjectSet result=db.get(ObsvPoint.class);
 	    while(result.hasNext()) {
-		XYPoint tmp=(XYPoint)result.next();
+		ObsvPoint tmp=(ObsvPoint)result.next();
 		db.delete(tmp);
 	    }
 	    for(int i=0;i<points.length;i++) {
@@ -2541,21 +2541,21 @@ public class DislocBean extends GenericSopacBean {
 	 /**
 	  * Converts the provided lat and lon into cartesian coordinates.
 	  */
-	 protected XYPoint convertLatLon(double lat, 
-												double lon,
-												double origin_lat,
-												double origin_lon) {
-	     double x=(lon-origin_lon)*factor(origin_lon,origin_lat);
-	     double y=(lat-origin_lat)*111.32;
-
-		  System.out.println("XYPoints:"+lat+" "+lon+" "+x+" "+y);
-
-		  XYPoint point=new XYPoint();
-		  point.setX(x);
-		  point.setY(y);
-		  point.setLat(lat);
-		  point.setLon(lon);
-
-	     return point;
-	 }
+    protected ObsvPoint convertLatLon(double lat, 
+				      double lon,
+				      double origin_lat,
+				      double origin_lon) {
+	double x=(lon-origin_lon)*factor(origin_lon,origin_lat);
+	double y=(lat-origin_lat)*111.32;
+	
+	System.out.println("ObsvPoints:"+lat+" "+lon+" "+x+" "+y);
+	
+	ObsvPoint point=new ObsvPoint();
+	point.setXcartPoint(x+"");
+	point.setYcartPoint(y+"");
+	point.setLatPoint(lat+"");
+	point.setLonPoint(lon+"");
+	
+	return point;
+    }
 }

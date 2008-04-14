@@ -8,6 +8,7 @@
 package cgl.quakesim.disloc;
 
 public class Fault  implements java.io.Serializable {
+
     private double faultDepth;
 
     private double faultDipAngle;

@@ -415,14 +415,14 @@ function getScrolling() {
 							   value="<b>Lat</b>" /> 
 					     </f:facet> 
 
-						  <h:outputText id="akjlatelkr34je" value="#{xypoints.lat}"/>
+						  <h:outputText id="akjlatelkr34je" value="#{xypoints.latPoint}"/>
     					</h:column>
 						<h:column>
 					     <f:facet name="header"> 
 						   <h:outputFormat id="outputere2" escape="false" 
 							   value="<b>Lon</b>" /> 
 					     </f:facet> 
-						  <h:outputText id="rerdad62lon" value="#{xypoints.lon}"/>
+						  <h:outputText id="rerdad62lon" value="#{xypoints.lonPoint}"/>
     					</h:column>
 					</h:dataTable>
             </h:panelGrid>
