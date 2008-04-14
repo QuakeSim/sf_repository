@@ -46,9 +46,9 @@ public class DislocExtendedService extends DislocService implements Runnable {
 	 
     public DislocResultsBean runNonBlockingDislocExt(String userName,
 						  String projectName,
+						  ObsvPoint[] obsvPoints,
 						  Fault[] faults,
 						  DislocParamsBean dislocParams,
-						  ObsvPoint[] obsvPoints,
 						  String targetName) 
 	throws Exception {
 	System.out.println("RunNonBlocking called");
@@ -69,9 +69,9 @@ public class DislocExtendedService extends DislocService implements Runnable {
     
     public DislocResultsBean runBlockingDislocExt(String userName,
 					       String projectName,
+					       ObsvPoint[] obsvPoints,
 					       Fault[] faults,
 					       DislocParamsBean dislocParams,
-					       ObsvPoint[] obsvPoints,
 					       String targetName) 
 	throws Exception {
 		  for(int i=0;i<obsvPoints.length;i++) {
