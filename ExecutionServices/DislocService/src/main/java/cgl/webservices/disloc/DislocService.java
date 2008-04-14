@@ -273,7 +273,7 @@ public class DislocService extends AntVisco implements Runnable {
 		  throws Exception {
     }
     
-    private void makeWorkDir(String workDir) 
+    protected void makeWorkDir(String workDir) 
 		  throws Exception {
 		  
 		  System.out.println("Working Directory is "+workDir);

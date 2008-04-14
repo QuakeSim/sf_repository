@@ -47,26 +47,26 @@ public class DislocExtendedService extends DislocService implements Runnable {
     }
 	 
     public DislocResultsBean runNonBlockingDislocExt(String userName,
-						  String projectName,
-						  ObsvPoint[] obsvPoints,
-						  Fault[] faults,
+																	  String projectName,
+																	  ObsvPoint[] obsvPoints,
+																	  Fault[] faults,
 																	  DislocParamsBean dislocParams,
 																	  String targetName) 
 		  throws Exception {
 		  System.out.println("RunNonBlocking called");
-	if(targetName==null) targetName=DislocConstants.DISLOC_DEFAULT_TARGET;
-	String jobStamp=generateJobStamp();
-	
-	String[] args=prefabDisloc(userName,
-				   projectName,
-				   dislocParams,
-				   faults,
-				   obsvPoints,
-				   targetName,
-				   jobStamp);
-	setArgs(args);
-	execute();
-	return createDislocResultsBean(userName,projectName,jobStamp);
+		  if(targetName==null) targetName=DislocConstants.DISLOC_DEFAULT_TARGET;
+		  String jobStamp=generateJobStamp();
+		  
+		  String[] args=prefabDisloc(userName,
+											  projectName,
+											  dislocParams,
+											  faults,
+											  obsvPoints,
+											  targetName,
+											  jobStamp);
+		  setArgs(args);
+		  execute();
+		  return createDislocResultsBean(userName,projectName,jobStamp);
     }
     
     public DislocResultsBean runBlockingDislocExt(String userName,
@@ -175,85 +175,6 @@ public class DislocExtendedService extends DislocService implements Runnable {
 	
     }
     
-    protected String[] setUpArgs(String workDir,
-				 String projectName,
-				 String targetName) {
-	
-		  String[] args=new String[6];
-		  args[0]="-Dbindir.prop="+binDir;
-		  args[1]="-DworkDir.prop="+workDir;
-		  args[2]="-DprojectName.prop="+projectName;
-		  args[3]="-buildfile";
-		  args[4]=buildFilePath;
-		  args[5]=targetName;
-		  
-		  return args;
-	 }
-
-	 /**
-	  * Create the name of the work directory
-	  */
-	 protected String generateWorkDir(String userName,
-					  String projectName,
-					  String timeStamp) {
-
-
-	     String workDir=baseWorkDir+File.separator
-		 +userName+File.separator
-		 +projectName+File.separator+timeStamp;
-	     
-	     return workDir;
-	 }
-    
-    /**
-	  * Generate a ticket.  This can be used to 
-	  * make "gentle" status queries later.
-	  */
-	 protected String generateJobStamp(){
-		  return (new UID().toString());
-	 }
-
-    protected String generateBaseUrl(String userName,
-												 String projectName,
-												 String timeStamp) {
-		  
-		  //Need to be careful here because this must follow
-		  //the workDir convention also.
-		  String baseUrl=serverUrl+"/"+userName+"/"
-				+projectName+"/"+"/"+timeStamp;
-		  
-		  return baseUrl;
-    }
-    
-    protected DislocResultsBean createDislocResultsBean(String userName,
-																		  String projectName,
-																		  String jobUIDStamp) {
-		  DislocResultsBean drb=new DislocResultsBean();
-		  
-		  String baseUrl=generateBaseUrl(userName,projectName,jobUIDStamp);
-		  
-		  drb.setJobUIDStamp(jobUIDStamp);
-		  drb.setProjectName(projectName);
-		  drb.setInputFileUrl(baseUrl+"/"+projectName+".input");
-		  drb.setOutputFileUrl(baseUrl+"/"+projectName+".output");
-		  drb.setStdoutUrl(baseUrl+"/"+projectName+".stdout");
-		  
-		  return drb;
-    }
-    
-	 protected void printGridObservationSites(PrintWriter pw, 
-															DislocParamsBean dislocParams) 
-	     throws Exception {
-	     
-	     pw.println(dislocParams.getGridMinXValue()
-						 +space+dislocParams.getGridXSpacing()
-						 +space+dislocParams.getGridXIterations()
-						 +space+dislocParams.getGridMinYValue()
-						 +space+dislocParams.getGridYSpacing()
-						 +space+dislocParams.getGridYIterations());
-	     
-	 }
-
     protected void printScatterObservationSites(PrintWriter pw, 
 						DislocParamsBean dislocParams,
 						ObsvPoint[] obsvPoints)  
@@ -265,40 +186,4 @@ public class DislocExtendedService extends DislocService implements Runnable {
 		  }
     }
     
-    private void makeWorkDir(String workDir) 
-		  throws Exception {
-		  
-		  System.out.println("Working Directory is "+workDir);
-		  
-		  String[] args0=new String[4];
-        args0[0]="-DworkDir.prop="+workDir;
-        args0[1]="-buildfile";
-        args0[2]=buildFilePath;
-        args0[3]="MakeWorkDir";
-		  
-        setArgs(args0);
-        run();
-    }  
-	
-	 protected void printFaultParams(PrintWriter pw, Fault[] faults)
-		  throws Exception {
-		  
-		  for(int i=0;i<faults.length;i++) {
-				pw.println(faults[i].getFaultLocationX()
-							  +space+faults[i].getFaultLocationY()
-							  +space+faults[i].getFaultStrikeAngle());
-
-				pw.println(DislocConstants.FAULT_LINE_PREFIX
-							  +space+faults[i].getFaultDepth()
-							  +space+faults[i].getFaultDipAngle()
-							  +space+faults[i].getFaultLameLambda()
-							  +space+faults[i].getFaultLameMu()
-							  +space+faults[i].getFaultStrikeSlip()
-							  +space+faults[i].getFaultDipSlip()
-							  +space+faults[i].getFaultTensileSlip()
-							  +space+faults[i].getFaultLength()
-							  +space+faults[i].getFaultWidth());
-
-		  }
-	 }
 }  
