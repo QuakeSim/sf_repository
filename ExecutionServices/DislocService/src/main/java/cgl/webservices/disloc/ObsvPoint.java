@@ -1,16 +1,16 @@
 package cgl.webservices.disloc;
 
 public class ObsvPoint {
-	 double xcartPoint;
-	 double ycartPoint;
-	 private double lonPoint;
-	 private double latPoint;
+	 String xcartPoint;
+	 String ycartPoint;
+	 String lonPoint;
+	 String latPoint;
 
     public ObsvPoint(
-						 double latPoint,
-						 double lonPoint,
-						 double xcartPoint,
-						 double ycartPoint) {
+						 String latPoint,
+						 String lonPoint,
+						 String xcartPoint,
+						 String ycartPoint) {
            this.xcartPoint = xcartPoint;
            this.ycartPoint = ycartPoint;
 			  this.latPoint=latPoint;
@@ -18,42 +18,42 @@ public class ObsvPoint {
 			  System.out.println("XYPoints:"+latPoint+" "+lonPoint+" "+xcartPoint+" "+ycartPoint);
     }
 
-	 public double getLonPoint() {
+	 public String getLonPoint() {
 		  System.out.println("LonPoint:"+lonPoint);
 		  return lonPoint;
 	 }
 	 
-	 public double getLatPoint() {
+	 public String getLatPoint() {
 		  System.out.println("LatPoint:"+latPoint);
 		  return latPoint;
 	 }
 
-	 public void setLonPoint(double lonPoint) {
+	 public void setLonPoint(String lonPoint) {
 		  System.out.println("LonPoint:"+lonPoint);
 		  this.lonPoint=lonPoint;
 	 }
 
-	 public void setLatPoint(double latPoint){
+	 public void setLatPoint(String latPoint){
 		  System.out.println("LatPoint:"+latPoint);
 		  this.latPoint=latPoint;
 	 }
 
-	 public double getXcartPoint() {
+	 public String getXcartPoint() {
 		  System.out.println("X:"+xcartPoint);
 		  return xcartPoint;
 	 }
 
-	 public void setXcartPoint(double xcartPoint) {
+	 public void setXcartPoint(String xcartPoint) {
 		  System.out.println("XPOINT:"+xcartPoint);
 		  this.xcartPoint=xcartPoint;
 	 }
 
-	 public double getYcartPoint() {
+	 public String getYcartPoint() {
 		  System.out.println("Y:"+ycartPoint);
 		  return ycartPoint;
 	 }
 	 
-	 public void setYcartPoint(double ycartPoint) {
+	 public void setYcartPoint(String ycartPoint) {
 		  System.out.println("YPOINT:"+ycartPoint);
 		  this.ycartPoint=ycartPoint;
 	 }
