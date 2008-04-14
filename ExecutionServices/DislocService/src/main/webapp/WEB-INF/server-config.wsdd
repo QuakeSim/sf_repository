@@ -37,7 +37,7 @@
  </service>
  <service name="DislocExec" provider="java:RPC">
   <parameter name="allowedMethods" value="runBlockingDisloc runNonBlockingDisloc"/>
-  <parameter name="scope" value="Session"/>
+  <parameter name="scope" value="Request"/>
   <parameter name="className" value="cgl.webservices.disloc.DislocService"/>
   <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns1:ArrayOf_soapenc_string" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:java.lang.String[]" xmlns:ns1="urn:GatewayWS"/>
  <beanMapping qname="myNS:DislocParamsBean" xmlns:myNS="urn:DislocService" languageSpecificType="java:cgl.webservices.disloc.DislocParamsBean"/>
@@ -46,7 +46,7 @@
  </service>
  <service name="DislocExtendedExec" provider="java:RPC">
   <parameter name="allowedMethods" value="runBlockingDislocExt runNonBlockingDislocExt"/>
-  <parameter name="scope" value="Session"/>
+  <parameter name="scope" value="Request"/>
   <parameter name="className" value="cgl.webservices.disloc.DislocExtendedService"/>
   <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns1:ArrayOf_soapenc_string" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:java.lang.String[]" xmlns:ns1="urn:GatewayWS"/>
  <beanMapping qname="myNS:DislocParamsBean" xmlns:myNS="urn:DislocExtendedService" languageSpecificType="java:cgl.webservices.disloc.DislocParamsBean"/>
