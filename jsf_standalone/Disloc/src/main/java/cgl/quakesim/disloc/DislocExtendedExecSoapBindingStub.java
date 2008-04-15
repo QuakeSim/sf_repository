@@ -16,7 +16,7 @@ public class DislocExtendedExecSoapBindingStub extends org.apache.axis.client.St
     static org.apache.axis.description.OperationDesc [] _operations;
 
     static {
-        _operations = new org.apache.axis.description.OperationDesc[2];
+        _operations = new org.apache.axis.description.OperationDesc[3];
         _initOperationDesc1();
     }
 
@@ -24,14 +24,23 @@ public class DislocExtendedExecSoapBindingStub extends org.apache.axis.client.St
         org.apache.axis.description.OperationDesc oper;
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("testCall");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "testBean"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://localhost:8080/dislocexec/services/DislocExtendedExec", "ArrayOf_tns1_ObsvPoint"), cgl.quakesim.disloc.ObsvPoint[].class, false, false);
+        oper.addParameter(param);
+        oper.setReturnType(org.apache.axis.encoding.XMLType.AXIS_VOID);
+        oper.setStyle(org.apache.axis.constants.Style.RPC);
+        oper.setUse(org.apache.axis.constants.Use.ENCODED);
+        _operations[0] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
         oper.setName("runNonBlockingDislocExt");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "userName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "projectName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "obsvPoints"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec", "ArrayOf_tns1_ObsvPoint"), cgl.quakesim.disloc.ObsvPoint[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "obsvPoints"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://localhost:8080/dislocexec/services/DislocExtendedExec", "ArrayOf_tns1_ObsvPoint"), cgl.quakesim.disloc.ObsvPoint[].class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "faults"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec", "ArrayOf_tns1_Fault"), cgl.quakesim.disloc.Fault[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "faults"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://localhost:8080/dislocexec/services/DislocExtendedExec", "ArrayOf_tns1_Fault"), cgl.quakesim.disloc.Fault[].class, false, false);
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "dislocParams"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn:DislocExtendedService", "DislocParamsBean"), cgl.quakesim.disloc.DislocParamsBean.class, false, false);
         oper.addParameter(param);
@@ -42,7 +51,7 @@ public class DislocExtendedExecSoapBindingStub extends org.apache.axis.client.St
         oper.setReturnQName(new javax.xml.namespace.QName("", "runNonBlockingDislocExtReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
-        _operations[0] = oper;
+        _operations[1] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("runBlockingDislocExt");
@@ -50,9 +59,9 @@ public class DislocExtendedExecSoapBindingStub extends org.apache.axis.client.St
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "projectName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "obsvPoints"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec", "ArrayOf_tns1_ObsvPoint"), cgl.quakesim.disloc.ObsvPoint[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "obsvPoints"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://localhost:8080/dislocexec/services/DislocExtendedExec", "ArrayOf_tns1_ObsvPoint"), cgl.quakesim.disloc.ObsvPoint[].class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "faults"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec", "ArrayOf_tns1_Fault"), cgl.quakesim.disloc.Fault[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "faults"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://localhost:8080/dislocexec/services/DislocExtendedExec", "ArrayOf_tns1_Fault"), cgl.quakesim.disloc.Fault[].class, false, false);
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "dislocParams"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn:DislocExtendedService", "DislocParamsBean"), cgl.quakesim.disloc.DislocParamsBean.class, false, false);
         oper.addParameter(param);
@@ -63,7 +72,7 @@ public class DislocExtendedExecSoapBindingStub extends org.apache.axis.client.St
         oper.setReturnQName(new javax.xml.namespace.QName("", "runBlockingDislocExtReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
-        _operations[1] = oper;
+        _operations[2] = oper;
 
     }
 
@@ -96,7 +105,7 @@ public class DislocExtendedExecSoapBindingStub extends org.apache.axis.client.St
             java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
             java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
             java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
-            qName = new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec", "ArrayOf_tns1_Fault");
+            qName = new javax.xml.namespace.QName("http://localhost:8080/dislocexec/services/DislocExtendedExec", "ArrayOf_tns1_Fault");
             cachedSerQNames.add(qName);
             cls = cgl.quakesim.disloc.Fault[].class;
             cachedSerClasses.add(cls);
@@ -105,7 +114,7 @@ public class DislocExtendedExecSoapBindingStub extends org.apache.axis.client.St
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec", "ArrayOf_tns1_ObsvPoint");
+            qName = new javax.xml.namespace.QName("http://localhost:8080/dislocexec/services/DislocExtendedExec", "ArrayOf_tns1_ObsvPoint");
             cachedSerQNames.add(qName);
             cls = cgl.quakesim.disloc.ObsvPoint[].class;
             cachedSerClasses.add(cls);
@@ -209,12 +218,36 @@ public class DislocExtendedExecSoapBindingStub extends org.apache.axis.client.St
         }
     }
 
-    public cgl.quakesim.disloc.DislocResultsBean runNonBlockingDislocExt(java.lang.String userName, java.lang.String projectName, cgl.quakesim.disloc.ObsvPoint[] obsvPoints, cgl.quakesim.disloc.Fault[] faults, cgl.quakesim.disloc.DislocParamsBean dislocParams, java.lang.String targetName) throws java.rmi.RemoteException {
+    public void testCall(cgl.quakesim.disloc.ObsvPoint[] testBean) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
         _call.setOperation(_operations[0]);
+        _call.setUseSOAPAction(true);
+        _call.setSOAPActionURI("");
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("http://disloc.webservices.cgl", "testCall"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {testBean});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        extractAttachments(_call);
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+  throw axisFaultException;
+}
+    }
+
+    public cgl.quakesim.disloc.DislocResultsBean runNonBlockingDislocExt(java.lang.String userName, java.lang.String projectName, cgl.quakesim.disloc.ObsvPoint[] obsvPoints, cgl.quakesim.disloc.Fault[] faults, cgl.quakesim.disloc.DislocParamsBean dislocParams, java.lang.String targetName) throws java.rmi.RemoteException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[1]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
@@ -245,7 +278,7 @@ public class DislocExtendedExecSoapBindingStub extends org.apache.axis.client.St
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[1]);
+        _call.setOperation(_operations[2]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);

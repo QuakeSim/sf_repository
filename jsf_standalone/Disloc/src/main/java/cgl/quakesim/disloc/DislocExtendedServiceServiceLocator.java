@@ -22,7 +22,7 @@ public class DislocExtendedServiceServiceLocator extends org.apache.axis.client.
     }
 
     // Use to get a proxy class for DislocExtendedExec
-    private java.lang.String DislocExtendedExec_address = "http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec";
+    private java.lang.String DislocExtendedExec_address = "http://localhost:8080/dislocexec/services/DislocExtendedExec";
 
     public java.lang.String getDislocExtendedExecAddress() {
         return DislocExtendedExec_address;
@@ -105,7 +105,7 @@ public class DislocExtendedServiceServiceLocator extends org.apache.axis.client.
     }
 
     public javax.xml.namespace.QName getServiceName() {
-        return new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec", "DislocExtendedServiceService");
+        return new javax.xml.namespace.QName("http://localhost:8080/dislocexec/services/DislocExtendedExec", "DislocExtendedServiceService");
     }
 
     private java.util.HashSet ports = null;
@@ -113,7 +113,7 @@ public class DislocExtendedServiceServiceLocator extends org.apache.axis.client.
     public java.util.Iterator getPorts() {
         if (ports == null) {
             ports = new java.util.HashSet();
-            ports.add(new javax.xml.namespace.QName("http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec", "DislocExtendedExec"));
+            ports.add(new javax.xml.namespace.QName("http://localhost:8080/dislocexec/services/DislocExtendedExec", "DislocExtendedExec"));
         }
         return ports.iterator();
     }

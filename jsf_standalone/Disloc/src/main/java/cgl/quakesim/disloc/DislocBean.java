@@ -157,6 +157,20 @@ public class DislocBean extends GenericSopacBean {
     //--------------------------------------------------
     // This section contains the main execution calls.
     //--------------------------------------------------
+
+    public void runTestCall() throws Exception{
+	ObsvPoint[] testBean=new ObsvPoint[3];
+	for(int i=0;i<testBean.length;i++) {
+	    testBean[i]=new ObsvPoint();
+	    testBean[i].setLatPoint(10.0+i+"");
+	    testBean[i].setLonPoint(20.0+i+"");
+	    testBean[i].setXcartPoint(30.0+i+"");
+	    testBean[i].setYcartPoint(40.0+i+"");
+	}
+
+	initDislocExtendedService();
+	dislocExtendedService.testCall(testBean);
+    }
     
     /**
      * Protected convenience method. 

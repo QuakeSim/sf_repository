@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions targetNamespace="http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec" xmlns:intf="http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="urn:DislocExtendedService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-<!--WSDL created by Apache Axis version: 1.2.1
-Built on Jun 14, 2005 (09:15:57 EDT)-->
+<wsdl:definitions targetNamespace="http://localhost:8080/dislocexec/services/DislocExtendedExec" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://localhost:8080/dislocexec/services/DislocExtendedExec" xmlns:intf="http://localhost:8080/dislocexec/services/DislocExtendedExec" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="urn:DislocExtendedService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
  <wsdl:types>
   <schema targetNamespace="urn:DislocExtendedService" xmlns="http://www.w3.org/2001/XMLSchema">
-   <import namespace="http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec"/>
+   <import namespace="http://localhost:8080/dislocexec/services/DislocExtendedExec"/>
    <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
    <complexType name="ObsvPoint">
     <sequence>
@@ -60,7 +60,7 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
     </sequence>
    </complexType>
   </schema>
-  <schema targetNamespace="http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec" xmlns="http://www.w3.org/2001/XMLSchema">
+  <schema targetNamespace="http://localhost:8080/dislocexec/services/DislocExtendedExec" xmlns="http://www.w3.org/2001/XMLSchema">
    <import namespace="urn:DislocExtendedService"/>
    <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
    <complexType name="ArrayOf_tns1_ObsvPoint">
@@ -80,9 +80,7 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
   </schema>
  </wsdl:types>
 
-   <wsdl:message name="runBlockingDislocExtResponse">
-
-      <wsdl:part name="runBlockingDislocExtReturn" type="tns1:DislocResultsBean"/>
+   <wsdl:message name="testCallResponse">
 
    </wsdl:message>
 
@@ -102,9 +100,9 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
 
    </wsdl:message>
 
-   <wsdl:message name="runNonBlockingDislocExtResponse">
+   <wsdl:message name="runBlockingDislocExtResponse">
 
-      <wsdl:part name="runNonBlockingDislocExtReturn" type="tns1:DislocResultsBean"/>
+      <wsdl:part name="runBlockingDislocExtReturn" type="tns1:DislocResultsBean"/>
 
    </wsdl:message>
 
@@ -124,7 +122,27 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
 
    </wsdl:message>
 
+   <wsdl:message name="testCallRequest">
+
+      <wsdl:part name="testBean" type="impl:ArrayOf_tns1_ObsvPoint"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runNonBlockingDislocExtResponse">
+
+      <wsdl:part name="runNonBlockingDislocExtReturn" type="tns1:DislocResultsBean"/>
+
+   </wsdl:message>
+
    <wsdl:portType name="DislocExtendedService">
+
+      <wsdl:operation name="testCall" parameterOrder="testBean">
+
+         <wsdl:input message="impl:testCallRequest" name="testCallRequest"/>
+
+         <wsdl:output message="impl:testCallResponse" name="testCallResponse"/>
+
+      </wsdl:operation>
 
       <wsdl:operation name="runNonBlockingDislocExt" parameterOrder="userName projectName obsvPoints faults dislocParams targetName">
 
@@ -148,6 +166,24 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
 
       <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
 
+      <wsdl:operation name="testCall">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="testCallRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://disloc.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="testCallResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://localhost:8080/dislocexec/services/DislocExtendedExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
       <wsdl:operation name="runNonBlockingDislocExt">
 
          <wsdlsoap:operation soapAction=""/>
@@ -160,7 +196,7 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
 
          <wsdl:output name="runNonBlockingDislocExtResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://localhost:8080/dislocexec/services/DislocExtendedExec" use="encoded"/>
 
          </wsdl:output>
 
@@ -178,7 +214,7 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
 
          <wsdl:output name="runBlockingDislocExtResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://localhost:8080/dislocexec/services/DislocExtendedExec" use="encoded"/>
 
          </wsdl:output>
 
@@ -190,7 +226,7 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
 
       <wsdl:port binding="impl:DislocExtendedExecSoapBinding" name="DislocExtendedExec">
 
-         <wsdlsoap:address location="http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec"/>
+         <wsdlsoap:address location="http://localhost:8080/dislocexec/services/DislocExtendedExec"/>
 
       </wsdl:port>
 

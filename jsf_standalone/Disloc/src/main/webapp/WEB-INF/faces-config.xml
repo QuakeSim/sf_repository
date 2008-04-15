@@ -30,12 +30,12 @@
 
                  <managed-property>
                    <property-name>dislocServiceUrl</property-name>
-                   <value>http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExec</value>
+                   <value>http://localhost:8080/dislocexec/services/DislocExec</value>
                  </managed-property> 
 
                  <managed-property>
                    <property-name>dislocExtendedServiceUrl</property-name>
-                   <value>http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec</value>
+                   <value>http://localhost:8080/dislocexec/services/DislocExtendedExec</value>
                  </managed-property> 
 
                 <managed-property>
