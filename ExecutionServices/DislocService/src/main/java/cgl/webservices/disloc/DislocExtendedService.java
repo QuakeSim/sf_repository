@@ -45,7 +45,16 @@ public class DislocExtendedService extends DislocService implements Runnable {
 		  super(useClassLoader);
 		  System.out.println("Base:"+baseWorkDir);
     }
-	 
+	
+    public void testCall(ObsvPoint[] testBean) {
+	for(int i=0;i<testBean.length;i++){
+	    System.out.println(testBean[i].getLatPoint());
+	    System.out.println(testBean[i].getLonPoint());
+	    System.out.println(testBean[i].getXcartPoint());
+	    System.out.println(testBean[i].getYcartPoint());
+	}
+    }
+
     public DislocResultsBean runNonBlockingDislocExt(String userName,
 																	  String projectName,
 																	  ObsvPoint[] obsvPoints,

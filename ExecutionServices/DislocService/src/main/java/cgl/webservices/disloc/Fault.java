@@ -28,7 +28,6 @@ public class Fault {
 	 double faultLonEnd=-118.591;
 	 double faultLameMu=35.0;
 	 double faultLameLambda=35.0;
-	 
 
 	 public double getFaultDipSlip(){ return faultDipSlip;}
 	 public double getFaultStrikeSlip(){ return faultStrikeSlip;}
