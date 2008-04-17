@@ -311,5 +311,4 @@ public class GenericSopacBean extends GenericProjectBean{
     public void setSopacDataFileUrl(String sopacDataFileUrl){
 	this.sopacDataFileUrl=sopacDataFileUrl;
     }
-
 }

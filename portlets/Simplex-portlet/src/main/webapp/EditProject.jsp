@@ -60,7 +60,7 @@ type="text/javascript"></script>
 	 var geocoder=null;
 	 var map;
 	 var geoXml;
-
+	 
         var req;
         var baseIcon = new GIcon();
         baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
