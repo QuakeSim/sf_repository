@@ -87,6 +87,7 @@ type="text/javascript"></script>
 
 function initialize() {
 	 map=new GMap2(document.getElementById("map"));
+	     map.addMapType(G_PHYSICAL_MAP);
     	  map.setCenter(new GLatLng(33,-117),7);
     	  map.addControl(new GLargeMapControl());
     	  map.addControl(new GMapTypeControl());

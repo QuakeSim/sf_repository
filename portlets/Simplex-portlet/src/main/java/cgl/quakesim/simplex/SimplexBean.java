@@ -28,6 +28,24 @@ import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
  */
 
 public class SimplexBean extends GenericSopacBean {
+	 //KML stuff, need to move this to another place.
+	 String xmlHead="<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+	 String kmlHead="<kml xmlns=\"http://earth.google.com/kml/2.2\">";
+	 String kmlEnd="</kml>";
+	 String pmBegin="<Placemark>";
+	 String pmEnd="</Placemark>";
+	 String lsBegin="<LineString>";
+	 String lsEnd="</LineString>";
+	 String pointBegin="<Point>";
+	 String pointEnd="</Point>";
+	 String coordBegin="<coordinates>";
+	 String coordEnd="</coordinates>";
+	 String docBegin="<Document>";
+	 String docEnd="</Document>";
+	 String comma=", ";
+	 String descBegin="<description>";
+	 String descEnd="</description>";
+
     //These are properties needed if you want to include a query
     //to the GRWS web service.
 
@@ -111,28 +129,12 @@ public class SimplexBean extends GenericSopacBean {
 	 String minMaxLatLon="";
 	 String contextId="38";
 
-	 String portalBaseUrl;
-    String faultKmlUrl;
-	 String faultKmlFilename;
-
     NumberFormat format=null;
 
-    public String getFaultKmlUrl(){
-		  faultKmlUrl=createFaultKmlFile();
-		  return faultKmlUrl;
-    }
+    protected String faultKmlUrl;
+	 protected String faultKmlFilename;
+	 protected String portalBaseUrl;
 
-    public void setFaultKmlUrl(String faultKmlUrl) {
-	this.faultKmlUrl=faultKmlUrl;
-    }
-
-	 public String getPortalBaseUrl() {
-		  return portalBaseUrl;
-	 }
-	 
-	 public void setPortalBaseUrl(String portalBaseUrl) {
-		  this.portalBaseUrl=portalBaseUrl;
-	 }
     
     public boolean getGpsRefStation(){
 	return this.gpsRefStation;
@@ -581,49 +583,7 @@ public class SimplexBean extends GenericSopacBean {
 		  simplexService = new SimpleXServiceServiceLocator()
 				.getSimpleXExec(new URL(simpleXServiceUrl));
 	 }
-	 
-	 /**
-	  * These are methods associated with Faces navigations from Main.jsp.  They are
-	  * probably obsolete and may be removed.
-	  */
-// 	 public String newProject() throws Exception {
-// 		  		isInitialized = getIsInitialized();
-// 		  		if (!isInitialized) {
-// 		  			initWebServices();
-// 		  		}
-// 		  		makeProjectDirectory();
-// 		  		setContextList();
-// 		  return ("Simplex2-new-project");
-// 	 }
-	 
-// 	 public String loadProject() throws Exception {
-// 		System.out.println("Loading project");
-// 		if (!isInitialized) {
-// 			initWebServices();
-// 		}
-// 		makeProjectDirectory();
-// 		setContextList();
-// 		  return ("Simplex2-load-project");
-// 	}
-
-// 	 public String archivedData() throws Exception {
-// 		System.out.println("load archived Data");
-// 		if (!isInitialized) {
-// 			initWebServices();
-// 		}
-// 		setContextList();
-// 		  return ("Simplex2-archived-data");
-// 	}
-
-// 	 public String GMTDataPlots() throws Exception {
-// 		 System.out.println("Plot Data");
-// 		 if (!isInitialized) {
-// 			  initWebServices();
-// 		 }
-// 		 setContextList();
-// 		  return ("Simplex2-listgmt-archives");
-// 	}
-	 
+	  	 
 	 public String toggleRunSimplex2() {
 		  
 		  Observation[] obsv = getObservationsFromDB();
@@ -1288,6 +1248,7 @@ public class SimplexBean extends GenericSopacBean {
 		  db.commit();
 		  db.close();
 		  saveSimplexProjectEntry(currentProjectEntry);
+		  setGpsRefStation(false);
 	 }
 	 
 	 private Observation[] setXYLocations(Observation[] obsv,
@@ -1367,7 +1328,7 @@ public class SimplexBean extends GenericSopacBean {
 						  //Note all 3 obsv values for this one station
 						  //will be set to this value.
 						  if(gpsRefStation) {
-						      observations[i].setObsvRefSite("0");
+						      observations[i].setObsvRefSite("-1");
 						  }
 						  else {
 						      observations[i].setObsvRefSite("1");
@@ -1383,20 +1344,6 @@ public class SimplexBean extends GenericSopacBean {
 		  System.out.println("Turn off the map display");
 		  getCurrentEditProjectForm().setRenderGPSStationMap(false);		  
 	 }
-
-	public String toggleReplotGMT() {
-
-		try {
-
-			 initSimplexService();
-			this.gmtPlotPdfUrl = simplexService.runRePlotGMT(userName,
-					projectName, currentGMTViewForm, this.gmtPlotPdf_timeStamp);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return this.gmtPlotPdfUrl;
-	}
 
 	protected static String getRealPath() {
 		String path = ".";
@@ -1506,6 +1453,7 @@ public class SimplexBean extends GenericSopacBean {
 	 public String getKmlProjectFile(){
 		  return this.kmlProjectFile;
 	 }
+
 	 protected void downloadKmlFile(String kmlUrlString, String localDestination) {
 		  try {
 				URL kmlUrl=new URL(kmlUrlString);
@@ -1528,18 +1476,6 @@ public class SimplexBean extends GenericSopacBean {
 				ex.printStackTrace();
 		  }
 	 }
-
-	 /**
-	  * Some of the stuff below should be abstracted to the generic project classes.
-	  */
- 
-	 /**
-	  * Do nothing for now.
-	  */
-// 	 protected List sortByDate(List fullList) {
-// 		  return fullList;
-// 	 }
-
 
 
 	 /**
@@ -1601,25 +1537,25 @@ public class SimplexBean extends GenericSopacBean {
 
 		  return first;
 	 }
-
     /**
      * Create a KML file of the faults.  The method assumes
      * access to global variables.
      */
+
     public String createFaultKmlFile() { 
 		  //Some KML constants.
-		  String xmlHead="<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-		  String kmlHead="<kml xmlns=\"http://earth.google.com/kml/2.2\">";
-		  String kmlEnd="</kml>";
-		  String pmBegin="<Placemark>";
-		  String pmEnd="</Placemark>";
-		  String lsBegin="<LineString>";
-		  String lsEnd="</LineString>";
-		  String coordBegin="<coordinates>";
-		  String coordEnd="</coordinates>";
-		  String docBegin="<Document>";
-		  String docEnd="</Document>";
-		  String comma=",";
+		  // String xmlHead="<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+		  // String kmlHead="<kml xmlns=\"http://earth.google.com/kml/2.2\">";
+		  // String kmlEnd="</kml>";
+		  // String pmBegin="<Placemark>";
+		  // String pmEnd="</Placemark>";
+		  // String lsBegin="<LineString>";
+		  // String lsEnd="</LineString>";
+		  // String coordBegin="<coordinates>";
+		  // String coordEnd="</coordinates>";
+		  // String docBegin="<Document>";
+		  // String docEnd="</Document>";
+		  // String comma=",";
 
 		  String newFaultFilename="";
 		  String oldLocalDestination=this.getBasePath()+"/"+"gridsphere"+"/"
@@ -1657,6 +1593,9 @@ public class SimplexBean extends GenericSopacBean {
 					 out.println(docBegin);
 					 for(int i=0;i<faults.length;i++) {
 						  out.println(pmBegin);
+						  out.println(descBegin);
+						  out.println("<b>Fault: </b>"+faults[i].getFaultName());
+						  out.println(descEnd);
 						  out.println(lsBegin);
 						  out.println(coordBegin);
 						  out.println(faults[i].getFaultLonStarts()+comma+faults[i].getFaultLatStarts()+comma+"0");
@@ -1689,4 +1628,20 @@ public class SimplexBean extends GenericSopacBean {
 		  this.faultKmlFilename=faultKmlFilename;
 	 }
 
+    public String getFaultKmlUrl(){
+		  faultKmlUrl=createFaultKmlFile();
+		  return faultKmlUrl;
+    }
+	 
+    public void setFaultKmlUrl(String faultKmlUrl) {
+		  this.faultKmlUrl=faultKmlUrl;
+    }
+	 public String getPortalBaseUrl() {
+		  return portalBaseUrl;
+	 }
+	 
+	 public void setPortalBaseUrl(String portalBaseUrl) {
+		  this.portalBaseUrl=portalBaseUrl;
+	 }
+	
 }
