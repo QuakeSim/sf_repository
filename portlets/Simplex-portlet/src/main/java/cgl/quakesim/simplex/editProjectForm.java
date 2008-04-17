@@ -53,7 +53,9 @@ public class editProjectForm extends GenericProjectBean {
 	 double projectOriginLon, projectOriginLat;
 	 
 	 projectEntry currentProject;
-	 
+	
+    NumberFormat format=null;
+
 	 /**
 	  * Create the bean
 	  */
@@ -65,6 +67,7 @@ public class editProjectForm extends GenericProjectBean {
 		  super();
 		  this.selectdbURL=selectdbURL;
 		  System.out.println("editProjectForm Created");
+		  format=NumberFormat.getInstance();
 	 }
 	 
 	public void initEditFormsSelection() {
@@ -339,7 +342,7 @@ public class editProjectForm extends GenericProjectBean {
 			tmp_fault.setFaultLatEnds(latEnd+"");
 			
 			//Set the strike
-			strike=Math.atan2(x,y)/d2r+"";
+			strike=format.format(Math.atan2(x,y)/d2r);
 			tmp_fault.setFaultStrikeAngle(strike);
 			
 			//Set the origin
@@ -368,8 +371,8 @@ public class editProjectForm extends GenericProjectBean {
 			double x1=(lonStart-projectOriginLon)*factor(projectOriginLon,projectOriginLat);
 			double y1=(latStart-projectOriginLat)*111.32;
 			System.out.println("Fault origin: "+x1+" "+y1);
-			tmp_fault.setFaultLocationX(x1+"");
-			tmp_fault.setFaultLocationY(y1+"");
+			tmp_fault.setFaultLocationX(format.format(x1));
+			tmp_fault.setFaultLocationY(format.format(y1));
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();

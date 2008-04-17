@@ -5,6 +5,7 @@ import java.io.*;
 import java.net.*;
 import java.rmi.server.UID;
 import java.util.*;
+import java.text.NumberFormat;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -46,7 +47,7 @@ public class SimplexBean extends GenericSopacBean {
 	// --------------------------------------------------
 	String FAULTS = "Faults";
 	 
-coim	 String SEPARATOR = "/";
+	 String SEPARATOR = "/";
 	 
 	 String OBSERVATIONS = "Observations";
 	 
@@ -99,6 +100,7 @@ coim	 String SEPARATOR = "/";
 	 String gpsStationName="";
 	 String gpsStationLat="";
 	 String gpsStationLon="";
+    boolean gpsRefStation=false;
 	 
 	 //These are needed for the SOPAC GRWS query.
 	 //These dates are arbitrary but apparently needed.
@@ -112,6 +114,8 @@ coim	 String SEPARATOR = "/";
 	 String portalBaseUrl;
     String faultKmlUrl;
 	 String faultKmlFilename;
+
+    NumberFormat format=null;
 
     public String getFaultKmlUrl(){
 		  faultKmlUrl=createFaultKmlFile();
@@ -129,6 +133,13 @@ coim	 String SEPARATOR = "/";
 	 public void setPortalBaseUrl(String portalBaseUrl) {
 		  this.portalBaseUrl=portalBaseUrl;
 	 }
+    
+    public boolean getGpsRefStation(){
+	return this.gpsRefStation;
+    }
+    public void setGpsRefStation(boolean gpsRefStation){
+	this.gpsRefStation=gpsRefStation;
+    }
 
 	 public String getGpsStationName() {
 		  return gpsStationName;
@@ -562,6 +573,7 @@ coim	 String SEPARATOR = "/";
 	 public SimplexBean() throws Exception {
 		  super();
 		  cm = getContextManagerImp();
+		  format=NumberFormat.getInstance();
 		  System.out.println("Simplex Bean Created");
 	 }
 	 
@@ -1254,7 +1266,7 @@ coim	 String SEPARATOR = "/";
 		  gpsStationName=gpsStationName.toLowerCase();
 
 		  db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
-									+ codeName + "/" + projectName + ".db");
+				     + codeName + "/" + projectName + ".db");
 
 		  try {
 				GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
@@ -1263,8 +1275,7 @@ coim	 String SEPARATOR = "/";
 				dataUrl+=gsq.getResource()+" ";
 				
 				System.out.println(dataUrl);
-				Observation[] obsv=makeGPSObservationPoints(gpsStationName,
-																			dataUrl);
+				Observation[] obsv=makeGPSObservationPoints(gpsStationName,dataUrl,getGpsRefStation());
 				obsv=setXYLocations(obsv,gpsStationLat,gpsStationLon);
 				for(int i=0;i<obsv.length;i++) {
 					 db.set(obsv[i]);
@@ -1307,17 +1318,18 @@ coim	 String SEPARATOR = "/";
 				double y=(gpsLat-origin_lat)*111.32;
 				for(int i=0;i<obsv.length;i++) {
 					 //We are at the origin.
-					 obsv[i].setObsvLocationEast(x+"");
-					 obsv[i].setObsvLocationNorth(y+"");
+				    obsv[i].setObsvLocationEast(format.format(x));
+				    obsv[i].setObsvLocationNorth(format.format(y));
 				}
 		  }
 		  //We have probably updated the origin, so save to db.
 		  return obsv;
 	 }
 
-	 private Observation[] makeGPSObservationPoints(String stationName,
-																	String rawGRWSResponse) {
-
+    private Observation[] makeGPSObservationPoints(String stationName,
+						   String rawGRWSResponse,
+						   boolean gpsRefStation) {
+	     
 		  Observation[] observations=new Observation[3];
 		  //Check the response and only take the latest value.
 		  StringTokenizer st=new StringTokenizer(rawGRWSResponse,"\n");
@@ -1352,7 +1364,14 @@ coim	 String SEPARATOR = "/";
 						  observations[i].setObsvType(simplexObType[i]);
 						  observations[i].setObsvValue(neu[i]);
 						  observations[i].setObsvError(sig_neu[i]);
-						  observations[i].setObsvRefSite("1");
+						  //Note all 3 obsv values for this one station
+						  //will be set to this value.
+						  if(gpsRefStation) {
+						      observations[i].setObsvRefSite("0");
+						  }
+						  else {
+						      observations[i].setObsvRefSite("1");
+						  }
 					 }
 				}
 

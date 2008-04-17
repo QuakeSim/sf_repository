@@ -288,7 +288,7 @@ function printNetworkColors (array) {
 							itemValue="ShowObsvCutPaste" />
 
 						<f:selectItem id="item021"
-							itemLabel="Add GPS Observation Point"
+							itemLabel="Add GPS Observation Point: Use map to choose GPS station input."
 							itemValue="ShowGPSObsv" />
 
 						<f:selectItem id="item2"
@@ -349,6 +349,10 @@ function printNetworkColors (array) {
 						 <h:inputText id="stationLat" value="#{SimplexBean.gpsStationLat}"/>
 						 <h:outputText id="dkljfer4" value="Longitude:"/>
 						 <h:inputText id="stationLon" value="#{SimplexBean.gpsStationLon}"/>
+             					 <h:outputText id="dkljr3dssrf" value="Ref Station?:"/>
+						<h:selectBooleanCheckbox id="gpsRefStation23211s"
+							value="#{SimplexBean.gpsRefStation}" />
+
 						 <h:commandButton id="addGPSObsv" value="Add Station"
 						 		actionListener="#{SimplexBean.toggleAddGPSObsvForProject}"/>
 						 <h:commandButton id="closeMap" value="Close Map"

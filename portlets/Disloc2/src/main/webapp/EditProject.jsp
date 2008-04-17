@@ -297,11 +297,11 @@ function getScrolling() {
 				<h:selectOneRadio layout="pageDirection" id="subscriptions" 
 					value="#{DislocBean.projectSelectionCode}"> 
 				<f:selectItem id="item0w3" 
-						itemLabel="Observation Style: Choose between grid and scatter points." 
+						itemLabel="Set Observation Style: Choose between grid and scatter points." 
 						itemValue="ChooseObsvStyleForm"/> 
 
 					<f:selectItem id="item1" 
-						itemLabel="Add Observations: Click to specify observation points." 
+						itemLabel="View Project Info: Verify and update project information." 
 						itemValue="CreateObservationGrid" /> 
 					<f:selectItem id="item2" 
 						itemLabel="Create New Fault: Click to specify geometry for a fault segment." 
@@ -312,7 +312,7 @@ function getScrolling() {
 						itemValue="AddFaultSelection" /> 
 
 					<f:selectItem id="item021"
-						itemLabel="Show Map: View faults and pick observation points."
+						itemLabel="Use Map: View faults and pick observation points on an interactive map."
 						itemValue="ShowMap" />
 				</h:selectOneRadio> 
 				<h:commandButton id="button1" value="Make Selection" 

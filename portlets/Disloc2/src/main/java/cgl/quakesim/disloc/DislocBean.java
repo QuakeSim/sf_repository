@@ -140,16 +140,16 @@ public class DislocBean extends GenericSopacBean {
 	 String gpsStationName="";
 	 String gpsStationLat="";
 	 String gpsStationLon="";
-
+    NumberFormat format = null;
     
     /**
      * The client constructor.
      */
     public DislocBean() throws Exception {
-		  super();
-		  
+	super();
+	format=NumberFormat.getInstance();
 	//		  currentParams.setObservationPointStyle(1);
-		  
+	
 	//We are done.
 		  System.out.println("Primary Disloc Bean Created");
     }
@@ -2446,19 +2446,19 @@ public class DislocBean extends GenericSopacBean {
 	 }
 	 
 	 public String getGpsStationLat() {
-		  return gpsStationLat;
+	     return gpsStationLat;
 	 }
 
 	 public void setGpsStationLat(String gpsStationLat) {
-		  this.gpsStationLat=gpsStationLat;
+	     this.gpsStationLat=gpsStationLat;
 	 }
 	 
 	 public String getGpsStationLon() {
-		  return gpsStationLon;
+	     return gpsStationLon;
 	 }
 
 	 public void setGpsStationLon(String gpsStationLon) {
-		  this.gpsStationLon=gpsStationLon;
+	     this.gpsStationLon=gpsStationLon;
 	 }
 
 	 public void toggleAddPointObsvForProject(ActionEvent ev) {
@@ -2473,9 +2473,10 @@ public class DislocBean extends GenericSopacBean {
 				currentParams.setOriginLat(Double.parseDouble(gpsStationLat));
 				currentParams.setOriginLon(Double.parseDouble(gpsStationLon));
 		  }
-		  
-		  ObsvPoint point=convertLatLon(Double.parseDouble(gpsStationLat),
-						Double.parseDouble(gpsStationLon),
+		  double dLat=Double.parseDouble(gpsStationLat);
+		  double dLon=Double.parseDouble(gpsStationLon);
+		  ObsvPoint point=convertLatLon(Double.parseDouble(format.format(dLat)),
+						Double.parseDouble(format.format(dLon)),
 						currentParams.getOriginLat(),
 						currentParams.getOriginLon());
 		  
@@ -2561,6 +2562,9 @@ public class DislocBean extends GenericSopacBean {
 				      double origin_lon) {
 	double x=(lon-origin_lon)*factor(origin_lon,origin_lat);
 	double y=(lat-origin_lat)*111.32;
+	
+	x=Double.parseDouble(format.format(x));
+	y=Double.parseDouble(format.format(y));
 	
 	System.out.println("ObsvPoints:"+lat+" "+lon+" "+x+" "+y);
 	
