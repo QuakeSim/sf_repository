@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+
+<%@page import="java.util.*, java.net.URL, java.io.*, java.lang.*, org.dom4j.*, cgl.sensorgrid.common.*, org.dom4j.io.*"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
@@ -20,7 +23,30 @@ String mapcenter_y = "-117.24";
 String [] center_xy = RSSBeanID.getMapCenter();
 mapcenter_x = center_xy[0];
 mapcenter_y = center_xy[1];
+%>
 
+<% 
+File localFile = new File(config.getServletContext().getRealPath("stations-rss-new.xml"));
+BufferedReader br=new BufferedReader(new FileReader(localFile));
+StringBuffer sb = new StringBuffer();
+while (br.ready()) {
+	sb.append(br.readLine());
+}
+SAXReader reader = new SAXReader();
+Document statusDoc = reader.read( new StringReader(sb.toString()) );          
+Element eleXml = (Element)statusDoc.getRootElement();
+List stationList = eleXml.elements("station");
+String[] latArray=new String[stationList.size()];
+String[] lonArray=new String[stationList.size()];
+String[] nameArray=new String[stationList.size()];
+
+//Set upt the arrays
+for(int i=0;i<stationList.size();i++) {
+   Element station=(Element)stationList.get(i);
+   latArray[i]=station.element("latitude").getText();
+    lonArray[i]=station.element("longitude").getText();
+    nameArray[i]=station.element("id").getText();
+}
 %>
 
 <style>
@@ -86,19 +112,17 @@ type="text/javascript"></script>
         }
 
 function initialize() {
-	 map=new GMap2(document.getElementById("map"));
-	     map.addMapType(G_PHYSICAL_MAP);
-    	  map.setCenter(new GLatLng(33,-117),7);
-    	  map.addControl(new GLargeMapControl());
-    	  map.addControl(new GMapTypeControl());
-        map.addControl(new GScaleControl());
+ map=new GMap2(document.getElementById("map"));
+ map.addMapType(G_PHYSICAL_MAP);
+ map.setCenter(new GLatLng(33,-117),7);
+ map.addControl(new GLargeMapControl());
+ map.addControl(new GMapTypeControl());
+ map.addControl(new GScaleControl());
 
-		  //Create the network.
-		  var faultKmlUrl=document.getElementById("faultKmlUrl");
-//		  alert(faultKmlUrl.value);	
-//		  geoXml=new GGeoXml(faultKmlUrl.value);
- 		  geoXml=new GGeoXml(faultKmlUrl.value, function() {
-		  		//var message=document.getElementById("message");
+ //Show the faults
+  var faultKmlUrl=document.getElementById("faultKmlUrl");
+  geoXml=new GGeoXml(faultKmlUrl.value, function() {
+
         		while (!geoXml.hasLoaded()) {
 						//message.innerHTML="Loading...";
 		  		}
@@ -106,12 +130,53 @@ function initialize() {
           	geoXml.gotoDefaultViewport(map);
 			 	//Show the map.
 	  		 	map.addOverlay(geoXml);
-        	 	overlayNetworks();
+        	 	//overlayNetworks();
       });
 
 		  map.addOverlay(geoXml);
-        overlayNetworks();
-        printNetworkColors(networkInfo);
+
+        //Add the markers
+	var marker=new Array(<%= stationList.size() %>);
+
+	//Set up the icon marker
+	var baseIcon=new GIcon(G_DEFAULT_ICON);
+	baseIcon.iconSize=new GSize(15,20);
+	baseIcon.shadowSize = new GSize(10, 10);
+	baseIcon.iconAnchor = new GPoint(1, 10);
+	baseIcon.infoWindowAnchor = new GPoint(5, 1);
+	baseIcon.infoShadowAnchor = new GPoint(5, 5);
+	baseIcon.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";
+	markerOptions={ icon:baseIcon };
+	
+	var html=new Array(<%=stationList.size()%>);
+	
+<%
+	//Display the markers
+	for(int i=0;i<stationList.size();i++){
+%>
+		var lon=<%=lonArray[i] %>;
+		var lat=<%=latArray[i] %>;
+		marker[<%=i%>]=new GMarker(new GLatLng(lat,lon),markerOptions);
+		html[<%=i%>]="<b>Station Name=</b>"+"<%=nameArray[i] %> <br>";
+		html[<%=i%>]+="<b>Latitude:</b> "+lat+"<br>";
+		html[<%=i%>]+="<b>Longitude:</b> "+lon+"<br>";
+		GEvent.addListener(marker[<%=i%>],"click",function() {
+	     		marker[<%=i%>].openInfoWindow(html[<%=i%>]);
+			var newElement=document.getElementById("obsvGPSMap:stationName");
+			newElement.setAttribute("value","<%= nameArray[i] %>");
+			var newElement2=document.getElementById("obsvGPSMap:stationLat");
+			newElement2.setAttribute("value",lat);
+			var newElement3=document.getElementById("obsvGPSMap:stationLon");
+			newElement3.setAttribute("value",lon);
+
+		});
+		map.addOverlay(marker[<%=i%>]);
+<%
+        }
+%>
+
+//        overlayNetworks();
+//        printNetworkColors(networkInfo);
 }
 
 function selectOne(form , button) {
