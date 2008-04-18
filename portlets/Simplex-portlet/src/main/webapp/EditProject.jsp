@@ -165,9 +165,9 @@ function initialize() {
 			var newElement=document.getElementById("obsvGPSMap:stationName");
 			newElement.setAttribute("value","<%= nameArray[i] %>");
 			var newElement2=document.getElementById("obsvGPSMap:stationLat");
-			newElement2.setAttribute("value",lat);
+			newElement2.setAttribute("value","<%= latArray[i] %>");
 			var newElement3=document.getElementById("obsvGPSMap:stationLon");
-			newElement3.setAttribute("value",lon);
+			newElement3.setAttribute("value","<%= lonArray[i] %>");
 
 		});
 		map.addOverlay(marker[<%=i%>]);
