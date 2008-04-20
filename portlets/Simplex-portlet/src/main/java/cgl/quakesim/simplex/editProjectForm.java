@@ -334,8 +334,8 @@ public class editProjectForm extends GenericProjectBean {
 			tmp_fault.setFaultDepth (depth);
 			tmp_fault.setFaultDipAngle(dip);
 
-			tmp_fault.setFaultSlip (""); 
-			tmp_fault.setFaultRakeAngle("");
+			tmp_fault.setFaultSlip ("1.0"); 
+			tmp_fault.setFaultRakeAngle("1.0");
 			tmp_fault.setFaultLonStarts(lonStart+"");
 			tmp_fault.setFaultLatStarts(latStart+"");
 			tmp_fault.setFaultLonEnds(lonEnd+"");
