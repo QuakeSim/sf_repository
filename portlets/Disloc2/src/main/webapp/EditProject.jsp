@@ -80,6 +80,33 @@ mapcenter_y = center_xy[1];
           networkInfo [i] = new Array (2);
         }
 
+//This is used to calculate the length and strike angle.
+function doMath(){
+var lonStart=document.getElementById("Faultform:faultLon");
+var lonEnd=document.getElementById("Faultform:faultLonende3r");
+var latStart=document.getElementById("Faultform:faultLat");
+var latEnd=document.getElementById("Faultform:faultLatendere");
+
+var length=document.getElementById("Faultform:FaultLength");
+var strike=document.getElementById("Faultform:FaultStrikeAngle");
+
+
+var d2r = Math.acos(-1.0) / 180.0;
+var flatten=1.0/298.247;
+      var theFactor = d2r* Math.cos(d2r * latStart.value)
+        * 6378.139 * (1.0 - Math.sin(d2r * lonStart.value) * Math.sin(d2r * lonStart.value) * flatten);
+
+var x=(lonEnd.value-lonStart.value)*theFactor;
+var y=(latEnd.value-latStart.value)*111.32;
+var lengthVal=Math.sqrt(x*x+y*y);
+
+
+length.value=Math.round(lengthVal*1000)/1000;
+
+var strikeValue=Math.atan2(x,y)/d2r;
+strike.value=Math.round(strikeValue*1000)/1000;
+} 
+
 function dataTableSelectOneRadio(radio) { 
     var id = radio.name.substring(radio.name.lastIndexOf(':')); 
     var el = radio.form.elements; 
@@ -588,8 +615,19 @@ function getScrolling() {
 							value="#{DislocBean.currentFault.faultLameMu}" required="true" /> 
 					</h:panelGroup> 
  
-					<h:commandButton id="addfault" value="select" 
+					<h:commandButton id="addfault" value="Set Values" 
 						actionListener="#{DislocBean.toggleAddFaultForProject}" /> 
+				      <f:verbatim>
+				         <input type="button" name="Update"
+					 	value="Do Math"
+						onclick="doMath()"/>
+ 				      </f:verbatim>
+					<f:facet name="footer"> 
+					   <h:outputFormat id="output2" escape="false" 
+						value="Click 'Do Math' to udpate length and strike. 
+						       Click 'Set Values' when you are done." /> 
+					</f:facet> 
+
 				</h:panelGrid> 
 			</h:form> 
  

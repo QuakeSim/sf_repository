@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" 
+l<%@ page language="java" contentType="text/html; charset=ISO-8859-1" 
 	pageEncoding="ISO-8859-1"%> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%> 
@@ -45,10 +45,14 @@ function turnOffRadioForForm(form)
 
 //This is used to calculate the length and strike angle.
 function doMath(){
-var lonStart=document.getElementById("faultLon");
-var lonEnd=document.getElementById("faultLonende3r");
-var latStart=document.getElementById("faultLat");
-var latEnd=document.getElementById("faultLatendere");
+var lonStart=document.getElementById("Faultform:faultLon");
+var lonEnd=document.getElementById("Faultform:faultLonende3r");
+var latStart=document.getElementById("Faultform:faultLat");
+var latEnd=document.getElementById("Faultform:faultLatendere");
+
+var length=document.getElementById("Faultform:FaultLength");
+var strike=document.getElementById("Faultform:FaultStrikeAngle");
+
 
 var d2r = Math.acos(-1.0) / 180.0;
 var flatten=1.0/298.247;
@@ -59,12 +63,11 @@ var x=(lonEnd.value-lonStart.value)*theFactor;
 var y=(latEnd.value-latStart.value)*111.32;
 var lengthVal=Math.sqrt(x*x+y*y);
 
-var length=document.getElementById("FaultForm:FaultLength");
+
 length.value=Math.round(lengthVal*1000)/1000;
 
-var strike=document.getElementById("FaultForm:FaultStrikeAngle");
 var strikeValue=Math.atan2(x,y)/d2r;
-strike.value=Math.round(strikeVal*1000)/1000;
+strike.value=Math.round(strikeValue*1000)/1000;
 } 
  
 function dataTableSelectOneRadio(radio) { 

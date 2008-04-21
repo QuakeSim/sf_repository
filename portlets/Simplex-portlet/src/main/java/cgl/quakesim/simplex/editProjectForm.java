@@ -37,7 +37,7 @@ public class editProjectForm extends GenericProjectBean {
 	 boolean renderSearchByLatLonForm = false;	 
 	 boolean renderViewAllFaultsForm = false;
 	 boolean renderGPSStationMap = false;
-	 boolean renderObsvEntries= true;
+	 boolean renderObsvEntries = false;
 
 	 String faultSelectionCode = "";
 	 boolean renderAddFaultFromDBForm = false;
@@ -333,7 +333,8 @@ public class editProjectForm extends GenericProjectBean {
 			tmp_fault.setFaultWidth(width);
 			tmp_fault.setFaultDepth (depth);
 			tmp_fault.setFaultDipAngle(dip);
-
+			
+			//Probably hokey default values
 			tmp_fault.setFaultSlip ("1.0"); 
 			tmp_fault.setFaultRakeAngle("1.0");
 			tmp_fault.setFaultLonStarts(lonStart+"");
