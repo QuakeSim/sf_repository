@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 
 <%@ page import="cgl.quakesim.disloc.DislocBean" %>
-<jsp:useBean id="DislocBean" scope="session" class="cgl.quakesim.disloc.DislocBean"/>
+<jsp:useBean id="DislocBean2" scope="session" class="cgl.quakesim.disloc.DislocBean"/>
 
 <html xmlns="http://www.w3.org/1999/xhtml">  <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
