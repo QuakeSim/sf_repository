@@ -1,3 +1,6 @@
+<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
+<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
+
 <%@page import="java.util.*, java.net.URL, java.io.*, java.lang.*, org.dom4j.*, cgl.sensorgrid.common.*, org.dom4j.io.*"%>
 
 <%
@@ -21,7 +24,7 @@
 
 <html>
 	<head>
-	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAlW-VacciIjziyRXAuwNEPRTHN3guvZVblLcC-EJwLBdWde6_phS7mdwrISgPOfAEOnp6MgtTVZLUNQ" type="text/javascript"></script>
+	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTCdqtmO6Kma7uYZgpagQkNe17MQhRS93QdZFchZ2Vy9IpcH0W3nbN34g" type="text/javascript"></script>
 	</head>
 	<body>
 
@@ -59,7 +62,6 @@
 	var modelStartDate = new Date(1994, 1, 1, 0, 0, 0);
 	
 	//Add an alert window.
-	var calClicked = false;
 	function myShowDateHandler(type,args,obj) {
 		var dates=args[0];
 		var date=dates[0];
@@ -76,14 +78,12 @@
 			if (tmpDate > today || tmpDate < modelStartDate) {
 				alert("Please choose a date between " + getDateString(modelStartDate) + " and " + getDateString(today));
 				return;
-			}
-	 		
-			calClicked = true;
+			}	 		
 			dateToShow.setAttribute("value",showDate);
 			dateToShow.value = showDate;
-			overlayMarkers();
+			tmpNoActOnSlideChange = true;
 			setSliderValByDate(tmpDate);
-			calClicked = false;
+			overlayMarkers();		
 		}
 	}	
   
@@ -92,9 +92,10 @@
 		slider.setValue( (theDate.getTime() - modelStartDate.getTime()) * slider_range / (today.getTime() - modelStartDate.getTime()) );
 	}
   
+	var tmpNoActOnSlideChange = false;
 	function onSlideChange() {
 		// if the slider changes because user presses "enter" in the date text box or click the calendar, don't change the date and do everything again
-		if (dateTextKeyDown || calClicked) {
+		if (tmpNoActOnSlideChange) {
 			return;
 		}
 		var slider_val = slider.getValue();
@@ -149,8 +150,11 @@
 	}
   
 	function onSlideEnd() {
-		if (dateTextKeyDown || calClicked)
+		//alert("onSlideEnd " + tmpNoActOnSlideChange);
+		if (tmpNoActOnSlideChange) {
+			tmpNoActOnSlideChange = false;
 			return;
+		}
 		setCalByDate(denotedDate);
 		overlayMarkers();
 	}
@@ -186,12 +190,11 @@
 		str = getDateString(tmpDate);
 		var dateTxt = document.getElementById("dateText");
 		dateTxt.value = str;
-		dateTextKeyDown = true;
 		dateTxt.setAttribute("value", str);
-		overlayMarkers();        			
+		tmpNoActOnSlideChange = true;
 		setSliderValByDate(tmpDate);
 		setCalByDate(tmpDate);
-		dateTextKeyDown = false;
+		overlayMarkers();	
 	}
   
 	function setCalByDate(theDate) {
@@ -199,18 +202,6 @@
 		YAHOO.example.calendar.cal1.setMonth(theDate.getMonth());
 		YAHOO.example.calendar.cal1.render();
 	}
-	
-	function init() {
-		YAHOO.example.calendar.cal1=new YAHOO.widget.Calendar("cal1","cal1Container");
-		YAHOO.example.calendar.cal1.selectEvent.subscribe(myShowDateHandler,YAHOO.example.calendar.cal1, true);
-		YAHOO.example.calendar.cal1.render();
-		
-		slider = YAHOO.widget.Slider.getHorizSlider("slider-bg", "slider-thumb", 0, slider_range, 1); 
-		slider.subscribe("change", onSlideChange);
-		slider.subscribe("slideEnd", onSlideEnd);
-		slider.setValue(slider_range);
-	}
-	YAHOO.util.Event.addListener(window, "load", init);
 	</script> 
 
 <!-- inline functions about map api -->	
@@ -302,8 +293,8 @@
 	}	
 
 	// Create the marker and corresponding information window 
-	function createTabsInfoMarker(point, infoTabs ,icon, idx, sel) {
-		var marker = new GMarker(point,icon);
+	function createTabsInfoMarker(point, infoTabs ,icon1, idx, sel) {
+		var marker = new GMarker(point, {icon: icon1, clickable: true, title:stationArray[idx][0]});
 		GEvent.addListener(marker, "click", function() {
 			var stationId = stationArray[idx][0];
 			var urlPattern2 = urlPattern, dirPattern2 = dirPattern;
@@ -365,7 +356,15 @@
 		<tr>
 			<td width="650" colspan="2">
 				<b><font size="4" face="Verdana">Daily RDAHMM GPS Data Analysis</font></b><p>
-				<font face="Verdana" size="2">Click on a station symbol for more information.</font><p></p>
+				<font face="Verdana" size="2">Note:The default date is set to the latest day when GPS data is available. Click on a station symbol for more information.</font><p></p>
+				<f:view>
+					<h:form id="form1">
+						<h:inputText id="regionLimit" value="#{dailyRdahmmResult.regionLimit}" style="display:none; height:1px; width:5px"/>       		
+						<h:inputText id="dateSelected" value="#{dailyRdahmmResult.date}" style="display:none; height:1px; width:5px"/>
+						<h:inputText id="colorResult" value="#{dailyRdahmmResult.colorResult}" style="display:none; height:1px; width:5px"/>
+						<h:inputText id="dataLatestDate" value="#{dailyRdahmmResult.dataLatestDate}" style="display:none; height:1px; width:5px"/>
+						<h:commandButton id="calcColors" action="#{dailyRdahmmResult.calcStationColors}" style="display:none; height:1px; width:5px"/>
+					</h:form>				</f:view>
 			</td>
 		</tr>
 		<tr>
@@ -468,8 +467,7 @@
 		var dateToShow=document.getElementById("dateText");
 		var d = new Date();
 		var ds = getDateString(d);
-		if (dateToShow.value != ds) {	 					
-			dateToShow.setAttribute("value",ds);
+		if (dateToShow.value != ds) {
 			dateToShow.value = ds;
 			overlayMarkers();
 			YAHOO.example.calendar.cal1.setYear(d.getFullYear());
@@ -480,7 +478,6 @@
 	}
         
 	// what to do when the user pressed a key in the date text box
-	var dateTextKeyDown = false;
 	function onDateTextKeyDown(e) {
 		var keynum, targ;
 		if(window.event) {   // IE
@@ -515,12 +512,11 @@
 					alert("Please input a date between " + getDateString(modelStartDate) + " and " + getDateString(today));
 					return;
 				}        			
-				dateTextKeyDown = true;
 				dateTxt.setAttribute("value", str);
-				overlayMarkers();        			
+				tmpNoActOnSlideChange = true;
 				setSliderValByDate(tmpDate);
 				setCalByDate(tmpDate);
-				dateTextKeyDown = false;
+				overlayMarkers();	
 			}
 		}
 	}
@@ -600,7 +596,7 @@
 	*/
 <%
 	Document statusDoc = null;
-	String xmlUrl = "http://gf13.ucs.indiana.edu:8080//DailyRDAHMM-portlet/station-status-change-rss.xml";
+	String xmlUrl = "http://gf13.ucs.indiana.edu:8080//rdahmmexec/station-status-change-rss.xml";
 	try {
 		// if the file is old or does not exist, copy it from xmlUrl
 		boolean shouldCopy = false;		
@@ -655,7 +651,8 @@
 	var qPattern = '<%=eleOutput.element("QFile").getText()%>';
 	var maxPattern = '<%=eleOutput.element("MaxValFile").getText()%>';
 	var minPattern = '<%=eleOutput.element("MinValFile").getText()%>';
-	var rangePattern = '<%=eleOutput.element("RangeFile").getText()%>';				
+	var rangePattern = '<%=eleOutput.element("RangeFile").getText()%>';
+	var modelPattern = '<%=eleOutput.element("ModelFiles").getText()%>';
 <%				
 	List lStations = eleXml.elements("station");
 %>
@@ -692,18 +689,21 @@
 		nodataCount = Integer.parseInt(eleStation.element("nodata-count").getText());
 %>
 		stationArray[<%=i%>] = new Array(7);	stationArray[<%=i%>][0] = '<%=eleStation.element("id").getText()%>';
-		stationArray[<%=i%>][1] = <%=x%>;	stationArray[<%=i%>][2] = <%=y%>;	stationArray[<%=i%>][3] = null;
-		var icon = new GIcon(baseIcon);					
+		stationArray[<%=i%>][1] = <%=x%>;	stationArray[<%=i%>][2] = <%=y%>;
+		var icon = new GIcon(baseIcon);
 		stationArray[<%=i%>][6] = createTabsInfoMarker(new GPoint('<%=y%>', '<%=x%>') , null, icon, <%=i%>, document.getElementById("stationSelect"));
 		/*stationArray[<%=i%>][6] = null; */
 <%				
 		if (changeCount == 0) {
 			out.write("stationArray[" + i + "][5] = null;");
-		} else {
-			out.write("stationArray[" + i + "][5] = new Array(" + changeCount + " * 3); ");	
+		} else {	
 			int changeIdx = 0;
 			List lChanges = eleStation.elements("status-changes");
-			for (int j=0; j<lChanges.size(); j++) {
+			int usefulChange = 10;
+			if (lChanges.size() < usefulChange)
+				usefulChange = lChanges.size();
+			out.write("stationArray[" + i + "][5] = new Array(" + usefulChange + " * 3); ");
+			for (int j=0; j<lChanges.size() &&  j<usefulChange; j++) {
 				String changeStr = ((Element)lChanges.get(j)).getText();
 				int idx1 = 0;
 				int idx2 = changeStr.indexOf(';');
@@ -729,6 +729,8 @@
 %>								
 					stationArray[<%=i%>][5][<%=changeIdx++%>] = <%=tmpCaldr.getTime().getTime() / DAY_MILLI%>; stationArray[<%=i%>][5][<%=changeIdx++%>] = <%=oldStatus%>; stationArray[<%=i%>][5][<%=changeIdx++%>] = <%=newStatus%>;
 <%				
+					if (changeIdx >= 30)
+						break;
 					idx1 = idx2 + 1;
 					if (idx1 >= changeStr.length())
 						break;
@@ -739,47 +741,11 @@
 						if (idx2 < 0)
 							idx2 = changeStr.length();
 					}
-				}		
-			}
-		}
-		if (nodataCount == 0) {
-			out.write("stationArray[" + i + "][4] = null;");
-		} else {
-			out.write("stationArray[" + i + "][4] = new Array(" + nodataCount + " * 2); ");	
-			int nodataIdx = 0;
-			String nodataStr = eleStation.element("time-nodata").getText();
-			int idx1 = 0;
-			int idx2 = nodataStr.indexOf(';');
-			while (idx2 >= 0) {
-				String oneMissSec = nodataStr.substring(idx1, idx2).trim();
-				int idxTo = oneMissSec.indexOf("to");
-				String lateDate = oneMissSec.substring(0, idxTo);
-				String earlyDate = oneMissSec.substring(idxTo + 2);
-								
-				String str = lateDate;
-				String year, month, day;
-				int i1, i2;
-				i1 = str.indexOf("-");		i2 = str.indexOf("-", i1+1);
-				year = str.substring(0, i1);	month = str.substring(i1+1, i2);	day = str.substring(i2+1);
-				tmpCaldr.set(Calendar.YEAR, Integer.parseInt(year, 10));	tmpCaldr.set(Calendar.MONTH, Integer.parseInt(month, 10)-1);	tmpCaldr.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day, 10));
-%>							
-				stationArray[<%=i%>][4][<%=nodataIdx++%>] = <%=tmpCaldr.getTime().getTime() / DAY_MILLI%>;
-<%						
-				str = earlyDate;
-				i1 = str.indexOf("-");		i2 = str.indexOf("-", i1+1);
-				year = str.substring(0, i1);	month = str.substring(i1+1, i2);	day = str.substring(i2+1);
-				tmpCaldr.set(Calendar.YEAR, Integer.parseInt(year, 10));	tmpCaldr.set(Calendar.MONTH, Integer.parseInt(month, 10)-1);	tmpCaldr.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day, 10));
-%>
-				stationArray[<%=i%>][4][<%=nodataIdx++%>] = <%=tmpCaldr.getTime().getTime() / DAY_MILLI%>;
-<%							
-				idx1 = idx2 + 1;
-				if (idx1 >= nodataStr.length())
-					break;
-				else {
-					idx2 = nodataStr.indexOf(';', idx1);
 				}
-			}		
-		}					
+				if (changeIdx >= 30)
+					break;		
+			}
+		}				
 	}
 	mapcenter_x = xmin + (xmax - xmin)/2;
 	mapcenter_y = ymin + (ymax - ymin)/2;
@@ -788,9 +754,34 @@
 	tmpCaldr.set(Calendar.DAY_OF_MONTH, 2);				
 %>
 	var DAY_MILLI = 86400000;
-	var timeDiff = parseInt(Date.UTC(1970,0,2)/DAY_MILLI) - <%=(tmpCaldr.getTime().getTime()/DAY_MILLI)%>;
-	
-	map.centerAndZoom(new GPoint(<%=mapcenter_y%>, <%=mapcenter_x%>), 10);
+	var timeDiff = parseInt(Date.UTC(1970,0,2)/DAY_MILLI) - <%=(tmpCaldr.getTime().getTime()/DAY_MILLI)%>;	
+	var mapCenterY = 0, mapCenterX = 0;
+	if (document.getElementById("form1:regionLimit") != null && document.getElementById("form1:regionLimit").getAttribute("value").length > 0) {
+		var regionLimitStr = document.getElementById("form1:regionLimit").getAttribute("value");
+		var scIdx, commerIdx;
+		scIdx = regionLimitStr.indexOf(';');
+		if (scIdx >= 0) {
+			commerIdx = regionLimitStr.indexOf(',');
+			if (commerIdx >= 0 && commerIdx < scIdx) {
+				var leftLat = parseFloat(regionLimitStr.substring(0, commerIdx));
+				var downLong = parseFloat(regionLimitStr.substring(commerIdx + 1, scIdx));
+				
+				commerIdx = regionLimitStr.indexOf(',', scIdx + 1);
+				if (commerIdx >= 0) {
+					var rightLat = parseFloat(regionLimitStr.substring(scIdx + 1, commerIdx));
+					var upLong = parseFloat(regionLimitStr.substring(commerIdx + 1));
+					mapCenterX = leftLat + (rightLat - leftLat) / 2;
+					mapCenterY = downLong + (upLong - downLong) / 2;
+				}
+			}
+		}
+	} 
+
+	if (mapCenterY == 0 || mapCenterX == 0) {
+		mapCenterY = <%=mapcenter_y%>;
+		mapCenterX = <%=mapcenter_x%>;	
+	}
+	map.centerAndZoom(new GPoint(mapCenterY, mapCenterX), 10);
 	GEvent.addListener(map, "moveend", function() {	onMapMove(); } );
 	GEvent.addListener(map, "zoomend", function(oldLevel, newLevel) {
 		// zoomin: newLevel > oldLevel; zoomout: newLevel < oldLevel
@@ -814,9 +805,10 @@
 		var stationId = stationArray[stationSlt.selectedIndex][0];
 		var urlPattern2 = urlPattern, inputPattern2 = inputPattern, rangePattern2 = rangePattern, qPattern2 = qPattern, aPattern2 = aPattern;
 		var bPattern2 = bPattern, lPattern2 = lPattern, piPattern2 = piPattern, minPattern2 = minPattern, maxPattern2 = maxPattern;
-		var xPattern2 = xPattern, yPattern2 = yPattern, zPattern2 = zPattern, dirPattern2 = dirPattern;
+		var xPattern2 = xPattern, yPattern2 = yPattern, zPattern2 = zPattern, dirPattern2 = dirPattern; modelPattern2 = modelPattern;
           
 		var preFix = urlPattern2.replace(/{!station-id!}/g, stationId) + "/" + dirPattern2.replace(/{!station-id!}/g, stationId) + "/";
+		var modelLink = urlPattern2.replace(/{!station-id!}/g, stationId) + "/daily/" + modelPattern2.replace(/{!station-id!}/g, stationId);
 		var outputTable = "<table border='0'> <tr><td> <b>Output Values</b> </td></tr>" + "<tr><td><a target=\"_blank\" href=\"" 
 							+  preFix + inputPattern2.replace(/{!station-id!}/g, stationId) + "\">Input File</a></td></tr>"
 							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + rangePattern2.replace(/{!station-id!}/g, stationId) + "\">Range</a></td></tr>"
@@ -829,7 +821,8 @@
 							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + maxPattern2.replace(/{!station-id!}/g, stationId) + "\">Maximum Value</a></td></tr>"
 							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + xPattern2.replace(/{!station-id!}/g, stationId) + "\">Plot of X Values</a></td></tr>"
 							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + yPattern2.replace(/{!station-id!}/g, stationId) + "\">Plot of Y Values</a></td></tr>"
-							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + zPattern2.replace(/{!station-id!}/g, stationId) + "\">Plot of Z Values</a></td></tr> </table>";
+							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + zPattern2.replace(/{!station-id!}/g, stationId) + "\">Plot of Z Values</a></td></tr>" 
+							+ "<tr><td><b><a target=\"_blank\" href=\"" +  modelLink + "\">Get all model files</a></b></td></tr></table>";
           
 		var changeTable = "<table border='1'> <tr> <td><b>Date</b></td> <td><b>Old Status</b></td> <td><b>New Status</b></td> </tr>";
 		var dateTmp = new Date();
@@ -856,154 +849,57 @@
        
 	printChangedStations();
 	sltChange(document.getElementById("stationSelect"));
-
-	// check if a station's marker should be red or yellow by trying to find a status change with a date between theDate and 30 days before theDate
-	// the format of changeArray is like: {chagneTime_1, oldStatus_1, newStatus_1, chagneTime_2, oldStatus_2, newStatus_2, ...}
-	function getMarkerColorForChanges(theDate, changeArray) {       	
-		var NDAYS = 30;
-		var firstDate = nDaysBefore(30, theDate);        	
-		var idx1 = 0;
-		var idx2 = changeArray.length / 3 - 1;
-		var color = "green";
-		// since javascript time is larger than java time by timeDiff, and the time stored in the station Array is java time, we should reduce javascript time by timeDiff to make it comparable with java time
-		var startTime = parseInt(Date.UTC(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate()) / DAY_MILLI) - timeDiff;
-		var endTime = parseInt(Date.UTC(theDate.getFullYear(), theDate.getMonth(), theDate.getDate()) / DAY_MILLI)- timeDiff;
-		var midTime;
-        	
-		if (idx1 == idx2) {
-			midTime = changeArray[idx1*3];
-			if (midTime == endTime) {
-				color = "red";
-			} else if (midTime >= startTime && midTime < endTime) {
-				color = "yellow";
-			}
-			return color;
-		}
-        	
-		// since the changes are desendantly ordered by date, we use binary search to find the date
-		while (idx1 < idx2) { 
-			var mid = parseInt((idx1 + idx2) / 2);
-			midTime = changeArray[mid*3];
-			//alert("startTime: " + startTime + " midTime: " + midTime + " endTime: " + endTime + " startDate: " + getDateString(firstDate) 
-			//		+ " midDate: " + getDateString(changeArray[mid][0]) + " endDate: " + getDateString(theDate) );
-			if (midTime == endTime) {
-				color = "red";
-				break;
-			} else {
-				if (midTime >= startTime && midTime < endTime)
-					color = "yellow";
-        			
-				if (mid == idx1) {
-					// this implies that idx1 == idx2-1; so we just check idx2 and get out
-					midTime = changeArray[idx2*3];
-					if (midTime == endTime)
-						color = "red";
-					else if (midTime >= startTime && midTime < endTime)
-						color = "yellow";
-					break;
-				}
-        			
-				if (midTime > endTime) {
-					idx1 = mid;
-				} else {
-					idx2 = mid;
-				}
-			}
-		}
-
-		return color;
-	}
-
-	// check if a station's data is missing for a specific date
-	// the format of nodataArray is like: {missSec1_endDate, missSec1_startDate, missSec2_endDate, missSec2_startDate, ...}
-	function checkMissingData(theDate, nodataArray) {       	       	
-		var idx1 = 0;
-		var idx2 = nodataArray.length / 2 - 1;
-		// since javascript time is larger than java time by timeDiff, and the time stored in the station Array is java time, we should reduce javascript time by timeDiff to make it comparable with java time
-		var theTime = parseInt(Date.UTC(theDate.getFullYear(), theDate.getMonth(), theDate.getDate()) / DAY_MILLI)- timeDiff;
-		if (theTime > nodataArray[0] || theTime < nodataArray[nodataArray.length-1])
-			return true;
-		var lateTime;
-		var earlyTime;
-        	
-		if (idx1 == idx2) {
-			lateTime = nodataArray[idx1*2];
-			earlyTime = nodataArray[idx1*2 + 1];
-			if (theTime >= earlyTime && theTime <= lateTime) {
-				return true;
-			}
-		}
-
-		// since the missing data time sections are desendantly ordered by date, we use binary search to find the date
-		while (idx1 < idx2) { 
-			var mid = parseInt((idx1 + idx2) / 2);
-			lateTime = nodataArray[mid*2];
-			earlyTime = nodataArray[mid*2+1];
-        		
-			if (theTime >= earlyTime && theTime <= lateTime) {
-				return true;
-			} else {
-				if (mid == idx1) {
-					lateTime = nodataArray[idx2*2];
-					earlyTime = nodataArray[idx2*2+1];
-					if (theTime >= earlyTime && theTime <= lateTime)
-						return true;
-					break;
-				}       			
-				if (theTime < earlyTime) {
-					idx1 = mid;
-				} else {
-					idx2 = mid;
-				}
-			}
-		}
-		
-		return false;
-	}			
 	
 	// every station in the station array has 7 attributes: id, lat, long, hasColored(for the selected date), null(for output table), status change details, marker
+	var globalColorStr = "";
 	function overlayMarkers(){        	
 		var dateShowText = document.getElementById("dateText");	
 		var showDateStr = dateShowText.getAttribute("value");
-		var yellowcount = 0;
-		var redcount = 0;
 		var icon;
+		var mapBounds = map.getBounds();
+		var sw = mapBounds.getSouthWest();
+		var ne = mapBounds.getNorthEast();
 		if (showDateStr != "") {
-			map.clearOverlays();		    		
-			var theDate = getDateFromString(showDateStr);				 	
-			var mapBounds = map.getBounds();
-			var sw = mapBounds.getSouthWest();
-			var ne = mapBounds.getNorthEast();
-			var colorCount = 0;
-			for (var i=0; i<stationArray.length; i++) {
-				stationArray[i][3] = false;				
-				if (stationArray[i][1] <= sw.lat() || stationArray[i][1] >= ne.lat() || stationArray[i][2] <= sw.lng() || stationArray[i][2] >= ne.lng())
-					continue;
-				var color = "green";
-				if (stationArray[i][5] != null)
-					color = getMarkerColorForChanges(theDate, stationArray[i][5]);
-
-				if (color == "red")
-					redcount++;
-				else {
-					if (checkMissingData(theDate, stationArray[i][4])) {
-						if (color == "yellow")
-							color = "blue";
-						else
+			var colorStr = document.getElementById("form1:colorResult").getAttribute("value");
+			if (colorStr.length != 0) {
+				for (var i=0; i<stationArray.length; i++) {
+					stationArray[i][3] = false;									
+					if (stationArray[i][1] <= sw.lat() || stationArray[i][1] >= ne.lat() || stationArray[i][2] <= sw.lng() || stationArray[i][2] >= ne.lng())
+						continue;
+					var color = "green";
+					switch(colorStr.charAt(2 * i)) {
+						case '1':
+							color = "red";
+							break;
+						case '2':
+							color = "yellow";
+							break;
+						case '3':
 							color = "gray";
+							break;
+						case '4':
+							color = "blue";
+							break;
 					}
+			    	 		
+					if (stationArray[i][6] != null)
+						stationArray[i][6].getIcon().image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
+					else {
+						icon = new GIcon(baseIcon);	
+						icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";			
+						stationArray[i][6] = createTabsInfoMarker(new GPoint(stationArray[i][2], stationArray[i][1]) , null, icon, i, document.getElementById("stationSelect"));
+					}
+					map.addOverlay(stationArray[i][6]);
+					stationArray[i][3] = true;
 				}
-		    	 		
-				if (stationArray[i][6] != null)
-					stationArray[i][6].getIcon().image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
-				else {
-					icon = new GIcon(baseIcon);	
-					icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";			
-					stationArray[i][6] = createTabsInfoMarker(new GPoint(stationArray[i][2], stationArray[i][1]) , null, icon, i, document.getElementById("stationSelect"));
-				}
-				map.addOverlay(stationArray[i][6]);
-				stationArray[i][3] = true;
-				colorCount++;
+				globalColorStr = colorStr;
+				document.getElementById("form1:colorResult").setAttribute("value", "");
+			} else {    		
+				var theDate = getDateFromString(showDateStr);
+				document.getElementById("form1:regionLimit").setAttribute("value", sw.lat() + ',' + sw.lng() + ';' + ne.lat() + ',' + ne.lng());
+				//alert("about to clear overlays " + document.getElementById("form1:regionLimit").getAttribute("value"));
+				document.getElementById("form1:dateSelected").setAttribute("value", showDateStr);
+				document.getElementById("form1:calcColors").click();
 			}
 		}       
 	}
@@ -1011,48 +907,43 @@
 	function onMapMove() {
 		var dateShowText = document.getElementById("dateText");	
 		var showDateStr = dateShowText.getAttribute("value");
-		var yellowcount = 0;
-		var redcount = 0;
 		var icon;
-		if (showDateStr != "") {  		
-			var theDate = getDateFromString(showDateStr); 	
-			var mapBounds = map.getBounds();
-			var sw = mapBounds.getSouthWest();
-			var ne = mapBounds.getNorthEast();
-			var colorCount = 0;
-			//alert("the date : " + Date.UTC(theDate.getFullYear(), theDate.getMonth(), theDate.getDate()) + "; timeDiff:" + timeDiff);
-			for (var i=0; i<stationArray.length; i++) {									
-				if (stationArray[i][1] <= sw.lat() || stationArray[i][1] >= ne.lat() || stationArray[i][2] <= sw.lng() || stationArray[i][2] >= ne.lng())
-					continue;
-				if (stationArray[i][3] == true)
-					continue;
-				var color = "green";
-				if (stationArray[i][5] != null)
-					color = getMarkerColorForChanges(theDate, stationArray[i][5]);
-		    	 		
-				if (color == "red")
-					redcount++;
-				else {
-					if (checkMissingData(theDate, stationArray[i][4])) {
-						if (color == "yellow")
-							color = "blue";
-						else
+		var mapBounds = map.getBounds();
+		var sw = mapBounds.getSouthWest();
+		var ne = mapBounds.getNorthEast();
+		if (showDateStr != "") {
+			if (globalColorStr.length != 0) {
+				for (var i=0; i<stationArray.length; i++) {					
+					if (stationArray[i][3] || stationArray[i][1] <= sw.lat() || stationArray[i][1] >= ne.lat() || stationArray[i][2] <= sw.lng() || stationArray[i][2] >= ne.lng())
+						continue;
+					var color = "green";
+					switch(globalColorStr.charAt(2 * i)) {
+						case '1':
+							color = "red";
+							break;
+						case '2':
+							color = "yellow";
+							break;
+						case '3':
 							color = "gray";
+							break;
+						case '4':
+							color = "blue";
+							break;
 					}
+			    	 		
+					if (stationArray[i][6] != null)
+						stationArray[i][6].getIcon().image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
+					else {
+						icon = new GIcon(baseIcon);	
+						icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";			
+						stationArray[i][6] = createTabsInfoMarker(new GPoint(stationArray[i][2], stationArray[i][1]) , null, icon, i, document.getElementById("stationSelect"));
+					}
+					map.addOverlay(stationArray[i][6]);
+					stationArray[i][3] = true;
 				}
-		    	 		
-				if (stationArray[i][6] != null)
-					stationArray[i][6].getIcon().image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
-				else {
-					icon = new GIcon(baseIcon);	
-					icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";			
-					stationArray[i][6] = createTabsInfoMarker(new GPoint(stationArray[i][2], stationArray[i][1]) , null, icon, i, document.getElementById("stationSelect"));
-				}
-				map.addOverlay(stationArray[i][6]);
-				stationArray[i][3] = true;
-				colorCount++;
-			}	
-		}    	
+			}
+		}
 	}
 
 	function createMarker(networkName, name, lon, lat, icon) {
@@ -1063,7 +954,33 @@
 			marker.openInfoWindowHtml(html);});
 		return marker;
 	}
-	//overlayMarkers();
+
+	YAHOO.example.calendar.cal1=new YAHOO.widget.Calendar("cal1","cal1Container");
+	YAHOO.example.calendar.cal1.selectEvent.subscribe(myShowDateHandler,YAHOO.example.calendar.cal1, true);
+	YAHOO.example.calendar.cal1.Style.CSS_CELL_TODAY = null;
+	YAHOO.example.calendar.cal1.render();
+		
+	slider = YAHOO.widget.Slider.getHorizSlider("slider-bg", "slider-thumb", 0, slider_range, 1); 
+	slider.subscribe("change", onSlideChange);
+	slider.subscribe("slideEnd", onSlideEnd);
+	if (document.getElementById("form1:dateSelected") == null || document.getElementById("form1:dateSelected").getAttribute("value").length == 0) {
+		// set the date to 18 days ago, the latest date that we get data for all stations
+		var str = document.getElementById("form1:dataLatestDate").getAttribute("value");
+		var tmpDate = getDateFromString(str);
+		document.getElementById("dateText").setAttribute("value", "");
+		YAHOO.example.calendar.cal1.setYear(tmpDate.getFullYear());
+		YAHOO.example.calendar.cal1.setMonth(tmpDate.getMonth());
+		YAHOO.example.calendar.cal1.select(tmpDate);
+		YAHOO.example.calendar.cal1.render();
+	} else {
+		var str = document.getElementById("form1:dateSelected").getAttribute("value");
+		var tmpDate = getDateFromString(str);
+		document.getElementById("dateText").setAttribute("value", "");
+		YAHOO.example.calendar.cal1.setYear(tmpDate.getFullYear());
+		YAHOO.example.calendar.cal1.setMonth(tmpDate.getMonth());
+		YAHOO.example.calendar.cal1.select(tmpDate);
+		YAHOO.example.calendar.cal1.render();
+	}
 
 	</script>
 	<p><font face="Verdana" size="2">More information about California Real Time Network (CRTN) is available at	<a href="http://sopac.ucsd.edu/projects/realtime/">SOPAC Web Page</a></font></p>

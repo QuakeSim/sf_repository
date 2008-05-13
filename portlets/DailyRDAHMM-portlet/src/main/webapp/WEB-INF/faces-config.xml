@@ -12,6 +12,20 @@
 		<managed-bean-class>org.vlab.sunjsf.blank.HelloWorldBacking</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>dailyRdahmmResult</managed-bean-name>
+		<managed-bean-class>cgl.webservices.DailyRdahmmResultsBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>xmlResPath</property-name>
+			<value>/home/gaoxm/projects/test/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/DailyRDAHMM-portlet/station-status-change-rss.xml</value>
+		</managed-property>
+		<managed-property>
+			<property-name>xmlResURL</property-name>
+			<value>http://gf13.ucs.indiana.edu:8080//rdahmmexec/station-status-change-rss.xml</value>
+		</managed-property>
+	</managed-bean>
 	
 	<!-- navigation rules for helloWorld.jsp -->
 	<navigation-rule>
