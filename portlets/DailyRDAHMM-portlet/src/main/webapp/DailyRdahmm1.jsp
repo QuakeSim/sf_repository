@@ -21,7 +21,7 @@
 
 <html>
   <head>
-  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAlW-VacciIjziyRXAuwNEPRRIzJT_coxGrJAin4PAyr5SOc_NDxQ9RiC4mmJj_BHI6uyRvudBgZ7wNw"
+  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=Daily.RDAHMM.Google.Key"
       type="text/javascript"></script>
   </head>
   <body>

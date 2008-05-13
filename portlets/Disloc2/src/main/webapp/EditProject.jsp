@@ -42,7 +42,7 @@ mapcenter_y = center_xy[1];
 	href='<%= request.getContextPath() + "/stylesheet.css" %>'> 
  
 <title>Edit Project</title>
-    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBRxYpIIOz9ynlSKjbx-4JMuN5JjrhR5gSOcKdieYppOZ4_yzZc_Ti15qw"
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here"
       type="text/javascript"></script>
 </head> 
 

@@ -4,7 +4,7 @@
 	 <!--==================================================-->
 	 <!-- These need to be edited by the deployer -->
 	 <!--==================================================-->
-	 <portal.server.ip>156.56.104.143</portal.server.ip>
+	 <portal.server.ip>156.56.104.161</portal.server.ip>
 	 <host.base.url>http://${portal.server.ip}:8080/</host.base.url>
 
 	 <!--==================================================-->
@@ -26,7 +26,7 @@
 	 <tomcat.bin.perm>755</tomcat.bin.perm>
 	 <tomcat.version>apache-tomcat-5.5.20</tomcat.version>
 	 <yui.version>yui_0.12.2</yui.version>
-    <catalina.home>/${env.HOME}/QuakeSim2/portal_deploy/${tomcat.version}/</catalina.home>
+    <catalina.home>${env.HOME}/QuakeSim2/portal_deploy/${tomcat.version}/</catalina.home>
     <tomcat.base.dir>${env.HOME}/QuakeSim2/portal_deploy/${tomcat.version}/</tomcat.base.dir>
 	 <gridsphere.version>gridsphere-2.1.4</gridsphere.version>
 	 
@@ -97,11 +97,11 @@
     
     <!--These are the portlets.  Add new ones here. -->
     <module>portlets/DailyRDAHMM-portlet</module>
-    <module>portlets/Disloc-portlet</module>
+	 <module>portlets/Disloc-portlet</module>
     <module>portlets/GeoFESTGrid-portlet</module>
     <module>portlets/NewMeshGen-portlet</module>
     <module>portlets/RDAHMM-portlet</module>
-    <module>portlets/RealTimeRDAHMM-portlet</module>
+    <module>portlets/RealTimeRdahmm-portlet</module>
     <module>portlets/STFILTER-portlet</module>
     <module>portlets/Simplex-portlet</module>
     <module>portlets/StationMonitor-portlet</module>

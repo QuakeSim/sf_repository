@@ -14,7 +14,7 @@
 %>
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <script src="http://maps.google.com/maps?file=api&v=1&key=ABQIAAAA68__CB1RSwlTPrJDO7qiqRTRVqf-hKjgLTyRqRVRweQII5QY0xSosJWFNpclIRRupHYUhWMGsBGrRQ" type="text/javascript"></script><script type="text/javascript">
+    <script src="http://maps.google.com/maps?file=api&v=1&key=put.google.map.key.here" type="text/javascript"></script><script type="text/javascript">
 
       //<![CDATA[
       //for gf8:7070/ajax ABQIAAAA68__CB1RSwlTPrJDO7qiqRTy5gaO9GNLTqqmMNUThvEgzxgQPxQtk3Ws9HVeiuwtwLmeYzA9VhjNiQ

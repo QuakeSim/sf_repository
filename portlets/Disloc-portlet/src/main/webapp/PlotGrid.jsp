@@ -8,7 +8,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">  <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <title>Google Maps Example</title>
- <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBQozjQdf4FEuMBqpopduISAOADS4xTilRYX9d1ZU0uvBJwyY4gerC4Gog"
+ <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here"
       type="text/javascript"></script>
   <script src="http://gf7.ucs.indiana.edu:8080/Disloc-portlet/egeoxml.js" type="text/javascript"></script>
   </head>

@@ -7,7 +7,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" 
 xmlns:v="urn:schemas-microsoft-com:vml">
   <head>
-    <script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=ABQIAAAAKcOFua2izv3xh_wg-gvdExRh1JQEJS7hgeRDDBK9HlFLesVumhSaPjYigtcpAWT943Ea8LX9vszTgw"
+    <script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=put.google.map.key.here"
       type="text/javascript"></script>
 
 
