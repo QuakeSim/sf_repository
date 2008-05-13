@@ -16,7 +16,7 @@
   <%
 	  DislocBean dislocBean=(DislocBean)session.getAttribute("DislocBean2");
 	  String fileName=dislocBean.getKmlProjectFile();
-	  dislocBean.setCodeName("Disloc");
+	  dislocBean.setCodeName("Disloc2");
 	  dislocBean.setContextBasePath("/WebServices/WEB-INF/Descriptors/users/");
 
   %>
