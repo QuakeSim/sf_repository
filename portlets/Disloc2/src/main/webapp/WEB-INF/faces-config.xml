@@ -8,7 +8,7 @@
 
 	<!-- managed beans of the simple hello world app -->
 	<managed-bean>
-		<managed-bean-name>DislocBean</managed-bean-name>
+		<managed-bean-name>DislocBean2</managed-bean-name>
 		<managed-bean-class>cgl.quakesim.disloc.DislocBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 

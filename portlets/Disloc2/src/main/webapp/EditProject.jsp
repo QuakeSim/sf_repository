@@ -301,8 +301,8 @@ function getScrolling() {
 <f:view> 
 	<h:outputText styleClass="header2" value="Project Input"/> 
 	<h:outputText id="message" value=""/>
-	<h:inputHidden id="faultKmlUrl" value="#{DislocBean.faultKmlUrl}"/>
-	<h:inputHidden id="obsvKmlUrl" value="#{DislocBean.obsvKmlUrl}"/>
+	<h:inputHidden id="faultKmlUrl" value="#{DislocBean2.faultKmlUrl}"/>
+	<h:inputHidden id="obsvKmlUrl" value="#{DislocBean2.obsvKmlUrl}"/>
         <h:outputText escape="false" 
 					  value="<p>Create your geometry out of observation points and faults.  
                         <br/> The project origin 
@@ -314,15 +314,15 @@ function getScrolling() {
 			<h:panelGroup id="pg1"> 
  
 				<h:outputFormat id="stuff1" escape="false" 
-					value="<b>Project Name: #{DislocBean.projectName} </b><br>" /> 
+					value="<b>Project Name: #{DislocBean2.projectName} </b><br>" /> 
 				<h:outputFormat id="stuffe3io4" escape="false" 
-					value="<b>Project Origin (lat/lon):</b> (#{DislocBean.currentParams.originLat}, 
-											        #{DislocBean.currentParams.originLon}) <br>" /> 
+					value="<b>Project Origin (lat/lon):</b> (#{DislocBean2.currentParams.originLat}, 
+											        #{DislocBean2.currentParams.originLon}) <br>" /> 
 				<h:outputFormat id="stufw3f1" escape="false" 
-					value="<b>Observation Style: #{DislocBean.currentParams.observationPointStyle} </b><br>" /> 
+					value="<b>Observation Style: #{DislocBean2.currentParams.observationPointStyle} </b><br>" /> 
  
 				<h:selectOneRadio layout="pageDirection" id="subscriptions" 
-					value="#{DislocBean.projectSelectionCode}"> 
+					value="#{DislocBean2.projectSelectionCode}"> 
 				<f:selectItem id="item0w3" 
 						itemLabel="Set Observation Style: Choose between grid and scatter points." 
 						itemValue="ChooseObsvStyleForm"/> 
@@ -343,18 +343,18 @@ function getScrolling() {
 						itemValue="ShowMap" />
 				</h:selectOneRadio> 
 				<h:commandButton id="button1" value="Make Selection" 
-					actionListener="#{DislocBean.toggleProjectSelection}"> 
+					actionListener="#{DislocBean2.toggleProjectSelection}"> 
 				</h:commandButton> 
 			</h:panelGroup> 
 		</h:form> 
 		
 		<h:panelGroup id="lck0ere93ks"
-					rendered="#{DislocBean.renderChooseObsvStyleForm}">
+					rendered="#{DislocBean2.renderChooseObsvStyleForm}">
 		      <h:form id="obsvStyleForm">
                 	<h:outputText id="clrr33asz3" escape="false"
 					    value="<b>Select Sites:</b>Click to choose scatter point."/>
 					  <h:selectOneRadio layout="pageDirection" id="ere34ionssss" 
-							value="#{DislocBean.obsvStyleSelectionCode}"> 
+							value="#{DislocBean2.obsvStyleSelectionCode}"> 
 							<f:selectItem id="item021" 
 											  itemLabel="Rectangular grid of observation points" 
 											  itemValue="GridStyle" /> 
@@ -363,12 +363,12 @@ function getScrolling() {
 								itemValue="ScatterStyle" /> 
 					  </h:selectOneRadio> 
 					  <h:commandButton id="chooseAStyle" value="Choose Style"
-						 		actionListener="#{DislocBean.toggleSetObsvStyle}"/>
+						 		actionListener="#{DislocBean2.toggleSetObsvStyle}"/>
 					 </h:form>
 		        </h:panelGroup>
 
 			<h:panelGroup id="lck093ks"
-					rendered="#{DislocBean.renderMap}">
+					rendered="#{DislocBean2.renderMap}">
 					 <h:form id="obsvGPSMap">
                 <h:outputText id="clrlc093" escape="false"
 					    value="<b>Select Sites:</b>Click to choose scatter point."/>
@@ -380,17 +380,17 @@ function getScrolling() {
                       </h:panelGroup>
                       <h:panelGroup id="mapncrap2">
 							<h:panelGrid id="dfjdlkj" columns="2" 
-							   rendered="#{empty DislocBean.usesGridPoints
-											 || !DislocBean.usesGridPoints}">
+							   rendered="#{empty DislocBean2.usesGridPoints
+											 || !DislocBean2.usesGridPoints}">
 						 <h:outputText id="dkljr3rf" value="Latitude:"/>
-						 <h:inputText id="stationLat" value="#{DislocBean.gpsStationLat}"/>
+						 <h:inputText id="stationLat" value="#{DislocBean2.gpsStationLat}"/>
 						 <h:outputText id="dkljfer4" value="Longitude:"/>
-						 <h:inputText id="stationLon" value="#{DislocBean.gpsStationLon}"/>
+						 <h:inputText id="stationLon" value="#{DislocBean2.gpsStationLon}"/>
 						 <h:commandButton id="addGPSObsv" value="Add Observation Point"
-						 		actionListener="#{DislocBean.toggleAddPointObsvForProject}"/>
+						 		actionListener="#{DislocBean2.toggleAddPointObsvForProject}"/>
 
 						 <h:commandButton id="closeMap" value="Close Map"
-						 		actionListener="#{DislocBean.toggleCloseMap}"/>
+						 		actionListener="#{DislocBean2.toggleCloseMap}"/>
 								</h:panelGrid>
 						   </h:panelGroup>
 							</h:panelGrid>
@@ -398,7 +398,7 @@ function getScrolling() {
 			</h:panelGroup>
  
 			<h:panelGroup id="stuff4">
-	          	   <h:form id="obsvform" rendered="#{DislocBean.renderDislocGridParamsForm}"> 
+	          	   <h:form id="obsvform" rendered="#{DislocBean2.renderDislocGridParamsForm}"> 
 				<h:panelGrid id="ObsvTable" columns="2" footerClass="subtitle" 
 					headerClass="subtitlebig" styleClass="medium" 
 					columnClasses="subtitle,medium"> 
@@ -411,29 +411,29 @@ function getScrolling() {
  					<h:outputText  id="stuff223" value="Project Origin Lat:" /> 
 					<h:panelGroup  id="stuff543"> 
 						<h:inputText id="origin_latlieew" 
-							value="#{DislocBean.currentParams.originLat}" required="true" /> 
+							value="#{DislocBean2.currentParams.originLat}" required="true" /> 
 					</h:panelGroup> 
 
  					<h:outputText  id="stuff2434" value="Project Origin Lon:" /> 
 					<h:panelGroup  id="stuff24sx5"> 
 						<h:inputText id="origin_lonlkd" 
-							value="#{DislocBean.currentParams.originLon}" required="true" /> 
+							value="#{DislocBean2.currentParams.originLon}" required="true" /> 
 					</h:panelGroup> 
 					
  					<h:outputText  id="stuf334" value="Observation Style:" /> 
 					<h:panelGroup>
 					<h:outputText id="stylejkrejonlkd" 
-					              value="#{DislocBean.currentParams.observationPointStyle}"/>
+					              value="#{DislocBean2.currentParams.observationPointStyle}"/>
 					</h:panelGroup>	      
           			</h:panelGrid>
 
-				<h:panelGrid id="erep912e3" rendered="#{!DislocBean.usesGridPoints}">
+				<h:panelGrid id="erep912e3" rendered="#{!DislocBean2.usesGridPoints}">
 					<f:facet name="header"> 
 						<h:outputFormat id="outputere2" escape="false" 
 							value="<b>Scatter-Style Observation Points </b>" /> 
 					</f:facet> 
-					<h:dataTable value="#{DislocBean.myPointObservationList}"
-									 binding="#{DislocBean.myScatterPointsTable}"
+					<h:dataTable value="#{DislocBean2.myPointObservationList}"
+									 binding="#{DislocBean2.myScatterPointsTable}"
 									 var="xypoints"
 									 id="xypointsq3u">
  						<h:column>
@@ -454,7 +454,7 @@ function getScrolling() {
 					</h:dataTable>
             </h:panelGrid>
 
-				<h:panelGrid id="eiurojd93" columns="2" rendered="#{DislocBean.usesGridPoints}">
+				<h:panelGrid id="eiurojd93" columns="2" rendered="#{DislocBean2.usesGridPoints}">
 					<f:facet name="header"> 
 						<h:outputFormat id="outputere2" escape="false" 
 							value="<b>Define Grid of Observation Points </b>" /> 
@@ -463,46 +463,46 @@ function getScrolling() {
  					<h:outputText  id="stuff2" value="Grid Minimum X Value:" /> 
 					<h:panelGroup  id="stuff5"> 
 						<h:inputText id="minx" 
-							value="#{DislocBean.currentParams.gridMinXValue}" required="true" /> 
+							value="#{DislocBean2.currentParams.gridMinXValue}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff3" value="X Spacing:" /> 
 					<h:panelGroup  id="stuff6"> 
 						<h:inputText id="xspacing" 
-							value="#{DislocBean.currentParams.gridXSpacing}" required="true" /> 
+							value="#{DislocBean2.currentParams.gridXSpacing}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff7" value="X Iterations" /> 
 					<h:panelGroup  id="stuff8"> 
 						<h:inputText id="xiterations" 
-							value="#{DislocBean.currentParams.gridXIterations}" required="true" /> 
+							value="#{DislocBean2.currentParams.gridXIterations}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff9" value="Grid Minimum Y Value:" /> 
 					<h:panelGroup  id="stuff10"> 
 						<h:inputText id="miny" 
-							value="#{DislocBean.currentParams.gridMinYValue}" required="true" /> 
+							value="#{DislocBean2.currentParams.gridMinYValue}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff11" value="Y Spacing:" /> 
 					<h:panelGroup   id="pg2"> 
 						<h:inputText id="yspacing" 
-							value="#{DislocBean.currentParams.gridYSpacing}" required="true" /> 
+							value="#{DislocBean2.currentParams.gridYSpacing}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff12" value="Y Iterations" /> 
 					<h:panelGroup  id="stuff13"> 
 						<h:inputText id="yiterations" 
-							value="#{DislocBean.currentParams.gridYIterations}" required="true" /> 
+							value="#{DislocBean2.currentParams.gridYIterations}" required="true" /> 
 					</h:panelGroup> 
 				</h:panelGrid>
  
 					<h:commandButton id="addobservation" value="select" 
-						actionListener="#{DislocBean.toggleAddObservationsForProject}" /> 
+						actionListener="#{DislocBean2.toggleAddObservationsForProject}" /> 
 
 			</h:form> 
  
-			<h:form id="Faultform" rendered="#{DislocBean.renderCreateNewFaultForm}"> 
+			<h:form id="Faultform" rendered="#{DislocBean2.renderCreateNewFaultForm}"> 
 				<h:panelGrid id="FaultTable" columns="2" footerClass="subtitle" 
 					headerClass="subtitlebig" styleClass="medium" 
 					columnClasses="subtitle,medium"> 
@@ -515,42 +515,42 @@ function getScrolling() {
 					<h:outputText  id="stuff15" value="Fault Name:" /> 
 					<h:panelGroup  id="stuff16"> 
 						<h:inputText id="FaultName" 
-							value="#{DislocBean.currentFault.faultName}" required="true" /> 
+							value="#{DislocBean2.currentFault.faultName}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff17" value="Location X:" /> 
 					<h:panelGroup  id="stuff18"> 
 						<h:inputText id="FaultLocationX" 
-							value="#{DislocBean.currentFault.faultLocationX}" required="true" /> 
+							value="#{DislocBean2.currentFault.faultLocationX}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff19" value="Location Y:" /> 
 					<h:panelGroup  id="stuff20"> 
 						<h:inputText id="FaultLocationY" 
-							value="#{DislocBean.currentFault.faultLocationY}" required="true" /> 
+							value="#{DislocBean2.currentFault.faultLocationY}" required="true" /> 
 					</h:panelGroup> 
 
 					<h:outputText value="Fault Origin Latitude:" />
 			      <h:panelGroup>
-						<h:inputText id="faultLat" value="#{DislocBean.currentFault.faultLatStart}"
+						<h:inputText id="faultLat" value="#{DislocBean2.currentFault.faultLatStart}"
 										 required="true" />
 					</h:panelGroup>
 
 					<h:outputText value="Fault Origin Longitude" />
 					<h:panelGroup>
-					<h:inputText id="faultLon" value="#{DislocBean.currentFault.faultLonStart}"
+					<h:inputText id="faultLon" value="#{DislocBean2.currentFault.faultLonStart}"
 									 required="true" />
 					</h:panelGroup>
 
 					<h:outputText value="Fault End Latitude:" />
 			      <h:panelGroup>
-						<h:inputText id="faultLatendere" value="#{DislocBean.currentFault.faultLatEnd}"
+						<h:inputText id="faultLatendere" value="#{DislocBean2.currentFault.faultLatEnd}"
 										 required="true" />
 					</h:panelGroup>
 
 					<h:outputText value="Fault End Longitude" />
 					<h:panelGroup>
-					<h:inputText id="faultLonende3r" value="#{DislocBean.currentFault.faultLonEnd}"
+					<h:inputText id="faultLonende3r" value="#{DislocBean2.currentFault.faultLonEnd}"
 									 required="true" />
 					</h:panelGroup>
 
@@ -558,65 +558,65 @@ function getScrolling() {
 					<h:outputText  id="stuff21" value="Length:" /> 
 					<h:panelGroup  id="stuff22"> 
 						<h:inputText id="FaultLength" 
-							value="#{DislocBean.currentFault.faultLength}" required="true" /> 
+							value="#{DislocBean2.currentFault.faultLength}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff23" value="Width:" /> 
 					<h:panelGroup  id="stuff24"> 
 						<h:inputText id="FaultWidth" 
-							value="#{DislocBean.currentFault.faultWidth}" required="true" /> 
+							value="#{DislocBean2.currentFault.faultWidth}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff25" value="Depth:" /> 
 					<h:panelGroup  id="stuff26"> 
 						<h:inputText id="FaultDepth" 
-							value="#{DislocBean.currentFault.faultDepth}" required="true" /> 
+							value="#{DislocBean2.currentFault.faultDepth}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff27" value="Dip Angle:" /> 
 					<h:panelGroup  id="stuff28"> 
 						<h:inputText id="FaultDipAngle" 
-							value="#{DislocBean.currentFault.faultDipAngle}" required="true" /> 
+							value="#{DislocBean2.currentFault.faultDipAngle}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff29" value="Dip Slip:" /> 
 					<h:panelGroup  id="stuff30"> 
 						<h:inputText id="FaultSlip" 
-							value="#{DislocBean.currentFault.faultDipSlip}" required="true" /> 
+							value="#{DislocBean2.currentFault.faultDipSlip}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff31" value="Strike Angle:" /> 
 					<h:panelGroup  id="stuff32"> 
 						<h:inputText id="FaultStrikeAngle" 
-							value="#{DislocBean.currentFault.faultStrikeAngle}" required="true" /> 
+							value="#{DislocBean2.currentFault.faultStrikeAngle}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff33" value="Strike Slip:" /> 
 					<h:panelGroup  id="stuff35"> 
 						<h:inputText id="FaultStrikeSlip" 
-							value="#{DislocBean.currentFault.faultStrikeSlip}" required="true" /> 
+							value="#{DislocBean2.currentFault.faultStrikeSlip}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff34" value="Tensile Slip:" /> 
 					<h:panelGroup  id="stuff36"> 
 						<h:inputText id="FaultTensileSlip" 
-							value="#{DislocBean.currentFault.faultTensileSlip}" required="true" /> 
+							value="#{DislocBean2.currentFault.faultTensileSlip}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff37" value="Lame Lambda:" /> 
 					<h:panelGroup  id="stuff38"> 
 						<h:inputText id="LameLambda" 
-							value="#{DislocBean.currentFault.faultLameLambda}" required="true" /> 
+							value="#{DislocBean2.currentFault.faultLameLambda}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:outputText  id="stuff39" value="Lame Mu:" /> 
 					<h:panelGroup  id="stuff40"> 
 						<h:inputText id="LameMu" 
-							value="#{DislocBean.currentFault.faultLameMu}" required="true" /> 
+							value="#{DislocBean2.currentFault.faultLameMu}" required="true" /> 
 					</h:panelGroup> 
  
 					<h:commandButton id="addfault" value="Set Values" 
-						actionListener="#{DislocBean.toggleAddFaultForProject}" /> 
+						actionListener="#{DislocBean2.toggleAddFaultForProject}" /> 
 				      <f:verbatim>
 				         <input type="button" name="Update"
 					 	value="Do Math"
@@ -632,7 +632,7 @@ function getScrolling() {
 			</h:form> 
  
 			<h:form id="faultselection" 
-				rendered="#{DislocBean.renderAddFaultSelectionForm}"> 
+				rendered="#{DislocBean2.renderAddFaultSelectionForm}"> 
 				<h:panelGrid id="AddFaultSelection" columns="1" 
 					footerClass="subtitle" headerClass="subtitlebig" 
 					styleClass="medium" columnClasses="subtitle,medium"> 
@@ -650,7 +650,7 @@ function getScrolling() {
  
 					<h:panelGroup id="stuff44"> 
 						<h:selectOneRadio layout="pageDirection" id="subscriptionssss" 
-							value="#{DislocBean.faultSelectionCode}"> 
+							value="#{DislocBean2.faultSelectionCode}"> 
 							<f:selectItem id="item01" itemLabel="Search by fault name." 
 								itemValue="SearchByFaultName" /> 
 							<f:selectItem id="item02" 
@@ -662,13 +662,13 @@ function getScrolling() {
 								itemValue="ViewAllFaults" /> 
 						</h:selectOneRadio> 
 						<h:commandButton id="button122" value="Make Selection" 
-							actionListener="#{DislocBean.toggleFaultSelection}" /> 
+							actionListener="#{DislocBean2.toggleFaultSelection}" /> 
 					</h:panelGroup> 
 				</h:panelGrid> 
 			</h:form> 
  
 			<h:form id="faultsearchByNameform" 
-				rendered="#{DislocBean.renderSearchByFaultNameForm}"> 
+				rendered="#{DislocBean2.renderSearchByFaultNameForm}"> 
 				<h:panelGrid id="FaultSearchName" columns="1" footerClass="subtitle" 
 					headerClass="subtitlebig" styleClass="medium" 
 					columnClasses="subtitle,medium"> 
@@ -684,20 +684,20 @@ function getScrolling() {
 						</h:panelGroup> 
  
 						<h:panelGroup  id="stuff49"> 
-							<h:inputText id="Fault_Name" value="#{DislocBean.forSearchStr}" 
+							<h:inputText id="Fault_Name" value="#{DislocBean2.forSearchStr}" 
 								required="true" /> 
 							<h:message for="Fault_Name" showDetail="true" showSummary="true" 
 							     id="stuff50" 
 								errorStyle="color: red" /> 
 							<h:commandButton  id="stuff51" value="Query" 
-								actionListener="#{DislocBean.toggleFaultSearchByName}" /> 
+								actionListener="#{DislocBean2.toggleFaultSearchByName}" /> 
 						</h:panelGroup> 
 					</h:panelGroup> 
 				</h:panelGrid> 
 			</h:form> 
  
 			<h:form id="faultlatlonsearchform" 
-				rendered="#{DislocBean.renderSearchByLatLonForm}"> 
+				rendered="#{DislocBean2.renderSearchByLatLonForm}"> 
 				<h:panelGrid id="FaultLatLonSearch" columns="1" 
 					footerClass="subtitle" headerClass="subtitlebig" 
 					styleClass="medium" columnClasses="subtitle,medium"> 
@@ -711,7 +711,7 @@ function getScrolling() {
 						<h:panelGroup  id="stuff56"> 
 							<h:inputText id="StartingLatitude" 
 							    id="stuff57" 
-								value="#{DislocBean.faultLatStart}" required="true" /> 
+								value="#{DislocBean2.faultLatStart}" required="true" /> 
 							<h:message for="StartingLatitude" showDetail="true" 
 							    id="stuff58" 
 								showSummary="true" errorStyle="color: red" /> 
@@ -719,7 +719,7 @@ function getScrolling() {
  
 						<h:outputText  id="stuff59" value="Ending Latitude: " /> 
 						<h:panelGroup  id="stuff60"> 
-							<h:inputText id="EndingLatitude" value="#{DislocBean.faultLatEnd}" 
+							<h:inputText id="EndingLatitude" value="#{DislocBean2.faultLatEnd}" 
 								required="true" /> 
 							<h:message for="EndingLatitude" showDetail="true" 
 							     id="stuff61" 
@@ -729,14 +729,14 @@ function getScrolling() {
 						<h:panelGroup  id="stuff63"> 
 							<h:inputText id="StartingLongitude" 
 							     id="stuff64" 
-								value="#{DislocBean.faultLonStart}" required="true" /> 
+								value="#{DislocBean2.faultLonStart}" required="true" /> 
 							<h:message for="StartingLongitude" showDetail="true" 
 							     id="stuff65" 
 								showSummary="true" errorStyle="color: red" /> 
 						</h:panelGroup> 
 						<h:outputText value="Ending Longitude: "   id="stuff66"/> 
 						<h:panelGroup   id="stuff67"> 
-							<h:inputText id="EndingLongitude" value="#{DislocBean.faultLonEnd}" 
+							<h:inputText id="EndingLongitude" value="#{DislocBean2.faultLonEnd}" 
 								required="true" /> 
 							<h:message for="EndingLongitude" showDetail="true" 
 							    id="stuff68" 
@@ -746,14 +746,14 @@ function getScrolling() {
  
 							<h:commandButton value="Query" 
 							     id="stuff69" 
-								actionListener="#{DislocBean.toggleFaultSearchByLonLat}" /> 
+								actionListener="#{DislocBean2.toggleFaultSearchByLonLat}" /> 
 						</h:panelGroup> 
 					</h:panelGrid> 
 				</h:panelGrid> 
 			</h:form> 
  
 			<h:form id="FaultAuthorSearchform" 
-				rendered="#{DislocBean.renderSearchByAuthorForm}"> 
+				rendered="#{DislocBean2.renderSearchByAuthorForm}"> 
 				<h:panelGrid id="FaultAuthorSearch" columns="1" 
 					footerClass="subtitle" headerClass="subtitlebig" 
 					styleClass="medium" columnClasses="subtitle,medium"> 
@@ -769,23 +769,23 @@ function getScrolling() {
  
 						<h:panelGroup  id="pg5"> 
 							<h:inputText id="FaultAuthorForSearch" 
-								value="#{DislocBean.forSearchStr}" required="true" /> 
+								value="#{DislocBean2.forSearchStr}" required="true" /> 
 							<h:message for="FaultAuthorForSearch" showDetail="true" 
 							    id="stuff72" 
 								showSummary="true" errorStyle="color: red" /> 
 							<h:commandButton value="Query" 
 							    id="stuff73" 
-								actionListener="#{DislocBean.toggleFaultSearchByAuthor}" /> 
+								actionListener="#{DislocBean2.toggleFaultSearchByAuthor}" /> 
 						</h:panelGroup> 
 					</h:panelGroup> 
 				</h:panelGrid> 
 			</h:form> 
  
 			<h:form id="SelectFaultDBEntryForm" 
-				rendered="#{DislocBean.renderAddFaultFromDBForm}"> 
-				<h:dataTable value="#{DislocBean.myFaultDBEntryList}" var="myentry1" 
+				rendered="#{DislocBean2.renderAddFaultFromDBForm}"> 
+				<h:dataTable value="#{DislocBean2.myFaultDBEntryList}" var="myentry1" 
 				    id="stuff74" 
-					binding="#{DislocBean.myFaultDataTable}"> 
+					binding="#{DislocBean2.myFaultDataTable}"> 
  
 					<h:column  id="pg6"> 
 						<f:facet name="header"> 
@@ -793,7 +793,7 @@ function getScrolling() {
 						</f:facet> 
 						<h:selectOneRadio layout="pageDirection" 
 						    id="stuff75" 
-							valueChangeListener="#{DislocBean.handleFaultsRadioValueChange}" 
+							valueChangeListener="#{DislocBean2.handleFaultsRadioValueChange}" 
 							onchange="dataTableSelectOneRadio(this)" 
 							onclick="dataTableSelectOneRadio(this)"> 
 							<f:selectItems value="#{myentry1.faultName}" /> 
@@ -825,30 +825,30 @@ function getScrolling() {
 							<h:outputText escape="false" value="<b>Action</b>" /> 
 						</f:facet> 
 						<h:commandLink id="stuff76" 
-							actionListener="#{DislocBean.handleFaultEntryEdit}"> 
+							actionListener="#{DislocBean2.handleFaultEntryEdit}"> 
 							<h:outputText value="Get" /> 
 						</h:commandLink> 
 					</h:column> 
 				</h:dataTable> 
 				<h:commandButton id="SelectFaultDBEntry" value="SelectFaultDBEntry" 
-					actionListener="#{DislocBean.toggleSelectFaultDBEntry}" /> 
+					actionListener="#{DislocBean2.toggleSelectFaultDBEntry}" /> 
 			</h:form> 
  
 		</h:panelGroup> 
 	</h:panelGrid> 
  
 	<h:panelGroup  id="stuff77" 
-		rendered="#{!empty DislocBean.myFaultEntryForProjectList 
-					   || !empty DislocBean.myObsvEntryForProjectList}"> 
+		rendered="#{!empty DislocBean2.myFaultEntryForProjectList 
+					   || !empty DislocBean2.myObsvEntryForProjectList}"> 
  
 	<h:outputText  id="stuff78" styleClass="header2" value="Current Project Components"
-						rendered="#{!empty DislocBean.myFaultEntryForProjectList 
-					   || !empty DislocBean.myObsvEntryForProjectList}"/> 
+						rendered="#{!empty DislocBean2.myFaultEntryForProjectList 
+					   || !empty DislocBean2.myObsvEntryForProjectList}"/> 
  
 	<h:panelGrid id="ProjectComponentList" columns="2" border="1" 
 			columnClasses="alignTop, alignTop"> 
  
-		<h:panelGroup id="stuff79" rendered="#{!empty DislocBean.myFaultEntryForProjectList}"> 
+		<h:panelGroup id="stuff79" rendered="#{!empty DislocBean2.myFaultEntryForProjectList}"> 
 			<h:form id="UpdateSelectFaultsForm">
 				<h:panelGrid columns="1" border="1"  id="stuff80"> 
 					<h:panelGroup  id="lid2"> 
@@ -857,7 +857,7 @@ function getScrolling() {
 						</h:panelGrid> 
  
 						<h:dataTable border="1" id="stuff81" 
-							value="#{DislocBean.myFaultEntryForProjectList}" var="myentry3"> 
+							value="#{DislocBean2.myFaultEntryForProjectList}" var="myentry3"> 
 							<h:column  id="lid4"> 
 								<f:facet name="header"> 
 									<h:outputText  id="lid5" escape="false" value="<b>Name</b>"> 
@@ -891,12 +891,12 @@ function getScrolling() {
  
 				</h:panelGrid> 
 				<h:commandButton id="SelectFault4proj" value="UpdateFault" 
-					actionListener="#{DislocBean.toggleUpdateFaultProjectEntry}" /> 
+					actionListener="#{DislocBean2.toggleUpdateFaultProjectEntry}" /> 
  
 			</h:form> 
  
 			<h:form id="UpdateSelectedParamsForm" 
-				rendered="#{!empty DislocBean.myObsvEntryForProjectList}"> 
+				rendered="#{!empty DislocBean2.myObsvEntryForProjectList}"> 
 				<h:panelGrid columns="1" border="1"  id="stuff84"> 
 					<h:panelGroup  id="lid9"> 
 						<h:panelGrid  id="stuff85" columns="1"> 
@@ -905,7 +905,7 @@ function getScrolling() {
 						</h:panelGrid> 
  
 						<h:dataTable border="1"  id="stuff87" 
-							value="#{DislocBean.myObsvEntryForProjectList}" var="myentry4"> 
+							value="#{DislocBean2.myObsvEntryForProjectList}" var="myentry4"> 
 							<h:column  id="lid110"> 
 								<f:facet name="header"> 
 									<h:outputText  id="lkj1" escape="false" value="<b>Name</b>"> 
@@ -938,14 +938,14 @@ function getScrolling() {
  
 				</h:panelGrid> 
 				<h:commandButton id="updateObsv" value="Update Observations" 
-					actionListener="#{DislocBean.toggleUpdateProjectObservations}" /> 
+					actionListener="#{DislocBean2.toggleUpdateProjectObservations}" /> 
  
 			</h:form> 
 		</h:panelGroup> 
  
 		<h:form id="RunDisloc"
-				rendered="#{!(empty DislocBean.myFaultEntryForProjectList) 
-							   && !(empty DislocBean.myObsvEntryForProjectList)}" > 
+				rendered="#{!(empty DislocBean2.myFaultEntryForProjectList) 
+							   && !(empty DislocBean2.myObsvEntryForProjectList)}" > 
 			<h:panelGrid columns="1"  
              id="stuff89" 
 				footerClass="subtitle" 
@@ -958,7 +958,7 @@ function getScrolling() {
 					value="Click the button below to run Disloc.<br><br>" /> 
  
 					<h:commandButton value="Run Disloc" 
-						action="#{DislocBean.runBlockingDislocJSF}" /> 
+						action="#{DislocBean2.runBlockingDislocJSF}" /> 
 			</h:panelGrid> 
 		</h:form> 
 	</h:panelGrid> 

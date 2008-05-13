@@ -55,8 +55,8 @@ function dataTableSelectOneRadio(radio) {
 			<h:outputText id="dosomework" escape="false"
 				value="You have the following archived disloc runs. Click the link to download the desired file to your desk top. To save directly to your desktop, click your mouse's right button over the link and select<br>" />
 
-  				<h:dataTable value="#{DislocBean.myArchivedDislocResultsList}" 
-								 binding="#{DislocBean.myProjectSummaryDataTable}"
+  				<h:dataTable value="#{DislocBean2.myArchivedDislocResultsList}" 
+								 binding="#{DislocBean2.myProjectSummaryDataTable}"
 								 var="summaryBean" 
 								 id="DislocOutputPanel" 
 								 border="1">
@@ -120,7 +120,7 @@ function dataTableSelectOneRadio(radio) {
 					</f:facet>
 						<h:panelGroup id="pgdelete">
 							<h:commandButton id="DeleteSummary" value="Delete"
-												  actionListener="#{DislocBean.toggleDeleteProjectSummary}"/>
+												  actionListener="#{DislocBean2.toggleDeleteProjectSummary}"/>
 						</h:panelGroup>
 
 				</h:column>					
