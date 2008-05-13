@@ -14,7 +14,7 @@
   </head>
   <body>
   <%
-	  DislocBean dislocBean=(DislocBean)session.getAttribute("DislocBean");
+	  DislocBean dislocBean=(DislocBean2)session.getAttribute("DislocBean2");
 	  String fileName=dislocBean.getKmlProjectFile();
 	  dislocBean.setCodeName("Disloc");
 	  dislocBean.setContextBasePath("/WebServices/WEB-INF/Descriptors/users/");
@@ -61,9 +61,9 @@
     <h:form id="elkrheh">
 	 <h:dataTable id="projectlistdfeer" 
 					  border="1"
-					  binding="#{DislocBean.myProjectSummaryDataTable}"
+					  binding="#{DislocBean2.myProjectSummaryDataTable}"
 					  var="summaryBean"
-					  value="#{DislocBean.myArchivedDislocResultsList}">
+					  value="#{DislocBean2.myArchivedDislocResultsList}">
 					<h:column>
 					    <f:facet name="header">
 					    <h:outputText  id="dlkjfe0" value="Project Name"/>
@@ -89,7 +89,7 @@
 					</f:facet>
 						<h:panelGroup id="pgselecerert">
 							<h:commandButton id="SelectProject" value="Plot"
-												  actionListener="#{DislocBean.togglePlotProject}"/>
+												  actionListener="#{DislocBean2.togglePlotProject}"/>
 						</h:panelGroup>
 				</h:column>					
 
