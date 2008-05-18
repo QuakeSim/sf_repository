@@ -26,6 +26,11 @@ import java.util.*;
 //Import stuff from db4o
 import com.db4o.*;
 
+//Fault DB interface
+import TestClient.Select.Select;
+import TestClient.Select.SelectService;
+import TestClient.Select.SelectServiceLocator;
+
 /**
  * Everything you need to set up and run RDAHMM.
  */
@@ -356,4 +361,78 @@ public class GenericProjectBean {
 		  }
 		  return objectList;
     }
+
+
+    protected List createFaultList(String getSegmentList,
+				    String getAuthorList,
+				    String getLatStartList,
+				    String getLatEndList,
+				    String getLonStartList,
+				    String getLonEndList,
+				    String getFaultList,
+				    String getInterpId) {
+
+	List faultSegmentNameList = QueryFaultsBySQL(getSegmentList);
+	List faultAuthorList = QueryFaultsBySQL(getAuthorList);
+	List faultLatStarts = QueryFaultsBySQL(getLatStartList);
+	List faultLatEnds = QueryFaultsBySQL(getLatEndList);
+	List faultLonStarts = QueryFaultsBySQL(getLonStartList);
+	List faultLonEnds = QueryFaultsBySQL(getLonEndList);
+	List tmp_faultNameList = QueryFaultsBySQL(getFaultList);
+	List tmp_interpIdList=QueryFaultsBySQL(getInterpId);
+	
+	List myFaultDBEntryList=new ArrayList();
+
+	for (int i = 0; i < tmp_faultNameList.size(); i++) {
+	    String tmp1 = tmp_faultNameList.get(i).toString();
+	    FaultDBEntry tmp_FaultDBEntry = new FaultDBEntry();
+	    tmp_FaultDBEntry.faultName = new SelectItem(tmp1 + "@"
+							+ faultSegmentNameList.get(i).toString(), tmp1);
+	    tmp_FaultDBEntry.faultAuthor = faultAuthorList.get(i).toString();
+	    tmp_FaultDBEntry.faultSegmentName = faultSegmentNameList.get(i)
+		.toString();
+	    tmp_FaultDBEntry.faultSegmentCoordinates = "("
+		+ faultLatStarts.get(i).toString() + ","
+		+ faultLatEnds.get(i).toString() + ")-("
+		+ faultLonStarts.get(i).toString() + ","
+		+ faultLonEnds.get(i).toString() + ")";
+	    tmp_FaultDBEntry.interpId=tmp_interpIdList.get(i).toString();
+
+	    myFaultDBEntryList.add(tmp_FaultDBEntry);
+	    
+	}
+	return myFaultDBEntryList;
+    }
+
+    public List QueryFaultsBySQL(String tmp_query_sql, 
+				 String faultDBServiceUrl) {
+	List tmp_list = new ArrayList();
+	try {
+	    
+	    String DB_RESPONSE_HEADER = "results of the query:";
+	    SelectService ss = new SelectServiceLocator();
+	    Select select = ss.getSelect(new URL(faultDBServiceUrl));
+	    
+	    // --------------------------------------------------
+	    // Make queries.
+	    // --------------------------------------------------
+	    String tmp_str = select.select(tmp_query_sql);
+	    tmp_str = tmp_str.substring(DB_RESPONSE_HEADER.length());
+	    StringTokenizer st1 = new StringTokenizer(tmp_str, "\n");
+	    // They begin with blank lines ?!
+	    st1.nextToken();
+	    st1.nextToken();
+	    tmp_list.clear();
+	    while (st1.hasMoreTokens()) {
+		String tmp1 = st1.nextToken().trim();
+		if (tmp1 == null || tmp1.equals("null"))
+		    tmp1 = "N/A";
+		tmp_list.add(tmp1);
+	    }
+	} catch (Exception ex) {
+	    ex.printStackTrace();
+	}
+	return tmp_list;
+    }
+    
 }
