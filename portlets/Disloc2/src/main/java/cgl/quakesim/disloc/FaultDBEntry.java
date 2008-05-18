@@ -8,6 +8,7 @@ public class FaultDBEntry {
 	String faultSegmentName="";
 	String faultAuthor="";
 	String faultSegmentCoordinates="";
+    String interpId;
 	
 	
 	public void setFaultName(SelectItem tmp_str) {
@@ -42,4 +43,11 @@ public class FaultDBEntry {
 		return faultSegmentCoordinates;
 	}		
 	
+    public String getInterpId() {
+	return interpId;
+    }
+    
+    public void setInterpId(String interpId) {
+	this.interpId=interpId;
+    }
 }

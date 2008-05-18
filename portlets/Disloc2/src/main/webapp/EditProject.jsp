@@ -820,6 +820,12 @@ function getScrolling() {
 						</f:facet> 
 						<h:outputText  id="liered1" value="#{myentry1.faultSegmentCoordinates}" /> 
 					</h:column> 
+					<h:column  id="ldkjrle93d"> 
+						<f:facet name="header"> 
+							<h:outputText escape="false" value="<b>InterpId</b>" /> 
+						</f:facet> 
+						<h:outputText  id="lie323291" value="#{myentry1.interpId}" /> 
+					</h:column> 
 					<h:column  id="lieraed1"> 
 						<f:facet name="header"> 
 							<h:outputText escape="false" value="<b>Action</b>" /> 

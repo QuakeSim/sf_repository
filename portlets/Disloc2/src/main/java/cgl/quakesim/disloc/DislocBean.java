@@ -21,8 +21,9 @@ import javax.portlet.PortletContext;
 import javax.servlet.ServletContext;
 
 import org.servogrid.genericproject.GenericSopacBean;
+import org.servogrid.genericproject.FaultDBEntry;
 
-import sun.misc.BASE64Encoder;
+//import sun.misc.BASE64Encoder;
 
 import TestClient.Select.Select;
 import TestClient.Select.SelectService;
@@ -108,9 +109,10 @@ public class DislocBean extends GenericSopacBean {
     List myObservationsForProjectList=new ArrayList();
     List myObsvEntryForProjectList=new ArrayList();
     List myArchivedDislocResultsList=new ArrayList();
-	 List myPointObservationList=new ArrayList();
+    List myPointObservationList=new ArrayList();
+    List myInterpIdList=new ArrayList();
 
-    HtmlDataTable myFaultDataTable, myProjectSummaryDataTable,myScatterPointsTable;
+    HtmlDataTable myFaultDataTable,myProjectSummaryDataTable,myScatterPointsTable;
     
     //Create the database
     ObjectContainer db=null;
@@ -393,13 +395,6 @@ public class DislocBean extends GenericSopacBean {
 		  end_x=start_x+xinterval*(xiterationsNumber-1);
 		  end_y=start_y+yinterval*(yiterationsNumber-1);
 		  
-// 		  System.out.println(start_x);
-// 		  System.out.println(start_y);
-// 		  System.out.println(end_x);
-// 		  System.out.println(end_y);
-// 		  System.out.println(xinterval);
-// 		  System.out.println(yinterval);
-		  
 		  //	kmlService.setGridLine("Grid Line", start_x, start_y, end_x, end_y, xinterval,yinterval);
 		  kmlService.setPointPlacemark("Icon Layer");
 		  //kmlService.setArrowPlacemark("Arrow Layer", "ff66a1cc", 2);
@@ -583,31 +578,25 @@ public class DislocBean extends GenericSopacBean {
 	    + input_str2
 	    + " and LonStart<="
 	    + input_str3 + " and LonEnd>=" + input_str4 + ";";
+
+	String getInterpId = "SELECT F.InterpId FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and LatStart>="
+	    + input_str1
+	    + " and LatEnd<="
+	    + input_str2
+	    + " and LonStart<="
+	    + input_str3 + " and LonEnd>=" + input_str4 + ";";
 	
 	myFaultDBEntryList.clear();
-	
-	List faultSegmentNameList = QueryFaultsBySQL(getSegmentList);
-	List faultAuthorList = QueryFaultsBySQL(getAuthorList);
-	List faultLatStarts = QueryFaultsBySQL(getLatStartList);
-	List faultLatEnds = QueryFaultsBySQL(getLatEndList);
-	List faultLonStarts = QueryFaultsBySQL(getLonStartList);
-	List faultLonEnds = QueryFaultsBySQL(getLonEndList);
-	List tmp_faultNameList = QueryFaultsBySQL(getFaultList);
-	for (int i = 0; i < tmp_faultNameList.size(); i++) {
-				String tmp1 = tmp_faultNameList.get(i).toString();
-				FaultDBEntry tmp_FaultDBEntry = new FaultDBEntry();
-				tmp_FaultDBEntry.faultName=new SelectItem(tmp1 + "@"
-																		+ faultSegmentNameList.get(i).toString(), tmp1);
-				tmp_FaultDBEntry.faultAuthor=faultAuthorList.get(i).toString();
-				tmp_FaultDBEntry.faultSegmentName = faultSegmentNameList.get(i)
-					 .toString();
-				tmp_FaultDBEntry.faultSegmentCoordinates = "("
-					 + faultLatStarts.get(i).toString() + ","
-					 + faultLatEnds.get(i).toString() + ")-("
-					 + faultLonStarts.get(i).toString() + ","
-					 + faultLonEnds.get(i).toString() + ")";
-				myFaultDBEntryList.add(tmp_FaultDBEntry);
-		  }		  
+	myFaultDBEntryList=createFaultList(getSegmentList,
+					   getAuthorList,
+					   getLatStartList,
+					   getLatEndList,
+					   getLonStartList,
+					   getLonEndList,
+					   getFaultList,
+					   getInterpId,
+					   faultDBServiceUrl);
+
     }
     
     /**
@@ -615,54 +604,42 @@ public class DislocBean extends GenericSopacBean {
      */
     public void QueryFaultsByAuthor(String input_str) {
 		  
-		  String getAuthorList = "SELECT R.Author1 FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
-				+ input_str + "%\';";
-		  String getFaultList = "SELECT F.FaultName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
-				+ input_str + "%\';";
-		  String getSegmentList = "SELECT F.SegmentName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
-				+ input_str + "%\';";
-		  String getLatStartList = "SELECT F.LatStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
-				+ input_str + "%\';";
-		  String getLatEndList = "SELECT F.LatEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
-				+ input_str + "%\';";
-		  String getLonStartList = "SELECT F.LonStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
-				+ input_str + "%\';";
-		  String getLonEndList = "SELECT F.LonEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
-				+ input_str + "%\';";
-		  
-		  myFaultDBEntryList.clear();
-		  
-		  List faultSegmentNameList = QueryFaultsBySQL(getSegmentList);
-		  List faultAuthorList = QueryFaultsBySQL(getAuthorList);
-		  List faultLatStarts = QueryFaultsBySQL(getLatStartList);
-		  List faultLatEnds = QueryFaultsBySQL(getLatEndList);
-		  List faultLonStarts = QueryFaultsBySQL(getLonStartList);
-		  List faultLonEnds = QueryFaultsBySQL(getLonEndList);
-		  List tmp_faultNameList = QueryFaultsBySQL(getFaultList);
-		  for (int i = 0; i < tmp_faultNameList.size(); i++) {
-				String tmp1 = tmp_faultNameList.get(i).toString();
-				FaultDBEntry tmp_FaultDBEntry = new FaultDBEntry();
-				tmp_FaultDBEntry.faultName = new SelectItem(tmp1 + "@"
-																		  + faultSegmentNameList.get(i).toString(), tmp1);
-				tmp_FaultDBEntry.faultAuthor = faultAuthorList.get(i).toString();
-				tmp_FaultDBEntry.faultSegmentName = faultSegmentNameList.get(i)
-					 .toString();
-				tmp_FaultDBEntry.faultSegmentCoordinates = "("
-					 + faultLatStarts.get(i).toString() + ","
-					 + faultLatEnds.get(i).toString() + ")-("
-					 + faultLonStarts.get(i).toString() + ","
-					 + faultLonEnds.get(i).toString() + ")";
-				myFaultDBEntryList.add(tmp_FaultDBEntry);
-				
-		  }
+	String getAuthorList = "SELECT R.Author1 FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
+	    + input_str + "%\';";
+	String getFaultList = "SELECT F.FaultName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
+	    + input_str + "%\';";
+	String getSegmentList = "SELECT F.SegmentName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
+	    + input_str + "%\';";
+	String getLatStartList = "SELECT F.LatStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
+	    + input_str + "%\';";
+	String getLatEndList = "SELECT F.LatEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
+	    + input_str + "%\';";
+	String getLonStartList = "SELECT F.LonStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
+	    + input_str + "%\';";
+	String getLonEndList = "SELECT F.LonEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
+	    + input_str + "%\';";
+	String getInterpId = "SELECT F.InterpId FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
+	    + input_str + "%\';";
+	
+	myFaultDBEntryList.clear();
+	
+	myFaultDBEntryList=createFaultList(getSegmentList,
+					   getAuthorList,
+					   getLatStartList,
+					   getLatEndList,
+					   getLonStartList,
+					   getLonEndList,
+					   getFaultList,
+					   getInterpId,
+					   faultDBServiceUrl);
     }
-	 
+    
     /**
      * Query the fault db by the fault name.
      */ 
     public void QueryFaultsByName(String input_str) {
-		  
-		  String getFaultList = "SELECT F.FaultName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
+	
+	String getFaultList = "SELECT F.FaultName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
 				+ input_str + "%\';";
 		  String getSegmentList = "SELECT F.SegmentName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
 				+ input_str + "%\';";
@@ -676,32 +653,19 @@ public class DislocBean extends GenericSopacBean {
 				+ input_str + "%\';";
 		  String getLonEndList = "SELECT F.LonEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
 				+ input_str + "%\';";
+		  String getInterpId = "SELECT F.InterpId FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
+				+ input_str + "%\';";
 		  
 		  myFaultDBEntryList.clear();
-		  
-		  List faultSegmentNameList = QueryFaultsBySQL(getSegmentList);
-		  List faultAuthorList = QueryFaultsBySQL(getAuthorList);
-		  List faultLatStarts = QueryFaultsBySQL(getLatStartList);
-		  List faultLatEnds = QueryFaultsBySQL(getLatEndList);
-		  List faultLonStarts = QueryFaultsBySQL(getLonStartList);
-		  List faultLonEnds = QueryFaultsBySQL(getLonEndList);
-		  List tmp_faultNameList = QueryFaultsBySQL(getFaultList);
-		  for (int i = 0; i < tmp_faultNameList.size(); i++) {
-				String tmp1 = tmp_faultNameList.get(i).toString();
-				FaultDBEntry tmp_FaultDBEntry = new FaultDBEntry();
-				tmp_FaultDBEntry.faultName = new SelectItem(tmp1 + "@"
-																		  + faultSegmentNameList.get(i).toString(), tmp1);
-				tmp_FaultDBEntry.faultAuthor = faultAuthorList.get(i).toString();
-				tmp_FaultDBEntry.faultSegmentName = faultSegmentNameList.get(i)
-					 .toString();
-				tmp_FaultDBEntry.faultSegmentCoordinates = "("
-					 + faultLatStarts.get(i).toString() + ","
-					 + faultLatEnds.get(i).toString() + ")-("
-					 + faultLonStarts.get(i).toString() + ","
-					 + faultLonEnds.get(i).toString() + ")";
-				myFaultDBEntryList.add(tmp_FaultDBEntry);
-				
-		  }
+	myFaultDBEntryList=createFaultList(getSegmentList,
+					   getAuthorList,
+					   getLatStartList,
+					   getLatEndList,
+					   getLonStartList,
+					   getLonEndList,
+					   getFaultList,
+					   getInterpId,
+					   faultDBServiceUrl);
 		  
     }
     
@@ -717,66 +681,24 @@ public class DislocBean extends GenericSopacBean {
 		  String getLatEndList = "SELECT F.LatEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
 		  String getLonStartList = "SELECT F.LonStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
 		  String getLonEndList = "SELECT F.LonEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
+		  String getInterpId = "SELECT F.InterpId FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId;";
 		  
 		  myFaultDBEntryList.clear();
-		  
-		  List faultSegmentNameList = QueryFaultsBySQL(getSegmentList);
-		  List faultAuthorList = QueryFaultsBySQL(getAuthorList);
-		  List faultLatStarts = QueryFaultsBySQL(getLatStartList);
-		  List faultLatEnds = QueryFaultsBySQL(getLatEndList);
-		  List faultLonStarts = QueryFaultsBySQL(getLonStartList);
-		  List faultLonEnds = QueryFaultsBySQL(getLonEndList);
-		  List tmp_faultNameList = QueryFaultsBySQL(getFaultList);
-		  for (int i = 0; i < tmp_faultNameList.size(); i++) {
-				String tmp1 = tmp_faultNameList.get(i).toString();
-				FaultDBEntry tmp_FaultDBEntry = new FaultDBEntry();
-				tmp_FaultDBEntry.faultName = new SelectItem(tmp1 + "@"
-																		  + faultSegmentNameList.get(i).toString(), tmp1);
-				tmp_FaultDBEntry.faultAuthor = faultAuthorList.get(i).toString();
-				tmp_FaultDBEntry.faultSegmentName = faultSegmentNameList.get(i)
-					 .toString();
-				tmp_FaultDBEntry.faultSegmentCoordinates = "("
-					 + faultLatStarts.get(i).toString() + ","
-					 + faultLatEnds.get(i).toString() + ")-("
-					 + faultLonStarts.get(i).toString() + ","
-					 + faultLonEnds.get(i).toString() + ")";
-				myFaultDBEntryList.add(tmp_FaultDBEntry);
-				
-		  }
-    }
-        
-    public List QueryFaultsBySQL(String tmp_query_sql) {
-		  List tmp_list = new ArrayList();
-		  try {
-				
-				String DB_RESPONSE_HEADER = "results of the query:";
-				SelectService ss = new SelectServiceLocator();
-				Select select = ss.getSelect(new URL(faultDBServiceUrl));
-	    
-				// --------------------------------------------------
-				// Make queries.
-				// --------------------------------------------------
-				String tmp_str = select.select(tmp_query_sql);
-				tmp_str = tmp_str.substring(DB_RESPONSE_HEADER.length());
-				StringTokenizer st1 = new StringTokenizer(tmp_str, "\n");
-				// They begin with blank lines ?!
-				st1.nextToken();
-				st1.nextToken();
-				tmp_list.clear();
-				while (st1.hasMoreTokens()) {
-					 String tmp1 = st1.nextToken().trim();
-					 if (tmp1 == null || tmp1.equals("null"))
-						  tmp1 = "N/A";
-					 tmp_list.add(tmp1);
-				}
-		  } catch (Exception ex) {
-				ex.printStackTrace();
-		  }
-		  return tmp_list;
+	myFaultDBEntryList=createFaultList(getSegmentList,
+					   getAuthorList,
+					   getLatStartList,
+					   getLatEndList,
+					   getLonStartList,
+					   getLonEndList,
+					   getFaultList,
+					   getInterpId,
+					   faultDBServiceUrl);
     }
     
-    public String getDBValue(Select select, String param, String theLayer)
-		  throws Exception {
+    public String getDBValue(Select select, 
+			     String param, 
+			     String theLayer)
+	throws Exception {
 		  
 		  String DB_RESPONSE_HEADER = "results of the query:";
 
@@ -833,46 +755,51 @@ public class DislocBean extends GenericSopacBean {
 		  }
     }
     
-	 /**
-	  * Get the specific fault from the DB.  Fill in some parameters as necessary.
-	  * Determine if this is an origin fault or not.
-	  * 
-	  * The input value supports a backward-compatible @ token that can be ignored
-	  * these days.
-	  */
+    /**
+     * Get the specific fault from the DB.  Fill in some parameters as necessary.
+     * Determine if this is an origin fault or not.
+     * 
+     * The input value supports a backward-compatible @ token that can be ignored
+     * these days.
+     */
     public Fault QueryFaultFromDB(String faultAndSegment) {
-		  // Check request with fallback
-		  String theFault = faultAndSegment.substring(0, faultAndSegment.indexOf("@"));
-		  String theSegment = faultAndSegment.substring(faultAndSegment.indexOf("@") + 1, 
-																		faultAndSegment.length());
-		  //tmp_str = "";
-		  Fault tmp_fault = new Fault();
-		  
-		  try {
-		      SelectService ss = new SelectServiceLocator();
-		      Select select = ss.getSelect(new URL(faultDBServiceUrl));
-		      
-		      // --------------------------------------------------
-		      // Make queries.
-		      // --------------------------------------------------
-		      double dip = Double.parseDouble(getDBValue(select, "Dip", theFault, theSegment));
-		      double strike = Double.parseDouble(getDBValue(select, "Strike", theFault, theSegment));
-		      double depth = Double.parseDouble(getDBValue(select, "Depth", theFault, theSegment));
-		      double width = Double.parseDouble(getDBValue(select, "Width", theFault, theSegment));
-		      
-		      // Get the length and width
-		      double latEnd = Double.parseDouble(getDBValue(select, "LatEnd",
-																			 theFault, theSegment));
-		      double latStart = Double.parseDouble(getDBValue(select, "LatStart",
-																				theFault, theSegment));
-		      double lonStart = Double.parseDouble(getDBValue(select, "LonStart",
-																				theFault, theSegment));
-		      double lonEnd = Double.parseDouble(getDBValue(select, "LonEnd",
-																			 theFault, theSegment));
-		      // Calculate the length
-		      NumberFormat format = NumberFormat.getInstance();
-		      double d2r = Math.acos(-1.0) / 180.0;
-				double flatten=1.0/298.247;
+
+	// Check request with fallback
+	String theFault = faultAndSegment.substring(0, faultAndSegment.indexOf("@"));
+	String theSegment=faultAndSegment.substring(faultAndSegment.indexOf("@") + 1, faultAndSegment.indexOf("%"));
+
+	String interpId=faultAndSegment.substring(faultAndSegment.indexOf("%") + 1, faultAndSegment.length());
+
+	//tmp_str = "";
+	
+	
+	Fault tmp_fault = new Fault();
+	
+	try {
+	    SelectService ss = new SelectServiceLocator();
+	    Select select = ss.getSelect(new URL(faultDBServiceUrl));
+	    
+	    // --------------------------------------------------
+	    // Make queries.
+	    // --------------------------------------------------
+	    double dip = Double.parseDouble(getDBValue(select, "Dip", theFault, theSegment,interpId));
+	    double strike = Double.parseDouble(getDBValue(select, "Strike", theFault, theSegment,interpId));
+	    double depth = Double.parseDouble(getDBValue(select, "Depth", theFault, theSegment,interpId));
+	    double width = Double.parseDouble(getDBValue(select, "Width", theFault, theSegment,interpId));
+	    
+	    // Get the length and width
+	    double latEnd = Double.parseDouble(getDBValue(select, "LatEnd",
+							  theFault, theSegment,interpId));
+	    double latStart = Double.parseDouble(getDBValue(select, "LatStart",
+							    theFault, theSegment,interpId));
+	    double lonStart = Double.parseDouble(getDBValue(select, "LonStart",
+							    theFault, theSegment,interpId));
+	    double lonEnd = Double.parseDouble(getDBValue(select, "LonEnd",
+							  theFault, theSegment,interpId));
+	    // Calculate the length
+	    NumberFormat format = NumberFormat.getInstance();
+	    double d2r = Math.acos(-1.0) / 180.0;
+	    double flatten=1.0/298.247;
 		      
 		      double x = (lonEnd - lonStart) * factor(lonStart,latStart);
 		      double y = (latEnd - latStart) * 111.32;
@@ -980,7 +907,7 @@ public class DislocBean extends GenericSopacBean {
 		  initEditFormsSelection();
 		  currentFault.setFaultName(currentFault.getFaultName().trim());
 		  if (!currentFault.getFaultName().equals("")) {
-				currentFault = QueryFaultFromDB(currentFault.getFaultName().trim());
+		      currentFault = QueryFaultFromDB(currentFault.getFaultName().trim());
 		  }
 		  renderCreateNewFaultForm = !renderCreateNewFaultForm;
 		  
@@ -2576,4 +2503,35 @@ public class DislocBean extends GenericSopacBean {
 	
 	return point;
     }
+
+    public List QueryFaultsBySQL(String tmp_query_sql) {
+	List tmp_list = new ArrayList();
+	try {
+	    
+	    String DB_RESPONSE_HEADER = "results of the query:";
+	    SelectService ss = new SelectServiceLocator();
+	    Select select = ss.getSelect(new URL(faultDBServiceUrl));
+	    
+	    // --------------------------------------------------
+	    // Make queries.
+	    // --------------------------------------------------
+	    String tmp_str = select.select(tmp_query_sql);
+	    tmp_str = tmp_str.substring(DB_RESPONSE_HEADER.length());
+	    StringTokenizer st1 = new StringTokenizer(tmp_str, "\n");
+	    // They begin with blank lines ?!
+	    st1.nextToken();
+	    st1.nextToken();
+	    tmp_list.clear();
+	    while (st1.hasMoreTokens()) {
+		String tmp1 = st1.nextToken().trim();
+		if (tmp1 == null || tmp1.equals("null"))
+		    tmp1 = "N/A";
+		tmp_list.add(tmp1);
+	    }
+	} catch (Exception ex) {
+	    ex.printStackTrace();
+	}
+	return tmp_list;
+    }
+    
 }

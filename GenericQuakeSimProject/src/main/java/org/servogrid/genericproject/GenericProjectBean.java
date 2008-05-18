@@ -26,6 +26,9 @@ import java.util.*;
 //Import stuff from db4o
 import com.db4o.*;
 
+//From JSF
+import javax.faces.model.SelectItem;
+
 //Fault DB interface
 import TestClient.Select.Select;
 import TestClient.Select.SelectService;
@@ -364,22 +367,23 @@ public class GenericProjectBean {
 
 
     protected List createFaultList(String getSegmentList,
-				    String getAuthorList,
-				    String getLatStartList,
-				    String getLatEndList,
-				    String getLonStartList,
-				    String getLonEndList,
-				    String getFaultList,
-				    String getInterpId) {
+				   String getAuthorList,
+				   String getLatStartList,
+				   String getLatEndList,
+				   String getLonStartList,
+				   String getLonEndList,
+				   String getFaultList,
+				   String getInterpId,
+				   String faultDBUrl) {
 
-	List faultSegmentNameList = QueryFaultsBySQL(getSegmentList);
-	List faultAuthorList = QueryFaultsBySQL(getAuthorList);
-	List faultLatStarts = QueryFaultsBySQL(getLatStartList);
-	List faultLatEnds = QueryFaultsBySQL(getLatEndList);
-	List faultLonStarts = QueryFaultsBySQL(getLonStartList);
-	List faultLonEnds = QueryFaultsBySQL(getLonEndList);
-	List tmp_faultNameList = QueryFaultsBySQL(getFaultList);
-	List tmp_interpIdList=QueryFaultsBySQL(getInterpId);
+	List faultSegmentNameList = QueryFaultsBySQL(getSegmentList,faultDBUrl);
+	List faultAuthorList = QueryFaultsBySQL(getAuthorList,faultDBUrl);
+	List faultLatStarts = QueryFaultsBySQL(getLatStartList,faultDBUrl);
+	List faultLatEnds = QueryFaultsBySQL(getLatEndList,faultDBUrl);
+	List faultLonStarts = QueryFaultsBySQL(getLonStartList,faultDBUrl);
+	List faultLonEnds = QueryFaultsBySQL(getLonEndList,faultDBUrl);
+	List tmp_faultNameList = QueryFaultsBySQL(getFaultList,faultDBUrl);
+	List tmp_interpIdList=QueryFaultsBySQL(getInterpId,faultDBUrl);
 	
 	List myFaultDBEntryList=new ArrayList();
 
@@ -387,7 +391,7 @@ public class GenericProjectBean {
 	    String tmp1 = tmp_faultNameList.get(i).toString();
 	    FaultDBEntry tmp_FaultDBEntry = new FaultDBEntry();
 	    tmp_FaultDBEntry.faultName = new SelectItem(tmp1 + "@"
-							+ faultSegmentNameList.get(i).toString(), tmp1);
+							+ faultSegmentNameList.get(i).toString()+"%"+tmp_interpIdList.get(i), tmp1);
 	    tmp_FaultDBEntry.faultAuthor = faultAuthorList.get(i).toString();
 	    tmp_FaultDBEntry.faultSegmentName = faultSegmentNameList.get(i)
 		.toString();
@@ -434,5 +438,59 @@ public class GenericProjectBean {
 	}
 	return tmp_list;
     }
-    
+
+    public String getDBValue(Select select, 
+			     String param, 
+			     String theFault,
+			     String theSegment,
+			     String interpId) throws Exception {
+	
+	String DB_RESPONSE_HEADER = "results of the query:";
+	System.out.println("SQL Query on:" + param);
+
+	String sqlQuery="";
+	
+	if(theSegment==null || 
+	   theSegment.equals("") || 
+	   theSegment.equals("N/A")) {
+	    //This is the simple fault (no segment) case.
+	    sqlQuery = "select " + param
+		+ " from FAULT, REFERENCE where FAULT.FaultName=\'" + theFault
+		+ "\' and FAULT.InterpId="+interpId
+		+ " and FAULT.InterpId=REFERENCE.InterpId;";
+	}
+	//This is the full info case.
+	else {
+	    sqlQuery = "select " + param
+		+ " from SEGMENT, REFERENCE where FaultName=\'" + theFault
+		+ "\' and SegmentName=\'" + theSegment
+		+ "\' and SEGMENT.InterpId="+interpId
+		+ " and SEGMENT.InterpId=REFERENCE.InterpId;";
+	}
+	    
+	    // 		  String sqlQuery = "select F." + param
+	// 				+ " from FAULT AS F, REFERENCE AS R where F.FaultName=\'" + theFault
+	// 				+ "\' and F.InterpId=R.InterpId;";
+	
+	System.out.println("SQL Query is "+sqlQuery);
+	
+	String tmp = select.select(sqlQuery);
+	if (tmp == null || tmp.equals("null") || tmp.equals("")) {
+	    System.out.println();
+	    return "0.0";
+	}
+	
+	if (tmp.indexOf("no data") > -1)
+	    return "0.0";
+	if (tmp.length() > DB_RESPONSE_HEADER.length() + 1) {
+	    tmp = tmp.substring(DB_RESPONSE_HEADER.length() + 1);
+	    tmp = tmp.substring(param.length() + 1);
+	    if (tmp.trim().equals("null"))
+		return "0.0";
+	    else
+		return tmp.trim();
+	} else {
+	    return "0.0";
+	}
+    }
 }

@@ -746,12 +746,13 @@ public class DislocBean extends GenericSopacBean {
 	  * these days.
 	  */
     public Fault QueryFaultFromDB(String faultAndSegment) {
-		  // Check request with fallback
-		  String theFault = faultAndSegment.substring(0, faultAndSegment.indexOf("@"));
-		  String theSegment = faultAndSegment.substring(faultAndSegment.indexOf("@") + 1, 
-																		faultAndSegment.length());
-		  //tmp_str = "";
-		  Fault tmp_fault = new Fault();
+	// Check request with fallback
+	String theFault = faultAndSegment.substring(0, faultAndSegment.indexOf("@"));
+
+	String theSegment = faultAndSegment.substring(faultAndSegment.indexOf("@") + 1,faultAndSegment.length());
+
+	//tmp_str = "";
+	Fault tmp_fault = new Fault();
 		  
 		  try {
 		      SelectService ss = new SelectServiceLocator();
