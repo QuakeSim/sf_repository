@@ -327,13 +327,6 @@ public class DislocBean extends GenericSopacBean {
 	    
 	    Fault[] faults=getFaultsFromDB();
 	    ObsvPoint[] points=getObsvPointsFromDB();
-	    // for(int i=0;i<points.length;i++){
-	    // 	System.out.println("DB X:"+points[i].getXcartPoint());
-	    // 	System.out.println("DB Y:"+points[i].getYcartPoint());
-	    // 	System.out.println("DB Lat:"+points[i].getLatPoint());
-	    // 	System.out.println("DB Lon:"+points[i].getLonPoint());
-	    // }
-	    
 	    initDislocExtendedService();
 	    DislocResultsBean dislocResultsBean=
 		dislocExtendedService.runBlockingDislocExt(userName,
