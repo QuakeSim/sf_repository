@@ -56,49 +56,43 @@ public class DislocExtendedService extends DislocService implements Runnable {
     }
 
     public DislocResultsBean runNonBlockingDislocExt(String userName,
-																	  String projectName,
-																	  ObsvPoint[] obsvPoints,
-																	  Fault[] faults,
-																	  DislocParamsBean dislocParams,
-																	  String targetName) 
-		  throws Exception {
-		  System.out.println("RunNonBlocking called");
-		  if(targetName==null) targetName=DislocConstants.DISLOC_DEFAULT_TARGET;
-		  String jobStamp=generateJobStamp();
-		  
-		  String[] args=prefabDisloc(userName,
-											  projectName,
-											  dislocParams,
-											  faults,
-											  obsvPoints,
-											  targetName,
-											  jobStamp);
-		  setArgs(args);
-		  execute();
-		  return createDislocResultsBean(userName,projectName,jobStamp);
+						     String projectName,
+						     ObsvPoint[] obsvPoints,
+						     Fault[] faults,
+						     DislocParamsBean dislocParams,
+						     String targetName) 
+	throws Exception {
+	System.out.println("RunNonBlocking called");
+	if(targetName==null) targetName=DislocConstants.DISLOC_DEFAULT_TARGET;
+	String jobStamp=generateJobStamp();
+	
+	String[] args=prefabDisloc(userName,
+				   projectName,
+				   dislocParams,
+				   faults,
+				   obsvPoints,
+				   targetName,
+				   jobStamp);
+	setArgs(args);
+	execute();
+	return createDislocResultsBean(userName,projectName,jobStamp);
     }
     
     public DislocResultsBean runBlockingDislocExt(String userName,
-					       String projectName,
-					       ObsvPoint[] obsvPoints,
-					       Fault[] faults,
-					       DislocParamsBean dislocParams,
-					       String targetName) 
+						  String projectName,
+						  ObsvPoint[] obsvPoints,
+						  Fault[] faults,
+						  DislocParamsBean dislocParams,
+						  String targetName) 
 	throws Exception {
-
-		  try {
-				System.out.println(AxisEngine.getCurrentMessageContext().getRequestMessage().getSOAPPartAsString());
-		  } catch (AxisFault e) {
-				e.printStackTrace();
-		  }
-		  
-		  for(int i=0;i<obsvPoints.length;i++) {
-					 System.out.println("Service X:"+obsvPoints[i].getXcartPoint());
-					 System.out.println("Service Y:"+obsvPoints[i].getYcartPoint());
-					 System.out.println("Service Lat:"+obsvPoints[i].getLatPoint());
-					 System.out.println("Service Lon:"+obsvPoints[i].getLonPoint());
-		  }
-
+	
+	try {
+	    System.out.println(AxisEngine.getCurrentMessageContext().getRequestMessage().getSOAPPartAsString());
+	} catch (AxisFault e) {
+	    e.printStackTrace();
+	}
+	
+	
 	if(targetName==null) targetName=DislocConstants.DISLOC_DEFAULT_TARGET;
 	String jobStamp=generateJobStamp();
 	String[] args=prefabDisloc(userName,
