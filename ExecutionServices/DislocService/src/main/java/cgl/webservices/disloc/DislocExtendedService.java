@@ -86,11 +86,11 @@ public class DislocExtendedService extends DislocService implements Runnable {
 						  String targetName) 
 	throws Exception {
 	
-	try {
-	    System.out.println(AxisEngine.getCurrentMessageContext().getRequestMessage().getSOAPPartAsString());
-	} catch (AxisFault e) {
-	    e.printStackTrace();
-	}
+	// try {
+	//     System.out.println(AxisEngine.getCurrentMessageContext().getRequestMessage().getSOAPPartAsString());
+	// } catch (AxisFault e) {
+	//     e.printStackTrace();
+	// }
 	
 	
 	if(targetName==null) targetName=DislocConstants.DISLOC_DEFAULT_TARGET;
