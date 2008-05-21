@@ -70,6 +70,11 @@ public class GenericProjectBean {
     //    protected String gnuplotHostName="gf2.ucs.indiana.edu";
 
     protected ArrayList projectsToDelete;
+    String faultDBServiceUrl;
+
+    //These are left blank.  They will be overwritten by the child class.
+    List myFaultDBEntryList = new ArrayList();    
+    
 
     ObjectContainer db=null;
 
@@ -493,4 +498,181 @@ public class GenericProjectBean {
 	    return "0.0";
 	}
     }
+    /**
+     * This method is used to query the fault database using a lat/lon
+     * bounding box.
+     */
+    public List QueryFaultsByLonLat(String input_str1, String input_str2,
+				    String input_str3, String input_str4,
+				    String faultDBServiceUrl) {
+	
+	String getAuthorList = "SELECT R.Author1 FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and LatStart>="
+	    + input_str1
+	    + " and LatEnd<="
+	    + input_str2
+	    + " and LonStart<="
+	    + input_str3 + " and LonEnd>=" + input_str4 + ";";
+	String getFaultList = "SELECT F.FaultName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and LatStart>="
+	    + input_str1
+	    + " and LatEnd<="
+	    + input_str2
+	    + " and LonStart<="
+	    + input_str3 + " and LonEnd>=" + input_str4 + ";";
+	String getSegmentList = "SELECT F.SegmentName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and LatStart>="
+	    + input_str1
+	    + " and LatEnd<="
+	    + input_str2
+	    + " and LonStart<="
+	    + input_str3 + " and LonEnd>=" + input_str4 + ";";
+	String getLatStartList = "SELECT F.LatStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and LatStart>="
+	    + input_str1
+	    + " and LatEnd<="
+	    + input_str2
+	    + " and LonStart<="
+	    + input_str3 + " and LonEnd>=" + input_str4 + ";";
+	String getLatEndList = "SELECT F.LatEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and LatStart>="
+	    + input_str1
+	    + " and LatEnd<="
+	    + input_str2
+	    + " and LonStart<`="
+	    + input_str3 + " and LonEnd>=" + input_str4 + ";";
+	String getLonStartList = "SELECT F.LonStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and LatStart>="
+	    + input_str1
+	    + " and LatEnd<="
+	    + input_str2
+	    + " and LonStart<="
+	    + input_str3 + " and LonEnd>=" + input_str4 + ";";
+	String getLonEndList = "SELECT F.LonEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and LatStart>="
+	    + input_str1
+	    + " and LatEnd<="
+	    + input_str2
+	    + " and LonStart<="
+	    + input_str3 + " and LonEnd>=" + input_str4 + ";";
+
+	String getInterpId = "SELECT F.InterpId FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and LatStart>="
+	    + input_str1
+	    + " and LatEnd<="
+	    + input_str2
+	    + " and LonStart<="
+	    + input_str3 + " and LonEnd>=" + input_str4 + ";";
+	
+	myFaultDBEntryList.clear();
+	myFaultDBEntryList=createFaultList(getSegmentList,
+					   getAuthorList,
+					   getLatStartList,
+					   getLatEndList,
+					   getLonStartList,
+					   getLonEndList,
+					   getFaultList,
+					   getInterpId,
+					   faultDBServiceUrl);
+	return myFaultDBEntryList;
+
+    }
+    
+    /**
+     * This method queries the DB by author name.
+     */
+    public List QueryFaultsByAuthor(String input_str, String faultDBServiceUrl) {
+		  
+	String getAuthorList = "SELECT R.Author1 FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
+	    + input_str + "%\';";
+	String getFaultList = "SELECT F.FaultName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
+	    + input_str + "%\';";
+	String getSegmentList = "SELECT F.SegmentName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
+	    + input_str + "%\';";
+	String getLatStartList = "SELECT F.LatStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
+	    + input_str + "%\';";
+	String getLatEndList = "SELECT F.LatEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
+	    + input_str + "%\';";
+	String getLonStartList = "SELECT F.LonStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
+	    + input_str + "%\';";
+	String getLonEndList = "SELECT F.LonEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
+	    + input_str + "%\';";
+	String getInterpId = "SELECT F.InterpId FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
+	    + input_str + "%\';";
+	
+	myFaultDBEntryList.clear();
+	
+	myFaultDBEntryList=createFaultList(getSegmentList,
+					   getAuthorList,
+					   getLatStartList,
+					   getLatEndList,
+					   getLonStartList,
+					   getLonEndList,
+					   getFaultList,
+					   getInterpId,
+					   faultDBServiceUrl);
+	return myFaultDBEntryList;
+    }
+    
+    /**
+     * Query the fault db by the fault name.
+     */ 
+    public List QueryFaultsByName(String input_str, String faultDBServiceUrl) {
+	
+	String getFaultList = "SELECT F.FaultName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
+				+ input_str + "%\';";
+		  String getSegmentList = "SELECT F.SegmentName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
+				+ input_str + "%\';";
+		  String getAuthorList = "SELECT R.Author1 FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
+				+ input_str + "%\';";
+		  String getLatStartList = "SELECT F.LatStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
+				+ input_str + "%\';";
+		  String getLatEndList = "SELECT F.LatEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
+				+ input_str + "%\';";
+		  String getLonStartList = "SELECT F.LonStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
+				+ input_str + "%\';";
+		  String getLonEndList = "SELECT F.LonEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
+				+ input_str + "%\';";
+		  String getInterpId = "SELECT F.InterpId FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
+				+ input_str + "%\';";
+		  
+		  myFaultDBEntryList.clear();
+	myFaultDBEntryList=createFaultList(getSegmentList,
+					   getAuthorList,
+					   getLatStartList,
+					   getLatEndList,
+					   getLonStartList,
+					   getLonEndList,
+					   getFaultList,
+					   getInterpId,
+					   faultDBServiceUrl);
+	return myFaultDBEntryList;
+		  
+    }
+    
+    /** 
+     * Queries the fault db for everything.
+     */
+    public List ViewAllFaults(String faultDBServiceUrl) {
+		  
+		  String getFaultList = "SELECT F.FaultName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
+		  String getAuthorList = "SELECT R.Author1 FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
+		  String getSegmentList = "SELECT F.SegmentName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
+		  String getLatStartList = "SELECT F.LatStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
+		  String getLatEndList = "SELECT F.LatEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
+		  String getLonStartList = "SELECT F.LonStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
+		  String getLonEndList = "SELECT F.LonEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
+		  String getInterpId = "SELECT F.InterpId FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId;";
+		  
+		  myFaultDBEntryList.clear();
+	myFaultDBEntryList=createFaultList(getSegmentList,
+					   getAuthorList,
+					   getLatStartList,
+					   getLatEndList,
+					   getLonStartList,
+					   getLonEndList,
+					   getFaultList,
+					   getInterpId,
+					   faultDBServiceUrl);
+	return myFaultDBEntryList;
+    }
+	 public void setFaultDBServiceUrl(String faultDBServiceUrl){
+		  this.faultDBServiceUrl=faultDBServiceUrl;
+	 }
+	 
+	 public String getFaultDBServiceUrl() {
+		  return faultDBServiceUrl;
+	 }
 }
