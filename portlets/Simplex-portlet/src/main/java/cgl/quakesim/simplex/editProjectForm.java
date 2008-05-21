@@ -172,7 +172,7 @@ public class editProjectForm extends GenericProjectBean {
 		}
 		if (faultSelectionCode.equals("ViewAllFaults")) {
 			initEditFormsSelection();
-			//			myfaultDBEntryList=ViewAllFaults(selectdbURL);
+			myFaultDBEntryList=ViewAllFaults(selectdbURL);
 			renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
 		}
 		if (projectSelectionCode.equals("")) {
