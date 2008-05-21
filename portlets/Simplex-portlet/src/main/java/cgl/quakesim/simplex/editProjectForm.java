@@ -19,6 +19,7 @@ import WebFlowClient.ViscoViz.MyVTKServicePortType;
 
 //Need this to get the factor(double,double) method
 import org.servogrid.genericproject.GenericProjectBean;
+import org.servogrid.genericproject.FaultDBEntry;
 
 public class editProjectForm extends GenericProjectBean {
 	 
@@ -170,7 +171,7 @@ public class editProjectForm extends GenericProjectBean {
 		}
 		if (faultSelectionCode.equals("ViewAllFaults")) {
 			initEditFormsSelection();
-			ViewAllFaults();
+			//			myfaultDBEntryList=ViewAllFaults(selectdbURL);
 			renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
 		}
 		if (projectSelectionCode.equals("")) {
@@ -188,43 +189,7 @@ public class editProjectForm extends GenericProjectBean {
 		renderCreateNewFaultForm = !renderCreateNewFaultForm;
 	}
 
-	public void ViewAllFaults() {
-
-		String getFaultList = "SELECT F.FaultName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
-		String getAuthorList = "SELECT R.Author1 FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
-		String getSegmentList = "SELECT F.SegmentName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
-		String getLatStartList = "SELECT F.LatStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
-		String getLatEndList = "SELECT F.LatEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
-		String getLonStartList = "SELECT F.LonStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
-		String getLonEndList = "SELECT F.LonEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId";
-
-		myFaultDBEntryList.clear();
-
-		List faultSegmentNameList = QueryFaultsBySQL(getSegmentList);
-		List faultAuthorList = QueryFaultsBySQL(getAuthorList);
-		List faultLatStarts = QueryFaultsBySQL(getLatStartList);
-		List faultLatEnds = QueryFaultsBySQL(getLatEndList);
-		List faultLonStarts = QueryFaultsBySQL(getLonStartList);
-		List faultLonEnds = QueryFaultsBySQL(getLonEndList);
-		List tmp_faultNameList = QueryFaultsBySQL(getFaultList);
-		for (int i = 0; i < tmp_faultNameList.size(); i++) {
-			String tmp1 = tmp_faultNameList.get(i).toString();
-			FaultDBEntry tmp_FaultDBEntry = new FaultDBEntry();
-			tmp_FaultDBEntry.faultName = new SelectItem(tmp1 + "@"
-					+ faultSegmentNameList.get(i).toString(), tmp1);
-			tmp_FaultDBEntry.faultAuthor = faultAuthorList.get(i).toString();
-			tmp_FaultDBEntry.faultSegmentName = faultSegmentNameList.get(i)
-					.toString();
-			tmp_FaultDBEntry.faultSegmentCoordinates = "("
-					+ faultLatStarts.get(i).toString() + ","
-					+ faultLatEnds.get(i).toString() + ")-("
-					+ faultLonStarts.get(i).toString() + ","
-					+ faultLonEnds.get(i).toString() + ")";
-			myFaultDBEntryList.add(tmp_FaultDBEntry);
-
-		}
-
-	}	
+	
 	public List QueryFaultsBySQL(String tmp_query_sql) {
 		List tmp_list = new ArrayList();
 		try {
@@ -291,8 +256,10 @@ public class editProjectForm extends GenericProjectBean {
 		// Check request with fallback
 
 		String theFault = tmp_str.substring(0, tmp_str.indexOf("@"));
-		String theSegment = tmp_str.substring(tmp_str.indexOf("@") + 1, tmp_str
-				.length());
+	String theSegment=tmp_str.substring(tmp_str.indexOf("@") + 1, tmp_str.indexOf("%"));
+
+	String interpId=tmp_str.substring(tmp_str.indexOf("%") + 1, tmp_str.length());
+
 		tmp_str = "";
 		Fault tmp_fault = new Fault();
 
@@ -304,20 +271,20 @@ public class editProjectForm extends GenericProjectBean {
 			// --------------------------------------------------
 			// Make queries.
 			// --------------------------------------------------
-			String dip = getDBValue(select, "Dip", theFault, theSegment);
-			String strike = getDBValue(select, "Strike", theFault, theSegment);
-			String depth = getDBValue(select, "Depth", theFault, theSegment);
-			String width = getDBValue(select, "Width", theFault, theSegment);
+			String dip = getDBValue(select, "Dip", theFault, theSegment,interpId);
+			String strike = getDBValue(select, "Strike", theFault, theSegment,interpId);
+			String depth = getDBValue(select, "Depth", theFault, theSegment,interpId);
+			String width = getDBValue(select, "Width", theFault, theSegment,interpId);
 
 			// Get the length and width
 			double latEnd = Double.parseDouble(getDBValue(select, "LatEnd",
-																		 theFault, theSegment));
+																		 theFault, theSegment,interpId));
 			double latStart = Double.parseDouble(getDBValue(select, "LatStart",
-																			theFault, theSegment));
+																			theFault, theSegment,interpId));
 			double lonStart = Double.parseDouble(getDBValue(select, "LonStart",
-																			theFault, theSegment));
+																			theFault, theSegment,interpId));
 			double lonEnd = Double.parseDouble(getDBValue(select, "LonEnd",
-																		 theFault, theSegment));
+																		 theFault, theSegment,interpId));
 			
 			// Calculate the length
 			NumberFormat format = NumberFormat.getInstance();
@@ -380,174 +347,12 @@ public class editProjectForm extends GenericProjectBean {
 		}
 		return tmp_fault;
 	}
-	
-	public void QueryFaultsByName(String input_str) {
-
-		String getFaultList = "SELECT F.FaultName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
-				+ input_str + "%\';";
-		String getSegmentList = "SELECT F.SegmentName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
-			 + input_str + "%\';";
-		String getAuthorList = "SELECT R.Author1 FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
-			 + input_str + "%\';";
-		String getLatStartList = "SELECT F.LatStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
-			 + input_str + "%\';";
-		String getLatEndList = "SELECT F.LatEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
-			 + input_str + "%\';";
-		String getLonStartList = "SELECT F.LonStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
-			 + input_str + "%\';";
-		String getLonEndList = "SELECT F.LonEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and F.FaultName like \'%"
-			 + input_str + "%\';";
 		
-		myFaultDBEntryList.clear();
-		
-		List faultSegmentNameList = QueryFaultsBySQL(getSegmentList);
-		List faultAuthorList = QueryFaultsBySQL(getAuthorList);
-		List faultLatStarts = QueryFaultsBySQL(getLatStartList);
-		List faultLatEnds = QueryFaultsBySQL(getLatEndList);
-		List faultLonStarts = QueryFaultsBySQL(getLonStartList);
-		List faultLonEnds = QueryFaultsBySQL(getLonEndList);
-		List tmp_faultNameList = QueryFaultsBySQL(getFaultList);
-		for (int i = 0; i < tmp_faultNameList.size(); i++) {
-			String tmp1 = tmp_faultNameList.get(i).toString();
-			FaultDBEntry tmp_FaultDBEntry = new FaultDBEntry();
-			tmp_FaultDBEntry.faultName = new SelectItem(tmp1 + "@"
-					+ faultSegmentNameList.get(i).toString(), tmp1);
-			tmp_FaultDBEntry.faultAuthor = faultAuthorList.get(i).toString();
-			tmp_FaultDBEntry.faultSegmentName = faultSegmentNameList.get(i)
-					.toString();
-			tmp_FaultDBEntry.faultSegmentCoordinates = "("
-					+ faultLatStarts.get(i).toString() + ","
-					+ faultLatEnds.get(i).toString() + ")-("
-					+ faultLonStarts.get(i).toString() + ","
-					+ faultLonEnds.get(i).toString() + ")";
-			myFaultDBEntryList.add(tmp_FaultDBEntry);
-		}
-	}
-	
-	public void QueryFaultsByAuthor(String input_str) {
-
-		String getAuthorList = "SELECT R.Author1 FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
-				+ input_str + "%\';";
-		String getFaultList = "SELECT F.FaultName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
-				+ input_str + "%\';";
-		String getSegmentList = "SELECT F.SegmentName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
-				+ input_str + "%\';";
-		String getLatStartList = "SELECT F.LatStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
-				+ input_str + "%\';";
-		String getLatEndList = "SELECT F.LatEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
-				+ input_str + "%\';";
-		String getLonStartList = "SELECT F.LonStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
-				+ input_str + "%\';";
-		String getLonEndList = "SELECT F.LonEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and R.Author1 like \'%"
-				+ input_str + "%\';";
-
-		myFaultDBEntryList.clear();
-
-		List faultSegmentNameList = QueryFaultsBySQL(getSegmentList);
-		List faultAuthorList = QueryFaultsBySQL(getAuthorList);
-		List faultLatStarts = QueryFaultsBySQL(getLatStartList);
-		List faultLatEnds = QueryFaultsBySQL(getLatEndList);
-		List faultLonStarts = QueryFaultsBySQL(getLonStartList);
-		List faultLonEnds = QueryFaultsBySQL(getLonEndList);
-		List tmp_faultNameList = QueryFaultsBySQL(getFaultList);
-		for (int i = 0; i < tmp_faultNameList.size(); i++) {
-			String tmp1 = tmp_faultNameList.get(i).toString();
-			FaultDBEntry tmp_FaultDBEntry = new FaultDBEntry();
-			tmp_FaultDBEntry.faultName = new SelectItem(tmp1 + "@"
-					+ faultSegmentNameList.get(i).toString(), tmp1);
-			tmp_FaultDBEntry.faultAuthor = faultAuthorList.get(i).toString();
-			tmp_FaultDBEntry.faultSegmentName = faultSegmentNameList.get(i)
-					.toString();
-			tmp_FaultDBEntry.faultSegmentCoordinates = "("
-					+ faultLatStarts.get(i).toString() + ","
-					+ faultLatEnds.get(i).toString() + ")-("
-					+ faultLonStarts.get(i).toString() + ","
-					+ faultLonEnds.get(i).toString() + ")";
-			myFaultDBEntryList.add(tmp_FaultDBEntry);
-
-		}
-
-	}
-	
-	public void QueryFaultsByLonLat(String input_str1, String input_str2,
-			String input_str3, String input_str4) {
-
-		String getAuthorList = "SELECT R.Author1 FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and LatStart>="
-				+ input_str1
-				+ " and LatEnd<="
-				+ input_str2
-				+ " and LonStart<="
-				+ input_str3 + " and LonEnd>=" + input_str4 + ";";
-		String getFaultList = "SELECT F.FaultName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and LatStart>="
-				+ input_str1
-				+ " and LatEnd<="
-				+ input_str2
-				+ " and LonStart<="
-				+ input_str3 + " and LonEnd>=" + input_str4 + ";";
-		String getSegmentList = "SELECT F.SegmentName FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and LatStart>="
-				+ input_str1
-				+ " and LatEnd<="
-				+ input_str2
-				+ " and LonStart<="
-				+ input_str3 + " and LonEnd>=" + input_str4 + ";";
-		String getLatStartList = "SELECT F.LatStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and LatStart>="
-				+ input_str1
-				+ " and LatEnd<="
-				+ input_str2
-				+ " and LonStart<="
-				+ input_str3 + " and LonEnd>=" + input_str4 + ";";
-		String getLatEndList = "SELECT F.LatEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and LatStart>="
-				+ input_str1
-				+ " and LatEnd<="
-				+ input_str2
-				+ " and LonStart<="
-				+ input_str3 + " and LonEnd>=" + input_str4 + ";";
-		String getLonStartList = "SELECT F.LonStart FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and LatStart>="
-				+ input_str1
-				+ " and LatEnd<="
-				+ input_str2
-				+ " and LonStart<="
-				+ input_str3 + " and LonEnd>=" + input_str4 + ";";
-		String getLonEndList = "SELECT F.LonEnd FROM FAULT AS F, REFERENCE AS R WHERE R.InterpId=F.InterpId and LatStart>="
-				+ input_str1
-				+ " and LatEnd<="
-				+ input_str2
-				+ " and LonStart<="
-				+ input_str3 + " and LonEnd>=" + input_str4 + ";";
-
-		myFaultDBEntryList.clear();
-
-		List faultSegmentNameList = QueryFaultsBySQL(getSegmentList);
-		List faultAuthorList = QueryFaultsBySQL(getAuthorList);
-		List faultLatStarts = QueryFaultsBySQL(getLatStartList);
-		List faultLatEnds = QueryFaultsBySQL(getLatEndList);
-		List faultLonStarts = QueryFaultsBySQL(getLonStartList);
-		List faultLonEnds = QueryFaultsBySQL(getLonEndList);
-		List tmp_faultNameList = QueryFaultsBySQL(getFaultList);
-		for (int i = 0; i < tmp_faultNameList.size(); i++) {
-			String tmp1 = tmp_faultNameList.get(i).toString();
-			FaultDBEntry tmp_FaultDBEntry = new FaultDBEntry();
-			tmp_FaultDBEntry.faultName = new SelectItem(tmp1 + "@"
-					+ faultSegmentNameList.get(i).toString(), tmp1);
-			tmp_FaultDBEntry.faultAuthor = faultAuthorList.get(i).toString();
-			tmp_FaultDBEntry.faultSegmentName = faultSegmentNameList.get(i)
-					.toString();
-			tmp_FaultDBEntry.faultSegmentCoordinates = "("
-					+ faultLatStarts.get(i).toString() + ","
-					+ faultLatEnds.get(i).toString() + ")-("
-					+ faultLonStarts.get(i).toString() + ","
-					+ faultLonEnds.get(i).toString() + ")";
-			myFaultDBEntryList.add(tmp_FaultDBEntry);
-
-		}
-
-	}
-	
 	public void toggleFaultSearchByName(ActionEvent ev) {
 		initEditFormsSelection();
 		this.forSearchStr = this.forSearchStr.trim();
 		if (!this.forSearchStr.equals("")) {
-			QueryFaultsByName(this.forSearchStr);
+		    myFaultDBEntryList=QueryFaultsByName(this.forSearchStr,selectdbURL);
 		}
 		this.forSearchStr = "";
 		renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
@@ -562,8 +367,7 @@ public class editProjectForm extends GenericProjectBean {
 		if ((!this.faultLatStart.equals("")) && (!this.faultLatEnd.equals(""))
 				&& (!this.faultLonStart.equals(""))
 				&& (!this.faultLonEnd.equals(""))) {
-			QueryFaultsByLonLat(this.faultLatStart, this.faultLatEnd,
-					this.faultLonStart, this.faultLonEnd);
+		    myFaultDBEntryList=QueryFaultsByLonLat(this.faultLatStart, this.faultLatEnd,this.faultLonStart, this.faultLonEnd, selectdbURL);
 		}
 		renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
 	}
@@ -572,7 +376,7 @@ public class editProjectForm extends GenericProjectBean {
 		initEditFormsSelection();
 		this.forSearchStr = this.forSearchStr.trim();
 		if (!this.forSearchStr.equals("")) {
-			QueryFaultsByAuthor(this.forSearchStr);
+		    myFaultDBEntryList=QueryFaultsByAuthor(this.forSearchStr,selectdbURL);
 		}
 		this.forSearchStr = "";
 		renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
@@ -779,4 +583,5 @@ public class editProjectForm extends GenericProjectBean {
 	 public void setRenderObsvEntries(boolean renderObsvEntries) {
 		  this.renderObsvEntries=renderObsvEntries;
 	 }
+
 }
