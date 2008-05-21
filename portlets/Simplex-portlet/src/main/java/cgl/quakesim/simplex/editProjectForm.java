@@ -221,37 +221,37 @@ public class editProjectForm extends GenericProjectBean {
 		return tmp_list;
 	}
 	
-	public String getDBValue(Select select, String param, String theFault,
-			String theSegment) throws Exception {
+	// public String getDBValue(Select select, String param, String theFault,
+	// 		String theSegment) throws Exception {
 
-		String DB_RESPONSE_HEADER = "results of the query:";
-		System.out.println("SQL Query on:" + param);
+	// 	String DB_RESPONSE_HEADER = "results of the query:";
+	// 	System.out.println("SQL Query on:" + param);
 
-		String sqlQuery = "select " + param
-				+ " from SEGMENT, REFERENCE where FaultName=\'" + theFault
-				+ "\' and SegmentName=\'" + theSegment
-				+ "\' and SEGMENT.InterpId=REFERENCE.InterpId;";
+	// 	String sqlQuery = "select " + param
+	// 			+ " from SEGMENT, REFERENCE where FaultName=\'" + theFault
+	// 			+ "\' and SegmentName=\'" + theSegment
+	// 			+ "\' and SEGMENT.InterpId=REFERENCE.InterpId;";
 
-		String tmp = select.select(sqlQuery);
-		if (tmp == null || tmp.equals("null") || tmp.equals("")) {
-			System.out.println();
-			return "0.0";
-		}
+	// 	String tmp = select.select(sqlQuery);
+	// 	if (tmp == null || tmp.equals("null") || tmp.equals("")) {
+	// 		System.out.println();
+	// 		return "0.0";
+	// 	}
 
-		if (tmp.indexOf("no data") > -1)
-			return "0.0";
-		if (tmp.length() > DB_RESPONSE_HEADER.length() + 1) {
-			tmp = tmp.substring(DB_RESPONSE_HEADER.length() + 1);
-			tmp = tmp.substring(param.length() + 1);
-			if (tmp.trim().equals("null"))
-				return "0.0";
-			else
-				return tmp.trim();
-		} else {
-			return "0.0";
-		}
+	// 	if (tmp.indexOf("no data") > -1)
+	// 		return "0.0";
+	// 	if (tmp.length() > DB_RESPONSE_HEADER.length() + 1) {
+	// 		tmp = tmp.substring(DB_RESPONSE_HEADER.length() + 1);
+	// 		tmp = tmp.substring(param.length() + 1);
+	// 		if (tmp.trim().equals("null"))
+	// 			return "0.0";
+	// 		else
+	// 			return tmp.trim();
+	// 	} else {
+	// 		return "0.0";
+	// 	}
 
-	}
+	// }
 	
 	public Fault QueryFaultFromDB(String tmp_str) {
 		// Check request with fallback
