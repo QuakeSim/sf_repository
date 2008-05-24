@@ -46,6 +46,9 @@
                                <replace dir="${basedir}/target/${pom.artifactId}" 
                                         token="put.google.map.key.here"
                                         value="${google.master.key}"/>
+										 <replace file="${basedir}/target/${pom.artifactId}/WEB-INF/faces-config.xml" 
+                                        token="put.catalina.home.here"
+                                        value="${catalina.home}"/>
                              </tasks>
                            </configuration>
                            <goals>
@@ -209,6 +212,13 @@
             <artifactId>servlet-api</artifactId>
             <version>2.3</version>
             <scope>provided</scope>
+        </dependency>
+
+		  <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.5</version>
+				<scope>provided</scope>
         </dependency>
 
     </dependencies>

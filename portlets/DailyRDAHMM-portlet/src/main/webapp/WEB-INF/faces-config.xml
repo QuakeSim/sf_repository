@@ -19,7 +19,7 @@
 		<managed-bean-scope>session</managed-bean-scope>
 		<managed-property>
 			<property-name>xmlResPath</property-name>
-			<value>/home/gaoxm/projects/test/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/DailyRDAHMM-portlet/station-status-change-rss.xml</value>
+			<value>put.catalina.home.here/webapps/DailyRDAHMM-portlet/station-status-change-rss.xml</value>
 		</managed-property>
 		<managed-property>
 			<property-name>xmlResURL</property-name>
