@@ -148,6 +148,11 @@
 
     <!-- Project dependencies -->
     <dependencies>
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.5</version>
+        </dependency>
 
         <!-- Faces Jars -->
         <dependency>
@@ -204,7 +209,6 @@
             <artifactId>portals-bridges-jsf</artifactId>
             <version>1.0</version>
         </dependency>
-
 
         <!-- Servlet Dependencies -->
         <dependency>

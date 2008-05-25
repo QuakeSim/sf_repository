@@ -110,7 +110,6 @@
         <servlet-class>org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet</servlet-class>
     </servlet>
 
-
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/DailyRDAHMM-portlet/*</url-pattern>
@@ -122,3 +121,4 @@
     </servlet-mapping>
 </web-app> 
  
+
