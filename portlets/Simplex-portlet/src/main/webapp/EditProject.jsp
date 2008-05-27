@@ -65,7 +65,7 @@ for(int i=0;i<stationList.size();i++) {
 	href='<%= request.getContextPath() + "/stylesheet.css" %>'>
 
 <title>Edit Project</title>
-    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here"
+ <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBQozjQdf4FEuMBqpopduISAOADS4xTilRYX9d1ZU0uvBJwyY4gerC4Gog"
       type="text/javascript"></script>
 
 <%/*
