@@ -8,7 +8,7 @@ public class RdahmmProjectBean {
 	 String resource="procCoords";
 	 String contextGroup="sopacGlobk";
 	 String minMaxLatLon="";
-	 String contextId="5";
+	 String contextId="58";
     protected int numModelStates=4;
     protected int randomSeed=1;
     protected String outputType="";

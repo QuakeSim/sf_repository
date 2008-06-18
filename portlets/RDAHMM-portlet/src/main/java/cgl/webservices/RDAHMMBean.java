@@ -81,7 +81,8 @@ public class RDAHMMBean extends GenericSopacBean{
 	 String resource="procCoords";
 	 String contextGroup="sopacGlobk";
 	 String minMaxLatLon="";
-	 String contextId="5";
+	 //	 String contextId="5";
+	 String contextId="58";
 
 	 Vector rdahmmRunValues=new Vector();
 	 
