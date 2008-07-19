@@ -271,18 +271,18 @@ This is the end of the function inlines.
               x_tabcontent=x_tabcontent.replace("{!networkName!}",networkName);
               x_tabcontent=x_tabcontent.replace("{!lon!}",lon);
               x_tabcontent=x_tabcontent.replace("{!lat!}",lat);
-              x_tabcontent=x_tabcontent.replace("{!output_png!}","http://darya.ucs.indiana.edu:23080/sensorgrid/rdahmm/eval/" + name + "/" + name + ".xyz.xyz.X.png");
-//              x_tabcontent=x_tabcontent.replace("{!output_png!}","http://darya.ucs.indiana.edu:23080/sensorgrid/rdahmm/eval/" + networkName.toUpperCase() + "/" + name + "/" + name + ".xyz.xyz.X.png");
+              x_tabcontent=x_tabcontent.replace("{!output_png!}","http://gf14.ucs.indiana.edu:23080/sensorgrid/rdahmm/eval/" + name + "/" + name + ".xyz.xyz.X.png");
+//              x_tabcontent=x_tabcontent.replace("{!output_png!}","http://gf14.ucs.indiana.edu:23080/sensorgrid/rdahmm/eval/" + networkName.toUpperCase() + "/" + name + "/" + name + ".xyz.xyz.X.png");
               y_tabcontent=y_tabcontent.replace("{!name!}",name);
               y_tabcontent=y_tabcontent.replace("{!networkName!}",networkName);
               y_tabcontent=y_tabcontent.replace("{!lon!}",lon);
               y_tabcontent=y_tabcontent.replace("{!lat!}",lat);
-              y_tabcontent=y_tabcontent.replace("{!output_png!}","http://darya.ucs.indiana.edu:23080/sensorgrid/rdahmm/eval/" + name + "/" + name + ".xyz.xyz.Y.png");
+              y_tabcontent=y_tabcontent.replace("{!output_png!}","http://gf14.ucs.indiana.edu:23080/sensorgrid/rdahmm/eval/" + name + "/" + name + ".xyz.xyz.Y.png");
               z_tabcontent=z_tabcontent.replace("{!name!}",name);
               z_tabcontent=z_tabcontent.replace("{!networkName!}",networkName);
               z_tabcontent=z_tabcontent.replace("{!lon!}",lon);
               z_tabcontent=z_tabcontent.replace("{!lat!}",lat);
-              z_tabcontent=z_tabcontent.replace("{!output_png!}","http://darya.ucs.indiana.edu:23080/sensorgrid/rdahmm/eval/" + name + "/" + name + ".xyz.xyz.Z.png");
+              z_tabcontent=z_tabcontent.replace("{!output_png!}","http://gf14.ucs.indiana.edu:23080/sensorgrid/rdahmm/eval/" + name + "/" + name + ".xyz.xyz.Z.png");
               
               %>
               stations [<%=i%>] [0] = "<%=name%>";
