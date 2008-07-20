@@ -40,25 +40,25 @@ import com.db4o.*;
  */
 
 public class DislocBean extends GenericSopacBean {
-
-	 //KML stuff, need to move this to another place.
-	 String xmlHead="<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-	 String kmlHead="<kml xmlns=\"http://earth.google.com/kml/2.2\">";
-	 String kmlEnd="</kml>";
-	 String pmBegin="<Placemark>";
-	 String pmEnd="</Placemark>";
-	 String lsBegin="<LineString>";
-	 String lsEnd="</LineString>";
-	 String pointBegin="<Point>";
-	 String pointEnd="</Point>";
-	 String coordBegin="<coordinates>";
-	 String coordEnd="</coordinates>";
-	 String docBegin="<Document>";
-	 String docEnd="</Document>";
-	 String comma=", ";
-	 String descBegin="<description>";
-	 String descEnd="</description>";
-
+    
+    //KML stuff, need to move this to another place.
+    String xmlHead="<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    String kmlHead="<kml xmlns=\"http://earth.google.com/kml/2.2\">";
+    String kmlEnd="</kml>";
+    String pmBegin="<Placemark>";
+    String pmEnd="</Placemark>";
+    String lsBegin="<LineString>";
+    String lsEnd="</LineString>";
+    String pointBegin="<Point>";
+    String pointEnd="</Point>";
+    String coordBegin="<coordinates>";
+    String coordEnd="</coordinates>";
+    String docBegin="<Document>";
+    String docEnd="</Document>";
+    String comma=", ";
+    String descBegin="<description>";
+    String descEnd="</description>";
+    
 	 
     //Some navigation strings.
     static final String DEFAULT_USER_NAME="disloc_default_user";

@@ -473,9 +473,6 @@ public class GenericProjectBean {
 		+ " and SEGMENT.InterpId=REFERENCE.InterpId;";
 	}
 	    
-	    // 		  String sqlQuery = "select F." + param
-	// 				+ " from FAULT AS F, REFERENCE AS R where F.FaultName=\'" + theFault
-	// 				+ "\' and F.InterpId=R.InterpId;";
 	
 	System.out.println("SQL Query is "+sqlQuery);
 	
