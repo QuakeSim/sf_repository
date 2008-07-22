@@ -45,7 +45,12 @@
                              <tasks>
 										 <replace dir="${basedir}/target/${pom.artifactId}" 
                                         token="put.google.map.key.here"
-                                        value="${google.master.key}"/>
+                                        value="${google.master.key}">
+                                        value="${portal.host.name}">
+                               <include name="**/*.jsp"/>
+                               <include name="**/*.xml"/>
+                               <include name="**/*.properties"/>
+										</replace>
                              </tasks>
                            </configuration>
                            <goals>
