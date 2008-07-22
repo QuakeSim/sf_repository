@@ -2360,5 +2360,35 @@ public class DislocBean extends GenericSopacBean {
 	}
 	return tmp_list;
     }
-    
+
+	 public void deleteScatterPoint(ActionEvent ev) throws Exception {
+		  List scatterPointList=reconstructMyPointObservationList(projectName);
+		  
+		  //Delete the entry from the list.
+		  ObsvPoint deadPoint=(ObsvPoint)getMyScatterPointsTable().getRowData();
+		  int numRows=getMyScatterPointsTable().getRowCount();
+		  scatterPointList.remove(numRows);
+
+		  //Remove the old db
+		  db=Db4o.openFile(getBasePath()
+								 +"/"+getContextBasePath()
+								 +"/"+userName
+								 +"/"+codeName
+								 +"/"+projectName
+								 +".db");		  
+		  ObjectSet results=db.get(ObsvPoint.class);
+		  while(results.hasNext()) {
+				db.delete(results.next());
+		  }
+		  db.commit();
+		  db.close();
+		  
+		  //Convert array list to standard array.
+		  ObsvPoint[] newPoints=new ObsvPoint[scatterPointList.size()];
+		  for(int i=0;i<scatterPointList.size();i++) {
+				newPoints[i]=(ObsvPoint)scatterPointList.get(i);
+		  }
+		  //Store the new db.
+		  storeObsvPointsInDB(newPoints);
+	 }
 }

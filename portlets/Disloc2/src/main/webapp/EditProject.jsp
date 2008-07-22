@@ -451,6 +451,10 @@ function getScrolling() {
 					     </f:facet> 
 						  <h:outputText id="rerdad62lon" value="#{xypoints.lonPoint}"/>
     					</h:column>
+						<h:column>
+						   <h:commandButton value="Delete" id="delxypointr4ero"
+												  actionListener="DislocBean2.deleteScatterPoint"/> 
+						</h:column>
 					</h:dataTable>
             </h:panelGrid>
 
