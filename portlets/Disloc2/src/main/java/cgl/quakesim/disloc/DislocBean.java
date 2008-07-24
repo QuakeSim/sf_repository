@@ -2362,6 +2362,7 @@ public class DislocBean extends GenericSopacBean {
     }
 
 	 public void deleteScatterPoint(ActionEvent ev) throws Exception {
+		  System.out.println("Deleting point");
 		  List scatterPointList=reconstructMyPointObservationList(projectName);
 		  
 		  //Delete the entry from the list.
@@ -2371,6 +2372,12 @@ public class DislocBean extends GenericSopacBean {
 
 		  //Remove the old db
 		  db=Db4o.openFile(getBasePath()
+								 +"/"+getContextBasePath()
+								 +"/"+userName
+								 +"/"+codeName
+								 +"/"+projectName
+								 +".db");		  
+		  System.out.println(getBasePath()
 								 +"/"+getContextBasePath()
 								 +"/"+userName
 								 +"/"+codeName

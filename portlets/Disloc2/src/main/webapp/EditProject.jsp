@@ -310,95 +310,13 @@ function getScrolling() {
 	<h:panelGrid id="EditProject"  
 		columnClasses="alignTop,alignTop" 
 		columns="2" border="1"> 
-		<h:form id="selectproj"> 
-			<h:panelGroup id="pg1"> 
- 
-				<h:outputFormat id="stuff1" escape="false" 
-					value="<b>Project Name: #{DislocBean2.projectName} </b><br>" /> 
-				<h:outputFormat id="stuffe3io4" escape="false" 
-					value="<b>Project Origin (lat/lon):</b> (#{DislocBean2.currentParams.originLat}, 
-											        #{DislocBean2.currentParams.originLon}) <br>" /> 
-				<h:outputFormat id="stufw3f1" escape="false" 
-					value="<b>Observation Style: #{DislocBean2.currentParams.observationPointStyle} </b><br>" /> 
- 
-				<h:selectOneRadio layout="pageDirection" id="subscriptions" 
-					value="#{DislocBean2.projectSelectionCode}"> 
-				<f:selectItem id="item0w3" 
-						itemLabel="Set Observation Style: Choose between grid and scatter points." 
-						itemValue="ChooseObsvStyleForm"/> 
 
-					<f:selectItem id="item1" 
-						itemLabel="View Project Info: Verify and update project information." 
-						itemValue="CreateObservationGrid" /> 
-					<f:selectItem id="item2" 
-						itemLabel="Create New Fault: Click to specify geometry for a fault segment." 
-						itemValue="CreateNewFault" /> 
-
-					<f:selectItem id="item4" 
-						itemLabel="Add Fault from DB: Click to select a fault segment from the database." 
-						itemValue="AddFaultSelection" /> 
-
-					<f:selectItem id="item021"
-						itemLabel="Use Map: View faults and pick observation points on an interactive map."
-						itemValue="ShowMap" />
-				</h:selectOneRadio> 
-				<h:commandButton id="button1" value="Make Selection" 
-					actionListener="#{DislocBean2.toggleProjectSelection}"> 
-				</h:commandButton> 
-			</h:panelGroup> 
-		</h:form> 
-		
-		<h:panelGroup id="lck0ere93ks"
-					rendered="#{DislocBean2.renderChooseObsvStyleForm}">
-		      <h:form id="obsvStyleForm">
-                	<h:outputText id="clrr33asz3" escape="false"
-					    value="<b>Select Sites:</b>Click to choose scatter point."/>
-					  <h:selectOneRadio layout="pageDirection" id="ere34ionssss" 
-							value="#{DislocBean2.obsvStyleSelectionCode}"> 
-							<f:selectItem id="item021" 
-											  itemLabel="Rectangular grid of observation points" 
-											  itemValue="GridStyle" /> 
-							<f:selectItem id="item0332" 
-								itemLabel="Scattered observation points." 
-								itemValue="ScatterStyle" /> 
-					  </h:selectOneRadio> 
-					  <h:commandButton id="chooseAStyle" value="Choose Style"
-						 		actionListener="#{DislocBean2.toggleSetObsvStyle}"/>
-					 </h:form>
-		        </h:panelGroup>
-
-			<h:panelGroup id="lck093ks"
-					rendered="#{DislocBean2.renderMap}">
-					 <h:form id="obsvGPSMap">
-                <h:outputText id="clrlc093" escape="false"
-					    value="<b>Select Sites:</b>Click to choose scatter point."/>
-						 <h:panelGrid id="mapsAndCrap" columns="2" columnClasses="alignTop,alignTop">
-						    <h:panelGroup id="mapncrap1">
-						 <f:verbatim>
-						 <div id="map" style="width: 600px; height: 400px"></div>
-						 </f:verbatim>
-                      </h:panelGroup>
-                      <h:panelGroup id="mapncrap2">
-							<h:panelGrid id="dfjdlkj" columns="2" 
-							   rendered="#{empty DislocBean2.usesGridPoints
-											 || !DislocBean2.usesGridPoints}">
-						 <h:outputText id="dkljr3rf" value="Latitude:"/>
-						 <h:inputText id="stationLat" value="#{DislocBean2.gpsStationLat}"/>
-						 <h:outputText id="dkljfer4" value="Longitude:"/>
-						 <h:inputText id="stationLon" value="#{DislocBean2.gpsStationLon}"/>
-						 <h:commandButton id="addGPSObsv" value="Add Observation Point"
-						 		actionListener="#{DislocBean2.toggleAddPointObsvForProject}"/>
-
-						 <h:commandButton id="closeMap" value="Close Map"
-						 		actionListener="#{DislocBean2.toggleCloseMap}"/>
-								</h:panelGrid>
-						   </h:panelGroup>
-							</h:panelGrid>
-					 </h:form>
-			</h:panelGroup>
+   <%@include file="DashboardPanel.jsp" %>
+   <%@include file="ObsvStyle.jsp" %>
+   <%@include file="ScatterMap.jsp" %>
  
 			<h:panelGroup id="stuff4">
-	          	   <h:form id="obsvform" rendered="#{DislocBean2.renderDislocGridParamsForm}"> 
+	       <h:form id="obsvform" rendered="#{DislocBean2.renderDislocGridParamsForm}"> 
 				<h:panelGrid id="ObsvTable" columns="2" footerClass="subtitle" 
 					headerClass="subtitlebig" styleClass="medium" 
 					columnClasses="subtitle,medium"> 
@@ -425,7 +343,7 @@ function getScrolling() {
 					<h:outputText id="stylejkrejonlkd" 
 					              value="#{DislocBean2.currentParams.observationPointStyle}"/>
 					</h:panelGroup>	      
-          			</h:panelGrid>
+				</h:panelGrid>
 
 				<h:panelGrid id="erep912e3" rendered="#{!DislocBean2.usesGridPoints}">
 					<f:facet name="header"> 
@@ -846,133 +764,8 @@ function getScrolling() {
  
 		</h:panelGroup> 
 	</h:panelGrid> 
- 
-	<h:panelGroup  id="stuff77" 
-		rendered="#{!empty DislocBean2.myFaultEntryForProjectList 
-					   || !empty DislocBean2.myObsvEntryForProjectList}"> 
- 
-	<h:outputText  id="stuff78" styleClass="header2" value="Current Project Components"
-						rendered="#{!empty DislocBean2.myFaultEntryForProjectList 
-					   || !empty DislocBean2.myObsvEntryForProjectList}"/> 
- 
-	<h:panelGrid id="ProjectComponentList" columns="2" border="1" 
-			columnClasses="alignTop, alignTop"> 
- 
-		<h:panelGroup id="stuff79" rendered="#{!empty DislocBean2.myFaultEntryForProjectList}"> 
-			<h:form id="UpdateSelectFaultsForm">
-				<h:panelGrid columns="1" border="1"  id="stuff80"> 
-					<h:panelGroup  id="lid2"> 
-						<h:panelGrid  id="lid3" columns="1"> 
-							<h:outputText escape="false" value="<b>Faults</b>"/> 
-						</h:panelGrid> 
- 
-						<h:dataTable border="1" id="stuff81" 
-							value="#{DislocBean2.myFaultEntryForProjectList}" var="myentry3"> 
-							<h:column  id="lid4"> 
-								<f:facet name="header"> 
-									<h:outputText  id="lid5" escape="false" value="<b>Name</b>"> 
-                           </h:outputText> 
-								</f:facet> 
-								<h:outputText value="#{myentry3.faultName}" 
-								    id="stuff82"/> 
-							</h:column> 
-							<h:column  id="lid6"> 
-								<f:facet name="header"> 
-									<h:outputText escape="false" value="<b>View</b>" /> 
-								</f:facet> 
-								<h:selectBooleanCheckbox value="#{myentry3.view}" 
-                            id="stuff83" 
-									onchange="selectOne(this.form,this)" 
-									onclick="selectOne(this.form,this)" /> 
- 
-							</h:column> 
-							<h:column  id="lid7"> 
-								<f:facet name="header"> 
-									<h:outputText escape="false" value="<b>Remove</b>" /> 
-								</f:facet> 
-								<h:selectBooleanCheckbox value="#{myentry3.delete}" 
-								    id="lid8" 
-									onchange="selectOne(this.form,this)" 
-									onclick="selectOne(this.form,this)" /> 
-							</h:column> 
- 
-						</h:dataTable> 
-					</h:panelGroup> 
- 
-				</h:panelGrid> 
-				<h:commandButton id="SelectFault4proj" value="UpdateFault" 
-					actionListener="#{DislocBean2.toggleUpdateFaultProjectEntry}" /> 
- 
-			</h:form> 
- 
-			<h:form id="UpdateSelectedParamsForm" 
-				rendered="#{!empty DislocBean2.myObsvEntryForProjectList}"> 
-				<h:panelGrid columns="1" border="1"  id="stuff84"> 
-					<h:panelGroup  id="lid9"> 
-						<h:panelGrid  id="stuff85" columns="1"> 
-							<h:outputText  id="stuff86" 
-                       escape="false" value="<b>Observations</b>"/> 
-						</h:panelGrid> 
- 
-						<h:dataTable border="1"  id="stuff87" 
-							value="#{DislocBean2.myObsvEntryForProjectList}" var="myentry4"> 
-							<h:column  id="lid110"> 
-								<f:facet name="header"> 
-									<h:outputText  id="lkj1" escape="false" value="<b>Name</b>"> 
-                           </h:outputText> 
-								</f:facet> 
-								<h:outputText  id="lkj2" value="Observations" /> 
-							</h:column> 
-							<h:column  id="lkj11"> 
-								<f:facet name="header"> 
-									<h:outputText  id="lkj3" escape="false" value="<b>View</b>" /> 
-								</f:facet> 
-								<h:selectBooleanCheckbox value="#{myentry4.view}" 
-                            id="stuff88" 
-									onchange="selectOne(this.form,this)" 
-									onclick="selectOne(this.form,this)" /> 
- 
-							</h:column> 
-							<h:column  id="lkj4"> 
-								<f:facet name="header"> 
-									<h:outputText escape="false" value="<b>Remove</b>" /> 
-								</f:facet> 
-								<h:selectBooleanCheckbox value="#{myentry4.delete}" 
-									onchange="selectOne(this.form,this)" 
-									 id="lkj5" 
-									onclick="selectOne(this.form,this)" /> 
-							</h:column> 
- 
-						</h:dataTable> 
-					</h:panelGroup> 
- 
-				</h:panelGrid> 
-				<h:commandButton id="updateObsv" value="Update Observations" 
-					actionListener="#{DislocBean2.toggleUpdateProjectObservations}" /> 
- 
-			</h:form> 
-		</h:panelGroup> 
- 
-		<h:form id="RunDisloc"
-				rendered="#{!(empty DislocBean2.myFaultEntryForProjectList) 
-							   && !(empty DislocBean2.myObsvEntryForProjectList)}" > 
-			<h:panelGrid columns="1"  
-             id="stuff89" 
-				footerClass="subtitle" 
-				headerClass="subtitlebig" styleClass="medium" 
-				columnClasses="subtitle,medium"> 
- 
-				<h:outputFormat escape="false"  id="stuff90" 
-					value="<b>Run Disloc</b><br><br>" /> 
-				<h:outputFormat escape="false"   id="stuff91" 
-					value="Click the button below to run Disloc.<br><br>" /> 
- 
-					<h:commandButton value="Run Disloc" 
-						action="#{DislocBean2.runBlockingDislocJSF}" /> 
-			</h:panelGrid> 
-		</h:form> 
-	</h:panelGrid> 
-   </h:panelGroup> 
+
+   <%@ include file="ProjectComponentPanel.jsp" %>  
  
    <%@ include file="footer.jsp" %>
  
