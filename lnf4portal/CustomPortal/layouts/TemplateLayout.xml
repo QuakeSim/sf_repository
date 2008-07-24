@@ -82,7 +82,7 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
               </portlet-tab>
 				</portlet-tabbed-pane>
 			 </portlet-tab>
-
+			 
 			 <!-- RT RDAHMM -->
 			 <portlet-tab label="RealTimeRDAHMM-Portlet">
 				<title lang="en">RealTimeRDAHMM-Portlet</title>
@@ -122,67 +122,70 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
 			 </portlet-tab>
 		  </portlet-tabbed-pane>
 		</portlet-tab>
-
+		
 		<!-- Deformation Group -->
 		<portlet-tab label="portal-deformation">
 		  <title lang="en">Deformation Analysis</title>
 		  <portlet-tabbed-pane selected="0" style="sub-menu">
 			 <portlet-tab label="Disloc-Portlet">
-				<title lang="en">Disloc-Portlet</title>
+				<title lang="en">Disloc2</title>
 				<portlet-tabbed-pane style="sub-menu">
 
 				  <!-- Disloc -->
-              <portlet-tab label="Disloc-Setup">
+              <portlet-tab label="Disloc2-Setup">
                 <title lang="en">Run Disloc</title>
                 <table-layout>
                   <row-layout>
                     <column-layout>
-                      <portlet-frame label="Disloc-PF">
-                        <portlet-class>Disloc-portlet#Disloc-portlet</portlet-class>
+                      <portlet-frame label="Disloc2-PF">
+                        <portlet-class>Disloc2#Disloc2</portlet-class>
                       </portlet-frame>
                     </column-layout>
                   </row-layout>
                 </table-layout>
               </portlet-tab>
-              <portlet-tab label="Pick-Location">
-                <title lang="en">Pick Location</title>
-                <table-layout>
-                    <row-layout>
-                        <column-layout>
-                            <portlet-frame label="Disloc-pick-location-PF">
-                                <portlet-class>Disloc-portlet#pick-location-portlet</portlet-class>
-                            </portlet-frame>
-                        </column-layout>
-                    </row-layout>
-                </table-layout>
-            </portlet-tab>
-              <portlet-tab label="Fetch-disloc-results">
+              <portlet-tab label="Fetch-disloc2-results">
                 <title lang="en">Fetch Disloc Results</title>
                 <table-layout>
                   <row-layout>
                     <column-layout>
-                      <portlet-frame label="Disloc-fetchmesh-PF">
-                        <portlet-class>Disloc-portlet#fetchresults-portlet</portlet-class>
+                      <portlet-frame label="Disloc2-fetchmesh-PF">
+                        <portlet-class>Disloc2#fetchresults-portlet</portlet-class>
                       </portlet-frame>
                     </column-layout>
                   </row-layout>
                 </table-layout>
               </portlet-tab>
-              <portlet-tab label="Plot-disloc-results">
+              <portlet-tab label="Plot-disloc2-results">
                 <title lang="en">Plot Disloc Results</title>
                 <table-layout>
                   <row-layout>
                     <column-layout>
-                      <portlet-frame label="Disloc-plot-grid-PF">
-                        <portlet-class>Disloc-portlet#plot-results-portlet</portlet-class>
+                      <portlet-frame label="Disloc2-plot-grid-PF">
+                        <portlet-class>Disloc2#plot-results-portlet</portlet-class>
                       </portlet-frame>
                     </column-layout>
                   </row-layout>
                 </table-layout>
               </portlet-tab>
+				  
+              <portlet-tab label="Disloc2-Pick-Location">
+                <title lang="en">Pick Location</title>
+                <table-layout>
+                  <row-layout>
+                    <column-layout>
+                      <portlet-frame label="Disloc2-pick-location-PF">
+                        <portlet-class>Disloc2#pick-location-portlet</portlet-class>
+                      </portlet-frame>
+                    </column-layout>
+                  </row-layout>
+                </table-layout>
+              </portlet-tab>
+				  
 				</portlet-tabbed-pane>
 			 </portlet-tab>
-
+			 
+			 
 			 <!-- GeoFEST -->
 			 <portlet-tab label="GeoFESTGrid-Portlet">
 				<title lang="en">GeoFESTGrid-Portlet</title>
@@ -238,61 +241,6 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
 				</portlet-tabbed-pane>
 			 </portlet-tab>
 			 
-			 <!-- New Mesh Gen -->
-			 <portlet-tab label="NewMeshGen-Portlet">
-				<title lang="en">NewMeshGen-Portlet</title>
-				<portlet-tabbed-pane style="sub-menu">
-              <portlet-tab label="Mesh-Generation-Setup">
-                <title lang="en">Mesh Generation</title>
-                <table-layout>
-                  <row-layout>
-                    <column-layout>
-                      <portlet-frame label="NewMeshGen-PF">
-                        <portlet-class>NewMeshGen-portlet#NewMeshGen-portlet </portlet-class>
-                      </portlet-frame>
-                    </column-layout>
-                  </row-layout>
-                </table-layout>
-              </portlet-tab>
-              <portlet-tab label="Fetch-mesh-results">
-                <title lang="en">Fetch Mesh Results</title>
-                <table-layout>
-                  <row-layout>
-                    <column-layout>
-                      <portlet-frame label="NewMeshGen-fetchmesh-PF">
-                        <portlet-class>NewMeshGen-portlet#fetchmesh-portlet </portlet-class>
-                      </portlet-frame>
-                    </column-layout>
-                  </row-layout>
-                </table-layout>
-              </portlet-tab>
-              <portlet-tab label="Choose-mesh-results">
-                <title lang="en">Run GeoFEST</title>
-                <table-layout>
-                  <row-layout>
-                    <column-layout>
-                      <portlet-frame label="NewMeshGen-choosemesh-PF">
-                        <portlet-class>NewMeshGen-portlet#choosemesh-portlet </portlet-class>
-                      </portlet-frame>
-                    </column-layout>
-                  </row-layout>
-                </table-layout>
-              </portlet-tab>
-              <portlet-tab label="Fetch-gfout-results">
-                <title lang="en">GeoFEST Results</title>
-                <table-layout>
-                  <row-layout>
-                    <column-layout>
-                      <portlet-frame label="NewMeshGen-geofestoutput-PF">
-                        <portlet-class>NewMeshGen-portlet#fetch-geofest-output-portlet </portlet-class>
-                      </portlet-frame>
-                    </column-layout>
-                  </row-layout>
-                </table-layout>
-              </portlet-tab>
-				</portlet-tabbed-pane>
-			 </portlet-tab>
-
 			 <!-- Simplex -->			 
 			 <portlet-tab label="Simplex-Portlet">
 				<title lang="en">Simplex-Portlet</title>
@@ -337,7 +285,7 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
 			 </portlet-tab>
 		  </portlet-tabbed-pane>
 		</portlet-tab>
-
+		
 		<!-- Fault DB Group -->
 		<portlet-tab label="portal-faultdb">
 		  <title lang="en">Fault Database</title>
@@ -368,6 +316,125 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
 			 </portlet-tab>
 		  </portlet-tabbed-pane>
 		</portlet-tab>
+
+		<!-- Obsolete Portlet Group -->
+		<portlet-tab label="portal-faultdb">
+		  <title lang="en">Obsolete Portlets</title>
+		  <portlet-tabbed-pane selected="0" style="sub-menu">
+			 <portlet-tab label="Disloc-Portlet">
+				<title lang="en">Old Disloc Portlet</title>
+				<portlet-tabbed-pane style="sub-menu">
+				  
+				  <!-- New Mesh Gen -->
+				  <portlet-tab label="NewMeshGen-Portlet">
+					 <title lang="en">NewMeshGen-Portlet</title>
+					 <portlet-tabbed-pane style="sub-menu">
+						<portlet-tab label="Mesh-Generation-Setup">
+						  <title lang="en">Mesh Generation</title>
+						  <table-layout>
+							 <row-layout>
+								<column-layout>
+								  <portlet-frame label="NewMeshGen-PF">
+									 <portlet-class>NewMeshGen-portlet#NewMeshGen-portlet </portlet-class>
+								  </portlet-frame>
+								</column-layout>
+							 </row-layout>
+						  </table-layout>
+						</portlet-tab>
+						<portlet-tab label="Fetch-mesh-results">
+						  <title lang="en">Fetch Mesh Results</title>
+						  <table-layout>
+							 <row-layout>
+								<column-layout>
+								  <portlet-frame label="NewMeshGen-fetchmesh-PF">
+									 <portlet-class>NewMeshGen-portlet#fetchmesh-portlet </portlet-class>
+								  </portlet-frame>
+								</column-layout>
+							 </row-layout>
+						  </table-layout>
+						</portlet-tab>
+						<portlet-tab label="Choose-mesh-results">
+						  <title lang="en">Run GeoFEST</title>
+						  <table-layout>
+							 <row-layout>
+								<column-layout>
+								  <portlet-frame label="NewMeshGen-choosemesh-PF">
+									 <portlet-class>NewMeshGen-portlet#choosemesh-portlet </portlet-class>
+								  </portlet-frame>
+								</column-layout>
+							 </row-layout>
+						  </table-layout>
+						</portlet-tab>
+						<portlet-tab label="Fetch-gfout-results">
+						  <title lang="en">GeoFEST Results</title>
+						  <table-layout>
+							 <row-layout>
+								<column-layout>
+								  <portlet-frame label="NewMeshGen-geofestoutput-PF">
+									 <portlet-class>NewMeshGen-portlet#fetch-geofest-output-portlet </portlet-class>
+								  </portlet-frame>
+								</column-layout>
+							 </row-layout>
+						  </table-layout>
+						</portlet-tab>
+					 </portlet-tabbed-pane>
+				  </portlet-tab>
+				  
+				  <!-- Disloc -->
+				  <portlet-tab label="Disloc-Setup">
+					 <title lang="en">Run Disloc</title>
+					 <table-layout>
+						<row-layout>
+						  <column-layout>
+							 <portlet-frame label="Disloc-PF">
+								<portlet-class>Disloc-portlet#Disloc-portlet</portlet-class>
+							 </portlet-frame>
+						  </column-layout>
+						</row-layout>
+					 </table-layout>
+				  </portlet-tab>
+				  <portlet-tab label="Pick-Location">
+					 <title lang="en">Pick Location</title>
+					 <table-layout>
+						<row-layout>
+						  <column-layout>
+							 <portlet-frame label="Disloc-pick-location-PF">
+								<portlet-class>Disloc-portlet#pick-location-portlet</portlet-class>
+							 </portlet-frame>
+						  </column-layout>
+						</row-layout>
+					 </table-layout>
+				  </portlet-tab>
+				  <portlet-tab label="Fetch-disloc-results">
+					 <title lang="en">Fetch Disloc Results</title>
+					 <table-layout>
+						<row-layout>
+						  <column-layout>
+							 <portlet-frame label="Disloc-fetchmesh-PF">
+								<portlet-class>Disloc-portlet#fetchresults-portlet</portlet-class>
+							 </portlet-frame>
+						  </column-layout>
+						</row-layout>
+					 </table-layout>
+				  </portlet-tab>
+				  <portlet-tab label="Plot-disloc-results">
+					 <title lang="en">Plot Disloc Results</title>
+					 <table-layout>
+						<row-layout>
+						  <column-layout>
+							 <portlet-frame label="Disloc-plot-grid-PF">
+								<portlet-class>Disloc-portlet#plot-results-portlet</portlet-class>
+							 </portlet-frame>
+						  </column-layout>
+						</row-layout>
+					 </table-layout>
+				  </portlet-tab>
+				</portlet-tabbed-pane>
+			 </portlet-tab>
+		  </portlet-tabbed-pane>
+		</portlet-tab>
+		
+    <!-- The end -->		
 	 </portlet-tabbed-pane>
 
     <!-- Footer components (if any) -->

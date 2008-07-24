@@ -1,4 +1,3 @@
-
 	       <h:form id="obsvform" rendered="#{DislocBean2.renderDislocGridParamsForm}"> 
 				<h:panelGrid id="ObsvTable" columns="2" footerClass="subtitle" 
 					headerClass="subtitlebig" styleClass="medium" 
@@ -53,8 +52,12 @@
 						  <h:outputText id="rerdad62lon" value="#{xypoints.lonPoint}"/>
     					</h:column>
 						<h:column>
+					     <f:facet name="header"> 
+						   <h:outputFormat id="outputere2" escape="false" 
+							   value="<b>Remove</b>" /> 
+					     </f:facet> 
 						   <h:commandButton value="Delete" id="delxypointr4ero"
-												  actionListener="DislocBean2.deleteScatterPoint"/> 
+												  actionListener="#{DislocBean2.deleteScatterPoint}"/> 
 						</h:column>
 					</h:dataTable>
             </h:panelGrid>

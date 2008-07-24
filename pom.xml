@@ -106,6 +106,7 @@
     <module>portlets/Simplex-portlet</module>
     <module>portlets/StationMonitor-portlet</module>
     <module>portlets/FaultDB-portlet</module>
+	 <module>portlets/Disloc2</module>
 
     <!-- These are services.  Add new ones here. -->
     <module>ExecutionServices/AnalyzeTseriService</module>

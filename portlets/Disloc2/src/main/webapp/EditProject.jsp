@@ -314,28 +314,16 @@ function getScrolling() {
    <%@include file="DashboardPanel.jsp" %>
    <%@include file="ObsvStyle.jsp" %>
    <%@include file="ScatterMap.jsp" %>
-
-			<h:panelGroup id="stuff4">
    <%@include file="ObservationParamsPanel.jsp" %>
- 
- 
-
-    <%@ include file="FaultParamPanel.jsp" %>  
-
+   <%@ include file="FaultParamPanel.jsp" %>  
    <%@ include file="FaultSearchOptionPanel.jsp" %>  
- 
    <%@ include file="SearchFaultNamePanel.jsp" %>  
-
    <%@ include file="SearchFaultLatLonPanel.jsp" %>  
- 
    <%@ include file="SearchFaultAuthorPanel.jsp" %>  
- 
    <%@ include file="FaultDisplaySearchResultsPanel.jsp" %>  
-		</h:panelGroup> 
-	</h:panelGrid> 
 
+	</h:panelGrid> 
    <%@ include file="ProjectComponentPanel.jsp" %>  
- 
    <%@ include file="footer.jsp" %>
  
 </f:view> 

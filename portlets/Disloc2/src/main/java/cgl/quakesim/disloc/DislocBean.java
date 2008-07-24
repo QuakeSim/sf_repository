@@ -2367,8 +2367,9 @@ public class DislocBean extends GenericSopacBean {
 		  
 		  //Delete the entry from the list.
 		  ObsvPoint deadPoint=(ObsvPoint)getMyScatterPointsTable().getRowData();
-		  int numRows=getMyScatterPointsTable().getRowCount();
-		  scatterPointList.remove(numRows);
+		  int rowValue=getMyScatterPointsTable().getRowIndex();
+		  System.out.println("Selected row value:"+rowValue);
+		  scatterPointList.remove(rowValue);
 
 		  //Remove the old db
 		  db=Db4o.openFile(getBasePath()

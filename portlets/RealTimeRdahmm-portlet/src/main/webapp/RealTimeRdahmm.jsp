@@ -4,12 +4,12 @@
 	Vector networkNames = RSSBeanID.networkNames();
 
 	//Vector stationsVec = RSSBeanID.getAllStationsVec();
-	String mapcenter_x = "33.036";
-	String mapcenter_y = "-117.24";
+	String mapcenter_x = "33.54";
+	String mapcenter_y = "-116.63";
 
 	String [] center_xy = RSSBeanID.getMapCenter();
-	mapcenter_x = center_xy[0];
-	mapcenter_y = center_xy[1];
+//	mapcenter_x = center_xy[0];
+//	mapcenter_y = center_xy[1];
 %>
 <%
 	String str_tabcontent = new String();
