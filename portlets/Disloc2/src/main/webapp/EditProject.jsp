@@ -552,7 +552,7 @@ function getScrolling() {
 
 				</h:panelGrid> 
 			</h:form> 
- 
+
 			<h:form id="faultselection" 
 				rendered="#{DislocBean2.renderAddFaultSelectionForm}"> 
 				<h:panelGrid id="AddFaultSelection" columns="1" 
@@ -618,11 +618,11 @@ function getScrolling() {
 				</h:panelGrid> 
 			</h:form> 
  
-   <%@ include file="FaultLatLonSearchPanel.jsp" %>  
+   <%@ include file="SearchFaultLatLonPanel.jsp" %>  
  
-   <%@ include file="FaultAuthorSearchPanel.jsp" %>  
+   <%@ include file="SearchFaultAuthorPanel.jsp" %>  
  
-   <%@ include file="FaultSearchResultsPanel.jsp" %>  
+   <%@ include file="FaultDisplaySearchResultsPanel.jsp" %>  
 		</h:panelGroup> 
 	</h:panelGrid> 
 
