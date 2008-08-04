@@ -321,64 +321,65 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
 		<portlet-tab label="portal-faultdb">
 		  <title lang="en">Obsolete Portlets</title>
 		  <portlet-tabbed-pane selected="0" style="sub-menu">
+			 <!-- New Mesh Gen -->
+			 <portlet-tab label="NewMeshGen-Portlet">
+				<title lang="en">NewMeshGen-Portlet</title>
+				<portlet-tabbed-pane style="sub-menu">
+				  <portlet-tab label="Mesh-Generation-Setup">
+					 <title lang="en">Mesh Generation</title>
+					 <table-layout>
+						<row-layout>
+						  <column-layout>
+							 <portlet-frame label="NewMeshGen-PF">
+								<portlet-class>NewMeshGen-portlet#NewMeshGen-portlet </portlet-class>
+							 </portlet-frame>
+						  </column-layout>
+						</row-layout>
+					 </table-layout>
+				  </portlet-tab>
+				  <portlet-tab label="Fetch-mesh-results">
+					 <title lang="en">Fetch Mesh Results</title>
+					 <table-layout>
+						<row-layout>
+						  <column-layout>
+							 <portlet-frame label="NewMeshGen-fetchmesh-PF">
+								<portlet-class>NewMeshGen-portlet#fetchmesh-portlet </portlet-class>
+							 </portlet-frame>
+						  </column-layout>
+						</row-layout>
+					 </table-layout>
+				  </portlet-tab>
+				  <portlet-tab label="Choose-mesh-results">
+					 <title lang="en">Run GeoFEST</title>
+					 <table-layout>
+						<row-layout>
+						  <column-layout>
+							 <portlet-frame label="NewMeshGen-choosemesh-PF">
+								<portlet-class>NewMeshGen-portlet#choosemesh-portlet </portlet-class>
+							 </portlet-frame>
+						  </column-layout>
+						</row-layout>
+					 </table-layout>
+				  </portlet-tab>
+				  <portlet-tab label="Fetch-gfout-results">
+					 <title lang="en">GeoFEST Results</title>
+					 <table-layout>
+						<row-layout>
+						  <column-layout>
+							 <portlet-frame label="NewMeshGen-geofestoutput-PF">
+								<portlet-class>NewMeshGen-portlet#fetch-geofest-output-portlet </portlet-class>
+							 </portlet-frame>
+						  </column-layout>
+						</row-layout>
+					 </table-layout>
+				  </portlet-tab>
+				</portlet-tabbed-pane>
+			 </portlet-tab>
+
 			 <portlet-tab label="Disloc-Portlet">
 				<title lang="en">Old Disloc Portlet</title>
 				<portlet-tabbed-pane style="sub-menu">
 				  
-				  <!-- New Mesh Gen -->
-				  <portlet-tab label="NewMeshGen-Portlet">
-					 <title lang="en">NewMeshGen-Portlet</title>
-					 <portlet-tabbed-pane style="sub-menu">
-						<portlet-tab label="Mesh-Generation-Setup">
-						  <title lang="en">Mesh Generation</title>
-						  <table-layout>
-							 <row-layout>
-								<column-layout>
-								  <portlet-frame label="NewMeshGen-PF">
-									 <portlet-class>NewMeshGen-portlet#NewMeshGen-portlet </portlet-class>
-								  </portlet-frame>
-								</column-layout>
-							 </row-layout>
-						  </table-layout>
-						</portlet-tab>
-						<portlet-tab label="Fetch-mesh-results">
-						  <title lang="en">Fetch Mesh Results</title>
-						  <table-layout>
-							 <row-layout>
-								<column-layout>
-								  <portlet-frame label="NewMeshGen-fetchmesh-PF">
-									 <portlet-class>NewMeshGen-portlet#fetchmesh-portlet </portlet-class>
-								  </portlet-frame>
-								</column-layout>
-							 </row-layout>
-						  </table-layout>
-						</portlet-tab>
-						<portlet-tab label="Choose-mesh-results">
-						  <title lang="en">Run GeoFEST</title>
-						  <table-layout>
-							 <row-layout>
-								<column-layout>
-								  <portlet-frame label="NewMeshGen-choosemesh-PF">
-									 <portlet-class>NewMeshGen-portlet#choosemesh-portlet </portlet-class>
-								  </portlet-frame>
-								</column-layout>
-							 </row-layout>
-						  </table-layout>
-						</portlet-tab>
-						<portlet-tab label="Fetch-gfout-results">
-						  <title lang="en">GeoFEST Results</title>
-						  <table-layout>
-							 <row-layout>
-								<column-layout>
-								  <portlet-frame label="NewMeshGen-geofestoutput-PF">
-									 <portlet-class>NewMeshGen-portlet#fetch-geofest-output-portlet </portlet-class>
-								  </portlet-frame>
-								</column-layout>
-							 </row-layout>
-						  </table-layout>
-						</portlet-tab>
-					 </portlet-tabbed-pane>
-				  </portlet-tab>
 				  
 				  <!-- Disloc -->
 				  <portlet-tab label="Disloc-Setup">
