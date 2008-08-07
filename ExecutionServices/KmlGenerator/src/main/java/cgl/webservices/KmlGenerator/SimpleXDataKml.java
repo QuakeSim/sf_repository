@@ -22,20 +22,31 @@ import javax.servlet.http.HttpServlet;
 import org.apache.axis.MessageContext;
 import org.apache.axis.transport.http.HTTPConstants;
 
-import cgl.webservices.KmlGenerator.gekmlib.Folder;
-import cgl.webservices.KmlGenerator.gekmlib.Kml;
-import cgl.webservices.KmlGenerator.gekmlib.LineString;
-import cgl.webservices.KmlGenerator.gekmlib.Placemark;
-import cgl.webservices.KmlGenerator.gekmlib.Point;
-import cgl.webservices.KmlGenerator.gekmlib.Style;
-import cgl.webservices.KmlGenerator.gekmlib.LineStyle;
-import cgl.webservices.KmlGenerator.gekmlib.IconStyle;
-import cgl.webservices.KmlGenerator.gekmlib.Icon;
-import cgl.webservices.KmlGenerator.gekmlib.vec2;
-import cgl.webservices.KmlGenerator.gekmlib.Node;
-import cgl.webservices.KmlGenerator.gekmlib.Document;
+// import cgl.webservices.KmlGenerator.gekmlib.Folder;
+// import cgl.webservices.KmlGenerator.gekmlib.Kml;
+// import cgl.webservices.KmlGenerator.gekmlib.LineString;
+// import cgl.webservices.KmlGenerator.gekmlib.Placemark;
+// import cgl.webservices.KmlGenerator.gekmlib.Point;
+// import cgl.webservices.KmlGenerator.gekmlib.Style;
+// import cgl.webservices.KmlGenerator.gekmlib.LineStyle;
+// import cgl.webservices.KmlGenerator.gekmlib.IconStyle;
+// import cgl.webservices.KmlGenerator.gekmlib.Icon;
+// import cgl.webservices.KmlGenerator.gekmlib.vec2;
+// import cgl.webservices.KmlGenerator.gekmlib.Node;
+// import cgl.webservices.KmlGenerator.gekmlib.Document;
 
-
+import com.keithpower.gekmlib.Folder;
+import com.keithpower.gekmlib.Kml;
+import com.keithpower.gekmlib.LineString;
+import com.keithpower.gekmlib.Placemark;
+import com.keithpower.gekmlib.Point;
+import com.keithpower.gekmlib.Style;
+import com.keithpower.gekmlib.LineStyle;
+import com.keithpower.gekmlib.IconStyle;
+import com.keithpower.gekmlib.Icon;
+import com.keithpower.gekmlib.vec2;
+import com.keithpower.gekmlib.Node;
+import com.keithpower.gekmlib.Document;
 
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
@@ -71,19 +82,59 @@ public class SimpleXDataKml {
 	
 	private Properties properties;
 
+	 private double arrowScale, defaultArrowScale;
+
+	 //Some useful string constants
+	 String fontStart="<font color=blue>";
+	 String fontEnd="</font>";
+	 String br="<br/>";
+	 String cdataStart="<![CDATA[ <br/> <hr/>";
+	 String cdataEnd="]]>";
+
 	public SimpleXDataKml() {
-		init();
+		 this(false);
 	}
 
-	public SimpleXDataKml(String OriginalLon, String OriginalLat) {
+	 public SimpleXDataKml(boolean useClassLoader) {
+		  init(useClassLoader);
+	 }
+
+	 public SimpleXDataKml(String OriginalLon, String OriginalLat, boolean useClassLoader) {
 		this.setOriginal_lon(OriginalLon);
 		this.setOriginal_lat(OriginalLat);
-		init();
+		init(useClassLoader);
 	}
 
-	public static void main(String[] av) throws IOException {
-		 SimpleXDataKml dw = new SimpleXDataKml();
-		 dw.runMakeKml("","","nice","111");
+	 public SimpleXDataKml(String OriginalLon, String OriginalLat) {
+		  this(OriginalLon, OriginalLat, false);
+	}
+
+	 /**
+	  * This is a main method for testing.
+	  */
+	 public static void main(String[] av) throws IOException {
+		 SimpleXDataKml test = new SimpleXDataKml(true);
+		 PointEntry[] pointEntryList=new PointEntry[1];
+		 pointEntryList[0]=new PointEntry();
+		 pointEntryList[0].setX("-10.0");
+		 pointEntryList[0].setY("-10.0");
+		 pointEntryList[0].setDeltaXName("dx");
+		 pointEntryList[0].setDeltaXValue("6.37");
+		 pointEntryList[0].setDeltaYName("dy");
+		 pointEntryList[0].setDeltaYValue("6.02");
+		 pointEntryList[0].setDeltaZName("dz");
+		 pointEntryList[0].setDeltaZValue("1.9");
+		 pointEntryList[0].setFolderTag("point");
+
+
+		 test.setDatalist(pointEntryList);
+		 test.setOriginalCoordinate("-118.72","34.25");
+		 test.setCoordinateUnit("1000");
+		 //		 test.setArrowPlacemark("Arrowed","ff66a1cc",0.5);
+		 test.setArrowPlacemark("Arrowed","ff0000f",1);
+
+		 test.setFaultPlot("","test","-118.72","34.243","-118.591","34.176","ff66a1cc",5);
+		 test.printToFile(test.doc.toKML(),"test.kml");	
 	}
 	 
 	 public void setDatalist(PointEntry[] InputDataList) {
@@ -143,35 +194,55 @@ public class SimpleXDataKml {
 		return (PointEntry[]) (dataset.toArray(new PointEntry[dataset.size()]));
 	}
 
-	public void init() {
+
+	public void init(boolean useClassLoader) {
 		 System.out.println("----------------------------------");
 		 System.out.println("Initializing KML service.");
 		 System.out.println("----------------------------------");
 
-		try {
-			// Extract the Servlet Context
-			System.out.println("Using Servlet Context");
-			MessageContext msgC = MessageContext.getCurrentContext();
-			ServletContext context = ((HttpServlet) msgC
-					.getProperty(HTTPConstants.MC_HTTP_SERVLET))
-					.getServletContext();
-			String propertyFile = context.getRealPath("/")
-					+ "/WEB-INF/classes/kmlgenerator.properties";
-			System.out.println("Prop file location " + propertyFile);
-			properties = new Properties();
-			properties.load(new FileInputStream(propertyFile));
-			// Note these will be "global" for this class, so
-			// I will not explicitly pass them around.
-			serverUrl = properties.getProperty("KmlGenerator.service.url");
-			baseOutputDestDir = properties.getProperty("output.dest.dir");
-		}
-		catch (Exception e ) {
-			 e.printStackTrace();
-		}
-		root.setName("root Folder");
-		root.setDescription("This is the root folder");
-		kmlDocument.addFolder(root);
-		doc.addDocument(kmlDocument);
+		 try {
+			  if(useClassLoader) {
+					
+					System.out.println("Using classloader");
+					//This is useful for command line clients but does not work
+					//inside Tomcat.
+					ClassLoader loader=ClassLoader.getSystemClassLoader();
+					properties=new Properties();
+					
+					//This works if you are using the classloader but not inside
+					//Tomcat.
+					properties.load(loader.getResourceAsStream("kmlgenerator.properties"));
+			  }
+			  else {
+					// Extract the Servlet Context
+					System.out.println("Using Servlet Context");
+					MessageContext msgC = MessageContext.getCurrentContext();
+					ServletContext context = ((HttpServlet) msgC
+													  .getProperty(HTTPConstants.MC_HTTP_SERVLET))
+						 .getServletContext();
+					String propertyFile = context.getRealPath("/")
+						 + "/WEB-INF/classes/kmlgenerator.properties";
+					System.out.println("Prop file location " + propertyFile);
+					properties = new Properties();
+					properties.load(new FileInputStream(propertyFile));
+			  }
+
+			  
+			  // Note these will be "global" for this class, so
+			  // I will not explicitly pass them around.
+			  serverUrl = properties.getProperty("KmlGenerator.service.url");
+			  baseOutputDestDir = properties.getProperty("output.dest.dir");
+			  defaultArrowScale=Double.parseDouble(properties.getProperty("default.arrow.scale"));
+			  arrowScale=defaultArrowScale;
+		 }
+
+		 catch (Exception ex) {
+			  ex.printStackTrace();
+		 }
+		 root.setName("root Folder");
+		 root.setDescription("This is the root folder");
+		 kmlDocument.addFolder(root);
+		 doc.addDocument(kmlDocument);
 	}
 
 	public void setLineStyle(Folder curfolder, String id, String Color_value,
@@ -397,15 +468,15 @@ public class SimpleXDataKml {
 			descriptionValue = descriptionValue
 					+ "<font color=blue>lon:</font>" + lon + "<br/>";
 			descriptionValue = descriptionValue
-					+ "<font color=blue>length:</font>" + length + "<br/>";
+					+ "<font color=blue>length:</font>" + length + "km <br/>";
 			descriptionValue = descriptionValue
-					+ "<font color=blue>degree:</font>" + degs + "<br/>";
-			descriptionValue = descriptionValue + datalist[i].getDeltaXName()
-					+ ":" + datalist[i].getDeltaXValue() + "<br/>";
-			descriptionValue = descriptionValue + datalist[i].getDeltaYName()
-					+ ":" + datalist[i].getDeltaYValue() + "<br/>";
-			descriptionValue = descriptionValue + datalist[i].getDeltaZName()
-					+ ":" + datalist[i].getDeltaZValue() + "<br/>";
+					+ "<font color=blue>degrees:</font>" + degs + "<br/>";
+			descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaXName()
+					+ ":" +fontEnd+ datalist[i].getDeltaXValue() + "<br/>";
+			descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaYName()
+					+ ":" +fontEnd+ datalist[i].getDeltaYValue() + "<br/>";
+			descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaZName()
+					+ ":" +fontEnd+ datalist[i].getDeltaZValue() + "<br/>";
 			descriptionValue = descriptionValue
 					+ "<font color=blue>tag name:</font>"
 					+ datalist[i].getFolderTag();
@@ -439,8 +510,8 @@ public class SimpleXDataKml {
 		} else {
 			container = root;
 		}
-		//		String linestyleid=faultName+"Style";
-		String linestyleid="";
+		String linestyleid=faultName+"Style";
+		//		String linestyleid="";
 		setLineStyle(container, linestyleid, LineColor, LineWidth);
 		Placemark mark1 = new Placemark();
 		mark1.setName(faultName);
@@ -455,26 +526,31 @@ public class SimpleXDataKml {
 //				tmp_lonlat.getY());
 		line_value = line_value + tmp_lonlat.getX() + ","
 				+ tmp_lonlat.getY() + ",0  ";
-		String descriptionValue= "lonstart:"+tmp_lonlat.getX()+" ";
-		descriptionValue=descriptionValue + "latstart:"+tmp_lonlat.getY()+" ";
+		String descriptionValue= cdataStart+fontStart+"Starting Lon:"+fontEnd+tmp_lonlat.getX()+" "+br;
+		descriptionValue=descriptionValue + fontStart+"Starting Lat:"+fontEnd+tmp_lonlat.getY()+" "+br;
 		// plot end point
 		tmp_lonlat = new Coordinate(Double.valueOf(lonend).doubleValue() , Double.valueOf(latend).doubleValue());
 //		tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(),
 //				tmp_lonlat.getY());
 		line_value = line_value + tmp_lonlat.getX() + ","
 				+ tmp_lonlat.getY() + ",0  ";	
-		descriptionValue=descriptionValue + "lonend:"+tmp_lonlat.getX()+" ";
-		descriptionValue=descriptionValue + "latend:"+tmp_lonlat.getY()+" ";
+		descriptionValue=descriptionValue + fontStart+"Ending Lon:"+fontEnd+tmp_lonlat.getX()+" "+br;
+		descriptionValue=descriptionValue + fontStart+"Ending Lat:"+fontEnd+tmp_lonlat.getY()+" "+br;
+		descriptionValue+=cdataEnd;
 
 		mark1.setDescription(descriptionValue);
-		//		mark1.setStyleUrl("#" + linestyleid);
-		mark1.setStyleUrl(linestyleid);
+		mark1.setStyleUrl("#" + linestyleid);
+		//		mark1.setStyleUrl(linestyleid);
 		newline.setCoordinates(line_value);
 		mark1.addLineString(newline);
 		container.addPlacemark(mark1);		
 	}
 	
 	 public void setArrowPlacemark(String folderName, String LineColor, double LineWidth) {
+		  setArrowPlacemark(folderName, LineColor, LineWidth, defaultArrowScale);
+	 }
+
+	 public void setArrowPlacemark(String folderName, String LineColor, double LineWidth, double arrowScale) {
 		  
 		Folder container = new Folder();
 		if (!folderName.equals("") && !folderName.equals("null")) {
@@ -487,8 +563,8 @@ public class SimpleXDataKml {
 		}
 		
 		//This isn't done correctly so disable in anticipation of future brilliance.
-		//		String linestyleid=LineColor+(int)(LineWidth)
-		String linestyleid="";
+		String linestyleid="arrowedStyle";
+			 //String linestyleid="";
 		setLineStyle(container, linestyleid, LineColor, LineWidth);
 		for (int i = 0; i < datalist.length; i++) {
 			// create and add a Placemark containing a Point
@@ -518,38 +594,42 @@ public class SimpleXDataKml {
 			double lat = new_lonlat.getY();
 			double lon = new_lonlat.getX();
 			
+			String br="<br/>";
+			String fontStart="<font color=blue>";
+			String fontEnd="</font>";
+
 			String descriptionValue = "<![CDATA[";
 			descriptionValue = descriptionValue
-					+ "<font color=blue>lat:</font>" + lat + "";
+					+ "<font color=blue>lat:</font>" + lat + ""+br;
 			descriptionValue = descriptionValue
-					+ "<font color=blue>lon:</font>" + lon + "";
+					+ "<font color=blue>lon:</font>" + lon + ""+br;
 			descriptionValue = descriptionValue
-					+ "<font color=blue>length:</font>" + length + "";
+					+ "<font color=blue>length:</font>" + length + " km "+br;
 			descriptionValue = descriptionValue
-					+ "<font color=blue>degree:</font>" + degs + "";
-			descriptionValue = descriptionValue + datalist[i].getDeltaXName()
-					+ ":" + datalist[i].getDeltaXValue() + "";
-			descriptionValue = descriptionValue + datalist[i].getDeltaYName()
-					+ ":" + datalist[i].getDeltaYValue() + "";
-			descriptionValue = descriptionValue + datalist[i].getDeltaZName()
-					+ ":" + datalist[i].getDeltaZValue() + "";
+					+ "<font color=blue>degree:</font>" + degs + ""+br;
+			descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaXName()
+					+ ":" +fontEnd+ datalist[i].getDeltaXValue() + " cm <br/>";
+			descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaYName()
+					+ ":" +fontEnd+ datalist[i].getDeltaYValue() + " cm <br/>";
+			descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaZName()
+					+ ":" +fontEnd+ datalist[i].getDeltaZValue() + " cm <br/>";
 			descriptionValue = descriptionValue
 					+ "<font color=blue>tag name:</font>"
-					+ datalist[i].getFolderTag();
+					+ datalist[i].getFolderTag()+br;
 			descriptionValue = descriptionValue + "]]>";
 			mark1.setDescription(descriptionValue);
 
 			LineString newline = new LineString();
-			mark1.setStyleUrl(linestyleid);
+			mark1.setStyleUrl("#"+linestyleid);
 			String line_value = "";
 			double startx = original_xy.getX() + x * coordinateUnit;
 			double starty = original_xy.getY() + y * coordinateUnit;
-			double endx = startx + dx * coordinateUnit;
-			double endy = starty + dy * coordinateUnit;
+ 			// double endx = startx + dx * coordinateUnit;
+			// double endy = starty + dy * coordinateUnit;
+			double endx = startx + dx*arrowScale;
+			double endy = starty + dy*arrowScale;
 			ArrowLine curarrow = CreateArrowByCoordinate(startx, starty, endx,
 					endy);
-			
-			
 			
 			// plot start point
 			double mapx = curarrow.getStartPoint().getX();
@@ -603,7 +683,6 @@ public class SimpleXDataKml {
 			newline.setCoordinates(line_value);
 			mark1.addLineString(newline);
 			container.addPlacemark(mark1);
-
 		}
 	}
 
@@ -775,6 +854,5 @@ public class SimpleXDataKml {
 		System.out.println("Working Directory is " + workDir);
 		new File(workDir).mkdirs();
 	}
-	
 
 }

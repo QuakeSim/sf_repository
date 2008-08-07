@@ -76,6 +76,11 @@
 
     <!-- Project dependencies -->
     <dependencies>
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.5</version>
+        </dependency>
 
         <!-- Servlet Dependencies -->
         <dependency>

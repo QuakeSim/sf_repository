@@ -83,6 +83,13 @@
             <scope>provided</scope>
         </dependency>
 
+		  <!-- gekmllib jar stuff -->
+		  <dependency>
+			 <groupId>QuakeSim2</groupId>
+			 <artifactId>gekmllib</artifactId>
+			 <version>0.03</version>
+		  </dependency>
+
         <!-- Axis jars -->
         <dependency>
              <groupId>axis</groupId>
@@ -149,6 +156,7 @@
         <!--
         SOPAC Jars
         -->
+<!--
         <dependency>
              <groupId>SOPAC</groupId>
              <artifactId>GRWS_SubmitQuery</artifactId>
@@ -160,7 +168,7 @@
              <artifactId>grwsXmlBeansSchemas</artifactId>
              <version>1.0</version>
         </dependency>
-
+-->
 
        </dependencies>
 
