@@ -42,11 +42,12 @@
                         <phase>package</phase>
                            <configuration>
                              <tasks>
-			       <replace dir="${basedir}/target/${pom.artifactId}" 
+										 <echo message="Google Master Key: ${google.master.key}"/>
+										 <replace dir="${basedir}/target/${pom.artifactId}" 
                                         token="put.google.map.key.here"
                                         value="${google.master.key}">
-				 <include name="**/*.jsf"/>
-			       </replace>
+											<include name="**/*.jsp"/>
+										 </replace>
                              </tasks>
                            </configuration>
                            <goals>

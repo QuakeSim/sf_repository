@@ -2034,47 +2034,56 @@ public class DislocBean extends GenericSopacBean {
 				localDestination=this.getBasePath()+"/"+"gridsphere"+"/"
 					 +getObsvKmlFilename();
 
-
+				PrintWriter out=new PrintWriter(new FileWriter(localDestination));
+				
 				if(currentParams.getObservationPointStyle()==1) {
 					 DislocParamsBean dpb=getDislocParamsFromDB();
 					 //Get data points
 					 int xint=dpb.getGridXIterations();
-					 int yint=dbp.getGridYIterations();
-					 double xspacing=dbp.getGridXSpacing();
-					 double yspacing=dbp.getGridYSpacing();
-					 double xmin=dbp.getGridMinXValue();
-					 double ymin=dbp.getGridMinYValue();
+					 int yint=dpb.getGridYIterations();
+					 double xspacing=dpb.getGridXSpacing();
+					 double yspacing=dpb.getGridYSpacing();
+					 double xmin=dpb.getGridMinXValue();
+					 double ymin=dpb.getGridMinYValue();
+					 double originLat=dpb.getOriginLat();
+					 double originLon=dpb.getOriginLon();
 
 					 //Make the KML
+					 out.println(xmlHead); 														 
+					 out.println(kmlHead);
+					 out.println(docBegin);
+				
+					 double cartX, cartY;
+					 double lat, lon;
+
 					 for(int i=0;i<xint;i++) {
+						  cartX=xmin+i*xspacing;
 						  for(int j=0;j<yint;j++) {
+								cartY=ymin+j*yspacing;
+								lon=cartX/factor(originLon, originLat)+originLon;
+								lat=cartY/111.32+originLat;
+								writeKmlPoint(lat, lon, out);
 						  }
 					 }
+					 out.println(docEnd);
+					 out.println(kmlEnd);
+					 out.flush();
+					 out.close();
 				}
 
 				//Default to scatter style
 				else {
 				    ObsvPoint[] points=getObsvPointsFromDB();
-				    
-				    PrintWriter out=new PrintWriter(new FileWriter(localDestination));
+					 out.println(xmlHead); 														 
+					 out.println(kmlHead);
 				    
 				    if(points!=null && points.length>0) {
-					out.println(xmlHead); 														 
-					out.println(kmlHead);
 						  out.println(docBegin);
 						  for(int i=0;i<points.length;i++) {
-						  out.println(pmBegin);
-						  out.println(descBegin);
-						  out.println("<b>Observation Point:</b> "
-										  +points[i].getLonPoint()+comma+points[i].getLatPoint());
-						  out.println(descEnd);
-						  out.println(pointBegin);
-						  out.println(coordBegin);
-						  out.println(points[i].getLonPoint()+comma+points[i].getLatPoint()+comma+"0");
-						  out.println(coordEnd);
-						  out.println(pointEnd);
-						  out.println(pmEnd);
-					 }
+								writeKmlPoint(Double.parseDouble(points[i].getLonPoint()), 
+												  Double.parseDouble(points[i].getLatPoint()), 
+												  out);
+						  }
 						  out.println(docEnd);
 						  out.println(kmlEnd);
 						  out.flush();
@@ -2091,6 +2100,21 @@ public class DislocBean extends GenericSopacBean {
 		  System.out.println("KML:"+returnString);
 		  return returnString;
 	 }
+		  
+	 protected void writeKmlPoint(double lat, double lon, PrintWriter out) {
+		  out.println(pmBegin);
+		  out.println(descBegin);
+		  out.println("<b>Observation Point:</b> "
+						  +lon+comma+lat);
+		  out.println(descEnd);
+		  out.println(pointBegin);
+		  out.println(coordBegin);
+		  out.println(lon+comma+lat+comma+"0");
+		  out.println(coordEnd);
+		  out.println(pointEnd);
+		  out.println(pmEnd);
+	 }
+		 
 
 	 public String getFaultKmlFilename() {
 		  return faultKmlFilename;

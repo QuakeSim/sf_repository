@@ -18,7 +18,6 @@
 	  String fileName=dislocBean.getKmlProjectFile();
 	  dislocBean.setCodeName("Disloc2");
 	  dislocBean.setContextBasePath("/WebServices/WEB-INF/Descriptors/users/");
-
   %>
 
    <table>

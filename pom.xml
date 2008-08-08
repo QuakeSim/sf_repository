@@ -6,7 +6,7 @@
 	 <!--==================================================-->
 	 <portal.server.ip>156.56.104.143</portal.server.ip>
 	 <host.base.url>http://${portal.server.ip}:8080/</host.base.url>
-
+	 <google.master.key>ABQIAAAAxOZ1VuCkrWUtft6jtubycBRxYpIIOz9ynlSKjbx-4JMuN5JjrhR5gSOcKdieYppOZ4_yzZc_Ti15qw</google.master.key>
 	 <!--==================================================-->
 	 <!-- 
 			Specify your container.  Currently only gridsphere
@@ -29,7 +29,8 @@
     <catalina.home>${env.HOME}/QuakeSim2/portal_deploy/${tomcat.version}/</catalina.home>
     <tomcat.base.dir>${env.HOME}/QuakeSim2/portal_deploy/${tomcat.version}/</tomcat.base.dir>
 	 <gridsphere.version>gridsphere-2.1.4</gridsphere.version>
-	 
+
+
     <user.home>${user.home}</user.home>
 
 	 <!-- These are the urls for the various services -->
