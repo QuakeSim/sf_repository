@@ -353,6 +353,9 @@ public class DislocBean extends GenericSopacBean {
 	return DISLOC_NAV_STRING;		  
     }
     
+	 /**
+	  * This method is used to generate the output plots with the remote KML service.
+	  */
     protected String createKml(DislocParamsBean dislocParams,
 			       DislocResultsBean dislocResultsBean,
 			       Fault[] faults) throws Exception {
@@ -2007,7 +2010,7 @@ public class DislocBean extends GenericSopacBean {
 
     /**
      * Create a KML file of the point observations.  The method assumes
-     * access to global variables.
+     * access to global variables.  This method is used to plot INPUT values for disloc.
      */
     public String createObsvKmlFile() { 
 		  String newObsvFilename="";
@@ -2033,8 +2036,22 @@ public class DislocBean extends GenericSopacBean {
 
 
 				if(currentParams.getObservationPointStyle()==1) {
-					 //Need to print the grid lines.
+					 DislocParamsBean dpb=getDislocParamsFromDB();
+					 //Get data points
+					 int xint=dpb.getGridXIterations();
+					 int yint=dbp.getGridYIterations();
+					 double xspacing=dbp.getGridXSpacing();
+					 double yspacing=dbp.getGridYSpacing();
+					 double xmin=dbp.getGridMinXValue();
+					 double ymin=dbp.getGridMinYValue();
+
+					 //Make the KML
+					 for(int i=0;i<xint;i++) {
+						  for(int j=0;j<yint;j++) {
+						  }
+					 }
 				}
+
 				//Default to scatter style
 				else {
 				    ObsvPoint[] points=getObsvPointsFromDB();
