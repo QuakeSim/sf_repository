@@ -1,4 +1,3 @@
-
 			<h:form id="UpdateSelectFaultsForm">
 				<h:panelGrid columns="1" border="1"  id="stuff80"> 
 					<h:panelGroup  id="lid2"> 

@@ -65,7 +65,6 @@ String [] center_xy = RSSBeanID.getMapCenter();
  	     	YAHOO.example.calendar.cal1.selectEvent.subscribe(myBeginDateHandler1,YAHOO.example.calendar.cal1, true);
 	     	YAHOO.example.calendar.cal1.render();
 		YAHOO.util.Event.addListener("form1:cal1Button","mouseover",YAHOO.example.calendar.cal1.show,YAHOO.example.calendar.cal1,true);
-
 	
 		//Set up the second calendar
 	     	YAHOO.example.calendar.cal2=new YAHOO.widget.Calendar("cal2","cal2Container",{title:"Ending Date:",close:true});

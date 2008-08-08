@@ -672,4 +672,42 @@ public class GenericProjectBean {
 	 public String getFaultDBServiceUrl() {
 		  return faultDBServiceUrl;
 	 }
+	 
+	 /**
+	  * Stole this from http://www.java2s.com/Code/Java/File-Input-Output/CopyfilesusingJavaIOAPI.htm
+	  */
+	 public void copyFile(File oldFileDB, File newFileDB) throws Exception {
+		  
+		  System.out.println("Files to copy:"+oldFileDB.toString()+" "+newFileDB.toString());
+		  if(oldFileDB.exists() && oldFileDB.canRead() 
+			  && newFileDB.exists() && newFileDB.canWrite()) {
+				FileInputStream from = null;
+				FileOutputStream to = null;
+				try {
+					 from = new FileInputStream(oldFileDB);
+					 to = new FileOutputStream(newFileDB);
+					 byte[] buffer = new byte[4096];
+					 int bytesRead;
+					 
+					 while ((bytesRead = from.read(buffer)) != -1)
+						  to.write(buffer, 0, bytesRead); // write
+				} finally {
+					 if (from != null)
+						  try {
+								from.close();
+						  } catch (IOException e) {
+								;
+						  }
+					 if (to != null)
+						  try {
+								to.close();
+						  } catch (IOException e) {
+								;
+						  }
+				 }
+		  }
+		  else {
+				System.err.println("Couldn't create new project DB file");
+		  }
+	 }
 }

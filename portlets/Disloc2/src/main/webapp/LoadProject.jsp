@@ -53,14 +53,14 @@ function dataTableSelectOneRadio(radio) {
 </script>
 
 <f:view>
-	<h:form>
 	<h:outputText styleClass="header2" value="Project Archive"/>
         <p/>
 		  <h:outputText value="You don't have any archived projects."
 							 rendered="#{empty DislocBean2.myProjectNameList}"/>
-		<h:panelGrid columns="2" 
+		<h:panelGrid columnClasses="alignTop,alignTop,alignTop" columns="3" 
 						 rendered="#{!(empty DislocBean2.myProjectNameList)}"		 
 						 border="1">
+	     <h:form>
 			<h:panelGrid columns="1" border="0">
 				<h:outputText escape="false" value="<b>Select Project</b><br><br>" />
 				<h:outputText escape="false"
@@ -77,6 +77,34 @@ function dataTableSelectOneRadio(radio) {
 				<h:commandButton value="Select"
 					action="#{DislocBean2.toggleSelectProject}" />
 			</h:panelGrid>
+			</h:form>
+
+			<h:form>
+			<h:panelGrid columns="1" border="0">
+				<h:outputText escape="false" value="<b>Copy Project</b><br><br>" />
+				<h:outputText escape="false"
+					value="Please select from one of the previous projects." />
+	
+				<h:selectManyCheckbox id="projectlistforcopy" 
+											 value="#{DislocBean2.copyProjectsArray}"
+					onchange="dataTableSelectOneRadio(this)"
+					onclick="dataTableSelectOneRadio(this)"
+
+					layout="pageDirection">					
+					<f:selectItems value="#{DislocBean2.myProjectNameList}" />
+				</h:selectManyCheckbox>
+
+				   <h:outputText value="New ProjectName:"/>
+				   <h:inputText id="newProjectName" 
+									 value="#{DislocBean2.projectName}"
+									 required="true"/>
+
+				<h:commandButton value="Copy"
+					action="#{DislocBean2.toggleCopyProject}" />
+			</h:panelGrid>
+			</h:form>
+
+			<h:form>
 			<h:panelGrid columns="1" 
 							 border="0">
 				<h:outputText escape="false" value="<b>Delete Projects</b><br><br>" />
@@ -89,8 +117,10 @@ function dataTableSelectOneRadio(radio) {
 				<h:commandButton value="Delete"
 					action="#{DislocBean2.toggleDeleteProject}" />
 			</h:panelGrid>
+			</h:form>
+
 		</h:panelGrid>
-	</h:form>
+
 <p/>
 	<h:form>
 		<b>New Project Name</b>

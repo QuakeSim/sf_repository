@@ -101,6 +101,8 @@ public class DislocBean extends GenericSopacBean {
     //These are useful object lists.
     String[] selectProjectsArray;
     String[] deleteProjectsArray;
+	 String[] copyProjectsArray;
+
     List myProjectNameList=new ArrayList();
     List myFaultCollection=new ArrayList();
     List myDislocParamsCollection=new ArrayList();
@@ -248,26 +250,26 @@ public class DislocBean extends GenericSopacBean {
      * Note this method assumes projectName has been set externally.  It will return a
      * new object if it can't locate one in the db.
      */
-    protected DislocParamsBean getDislocParamsFromDB(){
-	//Create an empyt params.  We will use this if we can't find one
-	//in the DB.  Set the origin just in case.
-	DislocParamsBean paramsBean=new DislocParamsBean();
-	paramsBean.setOriginLat(DislocParamsBean.DEFAULT_LAT);
-	paramsBean.setOriginLon(DislocParamsBean.DEFAULT_LON);
-	
-	db=Db4o.openFile(getBasePath()+"/"
-			 +getContextBasePath()
-			 +"/"+userName+"/"+codeName+"/"+projectName+".db");		  
-	ObjectSet results=db.get(DislocParamsBean.class);
-	System.out.println("Getting params from db:"+results.size());
-	if(results.hasNext()) {
-	    paramsBean=(DislocParamsBean)results.next();
-	}
-	System.out.println("Project Origin:"
-			   +paramsBean.getOriginLat()+" "
-			   +paramsBean.getOriginLon());
-	db.close();
-	return paramsBean;
+    protected DislocParamsBean getDislocParamsFromDB(String projectName){
+		  //Create an empty params.  We will use this if we can't find one
+		  //in the DB.  Set the origin just in case.
+		  DislocParamsBean paramsBean=new DislocParamsBean();
+		  paramsBean.setOriginLat(DislocParamsBean.DEFAULT_LAT);
+		  paramsBean.setOriginLon(DislocParamsBean.DEFAULT_LON);
+		  
+		  db=Db4o.openFile(getBasePath()+"/"
+								 +getContextBasePath()
+								 +"/"+userName+"/"+codeName+"/"+projectName+".db");		  
+		  ObjectSet results=db.get(DislocParamsBean.class);
+		  System.out.println("Getting params from db:"+results.size());
+		  if(results.hasNext()) {
+				paramsBean=(DislocParamsBean)results.next();
+		  }
+		  System.out.println("Project Origin:"
+									+paramsBean.getOriginLat()+" "
+									+paramsBean.getOriginLon());
+		  db.close();
+		  return paramsBean;
     }
     
     protected void storeProjectInContext(String userName,
@@ -770,6 +772,7 @@ public class DislocBean extends GenericSopacBean {
 	  * This is called when a project is seleted for loading.
 	  */
     public String toggleSelectProject() throws Exception  {
+		  System.out.println("Loading Project");
 		  initEditFormsSelection();
 		  //This is implemented as a selectmanycheckbox on the client side (LoadProject.jsp),
 		  //hence the unusual for loop.
@@ -797,19 +800,69 @@ public class DislocBean extends GenericSopacBean {
 			myFaultEntryForProjectList=reconstructMyFaultEntryForProjectList(projectName);
 
 			//Now look up the project params bean and set the project origin.
-			currentParams=getDislocParamsFromDB();
+			currentParams=getDislocParamsFromDB(projectName);
+			
+			//Some final stuff.
+			projectSelectionCode = "";
+			faultSelectionCode = "";
+			return "disloc-edit-project";
+    }
 
-// 			//Now create a new summary bean, since it will be for a project instance.
-// 			//Set the origin to be the first fault's lat/lon starting value.
-// 			currentSummary=new DislocProjectSummaryBean();
-// 			currentSummary.setProjectName(projectName);
-// 			if(myFaultEntryForProjectList !=null && myFaultEntryForProjectList.size() > 0) {
-// 				 String firstFaultName=((faultEntryForProject)myFaultEntryForProjectList.get(0)).getFaultName();
-// 				 Fault firstFault=QueryFaultFromDB(firstFaultName);
-// 				 currentSummary.setOriginLat(firstFault.getFaultLatStart());
-// 				 currentSummary.setOriginLon(firstFault.getFaultLonStart());
-// 			}
-// 			setCurrentSummary(projectSummary);
+	 /**
+	  * This is called when a project is seleted for copying and loading.
+	  */
+    public String toggleCopyProject() throws Exception  {
+		  System.out.println("Copying project");
+		  initEditFormsSelection();
+		  //Get the old project name from the checkboxes
+		  String oldProjectName="";
+		  if (copyProjectsArray != null) {
+				for (int i = 0; i < 1; i++) {
+					 oldProjectName = copyProjectsArray[0];
+				}
+		  }
+		  System.out.println("Old project name: "+oldProjectName);
+
+		  //Create an empty project
+		  String newProjectName=this.getProjectName();
+		  createNewProject(newProjectName);
+
+		  //Now replace empty new project pieces with old stuff.
+			db=Db4o.openFile(getBasePath()+"/"
+								  +getContextBasePath()
+								  +"/"+userName
+								  +"/"+codeName+".db");		  
+
+			//Get the old project bean.
+			DislocProjectBean project=new DislocProjectBean();
+			project.setProjectName(oldProjectName);
+			ObjectSet results=db.get(project);
+			System.out.println("Got results:"+results.size());
+			if(results.hasNext()) {
+				currentProject=(DislocProjectBean)results.next();
+			}
+			//Say goodbye.
+			db.close();
+
+			// //Reconstruct the fault and layer object collections from the context
+			// myFaultEntryForProjectList=reconstructMyFaultEntryForProjectList(oldProjectName);
+			// System.out.println("Old project size:"+myFaultEntryForProjectList.size());
+			// System.out.println("Some faultentrystuff:"+((faultEntryForProject)myFaultEntryForProjectList.get(0)).getFaultName());
+
+			//Copy the DB file for the old project to the new project.
+			File oldFileDB=new File(getBasePath()+"/"
+											+getContextBasePath()
+											+"/"+userName+"/"+codeName+"/"+oldProjectName+".db");
+			File newFileDB=new File(getBasePath()+"/"
+											+getContextBasePath()
+
+											+"/"+userName+"/"+codeName+"/"+newProjectName+".db");
+			copyFile(oldFileDB,newFileDB);
+
+			//Now look up the project params bean and set the project origin.
+			currentParams=getDislocParamsFromDB(oldProjectName);
+			System.out.println("Min Y:"+currentParams.getGridMinYValue());
+			System.out.println("Min X:"+currentParams.getGridMinXValue());
 			
 			//Some final stuff.
 			projectSelectionCode = "";
@@ -821,9 +874,10 @@ public class DislocBean extends GenericSopacBean {
      * Handle action events in the project selection area.
      */
     public void toggleProjectSelection(ActionEvent ev) {
+
 		  initEditFormsSelection();
 		  if (projectSelectionCode.equals("CreateObservationGrid")) {
-				currentParams=getDislocParamsFromDB();
+				currentParams=getDislocParamsFromDB(projectName);
 				renderDislocGridParamsForm = !renderDislocGridParamsForm;
 		  }
 
@@ -1060,6 +1114,7 @@ public class DislocBean extends GenericSopacBean {
      * This will delete projects
      */
     public void toggleDeleteProjectSummary(ActionEvent ev) {
+		  System.out.println("Deleting Project");
 	try {
 	    DislocProjectSummaryBean dpsb=
 		(DislocProjectSummaryBean)getMyProjectSummaryDataTable().getRowData();
@@ -1284,11 +1339,12 @@ public class DislocBean extends GenericSopacBean {
     }
     
     public String toggleDeleteProject() {
-	try {
-	    db=Db4o.openFile(getBasePath()+"/"
-			     +getContextBasePath()+"/"+userName+"/"+codeName+".db");
-	    if (deleteProjectsArray != null) {
-		for (int i = 0; i < deleteProjectsArray.length; i++) {
+		  System.out.println("Deleting a project");
+		  try {
+				db=Db4o.openFile(getBasePath()+"/"
+									  +getContextBasePath()+"/"+userName+"/"+codeName+".db");
+				if (deleteProjectsArray != null) {
+					 for (int i = 0; i < deleteProjectsArray.length; i++) {
 		    //Delete the project input data
 						  System.out.println("Deleting project input junk");
 						  DislocProjectBean delproj=new DislocProjectBean();
@@ -1351,7 +1407,7 @@ public class DislocBean extends GenericSopacBean {
 		  db.commit();
 		  db.close();
 		  
-		  currentParams=getDislocParamsFromDB();
+		  currentParams=getDislocParamsFromDB(projectName);
     }
     
     public String loadProjectList() throws Exception {
@@ -1394,6 +1450,7 @@ public class DislocBean extends GenericSopacBean {
     
     public String[] getDeleteProjectsArray() { return this.deleteProjectsArray; }
     public String[] getSelectProjectsArray() { return this.selectProjectsArray; }
+    public String[] getCopyProjectsArray() { return this.copyProjectsArray; }
     
     public String getForSearchStr() {
 		  return this.forSearchStr;
@@ -1406,6 +1463,10 @@ public class DislocBean extends GenericSopacBean {
 	 public void setDeleteProjectsArray(String[] deleteProjectsArray) { 
 		  this.deleteProjectsArray=deleteProjectsArray; 
 	 }
+	 public void setCopyProjectsArray(String[] copyProjectsArray) { 
+		  this.copyProjectsArray=copyProjectsArray; 
+	 }
+
 	 public void setMyProjectNameList(List myProjectNameList) { 
 		  this.myProjectNameList=myProjectNameList; 
 	 }
@@ -1630,32 +1691,32 @@ public class DislocBean extends GenericSopacBean {
      * Reconstructs the fault entry list.
      */
     protected List reconstructMyFaultEntryForProjectList(String projectName) {
-	String projectFullName = codeName + SEPARATOR + projectName;
-	this.myFaultEntryForProjectList.clear();
-	try {
-	    db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
-	    
-// 	    Fault tmpfault=new Fault();
-// 	    ObjectSet results=db.get(tmpfault);
-	    ObjectSet results=db.get(Fault.class);
-	    Fault tmpfault;
-	    while(results.hasNext()){
-		tmpfault=(Fault)results.next();
-		faultEntryForProject tmp_myFaultEntryForProject = new faultEntryForProject();
-		tmp_myFaultEntryForProject.setFaultName(tmpfault.getFaultName());
-		tmp_myFaultEntryForProject.view = false;
-		tmp_myFaultEntryForProject.delete = false;
-		this.myFaultEntryForProjectList
-		    .add(tmp_myFaultEntryForProject);
-	    }
-	    db.close(); 
-	    
-	} catch (Exception ex) {
-	    ex.printStackTrace();
-	    if(db!=null) db.close();
-	}
-	
-	return this.myFaultEntryForProjectList;
+		  String projectFullName = codeName + SEPARATOR + projectName;
+		  this.myFaultEntryForProjectList.clear();
+		  try {
+				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");
+				
+				// 	    Fault tmpfault=new Fault();
+				// 	    ObjectSet results=db.get(tmpfault);
+				ObjectSet results=db.get(Fault.class);
+				Fault tmpfault;
+				while(results.hasNext()){
+					 tmpfault=(Fault)results.next();
+					 faultEntryForProject tmp_myFaultEntryForProject = new faultEntryForProject();
+					 tmp_myFaultEntryForProject.setFaultName(tmpfault.getFaultName());
+					 tmp_myFaultEntryForProject.view = false;
+					 tmp_myFaultEntryForProject.delete = false;
+					 this.myFaultEntryForProjectList
+						  .add(tmp_myFaultEntryForProject);
+				}
+				db.close(); 
+				
+		  } catch (Exception ex) {
+				ex.printStackTrace();
+				if(db!=null) db.close();
+		  }
+		  
+		  return this.myFaultEntryForProjectList;
     }
     
 	 protected List reconstructMyObservationsForProjectList(String projectName) {
@@ -2037,7 +2098,7 @@ public class DislocBean extends GenericSopacBean {
 				PrintWriter out=new PrintWriter(new FileWriter(localDestination));
 				
 				if(currentParams.getObservationPointStyle()==1) {
-					 DislocParamsBean dpb=getDislocParamsFromDB();
+					 DislocParamsBean dpb=getDislocParamsFromDB(projectName);
 					 //Get data points
 					 int xint=dpb.getGridXIterations();
 					 int yint=dpb.getGridYIterations();
