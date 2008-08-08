@@ -61,9 +61,9 @@
                                <replace dir="${basedir}/target/${pom.artifactId}" 
                                         token="put.google.map.key.here"
                                         value="${google.key}">
-			       <include name="**/*.jsp"/>
-                               <include name="**/*.xml"/>
-                               <include name="**/*.properties"/>
+											<include name="**/*.jsp"/>
+											<include name="**/*.xml"/>
+											<include name="**/*.properties"/>
                                </replace>
                              </tasks>
                            </configuration>
