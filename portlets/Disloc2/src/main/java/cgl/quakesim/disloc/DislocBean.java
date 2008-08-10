@@ -2141,8 +2141,8 @@ public class DislocBean extends GenericSopacBean {
 				    if(points!=null && points.length>0) {
 						  out.println(docBegin);
 						  for(int i=0;i<points.length;i++) {
-								writeKmlPoint(Double.parseDouble(points[i].getLonPoint()), 
-												  Double.parseDouble(points[i].getLatPoint()), 
+								writeKmlPoint(Double.parseDouble(points[i].getLatPoint()), 
+												  Double.parseDouble(points[i].getLonPoint()), 
 												  out);
 						  }
 						  out.println(docEnd);
