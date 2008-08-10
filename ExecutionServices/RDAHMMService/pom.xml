@@ -25,6 +25,38 @@
                <filtering>true</filtering>
            </resource>
         </resources>
+		  <plugins>
+			 <plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+				  <execution>
+					 <id>Install ${pom.artifactId} binaries</id>
+					 <phase>install</phase>
+					 <configuration>
+						<!--
+							 
+							 Allow this to fail on error. This is not great, but we must do this
+							 since the parent pom is not abstract and so will get executed along with
+							 its children.
+							 
+						  -->
+						<tasks>
+						  <echo message="Copying the binaries:"/>
+						  <copy overwrite="true" filtering="true" failonerror="false" todir="${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec">
+							 <fileset dir="${rdahmm.bin.home}"/>
+						  </copy>
+						  <chmod perm="${tomcat.bin.perm}" dir="${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec/">
+							 <include name="*"/>
+						  </chmod>
+						</tasks>
+					 </configuration>
+					 <goals>
+						<goal>run</goal>
+					 </goals>
+				  </execution>
+				</executions>
+			 </plugin>
+		  </plugins>
 <!--        <plugins>
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
@@ -35,6 +67,8 @@
             </plugin>
         </plugins>
 -->
+
+
     </build>
 
     <!-- We get this from the command line and pass to the resources
