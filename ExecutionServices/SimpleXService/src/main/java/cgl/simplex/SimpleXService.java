@@ -396,12 +396,6 @@ public class SimpleXService extends AntVisco implements Runnable {
 		sxoutput.setFaultUrl(baseUrl + "/" + projectName + ".fault");
 		sxoutput.setCreationDate(creationDate);
 
-		// System.out.println(sxoutput.getProjectName());
-		// System.out.println(sxoutput.getJobUIDStamp());
-		// System.out.println(sxoutput.getInputUrl());
-		// System.out.println(sxoutput.getOutputUrl());
-		// System.out.println(sxoutput.getLogUrl());
-		// System.out.println(sxoutput.getFaultUrl());
 		try {
 			String outputfilename = workDir + "/" + projectName + ".output";
 			GmapDataXml dw = new GmapDataXml();
@@ -421,7 +415,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			kmlService.setCoordinateUnit("1000");
 			kmlService = setfaultplot(kmlService, faults);
 			kmlService.setPointPlacemark("Icon Layer");
-			kmlService.setArrowPlacemark("Arrow Layer", "ff66a1cc", 2);
+			kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
 
 			String observKmlUrl = kmlService.runMakeKml("", userName,
 					projectName, "observ");
@@ -437,7 +431,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			kmlService.setCoordinateUnit("1000");
 			kmlService=setfaultplot(kmlService,faults);
 			kmlService.setPointPlacemark("Icon Layer");
-			kmlService.setArrowPlacemark("Arrow Layer", "ff00ccff", 2);
+			kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
 			String calcKmlUrl = kmlService.runMakeKml("", userName,
 					projectName, "calc");
 
@@ -452,7 +446,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			kmlService.setCoordinateUnit("1000");
 			kmlService=setfaultplot(kmlService,faults);
 			kmlService.setPointPlacemark("Icon Layer");
-			kmlService.setArrowPlacemark("Arrow Layer", "ff61f2f2", 2);
+			kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
 			String o_cKmlUrl = kmlService.runMakeKml("", userName, projectName,
 					"o_c");
 

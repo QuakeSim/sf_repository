@@ -100,17 +100,17 @@ public class GmapDataXml {
 									.get(new Coordinate(tmp_lat, tmp_lon));
 						}
 						if (tmp_type == 1) {
-							TmpObsPoint.NorthVec.type = tmp_type;
-							TmpObsPoint.NorthVec.observ = tmp_observ;
-							TmpObsPoint.NorthVec.calc = tmp_calc;
-							TmpObsPoint.NorthVec.o_c = tmp_o_c;
-							TmpObsPoint.NorthVec.error = tmp_error;
-						} else if (tmp_type == 2) {
 							TmpObsPoint.EastVec.type = tmp_type;
 							TmpObsPoint.EastVec.observ = tmp_observ;
 							TmpObsPoint.EastVec.calc = tmp_calc;
 							TmpObsPoint.EastVec.o_c = tmp_o_c;
 							TmpObsPoint.EastVec.error = tmp_error;
+						} else if (tmp_type == 2) {
+							TmpObsPoint.NorthVec.type = tmp_type;
+							TmpObsPoint.NorthVec.observ = tmp_observ;
+							TmpObsPoint.NorthVec.calc = tmp_calc;
+							TmpObsPoint.NorthVec.o_c = tmp_o_c;
+							TmpObsPoint.NorthVec.error = tmp_error;
 						} else if (tmp_type == 3) {
 							TmpObsPoint.UpVec.type = tmp_type;
 							TmpObsPoint.UpVec.observ = tmp_observ;
