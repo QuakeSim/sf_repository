@@ -173,18 +173,6 @@
         <!--
         SOPAC Jars
         -->
-        <dependency>
-             <groupId>SOPAC</groupId>
-             <artifactId>GRWS_SubmitQuery</artifactId>
-             <version>4.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-             <groupId>SOPAC</groupId>
-             <artifactId>grwsXmlBeansSchemas</artifactId>
-             <version>1.0</version>
-        </dependency>
-
 
        </dependencies>
 
