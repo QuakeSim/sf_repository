@@ -1532,7 +1532,7 @@ public class SimplexBean extends GenericSopacBean {
 				}
 				Date date1=new Date(mb1.getCreationDate());
 				Date date2=new Date(mb2.getCreationDate());			  
-				if(date2.before(date1)) first=i;
+				if(date2.after(date1)) first=i;
 		  }
 
 		  return first;
@@ -1543,20 +1543,6 @@ public class SimplexBean extends GenericSopacBean {
      */
 
     public String createFaultKmlFile() { 
-		  //Some KML constants.
-		  // String xmlHead="<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-		  // String kmlHead="<kml xmlns=\"http://earth.google.com/kml/2.2\">";
-		  // String kmlEnd="</kml>";
-		  // String pmBegin="<Placemark>";
-		  // String pmEnd="</Placemark>";
-		  // String lsBegin="<LineString>";
-		  // String lsEnd="</LineString>";
-		  // String coordBegin="<coordinates>";
-		  // String coordEnd="</coordinates>";
-		  // String docBegin="<Document>";
-		  // String docEnd="</Document>";
-		  // String comma=",";
-
 		  String newFaultFilename="";
 		  String oldLocalDestination=this.getBasePath()+"/"+"gridsphere"+"/"
 				+getFaultKmlFilename();

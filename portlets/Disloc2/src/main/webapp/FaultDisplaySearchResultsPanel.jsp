@@ -1,8 +1,15 @@
 			<h:form id="SelectFaultDBEntryForm" 
 				rendered="#{DislocBean2.renderAddFaultFromDBForm}"> 
-				<h:dataTable value="#{DislocBean2.myFaultDBEntryList}" var="myentry1" 
-				    id="stuff74" 
-					binding="#{DislocBean2.myFaultDataTable}"> 
+
+				<h:outputText id="dbisdownklj" escape="false"
+								  value="<b>Error:</b> Data base returned no response.  Contact portal administrator."
+								  rendered="#{DislocBean2.myFaultDBEntryList}"/>
+
+				<h:dataTable rendered="#{!empty DislocBean2.myFaultDBEntryList}"
+								 value="#{DislocBean2.myFaultDBEntryList}" 
+								 var="myentry1" 
+				    			 id="stuff74" 
+								 binding="#{DislocBean2.myFaultDataTable}"> 
  
 					<h:column  id="pg6"> 
 						<f:facet name="header"> 
@@ -53,7 +60,9 @@
 						</h:commandLink> 
 					</h:column> 
 				</h:dataTable> 
-				<h:commandButton id="SelectFaultDBEntry" value="SelectFaultDBEntry" 
-					actionListener="#{DislocBean2.toggleSelectFaultDBEntry}" /> 
+				<h:commandButton rendered="#{!empty DislocBean2.myFaultDBEntryList}"
+									  id="SelectFaultDBEntry" 
+									  value="SelectFaultDBEntry" 
+									  actionListener="#{DislocBean2.toggleSelectFaultDBEntry}" /> 
 			</h:form> 
  
