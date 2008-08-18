@@ -25,7 +25,7 @@
                 <!-- Needed for the selectdbURL service-->
                  <managed-property>
                    <property-name>selectdbURL</property-name>
-                   <value>http://gf2.ucs.indiana.edu:9090/axis/services/Select</value>
+                   <value>http://gf19.ucs.indiana.edu:9898/axis/services/Select</value>
                  </managed-property>
  
                 <!-- Needed for the context service-->
