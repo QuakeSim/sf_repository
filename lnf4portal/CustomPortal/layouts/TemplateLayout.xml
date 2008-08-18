@@ -314,6 +314,32 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
 				  </row-layout>
 				</table-layout>
 			 </portlet-tab>
+
+			 <portlet-tab label="FetchDB-KML">
+				<title lang="en">FaultDB KML</title>
+				<table-layout>
+				  <row-layout>
+					 <column-layout>
+						<portlet-frame label="FaultDB-KML-PF">
+						  <portlet-class>FaultDB-portlet#FaultDB-KML</portlet-class>
+						</portlet-frame>
+					 </column-layout>
+				  </row-layout>
+				</table-layout>
+			 </portlet-tab>
+			 <portlet-tab label="FetchDB-InSAR">
+				<title lang="en">Search FaultDB</title>
+				<table-layout>
+				  <row-layout>
+					 <column-layout>
+						<portlet-frame label="FaultDB-InSAR-PF">
+						  <portlet-class>FaultDB-portlet#FaultDB-InSAR</portlet-class>
+						</portlet-frame>
+					 </column-layout>
+				  </row-layout>
+				</table-layout>
+			 </portlet-tab>
+
 		  </portlet-tabbed-pane>
 		</portlet-tab>
 

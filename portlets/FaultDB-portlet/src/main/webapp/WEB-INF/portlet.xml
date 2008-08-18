@@ -54,8 +54,62 @@ xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0"
        <keywords>faults</keywords>
      </portlet-info>        
    </portlet>
+
+   <portlet>
+     <portlet-name>FaultDB-KML</portlet-name>
+     <portlet-class>org.apache.portals.bridges.jsf.FacesPortlet</portlet-class>
+     <expiration-cache>0</expiration-cache>
+     <init-param>
+       <!--
+	   <name>default-view</name>
+	   -->
+       <name>ViewPage</name>
+       <value>/FaultKML.jsp</value>
+     </init-param>
+     <init-param>
+       <name>HelpPage</name>
+       <value>/QTHelp.jsp</value>
+     </init-param>
+     <supports>
+       <mime-type>text/html</mime-type>
+       <portlet-mode>VIEW</portlet-mode>
+       <portlet-mode>HELP</portlet-mode>
+     </supports>
+     <portlet-info>
+       <title>QuakeTables KML</title>
+       <keywords>faults</keywords>
+     </portlet-info>        
+   </portlet>
+
+   <portlet>
+     <portlet-name>FaultDB-InSAR</portlet-name>
+     <portlet-class>org.apache.portals.bridges.jsf.FacesPortlet</portlet-class>
+     <expiration-cache>0</expiration-cache>
+     <init-param>
+       <!--
+	   <name>default-view</name>
+	   -->
+       <name>ViewPage</name>
+       <value>/InSAR.jsp</value>
+     </init-param>
+     <init-param>
+       <name>HelpPage</name>
+       <value>/QTHelp.jsp</value>
+     </init-param>
+     <supports>
+       <mime-type>text/html</mime-type>
+       <portlet-mode>VIEW</portlet-mode>
+       <portlet-mode>HELP</portlet-mode>
+     </supports>
+     <portlet-info>
+       <title>QuakeTables InSAR</title>
+       <keywords>faults</keywords>
+     </portlet-info>        
+   </portlet>
+
    <user-attribute>
     <description>User Name</description>
     <name>user.name</name>
    </user-attribute>
 </portlet-app> 
+
