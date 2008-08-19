@@ -328,7 +328,7 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
 				</table-layout>
 			 </portlet-tab>
 			 <portlet-tab label="FetchDB-InSAR">
-				<title lang="en">Search FaultDB</title>
+				<title lang="en">FaultDB InSAR</title>
 				<table-layout>
 				  <row-layout>
 					 <column-layout>
