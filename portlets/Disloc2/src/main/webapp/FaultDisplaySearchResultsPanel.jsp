@@ -3,7 +3,7 @@
 
 				<h:outputText id="dbisdownklj" escape="false"
 								  value="<b>Error:</b> Data base returned no response.  Contact portal administrator."
-								  rendered="#{DislocBean2.myFaultDBEntryList}"/>
+								  rendered="#{empty DislocBean2.myFaultDBEntryList}"/>
 
 				<h:dataTable rendered="#{!empty DislocBean2.myFaultDBEntryList}"
 								 value="#{DislocBean2.myFaultDBEntryList}" 
