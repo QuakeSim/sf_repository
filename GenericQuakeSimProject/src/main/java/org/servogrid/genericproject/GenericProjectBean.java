@@ -428,12 +428,16 @@ public class GenericProjectBean {
 	    String tmp_str = select.select(tmp_query_sql);
 	    tmp_str = tmp_str.substring(DB_RESPONSE_HEADER.length());
 	    StringTokenizer st1 = new StringTokenizer(tmp_str, "\n");
+		 System.out.println("Here is the FaultDB output:");
 	    // They begin with blank lines ?!
-	    st1.nextToken();
-	    st1.nextToken();
+	    String junk=st1.nextToken();
+		 System.out.println("junk:"+junk);
+	    junk=st1.nextToken();
+		 System.out.println("junk:"+junk);
 	    tmp_list.clear();
 	    while (st1.hasMoreTokens()) {
 		String tmp1 = st1.nextToken().trim();
+		 System.out.println("tmp1:"+tmp1);		
 		if (tmp1 == null || tmp1.equals("null"))
 		    tmp1 = "N/A";
 		tmp_list.add(tmp1);

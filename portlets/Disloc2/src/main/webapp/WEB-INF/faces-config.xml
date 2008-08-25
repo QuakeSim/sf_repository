@@ -25,7 +25,7 @@
 
                  <managed-property>
                    <property-name>faultDBServiceUrl</property-name>
-                   <value>http://gf19.ucs.indiana.edu:9898/axis/services/Select</value>
+                   <value>http://gf2.ucs.indiana.edu:9090/axis/services/Select</value>
                  </managed-property> 
 
                  <managed-property>
