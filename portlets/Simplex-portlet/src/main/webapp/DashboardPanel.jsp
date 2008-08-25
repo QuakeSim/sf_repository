@@ -12,7 +12,7 @@
 						#{SimplexBean.currentProjectEntry.origin_lon})"/>
 						
 					<h:outputText id="instructionezzze" escape="false"
-					  				  value="You must add at least one observation point and one fault.  The preferred method is to use the GPS station map option."/>
+					  				  value="<br>You must add at least one observation point and one fault.  The preferred method is to use the GPS station map option."/>
 
 					<h:selectOneRadio layout="pageDirection" id="subscriptions"
 						value="#{SimplexBean.currentEditProjectForm.projectSelectionCode}">
