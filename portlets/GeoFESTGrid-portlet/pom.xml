@@ -86,6 +86,7 @@
             <id>crisisgrid-maven-repo</id>
             <url>http://www.crisisgrid.org/maven2</url>
         </repository>
+<!--
         <repository>
             <releases>
                 <enabled>false</enabled>
@@ -96,6 +97,7 @@
             <id>apache-maven-snapshots</id>
             <url>http://cvs.apache.org/maven-snapshot-repository</url>
         </repository>
+-->
         <repository>
             <id>apache-maven</id>
             <url>http://www.ibiblio.org/maven2</url>
