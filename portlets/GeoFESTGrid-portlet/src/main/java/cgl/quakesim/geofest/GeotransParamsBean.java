@@ -32,7 +32,7 @@ public class GeotransParamsBean  implements java.io.Serializable {
 
     private java.lang.String logFileName;
 
-    private java.lang.String north_bc="Locked Node";
+    private java.lang.String north_bc="Free Node";
 
     private java.lang.String north_bc_value="0 0. 0. 0. 1.";
 
