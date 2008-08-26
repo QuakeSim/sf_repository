@@ -9,7 +9,7 @@
 
 package cgl.quakesim.geofest;
 
-public class GeotransParamsBean  implements java.io.Serializable {
+public class GeotransParallelParamsBean  implements java.io.Serializable {
     private java.lang.String alpha="1.0";
 
     private java.lang.String backup_steps="5000";
@@ -84,7 +84,7 @@ public class GeotransParamsBean  implements java.io.Serializable {
 	 /**
 	  * Provide with default values.
 	  */ 
-    public GeotransParamsBean() {
+    public GeotransParallelParamsBean() {
 		this.number_space_dimensions="3";
 		this.number_degrees_freedom="3";
 		this.nrates ="0";
@@ -124,7 +124,7 @@ public class GeotransParamsBean  implements java.io.Serializable {
 
     }
 
-    public GeotransParamsBean(
+    public GeotransParallelParamsBean(
            java.lang.String alpha,
            java.lang.String backup_steps,
            java.lang.String bottom_bc,
