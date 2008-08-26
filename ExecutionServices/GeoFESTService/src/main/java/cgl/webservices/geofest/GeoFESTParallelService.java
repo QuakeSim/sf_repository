@@ -22,7 +22,6 @@ import java.text.*;
 
 //Needed for a unique id
 import java.rmi.server.UID;
-
 //Import Google GData
 import com.google.gdata.client.*;
 import com.google.gdata.client.youtube.*;

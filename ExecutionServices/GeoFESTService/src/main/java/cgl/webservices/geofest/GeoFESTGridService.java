@@ -349,7 +349,7 @@ public class GeoFESTGridService extends GeoFESTService{
 		  String content=createMeshRunContent(faults, mrb);
 		  String title=createMeshRunTitle(userName,"MeshRun",projectName);
 		  try {
-				writeToBlog(userName,title,content);
+				//				writeToBlog(userName,title,content);
 				writeToCalendar(title,content);
 		  }
 		  catch (Exception ex) {
