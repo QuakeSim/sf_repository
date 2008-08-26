@@ -5,63 +5,49 @@ package cgl.webservices.geofest;
  * GeoFEST.
  */
 public class GeotransParamsBean {
-	 
-	 //input params
-	 String number_space_dimensions="3";
-	 String number_degrees_freedom="3";
-	 String nrates ="0";
-	 String shape_flag = "1";
-	 String solver_flag = "2";
-	 String number_time_groups = "1";
-	 String reform_steps ="1";
-	 String backup_steps="5000";
-	 String fault_interval="5000.0";
-	 String end_time="50.0";
-	 String alpha ="1.0";
-	 String time_step="0.5";
+
+	//input params
+	String number_space_dimensions="3";
+	String number_degrees_freedom="3";
+	String nrates ="0";
+	String shape_flag = "1";
+	String solver_flag = "2";
+	String number_time_groups = "1";
+	String reform_steps ="1";
+	String backup_steps="5000";
+	String fault_interval="5000.0";
+	String end_time="50.0";
+	String alpha ="1.0";
+	String time_step="0.5";
 	
-	 //cordinate boundary
-	 
-	 String top_bc="locked node";
-	 String top_bc_value="0 0. 0. 0. 1. ";
-	 String east_bc="locked node";
-	 String east_bc_value="0 0. 0. 0. 1. ";
-	 String west_bc="locked node";
-	 String west_bc_value="0 0. 0. 0. 1. ";
-	 String north_bc="locked node";
-	 String north_bc_value="0 0. 0. 0. 1. ";
-	 String south_bc="locked node";
-	 String south_bc_value="0 0. 0. 0. 1. ";
-	 String bottom_bc="locked node";
-	 String bottom_bc_value="0 0. 0. 0. 1. ";
+	//cordinate boundary
+	String top_bc="locked node";
+	String top_bc_value="0 0. 0. 0. 1. ";
+	String east_bc="locked node";
+	String east_bc_value="0 0. 0. 0. 1. ";
+	String west_bc="locked node";
+	String west_bc_value="0 0. 0. 0. 1. ";
+	String north_bc="locked node";
+	String north_bc_value="0 0. 0. 0. 1. ";
+	String south_bc="locked node";
+	String south_bc_value="0 0. 0. 0. 1. ";
+	String bottom_bc="locked node";
+	String bottom_bc_value="0 0. 0. 0. 1. ";
 	
 	//Output Parameters and Formatting
-	 
-	 String reportingNodes="All";
-	 String reportingElements="All";
-	 String printTimesType="steps";
-	 String numberofPrintTimes="5";
-	 String printTimesInterval="1.0";
-	 String restartFile="NO_RESTART";
-	 String checkpointFile="NO_SAVE";
 	
-	 String inputFileName="";
-	 String outputFileName="";
-	 String logFileName="";
-	 String run_choice="";
-	 
-	 //These are new parameters
-	 String elastic1="1";
-	 String elasOut1="1";
-	 String refine="0";
-	 String refineOut="0";
-	 String elastic2="0";
-	 String elasOut2="0";
-	 String visco="1";
-	 String velblock=" ";
-	 //Ramp BC
-	 String[] ramp_bc;
-
+	String reportingNodes="All";
+	String reportingElements="All";
+	String printTimesType="steps";
+	String numberofPrintTimes="5";
+	String printTimesInterval="1.0";
+	String restartFile="NO_RESTART";
+	String checkpointFile="NO_SAVE";
+	
+	String inputFileName="";
+	String outputFileName="";
+	String logFileName="";
+	String run_choice="";
 	
 	public void reset(String projectName) {
 		number_space_dimensions="3";
@@ -78,7 +64,7 @@ public class GeotransParamsBean {
 		time_step="0.5";
 		//cordinate boundary
 		
-		top_bc="Free Node";
+		top_bc="Locked Node";
 		top_bc_value="0 0. 0. 0. 1.";
 		east_bc="Locked Node";
 		east_bc_value="0 0. 0. 0. 1.";
@@ -92,6 +78,7 @@ public class GeotransParamsBean {
 		bottom_bc_value="0 0. 0. 0. 1.";
 		
 		//Output Parameters and Formatting
+		
 		reportingNodes="All";
 		reportingElements="All";
 		printTimesType="steps";
@@ -386,86 +373,4 @@ public class GeotransParamsBean {
 	public String getNumber_space_dimensions() {
 		return number_space_dimensions;
 	}		
-
-	 public String getElastic1() {
-		  return elastic1;
-	 }
-
-	 public void setElastic1(String elastic1) {
-		  this.elastic1=elastic1;
-	 }
-
-	 public String getElastic2() {
-		  return notNull(elastic2);
-	 }
-
-	 public void setElastic2(String elastic1) {
-		  this.elastic2=elastic2;
-	 }
-
-	 public String getRefine() {
-		  return notNull(refine);
-	 }
-	 
-	 public void setRefine(String refine) {
-		  this.refine=refine;
-	 }
-
-	 public String getRefineOut() {
-		  return notNull(refineOut);
-	 }
-	 
-	 public void setRefineOut(String refineOut) {
-		  this.refineOut=refineOut;
-	 }
-
-	 public String getElasOut1() {
-		  return notNull(elasOut1);
-	 }
-
-	 public void setElasOut1(String elasOut1) {
-		  this.elasOut1=elasOut1;
-	 }
-
-	 public String getElasOut2() {
-		  return notNull(elasOut2);
-	 }
-
-	 public void setElasOut2(String elasOut2) {
-		  this.elasOut2=elasOut2;
-	 }
-
-	 public void setVisco(String visco){
-		  this.visco=visco;
-	 }
-	 
-	 public String getVisco() {
-		  return notNull(visco);
-	 }
-
-	 public String[] getRampBC() {
-		  return ramp_bc;  
-	 }
-
-	 public void setRampBC(String[] ramp_bc) {
-		  java.lang.System.arraycopy(ramp_bc,0,this.ramp_bc,0,ramp_bc.length);
-	 }
-	 
-	 public String getVelblock() {
-		  return notNull(velblock);
-	 }
-	 
-	 public void setVelblock(String velblock) {
-		  this.velblock=velblock;
-	 }
-
-	 private String notNull(String retString) {
-		  if(retString==null) {
-				return "";
-		  }
-		  else {
-				return retString;
-		  }
-				
-	 }
 }
