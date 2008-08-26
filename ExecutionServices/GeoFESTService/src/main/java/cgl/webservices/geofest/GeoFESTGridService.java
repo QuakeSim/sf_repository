@@ -1,5 +1,7 @@
 /** 
  * This service extends the basic GeoFEST service to use Condor-G for job submission.
+ * Note that it only handles serial jobs. The extension GeoFESTParallelService.java creates
+ * parallel input files.
  */
 package cgl.webservices.geofest;
 
