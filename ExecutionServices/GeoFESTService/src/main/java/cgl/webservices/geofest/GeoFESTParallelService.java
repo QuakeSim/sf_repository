@@ -51,7 +51,7 @@ import com.google.gdata.data.extensions.*;
  * A simple wrapper for Ant.
  */
 
-public class GeoFESTService extends AntVisco implements Runnable{    
+public class GeoFESTParallelService extends GeoFESTGridService {    
     static Logger logger=Logger.getLogger(GeoFESTService.class);
 
     final String FILE_PROTOCOL="file";
@@ -96,14 +96,14 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  layers[0]=new Layer();
 		  
 		  //Create geotrans params
-		  GeotransParamsBean gpb=new GeotransParamsBean();
+		  GeotransParallelParamsBean gpb=new GeotransParallelParamsBean();
 		  
 		  String userName="duhFaultUser";
 		  String projectName="faultsatmyfeet";
 		  
 		  try {
 				//Make the mesh.
-				GeoFESTService gfs=new GeoFESTService(true);
+				GeoFESTParallelService gfs=new GeoFESTParallelService(true);
 				
 				//This will actually return before the job is 
 				//finished, so we'll use ticket2 in later calculations.
@@ -137,7 +137,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
      * The constructor. Set useClassLoader=true when running
      * on the command line.
      */
-    public GeoFESTService(boolean useClassLoader) 
+    public GeoFESTParallelService(boolean useClassLoader) 
 		  throws Exception {
 	
 		  super();
@@ -189,7 +189,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  instantiateCalendarService();
     }
     
-    public GeoFESTService() throws Exception{
+    public GeoFESTParallelService() throws Exception{
 		  this(false);
     }
 	 
@@ -365,7 +365,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	  */
 	 public String[] runPackageGeoFESTFiles(String userName,
 														 String projectName,
-														 GeotransParamsBean gpb,
+														 GeotransParallelParamsBean gpb,
 														 String timeStamp)
 		  throws Exception {
 
@@ -383,7 +383,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	 
 	 protected String[] prefabGeoFESTCall(String userName,
 													  String projectName,
-													  GeotransParamsBean gpb,
+													  GeotransParallelParamsBean gpb,
 													  String timeStamp,
 													  String targetName) 
 		  throws Exception {
@@ -414,7 +414,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
      */
     public GFOutputBean runGeoFEST(String userName,
 				   String projectName,
-				   GeotransParamsBean gpb,
+				   GeotransParallelParamsBean gpb,
 				   String timeStamp)
 		  throws Exception {
 		  
@@ -508,7 +508,7 @@ public class GeoFESTService extends AntVisco implements Runnable{
 	  */
 	 protected void createGeoFESTInputFile(String workDir,
 														String projectName,
-														GeotransParamsBean gpb) 
+														GeotransParallelParamsBean gpb) 
 		  throws Exception {
 
 		  // --------------------------------------------------

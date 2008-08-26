@@ -68,6 +68,7 @@
     <!-- We get this from the command line and pass to the resources
          via filtering -->
     <repositories>
+<!--
         <repository>
             <releases>
                 <enabled>false</enabled>
@@ -78,6 +79,7 @@
             <id>apache-maven-snapshots</id>
             <url>http://cvs.apache.org/maven-snapshot-repository</url>
         </repository>
+-->
         <repository>
             <id>SOPAC</id>
             <url>http://sopac.ucsd.edu/repositories/maven2</url>

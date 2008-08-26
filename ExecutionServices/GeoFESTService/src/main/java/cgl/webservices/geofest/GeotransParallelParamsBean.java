@@ -4,7 +4,7 @@ package cgl.webservices.geofest;
  * This bean contains all the necessary data for running
  * GeoFEST.
  */
-public class GeotransParamsBean {
+public class GeotransParallelParamsBean {
 	 
 	 //input params
 	 String number_space_dimensions="3";
