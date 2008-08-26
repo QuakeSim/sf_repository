@@ -529,17 +529,6 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  String space = " ";
 		  
 		  pw.println("output_filename" + space + gpb.getOutputFileName()+br);
-		  
-		  //These are new parameters, probably place holders
-		  pw.println("ELASTIC1"+space+gpb.getElastic1());
-		  pw.println("ELAS_OUT1"+space+gpb.getElasOut1());
-		  pw.println("REFINE"+space+gpb.getRefine());
-		  pw.println("REFINE_OUT"+space+gpb.getRefineOut());
-		  pw.println("ELASTIC2"+space+gpb.getElastic2());
-		  pw.println("ELAS_OUT2"+space+gpb.getElasOut2());
-		  pw.println("VISCO"+space+gpb.getVisco());
-						 
-		  
 		  pw.println("number_space_dimensions" + space
 						 +gpb.getNumber_space_dimensions()+br);
 		  
@@ -547,8 +536,6 @@ public class GeoFESTService extends AntVisco implements Runnable{
 						 +gpb.getNumber_degrees_freedom()+br);
 		  
 		  pw.println("nrates" + space + gpb.getNrates()+br);
-
-		  pw.println("velblock"+space+gpb.getVelblock());
 		  
 		  pw.println("shape_flag" + space + gpb.getShape_flag()+br);
 		  
@@ -598,15 +585,8 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  pw.println("start_from_file" + space + gpb.getRestartFile()+br);
 		  
 		  pw.println("checkpoint_file" + space + gpb.getCheckpointFile()+br);
-
-		  //Handle the ramp BC stuff
-		  if(gpb.getRampBC()!=null) {
-				for(int i=0;i<gpb.getRampBC().length;i++) {
-					 pw.println("ramp_bc"+space+gpb.getRampBC());
-				}
-		  }
 		  
-		  // Finally, handle the number_print_times variable, which may be null
+		  // Finally, handle the number_print_times variable, which
 		  
 		  if (gpb.getPrintTimesType().equalsIgnoreCase("steps")) {
 				pw.println("number_print_times" + space
