@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app-extension 
+    xmlns="http://www.sun.com/software/xml/ns/portal_server"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:sunportal="http://www.sun.com/software/xml/ns/portal_server"
+    xsi:noNamespaceSchemaLocation="http://www.sun.com/software/xml/ns/portal_server" version="1.0">
+
+    <portlet>
+        <portlet-name>RssPortlett</portlet-name>
+        <deployment-extension>
+            <extension-element>
+                <session-enabled>0</session-enabled>
+            </extension-element>
+        </deployment-extension>
+    </portlet>
+
+</portlet-app-extension>

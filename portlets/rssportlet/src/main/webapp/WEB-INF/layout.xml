@@ -1,0 +1,21 @@
+<portlet-tabbed-pane>
+    <portlet-tab label="RssPortlet">
+        <title lang="en">RssPortlet</title>
+        <portlet-tabbed-pane style="sub-menu">
+            <portlet-tab label="RssPortlet">
+                <title lang="en">RSS Portlet</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="RSSPortlet-PF">
+                                <portlet-class>rssportlet#RssPortlet</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+        </portlet-tabbed-pane>
+    </portlet-tab>
+</portlet-tabbed-pane>
+
+

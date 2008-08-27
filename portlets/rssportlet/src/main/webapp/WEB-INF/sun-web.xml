@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sun-web-app>
+  <context-root>/rssportlet</context-root>
+  <session-config>
+    <cookie-properties>
+      <property name="cookiePath" value="/"/>
+    </cookie-properties>
+  </session-config>
+</sun-web-app>
+
