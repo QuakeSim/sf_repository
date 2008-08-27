@@ -108,6 +108,7 @@
     <module>portlets/StationMonitor-portlet</module>
     <module>portlets/FaultDB-portlet</module>
 	 <module>portlets/Disloc2</module>
+	 <module>portlets/rssportlet</module>
 
     <!-- These are services.  Add new ones here. -->
     <module>ExecutionServices/AnalyzeTseriService</module>
