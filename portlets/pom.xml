@@ -31,9 +31,17 @@
 					its children.
 				-->
 			 <tasks>			 
-				<delete failonerror="false"
-						  dir="${catalina.home}/webapps/${pom.artifactId}"/>
-				
+				<delete failonerror="false">
+				  <fileset dir="${catalina.home}/webapps/${pom.artifactId}">
+					 <include name="**/*.jar"/>
+					 <include name="**/*.xml"/>
+					 <include name="**/*.properties"/>
+					 <include name="**/*.class"/>						  
+					 <include name="**/*.jsp"/>
+					 <include name="**/*.wsdd"/>
+				  </fileset>
+				</delete>
+
 				<delete file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${pom.artifactId}"/>
           </tasks>
         </configuration>

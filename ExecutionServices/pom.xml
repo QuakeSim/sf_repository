@@ -32,8 +32,19 @@
 					 -->
 				  <tasks>			 
 					 <echo message="Project home: ${project.home}"/>
-					 <delete failonerror="false"
-								dir="${catalina.home}/webapps/${pom.artifactId}"/>
+					 <delete failonerror="false">
+						<fileset dir="${catalina.home}/webapps/${pom.artifactId}">
+						  <include name="**/*.jar"/>
+						  <include name="**/*.xml"/>
+						  <include name="**/*.properties"/>
+						  <include name="**/*.class"/>						  
+						  <include name="**/*.jsp"/>
+						  <include name="**/*.wsdd"/>
+						</fileset>
+					 </delete>
+					 <delete failonerror="false">
+						<fileset dir="${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec"/>
+					 </delete>
 				  </tasks>
 				</configuration>
 				<goals>
