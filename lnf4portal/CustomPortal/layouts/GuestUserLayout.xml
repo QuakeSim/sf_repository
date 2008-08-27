@@ -55,6 +55,18 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
+            <portlet-tab label="news">
+               	<title lang="en">News</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout width="100%">
+                            <portlet-frame label="news">
+                                <portlet-class>rssportlet#RssPortlet</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
         </portlet-tabbed-pane>
     </portlet-tab>
 

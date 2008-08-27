@@ -23,23 +23,11 @@
     <portlet-preferences>
       <preference>
         <name>feeds</name>
-        <value>http://rss.slashdot.org/Slashdot/slashdot</value>
-        <value>http://blogs.sun.com/jonathan/feed/entries/rss</value>
-        <value>
-          http://www.wired.com/news_drop/netcenter/netcenter.rdf
-        </value>
-        <value>
-          http://www.theserverside.com/rss/theserverside-rss2.xml
-        </value>
-        <value>http://www.sciencedaily.com/newsfeed.xml</value>
-        <value>
-          http://rollerweblogger.org/project/feed/entries/rss
-        </value>
-        <value>http://blogs.sun.com/theaquarium/feed/entries/rss</value>
+        <value>http://quakesim.blogspot.com/feeds/posts/default?alt=rss</value>
       </preference>
       <preference>
         <name>maxEntries</name>
-        <value>5</value>
+        <value>15</value>
       </preference>
       <preference>
         <name>newWindow</name>
@@ -51,11 +39,11 @@
       </preference>
       <preference>
         <name>maxAge</name>
-        <value>72</value>
+        <value>7200</value>
       </preference>
       <preference>
         <name>cacheTimeout</name>
-        <value>3600</value>
+        <value>300</value>
       </preference>
       <preference>
         <name>maxDescriptionLength</name>

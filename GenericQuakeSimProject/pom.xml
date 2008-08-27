@@ -42,13 +42,16 @@
     </repositories>
 
     <!-- Repositories for plugins -->
+
     <pluginRepositories>
         <!-- Repository to get the jetty plugin -->
+<!--
         <pluginRepository>
             <id>mortbay-repo</id>
             <name>mortbay-repo</name>
             <url>http://www.mortbay.org/maven2/snapshot</url>
         </pluginRepository>
+-->
     </pluginRepositories>
 
     <!-- Project dependencies -->
