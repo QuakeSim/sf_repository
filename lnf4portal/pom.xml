@@ -83,7 +83,12 @@
 						todir="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/">
 				  <fileset dir="${basedir}/CustomPortal/"/>
             </copy>
-
+				<!-- Copy the KML file -->
+				<copy overwrite="true"
+						todir="${catalina.home}/webapps/gridsphere/">
+				  <fileset file="${basedir}/FaultKML/allQTFaults.kml/"/>
+            </copy>
+				
           </tasks>
         </configuration>
         <goals>
