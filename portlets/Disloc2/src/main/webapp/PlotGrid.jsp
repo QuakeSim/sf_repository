@@ -10,7 +10,7 @@
     <title>Google Maps Example</title>
  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBQozjQdf4FEuMBqpopduISAOADS4xTilRYX9d1ZU0uvBJwyY4gerC4Gog"
       type="text/javascript"></script>
-  <script src="http://gf7.ucs.indiana.edu:8080/Disloc-portlet/egeoxml.js" type="text/javascript"></script>
+  <script src="http://localhost:8080/Disloc2/egeoxml.js" type="text/javascript"></script>
   </head>
   <body>
   <%
@@ -45,7 +45,7 @@
     }
    
 //    var exml = new EGeoXml("exml", map, ["<%= fileName %>"], {dropboxid:"dropboxdiv",addmarker:addMark});
-    var exml = new EGeoXml("exml", map, ["<%= fileName %>"], {dropboxid:"dropboxdiv"});
+    var exml = new EGeoXml("exml", map, ["<%= fileName %>"], {nozoom:true, dropboxid:"dropboxdiv"});
     exml.parse();
 //    GEvent.addListener(exml,"parse",function(){
 //        mgr.refresh();

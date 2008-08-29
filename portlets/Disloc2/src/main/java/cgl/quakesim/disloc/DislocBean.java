@@ -78,6 +78,7 @@ public class DislocBean extends GenericSopacBean {
     boolean renderViewAllFaultsForm = false;    
     boolean renderAddFaultFromDBForm = false;    
     boolean renderMap=false;
+    boolean renderFaultMap=false;
 	 boolean usesGridPoints;
 	 boolean renderChooseObsvStyleForm=false;
 
@@ -765,6 +766,7 @@ public class DislocBean extends GenericSopacBean {
 		  renderAddFaultFromDBForm = false;
 		  renderDislocGridParamsForm = false;       
 		  renderMap=false;
+		  renderFaultMap=false;
 		  renderChooseObsvStyleForm=false;
     }
 
@@ -890,6 +892,9 @@ public class DislocBean extends GenericSopacBean {
 		  }
 		  else if (projectSelectionCode.equals("ShowMap")) {
 				renderMap = !renderMap;
+		  }
+		  else if (projectSelectionCode.equals("ShowFaultMap")) {
+				renderFaultMap = !renderFaultMap;
 		  }
 		  else if (projectSelectionCode.equals("ChooseObsvStyleForm")) {
 				renderChooseObsvStyleForm=!renderChooseObsvStyleForm;
@@ -1142,6 +1147,10 @@ public class DislocBean extends GenericSopacBean {
 	setRenderMap(false);	
     }
 
+	 public void toggleCloseFaultMap(ActionEvent ev){
+		  setRenderFaultMap(false);
+	 }
+
 	 /**
 	  * Used for selecting the data to plot
 	  */
@@ -1161,7 +1170,7 @@ public class DislocBean extends GenericSopacBean {
 				downloadKmlFile(dpsb.getKmlurl(),
 									 this.getBasePath()+"/"+"gridsphere"+"/"+kmlName);
 
-				System.out.println(kmlName);
+				System.out.println("KML Name: "+kmlName);
 				setKmlProjectFile(kmlName);
 				
 				//				ObjectSet results=db.get(dpsb);
@@ -1649,6 +1658,14 @@ public class DislocBean extends GenericSopacBean {
     
     public void setRenderMap(boolean renderMap) {
 		  this.renderMap=renderMap;
+    }
+
+    public boolean getRenderFaultMap() {
+		  return this.renderFaultMap;
+    }
+    
+    public void setRenderFaultMap(boolean renderFaultMap) {
+		  this.renderFaultMap=renderFaultMap;
     }
     
 	 public boolean getUsesGridPoints() {

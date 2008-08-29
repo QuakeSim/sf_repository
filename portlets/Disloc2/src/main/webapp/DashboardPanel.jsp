@@ -17,17 +17,23 @@
 					<f:selectItem id="item1" 
 						itemLabel="View Project Info: Verify and update project information." 
 						itemValue="CreateObservationGrid" /> 
+
 					<f:selectItem id="item2" 
 						itemLabel="Create New Fault: Click to specify geometry for a fault segment." 
 						itemValue="CreateNewFault" /> 
+
+					<f:selectItem id="item02132"
+						itemLabel="Use Fault Map: Interactively select faults." 
+						itemValue="ShowFaultMap" />
 
 					<f:selectItem id="item4" 
 						itemLabel="Add Fault from DB: Click to select a fault segment from the database." 
 						itemValue="AddFaultSelection" /> 
 
 					<f:selectItem id="item021"
-						itemLabel="Use Map: View faults and pick observation points on an interactive map."
+						itemLabel="Use Map: View project faults and pick observation points on an interactive map."
 						itemValue="ShowMap" />
+
 				</h:selectOneRadio> 
 				<h:commandButton id="button1" value="Make Selection" 
 					actionListener="#{DislocBean2.toggleProjectSelection}"> 

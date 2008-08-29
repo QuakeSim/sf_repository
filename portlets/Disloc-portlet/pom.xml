@@ -111,7 +111,7 @@
             <url>http://www.crisisgrid.org/maven2</url>
         </repository>
 
-
+<!-- Obsolete, broken
         <repository>
             <releases>
                 <enabled>false</enabled>
@@ -126,6 +126,7 @@
             <id>apache-maven</id>
             <url>http://www.ibiblio.org/maven2</url>
         </repository>
+-->
 
         <!-- This is the apache repository for bridges -->
         <repository>
