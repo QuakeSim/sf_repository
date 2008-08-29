@@ -44,7 +44,6 @@ mapcenter_y = center_xy[1];
 <title>Edit Project</title>
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here"
       type="text/javascript"></script>
- <script src="http://localhost:8080/Disloc2/egeoxml.js" type="text/javascript"></script>
 </head> 
 
 <body onload="initialize()" onunload="GUnload()">
@@ -56,7 +55,7 @@ mapcenter_y = center_xy[1];
 	 var map;
 	 var geoXml;
 	 var geoObsvXml;
-	 var faultMap;
+
 
         var req;
         var baseIcon = new GIcon();
@@ -136,7 +135,6 @@ function turnOffRadioForForm(form)
   for(var i=0; i<form.elements.length; i++) 
   { 
    form.elements[i].checked = false; 
-       
   } 
 } 
 
@@ -144,7 +142,6 @@ function initialize() {
 	 map=null;
 	 geoXml=null;
 	 geoObsvXml=null;
-
 	 map=new GMap2(document.getElementById("map"));
 	 	  //This is the default center.
     	  map.setCenter(new GLatLng(33,-117),7);
@@ -185,18 +182,6 @@ function initialize() {
 
 		//Listen for user clicks
 	   GEvent.addListener(map,"click",addObsvMarker);
-
-    //These are used by the fault map 
-	 faultMap=null;
-    faultMap=new GMap2(document.getElementById("faultMap"));
-    faultMap.setCenter(new GLatLng(35.0,-118.5),5);
-    faultMap.addControl(new GLargeMapControl());
-    faultMap.addControl(new GMapTypeControl());
-   
-		var exmlFMap = new EGeoXml("exmlFMap", faultMap, ["allQTFaults.kml"], {nozoom:true,sidebarid:"the_side_bar",iwwidth:200});
-    exmlFMap.parse();
-
-
 }
 
 function addObsvMarker(overlay,point) {
@@ -337,7 +322,7 @@ function getScrolling() {
    <%@ include file="SearchFaultLatLonPanel.jsp" %>  
    <%@ include file="SearchFaultAuthorPanel.jsp" %>  
    <%@ include file="FaultDisplaySearchResultsPanel.jsp" %>  
-   <%@ include file="FaultMapPanel.jsp"%>
+   <%@ include file="FaultMapPanelFrame.jsp"%>
 
 	</h:panelGrid> 
    <%@ include file="ProjectComponentPanel.jsp" %>  
