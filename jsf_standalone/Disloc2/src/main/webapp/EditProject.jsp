@@ -82,7 +82,6 @@ mapcenter_y = center_xy[1];
         }
 
 
-
 //This is used to calculate the length and strike angle.
 function doMath(){
 var lonStart=document.getElementById("Faultform:faultLon");
@@ -102,7 +101,6 @@ var flatten=1.0/298.247;
 var x=(lonEnd.value-lonStart.value)*theFactor;
 var y=(latEnd.value-latStart.value)*111.32;
 var lengthVal=Math.sqrt(x*x+y*y);
-
 
 length.value=Math.round(lengthVal*1000)/1000;
 

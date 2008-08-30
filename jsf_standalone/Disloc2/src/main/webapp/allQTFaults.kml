@@ -179,7 +179,7 @@
 			<description><b>Fault:</b> Anacapa-Dume<br/>This fault has 2 segment(s)</description>
 			<Placemark>
 				<name>Anacapa-Dume</name>
-				<description><b>Fault Name:</b> Anacapa-Dume<br/><b>Coordinates:</b> from [-118.69, 33.98] to [-119.5, 33.99]<br/><b>Strike =</b> -89.15<br/><b>Dip =</b> 45<br/><b>Length =</b> 75<br/><b>Width =</b> 28</description>
+				<description><![CDATA[<b>Fault Name:</b> Anacapa-Dume<br/><b>Coordinates:</b> from [-118.69, 33.98] to [-119.5, 33.99]<br/><b>Strike =</b> -89.15<br/><b>Dip =</b> 45<br/><b>Length =</b> 75<br/><b>Width =</b> 28]]></description>
 				<styleUrl>#lineStyle1</styleUrl>
 				<LineString><altitudeMode>relativeToGround</altitudeMode><tessellate>1</tessellate><coordinates>-118.69,33.98,0 -119.5,33.99,0 </coordinates></LineString>
 			</Placemark>
