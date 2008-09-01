@@ -42,6 +42,8 @@ mapcenter_y = center_xy[1];
 	href='<%= request.getContextPath() + "/stylesheet.css" %>'> 
  
 <title>Edit Project</title>
+<!--Google and related APIs are imported here -->
+ <script src="http://156.56.104.143:8080/Disloc2/egeoxml.js" type="text/javascript"></script>
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here"
       type="text/javascript"></script>
 </head> 

@@ -1,3 +1,7 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%> 
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%> 
 
@@ -17,12 +21,13 @@
 	 <div id="the_side_bar" style="width:300px; height:400px;overflow:auto;"></div>
    </f:verbatim>
 </h:panelGrid>
-<h:outputText escape="false" value="Fault Name:" /><h:inputText id="faultName" value="Some fault"/>
-<h:outputText escape="false" value="Segment Name:" /><h:inputText id="segmentName" value="Some segment"/>
+<h:outputText escape="false" value="<b>Fault Name:</b>" /><h:inputText id="faultName" value="#{DislocBean2.faultDBEntry.faultName}"/>
+<h:outputText escape="false" value="<b>Segment Name:</b>" /><h:inputText id="segmentName" value="#{DislocBean2.faultDBEntry.faultSegmentName}"/>
+<h:outputText escape="false" value="<b>InterpId:</b>" /><h:inputText id="interpId" value="#{DislocBean2.faultDBEntry.interpId}"/>
+<h:commandButton id="queryDBFromMap" value="Get Fault Params"
+					  actionListener="#{DislocBean2.toggleSetFaultFromMap}"/> 
 </h:form>
 </f:view>
-
-<a id="Northridge" href="javascript:GEvent.trigger(document.getElementById('faultKMLSelectorForm:faultName'),'click','Northridge',exmlFMap.gpolylines[0])">blah</a>
 
 <script language="JavaScript">
 	 var faultMap=null;
@@ -41,23 +46,32 @@
        //Handle sidebar events.  Param1 is the fault+segment name, param2 is the polyline.
     	 var faultField=document.getElementById("faultKMLSelectorForm:faultName")
 	 	 GEvent.addDomListener(faultField,"click",function(param1,param2){
+					   var interpHead="(InterpId:";
 					   var faultName,segmentName;
+						var segmentNamePlusId, interpId;
 						//Parse out the segment name
-						if(param1.indexOf("-") > -1) {
-							faultName=param1.substring(0,param1.indexOf("-"));
-							segmentName=param1.substring(param1.indexOf("-")+1,param1.length);
+						if(param1.indexOf("--") > -1) {
+						  
+							faultName=param1.substring(0,param1.indexOf("--"));
+							segmentName=param1.substring(param1.indexOf("--")+2,param1.indexOf(interpHead));
+							interpId=param1.substring(param1.indexOf(interpHead)+interpHead.length,param1.length-1);
 						}
 						else {
-						   //Fault name and segment name are the same.
-							faultName=param1;
-							segmentName=param1;
+						   //No segment name
+							faultName=param1.substring(0,param1.indexOf(interpHead));
+							segmentName="N/A";
+							interpId=param1.substring(param1.indexOf(interpHead)+interpHead.length,param1.length-1);
 						}
 
 					   //Now show the values.
 			         var newElement1=document.getElementById("faultKMLSelectorForm:faultName");
 		  				newElement1.setAttribute("value",faultName);
+
 			         var newElement2=document.getElementById("faultKMLSelectorForm:segmentName");
 		  				newElement2.setAttribute("value",segmentName);
+
+			         var newElement3=document.getElementById("faultKMLSelectorForm:interpId");
+		  				newElement3.setAttribute("value",interpId);
 
 						//Trigger the polyline click event to show the popup window.
 						GEvent.trigger(param2,'click');
@@ -67,7 +81,8 @@
 	 function myside(myvar,name,type,i,graphic) {
 
 	   if(type=="polyline") {
-        return '<a id="'+name+'" href="javascript:GEvent.trigger(document.getElementById(\'faultKMLSelectorForm:faultName\'),\'click\',\''+name+'\','+myvar+'.gpolylines['+i+'])">' + name + '</a><br>';
+			shortName=name.substring(0,name.indexOf("(InterpId:"));
+        return '<a id="'+name+'" href="javascript:GEvent.trigger(document.getElementById(\'faultKMLSelectorForm:faultName\'),\'click\',\''+name+'\','+myvar+'.gpolylines['+i+'])">' + shortName + '</a><br>';
 
 //        return '<a id="'+name+'" href="javascript:GEvent.trigger('
 //          + myvar+ '.gpolylines['+i+'],\'click\')">' + name + '</a><br>';

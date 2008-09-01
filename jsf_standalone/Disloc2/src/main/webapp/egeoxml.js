@@ -71,6 +71,7 @@ function EGeoXml(myvar, map, url, opts) {
   this.lastmarker = {};   
   this.myimages = [];
   this.imageNum =0;
+
 }
 
 // Create Marker
