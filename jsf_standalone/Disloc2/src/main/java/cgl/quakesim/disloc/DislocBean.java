@@ -2533,6 +2533,7 @@ public class DislocBean extends GenericSopacBean {
 	  * Needed to make the map interface work
 	  **/
 	 public void toggleSetFaultFromMap(ActionEvent ev) throws Exception {
+		  renderFaultMap=false;
 		  try {
 				System.out.println("Adding fault from map");
 				
@@ -2542,7 +2543,7 @@ public class DislocBean extends GenericSopacBean {
 				System.out.println("DB qeury:"+dbQuery);
 				currentFault=QueryFaultFromDB(dbQuery);
 				
-				renderCreateNewFaultForm = !renderCreateNewFaultForm;
+				renderCreateNewFaultForm = true;
 		  }
 		  catch (Exception ex){
 				System.out.println("Map fault selection error.");
