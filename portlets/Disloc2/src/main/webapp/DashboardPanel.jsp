@@ -31,7 +31,7 @@
 						itemValue="AddFaultSelection" /> 
 
 					<f:selectItem id="item021"
-						itemLabel="Use Map: View project faults and pick observation points on an interactive map."
+						itemLabel="View Project Map: View project faults and pick observation points on an interactive map."
 						itemValue="ShowMap" />
 
 				</h:selectOneRadio> 

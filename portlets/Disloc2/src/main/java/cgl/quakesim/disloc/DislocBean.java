@@ -58,7 +58,6 @@ public class DislocBean extends GenericSopacBean {
     String comma=", ";
     String descBegin="<description>";
     String descEnd="</description>";
-    
 	 
     //Some navigation strings.
     static final String DEFAULT_USER_NAME="disloc_default_user";
@@ -146,12 +145,15 @@ public class DislocBean extends GenericSopacBean {
 	 String gpsStationLat="";
 	 String gpsStationLon="";
     NumberFormat format = null;
+
+	 FaultDBEntry faultDBEntry;
     
     /**
      * The client constructor.
      */
     public DislocBean() throws Exception {
 	super();
+	faultDBEntry=new FaultDBEntry();
 	format=NumberFormat.getInstance();
 	//		  currentParams.setObservationPointStyle(1);
 	
@@ -785,7 +787,6 @@ public class DislocBean extends GenericSopacBean {
 		  }
 
 			db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");		  
-
 			//First, get the project bean
 			DislocProjectBean project=new DislocProjectBean();
 			project.setProjectName(projectName);
@@ -1541,6 +1542,14 @@ public class DislocBean extends GenericSopacBean {
     public List getMyFaultDBEntryList() {
 		  return myFaultDBEntryList;
     }
+
+	 public void setFaultDBEntry(FaultDBEntry faultDBEntry) {
+		  this.faultDBEntry=faultDBEntry;
+	 }
+
+	 public FaultDBEntry getFaultDBEntry() {
+		  return this.faultDBEntry;
+	 }
 
     public void setJobToken(String jobToken){
 		  this.jobToken=jobToken;
@@ -2518,4 +2527,37 @@ public class DislocBean extends GenericSopacBean {
 		  //Store the new db.
 		  storeObsvPointsInDB(newPoints);
 	 }
+
+	 //--------------------------------------------------
+	 /**
+	  * Needed to make the map interface work
+	  **/
+	 public void toggleSetFaultFromMap(ActionEvent ev) throws Exception {
+		  renderFaultMap=false;
+		  try {
+				System.out.println("Adding fault from map");
+				
+				initEditFormsSelection();
+				
+				String dbQuery=getMapFaultName();
+				System.out.println("DB qeury:"+dbQuery);
+				currentFault=QueryFaultFromDB(dbQuery);
+				
+				renderCreateNewFaultForm = true;
+		  }
+		  catch (Exception ex){
+				System.out.println("Map fault selection error.");
+				ex.printStackTrace();
+		  }
+	 }
+	 
+	 String mapFaultName;
+	 public void setMapFaultName(String mapFaultName) {
+		  this.mapFaultName=mapFaultName;
+	 }
+
+	 public String getMapFaultName() {
+		  return this.mapFaultName;
+	 }
+	 //--------------------------------------------------
 }

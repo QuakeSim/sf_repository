@@ -53,6 +53,14 @@
 
 
 	<navigation-rule>
+		<from-view-id>/FautMapPanel.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>disloc-this</from-outcome>
+			<to-view-id>/EditProject.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
 		<from-view-id>/EditProject.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>disloc-this</from-outcome>

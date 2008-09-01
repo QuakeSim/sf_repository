@@ -3,6 +3,26 @@
 
 <target name="copy-all-to-portlet" depends="copy-rdahmm-to-portlet,copy-stfilter-to-portlet,copy-stationmonitor-to-portlet,copy-realtimerdahmm-to-portlet"/>
 
+<target name="copy-disloc2-to-portlet">
+   <property name="disloc.dest.dir" value="./portlets/Disloc2/"/>
+   <property name="disloc.source.dir" value="./jsf_standalone/Disloc2"/>
+   <copy toDir="${disloc.dest.dir}"
+         overwrite="true">
+      <fileset dir="${disloc.source.dir}">
+         <include name="**/*.java"/>
+      </fileset>
+      <fileset dir="${disloc.source.dir}">
+         <include name="**/*.xml"/>
+         <include name="**/*.class"/>
+         <include name="**/*.jar"/>
+         <include name="**/*.jsp"/>
+         <include name="**/*.properties"/>
+         <exclude name="pom.xml"/>
+         <exclude name="**/web.xml"/>
+      </fileset>
+   </copy>
+</target>
+
 <target name="copy-simplex-to-portlet">
    <property name="simplex.dest.dir" value="./portlets/Simplex-portlet/"/>
    <property name="simplex.source.dir" value="./jsf_standalone/Simplex"/>
