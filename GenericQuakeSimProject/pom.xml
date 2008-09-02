@@ -8,6 +8,7 @@
   <name>Generic parts of the application management code</name>
   <url>http://maven.apache.org</url>
     <repositories>
+<!-- Obsolete snapshot rep
         <repository>
             <releases>
                 <enabled>false</enabled>
@@ -18,6 +19,7 @@
             <id>apache-maven-snapshots</id>
             <url>http://cvs.apache.org/maven-snapshot-repository</url>
         </repository>
+-->
         <repository>
             <id>SOPAC</id>
             <url>http://sopac.ucsd.edu/repositories/maven2</url>
