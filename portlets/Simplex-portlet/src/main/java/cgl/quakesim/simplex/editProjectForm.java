@@ -40,6 +40,7 @@ public class editProjectForm extends GenericProjectBean {
 	 boolean renderViewAllFaultsForm = false;
 	 boolean renderGPSStationMap = false;
 	 boolean renderObsvEntries = false;
+	 boolean renderFaultMap = false;
 
 	 String faultSelectionCode = "";
 	 boolean renderAddFaultFromDBForm = false;
@@ -84,6 +85,7 @@ public class editProjectForm extends GenericProjectBean {
 		 renderAddFaultSelectionForm = false;
 		 renderAddFaultFromDBForm = false;
 		 renderGPSStationMap = false;
+		 renderFaultMap =  false;
 	}	
 	 
 	 public void toggleShowObsvEntries(ActionEvent ev) {
@@ -97,29 +99,38 @@ public class editProjectForm extends GenericProjectBean {
 			renderCreateObservationForm = !renderCreateObservationForm;
 		}
 
-		if (projectSelectionCode.equals("ShowObsvCutPaste")) {
+		else if (projectSelectionCode.equals("ShowObsvCutPaste")) {
 			renderCreateObsvCutPaste = !renderCreateObsvCutPaste;
 		}
 
-		if (projectSelectionCode.equals("CreateNewFault")) {
+		else if (projectSelectionCode.equals("CreateNewFault")) {
 			currentFault= new Fault();
 			renderCreateNewFaultForm = !renderCreateNewFaultForm;
 		}
-		if (projectSelectionCode.equals("ShowDislocList")) {
+		else if (projectSelectionCode.equals("ShowDislocList")) {
 //			QueryLayersList();
 			renderDislocListForm = !renderDislocListForm;
 		}
 
-		if (projectSelectionCode.equals("AddFaultSelection")) {
+		else if (projectSelectionCode.equals("AddFaultSelection")) {
 			renderAddFaultSelectionForm = !renderAddFaultSelectionForm;
 		}
 
-		if (projectSelectionCode.equals("ShowGPSObsv")) {
-			 System.out.println("Showing Map");
+		else if (projectSelectionCode.equals("ShowGPSObsv")) {
+			 System.out.println("Showing GPS Map");
 			 renderGPSStationMap=!renderGPSStationMap;
 		}
+		
+		else if (projectSelectionCode.equals("ShowFaultMap")) {
+			 System.out.println("Showing Fault Map");
+			 renderFaultMap=!renderFaultMap;
+		}
+		
+		else if (projectSelectionCode.equals("")) {
+			 ;
+		}
 
-		if (projectSelectionCode.equals("")) {
+		else {
 			 ;
 		}
 
@@ -505,6 +516,15 @@ public class editProjectForm extends GenericProjectBean {
 		this.renderAddFaultSelectionForm = tmp_boolean;
 	}
 
+    public boolean getRenderFaultMap() {
+		  return this.renderFaultMap;
+    }
+    
+    public void setRenderFaultMap(boolean renderFaultMap) {
+		  this.renderFaultMap=renderFaultMap;
+    }
+    
+
 	public String getFaultLatStart() {
 		return this.faultLatStart;
 	}
@@ -584,5 +604,39 @@ public class editProjectForm extends GenericProjectBean {
 	 public void setRenderObsvEntries(boolean renderObsvEntries) {
 		  this.renderObsvEntries=renderObsvEntries;
 	 }
+
+	 //--------------------------------------------------
+	 /**
+	  * Needed to make the map interface work
+	  **/
+	 public void toggleSetFaultFromMap(ActionEvent ev) throws Exception {
+		  renderFaultMap=false;
+		  try {
+				System.out.println("Adding fault from map");
+				
+				initEditFormsSelection();
+				
+				String dbQuery=getMapFaultName();
+				System.out.println("DB qeury:"+dbQuery);
+				currentFault=QueryFaultFromDB(dbQuery);
+				
+				renderCreateNewFaultForm = true;
+		  }
+		  catch (Exception ex){
+				System.out.println("Map fault selection error.");
+				ex.printStackTrace();
+		  }
+	 }
+	 
+	 String mapFaultName;
+	 public void setMapFaultName(String mapFaultName) {
+		  this.mapFaultName=mapFaultName;
+	 }
+
+	 public String getMapFaultName() {
+		  return this.mapFaultName;
+	 }
+	 //--------------------------------------------------
+
 
 }

@@ -1477,7 +1477,6 @@ public class SimplexBean extends GenericSopacBean {
 		  }
 	 }
 
-
 	 /**
 	  * Sort the list by date
 	  */
@@ -1537,6 +1536,7 @@ public class SimplexBean extends GenericSopacBean {
 
 		  return first;
 	 }
+
     /**
      * Create a KML file of the faults.  The method assumes
      * access to global variables.
@@ -1628,6 +1628,5 @@ public class SimplexBean extends GenericSopacBean {
 	 
 	 public void setPortalBaseUrl(String portalBaseUrl) {
 		  this.portalBaseUrl=portalBaseUrl;
-	 }
-	
+	 }	
 }
