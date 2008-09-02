@@ -1,4 +1,4 @@
-<h:form id="faultKMLSelectorForm" rendered="#{Simplex.renderFaultMap}">
+<h:form id="faultKMLSelectorForm" rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}">
 <h:panelGrid id="faultKmlploter" columns="2">
    <f:verbatim>
     <div id="faultMap" style="width: 500px; height: 400px;"></div>
@@ -7,9 +7,9 @@
 	 <div id="the_side_bar" style="width:300px; height:400px;overflow:auto;"></div>
    </f:verbatim>
 </h:panelGrid>
-<h:outputText escape="false" value="<b>Fault Name:</b>" /><h:inputText id="faultName" value="#{Simplex.editProjectForm.mapFaultName}"/>
+<h:outputText escape="false" value="<b>Fault Name:</b>" /><h:inputText id="faultName" value="#{SimplexBean.currentEditProjectForm.mapFaultName}"/>
 <h:commandButton id="queryDBFromMap" value="Get Fault Params"
-					  actionListener="#{Simplex.editProjectForm.toggleSetFaultFromMap}"/> 
+					  actionListener="#{SimplexBean.currentEditProjectForm.toggleSetFaultFromMap}"/> 
 </h:form>
 
 <f:verbatim>

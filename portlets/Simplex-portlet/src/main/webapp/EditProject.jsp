@@ -65,17 +65,14 @@ for(int i=0;i<stationList.size();i++) {
 	href='<%= request.getContextPath() + "/stylesheet.css" %>'>
 
 <title>Edit Project</title>
+<%/*
  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBQozjQdf4FEuMBqpopduISAOADS4xTilRYX9d1ZU0uvBJwyY4gerC4Gog"
       type="text/javascript"></script>
+*/%>
 
-<%/*
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here"
 type="text/javascript"></script>
-
-
-  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here"
-type="text/javascript"></script>      
-*/%>
+ <script src="http://156.56.104.143:8080/Disloc2/egeoxml.js" type="text/javascript"></script>
 
 </head>
 <body onload="initialize()" onunload="GUnload()">
@@ -383,6 +380,9 @@ function printNetworkColors (array) {
 
 			<%/* Fault search results */%>
 			<%@include file="FaultSearchResultsPanel.jsp" %>
+
+			<%/* Fault map search */%>
+			<%@include file="FaultMapPanelFrame.jsp" %>
 		</h:panelGrid>
 
 		<%/*This is the right hand column */%>

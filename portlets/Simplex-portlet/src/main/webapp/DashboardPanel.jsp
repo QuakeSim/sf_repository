@@ -28,6 +28,10 @@
 							itemLabel="Add Observation List (Advanced): Cut and paste a list of observation points. "
 							itemValue="ShowObsvCutPaste" />
 
+						<f:selectItem id="item33221"
+							itemLabel="Add Fault from Map (Preferred): Use map to choose input fault."
+							itemValue="ShowFaultMap" />
+
 						<f:selectItem id="item2"
 							itemLabel="Create New Fault: Click to specify geometry for a fault segment."
 							itemValue="CreateNewFault" />
