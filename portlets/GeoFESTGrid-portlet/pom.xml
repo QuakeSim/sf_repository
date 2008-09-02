@@ -26,6 +26,27 @@
            </resource>
         </resources>
         <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                  <executions>
+                     <execution>
+                        <phase>package</phase>
+                           <configuration>
+                             <tasks>
+                               <replace dir="${basedir}/target/${pom.artifactId}" 
+                                        token="put.google.map.key.here"
+                                        value="${google.master.key}">
+											<include name="**/*.jsp"/>
+										 </replace>
+                             </tasks>
+                           </configuration>
+                           <goals>
+                             <goal>run</goal>
+                           </goals>
+                     </execution> 
+                  </executions>
+            </plugin>
+
 <!--
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
@@ -43,41 +64,6 @@
     <properties>
        <tomcat.base.dir>${catalina.home}</tomcat.base.dir>
     </properties>
-
-
-
-    <!-- Profile to run jetty, so the tomcat jars are included in the bundle. They are not included by default -->
-    <profiles>
-        <profile>
-            <id>jettyConfig</id>
-            <dependencies>
-                <dependency>
-                    <groupId>javax.servlet</groupId>
-                    <artifactId>jsp-api</artifactId>
-                    <version>2.0</version>
-                    <scope>compile</scope>
-                </dependency>
-                <dependency>
-                    <groupId>tomcat</groupId>
-                    <artifactId>jasper-compiler</artifactId>
-                    <version>5.5.9</version>
-                    <scope>compile</scope>
-                </dependency>
-                <dependency>
-                    <groupId>tomcat</groupId>
-                    <artifactId>jasper-runtime</artifactId>
-                    <version>5.5.9</version>
-                    <scope>compile</scope>
-                </dependency>
-                <dependency>
-                    <groupId>tomcat</groupId>
-                    <artifactId>jasper-compiler-jdt</artifactId>
-                    <version>5.5.9</version>
-                    <scope>compile</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
 
 
     <repositories>

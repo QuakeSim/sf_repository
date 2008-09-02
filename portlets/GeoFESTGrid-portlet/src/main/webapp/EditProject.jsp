@@ -20,6 +20,10 @@
 
 <html>
 <head>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here"
+type="text/javascript"></script>
+ <script src="http://156.56.104.143:8080/Disloc2/egeoxml.js" type="text/javascript"></script>
+
 <link rel="stylesheet" type="text/css"
 	href='<%= request.getContextPath() + "/stylesheet.css" %>'>
 
@@ -86,6 +90,9 @@ function dataTableSelectOneRadio(radio) {
 					<f:selectItem id="item4"
 						itemLabel="Add Fault from DB: Click to select a fault segment from the database."
 						itemValue="AddFaultSelection" />
+					<f:selectItem id="item5"
+						itemLabel="Add Fault from Map: Click to select a fault segment using the map interface."
+						itemValue="FaultMapSelection" />
 				</h:selectOneRadio>
 				<h:commandButton id="button1" value="Make Selection"
 					actionListener="#{MGBean.toggleProjectSelection}">
@@ -94,6 +101,10 @@ function dataTableSelectOneRadio(radio) {
 		</h:form>
 
 		<h:panelGroup  id="stuff4">
+
+			<%/* Fault map search */%>
+			<%@include file="FaultMapPanelFrame.jsp" %>
+		   
 			<h:form id="layerform" rendered="#{MGBean.renderCreateNewLayerForm}">
 
 				<h:panelGrid id="LayerTable" columns="2" footerClass="subtitle"
