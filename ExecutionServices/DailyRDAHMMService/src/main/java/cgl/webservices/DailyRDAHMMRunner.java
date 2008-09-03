@@ -9,6 +9,7 @@ public class DailyRDAHMMRunner {
 	
 	protected Vector<String[]> statoinList = new Vector<String[]>();
 	protected int numOfStates = 7;
+	protected TreeMap<String, Integer> stateChangeNums;
 	
 	public DailyRDAHMMRunner() {
 		//get the station list
@@ -56,6 +57,7 @@ public class DailyRDAHMMRunner {
 					}
 				}
             }
+			stateChangeNums = new TreeMap<String, Integer>();
 		} catch (Exception ex3) {
 			ex3.printStackTrace();
         }    

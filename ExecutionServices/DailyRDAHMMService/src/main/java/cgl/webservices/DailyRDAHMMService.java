@@ -46,41 +46,16 @@ public class DailyRDAHMMService extends RDAHMMService {
 			String outputType, double annealStep, String buildFilePath,
 			String antTarget) throws Exception {
 
+		DailyRDAHMMThread.exec("mkdir " + baseDestDir);
 		// Set up the work directory
 		String workDir = baseWorkDir + File.separator + projectName;
 		DailyRDAHMMThread.exec("mkdir " + workDir);
-
+		
+		
 		System.out.println("inputFileUrlString in runBlockingRDAHMM: "	+ inputFileUrlString);
 		if (inputFileUrlString.indexOf("ERROR") >= 0) {
-			// no input to evaluate, just plot on the model data
-			String res, fileset;
-			res = DailyRDAHMMThread.exec("mkdir " + outputDestDir);
-			fileset = modelWorkDir + File.separator + "*";
-			res = DailyRDAHMMThread.exec("cp " + fileset + " " + outputDestDir + File.separator);
-			res = DailyRDAHMMThread.exec("cp " + fileset + " " + workDir + File.separator);
-
-			// plot images with model files
-			String modelPath = outputDestDir + File.separator + modelBaseName;
-			String proPath = outputDestDir + File.separator + projectName;
-			// the model .input file is just the all.input file
-			res = DailyRDAHMMThread.exec("cp " + modelPath + ".input "	+ proPath + ".all.input");
-
-			String plotSh = binPath + File.separator + "plot_go.sh";
-			System.out.println("about to executing " + plotSh + " " + proPath
-					+ ".all.input " + modelPath + ".Q " + modelPath	+ ".raw ...");
-			res = DailyRDAHMMThread.exec(plotSh + " " + proPath + ".all.input "
-					+ modelPath + ".Q " + modelPath + ".raw ",	new File(binPath));
-			System.out.println("result : " + res);
-			res = DailyRDAHMMThread.exec("touch " + proPath + ".input");
-			res = DailyRDAHMMThread.exec("touch " + proPath + ".Q");
-			res = DailyRDAHMMThread.exec("touch " + proPath + ".raw");
-
-			// create empty files in workDir
-			String proWorkPath = workDir + File.separator + projectName;
-			res = DailyRDAHMMThread.exec("touch " + proWorkPath + ".input");
-			res = DailyRDAHMMThread.exec("touch " + proWorkPath + ".Q");
-			res = DailyRDAHMMThread.exec("touch " + proWorkPath + ".raw");
-
+			System.out.println("Failed to get GRWS input for station " + stationID);
+			fakeEvaluation();
 			return getTheReturnFiles();
 		}
 
@@ -106,6 +81,44 @@ public class DailyRDAHMMService extends RDAHMMService {
 		}
 		return getTheReturnFiles();
 	}
+
+	/** 
+	 * do fake evaluation on the station: only called when there is no evaluation input
+	  */
+	protected void fakeEvaluation() {
+		System.out.println("Fake Evaluation for project " + projectName);
+		String workDir = baseWorkDir + File.separator + projectName;
+		
+		// no input to evaluate, just plot on the model data
+		String res, fileset;
+		res = DailyRDAHMMThread.exec("mkdir " + outputDestDir);
+		fileset = modelWorkDir + File.separator + "*";
+		res = DailyRDAHMMThread.exec("cp " + fileset + " " + outputDestDir + File.separator);
+		res = DailyRDAHMMThread.exec("cp " + fileset + " " + workDir + File.separator);
+
+		// plot images with model files
+		String modelPath = outputDestDir + File.separator + modelBaseName;
+		String proPath = outputDestDir + File.separator + projectName;
+		// the model .input file is just the all.input file
+		res = DailyRDAHMMThread.exec("cp " + modelPath + ".input "	+ proPath + ".all.input");
+
+		String plotSh = binPath + File.separator + "plot_go.sh";
+		System.out.println("about to executing " + plotSh + " " + proPath
+				+ ".all.input " + modelPath + ".Q " + modelPath	+ ".raw ...");
+		res = DailyRDAHMMThread.exec(plotSh + " " + proPath + ".all.input "
+				+ modelPath + ".Q " + modelPath + ".raw ",	new File(binPath));
+		System.out.println("result : " + res);
+		res = DailyRDAHMMThread.exec("touch " + proPath + ".input");
+		res = DailyRDAHMMThread.exec("touch " + proPath + ".Q");
+		res = DailyRDAHMMThread.exec("touch " + proPath + ".raw");
+
+		// create empty files in workDir
+		String proWorkPath = workDir + File.separator + projectName;
+		res = DailyRDAHMMThread.exec("touch " + proWorkPath + ".input");
+		res = DailyRDAHMMThread.exec("touch " + proWorkPath + ".Q");
+		res = DailyRDAHMMThread.exec("touch " + proWorkPath + ".raw");
+	}
+
     
     /**
 	 * generate the rdahmm input file from the url string of the input file
@@ -289,9 +302,7 @@ public class DailyRDAHMMService extends RDAHMMService {
 					 //Otherwise, we will have to copy it.
 					 copyFileToFile(filePathObject, destFileObject);
 					 return fileLocalFullName;
-				}
-				
-				else if(protocol.equals(HTTP_PROTOCOL)) {
+				}	else if(protocol.equals(HTTP_PROTOCOL)) {
 					 copyUrlToFile(inputFileUrl,fileLocalFullName[i]);
 				}
 				
@@ -352,7 +363,9 @@ public class DailyRDAHMMService extends RDAHMMService {
 		  String resource="procCoords";
 		  String contextGroup="sopacGlobk";
 		  String minMaxLatLon="";
-		  String contextId="5";
+		  String contextId="58";
+		  
+		  System.out.println("about to query input url for site " + siteCode + " beginDate:" + beginDate + " endDate:" + endDate);
 		  
 		  return querySOPACGetURL(siteCode,
 										  resource,
