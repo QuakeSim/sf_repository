@@ -52,8 +52,26 @@
 			top: 4px; 
 		} 
 	</style>
+	
+	<style>
+		td      { font-size: 9pt;}
+		.ooib { border-width: 1px; border-style: none solid solid; border-color: #CC3333; background-color: #E4E5EE;}
+		.ooih td { border-width: 1px; padding: 0 5; }
+		.ooihj { color: #CC3333; background-color: #E4E5EE; border-style: solid solid none; border-color: #CC3333; cursor: pointer}
+		.ooihs { color: #6600CC; background-color: #ccccFF; border-style: solid; border-color: #6600CC #6600CC #CC3333; cursor: pointer}
+		.ooihx { border-style: none none solid; border-color: #CC3333; }
+	</style>
 
 	<script>
+	function ghbq(td) {
+		var tr = document.getElementById("tabRow");
+		var ob = document.getElementById("obody").rows;
+		for(var ii=0; ii < tr.cells.length-1; ii++){
+			tr.cells[ii].className = (td.cellIndex==ii ? "ooihj":"ooihs");
+			ob[ii].style.display = (td.cellIndex==ii ? "":"none");
+		}
+	}
+
 	YAHOO.namespace("example.calendar");
 	
 	var slider;
@@ -374,20 +392,39 @@
 				<div id="cal1Container"> </div>          
 				<div>    Or choose a date by dragging the slider under the map. </div>
 			</td>
-			<td width="600">
-				<div id="map" style="width: 750px; height: 600px">      </div>
-				<table border='0'>
-					<tr>
-						<td>
-							<img id="leftSliderArrow" src="/yui_0.12.2/build/slider/assets/arrow_left.png" style="cursor: pointer" onClick="sliderArrowClick(this)">
-						</td>	
-						<td>
-							<div id="slider-bg" tabindex="-1"> 
-								<div id="slider-thumb"><img src="/yui_0.12.2/build/slider/assets/horizSlider.png" style="cursor: pointer"></div> 
-							</div>
+			<td valign="top" width="600">
+				<table class="ooih" border="0" cellspacing="0" cellpadding="0" width="767" height="19">
+					<tr id="tabRow">
+						<td class="ooihj" nowrap onclick="ghbq(this)">View Map</td>
+						<td class="ooihs" nowrap onclick="ghbq(this)">State Change Number VS Time (Plot)</td>
+						<td class="ooihx" style="width:100%">&nbsp;</td>
+						</tr>
+				</table>
+				<table class="ooib" id="obody" border="0" cellspacing="0" cellpadding="0" width="767" height="635">
+					<tr valign="top">
+						<td valign="top">
+							<div id="map" style="width: 765px; height: 600px">      </div>
+							<table border='0'>
+								<tr>
+									<td>
+										<img id="leftSliderArrow" src="/yui_0.12.2/build/slider/assets/arrow_left.png" style="cursor: pointer" onClick="sliderArrowClick(this)">
+									</td>
+									<td>
+										<div id="slider-bg" tabindex="-1">
+										<div id="slider-thumb"><img src="/yui_0.12.2/build/slider/assets/horizSlider.png" style="cursor: pointer"></div>
+										</div>
+									</td>
+                                                			<td>
+										<img id="rightSliderArrow" src="/yui_0.12.2/build/slider/assets/arrow_right.png" style="cursor: pointer" onClick="sliderArrowClick(this)">
+									</td>
+								</tr>
+                                			</table>
 						</td>
-						<td>
-							<img id="rightSliderArrow" src="/yui_0.12.2/build/slider/assets/arrow_right.png" style="cursor: pointer" onClick="sliderArrowClick(this)">
+					</tr>
+					<tr valign="top" style="display: none">
+						<td vAlign="middle" align="center" >
+							<img id="scnPlotImg" align="middle" src="">
+							<a id="scnTxtLink" target="_blank" href="">Click here to view the detailed data.</a>
 						</td>
 					</tr>
 				</table>
@@ -426,7 +463,7 @@
 	map.addControl(new GScaleControl());
 
 	var networkInfo = new Array(5);
-	for (i = 0; i < networkInfo.length; ++ i){
+	for (i = 0; i < networkInfo.length; ++i){
 		networkInfo[i] = new Array(2);
 	}
 	networkInfo[0][0] = "no status change:";
@@ -607,12 +644,12 @@
 			calFile2.setTimeInMillis(localFile.lastModified());
 			shouldCopy = !( calFile1.get(Calendar.YEAR) == calFile2.get(Calendar.YEAR) && calFile1.get(Calendar.MONTH) == calFile2.get(Calendar.MONTH) && calFile1.get(Calendar.DATE) == calFile2.get(Calendar.DATE) );
 			if (shouldCopy) {
-				localFile.delete();
+				shouldCopy = false;
+				//localFile.delete();
 			}
 		} else {
 			shouldCopy = true;		
 		}
-
 		if (shouldCopy) {
 			InputStream inUrl = new URL(xmlUrl).openStream();
 			OutputStream outLocalFile = new FileOutputStream(localFile);
@@ -639,6 +676,11 @@
 	Element eleOutput = eleXml.element("output-pattern");
 %>
 	var urlPattern = '<%=eleOutput.element("server-url").getText()%>';
+	var scnPattern = '<%=eleOutput.element("stateChangeNumTxtFile").getText()%>';
+	
+	document.getElementById("scnPlotImg").src = urlPattern + "/" + scnPattern + ".png";
+	document.getElementById("scnTxtLink").href = urlPattern + "/" + scnPattern;
+
 	var dirPattern = 'daily/' + '<%=eleOutput.element("pro-dir").getText()%>';
 	var aPattern = '<%=eleOutput.element("AFile").getText()%>';
 	var bPattern = '<%=eleOutput.element("BFile").getText()%>';
