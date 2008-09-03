@@ -99,7 +99,6 @@ function dataTableSelectOneRadio(radio) {
 				</h:commandButton>
 			</h:panelGroup>
 		</h:form>
-
 		<h:panelGroup  id="stuff4">
 
 			<%/* Fault map search */%>

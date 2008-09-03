@@ -66,7 +66,9 @@ public class MeshGeneratorBean extends GenericSopacBean {
     boolean renderSearchByLatLonForm = false;
     boolean renderViewAllFaultsForm = false;    
     String faultSelectionCode = "";    
-    boolean renderAddFaultFromDBForm = false;    
+    boolean renderAddFaultFromDBForm = false;   
+	 boolean renderFaultMap = false;
+
     long EditProjectTableColumns = 1;    
     Layer currentLayer = new Layer();    
     Fault currentFault = new Fault();    
@@ -832,6 +834,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  renderAddLayerFromDBForm = false;
 		  renderAddFaultSelectionForm = false;
 		  renderAddFaultFromDBForm = false;
+		  renderFaultMap = false;
     }
 
 	 /**
@@ -882,20 +885,27 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				currentLayer=new Layer();
 				renderCreateNewLayerForm = !renderCreateNewLayerForm;
 		  }
-		  if (projectSelectionCode.equals("CreateNewFault")) {
+		  else if (projectSelectionCode.equals("CreateNewFault")) {
 				currentFault=new Fault();
 				renderCreateNewFaultForm = !renderCreateNewFaultForm;
 		  }
-		  if (projectSelectionCode.equals("AddLayerFromDB")) {
+		  else if (projectSelectionCode.equals("AddLayerFromDB")) {
 				QueryLayersList();
 				renderAddLayerFromDBForm = !renderAddLayerFromDBForm;
 		  }
-		  if (projectSelectionCode.equals("AddFaultSelection")) {
+		  else if (projectSelectionCode.equals("AddFaultSelection")) {
 				renderAddFaultSelectionForm = !renderAddFaultSelectionForm;
 		  }
-		  if (projectSelectionCode.equals("")) {
+		  else if (projectSelectionCode.equals("FaultMapSelection")) {
+				renderFaultMap=!renderFaultMap;
+		  }
+		  else if (projectSelectionCode.equals("")) {
 				;
 		  }
+		  else {
+				;
+		  }
+
     }
     
     /**
@@ -2564,4 +2574,49 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				//				ex.printStackTrace();
 		  }
 	 }
+
+	 //--------------------------------------------------
+	 /**
+	  * Needed to make the map interface work
+	  **/
+	 public void toggleSetFaultFromMap(ActionEvent ev) throws Exception {
+		  renderFaultMap=false;
+		  try {
+				System.out.println("Adding fault from map");
+				
+				initEditFormsSelection();
+				
+				String dbQuery=getMapFaultName();
+				System.out.println("DB qeury:"+dbQuery);
+				currentFault=QueryFaultFromDB(dbQuery);
+				
+				renderCreateNewFaultForm = true;
+		  }
+		  catch (Exception ex){
+				System.out.println("Map fault selection error.");
+				ex.printStackTrace();
+		  }
+	 }
+	 
+	 String mapFaultName;
+	 public void setMapFaultName(String mapFaultName) {
+		  this.mapFaultName=mapFaultName;
+	 }
+
+	 public String getMapFaultName() {
+		  return this.mapFaultName;
+	 }
+	 
+	 public boolean getRenderFaultMap(){
+		  return this.renderFaultMap;
+	 }
+
+	 public void setRenderFaultMap(boolean renderFaultMap){
+		  this.renderFaultMap=renderFaultMap;
+	 }
+
+	 //--------------------------------------------------
+
+
+	 
 }
