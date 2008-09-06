@@ -193,18 +193,7 @@ public class MyMain {
      * target or the default target.
      *
      * @param args Command line arguments. Must not be <code>null</code>.
-     */
-    private static void checkargs(String[] args,String msg) {
-	if(args==null) {
-	    logger.info("Null args in "+msg);
-	}
-// 	else {
-//  	    logger.info("Arg list for "+msg);
-//  	    for(int i=0;i<args.length;i++) {
-//  		logger.info(args[i]);
-// 	    }
-// 	}
-    }
+     */    
     public static void main(String[] args) {
 	try {
 	    checkargs(args,"main");
@@ -214,6 +203,18 @@ public class MyMain {
 	    ex.printStackTrace();
 	}
     }
+    
+    private static void checkargs(String[] args,String msg) {
+    	if(args==null) {
+    	    logger.info("Null args in "+msg);
+    	}
+//     	else {
+//      	    logger.info("Arg list for "+msg);
+//      	    for(int i=0;i<args.length;i++) {
+//      		logger.info(args[i]);
+//     	    }
+//     	}
+        }
 
     // XXX: (Jon Skeet) Error handling appears to be inconsistent here.
     // Sometimes there's just a return statement, and sometimes a

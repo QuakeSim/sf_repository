@@ -72,8 +72,7 @@ public class RDAHMMService extends AntVisco implements Runnable{
 				System.out.println("Prop file location "+propertyFile);
 				
 				properties=new Properties();	    
-				properties.load(new 
-									 FileInputStream(propertyFile));
+				properties.load(new FileInputStream(propertyFile));
 		  }
 		  
 		  serverUrl=properties.getProperty("rdahmm.service.url");
@@ -94,10 +93,9 @@ public class RDAHMMService extends AntVisco implements Runnable{
 		  antTarget=properties.getProperty("ant.target");
 		  
 		  //Put a time stamp on the project name:
-		  projectName+="-"+(new Date()).getTime();
+		  projectName += "-"+(new Date()).getTime();
 		  
-		  outputDestDir=baseDestDir+"/"+projectName;
-		  
+		  outputDestDir=baseDestDir+"/"+projectName;		  
 		  
 		  System.out.println("Here are some property values");
 		  System.out.println(baseWorkDir);
@@ -754,18 +752,17 @@ public class RDAHMMService extends AntVisco implements Runnable{
 		  
 		  
 		  //Set up the work directory
-		  String workDir=baseWorkDir+File.separator+projectName;
+		  String workDir = baseWorkDir+File.separator+projectName;
 		  makeWorkDir(workDir,buildFilePath);
 		  
-		  //Copy the input file to the working directory, if 
-		  //necessary.
-		  String[] inputFileUrlArray=
-				convertInputUrlStringToArray(inputFileUrlString);
-		  
-		  String[] localFileArray=downloadInputFile(inputFileUrlArray,workDir);
-		  String[] localFileArrayFiltered=filterResults(localFileArray, 2, 3);
-		  String rdahmmInputFile=workDir+"/"+projectName+".input";
-		  mergeInputFiles(localFileArrayFiltered,rdahmmInputFile);
+		  String[] inputFileUrlArray = convertInputUrlStringToArray(inputFileUrlString);
+			
+			String[] localFileArray = downloadInputFile(inputFileUrlArray,workDir);
+			
+			String[] localFileArrayFiltered = filterResults(localFileArray, 2, 3);
+			
+			String rdahmmInputFile = workDir + "/" + projectName + ".input";
+			mergeInputFiles(localFileArrayFiltered,rdahmmInputFile);
 		  
 		  
 		  //Get the dimensions and number of observations.
@@ -789,7 +786,7 @@ public class RDAHMMService extends AntVisco implements Runnable{
 		  //Methods inherited from parent
         setArgs(args);
         run();
-		  return getTheReturnFiles();	
+		return getTheReturnFiles();	
     }
     
     public RDAHMMResultsBean runBlockingRDAHMM2(String inputFileUrlString,
@@ -809,15 +806,14 @@ public class RDAHMMService extends AntVisco implements Runnable{
 		  String workDir=baseWorkDir+File.separator+projectName;
 		  makeWorkDir(workDir,buildFilePath);
 		  
-		  //Copy the input file to the working directory, if 
-		  //necessary.
-		  String[] inputFileUrlArray=
-				convertInputUrlStringToArray(inputFileUrlString);
-		  
-		  String[] localFileArray=downloadInputFile(inputFileUrlArray,workDir);
-		  String[] localFileArrayFiltered=filterResults(localFileArray, 2, 3);
-		  String rdahmmInputFile=workDir+"/"+projectName+".input";
-		  mergeInputFiles(localFileArrayFiltered,rdahmmInputFile);
+		  String[] inputFileUrlArray = convertInputUrlStringToArray(inputFileUrlString);
+			
+			String[] localFileArray = downloadInputFile(inputFileUrlArray,workDir);
+			
+			String[] localFileArrayFiltered = filterResults(localFileArray, 2, 3);
+			
+			String rdahmmInputFile = workDir + "/" + projectName + ".input";
+			mergeInputFiles(localFileArrayFiltered,rdahmmInputFile);
 		  
 		  
 		  //Get the dimensions and number of observations.
@@ -867,12 +863,10 @@ public class RDAHMMService extends AntVisco implements Runnable{
 		  
 		  //Copy the input file to the working directory, if 
 		  //necessary.
-		  String[] inputFileUrlArray=
-				convertInputUrlStringToArray(inputFileUrlString);
-		  
-		  String[] localFileArray=downloadInputFile(inputFileUrlArray,workDir);
-		  String[] localFileArrayFiltered=filterResults(localFileArray, 2, 3);
-		  String rdahmmInputFile=workDir+"/"+projectName+".input";
+		  String[] inputFileUrlArray = convertInputUrlStringToArray(inputFileUrlString);
+		  String[] localFileArray = downloadInputFile(inputFileUrlArray,workDir);
+		  String[] localFileArrayFiltered = filterResults(localFileArray, 2, 3);
+		  String rdahmmInputFile = workDir + "/" + projectName + ".input";
 		  mergeInputFiles(localFileArrayFiltered,rdahmmInputFile);
 		  
 		  //Get the dimensions and number of observations.
@@ -918,15 +912,14 @@ public class RDAHMMService extends AntVisco implements Runnable{
 		  String workDir=baseWorkDir+File.separator+projectName;
 		  makeWorkDir(workDir,buildFilePath);
 		  
-		  //Copy the input file to the working directory, if 
-		  //necessary.
-		  String[] inputFileUrlArray=
-				convertInputUrlStringToArray(inputFileUrlString);
-		  
-		  String[] localFileArray=downloadInputFile(inputFileUrlArray,workDir);
-		  String[] localFileArrayFiltered=filterResults(localFileArray, 2, 3);
-		  String rdahmmInputFile=workDir+"/"+projectName+".input";
-		  mergeInputFiles(localFileArrayFiltered,rdahmmInputFile);
+		  String[] inputFileUrlArray = convertInputUrlStringToArray(inputFileUrlString);
+			
+			String[] localFileArray = downloadInputFile(inputFileUrlArray,workDir);
+			
+			String[] localFileArrayFiltered = filterResults(localFileArray, 2, 3);
+			
+			String rdahmmInputFile = workDir + "/" + projectName + ".input";
+			mergeInputFiles(localFileArrayFiltered,rdahmmInputFile);
 		  
 		  //Get the dimensions and number of observations.
 		  int ndim=getFileDimension(rdahmmInputFile);
@@ -960,7 +953,6 @@ public class RDAHMMService extends AntVisco implements Runnable{
      * will not get called if the execute()/run() method fails.
      */ 
     protected String[] getTheReturnFiles() {
-		  
 		  String[] extensions={".input",".range",".Q",".pi",".A",
 									  ".minval",".maxval",".L",".B",
 									  ".Q",".stdout",
@@ -1002,6 +994,7 @@ public class RDAHMMService extends AntVisco implements Runnable{
 				System.out.println("Site entry:"+siteCodeEntry);
 				gsq.setFromServlet(siteCodeEntry, beginDate, endDate, resource,
 										 contextGroup, contextId, minMaxLatLon, true);
+				
 				dataUrl+=gsq.getResource()+" ";
 				System.out.println("GRWS data url: "+dataUrl);
 		  }

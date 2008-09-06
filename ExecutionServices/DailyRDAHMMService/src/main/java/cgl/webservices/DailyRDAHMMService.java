@@ -26,7 +26,7 @@ public class DailyRDAHMMService extends RDAHMMService {
 		buildFilePath = properties.getProperty("build_daily.file.path");		  
 		modelBaseName = properties.getProperty("project_daily.name") + "_" + stationID;
 		baseDestDir = properties.getProperty("base.dest.daily_dir");
-		projectName = modelBaseName + "_" + DailyRDAHMMThread.getDateString(Calendar.getInstance());
+		projectName = modelBaseName + "_" + UtilSet.getDateString(Calendar.getInstance());
 		modelWorkDir = baseWorkDir + File.separator + modelBaseName;
 		outputDestDir = baseDestDir+ File.separator + projectName;		
 	}
@@ -46,10 +46,10 @@ public class DailyRDAHMMService extends RDAHMMService {
 			String outputType, double annealStep, String buildFilePath,
 			String antTarget) throws Exception {
 
-		DailyRDAHMMThread.exec("mkdir " + baseDestDir);
+		UtilSet.exec("mkdir " + baseDestDir);
 		// Set up the work directory
 		String workDir = baseWorkDir + File.separator + projectName;
-		DailyRDAHMMThread.exec("mkdir " + workDir);
+		UtilSet.exec("mkdir " + workDir);
 		
 		
 		System.out.println("inputFileUrlString in runBlockingRDAHMM: "	+ inputFileUrlString);
@@ -91,32 +91,32 @@ public class DailyRDAHMMService extends RDAHMMService {
 		
 		// no input to evaluate, just plot on the model data
 		String res, fileset;
-		res = DailyRDAHMMThread.exec("mkdir " + outputDestDir);
+		res = UtilSet.exec("mkdir " + outputDestDir);
 		fileset = modelWorkDir + File.separator + "*";
-		res = DailyRDAHMMThread.exec("cp " + fileset + " " + outputDestDir + File.separator);
-		res = DailyRDAHMMThread.exec("cp " + fileset + " " + workDir + File.separator);
+		res = UtilSet.exec("cp " + fileset + " " + outputDestDir + File.separator);
+		res = UtilSet.exec("cp " + fileset + " " + workDir + File.separator);
 
 		// plot images with model files
 		String modelPath = outputDestDir + File.separator + modelBaseName;
 		String proPath = outputDestDir + File.separator + projectName;
 		// the model .input file is just the all.input file
-		res = DailyRDAHMMThread.exec("cp " + modelPath + ".input "	+ proPath + ".all.input");
+		res = UtilSet.exec("cp " + modelPath + ".input "	+ proPath + ".all.input");
 
 		String plotSh = binPath + File.separator + "plot_go.sh";
 		System.out.println("about to executing " + plotSh + " " + proPath
 				+ ".all.input " + modelPath + ".Q " + modelPath	+ ".raw ...");
-		res = DailyRDAHMMThread.exec(plotSh + " " + proPath + ".all.input "
+		res = UtilSet.exec(plotSh + " " + proPath + ".all.input "
 				+ modelPath + ".Q " + modelPath + ".raw ",	new File(binPath));
 		System.out.println("result : " + res);
-		res = DailyRDAHMMThread.exec("touch " + proPath + ".input");
-		res = DailyRDAHMMThread.exec("touch " + proPath + ".Q");
-		res = DailyRDAHMMThread.exec("touch " + proPath + ".raw");
+		res = UtilSet.exec("touch " + proPath + ".input");
+		res = UtilSet.exec("touch " + proPath + ".Q");
+		res = UtilSet.exec("touch " + proPath + ".raw");
 
 		// create empty files in workDir
 		String proWorkPath = workDir + File.separator + projectName;
-		res = DailyRDAHMMThread.exec("touch " + proWorkPath + ".input");
-		res = DailyRDAHMMThread.exec("touch " + proWorkPath + ".Q");
-		res = DailyRDAHMMThread.exec("touch " + proWorkPath + ".raw");
+		res = UtilSet.exec("touch " + proWorkPath + ".input");
+		res = UtilSet.exec("touch " + proWorkPath + ".Q");
+		res = UtilSet.exec("touch " + proWorkPath + ".raw");
 	}
 
     

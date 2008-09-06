@@ -38,7 +38,7 @@ public class DailyRDAHMMRunner {
 					// System.out.println(e.selectSingleNode("id").getText());
 					String[] listEle = new String[4];
 					listEle[0] = e.selectSingleNode("id").getText().toLowerCase();
-					listEle[1] = DailyRDAHMMThread.getDateString(yesterday);
+					listEle[1] = UtilSet.getDateString(yesterday);
 					listEle[2] = e.selectSingleNode("latitude").getText();
 					listEle[3] = e.selectSingleNode("longitude").getText();
 					boolean found = false;

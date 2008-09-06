@@ -1,15 +1,15 @@
-<%@page import="java.util.*, cgl.sensorgrid.sopac.gps.GetStationsRSS, java.io.*, java.lang.*"%>
+<%@page import="java.util.*, java.net.URL, cgl.sensorgrid.sopac.gps.GetStationsRSS, java.io.*, java.lang.*"%>
 <jsp:useBean id="RSSBeanID" scope="session" class="cgl.sensorgrid.sopac.gps.GetStationsRSS"/>
 <%
 	Vector networkNames = RSSBeanID.networkNames();
 
 	//Vector stationsVec = RSSBeanID.getAllStationsVec();
-	String mapcenter_x = "33.54";
-	String mapcenter_y = "-116.63";
+	String mapcenter_x = "33.036";
+	String mapcenter_y = "-117.24";
 
 	String [] center_xy = RSSBeanID.getMapCenter();
-//	mapcenter_x = center_xy[0];
-//	mapcenter_y = center_xy[1];
+	mapcenter_x = center_xy[0];
+	mapcenter_y = center_xy[1];
 %>
 <%
 	String str_tabcontent = new String();
@@ -130,8 +130,8 @@ function createInfoMarker(point, address, icon) {
 }
 
 // Create the marker and corresponding information window 
-function createTabsInfoMarker(point, infoTabs ,icon) {
-  var marker = new GMarker(point,icon);
+function createTabsInfoMarker(point, infoTabs ,icon1, name) {
+  var marker = new GMarker(point,{icon: icon1, clickable: true, title:name});
   GEvent.addListener(marker, "click", function() {
     marker.openInfoWindowTabsHtml(infoTabs);
   });
@@ -181,7 +181,7 @@ This is the end of the function inlines.
         <td width="600">
           <div id="map" style="width: 750px; height: 600px">      </div>
         </td>
-        <td valign="middle" width="50">
+        <td valign="middle" width="200">
           <div id="networksDiv"> Network Names and Colors     </div>
         </td>
       </tr>
@@ -217,19 +217,26 @@ This is the end of the function inlines.
         map.addControl(new GScaleControl());
         map.centerAndZoom(new GPoint(<%=mapcenter_y%>, <%=mapcenter_x%>), 10);
 
-        var colors = new Array (6);
+        var colors = new Array (3);
         colors[0]="red";
         colors[1]="green";
-        colors[2]="blue";
-        colors[3]="black";
-        colors[4]="white";
-        colors[5]="yellow";
-        colors[6]="purple";
-        colors[7]="brown";
+        colors[2]="yellow";
 
-        var networkInfo = new Array (<%=networkNames.size()%>);
+        var networkInfo = new Array (3);
         for (i = 0; i < networkInfo.length; ++ i){
           networkInfo [i] = new Array (2);
+	  switch (i) {
+		case 0: 
+			networkInfo[i][0] = "state change within last 2 hours";
+			break;
+		case 1:
+			networkInfo[i][0] = "state change within last 1 day";
+			break;
+		case 2:
+			networkInfo[i][0] = "no state change within last 1 day";
+			break;	
+	  }
+	  networkInfo [i][1] = "http://labs.google.com/ridefinder/images/mm_20_" + colors[i] + ".png";
         }
 
         function overlayNetworks(){
@@ -241,28 +248,58 @@ This is the end of the function inlines.
             String networkName = (String)networkNames.get(j);
             Vector stationsVec = RSSBeanID.getStationsVec(networkName);
             %>
-            networkInfo [<%=j%>] [0] = "<%=networkName%>";
 
             var k;
             if(<%=j%>>=colors.length)
-            k = 0;
+            	k = 0;
             else
-            k=<%=j%>;
-            icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + colors[k] + ".png";
-            networkInfo [<%=j%>] [1] = "http://labs.google.com/ridefinder/images/mm_20_" + colors[k] + ".png";
+            	k=<%=j%>;
 
             var stationCount = <%=stationsVec.size()%>;
-            var stations = new Array (stationCount);
+	    var stations = new Array (stationCount);
             var Markers = new Array (stationCount);
             for (i = 0; i < stations.length; ++ i){
               stations [i] = new Array (3);
             }
 
-            <%
+            <%	
+	    Vector stateChangeVec = new Vector();
+	    try{
+	    	String stateChangeFileName = "state_change_" + networkName.toLowerCase() + ".txt";
+	    	InputStream inUrl = new URL("http://gf14.ucs.indiana.edu:23080/sensorgrid/rdahmm/eval/" + stateChangeFileName).openStream();
+	    	BufferedReader br = new BufferedReader(new InputStreamReader(inUrl));
+	    	String line = br.readLine();
+	    	while (line != null) {
+			stateChangeVec.add(line);
+			line = br.readLine();
+	    	}
+	    	br.close();
+	    	inUrl.close();
+	    }catch (Exception e){
+		e.printStackTrace();
+	    }
+
             for (int i = 0; i < stationsVec.size(); i++) {
               String name = (String)stationsVec.get(i);
               String lat = RSSBeanID.getStationInfo(name)[0];
               String lon = RSSBeanID.getStationInfo(name)[1];
+	      String stationColor = "green";
+	      String scLine;
+	      
+	      for (int p=0; p<stateChangeVec.size(); p++) {
+		// a line in the state change file is like "raap yes no"
+		scLine = (String)stateChangeVec.get(p);
+		if (scLine.indexOf(name.toLowerCase()) >= 0) {
+			int pos1 = scLine.indexOf(' ');
+			int pos2 = scLine.indexOf(' ', pos1+1);
+			if (scLine.substring(pos1+1, pos2).equals("yes"))
+				stationColor = "red";
+			else if (scLine.substring(pos2+1).equals("yes"))
+				stationColor = "yellow";
+			break;
+		}
+	      }
+
             
               String x_tabcontent=new String(str_tabcontent);
               String y_tabcontent=new String(str_tabcontent);
@@ -295,8 +332,8 @@ This is the end of the function inlines.
 							new GInfoWindowTab("Current Y", '<%=y_tabcontent%>'),
 							new GInfoWindowTab("Current Z", '<%=z_tabcontent%>')
 							];  
-
-              Markers[<%=i%>] = createTabsInfoMarker(new GPoint("<%=lon%>", "<%=lat%>") , infoTabs , icon);
+              icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + "<%=stationColor%>" + ".png";
+	      Markers[<%=i%>] = createTabsInfoMarker(new GPoint("<%=lon%>", "<%=lat%>") , infoTabs , icon, "<%=name + '[' + networkName + ']' %>");
 
               map.addOverlay(Markers[<%=i%>]);
               <%
@@ -305,8 +342,8 @@ This is the end of the function inlines.
           %>
         }
 
-        function createMarker(networkName, name, lon, lat, icon) {
-          var marker = new GMarker(new GPoint(lon, lat),icon);
+        function createMarker(networkName, name, lon, lat, icon1) {
+          var marker = new GMarker(new GPoint(lon, lat), {icon: icon1, clickable:true, title:name});
           // Show this marker's name in the info window when it is clicked
           var html = "<b>Station Name= </b>" + name + "<br><b>Lat=</b>" + lat + "<br><b>Lon= </b>" + lon + "<br><b>Network= </b>" + networkName;
           GEvent.addListener(marker, "click", function() {
@@ -319,7 +356,7 @@ This is the end of the function inlines.
 
         function printNetworkColors (array)
         {
-          var html = "<table border='0'><tr><td><b>Network</b></td><td nowrap><b>Icon Color<b></td></tr>";
+          var html = "<table border='0'><tr><td><b>State Change Case</b></td><td nowrap><b>Icon Color<b></td></tr>";
 
           var row;
           for (row = 0; row < array.length; ++ row)

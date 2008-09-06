@@ -57,12 +57,9 @@ public class RDAHMMResultsBean  implements java.io.Serializable {
            this.LUrl = LUrl;
            this.QUrl = QUrl;
            this.inputUrl = inputUrl;			  
-//            this.inputXPngUrl = inputXPngUrl;
-//            this.inputYPngUrl = inputYPngUrl;
-//            this.inputZPngUrl = inputZPngUrl;
-			  setInputXPngUrl(inputXPngUrl);
-			  setInputYPngUrl(inputYPngUrl);
-			  setInputZPngUrl(inputZPngUrl);
+ 		   setInputXPngUrl(inputXPngUrl);
+		   setInputYPngUrl(inputYPngUrl);
+		   setInputZPngUrl(inputZPngUrl);
            this.maxvalUrl = maxvalUrl;
            this.minvalUrl = minvalUrl;
            this.piUrl = piUrl;

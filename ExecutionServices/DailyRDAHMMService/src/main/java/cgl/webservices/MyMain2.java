@@ -153,7 +153,7 @@ public class MyMain2 implements AntMain {
             Diagnostics.validateVersion(); 
             processArgs(args); 
         } catch (Throwable exc) { 
-	    exc.printStackTrace();
+        	exc.printStackTrace();
             handleLogfile(); 
             printMessage(exc); 
 	    //            System.exit(1); 

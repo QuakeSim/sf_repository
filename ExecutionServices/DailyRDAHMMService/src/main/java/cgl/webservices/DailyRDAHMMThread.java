@@ -8,6 +8,8 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
+import com.sun.corba.se.impl.javax.rmi.CORBA.Util;
+
 public class DailyRDAHMMThread implements Runnable {
 
 	protected DailyRDAHMMRunner runner = null;
@@ -48,7 +50,7 @@ public class DailyRDAHMMThread implements Runnable {
 	 */
 	public void run() {
 		if (runner == null) {
-			log(threadNum, "runner is null, the DailyRDAHMMThread is going to exit...");
+			UtilSet.log(threadNum, "runner is null, the DailyRDAHMMThread is going to exit...");
 			return;
 		}
 		
@@ -57,7 +59,7 @@ public class DailyRDAHMMThread implements Runnable {
 		Calendar today = Calendar.getInstance();
 		Calendar tomorrow4 = Calendar.getInstance();
 		Calendar modelEndCal = Calendar.getInstance();
-		Calendar evalStartCal = getDateFromString(evalStartDate);
+		Calendar evalStartCal = UtilSet.getDateFromString(evalStartDate);
 		today.setTimeInMillis(time);
 		String station = null;
 		Vector<String> proNames = new Vector<String>();
@@ -66,6 +68,8 @@ public class DailyRDAHMMThread implements Runnable {
 		String baseDestDir = null;
 		String binDir = null;
 		String resPath = null;
+		String yesterdayVideoPath = null;
+		String videoConfigPath = null;
 		boolean modelSuc = false;
 		while (true) {			
 			try {
@@ -78,19 +82,29 @@ public class DailyRDAHMMThread implements Runnable {
 					//all stations have been added to the temporary file;
 					boolean doRename = false;
 					synchronized (lock_nStationsDone) {
-						log(threadNum, "nStations = " + nStations + "; nStationsDone = " + nStationsDone);
+						UtilSet.log(threadNum, "nStations = " + nStations + "; nStationsDone = " + nStationsDone);
 						if (nStationsDone >= nStations) {
 							doRename = true;
 							nStationsDone = 0;
 						}
 					}		
 					if (doRename) {
+						// rename the result file
 						renameFile(resPath, xmlPath);
 						renameFile(resPath.substring(0, resPath.length()-4) + "2.xml", 
 									xmlPath.substring(0, xmlPath.length()-4) + "2.xml");
+						
+						// draw the plot for number of stations with state changes vs time
 						saveStateChangeNums(scnPath);
 						plotStateChangeNums(scnPath, binDir);
 						runner.stateChangeNums.clear();
+						
+						// make a video of the whole time period
+						DailyRDAHMMVideoThread vt = new DailyRDAHMMVideoThread(videoConfigPath, null, today);
+						vt.setVideoPathToDelete(yesterdayVideoPath);
+						vt.setFinalVideoDir(resPath.substring(0, resPath.lastIndexOf(File.separator)));
+						vt.start();
+						yesterdayVideoPath = vt.getFinalVideoPath();
 					}
 					
 					//delete yestoday's project directories
@@ -122,14 +136,14 @@ public class DailyRDAHMMThread implements Runnable {
 				rds.runningLock = lock_runRdahmm;
 				RDAHMMResultsBean rrb = null;
 				
-				log(threadNum, "Daily RDAHMMThread -- About to run RDAHMM on " + station + " from " 
-										+ evalStartDate + " to " + getDateString(today) + " ...");
+				UtilSet.log(threadNum, "Daily RDAHMMThread -- About to run RDAHMM on " + station + " from " 
+										+ evalStartDate + " to " + UtilSet.getDateString(today) + " ...");
 				if (!modeledStations.contains(station)) {
 					modelSuc = trainModelOnStation(station, rds, today);
 					if (modelSuc) {
 						modeledStations.add(station);
 					}	else {
-						if (!trainModelAndPlot(station, evalStartDate, getDateString(today), rds)) {
+						if (!trainModelAndPlot(station, evalStartDate, UtilSet.getDateString(today), rds)) {
 							continue;
 						}
 					}
@@ -141,9 +155,9 @@ public class DailyRDAHMMThread implements Runnable {
 				
 				readFileToVector(rds.modelWorkDir + File.separator + rds.modelBaseName + ".raw", modelRawLines);
 				readFileToVector(rds.modelWorkDir + File.separator + rds.modelBaseName + ".Q", modelQLines);
-				log(threadNum, "station:" + station + "; modelRawLines " + modelRawLines.size() + "; modelQLines " + modelQLines.size());
+				UtilSet.log(threadNum, "station:" + station + "; modelRawLines " + modelRawLines.size() + "; modelQLines " + modelQLines.size());
 				if (modelRawLines.size() > 0) {
-					setDateByString( modelEndCal, getDateFromRawLine((String)modelRawLines.get(modelRawLines.size()-1)) );
+					UtilSet.setDateByString( modelEndCal, getDateFromRawLine((String)modelRawLines.get(modelRawLines.size()-1)) );
 					// if the end date of model phase is later than normal evaluation starting date, short evaluation
 					// should be used
 					if (modelEndCal.getTimeInMillis() >= evalStartCal.getTimeInMillis()) {
@@ -156,9 +170,9 @@ public class DailyRDAHMMThread implements Runnable {
 				
 				if (modelSuc) {
 					if (shortEvalList.contains(station)) {
-						rrb = rds.runBlockingRDAHMM2(station, shortEvalStartDate, getDateString(today), runner.numOfStates);
+						rrb = rds.runBlockingRDAHMM2(station, shortEvalStartDate, UtilSet.getDateString(today), runner.numOfStates);
 					}	else {
-						rrb = rds.runBlockingRDAHMM2(station, evalStartDate, getDateString(today), runner.numOfStates);
+						rrb = rds.runBlockingRDAHMM2(station, evalStartDate, UtilSet.getDateString(today), runner.numOfStates);
 					}
 				}
 				
@@ -175,7 +189,7 @@ public class DailyRDAHMMThread implements Runnable {
 									 + rds.projectName+".raw", evalRawLines);
 				readFileToVector(rds.baseWorkDir + File.separator + rds.projectName + File.separator
 									 + rds.projectName+".Q", evalQLines);
-				log(threadNum, "station:" + station + "; evalRawLines " + evalRawLines.size() + "; evalQLines " + evalQLines.size());
+				UtilSet.log(threadNum, "station:" + station + "; evalRawLines " + evalRawLines.size() + "; evalQLines " + evalQLines.size());
 				
 				// write results to file
 				resPath = rds.properties.getProperty("dailyRdahmm.output.path");
@@ -183,6 +197,8 @@ public class DailyRDAHMMThread implements Runnable {
 					xmlPath = resPath;
 				if (scnPath == null)
 					scnPath = rds.properties.getProperty("dailyRdahmm.stateChangeNumTrace.path");
+				if (videoConfigPath == null)
+					videoConfigPath = rds.properties.getProperty("dailyRdahmm.video.config.path");
 				// change the file of the form A.xml to the form of A_tmp.xml
 				resPath = resPath.substring(0, resPath.length() - 4) + "_tmp.xml";
 				writeResToXML(today, station, resPath, rds);				
@@ -204,7 +220,7 @@ public class DailyRDAHMMThread implements Runnable {
 			return;
 		try {
 			vec.removeAllElements();
-			log(threadNum, "readFileToVector : " + path);
+			UtilSet.log(threadNum, "readFileToVector : " + path);
 			String line;
 			int count = 0;
 			BufferedReader br = new BufferedReader(new FileReader(path));
@@ -216,7 +232,7 @@ public class DailyRDAHMMThread implements Runnable {
 				}
 				line = br.readLine();
 			}
-			log(threadNum, count + "lines read from " + path);
+			UtilSet.log(threadNum, count + "lines read from " + path);
 			br.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -228,7 +244,7 @@ public class DailyRDAHMMThread implements Runnable {
 		if (path == null || path.length() == 0 || lineNum < 0)
 			return null;
 		try {
-			log(threadNum, "readOneLineFromFile : " + path + " " + lineNum);
+			UtilSet.log(threadNum, "readOneLineFromFile : " + path + " " + lineNum);
 			String line = null;
 			int count = -1;
 			BufferedReader br = new BufferedReader(new FileReader(path));
@@ -241,7 +257,7 @@ public class DailyRDAHMMThread implements Runnable {
 				}
 				line = br.readLine();
 			}
-			log(threadNum, count + "lines read from " + path);
+			UtilSet.log(threadNum, count + "lines read from " + path);
 			br.close();
 			if (count == lineNum)
 				return line;
@@ -270,7 +286,7 @@ public class DailyRDAHMMThread implements Runnable {
 			synchronized (fileMutex) {
 				boolean doNextStep = true, newFile = false;
 				resPath = resPath.replace('/', File.separatorChar);
-				log(threadNum, "resPath: " + resPath);
+				UtilSet.log(threadNum, "resPath: " + resPath);
 				File outputFile = new File(resPath);
 				File outputPretty = new File(resPath.substring(0, resPath.length()-4) + "2.xml");
 				// if result file out of date, create a new one
@@ -285,7 +301,7 @@ public class DailyRDAHMMThread implements Runnable {
 							doNextStep = outputFile.createNewFile() && outputPretty.createNewFile();
 							newFile = true;
 						} else {
-							log(threadNum, "Failed to delete the old RDAHMM result file!");
+							UtilSet.log(threadNum, "Failed to delete the old RDAHMM result file!");
 							doNextStep = false;
 						}
 					}					
@@ -344,10 +360,10 @@ public class DailyRDAHMMThread implements Runnable {
 				}
 			} 
 		} catch (Exception e) {
-			log(threadNum, "exception when trying to write RDAHMM results of " + station + " to file!");
+			UtilSet.log(threadNum, "exception when trying to write RDAHMM results of " + station + " to file!");
 			e.printStackTrace();
 		} 
-		log(threadNum, "Daily RDAHMMThread -- Done with running RDAHMM on " + station + "...");	
+		UtilSet.log(threadNum, "Daily RDAHMMThread -- Done with running RDAHMM on " + station + "...");	
 	}
 
 	/**
@@ -380,7 +396,7 @@ public class DailyRDAHMMThread implements Runnable {
 		String latText = latStr;
 		String longText = longStr;
 		if (latText.length() == 0 || longText.length() == 0) {
-			log(threadNum, "latStr or longStr is empty!");
+			UtilSet.log(threadNum, "latStr or longStr is empty!");
 			for (int p=0; p<runner.statoinList.size(); p++) {
 				String[] ele = (String [])runner.statoinList.get(p);
 				if (ele[0].equals(station)) {
@@ -403,8 +419,8 @@ public class DailyRDAHMMThread implements Runnable {
 		String str1 = "", str2 = "", date1 = "", date2 = "";
 		Calendar cal1 = Calendar.getInstance();
 		Calendar cal2 = Calendar.getInstance();
-		Calendar calToday2 = getDateFromString(getDateString(today));
-		Calendar calModel = getDateFromString(modelStartDate);
+		Calendar calToday2 = UtilSet.getDateFromString(UtilSet.getDateString(today));
+		Calendar calModel = UtilSet.getDateFromString(modelStartDate);
 		// every status change is formated like 2007-10-09:4to3;, and there are 20 change in one change group
 		StringBuffer sbgroup = new StringBuffer(16*20);
 		// every missing data section is formated like 2006-10-09to2007-10-13;, and we estimate that there are less than 20 sections for every 
@@ -412,7 +428,7 @@ public class DailyRDAHMMThread implements Runnable {
 		int count20 = 0;
 		int changeCount = 0;
 		int missCount = 0;
-		log(threadNum, "station " + station + ": evalQLines " + evalQLines.size() + "; evalRawLines " 
+		UtilSet.log(threadNum, "station " + station + ": evalQLines " + evalQLines.size() + "; evalRawLines " 
 							+ evalRawLines.size() + "; modelQLines " + modelQLines.size() + "; modelRawLines " 
 							+ modelRawLines.size());
 		if (evalQLines.size() > 1) {
@@ -420,16 +436,16 @@ public class DailyRDAHMMThread implements Runnable {
 				// record section with missing data
 				date1 = getDateFromRawLine((String)evalRawLines.get(i-1));
 				date2 = getDateFromRawLine((String)evalRawLines.get(i));
-				setDateByString(cal1, date1);
-				setDateByString(cal2, date2);
+				UtilSet.setDateByString(cal1, date1);
+				UtilSet.setDateByString(cal2, date2);
 				// make every date string 10-chars long
-				date1 = getDateString(cal1);
-				date2 = getDateString(cal2);
+				date1 = UtilSet.getDateString(cal1);
+				date2 = UtilSet.getDateString(cal2);
 				// check if the evaluation input data lasts till today
 				if (i == evalQLines.size() - 1) {
 					if (cal2.getTimeInMillis() != calToday2.getTimeInMillis()) {
 						ndaysBeforeToday(cal2, -1, cal2);
-						sbMissData.append(getDateString(calToday2)).append("to").append(getDateString(cal2)).append(';');
+						sbMissData.append(UtilSet.getDateString(calToday2)).append("to").append(UtilSet.getDateString(cal2)).append(';');
 						missCount++;
 						ndaysBeforeToday(cal2, 1, cal2);
 					}
@@ -437,7 +453,7 @@ public class DailyRDAHMMThread implements Runnable {
 				ndaysBeforeToday(cal2, 1, cal2);
 				if (cal2.getTimeInMillis() != cal1.getTimeInMillis()) {
 					ndaysBeforeToday(cal1, -1, cal1);
-					sbMissData.append(getDateString(cal2)).append("to").append(getDateString(cal1)).append(';');
+					sbMissData.append(UtilSet.getDateString(cal2)).append("to").append(UtilSet.getDateString(cal1)).append(';');
 					missCount++;
 				}
 				
@@ -475,17 +491,17 @@ public class DailyRDAHMMThread implements Runnable {
 			// record section with missing data
 			date1 = getDateFromRawLine(modelRawLines.get(modelRawLines.size() - 1));
 			date2 = getDateFromRawLine(evalRawLines.get(0));
-			setDateByString(cal1, date1);
-			setDateByString(cal2, date2);
+			UtilSet.setDateByString(cal1, date1);
+			UtilSet.setDateByString(cal2, date2);
 			// make every date string 10-chars long
-			date1 = getDateString(cal1);
-			date2 = getDateString(cal2);
+			date1 = UtilSet.getDateString(cal1);
+			date2 = UtilSet.getDateString(cal2);
 			// check if the evaluation input data lasts till today; note that if the evaluation data has more than 1 lines,
 			// we should already have done the check at the previous step
 			if (evalQLines.size() == 1) {
 				if (cal2.getTimeInMillis() != calToday2.getTimeInMillis()) {
 					ndaysBeforeToday(cal2, -1, cal2);
-					sbMissData.append(getDateString(calToday2)).append("to").append(getDateString(cal2)).append(';');
+					sbMissData.append(UtilSet.getDateString(calToday2)).append("to").append(UtilSet.getDateString(cal2)).append(';');
 					missCount++;
 					ndaysBeforeToday(cal2, 1, cal2);
 				}
@@ -493,7 +509,7 @@ public class DailyRDAHMMThread implements Runnable {
 			ndaysBeforeToday(cal2, 1, cal2);
 			if (cal2.getTimeInMillis() != cal1.getTimeInMillis()) {
 				ndaysBeforeToday(cal1, -1, cal1);
-				sbMissData.append(getDateString(cal2)).append("to").append(getDateString(cal1)).append(';');
+				sbMissData.append(UtilSet.getDateString(cal2)).append("to").append(UtilSet.getDateString(cal1)).append(';');
 				missCount++;
 			}			
 			
@@ -528,17 +544,17 @@ public class DailyRDAHMMThread implements Runnable {
 				// record section with missing data
 				date1 = getDateFromRawLine((String)modelRawLines.get(j-1));
 				date2 = getDateFromRawLine((String)modelRawLines.get(j));
-				setDateByString(cal1, date1);
-				setDateByString(cal2, date2);
+				UtilSet.setDateByString(cal1, date1);
+				UtilSet.setDateByString(cal2, date2);
 				// make every date string 10-chars long
-				date1 = getDateString(cal1);
-				date2 = getDateString(cal2);
+				date1 = UtilSet.getDateString(cal1);
+				date2 = UtilSet.getDateString(cal2);
 				// check if the evaluation input data lasts till today; note that if the evaluation data has more than 0 lines,
 				// we should already have done the check at the previous steps
 				if (j == modelQLines.size() - 1 && evalQLines.size() <= 0) {
 					if (cal2.getTimeInMillis() != calToday2.getTimeInMillis()) {
 						ndaysBeforeToday(cal2, -1, cal2);
-						sbMissData.append(getDateString(calToday2)).append("to").append(getDateString(cal2)).append(';');
+						sbMissData.append(UtilSet.getDateString(calToday2)).append("to").append(UtilSet.getDateString(cal2)).append(';');
 						missCount++;
 						ndaysBeforeToday(cal2, 1, cal2);
 					}
@@ -546,7 +562,7 @@ public class DailyRDAHMMThread implements Runnable {
 				ndaysBeforeToday(cal2, 1, cal2);
 				if (cal2.getTimeInMillis() != cal1.getTimeInMillis()) {
 					ndaysBeforeToday(cal1, -1, cal1);
-					sbMissData.append(getDateString(cal2)).append("to").append(getDateString(cal1)).append(';');
+					sbMissData.append(UtilSet.getDateString(cal2)).append("to").append(UtilSet.getDateString(cal1)).append(';');
 					missCount++;
 				}
 				
@@ -580,11 +596,11 @@ public class DailyRDAHMMThread implements Runnable {
 		
 		if (modelQLines.size() > 0) {
 			date2 = getDateFromRawLine((String)modelRawLines.get(0));
-			setDateByString(cal2, date2);
+			UtilSet.setDateByString(cal2, date2);
 			if (modelQLines.size() <= 1 && evalQLines.size() <= 0) {
 				if (cal2.getTimeInMillis() != calToday2.getTimeInMillis()) {
 					ndaysBeforeToday(cal2, -1, cal2);
-					sbMissData.append(getDateString(calToday2)).append("to").append(getDateString(cal2)).append(';');
+					sbMissData.append(UtilSet.getDateString(calToday2)).append("to").append(UtilSet.getDateString(cal2)).append(';');
 					missCount++;
 					ndaysBeforeToday(cal2, 1, cal2);
 				}
@@ -593,12 +609,12 @@ public class DailyRDAHMMThread implements Runnable {
 			// check if the model input data starts from modelStartDate
 			if (cal2.getTimeInMillis() != calModel.getTimeInMillis()) {
 				ndaysBeforeToday(cal2, 1, cal2);
-				sbMissData.append(getDateString(cal2)).append("to").append(modelStartDate).append(';');
+				sbMissData.append(UtilSet.getDateString(cal2)).append("to").append(modelStartDate).append(';');
 				missCount++;
 			}							 
 		} else {
 			// if there is even no data for training model, there must be no data at all
-			sbMissData.append(getDateString(calToday2)).append("to").append(modelStartDate).append(';');
+			sbMissData.append(UtilSet.getDateString(calToday2)).append("to").append(modelStartDate).append(';');
 			missCount++;
 		}
 		
@@ -632,6 +648,9 @@ public class DailyRDAHMMThread implements Runnable {
 			if (scnPath == null)
 				scnPath = rds.properties.getProperty("dailyRdahmm.stateChangeNumTrace.path");
 			tmpNode.setText(scnPath.substring(scnPath.lastIndexOf(File.separator)+1));
+			
+			tmpNode = elePattern.addElement("videoFile");
+			tmpNode.setText(modelStartDate + "to" + UtilSet.getDateString(Calendar.getInstance()) + ".mpeg");
 			
 			String proNamePat = rds.projectName.replaceAll(station, "{!station-id!}");			
 			String modelBasePat = rds.modelBaseName.replaceAll(station, "{!station-id!}");
@@ -695,64 +714,6 @@ public class DailyRDAHMMThread implements Runnable {
 		return tmp;		
 	}
 
-	public static void log(int threadNum, String msg) {
-		System.out.println("Thread " + threadNum + ": " + msg);
-	}
-	
-	
-	/**
-	 * get the "2007-02-15" alike string form of the date
-	 * 
-	 * @param date
-	 * @return
-	 */
-	public static String getDateString(Calendar date) {
-		StringBuffer sb = new StringBuffer();
-		
-		int year = date.get(Calendar.YEAR);
-		for (int i=0; i<4-String.valueOf(year).length(); i++)
-			sb.append('0');
-		sb.append(year).append('-');
-		
-		int month = date.get(Calendar.MONTH) + 1;
-		if (month < 10)
-			sb.append('0');
-		sb.append(month).append('-');
-		
-		int day = date.get(Calendar.DAY_OF_MONTH);
-		if (day < 10)
-			sb.append('0');
-		sb.append(day);
-		
-		return sb.toString();
-	}
-	
-	// get date from a string like 2007-03-08
-	public static Calendar getDateFromString(String str) { 	
-	  	Calendar ret = Calendar.getInstance();
-	  	setDateByString(ret, str);  	
-	  	return ret;
-	}
-	  
-	public static void setDateByString(Calendar theDate, String str) {
-	  	str = str.trim();
-		String year, month, day;
-	  	int i1, i2;
-	  	i1 = str.indexOf("-");
-	  	i2 = str.indexOf("-", i1+1);
-	  	year = str.substring(0, i1);
-	  	month = str.substring(i1+1, i2);
-	  	day = str.substring(i2+1);
-	  	
-	  	theDate.set(Calendar.YEAR, Integer.parseInt(year, 10));
-	  	theDate.set(Calendar.MONTH, Integer.parseInt(month, 10)-1);
-	  	theDate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day, 10));
-	  	theDate.set(Calendar.HOUR_OF_DAY, 12);
-	  	theDate.set(Calendar.MINUTE, 0);
-	  	theDate.set(Calendar.SECOND, 0);
-	  	theDate.set(Calendar.MILLISECOND, 0);
-	}
-
 	/**
 	 * get the id of the next station to run
 	 * 
@@ -790,7 +751,7 @@ public class DailyRDAHMMThread implements Runnable {
 				if (year < today.get(Calendar.YEAR) || month < today.get(Calendar.MONTH)+1
 						|| day < today.get(Calendar.DAY_OF_MONTH)) {
 					ret = s[0];
-					s[1] = getDateString(today);
+					s[1] = UtilSet.getDateString(today);
 					latStr = s[2];
 					longStr = s[3];
 					break;
@@ -827,13 +788,13 @@ public class DailyRDAHMMThread implements Runnable {
 		for (int i=0; i<proNames.size(); i++) {
 			proName = (String)proNames.get(i);
 			baseWorkPath = baseWorkDir + proName;
-			res = exec("rm -f -r " + baseWorkPath.replace('/', File.separatorChar));
+			res = UtilSet.exec("rm -f -r " + baseWorkPath.replace('/', File.separatorChar));
 			
 			baseDestPath = baseDestDir + '/' + proName;
-			res = exec("rm -f -r " + baseDestPath.replace('/', File.separatorChar));
+			res = UtilSet.exec("rm -f -r " + baseDestPath.replace('/', File.separatorChar));
 						
 			binPath = binDir + '/' + proName + ".*";
-			res = exec("rm -f -r " + binPath.replace('/', File.separatorChar));
+			res = UtilSet.exec("rm -f -r " + binPath.replace('/', File.separatorChar));
 		}
 	}
 	
@@ -843,8 +804,8 @@ public class DailyRDAHMMThread implements Runnable {
 	 * @param newPath
 	 */
 	private void renameFile(String srcPath, String newPath) {
-		log(threadNum, "renameFile -- srcPath : " + srcPath);
-		log(threadNum, "renameFile -- newPath : " + newPath);
+		UtilSet.log(threadNum, "renameFile -- srcPath : " + srcPath);
+		UtilSet.log(threadNum, "renameFile -- newPath : " + newPath);
 		
 		if (srcPath == null || newPath == null)
 			return;
@@ -858,74 +819,19 @@ public class DailyRDAHMMThread implements Runnable {
 			// if file of newPath exists, delete it
 			if (newPathFile.exists()) {
 				if (!newPathFile.delete()) {
-					log(threadNum, "Failed to delete the old RDAHMM result file!");
+					UtilSet.log(threadNum, "Failed to delete the old RDAHMM result file!");
 					return;
 				}
 			}
 
 			// rename the srcFile
 			if (!srcFile.renameTo(newPathFile)) {
-				log(threadNum, "Failed to rename the temporary file to the destined xml file!");
+				UtilSet.log(threadNum, "Failed to rename the temporary file to the destined xml file!");
 			}
 		}
 	}
 	
-	public static String exec(String execStr) {
-		return exec(execStr, null);
-	}
 	
-	/**
-	 * Execute a command
-	 * 
-	 * @param execStr
-	 *            String command string
-	 * @return String the information of execute result
-	 */
-	public static String exec(String execStr, File dir) {
-		Runtime runtime = Runtime.getRuntime();// Get current runtime object
-		String outInfo = ""; // execute error information
-		try {
-			String[] args = null;
-			args = new String[] { "/bin/sh", "-c", execStr }; // execute
-
-			Process proc = null;
-			if (dir == null)
-				proc = runtime.exec(args); // run another process to
-			else
-				proc = runtime.exec(args, null, dir);
-			// execute command
-			InputStream out = proc.getInputStream();
-			BufferedReader br1 = new BufferedReader(new InputStreamReader(out));
-			while (br1.readLine() != null) {
-			}
-			out.close();
-
-			InputStream in = proc.getErrorStream(); // get error information
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
-			String line = "";
-			while ((line = br.readLine()) != null) {
-				outInfo = outInfo + line + "/n";
-			}
-			// System.out.println(outInfo);
-			in.close();
-
-			try { // check the result
-				if (proc.waitFor() != 0) {
-					System.err.println("exit value = " + proc.exitValue());
-				}
-			} catch (InterruptedException e) {
-				System.err.print(e);
-				e.printStackTrace();
-				outInfo += " InterruptedException encountered when calling proc.waitFor()!";
-			}
-
-		} catch (IOException e) {
-			System.out.println("exec error: " + e.getMessage());
-			e.printStackTrace();
-			outInfo += " IOException encountered!";
-		}
-		return outInfo;
-	}
 	
 	/**
 	 * train the RDAHMM model for a station
@@ -940,24 +846,24 @@ public class DailyRDAHMMThread implements Runnable {
 				File modelQFile = new File(rds.modelWorkDir + File.separator + rds.modelBaseName + ".Q");
 				if (modelQFile.exists() && modelQFile.isFile() && modelQFile.length() > 0) {
 					String rawPath = rds.modelWorkDir + File.separator + rds.modelBaseName + ".raw";
-					Calendar cal1 = getDateFromString(getDateFromRawLine(readOneLineFromFile(rawPath, 0)));
-					Calendar modelEnd = getDateFromString(shortModelEndDate);
+					Calendar cal1 = UtilSet.getDateFromString(getDateFromRawLine(readOneLineFromFile(rawPath, 0)));
+					Calendar modelEnd = UtilSet.getDateFromString(shortModelEndDate);
 					if (cal1.getTimeInMillis() <= modelEnd.getTimeInMillis()) {
-						log(threadNum, "Model Files for " + station + " Exists, No Need to train Model!!!!!!!!!!!!! " 
-									+ getDateString(cal1) + "<=" + getDateString(modelEnd));
+						UtilSet.log(threadNum, "Model Files for " + station + " Exists, No Need to train Model!!!!!!!!!!!!! " 
+									+ UtilSet.getDateString(cal1) + "<=" + UtilSet.getDateString(modelEnd));
 						return true;
 					} 
 				}
-				exec("rm -f -r " + rds.modelWorkDir + File.separator + "*");
+				UtilSet.exec("rm -f -r " + rds.modelWorkDir + File.separator + "*");
 			} else {
-				exec("rm -f -r " + rds.modelWorkDir);
+				UtilSet.exec("rm -f -r " + rds.modelWorkDir);
 			}
 		}	
 		
 		// make the modelWorkDir for saving model results
 		String err;
 		if (!modelDirFile.exists()) {
-			err = exec("mkdir " + rds.modelWorkDir);
+			err = UtilSet.exec("mkdir " + rds.modelWorkDir);
 			if (err.length() > 0)
 				return false;	
 		}
@@ -983,27 +889,27 @@ public class DailyRDAHMMThread implements Runnable {
 							+ " -D " + rds.getFileDimension(inputFile) + " -N " + runner.numOfStates 
 							+ " -output_type gauss -anneal -annealfactor 1.1 -betamin 0.1" 
 							+ " -regularize -omega 0 0 1 1.0e-6 -ntries 10 -seed 1234";
-		err = exec(exeRdahmm);
+		err = UtilSet.exec(exeRdahmm);
 		
 		if (err.length() > 0)
-			log(threadNum, "trainModelOnStation training output: " + err);
+			UtilSet.log(threadNum, "trainModelOnStation training output: " + err);
 		
 		return err.length() == 0;
 	}
 	
 	protected boolean trainModelAndPlot(String station, String sDate, String eDate, DailyRDAHMMService rds) {
-		log(threadNum, "about to do trainModelAndPlot on station " + station);
+		UtilSet.log(threadNum, "about to do trainModelAndPlot on station " + station);
 		
 		// first train the model		
 		// make the modelWorkDir for saving model results
 		File modelDirFile = new File(rds.modelWorkDir);		
 		String err;
 		if (!modelDirFile.exists()) {
-			err = exec("mkdir " + rds.modelWorkDir);
+			err = UtilSet.exec("mkdir " + rds.modelWorkDir);
 			if (err.length() > 0)
 				return false;	
 		}
-		exec("rm -f -r " + rds.modelWorkDir + File.separator + "*");
+		UtilSet.exec("rm -f -r " + rds.modelWorkDir + File.separator + "*");
 		
 		// download the input file
 		String inputFile = null;
@@ -1023,18 +929,18 @@ public class DailyRDAHMMThread implements Runnable {
 							+ " -D " + rds.getFileDimension(inputFile) + " -N " + runner.numOfStates 
 							+ " -output_type gauss -anneal -annealfactor 1.1 -betamin 0.1" 
 							+ " -regularize -omega 0 0 1 1.0e-6 -ntries 10 -seed 1234";
-		err = exec(exeRdahmm);
+		err = UtilSet.exec(exeRdahmm);
 		
 		if (err.length() > 0) { 
-			log(threadNum, "trainModelAndPlot Fails: " + err);
+			UtilSet.log(threadNum, "trainModelAndPlot Fails: " + err);
 			return false;
 		}
 		
 		// then do fake evaluation on the model, which is just plotting and file copying stuff
-		err = exec("mkdir " + rds.baseDestDir);
+		err = UtilSet.exec("mkdir " + rds.baseDestDir);
 		// Set up the work directory
 		String workDir = rds.baseWorkDir + File.separator + rds.projectName;
-		err = exec("mkdir " + workDir);
+		err = UtilSet.exec("mkdir " + workDir);
 		rds.fakeEvaluation();
 		return true;		
 	}
@@ -1046,8 +952,8 @@ public class DailyRDAHMMThread implements Runnable {
 		if (fzip.exists())
 			return;
 		String exeZip = "zip -r " + zipPath + " " + rds.modelBaseName;
-		String err = exec(exeZip, new File(rds.baseWorkDir));
-		log(threadNum, "zipping model " + exeZip + "output: " + err);
+		String err = UtilSet.exec(exeZip, new File(rds.baseWorkDir));
+		UtilSet.log(threadNum, "zipping model " + exeZip + "output: " + err);
 	}
 	
 	// add the state change number on date by addition
@@ -1064,7 +970,7 @@ public class DailyRDAHMMThread implements Runnable {
 	
 	// save the state change numbers to a file
 	protected void saveStateChangeNums(String filePath) {
-		Calendar calTmp = getDateFromString(modelStartDate);
+		Calendar calTmp = UtilSet.getDateFromString(modelStartDate);
 		Calendar calToday = Calendar.getInstance();
 		calToday.set(Calendar.HOUR_OF_DAY, 12);
 		calToday.set(Calendar.MINUTE, 0);
@@ -1075,7 +981,7 @@ public class DailyRDAHMMThread implements Runnable {
 			FileWriter fw = new FileWriter(filePath, false);
 			synchronized (runner.stateChangeNums) {
 				while (calTmp.compareTo(calToday) <= 0) {
-					String strDate = getDateString(calTmp);
+					String strDate = UtilSet.getDateString(calTmp);
 					fw.write(strDate + " ");
 					if (runner.stateChangeNums.containsKey(strDate)) {
 						fw.write(runner.stateChangeNums.get(strDate).intValue() + "\n");
@@ -1096,7 +1002,7 @@ public class DailyRDAHMMThread implements Runnable {
 	protected void plotStateChangeNums(String scnFilePath, String shDir) {
 		String plotSh = shDir + File.separator + "plot_stateNum.sh";
 		System.out.println("about to executing " + plotSh + " " + scnFilePath);
-		String res = DailyRDAHMMThread.exec(plotSh + " " + scnFilePath, new File(shDir));
+		String res = UtilSet.exec(plotSh + " " + scnFilePath, new File(shDir));
 		System.out.println("result for plotting state change numbers:" + res);
 	}
 }
