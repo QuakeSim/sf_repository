@@ -425,6 +425,8 @@
 						<td vAlign="middle" align="center" >
 							<img id="scnPlotImg" align="middle" src="">
 							<a id="scnTxtLink" target="_blank" href="">Click here to view the detailed data.</a>
+							<br/>
+							<a id="videoLink" target="_blank" href="">Click here to get a video of the whole time since 1994.</a>
 						</td>
 					</tr>
 				</table>
@@ -677,9 +679,11 @@
 %>
 	var urlPattern = '<%=eleOutput.element("server-url").getText()%>';
 	var scnPattern = '<%=eleOutput.element("stateChangeNumTxtFile").getText()%>';
+	var videoPattern = '<%=eleOutput.element("videoFile").getText()%>';
 	
 	document.getElementById("scnPlotImg").src = urlPattern + "/" + scnPattern + ".png";
 	document.getElementById("scnTxtLink").href = urlPattern + "/" + scnPattern;
+	document.getElementById("videoLink").href = urlPattern + "/" + videoPattern;
 
 	var dirPattern = 'daily/' + '<%=eleOutput.element("pro-dir").getText()%>';
 	var aPattern = '<%=eleOutput.element("AFile").getText()%>';
