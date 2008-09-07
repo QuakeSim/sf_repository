@@ -72,7 +72,7 @@ for(int i=0;i<stationList.size();i++) {
 
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here"
 type="text/javascript"></script>
- <script src="http://156.56.104.143:8080/Disloc2/egeoxml.js" type="text/javascript"></script>
+ <script src="http://@host.base.url@/Simplex-portlet/egeoxml.js" type="text/javascript"></script>
 
 </head>
 <body onload="initialize()" onunload="GUnload()">
