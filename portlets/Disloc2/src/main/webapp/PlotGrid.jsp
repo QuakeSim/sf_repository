@@ -8,7 +8,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">  <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <title>Google Maps Example</title>
- <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBQozjQdf4FEuMBqpopduISAOADS4xTilRYX9d1ZU0uvBJwyY4gerC4Gog"
+ <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here"
       type="text/javascript"></script>
   <script src="@host.base.url@/Disloc2/egeoxml.js" type="text/javascript"></script>
   </head>
@@ -45,7 +45,8 @@
     }
    
 //    var exml = new EGeoXml("exml", map, ["<%= fileName %>"], {dropboxid:"dropboxdiv",addmarker:addMark});
-    var exml = new EGeoXml("exml", map, ["<%= fileName %>"], {nozoom:true, dropboxid:"dropboxdiv"});
+//    var exml = new EGeoXml("exml", map, ["<%= fileName %>"], {nozoom:true, dropboxid:"dropboxdiv"});
+    var exml = new EGeoXml("exml", map, ["<%= fileName %>"]);
     exml.parse();
 //    GEvent.addListener(exml,"parse",function(){
 //        mgr.refresh();
