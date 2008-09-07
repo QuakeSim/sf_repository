@@ -48,6 +48,11 @@
                                         value="${google.master.key}">
 											<include name="**/*.jsp"/>
 										 </replace>
+										 <replace dir="${basedir}/target/${pom.artifactId}" 
+                                        token="@host.base.url@"
+                                        value="${host.base.url}">
+											<include name="**/*.jsp"/>
+										 </replace>
                              </tasks>
                            </configuration>
                            <goals>
