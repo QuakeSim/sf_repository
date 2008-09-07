@@ -33,6 +33,7 @@ mapcenter_y = center_xy[1];
 		font-size: 18pt; 
 		font: bold; 
 	} 
+
 </style> 
  
  

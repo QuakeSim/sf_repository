@@ -22,7 +22,7 @@
 <head>
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here"
 type="text/javascript"></script>
- <script src="http://156.56.104.143:8080/Disloc2/egeoxml.js" type="text/javascript"></script>
+ <script src="@host.base.url@/Disloc2/egeoxml.js" type="text/javascript"></script>
 
 <link rel="stylesheet" type="text/css"
 	href='<%= request.getContextPath() + "/stylesheet.css" %>'>
