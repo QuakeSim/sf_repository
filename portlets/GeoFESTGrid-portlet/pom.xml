@@ -29,6 +29,7 @@
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                   <executions>
+<!--
                      <execution>
                         <phase>package</phase>
                            <configuration>
@@ -44,6 +45,7 @@
                              <goal>run</goal>
                            </goals>
                      </execution> 
+-->
                   </executions>
             </plugin>
 

@@ -62,11 +62,13 @@
                                </replace>
 
 -->										 
+<!--
                                <replace dir="${basedir}/target/${pom.artifactId}" 
                                         token="put.google.map.key.here"
                                         value="${google.master.key}">
                                <include name="**/*.jsp"/>
 			       </replace>
+-->
                              </tasks>
                            </configuration>
                            <goals>

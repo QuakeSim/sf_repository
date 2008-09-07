@@ -85,6 +85,27 @@
 			 <goal>run</goal>
         </goals>
        </execution>
+       <execution>
+         <phase>package</phase>
+         <configuration>
+           <tasks>
+				 <echo message="Google Master Key: ${google.master.key}"/>
+				 <replace dir="${basedir}/target/${pom.artifactId}" 
+                      token="put.google.map.key.here"
+                      value="${google.master.key}">
+					<include name="**/*.jsp"/>
+				 </replace>
+				 <replace dir="${basedir}/target/${pom.artifactId}" 
+                      token="@host.base.url@"
+                      value="${host.base.url}">
+					<include name="**/*.jsp"/>
+				 </replace>
+           </tasks>
+         </configuration>
+         <goals>
+           <goal>run</goal>
+         </goals>
+       </execution> 
       </executions>       
 		</plugin>
     </plugins>
