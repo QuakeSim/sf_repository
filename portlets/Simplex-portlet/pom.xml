@@ -37,12 +37,13 @@
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                   <executions>
+<!--
                      <execution>
                         <phase>package</phase>
                            <configuration>
                              <tasks>
 
-<!--
+
 
                                <replace dir="${basedir}/target/${pom.artifactId}" 
                                         token="gf2.ucs.indiana.edu"
@@ -61,20 +62,19 @@
                                <include name="**/*.properties"/>
                                </replace>
 
--->										 
-<!--
                                <replace dir="${basedir}/target/${pom.artifactId}" 
                                         token="put.google.map.key.here"
                                         value="${google.master.key}">
                                <include name="**/*.jsp"/>
 			       </replace>
--->
+
                              </tasks>
                            </configuration>
                            <goals>
                              <goal>run</goal>
                            </goals>
                      </execution> 
+-->
                   </executions>
             </plugin>
         </plugins>

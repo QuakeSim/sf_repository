@@ -95,6 +95,7 @@
                       value="${google.master.key}">
 					<include name="**/*.jsp"/>
 				 </replace>
+				 <echo message="Setting the host.base.url: ${host.base.url}"/>
 				 <replace dir="${basedir}/target/${pom.artifactId}" 
                       token="@host.base.url@"
                       value="${host.base.url}">
