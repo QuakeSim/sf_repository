@@ -10,7 +10,7 @@
     <title>Google Maps Example</title>
  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here"
       type="text/javascript"></script>
-  <script src="http://gf7.ucs.indiana.edu:8080/Simplex-portlet/egeoxml.js" type="text/javascript"></script>
+  <script src="@host.base.url@/Simplex-portlet/egeoxml.js" type="text/javascript"></script>
   </head>
   <body>
   <%
