@@ -54,14 +54,12 @@ xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0"
      </portlet-info>        
    </portlet>
 
+<!--
 	<portlet>
     <portlet-name>plot-results-portlet</portlet-name>
     <portlet-class>org.apache.portals.bridges.jsf.FacesPortlet</portlet-class>
       <expiration-cache>0</expiration-cache>
       <init-param>
-      <!--
-      <name>default-view</name>
-       -->
       <name>ViewPage</name>
       <value>/PlotGrid.jsp</value>
      </init-param>
@@ -79,6 +77,7 @@ xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0"
       <keywords>Disloc</keywords>
      </portlet-info>        
    </portlet>
+-->
 
 	<portlet>
     <portlet-name>pick-location-portlet</portlet-name>
