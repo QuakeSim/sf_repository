@@ -48,6 +48,11 @@
                                         value="${google.master.key}">
 											<include name="**/*.jsp"/>
 										 </replace>
+										 <replace dir="${basedir}/target/${pom.artifactId}" 
+                                        token="put.url.here"
+                                        value="${host.base.url}/${pom.artifactId}">
+											<include name="**/*.jsp"/>
+										 </replace>
 										 <replace file="${basedir}/target/${pom.artifactId}/WEB-INF/faces-config.xml" 
                                         token="put.catalina.home.here"
                                         value="${catalina.home}"/>

@@ -25,6 +25,8 @@
 <html>
 	<head>
 	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>
+	<script src="put.url.here/NmapAPI.js" type="text/javascript"></script>
+	<script src="put.url.here/dateUtil.js" type="text/javascript"></script>
 	</head>
 	<body>
 
@@ -52,7 +54,7 @@
 			top: 4px; 
 		} 
 	</style>
-	
+
 	<style>
 		td      { font-size: 9pt;}
 		.ooib { border-width: 1px; border-style: none solid solid; border-color: #CC3333; background-color: #E4E5EE;}
@@ -63,6 +65,7 @@
 	</style>
 
 	<script>
+	//for manipulating the tabs
 	function ghbq(td) {
 		var tr = document.getElementById("tabRow");
 		var ob = document.getElementById("obody").rows;
@@ -125,48 +128,7 @@
 		dateToShow.setAttribute("value", str);
 		dateToShow.value = str;
 	}
-  
-	// get the date that is n days before thisDate
-	function nDaysBefore(n, thisDate) {
-		var before = new Date();
-		before.setTime(thisDate.getTime() - n * 86400 * 1000);
-		return before;
-	}
-  
-	// get the string representation for a date
-	function getDateString(d) {
-		return d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
-	}
 
-	// get the UTC string representation for a date
-	function getUTCDateString(d) {
-		return d.getUTCFullYear() + "-" + (d.getUTCMonth()+1) + "-" + d.getUTCDate();
-	}
-  
-	// get date from a string like 2007-03-08
-	function getDateFromString(str) { 	
-		var ret = new Date();
-		setDateByString(ret, str);  	
-		return ret;
-	}
-  
-	function setDateByString(theDate, str) {
-		var year, month, day, i1, i2;
-		i1 = str.indexOf("-");
-		i2 = str.indexOf("-", i1+1);
-		year = str.substring(0, i1);
-		month = str.substring(i1+1, i2);
-		day = str.substring(i2+1);
-  	
-		theDate.setFullYear(parseInt(year, 10));
-		theDate.setMonth(parseInt(month, 10)-1);
-		theDate.setDate(parseInt(day, 10));
-		theDate.setHours(12);
-		theDate.setMinutes(0);
-		theDate.setSeconds(0);
-		theDate.setMilliseconds(0);
-	}
-  
 	function onSlideEnd() {
 		//alert("onSlideEnd " + tmpNoActOnSlideChange);
 		if (tmpNoActOnSlideChange) {
@@ -224,92 +186,6 @@
 
 <!-- inline functions about map api -->	
 	<script type="text/javascript">
-	
-	//N_map_API 0.1
-	//Load Javascript function.
-	function K_LoadJS(src,handle) {
-		var jsFile= document.createElement("script");
-		jsFile.src=src;
-		jsFile.onreadystatechange=function(){if(this.readyState=="complete" || this.readyState=="loaded"){if(handle)handle.call()}};
-		document.body.appendChild(jsFile);
-	}
-	//read URL function
-	function K_GetQueryString(key)
-	{
-		var returnValue =""; 
-		var sURL = window.document.URL;
-		if (sURL.indexOf("?") > 0)
-		{
-			var arrayParams = sURL.split("?");
-			var arrayURLParams = arrayParams[1].split("&");
-			for (var i = 0; i < arrayURLParams.length; i++)
-			{
-				var sParam =  arrayURLParams[i].split("=");
-				if ((sParam[0] ==key) && (sParam[1] != ""))
-				returnValue=sParam[1];
-			}
-		}
-		return returnValue;
-	}
-	//read cookie function.
-	function K_GetCookieVal(offset)
-	{
-		var endstr = document.cookie.indexOf (";", offset);
-		if (endstr == -1)
-			endstr = document.cookie.length;
-			return unescape(document.cookie.substring(offset, endstr));
-	}
-	function K_SetCookie(name, value)
-	{
-		var expdate = new Date();
-		var argv = K_SetCookie.arguments;
-		var argc = K_SetCookie.arguments.length;
-		var expires = (argc > 2) ? argv[2] : null;
-		var path = (argc > 3) ? argv[3] : null;
-		var domain = (argc > 4) ? argv[4] : null;
-		var secure = (argc > 5) ? argv[5] : false;
-		if(expires!=null) expdate.setTime(expdate.getTime() + ( expires * 1000 ));
-		document.cookie = name + "=" + escape (value) +((expires == null) ? "" : ("; expires="+ expdate.toGMTString()))+((path == null) ? "" : ("; path=" + path)) +((domain == null) ? "" : ("; domain=" + domain))+((secure == true) ? "; secure" : "");
-	}
-	function K_DelCookie(name)
-	{
-		var exp = new Date();
-		exp.setTime(exp.getTime() - 1);
-		var cval =K_GetCookie(name);
-		document.cookie = name + "=" + cval + "; expires="+ exp.toGMTString();
-	}
-	function K_GetCookie(name)
-	{
-		var arg = name + "=";
-		var alen = arg.length;
-		var clen = document.cookie.length;
-		var i = 0;
-		while (i < clen)
-		{
-			var j = i + alen;
-			if (document.cookie.substring(i, j) == arg)
-				return K_GetCookieVal(j);
-			i = document.cookie.indexOf(" ", i) + 1;
-			if (i == 0) break;
-		}
-		return null;
-	}
-	//callback function.
-	function K_GetCallBack(obj,func)
-	{
-		return function(){return func.apply(obj,arguments)};
-	}
-
-	// Create the marker and corresponding information window 
-	function createInfoMarker(point, address, icon) {
-		var marker = new GMarker(point,icon);
-		GEvent.addListener(marker, "click", function()
-			{
-				marker.openInfoWindowHtml(address);
-			} );
-		return marker;
-	}	
-
 	// Create the marker and corresponding information window 
 	function createTabsInfoMarker(point, infoTabs ,icon1, idx, sel) {
 		var marker = new GMarker(point, {icon: icon1, clickable: true, title:stationArray[idx][0]});
@@ -343,31 +219,6 @@
 		});
 		return marker;
 	}
-
-	function refimg(elementId,url){
-		objimg = document.getElementById(elementId);
-		objimg.setAttribute('src',url,0);
-	}
-
-	function load() {
-		if (GBrowserIsCompatible()) {
-			var map = new GMap2(document.getElementById("map"));
-			map.addControl(new GSmallMapControl());	
-			map.addControl(new GMapTypeControl());
-			map.setCenter(new GLatLng(37.4419, -122.1419), 13);
-			// Our info window content
-			var infoTabs = [ new GInfoWindowTab("Tab #1", "This is tab #1 content"),
-									new GInfoWindowTab("Tab #2", "This is tab #2 content")];
-	
-			// Place a marker in the center of the map and open the info window automatically
-			var marker = new GMarker(map.getCenter());
-			GEvent.addListener(marker, "click", function() {
-					marker.openInfoWindowTabsHtml(infoTabs);
-			});
-			map.addOverlay(marker);
-			marker.openInfoWindowTabsHtml(infoTabs);
-		}
-	}  
 	</script>
 
 	<table>

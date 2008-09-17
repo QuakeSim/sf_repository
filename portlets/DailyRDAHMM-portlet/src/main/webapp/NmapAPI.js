@@ -86,13 +86,13 @@ function createInfoMarker(point, address, icon) {
 }
 
 // Create the marker and corresponding information window 
-function createTabsInfoMarker(point, infoTabs ,icon) {
-  var marker = new GMarker(point,icon);
-  GEvent.addListener(marker, "click", function() {
-    marker.openInfoWindowTabsHtml(infoTabs);
-  });
-  return marker;
-}
+//function createTabsInfoMarker(point, infoTabs ,icon) {
+//  var marker = new GMarker(point,icon);
+//  GEvent.addListener(marker, "click", function() {
+//    marker.openInfoWindowTabsHtml(infoTabs);
+//  });
+//  return marker;
+//}
 
 function refimg(elementId,url){
 	objimg = document.getElementById(elementId);
