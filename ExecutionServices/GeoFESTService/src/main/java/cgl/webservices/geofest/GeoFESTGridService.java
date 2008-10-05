@@ -49,18 +49,18 @@ import com.google.gdata.data.youtube.*;
 import com.google.gdata.data.extensions.*;
 import com.google.gdata.util.*;
 
-import com.google.gdata.client.*;
-import com.google.gdata.data.*;
-import com.google.gdata.util.*;
-import java.io.IOException;
-import java.net.URL;
-
 //Google Calendar stuff
 import com.google.gdata.client.calendar.*;
 import com.google.gdata.data.acl.*;
 import com.google.gdata.data.calendar.*;
 import com.google.gdata.data.extensions.*;
 
+import com.google.gdata.client.*;
+import com.google.gdata.data.*;
+import com.google.gdata.util.*;
+
+import java.io.IOException;
+import java.net.URL;
 
 public class GeoFESTGridService extends GeoFESTService{    
 

@@ -185,8 +185,8 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  googleBlogId=properties.getProperty("google.blog.id");
 
 		  //Instantiate the Google Service
-		  instantiateGoogleService("blogger",gServiceUserName,gServiceUserPass);
-		  instantiateCalendarService();
+ 		  // instantiateGoogleService("blogger",gServiceUserName,gServiceUserPass);
+		  // instantiateCalendarService();
     }
     
     public GeoFESTService() throws Exception{
