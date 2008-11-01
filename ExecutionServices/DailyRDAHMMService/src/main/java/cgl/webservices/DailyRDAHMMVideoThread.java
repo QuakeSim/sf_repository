@@ -5,8 +5,6 @@ import java.util.Calendar;
 
 public class DailyRDAHMMVideoThread extends Thread {
 	String configPath = null;
-	Calendar startDate = null;
-	Calendar endDate = null;
 	VideoMaker vm = null;
 	String videoPathToDelete = null;
 	public DailyRDAHMMVideoThread(String configPath) {
@@ -16,25 +14,26 @@ public class DailyRDAHMMVideoThread extends Thread {
 	public DailyRDAHMMVideoThread(String configPath, Calendar startDate, Calendar endDate){
 		super();
 		this.configPath = configPath;
-		this.startDate = startDate;
-		this.endDate = endDate;
 		vm = new VideoMaker(configPath);
-	}
-	
-	public void run() {
 		if (startDate != null)
 			vm.startDate = startDate;
 		if (endDate != null)
 			vm.endDate = endDate;
+	}
+	
+	public void run() {	
 		vm.drawPictures();
 		vm.makeList();
 		vm.makeNewVideo();
 		
 		if (videoPathToDelete != null) {
+			System.out.print("deleting " + videoPathToDelete);
 			File vf = new File(videoPathToDelete);
-			if (vf.exists())
-				vf.delete();
-		}
+			if (vf.exists()) {
+				System.out.println("... result:" + vf.delete());
+			}
+		} else
+			System.out.println("videoPathToDelete is null!");
 	}
 	
 	public String getFinalVideoPath(){

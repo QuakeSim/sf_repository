@@ -30,6 +30,7 @@ public class DailyRDAHMMThread implements Runnable {
 	static Vector<String> modeledStations = new Vector<String>();
 	static Vector<String> shortEvalList = new Vector<String>();	//some stations don't have historical data, so we just build the model with 
 												//data from 2006-10-01 to 2007-09-30, and do evaluation from 2007-10-01 to today
+	static TreeSet<String> allProNames = new TreeSet<String>();
 	static int objCount = 0;
 	
 	protected Vector<String> modelRawLines = new Vector<String>(); 	//for saving lines from the GRWS queried input file in modeling phase
@@ -60,6 +61,7 @@ public class DailyRDAHMMThread implements Runnable {
 		Calendar tomorrow4 = Calendar.getInstance();
 		Calendar modelEndCal = Calendar.getInstance();
 		Calendar evalStartCal = UtilSet.getDateFromString(evalStartDate);
+		Calendar shortModelEndCal = UtilSet.getDateFromString(shortModelEndDate);
 		today.setTimeInMillis(time);
 		String station = null;
 		Vector<String> proNames = new Vector<String>();
@@ -107,10 +109,13 @@ public class DailyRDAHMMThread implements Runnable {
 						yesterdayVideoPath = vt.getFinalVideoPath();
 					}
 					
+					//make a big flat input file containing 
+					makeAllStationInput(baseDestDir, allProNames, UtilSet.getDateFromString(modelStartDate), today);
 					//delete yestoday's project directories
 					deleteDirectories(yestoday_proNames, baseWorkDir, baseDestDir, binDir);					
 					
-					tomorrow4.setTimeInMillis(time + dayMilli);
+					tomorrow4.setTimeInMillis(System.currentTimeMillis());
+					UtilSet.ndaysBeforeToday(tomorrow4, -1, tomorrow4);
 					tomorrow4.set(Calendar.HOUR_OF_DAY, 4);
 					tomorrow4.set(Calendar.MINUTE, 0);
 					tomorrow4.set(Calendar.SECOND, 0);
@@ -124,9 +129,10 @@ public class DailyRDAHMMThread implements Runnable {
 					
 					// move projects names from proNames to yestoday_proNames
 					yestoday_proNames.removeAllElements();
-					for (int p=0; p<proNames.size(); p++)
-						yestoday_proNames.add(proNames.get(p));
+					for (Iterator<String> itr = proNames.iterator(); itr.hasNext();)
+						yestoday_proNames.add(itr.next());
 					proNames.removeAllElements();
+					allProNames.clear();
 					
 					continue;
 				}
@@ -142,9 +148,15 @@ public class DailyRDAHMMThread implements Runnable {
 					modelSuc = trainModelOnStation(station, rds, today);
 					if (modelSuc) {
 						modeledStations.add(station);
-					}	else {
-						if (!trainModelAndPlot(station, evalStartDate, UtilSet.getDateString(today), rds)) {
+					} else {
+						if (!trainModelAndPlot(station, evalStartDate, UtilSet.getDateString(today), 
+												UtilSet.getDateString(today), rds)) {
 							continue;
+						} else {
+							fillNaNToFile(UtilSet.getDateFromString(modelStartDate), 
+										UtilSet.getDateFromString(modelEndDate), 
+										rds.modelWorkDir + File.separator + rds.modelBaseName + ".input.flat", 
+										true);
 						}
 					}
 				} else {
@@ -157,10 +169,10 @@ public class DailyRDAHMMThread implements Runnable {
 				readFileToVector(rds.modelWorkDir + File.separator + rds.modelBaseName + ".Q", modelQLines);
 				UtilSet.log(threadNum, "station:" + station + "; modelRawLines " + modelRawLines.size() + "; modelQLines " + modelQLines.size());
 				if (modelRawLines.size() > 0) {
-					UtilSet.setDateByString( modelEndCal, getDateFromRawLine((String)modelRawLines.get(modelRawLines.size()-1)) );
+					UtilSet.setDateByString(modelEndCal, getDateFromRawLine((String)modelRawLines.get(modelRawLines.size()-1)) );
 					// if the end date of model phase is later than normal evaluation starting date, short evaluation
 					// should be used
-					if (modelEndCal.getTimeInMillis() >= evalStartCal.getTimeInMillis()) {
+					if (modelEndCal.compareTo(evalStartCal) >= 0 && modelEndCal.compareTo(shortModelEndCal) <= 0) {
 						synchronized (lock_shortEvalList) {
 							if (!shortEvalList.contains(station))
 								shortEvalList.add(station);
@@ -171,13 +183,21 @@ public class DailyRDAHMMThread implements Runnable {
 				if (modelSuc) {
 					if (shortEvalList.contains(station)) {
 						rrb = rds.runBlockingRDAHMM2(station, shortEvalStartDate, UtilSet.getDateString(today), runner.numOfStates);
-					}	else {
+					} else {
 						rrb = rds.runBlockingRDAHMM2(station, evalStartDate, UtilSet.getDateString(today), runner.numOfStates);
 					}
 				}
 				
+				// concatenate the flat input files
+				UtilSet.catTwoFiles(rds.modelWorkDir + File.separator + rds.modelBaseName + ".input.flat", 
+						rds.outputDestDir + File.separator + rds.projectName + ".input.flat", 
+						rds.outputDestDir + File.separator + rds.projectName + ".all.input.flat");
+				
 				// record the projects' names so that we can delete the directories "tomorrow"
 				proNames.add(rds.projectName);
+				synchronized (allProNames) {
+					allProNames.add(rds.projectName);
+				}
 				if (baseWorkDir == null) {
 					baseWorkDir = rds.baseWorkDir;
 					baseDestDir = rds.baseDestDir;
@@ -239,9 +259,11 @@ public class DailyRDAHMMThread implements Runnable {
 		}
 	}
 	
-	/** read the "lineNum"th line of a file*/
+	/** 
+	 * read the "lineNum"th line of a file; lineNum ==  -1: get the last line
+	 * */
 	String readOneLineFromFile(String path, int lineNum) {
-		if (path == null || path.length() == 0 || lineNum < 0)
+		if (path == null || path.length() == 0 || lineNum < -1)
 			return null;
 		try {
 			UtilSet.log(threadNum, "readOneLineFromFile : " + path + " " + lineNum);
@@ -249,18 +271,22 @@ public class DailyRDAHMMThread implements Runnable {
 			int count = -1;
 			BufferedReader br = new BufferedReader(new FileReader(path));
 			line = br.readLine();
+			String lastLine = line;
 			while (line != null) {
 				if (line.length() > 0) {
 					count++;
 					if (count == lineNum)
 						break;					
 				}
+				lastLine = line;
 				line = br.readLine();
 			}
 			UtilSet.log(threadNum, count + "lines read from " + path);
 			br.close();
 			if (count == lineNum)
 				return line;
+			else if (lineNum == -1)
+				return lastLine;
 			else
 				return null;
 		} catch (Exception e) {
@@ -420,7 +446,8 @@ public class DailyRDAHMMThread implements Runnable {
 		Calendar cal1 = Calendar.getInstance();
 		Calendar cal2 = Calendar.getInstance();
 		Calendar calToday2 = UtilSet.getDateFromString(UtilSet.getDateString(today));
-		Calendar calModel = UtilSet.getDateFromString(modelStartDate);
+		Calendar calMissingEnd = Calendar.getInstance();
+		Calendar calMissingBegin = Calendar.getInstance();
 		// every status change is formated like 2007-10-09:4to3;, and there are 20 change in one change group
 		StringBuffer sbgroup = new StringBuffer(16*20);
 		// every missing data section is formated like 2006-10-09to2007-10-13;, and we estimate that there are less than 20 sections for every 
@@ -431,32 +458,73 @@ public class DailyRDAHMMThread implements Runnable {
 		UtilSet.log(threadNum, "station " + station + ": evalQLines " + evalQLines.size() + "; evalRawLines " 
 							+ evalRawLines.size() + "; modelQLines " + modelQLines.size() + "; modelRawLines " 
 							+ modelRawLines.size());
-		if (evalQLines.size() > 1) {
+		if (evalQLines.size() > 0) {
+			date2 = getDateFromRawLine((String)evalRawLines.get(evalQLines.size()-1));
+			UtilSet.setDateByString(cal2, date2);
+			UtilSet.ndaysBeforeToday(cal2, -1, cal2);
+			if (cal2.compareTo(calToday2) < 0) {
+				sbMissData.append(UtilSet.getDateString(calToday2)).append("to");
+				sbMissData.append(UtilSet.getDateString(cal2)).append(';');
+				missCount++;
+			}
+			UtilSet.ndaysBeforeToday(cal2, 1, cal2);
+		} else if (modelQLines.size() > 0) {
+			date2 = getDateFromRawLine((String)modelRawLines.get(modelQLines.size()-1));
+			UtilSet.setDateByString(cal2, date2);
+			UtilSet.ndaysBeforeToday(cal2, -1, cal2);
+			if (cal2.compareTo(calToday2) < 0) {
+				sbMissData.append(UtilSet.getDateString(calToday2)).append("to");
+				sbMissData.append(UtilSet.getDateString(cal2)).append(';');
+				missCount++;
+			}
+			UtilSet.ndaysBeforeToday(cal2, 1, cal2);
+		} else {
+			// if there is even no data for training model, there must be no data at all
+			sbMissData.append(UtilSet.getDateString(calToday2)).append("to").append(modelStartDate).append(';');
+			missCount++;
+		}
+		
+		if (evalQLines.size() > 1) {			
 			for (int i = evalQLines.size() - 1; i > 0; i--) {
 				// record section with missing data
-				date1 = getDateFromRawLine((String)evalRawLines.get(i-1));
-				date2 = getDateFromRawLine((String)evalRawLines.get(i));
-				UtilSet.setDateByString(cal1, date1);
-				UtilSet.setDateByString(cal2, date2);
-				// make every date string 10-chars long
-				date1 = UtilSet.getDateString(cal1);
-				date2 = UtilSet.getDateString(cal2);
-				// check if the evaluation input data lasts till today
-				if (i == evalQLines.size() - 1) {
-					if (cal2.getTimeInMillis() != calToday2.getTimeInMillis()) {
-						ndaysBeforeToday(cal2, -1, cal2);
-						sbMissData.append(UtilSet.getDateString(calToday2)).append("to").append(UtilSet.getDateString(cal2)).append(';');
-						missCount++;
-						ndaysBeforeToday(cal2, 1, cal2);
-					}
+				date1 = getDateTimeFromRawLine((String)evalRawLines.get(i-1));
+				date2 = getDateTimeFromRawLine((String)evalRawLines.get(i));
+				UtilSet.setDateTimeByString(cal1, date1);
+				UtilSet.setDateTimeByString(cal2, date2);
+				date1 = UtilSet.getDatePart(date1);
+				date2 = UtilSet.getDatePart(date2);
+				
+				// if the last line is like "2008-10-03T22:22:22", then it's an end of a missing-data time section
+				if (i == evalQLines.size()-1 
+					&& cal2.get(Calendar.HOUR_OF_DAY) == DailyRDAHMMService.DUP_LINE_TIME) {
+					calMissingEnd.setTimeInMillis(cal2.getTimeInMillis());
 				}
-				ndaysBeforeToday(cal2, 1, cal2);
-				if (cal2.getTimeInMillis() != cal1.getTimeInMillis()) {
-					ndaysBeforeToday(cal1, -1, cal1);
-					sbMissData.append(UtilSet.getDateString(cal2)).append("to").append(UtilSet.getDateString(cal1)).append(';');
+				
+				// situation like "2008-10-03T22:22:22 ..."
+				//				  "2008-10-04T12:00:00 ...", where 2008-10-03 is an end of missing-data time section
+				if (cal1.get(Calendar.HOUR_OF_DAY) == DailyRDAHMMService.DUP_LINE_TIME
+					&& cal2.get(Calendar.HOUR_OF_DAY) != DailyRDAHMMService.DUP_LINE_TIME) {
+					calMissingEnd.setTimeInMillis(cal1.getTimeInMillis());
+				}
+				
+				// if the first line is like "1994-01-01T22:22:22", then it's a start of a missing-data time section
+				if (i == 1 && cal1.get(Calendar.HOUR_OF_DAY) == DailyRDAHMMService.DUP_LINE_TIME) {
+					calMissingBegin.setTimeInMillis(cal1.getTimeInMillis());
+					sbMissData.append(UtilSet.getDateString(calMissingEnd)).append("to");
+					sbMissData.append(UtilSet.getDateString(calMissingBegin)).append(';');
 					missCount++;
 				}
 				
+				// situation like "2008-09-03T12:00:00 ..."
+				//				  "2008-09-04T22:22:22 ...", where 2008-09-04 is a start of missing-data time section
+				if (cal1.get(Calendar.HOUR_OF_DAY) != DailyRDAHMMService.DUP_LINE_TIME
+					&& cal2.get(Calendar.HOUR_OF_DAY) == DailyRDAHMMService.DUP_LINE_TIME) {
+					calMissingBegin.setTimeInMillis(cal2.getTimeInMillis());
+					sbMissData.append(UtilSet.getDateString(calMissingEnd)).append("to");
+					sbMissData.append(UtilSet.getDateString(calMissingBegin)).append(';');
+					missCount++;
+				}
+
 				// record status changes
 				str1 = (String)evalQLines.get(i - 1);
 				status1 = Long.valueOf(str1).longValue();
@@ -487,31 +555,22 @@ public class DailyRDAHMMThread implements Runnable {
 		
 		// the state sequence before the evaluation starting date is contained in the .Q file of the modeling phase
 		// this is to compare the first line of evalQLines and the last line of modelQLines
-		if (evalQLines.size() > 0 &&  modelQLines.size() > 0) {
-			// record section with missing data
+		if (evalQLines.size() > 0 && modelQLines.size() > 0) {
+			// since we make sure that evalQLines.size() > 1 && modelQLines.size() > 1
+			// by filling missing data, there is no need to check missing data here
 			date1 = getDateFromRawLine(modelRawLines.get(modelRawLines.size() - 1));
 			date2 = getDateFromRawLine(evalRawLines.get(0));
 			UtilSet.setDateByString(cal1, date1);
 			UtilSet.setDateByString(cal2, date2);
-			// make every date string 10-chars long
-			date1 = UtilSet.getDateString(cal1);
-			date2 = UtilSet.getDateString(cal2);
-			// check if the evaluation input data lasts till today; note that if the evaluation data has more than 1 lines,
-			// we should already have done the check at the previous step
-			if (evalQLines.size() == 1) {
-				if (cal2.getTimeInMillis() != calToday2.getTimeInMillis()) {
-					ndaysBeforeToday(cal2, -1, cal2);
-					sbMissData.append(UtilSet.getDateString(calToday2)).append("to").append(UtilSet.getDateString(cal2)).append(';');
-					missCount++;
-					ndaysBeforeToday(cal2, 1, cal2);
-				}
-			}			
-			ndaysBeforeToday(cal2, 1, cal2);
-			if (cal2.getTimeInMillis() != cal1.getTimeInMillis()) {
-				ndaysBeforeToday(cal1, -1, cal1);
-				sbMissData.append(UtilSet.getDateString(cal2)).append("to").append(UtilSet.getDateString(cal1)).append(';');
+			UtilSet.ndaysBeforeToday(cal1, -1, cal1);
+			UtilSet.ndaysBeforeToday(cal2, 1, cal2);
+			if (cal1.compareTo(cal2) < 0) {
+				sbMissData.append(UtilSet.getDateString(cal2)).append("to");
+				sbMissData.append(UtilSet.getDateString(cal1)).append(';');
 				missCount++;
-			}			
+			}
+			UtilSet.ndaysBeforeToday(cal1, 1, cal1);
+			UtilSet.ndaysBeforeToday(cal2, -1, cal2);
 			
 			// record status changes
 			str1 = (String)modelQLines.get(modelQLines.size() - 1);
@@ -542,27 +601,41 @@ public class DailyRDAHMMThread implements Runnable {
 			status2 = -1;
 			for (int j = modelQLines.size() - 1; j > 0; j--) {				
 				// record section with missing data
-				date1 = getDateFromRawLine((String)modelRawLines.get(j-1));
-				date2 = getDateFromRawLine((String)modelRawLines.get(j));
-				UtilSet.setDateByString(cal1, date1);
-				UtilSet.setDateByString(cal2, date2);
-				// make every date string 10-chars long
-				date1 = UtilSet.getDateString(cal1);
-				date2 = UtilSet.getDateString(cal2);
-				// check if the evaluation input data lasts till today; note that if the evaluation data has more than 0 lines,
-				// we should already have done the check at the previous steps
-				if (j == modelQLines.size() - 1 && evalQLines.size() <= 0) {
-					if (cal2.getTimeInMillis() != calToday2.getTimeInMillis()) {
-						ndaysBeforeToday(cal2, -1, cal2);
-						sbMissData.append(UtilSet.getDateString(calToday2)).append("to").append(UtilSet.getDateString(cal2)).append(';');
-						missCount++;
-						ndaysBeforeToday(cal2, 1, cal2);
-					}
-				}				
-				ndaysBeforeToday(cal2, 1, cal2);
-				if (cal2.getTimeInMillis() != cal1.getTimeInMillis()) {
-					ndaysBeforeToday(cal1, -1, cal1);
-					sbMissData.append(UtilSet.getDateString(cal2)).append("to").append(UtilSet.getDateString(cal1)).append(';');
+				date1 = getDateTimeFromRawLine((String)modelRawLines.get(j-1));
+				date2 = getDateTimeFromRawLine((String)modelRawLines.get(j));
+				UtilSet.setDateTimeByString(cal1, date1);
+				UtilSet.setDateTimeByString(cal2, date2);
+				date1 = UtilSet.getDatePart(date1);
+				date2 = UtilSet.getDatePart(date2);
+				
+				// if the last line is like "2008-10-03T22:22:22", then it's an end of a missing-data time section
+				if (j == modelQLines.size()-1 
+					&& cal2.get(Calendar.HOUR_OF_DAY) == DailyRDAHMMService.DUP_LINE_TIME) {
+					calMissingEnd.setTimeInMillis(cal2.getTimeInMillis());
+				}
+				
+				// situation like "2008-10-03T22:22:22 ..."
+				//				  "2008-10-04T12:00:00 ...", where 2008-10-03 is an end of missing-data time section
+				if (cal1.get(Calendar.HOUR_OF_DAY) == DailyRDAHMMService.DUP_LINE_TIME
+					&& cal2.get(Calendar.HOUR_OF_DAY) != DailyRDAHMMService.DUP_LINE_TIME) {
+					calMissingEnd.setTimeInMillis(cal1.getTimeInMillis());
+				}
+				
+				// if the first line is like "1994-01-01T22:22:22", then it's a start of a missing-data time section
+				if (j == 1 && cal1.get(Calendar.HOUR_OF_DAY) == DailyRDAHMMService.DUP_LINE_TIME) {
+					calMissingBegin.setTimeInMillis(cal1.getTimeInMillis());
+					sbMissData.append(UtilSet.getDateString(calMissingEnd)).append("to");
+					sbMissData.append(UtilSet.getDateString(calMissingBegin)).append(';');
+					missCount++;
+				}
+				
+				// situation like "2008-09-03T12:00:00 ..."
+				//				  "2008-09-04T22:22:22 ...", where 2008-09-04 is a start of missing-data time section
+				if (cal1.get(Calendar.HOUR_OF_DAY) != DailyRDAHMMService.DUP_LINE_TIME
+					&& cal2.get(Calendar.HOUR_OF_DAY) == DailyRDAHMMService.DUP_LINE_TIME) {
+					calMissingBegin.setTimeInMillis(cal2.getTimeInMillis());
+					sbMissData.append(UtilSet.getDateString(calMissingEnd)).append("to");
+					sbMissData.append(UtilSet.getDateString(calMissingBegin)).append(';');
 					missCount++;
 				}
 				
@@ -595,27 +668,17 @@ public class DailyRDAHMMThread implements Runnable {
 		}
 		
 		if (modelQLines.size() > 0) {
+			date1 = modelStartDate;
 			date2 = getDateFromRawLine((String)modelRawLines.get(0));
+			UtilSet.setDateByString(cal1, date1);
 			UtilSet.setDateByString(cal2, date2);
-			if (modelQLines.size() <= 1 && evalQLines.size() <= 0) {
-				if (cal2.getTimeInMillis() != calToday2.getTimeInMillis()) {
-					ndaysBeforeToday(cal2, -1, cal2);
-					sbMissData.append(UtilSet.getDateString(calToday2)).append("to").append(UtilSet.getDateString(cal2)).append(';');
-					missCount++;
-					ndaysBeforeToday(cal2, 1, cal2);
-				}
-			}
-			
-			// check if the model input data starts from modelStartDate
-			if (cal2.getTimeInMillis() != calModel.getTimeInMillis()) {
-				ndaysBeforeToday(cal2, 1, cal2);
-				sbMissData.append(UtilSet.getDateString(cal2)).append("to").append(modelStartDate).append(';');
+			UtilSet.ndaysBeforeToday(cal2, 1, cal2);
+			if (cal1.compareTo(cal2) < 0) {
+				sbMissData.append(UtilSet.getDateString(cal2)).append("to");
+				sbMissData.append(date1).append(';');
 				missCount++;
-			}							 
-		} else {
-			// if there is even no data for training model, there must be no data at all
-			sbMissData.append(UtilSet.getDateString(calToday2)).append("to").append(modelStartDate).append(';');
-			missCount++;
+			}
+			UtilSet.ndaysBeforeToday(cal2, -1, cal2);
 		}
 		
 		// if there are still some status change information not written in to xml
@@ -648,6 +711,9 @@ public class DailyRDAHMMThread implements Runnable {
 			if (scnPath == null)
 				scnPath = rds.properties.getProperty("dailyRdahmm.stateChangeNumTrace.path");
 			tmpNode.setText(scnPath.substring(scnPath.lastIndexOf(File.separator)+1));
+			
+			tmpNode = elePattern.addElement("allStationInputName");
+			tmpNode.setText(DailyRDAHMMService.allStationInputName);
 			
 			tmpNode = elePattern.addElement("videoFile");
 			tmpNode.setText(modelStartDate + "to" + UtilSet.getDateString(Calendar.getInstance()) + ".mpeg");
@@ -687,8 +753,8 @@ public class DailyRDAHMMThread implements Runnable {
 	}
 	
 	/**  get the date string from the a line of the raw data file received from GRWS query */
-	String getDateFromRawLine(String rawLine) {
-		// The date string lies after the first space in the line and is followed by a 'T'
+	static String getDateFromRawLine(String rawLine) {
+		// a raw line is like "dond 2007-02-22T12:00:00 -2517566.0543 -4415531.3935 3841177.1618 0.0035 0.0055 0.0047"
 		int idx = rawLine.indexOf(' ');
 		if (idx < 0)
 			return null;
@@ -697,21 +763,21 @@ public class DailyRDAHMMThread implements Runnable {
 		if (idx2 < 0)
 			return null;
 		
-		String tmp = rawLine.substring(idx, idx2);
-		// if the date string is in the form of '2007-01-01', remove the '0's before '1's
-		idx = tmp.indexOf('-');
-		if (idx < 0 || idx == tmp.length()-1)
+		return rawLine.substring(idx+1, idx2);
+	}
+	
+	/**  get the date-time string from the a line of the raw data file received from GRWS query */
+	static String getDateTimeFromRawLine(String rawLine) {
+		// a raw line is like "dond 2007-02-22T12:00:00 -2517566.0543 -4415531.3935 3841177.1618 0.0035 0.0055 0.0047"
+		int idx = rawLine.indexOf(' ');
+		if (idx < 0)
 			return null;
-		if (tmp.charAt(idx+1) == '0')
-			tmp = tmp.substring(0, idx+1) + tmp.substring(idx+2);
 		
-		idx2 = tmp.indexOf('-', idx+1);
-		if (idx2 < 0 || idx2 == tmp.length()-1)
+		int idx2 = rawLine.indexOf(' ', idx+1);
+		if (idx2 < 0)
 			return null;
-		if (tmp.charAt(idx2+1) == '0')
-			tmp = tmp.substring(0, idx2+1) + tmp.substring(idx2+2);
 		
-		return tmp;		
+		return rawLine.substring(idx+1, idx2);
 	}
 
 	/**
@@ -759,20 +825,6 @@ public class DailyRDAHMMThread implements Runnable {
 			}
 		}
 		return ret;
-	}
-	
-	/**
-	 * get the date objects representing a date that is "ndays" days "ago" from today 
-	 * 
-	 * @param today
-	 * @param ndays
-	 * @return
-	 */
-	private Calendar ndaysBeforeToday(Calendar today, int ndays, Calendar daysBefore){
-		daysBefore.setTimeInMillis(today.getTimeInMillis());
-		daysBefore.set(Calendar.DATE, today.get(Calendar.DATE) - ndays);
-		
-		return daysBefore;
 	}
 	
 	/**
@@ -831,10 +883,125 @@ public class DailyRDAHMMThread implements Runnable {
 		}
 	}
 	
-	
+	/**
+	 * Fill "NaN NaN NaN" lines to the file specified with path, for time between calStart and calEnd
+	 * @param calStart
+	 * @param calEnd
+	 * @param path
+	 */
+	protected void fillNaNToFile(Calendar calStart, Calendar calEnd, String path, boolean addToStart) {
+		try {
+			String tmpPath = path + ".tmp";
+			PrintWriter pwTmp = new PrintWriter(new FileWriter(tmpPath, true));
+			Calendar calTmp = Calendar.getInstance();
+			calTmp.setTimeInMillis(calStart.getTimeInMillis());
+			while (calTmp.compareTo(calEnd) <= 0) {
+				pwTmp.println("NaN NaN NaN");
+				UtilSet.ndaysBeforeToday(calTmp, -1, calTmp);
+			}
+			pwTmp.flush();
+			pwTmp.close();
+			
+			String tmpPath2 = path + ".tmp2";
+			if (addToStart)
+				UtilSet.catTwoFiles(tmpPath, path, tmpPath2);
+			else
+				UtilSet.catTwoFiles(path, tmpPath, tmpPath2);
+			
+			File fTmp = new File(tmpPath);
+			fTmp.delete();
+			fTmp = new File(path);
+			fTmp.delete();
+			
+			UtilSet.renameFile(tmpPath2, path);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+			
+	}
 	
 	/**
-	 * train the RDAHMM model for a station
+	 * make a large input file containing all stations' input data since 1994-01-01
+	 * @param baseDestDir
+	 * @param proNames
+	 * @param startDate
+	 * @param endDate
+	 */
+	protected void makeAllStationInput(String baseDestDir, TreeSet<String> proNames, Calendar startDate, Calendar endDate){
+		try {
+			int i = 0;
+			// create the ".tmp0" file, which contains the floating date strings, like "2008.0327" 
+			String tmpPathPre = baseDestDir + File.separator + "all_stations.tmp";
+			String tmpPath = tmpPathPre + i;
+			PrintWriter prDates = new PrintWriter(new FileWriter(tmpPath, false));
+			Calendar calTmp = Calendar.getInstance();
+			calTmp.setTimeInMillis(startDate.getTimeInMillis());
+			calTmp.set(Calendar.HOUR_OF_DAY, 12);
+		  	calTmp.set(Calendar.MINUTE, 0);
+		  	calTmp.set(Calendar.SECOND, 0);
+		  	calTmp.set(Calendar.MILLISECOND, 0);
+			Calendar calEnd = Calendar.getInstance();
+			calEnd.setTimeInMillis(endDate.getTimeInMillis());
+			calEnd.set(Calendar.HOUR_OF_DAY, 12);
+		  	calEnd.set(Calendar.MINUTE, 0);
+		  	calEnd.set(Calendar.SECOND, 0);
+		  	calEnd.set(Calendar.MILLISECOND, 0);
+			while (calTmp.compareTo(calEnd) <= 0) {
+				prDates.println(UtilSet.getFloatDateString(calTmp));
+				calTmp.set(Calendar.DATE, calTmp.get(Calendar.DATE) + 1);
+			}
+			prDates.close();
+			
+			// path of the title file containing one line: "time station1.x station1.y station1.z ..."
+			String titlePath = baseDestDir + File.separator + "all_stations.title";
+			StringBuffer sbTitle = new StringBuffer();
+			String res = null;
+			for (Iterator<String> itr = proNames.iterator(); itr.hasNext();) {
+				String proName = itr.next();
+				String proInputPath = baseDestDir + File.separator + proName + File.separator + proName + ".all.input.flat";
+				File fInput = new File(proInputPath);
+				if (!fInput.exists()) {
+					continue;
+				}
+				
+				if (i == 0) {
+					sbTitle.append("time ");
+				} else {
+					// a project name is like "daily_project_azu1_2008-02-22", where azu1 is the station id
+					int idx = DailyRDAHMMService.proNamePrefix.length();
+					String stationID = proName.substring(idx, idx+4);
+					sbTitle.append(stationID).append("-x ").append(stationID).append("-y ").append(stationID).append("-z ");
+				}
+				
+				// paste the temp file containing the content of previous ".all.input" files with the new ".all.input" file
+				res = UtilSet.exec("paste -d\" \" " + tmpPathPre + i + " " + proInputPath + " > " + tmpPathPre + (i+1));
+				if (res != null && res.length() > 0)
+					UtilSet.log(threadNum, "paste result: " + res);
+				File fTmp = new File(tmpPathPre+i);
+				fTmp.delete();
+				
+				i++;
+			}
+			PrintWriter prTitle = new PrintWriter(new FileWriter(titlePath, false));
+			prTitle.println(sbTitle.toString());
+			prTitle.close();
+			
+			String finalPath = baseDestDir + File.separator + DailyRDAHMMService.allStationInputName;
+			res = UtilSet.exec("cat " + titlePath + " " + tmpPathPre + i + " > " + finalPath);
+			UtilSet.log(threadNum, "cat result: " + res);
+			
+			File fTmpLast = new File(tmpPathPre + i);
+			fTmpLast.delete();
+			File fTitle = new File(titlePath);
+			fTitle.delete();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	}
+	
+	/**
+	 * train the RDAHMM model for a station, set the modelSuc parameter to whether the model has been
+	 * built successfully, and return whether evaluation should be done on this station
 	 * @param station
 	 * @param rds
 	 */
@@ -846,13 +1013,13 @@ public class DailyRDAHMMThread implements Runnable {
 				File modelQFile = new File(rds.modelWorkDir + File.separator + rds.modelBaseName + ".Q");
 				if (modelQFile.exists() && modelQFile.isFile() && modelQFile.length() > 0) {
 					String rawPath = rds.modelWorkDir + File.separator + rds.modelBaseName + ".raw";
-					Calendar cal1 = UtilSet.getDateFromString(getDateFromRawLine(readOneLineFromFile(rawPath, 0)));
+					Calendar cal1 = UtilSet.getDateFromString(getDateFromRawLine(readOneLineFromFile(rawPath, -1)));
 					Calendar modelEnd = UtilSet.getDateFromString(shortModelEndDate);
 					if (cal1.getTimeInMillis() <= modelEnd.getTimeInMillis()) {
 						UtilSet.log(threadNum, "Model Files for " + station + " Exists, No Need to train Model!!!!!!!!!!!!! " 
 									+ UtilSet.getDateString(cal1) + "<=" + UtilSet.getDateString(modelEnd));
 						return true;
-					} 
+					}
 				}
 				UtilSet.exec("rm -f -r " + rds.modelWorkDir + File.separator + "*");
 			} else {
@@ -863,22 +1030,29 @@ public class DailyRDAHMMThread implements Runnable {
 		// make the modelWorkDir for saving model results
 		String err;
 		if (!modelDirFile.exists()) {
-			err = UtilSet.exec("mkdir " + rds.modelWorkDir);
-			if (err.length() > 0)
-				return false;	
+			if(!modelDirFile.mkdirs())
+				return false;
 		}
 		
 		// download the input file
 		String inputFile = null;
+		boolean isShortModel = false;
 		try {
 			String url = rds.querySOPACGetURL(station, modelStartDate, modelEndDate);
 			if (url.indexOf("ERROR") >= 0) {
 				url = rds.querySOPACGetURL(station, evalStartDate, shortModelEndDate);
 				if (url.indexOf("ERROR") >= 0) {
 					return false;
-				}
+				} else
+					isShortModel = true;
 			}
 			inputFile = rds.makeRdahmmInputFile(url, rds.modelBaseName, rds.modelWorkDir);
+			if (isShortModel) {
+				Calendar calStart = UtilSet.getDateFromString(modelStartDate);
+				Calendar calEnd = UtilSet.getDateFromString(modelEndDate);
+				String flatPath = rds.modelWorkDir + File.separator + rds.modelBaseName + ".input.flat";
+				fillNaNToFile(calStart, calEnd, flatPath, true);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -897,7 +1071,8 @@ public class DailyRDAHMMThread implements Runnable {
 		return err.length() == 0;
 	}
 	
-	protected boolean trainModelAndPlot(String station, String sDate, String eDate, DailyRDAHMMService rds) {
+	protected boolean trainModelAndPlot(String station, String modelStartDate, String modelEndDate, 
+										String evalEndDate, DailyRDAHMMService rds) {
 		UtilSet.log(threadNum, "about to do trainModelAndPlot on station " + station);
 		
 		// first train the model		
@@ -914,7 +1089,7 @@ public class DailyRDAHMMThread implements Runnable {
 		// download the input file
 		String inputFile = null;
 		try {
-			String url = rds.querySOPACGetURL(station, sDate, eDate);
+			String url = rds.querySOPACGetURL(station, modelStartDate, modelEndDate);
 			if (url.indexOf("ERROR") >= 0) {
 				return false;
 			}
@@ -941,8 +1116,10 @@ public class DailyRDAHMMThread implements Runnable {
 		// Set up the work directory
 		String workDir = rds.baseWorkDir + File.separator + rds.projectName;
 		err = UtilSet.exec("mkdir " + workDir);
-		rds.fakeEvaluation();
-		return true;		
+		Calendar calEvalStart = UtilSet.getDateFromString(modelEndDate);
+		UtilSet.ndaysBeforeToday(calEvalStart, -1, calEvalStart);
+		rds.fakeEvaluation(calEvalStart, UtilSet.getDateFromString(evalEndDate));
+		return true;
 	}
 	
 	// create the zipped model files
@@ -998,7 +1175,10 @@ public class DailyRDAHMMThread implements Runnable {
 		}
 	}
 	
-	// plot the state change number by time
+	/** plot the state change number by time
+	 * @param scnFilePath
+	 * @param shDir
+	 */
 	protected void plotStateChangeNums(String scnFilePath, String shDir) {
 		String plotSh = shDir + File.separator + "plot_stateNum.sh";
 		System.out.println("about to executing " + plotSh + " " + scnFilePath);

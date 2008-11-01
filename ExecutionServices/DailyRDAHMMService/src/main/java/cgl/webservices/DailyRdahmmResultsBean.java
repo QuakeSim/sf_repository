@@ -337,13 +337,7 @@ public class DailyRdahmmResultsBean {
 		int nodataIdx = getNoDataIdx(theDate, station);
 		// if no data for a month before the date, then there is no need to check state change
 		if (nodataIdx >= 0 && station.noDataSections[nodataIdx+1] < startTime)
-			return '3';
-		
-		/*
-		if (station.stationID.equals("gnps"))
-			System.out.println("calc color for gnps, endtime:" + endTime + "; first change time:" 
-															+ station.stateChanges[0] + " len:" + station.stateChanges.length);
-		*/                                                   
+			return '3';                                                   
 		
 		if (station.stateChanges == null) {
 			if (nodataIdx >= 0)

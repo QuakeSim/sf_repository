@@ -31,6 +31,7 @@ public class DailyRDAHMMRunner {
 			yesterday.setTimeInMillis(System.currentTimeMillis() - 86400000);
             
 			List l = document.selectNodes("//station");
+			int count = 0;
 			Vector<String> vec = new Vector<String>();
 			for (int i = 0; i < l.size(); i++) {
 				Element e = (Element)l.get(i);
@@ -52,11 +53,13 @@ public class DailyRDAHMMRunner {
 					if (!found) {
 						statoinList.add(listEle);
 						vec.add(listEle[0]);
-						System.out.println("station added to station List in DailyRDAHMMRunner: " 
-										+ listEle[0] + ":" + listEle[1] + "@" + listEle[2] + "," + listEle[3]);
+						count++;
+						//System.out.println("station added to station List in DailyRDAHMMRunner: " 
+							//			+ listEle[0] + ":" + listEle[1] + "@" + listEle[2] + "," + listEle[3]);
 					}
 				}
             }
+			System.out.println(count + " distinct statations are added in total");
 			stateChangeNums = new TreeMap<String, Integer>();
 		} catch (Exception ex3) {
 			ex3.printStackTrace();

@@ -1,15 +1,21 @@
 package cgl.webservices;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
+import java.util.concurrent.ExecutionException;
 
 public class DailyRDAHMMService extends RDAHMMService {
 	
@@ -17,18 +23,29 @@ public class DailyRDAHMMService extends RDAHMMService {
 	String modelBaseName;
 	String modelWorkDir;
 	Object runningLock = null;
+	String beginDate;
+	String endDate;
+	static int DUP_LINE_TIME = 22;
+	static String proNamePrefix = null;
+	static String allStationInputName = null;
 	
 	public DailyRDAHMMService(boolean useClassLoader, String stationID) 
 		throws Exception{
 		super(useClassLoader);
 		this.stationID = stationID;
 		
-		buildFilePath = properties.getProperty("build_daily.file.path");		  
-		modelBaseName = properties.getProperty("project_daily.name") + "_" + stationID;
+		buildFilePath = properties.getProperty("build_daily.file.path");
+		if (proNamePrefix == null)
+			proNamePrefix = properties.getProperty("project_daily.name") + "_";
+		if (allStationInputName == null)
+			allStationInputName = properties.getProperty("dailyRdahmm.allStationInput.name");
+		modelBaseName = proNamePrefix + stationID;
 		baseDestDir = properties.getProperty("base.dest.daily_dir");
 		projectName = modelBaseName + "_" + UtilSet.getDateString(Calendar.getInstance());
 		modelWorkDir = baseWorkDir + File.separator + modelBaseName;
-		outputDestDir = baseDestDir+ File.separator + projectName;		
+		outputDestDir = baseDestDir+ File.separator + projectName;
+		beginDate = DailyRDAHMMThread.evalStartDate;
+		endDate = UtilSet.getDateString(Calendar.getInstance());
 	}
 	
 	public DailyRDAHMMService() 
@@ -55,7 +72,7 @@ public class DailyRDAHMMService extends RDAHMMService {
 		System.out.println("inputFileUrlString in runBlockingRDAHMM: "	+ inputFileUrlString);
 		if (inputFileUrlString.indexOf("ERROR") >= 0) {
 			System.out.println("Failed to get GRWS input for station " + stationID);
-			fakeEvaluation();
+			fakeEvaluation(UtilSet.getDateFromString(beginDate), UtilSet.getDateFromString(endDate));
 			return getTheReturnFiles();
 		}
 
@@ -85,7 +102,7 @@ public class DailyRDAHMMService extends RDAHMMService {
 	/** 
 	 * do fake evaluation on the station: only called when there is no evaluation input
 	  */
-	protected void fakeEvaluation() {
+	protected void fakeEvaluation(Calendar startDate, Calendar endDate) {
 		System.out.println("Fake Evaluation for project " + projectName);
 		String workDir = baseWorkDir + File.separator + projectName;
 		
@@ -100,7 +117,7 @@ public class DailyRDAHMMService extends RDAHMMService {
 		String modelPath = outputDestDir + File.separator + modelBaseName;
 		String proPath = outputDestDir + File.separator + projectName;
 		// the model .input file is just the all.input file
-		res = UtilSet.exec("cp " + modelPath + ".input "	+ proPath + ".all.input");
+		res = UtilSet.exec("cp " + modelPath + ".input " + proPath + ".all.input");
 
 		String plotSh = binPath + File.separator + "plot_go.sh";
 		System.out.println("about to executing " + plotSh + " " + proPath
@@ -117,6 +134,22 @@ public class DailyRDAHMMService extends RDAHMMService {
 		res = UtilSet.exec("touch " + proWorkPath + ".input");
 		res = UtilSet.exec("touch " + proWorkPath + ".Q");
 		res = UtilSet.exec("touch " + proWorkPath + ".raw");
+		
+		// fill the flat input file with "NaN NaN NaN" in every line
+		try {
+			PrintWriter pwFlat = new PrintWriter(new FileWriter(proPath + ".input.flat"));
+			Calendar calTmp = Calendar.getInstance();
+			calTmp.setTimeInMillis(startDate.getTimeInMillis());
+			while (calTmp.compareTo(endDate) <= 0) {
+				pwFlat.println("NaN NaN NaN");
+				UtilSet.ndaysBeforeToday(calTmp, -1, calTmp);
+			}
+			pwFlat.flush();
+			pwFlat.close();
+			res = UtilSet.exec("cp " + proPath + ".input.flat " + proWorkPath + ".input.flat");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
     
@@ -144,7 +177,101 @@ public class DailyRDAHMMService extends RDAHMMService {
 		String rdahmmInputFile = workDir + File.separator + projectName + ".input";
 		mergeInputFiles(localFileArrayFiltered,rdahmmInputFile);
 		
+		fillMissingData(rdahmmInputFile, rdahmmRawInputFile, beginDate, endDate);
+		
 		return rdahmmInputFile;
+	}
+	
+	/**
+	 * fill the missing data with the data on a date closet to the data-missing dates
+	 * @param inputPath
+	 * @param rawPath
+	 * @param beginDate
+	 * @param endDate
+	 */
+	protected void fillMissingData(String inputPath, String rawPath, String beginDate, String endDate) {
+		String inputTmpPath = inputPath + ".tmp";
+		String rawTmpPath =  rawPath + ".tmp";
+		String inputFlatPath = inputPath + ".flat";	// this file is used for creating the big flat file
+		Calendar calBegin = UtilSet.getDateFromString(beginDate);
+		Calendar calEnd = UtilSet.getDateFromString(endDate);
+		
+		try {
+			// a raw line is like 
+			//"dond 2007-02-22T12:00:00 -2517566.0543 -4415531.3935 3841177.1618 0.0035 0.0055 0.0047"
+			//while an input line contains only the three columns in the middle
+			BufferedReader brInput = new BufferedReader(new FileReader(inputPath));
+			BufferedReader brRaw = new BufferedReader(new FileReader(rawPath));
+			
+			PrintWriter prInputTmp = new PrintWriter(new FileWriter(inputTmpPath));
+			PrintWriter prRawTmp = new PrintWriter(new FileWriter(rawTmpPath));
+			PrintWriter prFlat = new PrintWriter(new FileWriter(inputFlatPath));
+			
+			String lineInput = brInput.readLine();
+			String lineInputPre = lineInput;
+			String lineRaw = brRaw.readLine();
+			String lineRawPre = lineRaw;
+			String restLineRawPre = lineRawPre.substring(lineRawPre.indexOf(' ', 5));
+			
+			Calendar cal1 = Calendar.getInstance();
+			UtilSet.ndaysBeforeToday(calBegin, 1, cal1);
+			Calendar cal2 = Calendar.getInstance();	
+			Calendar calTmp = Calendar.getInstance();
+			calTmp.setTimeInMillis(calBegin.getTimeInMillis());
+			Calendar calLine = Calendar.getInstance();
+			
+			while (lineRaw != null) {
+				UtilSet.setDateByString(cal2, DailyRDAHMMThread.getDateFromRawLine(lineRaw));
+			
+				// if there is a gap between cal1+1day and cal2, fill it with the last line
+				UtilSet.ndaysBeforeToday(cal1, -1, calTmp);
+				calLine.setTimeInMillis(calTmp.getTimeInMillis());
+				calLine.set(Calendar.HOUR_OF_DAY, DUP_LINE_TIME);
+				calLine.set(Calendar.MINUTE, DUP_LINE_TIME);
+				calLine.set(Calendar.SECOND, DUP_LINE_TIME);
+				cal1.setTimeInMillis(calTmp.getTimeInMillis());
+				while (calTmp.compareTo(cal2) < 0) {
+					if (cal1.getTimeInMillis() != calBegin.getTimeInMillis()){
+						// we use the time 22:22:22 to denote a duplicated line that used to be missing data
+						prRawTmp.println(stationID + ' ' + UtilSet.getDateTimeString(calLine) + restLineRawPre);
+						prInputTmp.println(lineInputPre);		
+					}
+					prFlat.println("NaN NaN NaN");
+					UtilSet.ndaysBeforeToday(calTmp, -1, calTmp);
+					UtilSet.ndaysBeforeToday(calLine, -1, calLine);
+				}
+				prRawTmp.println(lineRaw);
+				prInputTmp.println(lineInput);
+				prFlat.println(lineInput);
+				
+				cal1.setTimeInMillis(cal2.getTimeInMillis());
+				lineRawPre = lineRaw;
+				restLineRawPre = lineRawPre.substring(lineRawPre.indexOf(' ', lineRawPre.indexOf(' ')+1));
+				lineInputPre = lineInput;
+				lineRaw = brRaw.readLine();
+				lineInput = brInput.readLine();
+			}
+			brInput.close();
+			brRaw.close();
+			
+			// if there is a gap between cal2+1day and calEnd, fill it with the last line
+			UtilSet.ndaysBeforeToday(cal2, -1, calTmp);
+			while (calTmp.compareTo(calEnd) <= 0) {
+				prFlat.println("NaN NaN NaN");
+				UtilSet.ndaysBeforeToday(calTmp, -1, calTmp);
+			}
+			prRawTmp.flush();
+			prRawTmp.close();
+			prInputTmp.flush();
+			prInputTmp.close();
+			prFlat.flush();
+			prFlat.close();
+			
+			UtilSet.renameFile(inputTmpPath, inputPath);
+			UtilSet.renameFile(rawTmpPath, rawPath);		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
     
     /**
@@ -359,28 +486,23 @@ public class DailyRDAHMMService extends RDAHMMService {
     protected String querySOPACGetURL(String siteCode,
 												  String beginDate,
 												  String endDate) throws Exception {
+    	this.beginDate = beginDate;
+    	this.endDate = endDate;
+    	
+    	String resource="procCoords";
+		String contextGroup="sopacGlobk";
+		String minMaxLatLon="";
+		String contextId="58";
 		  
-		  String resource="procCoords";
-		  String contextGroup="sopacGlobk";
-		  String minMaxLatLon="";
-		  String contextId="58";
+		System.out.println("about to query input url for site " + siteCode + " beginDate:" + beginDate + " endDate:" + endDate);
 		  
-		  System.out.println("about to query input url for site " + siteCode + " beginDate:" + beginDate + " endDate:" + endDate);
-		  
-		  return querySOPACGetURL(siteCode,
-										  resource,
-										  contextGroup,
-										  contextId,
-										  minMaxLatLon,
-										  beginDate,
-										  endDate);
-		  
-		  // 	GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
-		  // 	gsq.setFromServlet(siteCode, beginDate, endDate, resource,
-		  // 			   contextGroup, contextId, minMaxLatLon, true);
-		  // 	String dataUrl=gsq.getResource();
-		  // 	System.out.println("GRWS data url: "+dataUrl);
-		  //	return dataUrl;
+		return querySOPACGetURL(siteCode,
+								resource,
+								contextGroup,
+								contextId,
+								minMaxLatLon,
+								beginDate,
+								endDate);
     }
 	
 }
