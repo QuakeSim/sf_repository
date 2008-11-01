@@ -278,6 +278,8 @@
 							<a id="scnTxtLink" target="_blank" href="">Click here to view the detailed data.</a>
 							<br/>
 							<a id="videoLink" target="_blank" href="">Click here to get a video of the whole time since 1994.</a>
+							<br/>
+							<a id="allInputLink" target="_blank" href="">Click here to get a file containing the input of all stations.</a>
 						</td>
 					</tr>
 				</table>
@@ -531,10 +533,12 @@
 	var urlPattern = '<%=eleOutput.element("server-url").getText()%>';
 	var scnPattern = '<%=eleOutput.element("stateChangeNumTxtFile").getText()%>';
 	var videoPattern = '<%=eleOutput.element("videoFile").getText()%>';
+	var allInputPattern = '<%=eleOutput.element("allStationInputName").getText()%>';
 	
 	document.getElementById("scnPlotImg").src = urlPattern + "/" + scnPattern + ".png";
 	document.getElementById("scnTxtLink").href = urlPattern + "/" + scnPattern;
 	document.getElementById("videoLink").href = urlPattern + "/" + videoPattern;
+	document.getElementById("allInputLink").href = urlPattern + "/daily/" + allInputPattern;
 
 	var dirPattern = 'daily/' + '<%=eleOutput.element("pro-dir").getText()%>';
 	var aPattern = '<%=eleOutput.element("AFile").getText()%>';
@@ -703,11 +707,15 @@
 		var urlPattern2 = urlPattern, inputPattern2 = inputPattern, rangePattern2 = rangePattern, qPattern2 = qPattern, aPattern2 = aPattern;
 		var bPattern2 = bPattern, lPattern2 = lPattern, piPattern2 = piPattern, minPattern2 = minPattern, maxPattern2 = maxPattern;
 		var xPattern2 = xPattern, yPattern2 = yPattern, zPattern2 = zPattern, dirPattern2 = dirPattern; modelPattern2 = modelPattern;
+
+		var idx = inputPattern2.lastIndexOf(".");
+		var allRawPattern = inputPattern2.substring(0, idx) + ".all.raw"; 
           
 		var preFix = urlPattern2.replace(/{!station-id!}/g, stationId) + "/" + dirPattern2.replace(/{!station-id!}/g, stationId) + "/";
 		var modelLink = urlPattern2.replace(/{!station-id!}/g, stationId) + "/daily/" + modelPattern2.replace(/{!station-id!}/g, stationId);
 		var outputTable = "<table border='0'> <tr><td> <b>Output Values</b> </td></tr>" + "<tr><td><a target=\"_blank\" href=\"" 
 							+  preFix + inputPattern2.replace(/{!station-id!}/g, stationId) + "\">Input File</a></td></tr>"
+							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + allRawPattern.replace(/{!station-id!}/g, stationId) + "\">All Raw Input Data</a></td></tr>"
 							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + rangePattern2.replace(/{!station-id!}/g, stationId) + "\">Range</a></td></tr>"
 							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + qPattern2.replace(/{!station-id!}/g, stationId) + "\">Optimal State Sequence File (Q)</a></td></tr>"
 							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + aPattern2.replace(/{!station-id!}/g, stationId) + "\">Model Transition Probability (A)</a></td></tr>"
@@ -851,6 +859,8 @@
 			marker.openInfoWindowHtml(html);});
 		return marker;
 	}
+
+	//YAHOO.namespace("example.calendar");
 
 	YAHOO.example.calendar.cal1=new YAHOO.widget.Calendar("cal1","cal1Container");
 	YAHOO.example.calendar.cal1.selectEvent.subscribe(myShowDateHandler,YAHOO.example.calendar.cal1, true);
