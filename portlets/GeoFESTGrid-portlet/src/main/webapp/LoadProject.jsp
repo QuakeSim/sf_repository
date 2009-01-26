@@ -78,7 +78,6 @@ function dataTableSelectOneRadio(radio) {
 					action="#{MGBean.toggleDeleteProject}" />
 			</h:panelGrid>
 		</h:panelGrid>
-
 	</h:form>
 
 <p/>
