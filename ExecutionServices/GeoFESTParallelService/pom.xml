@@ -42,13 +42,13 @@
 					<tasks>			 
 					  <echo message="Copying the binaries:"/>
 					  <echo message="${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec"/>
-					  <echo message="${geofest.bin.home}"/>
+					  <echo message="${parallel.geofest.bin.home}"/>
 						 
 					  <copy overwrite="true" 
 							  filtering="true"
 							  failonerror="false"
 							  todir="${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec">
-						 <fileset dir="${geofest.bin.home}"/>
+						 <fileset dir="${parallel.geofest.bin.home}"/>
 					  </copy>
 					  <chmod perm="${tomcat.bin.perm}" 
 								dir="${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec/">
