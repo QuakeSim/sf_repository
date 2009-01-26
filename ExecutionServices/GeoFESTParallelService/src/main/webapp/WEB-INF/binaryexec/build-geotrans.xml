@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+<project name="guiVisco" default="all" basedir=".">
+
+<!--
+<property name="workdir.prop" value="/home/gateway/nr8files"/>
+<property name="projectDir.prop" value="/home/gateway/nr8files"/>
+<property name="projectName.prop" value="nr8"/>
+<property name="bindir.prop" value="/home/gateway/GEMCodes/GeoFEST"/>
+<property name="meshsize.prop" value="50.0"/>
+<property name="outdir.prop" value=""/>
+<property name="tomcatdir.prop" value=""/>
+-->
+
+
+
+<target name="test">
+</target>
+
+<!-- This is used to create the mesh from the input geometry -->
+<target name="MakeWorkDir">
+   <echo message="Creating ${workdir.prop}" />
+   <mkdir dir="${workdir.prop}" />
+</target>
+
+<target name="autoref" depends="MakeWorkDir">
+  <taskdef name="queuetask" classname="cgl.webservices.geofest.QueueTask"/>
+  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
+				 message="autoref.start" 
+				 queueServiceUrl="${queueServiceUrl.prop}"/>
+
+   <tstamp/>
+   <echo append="true" file="${workdir.prop}/jobstatus.log">Autoref running: ${TSTAMP}.${DSTAMP}
+   </echo>
+   <exec executable="${bindir.prop}/autoref.pl" 
+         output="${workdir.prop}/autoref.out"
+	      error="${workdir.prop}/autoref.error"
+	      dir="${workdir.prop}">
+      <arg value="${projectName.prop}"/>
+      <arg value="${mode.prop}"/>
+      <env key="PATH" path="${bindir.prop}:/bin:/usr/bin/:$PATH"/>
+   </exec>
+   <delete file="${workdir.prop}/${projectName.prop}-visco.tar.gz"/>
+   <delete file="${workdir.prop}/${projectName.prop}-visco.tar"/>
+   <tar tarfile="${workdir.prop}/${projectName.prop}-visco.tar.gz" basedir="${workdir.prop}" compression="gzip"/>
+
+   <echo append="true" file="${workdir.prop}/jobstatus.log">Autoref complete: ${TSTAMP}.${DSTAMP}
+   </echo>
+
+  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
+				 message="autoref.done" 
+				 queueServiceUrl="${queueServiceUrl.prop}"/>
+
+
+<!--
+   <copy todir="${outputdest.prop}">
+      <fileset dir="${workdir.prop}"/>
+   </copy>
+-->
+</target>
+
+<!--This is used to create the GeoFEST input file. -->
+<target name="geotrans">
+   <tstamp/>
+
+   <echo append="true" 
+         file="${workdir.prop}/jobstatus.log">Geotrans running: ${TSTAMP}.${DSTAMP}
+   </echo>
+   <touch file="${workdir.prop}/geotrans.error"/>
+   <exec executable="${bindir.prop}/geotrans-v3.3" 
+         output="${workdir.prop}/geotrans.out"
+	      error="${workdir.prop}/geotrans.error"
+	      dir="${workdir.prop}">
+      <arg value="${projectName.prop}"/>
+      <arg value="${projectName.prop}.std"/>
+      <arg value="${GFInput.prop}"/>
+      <env key="PATH" path="${bindir.prop}:/bin/:/usr/bin:$PATH"/>
+   </exec>   
+   <echo append="true" file="${workdir.prop}/jobstatus.log">Geotrans complete: ${TSTAMP}.${DSTAMP}
+   </echo>
+
+</target>
+
+<target name="geotrans.tar" depends="geotrans">
+  <taskdef name="queuetask" classname="cgl.webservices.geofest.QueueTask"/>
+  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
+				 message="geotrans.tar.start" 
+				 queueServiceUrl="${queueServiceUrl.prop}"/>
+   <tstamp/>
+   <echo append="true" 
+         file="${workdir.prop}/jobstatus.log">Tarring geotrans files: ${TSTAMP}.${DSTAMP}
+   </echo>
+
+   <delete file="${workdir.prop}/${projectName.prop}.tar.gz"/>
+   <delete file="${workdir.prop}/${projectName.prop}.tar"/>
+   <tar tarfile="${workdir.prop}/${projectName.prop}.tar.gz" basedir="${workdir.prop}" compression="gzip"/>
+
+   <echo append="true" file="${workdir.prop}/jobstatus.log">Geotrans tar complete: ${TSTAMP}.${DSTAMP}
+   </echo>
+
+<!--
+   <copy file="${workdir.prop}/${projectName.prop}.tar.gz" 
+         todir="${outputdest.prop}">
+   </copy>
+-->
+  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
+				 message="geotrans.tar.done" 
+				 queueServiceUrl="${queueServiceUrl.prop}"/>
+
+</target>
+
+<target name="GeoFEST" depends="geotrans">
+  <taskdef name="queuetask" classname="cgl.webservices.geofest.QueueTask"/>
+  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
+				 message="geofest.start" 
+				 queueServiceUrl="${queueServiceUrl.prop}"/>
+   <tstamp/>
+   <echo append="true"  
+           file="${workdir.prop}/jobstatus.log">GeoFEST running: ${TSTAMP}.${DSTAMP}
+   </echo>
+
+   <exec executable="${bindir.prop}/GeoFEST" 
+         output="${workdir.prop}/${GFLog.prop}"
+	      dir="${workdir.prop}">
+      <arg value="${GFInput.prop}"/>
+      <arg value="${GFOutput.prop}"/>
+      <arg value="${GFLog.prop}"/>
+      <env key="PATH" path="${bindir.prop}:/bin/:/usr/bin:$PATH"/>
+   </exec>
+   <echo append="true"  file="${workdir.prop}/jobstatus.log">GeoFEST complete: ${TSTAMP}.${DSTAMP}
+   </echo>
+  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
+				 message="geofest.done" 
+				 queueServiceUrl="${queueServiceUrl.prop}"/>
+
+</target>
+
+<target name="tar.all" depends="GeoFEST">
+  <taskdef name="queuetask" classname="cgl.webservices.geofest.QueueTask"/>
+  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
+				 message="tar.all.start" 
+				 queueServiceUrl="${queueServiceUrl.prop}"/>
+   <tstamp/>
+   <echo append="true" file="${workdir.prop}/jobstatus.log">Creating tar of output: ${TSTAMP}.${DSTAMP}
+   </echo>
+
+   <delete file="${workdir.prop}/${projectName.prop}.tar.gz"/>
+   <delete file="${workdir.prop}/${projectName.prop}.tar"/>
+   <tar tarfile="${workdir.prop}/${projectName.prop}.tar.gz" basedir="${workdir.prop}" compression="gzip"/>
+ 
+   <echo append="true" file="${workdir.prop}/jobstatus.log">GeoFEST complete: ${TSTAMP}.${DSTAMP}
+   </echo>
+
+  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
+				 message="tar.all.done" 
+				 queueServiceUrl="${queueServiceUrl.prop}"/>
+
+<!--
+   <copy todir="${outputdest.prop}">
+      <fileset dir="${workdir.prop}"/>
+   </copy>
+-->
+</target>
+
+
+<target name="all" depends="GeoFEST">
+   <tstamp/>
+   <echo append="true" file="${workdir.prop}/jobstatus.log">Job Complete: ${TSTAMP}.${DSTAMP}
+   </echo>
+
+</target>
+</project>
+
+
+

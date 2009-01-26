@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>quakesim</groupId>
+    <artifactId>geofest-parallel-exec</artifactId>
+    <packaging>war</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>GeoFEST Parallel Exec Service</name>
+    <url>http://www.myorganization.org</url>
+   <parent>
+	 <groupId>quakesim</groupId>
+	 <artifactId>services-driver</artifactId>
+	 <version>1.0</version>
+	 <relativePath>..</relativePath>
+  </parent>
+
+
+   <build>
+     <finalName>geofest-parallel-exec</finalName>
+     <resources>
+       <resource>
+         <directory>src/main/resources</directory>
+         <filtering>true</filtering>
+       </resource>
+     </resources>
+	  <plugins>
+		 <plugin>
+			<artifactId>maven-antrun-plugin</artifactId>
+			<executions>
+			  <execution>
+				 <id>Install ${pom.artifactId} binaries</id>
+				 <phase>install</phase>
+				 <configuration>
+					<!-- 
+						  Allow this to fail on error. This is not great, but we must do this
+						  since the parent pom is not abstract and so will get executed along with
+						  its children.
+					  -->
+					<tasks>			 
+					  <echo message="Copying the binaries:"/>
+					  <echo message="${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec"/>
+					  <echo message="${geofest.bin.home}"/>
+						 
+					  <copy overwrite="true" 
+							  filtering="true"
+							  failonerror="false"
+							  todir="${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec">
+						 <fileset dir="${geofest.bin.home}"/>
+					  </copy>
+					  <chmod perm="${tomcat.bin.perm}" 
+								dir="${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec/">
+						 <include name="*"/>
+					  </chmod>
+					</tasks>
+				 </configuration>
+				 <goals>
+					<goal>run</goal>
+				 </goals>
+			  </execution>
+			</executions>
+		 </plugin>
+	  </plugins>
+   </build>
+	
+    <!-- We get this from the command line and pass to the resources
+         via filtering -->
+    <repositories>
+<!--
+        <repository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>apache-maven-snapshots</id>
+            <url>http://cvs.apache.org/maven-snapshot-repository</url>
+        </repository>
+-->
+        <repository>
+            <id>SOPAC</id>
+            <url>http://sopac.ucsd.edu/repositories/maven2</url>
+        </repository>
+        <!-- This is our local repository -->
+        <repository>
+            <id>crisisgrid-maven-repo</id>
+            <url>http://www.crisisgrid.org/maven2</url>
+        </repository>
+        <repository>
+            <id>crisisgrid-maven-legacy-repo</id>
+            <url>http://www.crisisgrid.org/maven</url>
+				<layout>legacy</layout>
+        </repository>
+        <repository>
+            <id>ogce-maven-repo</id>
+            <url>http://www.collab-ogce.org/maven2</url>
+        </repository>
+
+        <repository>
+            <id>apache-maven</id>
+            <url>http://www.ibiblio.org/maven2</url>
+        </repository>
+
+        <!-- This is the apache repository for bridges -->
+        <repository>
+            <id>apache-maven</id>
+            <url>http://cvs.apache.org/repository</url>
+        </repository>
+
+    </repositories>
+
+    <!-- Project dependencies -->
+    <dependencies>
+
+        <!-- Servlet Dependencies -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.3</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Axis jars -->
+        <dependency>
+             <groupId>axis</groupId>
+             <artifactId>axis</artifactId>
+             <version>1.4</version>
+        </dependency>
+
+        <dependency>
+             <groupId>axis</groupId>
+             <artifactId>axis-jaxrpc</artifactId>
+             <version>1.4</version>
+        </dependency>
+
+        <dependency>
+             <groupId>commons-discovery</groupId>
+             <artifactId>commons-discovery</artifactId>
+             <version>0.2</version>
+        </dependency>
+
+        <dependency>
+             <groupId>commons-logging</groupId>
+             <artifactId>commons-logging</artifactId>
+             <version>1.0.4</version>
+        </dependency>
+
+        <dependency>
+             <groupId>axis</groupId>
+             <artifactId>axis-wsdl4j</artifactId>
+             <version>1.5.1</version>
+        </dependency>
+
+        <dependency>
+             <groupId>axis</groupId>
+             <artifactId>axis-saaj</artifactId>
+             <version>1.4</version>
+        </dependency>
+
+        <dependency>
+             <groupId>log4j</groupId>
+             <artifactId>log4j</artifactId>
+             <version>1.2.8</version>
+        </dependency>
+
+        <dependency>
+             <groupId>condor.birdbath</groupId>
+             <artifactId>birdbath</artifactId>
+             <version>6.8</version>
+        </dependency>
+
+        <dependency>
+             <groupId>condor.birdbath</groupId>
+             <artifactId>birdbath1</artifactId>
+             <version>6.8</version>
+        </dependency>
+
+        <!-- These are ant jars -->
+        <dependency>
+             <groupId>ant</groupId>
+             <artifactId>ant</artifactId>
+             <version>1.6.5</version>
+        </dependency>
+
+        <dependency>
+             <groupId>ant</groupId>
+             <artifactId>ant-launcher</artifactId>
+             <version>1.6.5</version>
+        </dependency>
+
+		  <dependency>
+			 <groupId>cgl.webservices</groupId>
+			 <artifactId>AntVisco</artifactId>
+			 <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+		  <!-- GData Jars -->
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-appsforyourdomain</artifactId>
+			 <version>1.0</version>
+        </dependency>
+
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-appsforyourdomain-meta</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-base</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-calendar</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-client</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-client-meta</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-codesearch</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-codesearch-meta</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-contacts</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-contacts-meta</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-core</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-docs</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-docs-meta</artifactId>
+			 <version>1.0</version>
+        </dependency>		  
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-media</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-photos</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-photos-meta</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-spreadsheet</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-spreadsheet-meta</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-youtube</artifactId>
+			 <version>1.0</version>
+        </dependency>
+		  
+		  <dependency>
+			 <groupId>gdata</groupId>
+			 <artifactId>gdata-youtube-meta</artifactId>
+			 <version>1.0</version>
+        </dependency>
+
+
+       </dependencies>
+
+    <!-- Repositories for plugins -->
+    <pluginRepositories>
+        <!-- Repository to get the jetty plugin -->
+        <pluginRepository>
+            <id>mortbay-repo</id>
+            <name>mortbay-repo</name>
+            <url>http://www.mortbay.org/maven2/snapshot</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+
+</project>
