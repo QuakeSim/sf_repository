@@ -11,34 +11,28 @@
 		<managed-bean-name>MGBean</managed-bean-name>
 		<managed-bean-class>cgl.quakesim.geofest.MeshGeneratorBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
-                <!--Who we are-->
-                <managed-property>
-                   <property-name>codeName</property-name>
-                   <value>GridGeoFEST</value>
-                </managed-property>
-                 <managed-property>
-                   <property-name>faultDBServiceUrl</property-name>
-                   <value>http://gf19.ucs.indiana.edu:9898/axis/services/Select</value>
-                 </managed-property>
+      <!--Who we are-->
+      <managed-property>
+        <property-name>codeName</property-name>
+        <value>GridGeoFEST</value>
+      </managed-property>
+      <managed-property>
+        <property-name>faultDBServiceUrl</property-name>
+        <value>http://gf19.ucs.indiana.edu:9898/axis/services/Select</value>
+      </managed-property>
 
-                 <managed-property>
-                   <property-name>geoFESTBaseUrl</property-name>
-                   <value>http://gf19.ucs.indiana.edu:8080/geofestexec/</value>
-                 </managed-property>
-
+      <managed-property>
+        <property-name>geoFESTBaseUrl</property-name>
+        <value>http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/</value>
+      </managed-property>
+		
                  <managed-property>
                    <property-name>geoFESTServiceUrl</property-name>
-                   <value>http://gf19.ucs.indiana.edu:8080/geofestexec/services/GeoFESTExec</value>
+                   <value>http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTExec</value>
                  </managed-property>
                  <managed-property>
                    <property-name>geoFESTGridServiceUrl</property-name>
-                   <value>http://gf19.ucs.indiana.edu:8080/geofestexec/services/GeoFESTGridExec</value>
-                 </managed-property>
-
-                <!-- Needed for the context service-->
-                <managed-property>
-                   <property-name>contextUrl</property-name>
-                   <value>http://gf7.ucs.indiana.edu:8080/WebServices/services/ContextManager</value>
+                   <value>http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTGridExec</value>
                  </managed-property>
 
                 <managed-property>
@@ -56,15 +50,6 @@
                    <value>/WebServices/WEB-INF/Descriptors/users/</value>
                 </managed-property>
 
-                <!-- These are execution host params -->
-                <managed-property>
-                   <property-name>mesh_gen_viz_fileServiceUrl</property-name>
-                   <value>http://gf2.ucs.indiana.edu:6060/jetspeed/services/FileService</value>
-                </managed-property>
-                <managed-property>
-                   <property-name>mesh_gen_viz_base_dir</property-name>
-                   <value>/home/gateway/yan_offscreen/offscreen/</value>
-                </managed-property>
 	</managed-bean>
 
 	<navigation-rule>

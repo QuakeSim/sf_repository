@@ -37,6 +37,7 @@
     <analyze_tseri.service.url>${host.base.url}/analyze-tseri-exec</analyze_tseri.service.url>
     <disloc.service.url>${host.base.url}/dislocexec</disloc.service.url>
     <geofest.service.url>${host.base.url}/geofestexec</geofest.service.url>
+    <parallel.geofest.service.url>${host.base.url}/geofest-parallel-exec</parallel.geofest.service.url>
     <queue.service.url>${host.base.url}/QueueExec</queue.service.url>
     <KmlGenerator.service.url>${host.base.url}/KmlGenerator</KmlGenerator.service.url>
     <queue.service.url>${host.base.url}/queueservice</queue.service.url>
