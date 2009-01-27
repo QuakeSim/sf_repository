@@ -50,7 +50,6 @@
 				 message="autoref.done" 
 				 queueServiceUrl="${queueServiceUrl.prop}"/>
 
-
 <!--
    <copy todir="${outputdest.prop}">
       <fileset dir="${workdir.prop}"/>

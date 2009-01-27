@@ -34,11 +34,6 @@
 				 <id>Install ${pom.artifactId} binaries</id>
 				 <phase>install</phase>
 				 <configuration>
-					<!-- 
-						  Allow this to fail on error. This is not great, but we must do this
-						  since the parent pom is not abstract and so will get executed along with
-						  its children.
-					  -->
 					<tasks>			 
 					  <echo message="Copying the binaries:"/>
 					  <echo message="${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec"/>

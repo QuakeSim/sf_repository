@@ -46,7 +46,7 @@
 	 <!-- These are locations of 'third party' binary files -->
     <bin.path>${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec</bin.path>
 	 <geofest.bin.home>${env.HOME}/GEMCodes/GeoFEST/bin/</geofest.bin.home>
-	 <parallel.geofest.bin.home>${env.HOME}/GEMCodes/GeoFEST/bin/</parallel.geofest.bin.home>
+	 <parallel.geofest.bin.home>${env.HOME}/GEMCodes/GeoFEST-4.8/bin/</parallel.geofest.bin.home>
 	 <rdahmm.bin.home>${env.HOME}/GEMCodes/RDAHMM2/bin/</rdahmm.bin.home>
 	 <disloc.bin.home>${env.HOME}/GEMCodes/Disloc/</disloc.bin.home>
 	 <simplex.bin.home>${env.HOME}/GEMCodes/Simplex/</simplex.bin.home>
