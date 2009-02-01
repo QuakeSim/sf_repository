@@ -41,6 +41,12 @@
   <parameter name="className" value="cgl.webservices.gridinfo.GridInfoService"/>
   <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns1:ArrayOf_soapenc_string" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:java.lang.String[]" xmlns:ns1="urn:GatewayWS"/>
  </service>
+ <service name="NASAGridInfoService" provider="java:RPC">
+  <parameter name="allowedMethods" value="getHomeDirectory getJobManager getUserName getForkManager getHosts"/>
+  <parameter name="scope" value="Session"/>
+  <parameter name="className" value="cgl.webservices.gridinfo.NASAGridInfoService"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns1:ArrayOf_soapenc_string" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:java.lang.String[]" xmlns:ns1="urn:GatewayWS"/>
+ </service>
  <transport name="http">
   <requestFlow>
    <handler type="URLMapper"/>
