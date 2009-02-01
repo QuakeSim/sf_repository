@@ -36,18 +36,18 @@
                  </managed-property>
 
                  <managed-property>
-                   <property-name>geoFESTGridServiceUrl</property-name>
-                   <value>http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTGridExec</value>
+                   <property-name>geoFESTParallelServiceUrl</property-name>
+                   <value>http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec</value>
                  </managed-property>
 
                 <managed-property>
                    <property-name>queueServiceUrl</property-name>
-                   <value>http://156.56.104.143:8080/queueservice/services/QueueExec</value>
+                   <value>http://gf19.ucs.indiana.edu:8080/queueservice/services/QueueExec</value>
                  </managed-property>
 
                 <managed-property>
                    <property-name>gridInfoServiceUrl</property-name>
-                   <value>http://156.56.104.143:8080/gridinfo/services/GridInfoService</value>
+                   <value>http://gf19.ucs.indiana.edu:8080/gridinfo/services/NASAGridInfoService</value>
                  </managed-property>
 
                  <managed-property>
