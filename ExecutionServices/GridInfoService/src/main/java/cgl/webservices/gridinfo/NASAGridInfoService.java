@@ -48,6 +48,33 @@ public class NASAGridInfoService extends GridInfoService {
 	 
 	 public NASAGridInfoService(boolean useClassLoader) throws Exception {
 		  super();
+		  if(useClassLoader) {
+				System.out.println("Using classloader");
+				//This is useful for command line clients but does not work
+				//inside Tomcat.
+				ClassLoader loader=ClassLoader.getSystemClassLoader();
+				properties=new Properties();
+				
+				//This works from the command line but not inside Tomcat
+				//because of classloader issues.
+				properties.load(loader.getResourceAsStream(basePropertyFile));
+		  }
+		  else {
+				//Extract the Servlet Context
+				System.out.println("Using Servlet Context");
+				MessageContext msgC=MessageContext.getCurrentContext();
+				ServletContext context=((HttpServlet)msgC.getProperty(HTTPConstants.MC_HTTP_SERVLET)).getServletContext();
+				
+				String propertyFile=context.getRealPath("/")
+					 +"/WEB-INF/classes/"+basePropertyFile;
+				System.out.println("Prop file location "+propertyFile);
+				
+				properties=new Properties();	    
+				properties.load(new FileInputStream(propertyFile));
+		  }
+		  hosts=populateHostList(properties);
+		  populateDataObjects(properties,hosts);
+		  
 	 }
 	 
 }
