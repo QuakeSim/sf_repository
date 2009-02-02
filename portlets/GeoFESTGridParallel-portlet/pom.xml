@@ -5,7 +5,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>QuakeSim2</groupId>
-    <artifactId>GeoFESTGridParallel-portlet</artifactId>
+    <artifactId>GeoFESTParallel-portlet</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>A custom project using myfaces</name>
@@ -18,7 +18,7 @@
   </parent>
 
     <build>
-        <finalName>GeoFESTGridParallel-portlet</finalName>
+        <finalName>GeoFESTParallel-portlet</finalName>
         <resources>
            <resource>
                <directory>src/main/resources</directory>

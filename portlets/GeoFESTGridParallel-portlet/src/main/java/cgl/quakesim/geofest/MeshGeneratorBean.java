@@ -142,6 +142,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	 String geoFESTBaseUrl;//="http://156.56.104.143:8080/geofestexec/";
     String geoFESTServiceUrl;
     String geoFESTGridServiceUrl;
+    String geoFESTParallelServiceUrl;
 	 String geoFESTBaseUrlForJnlp;
 	 String queueServiceUrl;
 	 String gridInfoServiceUrl;
@@ -2332,6 +2333,14 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 	 public void setQueueServiceUrl(String queueServiceUrl){
 		  this.queueServiceUrl=queueServiceUrl;
+	 }
+
+	 public String getGeoFESTParallelServiceUrl() {
+		  return this.geoFESTParallelServiceUrl;
+	 }
+
+	 public void setGeoFESTParallelServiceUrl(String geoFESTParallelServiceUrl){
+		  this.geoFESTParallelServiceUrl=geoFESTParallelServiceUrl;
 	 }
 
 	 public String getGeoFESTGridServiceUrl() {

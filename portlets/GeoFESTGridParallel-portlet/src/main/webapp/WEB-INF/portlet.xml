@@ -4,7 +4,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:portlet="http://java.sun.com/xml/ns/portlet"
 xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0">
    <portlet>
-    <portlet-name>GeoFESTGrid-portlet</portlet-name>
+    <portlet-name>GeoFESTParallel-portlet</portlet-name>
     <portlet-class>org.apache.portals.bridges.jsf.FacesPortlet</portlet-class>
       <expiration-cache>0</expiration-cache>
       <init-param>
@@ -24,7 +24,7 @@ xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0"
        <portlet-mode>HELP</portlet-mode>
      </supports>
      <portlet-info>
-      <title>GeoFESTGrid-Portlet</title>
+      <title>GeoFESTParallel-Portlet</title>
       <keywords>MeshGenerator</keywords>
      </portlet-info>        
    </portlet>

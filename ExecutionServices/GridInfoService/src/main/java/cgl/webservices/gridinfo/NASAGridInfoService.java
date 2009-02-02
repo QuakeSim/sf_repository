@@ -76,5 +76,4 @@ public class NASAGridInfoService extends GridInfoService {
 		  populateDataObjects(properties,hosts);
 		  
 	 }
-	 
 }

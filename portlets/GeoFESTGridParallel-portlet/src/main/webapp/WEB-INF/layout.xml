@@ -1,14 +1,14 @@
 <portlet-tabbed-pane>
-    <portlet-tab label="GeoFESTGrid-Portlet">
-        <title lang="en">GeoFESTGrid-Portlet</title>
+    <portlet-tab label="GeoFESTParallel-Portlet">
+        <title lang="en">GeoFESTParallel-Portlet</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab label="Grid-Mesh-Generation-Setup">
                 <title lang="en">Mesh Generation</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
-                            <portlet-frame label="GeoFESTGrid-PF">
-                                <portlet-class>GeoFESTGrid-portlet#GeoFESTGrid-portlet </portlet-class>
+                            <portlet-frame label="GeoFESTParallel-PF">
+                                <portlet-class>GeoFESTParallel-portlet#GeoFESTParallel-portlet </portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>
@@ -19,8 +19,8 @@
                 <table-layout>
                     <row-layout>
                         <column-layout>
-                            <portlet-frame label="GeoFESTGrid-fetchmesh-PF">
-                                <portlet-class>GeoFESTGrid-portlet#fetchmesh-portlet </portlet-class>
+                            <portlet-frame label="GeoFESTParallel-fetchmesh-PF">
+                                <portlet-class>GeoFESTParallel-portlet#fetchmesh-portlet </portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>
@@ -31,8 +31,8 @@
                 <table-layout>
                     <row-layout>
                         <column-layout>
-                            <portlet-frame label="GeoFESTGrid-choosemesh-PF">
-                                <portlet-class>GeoFESTGrid-portlet#choosemesh-portlet </portlet-class>
+                            <portlet-frame label="GeoFESTParallel-choosemesh-PF">
+                                <portlet-class>GeoFESTParallel-portlet#choosemesh-portlet </portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>
@@ -43,8 +43,8 @@
                 <table-layout>
                     <row-layout>
                         <column-layout>
-                            <portlet-frame label="GeoFESTGrid-geofestoutput-PF">
-                                <portlet-class>GeoFESTGrid-portlet#fetch-geofest-output-portlet </portlet-class>
+                            <portlet-frame label="GeoFESTParallel-geofestoutput-PF">
+                                <portlet-class>GeoFESTParallel-portlet#fetch-geofest-output-portlet </portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>
