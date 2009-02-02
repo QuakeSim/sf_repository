@@ -53,7 +53,8 @@
 	 <simplex.bin.home>${env.HOME}/GEMCodes/Simplex/</simplex.bin.home>
 
 	 <!-- Globus Stuff -->
-	 <grid.proxy.location>/tmp/x509up_u501</grid.proxy.location>
+	 <grid.proxy.location>/tmp/x509up_u500</grid.proxy.location>
+	 <cosmos.proxy.location>/tmp/x509up_cosmos</cosmos.proxy.location>
 	 <dot.globus.home>${env.HOME}/.globus/</dot.globus.home>
   </properties>
   
