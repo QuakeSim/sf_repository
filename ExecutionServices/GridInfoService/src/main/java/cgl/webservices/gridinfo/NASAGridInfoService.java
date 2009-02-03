@@ -24,7 +24,7 @@ import java.text.*;
 //Needed for a unique id
 import java.rmi.server.UID;
 
-public class NASAGridInfoService extends GridInfoService {
+public class NASAGridInfoService extends GridInfoBean {
 	 
 	 Properties properties;
 	 String basePropertyFile="cosmos.properties";
