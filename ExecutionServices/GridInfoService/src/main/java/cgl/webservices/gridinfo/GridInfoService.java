@@ -96,7 +96,7 @@ public class GridInfoService extends GridInfoBean {
 	 
 	 protected String[] populateHostList(Properties props) {
 		  String hostlist=props.getProperty("hostname.list");
-		  //		  System.out.println(hostlist);
+		  System.out.println(hostlist);
 		  StringTokenizer st=new StringTokenizer(hostlist,",");
 		  String[] hosts=new String[st.countTokens()];
 		  int i=0;
