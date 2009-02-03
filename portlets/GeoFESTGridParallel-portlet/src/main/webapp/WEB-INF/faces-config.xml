@@ -14,7 +14,7 @@
       <!--Who we are-->
       <managed-property>
         <property-name>codeName</property-name>
-        <value>GridGeoFEST</value>
+        <value>ParallelGeoFEST</value>
       </managed-property>
       <managed-property>
         <property-name>faultDBServiceUrl</property-name>

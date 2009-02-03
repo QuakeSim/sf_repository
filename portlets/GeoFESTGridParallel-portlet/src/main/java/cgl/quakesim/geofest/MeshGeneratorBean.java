@@ -2383,6 +2383,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	 protected GridInfoService_PortType getGridInfoService() throws Exception {
 		  GridInfoService_PortType gridInfoService=
 				new GridInfoServiceServiceLocator().getGridInfoService(new URL(gridInfoServiceUrl));
+		  System.out.println("Grid info host:"+gridInfoServiceUrl;
 		  
 		  return gridInfoService;
 	 }
