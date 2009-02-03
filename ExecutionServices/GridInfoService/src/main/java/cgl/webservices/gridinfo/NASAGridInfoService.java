@@ -73,8 +73,7 @@ public class NASAGridInfoService extends GridInfoService {
 				properties.load(new FileInputStream(propertyFile));
 		  }
 		  hosts=populateHostList(properties);
-		  populateDataObjects(properties,hosts);
-		  
+		  populateDataObjects(properties,hosts);		  
 	 }
 	 
 	 public String getHomeDirectory(String host) {
@@ -95,6 +94,29 @@ public class NASAGridInfoService extends GridInfoService {
 
 	 public String[] getHosts() {
 		  return hosts;
+	 }
+	 
+	 protected String[] populateHostList(Properties props) {
+		  String hostlist=props.getProperty("hostname.list");
+		  System.out.println(hostlist);
+		  StringTokenizer st=new StringTokenizer(hostlist,",");
+		  String[] hosts=new String[st.countTokens()];
+		  int i=0;
+		  while(st.hasMoreTokens()){
+				hosts[i]=st.nextToken();
+				//System.out.println(hosts[i]);
+				i++;
+		  }
+		  return hosts;
+	 }
+
+	 protected void populateDataObjects(Properties props, String[] hosts){
+		  for(int i=0;i<hosts.length;i++) {
+				jobManager.put(hosts[i],props.getProperty(GRAM+DOT+hosts[i]));
+				userName.put(hosts[i],props.getProperty(USERNAME+DOT+hosts[i]));
+				userHome.put(hosts[i],props.getProperty(HOME+DOT+hosts[i]));
+				forkManager.put(hosts[i],props.getProperty(FORK+DOT+hosts[i]));
+		  }
 	 }
 
 }
