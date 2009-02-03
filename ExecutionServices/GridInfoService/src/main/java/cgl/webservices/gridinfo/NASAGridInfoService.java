@@ -76,4 +76,25 @@ public class NASAGridInfoService extends GridInfoService {
 		  populateDataObjects(properties,hosts);
 		  
 	 }
+	 
+	 public String getHomeDirectory(String host) {
+		  return (String)userHome.get(host);
+	 }
+	 
+	 public String getJobManager(String host) {
+		  return (String)jobManager.get(host);
+	 }
+
+	 public String getUserName(String host) {
+		  return (String)userName.get(host);
+	 }
+
+	 public String getForkManager(String host) {
+		  return (String)forkManager.get(host);
+	 }
+
+	 public String[] getHosts() {
+		  return hosts;
+	 }
+
 }
