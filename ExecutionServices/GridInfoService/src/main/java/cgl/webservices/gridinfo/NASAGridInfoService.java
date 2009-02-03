@@ -118,5 +118,4 @@ public class NASAGridInfoService extends GridInfoBean {
 				forkManager.put(hosts[i],props.getProperty(FORK+DOT+hosts[i]));
 		  }
 	 }
-
 }
