@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec" xmlns:intf="http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="urn:GatewayWS" xmlns:tns2="urn:GeoFESTService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema targetNamespace="urn:GatewayWS" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="urn:GeoFESTService"/>
+   <import namespace="http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec"/>
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="ArrayOf_soapenc_string">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="soapenc:string[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+  </schema>
+  <schema targetNamespace="http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="urn:GeoFESTService"/>
+   <import namespace="urn:GatewayWS"/>
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="GeotransParallelParamsBean">
+    <sequence>
+     <element name="alpha" nillable="true" type="soapenc:string"/>
+     <element name="backup_steps" nillable="true" type="soapenc:string"/>
+     <element name="bottom_bc" nillable="true" type="soapenc:string"/>
+     <element name="bottom_bc_value" nillable="true" type="soapenc:string"/>
+     <element name="checkpointFile" nillable="true" type="soapenc:string"/>
+     <element name="east_bc" nillable="true" type="soapenc:string"/>
+     <element name="east_bc_value" nillable="true" type="soapenc:string"/>
+     <element name="elasOut1" nillable="true" type="soapenc:string"/>
+     <element name="elasOut2" nillable="true" type="soapenc:string"/>
+     <element name="elastic1" nillable="true" type="soapenc:string"/>
+     <element name="elastic2" nillable="true" type="soapenc:string"/>
+     <element name="end_time" nillable="true" type="soapenc:string"/>
+     <element name="fault_interval" nillable="true" type="soapenc:string"/>
+     <element name="inputFileName" nillable="true" type="soapenc:string"/>
+     <element name="logFileName" nillable="true" type="soapenc:string"/>
+     <element name="north_bc" nillable="true" type="soapenc:string"/>
+     <element name="north_bc_value" nillable="true" type="soapenc:string"/>
+     <element name="nrates" nillable="true" type="soapenc:string"/>
+     <element name="number_degrees_freedom" nillable="true" type="soapenc:string"/>
+     <element name="number_space_dimensions" nillable="true" type="soapenc:string"/>
+     <element name="number_time_groups" nillable="true" type="soapenc:string"/>
+     <element name="numberofPrintTimes" nillable="true" type="soapenc:string"/>
+     <element name="outputFileName" nillable="true" type="soapenc:string"/>
+     <element name="printTimesInterval" nillable="true" type="soapenc:string"/>
+     <element name="printTimesType" nillable="true" type="soapenc:string"/>
+     <element name="rampBC" nillable="true" type="tns1:ArrayOf_soapenc_string"/>
+     <element name="refine" nillable="true" type="soapenc:string"/>
+     <element name="refineOut" nillable="true" type="soapenc:string"/>
+     <element name="reform_steps" nillable="true" type="soapenc:string"/>
+     <element name="reportingElements" nillable="true" type="soapenc:string"/>
+     <element name="reportingNodes" nillable="true" type="soapenc:string"/>
+     <element name="restartFile" nillable="true" type="soapenc:string"/>
+     <element name="run_choice" nillable="true" type="soapenc:string"/>
+     <element name="shape_flag" nillable="true" type="soapenc:string"/>
+     <element name="solver_flag" nillable="true" type="soapenc:string"/>
+     <element name="south_bc" nillable="true" type="soapenc:string"/>
+     <element name="south_bc_value" nillable="true" type="soapenc:string"/>
+     <element name="time_step" nillable="true" type="soapenc:string"/>
+     <element name="top_bc" nillable="true" type="soapenc:string"/>
+     <element name="top_bc_value" nillable="true" type="soapenc:string"/>
+     <element name="velblock" nillable="true" type="soapenc:string"/>
+     <element name="visco" nillable="true" type="soapenc:string"/>
+     <element name="west_bc" nillable="true" type="soapenc:string"/>
+     <element name="west_bc_value" nillable="true" type="soapenc:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOf_tns2_Fault">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns2:Fault[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="ArrayOf_tns2_Layer">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns2:Layer[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+  </schema>
+  <schema targetNamespace="urn:GeoFESTService" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="urn:GatewayWS"/>
+   <import namespace="http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec"/>
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="GFOutputBean">
+    <sequence>
+     <element name="cghistUrl" nillable="true" type="soapenc:string"/>
+     <element name="indexUrl" nillable="true" type="soapenc:string"/>
+     <element name="inputUrl" nillable="true" type="soapenc:string"/>
+     <element name="jobStatusUrl" nillable="true" type="soapenc:string"/>
+     <element name="jobUIDStamp" nillable="true" type="soapenc:string"/>
+     <element name="junkBox" nillable="true" type="soapenc:string"/>
+     <element name="logUrl" nillable="true" type="soapenc:string"/>
+     <element name="nodeUrl" nillable="true" type="soapenc:string"/>
+     <element name="outputUrl" nillable="true" type="soapenc:string"/>
+     <element name="projectName" nillable="true" type="soapenc:string"/>
+     <element name="tarOfEverythingUrl" nillable="true" type="soapenc:string"/>
+     <element name="tetraUrl" nillable="true" type="soapenc:string"/>
+     <element name="tetvolsUrl" nillable="true" type="soapenc:string"/>
+     <element name="toptrisUrl" nillable="true" type="soapenc:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="GeotransParamsBean">
+    <sequence>
+     <element name="alpha" nillable="true" type="soapenc:string"/>
+     <element name="backup_steps" nillable="true" type="soapenc:string"/>
+     <element name="bottom_bc" nillable="true" type="soapenc:string"/>
+     <element name="bottom_bc_value" nillable="true" type="soapenc:string"/>
+     <element name="checkpointFile" nillable="true" type="soapenc:string"/>
+     <element name="east_bc" nillable="true" type="soapenc:string"/>
+     <element name="east_bc_value" nillable="true" type="soapenc:string"/>
+     <element name="end_time" nillable="true" type="soapenc:string"/>
+     <element name="fault_interval" nillable="true" type="soapenc:string"/>
+     <element name="inputFileName" nillable="true" type="soapenc:string"/>
+     <element name="logFileName" nillable="true" type="soapenc:string"/>
+     <element name="north_bc" nillable="true" type="soapenc:string"/>
+     <element name="north_bc_value" nillable="true" type="soapenc:string"/>
+     <element name="nrates" nillable="true" type="soapenc:string"/>
+     <element name="number_degrees_freedom" nillable="true" type="soapenc:string"/>
+     <element name="number_space_dimensions" nillable="true" type="soapenc:string"/>
+     <element name="number_time_groups" nillable="true" type="soapenc:string"/>
+     <element name="numberofPrintTimes" nillable="true" type="soapenc:string"/>
+     <element name="outputFileName" nillable="true" type="soapenc:string"/>
+     <element name="printTimesInterval" nillable="true" type="soapenc:string"/>
+     <element name="printTimesType" nillable="true" type="soapenc:string"/>
+     <element name="reform_steps" nillable="true" type="soapenc:string"/>
+     <element name="reportingElements" nillable="true" type="soapenc:string"/>
+     <element name="reportingNodes" nillable="true" type="soapenc:string"/>
+     <element name="restartFile" nillable="true" type="soapenc:string"/>
+     <element name="run_choice" nillable="true" type="soapenc:string"/>
+     <element name="shape_flag" nillable="true" type="soapenc:string"/>
+     <element name="solver_flag" nillable="true" type="soapenc:string"/>
+     <element name="south_bc" nillable="true" type="soapenc:string"/>
+     <element name="south_bc_value" nillable="true" type="soapenc:string"/>
+     <element name="time_step" nillable="true" type="soapenc:string"/>
+     <element name="top_bc" nillable="true" type="soapenc:string"/>
+     <element name="top_bc_value" nillable="true" type="soapenc:string"/>
+     <element name="west_bc" nillable="true" type="soapenc:string"/>
+     <element name="west_bc_value" nillable="true" type="soapenc:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="Fault">
+    <sequence>
+     <element name="faultDepth" nillable="true" type="soapenc:string"/>
+     <element name="faultDipAngle" nillable="true" type="soapenc:string"/>
+     <element name="faultLatEnd" nillable="true" type="soapenc:string"/>
+     <element name="faultLatStart" nillable="true" type="soapenc:string"/>
+     <element name="faultLength" nillable="true" type="soapenc:string"/>
+     <element name="faultLocationX" nillable="true" type="soapenc:string"/>
+     <element name="faultLocationY" nillable="true" type="soapenc:string"/>
+     <element name="faultLocationZ" nillable="true" type="soapenc:string"/>
+     <element name="faultLonEnd" nillable="true" type="soapenc:string"/>
+     <element name="faultLonStart" nillable="true" type="soapenc:string"/>
+     <element name="faultName" nillable="true" type="soapenc:string"/>
+     <element name="faultRakeAngle" nillable="true" type="soapenc:string"/>
+     <element name="faultSlip" nillable="true" type="soapenc:string"/>
+     <element name="faultStrikeAngle" nillable="true" type="soapenc:string"/>
+     <element name="faultWidth" nillable="true" type="soapenc:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="Layer">
+    <sequence>
+     <element name="exponent" nillable="true" type="soapenc:string"/>
+     <element name="lameLambda" nillable="true" type="soapenc:string"/>
+     <element name="lameMu" nillable="true" type="soapenc:string"/>
+     <element name="layerDepth" nillable="true" type="soapenc:string"/>
+     <element name="layerLatOrigin" nillable="true" type="soapenc:string"/>
+     <element name="layerLength" nillable="true" type="soapenc:string"/>
+     <element name="layerLonOrigin" nillable="true" type="soapenc:string"/>
+     <element name="layerName" nillable="true" type="soapenc:string"/>
+     <element name="layerOriginX" nillable="true" type="soapenc:string"/>
+     <element name="layerOriginY" nillable="true" type="soapenc:string"/>
+     <element name="layerOriginZ" nillable="true" type="soapenc:string"/>
+     <element name="layerWidth" nillable="true" type="soapenc:string"/>
+     <element name="viscosity" nillable="true" type="soapenc:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="MeshRunBean">
+    <sequence>
+     <element name="autoref" nillable="true" type="soapenc:string"/>
+     <element name="autorefError" nillable="true" type="soapenc:string"/>
+     <element name="bcUrl" nillable="true" type="soapenc:string"/>
+     <element name="indexUrl" nillable="true" type="soapenc:string"/>
+     <element name="jobUIDStamp" nillable="true" type="soapenc:string"/>
+     <element name="junkBox" nillable="true" type="soapenc:string"/>
+     <element name="leeRefinerLog" nillable="true" type="soapenc:string"/>
+     <element name="nodeUrl" nillable="true" type="soapenc:string"/>
+     <element name="projectName" nillable="true" type="soapenc:string"/>
+     <element name="refinerLog" nillable="true" type="soapenc:string"/>
+     <element name="tagbigfltLog" nillable="true" type="soapenc:string"/>
+     <element name="tetraUrl" nillable="true" type="soapenc:string"/>
+     <element name="tstout" nillable="true" type="soapenc:string"/>
+     <element name="viscoTarUrl" nillable="true" type="soapenc:string"/>
+    </sequence>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="queryMeshGeneratorStatusRequest">
+
+      <wsdl:part name="userName" type="soapenc:string"/>
+
+      <wsdl:part name="projectId" type="soapenc:string"/>
+
+      <wsdl:part name="jobStamp" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runGridGeoFESTRequest">
+
+      <wsdl:part name="userName" type="soapenc:string"/>
+
+      <wsdl:part name="projectName" type="soapenc:string"/>
+
+      <wsdl:part name="gpb" type="impl:GeotransParallelParamsBean"/>
+
+      <wsdl:part name="exec" type="soapenc:string"/>
+
+      <wsdl:part name="args" type="soapenc:string"/>
+
+      <wsdl:part name="gridResourceVal" type="soapenc:string"/>
+
+      <wsdl:part name="proxyLocation" type="soapenc:string"/>
+
+      <wsdl:part name="envSettings" type="soapenc:string"/>
+
+      <wsdl:part name="timeStamp" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="queryGeoFESTStatusResponse">
+
+      <wsdl:part name="queryGeoFESTStatusReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="queryGeoFESTStatusRequest">
+
+      <wsdl:part name="userName" type="soapenc:string"/>
+
+      <wsdl:part name="projectId" type="soapenc:string"/>
+
+      <wsdl:part name="jobStamp" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runGridMeshGeneratorResponse">
+
+      <wsdl:part name="runGridMeshGeneratorReturn" type="tns2:MeshRunBean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="queryGeoFESTStatusResponse1">
+
+      <wsdl:part name="queryGeoFESTStatusReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runGridGeoFESTResponse">
+
+      <wsdl:part name="runGridGeoFESTReturn" type="tns2:GFOutputBean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runGridGeoFESTRequest1">
+
+      <wsdl:part name="userName" type="soapenc:string"/>
+
+      <wsdl:part name="projectName" type="soapenc:string"/>
+
+      <wsdl:part name="gpb" type="tns2:GeotransParamsBean"/>
+
+      <wsdl:part name="exec" type="soapenc:string"/>
+
+      <wsdl:part name="args" type="soapenc:string"/>
+
+      <wsdl:part name="gridResourceVal" type="soapenc:string"/>
+
+      <wsdl:part name="proxyLocation" type="soapenc:string"/>
+
+      <wsdl:part name="envSettings" type="soapenc:string"/>
+
+      <wsdl:part name="timeStamp" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="deleteGeoFESTJobRequest">
+
+      <wsdl:part name="userName" type="soapenc:string"/>
+
+      <wsdl:part name="projectId" type="soapenc:string"/>
+
+      <wsdl:part name="jobStamp" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="queryMeshGeneratorStatusResponse1">
+
+   </wsdl:message>
+
+   <wsdl:message name="deleteGeoFESTJobResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="runGridMeshGeneratorRequest">
+
+      <wsdl:part name="userName" type="soapenc:string"/>
+
+      <wsdl:part name="projectName" type="soapenc:string"/>
+
+      <wsdl:part name="faults" type="impl:ArrayOf_tns2_Fault"/>
+
+      <wsdl:part name="layers" type="impl:ArrayOf_tns2_Layer"/>
+
+      <wsdl:part name="autoref_mode" type="soapenc:string"/>
+
+      <wsdl:part name="proxyLocation" type="soapenc:string"/>
+
+      <wsdl:part name="gridResourceVal" type="soapenc:string"/>
+
+      <wsdl:part name="envSettings" type="soapenc:string"/>
+
+      <wsdl:part name="meshExec" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="deleteMeshGeneratorJobRequest">
+
+      <wsdl:part name="userName" type="soapenc:string"/>
+
+      <wsdl:part name="projectId" type="soapenc:string"/>
+
+      <wsdl:part name="jobStamp" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="deleteMeshGeneratorJobResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="queryGeoFESTStatusRequest1">
+
+   </wsdl:message>
+
+   <wsdl:message name="runGridGeoFESTResponse1">
+
+      <wsdl:part name="runGridGeoFESTReturn" type="tns2:GFOutputBean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="queryMeshGeneratorStatusResponse">
+
+      <wsdl:part name="queryMeshGeneratorStatusReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="queryMeshGeneratorStatusRequest1">
+
+   </wsdl:message>
+
+   <wsdl:portType name="GeoFESTParallelService">
+
+      <wsdl:operation name="runGridGeoFEST" parameterOrder="userName projectName gpb exec args gridResourceVal proxyLocation envSettings timeStamp">
+
+         <wsdl:input message="impl:runGridGeoFESTRequest" name="runGridGeoFESTRequest"/>
+
+         <wsdl:output message="impl:runGridGeoFESTResponse" name="runGridGeoFESTResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runGridGeoFEST" parameterOrder="userName projectName gpb exec args gridResourceVal proxyLocation envSettings timeStamp">
+
+         <wsdl:input message="impl:runGridGeoFESTRequest1" name="runGridGeoFESTRequest1"/>
+
+         <wsdl:output message="impl:runGridGeoFESTResponse1" name="runGridGeoFESTResponse1"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runGridMeshGenerator" parameterOrder="userName projectName faults layers autoref_mode proxyLocation gridResourceVal envSettings meshExec">
+
+         <wsdl:input message="impl:runGridMeshGeneratorRequest" name="runGridMeshGeneratorRequest"/>
+
+         <wsdl:output message="impl:runGridMeshGeneratorResponse" name="runGridMeshGeneratorResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="queryGeoFESTStatus" parameterOrder="userName projectId jobStamp">
+
+         <wsdl:input message="impl:queryGeoFESTStatusRequest" name="queryGeoFESTStatusRequest"/>
+
+         <wsdl:output message="impl:queryGeoFESTStatusResponse" name="queryGeoFESTStatusResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="queryGeoFESTStatus">
+
+         <wsdl:input message="impl:queryGeoFESTStatusRequest1" name="queryGeoFESTStatusRequest1"/>
+
+         <wsdl:output message="impl:queryGeoFESTStatusResponse1" name="queryGeoFESTStatusResponse1"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="queryMeshGeneratorStatus" parameterOrder="userName projectId jobStamp">
+
+         <wsdl:input message="impl:queryMeshGeneratorStatusRequest" name="queryMeshGeneratorStatusRequest"/>
+
+         <wsdl:output message="impl:queryMeshGeneratorStatusResponse" name="queryMeshGeneratorStatusResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="queryMeshGeneratorStatus">
+
+         <wsdl:input message="impl:queryMeshGeneratorStatusRequest1" name="queryMeshGeneratorStatusRequest1"/>
+
+         <wsdl:output message="impl:queryMeshGeneratorStatusResponse1" name="queryMeshGeneratorStatusResponse1"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deleteMeshGeneratorJob" parameterOrder="userName projectId jobStamp">
+
+         <wsdl:input message="impl:deleteMeshGeneratorJobRequest" name="deleteMeshGeneratorJobRequest"/>
+
+         <wsdl:output message="impl:deleteMeshGeneratorJobResponse" name="deleteMeshGeneratorJobResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deleteGeoFESTJob" parameterOrder="userName projectId jobStamp">
+
+         <wsdl:input message="impl:deleteGeoFESTJobRequest" name="deleteGeoFESTJobRequest"/>
+
+         <wsdl:output message="impl:deleteGeoFESTJobResponse" name="deleteGeoFESTJobResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="GeoFESTParallelExecSoapBinding" type="impl:GeoFESTParallelService">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="runGridGeoFEST">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="runGridGeoFESTRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://geofest.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="runGridGeoFESTResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runGridGeoFEST">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="runGridGeoFESTRequest1">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://geofest.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="runGridGeoFESTResponse1">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runGridMeshGenerator">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="runGridMeshGeneratorRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://geofest.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="runGridMeshGeneratorResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="queryGeoFESTStatus">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="queryGeoFESTStatusRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://geofest.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="queryGeoFESTStatusResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="queryGeoFESTStatus">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="queryGeoFESTStatusRequest1">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://geofest.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="queryGeoFESTStatusResponse1">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="queryMeshGeneratorStatus">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="queryMeshGeneratorStatusRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://geofest.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="queryMeshGeneratorStatusResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="queryMeshGeneratorStatus">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="queryMeshGeneratorStatusRequest1">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://geofest.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="queryMeshGeneratorStatusResponse1">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deleteMeshGeneratorJob">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="deleteMeshGeneratorJobRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://geofest.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="deleteMeshGeneratorJobResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deleteGeoFESTJob">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="deleteGeoFESTJobRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://geofest.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="deleteGeoFESTJobResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="GeoFESTParallelServiceService">
+
+      <wsdl:port binding="impl:GeoFESTParallelExecSoapBinding" name="GeoFESTParallelExec">
+
+         <wsdlsoap:address location="http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>
