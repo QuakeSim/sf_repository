@@ -128,7 +128,6 @@ public class GeoFESTParallelService extends GeoFESTGridService {
 
 		  //Set up the stuff.
 		  String workDir=generateWorkDir(userName,projectName,timeStamp);
-		  //			createGeoFESTInputFile(workDir,projectName,gpb);
 				
 		  //Create the input file locally.  This will also generate the 
 		  //output destination directory.

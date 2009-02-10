@@ -5,13 +5,15 @@ import java.util.Date;
 /**
  * This is a mesh bean convenient class, holds the web service response's mesh bean and adds
  * some additional methods.
+ * 
+ * This version is used to store the parallel version of the geotrans params.
  */
 
 public class MeshDataMegaBean {
 	 
 	 //These default to empty beans, but this will be overridden later,.
 	 MeshRunBean meshRunBean=new MeshRunBean();
-	 GeotransParamsBean geotransParamsBean=new GeotransParamsBean();
+	 GeotransParallelParamsBean geotransParamsBean=new GeotransParallelParamsBean();
 	 //	 GFOutputBean gFOutputBean=new GFOutputBean();
 	 GFOutputBean geofestOutputBean=new GFOutputBean();
 	 String jnlpLayers;
@@ -56,11 +58,11 @@ public class MeshDataMegaBean {
 		  return geofestOutputBean;
 	 }
 
-	 public void setGeotransParamsBean(GeotransParamsBean geotransParamsBean) {
+	 public void setGeotransParamsBean(GeotransParallelParamsBean geotransParamsBean) {
 		  this.geotransParamsBean=geotransParamsBean;
 	 }
 
-	 public GeotransParamsBean getGeotransParamsBean() {
+	 public GeotransParallelParamsBean getGeotransParamsBean() {
 		  return this.geotransParamsBean;
 	 }
 

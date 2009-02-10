@@ -1,127 +1,102 @@
 /**
- * GeotransParamsBean.java
+ * GeotransParallelParamsBean.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
- *
- * Additional sweetener manually/manfully added.
  */
 
 package cgl.quakesim.geofest;
 
 public class GeotransParallelParamsBean  implements java.io.Serializable {
-    private java.lang.String alpha="1.0";
+    private java.lang.String alpha;
 
-    private java.lang.String backup_steps="5000";
+    private java.lang.String backup_steps;
 
-    private java.lang.String bottom_bc="Locked Node";
+    private java.lang.String bottom_bc;
 
-    private java.lang.String bottom_bc_value="0 0. 0. 0. 1.";
+    private java.lang.String bottom_bc_value;
 
-    private java.lang.String checkpointFile="NO_SAVE";	;
+    private java.lang.String checkpointFile;
 
-    private java.lang.String east_bc="Locked Node";
+    private java.lang.String east_bc;
 
-    private java.lang.String east_bc_value="0 0. 0. 0. 1.";
+    private java.lang.String east_bc_value;
 
-    private java.lang.String end_time="50.0";
+    private java.lang.String elasOut1;
 
-    private java.lang.String fault_interval="5000.0";
+    private java.lang.String elasOut2;
+
+    private java.lang.String elastic1;
+
+    private java.lang.String elastic2;
+
+    private java.lang.String end_time;
+
+    private java.lang.String fault_interval;
 
     private java.lang.String inputFileName;
 
     private java.lang.String logFileName;
 
-    private java.lang.String north_bc="Locked Node";
+    private java.lang.String north_bc;
 
-    private java.lang.String north_bc_value="0 0. 0. 0. 1.";
+    private java.lang.String north_bc_value;
 
-    private java.lang.String nrates="0";
+    private java.lang.String nrates;
 
-    private java.lang.String number_degrees_freedom="3";
+    private java.lang.String number_degrees_freedom;
 
-    private java.lang.String number_space_dimensions="3";
+    private java.lang.String number_space_dimensions;
 
-    private java.lang.String number_time_groups="1";
+    private java.lang.String number_time_groups;
 
-    private java.lang.String numberofPrintTimes="20";
+    private java.lang.String numberofPrintTimes;
 
     private java.lang.String outputFileName;
 
-    private java.lang.String printTimesInterval="1.0";
+    private java.lang.String printTimesInterval;
 
-    private java.lang.String printTimesType="steps";
+    private java.lang.String printTimesType;
 
-    private java.lang.String reform_steps="1";
+    private java.lang.String[] rampBC;
 
-    private java.lang.String reportingElements="All";
+    private java.lang.String refine;
 
-    private java.lang.String reportingNodes="All";
+    private java.lang.String refineOut;
 
-    private java.lang.String restartFile="NO_RESTART";
+    private java.lang.String reform_steps;
+
+    private java.lang.String reportingElements;
+
+    private java.lang.String reportingNodes;
+
+    private java.lang.String restartFile;
 
     private java.lang.String run_choice;
 
-    private java.lang.String shape_flag="1";
+    private java.lang.String shape_flag;
 
-    private java.lang.String solver_flag="2";
+    private java.lang.String solver_flag;
 
-    private java.lang.String south_bc="Locked Node";
+    private java.lang.String south_bc;
 
-    private java.lang.String south_bc_value="0 0. 0. 0. 1.";
+    private java.lang.String south_bc_value;
 
-    private java.lang.String time_step="0.5";
+    private java.lang.String time_step;
 
-    private java.lang.String top_bc="Free Node";
+    private java.lang.String top_bc;
 
-    private java.lang.String top_bc_value="0 0. 0. 0. 1.";
+    private java.lang.String top_bc_value;
 
-    private java.lang.String west_bc="Locked Node";
+    private java.lang.String velblock;
 
-    private java.lang.String west_bc_value="0 0. 0. 0. 1.";
+    private java.lang.String visco;
 
+    private java.lang.String west_bc;
 
-	 /**
-	  * Provide with default values.
-	  */ 
+    private java.lang.String west_bc_value;
+
     public GeotransParallelParamsBean() {
-		this.number_space_dimensions="3";
-		this.number_degrees_freedom="3";
-		this.nrates ="0";
-		this.shape_flag = "1";
-		this.solver_flag = "2";
-		this.number_time_groups = "1";
-		this.reform_steps ="1";
-		this.backup_steps="5000";
-		this.fault_interval="5000.0";
-		this.end_time="50.0";
-		this.alpha ="1.0";
-		this.time_step="0.5";
-		//cordinate boundary
-		
-		this.top_bc="Free Node";
-		this.top_bc_value="0 0. 0. 0. 1.";
-		this.east_bc="Locked Node";
-		this.east_bc_value="0 0. 0. 0. 1.";
-		this.west_bc="Locked Node";
-		this.west_bc_value="0 0. 0. 0. 1.";
-		this.north_bc="Locked Node";
-		this.north_bc_value="0 0. 0. 0. 1.";
-		this.south_bc="Locked Node";
-		this.south_bc_value="0 0. 0. 0. 1.";
-		this.bottom_bc="Locked Node";
-		this.bottom_bc_value="0 0. 0. 0. 1.";
-		
-		//Output Parameters and Formatting
-		
-		this.reportingNodes="All";
-		this.reportingElements="All";
-		this.printTimesType="steps";
-		this.numberofPrintTimes="20";
-		this.printTimesInterval="1.0";
-		this.restartFile="NO_RESTART";
-		this.checkpointFile="NO_SAVE";	
-
     }
 
     public GeotransParallelParamsBean(
@@ -132,6 +107,10 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
            java.lang.String checkpointFile,
            java.lang.String east_bc,
            java.lang.String east_bc_value,
+           java.lang.String elasOut1,
+           java.lang.String elasOut2,
+           java.lang.String elastic1,
+           java.lang.String elastic2,
            java.lang.String end_time,
            java.lang.String fault_interval,
            java.lang.String inputFileName,
@@ -146,6 +125,9 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
            java.lang.String outputFileName,
            java.lang.String printTimesInterval,
            java.lang.String printTimesType,
+           java.lang.String[] rampBC,
+           java.lang.String refine,
+           java.lang.String refineOut,
            java.lang.String reform_steps,
            java.lang.String reportingElements,
            java.lang.String reportingNodes,
@@ -158,9 +140,10 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
            java.lang.String time_step,
            java.lang.String top_bc,
            java.lang.String top_bc_value,
+           java.lang.String velblock,
+           java.lang.String visco,
            java.lang.String west_bc,
            java.lang.String west_bc_value) {
-
            this.alpha = alpha;
            this.backup_steps = backup_steps;
            this.bottom_bc = bottom_bc;
@@ -168,6 +151,10 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
            this.checkpointFile = checkpointFile;
            this.east_bc = east_bc;
            this.east_bc_value = east_bc_value;
+           this.elasOut1 = elasOut1;
+           this.elasOut2 = elasOut2;
+           this.elastic1 = elastic1;
+           this.elastic2 = elastic2;
            this.end_time = end_time;
            this.fault_interval = fault_interval;
            this.inputFileName = inputFileName;
@@ -182,6 +169,9 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
            this.outputFileName = outputFileName;
            this.printTimesInterval = printTimesInterval;
            this.printTimesType = printTimesType;
+           this.rampBC = rampBC;
+           this.refine = refine;
+           this.refineOut = refineOut;
            this.reform_steps = reform_steps;
            this.reportingElements = reportingElements;
            this.reportingNodes = reportingNodes;
@@ -194,13 +184,15 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
            this.time_step = time_step;
            this.top_bc = top_bc;
            this.top_bc_value = top_bc_value;
+           this.velblock = velblock;
+           this.visco = visco;
            this.west_bc = west_bc;
            this.west_bc_value = west_bc_value;
     }
 
 
     /**
-     * Gets the alpha value for this GeotransParamsBean.
+     * Gets the alpha value for this GeotransParallelParamsBean.
      * 
      * @return alpha
      */
@@ -210,18 +202,17 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the alpha value for this GeotransParamsBean.
+     * Sets the alpha value for this GeotransParallelParamsBean.
      * 
      * @param alpha
      */
     public void setAlpha(java.lang.String alpha) {
-		  System.out.println("This is alpha setter:"+alpha);
         this.alpha = alpha;
     }
 
 
     /**
-     * Gets the backup_steps value for this GeotransParamsBean.
+     * Gets the backup_steps value for this GeotransParallelParamsBean.
      * 
      * @return backup_steps
      */
@@ -231,7 +222,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the backup_steps value for this GeotransParamsBean.
+     * Sets the backup_steps value for this GeotransParallelParamsBean.
      * 
      * @param backup_steps
      */
@@ -241,7 +232,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the bottom_bc value for this GeotransParamsBean.
+     * Gets the bottom_bc value for this GeotransParallelParamsBean.
      * 
      * @return bottom_bc
      */
@@ -251,7 +242,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the bottom_bc value for this GeotransParamsBean.
+     * Sets the bottom_bc value for this GeotransParallelParamsBean.
      * 
      * @param bottom_bc
      */
@@ -261,7 +252,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the bottom_bc_value value for this GeotransParamsBean.
+     * Gets the bottom_bc_value value for this GeotransParallelParamsBean.
      * 
      * @return bottom_bc_value
      */
@@ -271,7 +262,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the bottom_bc_value value for this GeotransParamsBean.
+     * Sets the bottom_bc_value value for this GeotransParallelParamsBean.
      * 
      * @param bottom_bc_value
      */
@@ -281,7 +272,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the checkpointFile value for this GeotransParamsBean.
+     * Gets the checkpointFile value for this GeotransParallelParamsBean.
      * 
      * @return checkpointFile
      */
@@ -291,7 +282,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the checkpointFile value for this GeotransParamsBean.
+     * Sets the checkpointFile value for this GeotransParallelParamsBean.
      * 
      * @param checkpointFile
      */
@@ -301,7 +292,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the east_bc value for this GeotransParamsBean.
+     * Gets the east_bc value for this GeotransParallelParamsBean.
      * 
      * @return east_bc
      */
@@ -311,7 +302,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the east_bc value for this GeotransParamsBean.
+     * Sets the east_bc value for this GeotransParallelParamsBean.
      * 
      * @param east_bc
      */
@@ -321,7 +312,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the east_bc_value value for this GeotransParamsBean.
+     * Gets the east_bc_value value for this GeotransParallelParamsBean.
      * 
      * @return east_bc_value
      */
@@ -331,7 +322,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the east_bc_value value for this GeotransParamsBean.
+     * Sets the east_bc_value value for this GeotransParallelParamsBean.
      * 
      * @param east_bc_value
      */
@@ -341,7 +332,87 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the end_time value for this GeotransParamsBean.
+     * Gets the elasOut1 value for this GeotransParallelParamsBean.
+     * 
+     * @return elasOut1
+     */
+    public java.lang.String getElasOut1() {
+        return elasOut1;
+    }
+
+
+    /**
+     * Sets the elasOut1 value for this GeotransParallelParamsBean.
+     * 
+     * @param elasOut1
+     */
+    public void setElasOut1(java.lang.String elasOut1) {
+        this.elasOut1 = elasOut1;
+    }
+
+
+    /**
+     * Gets the elasOut2 value for this GeotransParallelParamsBean.
+     * 
+     * @return elasOut2
+     */
+    public java.lang.String getElasOut2() {
+        return elasOut2;
+    }
+
+
+    /**
+     * Sets the elasOut2 value for this GeotransParallelParamsBean.
+     * 
+     * @param elasOut2
+     */
+    public void setElasOut2(java.lang.String elasOut2) {
+        this.elasOut2 = elasOut2;
+    }
+
+
+    /**
+     * Gets the elastic1 value for this GeotransParallelParamsBean.
+     * 
+     * @return elastic1
+     */
+    public java.lang.String getElastic1() {
+        return elastic1;
+    }
+
+
+    /**
+     * Sets the elastic1 value for this GeotransParallelParamsBean.
+     * 
+     * @param elastic1
+     */
+    public void setElastic1(java.lang.String elastic1) {
+        this.elastic1 = elastic1;
+    }
+
+
+    /**
+     * Gets the elastic2 value for this GeotransParallelParamsBean.
+     * 
+     * @return elastic2
+     */
+    public java.lang.String getElastic2() {
+        return elastic2;
+    }
+
+
+    /**
+     * Sets the elastic2 value for this GeotransParallelParamsBean.
+     * 
+     * @param elastic2
+     */
+    public void setElastic2(java.lang.String elastic2) {
+        this.elastic2 = elastic2;
+    }
+
+
+    /**
+     * Gets the end_time value for this GeotransParallelParamsBean.
      * 
      * @return end_time
      */
@@ -351,7 +422,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the end_time value for this GeotransParamsBean.
+     * Sets the end_time value for this GeotransParallelParamsBean.
      * 
      * @param end_time
      */
@@ -361,7 +432,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the fault_interval value for this GeotransParamsBean.
+     * Gets the fault_interval value for this GeotransParallelParamsBean.
      * 
      * @return fault_interval
      */
@@ -371,7 +442,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the fault_interval value for this GeotransParamsBean.
+     * Sets the fault_interval value for this GeotransParallelParamsBean.
      * 
      * @param fault_interval
      */
@@ -381,7 +452,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the inputFileName value for this GeotransParamsBean.
+     * Gets the inputFileName value for this GeotransParallelParamsBean.
      * 
      * @return inputFileName
      */
@@ -391,7 +462,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the inputFileName value for this GeotransParamsBean.
+     * Sets the inputFileName value for this GeotransParallelParamsBean.
      * 
      * @param inputFileName
      */
@@ -401,7 +472,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the logFileName value for this GeotransParamsBean.
+     * Gets the logFileName value for this GeotransParallelParamsBean.
      * 
      * @return logFileName
      */
@@ -411,7 +482,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the logFileName value for this GeotransParamsBean.
+     * Sets the logFileName value for this GeotransParallelParamsBean.
      * 
      * @param logFileName
      */
@@ -421,7 +492,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the north_bc value for this GeotransParamsBean.
+     * Gets the north_bc value for this GeotransParallelParamsBean.
      * 
      * @return north_bc
      */
@@ -431,7 +502,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the north_bc value for this GeotransParamsBean.
+     * Sets the north_bc value for this GeotransParallelParamsBean.
      * 
      * @param north_bc
      */
@@ -441,7 +512,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the north_bc_value value for this GeotransParamsBean.
+     * Gets the north_bc_value value for this GeotransParallelParamsBean.
      * 
      * @return north_bc_value
      */
@@ -451,7 +522,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the north_bc_value value for this GeotransParamsBean.
+     * Sets the north_bc_value value for this GeotransParallelParamsBean.
      * 
      * @param north_bc_value
      */
@@ -461,7 +532,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the nrates value for this GeotransParamsBean.
+     * Gets the nrates value for this GeotransParallelParamsBean.
      * 
      * @return nrates
      */
@@ -471,7 +542,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the nrates value for this GeotransParamsBean.
+     * Sets the nrates value for this GeotransParallelParamsBean.
      * 
      * @param nrates
      */
@@ -481,7 +552,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the number_degrees_freedom value for this GeotransParamsBean.
+     * Gets the number_degrees_freedom value for this GeotransParallelParamsBean.
      * 
      * @return number_degrees_freedom
      */
@@ -491,7 +562,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the number_degrees_freedom value for this GeotransParamsBean.
+     * Sets the number_degrees_freedom value for this GeotransParallelParamsBean.
      * 
      * @param number_degrees_freedom
      */
@@ -501,7 +572,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the number_space_dimensions value for this GeotransParamsBean.
+     * Gets the number_space_dimensions value for this GeotransParallelParamsBean.
      * 
      * @return number_space_dimensions
      */
@@ -511,7 +582,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the number_space_dimensions value for this GeotransParamsBean.
+     * Sets the number_space_dimensions value for this GeotransParallelParamsBean.
      * 
      * @param number_space_dimensions
      */
@@ -521,7 +592,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the number_time_groups value for this GeotransParamsBean.
+     * Gets the number_time_groups value for this GeotransParallelParamsBean.
      * 
      * @return number_time_groups
      */
@@ -531,7 +602,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the number_time_groups value for this GeotransParamsBean.
+     * Sets the number_time_groups value for this GeotransParallelParamsBean.
      * 
      * @param number_time_groups
      */
@@ -541,7 +612,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the numberofPrintTimes value for this GeotransParamsBean.
+     * Gets the numberofPrintTimes value for this GeotransParallelParamsBean.
      * 
      * @return numberofPrintTimes
      */
@@ -551,7 +622,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the numberofPrintTimes value for this GeotransParamsBean.
+     * Sets the numberofPrintTimes value for this GeotransParallelParamsBean.
      * 
      * @param numberofPrintTimes
      */
@@ -561,7 +632,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the outputFileName value for this GeotransParamsBean.
+     * Gets the outputFileName value for this GeotransParallelParamsBean.
      * 
      * @return outputFileName
      */
@@ -571,7 +642,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the outputFileName value for this GeotransParamsBean.
+     * Sets the outputFileName value for this GeotransParallelParamsBean.
      * 
      * @param outputFileName
      */
@@ -581,7 +652,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the printTimesInterval value for this GeotransParamsBean.
+     * Gets the printTimesInterval value for this GeotransParallelParamsBean.
      * 
      * @return printTimesInterval
      */
@@ -591,7 +662,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the printTimesInterval value for this GeotransParamsBean.
+     * Sets the printTimesInterval value for this GeotransParallelParamsBean.
      * 
      * @param printTimesInterval
      */
@@ -601,7 +672,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the printTimesType value for this GeotransParamsBean.
+     * Gets the printTimesType value for this GeotransParallelParamsBean.
      * 
      * @return printTimesType
      */
@@ -611,7 +682,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the printTimesType value for this GeotransParamsBean.
+     * Sets the printTimesType value for this GeotransParallelParamsBean.
      * 
      * @param printTimesType
      */
@@ -621,7 +692,67 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the reform_steps value for this GeotransParamsBean.
+     * Gets the rampBC value for this GeotransParallelParamsBean.
+     * 
+     * @return rampBC
+     */
+    public java.lang.String[] getRampBC() {
+        return rampBC;
+    }
+
+
+    /**
+     * Sets the rampBC value for this GeotransParallelParamsBean.
+     * 
+     * @param rampBC
+     */
+    public void setRampBC(java.lang.String[] rampBC) {
+        this.rampBC = rampBC;
+    }
+
+
+    /**
+     * Gets the refine value for this GeotransParallelParamsBean.
+     * 
+     * @return refine
+     */
+    public java.lang.String getRefine() {
+        return refine;
+    }
+
+
+    /**
+     * Sets the refine value for this GeotransParallelParamsBean.
+     * 
+     * @param refine
+     */
+    public void setRefine(java.lang.String refine) {
+        this.refine = refine;
+    }
+
+
+    /**
+     * Gets the refineOut value for this GeotransParallelParamsBean.
+     * 
+     * @return refineOut
+     */
+    public java.lang.String getRefineOut() {
+        return refineOut;
+    }
+
+
+    /**
+     * Sets the refineOut value for this GeotransParallelParamsBean.
+     * 
+     * @param refineOut
+     */
+    public void setRefineOut(java.lang.String refineOut) {
+        this.refineOut = refineOut;
+    }
+
+
+    /**
+     * Gets the reform_steps value for this GeotransParallelParamsBean.
      * 
      * @return reform_steps
      */
@@ -631,7 +762,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the reform_steps value for this GeotransParamsBean.
+     * Sets the reform_steps value for this GeotransParallelParamsBean.
      * 
      * @param reform_steps
      */
@@ -641,7 +772,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the reportingElements value for this GeotransParamsBean.
+     * Gets the reportingElements value for this GeotransParallelParamsBean.
      * 
      * @return reportingElements
      */
@@ -651,7 +782,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the reportingElements value for this GeotransParamsBean.
+     * Sets the reportingElements value for this GeotransParallelParamsBean.
      * 
      * @param reportingElements
      */
@@ -661,7 +792,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the reportingNodes value for this GeotransParamsBean.
+     * Gets the reportingNodes value for this GeotransParallelParamsBean.
      * 
      * @return reportingNodes
      */
@@ -671,7 +802,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the reportingNodes value for this GeotransParamsBean.
+     * Sets the reportingNodes value for this GeotransParallelParamsBean.
      * 
      * @param reportingNodes
      */
@@ -681,7 +812,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the restartFile value for this GeotransParamsBean.
+     * Gets the restartFile value for this GeotransParallelParamsBean.
      * 
      * @return restartFile
      */
@@ -691,7 +822,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the restartFile value for this GeotransParamsBean.
+     * Sets the restartFile value for this GeotransParallelParamsBean.
      * 
      * @param restartFile
      */
@@ -701,7 +832,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the run_choice value for this GeotransParamsBean.
+     * Gets the run_choice value for this GeotransParallelParamsBean.
      * 
      * @return run_choice
      */
@@ -711,7 +842,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the run_choice value for this GeotransParamsBean.
+     * Sets the run_choice value for this GeotransParallelParamsBean.
      * 
      * @param run_choice
      */
@@ -721,7 +852,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the shape_flag value for this GeotransParamsBean.
+     * Gets the shape_flag value for this GeotransParallelParamsBean.
      * 
      * @return shape_flag
      */
@@ -731,7 +862,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the shape_flag value for this GeotransParamsBean.
+     * Sets the shape_flag value for this GeotransParallelParamsBean.
      * 
      * @param shape_flag
      */
@@ -741,7 +872,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the solver_flag value for this GeotransParamsBean.
+     * Gets the solver_flag value for this GeotransParallelParamsBean.
      * 
      * @return solver_flag
      */
@@ -751,7 +882,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the solver_flag value for this GeotransParamsBean.
+     * Sets the solver_flag value for this GeotransParallelParamsBean.
      * 
      * @param solver_flag
      */
@@ -761,7 +892,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the south_bc value for this GeotransParamsBean.
+     * Gets the south_bc value for this GeotransParallelParamsBean.
      * 
      * @return south_bc
      */
@@ -771,7 +902,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the south_bc value for this GeotransParamsBean.
+     * Sets the south_bc value for this GeotransParallelParamsBean.
      * 
      * @param south_bc
      */
@@ -781,7 +912,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the south_bc_value value for this GeotransParamsBean.
+     * Gets the south_bc_value value for this GeotransParallelParamsBean.
      * 
      * @return south_bc_value
      */
@@ -791,7 +922,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the south_bc_value value for this GeotransParamsBean.
+     * Sets the south_bc_value value for this GeotransParallelParamsBean.
      * 
      * @param south_bc_value
      */
@@ -801,7 +932,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the time_step value for this GeotransParamsBean.
+     * Gets the time_step value for this GeotransParallelParamsBean.
      * 
      * @return time_step
      */
@@ -811,7 +942,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the time_step value for this GeotransParamsBean.
+     * Sets the time_step value for this GeotransParallelParamsBean.
      * 
      * @param time_step
      */
@@ -821,7 +952,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the top_bc value for this GeotransParamsBean.
+     * Gets the top_bc value for this GeotransParallelParamsBean.
      * 
      * @return top_bc
      */
@@ -831,7 +962,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the top_bc value for this GeotransParamsBean.
+     * Sets the top_bc value for this GeotransParallelParamsBean.
      * 
      * @param top_bc
      */
@@ -841,7 +972,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the top_bc_value value for this GeotransParamsBean.
+     * Gets the top_bc_value value for this GeotransParallelParamsBean.
      * 
      * @return top_bc_value
      */
@@ -851,7 +982,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the top_bc_value value for this GeotransParamsBean.
+     * Sets the top_bc_value value for this GeotransParallelParamsBean.
      * 
      * @param top_bc_value
      */
@@ -861,7 +992,47 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the west_bc value for this GeotransParamsBean.
+     * Gets the velblock value for this GeotransParallelParamsBean.
+     * 
+     * @return velblock
+     */
+    public java.lang.String getVelblock() {
+        return velblock;
+    }
+
+
+    /**
+     * Sets the velblock value for this GeotransParallelParamsBean.
+     * 
+     * @param velblock
+     */
+    public void setVelblock(java.lang.String velblock) {
+        this.velblock = velblock;
+    }
+
+
+    /**
+     * Gets the visco value for this GeotransParallelParamsBean.
+     * 
+     * @return visco
+     */
+    public java.lang.String getVisco() {
+        return visco;
+    }
+
+
+    /**
+     * Sets the visco value for this GeotransParallelParamsBean.
+     * 
+     * @param visco
+     */
+    public void setVisco(java.lang.String visco) {
+        this.visco = visco;
+    }
+
+
+    /**
+     * Gets the west_bc value for this GeotransParallelParamsBean.
      * 
      * @return west_bc
      */
@@ -871,7 +1042,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the west_bc value for this GeotransParamsBean.
+     * Sets the west_bc value for this GeotransParallelParamsBean.
      * 
      * @param west_bc
      */
@@ -881,7 +1052,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Gets the west_bc_value value for this GeotransParamsBean.
+     * Gets the west_bc_value value for this GeotransParallelParamsBean.
      * 
      * @return west_bc_value
      */
@@ -891,7 +1062,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
 
     /**
-     * Sets the west_bc_value value for this GeotransParamsBean.
+     * Sets the west_bc_value value for this GeotransParallelParamsBean.
      * 
      * @param west_bc_value
      */
@@ -901,8 +1072,8 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof GeotransParamsBean)) return false;
-        GeotransParamsBean other = (GeotransParamsBean) obj;
+        if (!(obj instanceof GeotransParallelParamsBean)) return false;
+        GeotransParallelParamsBean other = (GeotransParallelParamsBean) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
@@ -932,6 +1103,18 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
             ((this.east_bc_value==null && other.getEast_bc_value()==null) || 
              (this.east_bc_value!=null &&
               this.east_bc_value.equals(other.getEast_bc_value()))) &&
+            ((this.elasOut1==null && other.getElasOut1()==null) || 
+             (this.elasOut1!=null &&
+              this.elasOut1.equals(other.getElasOut1()))) &&
+            ((this.elasOut2==null && other.getElasOut2()==null) || 
+             (this.elasOut2!=null &&
+              this.elasOut2.equals(other.getElasOut2()))) &&
+            ((this.elastic1==null && other.getElastic1()==null) || 
+             (this.elastic1!=null &&
+              this.elastic1.equals(other.getElastic1()))) &&
+            ((this.elastic2==null && other.getElastic2()==null) || 
+             (this.elastic2!=null &&
+              this.elastic2.equals(other.getElastic2()))) &&
             ((this.end_time==null && other.getEnd_time()==null) || 
              (this.end_time!=null &&
               this.end_time.equals(other.getEnd_time()))) &&
@@ -974,6 +1157,15 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
             ((this.printTimesType==null && other.getPrintTimesType()==null) || 
              (this.printTimesType!=null &&
               this.printTimesType.equals(other.getPrintTimesType()))) &&
+            ((this.rampBC==null && other.getRampBC()==null) || 
+             (this.rampBC!=null &&
+              java.util.Arrays.equals(this.rampBC, other.getRampBC()))) &&
+            ((this.refine==null && other.getRefine()==null) || 
+             (this.refine!=null &&
+              this.refine.equals(other.getRefine()))) &&
+            ((this.refineOut==null && other.getRefineOut()==null) || 
+             (this.refineOut!=null &&
+              this.refineOut.equals(other.getRefineOut()))) &&
             ((this.reform_steps==null && other.getReform_steps()==null) || 
              (this.reform_steps!=null &&
               this.reform_steps.equals(other.getReform_steps()))) &&
@@ -1010,6 +1202,12 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
             ((this.top_bc_value==null && other.getTop_bc_value()==null) || 
              (this.top_bc_value!=null &&
               this.top_bc_value.equals(other.getTop_bc_value()))) &&
+            ((this.velblock==null && other.getVelblock()==null) || 
+             (this.velblock!=null &&
+              this.velblock.equals(other.getVelblock()))) &&
+            ((this.visco==null && other.getVisco()==null) || 
+             (this.visco!=null &&
+              this.visco.equals(other.getVisco()))) &&
             ((this.west_bc==null && other.getWest_bc()==null) || 
              (this.west_bc!=null &&
               this.west_bc.equals(other.getWest_bc()))) &&
@@ -1047,6 +1245,18 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
         }
         if (getEast_bc_value() != null) {
             _hashCode += getEast_bc_value().hashCode();
+        }
+        if (getElasOut1() != null) {
+            _hashCode += getElasOut1().hashCode();
+        }
+        if (getElasOut2() != null) {
+            _hashCode += getElasOut2().hashCode();
+        }
+        if (getElastic1() != null) {
+            _hashCode += getElastic1().hashCode();
+        }
+        if (getElastic2() != null) {
+            _hashCode += getElastic2().hashCode();
         }
         if (getEnd_time() != null) {
             _hashCode += getEnd_time().hashCode();
@@ -1090,6 +1300,23 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
         if (getPrintTimesType() != null) {
             _hashCode += getPrintTimesType().hashCode();
         }
+        if (getRampBC() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getRampBC());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getRampBC(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
+        }
+        if (getRefine() != null) {
+            _hashCode += getRefine().hashCode();
+        }
+        if (getRefineOut() != null) {
+            _hashCode += getRefineOut().hashCode();
+        }
         if (getReform_steps() != null) {
             _hashCode += getReform_steps().hashCode();
         }
@@ -1126,6 +1353,12 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
         if (getTop_bc_value() != null) {
             _hashCode += getTop_bc_value().hashCode();
         }
+        if (getVelblock() != null) {
+            _hashCode += getVelblock().hashCode();
+        }
+        if (getVisco() != null) {
+            _hashCode += getVisco().hashCode();
+        }
         if (getWest_bc() != null) {
             _hashCode += getWest_bc().hashCode();
         }
@@ -1138,10 +1371,10 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(GeotransParamsBean.class, true);
+        new org.apache.axis.description.TypeDesc(GeotransParallelParamsBean.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("urn:GeoFESTService", "GeotransParamsBean"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec", "GeotransParallelParamsBean"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("alpha");
         elemField.setXmlName(new javax.xml.namespace.QName("", "alpha"));
@@ -1181,6 +1414,30 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("east_bc_value");
         elemField.setXmlName(new javax.xml.namespace.QName("", "east_bc_value"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("elasOut1");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "elasOut1"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("elasOut2");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "elasOut2"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("elastic1");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "elastic1"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("elastic2");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "elastic2"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
@@ -1269,6 +1526,24 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("rampBC");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "rampBC"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("refine");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "refine"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("refineOut");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "refineOut"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("reform_steps");
         elemField.setXmlName(new javax.xml.namespace.QName("", "reform_steps"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
@@ -1337,6 +1612,18 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("top_bc_value");
         elemField.setXmlName(new javax.xml.namespace.QName("", "top_bc_value"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("velblock");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "velblock"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("visco");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "visco"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

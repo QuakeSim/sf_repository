@@ -73,7 +73,9 @@ public class MeshGeneratorBean extends GenericSopacBean {
     Layer currentLayer = new Layer();    
     Fault currentFault = new Fault();    
 	 //    GeotransParamsData currentGeotransParamsData = new GeotransParamsData();    
-	 GeotransParamsBean currentGeotransParamsBean = new GeotransParamsBean();    
+	 //	 GeotransParamsBean currentGeotransParamsBean = new GeotransParamsBean();    
+	 GeotransParallelParamsBean currentGeotransParamsBean =
+		  new GeotransParallelParamsBean();    
 
 	 //Need to go through and simplify these.
     List myFaultDBEntryList = new ArrayList();    
@@ -401,7 +403,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  throws Exception {
 		  
 		  String tokenName=getJobToken();
-		  GeotransParamsBean currentGeotransParamsBean=getCurrentGeotransParamsBean();
+		  GeotransParallelParamsBean currentGeotransParamsBean=getCurrentGeotransParamsBean();
 		  System.out.println("ProjectName:"+projectName);
 		  System.out.println("tokenName:"+tokenName);
 
@@ -439,7 +441,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	 protected void saveGeotransParamsToDB(String userName, 
 														String projectName, 
 														String tokenName, 
-														GeotransParamsBean currentGeotransParamsBean,
+														GeotransParallelParamsBean currentGeotransParamsBean,
 														GFOutputBean projectGeoFestOtput) 
 		  throws Exception {
 
@@ -2244,11 +2246,11 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  this.meshDataMegaList=meshDataMegaList;
 	 }
 
-	 public void setCurrentGeotransParamsBean(GeotransParamsBean geotransParamsBean){
+	 public void setCurrentGeotransParamsBean(GeotransParallelParamsBean geotransParamsBean){
 		  this.currentGeotransParamsBean=geotransParamsBean;
 	 }
 
-	 public GeotransParamsBean getCurrentGeotransParamsBean(){
+	 public GeotransParallelParamsBean getCurrentGeotransParamsBean(){
 		  return this.currentGeotransParamsBean;
 	 }
 
