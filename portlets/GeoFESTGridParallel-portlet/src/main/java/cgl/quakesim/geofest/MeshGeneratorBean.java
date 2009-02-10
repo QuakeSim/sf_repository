@@ -154,6 +154,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
     //This is our geofest service stub.
     GeoFESTService geofestService;
     GeoFESTGridService geofestGridService;
+    GeoFESTParallelService geofestParallelService;
 	 QueueService queueService;
 	 GridInfoService_PortType gridInfoService;
 
@@ -213,6 +214,13 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  geofestGridService=
 				new GeoFESTGridServiceServiceLocator().getGeoFESTGridExec(new URL(geoFESTGridServiceUrl));
 	 }
+
+	 protected void initGeofestParallelService() throws Exception {
+		  geofestParallelService=
+				new GeoFESTParallelServiceServiceLocator().getGeoFESTParallelExec(new URL(geoFESTParallelServiceUrl));
+	 }
+
+
 
 	 protected void makeProjectDirectory() {
 		  File projectDir=new File(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/");
@@ -418,7 +426,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  System.out.println("GeoFEST arguments:"+args);
 		  String envSettings="\""+"PATH="+userHome+"/bin/:/bin/:/usr/bin/"+"\"";
 
-		  projectGeoFestOutput=geofestGridService.runGridGeoFEST(userName,
+		  projectGeoFestOutput=geofestParallelService.runGridGeoFEST(userName,
 																					projectName,
 																					currentGeotransParamsBean,
 																					exec,
