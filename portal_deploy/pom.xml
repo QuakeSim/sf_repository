@@ -61,6 +61,9 @@
 							dest="${basedir}/">
              </gunzip>
 
+				 <gunzip src="${basedir}/axis2.tar.gz" 
+							dest="${basedir}/">
+             </gunzip>
 
 				 <untar dest="${basedir}">
                 <fileset dir="${basedir}">
@@ -76,8 +79,13 @@
 				 
 				 <!-- Copy the YUI libraries -->
 				<copy overwrite="true"
-						todir="${catalina.home}/webapps/ROOT/${yui.version}">
+						todir="${basedir}/${tomcat.version}/webapps/ROOT/${yui.version}">
 				  <fileset dir="${basedir}/${yui.version}"/>
+            </copy>
+
+				<copy overwrite="true"
+						todir="${basedir}/${tomcat.version}/webapps/axis2">
+				  <fileset dir="${basedir}/axis2"/>
             </copy>
 
            </tasks>
