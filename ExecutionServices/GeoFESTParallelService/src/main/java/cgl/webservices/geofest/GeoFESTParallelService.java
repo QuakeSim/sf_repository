@@ -104,10 +104,10 @@ public class GeoFESTParallelService extends GeoFESTGridService {
 		  Layer[] layers=new Layer[1];
 		  layers[0]=new Layer();
 		  
-
-		  GeoFESTParallelService gfps=new GeoFESTParallelService(true);
-		  GeotransParallelParamsBean gppb=new GeotransParallelParamsBean();
 		  try {
+				GeoFESTParallelService gfps=new GeoFESTParallelService(true);
+				GeotransParallelParamsBean gppb=new GeotransParallelParamsBean();
+				
 				MeshRunBean mrb=gfps.runBlockingMeshGenerator("duhfault","plan9",faults,layers,"rare");
 				gfps.runGridGeoFEST("duhfault",
 										  "plan9",
