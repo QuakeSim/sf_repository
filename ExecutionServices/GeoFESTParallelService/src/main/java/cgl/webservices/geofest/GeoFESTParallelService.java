@@ -107,19 +107,22 @@ public class GeoFESTParallelService extends GeoFESTGridService {
 
 		  GeoFESTParallelService gfps=new GeoFESTParallelService(true);
 		  GeotransParallelParamsBean gppb=new GeotransParallelParamsBean();
-		  MeshRunBean mrb=gfps.runBlockingMeshGenerator("duhfault","plan9",faults,layers,"rare");
-		  gfps.runGridGeoFEST("duhfault",
-									 "plan9",
-									 gppb,
-									 "/bin/ls",
-									 "-l",
-									 "gt2 cosmos.jpl.nasa.gov",
-									 "/tmp/x509up_cosmos",
-									 "",
-									 "1901");
-	 }
-	 
-
+		  try {
+				MeshRunBean mrb=gfps.runBlockingMeshGenerator("duhfault","plan9",faults,layers,"rare");
+				gfps.runGridGeoFEST("duhfault",
+										  "plan9",
+										  gppb,
+										  "/bin/ls",
+										  "-l",
+										  "gt2 cosmos.jpl.nasa.gov",
+										  "/tmp/x509up_cosmos",
+										  "",
+										  "1901");
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  
     /**
      * The constructor. Set useClassLoader=true when running
      * on the command line.
