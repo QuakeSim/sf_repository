@@ -122,6 +122,7 @@ public class GeoFESTParallelService extends GeoFESTGridService {
 		  catch (Exception ex) {
 				ex.printStackTrace();
 		  }
+	 }
 		  
     /**
      * The constructor. Set useClassLoader=true when running
