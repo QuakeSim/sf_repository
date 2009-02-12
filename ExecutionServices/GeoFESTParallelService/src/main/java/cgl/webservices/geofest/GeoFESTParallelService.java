@@ -130,7 +130,7 @@ public class GeoFESTParallelService extends GeoFESTGridService {
      */
     public GeoFESTParallelService(boolean useClassLoader) 
 		  throws Exception {	
-		  super();
+		  super(useClassLoader);
 	 }
     
     public GeoFESTParallelService() throws Exception{
