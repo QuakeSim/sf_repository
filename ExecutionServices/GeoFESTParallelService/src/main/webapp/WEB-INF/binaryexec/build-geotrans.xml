@@ -71,7 +71,7 @@
    </echo>
    <touch file="${workdir.prop}/gfmeshparse.error"/>
    <exec executable="${bindir.prop}/gfmeshparse" 
-         output="${workdir.prop}/${GFInput.prop}.jpl"
+         output="${workdir.prop}/gfmeshparse.out"
 	      error="${workdir.prop}/gfmeshparse.error"
 	      dir="${workdir.prop}">
       <arg value="${GFInput.prop}"/>
