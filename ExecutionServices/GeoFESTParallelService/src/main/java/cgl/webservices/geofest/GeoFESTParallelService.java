@@ -117,7 +117,7 @@ public class GeoFESTParallelService extends GeoFESTGridService {
 										  "gt2 cosmos.jpl.nasa.gov",
 										  "/tmp/x509up_cosmos",
 										  "",
-										  "1901");
+										  mrb.getJobUIDStamp());
 		  }
 		  catch (Exception ex) {
 				ex.printStackTrace();
