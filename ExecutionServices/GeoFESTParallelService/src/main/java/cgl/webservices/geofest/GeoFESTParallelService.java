@@ -92,6 +92,34 @@ public class GeoFESTParallelService extends GeoFESTGridService {
 	 String googleBlogId;
 	 CalendarService calendarService;
 
+	 /**
+	  * A main for testing
+	  */ 
+	 public static void main (String[] args) {
+		  //Create fault.
+		  Fault[] faults=new Fault[1];
+		  faults[0]=new Fault();
+		  
+		  //Create layer.
+		  Layer[] layers=new Layer[1];
+		  layers[0]=new Layer();
+		  
+
+		  GeoFESTParallelService gfps=new GeoFESTParallelService(true);
+		  GeotransParallelParamsBean gppb=new GeotransParallelParamsBean();
+		  MeshRunBean mrb=gfps.runBlockingMesh("duhfault","plan9",faults.layers,"rare");
+		  gfps.runGridGeoFEST("duhfault",
+									 "plan9",
+									 gppb,
+									 "/bin/ls",
+									 "-l",
+									 "gt2 cosmos.jpl.nasa.gov",
+									 "/tmp/x509up_cosmos",
+									 "",
+									 "1901");
+	 }
+	 
+
     /**
      * The constructor. Set useClassLoader=true when running
      * on the command line.

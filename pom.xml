@@ -112,6 +112,7 @@
     <module>portlets/FaultDB-portlet</module>
 	 <module>portlets/Disloc2</module>
 	 <module>portlets/rssportlet</module>
+	 <module>portlets/GeoFESTGridParallel-portlet</module>
 
     <!-- These are services.  Add new ones here. -->
     <module>ExecutionServices/AnalyzeTseriService</module>
