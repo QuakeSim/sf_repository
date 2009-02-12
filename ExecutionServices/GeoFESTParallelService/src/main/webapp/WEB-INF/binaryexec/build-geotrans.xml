@@ -78,6 +78,23 @@
    </echo>
 
 </target>
+<target name="gfmeshparse" depends="geotrans">
+   <tstamp/>
+   <echo append="true" 
+         file="${workdir.prop}/jobstatus.log">GFmeshparse running: ${TSTAMP}.${DSTAMP}
+   </echo>
+   <touch file="${workdir.prop}/gfmeshparse.error"/>
+   <exec executable="${bindir.prop}/gfmeshparse" 
+         output="${workdir.prop}/${GFInput.prop}.jpl"
+	      error="${workdir.prop}/gfmeshparse.error"
+	      dir="${workdir.prop}">
+      <arg value="${GFInput.prop}"/>
+      <env key="PATH" path="${bindir.prop}:/bin/:/usr/bin:$PATH"/>
+   </exec>   
+   <echo append="true" file="${workdir.prop}/jobstatus.log">GFmeshparse complete: ${TSTAMP}.${DSTAMP}
+   </echo>
+
+</target>
 
 <target name="geotrans.tar" depends="geotrans">
   <taskdef name="queuetask" classname="cgl.webservices.geofest.QueueTask"/>

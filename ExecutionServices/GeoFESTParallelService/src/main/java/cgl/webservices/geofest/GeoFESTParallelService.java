@@ -135,7 +135,7 @@ public class GeoFESTParallelService extends GeoFESTGridService {
 														 projectName,
 														 gpb,
 														 timeStamp,
-														 "geotrans");
+														 "gfmeshparse");
 		  setArgs(geoArgs);
 		  run();
 		  
