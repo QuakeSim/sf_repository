@@ -23,11 +23,6 @@
 </target>
 
 <target name="autoref" depends="MakeWorkDir">
-  <taskdef name="queuetask" classname="cgl.webservices.geofest.QueueTask"/>
-  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
-				 message="autoref.start" 
-				 queueServiceUrl="${queueServiceUrl.prop}"/>
-
    <tstamp/>
    <echo append="true" file="${workdir.prop}/jobstatus.log">Autoref running: ${TSTAMP}.${DSTAMP}
    </echo>
@@ -46,15 +41,6 @@
    <echo append="true" file="${workdir.prop}/jobstatus.log">Autoref complete: ${TSTAMP}.${DSTAMP}
    </echo>
 
-  <queuetask queueName="${projectName.prop}.${jobUID.prop}" 
-				 message="autoref.done" 
-				 queueServiceUrl="${queueServiceUrl.prop}"/>
-
-<!--
-   <copy todir="${outputdest.prop}">
-      <fileset dir="${workdir.prop}"/>
-   </copy>
--->
 </target>
 
 <!--This is used to create the GeoFEST input file. -->
