@@ -16,10 +16,10 @@ public class NorthMantle extends Layer {
 	 String layerLonOrigin = "-118.72";
 	 String layerLength = "240.0";
 	 String layerWidth = "240.0";
-	 String layerDepth = "5.0";
-	 String lameLambda = "17.0";
-	 String lameMu = "17.0";
-	 String viscosity = "17.0";
+	 String layerDepth = "65.0";
+	 String lameLambda = "70.0";
+	 String lameMu = "70.0";
+	 String viscosity = "7000.0";
 	 String exponent = "1.0";
 	 
 	 
