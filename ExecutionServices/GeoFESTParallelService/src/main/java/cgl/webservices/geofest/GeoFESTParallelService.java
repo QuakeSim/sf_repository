@@ -103,7 +103,7 @@ public class GeoFESTParallelService extends GeoFESTGridService {
 		  //Create layer.
 		  Layer[] layers=new Layer[3];
 		  layers[0]=new Layer();
-		  layers[1]=new NorthMid();
+		  layers[1]=new NorthCrust();
 		  layers[2]=new NorthMantle();
 		  
 		  try {
