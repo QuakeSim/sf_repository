@@ -11,7 +11,7 @@ public class NorthCrust extends Layer {
 	 String layerName="NorthridgeAreaMidCrust";
 	 String layerOriginX = "-103.0";
 	 String layerOriginY = "-104.0";
-	 String layerOriginZ = "-35.0";
+	 String layerOriginZ = "-5.0";
 	 String layerLatOrigin = "34.243";
 	 String layerLonOrigin = "-118.72";
 	 String layerLength = "240.0";
