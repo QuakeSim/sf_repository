@@ -46,7 +46,7 @@ public class GeotransParallelParamsBean {
 	 String checkpointFile="NO_SAVE";
 	
 	 String inputFileName="";
-	 String outputFileName="";
+	 String outputFileName="plan9.out";
 	 String logFileName="";
 	 String run_choice="";
 	 

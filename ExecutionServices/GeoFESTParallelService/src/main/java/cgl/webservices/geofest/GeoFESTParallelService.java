@@ -101,8 +101,10 @@ public class GeoFESTParallelService extends GeoFESTGridService {
 		  faults[0]=new Fault();
 		  
 		  //Create layer.
-		  Layer[] layers=new Layer[1];
+		  Layer[] layers=new Layer[3];
 		  layers[0]=new Layer();
+		  layers[1]=new NorthMid();
+		  layers[2]=new NorthMantle();
 		  
 		  try {
 				GeoFESTParallelService gfps=new GeoFESTParallelService(true);
