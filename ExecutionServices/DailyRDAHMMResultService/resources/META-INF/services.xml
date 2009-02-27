@@ -1,25 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file was auto-generated from WSDL -->
-<!-- by the Apache Axis2 version: 1.4.1  Built on : Aug 13, 2008 (05:03:35 LKT) -->
-<serviceGroup>
-    <service name="DailyRdahmmResultService">
-        <messageReceivers>
-            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="cgl.webservices.DailyRdahmmResultServiceMessageReceiverInOut"/>
-        </messageReceivers>
-        <parameter name="ServiceClass">cgl.webservices.DailyRdahmmResultServiceSkeleton</parameter>
-        <parameter name="useOriginalwsdl">true</parameter>
-        <parameter name="modifyUserWSDLPortAddress">true</parameter>
-        <operation name="calcStationColors" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservices.cgl">
-            <actionMapping>urn:calcStationColors</actionMapping>
-            <outputActionMapping>urn:calcStationColorsResponse</outputActionMapping>
-        </operation>
-        <operation name="getDataLatestDate" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservices.cgl">
-            <actionMapping>urn:getDataLatestDate</actionMapping>
-            <outputActionMapping>urn:getDataLatestDateResponse</outputActionMapping>
-        </operation>
-        <operation name="getLatLongForStation" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservices.cgl">
-            <actionMapping>urn:getLatLongForStation</actionMapping>
-            <outputActionMapping>urn:getLatLongForStationResponse</outputActionMapping>
-        </operation>
-    </service>
-</serviceGroup>
+<service name="DailyRdahmmResultService" scope="application" targetNamespace="http://webservices.cgl/">
+	<description>
+		Daily RDAHMM Result Service
+	</description>
+	<messageReceivers>
+		<messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only"
+                       class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
+		<messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out"
+                       class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+	</messageReceivers>
+	<schema schemaNamespace="http://webservices.cgl/xsd"/>
+	<parameter name="ServiceClass">cgl.webservices.DailyRdahmmResultService</parameter>
+</service>
+

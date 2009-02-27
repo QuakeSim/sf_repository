@@ -14,16 +14,18 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-public class DailyRdahmmResultServiceSkeleton {
+public class DailyRdahmmResultService {
 	private static final String xmlResURL = "http://gf13.ucs.indiana.edu:8080//rdahmmexec/station-status-change-rss.xml";			//the url of the result xml file of daily rdahmm service, used when local copy is out of date
 	
 	private DailyRdahmmStation[] stationArray;	//array of all stations recorded in the xml result file
 	
 	private static long DAY_MILLI = 86400000;
 	
+	private Calendar calLastUpdate = Calendar.getInstance();
+	
 	private String dataLatestDate;
 	
-	public DailyRdahmmResultServiceSkeleton() {
+	public DailyRdahmmResultService() {
 		stationArray = null;
 	}
 	
@@ -168,8 +170,10 @@ public class DailyRdahmmResultServiceSkeleton {
 	}
 	
 	public String calcStationColors(String date) {
-		if (stationArray == null)
+		if (isUpdateNeeded()) {
 			getAndAnalyzeXmlRes();
+			calLastUpdate.setTimeInMillis(System.currentTimeMillis());
+		}
 		
 		StringBuffer res;
 		res = new StringBuffer();
@@ -191,10 +195,12 @@ public class DailyRdahmmResultServiceSkeleton {
 	/**
 	 * Get the color for a station on a specific date. Return values:
 	 *  0:green, 1:red, 2:yellow, 3:grey, 4:blue	
-	  * */
+	 * */
 	protected char getColorForStation(Calendar theDate, DailyRdahmmStation station) {
-		if (stationArray == null)
+		if (isUpdateNeeded()) {
 			getAndAnalyzeXmlRes();
+			calLastUpdate.setTimeInMillis(System.currentTimeMillis());
+		}
 		
 		int NDAYS = 30;
 		Calendar firstDate = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
@@ -289,8 +295,10 @@ public class DailyRdahmmResultServiceSkeleton {
 	 * @return
 	 */
 	public String getLatLongForStation(String stationId) {
-		if (stationArray == null)
+		if (isUpdateNeeded()) {
 			getAndAnalyzeXmlRes();
+			calLastUpdate.setTimeInMillis(System.currentTimeMillis());
+		}
 		
 		for (int i=0; i<stationArray.length; i++) {
 			if (stationArray[i].stationID.equals(stationId)) {
@@ -350,10 +358,21 @@ public class DailyRdahmmResultServiceSkeleton {
 		
 		return -1;
 	}
+	
+	protected boolean isUpdateNeeded() {
+		if (stationArray == null)
+			return true;
+		Calendar now = Calendar.getInstance();
+		return now.get(Calendar.DATE) != calLastUpdate.get(Calendar.DATE)
+				|| (now.get(Calendar.HOUR_OF_DAY) >= 5
+					&& calLastUpdate.get(Calendar.HOUR_OF_DAY) < 5);	
+	}
 
 	public String getDataLatestDate() {
-		if (stationArray == null)
+		if (isUpdateNeeded()) {
 			getAndAnalyzeXmlRes();
+			calLastUpdate.setTimeInMillis(System.currentTimeMillis());
+		}
 		return dataLatestDate;
 	}
 }
