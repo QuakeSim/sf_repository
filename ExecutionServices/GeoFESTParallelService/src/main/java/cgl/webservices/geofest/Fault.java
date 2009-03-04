@@ -23,6 +23,8 @@ public class Fault {
 	 String faultLatEnd="34.176";
 	 String faultLonStart="-118.72";
 	 String faultLonEnd="-118.591";
+	 String firstEvent="0.0";
+	 String repeatTime="3000.0";
 
 	 public String getFaultLatStart() {
 		  return faultLatStart;
@@ -146,5 +148,20 @@ public class Fault {
 		return faultRakeAngle;
 	}
 	
+	 public String getFirstEvent(){
+		  return firstEvent;
+	 }
+	 
+	 public void setFirstEvent(String firstEvent){
+		  this.firstEvent=firstEvent;
+	 }
+
+	 public String getRepeatTime(){
+		  return repeatTime;
+	 }
+
+	 public void setRepeatTime(String repeatTime) {
+		  this.repeatTime=repeatTime;
+	 }
 }
 

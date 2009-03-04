@@ -124,6 +124,7 @@
     <module>ExecutionServices/QueueService</module>
     <module>ExecutionServices/STFilterService</module>
     <module>ExecutionServices/SimpleXService</module>
+    <module>ExecutionServices/GeoFESTParallelService</module>
     <!--
     <module>ExecutionServices/RDAHMMService</module>
     -->

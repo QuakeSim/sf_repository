@@ -1037,7 +1037,9 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  String tab = "\t";
 		  String headerline = "number" + tab + "dip(o)" + tab + "strike(o)" + tab
 				+ "slip(m)" + tab + "rake(o)" + tab + "length(km)" + tab
-				+ "width(km)" + tab + "depth(km)";
+				+ "width(km)" + tab + "depth(km)" 
+				+ tab + "origX" +tab + "origY"
+				+ tab +"FirstEvent" + tab + "RepeatTime";
 		  
 		  String number="1.0";  //Note this is a legacy parameter.
 		  String dip = fault.getFaultDipAngle();
@@ -1052,11 +1054,14 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  String depth = fault.getFaultDepth();
 		  String orig_x = fault.getFaultLocationX();
 		  String orig_y = fault.getFaultLocationY();
+		  String firstEvent=fault.getFirstEvent();
+		  String repeatTime=fault.getRepeatTime();
+
 		  PrintWriter pw = new PrintWriter(new FileWriter(outputFile));
 		  pw.println(headerline);
 		  pw.print(number + tab + dip + tab + strike + tab + slip + tab + rake
 					  + tab + length + tab + width + tab + depth + tab + orig_x 
-					  + tab + orig_y);
+					  + tab + orig_y + tab + firstEvent + tab + repeatTime);
 		  pw.flush();
 		  pw.close();
 	 }
