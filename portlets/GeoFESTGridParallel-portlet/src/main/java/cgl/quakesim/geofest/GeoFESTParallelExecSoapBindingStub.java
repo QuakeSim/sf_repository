@@ -29,7 +29,7 @@ public class GeoFESTParallelExecSoapBindingStub extends org.apache.axis.client.S
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "projectName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "gpb"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec", "GeotransParallelParamsBean"), cgl.quakesim.geofest.GeotransParallelParamsBean.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "gpb"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://localhost:8080/geofest-parallel-exec/services/GeoFESTParallelExec", "GeotransParallelParamsBean"), cgl.quakesim.geofest.GeotransParallelParamsBean.class, false, false);
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "exec"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
@@ -83,9 +83,9 @@ public class GeoFESTParallelExecSoapBindingStub extends org.apache.axis.client.S
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "projectName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "faults"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec", "ArrayOf_tns2_Fault"), cgl.quakesim.geofest.Fault[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "faults"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://localhost:8080/geofest-parallel-exec/services/GeoFESTParallelExec", "ArrayOf_tns2_Fault"), cgl.quakesim.geofest.Fault[].class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "layers"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec", "ArrayOf_tns2_Layer"), cgl.quakesim.geofest.Layer[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "layers"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://localhost:8080/geofest-parallel-exec/services/GeoFESTParallelExec", "ArrayOf_tns2_Layer"), cgl.quakesim.geofest.Layer[].class, false, false);
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "autoref_mode"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
@@ -207,7 +207,7 @@ public class GeoFESTParallelExecSoapBindingStub extends org.apache.axis.client.S
             java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
             java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
             java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
-            qName = new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec", "ArrayOf_tns2_Fault");
+            qName = new javax.xml.namespace.QName("http://localhost:8080/geofest-parallel-exec/services/GeoFESTParallelExec", "ArrayOf_tns2_Fault");
             cachedSerQNames.add(qName);
             cls = cgl.quakesim.geofest.Fault[].class;
             cachedSerClasses.add(cls);
@@ -216,7 +216,7 @@ public class GeoFESTParallelExecSoapBindingStub extends org.apache.axis.client.S
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec", "ArrayOf_tns2_Layer");
+            qName = new javax.xml.namespace.QName("http://localhost:8080/geofest-parallel-exec/services/GeoFESTParallelExec", "ArrayOf_tns2_Layer");
             cachedSerQNames.add(qName);
             cls = cgl.quakesim.geofest.Layer[].class;
             cachedSerClasses.add(cls);
@@ -225,7 +225,7 @@ public class GeoFESTParallelExecSoapBindingStub extends org.apache.axis.client.S
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec", "GeotransParallelParamsBean");
+            qName = new javax.xml.namespace.QName("http://localhost:8080/geofest-parallel-exec/services/GeoFESTParallelExec", "GeotransParallelParamsBean");
             cachedSerQNames.add(qName);
             cls = cgl.quakesim.geofest.GeotransParallelParamsBean.class;
             cachedSerClasses.add(cls);

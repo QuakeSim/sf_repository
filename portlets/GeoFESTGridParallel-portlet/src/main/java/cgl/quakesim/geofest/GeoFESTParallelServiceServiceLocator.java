@@ -22,7 +22,7 @@ public class GeoFESTParallelServiceServiceLocator extends org.apache.axis.client
     }
 
     // Use to get a proxy class for GeoFESTParallelExec
-    private java.lang.String GeoFESTParallelExec_address = "http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec";
+    private java.lang.String GeoFESTParallelExec_address = "http://localhost:8080/geofest-parallel-exec/services/GeoFESTParallelExec";
 
     public java.lang.String getGeoFESTParallelExecAddress() {
         return GeoFESTParallelExec_address;
@@ -105,7 +105,7 @@ public class GeoFESTParallelServiceServiceLocator extends org.apache.axis.client
     }
 
     public javax.xml.namespace.QName getServiceName() {
-        return new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec", "GeoFESTParallelServiceService");
+        return new javax.xml.namespace.QName("http://localhost:8080/geofest-parallel-exec/services/GeoFESTParallelExec", "GeoFESTParallelServiceService");
     }
 
     private java.util.HashSet ports = null;
@@ -113,7 +113,7 @@ public class GeoFESTParallelServiceServiceLocator extends org.apache.axis.client
     public java.util.Iterator getPorts() {
         if (ports == null) {
             ports = new java.util.HashSet();
-            ports.add(new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec", "GeoFESTParallelExec"));
+            ports.add(new javax.xml.namespace.QName("http://localhost:8080/geofest-parallel-exec/services/GeoFESTParallelExec", "GeoFESTParallelExec"));
         }
         return ports.iterator();
     }

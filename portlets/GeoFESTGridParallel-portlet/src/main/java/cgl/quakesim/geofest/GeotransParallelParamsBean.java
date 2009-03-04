@@ -1374,7 +1374,7 @@ public class GeotransParallelParamsBean  implements java.io.Serializable {
         new org.apache.axis.description.TypeDesc(GeotransParallelParamsBean.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/geofest-parallel-exec/services/GeoFESTParallelExec", "GeotransParallelParamsBean"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://localhost:8080/geofest-parallel-exec/services/GeoFESTParallelExec", "GeotransParallelParamsBean"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("alpha");
         elemField.setXmlName(new javax.xml.namespace.QName("", "alpha"));

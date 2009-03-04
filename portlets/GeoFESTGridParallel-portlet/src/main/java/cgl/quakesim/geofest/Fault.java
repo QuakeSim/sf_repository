@@ -38,6 +38,10 @@ public class Fault  implements java.io.Serializable {
 
     private java.lang.String faultWidth;
 
+    private java.lang.String firstEvent;
+
+    private java.lang.String repeatTime;
+
     public Fault() {
     }
 
@@ -56,7 +60,9 @@ public class Fault  implements java.io.Serializable {
            java.lang.String faultRakeAngle,
            java.lang.String faultSlip,
            java.lang.String faultStrikeAngle,
-           java.lang.String faultWidth) {
+           java.lang.String faultWidth,
+           java.lang.String firstEvent,
+           java.lang.String repeatTime) {
            this.faultDepth = faultDepth;
            this.faultDipAngle = faultDipAngle;
            this.faultLatEnd = faultLatEnd;
@@ -72,6 +78,8 @@ public class Fault  implements java.io.Serializable {
            this.faultSlip = faultSlip;
            this.faultStrikeAngle = faultStrikeAngle;
            this.faultWidth = faultWidth;
+           this.firstEvent = firstEvent;
+           this.repeatTime = repeatTime;
     }
 
 
@@ -374,6 +382,46 @@ public class Fault  implements java.io.Serializable {
         this.faultWidth = faultWidth;
     }
 
+
+    /**
+     * Gets the firstEvent value for this Fault.
+     * 
+     * @return firstEvent
+     */
+    public java.lang.String getFirstEvent() {
+        return firstEvent;
+    }
+
+
+    /**
+     * Sets the firstEvent value for this Fault.
+     * 
+     * @param firstEvent
+     */
+    public void setFirstEvent(java.lang.String firstEvent) {
+        this.firstEvent = firstEvent;
+    }
+
+
+    /**
+     * Gets the repeatTime value for this Fault.
+     * 
+     * @return repeatTime
+     */
+    public java.lang.String getRepeatTime() {
+        return repeatTime;
+    }
+
+
+    /**
+     * Sets the repeatTime value for this Fault.
+     * 
+     * @param repeatTime
+     */
+    public void setRepeatTime(java.lang.String repeatTime) {
+        this.repeatTime = repeatTime;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof Fault)) return false;
@@ -430,7 +478,13 @@ public class Fault  implements java.io.Serializable {
               this.faultStrikeAngle.equals(other.getFaultStrikeAngle()))) &&
             ((this.faultWidth==null && other.getFaultWidth()==null) || 
              (this.faultWidth!=null &&
-              this.faultWidth.equals(other.getFaultWidth())));
+              this.faultWidth.equals(other.getFaultWidth()))) &&
+            ((this.firstEvent==null && other.getFirstEvent()==null) || 
+             (this.firstEvent!=null &&
+              this.firstEvent.equals(other.getFirstEvent()))) &&
+            ((this.repeatTime==null && other.getRepeatTime()==null) || 
+             (this.repeatTime!=null &&
+              this.repeatTime.equals(other.getRepeatTime())));
         __equalsCalc = null;
         return _equals;
     }
@@ -486,6 +540,12 @@ public class Fault  implements java.io.Serializable {
         }
         if (getFaultWidth() != null) {
             _hashCode += getFaultWidth().hashCode();
+        }
+        if (getFirstEvent() != null) {
+            _hashCode += getFirstEvent().hashCode();
+        }
+        if (getRepeatTime() != null) {
+            _hashCode += getRepeatTime().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -584,6 +644,18 @@ public class Fault  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("faultWidth");
         elemField.setXmlName(new javax.xml.namespace.QName("", "faultWidth"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("firstEvent");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "firstEvent"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("repeatTime");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "repeatTime"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
