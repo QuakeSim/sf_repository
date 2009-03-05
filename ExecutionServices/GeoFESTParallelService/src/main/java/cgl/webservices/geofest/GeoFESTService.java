@@ -935,7 +935,8 @@ public class GeoFESTService extends AntVisco implements Runnable{
 		  //String stringDate=(new Date().getTime())+"";
 		  //String stringDate="NOW";
 		  //short s=1;
-		  String stringDate=(new UID().toString());
+		  //		  String stringDate=(new UID().toString());
+		  String stringDate=(new UID().hashCode());
 		  return stringDate;
 	 }
 

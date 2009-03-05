@@ -326,6 +326,25 @@ function dataTableSelectOneRadio(radio) {
 									   id="stuff62"
 							showSummary="true" errorStyle="color: red" />
 					</h:panelGroup>
+
+					<h:outputText value="First Event:"  id="kld30"/>
+					<h:panelGroup  id="kld31">
+						<h:inputText id="FaultFirstEvent"
+							value="#{MGBean.currentFault.firstEvent}" required="true" />
+						<h:message for="FaultFirstEvent" showDetail="true"
+									   id="stuff63"
+							showSummary="true" errorStyle="color: red" />
+					</h:panelGroup>
+
+					<h:outputText value="Repeat Time:"  id="klr3ee3"/>
+					<h:panelGroup  id="ker3332d">
+						<h:inputText id="FaultRepeatTime"
+							value="#{MGBean.currentFault.repeatTime}" required="true" />
+						<h:message for="FaultRepeatTime" showDetail="true"
+									   id="stuff343"
+							showSummary="true" errorStyle="color: red" />
+					</h:panelGroup>
+
 					<h:commandButton id="addfault" value="select"
 						actionListener="#{MGBean.toggleAddFaultForProject}" />
 				</h:panelGrid>
