@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>cgl.webservices</groupId>
+    <artifactId>DailyRDAHMMVideoService</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>Daily RDAHMM Video Web Service</name>
+    <url>http://www.myorganization.org</url>
+	 <parent>
+		<groupId>quakesim</groupId>
+		<artifactId>services-driver</artifactId>
+		<version>1.0</version>
+		<relativePath>..</relativePath>
+	 </parent>
+
+    <!-- We get this from the command line and pass to the resources via filtering -->
+    <properties>
+<!--
+       <tomcat.base.dir>${basedir}/../../portal_deploy/${tomcat.version}</tomcat.base.dir>
+-->
+       <tomcat.base.dir>${catalina.home}</tomcat.base.dir>
+       <user.home>${user.home}</user.home>
+<!--
+       <rdahmm.service.url>${rdahmm.service.url}</rdahmm.service.url>
+-->
+    </properties>
+
+    <build>
+        <finalName>DailyRDAHMMVideoService</finalName>
+        <resources>
+           <resource>
+               <directory>resources</directory>
+               <filtering>true</filtering>
+           </resource>
+        </resources>
+        <plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>Build Axis2 ${pom.artifactId} Web Service</id>
+						<phase>generate-sources</phase>
+						<configuration>
+						<!-- 
+							  Allow this to fail on error. This is not great, but we must do this
+							  since the parent pom is not abstract and so will get executed along with
+							  its children.
+						  -->
+							<tasks>
+								<ant antfile="build.xml" target="clean"/>
+								<ant antfile="build.xml" target="generate.service">
+									<property name="AXIS2_HOME" value="${tomcat.base.dir}/webapps/axis2/WEB-INF"/>
+								</ant>
+								<copy overwrite="true" failonerror="false" todir="${catalina.home}/webapps/axis2/WEB-INF/services/${pom.artifactId}">
+									<fileset dir="${basedir}/build/classes"/>
+					 			</copy>
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>Clean Axis2 ${pom.artifactId} Web Service</id>
+						<phase>clean</phase>
+						<configuration>
+							<tasks>
+								<ant antfile="build.xml" target="clean"/>
+								<delete failonerror="false" dir="${catalina.home}/webapps/axis2/WEB-INF/services/${pom.artifactId}"/>
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+		 	</plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>apache-maven-snapshots</id>
+            <url>http://cvs.apache.org/maven-snapshot-repository</url>
+        </repository>
+        <repository>
+            <id>SOPAC</id>
+            <url>http://sopac.ucsd.edu/repositories/maven2</url>
+        </repository>
+        <!-- This is our local repository -->
+        <repository>
+            <id>crisisgrid-maven-repo</id>
+            <url>http://www.crisisgrid.org/maven2</url>
+        </repository>
+
+        <repository>
+            <id>apache-maven</id>
+            <url>http://www.ibiblio.org/maven2</url>
+        </repository>
+
+        <!-- This is the apache repository for bridges -->
+        <repository>
+            <id>apache-maven</id>
+            <url>http://cvs.apache.org/repository</url>
+        </repository>
+
+    </repositories>
+
+    <!-- Repositories for plugins -->
+    <pluginRepositories>
+        <!-- Repository to get the jetty plugin -->
+        <pluginRepository>
+            <id>mortbay-repo</id>
+            <name>mortbay-repo</name>
+            <url>http://www.mortbay.org/maven2/snapshot</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+
+</project>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service name="DailyRdahmmVideoService" scope="application" targetNamespace="http://webservices.cgl/">
+	<description>
+		Daily RDAHMM Video Service
+	</description>
+	<messageReceivers>
+		<messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out"
+                       class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+	</messageReceivers>
+	<schema schemaNamespace="http://webservices.cgl/xsd"/>
+	<parameter name="ServiceClass">cgl.webservices.DailyRDAHMMVideoService</parameter>
+</service>
+
