@@ -42,6 +42,7 @@
                         <phase>package</phase>
                            <configuration>
                              <tasks>
+                               <echo message="Google Key: ${google.key}"/>
                                <replace dir="${basedir}/target/${pom.artifactId}" 
                                         token="gf2.ucs.indiana.edu"
                                         value="${portal.host.name}">
