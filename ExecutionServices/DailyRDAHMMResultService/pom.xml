@@ -62,10 +62,8 @@
 								<ant antfile="build.xml" target="generate.service">
 									<property name="AXIS2_HOME" value="${tomcat.base.dir}/webapps/axis2/WEB-INF"/>
 								</ant>
-								<copy overwrite="true" failonerror="false" todir="${catalina.home}/webapps/axis2/WEB-INF/services">
-									<fileset dir="${basedir}/build">
-										<include name="DailyRdahmmResultService.aar"/>
-									</fileset>
+								<copy overwrite="true" failonerror="false" todir="${catalina.home}/webapps/axis2/WEB-INF/services/${pom.artifactId}">
+									<fileset dir="${basedir}/build/classes"/>
 					 			</copy>
 							</tasks>
 						</configuration>
@@ -79,11 +77,7 @@
 						<configuration>
 							<tasks>
 								<ant antfile="build.xml" target="clean"/>
-								<delete failonerror="false">
-									<fileset dir="${catalina.home}/webapps/axis2/WEB-INF/services">
-										<include name="DailyRdahmmResultService.aar"/>
-									</fileset>
-					 			</delete>							
+								<delete failonerror="false" dir="${catalina.home}/webapps/axis2/WEB-INF/services/${pom.artifactId}"/>						
 							</tasks>
 						</configuration>
 						<goals>

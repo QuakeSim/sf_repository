@@ -48,17 +48,11 @@
         <!--aar them up -->
         <copy toDir="${build.dir}/classes" failonerror="false">
             <fileset dir="${basedir}/resources">
-                <include name="**/*.xml"/>
+               <include name="**/*.xml"/>
+					<include name="lib/*.*"/>
+					<include name="*.*"/>
             </fileset>
         </copy>
-		  <copy toDir="${build.dir}/classes" failonerror="false">
-            <fileset dir="${basedir}/resources">
-                <include name="lib/*.*"/>
-            </fileset>
-        </copy>
-        <jar destfile="${build.dir}/DailyRdahmmResultService.aar">
-            <fileset excludes="**/Test.class" dir="${build.dir}/classes"/>
-        </jar>
     </target>
 
     <target name="clean">
