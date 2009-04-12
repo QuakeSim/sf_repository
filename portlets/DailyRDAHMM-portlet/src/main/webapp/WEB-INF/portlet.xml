@@ -12,7 +12,7 @@ xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0"
       <name>default-view</name>
        -->
       <name>ViewPage</name>
-      <value>/DailyRdahmm.jsp</value>
+      <value>/DailyRdahmm_sopac.jsp</value>
      </init-param>
      <supports>
        <mime-type>text/html</mime-type>

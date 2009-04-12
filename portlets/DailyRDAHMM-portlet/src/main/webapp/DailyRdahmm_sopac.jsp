@@ -25,8 +25,8 @@
 <html>
 	<head>
 	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>
-	<script src="put.url.here/NmapAPI.js" type="text/javascript"></script>
-	<script src="put.url.here/dateUtil.js" type="text/javascript"></script>
+	<script src="http://gw11.quarry.iu.teragrid.org:8080/DailyRDAHMM-portlet/NmapAPI.js" type="text/javascript"></script>
+	<script src="http://gw11.quarry.iu.teragrid.org:8080/DailyRDAHMM-portlet/dateUtil.js" type="text/javascript"></script>
 	</head>
 	<body>
 
@@ -80,7 +80,7 @@
 	var slider;
 	var slider_range = 682;
 	var denotedDate = new Date();
-	var modelStartDate = new Date(1994, 1, 1, 0, 0, 0);
+	var modelStartDate = new Date(1994, 0, 1, 0, 0, 0);
 	
 	//Add an alert window.
 	function myShowDateHandler(type,args,obj) {
@@ -221,19 +221,23 @@
 	}
 	</script>
 
+	<DIV ID="waitScreen" STYLE="position:absolute;z-index:5;top:30%;left:35%;visibility:hidden;">
+		<TABLE BGCOLOR="#CCCCFF" BORDER=1 BORDERCOLOR="#6600CC" CELLPADDING=0 CELLSPACING=0 HEIGHT=150 WIDTH=300>
+			<TR>
+				<TD WIDTH="100%" HEIGHT="100%" BGCOLOR="#CCCCFF" ALIGN="CENTER" VALIGN="MIDDLE">
+					<BR><BR>   
+            	<FONT FACE="Helvetica,Verdana,Arial" SIZE=2 COLOR="#6600CC"><B>Calculating.  Please wait...</B></FONT>
+					<BR><BR>
+				</TD>
+			</TR>
+		</TABLE>
+	</DIV>
+
 	<table>
 		<tr>
 			<td width="650" colspan="2">
-				<b><font size="4" face="Verdana">Daily RDAHMM GPS Data Analysis</font></b><p>
+				<b><font size="4" face="Verdana">Daily RDAHMM GPS Data Analysis - SOPAC GLOBK Context Group</font></b><p>
 				<font face="Verdana" size="2">Note:The default date is set to the latest day when GPS data is available. Click on a station symbol for more information.</font><p></p>
-				<f:view>
-					<h:form id="form1">
-						<h:inputText id="regionLimit" value="#{dailyRdahmmResult.regionLimit}" style="display:none; height:1px; width:5px"/>       		
-						<h:inputText id="dateSelected" value="#{dailyRdahmmResult.date}" style="display:none; height:1px; width:5px"/>
-						<h:inputText id="colorResult" value="#{dailyRdahmmResult.colorResult}" style="display:none; height:1px; width:5px"/>
-						<h:inputText id="dataLatestDate" value="#{dailyRdahmmResult.dataLatestDate}" style="display:none; height:1px; width:5px"/>
-						<h:commandButton id="calcColors" action="#{dailyRdahmmResult.calcStationColors}" style="display:none; height:1px; width:5px"/>
-					</h:form>				</f:view>
 			</td>
 		</tr>
 		<tr>
@@ -488,7 +492,7 @@
 	*/
 <%
 	Document statusDoc = null;
-	String xmlUrl = "http://gf13.ucs.indiana.edu:8080//rdahmmexec/station-status-change-rss.xml";
+	String xmlUrl = "http://gf13.ucs.indiana.edu:8080//rdahmmexec/daily/SOPAC_FILL/station-status-change-SOPAC_FILL.xml";
 	try {
 		// if the file is old or does not exist, copy it from xmlUrl
 		boolean shouldCopy = false;		
@@ -499,8 +503,8 @@
 			calFile2.setTimeInMillis(localFile.lastModified());
 			shouldCopy = !( calFile1.get(Calendar.YEAR) == calFile2.get(Calendar.YEAR) && calFile1.get(Calendar.MONTH) == calFile2.get(Calendar.MONTH) && calFile1.get(Calendar.DATE) == calFile2.get(Calendar.DATE) );
 			if (shouldCopy) {
-				shouldCopy = false;
-				//localFile.delete();
+				//shouldCopy = false;
+				localFile.delete();
 			}
 		} else {
 			shouldCopy = true;		
@@ -530,17 +534,18 @@
 	Element eleXml = statusDoc.getRootElement();
 	Element eleOutput = eleXml.element("output-pattern");
 %>
+	var xmlResultUrl = "<%=xmlUrl%>"; 
 	var urlPattern = '<%=eleOutput.element("server-url").getText()%>';
 	var scnPattern = '<%=eleOutput.element("stateChangeNumTxtFile").getText()%>';
-	var videoPattern = '<%=eleOutput.element("videoFile").getText()%>';
+	var videoUrl = '<%=eleOutput.element("video-url").getText()%>';
 	var allInputPattern = '<%=eleOutput.element("allStationInputName").getText()%>';
 	
 	document.getElementById("scnPlotImg").src = urlPattern + "/" + scnPattern + ".png";
 	document.getElementById("scnTxtLink").href = urlPattern + "/" + scnPattern;
-	document.getElementById("videoLink").href = urlPattern + "/" + videoPattern;
-	document.getElementById("allInputLink").href = urlPattern + "/daily/" + allInputPattern;
+	document.getElementById("videoLink").href = videoUrl;
+	document.getElementById("allInputLink").href = urlPattern + "/" + allInputPattern;
 
-	var dirPattern = 'daily/' + '<%=eleOutput.element("pro-dir").getText()%>';
+	var dirPattern = '<%=eleOutput.element("pro-dir").getText()%>';
 	var aPattern = '<%=eleOutput.element("AFile").getText()%>';
 	var bPattern = '<%=eleOutput.element("BFile").getText()%>';
 	var inputPattern = '<%=eleOutput.element("InputFile").getText()%>';
@@ -656,32 +661,9 @@
 %>
 	var DAY_MILLI = 86400000;
 	var timeDiff = parseInt(Date.UTC(1970,0,2)/DAY_MILLI) - <%=(tmpCaldr.getTime().getTime()/DAY_MILLI)%>;	
-	var mapCenterY = 0, mapCenterX = 0;
-	if (document.getElementById("form1:regionLimit") != null && document.getElementById("form1:regionLimit").getAttribute("value").length > 0) {
-		var regionLimitStr = document.getElementById("form1:regionLimit").getAttribute("value");
-		var scIdx, commerIdx;
-		scIdx = regionLimitStr.indexOf(';');
-		if (scIdx >= 0) {
-			commerIdx = regionLimitStr.indexOf(',');
-			if (commerIdx >= 0 && commerIdx < scIdx) {
-				var leftLat = parseFloat(regionLimitStr.substring(0, commerIdx));
-				var downLong = parseFloat(regionLimitStr.substring(commerIdx + 1, scIdx));
-				
-				commerIdx = regionLimitStr.indexOf(',', scIdx + 1);
-				if (commerIdx >= 0) {
-					var rightLat = parseFloat(regionLimitStr.substring(scIdx + 1, commerIdx));
-					var upLong = parseFloat(regionLimitStr.substring(commerIdx + 1));
-					mapCenterX = leftLat + (rightLat - leftLat) / 2;
-					mapCenterY = downLong + (upLong - downLong) / 2;
-				}
-			}
-		}
-	} 
-
-	if (mapCenterY == 0 || mapCenterX == 0) {
-		mapCenterY = <%=mapcenter_y%>;
-		mapCenterX = <%=mapcenter_x%>;	
-	}
+	var mapCenterY = <%=mapcenter_y%>;
+	var mapCenterX = <%=mapcenter_x%>;	
+	
 	map.centerAndZoom(new GPoint(mapCenterY, mapCenterX), 10);
 	GEvent.addListener(map, "moveend", function() {	onMapMove(); } );
 	GEvent.addListener(map, "zoomend", function(oldLevel, newLevel) {
@@ -707,12 +689,12 @@
 		var urlPattern2 = urlPattern, inputPattern2 = inputPattern, rangePattern2 = rangePattern, qPattern2 = qPattern, aPattern2 = aPattern;
 		var bPattern2 = bPattern, lPattern2 = lPattern, piPattern2 = piPattern, minPattern2 = minPattern, maxPattern2 = maxPattern;
 		var xPattern2 = xPattern, yPattern2 = yPattern, zPattern2 = zPattern, dirPattern2 = dirPattern; modelPattern2 = modelPattern;
-
-		var idx = inputPattern2.lastIndexOf(".");
-		var allRawPattern = inputPattern2.substring(0, idx) + ".all.raw"; 
           
+		var idx = inputPattern2.lastIndexOf(".");
+                var allRawPattern = inputPattern2.substring(0, idx) + ".all.raw"; 
+
 		var preFix = urlPattern2.replace(/{!station-id!}/g, stationId) + "/" + dirPattern2.replace(/{!station-id!}/g, stationId) + "/";
-		var modelLink = urlPattern2.replace(/{!station-id!}/g, stationId) + "/daily/" + modelPattern2.replace(/{!station-id!}/g, stationId);
+		var modelLink = urlPattern2.replace(/{!station-id!}/g, stationId) + "/" + modelPattern2.replace(/{!station-id!}/g, stationId);
 		var outputTable = "<table border='0'> <tr><td> <b>Output Values</b> </td></tr>" + "<tr><td><a target=\"_blank\" href=\"" 
 							+  preFix + inputPattern2.replace(/{!station-id!}/g, stationId) + "\">Input File</a></td></tr>"
 							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + allRawPattern.replace(/{!station-id!}/g, stationId) + "\">All Raw Input Data</a></td></tr>"
@@ -757,7 +739,12 @@
 	
 	// every station in the station array has 7 attributes: id, lat, long, hasColored(for the selected date), null(for output table), status change details, marker
 	var globalColorStr = "";
-	function overlayMarkers(){        	
+	function overlayMarkers() {
+		document.getElementById("waitScreen").style.visibility="visible";
+		window.setTimeout('overlayMarkersBody()',1);
+	}
+
+	function overlayMarkersBody(){        	
 		var dateShowText = document.getElementById("dateText");	
 		var showDateStr = dateShowText.getAttribute("value");
 		var icon;
@@ -765,8 +752,10 @@
 		var sw = mapBounds.getSouthWest();
 		var ne = mapBounds.getNorthEast();
 		if (showDateStr != "") {
-			var colorStr = document.getElementById("form1:colorResult").getAttribute("value");
+			url = "http://gw11.quarry.iu.teragrid.org:8080/axis2/services/DailyRdahmmResultService/calcStationColors?date=" + showDateStr + "&resUrl=" + xmlResultUrl;
+			var colorStr = callHttpService(url);
 			if (colorStr.length != 0) {
+				nMarkerDoneForNewDate = 0;
 				for (var i=0; i<stationArray.length; i++) {
 					stationArray[i][3] = false;									
 					if (stationArray[i][1] <= sw.lat() || stationArray[i][1] >= ne.lat() || stationArray[i][2] <= sw.lng() || stationArray[i][2] >= ne.lng())
@@ -796,20 +785,25 @@
 					}
 					map.addOverlay(stationArray[i][6]);
 					stationArray[i][3] = true;
+					nMarkerDoneForNewDate++;
 				}
 				globalColorStr = colorStr;
-				document.getElementById("form1:colorResult").setAttribute("value", "");
 			} else {    		
-				var theDate = getDateFromString(showDateStr);
-				document.getElementById("form1:regionLimit").setAttribute("value", sw.lat() + ',' + sw.lng() + ';' + ne.lat() + ',' + ne.lng());
-				//alert("about to clear overlays " + document.getElementById("form1:regionLimit").getAttribute("value"));
-				document.getElementById("form1:dateSelected").setAttribute("value", showDateStr);
-				document.getElementById("form1:calcColors").click();
+				alert("calling http service at " + url + " Returns empty string");
 			}
-		}       
+		}
+		document.getElementById("waitScreen").style.visibility="hidden";
 	}
 
+	var nMarkerDoneForNewDate = 0;
 	function onMapMove() {
+		if (nMarkerDoneForNewDate < stationArray.length * 0.7) {
+			document.getElementById("waitScreen").style.visibility="visible";
+		}
+		window.setTimeout('onMapMoveBody()',30);
+	}
+
+	function onMapMoveBody() {
 		var dateShowText = document.getElementById("dateText");	
 		var showDateStr = dateShowText.getAttribute("value");
 		var icon;
@@ -846,9 +840,11 @@
 					}
 					map.addOverlay(stationArray[i][6]);
 					stationArray[i][3] = true;
+					nMarkerDoneForNewDate++;
 				}
 			}
 		}
+		document.getElementById("waitScreen").style.visibility="hidden";
 	}
 
 	function createMarker(networkName, name, lon, lat, icon) {
@@ -860,7 +856,18 @@
 		return marker;
 	}
 
-	//YAHOO.namespace("example.calendar");
+	// call a web service with http binding
+	function callHttpService(url) {
+		var xmlhttp=new XMLHttpRequest();
+		xmlhttp.open("GET",url,false);
+		xmlhttp.send(null);
+		var str = "return>";
+		var idx = xmlhttp.responseText.indexOf(str);
+		if (idx < 0)
+			return "";
+		var idx2 = xmlhttp.responseText.indexOf("</", idx);
+		return xmlhttp.responseText.substring(idx + str.length, idx2);
+	}
 
 	YAHOO.example.calendar.cal1=new YAHOO.widget.Calendar("cal1","cal1Container");
 	YAHOO.example.calendar.cal1.selectEvent.subscribe(myShowDateHandler,YAHOO.example.calendar.cal1, true);
@@ -870,26 +877,27 @@
 	slider = YAHOO.widget.Slider.getHorizSlider("slider-bg", "slider-thumb", 0, slider_range, 1); 
 	slider.subscribe("change", onSlideChange);
 	slider.subscribe("slideEnd", onSlideEnd);
-	if (document.getElementById("form1:dateSelected") == null || document.getElementById("form1:dateSelected").getAttribute("value").length == 0) {
-		// set the date to 18 days ago, the latest date that we get data for all stations
-		var str = document.getElementById("form1:dataLatestDate").getAttribute("value");
-		var tmpDate = getDateFromString(str);
-		document.getElementById("dateText").setAttribute("value", "");
-		YAHOO.example.calendar.cal1.setYear(tmpDate.getFullYear());
-		YAHOO.example.calendar.cal1.setMonth(tmpDate.getMonth());
-		YAHOO.example.calendar.cal1.select(tmpDate);
-		YAHOO.example.calendar.cal1.render();
-	} else {
-		var str = document.getElementById("form1:dateSelected").getAttribute("value");
-		var tmpDate = getDateFromString(str);
-		document.getElementById("dateText").setAttribute("value", "");
-		YAHOO.example.calendar.cal1.setYear(tmpDate.getFullYear());
-		YAHOO.example.calendar.cal1.setMonth(tmpDate.getMonth());
-		YAHOO.example.calendar.cal1.select(tmpDate);
-		YAHOO.example.calendar.cal1.render();
-	}
+	// set the date to 18 days ago, the latest date that we get data for all stations
+	var url = "http://gw11.quarry.iu.teragrid.org:8080/axis2/services/DailyRdahmmResultService/getDataLatestDate?resUrl=" + xmlResultUrl;
+	var str = callHttpService(url);
+	var tmpDate = getDateFromString(str);
+	document.getElementById("dateText").setAttribute("value", "");
+	YAHOO.example.calendar.cal1.setYear(tmpDate.getFullYear());
+	YAHOO.example.calendar.cal1.setMonth(tmpDate.getMonth());
+	YAHOO.example.calendar.cal1.select(tmpDate);
+	YAHOO.example.calendar.cal1.render();
 
 	</script>
+
+	<hr/>
+	<f:view>
+		<h:form>
+			<h:commandLink action="go-to-jpl">
+				<h:outputText value="See Results for the JPL GIPSY Context Group"/>
+			</h:commandLink>
+		</h:form>
+	</f:view>
+
 	<p><font face="Verdana" size="2">More information about California Real Time Network (CRTN) is available at	<a href="http://sopac.ucsd.edu/projects/realtime/">SOPAC Web Page</a></font></p>
 	</body>
 </html>

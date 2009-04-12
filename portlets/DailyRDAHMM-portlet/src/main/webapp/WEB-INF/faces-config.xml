@@ -12,36 +12,37 @@
 		<managed-bean-class>org.vlab.sunjsf.blank.HelloWorldBacking</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
-
+<!--
 	<managed-bean>
 		<managed-bean-name>dailyRdahmmResult</managed-bean-name>
 		<managed-bean-class>cgl.webservices.DailyRdahmmResultsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 		<managed-property>
 			<property-name>xmlResPath</property-name>
-			<value>put.catalina.home.here/webapps/DailyRDAHMM-portlet/station-status-change-rss.xml</value>
+			<value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20//webapps/DailyRDAHMM-portlet/station-status-change-rss.xml</value>
 		</managed-property>
 		<managed-property>
 			<property-name>xmlResURL</property-name>
 			<value>http://gf13.ucs.indiana.edu:8080//rdahmmexec/station-status-change-rss.xml</value>
 		</managed-property>
 	</managed-bean>
+-->
 	
-	<!-- navigation rules for helloWorld.jsp -->
+	<!-- navigation rules for DailyRdahmm_sopac.jsp -->
 	<navigation-rule>
-		<from-view-id>/helloWorld.jsp</from-view-id>
+		<from-view-id>/DailyRdahmm_sopac.jsp</from-view-id>
 		<navigation-case>
-			<from-outcome>success</from-outcome>
-			<to-view-id>/page2.jsp</to-view-id>
+			<from-outcome>go-to-jpl</from-outcome>
+			<to-view-id>/DailyRdahmm_jpl.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	
-	<!-- navigation rules for page2.jsp -->
+	<!-- navigation rules for DailyRdahmm_jpl.jsp -->
 	<navigation-rule>
-		<from-view-id>/page2.jsp</from-view-id>
+		<from-view-id>/DailyRdahmm_jpl.jsp</from-view-id>
 		<navigation-case>
-			<from-outcome>back</from-outcome>
-			<to-view-id>/helloWorld.jsp</to-view-id>
+			<from-outcome>go-to-sopac</from-outcome>
+			<to-view-id>/DailyRdahmm_sopac.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 </faces-config>
