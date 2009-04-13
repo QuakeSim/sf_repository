@@ -78,24 +78,26 @@ public class DailyRDAHMMRunner {
 		int thread_num = 8;
 		
 		try {
-			if (args.length > 0 && args[0].equalsIgnoreCase("help")) {
-				System.out.println("Usage: DailyRDAHMMRunner [num_of_thread [num_of_states [model_start_date " +
+			if (args.length > 0 && args[0].equalsIgnoreCase("--help")) {
+				System.out.println("Usage: DailyRDAHMMRunner <daily RDAHMM property file name> [num_of_thread [num_of_states [model_start_date " +
 									"[model_end_date [eval_start_date] ] ] ] ]");
 			}
 			
-			int n = Integer.valueOf(args[0]).intValue();
+			DailyRDAHMMService.propFileName = args[0];
+			
+			int n = Integer.valueOf(args[1]).intValue();
 			if (n < 32)
 				thread_num = n;			
-			runner.numOfStates = Integer.valueOf(args[1]).intValue();
-			
-			if (args.length > 2)
-				DailyRDAHMMThread.modelStartDate = args[2];
+			runner.numOfStates = Integer.parseInt(args[2]);
 			
 			if (args.length > 3)
-				DailyRDAHMMThread.modelEndDate = args[3];
+				DailyRDAHMMThread.modelStartDate = args[3];
 			
 			if (args.length > 4)
-				DailyRDAHMMThread.evalStartDate = args[4];
+				DailyRDAHMMThread.modelEndDate = args[4];
+			
+			if (args.length > 5)
+				DailyRDAHMMThread.evalStartDate = args[5];
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -1,6 +1,8 @@
 package cgl.webservices;
 
 import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 
 import org.dom4j.*;
@@ -17,7 +19,7 @@ public class DailyRDAHMMThread implements Runnable {
 	static String shortModelEndDate = "2007-09-30";
 	static String shortEvalStartDate = "2007-10-01";
 	static String modelStartDate = "1994-01-01";
-	static String modelEndDate = "2006-09-30";	
+	static String modelEndDate = "2006-09-30";
 	static final long dayMilli = 86400*1000;
 	static final Object fileMutex = new Object();
 	static String xmlPath = null;
@@ -32,6 +34,7 @@ public class DailyRDAHMMThread implements Runnable {
 												//data from 2006-10-01 to 2007-09-30, and do evaluation from 2007-10-01 to today
 	static TreeSet<String> allProNames = new TreeSet<String>();
 	static int objCount = 0;
+	static String xmlUrlPrefix = null;
 	
 	protected Vector<String> modelRawLines = new Vector<String>(); 	//for saving lines from the GRWS queried input file in modeling phase
 	protected Vector<String> modelQLines = new Vector<String>();		//for saving lines from the .Q result file in modeling phase
@@ -70,8 +73,6 @@ public class DailyRDAHMMThread implements Runnable {
 		String baseDestDir = null;
 		String binDir = null;
 		String resPath = null;
-		String yesterdayVideoPath = null;
-		String videoConfigPath = null;
 		boolean modelSuc = false;
 		while (true) {			
 			try {
@@ -102,11 +103,14 @@ public class DailyRDAHMMThread implements Runnable {
 						runner.stateChangeNums.clear();
 						
 						// make a video of the whole time period
-						DailyRDAHMMVideoThread vt = new DailyRDAHMMVideoThread(videoConfigPath, null, today);
-						vt.setVideoPathToDelete(yesterdayVideoPath);
-						vt.setFinalVideoDir(resPath.substring(0, resPath.lastIndexOf(File.separator)));
-						vt.start();
-						yesterdayVideoPath = vt.getFinalVideoPath();
+						StringBuffer urlSb = new StringBuffer(DailyRDAHMMService.videoServiceUrlPrefix);
+						urlSb.append("dataSource=").append(DailyRDAHMMService.dataSource).append("&preProcTreat=");
+						urlSb.append(DailyRDAHMMService.preProcessingTreat).append("&resultUrl=");
+						urlSb.append(xmlUrlPrefix).append('/').append(UtilSet.getFileNamePart(xmlPath)).append("&startDate=");
+						urlSb.append(modelStartDate).append("&endDate=").append(UtilSet.getDateString(today));
+						String videoUrl = callHttpService(urlSb.toString());
+						UtilSet.log(threadNum, "video URL:" + videoUrl);
+						writeVideoUrlToXml(xmlPath, videoUrl);
 					}
 					
 					//make a big flat input file containing 
@@ -212,13 +216,11 @@ public class DailyRDAHMMThread implements Runnable {
 				UtilSet.log(threadNum, "station:" + station + "; evalRawLines " + evalRawLines.size() + "; evalQLines " + evalQLines.size());
 				
 				// write results to file
-				resPath = rds.properties.getProperty("dailyRdahmm.output.path");
+				resPath = DailyRDAHMMService.outputXmlPath;
 				if (xmlPath == null)
 					xmlPath = resPath;
 				if (scnPath == null)
-					scnPath = rds.properties.getProperty("dailyRdahmm.stateChangeNumTrace.path");
-				if (videoConfigPath == null)
-					videoConfigPath = rds.properties.getProperty("dailyRdahmm.video.config.path");
+					scnPath = DailyRDAHMMService.stateChangeNumTxtPath;
 				// change the file of the form A.xml to the form of A_tmp.xml
 				resPath = resPath.substring(0, resPath.length() - 4) + "_tmp.xml";
 				writeResToXML(today, station, resPath, rds);				
@@ -707,16 +709,16 @@ public class DailyRDAHMMThread implements Runnable {
 			Element tmpNode = elePattern.addElement("server-url");
 			tmpNode.setText(rds.serverUrl);
 			
+			if (xmlUrlPrefix == null)
+				xmlUrlPrefix = rds.serverUrl;
+			
 			tmpNode = elePattern.addElement("stateChangeNumTxtFile");
 			if (scnPath == null)
-				scnPath = rds.properties.getProperty("dailyRdahmm.stateChangeNumTrace.path");
+				scnPath = DailyRDAHMMService.stateChangeNumTxtPath;
 			tmpNode.setText(scnPath.substring(scnPath.lastIndexOf(File.separator)+1));
 			
 			tmpNode = elePattern.addElement("allStationInputName");
 			tmpNode.setText(DailyRDAHMMService.allStationInputName);
-			
-			tmpNode = elePattern.addElement("videoFile");
-			tmpNode.setText(modelStartDate + "to" + UtilSet.getDateString(Calendar.getInstance()) + ".mpeg");
 			
 			String proNamePat = rds.projectName.replaceAll(station, "{!station-id!}");			
 			String modelBasePat = rds.modelBaseName.replaceAll(station, "{!station-id!}");
@@ -947,7 +949,7 @@ public class DailyRDAHMMThread implements Runnable {
 		  	calEnd.set(Calendar.SECOND, 0);
 		  	calEnd.set(Calendar.MILLISECOND, 0);
 			while (calTmp.compareTo(calEnd) <= 0) {
-				prDates.println(UtilSet.getFloatDateString(calTmp));
+				prDates.println(UtilSet.getDateString(calTmp));
 				calTmp.set(Calendar.DATE, calTmp.get(Calendar.DATE) + 1);
 			}
 			prDates.close();
@@ -966,12 +968,11 @@ public class DailyRDAHMMThread implements Runnable {
 				
 				if (i == 0) {
 					sbTitle.append("time ");
-				} else {
-					// a project name is like "daily_project_azu1_2008-02-22", where azu1 is the station id
-					int idx = DailyRDAHMMService.proNamePrefix.length();
-					String stationID = proName.substring(idx, idx+4);
-					sbTitle.append(stationID).append("-x ").append(stationID).append("-y ").append(stationID).append("-z ");
 				}
+				// a project name is like "daily_project_azu1_2008-02-22", where azu1 is the station id
+				int idx = DailyRDAHMMService.proNamePrefix.length();
+				String stationID = proName.substring(idx, idx+4);
+				sbTitle.append(stationID).append("-x ").append(stationID).append("-y ").append(stationID).append("-z ");
 				
 				// paste the temp file containing the content of previous ".all.input" files with the new ".all.input" file
 				res = UtilSet.exec("paste -d\" \" " + tmpPathPre + i + " " + proInputPath + " > " + tmpPathPre + (i+1));
@@ -1128,9 +1129,10 @@ public class DailyRDAHMMThread implements Runnable {
 		File fzip = new File(zipPath);
 		if (fzip.exists())
 			return;
-		String exeZip = "zip -r " + zipPath + " " + rds.modelBaseName;
+		String zipSourceDir = rds.baseWorkDir + File.separator + rds.modelBaseName;
+		String exeZip = "zip -r " + zipPath + " " + zipSourceDir;
 		String err = UtilSet.exec(exeZip, new File(rds.baseWorkDir));
-		UtilSet.log(threadNum, "zipping model " + exeZip + "output: " + err);
+		UtilSet.log(threadNum, "zipping model " + exeZip + " output: " + err);
 	}
 	
 	// add the state change number on date by addition
@@ -1184,5 +1186,85 @@ public class DailyRDAHMMThread implements Runnable {
 		System.out.println("about to executing " + plotSh + " " + scnFilePath);
 		String res = UtilSet.exec(plotSh + " " + scnFilePath, new File(shDir));
 		System.out.println("result for plotting state change numbers:" + res);
+	}
+
+	/**
+	 * call a web service through an http port
+	 * @param url
+	 * @return
+	 */
+	protected String callHttpService(String url) {
+		try {
+			URL serviceURL = new URL(url);
+			URLConnection conn = serviceURL.openConnection();
+			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String htmlLine = in.readLine();
+			StringBuffer sb = new StringBuffer();
+			while (htmlLine != null) {
+				sb.append(htmlLine);
+				htmlLine = in.readLine();
+			}
+			in.close();
+			
+            int idx = sb.indexOf("return>");
+            if (idx < 0)
+                    return "";
+            int idx2 = sb.indexOf("</", idx);
+            return sb.substring(idx + "return>".length(), idx2);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "";
+	}
+	
+	/**
+	 * write the url to daily rdahmm video to the xml result file
+	 * @param resPath
+	 */
+	protected void writeVideoUrlToXml(String resPath, String videoUrl) {
+		try {
+			resPath = resPath.replace('/', File.separatorChar);
+			File outputFile = new File(resPath);
+			File outputPretty = new File(resPath.substring(0, resPath.length()-4) + "2.xml");
+			
+			// create the xml document to add stuff to
+			Document resDoc = null, resDocPretty = null;
+			Element eleXml = null, eleXmlPretty = null;
+			SAXReader xmlReader = new SAXReader();
+
+			FileReader fr = new FileReader(outputFile);
+			resDoc = xmlReader.read(fr);
+			eleXml = resDoc.getRootElement();
+			fr.close();							
+			fr = new FileReader(outputPretty);
+			resDocPretty = xmlReader.read(fr);
+			eleXmlPretty = resDocPretty.getRootElement();
+			fr.close();
+			
+			Element elePattern = eleXml.element("output-pattern");
+			Element eleVideoUrl = elePattern.addElement("video-url");
+			eleVideoUrl.setText(videoUrl);
+			
+			Element elePatternPretty = eleXmlPretty.element("output-pattern");
+			Element eleVideoUrlPretty = elePatternPretty.addElement("video-url");
+			eleVideoUrlPretty.setText(videoUrl);
+			
+			// write the document back to file					
+			OutputFormat format = OutputFormat.createPrettyPrint();
+			FileWriter fw2 = new FileWriter(outputPretty);
+			XMLWriter writer2 = new XMLWriter(fw2, format);
+			writer2.write(resDocPretty);
+			writer2.close();
+			fw2.close();					
+					
+			FileWriter fw = new FileWriter(outputFile);
+			XMLWriter writer = new XMLWriter(fw);
+			writer.write(resDoc);
+			writer.close();
+			fw.close();				
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
 	}
 }

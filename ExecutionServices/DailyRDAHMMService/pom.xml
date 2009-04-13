@@ -10,6 +10,12 @@
     <version>1.0-SNAPSHOT</version>
     <name>Ant Visco execution service</name>
     <url>http://www.myorganization.org</url>
+	 <parent>
+		<groupId>quakesim</groupId>
+		<artifactId>services-driver</artifactId>
+		<version>1.0</version>
+		<relativePath>..</relativePath>
+	 </parent>
 
     <build>
         <finalName>daily_rdahmmexec</finalName>
@@ -19,25 +25,64 @@
                <filtering>true</filtering>
            </resource>
         </resources>
-<!--        <plugins>
-            <plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>maven-jetty6-plugin</artifactId>
-                <configuration>
-                    <scanIntervalSeconds>10</scanIntervalSeconds>
-                </configuration>
-            </plugin>
-        </plugins>
+		  <plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>Install ${pom.artifactId} binaries</id>
+						<phase>install</phase>
+						<configuration>
+						<!-- 
+							  Allow this to fail on error. This is not great, but we must do this
+							  since the parent pom is not abstract and so will get executed along with
+							  its children.
+						  -->
+							<tasks>	
+<!--		 
+								<echo message="Copying the binaries:"/>
+								<echo message="${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec"/>
+								<echo message="${rdahmm.bin.home}"/>
+						 
+								<copy overwrite="true" 
+										filtering="true"
+										failonerror="false"
+										todir="${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec">
+									<fileset dir="${rdahmm.bin.home}"/>
+								</copy>
 -->
+								<chmod perm="${tomcat.bin.perm}" 
+										dir="${tomcat.base.dir}/webapps/${pom.artifactId}/WEB-INF/binaryexec/">
+									<include name="*"/>
+								</chmod>
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+		 	</plugin>
+		  </plugins>
     </build>
 
     <!-- We get this from the command line and pass to the resources
          via filtering -->
     <properties>
-       <tomcat.base.dir>${tomcat.base.dir}</tomcat.base.dir>
+       <tomcat.base.dir>${basedir}/../../portal_deploy/${tomcat.version}</tomcat.base.dir>
        <bin.path>${tomcat.base.dir}/webapps/${pom.artifactId}/WEB-INF/binaryexec</bin.path>
        <user.home>${user.home}</user.home>
+<!--
        <daily_rdahmm.service.url>${daily_rdahmm.service.url}</daily_rdahmm.service.url>
+-->
     </properties>
 
     <repositories>
@@ -160,6 +205,15 @@
              <groupId>SOPAC</groupId>
              <artifactId>grwsXmlBeansSchemas</artifactId>
              <version>1.0</version>
+        </dependency>
+
+	<!--
+			dom4j jars
+	-->
+		  <dependency>
+             <groupId>dom4j</groupId>
+             <artifactId>dom4j</artifactId>
+             <version>1.5</version>
         </dependency>
 
 

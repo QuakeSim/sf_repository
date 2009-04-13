@@ -51,13 +51,11 @@ public class RDAHMMService extends AntVisco implements Runnable{
 		  
 		  if(useClassLoader) {
 				System.out.println("Using classloader");
-				//This is useful for command line clients but does not work
-				//inside Tomcat.
+				//This is useful for command line clients but does not work inside Tomcat.
 				ClassLoader loader=ClassLoader.getSystemClassLoader();
 				properties=new Properties();
 				
-				//This works if you are using the classloader but not inside
-				//Tomcat.
+				//This works if you are using the classloader but not inside Tomcat.
 				properties.load(loader.getResourceAsStream("rdahmmconfig.properties"));
 		  }
 		  else {

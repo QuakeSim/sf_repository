@@ -314,4 +314,14 @@ public class UtilSet {
 		  in.close();
 		  out.close();
     }
+    
+    /**
+     * get the file name part of a path
+     * @param path
+     * @return
+     */
+    public static String getFileNamePart(String path) {
+    	int idx = path.lastIndexOf(File.separatorChar);
+    	return path.substring(idx + 1);
+    }
 }

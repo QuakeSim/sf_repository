@@ -1,7 +1,6 @@
 package cgl.webservices;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -11,11 +10,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.concurrent.ExecutionException;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServlet;
+
+import org.apache.axis.MessageContext;
+import org.apache.axis.transport.http.HTTPConstants;
 
 public class DailyRDAHMMService extends RDAHMMService {
 	
@@ -25,25 +28,73 @@ public class DailyRDAHMMService extends RDAHMMService {
 	Object runningLock = null;
 	String beginDate;
 	String endDate;
+	static String stateChangeNumTxtPath = null;
+	static String outputXmlPath = null; 
 	static int DUP_LINE_TIME = 22;
 	static String proNamePrefix = null;
 	static String allStationInputName = null;
+	static String propFileName = "dailyRdahmmSopacFill.properties";
+	static String inputContextGroup = null;
+	static String inputContextId = null;
+	static String videoServiceUrlPrefix = null;
+	static String dataSource = null;
+	static String preProcessingTreat = null;
 	
 	public DailyRDAHMMService(boolean useClassLoader, String stationID) 
 		throws Exception{
 		super(useClassLoader);
 		this.stationID = stationID;
 		
+		if (useClassLoader) {
+			System.out.println("Using classloader");
+			// This is useful for command line clients but does not work inside Tomcat.
+			ClassLoader loader = ClassLoader.getSystemClassLoader();
+			properties = new Properties();
+			properties.load(loader.getResourceAsStream(propFileName));
+		} else {
+			// Extract the Servlet Context
+			System.out.println("Using Servlet Context");
+			MessageContext msgC = MessageContext.getCurrentContext();
+			ServletContext context = ((HttpServlet) msgC
+					.getProperty(HTTPConstants.MC_HTTP_SERVLET))
+					.getServletContext();
+
+			String propertyFile = context.getRealPath("/") + File.separator + "WEB-INF" +
+									File.separator + "classes" + File.separator + propFileName;
+			System.out.println("Prop file location " + propertyFile);
+
+			properties = new Properties();
+			properties.load(new FileInputStream(propertyFile));
+		}
+		
+		if (dataSource == null)
+			dataSource = properties.getProperty("data.source");
+		if (preProcessingTreat == null)
+			preProcessingTreat = properties.getProperty("preprocessing.treatment");
+
+		serverUrl = properties.getProperty("daily.rdahmm.service.url");
+		baseWorkDir = properties.getProperty("base.workdir");
+		binPath = properties.getProperty("bin.path");
 		buildFilePath = properties.getProperty("build_daily.file.path");
 		if (proNamePrefix == null)
 			proNamePrefix = properties.getProperty("project_daily.name") + "_";
 		if (allStationInputName == null)
 			allStationInputName = properties.getProperty("dailyRdahmm.allStationInput.name");
+		if (stateChangeNumTxtPath == null)
+			stateChangeNumTxtPath = properties.getProperty("dailyRdahmm.stateChangeNumTrace.path");
+		if (outputXmlPath == null)
+			outputXmlPath = properties.getProperty("dailyRdahmm.output.path");
+		if (inputContextGroup == null)
+			inputContextGroup = properties.getProperty("dailyRdahmm.input.contextGroup");
+		if (inputContextId == null)
+			inputContextId = properties.getProperty("dailyRdahmm.input.contextId");
+		if (videoServiceUrlPrefix == null)
+			videoServiceUrlPrefix = properties.getProperty("dailyRdahmm.video.serviceUrlPrefix");
 		modelBaseName = proNamePrefix + stationID;
 		baseDestDir = properties.getProperty("base.dest.daily_dir");
 		projectName = modelBaseName + "_" + UtilSet.getDateString(Calendar.getInstance());
 		modelWorkDir = baseWorkDir + File.separator + modelBaseName;
-		outputDestDir = baseDestDir+ File.separator + projectName;
+		outputDestDir = baseDestDir + File.separator + projectName;
 		beginDate = DailyRDAHMMThread.evalStartDate;
 		endDate = UtilSet.getDateString(Calendar.getInstance());
 	}
@@ -489,10 +540,10 @@ public class DailyRDAHMMService extends RDAHMMService {
     	this.beginDate = beginDate;
     	this.endDate = endDate;
     	
-    	String resource="procCoords";
-		String contextGroup="sopacGlobk";
-		String minMaxLatLon="";
-		String contextId="58";
+    	String resource = "procCoords";
+		String contextGroup = inputContextGroup;
+		String minMaxLatLon = "";
+		String contextId = inputContextId;
 		  
 		System.out.println("about to query input url for site " + siteCode + " beginDate:" + beginDate + " endDate:" + endDate);
 		  
