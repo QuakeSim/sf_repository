@@ -496,7 +496,7 @@
 	try {
 		// if the file is old or does not exist, copy it from xmlUrl
 		boolean shouldCopy = false;		
-		File localFile = new File(config.getServletContext().getRealPath("station-status-change-rss.xml"));
+		File localFile = new File(config.getServletContext().getRealPath("station-status-change-SOPAC_FILL.xml"));S
 		if (localFile.exists()) {		
 			Calendar calFile1 = Calendar.getInstance();
 			Calendar calFile2 = Calendar.getInstance();
