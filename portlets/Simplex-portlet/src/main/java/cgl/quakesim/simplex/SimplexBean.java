@@ -1386,13 +1386,16 @@ public class SimplexBean extends GenericSopacBean {
 	  * This will delete projects
 	  */
     public void toggleDeleteProjectSummary(ActionEvent ev) {
+		  System.out.println("Getting selected archived project row");
 		  try {
+				System.out.println("Getting selected archived project row");
 				SimpleXOutputBean dpsb=
 					 (SimpleXOutputBean)getMyArchiveDataTable().getRowData();
 
-				db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
-										 + codeName + "/" + dpsb.getProjectName() + ".db");
 				System.out.println(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
+										 + codeName + "/" + dpsb.getProjectName() + ".db");
+
+				db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 										 + codeName + "/" + dpsb.getProjectName() + ".db");
 				
 				System.out.println("Found project:"+dpsb.getProjectName()+" "+dpsb.getJobUIDStamp());

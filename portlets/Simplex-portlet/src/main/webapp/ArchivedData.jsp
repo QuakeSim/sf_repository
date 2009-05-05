@@ -54,8 +54,8 @@ function dataTableSelectOneRadio(radio) {
 
 </script>
 <f:view>
-	<h:form>
-		<h:panelGrid columns="1" border="0">
+	<h:form id="theFormid">
+		<h:panelGrid id="pgidsimplex" columns="1" border="0">
 			<h:outputText escape="false" value="<h3>Archived Data</h3><br>" />
 			<h:outputText escape="false"
 							  rendered="#{!(empty SimplexBean.myarchivedFileEntryList)}"
