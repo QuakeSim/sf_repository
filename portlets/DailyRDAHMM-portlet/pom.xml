@@ -43,20 +43,6 @@
                         <phase>package</phase>
                            <configuration>
                              <tasks>
-<<<<<<< .mine
-										<replace dir="${basedir}/target/${pom.artifactId}" 
-													token="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBTCdqtmO6Kma7uYZgpagQkNe17MQhRS93QdZFchZ2Vy9IpcH0W3nbN34g"
-													value="${google.key}"/>
-										<mkdir dir="${tomcat.base.dir}/webapps/ROOT/${yui.version}/build/slider/assets/"></mkdir>
-										<copy overwrite="true" 
-												filtering="false"
-												failonerror="false"
-												todir="${tomcat.base.dir}/webapps/ROOT/${yui.version}/build/slider/assets/">
-											<fileset dir="${basedir}/yui-assets-plus/">
-												<include name="*.*"/>
-				  							</fileset>
-										</copy>
-=======
                                <replace dir="${basedir}/target/${pom.artifactId}" 
                                         token="put.google.map.key.here"
                                         value="${google.master.key}">
@@ -70,7 +56,6 @@
 										 <replace file="${basedir}/target/${pom.artifactId}/WEB-INF/faces-config.xml" 
                                         token="put.catalina.home.here"
                                         value="${catalina.home}"/>
->>>>>>> .r1102
                              </tasks>
                            </configuration>
                            <goals>
