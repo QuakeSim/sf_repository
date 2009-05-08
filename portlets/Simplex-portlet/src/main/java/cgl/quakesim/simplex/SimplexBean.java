@@ -294,7 +294,7 @@ public class SimplexBean extends GenericSopacBean {
 		List tmpList=new ArrayList();
 
 		myarchivedFileEntryList.clear();
-		System.out.println("Project list size:"+myprojectlist.size());
+		//		System.out.println("Project list size:"+myprojectlist.size());
 
 		for (int i = 0; i < myprojectlist.size(); i++) {
 			 String projectName = ((SelectItem) myprojectlist.get(i)).getLabel();
@@ -305,12 +305,14 @@ public class SimplexBean extends GenericSopacBean {
 			 db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 									  + codeName + "/" + projectName + ".db");
 			 // ObjectSet results=db.get(mega);
-			 ObjectSet results = db.get(SimpleXOutputBean.class);
-			 System.out.println("Matches for "+projectName+":"+results.size());
+			 //			 ObjectSet results = db.get(SimpleXOutputBean.class);
+			 ObjectSet results = db.get(new SimpleXOutputBean());
+			 //System.out.println("Matches for "+projectName+":"+results.size());
 			 while (results.hasNext()) {
-				  mega = (SimpleXOutputBean) results.next();
+				  //mega = (SimpleXOutputBean) results.next();
 				  //					myarchivedFileEntryList.add(mega);
-				  tmpList.add(mega);
+				  SimpleXOutputBean sob=(SimpleXOutputBean)results.next();
+				  tmpList.add(sob);
 			 }
 			 db.close();
 			 myarchivedFileEntryList=sortByDate(tmpList);
@@ -332,7 +334,7 @@ public class SimplexBean extends GenericSopacBean {
 	 }
 	 
 	 public List getMyProjectNameList() {
-		  System.out.println("Reconstructing the project name list");
+		  //		  System.out.println("Reconstructing the project name list");
 		  myProjectNameList.clear();
 		  try {
 				db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
@@ -342,7 +344,7 @@ public class SimplexBean extends GenericSopacBean {
 				// System.out.println("Got results:"+results.size());
 				while (results.hasNext()) {
 					 project = (projectEntry) results.next();
-					 System.out.println(project.getProjectName());
+					 //	 System.out.println(project.getProjectName());
 					 if(project==null || project.getProjectName()==null) {
 						  db.delete(project);
 					 }
@@ -588,7 +590,8 @@ public class SimplexBean extends GenericSopacBean {
 		  
 		  Observation[] obsv = getObservationsFromDB();
 		  Fault[] faults = getFaultsFromDB();
-		  String timeStamp = "";
+		  //		  String timeStamp = "";
+		  String timeStamp=generateTimeStamp();
 		  System.out.println("ProjectName:" + projectName);
 		  try {
 				initSimplexService();
@@ -1386,9 +1389,12 @@ public class SimplexBean extends GenericSopacBean {
 	  * This will delete projects
 	  */
     public void toggleDeleteProjectSummary(ActionEvent ev) {
-		  System.out.println("Getting selected archived project row");
 		  try {
 				System.out.println("Getting selected archived project row");
+				HtmlDataTable hdt=getMyArchiveDataTable();
+				System.out.println(hdt.getRowCount()+hdt.getId());
+				Object obj=hdt.getRowData();
+
 				SimpleXOutputBean dpsb=
 					 (SimpleXOutputBean)getMyArchiveDataTable().getRowData();
 

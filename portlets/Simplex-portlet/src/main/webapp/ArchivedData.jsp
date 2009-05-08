@@ -64,6 +64,7 @@ function dataTableSelectOneRadio(radio) {
 							  value="You don't have any archived results."
 							  rendered="#{empty SimplexBean.myarchivedFileEntryList}"/>
 			<h:dataTable border="1"
+							 id="SimplexOutputPanel"
 							 binding="#{SimplexBean.myArchiveDataTable}" 
 							 rendered="#{!(empty SimplexBean.myarchivedFileEntryList)}"
 							 value="#{SimplexBean.myarchivedFileEntryList}"
