@@ -171,6 +171,12 @@ public class SimpleXDataKml {
 						PointEntry tempPoint = new PointEntry();
 						Pattern p = Pattern.compile(" {1,20}");
 						String tmp[] = p.split(line);
+						//See what we actually have
+						System.out.println("Original input line: "+line);
+						for(int i=0;i<tmp.length;i++) {
+							 System.out.println("Line components: "+tmp[i]);
+						}
+						//Now assign values.
 						tempPoint.setX(tmp[1].trim());
 						tempPoint.setY(tmp[2].trim());
 						tempPoint.setDeltaXName("dx");
