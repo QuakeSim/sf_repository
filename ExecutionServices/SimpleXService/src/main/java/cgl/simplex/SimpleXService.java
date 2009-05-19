@@ -397,6 +397,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 		sxoutput.setCreationDate(creationDate);
 
 		try {
+			 System.out.println("Making the kml for the output");
 			String outputfilename = workDir + "/" + projectName + ".output";
 			GmapDataXml dw = new GmapDataXml();
 			dw.LoadDataFromFile(outputfilename);
