@@ -79,6 +79,13 @@ public class GmapDataXml {
 
 						String tmp[] = line.split("\t");
 
+						 //See what we have.
+						 System.out.println("Original line: "+line);
+						 for (int i=0;i<tmp.length;i++) {
+							  System.out.println(tmp[i]);
+						 }
+						
+
 						double tmp_lat = Double.valueOf(tmp[1].trim())
 								.doubleValue();
 						double tmp_lon = Double.valueOf(tmp[2].trim())
