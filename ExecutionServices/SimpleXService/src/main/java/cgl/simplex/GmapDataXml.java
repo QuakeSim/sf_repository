@@ -77,7 +77,7 @@ public class GmapDataXml {
 				} else {
 					if (!line.trim().equalsIgnoreCase("")) {
 
-						// String tmp[] = line.split("\t");
+						String tmp[] = line.split("\t");
 
 						//  //See what we have.
 						//  System.out.println("Original line: "+line);
