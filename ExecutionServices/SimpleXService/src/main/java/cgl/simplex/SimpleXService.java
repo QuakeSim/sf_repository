@@ -434,7 +434,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			kmlService.setPointPlacemark("Icon Layer");
 			kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
 			String calcKmlUrl = kmlService.runMakeKml("", userName,
-					projectName, "calc");
+					projectName+"/"+jobUIDStamp, "calc");
 
 			// get o_c kml
 			locator = new SimpleXDataKmlServiceLocator();
@@ -448,7 +448,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			kmlService=setfaultplot(kmlService,faults);
 			kmlService.setPointPlacemark("Icon Layer");
 			kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
-			String o_cKmlUrl = kmlService.runMakeKml("", userName, projectName,
+			String o_cKmlUrl = kmlService.runMakeKml("", userName, projectName+"/"+jobUIDStamp,
 					"o_c");
 
 			// get total kml
@@ -472,7 +472,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			kmlService.setPointPlacemark("Observed Displacements Icon Layer");
 			kmlService.setArrowPlacemark("Observed Displacements Arrow Layer", "ff66a1cc", 2);
 			String totalKmlUrl = kmlService.runMakeKml("", userName,
-					projectName, "");
+					projectName+"/"+jobUIDStamp, "");
 
 			kmlurls[0] = totalKmlUrl;
 			kmlurls[1] = observKmlUrl;
