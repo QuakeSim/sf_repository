@@ -43,7 +43,7 @@
 						<tasks>
 						  <echo message="Copying the binaries:"/>
 						  <copy overwrite="true" filtering="true" failonerror="false" todir="${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec">
-							 <fileset dir="${rdahmm.bin.home}/rdahmm"/>
+							 <fileset dir="${rdahmm.bin.home}"/>
 						  </copy>
 						  <chmod perm="${tomcat.bin.perm}" dir="${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec/">
 							 <include name="*"/>
