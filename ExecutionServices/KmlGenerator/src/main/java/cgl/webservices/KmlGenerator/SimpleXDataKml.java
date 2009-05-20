@@ -791,7 +791,7 @@ public class SimpleXDataKml {
 	 */
 	public void printToFile(String detail, String xmlfilename) {
 		 System.out.println("Printing KML to "+xmlfilename);
-		 System.out.println("Detail is "+detail);
+		 //		 System.out.println("Detail is "+detail);
 		try {
 			PrintStream out = new PrintStream(new FileOutputStream(xmlfilename));
 			out.println(detail);
