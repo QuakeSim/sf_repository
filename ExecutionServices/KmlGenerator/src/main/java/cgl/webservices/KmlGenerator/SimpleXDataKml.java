@@ -151,8 +151,8 @@ public class SimpleXDataKml {
 		  catch (Exception e) {
 				e.printStackTrace();
 		  }
-		  this.printToFile(this.doc.toKML(), destDir + "/" + ProjectName +"/"+ JobUID +".kml");	
-		  return baseUrl + "/" + ProjectName + "/"+JobUID +".kml" ;
+		  this.printToFile(this.doc.toKML(), destDir + "/" + ProjectName +JobUID +".kml");	
+		  return baseUrl + "/" + ProjectName +JobUID +".kml" ;
 	 }
 	 
 	 //
