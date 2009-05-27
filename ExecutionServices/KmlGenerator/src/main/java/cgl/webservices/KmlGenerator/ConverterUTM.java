@@ -407,7 +407,7 @@ public class ConverterUTM {
 				* D * D * D * D * D / 120)
 				/ Math.cos(phi1Rad);
 		Long = LongOrigin + Long * rad2deg;
-		Coordinate lonlat= new Coordinate(Long,Lat);
+		Coordinate lonlat= new Coordinate(Lat, Long);
 		return lonlat;
 	}
 
