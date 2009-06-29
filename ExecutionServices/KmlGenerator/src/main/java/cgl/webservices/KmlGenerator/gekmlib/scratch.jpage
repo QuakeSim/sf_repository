@@ -1,8 +1,0 @@
-java.math.BigInteger cur = new java.math.BigInteger("20000000026");
-java.math.BigInteger other = new java.math.BigInteger("20000000020");
-System.out.println(cur.compareTo(other));
-Syntax error on token "import", assert expected
-
-LongDate cannot be resolved to a typeLongDate cannot be resolved to a typeLongDate cannot be resolved to a typeLongDate cannot be resolved to a typecom.keithpower.gekmlib.LongDate cur = new com.keithpower.gekmlib.LongDate("20000000027");
-com.keithpower.gekmlib.LongDate other = new com.keithpower.gekmlib.LongDate("20000000026");
-System.out.println(cur.after(other));
