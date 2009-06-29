@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" xmlns:intf="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="urn:SimpleXDataKml" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.2.1
+Built on Jun 14, 2005 (09:15:57 EDT)-->
+ <wsdl:types>
+  <schema targetNamespace="urn:SimpleXDataKml" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator"/>
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="PointEntry">
+    <sequence>
+     <element name="deltaXName" nillable="true" type="soapenc:string"/>
+     <element name="deltaXValue" nillable="true" type="soapenc:string"/>
+     <element name="deltaYName" nillable="true" type="soapenc:string"/>
+     <element name="deltaYValue" nillable="true" type="soapenc:string"/>
+     <element name="deltaZName" nillable="true" type="soapenc:string"/>
+     <element name="deltaZValue" nillable="true" type="soapenc:string"/>
+     <element name="folderTag" nillable="true" type="soapenc:string"/>
+     <element name="x" nillable="true" type="soapenc:string"/>
+     <element name="y" nillable="true" type="soapenc:string"/>
+    </sequence>
+   </complexType>
+  </schema>
+  <schema targetNamespace="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="urn:SimpleXDataKml"/>
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="ArrayOf_tns1_PointEntry">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:PointEntry[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="runMakeKmlRequest">
+
+      <wsdl:part name="ServerTag" type="soapenc:string"/>
+
+      <wsdl:part name="UserName" type="soapenc:string"/>
+
+      <wsdl:part name="ProjectName" type="soapenc:string"/>
+
+      <wsdl:part name="JobUID" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setArrowPlacemarkRequest">
+
+      <wsdl:part name="folderName" type="soapenc:string"/>
+
+      <wsdl:part name="LineColor" type="soapenc:string"/>
+
+      <wsdl:part name="LineWidth" type="xsd:double"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setCoordinateUnitRequest">
+
+      <wsdl:part name="Unit" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setGridLineResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="setArrowPlacemarkResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="setGridLineRequest">
+
+      <wsdl:part name="folderName" type="soapenc:string"/>
+
+      <wsdl:part name="start_x" type="xsd:double"/>
+
+      <wsdl:part name="start_y" type="xsd:double"/>
+
+      <wsdl:part name="end_x" type="xsd:double"/>
+
+      <wsdl:part name="end_y" type="xsd:double"/>
+
+      <wsdl:part name="xinterval" type="xsd:double"/>
+
+      <wsdl:part name="yinterval" type="xsd:double"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setDatalistResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="setCoordinateUnitResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="setFaultPlotResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="setPointPlacemarkResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="setDatalistRequest">
+
+      <wsdl:part name="InputDataList" type="impl:ArrayOf_tns1_PointEntry"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setOriginalCoordinateRequest">
+
+      <wsdl:part name="lon" type="soapenc:string"/>
+
+      <wsdl:part name="lat" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setFaultPlotRequest">
+
+      <wsdl:part name="folderName" type="soapenc:string"/>
+
+      <wsdl:part name="faultName" type="soapenc:string"/>
+
+      <wsdl:part name="lonstart" type="soapenc:string"/>
+
+      <wsdl:part name="latstart" type="soapenc:string"/>
+
+      <wsdl:part name="lonend" type="soapenc:string"/>
+
+      <wsdl:part name="latend" type="soapenc:string"/>
+
+      <wsdl:part name="LineColor" type="soapenc:string"/>
+
+      <wsdl:part name="LineWidth" type="xsd:double"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setPointPlacemarkRequest">
+
+      <wsdl:part name="folderName" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runMakeKmlResponse">
+
+      <wsdl:part name="runMakeKmlReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setOriginalCoordinateResponse">
+
+   </wsdl:message>
+
+   <wsdl:portType name="SimpleXDataKml">
+
+      <wsdl:operation name="setDatalist" parameterOrder="InputDataList">
+
+         <wsdl:input message="impl:setDatalistRequest" name="setDatalistRequest"/>
+
+         <wsdl:output message="impl:setDatalistResponse" name="setDatalistResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setOriginalCoordinate" parameterOrder="lon lat">
+
+         <wsdl:input message="impl:setOriginalCoordinateRequest" name="setOriginalCoordinateRequest"/>
+
+         <wsdl:output message="impl:setOriginalCoordinateResponse" name="setOriginalCoordinateResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setCoordinateUnit" parameterOrder="Unit">
+
+         <wsdl:input message="impl:setCoordinateUnitRequest" name="setCoordinateUnitRequest"/>
+
+         <wsdl:output message="impl:setCoordinateUnitResponse" name="setCoordinateUnitResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setPointPlacemark" parameterOrder="folderName">
+
+         <wsdl:input message="impl:setPointPlacemarkRequest" name="setPointPlacemarkRequest"/>
+
+         <wsdl:output message="impl:setPointPlacemarkResponse" name="setPointPlacemarkResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setArrowPlacemark" parameterOrder="folderName LineColor LineWidth">
+
+         <wsdl:input message="impl:setArrowPlacemarkRequest" name="setArrowPlacemarkRequest"/>
+
+         <wsdl:output message="impl:setArrowPlacemarkResponse" name="setArrowPlacemarkResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runMakeKml" parameterOrder="ServerTag UserName ProjectName JobUID">
+
+         <wsdl:input message="impl:runMakeKmlRequest" name="runMakeKmlRequest"/>
+
+         <wsdl:output message="impl:runMakeKmlResponse" name="runMakeKmlResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setFaultPlot" parameterOrder="folderName faultName lonstart latstart lonend latend LineColor LineWidth">
+
+         <wsdl:input message="impl:setFaultPlotRequest" name="setFaultPlotRequest"/>
+
+         <wsdl:output message="impl:setFaultPlotResponse" name="setFaultPlotResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setGridLine" parameterOrder="folderName start_x start_y end_x end_y xinterval yinterval">
+
+         <wsdl:input message="impl:setGridLineRequest" name="setGridLineRequest"/>
+
+         <wsdl:output message="impl:setGridLineResponse" name="setGridLineResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="KmlGeneratorSoapBinding" type="impl:SimpleXDataKml">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="setDatalist">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setDatalistRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://KmlGenerator.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setDatalistResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setOriginalCoordinate">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setOriginalCoordinateRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://KmlGenerator.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setOriginalCoordinateResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setCoordinateUnit">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setCoordinateUnitRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://KmlGenerator.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setCoordinateUnitResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setPointPlacemark">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setPointPlacemarkRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://KmlGenerator.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setPointPlacemarkResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setArrowPlacemark">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setArrowPlacemarkRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://KmlGenerator.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setArrowPlacemarkResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runMakeKml">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="runMakeKmlRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://KmlGenerator.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="runMakeKmlResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setFaultPlot">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setFaultPlotRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://KmlGenerator.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setFaultPlotResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setGridLine">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setGridLineRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://KmlGenerator.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setGridLineResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="SimpleXDataKmlService">
+
+      <wsdl:port binding="impl:KmlGeneratorSoapBinding" name="KmlGenerator">
+
+         <wsdlsoap:address location="http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>
