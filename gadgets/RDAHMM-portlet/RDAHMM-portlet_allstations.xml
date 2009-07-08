@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<Module>
-<ModulePrefs title="RDAHMM-portlet_allstations" scrolling="true" width="400" height="600"/>
-<Content type="url" href="http://156.56.104.158:8080//RDAHMM-portlet/allstations.faces"/>
-</Module>
