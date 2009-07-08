@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<Module>
+  <ModulePrefs
+
+	title="Simplex-portlet"
+	description="QuakeSim2 gadgets"
+	author="IU QuakeSim Team"
+	author_email="mpierce@cs.indiana.edu"
+	title_url="http://www.quakesim.org/gadgets/Simplex-portlet/Simplex-portlet_maingadget.xml"
+	directory_title="QuakeSim2"
+	
+
+width="700" height="700" scrolling="true"> 
+
+
+    <Require feature="tabs" /> 
+  </ModulePrefs>
+  <Content type="html" view="home,canvas">
+  <![CDATA[ 
+
+    <script type="text/javascript">
+
+    var tabs = new gadgets.TabSet(__MODULE_ID__, "LoadProject");
+    function init() {
+
+        tabs.addTab("LoadProject", {
+           contentContainer: document.getElementById("LoadProject_id")
+        });
+
+        tabs.addTab("ArchivedData", {
+           contentContainer: document.getElementById("ArchivedData_id")
+        });
+
+        tabs.addTab("PlotGrid", {
+           contentContainer: document.getElementById("PlotGrid_id")
+        });
+
+
+    }
+
+    // Call init function to initialize and display tabs.
+    gadgets.util.registerOnLoadHandler(init);
+
+   </script>
+
+
+   <div id="LoadProject_id" style="display:none">
+       <iframe scrolling="yes" width=100% height="600" frameborder="0" src="http://156.56.104.158:8080//Simplex-portlet/LoadProject.faces"></iframe>
+   </div>
+
+   <div id="ArchivedData_id" style="display:none">
+       <iframe scrolling="yes" width=100% height="600" frameborder="0" src="http://156.56.104.158:8080//Simplex-portlet/ArchivedData.faces"></iframe>
+   </div>
+
+   <div id="PlotGrid_id" style="display:none">
+       <iframe scrolling="yes" width=100% height="600" frameborder="0" src="http://156.56.104.158:8080//Simplex-portlet/PlotGrid.faces"></iframe>
+   </div>
+
+  ]]>
+  </Content>
+</Module>
