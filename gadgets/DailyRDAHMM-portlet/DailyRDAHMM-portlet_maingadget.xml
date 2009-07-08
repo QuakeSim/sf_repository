@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<Module>
+  <ModulePrefs title="DailyRDAHMM-portlet" width="700" height="700" scrolling="true"> 
+    <Require feature="tabs" /> 
+  </ModulePrefs>
+  <Content type="html">
+  <![CDATA[ 
+
+    <script type="text/javascript">
+
+    var tabs = new gadgets.TabSet(__MODULE_ID__, "DailyRDAHMM-portlet");
+    function init() {
+
+        tabs.addTab("DailyRDAHMM-portlet", {
+           contentContainer: document.getElementById("DailyRDAHMM-portlet_id")
+        });
+    }
+
+    // Call init function to initialize and display tabs.
+    gadgets.util.registerOnLoadHandler(init);
+
+   </script>
+
+
+   <div id="DailyRDAHMM-portlet_id" style="display:none">
+       <iframe scrolling="yes" width=100% height="600" frameborder="0" src="http://156.56.104.158:8080//DailyRDAHMM-portlet/DailyRdahmm_sopac.faces"></iframe>
+   </div>
+
+
+  ]]>
+  </Content>
+</Module>
