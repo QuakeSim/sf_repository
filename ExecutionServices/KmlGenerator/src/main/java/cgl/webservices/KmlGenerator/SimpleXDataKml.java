@@ -27,6 +27,7 @@ import org.apache.axis.MessageContext;
 import org.apache.axis.transport.http.HTTPConstants;
 
 
+
 import com.keithpower.gekmlib.Folder;
 import com.keithpower.gekmlib.Kml;
 import com.keithpower.gekmlib.LineString;
@@ -158,13 +159,18 @@ public class SimpleXDataKml {
 		 test.setDatalist(pointEntryList);
 		 test.setOriginalCoordinate("-115.72","30.25");
 		 test.setCoordinateUnit("1000");
+		 
+		 
+		 
+		 test.setGridLine("fault folder", -117.35, 32.59, -115.35, 30.59, 1, 1);
+		 test.setFaultPlot("fault folder", "test fault1", "-117.35", "32.59", "-115.35", "30.59", "641478DC", 3);
 
 		 
-		 // test.setArrowPlacemark("Arrowed","5f1478DC", 3);
-		 test.setArrowPlacemark("Arrowed","641478DC", 3);
-		 test.setPointPlacemark("point");
+		 test.setArrowPlacemark("Arrowed","5f1478DC", 3);
+		 // test.setArrowPlacemark("Arrowed","641478DC", 3);
+		 // test.setPointPlacemark("point");
 
-		 test.printToFile(test.doc.toKML(),"test.kml");	
+		 test.printToFile(test.doc.toKML(),"test_original.kml");
 	}
 
 
@@ -346,7 +352,8 @@ public class SimpleXDataKml {
 		String line_value = "";
 		double tmp_x = smallx;
 		String UTMZone=ConverterUTM.getUTMZone(23, original_lon, original_lat);
-		Coordinate original_xy = ConverterUTM.LLtoUTM(23,original_lon, original_lat, UTMZone);
+		Coordinate original_xy = ConverterUTM.LLtoUTM(23,original_lon, original_lat, UTMZone);		
+		
 
 		int odd_flg = 1;
 //		Coordinate mercator_lonlat = new Coordinate();
@@ -541,14 +548,14 @@ public class SimpleXDataKml {
 		
 		// plot start point
 		Coordinate tmp_lonlat ;
-		tmp_lonlat = new Coordinate(Double.valueOf(latstart).doubleValue(), Double.valueOf(lonstart).doubleValue());
+		tmp_lonlat = new Coordinate(Double.valueOf(lonstart).doubleValue(), Double.valueOf(latstart).doubleValue());
 //		tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(),
 //				tmp_lonlat.getY());
 		line_value = line_value + tmp_lonlat.getX() + "," + tmp_lonlat.getY() + ",0  ";
 		String descriptionValue= cdataStart+fontStart+"Starting lat: "+fontEnd+tmp_lonlat.getY()+" "+br;
 		descriptionValue=descriptionValue + fontStart+"Starting lon: "+fontEnd+tmp_lonlat.getX()+" "+br;
 		// plot end point
-		tmp_lonlat = new Coordinate(Double.valueOf(latend).doubleValue(), Double.valueOf(lonend).doubleValue());
+		tmp_lonlat = new Coordinate(Double.valueOf(lonend).doubleValue(), Double.valueOf(latend).doubleValue());
 //		tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(),
 //				tmp_lonlat.getY());
 		line_value = line_value + tmp_lonlat.getX() + ","
