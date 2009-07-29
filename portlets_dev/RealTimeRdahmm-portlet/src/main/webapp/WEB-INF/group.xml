@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<portlet-group>
+    <group-name>RealTimeRDAHMM-portlet</group-name>
+    <group-description>RealTimeRDAHMM Portlet</group-description>
+    <group-visibility>PUBLIC</group-visibility>
+    <portlet-role-info>
+        <portlet-class>RealTimeRDAHMM-portlet#RealTimeRDAHMM-portlet</portlet-class>
+        <required-role>USER</required-role>
+    </portlet-role-info>
+</portlet-group>
+
+

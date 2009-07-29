@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE faces-config PUBLIC
+  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+  "http://java.sun.com/dtd/web-facesconfig_1_1.dtd" >
+
+<faces-config>
+	<managed-bean>
+		<managed-bean-name>rdahmmBean</managed-bean-name>
+		<managed-bean-class>cgl.webservices.RDAHMMBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+
+                <managed-property>
+                   <property-name>defaultWarningMessage</property-name>
+                   <value>A network problem prevented RDAHMM from executing correctly.  Please notify the QuakeSim portal administrator.</value>
+                </managed-property>
+		        
+
+                <!--Who we are-->
+                <managed-property>
+                   <property-name>codeName</property-name>
+                   <value>RDAHMM</value>
+                </managed-property>
+
+                <!--RDAHMM Service URL-->
+                <managed-property>
+                   <property-name>rdahmmServiceUrl</property-name>
+                   <value>http://gf19.ucs.indiana.edu:8080/rdahmmexec/services/RDAHMMExec</value>
+                </managed-property>
+
+
+                <!-- Needed for the context service-->
+                <managed-property>
+                   <property-name>contextUrl</property-name>
+                   <value>http://gf7.ucs.indiana.edu:8080/WebServices/services/ContextManager</value>
+                 </managed-property>
+                 <managed-property>
+                   <property-name>contextBasePath</property-name>
+                   <value>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/webapps/WebServices/WEB-INF/Descriptors/users/</value>
+                </managed-property>
+	</managed-bean>
+	
+	<!-- navigation rules for Main.jsp -->
+	<navigation-rule>
+		<from-view-id>/Main.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>rdahmm-new-project-created</from-outcome>
+			<to-view-id>/allstations.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>rdahmm-list-old-projects</from-outcome>
+			<to-view-id>/LoadProject.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>rdahmm-load-data-archive</from-outcome>
+			<to-view-id>/DataArchive.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>rdahmm-list-project-plots</from-outcome>
+			<to-view-id>/PlotData.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+       
+        
+        <!-- Allstations navigation rules -->
+	<navigation-rule>
+		<from-view-id>/allstations.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>rdahmm-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>rdahmm-output-display</from-outcome>
+			<to-view-id>/allstations.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>rdahmm-parameters-set</from-outcome>
+			<to-view-id>/allstations.jsp</to-view-id>
+		</navigation-case>
+
+		<navigation-case>
+			<from-outcome>rdahmm-new-project-created</from-outcome>
+			<to-view-id>/allstations.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+        
+        <!-- LoadProject navigation rules -->
+	<navigation-rule>
+		<from-view-id>/LoadProject.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>rdahmm-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/LoadProject.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>rdahmm-project-populated</from-outcome>
+			<to-view-id>/allstations.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+        <!-- Data archive rules -->
+	<navigation-rule>
+		<from-view-id>/DataArchive.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>rdahmm-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>rdahmm-back-to-main</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+        <!-- Plot data rules -->
+	<navigation-rule>
+		<from-view-id>/PlotData.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>rdahmm-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>rdahmm-plot-created</from-outcome>
+			<to-view-id>/ViewPlot.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+        <!-- ViewPlot rules -->
+	<navigation-rule>
+		<from-view-id>/ViewPlot.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>rdahmm-back</from-outcome>
+			<to-view-id>/Main.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+</faces-config>
