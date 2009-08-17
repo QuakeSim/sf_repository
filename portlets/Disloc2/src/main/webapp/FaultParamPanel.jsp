@@ -24,113 +24,221 @@
 					</h:panelGroup> 
 					<h:outputText  id="lkdjre32" value="N/A" /> 
  
-					<h:outputText  id="stuff17" value="Location X:" /> 
+					  <f:verbatim>
+					    <a class="tooltip" href="#">
+						 Location X:
+							  <span>Location of the grid origin in Cartesian coordinates</span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="stuff18"> 
 						<h:inputText id="FaultLocationX" 
 							value="#{DislocBean2.currentFault.faultLocationX}" required="true" /> 
 					</h:panelGroup> 
 					<h:outputText  id="lkdjre3234" value="N/A" /> 
  
-					<h:outputText  id="stuff19" value="Location Y:" /> 
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Location Y:
+							  <span>Location of the grid origin in Cartesian coordinates</span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="stuff20"> 
 						<h:inputText id="FaultLocationY" 
 							value="#{DislocBean2.currentFault.faultLocationY}" required="true" /> 
 					</h:panelGroup> 
 					<h:outputText  id="lkdjre3122" value="N/A" /> 
 
-					<h:outputText value="Fault Origin Latitude:" />
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault Origin Latitude:
+							  <span>
+							  Latitude of the fault's origin.
+							  </span>
+					     </a>
+				  </f:verbatim>
 			      <h:panelGroup>
 						<h:inputText id="faultLat" value="#{DislocBean2.currentFault.faultLatStart}"
 										 required="true" />
 					</h:panelGroup>
 					<h:outputText  id="lkdj21re32" value="N/A" /> 
 
-					<h:outputText value="Fault Origin Longitude" />
+
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault Origin Longitude:
+							  <span>
+							  Longitude of the fault's origin.
+							  </span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup>
 					<h:inputText id="faultLon" value="#{DislocBean2.currentFault.faultLonStart}"
 									 required="true" />
 					</h:panelGroup>
 					<h:outputText  id="lkdj121re32" value="N/A" /> 
 
-					<h:outputText value="Fault End Latitude:" />
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault End-Point Latitude:
+							  <span>
+							  Latitude of the fault's end point.
+							  </span>
+					     </a>
+				  </f:verbatim>
 			      <h:panelGroup>
 						<h:inputText id="faultLatendere" value="#{DislocBean2.currentFault.faultLatEnd}"
 										 required="true" />
 					</h:panelGroup>
 					<h:outputText  id="lkdj23oi232" value="N/A" /> 
 
-					<h:outputText value="Fault End Longitude" />
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault End-Point Longitude:
+							  <span>
+							  Longitude of the fault's end point.
+							  </span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup>
 					<h:inputText id="faultLonende3r" value="#{DislocBean2.currentFault.faultLonEnd}"
 									 required="true" />
 					</h:panelGroup>
 					<h:outputText  id="lkdjr1212e32" value="N/A" /> 
  
-					<h:outputText  id="stuff21" value="Length:" /> 
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault Length:
+							  <span>
+							  Length of the fault in kilometers
+							  </span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="stuff22"> 
 						<h:inputText id="FaultLength" 
 							value="#{DislocBean2.currentFault.faultLength}" required="true" /> 
 					</h:panelGroup> 
 					<h:outputText  id="lkdj1re1132" value="km" /> 
  
-					<h:outputText  id="stuff23" value="Width:" /> 
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault Width:
+							  <span>
+							  Width of the fault in kilometers
+							  </span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="stuff24"> 
 						<h:inputText id="FaultWidth" 
 							value="#{DislocBean2.currentFault.faultWidth}" required="true" /> 
 					</h:panelGroup> 
 					<h:outputText  id="lkdjr121e32" value="km"/> 
  
-					<h:outputText  id="stuff25" value="Depth:" /> 
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault Depth:
+							  <span>
+							  Depth of the fault in kilometers
+							  </span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="stuff26"> 
 						<h:inputText id="FaultDepth" 
 							value="#{DislocBean2.currentFault.faultDepth}" required="true" /> 
 					</h:panelGroup> 
 					<h:outputText  id="lkdj2321re32" value="km"/> 
  
-					<h:outputText  id="stuff27" value="Dip Angle:" /> 
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault Dip Angle:
+							  <span>
+							  Dip angle of the fault
+							  </span>
+					     </a>
+				  </f:verbatim>					
 					<h:panelGroup  id="stuff28"> 
 						<h:inputText id="FaultDipAngle" 
 							value="#{DislocBean2.currentFault.faultDipAngle}" required="true" /> 
 					</h:panelGroup> 
 					<h:outputText  id="lk34342djre32" value="degrees"/> 
  
-					<h:outputText  id="stuff29" value="Dip Slip:" /> 
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Dip Slip:
+							  <span>
+							  Dip slip of the fault in centimeters. 
+							  </span>
+					     </a>
+				  </f:verbatim>					
 					<h:panelGroup  id="stuff30"> 
 						<h:inputText id="FaultSlip" 
 							value="#{DislocBean2.currentFault.faultDipSlip}" required="true" /> 
 					</h:panelGroup> 
 					<h:outputText  id="lk67v342djre32" value="cm"/> 
  
-					<h:outputText  id="stuff31" value="Strike Angle:" /> 
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Strike Angle: 
+							  <span>
+							  Strike angle of the fault in degrees (not radians).
+							  </span>
+					     </a>
+				  </f:verbatim>					
 					<h:panelGroup  id="stuff32"> 
 						<h:inputText id="FaultStrikeAngle" 
 							value="#{DislocBean2.currentFault.faultStrikeAngle}" required="true" /> 
 					</h:panelGroup> 
 					<h:outputText  id="r54r4djre32" value="degrees"/> 
  
-					<h:outputText  id="stuff33" value="Strike Slip:" /> 
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Strike Slip: 
+							  <span>
+							  Strike slip of the fault in centimeters.
+							  </span>
+					     </a>
+				  </f:verbatim>					
 					<h:panelGroup  id="stuff35"> 
 						<h:inputText id="FaultStrikeSlip" 
 							value="#{DislocBean2.currentFault.faultStrikeSlip}" required="true" /> 
 					</h:panelGroup> 
 					<h:outputText  id="er9e2djre32" value="cm"/> 
  
-					<h:outputText  id="stuff34" value="Tensile Slip:" /> 
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Tensile Slip: 
+							  <span>
+							  Tensile slip of the fault in centimeters.
+							  </span>
+					     </a>
+				  </f:verbatim>					
 					<h:panelGroup  id="stuff36"> 
 						<h:inputText id="FaultTensileSlip" 
 							value="#{DislocBean2.currentFault.faultTensileSlip}" required="true" /> 
 					</h:panelGroup> 
 					<h:outputText  id="ee3e33c3" value="cm"/> 
-
  
-					<h:outputText  id="stuff37" value="Lame Lambda:" /> 
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						    Lame Lambda:
+							  <span>
+							  Lambda value of the Lame parameter.
+							  </span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="stuff38"> 
 						<h:inputText id="LameLambda" 
 							value="#{DislocBean2.currentFault.faultLameLambda}" required="true" /> 
 					</h:panelGroup> 
 					<h:outputText  id="e34343" value="N/A"/> 
  
-					<h:outputText  id="stuff39" value="Lame Mu:" /> 
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 	 Lame Mu:
+							  <span>
+							  Mu value of the Lame parameter
+							  </span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="stuff40"> 
 						<h:inputText id="LameMu" 
 							value="#{DislocBean2.currentFault.faultLameMu}" required="true" /> 

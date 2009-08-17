@@ -58,6 +58,11 @@ for(int i=0;i<stationList.size();i++) {
 		font-size: 18pt;
 		font: bold;
 	}
+
+	a:hover {background:#ffffff; text-decoration:none;}
+	a.tooltip span {display:none; padding:2px 3px; margin-left:8px; width:130px;}
+	a.tooltip:hover span{display:inline; position:absolute; background:#ffffff; border:1px solid #cccccc; color:#6c6c6c;}
+
 </style>
 
 <head>

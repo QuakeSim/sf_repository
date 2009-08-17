@@ -15,6 +15,11 @@
 		font-size: 18pt;
 		font: bold;
 	}
+
+	a:hover {background:#ffffff; text-decoration:none;}
+	a.tooltip span {display:none; padding:2px 3px; margin-left:8px; width:130px;}
+	a.tooltip:hover span{display:inline; position:absolute; background:#ffffff; border:1px solid #cccccc; color:#6c6c6c;}
+
 </style>
 
 
@@ -124,7 +129,12 @@ function dataTableSelectOneRadio(radio) {
 							errorStyle="color: red" />
 					</h:panelGroup>
 
-					<h:outputText  id="stuff8" value="Origin X:" />
+					  <f:verbatim>
+					    <a class="tooltip" href="#">
+						 Location X:
+							  <span>Location of the layer grid origin in Cartesian coordinates</span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="stuff9">
 						<h:inputText id="LayerOriginX"
 							value="#{MGBean.currentLayer.layerOriginX}" required="true" />
@@ -133,7 +143,12 @@ function dataTableSelectOneRadio(radio) {
 							errorStyle="color: red" />
 					</h:panelGroup>
 
-					<h:outputText value="Origin Y:"  id="stuff11"/>
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Location Y:
+							  <span>Location of the layer grid origin in Cartesian coordinates</span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="stuff12">
 						<h:inputText id="LayerOriginY"
 							value="#{MGBean.currentLayer.layerOriginY}" required="true" />
@@ -142,7 +157,12 @@ function dataTableSelectOneRadio(radio) {
 							errorStyle="color: red" />
 					</h:panelGroup>
 
-					<h:outputText value="Origin Z:"  id="stuff13"/>
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Location Z:
+							  <span>Location of the layer grid origin in Cartesian coordinates</span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="stuff14">
 						<h:inputText id="LayerOriginZ"
 							value="#{MGBean.currentLayer.layerOriginZ}" required="true" />
@@ -151,8 +171,14 @@ function dataTableSelectOneRadio(radio) {
 							errorStyle="color: red" />
 					</h:panelGroup>
 
-
-					<h:outputText  id="stuff16" value="Length:" />
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Layer Length:
+							  <span>
+							  Length of the fault in kilometers
+							  </span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="stuff17">
 						<h:inputText id="LayerLength"
 							value="#{MGBean.currentLayer.layerLength}" required="true" />
@@ -161,8 +187,14 @@ function dataTableSelectOneRadio(radio) {
 							errorStyle="color: red" />
 					</h:panelGroup>
 
-
-					<h:outputText value="Width:"  id="stuff19"/>
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Layer Width:
+							  <span>
+							  Width of the fault in kilometers
+							  </span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="stuff20">
 						<h:inputText id="LayerWidth"
 							value="#{MGBean.currentLayer.layerWidth}" required="true" />
@@ -171,8 +203,14 @@ function dataTableSelectOneRadio(radio) {
 							errorStyle="color: red" />
 					</h:panelGroup>
 
-
-					<h:outputText value="Depth:"  id="stuff22" />
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Layer Depth:
+							  <span>
+							  Depth of the fault in kilometers
+							  </span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="stuff23">
 						<h:inputText id="LayerDepth"
 							value="#{MGBean.currentLayer.layerDepth}" required="true" />
@@ -181,7 +219,14 @@ function dataTableSelectOneRadio(radio) {
 							errorStyle="color: red" />
 					</h:panelGroup>
 
-					<h:outputText value="Lame Lambda:"  id="stuff25"/>
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						    Lame Lambda:
+							  <span>
+							  Lambda value of the Lame parameter.
+							  </span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="stuff26">
 						<h:inputText id="LayerLameLambda"
 							value="#{MGBean.currentLayer.lameLambda}" required="true" />
@@ -190,7 +235,14 @@ function dataTableSelectOneRadio(radio) {
 							showSummary="true" errorStyle="color: red" />
 					</h:panelGroup>
 
-					<h:outputText value="Lame Mu:"  id="stuff28" />
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 	 Lame Mu:
+							  <span>
+							  Mu value of the Lame parameter
+							  </span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="stuff29">
 						<h:inputText id="LayerLameMu"
 							value="#{MGBean.currentLayer.lameMu}" required="true" />
@@ -199,8 +251,14 @@ function dataTableSelectOneRadio(radio) {
 							errorStyle="color: red" />
 					</h:panelGroup>
 
-
-					<h:outputText value="Viscosity:" id="stuff31"/>
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 	 Layer Viscosity:
+							  <span>
+							  Viscosity of the layer.
+							  </span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="stuff32">
 						<h:inputText id="LayerViscosity"
 							value="#{MGBean.currentLayer.viscosity}" required="true" />
@@ -209,7 +267,14 @@ function dataTableSelectOneRadio(radio) {
 							showSummary="true" errorStyle="color: red" />
 					</h:panelGroup>
 
-					<h:outputText value="Exponent:"  id="stuff34"/>
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 	 Layer Exponent:
+							  <span>
+							  Exponent of the layer.
+							  </span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="stuff35">
 						<h:inputText id="LayerExponent"
 							value="#{MGBean.currentLayer.exponent}" required="true" />
@@ -242,7 +307,13 @@ function dataTableSelectOneRadio(radio) {
 							errorStyle="color: red" />
 					</h:panelGroup>
 
-					<h:outputText  id="kld3" value="Location X:" />
+
+					  <f:verbatim>
+					    <a class="tooltip" href="#">
+						 Location X:
+							  <span>Location of the grid origin in Cartesian coordinates</span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="kld4">
 						<h:inputText id="FaultLocationX"
 							value="#{MGBean.currentFault.faultLocationX}" required="true" />
@@ -251,7 +322,12 @@ function dataTableSelectOneRadio(radio) {
 							showSummary="true" errorStyle="color: red" />
 					</h:panelGroup>
 
-					<h:outputText value="Location Y:"  id="kld5"/>
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Location Y:
+							  <span>Location of the grid origin in Cartesian coordinates</span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="kld6">
 						<h:inputText id="FaultLocationY"
 							value="#{MGBean.currentFault.faultLocationY}" required="true" />
@@ -260,8 +336,14 @@ function dataTableSelectOneRadio(radio) {
 							showSummary="true" errorStyle="color: red" />
 					</h:panelGroup>
 
-
-					<h:outputText value="Length:"  id="kld8"/>
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault Length:
+							  <span>
+							  Length of the fault in kilometers
+							  </span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup id="kld7">
 						<h:inputText id="FaultLength"
 							value="#{MGBean.currentFault.faultLength}" required="true" />
@@ -270,8 +352,14 @@ function dataTableSelectOneRadio(radio) {
 							errorStyle="color: red" />
 					</h:panelGroup>
 
-
-					<h:outputText value="Width:"  id="kld9"/>
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault Width:
+							  <span>
+							  Width of the fault in kilometers
+							  </span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="kld10">
 						<h:inputText id="FaultWidth"
 							value="#{MGBean.currentFault.faultWidth}" required="true" />
@@ -281,7 +369,14 @@ function dataTableSelectOneRadio(radio) {
 					</h:panelGroup>
 
 
-					<h:outputText value="Depth:"  id="kld11"/>
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault Depth:
+							  <span>
+							  Depth of the fault in kilometers
+							  </span>
+					     </a>
+				  </f:verbatim>
 					<h:panelGroup  id="kld21">
 						<h:inputText id="FaultDepth"
 							value="#{MGBean.currentFault.faultDepth}" required="true" />
@@ -290,7 +385,14 @@ function dataTableSelectOneRadio(radio) {
 							errorStyle="color: red" />
 					</h:panelGroup>
 
-					<h:outputText value="Dip Angle:"  id="kld22"/>
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault Dip Angle:
+							  <span>
+							  Dip angle of the fault
+							  </span>
+					     </a>
+				  </f:verbatim>	
 					<h:panelGroup  id="kld23">
 						<h:inputText id="FaultDipAngle"
 							value="#{MGBean.currentFault.faultDipAngle}" required="true" />
@@ -299,7 +401,14 @@ function dataTableSelectOneRadio(radio) {
 							showSummary="true" errorStyle="color: red" />
 					</h:panelGroup>
 
-					<h:outputText value="Strike Angle:"  id="kld24"/>
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Strike Angle: 
+							  <span>
+							  Strike angle of the fault in degrees (not radians).
+							  </span>
+					     </a>
+				  </f:verbatim>					
 					<h:panelGroup  id="kld25">
 						<h:inputText id="FaultStrikeAngle"
 							value="#{MGBean.currentFault.faultStrikeAngle}" required="true" />
@@ -309,7 +418,15 @@ function dataTableSelectOneRadio(radio) {
 					</h:panelGroup>
 
 
-					<h:outputText value="Slip:"  id="kld26"/>
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Dip Slip:
+							  <span>
+							  Dip slip of the fault in centimeters. 
+							  </span>
+					     </a>
+				  </f:verbatim>					
+
 					<h:panelGroup  id="kld27">
 						<h:inputText id="FaultSlip"
 							value="#{MGBean.currentFault.faultSlip}" required="true" />
@@ -318,7 +435,14 @@ function dataTableSelectOneRadio(radio) {
 							errorStyle="color: red" />
 					</h:panelGroup>
 
-					<h:outputText value="Rake Angle:"  id="kld28"/>
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Rake Angle:
+							  <span>
+							  Rake angle
+							  </span>
+					     </a>
+				  </f:verbatim>					
 					<h:panelGroup  id="kld29">
 						<h:inputText id="FaultRakeAngle"
 							value="#{MGBean.currentFault.faultRakeAngle}" required="true" />

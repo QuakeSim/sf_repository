@@ -21,7 +21,13 @@
 						</h:panelGroup>
 						<h:outputText value=""/>
 
-						<h:outputText id="lkdrq119" value="Location X:" />
+
+					  <f:verbatim>
+					    <a class="tooltip" href="#">
+						 Location X:
+							  <span>Location of the grid origin in Cartesian coordinates</span>
+					     </a>
+				      </f:verbatim>
 						<h:panelGroup id="lkdrq1181">
 							<h:inputText id="FaultLocationX"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultLocationX}"
@@ -32,7 +38,13 @@
 						<h:selectBooleanCheckbox id="faultOriginXVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultOriginXVary}" />
 
-						<h:outputText id="lkdrq1183" value="Location Y:" />
+
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Location Y:
+							  <span>Location of the grid origin in Cartesian coordinates</span>
+					     </a>
+				   </f:verbatim>
 						<h:panelGroup id="lkdrq1184">
 							<h:inputText id="FaultLocationY"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultLocationY}"
@@ -43,7 +55,14 @@
 						<h:selectBooleanCheckbox id="faultOriginYVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultOriginYVary}" />
 
-						<h:outputText id="lkdrq1186" value="Length:" />
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault Length:
+							  <span>
+							  Length of the fault in kilometers
+							  </span>
+					     </a>
+				  </f:verbatim>
 						<h:panelGroup id="lkdrq1187">
 							<h:inputText id="FaultLength"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultLength}"
@@ -53,7 +72,16 @@
 						</h:panelGroup>
 						<h:selectBooleanCheckbox id="faultLengthVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLengthVary}" />
-						<h:outputText id="lkdrq1189" value="Width:" />
+
+
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault Width:
+							  <span>
+							  Width of the fault in kilometers
+							  </span>
+					     </a>
+				  </f:verbatim>
 						<h:panelGroup id="lkdrq11811">
 							<h:inputText id="FaultWidth"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultWidth}"
@@ -64,7 +92,14 @@
 						<h:selectBooleanCheckbox id="faultWidthVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultWidthVary}" />
 
-						<h:outputText id="lkdrq11813" value="Depth:" />
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault Depth:
+							  <span>
+							  Depth of the fault in kilometers
+							  </span>
+					     </a>
+				  </f:verbatim>
 						<h:panelGroup id="lkdrq11814">
 							<h:inputText id="FaultDepth"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultDepth}"
@@ -75,7 +110,14 @@
 						<h:selectBooleanCheckbox id="faultDepthVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultDepthVary}" />
 
-						<h:outputText id="lkdrq11816" value="Dip Angle:" />
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault Dip Angle:
+							  <span>
+							  Dip angle of the fault
+							  </span>
+					     </a>
+				  </f:verbatim>	
 						<h:panelGroup id="lkdrq11817">
 							<h:inputText id="FaultDipAngle"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultDipAngle}"
@@ -86,7 +128,14 @@
 						<h:selectBooleanCheckbox id="faultDipAngleVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultDipAngleVary}" />
 
-						<h:outputText id="lkdrq11819" value="Strike Angle:" />
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Strike Angle: 
+							  <span>
+							  Strike angle of the fault in degrees (not radians).
+							  </span>
+					     </a>
+				  </f:verbatim>					
 						<h:panelGroup id="dflelerkljk1">
 							<h:inputText id="FaultStrikeAngle"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultStrikeAngle}"
@@ -98,7 +147,14 @@
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultStrikeAngleVary}" />
 
 
-						<h:outputText id="dflelerkljk3" value="Dip Slip:" />
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Dip Slip:
+							  <span>
+							  Dip slip of the fault in centimeters. 
+							  </span>
+					     </a>
+				  </f:verbatim>					
 						<h:panelGroup id="dflelerkljk4">
 							<h:inputText id="FaultSlip"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultSlip}"
@@ -109,39 +165,74 @@
 						<h:selectBooleanCheckbox id="faultDipSlipVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultDipSlipVary}" />
 
-						<h:outputText  id="dflelerkljk5" value="Strike Slip:" />
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Strike Slip: 
+							  <span>
+							  Strike slip of the fault in centimeters.
+							  </span>
+					     </a>
+				  </f:verbatim>					
 						<h:panelGroup id="dflelerkljk6">
-							<h:inputText id="FaultRakeAngle"
+							<h:inputText id="FaultStrikeSlip"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultRakeAngle}"
 								required="true" />
-							<h:message  id="dflelerkljk7" for="FaultRakeAngle" showDetail="true"
+							<h:message  id="dflelerkljk7" for="FaultStrikeSlip" showDetail="true"
 								showSummary="true" errorStyle="color: red" />
 						</h:panelGroup>
 						<h:selectBooleanCheckbox id="faultStrikeSlipVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultStrikeSlipVary}" />
 
-						<h:outputText id="dflelerkljk8" value="Fault Lon Starts:" />
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault Origin Longitude:
+							  <span>
+							  Longitude of the fault's origin.
+							  </span>
+					     </a>
+				  </f:verbatim>
 						<h:panelGroup id="dflelerkljk9">
 							<h:inputText id="FaultLonStarts"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultLonStarts}" />
 						</h:panelGroup>
 						<h:outputText  id="dflelerkljk10" value="optional" />
 
-						<h:outputText id="dflelerkljk11" value="Fault Lat Starts:" />
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault Origin Latitude:
+							  <span>
+							  Longitude of the fault's origin.
+							  </span>
+					     </a>
+				  </f:verbatim>
 						<h:panelGroup id="dflelerkljk12">
 							<h:inputText id="FaultLatStarts"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultLatStarts}" />
 						</h:panelGroup>
 						<h:outputText  id="dflelerkljk13" value="optional" />
 
-						<h:outputText  id="dflelerkljk14" value="Fault Lon Ends:" />
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault End-Point Longitude:
+							  <span>
+							  Longitude of the fault's end point.
+							  </span>
+					     </a>
+				  </f:verbatim>
 						<h:panelGroup id="dflelerkljk15">
 							<h:inputText id="FaultLonEnds"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultLonEnds}" />
 						</h:panelGroup>
 						<h:outputText  id="dflelerkljk16" value="optional" />
 
-						<h:outputText id="dflelerkljk17" value="Fault Lat Ends:" />
+					<f:verbatim>
+					    <a class="tooltip" href="#">
+						 Fault End-Point Latitude:
+							  <span>
+							  Latitude of the fault's end point.
+							  </span>
+					     </a>
+				  </f:verbatim>
 						<h:panelGroup id="dflelerkljk18">
 							<h:inputText id="FaultLatEnds"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultLatEnds}" />

@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.faces.component.html.HtmlDataTable;
+import javax.faces.component.UIData;
 
 import org.servogrid.genericproject.GenericSopacBean;
 
@@ -112,6 +113,7 @@ public class SimplexBean extends GenericSopacBean {
 	 SimpleXOutputBean projectSimpleXOutput;
 	 
 	 HtmlDataTable myArchiveDataTable;
+	 UIData myArchiveDataTable2;
 	 
 	 String kmlProjectFile="network0.kml";
 	 
@@ -1391,12 +1393,16 @@ public class SimplexBean extends GenericSopacBean {
     public void toggleDeleteProjectSummary(ActionEvent ev) {
 		  try {
 				System.out.println("Getting selected archived project row");
-				HtmlDataTable hdt=getMyArchiveDataTable();
-				System.out.println(hdt.getRowCount()+hdt.getId());
-				Object obj=hdt.getRowData();
+ 				// HtmlDataTable hdt=getMyArchiveDataTable();
+				// System.out.println(hdt.getRowCount()+hdt.getId());
+				// Object obj=hdt.getRowData();
 
-				SimpleXOutputBean dpsb=
-					 (SimpleXOutputBean)getMyArchiveDataTable().getRowData();
+				// SimpleXOutputBean dpsb=
+				// 	 (SimpleXOutputBean)getMyArchiveDataTable().getRowData();
+				
+				UIData madt2=getMyArchiveDataTable2();
+				System.out.println(madt2.toString()+" "+madt2.getRowCount()+" "+madt2.getId());
+				SimpleXOutputBean dpsb=(SimpleXOutputBean)getMyArchiveDataTable2().getRowData();
 
 				System.out.println(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 										 + codeName + "/" + dpsb.getProjectName() + ".db");
@@ -1420,8 +1426,16 @@ public class SimplexBean extends GenericSopacBean {
 		  
     }
 	 
+	 public UIData getMyArchiveDataTable2(){
+		  return this.myArchiveDataTable2;
+	 }
+
+	 public void setMyArchiveDataTable2(UIData myArchiveDataTable2){
+		  this.myArchiveDataTable2=myArchiveDataTable2;
+	 }
+
 	 public HtmlDataTable getMyArchiveDataTable() {
-		  return myArchiveDataTable;
+		  return this.myArchiveDataTable;
 	 }
 
 	 public void setMyArchiveDataTable(HtmlDataTable myArchiveDataTable){
