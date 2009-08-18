@@ -8,18 +8,27 @@
 
 						<f:facet name="header">
 							<h:outputFormat id="output3" escape="false"
-								value="<b>Fault Geometry</b>" />
-						</f:facet>
-						<f:facet name="header">
-							<h:outputFormat id="output343" escape="false"
-								value="<b>Fault Parameter Value</b>" />
-						</f:facet>
-						<f:facet name="header">
-							<h:outputFormat id="output3433" escape="false"
-								value="<b>Allow to Vary (Check for Yes)</b>" />
+								value="<b>Input Fault Geometry</b>" />
 						</f:facet>
 
-						<h:outputText id="lkdrq117" value="Fault Name:" />
+
+							<h:outputFormat id="output343" escape="false"
+								value="<b>Parameter Name</b>" />
+
+							<h:outputFormat id="output343" escape="false"
+								value="<b>Parameter Value</b>" />
+
+							<h:outputFormat id="output3433" escape="false"
+								value="<b>Allow to Vary (Check for Yes)</b>" />
+
+					  <f:verbatim>
+					    <a class="tooltip" href="#">
+						    Fault Name:
+							  <span>
+							  Canonical name of the fault segment. 
+							  </span>
+					     </a>
+				      </f:verbatim>
 						<h:panelGroup id="lkdrq118">
 							<h:inputText id="FaultName"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultName}"
