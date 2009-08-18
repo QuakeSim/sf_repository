@@ -8,7 +8,15 @@
 
 						<f:facet name="header">
 							<h:outputFormat id="output3" escape="false"
-								value="<b>Input Fault Geometry</b>" />
+								value="<b>Fault Geometry</b>" />
+						</f:facet>
+						<f:facet name="header">
+							<h:outputFormat id="output3" escape="false"
+								value="<b>Fault Parameter Value</b>" />
+						</f:facet>
+						<f:facet name="header">
+							<h:outputFormat id="output3" escape="false"
+								value="<b>Allow Variation (Check to Allow)?</b>" />
 						</f:facet>
 
 						<h:outputText id="lkdrq117" value="Fault Name:" />
