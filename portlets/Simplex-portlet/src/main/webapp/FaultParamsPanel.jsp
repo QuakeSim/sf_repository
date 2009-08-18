@@ -11,12 +11,12 @@
 								value="<b>Fault Geometry</b>" />
 						</f:facet>
 						<f:facet name="header">
-							<h:outputFormat id="output3" escape="false"
+							<h:outputFormat id="output343" escape="false"
 								value="<b>Fault Parameter Value</b>" />
 						</f:facet>
 						<f:facet name="header">
-							<h:outputFormat id="output3" escape="false"
-								value="<b>Allow Variation (Check to Allow)?</b>" />
+							<h:outputFormat id="output3433" escape="false"
+								value="<b>Allow to Vary (Check for Yes)</b>" />
 						</f:facet>
 
 						<h:outputText id="lkdrq117" value="Fault Name:" />
