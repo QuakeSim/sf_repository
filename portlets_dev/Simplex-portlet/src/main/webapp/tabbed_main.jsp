@@ -66,14 +66,6 @@ function TapAcess(index){
 <iframe scrolling="yes" width=100% height="700" onLoad="calcHeight();" frameborder="1" src="http://156.56.104.158:8080//Simplex-portlet/LoadProject.faces?email=<%=session.getAttribute("email")%>"></iframe>
 </div>
 
-<script type="text/javascript">
-
-var countries=new ddajaxtabs("countrytabs", "TabDiv")
-countries.setpersist(true)
-countries.setselectedClassTarget("link") //"link" or "linkparent"
-countries.init()
-
-</script>
 
 <hr/>
 
