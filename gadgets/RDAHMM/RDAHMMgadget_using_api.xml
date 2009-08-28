@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<Module>
+  <ModulePrefs title="RDAHMM"
+
+	description="QuakeSim2 RDAHMM gadget"
+	author="IU QuakeSim Team"
+	author_email="mpierce@cs.indiana.edu"
+	title_url="http://www.quakesim.org/gadgets/RDAHMM/RDAHMM_gadget.xml"
+	directory_title="QuakeSim2"
+
+
+width="700" height="700" scrolling="true"> 
+    <Require feature="tabs" /> 
+  </ModulePrefs>
+  <Content type="html" view="home,canvas">
+  <![CDATA[ 
+
+    <script type="text/javascript">
+
+    var tabs = new gadgets.TabSet(__MODULE_ID__, "allstations");
+    function init() {
+
+        tabs.addTab("allstations", {
+           contentContainer: document.getElementById("allstations_id")
+        });
+
+        tabs.addTab("FetchResults", {
+           contentContainer: document.getElementById("FetchResults_id")
+        });
+
+
+    }
+
+    // Call init function to initialize and display tabs.
+    gadgets.util.registerOnLoadHandler(init);
+
+   </script>
+
+
+   <div id="allstations_id" style="display:none">
+       <iframe scrolling="yes" width=100% height="600" frameborder="0" src="http://156.56.104.158:8080//RDAHMM-portlet/allstations.faces"></iframe>
+   </div>
+
+   <div id="FetchResults_id" style="display:none">
+       <iframe scrolling="yes" width=100% height="600" frameborder="0" src="http://156.56.104.158:8080//RDAHMM-portlet/FetchResults.faces"></iframe>
+   </div>
+
+
+  ]]>
+  </Content>
+</Module>

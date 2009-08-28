@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+<ModulePrefs title="Disloc2"
+
+	description="QuakeSim2 Disloc2 gadget"
+	author="IU QuakeSim Team"
+	author_email="mpierce@cs.indiana.edu"
+	title_url="http://www.quakesim.org/gadgets/Disloc2/Disloc2_gadget.xml"
+	directory_title="QuakeSim2"
+
+
+scrolling="false" width="400" height="600"/>
+<Content type="url" view="home,canvas" href="http://156.56.104.158:8080//Disloc2/index.faces"/>
+</Module>
