@@ -312,9 +312,13 @@ public class SimpleXService extends AntVisco implements Runnable {
 	 * pre simplex function
 	 */
 
-	protected String[] prefabSimpleXCall(String userName, String projectName,
-			Fault[] faults, Observation[] obsv, String startTemp,
-			String maxIters, String timeStamp) throws Exception {
+	 protected String[] prefabSimpleXCall(String userName, 
+													  String projectName,
+													  Fault[] faults, 
+													  Observation[] obsv, 
+													  String startTemp,
+													  String maxIters, 
+													  String timeStamp) throws Exception {
 
 		String workDir = generateWorkDir(userName, projectName, timeStamp);
 		SimplexCreateInputFile(workDir, projectName, faults, obsv, startTemp,
@@ -333,15 +337,26 @@ public class SimpleXService extends AntVisco implements Runnable {
 	 * output file. String [3] is the standard output of geofest. String [4] is
 	 * the simplex log file.
 	 */
-	 public SimpleXOutputBean runSimplex(String userName, String projectName,
-													 Fault[] faults, Observation[] obsv, String startTemp,
-													 String maxIters, String origin_lon, String origin_lat,
-													 String KmlGeneratorUrl, String timeStamp) throws Exception {
+	 public SimpleXOutputBean runSimplex(String userName, 
+													 String projectName,
+													 Fault[] faults, 
+													 Observation[] obsv, 
+													 String startTemp,
+													 String maxIters, 
+													 String origin_lon, 
+													 String origin_lat,
+													 String KmlGeneratorUrl, 
+													 String timeStamp) throws Exception {
 		  
 		  // The target is always "tar.all".
 
-		  String[] args = prefabSimpleXCall(userName, projectName, faults, obsv,
-														startTemp, maxIters, timeStamp);
+		  String[] args = prefabSimpleXCall(userName, 
+														projectName, 
+														faults, 
+														obsv,
+														startTemp, 
+														maxIters, 
+														timeStamp);
 		  setArgs(args);
 		  run();
 		  creationDate=createCreationDate();
