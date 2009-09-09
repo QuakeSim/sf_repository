@@ -496,7 +496,7 @@ public class GeoFESTGridService extends GeoFESTService{
 												  envSettings),
 					 new ClassAdStructAttr("GlobusRSL",
 												  ClassAdAttrType.value2, 
-												  "\"(project=TG-EAR070002T)(maxWallTime=120)(maxTime=120)\""),
+												  "\"(project=TG-STA060010N)(maxWallTime=120)(maxTime=120)\""),
 					 new ClassAdStructAttr("x509userproxy", 
 												  ClassAdAttrType.value3, 
 												  proxyLocation)
