@@ -88,7 +88,7 @@ function dataTableSelectOneRadio(radio) {
 					<f:facet name="header">
 						<h:outputText  id="kjb14" escape="false" value="<b>	Archived Data File</b>" />
 					</f:facet>
-					<h:panelGrid columns="4" border="1">
+					<h:panelGrid columns="3" border="1">
 						<h:outputLink id="link1" value="#{myentry3.inputUrl}" target="_blank">
 							<h:outputText id="kjb13" value="input" />
 						</h:outputLink>
@@ -98,9 +98,11 @@ function dataTableSelectOneRadio(radio) {
 						<h:outputLink id="link3" value="#{myentry3.outputUrl}" target="_blank">
 							<h:outputText  id="kjb11" value="output" />
 						</h:outputLink>
+						<f:verbatim><!--
 						<h:outputLink id="link4" value="#{myentry3.faultUrl}" target="_blank">
 							<h:outputText  id="kjb10" value="fault" />
 						</h:outputLink>
+						--></f:verbatim>
 					</h:panelGrid>
 				</h:column>
 
