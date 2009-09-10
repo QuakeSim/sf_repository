@@ -98,11 +98,6 @@ function dataTableSelectOneRadio(radio) {
 						<h:outputLink id="link3" value="#{myentry3.outputUrl}" target="_blank">
 							<h:outputText  id="kjb11" value="output" />
 						</h:outputLink>
-						<f:verbatim><!--
-						<h:outputLink id="link4" value="#{myentry3.faultUrl}" target="_blank">
-							<h:outputText  id="kjb10" value="fault" />
-						</h:outputLink>
-						--></f:verbatim>
 					</h:panelGrid>
 				</h:column>
 
