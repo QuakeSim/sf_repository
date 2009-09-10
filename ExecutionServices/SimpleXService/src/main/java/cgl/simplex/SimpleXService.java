@@ -428,7 +428,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 
 			kmlService.setDatalist(tmp_pointentrylist);
 			kmlService.setOriginalCoordinate(lon, lat);
-			kmlService.setCoordinateUnit("1000000000");
+			kmlService.setCoordinateUnit("1000");
 			kmlService = setfaultplot(kmlService, faults);
 			kmlService.setPointPlacemark("Icon Layer");
 			kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
@@ -444,7 +444,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			tmp_pointentrylist = dw.getCalcList();
 			kmlService.setDatalist(tmp_pointentrylist);
 			kmlService.setOriginalCoordinate(lon, lat);
-			kmlService.setCoordinateUnit("1000000000");
+			kmlService.setCoordinateUnit("1000");
 			kmlService=setfaultplot(kmlService,faults);
 			kmlService.setPointPlacemark("Icon Layer");
 			kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
@@ -459,7 +459,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			tmp_pointentrylist = dw.getO_cList();
 			kmlService.setDatalist(tmp_pointentrylist);
 			kmlService.setOriginalCoordinate(lon, lat);
-			kmlService.setCoordinateUnit("1000000000");
+			kmlService.setCoordinateUnit("1000");
 			kmlService=setfaultplot(kmlService,faults);
 			kmlService.setPointPlacemark("Icon Layer");
 			kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
@@ -473,7 +473,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			tmp_pointentrylist = dw.getO_cList();
 			kmlService.setDatalist(tmp_pointentrylist);
 			kmlService.setOriginalCoordinate(lon, lat);
-			kmlService.setCoordinateUnit("1000000000");
+			kmlService.setCoordinateUnit("1000");
 			kmlService=setfaultplot(kmlService,faults);
 			kmlService.setPointPlacemark("'Residual Displacements Icon Layer");
 			kmlService.setArrowPlacemark("'Residual Displacements Arrow Layer", "ff61f2f2", 2);
