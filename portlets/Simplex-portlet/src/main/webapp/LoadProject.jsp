@@ -81,7 +81,7 @@ function dataTableSelectOneRadio(radio) {
 									  action="#{SimplexBean.toggleSelectProject}" />
 			</h:panelGrid>
 			<h:panelGrid id="lkdjf9" columns="1" border="0">
-				<h:outputText id="lkdjf10" escape="false" value="<b>Select Projects</b><br><br>" />
+				<h:outputText id="lkdjf10" escape="false" value="<b>Delete Projects</b><br><br>" />
 				<h:outputText  id="lkdjf11" escape="false"
 					value="Please select from one of the previous projects." />
 				<h:selectManyCheckbox id="projectfordelete" value="#{SimplexBean.deleteProjectsList}"
