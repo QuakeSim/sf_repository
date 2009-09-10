@@ -113,16 +113,6 @@ function dataTableSelectOneRadio(radio) {
 
 					<h:column>
 					<f:facet name="header">
-						    <h:outputText value="Lee Refiner Log"/>
-				   </f:facet>
-				       <h:outputLink value="#{mrb.meshRunBean.leeRefinerLog}" target="_blank">
-						    <h:outputText value="Lee Refiner Log"/>
-						 </h:outputLink>
-					</h:column>
-
-
-					<h:column>
-					<f:facet name="header">
 						    <h:outputText value="Node File"/>
 				   </f:facet>
 				       <h:outputLink value="#{mrb.meshRunBean.nodeUrl}" target="_blank">
@@ -136,15 +126,6 @@ function dataTableSelectOneRadio(radio) {
 				   </f:facet>
 				       <h:outputLink value="#{mrb.meshRunBean.tetraUrl}" target="_blank">
 						    <h:outputText value="Tetra Url"/>
-						 </h:outputLink>
-					</h:column>
-					
-					<h:column>
-					<f:facet name="header">
-						    <h:outputText value="Project Input Files"/>
-				   </f:facet>
-				       <h:outputLink value="#{mrb.meshRunBean.viscoTarUrl}" target="_blank">
-						    <h:outputText value="Project Tar"/>
 						 </h:outputLink>
 					</h:column>
 					

@@ -130,15 +130,6 @@ function dataTableSelectOneRadio(radio) {
 
 					<h:column>
 					<f:facet name="header">
-						    <h:outputText value="Project Tar"/>
-				   </f:facet>
-				       <h:outputLink value="#{mrb.geofestOutputBean.tarOfEverythingUrl}" target="_blank">
-						    <h:outputText value="Project Tar"/>
-						 </h:outputLink>
-					</h:column>
-
-					<h:column>
-					<f:facet name="header">
 						    <h:outputText value="GeoFEST Status"/>
 				   </f:facet>
 					<h:commandLink actionListener="#{MGBean.queryGeoFESTStatus}">
