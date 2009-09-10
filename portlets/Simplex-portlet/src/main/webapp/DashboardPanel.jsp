@@ -5,20 +5,23 @@
 					<h:outputFormat id="lkdrq5" escape="false"
 						value="<b>Starting Temperature:</b>"/>
 					<h:inputText id="rvfr930391ci" 
-									 required="true"		 					
+									 required="true"		 
+									 size="10"					
 									 value="#{SimplexBean.currentProjectEntry.startTemp}" />
  					<f:verbatim><br/></f:verbatim>
 
 					<h:outputText id="lkdrq6" escape="false"
 						value="<b>Maximum Iterations:</b>"/>
 					<h:inputText id="dfe930391ci" 
-									 required="true"		 					
+									 required="true"		 	
+									 size="10"									
 									 value="#{SimplexBean.currentProjectEntry.maxIters}" />
  					<f:verbatim><br/></f:verbatim>
 
 					<h:outputText id="lkj3034f" escape="false"
 					   value="<b>Project Lat Origin:</b>"/>
 					<h:inputText id="ere9023"
+									 size="10"					
 									 value="#{SimplexBean.currentProjectEntry.origin_lat}"
 									 required="true"/>
  					<f:verbatim><br/></f:verbatim>
@@ -26,6 +29,7 @@
 					<h:outputText id="lkr33j3034f" escape="false"
 					   value="<b>Project Lon Origin:</b>"/>
 					<h:inputText id="ere90eree23"
+									 size="10"					
 									 value="#{SimplexBean.currentProjectEntry.origin_lon}"
 									 required="true"/>
  					<f:verbatim><br/></f:verbatim>
