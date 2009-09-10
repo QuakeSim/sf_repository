@@ -1,16 +1,43 @@
 			<h:panelGroup id="lkdrq3">
 			   <h:form id="selectproj">
-					<h:outputFormat id="lkdrq4" escape="false"
+					<h:outputText id="lkdrq4" escape="false"
 						value="<b>Project Name:</b> #{SimplexBean.projectName} <br>" />
 					<h:outputFormat id="lkdrq5" escape="false"
-						value="<b>Starting Temperature:</b> #{SimplexBean.currentProjectEntry.startTemp} <br>" />
-					<h:outputFormat id="lkdrq6" escape="false"
-						value="<b>Maximum Iterations:</b> #{SimplexBean.currentProjectEntry.maxIters} <br>" />
+						value="<b>Starting Temperature:</b>"/>
+					<h:inputText id="rvfr930391ci" 
+									 required="true"		 					
+									 value="#{SimplexBean.currentProjectEntry.startTemp}" />
+ 					<f:verbatim><br/></f:verbatim>
+
+					<h:outputText id="lkdrq6" escape="false"
+						value="<b>Maximum Iterations:</b>"/>
+					<h:inputText id="dfe930391ci" 
+									 required="true"		 					
+									 value="#{SimplexBean.currentProjectEntry.maxIters}" />
+ 					<f:verbatim><br/></f:verbatim>
+
 					<h:outputText id="lkj3034f" escape="false"
-					   value="<b>Project Lat/Lon Origin:</b> 
-						(#{SimplexBean.currentProjectEntry.origin_lat},
-						#{SimplexBean.currentProjectEntry.origin_lon})"/>
+					   value="<b>Project Lat Origin:</b>"/>
+					<h:inputText id="ere9023"
+									 value="#{SimplexBean.currentProjectEntry.origin_lat}"
+									 required="true"/>
+ 					<f:verbatim><br/></f:verbatim>
+
+					<h:outputText id="lkr33j3034f" escape="false"
+					   value="<b>Project Lon Origin:</b>"/>
+					<h:inputText id="ere90eree23"
+									 value="#{SimplexBean.currentProjectEntry.origin_lon}"
+									 required="true"/>
+ 					<f:verbatim><br/></f:verbatim>
 						
+
+					<h:commandButton id="button1121" value="Update Information"
+						actionListener="#{SimplexBean.currentEditProjectForm.toggleProjectSelection}">
+					</h:commandButton>
+						
+				</h:form>
+						<f:verbatim><hr></f:verbatim>
+				<h:form id="uyer092">
 					<h:outputText id="instructionezzze" escape="false"
 					  				  value="<br>You must add at least one observation point and one fault.  The preferred method is to use the GPS station map option."/>
 

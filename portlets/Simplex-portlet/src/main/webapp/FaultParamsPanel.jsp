@@ -36,7 +36,7 @@
 							<h:message for="FaultName" showDetail="true" showSummary="true"
 								errorStyle="color: red" />
 						</h:panelGroup>
-						<h:outputText id="dlkjfe0912"/>
+						<h:outputText id="dlkjfe0912" value="N/A"/>
 
 
 					  <f:verbatim>
