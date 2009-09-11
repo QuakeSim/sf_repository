@@ -8,7 +8,7 @@
 	<!--==================================================-->
 	<portal.server.ip>129.79.49.68</portal.server.ip>
 	<host.base.url>http://${portal.server.ip}:8080/</host.base.url>
-	<google.master.key>ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTM-mQfCm4234zOfC78cwKWdUeTuBSI6nfLv9WmRyyCQaUSnGm4oC9jzw</google.master.key>
+	<google.master.key>ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTf0RZ3CvQOmi-GOjEFoiamz50c8BRdcsDMSPvaTAMTVPL7sMxMzuZWCQ</google.master.key>
 	<!--==================================================-->
 	<!-- 
 		Specify your container.  Currently only gridsphere

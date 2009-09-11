@@ -44,9 +44,9 @@ mapcenter_y = center_xy[1];
  
 <title>Edit Project</title>
 <!--Google and related APIs are imported here -->
- <script src="http://156.56.104.158:8080/Disloc2/egeoxml.js" type="text/javascript"></script>
-    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here"
-      type="text/javascript"></script>
+
+<script src="@host.base.url@Disloc2/egeoxml.js" type="text/javascript"></script>
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>      
 </head> 
 
 <body onload="" onunload="GUnload()">
@@ -309,7 +309,7 @@ function getScrolling() {
 		value="<p>Create your geometry out of observation points and faults.<br/>The project origin will be the starting lat/lon of the first fault.</p>"/> 
 	<h:panelGrid id="EditProject"  
 		columnClasses="alignTop,alignTop" 
-		columns="2" border="1"> 
+		columns="1" border="1"> 
 
    <%@include file="DashboardPanel.jsp" %>
    <%@include file="ObsvStyle.jsp" %>

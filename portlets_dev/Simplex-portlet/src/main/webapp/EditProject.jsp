@@ -70,9 +70,11 @@ for(int i=0;i<stationList.size();i++) {
       type="text/javascript"></script>
 */%>
 
-    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTM-mQfCm4234zOfC78cwKWdUeTuBSI6nfLv9WmRyyCQaUSnGm4oC9jzw"
-type="text/javascript"></script>
- <script src="http://156.56.104.158:8080/Simplex-portlet/egeoxml.js" type="text/javascript"></script>
+
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>
+<script src="@host.base.url@Simplex-portlet/egeoxml.js" type="text/javascript"></script>
+
+
 
 </head>
 <body onload="" onunload="GUnload()">
