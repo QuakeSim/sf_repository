@@ -745,9 +745,9 @@ public class SimpleXDataKml {
 			*/ 
 			 
 			 
-			ArrowLine curarrow = CreateArrowByCoordinate(startx - x_sub + x_sub_adj, starty - y_sub + y_sub_adj, endx - x_sub + x_sub_adj, endy - y_sub + y_sub_adj); 
+			// ArrowLine curarrow = CreateArrowByCoordinate(startx - x_sub + x_sub_adj, starty - y_sub + y_sub_adj, endx - x_sub + x_sub_adj, endy - y_sub + y_sub_adj); 
 			 
-			// ArrowLine curarrow = CreateArrowByCoordinate(startx - x_sub, starty - y_sub, endx - x_sub, endy - y_sub); 
+			ArrowLine curarrow = CreateArrowByCoordinate(startx - x_sub, starty - y_sub, endx - x_sub, endy - y_sub); 
 			 
 			// plot start point 
 			double mapx = curarrow.getStartPoint().getX(); 
