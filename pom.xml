@@ -6,7 +6,7 @@
 	<!--==================================================-->
 	<!-- These need to be edited by the deployer -->
 	<!--==================================================-->
-	<portal.server.ip>156.56.104.158</portal.server.ip>
+	<portal.server.ip>129.79.49.68</portal.server.ip>
 	<host.base.url>http://${portal.server.ip}:8080/</host.base.url>
 	<google.master.key>ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTM-mQfCm4234zOfC78cwKWdUeTuBSI6nfLv9WmRyyCQaUSnGm4oC9jzw</google.master.key>
 	<!--==================================================-->
@@ -24,12 +24,12 @@
 		and don't have any unusual .globus requirements.
 		-->
 	<!--==================================================-->
-	<project.home>${env.HOME}/workspace/QuakeSim2_J_dev</project.home>
+	<project.home>${env.HOME}/workspace/QuakeSim2</project.home>
 	<tomcat.bin.perm>755</tomcat.bin.perm>
 	<tomcat.version>apache-tomcat-5.5.20</tomcat.version>
 	<yui.version>yui_0.12.2</yui.version>
-	<catalina.home>${env.HOME}/workspace/QuakeSim2_J_dev/portal_deploy/${tomcat.version}/</catalina.home>
-	<tomcat.base.dir>${env.HOME}/workspace/QuakeSim2_J_dev/portal_deploy/${tomcat.version}/</tomcat.base.dir>
+	<catalina.home>${env.HOME}/workspace/QuakeSim2/portal_deploy/${tomcat.version}/</catalina.home>
+	<tomcat.base.dir>${env.HOME}/workspace/QuakeSim2/portal_deploy/${tomcat.version}/</tomcat.base.dir>
 	<gridsphere.version>gridsphere-2.1.4</gridsphere.version>
 
 
@@ -125,7 +125,6 @@
 
 	<!-- These are services.  Add new ones here. -->
 
-<!--
 	<module>ExecutionServices/AnalyzeTseriService</module>
 	<module>ExecutionServices/AntVisco</module>
 	<module>ExecutionServices/DislocService</module>
@@ -136,8 +135,7 @@
 	<module>ExecutionServices/STFilterService</module>
 	<module>ExecutionServices/SimpleXService</module>
 	<module>ExecutionServices/GeoFESTParallelService</module>
-	<module>ExecutionServices/RDAHMMService</module> -->
-
+	<module>ExecutionServices/RDAHMMService</module>
 	
 	<module>ExecutionServices/DailyRDAHMMService</module>
 	<module>ExecutionServices/DailyRDAHMMResultService</module>
