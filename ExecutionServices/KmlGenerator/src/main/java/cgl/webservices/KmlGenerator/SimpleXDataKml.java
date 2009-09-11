@@ -613,13 +613,11 @@ public class SimpleXDataKml {
 			} 
 		}		 
 		 
-		 
 		double scale_rate = 0; 
 		 
 		if (longestlength != 0)			 
 			scale_rate = (100 * arrowScale)/longestlength;		 
-		 
-		 
+		 		 
 		for (int i = 0; i < datalist.length; i++) { 
 			// create and add a Placemark containing a Point 
 			Placemark mark1 = new Placemark();			 
@@ -645,9 +643,7 @@ public class SimpleXDataKml {
 			Coordinate original_xy = ConverterUTM.LLtoUTM(23, original_lon, original_lat,UTMZone); 
 			double tmp_x = original_xy.getX() + x * coordinateUnit; 
 			double tmp_y = original_xy.getY() + y * coordinateUnit; 
-			Coordinate new_lonlat = ConverterUTM.UTMtoLL(23, tmp_x, tmp_y, UTMZone);			 
-			 
-			 
+			Coordinate new_lonlat = ConverterUTM.UTMtoLL(23, tmp_x, tmp_y, UTMZone);			 			 
 //			new_lonlat = MapFunction.MercatorProject(new_lonlat.getX(), 
 //					new_lonlat.getY()); 
 			double lat = new_lonlat.getY(); 
@@ -675,7 +671,6 @@ public class SimpleXDataKml {
 					+ ": " +fontEnd+ datalist[i].getDeltaZValue() + " cm <br/>"; 
 			descriptionValue = descriptionValue + "<font color=blue>scale rate </font>" 
 			+ " :" +fontEnd+ longestlength + "cm  : " + arrowScale/1000 + "km <br/>";			 
-			 
 			descriptionValue = descriptionValue 
 					+ "<font color=blue>tag name:</font>" 
 					+ datalist[i].getFolderTag()+br; 
@@ -697,11 +692,9 @@ public class SimpleXDataKml {
 			double endx = startx + dx * 0.01; 
 			double endy = starty + dy * 0.01;			 
 			 
-			 
 			double x_sub_adj = (endx-startx)/2; 
 			double y_sub_adj = (endy-starty)/2; 
-			 
-			 
+			 			 
 			/*   
 			double x_sub_adj = 0; 
 			double y_sub_adj = 0; 
@@ -712,26 +705,20 @@ public class SimpleXDataKml {
 			 
 			// endx = (double)(endx * scale_rate); 
 			// endy = (double)(endy * scale_rate);		 
-			 
-			 
+			 			 
 			endx = startx + dx * 0.01 * scale_rate; 
 			endy = starty + dy * 0.01 * scale_rate; 
 			 
-			 
-			System.out.println("original_xy : x = " + original_xy.getX() + " y = " + original_xy.getY());			 
-			System.out.println("x = " + x + " y = " + y); 
-			System.out.println("tmp_xy : x = " + tmp_x + " y = " + tmp_y); 
-			 
-			 
-			System.out.println("start_xy : x = " + startx + " y = " + starty); 
-			System.out.println("end_xy : x = " + endx + " y = " + endy); 
+			// System.out.println("original_xy : x = " + original_xy.getX() + " y = " + original_xy.getY());			 
+			// System.out.println("x = " + x + " y = " + y); 
+			// System.out.println("tmp_xy : x = " + tmp_x + " y = " + tmp_y); 
 			 
 			 
- 
-			System.out.println("orignial lat, lon : x = " + original_lat + " y = " + original_lon); 
-			System.out.println("new lat, lon : x = " + lat + " y = " + lon);			 
- 
+			// System.out.println("start_xy : x = " + startx + " y = " + starty); 
+			// System.out.println("end_xy : x = " + endx + " y = " + endy); 
 			 
+			// System.out.println("orignial lat, lon : x = " + original_lat + " y = " + original_lon); 
+			// System.out.println("new lat, lon : x = " + lat + " y = " + lon);			 
 			 
 			double x_sub = (endx-startx)/2; 
 			double y_sub = (endy-starty)/2; 
@@ -744,10 +731,11 @@ public class SimpleXDataKml {
 			double y_sub = 0; 
 			*/ 
 			 
-			 
+			ArrowLine curarrow = CreateArrowByCoordinate(startx,starty,endx,endy); 
+
 			// ArrowLine curarrow = CreateArrowByCoordinate(startx - x_sub + x_sub_adj, starty - y_sub + y_sub_adj, endx - x_sub + x_sub_adj, endy - y_sub + y_sub_adj); 
 			 
-			ArrowLine curarrow = CreateArrowByCoordinate(startx - x_sub, starty - y_sub, endx - x_sub, endy - y_sub); 
+			// ArrowLine curarrow = CreateArrowByCoordinate(startx - x_sub, starty - y_sub, endx - x_sub, endy - y_sub); 
 			 
 			// plot start point 
 			double mapx = curarrow.getStartPoint().getX(); 
@@ -799,7 +787,6 @@ public class SimpleXDataKml {
 					+ tmp_lonlat.getY() + ",0  "; 
  
 			newline.setCoordinates(line_value); 
-			 
 			 
 			/* 
 			Style gridlineStyle = new Style(); 
