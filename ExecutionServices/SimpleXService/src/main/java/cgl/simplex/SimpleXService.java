@@ -358,8 +358,8 @@ public class SimpleXService extends AntVisco implements Runnable {
 														maxIters, 
 														timeStamp);
 		  setArgs(args);
-		  //		  run();
-		  execute();
+		  run();
+		  //		  execute();
 		  creationDate=createCreationDate();
 		  return getAllTheSimpleXFiles(KmlGeneratorUrl, 
 												 userName, 
