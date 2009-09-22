@@ -28,7 +28,7 @@
     exmlFMap.parse();
 
        //Handle sidebar events.  Param1 is the fault+segment name, param2 is the polyline.
-    	 var faultField=document.getElementById("faultKMLSelectorForm:faultName")
+    	 var faultField=document.getElementById("faultKMLSelectorForm:faultName");
 	 	 GEvent.addDomListener(faultField,"click",function(param1,param2){
 					   var interpHead=" (InterpId:";
 					   var faultName,segmentName;
