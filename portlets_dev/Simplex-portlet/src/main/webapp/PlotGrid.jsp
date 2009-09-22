@@ -8,10 +8,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">  <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <title>Google Maps Example</title>
- <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTM-mQfCm4234zOfC78cwKWdUeTuBSI6nfLv9WmRyyCQaUSnGm4oC9jzw"
+ <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here"
       type="text/javascript"></script>
 
-  <script src="http://156.56.104.158:8080//Simplex-portlet/egeoxml.js" type="text/javascript"></script>
+  <script src="@host.base.url@Simplex-portlet/egeoxml.js" type="text/javascript"></script>
   </head>
   <body>
   <%
