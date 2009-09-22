@@ -967,7 +967,7 @@ public class SimpleXDataKml {
 		setLatref(lat); 
 	} 
 	 
-	protected String generateBaseUrl(String foldertag, String userName, String projectName, 
+	public String generateBaseUrl(String foldertag, String userName, String projectName, 
 			String timeStamp) { 
  
 		// Need to be careful here because this must follow 
