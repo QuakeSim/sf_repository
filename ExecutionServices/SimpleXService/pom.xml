@@ -173,6 +173,11 @@
         <!--
         SOPAC Jars
         -->
+        <dependency>
+             <groupId>cgl.webservices</groupId>
+             <artifactId>AntVisco</artifactId>
+             <version>1.0-SNAPSHOT</version>
+        </dependency>
 
        </dependencies>
 

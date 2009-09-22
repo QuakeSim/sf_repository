@@ -358,7 +358,12 @@ public class SimpleXService extends AntVisco implements Runnable {
 														maxIters, 
 														timeStamp);
 		  setArgs(args);
-		  run();
+		  //		  run();
+		  execute();
+		  while (getStatus().equals(AntVisco.NOT_DONE)) {
+				System.out.println(getStatus());
+				Thread.sleep(10000);
+		  }
 		  //		  execute();
 		  creationDate=createCreationDate();
 		  return getAllTheSimpleXFiles(KmlGeneratorUrl, 
