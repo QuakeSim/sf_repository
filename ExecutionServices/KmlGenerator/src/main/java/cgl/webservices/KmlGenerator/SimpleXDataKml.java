@@ -700,8 +700,8 @@ public class SimpleXDataKml {
 			double y_sub_adj = 0; 
 			*/ 
 			 
-			System.out.println("end : x = " + endx + " y = " + endy);			 
-			System.out.println("scale_rate : " + scale_rate); 
+			// System.out.println("end : x = " + endx + " y = " + endy);			 
+			// System.out.println("scale_rate : " + scale_rate); 
 			 
 			// endx = (double)(endx * scale_rate); 
 			// endy = (double)(endy * scale_rate);		 
@@ -723,8 +723,8 @@ public class SimpleXDataKml {
 			double x_sub = (endx-startx)/2; 
 			double y_sub = (endy-starty)/2; 
 			 
-			System.out.println("sub : x = " + x_sub + " y = " + y_sub); 
-			System.out.println("sub_adj : x = " + x_sub_adj + " y = " + y_sub_adj); 
+			// System.out.println("sub : x = " + x_sub + " y = " + y_sub); 
+			// System.out.println("sub_adj : x = " + x_sub_adj + " y = " + y_sub_adj); 
 			 
 			/* 
 			double x_sub = 0; 
