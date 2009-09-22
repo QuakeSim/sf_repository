@@ -400,8 +400,8 @@ public class SimpleXService extends AntVisco implements Runnable {
 					new File(destDir + "/" + projectName + ".output"));
 			copyFileToFile(new File(workDir + "/" + projectName + ".stdout"),
 					new File(destDir + "/" + projectName + ".stdout"));
-			copyFileToFile(new File(workDir + "/" + projectName + ".fault"),
-					new File(destDir + "/" + projectName + ".fault"));
+			// copyFileToFile(new File(workDir + "/" + projectName + ".fault"),
+			// 		new File(destDir + "/" + projectName + ".fault"));
 		} // End of the try
 
 		catch (Exception ex) {
