@@ -324,4 +324,46 @@ public class UtilSet {
     	int idx = path.lastIndexOf(File.separatorChar);
     	return path.substring(idx + 1);
     }
+    
+    /**
+     * delete a non-empty directory
+     * @param success or not
+     * @return
+     */
+    public static boolean deleteDirectory(File dir) {
+    	if (dir.exists()) {
+			File[] files = dir.listFiles();
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].isDirectory()) {
+					if (!deleteDirectory(files[i]))
+						return false;
+				} else {
+					if (!files[i].delete())
+						return false;
+				}
+			}
+		}
+		return dir.delete();
+    }
+    
+    /**
+     * delete things under a directory
+     * @param dir
+     * @return
+     */
+    public static boolean deleteStuffInDir(File dir) {
+    	if (dir.exists()) {
+			File[] files = dir.listFiles();
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].isDirectory()) {
+					if (!deleteDirectory(files[i]))
+						return false;
+				} else {
+					if (!files[i].delete())
+						return false;
+				}
+			}
+		}
+    	return true;
+    }
 }

@@ -25,7 +25,7 @@ public class DailyRDAHMMService extends RDAHMMService {
 	String stationID;
 	String modelBaseName;
 	String modelWorkDir;
-	Object runningLock = null;
+	Object runningLock;
 	String beginDate;
 	String endDate;
 	static String stateChangeNumTxtPath = null;
@@ -97,6 +97,7 @@ public class DailyRDAHMMService extends RDAHMMService {
 		outputDestDir = baseDestDir + File.separator + projectName;
 		beginDate = DailyRDAHMMThread.evalStartDate;
 		endDate = UtilSet.getDateString(Calendar.getInstance());
+		runningLock = new Object();
 	}
 	
 	public DailyRDAHMMService() 
@@ -114,11 +115,10 @@ public class DailyRDAHMMService extends RDAHMMService {
 			String outputType, double annealStep, String buildFilePath,
 			String antTarget) throws Exception {
 
-		UtilSet.exec("mkdir " + baseDestDir);
+		new File(baseDestDir).mkdirs();
 		// Set up the work directory
 		String workDir = baseWorkDir + File.separator + projectName;
-		UtilSet.exec("mkdir " + workDir);
-		
+		new File(workDir).mkdirs();		
 		
 		System.out.println("inputFileUrlString in runBlockingRDAHMM: "	+ inputFileUrlString);
 		if (inputFileUrlString.indexOf("ERROR") >= 0) {
@@ -130,15 +130,16 @@ public class DailyRDAHMMService extends RDAHMMService {
 		// Copy the input file to the working directory, if necessary.
 		String rdahmmInputFile = makeRdahmmInputFile(inputFileUrlString,
 				projectName, workDir);
+		
+		// make *.all.input and *.all.raw for evaluation 
+		String allInputFilePath = makeAllInputAndRawFile(projectName, workDir, modelBaseName, modelWorkDir);
 
 		// Get the dimensions and number of observations.
-		int ndim = getFileDimension(rdahmmInputFile);
-		int nobsv = getLineCount(rdahmmInputFile);
+		int ndim = getFileDimension(allInputFilePath);
+		int nobsv = getLineCount(allInputFilePath);
 
-		if (runningLock == null)
-			runningLock = new Object();
 		synchronized (runningLock) {
-			String[] args = setUpArgArray(rdahmmInputFile, workDir,
+			String[] args = setUpArgArray(allInputFilePath, workDir,
 					modelWorkDir, outputDestDir, projectName, modelBaseName,
 					binPath, nobsv, ndim, numModelStates, randomSeed,
 					outputType, annealStep, buildFilePath, antTarget);
@@ -148,6 +149,88 @@ public class DailyRDAHMMService extends RDAHMMService {
 			run();
 		}
 		return getTheReturnFiles();
+	}
+	
+	public String makeAllInputAndRawFile(String projectName, String workDir, String modelName, String modelDir) {
+		String projectInputPath = workDir + File.separator + projectName + ".input";
+		String projectRawPath = workDir + File.separator + projectName + ".raw";
+		String modelInputPath = modelDir + File.separator + modelName + ".input";
+		String modelRawPath = modelDir + File.separator + modelName + ".raw";
+		String allInputPath = workDir + File.separator + projectName + ".all.input";
+		String allRawPath = workDir + File.separator + projectName + ".all.raw";
+		
+		try {
+			BufferedReader brModelInput = new BufferedReader(new FileReader(modelInputPath));
+			BufferedReader brModelRaw = new BufferedReader(new FileReader(modelRawPath));
+			
+			PrintWriter prAllInput = new PrintWriter(new FileWriter(allInputPath));
+			PrintWriter prAllRaw = new PrintWriter(new FileWriter(allRawPath));
+			
+			// first copy all stuff from model files
+			String lineInput = brModelInput.readLine();
+			String lineInputPre = lineInput;
+			String lineRaw = brModelRaw.readLine();
+			String lineRawPre = lineRaw;
+			
+			while (lineRaw != null) {
+				prAllInput.println(lineInput);
+				prAllRaw.println(lineRaw);
+				lineInputPre = lineInput;
+				lineRawPre = lineRaw;
+				lineInput = brModelInput.readLine();
+				lineRaw = brModelRaw.readLine();
+			}
+			brModelInput.close();
+			brModelRaw.close();
+		
+			BufferedReader brProjectInput = new BufferedReader(new FileReader(projectInputPath));
+			BufferedReader brProjectRaw = new BufferedReader(new FileReader(projectRawPath));
+			lineInput = brProjectInput.readLine();
+			lineRaw = brProjectRaw.readLine();			
+			
+			if (lineRaw != null) {
+				// fill in the gap between last data-available modeling date and first data-available 
+				// evaluation date
+				String restLineRawPre = lineRawPre.substring(lineRawPre.indexOf(' ', 5));
+				Calendar cal1 = UtilSet.getDateFromString(DailyRDAHMMThread.getDateFromRawLine(lineRawPre));
+				Calendar cal2 = UtilSet.getDateFromString(DailyRDAHMMThread.getDateFromRawLine(lineRaw));
+				Calendar calTmp = Calendar.getInstance();
+				UtilSet.ndaysBeforeToday(cal1, -1, calTmp);
+				Calendar calLine = Calendar.getInstance();
+				calLine.setTimeInMillis(calTmp.getTimeInMillis());
+				calLine.set(Calendar.HOUR_OF_DAY, DUP_LINE_TIME);
+				calLine.set(Calendar.MINUTE, DUP_LINE_TIME);
+				calLine.set(Calendar.SECOND, DUP_LINE_TIME);
+				while (calTmp.before(cal2)) {
+					prAllInput.println(lineInputPre);
+					prAllRaw.println(stationID + ' ' + UtilSet.getDateTimeString(calLine) + restLineRawPre);
+
+					UtilSet.ndaysBeforeToday(calTmp, -1, calTmp);
+					UtilSet.ndaysBeforeToday(calLine, -1, calLine);
+				}
+				
+				// finally, copy all stuff from evaluation files
+				while (lineRaw != null) {
+					prAllInput.println(lineInput);
+					prAllRaw.println(lineRaw);
+					lineInput = brProjectInput.readLine();
+					lineRaw = brProjectRaw.readLine();
+				}
+			}
+			
+			brProjectInput.close();
+			brProjectRaw.close();
+			prAllInput.flush();
+			prAllInput.close();
+			prAllRaw.flush();
+			prAllRaw.close();
+		
+			return allInputPath;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+		
+		return "";
 	}
 
 	/** 
@@ -164,27 +247,30 @@ public class DailyRDAHMMService extends RDAHMMService {
 		res = UtilSet.exec("cp " + fileset + " " + outputDestDir + File.separator);
 		res = UtilSet.exec("cp " + fileset + " " + workDir + File.separator);
 
-		// plot images with model files
-		String modelPath = outputDestDir + File.separator + modelBaseName;
-		String proPath = outputDestDir + File.separator + projectName;
-		// the model .input file is just the all.input file
-		res = UtilSet.exec("cp " + modelPath + ".input " + proPath + ".all.input");
-
-		String plotSh = binPath + File.separator + "plot_go.sh";
-		System.out.println("about to executing " + plotSh + " " + proPath
-				+ ".all.input " + modelPath + ".Q " + modelPath	+ ".raw ...");
-		res = UtilSet.exec(plotSh + " " + proPath + ".all.input "
-				+ modelPath + ".Q " + modelPath + ".raw ",	new File(binPath));
-		System.out.println("result : " + res);
-		res = UtilSet.exec("touch " + proPath + ".input");
-		res = UtilSet.exec("touch " + proPath + ".Q");
-		res = UtilSet.exec("touch " + proPath + ".raw");
-
 		// create empty files in workDir
+		String modelPath = outputDestDir + File.separator + modelBaseName;
 		String proWorkPath = workDir + File.separator + projectName;
 		res = UtilSet.exec("touch " + proWorkPath + ".input");
 		res = UtilSet.exec("touch " + proWorkPath + ".Q");
 		res = UtilSet.exec("touch " + proWorkPath + ".raw");
+		res = UtilSet.exec("cp " + modelPath + ".input " + proWorkPath + ".all.input");
+		res = UtilSet.exec("cp " + modelPath + ".raw " + proWorkPath + ".all.raw");
+		res = UtilSet.exec("cp " + modelPath + ".Q " + proWorkPath + ".all.Q");
+		
+		// plot images with model files
+		String proPath = outputDestDir + File.separator + projectName;
+		// the model .input file is just the all.input file
+		res = UtilSet.exec("cp " + modelPath + ".input " + proPath + ".all.input");
+		res = UtilSet.exec("cp " + modelPath + ".raw " + proPath + ".all.raw");
+		res = UtilSet.exec("cp " + modelPath + ".Q " + proPath + ".all.Q");
+
+		String plotSh = binPath + File.separator + "plot_go.sh";
+		System.out.println("about to executing " + plotSh + " " + proPath
+				+ ".all.input " + proPath + ".all.Q " + proPath	+ ".all.raw ...");
+		res = UtilSet.exec(plotSh + " " + proPath + ".all.input "
+				+ modelPath + ".Q " + modelPath + ".raw ",	new File(binPath));
+		System.out.println("result : " + res);
+
 		
 		// fill the flat input file with "NaN NaN NaN" in every line
 		try {
@@ -285,7 +371,7 @@ public class DailyRDAHMMService extends RDAHMMService {
 					if (cal1.getTimeInMillis() != calBegin.getTimeInMillis()){
 						// we use the time 22:22:22 to denote a duplicated line that used to be missing data
 						prRawTmp.println(stationID + ' ' + UtilSet.getDateTimeString(calLine) + restLineRawPre);
-						prInputTmp.println(lineInputPre);		
+						prInputTmp.println(lineInputPre);	
 					}
 					prFlat.println("NaN NaN NaN");
 					UtilSet.ndaysBeforeToday(calTmp, -1, calTmp);

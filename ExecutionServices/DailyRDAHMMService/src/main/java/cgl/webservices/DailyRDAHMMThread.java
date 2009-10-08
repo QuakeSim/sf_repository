@@ -10,8 +10,6 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
-import com.sun.corba.se.impl.javax.rmi.CORBA.Util;
-
 public class DailyRDAHMMThread implements Runnable {
 
 	protected DailyRDAHMMRunner runner = null;
@@ -36,8 +34,6 @@ public class DailyRDAHMMThread implements Runnable {
 	static int objCount = 0;
 	static String xmlUrlPrefix = null;
 	
-	protected Vector<String> modelRawLines = new Vector<String>(); 	//for saving lines from the GRWS queried input file in modeling phase
-	protected Vector<String> modelQLines = new Vector<String>();		//for saving lines from the .Q result file in modeling phase
 	protected Vector<String> evalRawLines = new Vector<String>();		//for saving lines from the GRWS queried input file in evaluating phase
 	protected Vector<String> evalQLines = new Vector<String>();		//for saving lines from the .Q result file in evaluating phase
 	protected String latStr = "";						//temporarily saved latitude for the station being modeled and evaluated
@@ -169,11 +165,10 @@ public class DailyRDAHMMThread implements Runnable {
 				
 				createModelZips(station, rds);
 				
-				readFileToVector(rds.modelWorkDir + File.separator + rds.modelBaseName + ".raw", modelRawLines);
-				readFileToVector(rds.modelWorkDir + File.separator + rds.modelBaseName + ".Q", modelQLines);
-				UtilSet.log(threadNum, "station:" + station + "; modelRawLines " + modelRawLines.size() + "; modelQLines " + modelQLines.size());
-				if (modelRawLines.size() > 0) {
-					UtilSet.setDateByString(modelEndCal, getDateFromRawLine((String)modelRawLines.get(modelRawLines.size()-1)) );
+				String modelRawFilePath = rds.modelWorkDir + File.separator + rds.modelBaseName + ".raw";
+				File modelRawFile =  new File(modelRawFilePath);
+				if (modelRawFile.exists() && modelRawFile.length() > 0) {
+					UtilSet.setDateByString(modelEndCal, getDateFromRawLine(readOneLineFromFile(modelRawFilePath, -1)));
 					// if the end date of model phase is later than normal evaluation starting date, short evaluation
 					// should be used
 					if (modelEndCal.compareTo(evalStartCal) >= 0 && modelEndCal.compareTo(shortModelEndCal) <= 0) {
@@ -210,9 +205,9 @@ public class DailyRDAHMMThread implements Runnable {
 			
 				// generate the results
 				readFileToVector(rds.baseWorkDir + File.separator + rds.projectName + File.separator
-									 + rds.projectName+".raw", evalRawLines);
+									 + rds.projectName + ".all.raw", evalRawLines);
 				readFileToVector(rds.baseWorkDir + File.separator + rds.projectName + File.separator
-									 + rds.projectName+".Q", evalQLines);
+									 + rds.projectName + ".all.Q", evalQLines);
 				UtilSet.log(threadNum, "station:" + station + "; evalRawLines " + evalRawLines.size() + "; evalQLines " + evalQLines.size());
 				
 				// write results to file
@@ -457,10 +452,8 @@ public class DailyRDAHMMThread implements Runnable {
 		int count20 = 0;
 		int changeCount = 0;
 		int missCount = 0;
-		UtilSet.log(threadNum, "station " + station + ": evalQLines " + evalQLines.size() + "; evalRawLines " 
-							+ evalRawLines.size() + "; modelQLines " + modelQLines.size() + "; modelRawLines " 
-							+ modelRawLines.size());
 		if (evalQLines.size() > 0) {
+			// data missing between last "data-available" date and "today"?
 			date2 = getDateFromRawLine((String)evalRawLines.get(evalQLines.size()-1));
 			UtilSet.setDateByString(cal2, date2);
 			UtilSet.ndaysBeforeToday(cal2, -1, cal2);
@@ -469,24 +462,8 @@ public class DailyRDAHMMThread implements Runnable {
 				sbMissData.append(UtilSet.getDateString(cal2)).append(';');
 				missCount++;
 			}
-			UtilSet.ndaysBeforeToday(cal2, 1, cal2);
-		} else if (modelQLines.size() > 0) {
-			date2 = getDateFromRawLine((String)modelRawLines.get(modelQLines.size()-1));
-			UtilSet.setDateByString(cal2, date2);
-			UtilSet.ndaysBeforeToday(cal2, -1, cal2);
-			if (cal2.compareTo(calToday2) < 0) {
-				sbMissData.append(UtilSet.getDateString(calToday2)).append("to");
-				sbMissData.append(UtilSet.getDateString(cal2)).append(';');
-				missCount++;
-			}
-			UtilSet.ndaysBeforeToday(cal2, 1, cal2);
-		} else {
-			// if there is even no data for training model, there must be no data at all
-			sbMissData.append(UtilSet.getDateString(calToday2)).append("to").append(modelStartDate).append(';');
-			missCount++;
-		}
-		
-		if (evalQLines.size() > 1) {			
+			
+			// get data-missing time sections and state changes during the evaluation time
 			for (int i = evalQLines.size() - 1; i > 0; i--) {
 				// record section with missing data
 				date1 = getDateTimeFromRawLine((String)evalRawLines.get(i-1));
@@ -553,125 +530,10 @@ public class DailyRDAHMMThread implements Runnable {
 				status2 = status1;
 				str2 = str1;				
 			}
-		}
-		
-		// the state sequence before the evaluation starting date is contained in the .Q file of the modeling phase
-		// this is to compare the first line of evalQLines and the last line of modelQLines
-		if (evalQLines.size() > 0 && modelQLines.size() > 0) {
-			// since we make sure that evalQLines.size() > 1 && modelQLines.size() > 1
-			// by filling missing data, there is no need to check missing data here
-			date1 = getDateFromRawLine(modelRawLines.get(modelRawLines.size() - 1));
-			date2 = getDateFromRawLine(evalRawLines.get(0));
-			UtilSet.setDateByString(cal1, date1);
-			UtilSet.setDateByString(cal2, date2);
-			UtilSet.ndaysBeforeToday(cal1, -1, cal1);
-			UtilSet.ndaysBeforeToday(cal2, 1, cal2);
-			if (cal1.compareTo(cal2) < 0) {
-				sbMissData.append(UtilSet.getDateString(cal2)).append("to");
-				sbMissData.append(UtilSet.getDateString(cal1)).append(';');
-				missCount++;
-			}
-			UtilSet.ndaysBeforeToday(cal1, 1, cal1);
-			UtilSet.ndaysBeforeToday(cal2, -1, cal2);
 			
-			// record status changes
-			str1 = (String)modelQLines.get(modelQLines.size() - 1);
-			str2 = (String)(evalQLines.get(0));
-			status1 = Long.valueOf(str1).longValue();
-			status2 = Long.valueOf(str2).longValue();
-			if (status1 != status2) {
-				changeCount++;
-				sbgroup.append( date2 );
-				sbgroup.append(':').append(str1).append("to").append(str2);
-				count20++;
-				addStateChangeNum(date2, 1);
-				if (count20 >= 20) {
-					// add a status change element
-					eleStation.addElement("status-changes").setText(sbgroup.toString());
-					eleStation2.addElement("status-changes").setText(sbgroup.toString());
-					sbgroup.setLength(0);
-					count20 = 0;						
-				} else {
-					sbgroup.append(';');
-				}
-			}
-		}
-		
-		// this is for the modelQLines
-		if (modelQLines.size() > 1) {
-			status1 = -1;
-			status2 = -1;
-			for (int j = modelQLines.size() - 1; j > 0; j--) {				
-				// record section with missing data
-				date1 = getDateTimeFromRawLine((String)modelRawLines.get(j-1));
-				date2 = getDateTimeFromRawLine((String)modelRawLines.get(j));
-				UtilSet.setDateTimeByString(cal1, date1);
-				UtilSet.setDateTimeByString(cal2, date2);
-				date1 = UtilSet.getDatePart(date1);
-				date2 = UtilSet.getDatePart(date2);
-				
-				// if the last line is like "2008-10-03T22:22:22", then it's an end of a missing-data time section
-				if (j == modelQLines.size()-1 
-					&& cal2.get(Calendar.HOUR_OF_DAY) == DailyRDAHMMService.DUP_LINE_TIME) {
-					calMissingEnd.setTimeInMillis(cal2.getTimeInMillis());
-				}
-				
-				// situation like "2008-10-03T22:22:22 ..."
-				//				  "2008-10-04T12:00:00 ...", where 2008-10-03 is an end of missing-data time section
-				if (cal1.get(Calendar.HOUR_OF_DAY) == DailyRDAHMMService.DUP_LINE_TIME
-					&& cal2.get(Calendar.HOUR_OF_DAY) != DailyRDAHMMService.DUP_LINE_TIME) {
-					calMissingEnd.setTimeInMillis(cal1.getTimeInMillis());
-				}
-				
-				// if the first line is like "1994-01-01T22:22:22", then it's a start of a missing-data time section
-				if (j == 1 && cal1.get(Calendar.HOUR_OF_DAY) == DailyRDAHMMService.DUP_LINE_TIME) {
-					calMissingBegin.setTimeInMillis(cal1.getTimeInMillis());
-					sbMissData.append(UtilSet.getDateString(calMissingEnd)).append("to");
-					sbMissData.append(UtilSet.getDateString(calMissingBegin)).append(';');
-					missCount++;
-				}
-				
-				// situation like "2008-09-03T12:00:00 ..."
-				//				  "2008-09-04T22:22:22 ...", where 2008-09-04 is a start of missing-data time section
-				if (cal1.get(Calendar.HOUR_OF_DAY) != DailyRDAHMMService.DUP_LINE_TIME
-					&& cal2.get(Calendar.HOUR_OF_DAY) == DailyRDAHMMService.DUP_LINE_TIME) {
-					calMissingBegin.setTimeInMillis(cal2.getTimeInMillis());
-					sbMissData.append(UtilSet.getDateString(calMissingEnd)).append("to");
-					sbMissData.append(UtilSet.getDateString(calMissingBegin)).append(';');
-					missCount++;
-				}
-				
-				// record status changes
-				str1 = (String)modelQLines.get(j - 1);
-				status1 = Long.valueOf(str1).longValue();
-				if (status2 < 0) {
-					str2 = (String)modelQLines.get(j);
-					status2 = Long.valueOf(str2).longValue();
-				}
-				if (status1 != status2) {
-					changeCount++;
-					sbgroup.append( getDateFromRawLine((String)modelRawLines.get(j)) );
-					sbgroup.append(':').append(str1).append("to").append(str2);
-					count20++;
-					addStateChangeNum(date2, 1);
-					if (count20 >= 20) {
-						// add a status change element
-						eleStation.addElement("status-changes").setText(sbgroup.toString());
-						eleStation2.addElement("status-changes").setText(sbgroup.toString());
-						sbgroup.setLength(0);
-						count20 = 0;						
-					} else {
-						sbgroup.append(';');
-					}					
-				}
-				status2 = status1;
-				str2 = str1;
-			}
-		}
-		
-		if (modelQLines.size() > 0) {
+			// data missing between 1994-01-01 and the first "data-available" date?
 			date1 = modelStartDate;
-			date2 = getDateFromRawLine((String)modelRawLines.get(0));
+			date2 = getDateFromRawLine((String)evalRawLines.get(0));
 			UtilSet.setDateByString(cal1, date1);
 			UtilSet.setDateByString(cal2, date2);
 			UtilSet.ndaysBeforeToday(cal2, 1, cal2);
@@ -680,7 +542,10 @@ public class DailyRDAHMMThread implements Runnable {
 				sbMissData.append(date1).append(';');
 				missCount++;
 			}
-			UtilSet.ndaysBeforeToday(cal2, -1, cal2);
+		} else {
+			// if there is even no data for training model, there must be no data at all
+			sbMissData.append(UtilSet.getDateString(calToday2)).append("to").append(modelStartDate).append(';');
+			missCount++;
 		}
 		
 		// if there are still some status change information not written in to xml
@@ -730,7 +595,9 @@ public class DailyRDAHMMThread implements Runnable {
 			tmpNode = elePattern.addElement("BFile");
 			tmpNode.setText(modelBasePat + ".B");			
 			tmpNode = elePattern.addElement("InputFile");
-			tmpNode.setText(proNamePat + ".input");		
+			tmpNode.setText(proNamePat + ".all.input");
+			tmpNode = elePattern.addElement("RawInputFile");
+			tmpNode.setText(proNamePat + ".all.raw");
 			tmpNode = elePattern.addElement("LFile");
 			tmpNode.setText(modelBasePat + ".L");			
 			tmpNode = elePattern.addElement("XPngFile");
@@ -742,7 +609,7 @@ public class DailyRDAHMMThread implements Runnable {
 			tmpNode = elePattern.addElement("PiFile");
 			tmpNode.setText(modelBasePat + ".pi");	
 			tmpNode = elePattern.addElement("QFile");
-			tmpNode.setText(proNamePat + ".Q");			
+			tmpNode.setText(proNamePat + ".all.Q");			
 			tmpNode = elePattern.addElement("MaxValFile");
 			tmpNode.setText(modelBasePat + ".maxval");		
 			tmpNode = elePattern.addElement("MinValFile");
@@ -837,18 +704,24 @@ public class DailyRDAHMMThread implements Runnable {
 	 * @param binDir
 	 */
 	private void deleteDirectories(Vector<String> proNames, String baseWorkDir, String baseDestDir, String binDir) {
-		String proName, baseWorkPath, baseDestPath, binPath, res;
+		String proName, workPath, destPath;
+		boolean res;
 		
 		for (int i=0; i<proNames.size(); i++) {
 			proName = (String)proNames.get(i);
-			baseWorkPath = baseWorkDir + proName;
-			res = UtilSet.exec("rm -f -r " + baseWorkPath.replace('/', File.separatorChar));
+			workPath = baseWorkDir + File.separator + proName;
+			res = UtilSet.deleteDirectory(new File(workPath));
+		
+			if (!res) {
+				UtilSet.log(threadNum, "failed to delete dir " + workPath);
+			}
 			
-			baseDestPath = baseDestDir + '/' + proName;
-			res = UtilSet.exec("rm -f -r " + baseDestPath.replace('/', File.separatorChar));
-						
-			binPath = binDir + '/' + proName + ".*";
-			res = UtilSet.exec("rm -f -r " + binPath.replace('/', File.separatorChar));
+			destPath = baseDestDir + File.separator + proName;
+			res = UtilSet.deleteDirectory(new File(destPath));
+			
+			if (!res) {
+				UtilSet.log(threadNum, "failed to delete dir " + destPath);
+			}
 		}
 	}
 	
@@ -1009,7 +882,7 @@ public class DailyRDAHMMThread implements Runnable {
 	protected boolean trainModelOnStation(String station, DailyRDAHMMService rds, Calendar today) {
 		// check if the model has already been built
 		File modelDirFile = new File(rds.modelWorkDir);
-		if ((modelDirFile.exists())) {
+		if (modelDirFile.exists()) {
 			if (modelDirFile.isDirectory()) {
 				File modelQFile = new File(rds.modelWorkDir + File.separator + rds.modelBaseName + ".Q");
 				if (modelQFile.exists() && modelQFile.isFile() && modelQFile.length() > 0) {
@@ -1022,9 +895,9 @@ public class DailyRDAHMMThread implements Runnable {
 						return true;
 					}
 				}
-				UtilSet.exec("rm -f -r " + rds.modelWorkDir + File.separator + "*");
+				UtilSet.deleteStuffInDir(modelDirFile);
 			} else {
-				UtilSet.exec("rm -f -r " + rds.modelWorkDir);
+				modelDirFile.delete();
 			}
 		}	
 		
@@ -1081,11 +954,11 @@ public class DailyRDAHMMThread implements Runnable {
 		File modelDirFile = new File(rds.modelWorkDir);		
 		String err;
 		if (!modelDirFile.exists()) {
-			err = UtilSet.exec("mkdir " + rds.modelWorkDir);
-			if (err.length() > 0)
-				return false;	
+			if (!modelDirFile.mkdirs())
+				return false;
+		} else {
+			UtilSet.deleteStuffInDir(modelDirFile);
 		}
-		UtilSet.exec("rm -f -r " + rds.modelWorkDir + File.separator + "*");
 		
 		// download the input file
 		String inputFile = null;
