@@ -266,7 +266,7 @@ This is the end of the function inlines.
 	    Vector stateChangeVec = new Vector();
 	    try{
 	    	String stateChangeFileName = "state_change_" + networkName.toLowerCase() + ".txt";
-	    	InputStream inUrl = new URL("http://gf14.ucs.indiana.edu:23080/sensorgrid/rdahmm/eval/" + stateChangeFileName).openStream();
+	    	InputStream inUrl = new URL("http://gf13.ucs.indiana.edu/sensorgrid/rdahmm/eval/" + stateChangeFileName).openStream();
 	    	BufferedReader br = new BufferedReader(new InputStreamReader(inUrl));
 	    	String line = br.readLine();
 	    	while (line != null) {
@@ -308,18 +308,18 @@ This is the end of the function inlines.
               x_tabcontent=x_tabcontent.replace("{!networkName!}",networkName);
               x_tabcontent=x_tabcontent.replace("{!lon!}",lon);
               x_tabcontent=x_tabcontent.replace("{!lat!}",lat);
-              x_tabcontent=x_tabcontent.replace("{!output_png!}","http://gf14.ucs.indiana.edu:23080/sensorgrid/rdahmm/eval/" + name + "/" + name + ".xyz.xyz.X.png");
-//              x_tabcontent=x_tabcontent.replace("{!output_png!}","http://gf14.ucs.indiana.edu:23080/sensorgrid/rdahmm/eval/" + networkName.toUpperCase() + "/" + name + "/" + name + ".xyz.xyz.X.png");
+              x_tabcontent=x_tabcontent.replace("{!output_png!}","http://gf13.ucs.indiana.edu/sensorgrid/rdahmm/eval/" + name + "/" + name + ".xyz.xyz.X.png");
+//              x_tabcontent=x_tabcontent.replace("{!output_png!}","http://gf13.ucs.indiana.edu/sensorgrid/rdahmm/eval/" + networkName.toUpperCase() + "/" + name + "/" + name + ".xyz.xyz.X.png");
               y_tabcontent=y_tabcontent.replace("{!name!}",name);
               y_tabcontent=y_tabcontent.replace("{!networkName!}",networkName);
               y_tabcontent=y_tabcontent.replace("{!lon!}",lon);
               y_tabcontent=y_tabcontent.replace("{!lat!}",lat);
-              y_tabcontent=y_tabcontent.replace("{!output_png!}","http://gf14.ucs.indiana.edu:23080/sensorgrid/rdahmm/eval/" + name + "/" + name + ".xyz.xyz.Y.png");
+              y_tabcontent=y_tabcontent.replace("{!output_png!}","http://gf13.ucs.indiana.edu/sensorgrid/rdahmm/eval/" + name + "/" + name + ".xyz.xyz.Y.png");
               z_tabcontent=z_tabcontent.replace("{!name!}",name);
               z_tabcontent=z_tabcontent.replace("{!networkName!}",networkName);
               z_tabcontent=z_tabcontent.replace("{!lon!}",lon);
               z_tabcontent=z_tabcontent.replace("{!lat!}",lat);
-              z_tabcontent=z_tabcontent.replace("{!output_png!}","http://gf14.ucs.indiana.edu:23080/sensorgrid/rdahmm/eval/" + name + "/" + name + ".xyz.xyz.Z.png");
+              z_tabcontent=z_tabcontent.replace("{!output_png!}","http://gf13.ucs.indiana.edu/sensorgrid/rdahmm/eval/" + name + "/" + name + ".xyz.xyz.Z.png");
               
               %>
               stations [<%=i%>] [0] = "<%=name%>";
@@ -328,9 +328,9 @@ This is the end of the function inlines.
 
           		var html = "<b>Station Name= </b>" + "<%=name%>" + "<br><b>Lat=</b>" + "<%=lat%>" + "<br><b>Lon= </b>" + "<%=lon%>" + "<br><b>Network= </b>" + "<%=networkName%>";
 							var infoTabs = [
-							new GInfoWindowTab("Current X", '<%=x_tabcontent%>'),
-							new GInfoWindowTab("Current Y", '<%=y_tabcontent%>'),
-							new GInfoWindowTab("Current Z", '<%=z_tabcontent%>')
+							new GInfoWindowTab("North", '<%=x_tabcontent%>'),
+							new GInfoWindowTab("East", '<%=y_tabcontent%>'),
+							new GInfoWindowTab("Up", '<%=z_tabcontent%>')
 							];  
               icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + "<%=stationColor%>" + ".png";
 	      Markers[<%=i%>] = createTabsInfoMarker(new GPoint("<%=lon%>", "<%=lat%>") , infoTabs , icon, "<%=name + '[' + networkName + ']' %>");

@@ -24,9 +24,10 @@
 
 <html>
 	<head>
-	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>
-	<script src="http://gw11.quarry.iu.teragrid.org:8080/DailyRDAHMM-portlet/NmapAPI.js" type="text/javascript"></script>
-	<script src="http://gw11.quarry.iu.teragrid.org:8080/DailyRDAHMM-portlet/dateUtil.js" type="text/javascript"></script>
+	<script
+    src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>
+	<script src="http://gw11.quarry.iu.teragrid.org/DailyRDAHMM-portlet/NmapAPI.js" type="text/javascript"></script>
+	<script src="http://gw11.quarry.iu.teragrid.org/DailyRDAHMM-portlet/dateUtil.js" type="text/javascript"></script>
 	</head>
 	<body>
 
@@ -208,9 +209,9 @@
 			var z_tabcontent = str_tabcontent2;
 			z_tabcontent = z_tabcontent.replace( /{!output_png!}/g, preFix + zPattern2.replace(/{!station-id!}/g, stationId));
 			
-			var infoTabs2 = [new GInfoWindowTab("Current X", x_tabcontent),
-									new GInfoWindowTab("Current Y", y_tabcontent),
-									new GInfoWindowTab("Current Z", z_tabcontent)];
+			var infoTabs2 = [new GInfoWindowTab("North", x_tabcontent),
+					 new GInfoWindowTab("East", y_tabcontent),
+					 new GInfoWindowTab("Up", z_tabcontent)];
 			
 			marker.openInfoWindowTabsHtml(infoTabs2);
 			sel =	document.getElementById("stationSelect");
@@ -241,7 +242,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td valign="top" width="180px">
+			<td valign="top" width="180">
 				<div id="loadInfo"> </div>
 				<div id="networksDiv"> Status changes and Colors:    </div>
 				<div id="cal1Container"> </div>          
@@ -288,7 +289,7 @@
 					</tr>
 				</table>
 			</td>
-			<td valign="top" width = "200px">
+			<td valign="top" width = "240">
 				<div id="changeListDiv"> Station List:	</div>
 			</td>        
 		</tr>
@@ -492,7 +493,7 @@
 	*/
 <%
 	Document statusDoc = null;
-	String xmlUrl = "http://gf13.ucs.indiana.edu:8080//rdahmmexec/daily/JPL_FILL/station-status-change-JPL_FILL.xml";
+	String xmlUrl = "http://gf13.ucs.indiana.edu//rdahmmexec/daily/JPL_FILL/station-status-change-JPL_FILL.xml";
 	try {
 		// if the file is old or does not exist, copy it from xmlUrl
 		boolean shouldCopy = false;		
@@ -501,7 +502,7 @@
 			Calendar calFile1 = Calendar.getInstance();
 			Calendar calFile2 = Calendar.getInstance();
 			calFile2.setTimeInMillis(localFile.lastModified());
-			shouldCopy = !( calFile1.get(Calendar.YEAR) == calFile2.get(Calendar.YEAR) && calFile1.get(Calendar.MONTH) == calFile2.get(Calendar.MONTH) && calFile1.get(Calendar.DATE) == calFile2.get(Calendar.DATE) );
+			shouldCopy = !( calFile1.get(Calendar.YEAR) == calFile2.get(Calendar.YEAR) && calFile1.get(Calendar.MONTH) == calFile2.get(Calendar.MONTH) && calFile1.get(Calendar.DATE) == calFile2.get(Calendar.DATE) && calFile2.get(Calendar.HOUR_OF_DAY) > 5);
 			if (shouldCopy) {
 				//shouldCopy = false;
 				localFile.delete();
@@ -549,6 +550,7 @@
 	var aPattern = '<%=eleOutput.element("AFile").getText()%>';
 	var bPattern = '<%=eleOutput.element("BFile").getText()%>';
 	var inputPattern = '<%=eleOutput.element("InputFile").getText()%>';
+	var rawInputPattern = '<%=eleOutput.element("RawInputFile").getText()%>';
 	var lPattern = '<%=eleOutput.element("LFile").getText()%>';
 	var xPattern = '<%=eleOutput.element("XPngFile").getText()%>';
 	var yPattern = '<%=eleOutput.element("YPngFile").getText()%>';
@@ -676,7 +678,7 @@
 	function printChangedStations() {
 		var idiv = window.document.getElementById("changeListDiv");
 		var html = "<table id=\"statusChangeTable\" border='0'> <tr><b>Stations with status changes:</b></tr> "
-						+ "<tr>(Select one for details)</tr> <tr> <select id=\"stationSelect\" style=\"width:200px\" onChange=\"sltChange(this)\" selectedIndex=0 >";
+						+ "<tr>(Select one for details)</tr> <tr> <select id=\"stationSelect\" style=\"width:240\" onChange=\"sltChange(this)\" selectedIndex=0 >";
 		for (var i=0; i<stationArray.length; i++) {
 			html += "<option>" + stationArray[i][0] + "</option>";
 		}
@@ -691,13 +693,13 @@
 		var xPattern2 = xPattern, yPattern2 = yPattern, zPattern2 = zPattern, dirPattern2 = dirPattern; modelPattern2 = modelPattern;
           
 		var idx = inputPattern2.lastIndexOf(".");
-                var allRawPattern = inputPattern2.substring(0, idx) + ".all.raw"; 
+                var rawInputPattern2 = rawInputPattern; 
 
 		var preFix = urlPattern2.replace(/{!station-id!}/g, stationId) + "/" + dirPattern2.replace(/{!station-id!}/g, stationId) + "/";
 		var modelLink = urlPattern2.replace(/{!station-id!}/g, stationId) + "/" + modelPattern2.replace(/{!station-id!}/g, stationId);
 		var outputTable = "<table border='0'> <tr><td> <b>Output Values</b> </td></tr>" + "<tr><td><a target=\"_blank\" href=\"" 
 							+  preFix + inputPattern2.replace(/{!station-id!}/g, stationId) + "\">Input File</a></td></tr>"
-							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + allRawPattern.replace(/{!station-id!}/g, stationId) + "\">All Raw Input Data</a></td></tr>"
+							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + rawInputPattern2.replace(/{!station-id!}/g, stationId) + "\">All Raw Input Data</a></td></tr>"
 							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + rangePattern2.replace(/{!station-id!}/g, stationId) + "\">Range</a></td></tr>"
 							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + qPattern2.replace(/{!station-id!}/g, stationId) + "\">Optimal State Sequence File (Q)</a></td></tr>"
 							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + aPattern2.replace(/{!station-id!}/g, stationId) + "\">Model Transition Probability (A)</a></td></tr>"
@@ -706,9 +708,9 @@
 							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + piPattern2.replace(/{!station-id!}/g, stationId) + "\">Model Initial State Probability (PI)</a></td></tr>"
 							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + minPattern2.replace(/{!station-id!}/g, stationId) + "\">Minimum Value</a></td></tr>"
 							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + maxPattern2.replace(/{!station-id!}/g, stationId) + "\">Maximum Value</a></td></tr>"
-							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + xPattern2.replace(/{!station-id!}/g, stationId) + "\">Plot of X Values</a></td></tr>"
-							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + yPattern2.replace(/{!station-id!}/g, stationId) + "\">Plot of Y Values</a></td></tr>"
-							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + zPattern2.replace(/{!station-id!}/g, stationId) + "\">Plot of Z Values</a></td></tr>" 
+							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + xPattern2.replace(/{!station-id!}/g, stationId) + "\">Plot of North Values</a></td></tr>"
+							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + yPattern2.replace(/{!station-id!}/g, stationId) + "\">Plot of East Values</a></td></tr>"
+							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + zPattern2.replace(/{!station-id!}/g, stationId) + "\">Plot of Up Values</a></td></tr>" 
 							+ "<tr><td><b><a target=\"_blank\" href=\"" +  modelLink + "\">Get all model files</a></b></td></tr></table>";
           
 		var changeTable = "<table border='1'> <tr> <td><b>Date</b></td> <td><b>Old Status</b></td> <td><b>New Status</b></td> </tr>";
@@ -752,7 +754,7 @@
 		var sw = mapBounds.getSouthWest();
 		var ne = mapBounds.getNorthEast();
 		if (showDateStr != "") {
-			url = "http://gw11.quarry.iu.teragrid.org:8080/axis2/services/DailyRdahmmResultService/calcStationColors?date=" + showDateStr + "&resUrl=" + xmlResultUrl;
+			url = "http://gw11.quarry.iu.teragrid.org/axis2/services/DailyRdahmmResultService/calcStationColors?date=" + showDateStr + "&resUrl=" + xmlResultUrl;
 			var colorStr = callHttpService(url);
 			if (colorStr.length != 0) {
 				nMarkerDoneForNewDate = 0;
@@ -878,7 +880,7 @@
 	slider.subscribe("change", onSlideChange);
 	slider.subscribe("slideEnd", onSlideEnd);
 	// set the date to 18 days ago, the latest date that we get data for all stations
-	var url = "http://gw11.quarry.iu.teragrid.org:8080/axis2/services/DailyRdahmmResultService/getDataLatestDate?resUrl=" + xmlResultUrl;
+	var url = "http://gw11.quarry.iu.teragrid.org/axis2/services/DailyRdahmmResultService/getDataLatestDate?resUrl=" + xmlResultUrl;
 	var str = callHttpService(url);
 	var tmpDate = getDateFromString(str);
 	document.getElementById("dateText").setAttribute("value", "");
