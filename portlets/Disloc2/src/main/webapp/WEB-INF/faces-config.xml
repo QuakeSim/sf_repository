@@ -14,7 +14,7 @@
 
                 <managed-property>
                    <property-name>portalBaseUrl</property-name>
-                   <value>http://156.56.104.143:8080</value>
+                   <value>http://gw11.quarry.iu.teragrid.org:8080</value>
                 </managed-property>
 
                 <!--Who we are-->
@@ -30,12 +30,12 @@
 
                  <managed-property>
                    <property-name>dislocServiceUrl</property-name>
-                   <value>http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExec</value>
+                   <value>http://gf19.ucs.indiana.edu:8080/dislocexec/services/DislocExec</value>
                  </managed-property> 
 
                  <managed-property>
                    <property-name>dislocExtendedServiceUrl</property-name>
-                   <value>http://gf7.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec</value>
+                   <value>http://gf19.ucs.indiana.edu:8080/dislocexec/services/DislocExtendedExec</value>
                  </managed-property> 
 
                 <managed-property>
