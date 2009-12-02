@@ -102,14 +102,14 @@
 	<module>portal_deploy</module>
 	<module>containers</module>
 	<module>lnf4portal</module>
-	<!--
+	
 	<module>GenericQuakeSimProject</module>
-	-->
+	
     
 	<!--These are the portlets.  Add new ones here. -->
-	<!-- <module>portlets/DailyRDAHMM-portlet</module> -->
-	<!-- <module>portlets/Disloc-portlet</module> -->
-<!-- 	<module>portlets/GeoFESTGrid-portlet</module>
+	<module>portlets/DailyRDAHMM-portlet</module>
+	<module>portlets/Disloc-portlet</module>
+	<module>portlets/GeoFESTGrid-portlet</module>
 	<module>portlets/NewMeshGen-portlet</module>
 	<module>portlets/RDAHMM-portlet</module>
 	<module>portlets/RealTimeRdahmm-portlet</module>
@@ -120,8 +120,6 @@
 	<module>portlets/Disloc2</module>
 	<module>portlets/rssportlet</module>
 	<module>portlets/GeoFESTGridParallel-portlet</module>
-
--->
 
 	<!-- These are services.  Add new ones here. -->
 
