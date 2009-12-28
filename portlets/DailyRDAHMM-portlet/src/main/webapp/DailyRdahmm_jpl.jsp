@@ -278,13 +278,27 @@
 						</td>
 					</tr>
 					<tr valign="top" style="display: none">
-						<td vAlign="middle" align="center" >
-							<img id="scnPlotImg" align="middle" src="">
-							<a id="scnTxtLink" target="_blank" href="">Click here to view the detailed data.</a>
-							<br/>
-							<a id="videoLink" target="_blank" href="">Click here to get a video of the whole time since 1994.</a>
-							<br/>
-							<a id="allInputLink" target="_blank" href="">Click here to get a file containing the input of all stations.</a>
+						<td valign="top" align="center">
+						<img id="scnPlotImg" align="middle" src="">
+						<br/>
+						<table border="1" valign="top" align="center" width="765">
+							<tr>
+								<td>
+									Get the plot for a bounded area:
+									<br/>
+									Latitude: from  <input type="text" id="scnLatFromText" size="8"/>  to  <input type="text" id="scnLatToText" size="8"/>
+									<br/>
+									Longitude: from  <input type="text" id="scnLongFromText" size="8"/>  to  <input type="text" id="scnLongToText" size="8"/>  <button id="scnPlotBtn" onClick="scnPlotBtnClick(this)" style="width:70px;height:20px">Plot</button> 
+								</td>
+								<td>
+									<a id="scnTxtLink" target="_blank" href="">Click here to view the detailed data.</a>
+									<br/>
+									<a id="videoLink" target="_blank" href="">Click here to get a video of the whole time since 1994.</a>
+									<br/>
+									<a id="allInputLink" target="_blank" href="">Click here to get a file containing the input of all stations.</a>
+								</td>
+							</tr>
+						</table>
 						</td>
 					</tr>
 				</table>
@@ -373,7 +387,39 @@
 			slider.setValue(slider_range);
 		}	
 	}
-        
+    
+	// plot state change number vs time for a bounded area
+	function scnPlotBtnClick(btn) {
+		var latFrom = document.getElementById("scnLatFromText").value;
+		var latTo = document.getElementById("scnLatToText").value;
+		var longFrom = document.getElementById("scnLongFromText").value;
+		var longTo = document.getElementById("scnLongToText").value;
+		
+		// little trick learnt from internet about checking validity of string representations of floats
+		if (parseFloat(latFrom) != latFrom - 0) {
+			alert("invalid minimum latitude!");
+			return;
+		}
+		if (parseFloat(latTo) != latTo - 0) {
+			alert("invalid maximum latitude!");
+			return;
+		}
+		if (parseFloat(longFrom) != longFrom - 0) {
+			alert("invalid minimum longitude!");
+			return;
+		}
+		if (parseFloat(longTo) != longTo - 0) {
+			alert("invalid maximum longitude!");
+			return;
+		}
+
+		var url = "http://gw11.quarry.iu.teragrid.org/axis2/services/DailyRdahmmResultService/proxyCallHttpService?serviceUrl=" + 
+					"http%3A%2F%2Fgf13.ucs.indiana.edu%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetStateChangeNumberPlot%3FdataSource%3DJPL%26minLat%3D"
+					+ latFrom + "%26maxLat%3D" + latTo + "%26minLong%3D" + longFrom + "%26maxLong%3D" + longTo;
+		var link = callHttpService(url);
+		window.open(link);
+	}
+
 	// what to do when the user pressed a key in the date text box
 	function onDateTextKeyDown(e) {
 		var keynum, targ;
