@@ -19,7 +19,7 @@ public class DailyRdahmmResultAnalyzer {
 	
 	private String xmlResUrl = "http://gf13.ucs.indiana.edu:8080//rdahmmexec/station-status-change-rss.xml";			//the url of the result xml file of daily rdahmm service, used when local copy is out of date
 	
-	private DailyRdahmmStation[] stationArray = null;	//array of all stations recorded in the xml result file
+	protected DailyRdahmmStation[] stationArray = null;	//array of all stations recorded in the xml result file
 	
 	private Calendar calLastUpdate = null;
 	

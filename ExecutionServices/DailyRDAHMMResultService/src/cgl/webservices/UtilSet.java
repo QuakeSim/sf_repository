@@ -2,9 +2,12 @@ package cgl.webservices;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Calendar;
 
 public class UtilSet {
@@ -129,5 +132,63 @@ public class UtilSet {
 	public static void nDaysBefore(Calendar before, int n, Calendar theDate) {
 		before.setTimeInMillis(theDate.getTimeInMillis());
 		before.set(Calendar.DATE, before.get(Calendar.DATE) - n);
+	}
+	
+	/**
+	 * find a line in file with substr as a substring 
+	 * @param file
+	 * @param substr
+	 * @return
+	 */
+	public static String findLineInFile(File file, String substr) {
+		if (!file.exists())
+			return "";
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String line = br.readLine();
+			String result = "";
+			while (line != null) {
+				if (line.indexOf(substr) >= 0) {
+					result = line;
+					break;
+				}
+				line = br.readLine();
+			}
+			br.close();
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+	
+	/**
+	 * call a web service through an http port
+	 * @param url
+	 * @return
+	 */
+	public static String callHttpService(String url) {
+		try {
+			URL serviceURL = new URL(url);
+			URLConnection conn = serviceURL.openConnection();
+			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String htmlLine = in.readLine();
+			StringBuffer sb = new StringBuffer();
+			while (htmlLine != null) {
+				sb.append(htmlLine).append(File.separator);
+				htmlLine = in.readLine();
+			}
+			in.close();
+			
+            int idx = sb.indexOf("return>");
+            if (idx < 0)
+            	return "";
+            int idx2 = sb.indexOf("</", idx);
+            return sb.substring(idx + "return>".length(), idx2);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "";
 	}
 }
