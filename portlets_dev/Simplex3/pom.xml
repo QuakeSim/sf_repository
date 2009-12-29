@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>QuakeSim2</groupId>
+    <artifactId>Simplex3</artifactId>
+    <packaging>war</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>A custom project using myfaces</name>
+    <url>http://www.myorganization.org</url>
+
+<!--
+  <parent>
+	 <groupId>quakesim</groupId>
+	 <artifactId>portlets-driver</artifactId>
+	 <version>1.0</version>
+	 <relativePath>..</relativePath>
+  </parent>
+-->
+
+    <!-- We get this from the command line and pass to the resources
+         via filtering -->
+    <properties>
+	<quakesim.dir>QuakeSim2</quakesim.dir>
+	<project.home>${env.HOME}/workspace/${quakesim.dir}</project.home>
+	<tomcat.bin.perm>755</tomcat.bin.perm>
+	<tomcat.version>apache-tomcat-5.5.20</tomcat.version>
+	<yui.version>yui_0.12.2</yui.version>
+	<catalina.home>${env.HOME}/workspace/${quakesim.dir}/portal_deploy/${tomcat.version}/</catalina.home>
+	<tomcat.base.dir>${env.HOME}/workspace/${quakesim.dir}/portal_deploy/${tomcat.version}/</tomcat.base.dir>
+        <portal.host.name>129.79.49.68</portal.host.name>
+	<google.master.key>ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTf0RZ3CvQOmi-GOjEFoiamz50c8BRdcsDMSPvaTAMTVPL7sMxMzuZWCQ</google.master.key>
+	<portal.server.ip>129.79.49.68</portal.server.ip>
+	<host.base.url>http://${portal.server.ip}:8080/</host.base.url>
+    </properties>
+
+    <build>
+        <finalName>Simplex3</finalName>
+        <resources>
+           <resource>
+               <directory>src/main/resources</directory>
+               <filtering>true</filtering>
+           </resource>
+        </resources>
+	 <plugins>
+		<plugin>
+		<artifactId>maven-antrun-plugin</artifactId>
+      <executions>
+       <execution>
+        <id>Clean ${pom.artifactId} portlet</id>
+		  <phase>clean</phase>
+        <configuration>
+			 <!-- 
+					Allow this to fail on error. This is not great, but we must do this
+					since the parent pom is not abstract and so will get executed along with
+					its children.
+				-->
+			 <tasks>			 
+				<delete dir="${catalina.home}/webapps/${pom.artifactId}">
+				</delete>
+
+				<delete file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${pom.artifactId}"/>
+          </tasks>
+        </configuration>
+        <goals>
+			 <goal>run</goal>
+        </goals>
+       </execution>
+       <execution>
+        <id>Install ${pom.artifactId} portlet</id>
+	<phase>install</phase>
+        <configuration>
+			 <!-- 
+					Allow this to fail on error. This is not great, but we must do this
+					since the parent pom is not abstract and so will get executed along with
+					its children.
+				-->
+			
+			 <tasks>
+				<copy overwrite="true" filtering="false" failonerror="false" todir="${catalina.home}/webapps/${pom.artifactId}">
+				  <fileset dir="${basedir}/target/${pom.artifactId}"/>
+				</copy>				  
+								
+				<touch file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${pom.artifactId}"/>
+			</tasks>
+		
+        </configuration>
+        <goals>
+			 <goal>run</goal>
+        </goals>
+       </execution>
+       
+       <execution>
+        <id>Convert ${pom.artifactId} portlet</id>
+	<phase>package</phase>
+        <configuration>				
+			<tasks if="to.jsf">
+				<delete file="${basedir}/target/${pom.artifactId}/WEB-INF/lib/portals-bridges-commons-1.0.jar"/>
+				<delete file="${basedir}/target/${pom.artifactId}/WEB-INF/lib/portals-bridges-jsf-1.0.jar"/>			 
+			</tasks>
+        </configuration>
+        <goals>
+	   <goal>run</goal>
+        </goals>
+       </execution>
+       
+       <execution>
+         <phase>package</phase>
+         <configuration>
+           <tasks>
+				 <echo message="Google Master Key: ${google.master.key}"/>
+				 <replace dir="${basedir}/target/${pom.artifactId}" token="put.google.map.key.here" value="${google.master.key}">
+					<include name="**/*.jsp"/>
+				 </replace>
+				 
+				 <echo message="Setting the host.base.url: ${host.base.url}"/>
+				 <replace dir="${basedir}/target/${pom.artifactId}"
+					  token="@host.base.url@"
+					  value="${host.base.url}">
+					<include name="**/*.*"/>
+				 </replace>
+				 
+				 <replace dir="${basedir}/target/${pom.artifactId}" 
+					  token="@artifactId@"
+					  value="${pom.artifactId}">
+					<include name="**/*.*"/>
+				 </replace>
+				 
+				 <copy file="${basedir}/target/${pom.artifactId}/gadget_template.xml" tofile="${project.home}/gadgets/${pom.artifactId}_gadget.xml" overwrite="true"/>
+				 
+				 <replace file="${project.home}/gadgets/${pom.artifactId}_gadget.xml"
+					  token="@host.base.url@"
+					  value="${host.base.url}">
+					<include name="**/*.*"/>
+				 </replace>
+				 
+				 <replace file="${project.home}/gadgets/${pom.artifactId}_gadget.xml"
+					  token="@artifactId@"
+					  value="${pom.artifactId}">
+					<include name="**/*.*"/>
+				 </replace>
+				 
+				 <replace file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/layouts/TemplateLayout.xml"
+					  token="Simplex-portlet"
+					  value="Simplex3">					
+				 </replace> 
+				 
+				 <replace file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/layouts/TemplateLayout.xml"
+					  token="Simplex-Portlet"
+					  value="Simplex3">					
+				 </replace> 
+				 
+				 
+           </tasks>
+
+         </configuration>
+         <goals>
+           <goal>run</goal>
+         </goals>
+       </execution> 
+      </executions>
+      </plugin>
+    </plugins>
+    </build>
+
+
+    <!-- Profile to run jetty, so the tomcat jars are included in the bundle. They are not included by default -->
+    <profiles>
+        <profile>
+            <id>jettyConfig</id>
+            <dependencies>
+                <dependency>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>jsp-api</artifactId>
+                    <version>2.0</version>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>tomcat</groupId>
+                    <artifactId>jasper-compiler</artifactId>
+                    <version>5.5.9</version>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>tomcat</groupId>
+                    <artifactId>jasper-runtime</artifactId>
+                    <version>5.5.9</version>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>tomcat</groupId>
+                    <artifactId>jasper-compiler-jdt</artifactId>
+                    <version>5.5.9</version>
+                    <scope>compile</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
+
+    <repositories>
+<!--
+        <repository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>apache-maven-snapshots</id>
+            <url>http://cvs.apache.org/maven-snapshot-repository</url>
+        </repository>
+-->
+        <repository>
+            <id>apache-maven</id>
+            <url>http://www.ibiblio.org/maven2</url>
+        </repository>
+
+        <!-- This is the apache repository for bridges -->
+        <repository>
+            <id>apache-maven</id>
+            <url>http://cvs.apache.org/repository</url>
+        </repository>
+
+        <!-- This is our local repository -->
+	
+        <repository>
+            <id>crisisgrid-maven-repo</id>
+            <url>http://www.crisisgrid.org/maven2</url>
+        </repository>
+	
+	
+
+        <repository>
+        <id>jboss</id>
+        <name>JBoss Repository</name>
+        <url>http://repository.jboss.org/maven2</url>
+        <snapshots>
+        <enabled>false</enabled>
+        </snapshots>
+        </repository>
+
+    </repositories>
+
+    <!-- Repositories for plugins -->
+    <pluginRepositories>
+        <!-- Repository to get the jetty plugin -->
+        <pluginRepository>
+            <id>mortbay-repo</id>
+            <name>mortbay-repo</name>
+            <url>http://www.mortbay.org/maven2/snapshot</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <!-- Project dependencies -->
+    <dependencies>
+
+        <!-- Faces Jars -->
+        <dependency>
+            <groupId>myfaces</groupId>
+            <artifactId>myfaces-api</artifactId>
+            <version>1.1.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>myfaces</groupId>
+            <artifactId>myfaces-impl</artifactId>
+            <version>1.1.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>myfaces</groupId>
+            <artifactId>tomahawk</artifactId>
+            <version>1.1.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Junit testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>compile</scope>
+        </dependency>
+
+        
+        <dependency>
+            <groupId>javax.portlet</groupId>
+            <artifactId>portlet-api</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+	
+
+        <dependency>
+            <groupId>ogce-misc</groupId>
+            <artifactId>gridsphere-ui-tags</artifactId>
+            <version>2.1</version>
+        </dependency>
+
+	
+        <dependency>
+            <groupId>org.apache.portals.bridges</groupId>
+            <artifactId>portals-bridges-commons</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.portals.bridges</groupId>
+            <artifactId>portals-bridges-jsf</artifactId>
+            <version>1.0</version>
+        </dependency>
+	
+
+
+	<!-- jsfunit -->
+
+    <dependency>
+      <groupId>org.jboss.jsfunit</groupId>
+      <artifactId>jboss-jsfunit-core</artifactId>
+      <version>1.0.0.GA</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.jsfunit</groupId>
+      <artifactId>jboss-jsfunit-ant</artifactId>
+      <version>1.0.0.GA</version>
+    </dependency>
+
+        <!-- Servlet Dependencies -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.3</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Web Service Dependencies -->
+        <dependency>
+             <groupId>QuakeSim2</groupId>
+             <artifactId>WebServices</artifactId>
+             <version>1.0</version>
+             <scope>compile</scope>
+        </dependency>
+
+        <!-- The following are given "provided" scope 
+             to allow me to compile without actually using 
+             these exact jars.  The real jars in in 
+             WEB-INF/lib.  Not good, but these are 
+             archaic services, so I don't want to waste time
+             resolving these dependencies
+        -->
+<!--
+        <dependency>
+             <groupId>axis</groupId>
+             <artifactId>axis</artifactId>
+             <version>1.1</version>
+             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+             <groupId>axis</groupId>
+             <artifactId>axis-jaxrpc</artifactId>
+             <version>1.2</version>
+             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+             <groupId>commons-discovery</groupId>
+             <artifactId>commons-discovery</artifactId>
+             <version>0.2</version>
+             <scope>provided</scope>
+        </dependency>
+-->
+        <dependency>
+             <groupId>axis</groupId>
+             <artifactId>axis</artifactId>
+             <version>1.4</version>
+        </dependency>
+
+        <dependency>
+             <groupId>axis</groupId>
+             <artifactId>axis-jaxrpc</artifactId>
+             <version>1.4</version>
+        </dependency>
+
+        <dependency>
+             <groupId>commons-discovery</groupId>
+             <artifactId>commons-discovery</artifactId>
+             <version>0.2</version>
+        </dependency>
+
+        <dependency>
+             <groupId>commons-logging</groupId>
+             <artifactId>commons-logging</artifactId>
+             <version>1.0.4</version>
+        </dependency>
+
+        <dependency>
+             <groupId>axis</groupId>
+             <artifactId>axis-wsdl4j</artifactId>
+             <version>1.5.1</version>
+        </dependency>
+
+        <dependency>
+             <groupId>axis</groupId>
+             <artifactId>axis-saaj</artifactId>
+             <version>1.4</version>
+        </dependency>
+
+
+        <!--
+       Generic Project Dependencies.
+       -->
+        
+        <dependency>
+             <groupId>org.servogrid.genericproject</groupId>
+             <artifactId>GenericQuakeSimProject</artifactId>
+             <version>1.0-SNAPSHOT</version>
+        </dependency>
+	
+
+        <dependency>
+             <groupId>QuakeSim2</groupId>
+             <artifactId>db4o-java5</artifactId>
+             <version>6.1</version>
+        </dependency>
+
+    </dependencies>
+
+
+</project>
