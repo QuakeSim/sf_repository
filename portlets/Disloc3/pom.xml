@@ -79,18 +79,14 @@
 			 <goal>run</goal>
         </goals>
        </execution>
-       <execution>
-        <id>Install ${pom.artifactId} portlet</id>
-	<phase>install</phase>
-        <configuration>
-			 <!-- 
-					Allow this to fail on error. This is not great, but we must do this
-					since the parent pom is not abstract and so will get executed along with
-					its children.
-				-->
 
-		
+<!-- This is inherited from the parent
+       <execution>
+			<id>Install ${pom.artifactId} portlet</id>
+			<phase>install</phase>
+			<configuration>
 			 <tasks>
+				<echo message="Copying ${pom.artifactId}"/>
 				<copy overwrite="true" 
 						filtering="false"
 						failonerror="false"
@@ -102,30 +98,28 @@
 			</tasks>			
 			
         </configuration>
-        <goals>
-			 <goal>run</goal>
-        </goals>
+			<goals>
+			  <goal>run</goal>
+			</goals>
        </execution>
-       
+    -->   
        <execution>
-        <id>Convert ${pom.artifactId} portlet</id>
-	<phase>package</phase>
-        <configuration>				
-			<tasks if="to.jsf">
-				<delete file="${basedir}/target/${pom.artifactId}/WEB-INF/lib/portals-bridges-commons-1.0.jar"/>
-				<delete file="${basedir}/target/${pom.artifactId}/WEB-INF/lib/portals-bridges-jsf-1.0.jar"/>			 
-			</tasks>
-        </configuration>
-        <goals>
-	   <goal>run</goal>
-        </goals>
+			<id>Convert ${pom.artifactId} portlet</id>
+			<phase>package</phase>
+			<configuration>				
+			  <tasks if="to.jsf">
+				 <delete file="${basedir}/target/${pom.artifactId}/WEB-INF/lib/portals-bridges-commons-1.0.jar"/>
+				 <delete file="${basedir}/target/${pom.artifactId}/WEB-INF/lib/portals-bridges-jsf-1.0.jar"/>			 
+			  </tasks>
+			</configuration>
+			<goals>
+			  <goal>run</goal>
+			</goals>
        </execution>
-       
        
        <execution>
          <phase>package</phase>
          <configuration>
-	 
            <tasks>
 				 <echo message="Google Master Key: ${google.master.key}"/>
 				 <replace dir="${basedir}/target/${pom.artifactId}" token="put.google.map.key.here" value="${google.master.key}">
@@ -158,15 +152,13 @@
 					  value="${pom.artifactId}">
 					<include name="**/*.*"/>
 				 </replace> 
-				 
+<!--				 
 				 <replace file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/layouts/TemplateLayout.xml"
 					  token="Disloc2"
 					  value="Disloc3">					
 				 </replace> 				 
-				 
-				 
+-->
            </tasks>
-
          </configuration>
          <goals>
            <goal>run</goal>

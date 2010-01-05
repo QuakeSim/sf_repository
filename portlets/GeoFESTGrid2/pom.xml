@@ -79,46 +79,39 @@
 			 <goal>run</goal>
         </goals>
        </execution>
-       <execution>
-        <id>Install ${pom.artifactId} portlet</id>
-	<phase>install</phase>
-        <configuration>
-			 <!-- 
-					Allow this to fail on error. This is not great, but we must do this
-					since the parent pom is not abstract and so will get executed along with
-					its children.
-				-->				
-
-			
-			 <tasks>
-				<copy overwrite="true" filtering="false" failonerror="false" todir="${catalina.home}/webapps/${pom.artifactId}">
-				  <fileset dir="${basedir}/target/${pom.artifactId}"/>
+		 <!--This is inherited from the parent.
+			  <execution>
+				 <id>Install ${pom.artifactId} portlet</id>
+				 <phase>install</phase>
+				 <configuration>
+					<tasks>
+					  <copy overwrite="true" filtering="false" failonerror="false" todir="${catalina.home}/webapps/${pom.artifactId}">
+						 <fileset dir="${basedir}/target/${pom.artifactId}"/>
 				</copy>				  
-				
-				<touch file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${pom.artifactId}"/>
-			</tasks>
-			
-			
-        </configuration>
-        <goals>
-			 <goal>run</goal>
-        </goals>
-       </execution>
-       
+					  
+					  <touch file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${pom.artifactId}"/>
+					</tasks>
+					
+				 </configuration>
+				 <goals>
+					<goal>run</goal>
+				 </goals>
+			  </execution>
+       -->
+
        <execution>
-        <id>Convert ${pom.artifactId} portlet</id>
-	<phase>package</phase>
-        <configuration>				
-			<tasks if="to.jsf">
-				<delete file="${basedir}/target/${pom.artifactId}/WEB-INF/lib/portals-bridges-commons-1.0.jar"/>
-				<delete file="${basedir}/target/${pom.artifactId}/WEB-INF/lib/portals-bridges-jsf-1.0.jar"/>			 
-			</tasks>
-        </configuration>
-        <goals>
-	   <goal>run</goal>
-        </goals>
+			<id>Convert ${pom.artifactId} portlet</id>
+			<phase>package</phase>
+			<configuration>				
+			  <tasks if="to.jsf">
+				 <delete file="${basedir}/target/${pom.artifactId}/WEB-INF/lib/portals-bridges-commons-1.0.jar"/>
+				 <delete file="${basedir}/target/${pom.artifactId}/WEB-INF/lib/portals-bridges-jsf-1.0.jar"/>			 
+			  </tasks>
+			</configuration>
+			<goals>
+			  <goal>run</goal>
+			</goals>
        </execution>
-       
        
        <execution>
          <phase>package</phase>
@@ -155,19 +148,19 @@
 					  value="${pom.artifactId}">
 					<include name="**/*.*"/>
 				 </replace> 
-				 
+<!--				 
 				 <replace file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/layouts/TemplateLayout.xml"
 					  token="GeoFESTGrid-portlet"
 					  value="GeoFESTGrid2">					
 				 </replace> 
 				 
 				 <replace file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/layouts/TemplateLayout.xml"
-					  token="GeoFESTGrid-Portlet"
-					  value="GeoFESTGrid2">					
+							 token="GeoFESTGrid-Portlet"
+							 value="GeoFESTGrid2">					
 				 </replace> 
-				 
+-->				 
            </tasks>
-
+			  
          </configuration>
          <goals>
            <goal>run</goal>
@@ -175,7 +168,7 @@
        </execution> 
       </executions> 
             </plugin>
-
+				
 <!--
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
