@@ -1,6 +1,6 @@
 <html>
 <head>
-  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTf0RZ3CvQOmi-GOjEFoiamz50c8BRdcsDMSPvaTAMTVPL7sMxMzuZWCQ"
+  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here"
       type="text/javascript"></script>
 </head>
 <body onload="" onunload="GUnload()">

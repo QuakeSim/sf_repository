@@ -46,7 +46,7 @@ mapcenter_y = center_xy[1];
 <!--Google and related APIs are imported here -->
 
 <script src="@host.base.url@@artifactId@/egeoxml.js" type="text/javascript"></script>
-<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTf0RZ3CvQOmi-GOjEFoiamz50c8BRdcsDMSPvaTAMTVPL7sMxMzuZWCQ" type="text/javascript"></script>      
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.maps.key.here" type="text/javascript"></script>      
 </head> 
 
 <body onload="" onunload="GUnload()">
