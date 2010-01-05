@@ -308,6 +308,169 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
 			 </portlet-tab>
 		  </portlet-tabbed-pane>
 		</portlet-tab>
+
+		<!-- Revised Deformation Group (using the revised fault database) -->
+		<portlet-tab label="portal-deformation2">
+		  <title lang="en">Revised Deformation Analysis</title>
+		  <portlet-tabbed-pane selected="0" style="sub-menu">
+			 <portlet-tab label="Disloc3-Portlet">
+				<title lang="en">Disloc3</title>
+				<portlet-tabbed-pane style="sub-menu">
+
+				  <!-- Disloc -->
+              <portlet-tab label="Disloc3-Setup">
+                <title lang="en">Run Disloc</title>
+                <table-layout>
+                  <row-layout>
+                    <column-layout>
+                      <portlet-frame label="Disloc3-PF">
+                        <portlet-class>Disloc3#Disloc3</portlet-class>
+                      </portlet-frame>
+                    </column-layout>
+                  </row-layout>
+                </table-layout>
+              </portlet-tab>
+              <portlet-tab label="Fetch-disloc2-results">
+                <title lang="en">Fetch Disloc Results</title>
+                <table-layout>
+                  <row-layout>
+                    <column-layout>
+                      <portlet-frame label="Disloc3-fetchmesh-PF">
+                        <portlet-class>Disloc3#fetchresults-portlet</portlet-class>
+                      </portlet-frame>
+                    </column-layout>
+                  </row-layout>
+                </table-layout>
+              </portlet-tab>
+              <!--
+              <portlet-tab label="Plot-disloc2-results">
+                <title lang="en">Plot Disloc Results</title>
+                <table-layout>
+                  <row-layout>
+                    <column-layout>
+                      <portlet-frame label="Disloc3-plot-grid-PF">
+                        <portlet-class>Disloc3#plot-results-portlet</portlet-class>
+                      </portlet-frame>
+                    </column-layout>
+                  </row-layout>
+                </table-layout>
+              </portlet-tab>
+				  -->
+              <portlet-tab label="Disloc3-Pick-Location">
+                <title lang="en">Pick Location</title>
+                <table-layout>
+                  <row-layout>
+                    <column-layout>
+                      <portlet-frame label="Disloc3-pick-location-PF">
+                        <portlet-class>Disloc3#pick-location-portlet</portlet-class>
+                      </portlet-frame>
+                    </column-layout>
+                  </row-layout>
+                </table-layout>
+              </portlet-tab>
+				  
+				</portlet-tabbed-pane>
+			 </portlet-tab>
+			 
+			 <!-- GeoFEST -->
+			 <portlet-tab label="GeoFESTGrid2">
+				<title lang="en">GeoFESTGrid2</title>
+				<portlet-tabbed-pane style="sub-menu">
+              <portlet-tab label="Grid2-Mesh-Generation-Setup">
+                <title lang="en">Mesh Generation</title>
+                <table-layout>
+                  <row-layout>
+                    <column-layout>
+                      <portlet-frame label="GeoFESTGrid2-PF">
+                        <portlet-class>GeoFESTGrid2#GeoFESTGrid2 </portlet-class>
+                      </portlet-frame>
+                    </column-layout>
+                  </row-layout>
+                </table-layout>
+              </portlet-tab>
+              <portlet-tab label="Grid2-Fetch-mesh-results">
+                <title lang="en">Fetch Mesh Results</title>
+                <table-layout>
+                  <row-layout>
+                    <column-layout>
+                      <portlet-frame label="GeoFESTGrid2-fetchmesh-PF">
+                        <portlet-class>GeoFESTGrid2#fetchmesh-portlet </portlet-class>
+                      </portlet-frame>
+                    </column-layout>
+                  </row-layout>
+                </table-layout>
+              </portlet-tab>
+              <portlet-tab label="Grid2-Choose-mesh-results">
+                <title lang="en">Run GeoFEST</title>
+                <table-layout>
+                  <row-layout>
+                    <column-layout>
+                      <portlet-frame label="GeoFESTGrid2-choosemesh-PF">
+                        <portlet-class>GeoFESTGrid2#choosemesh-portlet </portlet-class>
+                      </portlet-frame>
+                    </column-layout>
+                  </row-layout>
+                </table-layout>
+              </portlet-tab>
+              <portlet-tab label="Grid2-Fetch-gfout-results">
+                <title lang="en">GeoFEST Results</title>
+                <table-layout>
+                  <row-layout>
+                    <column-layout>
+                      <portlet-frame label="GeoFESTGrid2-geofestoutput-PF">
+                        <portlet-class>GeoFESTGrid2#fetch-geofest-output-portlet </portlet-class>
+                      </portlet-frame>
+                    </column-layout>
+                  </row-layout>
+                </table-layout>
+              </portlet-tab>
+				</portlet-tabbed-pane>
+			 </portlet-tab>
+			 
+			 <!-- Simplex -->			 
+			 <portlet-tab label="Simplex3">
+				<title lang="en">Simplex</title>
+				<portlet-tabbed-pane style="sub-menu">
+              <portlet-tab label="Simplex3">
+                <title lang="en">Simplex Project Manager</title>
+                <table-layout>
+                  <row-layout>
+                    <column-layout>
+                      <portlet-frame label="Simplex3-PF">
+                        <portlet-class>Simplex3#Simplex3</portlet-class>
+                      </portlet-frame>
+                    </column-layout>
+                  </row-layout>
+                </table-layout>
+              </portlet-tab>
+              <portlet-tab label="Fetch3-simplex-results">
+                <title lang="en">Fetch Simplex Results</title>
+                <table-layout>
+                  <row-layout>
+                    <column-layout>
+                      <portlet-frame label="Simplex3-fetchdata-PF">
+                        <portlet-class>Simplex3#Simplex-archive-portlet</portlet-class>
+                      </portlet-frame>
+                    </column-layout>
+                  </row-layout>
+                </table-layout>
+              </portlet-tab>
+              <portlet-tab label="Simplex3-plots-portlet">
+                <title lang="en">Simplex Plot Portlet</title>
+                <table-layout>
+                  <row-layout>
+                    <column-layout>
+                      <portlet-frame label="Simplex3-plots-PF">
+                        <portlet-class>Simplex3#Simplex-plot-portlet</portlet-class>
+                      </portlet-frame>
+                    </column-layout>
+                  </row-layout>
+                </table-layout>
+              </portlet-tab>
+				</portlet-tabbed-pane>
+			 </portlet-tab>
+		  </portlet-tabbed-pane>
+		</portlet-tab>
 		
 		<!-- Fault DB Group -->
 		<portlet-tab label="portal-faultdb">
