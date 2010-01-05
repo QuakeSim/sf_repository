@@ -7,13 +7,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" 
 xmlns:v="urn:schemas-microsoft-com:vml">
   <head>
-    <script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTM-mQfCm4234zOfC78cwKWdUeTuBSI6nfLv9WmRyyCQaUSnGm4oC9jzw"
+    <script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=put.google.map.key.here"
       type="text/javascript"></script>
-
 
   </head>
   
-
 
   <body onload="onLoad()">
 <f:view>

@@ -8,7 +8,7 @@
 <head>
 <title>Google Maps</title>
 <script
-	src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTM-mQfCm4234zOfC78cwKWdUeTuBSI6nfLv9WmRyyCQaUSnGm4oC9jzw"
+	src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here"
 	type="text/javascript"></script>
 
 
