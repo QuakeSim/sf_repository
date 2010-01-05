@@ -24,12 +24,12 @@
 		and don't have any unusual .globus requirements.
 		-->
 	<!--==================================================-->
-	<project.home>${env.HOME}/workspace/QuakeSim2</project.home>
+	<project.home>${env.HOME}/QuakeSim2</project.home>
 	<tomcat.bin.perm>755</tomcat.bin.perm>
 	<tomcat.version>apache-tomcat-5.5.20</tomcat.version>
 	<yui.version>yui_0.12.2</yui.version>
-	<catalina.home>${env.HOME}/workspace/QuakeSim2/portal_deploy/${tomcat.version}/</catalina.home>
-	<tomcat.base.dir>${env.HOME}/workspace/QuakeSim2/portal_deploy/${tomcat.version}/</tomcat.base.dir>
+	<catalina.home>${env.HOME}/QuakeSim2/portal_deploy/${tomcat.version}/</catalina.home>
+	<tomcat.base.dir>${env.HOME}/QuakeSim2/portal_deploy/${tomcat.version}/</tomcat.base.dir>
 	<gridsphere.version>gridsphere-2.1.4</gridsphere.version>
 
 
@@ -120,6 +120,9 @@
 	<module>portlets/Disloc2</module>
 	<module>portlets/rssportlet</module>
 	<module>portlets/GeoFESTGridParallel-portlet</module>
+	<module>portlets/Disloc3</module>
+	<module>portlets/Simplex3</module>
+	<module>portlets/GeoFESTGrid2</module>
 
 	<!-- These are services.  Add new ones here. -->
 
