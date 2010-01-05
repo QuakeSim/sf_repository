@@ -1,43 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>QuakeSim2</groupId>
-    <artifactId>Disloc3</artifactId>
+    <artifactId>Simplex3</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>A custom project using myfaces</name>
     <url>http://www.myorganization.org</url>
-
-
-  <parent>
-	 <groupId>quakesim</groupId>
-	 <artifactId>portlets-driver</artifactId>
-	 <version>1.0</version>
-	 <relativePath>..</relativePath>
-  </parent>
-
+	 
+	 <parent>
+		<groupId>quakesim</groupId>
+		<artifactId>portlets-driver</artifactId>
+		<version>1.0</version>
+		<relativePath>..</relativePath>
+	 </parent>
 
     <!-- We get this from the command line and pass to the resources
          via filtering -->
-<!-- These are inherited from the parent pom -->
-<!--
+	 <!-- These are inherited from the parent. 
     <properties>
-	<quakesim.dir>QuakeSim2</quakesim.dir>
-	<project.home>${env.HOME}/${quakesim.dir}</project.home>
-	<tomcat.bin.perm>755</tomcat.bin.perm>
-	<tomcat.version>apache-tomcat-5.5.20</tomcat.version>
-	<yui.version>yui_0.12.2</yui.version>
-	<catalina.home>${project.home}/portal_deploy/${tomcat.version}/</catalina.home>
-	<tomcat.base.dir>${project.home}/portal_deploy/${tomcat.version}/</tomcat.base.dir>
-   <portal.host.name>129.79.49.102</portal.host.name>
-	<google.master.key>ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTf0RZ3CvQOmi-GOjEFoiamz50c8BRdcsDMSPvaTAMTVPL7sMxMzuZWCQ</google.master.key>
-	<portal.server.ip>129.79.49.102</portal.server.ip>
-	<host.base.url>http://${portal.server.ip}:8080/</host.base.url>
+		<quakesim.dir>QuakeSim2</quakesim.dir>
+		<project.home>${env.HOME}/workspace/${quakesim.dir}</project.home>
+		<tomcat.bin.perm>755</tomcat.bin.perm>
+		<tomcat.version>apache-tomcat-5.5.20</tomcat.version>
+		<yui.version>yui_0.12.2</yui.version>
+		<catalina.home>${env.HOME}/workspace/${quakesim.dir}/portal_deploy/${tomcat.version}/</catalina.home>
+		<tomcat.base.dir>${env.HOME}/workspace/${quakesim.dir}/portal_deploy/${tomcat.version}/</tomcat.base.dir>
+      <portal.host.name>129.79.49.68</portal.host.name>
+		<google.master.key>ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTf0RZ3CvQOmi-GOjEFoiamz50c8BRdcsDMSPvaTAMTVPL7sMxMzuZWCQ</google.master.key>
+		<portal.server.ip>129.79.49.68</portal.server.ip>
+		<host.base.url>http://${portal.server.ip}:8080/</host.base.url>
     </properties>
--->    
+	 -->
 
     <build>
-        <finalName>Disloc3</finalName>
+        <finalName>Simplex3</finalName>
         <resources>
            <resource>
                <directory>src/main/resources</directory>
@@ -58,18 +57,7 @@
 					its children.
 				-->
 			 <tasks>			 
-				<delete failonerror="false">
-				  <fileset dir="${catalina.home}/webapps/${pom.artifactId}">
-					<include name="**/*"/>
-						<!--
-					 <include name="**/*.jar"/>
-					 <include name="**/*.xml"/>
-					 <include name="**/*.properties"/>
-					 <include name="**/*.class"/>						  
-					 <include name="**/*.jsp"/>
-					 <include name="**/*.wsdd"/>
-						-->
-				  </fileset>
+				<delete dir="${catalina.home}/webapps/${pom.artifactId}">
 				</delete>
 
 				<delete file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${pom.artifactId}"/>
@@ -88,19 +76,15 @@
 					since the parent pom is not abstract and so will get executed along with
 					its children.
 				-->
-
-		
-			 <tasks>
-				<copy overwrite="true" 
-						filtering="false"
-						failonerror="false"
-						todir="${catalina.home}/webapps/${pom.artifactId}">
-				  <fileset dir="${basedir}/target/${pom.artifactId}"/>
-				</copy>												
-				
-				<touch file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${pom.artifactId}"/>
-			</tasks>			
 			
+			 <tasks>
+				<copy overwrite="true" filtering="false" failonerror="false" todir="${catalina.home}/webapps/${pom.artifactId}">
+				  <fileset dir="${basedir}/target/${pom.artifactId}"/>
+				</copy>				  
+								
+				<touch file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${pom.artifactId}"/>
+			</tasks>
+		
         </configuration>
         <goals>
 			 <goal>run</goal>
@@ -121,11 +105,9 @@
         </goals>
        </execution>
        
-       
        <execution>
          <phase>package</phase>
          <configuration>
-	 
            <tasks>
 				 <echo message="Google Master Key: ${google.master.key}"/>
 				 <replace dir="${basedir}/target/${pom.artifactId}" token="put.google.map.key.here" value="${google.master.key}">
@@ -143,7 +125,7 @@
 					  token="@artifactId@"
 					  value="${pom.artifactId}">
 					<include name="**/*.*"/>
-				 </replace> 				 
+				 </replace>
 				 
 				 <copy file="${basedir}/target/${pom.artifactId}/gadget_template.xml" tofile="${project.home}/gadgets/${pom.artifactId}_gadget.xml" overwrite="true"/>
 				 
@@ -157,12 +139,17 @@
 					  token="@artifactId@"
 					  value="${pom.artifactId}">
 					<include name="**/*.*"/>
+				 </replace>
+				 
+				 <replace file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/layouts/TemplateLayout.xml"
+					  token="Simplex-portlet"
+					  value="Simplex3">					
 				 </replace> 
 				 
 				 <replace file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/layouts/TemplateLayout.xml"
-					  token="Disloc2"
-					  value="Disloc3">					
-				 </replace> 				 
+					  token="Simplex-Portlet"
+					  value="Simplex3">					
+				 </replace> 
 				 
 				 
            </tasks>
@@ -172,11 +159,10 @@
            <goal>run</goal>
          </goals>
        </execution> 
-      </executions>       
-		</plugin>
+      </executions>
+      </plugin>
     </plugins>
     </build>
-
 
 
     <!-- Profile to run jetty, so the tomcat jars are included in the bundle. They are not included by default -->
@@ -228,29 +214,23 @@
 -->
         <repository>
             <id>apache-maven</id>
-            <url>http://repo1.maven.org/maven2</url>
+            <url>http://www.ibiblio.org/maven2</url>
         </repository>
 
-
-        <!-- This is the apache repository for bridges
+        <!-- This is the apache repository for bridges -->
         <repository>
             <id>apache-maven</id>
             <url>http://cvs.apache.org/repository</url>
-        </repository> -->
-
+        </repository>
 
         <!-- This is our local repository -->
+	
         <repository>
             <id>crisisgrid-maven-repo</id>
             <url>http://www.crisisgrid.org/maven2</url>
         </repository>
-
-
-        <repository>
-            <id>sopac</id>
-            <url>http://sopac.ucsd.edu/repositories/maven2/SOPAC/</url>
-        </repository>
-
+	
+	
 
         <repository>
         <id>jboss</id>
@@ -260,50 +240,23 @@
         <enabled>false</enabled>
         </snapshots>
         </repository>
-	<!--
-	<repository>
-		<id>ogce-maven-repo</id>
-		<url>http://www.collab-ogce.org/maven2</url>
-	 </repository>
-	 -->
-	 <!--
-	 <repository>
-	  <id>ogce-maven1-legacy-repo</id>
-	  <url>http://www.collab-ogce.org/maven</url>
-	  <layout>legacy</layout>
-	 </repository>
-	 -->
-    
-
-
 
     </repositories>
 
     <!-- Repositories for plugins -->
     <pluginRepositories>
-        <!-- Repository to get the jetty plugin
+        <!-- Repository to get the jetty plugin -->
         <pluginRepository>
             <id>mortbay-repo</id>
             <name>mortbay-repo</name>
             <url>http://www.mortbay.org/maven2/snapshot</url>
         </pluginRepository>
--->
     </pluginRepositories>
 
     <!-- Project dependencies -->
     <dependencies>
 
         <!-- Faces Jars -->
-
-
-        <dependency>
-		<groupId>xerces</groupId>
-		<artifactId>xercesImpl</artifactId>
-		<version>2.9.1</version>
-		<scope>compile</scope>
-        </dependency>
-
-
         <dependency>
             <groupId>myfaces</groupId>
             <artifactId>myfaces-api</artifactId>
@@ -333,14 +286,14 @@
             <scope>compile</scope>
         </dependency>
 
-
+        
         <dependency>
             <groupId>javax.portlet</groupId>
             <artifactId>portlet-api</artifactId>
             <version>1.0</version>
             <scope>provided</scope>
         </dependency>
-
+	
 
         <dependency>
             <groupId>ogce-misc</groupId>
@@ -348,6 +301,7 @@
             <version>2.1</version>
         </dependency>
 
+	
         <dependency>
             <groupId>org.apache.portals.bridges</groupId>
             <artifactId>portals-bridges-commons</artifactId>
@@ -359,6 +313,7 @@
             <artifactId>portals-bridges-jsf</artifactId>
             <version>1.0</version>
         </dependency>
+	
 
 
 	<!-- jsfunit -->
@@ -369,14 +324,11 @@
       <version>1.0.0.GA</version>
     </dependency>
 
-
-
     <dependency>
       <groupId>org.jboss.jsfunit</groupId>
       <artifactId>jboss-jsfunit-ant</artifactId>
       <version>1.0.0.GA</version>
     </dependency>
-
 
         <!-- Servlet Dependencies -->
         <dependency>
