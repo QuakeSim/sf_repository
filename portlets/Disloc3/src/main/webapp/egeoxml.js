@@ -539,8 +539,9 @@ EGeoXml.prototype.processing = function(doc) {
       if (that.opts.sidebarid) {
 
 	var n = this.urlscounter;
-	var temp_url_bits = this.urls[n].split("/@artifactId@/",2);
-	var url_bits = temp_url_bits[1].split(".",2);	
+	// var temp_url_bits = this.urls[n].split("/@artifactId@/",2);
+	// var url_bits = temp_url_bits[1].split(".",2);	
+	var url_bits=this.urls[n].split(".",2);	
 
 	this.urlscounter = this.urlscounter + 1;
 

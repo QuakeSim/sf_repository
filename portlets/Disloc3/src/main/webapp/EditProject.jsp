@@ -54,7 +54,7 @@ mapcenter_y = center_xy[1];
 <script language="JavaScript">
 
 		  //These are various gmap definitions.
-	 var geocoder=null;
+	 var geocoder=null; 
 	 var map;
 	 var geoXml;
 	 var geoObsvXml;
