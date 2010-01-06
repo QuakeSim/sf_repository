@@ -86,7 +86,7 @@
 				<!-- Copy the KML file -->
 				<copy overwrite="true"
 						todir="${catalina.home}/webapps/gridsphere/">
-				  <fileset file="${basedir}/FaultKML/allQTFaults.kml/"/>
+				  <fileset file="${basedir}/FaultKML/*.kml/"/>
             </copy>
 				
           </tasks>
