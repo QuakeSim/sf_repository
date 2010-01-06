@@ -1,7 +1,7 @@
 package cgl.quakesim.simplex;
 
 import java.net.URL;
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -57,8 +57,10 @@ public class editProjectForm extends GenericProjectBean {
 	 double projectOriginLon, projectOriginLat;
 	 
 	 projectEntry currentProject;
-	
-    NumberFormat format=null;
+
+	 String kmlfiles = "";
+	 DecimalFormat df;
+	 
 
 	 /**
 	  * Create the bean
@@ -71,7 +73,7 @@ public class editProjectForm extends GenericProjectBean {
 		  super();
 		  this.selectdbURL=selectdbURL;
 		  System.out.println("editProjectForm Created");
-		  format=NumberFormat.getInstance();
+		  df = new DecimalFormat(".###");
 	 }
 	 
 	public void initEditFormsSelection() {
@@ -184,7 +186,11 @@ public class editProjectForm extends GenericProjectBean {
 		}
 		if (faultSelectionCode.equals("ViewAllFaults")) {
 			initEditFormsSelection();
-			myFaultDBEntryList=ViewAllFaults(selectdbURL);
+			// myFaultDBEntryList=ViewAllFaults(selectdbURL);
+			KMLdescriptionparser kdp = new KMLdescriptionparser();
+			kdp.parseXml(getBasePath() + "/" + codeName + "/", kmlfiles);
+			myFaultDBEntryList = kdp.getFaultList("All", "");
+			
 			renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
 		}
 		if (projectSelectionCode.equals("")) {
@@ -265,197 +271,188 @@ public class editProjectForm extends GenericProjectBean {
 
 	// }
 	
-	public Fault QueryFaultFromDB(String faultAndSegment) {
+	public Fault QueryFaultFromDB(String faultname) {
 		// Check request with fallback
-		/* modified for the new module importing from kml desc 09/12/18 Jun Ji at CGL
-		String theFault = tmp_str.substring(0, tmp_str.indexOf("@"));
-		String theSegment=tmp_str.substring(tmp_str.indexOf("@") + 1, tmp_str.indexOf("%"));
-		String interpId=tmp_str.substring(tmp_str.indexOf("%") + 1, tmp_str.length());
-		
-		tmp_str = "";
+
+		/* modified to the new module importing from kml desc 09/12/18 Jun Ji at CGL, jid@cs.indiana.edu
 		*/
 
 		Fault tmp_fault = new Fault();
 
-		if (faultAndSegment.split("@@##").length == 2)
-		{
-		      String theFault = faultAndSegment.split("@@##")[0];
-		      String desc = faultAndSegment.split("@@##")[1];		      
+		System.out.println ("[QueryFaultFromDB] faultname : " + faultname);
+
+		String theFault = faultname;	    
+
+		KMLdescriptionparser kdp = new KMLdescriptionparser();	 
+		kdp.parseXml(getBasePath() + "/" + codeName + "/", kmlfiles);
+		
+		kdp.getDesc(theFault);
+		kdp.parsevalues();
+		
+		try {
+			double dip = kdp.getdip();
+			double strike = kdp.getstrike();
+			double depth = kdp.getdepth();
+			double width = kdp.getwidth();    
+
+			double latEnd = kdp.getlatEnd();
+			double latStart = kdp.getlatStart();
+			double lonStart = kdp.getlonStart();
+			double lonEnd = kdp.getlonEnd();
+
+
+			// Calculate the length			
+			double d2r = Math.acos(-1.0) / 180.0;
+			double flatten=1.0/298.247;
+
+			double x = (lonEnd - lonStart) * factor(lonStart,latStart);
+			double y = (latEnd - latStart) * 111.32;
+
+			// String length = df.format(Math.sqrt(x * x + y * y));
+			double length=Double.parseDouble(df.format(Math.sqrt(x * x + y * y)));
+			tmp_fault.setFaultName(theFault+"");
+			tmp_fault.setFaultLength(length+"");
+			tmp_fault.setFaultWidth(width+"");
+			tmp_fault.setFaultDepth (depth+"");
+			tmp_fault.setFaultDipAngle(dip+"");
+			
+			//Probably hokey default values
+			tmp_fault.setFaultSlip ("1.0"); 
+			tmp_fault.setFaultRakeAngle("1.0");
+			tmp_fault.setFaultLonStarts(lonStart+"");
+			tmp_fault.setFaultLatStarts(latStart+"");
+			tmp_fault.setFaultLonEnds(lonEnd+"");
+			tmp_fault.setFaultLatEnds(latEnd+"");
+			
+			//Set the strike
+			strike=Math.atan2(x,y)/d2r;
+			tmp_fault.setFaultStrikeAngle(strike+"");
+			
+			//Set the origin
+			//This is the (x,y) of the fault relative to the project's origin
+			//The project origin is the lower left lat/lon of the first fault.
+			//If any of these conditions hold, we need to reset.
+			
+			System.out.println("Check Project Origin: "
+									+currentProject.getOrigin_lat()
+									+currentProject.getOrigin_lon());
+			
+			if(currentProject.getOrigin_lat()==projectEntry.DEFAULT_LAT
+				|| currentProject.getOrigin_lon()==projectEntry.DEFAULT_LON ) {
+				currentProject.setOrigin_lat(latStart);
+				currentProject.setOrigin_lon(lonStart);
+			}
+			double projectOriginLat=currentProject.getOrigin_lat();
+			double projectOriginLon=currentProject.getOrigin_lon();
+
+			System.out.println("Confirm Project Origin: "
+									+currentProject.getOrigin_lat()
+									+currentProject.getOrigin_lon());
+						
+			//The following should be done in any case.  If the origin was just (re)set above,
+			//we will get a harmless (0,0);
+			double x1=(lonStart-projectOriginLon)*factor(projectOriginLon,projectOriginLat);
+			double y1=(latStart-projectOriginLat)*111.32;
+			System.out.println("Fault origin: "+x1+" "+y1);
+			tmp_fault.setFaultLocationX(df.format(x1));
+			tmp_fault.setFaultLocationY(df.format(y1));
+			
+		      } catch (Exception ex) {
+			      ex.printStackTrace();
+		      }		
+
+	      /*
+	      String theFault = faultAndSegment.substring(0, faultAndSegment.indexOf("@"));
+	      String theSegment=faultAndSegment.substring(faultAndSegment.indexOf("@") + 1, faultAndSegment.indexOf("%"));
+
+	      String interpId=faultAndSegment.substring(faultAndSegment.indexOf("%") + 1, faultAndSegment.length());
+
+	      faultAndSegment = "";
+
+	      try {
+
+		      SelectService ss = new SelectServiceLocator();
+		      Select select = ss.getSelect(new URL(selectdbURL));
+
+		      // --------------------------------------------------
+		      // Make queries.
+		      // --------------------------------------------------
+		      String dip = getDBValue(select, "Dip", theFault, theSegment,interpId);
+		      String strike = getDBValue(select, "Strike", theFault, theSegment,interpId);
+		      String depth = getDBValue(select, "Depth", theFault, theSegment,interpId);
+		      String width = getDBValue(select, "Width", theFault, theSegment,interpId);
+
+		      // Get the length and width
+		      double latEnd = Double.parseDouble(getDBValue(select, "LatEnd",
+																	      theFault, theSegment,interpId));
+		      double latStart = Double.parseDouble(getDBValue(select, "LatStart",
+																		      theFault, theSegment,interpId));
+		      double lonStart = Double.parseDouble(getDBValue(select, "LonStart",
+																		      theFault, theSegment,interpId));
+		      double lonEnd = Double.parseDouble(getDBValue(select, "LonEnd",
+																	      theFault, theSegment,interpId));
 		      
-		      KMLdescriptionparser kdp = new KMLdescriptionparser();
-	      
-		      kdp.setDesc(desc);
-		      kdp.parsevalues();
+		      // Calculate the length
+		      NumberFormat format = NumberFormat.getInstance();
+		      double d2r = Math.acos(-1.0) / 180.0;
+		      double flatten=1.0/298.247;
 
-		      try {
-			      double dip = kdp.getdip();
-			      double strike = kdp.getstrike();
-			      double depth = kdp.getdepth();
-			      double width = kdp.getwidth();    
+		      double x = (lonEnd - lonStart) * factor(lonStart,latStart);
+		      double y = (latEnd - latStart) * 111.32;
 
-			      double latEnd = kdp.getlatEnd();
-			      double latStart = kdp.getlatStart();
-			      double lonStart = kdp.getlonStart();
-			      double lonEnd = kdp.getlonEnd();
-
-
-			      // Calculate the length
-			      NumberFormat format = NumberFormat.getInstance();
-			      double d2r = Math.acos(-1.0) / 180.0;
-			      double flatten=1.0/298.247;
-
-			      double x = (lonEnd - lonStart) * factor(lonStart,latStart);
-			      double y = (latEnd - latStart) * 111.32;
-
-			      // String length = format.format(Math.sqrt(x * x + y * y));
-			      double length=Double.parseDouble(format.format(Math.sqrt(x * x + y * y)));
-			      tmp_fault.setFaultName(theFault+"");
-			      tmp_fault.setFaultLength(length+"");
-			      tmp_fault.setFaultWidth(width+"");
-			      tmp_fault.setFaultDepth (depth+"");
-			      tmp_fault.setFaultDipAngle(dip+"");
-			      
-			      //Probably hokey default values
-			      tmp_fault.setFaultSlip ("1.0"); 
-			      tmp_fault.setFaultRakeAngle("1.0");
-			      tmp_fault.setFaultLonStarts(lonStart+"");
-			      tmp_fault.setFaultLatStarts(latStart+"");
-			      tmp_fault.setFaultLonEnds(lonEnd+"");
-			      tmp_fault.setFaultLatEnds(latEnd+"");
-			      
-			      //Set the strike
-			      strike=Math.atan2(x,y)/d2r;
-			      tmp_fault.setFaultStrikeAngle(strike+"");
-			      
-			      //Set the origin
-			      //This is the (x,y) of the fault relative to the project's origin
-			      //The project origin is the lower left lat/lon of the first fault.
-			      //If any of these conditions hold, we need to reset.
-			      
-			      System.out.println("Check Project Origin: "
-									      +currentProject.getOrigin_lat()
-									      +currentProject.getOrigin_lon());
-			      
-			      if(currentProject.getOrigin_lat()==projectEntry.DEFAULT_LAT
-				      || currentProject.getOrigin_lon()==projectEntry.DEFAULT_LON ) {
-				      currentProject.setOrigin_lat(latStart);
-				      currentProject.setOrigin_lon(lonStart);
-			      }
-			      double projectOriginLat=currentProject.getOrigin_lat();
-			      double projectOriginLon=currentProject.getOrigin_lon();
-
-			      System.out.println("Confirm Project Origin: "
-									      +currentProject.getOrigin_lat()
-									      +currentProject.getOrigin_lon());
-						      
-			      //The following should be done in any case.  If the origin was just (re)set above,
-			      //we will get a harmless (0,0);
-			      double x1=(lonStart-projectOriginLon)*factor(projectOriginLon,projectOriginLat);
-			      double y1=(latStart-projectOriginLat)*111.32;
-			      System.out.println("Fault origin: "+x1+" "+y1);
-			      tmp_fault.setFaultLocationX(format.format(x1));
-			      tmp_fault.setFaultLocationY(format.format(y1));
-			      
-		      } catch (Exception ex) {
-			      ex.printStackTrace();
+		      String length = df.format(Math.sqrt(x * x + y * y));
+		      tmp_fault.setFaultName(theFault );
+		      tmp_fault.setFaultLength(length);
+		      tmp_fault.setFaultWidth(width);
+		      tmp_fault.setFaultDepth (depth);
+		      tmp_fault.setFaultDipAngle(dip);
+		      
+		      //Probably hokey default values
+		      tmp_fault.setFaultSlip ("1.0"); 
+		      tmp_fault.setFaultRakeAngle("1.0");
+		      tmp_fault.setFaultLonStarts(lonStart+"");
+		      tmp_fault.setFaultLatStarts(latStart+"");
+		      tmp_fault.setFaultLonEnds(lonEnd+"");
+		      tmp_fault.setFaultLatEnds(latEnd+"");
+		      
+		      //Set the strike
+		      strike=df.format(Math.atan2(x,y)/d2r);
+		      tmp_fault.setFaultStrikeAngle(strike);
+		      
+		      //Set the origin
+		      //This is the (x,y) of the fault relative to the project's origin
+		      //The project origin is the lower left lat/lon of the first fault.
+		      //If any of these conditions hold, we need to reset.
+		      
+		      System.out.println("Check Project Origin: "
+								      +currentProject.getOrigin_lat()
+								      +currentProject.getOrigin_lon());
+		      
+		      if(currentProject.getOrigin_lat()==projectEntry.DEFAULT_LAT
+			      || currentProject.getOrigin_lon()==projectEntry.DEFAULT_LON ) {
+			      currentProject.setOrigin_lat(latStart);
+			      currentProject.setOrigin_lon(lonStart);
 		      }
-		}
+		      double projectOriginLat=currentProject.getOrigin_lat();
+		      double projectOriginLon=currentProject.getOrigin_lon();
 
-		else
-		{
-
-		      String theFault = faultAndSegment.substring(0, faultAndSegment.indexOf("@"));
-		      String theSegment=faultAndSegment.substring(faultAndSegment.indexOf("@") + 1, faultAndSegment.indexOf("%"));
-
-		      String interpId=faultAndSegment.substring(faultAndSegment.indexOf("%") + 1, faultAndSegment.length());
-
-		      faultAndSegment = "";
-
-		      try {
-
-			      SelectService ss = new SelectServiceLocator();
-			      Select select = ss.getSelect(new URL(selectdbURL));
-
-			      // --------------------------------------------------
-			      // Make queries.
-			      // --------------------------------------------------
-			      String dip = getDBValue(select, "Dip", theFault, theSegment,interpId);
-			      String strike = getDBValue(select, "Strike", theFault, theSegment,interpId);
-			      String depth = getDBValue(select, "Depth", theFault, theSegment,interpId);
-			      String width = getDBValue(select, "Width", theFault, theSegment,interpId);
-
-			      // Get the length and width
-			      double latEnd = Double.parseDouble(getDBValue(select, "LatEnd",
-																		      theFault, theSegment,interpId));
-			      double latStart = Double.parseDouble(getDBValue(select, "LatStart",
-																			      theFault, theSegment,interpId));
-			      double lonStart = Double.parseDouble(getDBValue(select, "LonStart",
-																			      theFault, theSegment,interpId));
-			      double lonEnd = Double.parseDouble(getDBValue(select, "LonEnd",
-																		      theFault, theSegment,interpId));
-			      
-			      // Calculate the length
-			      NumberFormat format = NumberFormat.getInstance();
-			      double d2r = Math.acos(-1.0) / 180.0;
-			      double flatten=1.0/298.247;
-
-			      double x = (lonEnd - lonStart) * factor(lonStart,latStart);
-			      double y = (latEnd - latStart) * 111.32;
-
-			      String length = format.format(Math.sqrt(x * x + y * y));
-			      tmp_fault.setFaultName(theFault );
-			      tmp_fault.setFaultLength(length);
-			      tmp_fault.setFaultWidth(width);
-			      tmp_fault.setFaultDepth (depth);
-			      tmp_fault.setFaultDipAngle(dip);
-			      
-			      //Probably hokey default values
-			      tmp_fault.setFaultSlip ("1.0"); 
-			      tmp_fault.setFaultRakeAngle("1.0");
-			      tmp_fault.setFaultLonStarts(lonStart+"");
-			      tmp_fault.setFaultLatStarts(latStart+"");
-			      tmp_fault.setFaultLonEnds(lonEnd+"");
-			      tmp_fault.setFaultLatEnds(latEnd+"");
-			      
-			      //Set the strike
-			      strike=format.format(Math.atan2(x,y)/d2r);
-			      tmp_fault.setFaultStrikeAngle(strike);
-			      
-			      //Set the origin
-			      //This is the (x,y) of the fault relative to the project's origin
-			      //The project origin is the lower left lat/lon of the first fault.
-			      //If any of these conditions hold, we need to reset.
-			      
-			      System.out.println("Check Project Origin: "
-									      +currentProject.getOrigin_lat()
-									      +currentProject.getOrigin_lon());
-			      
-			      if(currentProject.getOrigin_lat()==projectEntry.DEFAULT_LAT
-				      || currentProject.getOrigin_lon()==projectEntry.DEFAULT_LON ) {
-				      currentProject.setOrigin_lat(latStart);
-				      currentProject.setOrigin_lon(lonStart);
-			      }
-			      double projectOriginLat=currentProject.getOrigin_lat();
-			      double projectOriginLon=currentProject.getOrigin_lon();
-
-			      System.out.println("Confirm Project Origin: "
-									      +currentProject.getOrigin_lat()
-									      +currentProject.getOrigin_lon());
-						      
-			      //The following should be done in any case.  If the origin was just (re)set above,
-			      //we will get a harmless (0,0);
-			      double x1=(lonStart-projectOriginLon)*factor(projectOriginLon,projectOriginLat);
-			      double y1=(latStart-projectOriginLat)*111.32;
-			      System.out.println("Fault origin: "+x1+" "+y1);
-			      tmp_fault.setFaultLocationX(format.format(x1));
-			      tmp_fault.setFaultLocationY(format.format(y1));
-			      
-		      } catch (Exception ex) {
-			      ex.printStackTrace();
-		      }
-
-		}
-
+		      System.out.println("Confirm Project Origin: "
+								      +currentProject.getOrigin_lat()
+								      +currentProject.getOrigin_lon());
+					      
+		      //The following should be done in any case.  If the origin was just (re)set above,
+		      //we will get a harmless (0,0);
+		      double x1=(lonStart-projectOriginLon)*factor(projectOriginLon,projectOriginLat);
+		      double y1=(latStart-projectOriginLat)*111.32;
+		      System.out.println("Fault origin: "+x1+" "+y1);
+		      tmp_fault.setFaultLocationX(df.format(x1));
+		      tmp_fault.setFaultLocationY(df.format(y1));
+		      
+	      } catch (Exception ex) {
+		      ex.printStackTrace();
+	      }
+		  
+	    */	 
 		return tmp_fault;
 	}
 		
@@ -463,7 +460,10 @@ public class editProjectForm extends GenericProjectBean {
 		initEditFormsSelection();
 		this.forSearchStr = this.forSearchStr.trim();
 		if (!this.forSearchStr.equals("")) {
-		    myFaultDBEntryList=QueryFaultsByName(this.forSearchStr,selectdbURL);
+		    // myFaultDBEntryList=QueryFaultsByName(this.forSearchStr,selectdbURL);
+		    KMLdescriptionparser kdp = new KMLdescriptionparser();
+		    kdp.parseXml(getBasePath() + "/" + codeName + "/", kmlfiles);
+		    myFaultDBEntryList = kdp.getFaultList("Name", this.forSearchStr);
 		}
 		this.forSearchStr = "";
 		renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
@@ -478,7 +478,10 @@ public class editProjectForm extends GenericProjectBean {
 		if ((!this.faultLatStart.equals("")) && (!this.faultLatEnd.equals(""))
 				&& (!this.faultLonStart.equals(""))
 				&& (!this.faultLonEnd.equals(""))) {
-		    myFaultDBEntryList=QueryFaultsByLonLat(this.faultLatStart, this.faultLatEnd,this.faultLonStart, this.faultLonEnd, selectdbURL);
+		    // myFaultDBEntryList=QueryFaultsByLonLat(this.faultLatStart, this.faultLatEnd,this.faultLonStart, this.faultLonEnd, selectdbURL);
+		    KMLdescriptionparser kdp = new KMLdescriptionparser();
+		    kdp.parseXml(getBasePath() + "/" + codeName + "/", kmlfiles);
+		    myFaultDBEntryList = kdp.getFaultList("LonLat", this.faultLatStart + " " + this.faultLatEnd + " " + this.faultLonStart + " " + this.faultLonEnd);
 		}
 		renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
 	}
@@ -702,6 +705,15 @@ public class editProjectForm extends GenericProjectBean {
 
 	 public void setRenderObsvEntries(boolean renderObsvEntries) {
 		  this.renderObsvEntries=renderObsvEntries;
+	 }
+
+
+	 public String getKmlfiles() {
+		return kmlfiles;
+	 }
+
+	 public void setKmlfiles(String kmlfiles) {
+		this.kmlfiles = kmlfiles;
 	 }
 
 	 //--------------------------------------------------

@@ -6,6 +6,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.text.*;
+import java.text.DecimalFormat;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -67,16 +68,16 @@ public class MeshGeneratorBean extends GenericSopacBean {
     boolean renderSearchByLatLonForm = false;
     boolean renderViewAllFaultsForm = false;    
     String faultSelectionCode = "";    
-    boolean renderAddFaultFromDBForm = false;   
-	 boolean renderFaultMap = false;
+    boolean renderAddFaultFromDBForm = false;
+    boolean renderFaultMap = false;
 
     long EditProjectTableColumns = 1;    
     Layer currentLayer = new Layer();    
-    Fault currentFault = new Fault();    
-	 //    GeotransParamsData currentGeotransParamsData = new GeotransParamsData();    
-	 GeotransParamsBean currentGeotransParamsBean = new GeotransParamsBean();    
+    Fault currentFault = new Fault();
+    // GeotransParamsData currentGeotransParamsData = new GeotransParamsData();    
+    GeotransParamsBean currentGeotransParamsBean = new GeotransParamsBean();
 
-	 //Need to go through and simplify these.
+    // Need to go through and simplify these.
     List myFaultDBEntryList = new ArrayList();    
     List myLayerDBEntryList = new ArrayList();    
     List myFaultEntryForProjectList = new ArrayList();    
@@ -84,23 +85,21 @@ public class MeshGeneratorBean extends GenericSopacBean {
     List myFaultsForProject = new ArrayList();    
     List myProjectNameList = new ArrayList();    
     List myLoadMeshTableEntryList = new ArrayList();    
-    List myarchivedMeshTableEntryList = new ArrayList();    
-	 List myArchivedMeshRunList=new ArrayList();
-	 List myArchivedMeshRunList2=new ArrayList();
-	 List meshDataMegaList=new ArrayList();
+    List myarchivedMeshTableEntryList = new ArrayList();
+    List myArchivedMeshRunList=new ArrayList();
+    List myArchivedMeshRunList2=new ArrayList();
+    List meshDataMegaList=new ArrayList();
 
-	 //This is used to store the grid host names.
-	 //	 List gridHostList=new ArrayList();
-	 SelectItem[] gridHostList;
-
-	 //These are used to store the actual layers and faults
-	 List myFaultCollection=new ArrayList();
-	 List myLayerCollection=new ArrayList();
-
-	 List meshRunArrayList=new ArrayList();
-	 List gfoutputArrayList=new ArrayList();
-	 GFOutputBean projectGeoFestOutput;
-	 MeshRunBean projectMeshRunBean;
+    // This is used to store the grid host names.
+    // List gridHostList=new ArrayList();
+    SelectItem[] gridHostList;
+    // These are used to store the actual layers and faults
+    List myFaultCollection=new ArrayList();
+    List myLayerCollection=new ArrayList();
+    List meshRunArrayList=new ArrayList();
+    List gfoutputArrayList=new ArrayList();
+    GFOutputBean projectGeoFestOutput;
+    MeshRunBean projectMeshRunBean;
 
     String[] myProjectCreationDateArray;    
     String[] myProjectMeshHostArray;    
@@ -108,11 +107,11 @@ public class MeshGeneratorBean extends GenericSopacBean {
     String[] faultarrayForMesh;    
     String[] deleteProjectsList;    
     String[] selectProjectsList;    
-    private HtmlDataTable myLayerDataTable;    
-    private HtmlDataTable myFaultDataTable;    
-	 private HtmlDataTable archivedMeshTable;
+    private HtmlDataTable myLayerDataTable;
+    private HtmlDataTable myFaultDataTable;
+    private HtmlDataTable archivedMeshTable;
 
-	 UIData myMeshDataTable, myMeshDataTable2;
+    UIData myMeshDataTable, myMeshDataTable2;
     String forSearchStr = new String();    
     String faultLatStart = new String();    
     String faultLatEnd = new String();    
@@ -123,8 +122,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
     MeshViewer myMeshViewer; 
 
-    String mesh_gen_viz_fileServiceUrl = 
-		  "http://gf2.ucs.indiana.edu:6060/jetspeed/services/FileService";
+    String mesh_gen_viz_fileServiceUrl =  "http://gf2.ucs.indiana.edu:6060/jetspeed/services/FileService";
     String mesh_gen_viz_base_dir = new String("/home/gateway/yan_offscreen/offscreen/");
     String myLayersParamForJnlp = new String("");
     String myFaultsParamForJnlp = new String("");
@@ -136,32 +134,32 @@ public class MeshGeneratorBean extends GenericSopacBean {
     String projectName="";
     String meshResolution="rare";
 
-    //These should be populated from faces-config.xml
+    // These should be populated from faces-config.xml
     String meshViewerServerUrl="http://gf2.ucs.indiana.edu:18084";
     String faultDBServiceUrl;
-	 //	 String geoFESTBaseUrl="http://gf19.ucs.indiana.edu:8080/geofestexec/";
-	 String geoFESTBaseUrl;//="http://156.56.104.143:8080/geofestexec/";
+    // String geoFESTBaseUrl="http://gf19.ucs.indiana.edu:8080/geofestexec/";
+    String geoFESTBaseUrl;//="http://156.56.104.143:8080/geofestexec/";
     String geoFESTServiceUrl="";
     String geoFESTGridServiceUrl="";
-	 String geoFESTBaseUrlForJnlp="";
-	 String queueServiceUrl="";
-	 String gridInfoServiceUrl="";
-	 String gridRefinerHost="";
-	 String gridGeoFESTHost="";
-	 
-    //This is our geofest service stub.
+    String geoFESTBaseUrlForJnlp="";
+    String queueServiceUrl="";
+    String gridInfoServiceUrl="";
+    String gridRefinerHost="";
+    String gridGeoFESTHost="";
+
+    // This is our geofest service stub.
     GeoFESTService geofestService;
     GeoFESTGridService geofestGridService;
-	 QueueService queueService;
-	 GridInfoService_PortType gridInfoService;
+    QueueService queueService;
+    GridInfoService_PortType gridInfoService;
 
-	 //This is the db4o database
-	 ObjectContainer db=null;
-	 static final String DB_FILE_NAME="meshgen.db";
+    // This is the db4o database
+    ObjectContainer db=null;
+    static final String DB_FILE_NAME="meshgen.db";
 
-	 //Useful for manipulating fetchmesh data tables.
-	 UIData jnlpTable;
-	 List jnlpList;
+    // Useful for manipulating fetchmesh data tables.
+    UIData jnlpTable;
+    List jnlpList;
 
     // --------------------------------------------------
     // Set some variables. Need to put in properties.
@@ -176,9 +174,11 @@ public class MeshGeneratorBean extends GenericSopacBean {
     String plotTarget="";
     // --------------------------------------------------
 
-	 //Project origin placeholder, until I do a better job
-	 double origin_lon=0.0;
-	 double origin_lat=0.0;
+    // Project origin placeholder, until I do a better job
+    double origin_lon=0.0;
+    double origin_lat=0.0;
+    DecimalFormat df;
+    String kmlfiles = "";
 
     /**
      * The client constructor.
@@ -189,6 +189,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  gfutils.initLayerInteger();
 		  cm = getContextManagerImp();
 		  myMeshViewer = new MeshViewer(meshViewerServerUrl);
+
+		  df = new DecimalFormat(".###");
 
 		  //We are done.
 		  System.out.println("MeshGenerator Bean Created");
@@ -590,166 +592,166 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  }
     }
     
-    public Fault QueryFaultFromDB(String faultAndSegment) {
+    public Fault QueryFaultFromDB(String faultname) {
 	// Check request with fallback
 	
 
-	// modified to read from kml desc directly, not db 09/12/18, Jun Ji
-	
+	/* Modified to the new module importing from kml desc 09/12/18 Jun Ji at CGL, jid@cs.indiana.edu
+	*/
+
 	Fault tmp_fault = new Fault();
+	System.out.println ("[QueryFaultFromDB] faultname : " + faultname);
+	
+	String theFault = faultname;	    
 
-	if (faultAndSegment.split("@@##").length == 2)
-	{
-	      String theFault = faultAndSegment.split("@@##")[0];
-	      String desc = faultAndSegment.split("@@##")[1];
-
-	      KMLdescriptionparser kdp = new KMLdescriptionparser();
-
-	      kdp.setDesc(desc);
-	      kdp.parsevalues();
+	KMLdescriptionparser kdp = new KMLdescriptionparser();	 
+	kdp.parseXml(getBasePath() + "/" + codeName + "/", kmlfiles);
+	
+	kdp.getDesc(theFault);
+	kdp.parsevalues();
 	      
 	      try {	    
-		  double dip = kdp.getdip();
-		  double strike = kdp.getstrike();
-		  double depth = kdp.getdepth();
-		  double width = kdp.getwidth();    
+		      double dip = kdp.getdip();
+		      double strike = kdp.getstrike();
+		      double depth = kdp.getdepth();
+		      double width = kdp.getwidth();    
 
-		  double latEnd = kdp.getlatEnd();
-		  double latStart = kdp.getlatStart();
-		  double lonStart = kdp.getlonStart();
-		  double lonEnd = kdp.getlonEnd();
+		      double latEnd = kdp.getlatEnd();
+		      double latStart = kdp.getlatStart();
+		      double lonStart = kdp.getlonStart();
+		      double lonEnd = kdp.getlonEnd();
 
-		  // Calculate the length
-		  NumberFormat format = NumberFormat.getInstance();
-				      double d2r = Math.acos(-1.0) / 180.0;
-				      double flatten=1.0/298.247;
-				      
-				      double x = (lonEnd - lonStart) * factor(lonStart,latStart);
-				      double y = (latEnd - latStart) * 111.32;
-				      String length = format.format(Math.sqrt(x * x + y * y));
-				      tmp_fault.setFaultName (theFault);
-				      tmp_fault.setFaultLength(length);
-				      tmp_fault.setFaultWidth(width+"");
-				      tmp_fault.setFaultDepth(depth+"");
-				      tmp_fault.setFaultDipAngle(dip+"");
-				      tmp_fault.setFaultSlip("0");
-				      tmp_fault.setFaultRakeAngle("0");
+		      // Calculate the length		      
+		      double d2r = Math.acos(-1.0) / 180.0;
+		      double flatten=1.0/298.247;
+		      
+		      double x = (lonEnd - lonStart) * factor(lonStart,latStart);
+		      double y = (latEnd - latStart) * 111.32;
+		      String length = df.format(Math.sqrt(x * x + y * y));
+		      tmp_fault.setFaultName (theFault);
+		      tmp_fault.setFaultLength(length);
+		      tmp_fault.setFaultWidth(width+"");
+		      tmp_fault.setFaultDepth(depth+"");
+		      tmp_fault.setFaultDipAngle(dip+"");
+		      tmp_fault.setFaultSlip("0");
+		      tmp_fault.setFaultRakeAngle("0");
 
-				      //This is the fault's strike angle
-				      double dstrike=Math.atan2(x,y)/d2r;
-				      tmp_fault.setFaultStrikeAngle(format.format(dstrike));			
+		      //This is the fault's strike angle
+		      double dstrike=Math.atan2(x,y)/d2r;
+		      tmp_fault.setFaultStrikeAngle(df.format(dstrike));			
 
-				      //Get the origin of the first fault.
-				      Fault[] faults=getFaultsFromDB();
-				      if(faults!=null 
-					      && faults[0]!=null
-					      && faults[0].getFaultLonStart()!=null
-					      && faults[0].getFaultLatStart()!=null) {
-					      origin_lon=Double.parseDouble(faults[0].getFaultLonStart());
-					      origin_lat=Double.parseDouble(faults[0].getFaultLatStart());
-				      }
-				      //No fault, so set the p
-				      else {
-					      origin_lon=lonStart;
-					      origin_lat=latStart;
-				      }
-				      
-				      //This is the (x,y) of the fault relative to the project's origin
-				      //The project origin is the lower left lat/lon of the first fault.
-				      double x1=(lonStart-origin_lon)*factor(origin_lon,origin_lat);
-				      double y1=(latStart-origin_lat)*111.32;
-				      System.out.println("Fault origin: "+x1+" "+y1);
-			    tmp_fault.setFaultLocationX(format.format(x1));
-				      tmp_fault.setFaultLocationY(format.format(y1));				
+		      //Get the origin of the first fault.
+		      Fault[] faults=getFaultsFromDB();
+		      if(faults!=null 
+			      && faults[0]!=null
+			      && faults[0].getFaultLonStart()!=null
+			      && faults[0].getFaultLatStart()!=null) {
+			      origin_lon=Double.parseDouble(faults[0].getFaultLonStart());
+			      origin_lat=Double.parseDouble(faults[0].getFaultLatStart());
+		      }
+		  //No fault, so set the p
+		  else {
+			  origin_lon=lonStart;
+			  origin_lat=latStart;
+		  }
+		  
+		  //This is the (x,y) of the fault relative to the project's origin
+		  //The project origin is the lower left lat/lon of the first fault.
+		  double x1=(lonStart-origin_lon)*factor(origin_lon,origin_lat);
+		  double y1=(latStart-origin_lat)*111.32;
+		  System.out.println("Fault origin: "+x1+" "+y1);
+			    tmp_fault.setFaultLocationX(df.format(x1));
+				      tmp_fault.setFaultLocationY(df.format(y1));				
 
 			} catch (Exception ex) {
 				      ex.printStackTrace();
 			}
-	    }
+	    
+	
+	    /*
 
-	    else {
+	    String theFault = faultAndSegment.substring(0, faultAndSegment.indexOf("@"));
+	    String theSegment=faultAndSegment.substring(faultAndSegment.indexOf("@") + 1, faultAndSegment.indexOf("%"));
+	    
+	    String interpId=faultAndSegment.substring(faultAndSegment.indexOf("%") + 1, faultAndSegment.length());
+	    
+	    faultAndSegment = "";
+	    
+	    try {
+		SelectService ss = new SelectServiceLocator();
+		Select select = ss.getSelect(new URL(faultDBServiceUrl));
+		
+		// --------------------------------------------------
+		// Make queries.
+		// --------------------------------------------------
+		String dip = getDBValue(select, "Dip", theFault, theSegment,interpId);
+		String strike = getDBValue(select, "Strike", theFault, theSegment,interpId);
+		String depth = getDBValue(select, "Depth", theFault, theSegment,interpId);
+		String width = getDBValue(select, "Width", theFault, theSegment,interpId);
+		
+		// Get the length and width
+		double latEnd = Double.parseDouble(getDBValue(select, "LatEnd",
+							      theFault, theSegment,interpId));
+		double latStart = Double.parseDouble(getDBValue(select, "LatStart",
+								theFault, theSegment,interpId));
+		double lonStart = Double.parseDouble(getDBValue(select, "LonStart",
+								theFault, theSegment,interpId));
+		double lonEnd = Double.parseDouble(getDBValue(select, "LonEnd",
+							      theFault, theSegment,interpId));
+		
+		// Calculate the length
+		NumberFormat format = NumberFormat.getInstance();
+				    double d2r = Math.acos(-1.0) / 180.0;
+				    double flatten=1.0/298.247;
+    // 				double factor = d2r
+    // 					 * Math.cos(d2r * latStart)
+    // 					 * (6378.139 * (1.0 - Math.sin(d2r * latStart)
+    // 										 * Math.sin(d2r * latStart) / 298.247));
+				    
+				    double x = (lonEnd - lonStart) * factor(lonStart,latStart);
+				    double y = (latEnd - latStart) * 111.32;
+				    String length = df.format(Math.sqrt(x * x + y * y));
+				    tmp_fault.setFaultName (theFault);
+				    tmp_fault.setFaultLength(length);
+				    tmp_fault.setFaultWidth(width);
+				    tmp_fault.setFaultDepth(depth);
+				    tmp_fault.setFaultDipAngle(dip);
+				    tmp_fault.setFaultSlip("");
+				    tmp_fault.setFaultRakeAngle("");
 
-		    String theFault = faultAndSegment.substring(0, faultAndSegment.indexOf("@"));
-		    String theSegment=faultAndSegment.substring(faultAndSegment.indexOf("@") + 1, faultAndSegment.indexOf("%"));
-		    
-		    String interpId=faultAndSegment.substring(faultAndSegment.indexOf("%") + 1, faultAndSegment.length());
-		    
-		    faultAndSegment = "";
-		    
-		    try {
-			SelectService ss = new SelectServiceLocator();
-			Select select = ss.getSelect(new URL(faultDBServiceUrl));
-			
-			// --------------------------------------------------
-			// Make queries.
-			// --------------------------------------------------
-			String dip = getDBValue(select, "Dip", theFault, theSegment,interpId);
-			String strike = getDBValue(select, "Strike", theFault, theSegment,interpId);
-			String depth = getDBValue(select, "Depth", theFault, theSegment,interpId);
-			String width = getDBValue(select, "Width", theFault, theSegment,interpId);
-			
-			// Get the length and width
-			double latEnd = Double.parseDouble(getDBValue(select, "LatEnd",
-								      theFault, theSegment,interpId));
-			double latStart = Double.parseDouble(getDBValue(select, "LatStart",
-									theFault, theSegment,interpId));
-			double lonStart = Double.parseDouble(getDBValue(select, "LonStart",
-									theFault, theSegment,interpId));
-			double lonEnd = Double.parseDouble(getDBValue(select, "LonEnd",
-								      theFault, theSegment,interpId));
-			
-			// Calculate the length
-			NumberFormat format = NumberFormat.getInstance();
-					    double d2r = Math.acos(-1.0) / 180.0;
-					    double flatten=1.0/298.247;
-	    // 				double factor = d2r
-	    // 					 * Math.cos(d2r * latStart)
-	    // 					 * (6378.139 * (1.0 - Math.sin(d2r * latStart)
-	    // 										 * Math.sin(d2r * latStart) / 298.247));
-					    
-					    double x = (lonEnd - lonStart) * factor(lonStart,latStart);
-					    double y = (latEnd - latStart) * 111.32;
-					    String length = format.format(Math.sqrt(x * x + y * y));
-					    tmp_fault.setFaultName (theFault);
-					    tmp_fault.setFaultLength(length);
-					    tmp_fault.setFaultWidth(width);
-					    tmp_fault.setFaultDepth(depth);
-					    tmp_fault.setFaultDipAngle(dip);
-					    tmp_fault.setFaultSlip("");
-					    tmp_fault.setFaultRakeAngle("");
+				    //This is the fault's strike angle
+				    double dstrike=Math.atan2(x,y)/d2r;
+			  tmp_fault.setFaultStrikeAngle(df.format(dstrike));				
 
-					    //This is the fault's strike angle
-					    double dstrike=Math.atan2(x,y)/d2r;
-				  tmp_fault.setFaultStrikeAngle(format.format(dstrike));				
+				    //Get the origin of the first fault.
+				    Fault[] faults=getFaultsFromDB();
+				    if(faults!=null 
+					    && faults[0]!=null
+					    && faults[0].getFaultLonStart()!=null
+					    && faults[0].getFaultLatStart()!=null) {
+					    origin_lon=Double.parseDouble(faults[0].getFaultLonStart());
+					    origin_lat=Double.parseDouble(faults[0].getFaultLatStart());
+				    }
+				    //No fault, so set the p
+				    else {
+					    origin_lon=lonStart;
+					    origin_lat=latStart;
+				    }
+				    
+				    //This is the (x,y) of the fault relative to the project's origin
+				    //The project origin is the lower left lat/lon of the first fault.
+				    double x1=(lonStart-origin_lon)*factor(origin_lon,origin_lat);
+				    double y1=(latStart-origin_lat)*111.32;
+				    System.out.println("Fault origin: "+x1+" "+y1);
+			  tmp_fault.setFaultLocationX(df.format(x1));
+				    tmp_fault.setFaultLocationY(df.format(y1));				
 
-					    //Get the origin of the first fault.
-					    Fault[] faults=getFaultsFromDB();
-					    if(faults!=null 
-						    && faults[0]!=null
-						    && faults[0].getFaultLonStart()!=null
-						    && faults[0].getFaultLatStart()!=null) {
-						    origin_lon=Double.parseDouble(faults[0].getFaultLonStart());
-						    origin_lat=Double.parseDouble(faults[0].getFaultLatStart());
-					    }
-					    //No fault, so set the p
-					    else {
-						    origin_lon=lonStart;
-						    origin_lat=latStart;
-					    }
-					    
-					    //This is the (x,y) of the fault relative to the project's origin
-					    //The project origin is the lower left lat/lon of the first fault.
-					    double x1=(lonStart-origin_lon)*factor(origin_lon,origin_lat);
-					    double y1=(latStart-origin_lat)*111.32;
-					    System.out.println("Fault origin: "+x1+" "+y1);
-				  tmp_fault.setFaultLocationX(format.format(x1));
-					    tmp_fault.setFaultLocationY(format.format(y1));				
-
-			      } catch (Exception ex) {
-					    ex.printStackTrace();
-			      }
-		    }
-
+		      } catch (Exception ex) {
+				    ex.printStackTrace();
+		      }
+		  */
+		
+		
 		  return tmp_fault;
     }
     
@@ -1002,7 +1004,10 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  }
 		  if (faultSelectionCode.equals("ViewAllFaults")) {
 				initEditFormsSelection();
-				myFaultDBEntryList=ViewAllFaults(faultDBServiceUrl);
+				// myFaultDBEntryList=ViewAllFaults(faultDBServiceUrl);
+				KMLdescriptionparser kdp = new KMLdescriptionparser();
+				kdp.parseXml(getBasePath() + "/" + codeName + "/", kmlfiles);
+				myFaultDBEntryList = kdp.getFaultList("All", "");
 				renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
 		  }
 		  if (projectSelectionCode.equals("")) {
@@ -1036,7 +1041,10 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  initEditFormsSelection();
 		  this.forSearchStr = this.forSearchStr.trim();
 		  if (!this.forSearchStr.equals("")) {
-		      myFaultDBEntryList=QueryFaultsByName(this.forSearchStr,faultDBServiceUrl);
+		      // myFaultDBEntryList=QueryFaultsByName(this.forSearchStr,faultDBServiceUrl);
+		      KMLdescriptionparser kdp = new KMLdescriptionparser();	 
+		      kdp.parseXml(getBasePath() + "/" + codeName + "/", kmlfiles);
+		      myFaultDBEntryList = kdp.getFaultList("Name", this.forSearchStr);
 		  }
 		  this.forSearchStr = "";
 		  renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
@@ -1048,11 +1056,17 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  this.faultLatEnd = this.faultLatEnd.trim();
 		  this.faultLonStart = this.faultLonStart.trim();
 		  this.faultLonEnd = this.faultLonEnd.trim();
+		  
 		  if ((!this.faultLatStart.equals("")) && (!this.faultLatEnd.equals(""))
 				&& (!this.faultLonStart.equals(""))
 				&& (!this.faultLonEnd.equals(""))) {
-		      myFaultDBEntryList=QueryFaultsByLonLat(this.faultLatStart, this.faultLatEnd,this.faultLonStart, this.faultLonEnd,faultDBServiceUrl);
+		      // myFaultDBEntryList=QueryFaultsByLonLat(this.faultLatStart, this.faultLatEnd,this.faultLonStart, this.faultLonEnd,faultDBServiceUrl);
+		      KMLdescriptionparser kdp = new KMLdescriptionparser();
+		      kdp.parseXml(getBasePath() + "/" + codeName + "/", kmlfiles);
+		      myFaultDBEntryList = kdp.getFaultList("LonLat", this.faultLatStart + " " + this.faultLatEnd + " " + this.faultLonStart + " " + this.faultLonEnd);
+		      
 		  }
+
 		  renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
     }
     
@@ -2331,6 +2345,15 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	 public GeotransParamsBean getCurrentGeotransParamsBean(){
 		  return this.currentGeotransParamsBean;
 	 }
+
+	 public String getKmlfiles() {
+		return kmlfiles;
+	 }
+
+	 public void setKmlfiles(String kmlfiles) {
+		this.kmlfiles = kmlfiles;
+	 }
+	  
 
     //--------------------------------------------------
     // End the accessor method section.

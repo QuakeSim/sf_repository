@@ -100,9 +100,7 @@ function mcancelclosetime()
 	// These are used by the fault map 	
 	var faultMap=null;
 	faultMap=new GMap2(document.getElementById("faultMap"));
-	
 
-//	var kmllist = ["QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml","allQTFaults.kml"];
 	var kmllist = ["@host.base.url@@artifactId@/geo_000520-001216-sim_HDR_4rlks.unw.kml","@host.base.url@@artifactId@/QuakeTables_CGS_1996.kml","@host.base.url@@artifactId@/QuakeTables_CGS_2002.kml"];
 
 	
@@ -162,7 +160,7 @@ function mcancelclosetime()
 
 						// alert(param4);
 						
-						newElement1.value = param1+"@@##"+param4;
+						newElement1.value = param1;
 
 
 						// Trigger the polyline click event to show the popup window.

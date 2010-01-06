@@ -6,6 +6,8 @@ import java.net.*;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.text.*;
+import java.text.DecimalFormat;
+
 
 import javax.faces.model.SelectItem;
 import javax.faces.component.html.HtmlDataTable;
@@ -93,7 +95,7 @@ public class DislocBean extends GenericSopacBean {
     //These are useful object lists.
     String[] selectProjectsArray;
     String[] deleteProjectsArray;
-	 String[] copyProjectsArray;
+    String[] copyProjectsArray;
 
     List myProjectNameList=new ArrayList();
     List myFaultCollection=new ArrayList();
@@ -124,21 +126,21 @@ public class DislocBean extends GenericSopacBean {
     String realPath;
     String codeName;
     String kmlProjectFile="network0.kml";
+    String kmlfiles = "";
 
     double originLon, originLat;
     
     String faultKmlUrl;
     String portalBaseUrl;
     String faultKmlFilename;
-	 String obsvKmlUrl;
-	 String obsvKmlFilename;
-	 
-	 String gpsStationName="";
-	 String gpsStationLat="";
-	 String gpsStationLon="";
-    NumberFormat format = null;
+    String obsvKmlUrl;
+    String obsvKmlFilename;
 
-	 FaultDBEntry faultDBEntry;
+    String gpsStationName="";
+    String gpsStationLat="";
+    String gpsStationLon="";
+    DecimalFormat df;
+    FaultDBEntry faultDBEntry;
     
     /**
      * The client constructor.
@@ -146,7 +148,7 @@ public class DislocBean extends GenericSopacBean {
     public DislocBean() throws Exception {
 	super();
 	faultDBEntry=new FaultDBEntry();
-	format=NumberFormat.getInstance();
+	df = new DecimalFormat(".###");	
 	//		  currentParams.setObservationPointStyle(1);
 	
 	//We are done.	
@@ -594,25 +596,25 @@ public class DislocBean extends GenericSopacBean {
      * The input value supports a backward-compatible @ token that can be ignored
      * these days.
      */
-    public Fault QueryFaultFromDB(String faultAndSegment) {
+    public Fault QueryFaultFromDB(String faultname) {
 	// Check request with fallback
+
+	/* Modified to the new module importing from kml desc 09/12/18 Jun Ji at CGL, jid@cs.indiana.edu
+	*/
 
 	Fault tmp_fault = new Fault();
 	
-	System.out.println ("[QueryFaultFromDB] faultAndSegment : " + faultAndSegment);
-	System.out.println ("[QueryFaultFromDB] faultAndSegment.split(\"@@##\").length : " + faultAndSegment.split("@@##").length);
-	if (faultAndSegment.split("@@##").length == 2)
-	{
+	System.out.println ("[QueryFaultFromDB] faultname : " + faultname);
 	
-	    String theFault = faultAndSegment.split("@@##")[0];
-	    String desc = faultAndSegment.split("@@##")[1];
+	String theFault = faultname;	    
 
-	    KMLdescriptionparser kdp = new KMLdescriptionparser();
-	    
-	    kdp.setDesc(desc);
-	    kdp.parsevalues();
-	    
-	    try {
+	KMLdescriptionparser kdp = new KMLdescriptionparser();	 
+	kdp.parseXml(getBasePath() + "/" + codeName + "/", kmlfiles);
+	
+	kdp.getDesc(theFault);
+	kdp.parsevalues();
+	
+	try {
 		double dip = kdp.getdip();
 		double strike = kdp.getstrike();
 		double depth = kdp.getdepth();
@@ -621,78 +623,84 @@ public class DislocBean extends GenericSopacBean {
 		double latEnd = kdp.getlatEnd();
 		double latStart = kdp.getlatStart();
 		double lonStart = kdp.getlonStart();
+		System.out.println ("latStart : " + latStart);
+		System.out.println ("lonStart : " + lonStart);
 		double lonEnd = kdp.getlonEnd();
-
-		NumberFormat format = NumberFormat.getInstance();
+		
 		double d2r = Math.acos(-1.0) / 180.0;
 		double flatten=1.0/298.247;
 			  
-			  double x = (lonEnd - lonStart) * factor(lonStart,latStart);
-			  double y = (latEnd - latStart) * 111.32;
+		double x = (lonEnd - lonStart) * factor(lonStart,latStart);
+		double y = (latEnd - latStart) * 111.32;
 
-			  double length=Double.parseDouble(format.format(Math.sqrt(x * x + y * y)));
-			  tmp_fault.setFaultName(theFault);
-				    tmp_fault.setFaultLatStart(latStart);
-				    tmp_fault.setFaultLonStart(lonStart);
-				    tmp_fault.setFaultLonEnd(lonEnd);
-				    tmp_fault.setFaultLatEnd(latEnd);
-			  tmp_fault.setFaultLength(length);
-			  tmp_fault.setFaultWidth(width);
-			  tmp_fault.setFaultDepth(depth);
-			  tmp_fault.setFaultDipAngle(dip);
+		double length=Double.parseDouble(df.format(Math.sqrt(x * x + y * y)));
+		tmp_fault.setFaultName(theFault);
+		tmp_fault.setFaultLatStart(latStart);
+		tmp_fault.setFaultLonStart(lonStart);
+		tmp_fault.setFaultLonEnd(lonEnd);
+		tmp_fault.setFaultLatEnd(latEnd);
+		tmp_fault.setFaultLength(length);
+		tmp_fault.setFaultWidth(width);
+		tmp_fault.setFaultDepth(depth);
+		tmp_fault.setFaultDipAngle(dip);
+		
+		//This is the fault's strike angle
+		
+		strike=Math.atan2(x,y)/d2r;
+		tmp_fault.setFaultStrikeAngle(Double.parseDouble(df.format(strike)));
+		
+		//This is the (x,y) of the fault relative to the project's origin
+		//The project origin is the lower left lat/lon of the first fault.
+		//If any of these conditions hold, we need to reset.
+		System.out.println("Origin:"+currentParams.getOriginLat()+" " +currentParams.getOriginLon());
+		if(currentParams.getOriginLat()==DislocParamsBean.DEFAULT_LAT
+				|| currentParams.getOriginLon()==DislocParamsBean.DEFAULT_LON ) {
+			currentParams.setOriginLat(latStart);
+			currentParams.setOriginLon(lonStart);
+			//Update the parameters
+			db=Db4o.openFile(getBasePath()+"/"
+					+ getContextBasePath()
+					+ "/"+userName
+					+ "/" + codeName + "/" + projectName + ".db");
+			
+			ObjectSet result=db.get(DislocParamsBean.class);
+			if(result.hasNext()) {				
+				DislocParamsBean tmp=(DislocParamsBean)result.next();
+				db.delete(tmp);				
+			}
 
-				    //This is the fault's strike angle
-				    strike=Math.atan2(x,y)/d2r;
-			  tmp_fault.setFaultStrikeAngle(Double.parseDouble(format.format(strike)));				
+			db.set(currentParams);
+			
+			//Say goodbye.
+			db.commit();
+			db.close();
+			
+		}
+		System.out.println("Updated Origin:"+currentParams.getOriginLat()+" "
+				+currentParams.getOriginLon());
+		
+		//The following should be done in any case.
+		//If the origin was just (re)set above,
+		//we will get a harmless (0,0);
+		double x1=(lonStart-currentParams.getOriginLon())
+		* factor(currentParams.getOriginLon(), currentParams.getOriginLat());
+		
+		double y1=(latStart-currentParams.getOriginLat())*111.32;
+		System.out.println("Fault origin: "+x1+" "+y1);
+		
+		tmp_fault.setFaultLocationX(Double.parseDouble(df.format(x1)));
+		tmp_fault.setFaultLocationY(Double.parseDouble(df.format(y1)));
+		
+		// tmp_fault.setFaultLocationX(x1);
+		// tmp_fault.setFaultLocationY(y1);
+		
+	} catch (Exception ex) {
+		ex.printStackTrace();
+		
+	}
+	  
+	/*
 
-				    //This is the (x,y) of the fault relative to the project's origin
-				    //The project origin is the lower left lat/lon of the first fault.
-				    //If any of these conditions hold, we need to reset.
-				    System.out.println("Origin:"+currentParams.getOriginLat()+" "
-										    +currentParams.getOriginLon());
-				    if(currentParams.getOriginLat()==DislocParamsBean.DEFAULT_LAT
-					    || currentParams.getOriginLon()==DislocParamsBean.DEFAULT_LON ) {
-					    currentParams.setOriginLat(latStart);
-					    currentParams.setOriginLon(lonStart);
-					    //Update the parameters
-					    db=Db4o.openFile(getBasePath()+"/"
-											    +getContextBasePath()
-											    +"/"+userName
-											    +"/"+codeName+"/"+projectName+".db");	
-					    ObjectSet result=db.get(DislocParamsBean.class);
-					    if(result.hasNext()) {
-						      DislocParamsBean tmp=(DislocParamsBean)result.next();
-						      db.delete(tmp);
-					    }
-					    db.set(currentParams);
-					    
-					    //Say goodbye.
-					    db.commit();
-					    db.close();
-					    
-				    }
-				    System.out.println("Updated Origin:"+currentParams.getOriginLat()+" "
-										    +currentParams.getOriginLon());
-
-				    //The following should be done in any case.  
-				    //If the origin was just (re)set above,
-				    //we will get a harmless (0,0);
-				    double x1=(lonStart-currentParams.getOriginLon())
-					    *factor(currentParams.getOriginLon(),
-								    currentParams.getOriginLat());
-				    double y1=(latStart-currentParams.getOriginLat())*111.32;
-				    System.out.println("Fault origin: "+x1+" "+y1);
-				    tmp_fault.setFaultLocationX(Double.parseDouble(format.format(x1)));
-				    tmp_fault.setFaultLocationY(Double.parseDouble(format.format(y1)));
-    // 				tmp_fault.setFaultLocationX(x1);
-    // 				tmp_fault.setFaultLocationY(y1);
-				    
-		      } catch (Exception ex) {
-			  ex.printStackTrace();
-		      }
-	  }
-	
-	  else {
 
 	String theFault = faultAndSegment.substring(0, faultAndSegment.indexOf("@"));
 	String theSegment=faultAndSegment.substring(faultAndSegment.indexOf("@") + 1, faultAndSegment.indexOf("%"));
@@ -721,30 +729,29 @@ public class DislocBean extends GenericSopacBean {
 							    theFault, theSegment,interpId));
 	    double lonEnd = Double.parseDouble(getDBValue(select, "LonEnd",
 							  theFault, theSegment,interpId));
-	    // Calculate the length
-	    NumberFormat format = NumberFormat.getInstance();
+	    // Calculate the length	    
 	    double d2r = Math.acos(-1.0) / 180.0;
 	    double flatten=1.0/298.247;
 		      
 		      double x = (lonEnd - lonStart) * factor(lonStart,latStart);
 		      double y = (latEnd - latStart) * 111.32;
-		      //				String length = format.format(Math.sqrt(x * x + y * y));
+		      //				String length = df.format(Math.sqrt(x * x + y * y));
 		      //				double length = Math.sqrt(x * x + y * y);
 
-		      double length=Double.parseDouble(format.format(Math.sqrt(x * x + y * y)));
+		      double length=Double.parseDouble(df.format(Math.sqrt(x * x + y * y)));
 		      tmp_fault.setFaultName(theFault);
-				tmp_fault.setFaultLatStart(latStart);
-				tmp_fault.setFaultLonStart(lonStart);
-				tmp_fault.setFaultLonEnd(lonEnd);
-				tmp_fault.setFaultLatEnd(latEnd);
+		      tmp_fault.setFaultLatStart(latStart);
+		      tmp_fault.setFaultLonStart(lonStart);
+		      tmp_fault.setFaultLonEnd(lonEnd);
+		      tmp_fault.setFaultLatEnd(latEnd);
 		      tmp_fault.setFaultLength(length);
 		      tmp_fault.setFaultWidth(width);
 		      tmp_fault.setFaultDepth(depth);
 		      tmp_fault.setFaultDipAngle(dip);
-
-				//This is the fault's strike angle
- 				strike=Math.atan2(x,y)/d2r;
- 		      tmp_fault.setFaultStrikeAngle(Double.parseDouble(format.format(strike)));				
+  
+		      //This is the fault's strike angle
+		      strike=Math.atan2(x,y)/d2r;
+ 		      tmp_fault.setFaultStrikeAngle(Double.parseDouble(df.format(strike)));				
 
 				//This is the (x,y) of the fault relative to the project's origin
 				//The project origin is the lower left lat/lon of the first fault.
@@ -783,15 +790,17 @@ public class DislocBean extends GenericSopacBean {
 								currentParams.getOriginLat());
 				double y1=(latStart-currentParams.getOriginLat())*111.32;
 				System.out.println("Fault origin: "+x1+" "+y1);
-				tmp_fault.setFaultLocationX(Double.parseDouble(format.format(x1)));
-				tmp_fault.setFaultLocationY(Double.parseDouble(format.format(y1)));
+				tmp_fault.setFaultLocationX(Double.parseDouble(df.format(x1)));
+				tmp_fault.setFaultLocationY(Double.parseDouble(df.format(y1)));
 // 				tmp_fault.setFaultLocationX(x1);
 // 				tmp_fault.setFaultLocationY(y1);
 				
 		  } catch (Exception ex) {
 		      ex.printStackTrace();
 		  }
-	  }
+		  
+	  
+	  */
 	   return tmp_fault;
     }
     
@@ -1046,7 +1055,11 @@ public class DislocBean extends GenericSopacBean {
 		  }
 		  if (faultSelectionCode.equals("ViewAllFaults")) {
 				initEditFormsSelection();
-				 myFaultDBEntryList=ViewAllFaults(faultDBServiceUrl);
+				// myFaultDBEntryList=ViewAllFaults(faultDBServiceUrl);
+				KMLdescriptionparser kdp = new KMLdescriptionparser();
+				kdp.parseXml(getBasePath() + "/" + codeName + "/", kmlfiles);
+				myFaultDBEntryList = kdp.getFaultList("All", "");
+
 				renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
 		  }
 		  if (projectSelectionCode.equals("")) {
@@ -1190,7 +1203,10 @@ public class DislocBean extends GenericSopacBean {
 		  initEditFormsSelection();
 		  this.forSearchStr = this.forSearchStr.trim();
 		  if (!this.forSearchStr.equals("")) {
-		      myFaultDBEntryList=QueryFaultsByName(this.forSearchStr,faultDBServiceUrl);
+		      // myFaultDBEntryList=QueryFaultsByName(this.forSearchStr,faultDBServiceUrl);
+		      KMLdescriptionparser kdp = new KMLdescriptionparser();	 
+		      kdp.parseXml(getBasePath() + "/" + codeName + "/", kmlfiles);
+		      myFaultDBEntryList = kdp.getFaultList("Name", this.forSearchStr);
 		  }
 		  this.forSearchStr = "";
 		  renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
@@ -1205,11 +1221,12 @@ public class DislocBean extends GenericSopacBean {
 	if ((!this.faultLatStart.equals("")) && (!this.faultLatEnd.equals(""))
 	    && (!this.faultLonStart.equals(""))
 	    && (!this.faultLonEnd.equals(""))) {
-	     myFaultDBEntryList=QueryFaultsByLonLat(this.faultLatStart, 
-						    this.faultLatEnd,
-						    this.faultLonStart, 
-						    this.faultLonEnd,
-						    faultDBServiceUrl);
+		// myFaultDBEntryList=QueryFaultsByLonLat(this.faultLatStart, this.faultLatEnd, this.faultLonStart, this.faultLonEnd, faultDBServiceUrl);
+		KMLdescriptionparser kdp = new KMLdescriptionparser();
+		kdp.parseXml(getBasePath() + "/" + codeName + "/", kmlfiles);
+		myFaultDBEntryList = kdp.getFaultList("LonLat", this.faultLatStart + " " + this.faultLatEnd + " " + this.faultLonStart + " " + this.faultLonEnd);
+	     
+	     
 	}
 	renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
     }
@@ -1256,7 +1273,7 @@ public class DislocBean extends GenericSopacBean {
     public void togglePlotProject(ActionEvent ev) {
 		  System.out.println("Plotting project");
 		  try {
-				//				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");		  
+				//				db=Db4o.openFile(getBasePath()+"/"+getContextBafsePath()+"/"+userName+"/"+codeName+".db");		  
 				DislocProjectSummaryBean dpsb=
 					 (DislocProjectSummaryBean)getMyProjectSummaryDataTable().getRowData();
 				
@@ -1383,9 +1400,8 @@ public class DislocBean extends GenericSopacBean {
 				}
 				System.out.println("Disloc params are " + currentParams.getGridXIterations());
 				System.out.println("Disloc params are also " + currentParams.getGridYIterations());
-				db.set(currentParams);
+				db.set(currentParams);				
 				
-				NumberFormat format = NumberFormat.getInstance();
 				ObjectSet faultResults=db.get(Fault.class);
 				while(faultResults.hasNext()) {
 					 Fault tmp_fault=(Fault)faultResults.next();
@@ -1395,8 +1411,9 @@ public class DislocBean extends GenericSopacBean {
 						  *factor(currentParams.getOriginLon(),currentParams.getOriginLat());
 					 double y1=(tmp_fault.getFaultLatStart()-currentParams.getOriginLat())*111.32;
 					 System.out.println("New fault origin: "+x1+" "+y1);
-					 tmp_fault.setFaultLocationX(Double.parseDouble(format.format(x1)));
-					 tmp_fault.setFaultLocationY(Double.parseDouble(format.format(y1)));
+			    
+					 tmp_fault.setFaultLocationX(Double.parseDouble(df.format(x1)));
+					 tmp_fault.setFaultLocationY(Double.parseDouble(df.format(y1)));
 					 db.set(tmp_fault);
 				}
 				db.commit();
@@ -2078,9 +2095,18 @@ public class DislocBean extends GenericSopacBean {
 	 
 	 public String getKmlProjectFile(){
 		  return this.kmlProjectFile;
-	 }
+	 }	 
 	 
-	 public String getCodeName(){
+	 
+	 public String getKmlfiles() {
+		return kmlfiles;
+	}
+
+	public void setKmlfiles(String kmlfiles) {
+		this.kmlfiles = kmlfiles;
+	}
+
+	public String getCodeName(){
 		  return codeName;
 	 }
 	 public void setCodeName(String codeName){
@@ -2476,8 +2502,8 @@ public class DislocBean extends GenericSopacBean {
 		  }
 		  double dLat=Double.parseDouble(gpsStationLat);
 		  double dLon=Double.parseDouble(gpsStationLon);
-		  ObsvPoint point=convertLatLon(Double.parseDouble(format.format(dLat)),
-						Double.parseDouble(format.format(dLon)),
+		  ObsvPoint point=convertLatLon(Double.parseDouble(df.format(dLat)),
+						Double.parseDouble(df.format(dLon)),
 						currentParams.getOriginLat(),
 						currentParams.getOriginLon());
 		  
@@ -2564,8 +2590,8 @@ public class DislocBean extends GenericSopacBean {
 	double x=(lon-origin_lon)*factor(origin_lon,origin_lat);
 	double y=(lat-origin_lat)*111.32;
 	
-	x=Double.parseDouble(format.format(x));
-	y=Double.parseDouble(format.format(y));
+	x=Double.parseDouble(df.format(x));
+	y=Double.parseDouble(df.format(y));
 	
 	System.out.println("ObsvPoints:"+lat+" "+lon+" "+x+" "+y);
 	

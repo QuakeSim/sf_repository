@@ -15,10 +15,17 @@
 		<managed-bean-name>MGBean</managed-bean-name>
 		<managed-bean-class>cgl.quakesim.geofest.MeshGeneratorBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
+				
                 <!--Who we are-->
+		
+		<managed-property>
+                   <property-name>kmlfiles</property-name>
+                   <value>QuakeTables_CGS_1996.kml QuakeTables_CGS_2002.kml</value>
+                </managed-property>
+		
                 <managed-property>
                    <property-name>codeName</property-name>
-                   <value>GridGeoFEST2</value>
+                   <value>GeoFESTGrid2</value>
                 </managed-property>
                  <managed-property>
                    <property-name>faultDBServiceUrl</property-name>

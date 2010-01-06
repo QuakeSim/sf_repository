@@ -108,7 +108,7 @@
 
 						// alert(param4);
 						
-						newElement1.value = param1+"@@##"+param4;
+						newElement1.value = param1
 
 
 						// Trigger the polyline click event to show the popup window.
