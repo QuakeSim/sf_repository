@@ -101,12 +101,7 @@ function mcancelclosetime()
 	var faultMap=null;
 	faultMap=new GMap2(document.getElementById("faultMap"));
 
-<<<<<<< .mine
-	// var kmllist = ["QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml","allQTFaults.kml"];
 	// var kmllist = ["@host.base.url@@artifactId@/geo_000520-001216-sim_HDR_4rlks.unw.kml","@host.base.url@@artifactId@/QuakeTables_CGS_1996.kml","@host.base.url@@artifactId@/QuakeTables_CGS_2002.kml"];
-=======
-	var kmllist = ["@host.base.url@@artifactId@/geo_000520-001216-sim_HDR_4rlks.unw.kml","@host.base.url@@artifactId@/QuakeTables_CGS_1996.kml","@host.base.url@@artifactId@/QuakeTables_CGS_2002.kml"];
->>>>>>> .r1405
 
 	var kmllist = ["geo_000520-001216-sim_HDR_4rlks.unw.kml","QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml"];
 
