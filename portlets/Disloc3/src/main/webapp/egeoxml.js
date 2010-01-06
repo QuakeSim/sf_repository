@@ -75,7 +75,7 @@ function EGeoXml(myvar, map, url, opts) {
   this.imageNum =0; 
   this.urlscounter=0;
   this.overlaycounter=0;
-
+  
 }
 
 // Create Marker
@@ -539,13 +539,15 @@ EGeoXml.prototype.processing = function(doc) {
       if (that.opts.sidebarid) {
 
 	var n = this.urlscounter;
-	var url_bits = this.urls[n].split(".",2);
-	this.urlscounter++;
+	var temp_url_bits = this.urls[n].split("/@artifactId@/",2);
+	var url_bits = temp_url_bits[1].split(".",2);	
+
+	this.urlscounter = this.urlscounter + 1;
 
 	if(n==0)
 		that.side_bar_html = '<ul id="browser">';
 
-	that.side_bar_html += '<li>' + '<input type="checkbox" id="li_' + url_bits[0] + '"' + ' onchange="exmlFMap.togglebox_all_overlay(' + '\'' + url_bits[0] + '\',' + this.overlaycounter + ')" checked/>' + this.urls[n];
+	that.side_bar_html += '<li>' + '<input type="checkbox" id="li_' + url_bits[0] + '"' + ' onchange="exmlFMap.togglebox_all_overlay(' + '\'' + url_bits[0] + '\',' + this.overlaycounter + ')" checked/>' + url_bits[0];
 	that.side_bar_html += '<ul>';
 
 	// that.side_bar_list.length
@@ -565,6 +567,7 @@ EGeoXml.prototype.processing = function(doc) {
 
 	// document.getElementById(that.opts.sidebarid).innerHTML = '<ul id="navigation"> <li>Item 1 <ul> <li>Item 1.1</li> </ul> </li> </ul>';
 	// alert(document.getElementById(that.opts.sidebarid).innerHTML);
+	
 	document.getElementById(that.opts.sidebarid).innerHTML = that.side_bar_html;
 
 	// this.side_bar_html = document.getElementById(that.opts.sidebarid).innerHTML;

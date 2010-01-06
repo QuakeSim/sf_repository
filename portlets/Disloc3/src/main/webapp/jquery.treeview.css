@@ -4,7 +4,7 @@
 	list-style: none;
 }
 
-.treeview ul {	
+.treeview ul {
 	margin-top: 4px;
 }
 
@@ -53,7 +53,7 @@
 .treeview-black li { background-image: url(@host.base.url@@artifactId@/images/treeview-black-line.gif); }
 .treeview-black .hitarea, .treeview-black li.lastCollapsable, .treeview-black li.lastExpandable { background-image: url(@host.base.url@@artifactId@/images/treeview-black.gif); }  
 
-.treeview-gray li { background-image: url(@host.base.url@artifactId@/images/treeview-gray-line.gif); }
+.treeview-gray li { background-image: url(@host.base.url@@artifactId@/images/treeview-gray-line.gif); }
 .treeview-gray .hitarea, .treeview-gray li.lastCollapsable, .treeview-gray li.lastExpandable { background-image: url(@host.base.url@@artifactId@/images/treeview-gray.gif); } 
 
 .treeview-famfamfam li { background-image: url(@host.base.url@@artifactId@/images/treeview-famfamfam-line.gif); }
