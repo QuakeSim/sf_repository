@@ -130,6 +130,7 @@ public class SimplexBean extends GenericSopacBean {
 	 String contextGroup="sopacGlobk";
 	 String minMaxLatLon="";
 	 String contextId="38";
+    String kmlfiles = "";
 
     NumberFormat format=null;
 
@@ -1654,4 +1655,13 @@ public class SimplexBean extends GenericSopacBean {
 	 public void setPortalBaseUrl(String portalBaseUrl) {
 		  this.portalBaseUrl=portalBaseUrl;
 	 }	
+
+	 public String getKmlfiles() {
+		return kmlfiles;
+	 }
+
+	 public void setKmlfiles(String kmlfiles) {
+		this.kmlfiles = kmlfiles;
+	 }
+
 }
