@@ -135,14 +135,14 @@ function mcancelclosetime()
 
 	
 	// Handle sidebar events.  Param1 is the fault+segment name, param2 is the polyline.
-	var faultField=document.getElementById("faultKMLSelectorForm:faultName");
+	var faultField=document.getElementById("disloc-faultKMLSelectorForm:faultName");
 	GEvent.addDomListener(faultField,"click",function(param1,param2,param3,param4){
 
 					var interpHead=" (InterpId:";
 					var faultName,segmentName;
 					var segmentNamePlusId, interpId;
 
-					var newElement1=document.getElementById("faultKMLSelectorForm:faultName");
+					var newElement1=document.getElementById("disloc-faultKMLSelectorForm:faultName");
 
 					// Parse out the segment name
 					if((param1 != null) && (param2 != null) && (param3 != null)){
@@ -179,9 +179,9 @@ function mcancelclosetime()
 				if(type=="polyline" || type=="polygon") {
 					// shortName=name.substring(0,name.indexOf("(InterpId:"));
 					shortName=name;
-					return '<a id="'+name+'" href="javascript:GEvent.trigger(document.getElementById(\'faultKMLSelectorForm:faultName\'),\'click\',\''+name+'\','+myvar+'.gpolylines['+i+'], \'script\', '+myvar+'.gpolylines_desc['+i+'])">' + shortName + '</a>';					
+					return '<a id="'+name+'" href="javascript:GEvent.trigger(document.getElementById(\'disloc-faultKMLSelectorForm:faultName\'),\'click\',\''+name+'\','+myvar+'.gpolylines['+i+'], \'script\', '+myvar+'.gpolylines_desc['+i+'])">' + shortName + '</a>';					
 
-					var message=document.getElementById("faultKMLSelectorForm:messageBox");
+					var message=document.getElementById("disloc-faultKMLSelectorForm:messageBox");
 
 					if(type=="polyline")
 						message.setAttribute("value",message);
