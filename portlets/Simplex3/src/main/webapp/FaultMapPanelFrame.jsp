@@ -1,15 +1,15 @@
-<h:form id="faultKMLSelectorForm" rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}">
-<h:inputHidden id="faultName" value="#{SimplexBean.currentEditProjectForm.mapFaultName}"/>
+<h:form id="simplex-faultKMLSelectorForm" rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}">
+<h:inputHidden id="simplex-faultName" value="#{SimplexBean.currentEditProjectForm.mapFaultName}"/>
 
 <div id = "the_kmlselection_bar" style="width:200px; height:100px;overflow:yes">
 
-<h:panelGrid id="faultKmlploter" columns="1" border="1">
-<h:panelGrid id="gridforbutton" columns="1" border="0" style="vertical-align:top;">
+<h:panelGrid id="simplex-faultKmlploter" columns="1" border="1">
+<h:panelGrid id="simplex-gridforbutton" columns="1" border="0" style="vertical-align:top;">
 
 	<f:verbatim>
 		Click the button below to get chosen fault params
 	</f:verbatim>
-	<h:commandButton id="queryDBFromMap" value="Get Fault Params" actionListener="#{SimplexBean.currentEditProjectForm.toggleSetFaultFromMap}"/> 
+	<h:commandButton id="simplex-queryDBFromMap" value="Get Fault Params" actionListener="#{SimplexBean.currentEditProjectForm.toggleSetFaultFromMap}"/> 
 
 </h:panelGrid>
 
@@ -26,14 +26,14 @@
 
 </div>
 
-<h:panelGrid id="faultMapsideGrid" columns="2" border="1">
+<h:panelGrid id="simplex-faultMapsideGrid" columns="2" border="1">
 <f:verbatim>
-	<div id="faultMapside" style="width: 200px; height: 400px; overflow:auto;"></div>			
+	<div id="simplex-faultMapside" style="width: 200px; height: 400px; overflow:auto;"></div>			
 </f:verbatim>
 
 
 <f:verbatim>
-<div id="faultMap" style="width: 600px; height: 400px;"></div>
+<div id="simplex-faultMap" style="width: 600px; height: 400px;"></div>
 </f:verbatim>
 
 </h:panelGrid>

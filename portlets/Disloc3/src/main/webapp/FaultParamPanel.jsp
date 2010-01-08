@@ -50,7 +50,7 @@
 					<h:inputText id="faultLon" value="#{DislocBean2.currentFault.faultLonStart}"
 									 required="true" />
 					</h:panelGroup>
-					<h:outputText  id="lkdj121re32" value="N/A" /> 
+					<h:outputText  id="lkdecx121re32" value="N/A" /> 
 
 					<h:outputText value="Fault End Latitude:" />
 			      <h:panelGroup>
@@ -78,14 +78,14 @@
 						<h:inputText id="FaultWidth" 
 							value="#{DislocBean2.currentFault.faultWidth}" required="true" /> 
 					</h:panelGroup> 
-					<h:outputText  id="lkdjr121e32" value="km"/> 
+					<h:outputText  id="lkdjr1de21e32" value="km"/> 
  
 					<h:outputText  id="stuff25" value="Depth:" /> 
 					<h:panelGroup  id="stuff26"> 
 						<h:inputText id="FaultDepth" 
 							value="#{DislocBean2.currentFault.faultDepth}" required="true" /> 
 					</h:panelGroup> 
-					<h:outputText  id="lkdj2321re32" value="km"/> 
+					<h:outputText  id="lkdj2321dfere32" value="km"/> 
  
 					<h:outputText  id="stuff27" value="Dip Angle:" /> 
 					<h:panelGroup  id="stuff28"> 

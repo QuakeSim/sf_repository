@@ -1,14 +1,14 @@
-<h:form id="faultKMLSelectorForm" rendered="#{DislocBean2.renderFaultMap}">
-<h:inputHidden id="faultName" value="#{DislocBean2.mapFaultName}"/>
+<h:form id="disloc-faultKMLSelectorForm" rendered="#{DislocBean2.renderFaultMap}">
+<h:inputHidden id="disloc-faultName" value="#{DislocBean2.mapFaultName}"/>
 
 
-<h:panelGrid id="faultKmlploter" columns="1" border="1">
-<h:panelGrid id="gridforbutton" columns="1" border="0" style="vertical-align:top;">
+<h:panelGrid id="disloc-faultKmlploter" columns="1" border="1">
+<h:panelGrid id="disloc-gridforbutton" columns="1" border="0" style="vertical-align:top;">
 
 	<f:verbatim>
 		Click the button below to get chosen fault params
 	</f:verbatim>
-	<h:commandButton id="queryDBFromMap" value="Get Fault Params" actionListener="#{DislocBean2.toggleSetFaultFromMap}"/> 
+	<h:commandButton id="disloc-queryDBFromMap" value="Get Fault Params" actionListener="#{DislocBean2.toggleSetFaultFromMap}"/> 
 
 </h:panelGrid>
  
@@ -28,14 +28,14 @@
 
 </div>
 
-<h:panelGrid id="faultMapsideGrid" columns="2" border="1">
+<h:panelGrid id="disloc-faultMapsideGrid" columns="2" border="1">
 <f:verbatim>
-	<div id="faultMapside" style="width: 200px; height: 400px; overflow:auto;"></div>			
+	<div id="disloc-faultMapside" style="width: 200px; height: 400px; overflow:auto;"></div>			
 </f:verbatim>
 
 
 <f:verbatim>
-<div id="faultMap" style="width: 600px; height: 400px;"></div>
+<div id="disloc-faultMap" style="width: 600px; height: 400px;"></div>
 </f:verbatim>
 
 </h:panelGrid>
