@@ -1,16 +1,16 @@
-<h:form id="geofest-faultKMLSelectorForm" rendered="#{MGBean.renderFaultMap}">
-<h:inputHidden id="geofest-faultName" value="#{MGBean.mapFaultName}"/>
+<h:form id="faultKMLSelectorForm" rendered="#{MGBean.renderFaultMap}">
+<h:inputHidden id="faultName" value="#{MGBean.mapFaultName}"/>
 <div id = "the_kmlselection_bar" style="width:200px; height:100px;overflow:yes">
 
 
 
-<h:panelGrid id="geofest-faultKmlploter" columns="1" border="1">
-<h:panelGrid id="geofest-gridforbutton" columns="1" border="0" style="vertical-align:top;">
+<h:panelGrid id="faultKmlploter" columns="1" border="1">
+<h:panelGrid id="gridforbutton" columns="1" border="0" style="vertical-align:top;">
 
 	<f:verbatim>
 		Click the button below to get chosen fault params
 	</f:verbatim>
-	<h:commandButton id="geofest-queryDBFromMap" value="Get Fault Params" actionListener="#{MGBean.toggleSetFaultFromMap}"/> 
+	<h:commandButton id="queryDBFromMap" value="Get Fault Params" actionListener="#{MGBean.toggleSetFaultFromMap}"/> 
 
 </h:panelGrid>
 
@@ -27,14 +27,14 @@
 
 </div>
 
-<h:panelGrid id="geofest-faultMapsideGrid" columns="2" border="1">
+<h:panelGrid id="faultMapsideGrid" columns="2" border="1">
 <f:verbatim>
-	<div id="geofest-faultMapside" style="width: 200px; height: 400px; overflow:auto;"></div>			
+	<div id="faultMapside" style="width: 200px; height: 400px; overflow:auto;"></div>			
 </f:verbatim>
 
 
 <f:verbatim>
-<div id="geofest-faultMap" style="width: 600px; height: 400px;"></div>
+<div id="faultMap" style="width: 600px; height: 400px;"></div>
 </f:verbatim>
 
 </h:panelGrid>
@@ -49,14 +49,14 @@
 
 
 	var faultMap=null;
-	faultMap=new GMap2(document.getElementById("geofest-faultMap"));
+	faultMap=new GMap2(document.getElementById("faultMap"));
 
 	// var kmllist = ["@host.base.url@@artifactId@/geo_000520-001216-sim_HDR_4rlks.unw.kml","@host.base.url@@artifactId@/QuakeTables_CGS_1996.kml","@host.base.url@@artifactId@/QuakeTables_CGS_2002.kml"];
 	
 	var kmllist = ["geo_000520-001216-sim_HDR_4rlks.unw.kml","QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml"];
 
 
-	exmlFMap = new EGeoXml("exmlFMap", faultMap, kmllist, {sidebarfn:myside,nozoom:true,sidebarid:"geofest-faultMapside",iwwidth:200});       
+	exmlFMap = new EGeoXml("exmlFMap", faultMap, kmllist, {sidebarfn:myside,nozoom:true,sidebarid:"faultMapside",iwwidth:200});       
 	exmlFMap.parse();
 	
 
@@ -82,14 +82,14 @@
 	faultMap.addControl(new GMapTypeControl());
    
 
-	var faultField=document.getElementById("geofest-faultKMLSelectorForm:faultName");
+	var faultField=document.getElementById("faultKMLSelectorForm:faultName");
 	GEvent.addDomListener(faultField,"click",function(param1,param2,param3,param4){
 
 					var interpHead=" (InterpId:";
 					var faultName,segmentName;
 					var segmentNamePlusId, interpId;
 
-					var newElement1=document.getElementById("geofest-faultKMLSelectorForm:faultName");
+					var newElement1=document.getElementById("faultKMLSelectorForm:faultName");
 
 					// Parse out the segment name
 					if((param1 != null) && (param2 != null) && (param3 != null)){
@@ -129,7 +129,7 @@
 					
 					return '<a id="'+name+'" href="javascript:GEvent.trigger(document.getElementById(\'geofest-faultKMLSelectorForm:faultName\'),\'click\',\''+name+'\','+myvar+'.gpolylines['+i+'], \'script\', '+myvar+'.gpolylines_desc['+i+'])">' + shortName + '</a>';					
 
-					var message=document.getElementById("geofest-faultKMLSelectorForm:messageBox");
+					var message=document.getElementById("faultKMLSelectorForm:messageBox");
 
 					if(type=="polyline")
 						message.setAttribute("value",message);

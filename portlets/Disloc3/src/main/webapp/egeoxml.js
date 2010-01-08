@@ -1,4 +1,3 @@
-
 /*********************************************************************\
 *                                                                     *
 * egeoxml.js                                         by Mike Williams *
@@ -574,7 +573,6 @@ EGeoXml.prototype.processing = function(doc) {
 	// this.side_bar_html = document.getElementById(that.opts.sidebarid).innerHTML;
 	// this.side_bar_html = '<ul id="navigation"> <li>Item 1 <ul> <li>Item 1.1</li> </ul> </li> </ul>';
 
-
       }
       if (that.opts.dropboxid) {
         for (var i=0; i<that.side_bar_list.length; i++) {
@@ -593,7 +591,6 @@ EGeoXml.prototype.processing = function(doc) {
 
     }
 }
-
 
 EGeoXml.prototype.togglebox_all_overlay = function(overlayid, adjust) {
 
