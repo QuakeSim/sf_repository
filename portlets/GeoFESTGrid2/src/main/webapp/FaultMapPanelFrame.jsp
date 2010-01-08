@@ -55,7 +55,6 @@
 	
 	var kmllist = ["geo_000520-001216-sim_HDR_4rlks.unw.kml","QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml"];
 
-
 	exmlFMap = new EGeoXml("exmlFMap", faultMap, kmllist, {sidebarfn:myside,nozoom:true,sidebarid:"faultMapside",iwwidth:200});       
 	exmlFMap.parse();
 	
@@ -112,7 +111,6 @@
 						// alert(param4);
 						
 						newElement1.value = param1
-
 
 						// Trigger the polyline click event to show the popup window.
 						if(param3 != 'frommap')
