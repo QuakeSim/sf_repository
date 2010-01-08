@@ -87,9 +87,6 @@ function dataTableSelectOneRadio(radio) {
 					<f:selectItem id="item3"
 						itemLabel="Add Layer from DB: Click to select a layer from the database."
 						itemValue="AddLayerFromDB" />
-					<f:selectItem id="item4"
-						itemLabel="Add Fault from DB: Click to select a fault segment from the database."
-						itemValue="AddFaultSelection" />
 					<f:selectItem id="item5"
 						itemLabel="Add Fault from Map: Click to select a fault segment using the map interface."
 						itemValue="FaultMapSelection" />

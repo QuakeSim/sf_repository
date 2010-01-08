@@ -30,10 +30,6 @@
 						itemLabel="Use Fault Map: Interactively select faults." 
 						itemValue="ShowFaultMap" />
 
-					<f:selectItem id="item4" 
-						itemLabel="Add Fault from DB: Click to select a fault segment from the database." 
-						itemValue="AddFaultSelection" /> 
-
 					<f:selectItem id="item021"
 						itemLabel="View Project Map: View project faults and pick observation points on an interactive map."
 						itemValue="ShowMap" />
