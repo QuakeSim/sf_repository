@@ -77,6 +77,7 @@ public class KMLdescriptionparser {
 			DocumentBuilderFactory dbf = DocumentBuilderFactoryImpl.newInstance();		
 			try {
 				DocumentBuilder db = dbf.newDocumentBuilder();
+				System.out.println("[KMLdescriptionparser] " + "dir : " + dir + " temp[nA] : " + temp[nA]);
 				dom = db.parse(dir + temp[nA]);
 				docEle = dom.getDocumentElement();
 				

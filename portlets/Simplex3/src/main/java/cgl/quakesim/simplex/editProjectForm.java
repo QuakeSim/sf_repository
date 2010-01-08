@@ -58,7 +58,9 @@ public class editProjectForm extends GenericProjectBean {
 	 
 	 projectEntry currentProject;
 
-	 String kmlfiles = "";
+	 String kmlfiles = ""; // This should be passed from SimplexBean (faces-config.xml)
+	 String codeName = ""; // This should be passed from SimplexBean (faces-config.xml)
+
 	 DecimalFormat df;
 	 
 
@@ -714,6 +716,14 @@ public class editProjectForm extends GenericProjectBean {
 
 	 public void setKmlfiles(String kmlfiles) {
 		this.kmlfiles = kmlfiles;
+	 }
+
+	 public String getCodeName() {
+		return codeName;
+	 }
+
+	 public void setCodeName(String codeName) {
+		this.codeName = codeName;
 	 }
 
 	 //--------------------------------------------------

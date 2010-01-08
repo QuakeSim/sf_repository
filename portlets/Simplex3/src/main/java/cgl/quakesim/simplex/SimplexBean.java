@@ -55,8 +55,11 @@ public class SimplexBean extends GenericSopacBean {
 	// boolean isInitialized=false;
 
 	// Simplex Bean staff
-	 protected String codeName = "Simplex3";
-	 private int SIMPLEX_OBSV_COUNT=5;
+	// Protected String codeName = "Simplex3";
+	// modified to be from faces-config.xml 2010/1/8 Jun Ji
+
+	String codeName = "";
+	private int SIMPLEX_OBSV_COUNT=5;
 
 	// This is the db4o database
 	ObjectContainer db = null;
@@ -130,7 +133,7 @@ public class SimplexBean extends GenericSopacBean {
 	 String contextGroup="sopacGlobk";
 	 String minMaxLatLon="";
 	 String contextId="38";
-    String kmlfiles = "";
+	 String kmlfiles = "";
 
     NumberFormat format=null;
 
@@ -545,6 +548,9 @@ public class SimplexBean extends GenericSopacBean {
 	 
 	 public void setCurrentEditProjectForm(editProjectForm tmp) {
 		  this.currentEditProjectForm = tmp;
+		  this.currentEditProjectForm.setKmlfiles(getKmlfiles());
+		  this.currentEditProjectForm.setCodeName(getCodeName());
+		  System.out.println("[SimplexBean] this.currentEditProjectForm.setKmlfiles( " + getKmlfiles() + ")");
 	 }
 	 
 	 public editProjectForm getCurrentEditProjectForm() {
@@ -678,6 +684,8 @@ public class SimplexBean extends GenericSopacBean {
 		  String returnMessage="";
 		  try {
 				currentEditProjectForm=new editProjectForm(selectdbURL);
+				currentEditProjectForm.setKmlfiles(getKmlfiles());
+				currentEditProjectForm.setCodeName(getCodeName());
 				createNewProject();
 				currentEditProjectForm.init_edit_project();
 				returnMessage="Simplex2-edit-project";
@@ -740,6 +748,8 @@ public class SimplexBean extends GenericSopacBean {
 	  */ 
 	 public String toggleSelectProject() {
 		  currentEditProjectForm=new editProjectForm(selectdbURL);
+		  currentEditProjectForm.setKmlfiles(getKmlfiles());
+		  currentEditProjectForm.setCodeName(getCodeName());
 		  currentEditProjectForm.initEditFormsSelection();
 		  if (selectProjectsList != null) {
 				for (int i = 0; i < 1; i++) {
@@ -1664,4 +1674,11 @@ public class SimplexBean extends GenericSopacBean {
 		this.kmlfiles = kmlfiles;
 	 }
 
+	 public String getCodeName() {
+		return codeName;
+	 }
+
+	 public void setCodeName(String codeName) {
+		this.codeName = codeName;
+	 }
 }
