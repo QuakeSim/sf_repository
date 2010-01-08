@@ -179,7 +179,7 @@ function mcancelclosetime()
 				if(type=="polyline" || type=="polygon") {
 					// shortName=name.substring(0,name.indexOf("(InterpId:"));
 					shortName=name;
-					return '<a id="'+name+'" href="javascript:GEvent.trigger(document.getElementById(\'disloc-faultKMLSelectorForm:faultName\'),\'click\',\''+name+'\','+myvar+'.gpolylines['+i+'], \'script\', '+myvar+'.gpolylines_desc['+i+'])">' + shortName + '</a>';					
+					return '<a id="'+name+'" href="javascript:GEvent.trigger(document.getElementById(\'faultKMLSelectorForm:faultName\'),\'click\',\''+name+'\','+myvar+'.gpolylines['+i+'], \'script\', '+myvar+'.gpolylines_desc['+i+'])">' + shortName + '</a>';					
 
 					var message=document.getElementById("faultKMLSelectorForm:messageBox");
 
