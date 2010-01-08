@@ -1,6 +1,7 @@
 <h:form id="faultKMLSelectorForm" rendered="#{DislocBean2.renderFaultMap}">
 <h:inputHidden id="faultName" value="#{DislocBean2.mapFaultName}"/>
 
+<div id = "the_kmlselection_bar" style="width:200px; height:100px;overflow:yes">
 
 <h:panelGrid id="faultKmlploter" columns="1" border="1">
 <h:panelGrid id="gridforbutton" columns="1" border="0" style="vertical-align:top;">

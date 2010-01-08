@@ -2,8 +2,6 @@
 <h:inputHidden id="faultName" value="#{MGBean.mapFaultName}"/>
 <div id = "the_kmlselection_bar" style="width:200px; height:100px;overflow:yes">
 
-
-
 <h:panelGrid id="faultKmlploter" columns="1" border="1">
 <h:panelGrid id="gridforbutton" columns="1" border="0" style="vertical-align:top;">
 
@@ -110,7 +108,7 @@
 
 						// alert(param4);
 						
-						newElement1.value = param1
+						newElement1.value = param1;
 
 						// Trigger the polyline click event to show the popup window.
 						if(param3 != 'frommap')
