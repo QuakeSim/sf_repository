@@ -109,7 +109,7 @@ function mcancelclosetime()
 
 	
 	faultMap.clearOverlays();
-	exmlFMap = new EGeoXml("exmlFMap", faultMap, kmllist, {sidebarfn:myside,nozoom:true,sidebarid:"faultMapside",iwwidth:200});       
+	exmlFMap = new EGeoXml("exmlFMap", faultMap, kmllist, {sidebarfn:myside,nozoom:true,sidebarid:"disloc-faultMapside",iwwidth:200});       
 	exmlFMap.parse();
 
 	function jsleep(s){
