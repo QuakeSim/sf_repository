@@ -51,7 +51,7 @@
 
 
 	var faultMap=null;
-	faultMap=new GMap2(document.getElementById("faultMap"));
+	faultMap=new GMap2(document.getElementById("simplex-faultMap"));
 
 	// var kmllist = ["@host.base.url@@artifactId@/geo_000520-001216-sim_HDR_4rlks.unw.kml","@host.base.url@@artifactId@/QuakeTables_CGS_1996.kml","@host.base.url@@artifactId@/QuakeTables_CGS_2002.kml"];
        
