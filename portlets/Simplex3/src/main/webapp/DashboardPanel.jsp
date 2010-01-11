@@ -3,7 +3,7 @@
 		columns="2" border="0">			
 
 		<h:panelGroup id="lkdrq3">
-			   <h:form id="selectproj" style="width: 400px; height: 500px; overflow:auto;">  
+			   <h:form id="selectproj">  
 					<h:outputFormat id="lkdrq4" escape="false"
 						value="<b>Project Name:</b> #{SimplexBean.projectName} <br>" />
 					<h:outputFormat id="lkdrq5" escape="false"

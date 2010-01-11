@@ -3,7 +3,7 @@
 		columns="2" border="0">
 
 	   <h:panelGroup id="pg1"> 
-			<h:form id="selectproj" style="width: 400px; height: 400px; overflow:auto;">  
+			<h:form id="selectproj">
 				<h:outputFormat id="stuff1" escape="false" 
 					value="<b>Project Name: #{DislocBean2.projectName} </b><br>" /> 
 				<h:outputFormat id="stuffe3io4" escape="false" 
