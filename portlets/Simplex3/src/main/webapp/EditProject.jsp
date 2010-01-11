@@ -347,7 +347,7 @@ function printNetworkColors (array) {
    <%/* This is the main grid container */%>					 
 	<h:panelGrid id="EditProject"
 		columnClasses="alignTop,alignTop"
-		columns="1" border="1">
+		columns="2" border="1">
 		   
 			<%@include file="DashboardPanel.jsp" %>
 			<%@include file="ObservationPanel.jsp"%>			
@@ -359,6 +359,7 @@ function printNetworkColors (array) {
 			<%@include file="FaultLatLonSearchPanel.jsp" %>
 			<%@include file="FaultAuthorSearchPanel.jsp" %>
 			<%@include file="FaultSearchResultsPanel.jsp" %>			
+			<%@include file="FaultMapPanelFrame.jsp"%>				 
 		</h:panelGrid>
 
 			<%@include file="ProjectComponentsPanel.jsp" %>	

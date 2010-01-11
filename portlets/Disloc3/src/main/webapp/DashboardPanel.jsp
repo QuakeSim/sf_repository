@@ -2,7 +2,6 @@
 		columnClasses="alignTop,alignTop"
 		columns="2" border="0">
 
-
 	   <h:panelGroup id="pg1"> 
 			<h:form id="selectproj" style="width: 400px; height: 400px; overflow:auto;">  
 				<h:outputFormat id="stuff1" escape="false" 
@@ -40,8 +39,5 @@
 			</h:commandButton> 
 		</h:form> 
 			</h:panelGroup> 
-
-   <%@include file="ScatterMap.jsp" %>
-   <%@include file="FaultMapPanelFrame.jsp"%>
 
 </h:panelGrid>

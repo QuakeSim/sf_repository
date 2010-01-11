@@ -51,5 +51,5 @@
 							  				  action="#{SimplexBean.toggleRunSimplex2}" />
 			   </h:form>	
 		   </h:panelGroup>
-<%@include file="FaultMapPanelFrame.jsp"%>
+
 </h:panelGrid>

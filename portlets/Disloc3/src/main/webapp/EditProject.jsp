@@ -309,7 +309,7 @@ function getScrolling() {
 		value="<p>Create your geometry out of observation points and faults.<br/>The project origin will be the starting lat/lon of the first fault.</p>"/>
 	<h:panelGrid id="EditProject"
 		columnClasses="alignTop,alignTop"
-		columns="1" border="1">
+		columns="2" border="1">
 
    <%@include file="DashboardPanel.jsp" %>
    <%@include file="ObsvStyle.jsp" %>
@@ -320,7 +320,8 @@ function getScrolling() {
    <%@include file="SearchFaultLatLonPanel.jsp" %>
    <%@include file="SearchFaultAuthorPanel.jsp" %>
    <%@include file="FaultDisplaySearchResultsPanel.jsp" %>
-
+   <%@include file="ScatterMap.jsp" %>
+   <%@include file="FaultMapPanelFrame.jsp"%>
 
 	</h:panelGrid>
    <%@include file="ProjectComponentPanel.jsp" %>
