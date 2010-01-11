@@ -1,7 +1,7 @@
 <h:form id="faultKMLSelectorForm" rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}">
 <h:inputHidden id="faultName" value="#{SimplexBean.currentEditProjectForm.mapFaultName}"/>
-
 <div id = "the_kmlselection_bar" style="width:200px; height:100px;overflow:yes">
+
 
 <h:panelGrid id="faultKmlploter" columns="1" border="1">
 <h:panelGrid id="gridforbutton" columns="1" border="0" style="vertical-align:top;">
@@ -43,23 +43,18 @@
 </h:panelGrid>
 
 
-
-
 <f:verbatim>
-
 <script language="JavaScript">
 
 
 	var faultMap=null;
 	faultMap=new GMap2(document.getElementById("faultMap"));
 
+	// The gridsphere container doesn't work with urls. That should be solved
 	// var kmllist = ["@host.base.url@@artifactId@/geo_000520-001216-sim_HDR_4rlks.unw.kml","@host.base.url@@artifactId@/QuakeTables_CGS_1996.kml","@host.base.url@@artifactId@/QuakeTables_CGS_2002.kml"];
-       
-//        var kmllist = ["geo_000520-001216-sim_HDR_4rlks.unw.kml","QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml"];
-        var kmllist = ["QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml"];
-
-
-	exmlFMap = new EGeoXml("exmlFMap", faultMap, kmllist, {sidebarfn:myside,nozoom:true,sidebarid:"faultMapside",iwwidth:200});       
+	var kmllist = ["geo_000520-001216-sim_HDR_4rlks.unw.kml","QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml"];	
+	
+	exmlFMap = new EGeoXml("exmlFMap", faultMap, kmllist, {sidebarfn:myside,nozoom:true,sidebarid:"faultMapside",parentformofsidebarid:"faultKMLSelectorForm",clickpolyobjfn:clickpolyobj,iwwidth:200});       
 	exmlFMap.parse();
 	
 
@@ -114,7 +109,7 @@
 
 						// alert(param4);
 						
-						newElement1.value = param1;
+						newElement1.value = param1
 
 
 						// Trigger the polyline click event to show the popup window.
@@ -126,20 +121,18 @@
 
 	 // This function overrides the default side panel.
 	 function myside(myvar,name,type,i,graphic) {
-				if(type=="polyline" || type=="polygon") {
+				if((type == "polyline" || type == "polygon") || type == "GroundOverlay") {
 					// shortName=name.substring(0,name.indexOf("(InterpId:"));
 					shortName=name;
-					
-					return '<a id="'+name+'" href="javascript:GEvent.trigger(document.getElementById(\'faultKMLSelectorForm:faultName\'),\'click\',\''+name+'\','+myvar+'.gpolylines['+i+'], \'script\', '+myvar+'.gpolylines_desc['+i+'])">' + shortName + '</a>';					
-
-					var message=document.getElementById("faultKMLSelectorForm:messageBox");
-
-					if(type=="polyline")
-						message.setAttribute("value",message);
+					return '<a id="'+name+'" href="javascript:GEvent.trigger(document.getElementById(\'faultKMLSelectorForm:faultName\'),\'click\',\''+name+'\','+myvar+'.gpolyobjs['+i+'], \'script\', '+myvar+'.gpolyobjs_desc['+i+'])">' + shortName + '</a>';					
 				}
 
 				return "";
 		}
+
+	 function clickpolyobj() {
+	     return function() {GEvent.trigger(document.getElementById('faultKMLSelectorForm:faultName'),'click', name, p, 'frommap', desc);};
+	  }
 
   
 </script>

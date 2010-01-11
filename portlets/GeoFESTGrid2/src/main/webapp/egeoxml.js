@@ -1,3 +1,4 @@
+
 /*********************************************************************\
 *                                                                     *
 * egeoxml.js                                         by Mike Williams *
@@ -9,8 +10,6 @@
 * Documentation: http://www.econym.demon.co.uk/googlemaps/egeoxml.htm * 
 *                                                                     *
 \*********************************************************************/
-
-
 // Version 0.0   17 Apr 2007 - Initial testing, just markers
 // Version 0.1   17 Apr 2007 - Sensible shadows, and a few general improvements
 // Version 0.2   18 Apr 2007 - Polylines (non-clickable, no sidebar)
@@ -34,6 +33,25 @@
 // Version 2.0   23 Jun 2007 - .parseString() handles an array of strings
 // Version 2.1   25 Jul 2007 - imagescan
 
+
+
+/*********************************************************************\
+*                                                                     *
+* cgl_egeoxml.js, CGL Version                      by Jun Ji at CGL   *
+*                                                 jid@cs.indiana.edu  *
+* A Google Maps API Extension                                         *
+*                                                                     *
+* Renders the contents of a My Maps (or similar) KML file             *
+*                                                                     *
+* Documentation: http://www.econym.demon.co.uk/googlemaps/egeoxml.htm * 
+*                                                                     *
+\*********************************************************************/
+// CGL Version   11 Jan 2010 - Loading multiple KML files at once
+// CGL Version   11 Jan 2010 - Listing polyobjects of the KML files in the sidebar
+// CGL Version   11 Jan 2010 - Supporting to add a trigger for a clicking a fault on a map
+
+
+
 // Constructor
 
 
@@ -55,13 +73,15 @@ function EGeoXml(myvar, map, url, opts) {
   // sidebar/dropbox functions
   this.sidebarfn = this.opts.sidebarfn || EGeoXml.addSidebar;
   this.dropboxfn = this.opts.dropboxfn || EGeoXml.addDropdown;
+  this.clickpolyobjfn = this.opts.clickpolyobjfn || EGeoXml.addClickpolyobj;
   // elabel options 
   this.elabelopacity = this.opts.elabelopacity || 100;
   // other useful "global" stuff
   this.bounds = new GLatLngBounds();
   this.gmarkers = [];
   this.gpolylines = [];
-  this.gpolylines_desc = [];
+  this.gpolyobjs = []; // [CGL Version] a list containing a number of polystyle we manage
+  this.gpolyobjs_desc = []; // [CGL Version] a list for descriptions of polyobjects
   this.gpolygons = [];
   this.groundoverlays = [];
   this.side_bar_html = "";
@@ -69,12 +89,14 @@ function EGeoXml(myvar, map, url, opts) {
   this.styles = []; // associative array
   this.iwwidth = this.opts.iwwidth || 250;
   this.progress = 0;
-  this.lastmarker = {};   
+  this.lastmarker = {};
   this.myimages = [];
-  this.imageNum =0; 
-  this.urlscounter=0;
-  this.overlaycounter=0;
-  
+  this.imageNum = 0;
+
+  // [CGL Version] CGL Ver. supports to manage faults from multiURLs as a list
+  this.urlcounter = 0;
+  this.overlaycounter = 0;
+
 }
 
 // Create Marker
@@ -177,8 +199,6 @@ EGeoXml.prototype.createMarker = function(point,name,desc,style) {
   GEvent.addListener(m, "click", function() {
     eval(myvar+".lastmarker = m");
     m.openInfoWindowHtml(html1 + "</div>",iwoptions);
-
-	
   });
   if (!!this.opts.addmarker) {
     this.opts.addmarker(m,name,desc,icon.image,this.gmarkers.length)
@@ -199,19 +219,22 @@ EGeoXml.prototype.createPolyline = function(points,color,width,opacity,pbounds,n
   var iwoptions = this.opts.iwoptions || {};
   var p = new GPolyline(points,color,width,opacity);
   this.map.addOverlay(p);
-  this.gpolylines.push(p);
-  this.gpolylines_desc.push(desc);
+  // this.gpolylines.push(p);
+  this.gpolyobjs.push(p);
+  this.gpolyobjs_desc.push(desc); // [CGL Version] insert a description
   var html = "<div style='font-weight: bold; font-size: medium; margin-bottom: 0em;'>"+name+"</div>"
              +"<div style='font-family: Arial, sans-serif;font-size: small;width:"+this.iwwidth+"px'>"+desc+"</div>";
 
   GEvent.addListener(p,"click", function() {
     thismap.openInfoWindowHtml(p.getVertex(Math.floor(p.getVertexCount()/2)),html,iwoptions);
-    // GEvent.trigger(document.getElementById(barid), 'click');
-    GEvent.trigger(document.getElementById('faultKMLSelectorForm:faultName'),'click', name, p, 'frommap', desc);
   } );
+  // [CGL Version] For trigger a click event to choose the fault as a selected one when a fault line is clicked
+  GEvent.addListener(p,"click", this.opts.clickpolyobjfn);
+
 
   if (this.opts.sidebarid) {
-    var n = this.gpolylines.length-1;
+    // var n = this.gpolylines.length-1;
+    var n = this.gpolyobjs.length-1;
     var blob = '&nbsp;&nbsp;<span style=";border-left:'+width+'px solid '+color+';">&nbsp;</span> ';
     this.side_bar_list.push (name + "$$$polyline$$$" + n +"$$$" + blob );
   }
@@ -225,21 +248,30 @@ EGeoXml.prototype.createPolygon = function(points,color,width,opacity,fillcolor,
   var iwoptions = this.opts.iwoptions || {};
   var p = new GPolygon(points,color,width,opacity,fillcolor,fillopacity)
   this.map.addOverlay(p);
-//  this.gpolygons.push(p);
-  this.gpolylines.push(p);
-  this.gpolylines_desc.push(desc);
+  // this.gpolygons.push(p);
+
+  // [CGL Version]
+  this.gpolyobjs.push(p);
+  this.gpolyobjs_desc.push(desc);
+
   var html = "<div style='font-weight: bold; font-size: medium; margin-bottom: 0em;'>"+name+"</div>"
              +"<div style='font-family: Arial, sans-serif;font-size: small;width:"+this.iwwidth+"px'>"+desc+"</div>";
   GEvent.addListener(p,"click", function() {
+    
+    // [CGL Version] make a window to show a description at a better position
     // thismap.openInfoWindowHtml(pbounds.getCenter(),html,iwoptions);
     thismap.openInfoWindowHtml(p.getVertex(Math.floor(p.getVertexCount()/2)),html,iwoptions);
-
-    GEvent.trigger(document.getElementById('faultKMLSelectorForm:faultName'),'click', "polygon", p, 'frommap', "");
-
   } );
+
+  // [CGL Version] For trigger a click event to choose the fault as a selected one when a fault line is clicked
+  GEvent.addListener(p,"click", this.opts.clickpolyobjfn);
+
+
   if (this.opts.sidebarid) {
-//    var n = this.gpolygons.length-1;
-    var n = this.gpolylines.length-1;
+
+    // [CGL Version]
+    // var n = this.gpolygons.length-1;
+    var n = this.gpolyobjs.length-1;
     var blob = '<span style="background-color:' +fillcolor + ';border:2px solid '+color+';">&nbsp;&nbsp;&nbsp;&nbsp;</span> ';
     this.side_bar_list.push (name + "$$$polygon$$$" + n +"$$$" + blob );
   }
@@ -251,17 +283,20 @@ EGeoXml.addSidebar = function(myvar,name,type,i,graphic) {
   if (type == "marker") {
     return '<a href="javascript:GEvent.trigger(' + myvar+ '.gmarkers['+i+'],\'click\')">' + name + '</a><br>';
   }
-  if (type == "polyline") {
-    return '<div style="margin-top:6px;"><a href="javascript:GEvent.trigger(' + myvar+ '.gpolylines['+i+'],\'click\')">' + graphic + name + '</a></div>';
-  }
-  if (type == "polygon") {
-    return '<div style="margin-top:6px;"><a href="javascript:GEvent.trigger(' + myvar+ '.gpolygons['+i+'],\'click\')">' + graphic + name + '</a></div>';
-  }
+  else if ((type == "polyline" || type == "polygon") || type == "GroundOverlay") {
+    return '<div style="margin-top:6px;"><a href="javascript:GEvent.trigger(' + myvar+ '.gpolyobjs['+i+'],\'click\')">' + graphic + name + '</a></div>';
+  }  
 }
 
 // Dropdown factory method
 EGeoXml.addDropdown = function(myvar,name,type,i,graphic) {
     return '<option value="' + i + '">' + name +'</option>';
+}
+
+
+// [CGL Version] default function for addClickpolyobj
+EGeoXml.addClickpolyobj = function() {
+    
 }
 
   
@@ -272,8 +307,6 @@ EGeoXml.prototype.parse = function() {
  this.progress = this.urls.length;
  for (u=0; u<this.urls.length; u++) {
   GDownloadUrl(this.urls[u], function(doc) {that.processing(doc)});
-  // alert(this.urls[this.urlscounter]);
-  
  }
 }
 
@@ -291,8 +324,7 @@ EGeoXml.prototype.parseString = function(doc) {
 
 
 EGeoXml.prototype.processing = function(doc) {
-    var that = this;
-    var thismap = this.map;
+    var that = this;    
     var xmlDoc = GXml.parse(doc)
     // Read through the Styles
     var styles = xmlDoc.documentElement.getElementsByTagName("Style");
@@ -489,11 +521,14 @@ EGeoXml.prototype.processing = function(doc) {
       var ne = new GLatLng(north,east);                           
       var ground = new GGroundOverlay(url, new GLatLngBounds(sw,ne));
       that.bounds.extend(sw); 
-      that.bounds.extend(ne); 
+      that.bounds.extend(ne);
+
+      // [CGL Version] We count Ground Overlays as polyobjects
       // that.groundoverlays.push(ground);
       // that.map.addOverlay(ground);
-
-
+      that.map.addOverlay(ground);
+      that.gpolyobjs.push(ground);
+      that.gpolyobjs_desc.push(desc);
 
       var name=GXml.value(grounds[i].getElementsByTagName("name")[0]);
       var desc=GXml.value(grounds[i].getElementsByTagName("description")[0]);
@@ -504,22 +539,20 @@ EGeoXml.prototype.processing = function(doc) {
         desc = '<a href="' + desc + '">' + desc + '</a>';
       }
 
-      this.map.addOverlay(ground);
-      this.gpolylines.push(ground);
-      this.gpolylines_desc.push(desc);
+
       var html = "<div style='font-weight: bold; font-size: medium; margin-bottom: 0em;'>"+name+"</div>"
 	     +"<div style='font-family: Arial, sans-serif;font-size: small;width:"+this.iwwidth+"px'>"+desc+"</div>";
 
       var iwoptions = that.opts.iwoptions || {};
       GEvent.addListener(ground,"click", function() {      
-      thismap.openInfoWindowHtml(ne,html,iwoptions);
+      that.map.openInfoWindowHtml(ne,html,iwoptions);
 
       } );
 
       if (this.opts.sidebarid) {
-	var n = this.gpolylines.length-1;
+	var n = this.gpolyobjs.length-1;
 	var blob = '&nbsp;&nbsp;<span style=";border-left:'+width+'px solid '+color+';">&nbsp;</span> ';
-	this.side_bar_list.push (name + "$$$polyline$$$" + n +"$$$" + blob );
+	this.side_bar_list.push (name + "$$$GroundOverlay$$$" + n +"$$$" + blob );
       }
     }
 
@@ -535,26 +568,25 @@ EGeoXml.prototype.processing = function(doc) {
       if (that.opts.sortbyname) {
         that.side_bar_list.sort();
       }
+
       if (that.opts.sidebarid) {
 
-	var n = this.urlscounter;
-	// var temp_url_bits = this.urls[n].split("/@artifactId@/",2);
-	// var url_bits = temp_url_bits[1].split(".",2);
-	var url_bits = this.urls[n].split(".",2);
+	// [CGL Version] We list polyobjects in the sidebar in a shape of tree.
+	var n = this.urlcounter;
+	var temp_url_bits = this.urls[n].split("/@artifactId@/",2);
+	var url_bits = temp_url_bits[1].split(".",2);	
 
-	this.urlscounter = this.urlscounter + 1;
+	this.urlcounter = this.urlcounter + 1;
 
 	if(n==0)
 		that.side_bar_html = '<ul id="browser">';
 
-	that.side_bar_html += '<li>' + '<input type="checkbox" id="li_' + url_bits[0] + '"' + ' onchange="exmlFMap.togglebox_all_overlay(' + '\'' + url_bits[0] + '\',' + this.overlaycounter + ')" checked/>' + url_bits[0];
+	that.side_bar_html += '<li>' + '<input type="checkbox" id="li_' + url_bits[0] + '"' + ' onchange="' + this.myvar + '.togglechboxofAllOverlays(' + '\'' + url_bits[0] + '\',' + this.overlaycounter + ')" checked/>' + url_bits[0];
 	that.side_bar_html += '<ul>';
-
-	// that.side_bar_list.length
 
         for (var i=this.overlaycounter; i<that.side_bar_list.length; i++) {	  
           var bits = that.side_bar_list[i].split("$$$",4);
-          that.side_bar_html += '<li><div id = \'sidebarlist'+ (i-this.overlaycounter) +'\'>' + '<input type="checkbox" name="' + url_bits[0] + '_overlays"' + 'id="' + url_bits[0] + '_overlays_' + (i-this.overlaycounter) + '"' + ' onchange="exmlFMap.togglebox_overlay(' + '\'' + url_bits[0] + '\',' + i + ',' + this.overlaycounter + ')" checked/>' + that.sidebarfn(that.myvar,bits[0],bits[1],bits[2],bits[3]) + '</div></li>';
+          that.side_bar_html += '<li><div id = \'sidebarlist'+ (i-this.overlaycounter) +'\'>' + '<input type="checkbox" name="' + url_bits[0] + '_overlays"' + 'id="' + url_bits[0] + '_overlays_' + (i-this.overlaycounter) + '"' + ' onchange="' + this.myvar + '.togglechboxofOverlay(' + '\'' + url_bits[0] + '\',' + i + ',' + this.overlaycounter + ')" checked/>' + that.sidebarfn(that.myvar,bits[0],bits[1],bits[2],bits[3]) + '</div></li>';
         }
 
 	this.overlaycounter = that.side_bar_list.length;
@@ -563,18 +595,11 @@ EGeoXml.prototype.processing = function(doc) {
 	that.side_bar_html += '</li>';
 	if(n==this.urls.length-1)
 		that.side_bar_html += '</ul>';
-
-
-	// document.getElementById(that.opts.sidebarid).innerHTML = '<ul id="navigation"> <li>Item 1 <ul> <li>Item 1.1</li> </ul> </li> </ul>';
-	// alert(document.getElementById(that.opts.sidebarid).innerHTML);
 	
 	document.getElementById(that.opts.sidebarid).innerHTML = that.side_bar_html;
 
-	// this.side_bar_html = document.getElementById(that.opts.sidebarid).innerHTML;
-	// this.side_bar_html = '<ul id="navigation"> <li>Item 1 <ul> <li>Item 1.1</li> </ul> </li> </ul>';
-
-
       }
+
       if (that.opts.dropboxid) {
         for (var i=0; i<that.side_bar_list.length; i++) {
           var bits = that.side_bar_list[i].split("$$$",4);
@@ -593,59 +618,44 @@ EGeoXml.prototype.processing = function(doc) {
     }
 }
 
+// [CGL Version] For a checkbox feature
 
-EGeoXml.prototype.togglebox_all_overlay = function(overlayid, adjust) {
+EGeoXml.prototype.togglechboxofAllOverlays = function(overlayid, adjust) {
 
-
-	if(!document.forms['faultKMLSelectorForm'])
+	if(!document.forms[this.opts.parentformofsidebarid])
 		return;
-	var objCheckBoxes = document.forms['faultKMLSelectorForm'].elements[overlayid + '_overlays'];
-	if(!objCheckBoxes)
-	{
-		// alert("no boxes");		
-		return;
-	}
-	else
-		// alert('overlay id ' + overlayid + ' has ' + objCheckBoxes.length + " boxes");
+	var objCheckBoxes = document.forms[this.opts.parentformofsidebarid].elements[overlayid + '_overlays'];
 	var countCheckBoxes = objCheckBoxes.length;
 	var CheckValue = true;
 	if(objCheckBoxes.length > 0){
 		if(document.getElementById('li_' + overlayid).checked==true)
 		{
-			// alert("li is true");
 			for(var i = 0; i < objCheckBoxes.length; i++)
 			{
-				// alert("i = " + i + " objCheckBoxes.length = " + objCheckBoxes.length);
-
 				objCheckBoxes[i].checked = true;
-				exmlFMap.togglebox_overlay(overlayid, i+adjust, adjust);
+				exmlFMap.togglechboxofOverlay(overlayid, i+adjust, adjust);
 			}
 		}
 
 		else {
-			// alert("li is false");
+			
 			for(var i = 0; i < objCheckBoxes.length; i++)
 			{
 				objCheckBoxes[i].checked = false;
-				exmlFMap.togglebox_overlay(overlayid, i+adjust, adjust);
+				exmlFMap.togglechboxofOverlay(overlayid, i+adjust, adjust);
 			}
 		}
 	}
 }
 
+// [CGL Version] For a checkbox feature
 
-
-EGeoXml.prototype.togglebox_overlay = function(overlayid, i, adjust) {
+EGeoXml.prototype.togglechboxofOverlay = function(overlayid, i, adjust) {
 	
 	if(document.getElementById(overlayid+'_overlays_'+ (i-adjust)).checked==true)
-	{
-		// alert("clicked = true " + overlayid+'_overlays_'+i + 'this gmap has overlays ' + this);
-		this.map.addOverlay(this.gpolylines[i]);
-	}
-	else {
-		// alert("clicked = false " + overlayid+'_overlays_'+i);
-		this.map.removeOverlay(this.gpolylines[i]);
-	}
+		this.map.addOverlay(this.gpolyobjs[i]);
+	else
+		this.map.removeOverlay(this.gpolyobjs[i]);
 }
 
 
