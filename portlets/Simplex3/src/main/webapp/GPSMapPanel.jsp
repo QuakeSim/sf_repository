@@ -24,15 +24,14 @@
 						 <h:outputText id="dkljr3dssra" value="Use search area:"/>
 						 <h:selectBooleanCheckbox id="gpsRefStation23211b" onclick="toggleBorder()" 
 							value="#{SimplexBean.searcharea}"/>
-
+						 <h:outputText id="dkljr3dssraea" value="Selected GPS list:"/> 
 						 <h:inputText id="GPSStationList" value="#{SimplexBean.selectedGpsStationName}"/>
-						 <h:inputText id="GPSStationNum" value=""/>						 
-						 <h:inputText id="minlon" value="#{SimplexBean.selectedminlon}"/>
-						 <h:inputText id="minlat" value="#{SimplexBean.selectedminlat}"/>
-						 <h:inputText id="maxlon" value="#{SimplexBean.selectedmaxlon}"/>
-						 <h:inputText id="maxlat" value="#{SimplexBean.selectedmaxlat}"/>
-
-	      
+						 <h:outputText id="dkljr3dssabfd" value="Selected GPS Number:"/> 
+						 <h:inputText id="GPSStationNum" value=""/>
+						 <h:inputHidden id="minlon" value="#{SimplexBean.selectedminlon}"/>
+						 <h:inputHidden id="minlat" value="#{SimplexBean.selectedminlat}"/>
+						 <h:inputHidden id="maxlon" value="#{SimplexBean.selectedmaxlon}"/>
+						 <h:inputHidden id="maxlat" value="#{SimplexBean.selectedmaxlat}"/>
 						 <h:commandButton id="addGPSObsv" value="Add Station"
 						 		actionListener="#{SimplexBean.toggleAddGPSObsvForProject}"/>
 						 <h:commandButton id="closeMap" value="Close Map"

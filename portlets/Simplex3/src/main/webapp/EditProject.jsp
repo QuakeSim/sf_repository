@@ -473,18 +473,30 @@ function updateGPSinthebox() {
 	     b = document.getElementById("obsvGPSMap:GPSStationList").value.split(",");
 	
 	    for (var nA = 0 ; nA < markernamelist.length ; nA++)
-	    {  // alert ("maxlon.value : " + maxlon.value + " minlon.value : " + minlon.value);
+	    {
+		var c = 0;
+		for (var nB = 0; nB < markedmarkernamelist.length ; nB++)
+		{
+		    if (markedmarkernamelist[nB] == markernamelist[nA])
+			  c = 1;
+		    
+		}
+		
+		if (c==0)
+		{
+
 		    if ((markerlonlist[nA] <= maxlon.value && markerlonlist[nA] >= minlon.value) && 
 				(markerlatlist[nA] <= maxlat.value && markerlatlist[nA] >= minlat.value))
 		      {			
 			      
 			    
 				togglemarker(a, markernamelist[nA], "none");
-				b.push(markernamelist[nA]);
+				// b.push(markernamelist[nA]);
 			    
 		      }
 		    else
 				togglemarker(a, markernamelist[nA], "out");
+		 }
 		
 	    }
 	    
