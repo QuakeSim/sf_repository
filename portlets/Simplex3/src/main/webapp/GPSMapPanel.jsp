@@ -8,25 +8,10 @@
 						 <f:verbatim>
 						 <div id="defaultmap" style="width: 600px; height: 400px"></div>
 
-
-<script language="JavaScript">
-initialize();
-
-
-</script>
-
-
-
-
-
-
-
-
-
 						 </f:verbatim>
                       </h:panelGroup>
                       <h:panelGroup id="mapncrap2">
-							<h:panelGrid id="dfjdlkj" columns="2">
+						 <h:panelGrid id="dfjdlkj" columns="2">
 						 <h:outputText id="dkl34rtjf" value="Station:"/>
 						 <h:inputText id="stationName" value="#{SimplexBean.gpsStationName}"/>
 						 <h:outputText id="dkljr3rf" value="Latitude:"/>
@@ -34,19 +19,53 @@ initialize();
 						 <h:outputText id="dkljfer4" value="Longitude:"/>
 						 <h:inputText id="stationLon" value="#{SimplexBean.gpsStationLon}"/>
              					 <h:outputText id="dkljr3dssrf" value="Ref Station?:"/>
-						<h:selectBooleanCheckbox id="gpsRefStation23211s"
+						 <h:selectBooleanCheckbox id="gpsRefStation23211s"
 							value="#{SimplexBean.gpsRefStation}" />
+						 <h:outputText id="dkljr3dssra" value="Use search area:"/>
+						 <h:selectBooleanCheckbox id="gpsRefStation23211b" onclick="toggleBorder()" 
+							value="#{SimplexBean.searcharea}"/>
 
+						 <h:inputText id="GPSStationList" value="#{SimplexBean.selectedGpsStationName}"/>
+						 <h:inputText id="GPSStationNum" value=""/>						 
+						 <h:inputText id="minlon" value="#{SimplexBean.selectedminlon}"/>
+						 <h:inputText id="minlat" value="#{SimplexBean.selectedminlat}"/>
+						 <h:inputText id="maxlon" value="#{SimplexBean.selectedmaxlon}"/>
+						 <h:inputText id="maxlat" value="#{SimplexBean.selectedmaxlat}"/>
+
+	      
 						 <h:commandButton id="addGPSObsv" value="Add Station"
 						 		actionListener="#{SimplexBean.toggleAddGPSObsvForProject}"/>
 						 <h:commandButton id="closeMap" value="Close Map"
 						 		actionListener="#{SimplexBean.toggleCloseMap}"/>
+	
+	
+
 								</h:panelGrid>
                     <f:verbatim>
 						 <div id="networksDiv">
 						 </f:verbatim>
 						   </h:panelGroup>
 							</h:panelGrid>
+
+<f:verbatim>
+<script language="JavaScript">
+	initialize();
+
+
+
+
+
+	
+</script>
+</f:verbatim>
+
 					 </h:form>
+
+
+
+
+
+
+
+
 			</h:panelGroup>
-			
