@@ -1,17 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-
-<%@page import="java.util.*, java.net.URL, java.io.*, java.lang.*, org.dom4j.*, cgl.sensorgrid.common.*, org.dom4j.io.*"%>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 
-<%@page import="java.util.*, cgl.sensorgrid.sopac.gps.GetStationsRSS,cgl.sensorgrid.gui.google.MapBean, java.io.*"%>
-<%@page import="cgl.quakesim.simplex.*"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page import="java.util.*, java.io.*, java.util.*, java.net.URL, java.lang.*, org.dom4j.*, org.dom4j.io.*, cgl.sensorgrid.common.*, cgl.sensorgrid.sopac.gps.GetStationsRSS,cgl.sensorgrid.gui.google.MapBean, cgl.quakesim.simplex.*"%>
 
 <jsp:useBean id="RSSBeanID" scope="session" class="cgl.sensorgrid.sopac.gps.GetStationsRSS"/>
-
 <jsp:useBean id="MapperID" scope="session" class="cgl.sensorgrid.gui.google.Mapper"/>
 
 <%
@@ -62,26 +57,18 @@ for(int i=0;i<stationList.size();i++) {
 </style>
 
 <head>
-<link rel="stylesheet" type="text/css"
-	href='<%= request.getContextPath() + "/stylesheet.css" %>'>
-
-<title>Edit Project</title>
-<%/*
- <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTf0RZ3CvQOmi-GOjEFoiamz50c8BRdcsDMSPvaTAMTVPL7sMxMzuZWCQ"
-      type="text/javascript"></script>
-*/%>
-
-
-<script src="http://129.79.49.68:8080/Simplex3/egeoxml.js" type="text/javascript"></script>
-<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTf0RZ3CvQOmi-GOjEFoiamz50c8BRdcsDMSPvaTAMTVPL7sMxMzuZWCQ" type="text/javascript"></script>
-
+	<link rel="stylesheet" type="text/css" href='<%= request.getContextPath() + "/stylesheet.css" %>'>
+	<title>Edit Project</title>
+	<script src="http://129.79.49.68:8080/Simplex3/egeoxml.js" type="text/javascript"></script>
+	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTf0RZ3CvQOmi-GOjEFoiamz50c8BRdcsDMSPvaTAMTVPL7sMxMzuZWCQ" type="text/javascript"></script>
 </head>
+
+
 <body onload="" onunload="GUnload()">
 <f:view>
 <script language="JavaScript">
 
-	//These are various gmap definitions.
-	var geocoder=null;
+	// These are various gmap definitions.
 	var map;
 	var geoXml;
 	var selectedGPSstationlist = new Array();
@@ -91,29 +78,26 @@ for(int i=0;i<stationList.size();i++) {
 	var marker_NE;
 	var marker_SW;
 
-	var border;
-	
+	var border;	
 
 	var icon_NE;
 	var icon_SW;
 	var icon_move;
 
-
-        //Add the markers
-
+        // Add the markers
 	var pinmarker = new Array(2);
 	var pinmarkervalue = new Array(2);
 	var pin_index = -1;
 
-	var marker=new Array(<%=stationList.size()%>);
+	var marker = new Array(<%=stationList.size()%>);
 	
-	var markerlonlist=new Array(<%=stationList.size()%>);
-	var markerlatlist=new Array(<%=stationList.size()%>);
-	var markernamelist= new Array(<%= stationList.size() %>);
-	var markedmarkernamelist= new Array(<%= stationList.size() %>);
-	var html=new Array(<%=stationList.size()%>);
+	var markerlonlist = new Array(<%=stationList.size()%>);
+	var markerlatlist = new Array(<%=stationList.size()%>);
+	var markernamelist = new Array(<%= stationList.size() %>);
+	var markedmarkernamelist = new Array(<%= stationList.size() %>);
+	var unmarkedmarkernamelist = new Array(<%= stationList.size() %>);
 
-
+	var html = new Array(<%=stationList.size()%>);
 	 
         var req;
         var baseIcon = new GIcon();
@@ -125,55 +109,43 @@ for(int i=0;i<stationList.size();i++) {
         baseIcon.infoShadowAnchor = new GPoint(5, 5);
 
         var colors = new Array (6);
-        colors[0]="red";
-        colors[1]="green";
-        colors[2]="blue";
-        colors[3]="black";
-        colors[4]="white";
-        colors[5]="yellow";
-        colors[6]="purple";
-        colors[7]="brown";
+        colors[0] = "red";
+        colors[1] = "green";
+        colors[2] = "blue";
+  	colors[3] = "black";
+        colors[4] = "white";
+        colors[5] = "yellow";
+        colors[6] = "purple";
+        colors[7] = "brown";
 
         var networkInfo = new Array (<%=networkNames.size()%>);
         for (i = 0; i < networkInfo.length; ++ i){
           networkInfo [i] = new Array (2);
         }
 
-	
-
-
-
-
-
-
-//This is used to calculate the length and strike angle.
+// This is used to calculate the length and strike angle.
 function doMath(){
-  var lonStart=document.getElementById("Faultform:FaultLonStarts");
-  var lonEnd=document.getElementById("Faultform:FaultLonEnds");
-  var latStart=document.getElementById("Faultform:FaultLatStarts");
-  var latEnd=document.getElementById("Faultform:FaultLatEnds");
+  var lonStart = document.getElementById("Faultform:FaultLonStarts");
+  var lonEnd = document.getElementById("Faultform:FaultLonEnds");
+  var latStart = document.getElementById("Faultform:FaultLatStarts");
+  var latEnd = document.getElementById("Faultform:FaultLatEnds");
 
-  var length=document.getElementById("Faultform:FaultLength");
-  var strike=document.getElementById("Faultform:FaultStrikeAngle");
+  var length = document.getElementById("Faultform:FaultLength");
+  var strike = document.getElementById("Faultform:FaultStrikeAngle");
 
   var d2r = Math.acos(-1.0) / 180.0;
-  var flatten=1.0/298.247;
+  var flatten = 1.0/298.247;
   var theFactor = d2r* Math.cos(d2r * latStart.value) * 6378.139 * (1.0 - Math.sin(d2r * lonStart.value) * Math.sin(d2r * lonStart.value) * flatten);
 
-  var x=(lonEnd.value-lonStart.value)*theFactor;
-  var y=(latEnd.value-latStart.value)*111.32;
-  var lengthVal=Math.sqrt(x*x+y*y);
+  var x = (lonEnd.value-lonStart.value)*theFactor;
+  var y = (latEnd.value-latStart.value)*111.32;
+  var lengthVal = Math.sqrt(x*x+y*y);
 
-  length.value=Math.round(lengthVal*1000)/1000;
+  length.value = Math.round(lengthVal*1000)/1000;
 
-  var strikeValue=Math.atan2(x,y)/d2r;
-  strike.value=Math.round(strikeValue*1000)/1000;
+  var strikeValue = Math.atan2(x,y)/d2r;
+  strike.value = Math.round(strikeValue*1000)/1000;
 } 
-
-
-
-
-
 
 
 function initialize() {
@@ -189,17 +161,13 @@ function initialize() {
   icon_NE.iconAnchor = new GPoint(10, 32);
   icon_NE.dragCrossImage = '';
 
-  icon_SW = new GIcon(); 
-  icon_SW.image = 'http://maps.google.com/mapfiles/ms/micons/red-pushpin.png';
-  icon_SW.shadow = '';
-  icon_SW.iconSize = new GSize(32, 32);
-  icon_SW.shadowSize = new GSize(22, 20);
-  icon_SW.iconAnchor = new GPoint(10, 32);
-  icon_SW.dragCrossImage = '';
-
-
-  geocoder = new GClientGeocoder();
-
+  icon_SW = icon_NE;
+  // icon_SW.image = 'http://maps.google.com/mapfiles/ms/micons/red-pushpin.png';
+  // icon_SW.shadow = '';
+  // icon_SW.iconSize = new GSize(32, 32);
+  // icon_SW.shadowSize = new GSize(22, 20);
+  // icon_SW.iconAnchor = new GPoint(10, 32);
+  // icon_SW.dragCrossImage = '';
 
 
 
@@ -246,22 +214,32 @@ if (searcharea.value == true) {
 	SimplexBean SB = (SimplexBean)request.getSession().getAttribute("SimplexBean");
 	List l = SB.getMyObservationEntryForProjectList();
 
-
-
+	
 	for(int i=0;i<stationList.size();i++){
 	      
 	      String color = "http://labs.google.com/ridefinder/images/mm_20_green.png";
+	      int check = 0;
 
 	      for (int nA = 0; nA < l.size() ; nA++)
 	      {
 		  if (((observationEntryForProject)l.get(nA)).getObservationName().contains(nameArray[i].toLowerCase()))
 		   {
 			color = "http://labs.google.com/ridefinder/images/mm_20_red.png";
+			check = 1;
 %>
 			markedmarkernamelist[<%=nA%>]="<%=nameArray[i].toLowerCase()%>";
+			unmarkedmarkernamelist[<%=i%>]="marked";
+
 <%
 		   }
 	      }
+
+		if (check == 0) {		
+%>
+			unmarkedmarkernamelist[<%=i%>] = "<%=nameArray[i].toLowerCase()%>";
+<%	
+
+		}
 %>
 
 		baseIcon.image = "<%=color%>";
@@ -298,8 +276,8 @@ if (searcharea.value == true) {
         }
 %>
 
-//        overlayNetworks();
-//        printNetworkColors(networkInfo);
+	// overlayNetworks();
+	// printNetworkColors(networkInfo);
 
 
 
@@ -340,7 +318,7 @@ Array.prototype.remove = function(e)
 
 
 function togglemarker(array, e, option)
-	{
+{
 	    var b = 0;
 	    for(var nA = 0; nA < array.length; nA++ )
 	    {
@@ -474,16 +452,8 @@ function updateGPSinthebox() {
 	
 	    for (var nA = 0 ; nA < markernamelist.length ; nA++)
 	    {
-		var c = 0;
-		for (var nB = 0; nB < markedmarkernamelist.length ; nB++)
-		{
-		    if (markedmarkernamelist[nB] == markernamelist[nA])
-			  c = 1;
-		    
-		}
+		if(unmarkedmarkernamelist[nA] != "marked") {
 		
-		if (c==0)
-		{
 
 		    if ((markerlonlist[nA] <= maxlon.value && markerlonlist[nA] >= minlon.value) && 
 				(markerlatlist[nA] <= maxlat.value && markerlatlist[nA] >= minlat.value))
@@ -496,7 +466,8 @@ function updateGPSinthebox() {
 		      }
 		    else
 				togglemarker(a, markernamelist[nA], "out");
-		 }
+		}
+		 
 		
 	    }
 	    
