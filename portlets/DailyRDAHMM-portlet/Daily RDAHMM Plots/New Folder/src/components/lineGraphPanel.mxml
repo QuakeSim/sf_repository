@@ -8,6 +8,8 @@
 		creationComplete="init();" verticalAlign="middle"  horizontalAlign="center">
 		<mx:Script>
 			<![CDATA[
+				import mx.messaging.channels.StreamingAMFChannel;
+				import mx.charts.ChartItem;
 				import mx.events.StateChangeEvent;
 				import mx.events.ItemClickEvent;
 				import mx.formatters.SwitchSymbolFormatter;
@@ -50,8 +52,16 @@
 				private var todaydateyear: Number = new Date().fullYear;
 				
 				[Bindable]
-				private var counter:int = new int();
+				public var fromDate:Date;
 				
+				[Bindable]
+				public var toDate:Date;
+				
+				[Bindable]
+				private var fromDate1:String = new String();
+				
+				[Bindable]
+				private var toDate1:String = new String();
 				
 				public function showdatatip(hitdata:HitData):String {
 					var str:String;
@@ -66,15 +76,28 @@
 				public function init():void {
 					
 					//plotchart.dataTipFunction = showdatatip;
-					graphData.filterFunction = filterfunc;
-					graphData.refresh();
+					//graphData.filterFunction = filterfunc;
+					//graphData.refresh();
 					plotchart.dataProvider = graphData;
-					counter = 0;
-					trace(counter);
-					trace(plotchart.getFirstItem(ChartBase.HORIZONTAL));
-					//Alert.show(String(linkbar.getChildren()));
-					linkbar.addEventListener(ItemClickEvent.ITEM_CLICK, changestyle);
+					//togglebar.selectedIndex = 9;
+					filterData();
+										
+					//Alert.show(String(togglebar.getChildren()));
+					togglebar.addEventListener(ItemClickEvent.ITEM_CLICK, changestyle);
 					plotchart.addEventListener(StateChangeEvent.CURRENT_STATE_CHANGING, alertme);
+						
+				}
+				
+				private function getFromToDate():void {
+					if(graphData.length > 0) {
+					fromDate = graphData.getItemAt(0).date;
+					var df:DateFormatter = new DateFormatter();
+					df.formatString = "MMM-DD-YYYY";
+					fromDate1 = df.format(fromDate);
+					toDate = graphData.getItemAt(graphData.length - 1).date;
+					toDate1 = df.format(toDate); 
+					
+					}
 					
 					
 				}
@@ -87,7 +110,10 @@
 					//Alert.show("in change style");
 					//event.item.setStyle("textDecoration","none");
 					//setStyle("textDecoration", "none");
-					//linkbar.selectedIndex = event.index;
+					togglebar.selectedIndex = event.index;
+					getFromToDate();
+					
+					
 				}
 /* 				public function definelabel(cat:Object,pcat:Object,ax:CategoryAxis,labelItem:Object):String  {
 					        // Show contents of the labelItem:
@@ -113,11 +139,11 @@
 				
 				private function filterData():void {
 					//Alert.show("in change data function");
+					
 					graphData.filterFunction = filterfunc;
 					graphData.refresh();
-				
-				
-				
+					getFromToDate();
+			
 				}
 				private function filterfunc(item:Object):Boolean{
 		               //1252123200000
@@ -135,7 +161,8 @@
 		               var twoyear:Number = oneyear*2;
 		               var fiveyear:Number = oneyear*5;
 		               
-		               switch(linkbar.selectedIndex) {
+		               
+		               switch(togglebar.selectedIndex) {
 		               	case 0: var oneweekdate:Number = todaydate - oneweek;
 		               				if(item.date.time > oneweekdate) {
 		               					return true;
@@ -167,7 +194,7 @@
 		               				} break;
 		               	case 8: var fiveyeardate:Number = todaydate - (fiveyear);
 		               			if(item.date.time > fiveyeardate) {
-		               				if(counter == 0) {
+		               				/* if(counter == 0) {
 		               					counter++;
 		               					return true;
 		               					break;
@@ -179,7 +206,8 @@
 		               						break;
 		               					}
 		               					break;
-		               				}	
+		               				} */
+		               				return true;	
 		               			} break;
 		               	case 9: return true; break;
 		                default : if(item.date.fullYear == todaydateyear) return true; break;
@@ -221,22 +249,20 @@
 	<mx:HBox height="25" width="100%">
 		<mx:HBox height="25" width="50%" verticalAlign="middle" dropShadowEnabled="true">
 				<mx:LinkBar 
-					id="linkbar" 
+					id="togglebar" 
 					borderStyle="none" 
 					horizontalAlign="left" 
 					dataProvider="{linkData}" 
 					itemClick="filterData()"
-					textDecoration="underline"
-					textSelectedColor="#000000"
-					selectionColor="#ffffff"
-					height="25" selectedIndex="0"
+					fontWeight="normal"
+					labelField="week" toolTipField="weeklabel" width="100%"
 					
-					labelField="week" toolTipField="weeklabel" width="100%"/>
+					/>
 		</mx:HBox>
 		<mx:HBox width="50%" height="25" horizontalAlign="right" verticalAlign="middle">
-				<mx:Text id="from" text="from"/>
-				<mx:Text id="dash" text="-" enabled="false"/>
-				<mx:Text id="to" text="to"/>
+				<mx:Text id="from" text="{fromDate1}"/>
+				<mx:Text id="dash" text="to" color="#000000" fontWeight="normal"/>
+				<mx:Text id="to" text="{toDate1}"/>
 		</mx:HBox>
 	</mx:HBox>
 	
