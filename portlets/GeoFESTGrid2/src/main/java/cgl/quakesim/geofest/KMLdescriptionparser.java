@@ -260,6 +260,8 @@ public class KMLdescriptionparser {
 				this.dip = Double.parseDouble(temp[1]);
 			else if (temp[0].compareTo("<b>Down Dip Width</b>") == 0)
 				this.width = Double.parseDouble(temp[1].split("&")[0]);
+			else if (temp[0].compareTo("<b>Rupture - Bottom</b>") == 0)
+				this.depth = Double.parseDouble(temp[1].split("&")[0]);			
 			else if (temp[0].compareTo("<b>Location</b>") == 0) {
 				
 				String[] splitlocation = temp[1].split("\\], \\[");
@@ -273,8 +275,7 @@ public class KMLdescriptionparser {
 			}
 		}
 		 
-	    this.strike = 7.77;
-	    this.depth = 7.7;
+	    this.strike = 0; // will be calculated in each application. (QueryFaultFromDB)
 	    
 	    /*
 	    System.out.println(this.dip);
