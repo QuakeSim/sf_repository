@@ -443,7 +443,12 @@ EGeoXml.prototype.processing = function(doc) {
         // Build the list of points
         var points = [];
         var pbounds = new GLatLngBounds();
-        for (var p=0; p<path.length-1; p++) {
+
+	// [CGL Version] Although a KML coordinates tag is able to include 'altitude values' as the 3rd. (lon, lat, alt)
+        // [CGL Version] We'll use just only lon, lat so ignore alt. (even if it exists)
+        var pathlen = 2;
+	
+        for (var p=0; p<pathlen; p++) {
           var bits = path[p].split(",");
           var point = new GLatLng(parseFloat(bits[1]),parseFloat(bits[0]));
           points.push(point);
@@ -573,8 +578,13 @@ EGeoXml.prototype.processing = function(doc) {
 
 	// [CGL Version] We list polyobjects in the sidebar in a shape of tree.
 	var n = this.urlcounter;
-	var temp_url_bits = this.urls[n].split("/@artifactId@/",2);
-	var url_bits = temp_url_bits[1].split(".",2);	
+
+	if (this.urls[n].indexOf("/@artifactId@/") >= 0) {
+	    var temp_url_bits = this.urls[n].split("/@artifactId@/",2);
+	    var url_bits = temp_url_bits[1].split(".",2);
+	}
+	else
+	    var url_bits=this.urls[n].split(".",2);
 
 	this.urlcounter = this.urlcounter + 1;
 
