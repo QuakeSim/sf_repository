@@ -60,7 +60,7 @@ for(int i=0;i<stationList.size();i++) {
 	<link rel="stylesheet" type="text/css" href='<%= request.getContextPath() + "/stylesheet.css" %>'>
 	<title>Edit Project</title>
 	<script src="@host.base.url@@artifactId@/egeoxml.js" type="text/javascript"></script>
-	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTf0RZ3CvQOmi-GOjEFoiamz50c8BRdcsDMSPvaTAMTVPL7sMxMzuZWCQ" type="text/javascript"></script>
+	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>
 </head>
 
 
@@ -180,10 +180,6 @@ function initialize() {
  map.addControl(new GMapTypeControl());
  map.addControl(new GScaleControl());
 
-if (searcharea.value == true) {
-   alert ("searcharea.value : " + searcharea.value);
-   initialPosition();
-}
 
 
 
@@ -497,21 +493,18 @@ function updatePolyline() {
 }
 
 function toggleBorder() {
-if (searcharea.value == "false") {  
-  searcharea.value = true;
-  map.removeOverlay(border);
-  map.removeOverlay(marker_NE);
-  map.removeOverlay(marker_SW);  
+    if (searcharea.value == "false") {  
+      
+      map.removeOverlay(border);
+      map.removeOverlay(marker_NE);
+      map.removeOverlay(marker_SW);  
+    }
+
+    else {    
+	
+	initialPosition();
+    }
 }
-
-else {    
-    searcharea.value = false;
-    initialPosition();
-}
-
-}
-
-
 
 
 
