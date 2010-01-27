@@ -7,7 +7,7 @@
 	String strTabContent = new String();
 	java.io.BufferedInputStream bis=null;
 	try{
-		bis =new java.io.BufferedInputStream(new java.io.FileInputStream(config.getServletContext().getRealPath("form/tabcontent.htm")));
+		bis =new java.io.BufferedInputStream(new java.io.FileInputStream(config.getServletContext().getRealPath("form/windowcontent.htm")));
 		BufferedReader br = new BufferedReader(new InputStreamReader(bis));
 		String line = null;
 		while ((line = br.readLine()) != null) {
@@ -187,37 +187,24 @@
 
 <!-- inline functions about map api -->	
 	<script type="text/javascript">
-	// Create the marker and corresponding information window 
+	var markerWinHtmlStr = '<%=strTabContent%>';
+	// Create the marker and corresponding information window
 	function createTabsInfoMarker(point, infoTabs ,icon1, idx, sel) {
 		var marker = new GMarker(point, {icon: icon1, clickable: true, title:stationArray[idx][0]});
 		GEvent.addListener(marker, "click", function() {
-			var stationId = stationArray[idx][0];
-			var urlPattern2 = urlPattern, dirPattern2 = dirPattern;
-			var xPattern2 = xPattern, yPattern2 = yPattern, zPattern2 = zPattern;
-			var preFix = urlPattern2.replace(/{!station-id!}/g, stationId) + "/" + dirPattern2.replace(/{!station-id!}/g, stationId) + "/";
-		
-			var str_tabcontent2 = '<%=strTabContent%>';
-			var networkName = "unknown";
-			str_tabcontent2 = str_tabcontent2.replace(/{!name!}/g, stationId);
-			str_tabcontent2 = str_tabcontent2.replace(/{!networkName!}/g, networkName);
-			str_tabcontent2 = str_tabcontent2.replace(/{!lon!}/g, "" + stationArray[idx][2]);
-			str_tabcontent2 = str_tabcontent2.replace(/{!lat!}/g, "" + stationArray[idx][1]);
-			var x_tabcontent = str_tabcontent2;
-			x_tabcontent = x_tabcontent.replace( /{!output_png!}/g, preFix + xPattern2.replace(/{!station-id!}/g, stationId));
-			var y_tabcontent = str_tabcontent2;
-			y_tabcontent = y_tabcontent.replace( /{!output_png!}/g, preFix + yPattern2.replace(/{!station-id!}/g, stationId));
-			var z_tabcontent = str_tabcontent2;
-			z_tabcontent = z_tabcontent.replace( /{!output_png!}/g, preFix + zPattern2.replace(/{!station-id!}/g, stationId));
-			
-			var infoTabs2 = [new GInfoWindowTab("North", x_tabcontent),
-					 new GInfoWindowTab("East", y_tabcontent),
-					 new GInfoWindowTab("Up", z_tabcontent)];
-			
-			marker.openInfoWindowTabsHtml(infoTabs2);
-			sel =	document.getElementById("stationSelect");
-			sel.selectedIndex = idx;
-			sltChange(sel);
-		});
+				var stationId = stationArray[idx][0];
+				var urlPattern2 = urlPattern, dirPattern2 = dirPattern, rawInputPattern2 = rawInputPattern, qPattern2 = qPattern;
+				var preFix = urlPattern2.replace(/{!station-id!}/g, stationId) + "/" + dirPattern2.replace(/{!station-id!}/g, stationId) + "/";
+				var rawURL = preFix + rawInputPattern2.replace(/{!station-id!}/g, stationId);
+				var qURL = preFix + qPattern2.replace(/{!station-id!}/g, stationId);
+				var htmlStr = markerWinHtmlStr;
+				htmlStr = htmlStr.replace(/{!rawFileURL!}/g, rawURL);
+				htmlStr = htmlStr.replace(/{!qFileURL!}/g, qURL);
+				marker.openInfoWindowHtml(htmlStr);
+				sel = document.getElementById("stationSelect");
+				sel.selectedIndex = idx;
+				sltChange(sel);
+			});
 		return marker;
 	}
 	</script>
