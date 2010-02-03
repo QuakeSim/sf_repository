@@ -4,10 +4,12 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@ page import="java.util.*, java.io.*, java.util.*, java.net.URL, java.lang.*, org.dom4j.*, org.dom4j.io.*, cgl.sensorgrid.common.*, cgl.sensorgrid.sopac.gps.GetStationsRSS,cgl.sensorgrid.gui.google.MapBean, cgl.quakesim.simplex.*"%>
+<%@ page import="java.util.*, java.io.*, java.util.*, java.net.URL, java.lang.*, org.dom4j.*, org.dom4j.io.*, cgl.sensorgrid.common.*, cgl.sensorgrid.sopac.gps.GetStationsRSS,cgl.sensorgrid.gui.google.MapBean, cgl.quakesim.simplex.*, javax.faces.context.ExternalContext, javax.servlet.http.HttpServletRequest, javax.portlet.PortletRequest, javax.faces.context.FacesContext"%>
+
 
 <jsp:useBean id="RSSBeanID" scope="session" class="cgl.sensorgrid.sopac.gps.GetStationsRSS"/>
 <jsp:useBean id="MapperID" scope="session" class="cgl.sensorgrid.gui.google.Mapper"/>
+
 
 <%
 Vector networkNames = RSSBeanID.networkNames();
@@ -207,8 +209,42 @@ function initialize() {
 <%
 	//Display the markers
 
-	SimplexBean SB = (SimplexBean)request.getSession().getAttribute("SimplexBean");
-	List l = SB.getMyObservationEntryForProjectList();
+
+	ExternalContext context = null;
+
+	FacesContext facesContext=FacesContext.getCurrentInstance();
+	if(facesContext==null)
+		System.out.println("[EditProject.jsp] a null facesContext error");
+	else
+		System.out.println("[EditProject.jsp] the facesContext isn't null");
+	    
+	System.out.println("point1");
+	try {
+		context=facesContext.getExternalContext();
+	    }
+	    catch(Exception ex) {
+		ex.printStackTrace();
+	    }	
+	
+	Object requestObj=null;
+	requestObj=context.getRequest();
+	
+
+	SimplexBean SB = null;
+	List l = null;	
+
+	if(requestObj instanceof PortletRequest) {
+	    System.out.println("[EditProject.jsp] requestObj is an instance of PortletRequest");
+	    SB = (SimplexBean)((PortletRequest)requestObj).getPortletSession().getAttribute("SimplexBean");
+	}
+
+	else if(requestObj instanceof HttpServletRequest) {
+	    System.out.println("[EditProject.jsp] : requestObj is an instance of HttpServletRequest");
+	    SB = (SimplexBean)request.getSession().getAttribute("SimplexBean");
+        }
+	
+
+	l = SB.getMyObservationEntryForProjectList();
 
 	
 	for(int i=0;i<stationList.size();i++){
