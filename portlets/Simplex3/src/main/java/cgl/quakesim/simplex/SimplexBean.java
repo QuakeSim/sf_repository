@@ -1351,7 +1351,7 @@ public class SimplexBean extends GenericSopacBean {
 		 System.out.println ("searcharea : " + getSearcharea());
 		 System.out.println ("gpsRefStation : " + getGpsRefStation());
 		 
-		 if (searcharea == false) {
+		 // if (searcharea == false) {
 			 String[] stations = selectedGpsStationName.split(",");
 			 for (int nA = 0 ; nA < stations.length ; nA++) {
 				 System.out.println("Here are the choices:"+ stations[nA] + " " + gpsStationLat + " "+ gpsStationLon);
@@ -1386,8 +1386,10 @@ public class SimplexBean extends GenericSopacBean {
 				 saveSimplexProjectEntry(currentProjectEntry);
 				 setGpsRefStation(false);
 			 }
-		 }
+		 // }
 		 
+		 // GRWS_SubmitQuery isn't working correctly with a box option
+		 /*
 		 else {			 
 			 
 			 try {
@@ -1423,6 +1425,7 @@ public class SimplexBean extends GenericSopacBean {
 			 saveSimplexProjectEntry(currentProjectEntry);
 			 setGpsRefStation(false);			 
 		 }
+		 */
 	 }
 	 
 	 private Observation[] setXYLocations(Observation[] obsv,
