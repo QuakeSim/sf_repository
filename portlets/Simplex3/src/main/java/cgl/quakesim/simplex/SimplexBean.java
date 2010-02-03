@@ -1381,11 +1381,11 @@ public class SimplexBean extends GenericSopacBean {
 					 ex.printStackTrace();			 
 				 }
 
-				 db.commit();
-				 db.close();
+				 db.commit();				 
 				 saveSimplexProjectEntry(currentProjectEntry);
 				 setGpsRefStation(false);
 			 }
+			 db.close();
 		 // }
 		 
 		 // GRWS_SubmitQuery isn't working correctly with a box option
