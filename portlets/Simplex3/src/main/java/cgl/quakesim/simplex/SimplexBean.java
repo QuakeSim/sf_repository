@@ -13,6 +13,10 @@ import javax.faces.model.SelectItem;
 import javax.faces.component.html.HtmlDataTable;
 import javax.faces.component.UIData;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.servogrid.genericproject.GenericSopacBean;
 
 import sun.misc.BASE64Encoder;
@@ -21,6 +25,7 @@ import WebFlowClient.cm.ContextManagerImp;
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
+
 
 import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
 
@@ -123,7 +128,20 @@ public class SimplexBean extends GenericSopacBean {
 	 String gpsStationName="";
 	 String gpsStationLat="";
 	 String gpsStationLon="";
-    boolean gpsRefStation=false;
+	 boolean gpsRefStation=false;
+	 boolean searcharea=false;
+
+	 String selectedGpsStationName="";
+ 	 
+ 	 String selectedminlon=null;
+ 	 String selectedmaxlon=null;	
+ 	 String selectedminlat=null;
+	 String selectedmaxlat=null; 
+	 
+ 	 String[] latArray;
+	 String[] lonArray;
+	 String[] nameArray;
+ 
 	 
 	 //These are needed for the SOPAC GRWS query.
 	 //These dates are arbitrary but apparently needed.
@@ -135,9 +153,9 @@ public class SimplexBean extends GenericSopacBean {
 	 String contextId="38";
 	 String kmlfiles = "";
 
-    NumberFormat format=null;
+     NumberFormat format=null;
 
-    protected String faultKmlUrl;
+     protected String faultKmlUrl;
 	 protected String faultKmlFilename;
 	 protected String portalBaseUrl;
 
@@ -156,12 +174,52 @@ public class SimplexBean extends GenericSopacBean {
 	 public void setGpsStationName(String gpsStationName) {
 		  this.gpsStationName=gpsStationName;
 	 }
+
+
+	 public String getSelectedGpsStationName() {
+		  return selectedGpsStationName;
+	 }
+
+	 public void setSelectedGpsStationName(String selectedGpsStationName) {
+		  this.selectedGpsStationName=selectedGpsStationName;
+	 }
 	 
-	 public String getGpsStationLat() {
+ 	 public boolean getSearcharea() {
+ 		return searcharea;
+ 	 }
+ 	 public void setSearcharea(boolean searcharea) {
+ 		this.searcharea = searcharea;
+ 	 }	 
+	 
+	 public String getSelectedminlon() {
+		return selectedminlon;
+	}
+	public void setSelectedminlon(String selectedminlon) {
+		this.selectedminlon = selectedminlon;
+	}
+	public String getSelectedmaxlon() {
+		return selectedmaxlon;
+	}
+	public void setSelectedmaxlon(String selectedmaxlon) {
+		this.selectedmaxlon = selectedmaxlon;
+	}
+	public String getSelectedminlat() {
+		return selectedminlat;
+	}
+	public void setSelectedminlat(String selectedminlat) {
+		this.selectedminlat = selectedminlat;
+	}
+	public String getSelectedmaxlat() {
+		return selectedmaxlat;
+	}
+	public void setSelectedmaxlat(String selectedmaxlat) {
+		this.selectedmaxlat = selectedmaxlat;
+	}
+	public String getGpsStationLat() {		 
 		  return gpsStationLat;
 	 }
 
-	 public void setGpsStationLat(String gpsStationLat) {
+	 public void setGpsStationLat(String gpsStationLat) {		  
 		  this.gpsStationLat=gpsStationLat;
 	 }
 	 
@@ -188,6 +246,7 @@ public class SimplexBean extends GenericSopacBean {
 	 public void setProjectSimpleXOutput(SimpleXOutputBean tmp_str) {
 		  this.projectSimpleXOutput = tmp_str;
 	 }
+	 
 
 	 public String getSimpleXBaseUrl() {
 		  return this.simpleXBaseUrl;
@@ -204,6 +263,8 @@ public class SimplexBean extends GenericSopacBean {
 	 public void setSimpleXServiceUrl(String tmp_str) {
 		  this.simpleXServiceUrl = tmp_str;
 	 }
+
+	 
 	 
 	 protected void makeProjectDirectory() {
 		  File projectDir = new File(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
@@ -421,6 +482,7 @@ public class SimplexBean extends GenericSopacBean {
 
 	 public List getMyObservationEntryForProjectList() {
 		  String projectName = getProjectName();
+		  System.out.println("ProjectName : " + projectName);
 		  return reconstructMyObservationEntryForProjectList(projectName);
 	 }
 	 
@@ -535,7 +597,6 @@ public class SimplexBean extends GenericSopacBean {
 		}
 		db.close();
 		return currentFault;
-
 	}
 
 	 public void setCurrentProjectEntry(projectEntry tmp) {
@@ -582,12 +643,63 @@ public class SimplexBean extends GenericSopacBean {
 	 
 	 /**
 	  * default empty constructor
+	 * @throws IOException 
 	  */
+
+	 public void readStations(){
+		    System.out.println("[readStations] : " + getCodeName());
+		    File localFile = new File(getBasePath() + "/" + getCodeName() + "/" + "stations-rss-new.xml");
+		    BufferedReader br = null;
+			try {
+				br = new BufferedReader(new FileReader(localFile));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    StringBuffer sb = new StringBuffer();
+		    try {
+				while (br.ready()) {
+				    sb.append(br.readLine());
+				}
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		    SAXReader reader = new SAXReader();
+		    Document statusDoc = null;
+			try {
+				statusDoc = reader.read( new StringReader(sb.toString()) );
+			} catch (DocumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}          
+		    Element eleXml = (Element)statusDoc.getRootElement();
+		    List stationList = eleXml.elements("station");
+		    latArray=new String[stationList.size()];
+		    lonArray=new String[stationList.size()];
+		    nameArray=new String[stationList.size()];
+		    
+
+		    //Set upt the arrays
+		    for(int i=0;i<stationList.size();i++) {
+		      Element station=(Element)stationList.get(i);
+		      latArray[i]=station.element("latitude").getText();
+			lonArray[i]=station.element("longitude").getText();
+			nameArray[i]=station.element("id").getText();
+		    }   
+
+
+
+
+	 }
 	 public SimplexBean() throws Exception {
 		  super();
 		  cm = getContextManagerImp();
 		  format=NumberFormat.getInstance();
+
 		  System.out.println("Simplex Bean Created");
+
+
 	 }
 	 
 	 protected void initSimplexService() throws Exception {
@@ -1227,44 +1339,90 @@ public class SimplexBean extends GenericSopacBean {
 		saveSimplexProjectEntry(currentProjectEntry);
 		//Print this out as KML
 		faultKmlUrl=createFaultKmlFile();
-
-
 	}
 
+
 	 public void toggleAddGPSObsvForProject(ActionEvent ev) {
-		  String space=" ";
-		  System.out.println("Here are the choices:"+gpsStationName
-									+space+gpsStationLat
-									+space+gpsStationLon);
+		 
+		 readStations();
+		 String dataUrl="";
+		 db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/" + codeName + "/" + projectName + ".db");
+		 
+		 System.out.println ("searcharea : " + getSearcharea());
+		 System.out.println ("gpsRefStation : " + getGpsRefStation());
+		 
+		 if (searcharea == false) {
+			 String[] stations = selectedGpsStationName.split(",");
+			 for (int nA = 0 ; nA < stations.length ; nA++) {
+				 System.out.println("Here are the choices:"+ stations[nA] + " " + gpsStationLat + " "+ gpsStationLon);
+				 gpsStationName=stations[nA].toLowerCase();
+				 
+				 // I'm not sure if these are even used, but they can't be blank.
+				 
+				 try {
+					 
+					 GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
+					 
+					 gsq.setFromServlet(gpsStationName, beginDate, endDate, resource, contextGroup, contextId, minMaxLatLon, false);					 						
+					 
+					 dataUrl=gsq.getResource()+" ";
+					 System.out.println(dataUrl);
+					 
+					 Observation[] obsv=makeGPSObservationPoints(gpsStationName,dataUrl,getGpsRefStation());
+					 obsv=setXYLocations(obsv,gpsStationLat,gpsStationLon);
+					 
+					 for(int i=0;i<obsv.length;i++) {						 
+						 db.set(obsv[i]);
+						 
+					 }					 			 
+				 }
 
-		  //I'm not sure if these are even used, but they can't be blank.
-		  String dataUrl="";
-		  gpsStationName=gpsStationName.toLowerCase();
+				 catch (Exception ex) {			 
+					 ex.printStackTrace();			 
+				 }
 
-		  db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
-				     + codeName + "/" + projectName + ".db");
+				 db.commit();
+				 db.close();
+				 saveSimplexProjectEntry(currentProjectEntry);
+				 setGpsRefStation(false);
+			 }
+		 }
+		 
+		 else {			 
+			 
+			 try {
+				 
+				 GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
+			 
+				 System.out.println ("minMaxLatLon of this query : " + selectedminlon + " " + selectedminlat + " " + selectedmaxlon + " " + selectedmaxlat);
+				 gsq.setFromServlet("ALL", beginDate, endDate, resource, contextGroup, contextId, selectedminlat + " " + selectedminlon + " " + selectedmaxlat + " " + selectedmaxlat, false);							
+				 
+				 dataUrl=gsq.getResource()+" ";
+				 System.out.println(dataUrl);
+				 String[] splitdataUrl = dataUrl.split("\n");
+				 for (int nA = 0 ; nA < splitdataUrl.length ; nA++)
+					 System.out.println("splitdataUrl[" + nA + "] : " + splitdataUrl[nA]);	
+					 
+				 
+				 for (int nA = 0 ; nA < splitdataUrl.length ; nA++) {				 
+					 Observation[] obsv=makeGPSObservationPoints(gpsStationName,splitdataUrl[nA],getGpsRefStation());
+					 obsv=setXYLocations(obsv,gpsStationLat,gpsStationLon);
+					 
+					 for(int i=0;i<obsv.length;i++) {
+						 db.set(obsv[i]);				 
+					 }
+				 }			 
+			 }
 
-		  try {
-				GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
-				gsq.setFromServlet(gpsStationName, beginDate, endDate, resource,
-										 contextGroup, contextId, minMaxLatLon, false);
-				dataUrl+=gsq.getResource()+" ";
-				
-				System.out.println(dataUrl);
-				Observation[] obsv=makeGPSObservationPoints(gpsStationName,dataUrl,getGpsRefStation());
-				obsv=setXYLocations(obsv,gpsStationLat,gpsStationLon);
-				for(int i=0;i<obsv.length;i++) {
-					 db.set(obsv[i]);
-				}
-				
-		  }
-		  catch (Exception ex) {
-				ex.printStackTrace();
-		  }
-		  db.commit();
-		  db.close();
-		  saveSimplexProjectEntry(currentProjectEntry);
-		  setGpsRefStation(false);
+			 catch (Exception ex) {			 
+				 ex.printStackTrace();			 
+			 }
+
+			 db.commit();
+			 db.close();
+			 saveSimplexProjectEntry(currentProjectEntry);
+			 setGpsRefStation(false);			 
+		 }
 	 }
 	 
 	 private Observation[] setXYLocations(Observation[] obsv,
