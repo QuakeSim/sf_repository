@@ -330,7 +330,7 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
                   </row-layout>
                 </table-layout>
               </portlet-tab>
-              <portlet-tab label="Fetch-disloc2-results">
+              <portlet-tab label="Fetch-disloc3-results">
                 <title lang="en">Fetch Disloc Results</title>
                 <table-layout>
                   <row-layout>
