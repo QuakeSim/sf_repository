@@ -1572,9 +1572,8 @@ public class SimplexBean extends GenericSopacBean {
 				// SimpleXOutputBean dpsb=
 				// 	 (SimpleXOutputBean)getMyArchiveDataTable().getRowData();
 				
-				UIData madt2=getMyArchiveDataTable2();
-				System.out.println(madt2.toString()+" "+madt2.getRowCount()+" "+madt2.getId());
-				SimpleXOutputBean dpsb=(SimpleXOutputBean)(getMyArchiveDataTable2().getRowData());
+				
+				SimpleXOutputBean dpsb=(SimpleXOutputBean)(getMyArchiveDataTable().getRowData());
 
 				System.out.println(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
 										 + codeName + "/" + dpsb.getProjectName() + ".db");
