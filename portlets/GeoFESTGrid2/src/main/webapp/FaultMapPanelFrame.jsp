@@ -1,6 +1,6 @@
 <h:form id="faultKMLSelectorForm" rendered="#{MGBean.renderFaultMap}">
 <h:inputHidden id="faultName" value="#{MGBean.mapFaultName}"/>
-<div id = "the_kmlselection_bar" style="width:200px; height:100px;overflow:yes">
+
 
 
 <h:panelGrid id="faultKmlploter" columns="1" border="1">
@@ -22,10 +22,6 @@
 <script type="text/javascript" src="@host.base.url@@artifactId@/demo.js"></script>
 
 
-<div style="clear:both"></div>
-
-</div>
-
 <h:panelGrid id="faultMapsideGrid" columns="2" border="1">
 <f:verbatim>
 	<div id="faultMapside" style="width: 200px; height: 400px; overflow:auto;"></div>			
@@ -44,19 +40,21 @@
 
 
 <f:verbatim>
+
+
 <script language="JavaScript">
 
 
+	// These are used by the fault map 	
 	var faultMap=null;
 	faultMap=new GMap2(document.getElementById("faultMap"));
 
 	// The gridsphere container doesn't work with urls. That should be solved
-	// var kmllist = ["@host.base.url@@artifactId@/geo_000520-001216-sim_HDR_4rlks.unw.kml","@host.base.url@@artifactId@/QuakeTables_CGS_1996.kml","@host.base.url@@artifactId@/QuakeTables_CGS_2002.kml"];
-	var kmllist = ["geo_000520-001216-sim_HDR_4rlks.unw.kml","QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml"];	
+	var kmllist = ["@host.base.url@@artifactId@/geo_000520-001216-sim_HDR_4rlks.unw.kml","@host.base.url@@artifactId@/QuakeTables_CGS_1996.kml","@host.base.url@@artifactId@/QuakeTables_CGS_2002.kml"];
+	// var kmllist = ["geo_000520-001216-sim_HDR_4rlks.unw.kml","QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml"];	
 	
 	exmlFMap = new EGeoXml("exmlFMap", faultMap, kmllist, {sidebarfn:myside,nozoom:true,sidebarid:"faultMapside",parentformofsidebarid:"faultKMLSelectorForm",clickpolyobjfn:clickpolyobj,iwwidth:200});       
 	exmlFMap.parse();
-	
 
 	function jsleep(s){
 		s=s*1000;
@@ -72,14 +70,15 @@
 	}
 
 	jsleep(7);
-	
+
 	faultMap.addMapType(G_PHYSICAL_MAP);
 	faultMap.setMapType(G_PHYSICAL_MAP);
 	faultMap.setCenter(new GLatLng(35.0,-118.5),6);
 	faultMap.addControl(new GLargeMapControl());
 	faultMap.addControl(new GMapTypeControl());
-   
 
+	
+	// Handle sidebar events.  Param1 is the fault+segment name, param2 is the polyline.
 	var faultField=document.getElementById("faultKMLSelectorForm:faultName");
 	GEvent.addDomListener(faultField,"click",function(param1,param2,param3,param4){
 
@@ -103,14 +102,10 @@
 							interpId=param1.substring(param1.indexOf(interpHead)+interpHead.length+1,param1.length-1);
 						}
 					
-						faultName=faultName+"@"+segmentName+"%"+interpId;						
-					
-						// Now show the values.
-
-						// alert(param4);
+						faultName=faultName+"@"+segmentName+"%"+interpId;
 						
-						newElement1.value = param1
-
+						// We're going to use just the short name with the new search feature.
+						newElement1.value = param1;
 
 						// Trigger the polyline click event to show the popup window.
 						if(param3 != 'frommap')
@@ -130,10 +125,10 @@
 				return "";
 		}
 
+	
 	 function clickpolyobj() {
 	     return function() {GEvent.trigger(document.getElementById('faultKMLSelectorForm:faultName'),'click', name, p, 'frommap', desc);};
 	  }
-
   
 </script>
 </f:verbatim>
