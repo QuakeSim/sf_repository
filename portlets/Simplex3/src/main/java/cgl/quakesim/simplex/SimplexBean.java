@@ -88,13 +88,13 @@ public class SimplexBean extends GenericSopacBean {
 	 List myFaultEntryForProjectList = new ArrayList();
 	 
 	 List myObservationEntryForProjectList = new ArrayList();
-	 
-	 String[] selectProjectsList;
-	 
+	 	 
 	 List myProjectNameList = new ArrayList();
-	 
+
+	 String[] selectProjectsList;	 
 	 String[] deleteProjectsList;
-	 
+	 String[] copyProjectsList;
+
 	 List myarchivedFileEntryList = new ArrayList();
 	 
 	 GMTViewForm currentGMTViewForm = new GMTViewForm();
@@ -161,12 +161,12 @@ public class SimplexBean extends GenericSopacBean {
 
     
     public boolean getGpsRefStation(){
-	return this.gpsRefStation;
+		  return this.gpsRefStation;
     }
     public void setGpsRefStation(boolean gpsRefStation){
-	this.gpsRefStation=gpsRefStation;
+		  this.gpsRefStation=gpsRefStation;
     }
-
+	 
 	 public String getGpsStationName() {
 		  return gpsStationName;
 	 }
@@ -194,27 +194,35 @@ public class SimplexBean extends GenericSopacBean {
 	 public String getSelectedminlon() {
 		return selectedminlon;
 	}
+
 	public void setSelectedminlon(String selectedminlon) {
 		this.selectedminlon = selectedminlon;
 	}
+
 	public String getSelectedmaxlon() {
 		return selectedmaxlon;
 	}
+
 	public void setSelectedmaxlon(String selectedmaxlon) {
 		this.selectedmaxlon = selectedmaxlon;
 	}
+
 	public String getSelectedminlat() {
 		return selectedminlat;
 	}
+
 	public void setSelectedminlat(String selectedminlat) {
 		this.selectedminlat = selectedminlat;
 	}
+
 	public String getSelectedmaxlat() {
 		return selectedmaxlat;
 	}
+
 	public void setSelectedmaxlat(String selectedmaxlat) {
 		this.selectedmaxlat = selectedmaxlat;
 	}
+	 
 	public String getGpsStationLat() {		 
 		  return gpsStationLat;
 	 }
@@ -263,8 +271,6 @@ public class SimplexBean extends GenericSopacBean {
 	 public void setSimpleXServiceUrl(String tmp_str) {
 		  this.simpleXServiceUrl = tmp_str;
 	 }
-
-	 
 	 
 	 protected void makeProjectDirectory() {
 		  File projectDir = new File(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
@@ -810,6 +816,58 @@ public class SimplexBean extends GenericSopacBean {
 	 }
 
 	 /**
+	  * This is called when a project is seleted for copying and loading.
+	  */
+    public String toggleCopyProject() throws Exception  {
+		  System.out.println("Copying project");
+		  //Get the old project name from the checkboxes
+		  String oldProjectName="";
+		  if (copyProjectsList != null) {
+					 oldProjectName = copyProjectsList[0];
+		  }
+		  System.out.println("Old project name: "+oldProjectName);
+
+		  //Create an empty project
+		  String newProjectName=this.getProjectName();
+		  createNewProject(newProjectName);
+		  
+		  // //Now replace empty new project pieces with old stuff by restoring it from 
+		  // //the database.
+		  // db=Db4o.openFile(getBasePath()+"/"
+		  // 						 +getContextBasePath()
+		  // 						 +"/"+userName
+		  // 						 +"/"+codeName+".db");		  
+		  
+		  // 	//Get the old project bean.
+		  // 	currentProjectEntry.setProjectName(oldProjectName);
+		  // 	ObjectSet results=db.get(currentProjectEntry);
+		  // 	System.out.println("Got results:"+results.size());
+		  // 	if(results.hasNext()) {
+		  // 		currentProjectEntry=(projectEntry)results.next();
+		  // 	}
+		  // 	//Say goodbye.
+		  // 	db.close();
+
+			File oldFileDB=new File(getBasePath()+"/"
+											+getContextBasePath()
+											+"/"+userName+"/"+codeName+"/"+oldProjectName+".db");
+			File newFileDB=new File(getBasePath()+"/"
+											+getContextBasePath()
+											+"/"+userName+"/"+codeName+"/"+newProjectName+".db");
+			if(!newFileDB.exists()) {
+				 newFileDB.createNewFile();
+			}
+			copyFile(oldFileDB,newFileDB);
+			
+			return toggleSelectProject(newProjectName);
+
+			//Some final stuff.
+ 			// projectSelectionCode = "";
+			// faultSelectionCode = "";
+			//			return "Simplex2-edit-project";
+    }
+
+	 /**
 	  * Delete the selected project.  This is called by a JSF page.  Projects are
 	  * deleted by name.
 	  */
@@ -856,18 +914,29 @@ public class SimplexBean extends GenericSopacBean {
 	 
 	 /**
 	  * Loads the selected project from the database, sets the current project session variable.
-	  * 
+	  * This method is suitable for calling as a JSF action (ie no argument).  The project name 
+	  * is set separately. 
 	  */ 
-	 public String toggleSelectProject() {
+	 public String toggleSelectProject() throws Exception{
+		  String returnString="";
+		  if (selectProjectsList != null) {
+				this.projectName = selectProjectsList[0];
+			   returnString=toggleSelectProject(projectName);
+		  }
+		  else {
+				throw new Exception("Project not found in toggleSelectProject.");
+		  }
+		  return returnString;
+	 }
+	 /**
+	  * Loads the selected project from the database, sets the current project session variable.
+	  */ 
+
+	 public String toggleSelectProject(String projectName) {
 		  currentEditProjectForm=new editProjectForm(selectdbURL);
 		  currentEditProjectForm.setKmlfiles(getKmlfiles());
 		  currentEditProjectForm.setCodeName(getCodeName());
 		  currentEditProjectForm.initEditFormsSelection();
-		  if (selectProjectsList != null) {
-				for (int i = 0; i < 1; i++) {
-					 this.projectName = selectProjectsList[0];
-				}
-		  }
 		  
 		  try {
 				// Reconstruct the project lists
@@ -912,8 +981,17 @@ public class SimplexBean extends GenericSopacBean {
 
 	 /**
 	  * This creates a new projectEntry object, stores it in the DB, and sets the currentProject
+	  * Use this version to call from JSF.
 	  */
 	 protected String createNewProject() throws Exception {
+		  //projectName is set separately through bean methods.
+		  return createNewProject(this.getProjectName());
+	 }
+
+	 /**
+	  * This creates a new projectEntry object, stores it in the DB, and sets the currentProject
+	  */
+	 protected String createNewProject(String projectName) throws Exception {
 		  System.out.println("Creating new project");
 		  makeProjectDirectory();
 		  db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
@@ -1841,4 +1919,10 @@ public class SimplexBean extends GenericSopacBean {
 	 public void setCodeName(String codeName) {
 		this.codeName = codeName;
 	 }
+
+    public String[] getCopyProjectsList() { return this.copyProjectsList; }
+	 public void setCopyProjectsList(String[] copyProjectsList) { 
+		  this.copyProjectsList=copyProjectsList; 
+	 }
+
 }

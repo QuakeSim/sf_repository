@@ -66,11 +66,12 @@ function dataTableSelectOneRadio(radio) {
 							rendered="#{empty SimplexBean.myProjectNameList}"/>
 
 	        <h:panelGrid id="lkdjf4"
-						columns="2" 
+			  			columnClasses="alignTop,alignTop,alignTop"
+						columns="3" 
 						rendered="#{!(empty SimplexBean.myProjectNameList)}"		 
 						border="1">
 			<h:panelGrid  id="lkdjf5" columns="1" border="0">
-				<h:outputText  id="lkdjf6" escape="false" value="<b>Select Projects</b><br><br>" />
+				<h:outputText  id="lkdjf6" escape="false" value="<b>Select Projects</b><br>" />
 				<h:outputText id="lkdjf7" 
 								  escape="false"
 								value="Please select from one of the previous projects." />
@@ -85,8 +86,31 @@ function dataTableSelectOneRadio(radio) {
 				<h:commandButton id="lkdjf8" value="Select"
 									  action="#{SimplexBean.toggleSelectProject}" />
 			</h:panelGrid>
+			
+			<h:panelGrid id="dlrfih1" columns="1" border="0">
+				<h:outputText escape="false" value="<b>Copy Project</b><br>" />
+				<h:outputText escape="false"
+					value="Please select from one of the previous projects." />
+	
+				<h:selectManyCheckbox id="projectlistforcopy" 
+											 value="#{SimplexBean.selectProjectsList}"
+											 onchange="dataTableSelectOneRadio(this)"
+											 onclick="dataTableSelectOneRadio(this)"
+											 layout="pageDirection">					
+					<f:selectItems value="#{SimplexBean.myProjectNameList}" />
+				</h:selectManyCheckbox>
+
+				   <h:outputText value="New Project Name:"/>
+				   <h:inputText id="newProjectName" 
+									 value="#{SimplexBean.projectName}"
+									 required="true"/>
+
+				<h:commandButton value="Copy"
+					action="#{SimplexBean.toggleCopyProject}" />
+			</h:panelGrid>
+			
 			<h:panelGrid id="lkdjf9" columns="1" border="0">
-				<h:outputText id="lkdjf10" escape="false" value="<b>Select Projects</b><br><br>" />
+				<h:outputText id="lkdjf10" escape="false" value="<b>Select Projects</b><br>" />
 				<h:outputText  id="lkdjf11" escape="false"
 					value="Please select from one of the previous projects." />
 				<h:selectManyCheckbox id="projectfordelete" value="#{SimplexBean.deleteProjectsList}"
@@ -96,6 +120,7 @@ function dataTableSelectOneRadio(radio) {
 				<h:commandButton id="lkdjf12" value="Delete"
 					action="#{SimplexBean.toggleDeleteProject}" />
 			</h:panelGrid>
+
 		</h:panelGrid>
 
 	</h:form>
