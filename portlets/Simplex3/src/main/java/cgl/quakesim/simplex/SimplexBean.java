@@ -819,6 +819,7 @@ public class SimplexBean extends GenericSopacBean {
 	  * This is called when a project is seleted for copying and loading.
 	  */
     public String toggleCopyProject() throws Exception  {
+		  String returnString="";
 		  System.out.println("Copying project");
 		  //Get the old project name from the checkboxes
 		  String oldProjectName="";
@@ -827,27 +828,76 @@ public class SimplexBean extends GenericSopacBean {
 		  }
 		  System.out.println("Old project name: "+oldProjectName);
 
-		  //Create an empty project
+		  //--------------------------------------------------
+		  //Create an empty project and add toe the parent code database		  
+		  //--------------------------------------------------
 		  String newProjectName=this.getProjectName();
-		  createNewProject(newProjectName);
+		  currentEditProjectForm=new editProjectForm(selectdbURL);
+		  currentEditProjectForm.setKmlfiles(getKmlfiles());
+		  currentEditProjectForm.setCodeName(getCodeName());
+		  currentEditProjectForm.initEditFormsSelection();
 		  
-		  // //Now replace empty new project pieces with old stuff by restoring it from 
-		  // //the database.
-		  // db=Db4o.openFile(getBasePath()+"/"
-		  // 						 +getContextBasePath()
-		  // 						 +"/"+userName
-		  // 						 +"/"+codeName+".db");		  
-		  
-		  // 	//Get the old project bean.
-		  // 	currentProjectEntry.setProjectName(oldProjectName);
-		  // 	ObjectSet results=db.get(currentProjectEntry);
-		  // 	System.out.println("Got results:"+results.size());
-		  // 	if(results.hasNext()) {
-		  // 		currentProjectEntry=(projectEntry)results.next();
-		  // 	}
-		  // 	//Say goodbye.
-		  // 	db.close();
+		  //Add the project to the code database, cleaning up if necessary.
+		  System.out.println("Creating new project");
+		  makeProjectDirectory();
+		  db = Db4o.openFile(getBasePath()+"/"+getContextBasePath() + "/" + userName + "/"
+									+ codeName + ".db");
+		  // projectEntry tmp_project = new projectEntry();
+		  // tmp_project.projectName = this.projectName;
+		  // ObjectSet result = db.get(projectEntry.class);
+		 
+		  // while (result.hasNext()) {
+		  // 		tmp_project = (projectEntry) result.next();
+		  // 		//Clean up any null projects
+		  // 		if(tmp_project==null 
+		  // 			|| tmp_project.getProjectName()==null) {
+		  // 			 db.delete(tmp_project);
+		  // 		}
+		  // 		//This is an existing project, so load it and replace
+		  // 		else if (tmp_project.getProjectName().equals(projectName)) {
+		  // 			 db.delete(tmp_project);
+		  // 			 currentProjectEntry=tmp_project;
+		  // 			 break;
+		  // 		}
+		  // }
 
+		  //--------------------------------------------------
+		  // Now recover some of the project properties from
+		  // the old project and write this to the current project,
+		  // then commit to the database.
+		  //--------------------------------------------------
+			projectEntry oldProjectEntry=new projectEntry();
+			oldProjectEntry.setProjectName(oldProjectName);
+			ObjectSet results2=db.get(projectEntry.class);
+			System.out.println("Got results:"+results2.size());
+			//There should only be 0 or 1 matching entry.
+			while(results2.hasNext()) {
+				 projectEntry tmpProj=(projectEntry)results2.next();
+				 //Clean up any empty or null projects
+				 if(tmpProj==null 
+					 || tmpProj.getProjectName()==null) {
+					  db.delete(tmpProj);
+				 }
+
+				 if(tmpProj.getProjectName().equals(oldProjectName)) {
+					  System.out.println("Old Origin:"
+												+tmpProj.getOrigin_lat()
+												+" "+tmpProj.getOrigin_lon());
+					  currentProjectEntry.setProjectName(this.projectName);
+					  currentProjectEntry.setOrigin_lat(tmpProj.getOrigin_lat());
+					  currentProjectEntry.setOrigin_lon(tmpProj.getOrigin_lon());
+					  currentProjectEntry.setMaxIters(tmpProj.getMaxIters());
+					  currentProjectEntry.setStartTemp(tmpProj.getStartTemp());
+				 }
+			}
+			//Say goodbye.
+			db.set(currentProjectEntry);
+			db.commit();
+			db.close();
+
+			//--------------------------------------------------
+			//Copy over the project entry database.
+			//--------------------------------------------------
 			File oldFileDB=new File(getBasePath()+"/"
 											+getContextBasePath()
 											+"/"+userName+"/"+codeName+"/"+oldProjectName+".db");
@@ -859,7 +909,14 @@ public class SimplexBean extends GenericSopacBean {
 			}
 			copyFile(oldFileDB,newFileDB);
 			
-			return toggleSelectProject(newProjectName);
+			currentEditProjectForm.setProjectEntry(currentProjectEntry);
+
+			//--------------------------------------------------
+			//Finally, select the new project and load everything up
+			//--------------------------------------------------
+			returnString=toggleSelectProject(newProjectName);
+
+			return returnString;
 
 			//Some final stuff.
  			// projectSelectionCode = "";
@@ -921,17 +978,20 @@ public class SimplexBean extends GenericSopacBean {
 		  String returnString="";
 		  if (selectProjectsList != null) {
 				this.projectName = selectProjectsList[0];
+				System.out.println("Project name selected" + projectName);
 			   returnString=toggleSelectProject(projectName);
+				System.out.println("Return value: "+returnString);
 		  }
 		  else {
+				System.out.println("Project name selection list is null or empty");
 				throw new Exception("Project not found in toggleSelectProject.");
 		  }
 		  return returnString;
 	 }
+
 	 /**
 	  * Loads the selected project from the database, sets the current project session variable.
 	  */ 
-
 	 public String toggleSelectProject(String projectName) {
 		  currentEditProjectForm=new editProjectForm(selectdbURL);
 		  currentEditProjectForm.setKmlfiles(getKmlfiles());
@@ -964,7 +1024,8 @@ public class SimplexBean extends GenericSopacBean {
 					 } 
 				}
 				db.close();
-				
+			  
+
 				//Just for laughs, print out the origin to make sure it is OK.
 				System.out.println("Project origin: "
 										 +currentProjectEntry.getOrigin_lat()+" "
@@ -983,8 +1044,13 @@ public class SimplexBean extends GenericSopacBean {
 	  * This creates a new projectEntry object, stores it in the DB, and sets the currentProject
 	  * Use this version to call from JSF.
 	  */
-	 protected String createNewProject() throws Exception {
+	 public String createNewProject() throws Exception {
 		  //projectName is set separately through bean methods.
+		  currentEditProjectForm=new editProjectForm(selectdbURL);
+		  currentEditProjectForm.setKmlfiles(getKmlfiles());
+		  currentEditProjectForm.setCodeName(getCodeName());
+		  currentEditProjectForm.initEditFormsSelection();
+
 		  return createNewProject(this.getProjectName());
 	 }
 

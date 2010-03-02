@@ -93,7 +93,7 @@ function dataTableSelectOneRadio(radio) {
 					value="Please select from one of the previous projects." />
 	
 				<h:selectManyCheckbox id="projectlistforcopy" 
-											 value="#{SimplexBean.selectProjectsList}"
+											 value="#{SimplexBean.copyProjectsList}"
 											 onchange="dataTableSelectOneRadio(this)"
 											 onclick="dataTableSelectOneRadio(this)"
 											 layout="pageDirection">					
@@ -102,8 +102,7 @@ function dataTableSelectOneRadio(radio) {
 
 				   <h:outputText value="New Project Name:"/>
 				   <h:inputText id="newProjectName" 
-									 value="#{SimplexBean.projectName}"
-									 required="true"/>
+									 value="#{SimplexBean.projectName}"/>
 
 				<h:commandButton value="Copy"
 					action="#{SimplexBean.toggleCopyProject}" />
