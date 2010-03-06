@@ -214,7 +214,7 @@ EGeoXml.prototype.createMarker = function(point,name,desc,style) {
 
 // Create Polyline
 
-EGeoXml.prototype.createPolyline = function(points,color,width,opacity,pbounds,name,desc) {
+EGeoXml.prototype.createPolyline = function(points,color,width,opacity,pbounds,name,desc) {  
   var thismap = this.map;
   var iwoptions = this.opts.iwoptions || {};
   var p = new GPolyline(points,color,width,opacity);
@@ -227,9 +227,12 @@ EGeoXml.prototype.createPolyline = function(points,color,width,opacity,pbounds,n
 
   GEvent.addListener(p,"click", function() {
     thismap.openInfoWindowHtml(p.getVertex(Math.floor(p.getVertexCount()/2)),html,iwoptions);
+    // [CGL Version] It's a temporary solution.
+    GEvent.trigger(document.getElementById('faultKMLSelectorForm:faultName'),'click', name, p, 'frommap', desc);
   } );
   // [CGL Version] For trigger a click event to choose the fault as a selected one when a fault line is clicked
-  GEvent.addListener(p,"click", this.opts.clickpolyobjfn);
+  // GEvent.addListener(p,"click", function(p) { this.clickpolyobjfn(p); });
+
 
 
   if (this.opts.sidebarid) {
@@ -243,7 +246,7 @@ EGeoXml.prototype.createPolyline = function(points,color,width,opacity,pbounds,n
 
 // Create Polygon
 
-EGeoXml.prototype.createPolygon = function(points,color,width,opacity,fillcolor,fillopacity,pbounds, name, desc) {
+EGeoXml.prototype.createPolygon = function(points,color,width,opacity,fillcolor,fillopacity,pbounds, name, desc) {  
   var thismap = this.map;
   var iwoptions = this.opts.iwoptions || {};
   var p = new GPolygon(points,color,width,opacity,fillcolor,fillopacity)
@@ -261,11 +264,16 @@ EGeoXml.prototype.createPolygon = function(points,color,width,opacity,fillcolor,
     // [CGL Version] make a window to show a description at a better position
     // thismap.openInfoWindowHtml(pbounds.getCenter(),html,iwoptions);
     thismap.openInfoWindowHtml(p.getVertex(Math.floor(p.getVertexCount()/2)),html,iwoptions);
+    // [CGL Version] It's a temporary solution.
+    GEvent.trigger(document.getElementById('faultKMLSelectorForm:faultName'),'click', name, p, 'frommap', desc);
   } );
 
   // [CGL Version] For trigger a click event to choose the fault as a selected one when a fault line is clicked
-  GEvent.addListener(p,"click", this.opts.clickpolyobjfn);
+  // GEvent.addListener(p,"click", this.clickpolyobjfn());
+  // [CGL Version] For trigger a click event to choose the fault as a selected one when a fault line is clicked
+  // GEvent.addListener(p,"click", function(p) { this.clickpolyobjfn(p); });
 
+  
 
   if (this.opts.sidebarid) {
 
@@ -528,10 +536,12 @@ EGeoXml.prototype.processing = function(doc) {
       that.bounds.extend(sw); 
       that.bounds.extend(ne);
 
-      // [CGL Version] We count Ground Overlays as polyobjects
+      
       // that.groundoverlays.push(ground);
       // that.map.addOverlay(ground);
-      that.map.addOverlay(ground);
+
+      // [CGL Version] We count Ground Overlays as polyobjects
+      // that.map.addOverlay(ground); // [CGL Version] decided not to show an image file 3/4/2010
       that.gpolyobjs.push(ground);
       that.gpolyobjs_desc.push(desc);
 
