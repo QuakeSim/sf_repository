@@ -1,0 +1,34 @@
+Documents in this diretory contains information about how to configure Apache and start httpd on port 80, and redirects requests to QuakeSim portal and services to the Tomcat container. A detailed description about Apache Tomcat connector can be found at http://tomcat.apache.org/connectors-doc/generic_howto/quick.html. This file just gives a brief step-by-step description about how to complete this for QuakeSim.
+
+Since the default port number for Apache to accept http requests is 80, we don't need to modify port configurations of httpd. What we need to do are the following steps:
+
+1. Install mod_jk.so (unix) or mod_jk.dll (Windows) to the Apache module directory. Usual locations for modules directory on Unix are /usr/lib/apache/, /usr/lib/apache2/, and /usr/local/apache/libexec/. Usual locations for modules directory on Windows are C:\Program Files\Apache Group\Apache\modules\ and C:\Program Files\Apache Group\Apache2\modules\.
+
+2. Add configurations for mod_jk in /etc/httpd/conf/httpd.conf.
+Open http.conf, in the "Load Module" section, add the following line:
+LoadModule jk_module modules/mod_jk.so
+
+then at the end of the file, add the following lines:
+#configuration for mod_jk
+# Where to find workers.properties
+JkWorkersFile /etc/httpd/conf/workers.properties
+# Where to put jk shared memory
+JkShmFile /var/log/httpd/mod_jk.shm
+# Where to put jk logs
+JkLogFile /var/log/httpd/mod_jk.log
+# Set the jk log level [debug/error/info]
+JkLogLevel info
+# Select the timestamp log format
+JkLogStampFormat "[%a %b %d %H:%M:%S %Y] "
+Include /etc/httpd/conf/mod_jk.conf
+
+A typical workers.properties file and mod_jk.conf file are included in this directory. You can essentially copy these files to any place when actually deploying QuakeSim, e.g., the "conf" directory of tomcat.
+
+3. In the workers.properties file, set the "workers.tomcat_home" and "workers.java_home" to proper directories of your deployment. Add "ajp13" to the "worker.list" property. Set the "worker.ajp13.port" and "worker.ajp13.host" properties to the corresponding deployment of your tomcat; the default port number is 28009 and the defualt host is localhost. You can choose to start multiple tomcat workers and add them to the "worker.loadbalancer.balance_workers" property to balance the work load -- usually we don't need to do this.
+
+In cases when there is already a "workers.properties" file in use by the httpd server, you should add the above configurations properly to the existing file, instead of replacing it with our sample file.
+
+4. Modify configurations in mod_jk.conf according to your tomcat deployment. The "Server Name" should be the same as the host name in the URL of your QuakeSim portal. You can add or remove context redirections as needed by following the examples already contained in the file.
+
+5. Start httpd service: /usr/sbin/httpd -k start, and then start tomcat and
+test with a sample URL.
