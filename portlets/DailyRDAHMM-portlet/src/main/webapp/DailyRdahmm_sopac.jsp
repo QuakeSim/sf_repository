@@ -235,6 +235,7 @@
 				<div id="networksDiv"> Status changes and Colors:    </div>
 				<div id="cal1Container"> </div>          
 				<div>    Or choose a date by dragging the slider under the map. </div>
+				<div> <button id="getKmlBtn" onClick="getKmlBtnClick(this)" style="width:170px;height:20px\">Get KML For This Day</button> </div>
 			</td>
 			<td valign="top" width="600">
 				<table class="ooih" border="0" cellspacing="0" cellpadding="0" width="767" height="19">
@@ -404,6 +405,17 @@
 		var url = "http://gw11.quarry.iu.teragrid.org/axis2/services/DailyRdahmmResultService/proxyCallHttpService?serviceUrl=" + 
 					"http%3A%2F%2Fgf13.ucs.indiana.edu%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetStateChangeNumberPlot%3FdataSource%3DSOPAC%26minLat%3D"
 					+ latFrom + "%26maxLat%3D" + latTo + "%26minLong%3D" + longFrom + "%26maxLong%3D" + longTo;
+		var link = callHttpService(url);
+		window.open(link);
+	}
+
+	// get kml for the selected date
+	function getKmlBtnClick(btn) {
+		var dateStr = document.getElementById("dateText").value;
+
+		var url = "http://gw11.quarry.iu.teragrid.org/axis2/services/DailyRdahmmResultService/proxyCallHttpService?serviceUrl=" + 
+				  "http%3A%2F%2Fgf13.ucs.indiana.edu%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetKmlForDate%3FdateStr%3D"
+				  + dateStr + "%26resUrl%3Dhttp%3A%2F%2Fgf13.ucs.indiana.edu%2F%2Frdahmmexec%2Fdaily%2FSOPAC_FILL%2Fstation-status-change-SOPAC_FILL.xml";
 		var link = callHttpService(url);
 		window.open(link);
 	}

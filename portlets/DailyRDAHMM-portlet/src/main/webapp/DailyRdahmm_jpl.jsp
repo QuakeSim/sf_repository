@@ -188,7 +188,7 @@
 <!-- inline functions about map api -->	
 	<script type="text/javascript">
 	var markerWinHtmlStr = '<%=strTabContent%>';
-	// Create the marker and corresponding information window
+	// Create the marker and corresponding information window 
 	function createTabsInfoMarker(point, infoTabs ,icon1, idx, sel) {
 		var marker = new GMarker(point, {icon: icon1, clickable: true, title:stationArray[idx][0]});
 		GEvent.addListener(marker, "click", function() {
@@ -234,6 +234,7 @@
 				<div id="networksDiv"> Status changes and Colors:    </div>
 				<div id="cal1Container"> </div>          
 				<div>    Or choose a date by dragging the slider under the map. </div>
+				<div> <button id="getKmlBtn" onClick="getKmlBtnClick(this)" style="width:170px;height:20px\">Get KML For This Day</button> </div>
 			</td>
 			<td valign="top" width="600">
 				<table class="ooih" border="0" cellspacing="0" cellpadding="0" width="767" height="19">
@@ -328,10 +329,13 @@
 		networkInfo[i] = new Array(2);
 	}
 	networkInfo[0][0] = "no status change:";
-	networkInfo[0][1] = "http://labs.google.com/ridefinder/images/mm_20_green.png";	networkInfo[1][0] = "status changes on selected date:";
+	networkInfo[0][1] = "http://labs.google.com/ridefinder/images/mm_20_green.png";	
+	networkInfo[1][0] = "status changes on selected date:";
 	networkInfo[1][1] = "http://labs.google.com/ridefinder/images/mm_20_red.png";
 	networkInfo[2][0] = "status changed in last 30 days before selected date:";
-	networkInfo[2][1] = "http://labs.google.com/ridefinder/images/mm_20_yellow.png";	networkInfo[3][0] = "no data on selected date:";	networkInfo[3][1] = "http://labs.google.com/ridefinder/images/mm_20_gray.png";
+	networkInfo[2][1] = "http://labs.google.com/ridefinder/images/mm_20_yellow.png";	
+	networkInfo[3][0] = "no data on selected date:";	
+	networkInfo[3][1] = "http://labs.google.com/ridefinder/images/mm_20_gray.png";
 	networkInfo[4][0] = "no data on selected date, status changed in last 30 days before selected date:";
 	networkInfo[4][1] = "http://labs.google.com/ridefinder/images/mm_20_blue.png";
 
@@ -403,6 +407,17 @@
 		var url = "http://gw11.quarry.iu.teragrid.org/axis2/services/DailyRdahmmResultService/proxyCallHttpService?serviceUrl=" + 
 					"http%3A%2F%2Fgf13.ucs.indiana.edu%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetStateChangeNumberPlot%3FdataSource%3DJPL%26minLat%3D"
 					+ latFrom + "%26maxLat%3D" + latTo + "%26minLong%3D" + longFrom + "%26maxLong%3D" + longTo;
+		var link = callHttpService(url);
+		window.open(link);
+	}
+
+	// get kml for the selected date
+	function getKmlBtnClick(btn) {
+		var dateStr = document.getElementById("dateText").value;
+
+		var url = "http://gw11.quarry.iu.teragrid.org/axis2/services/DailyRdahmmResultService/proxyCallHttpService?serviceUrl=" + 
+				  "http%3A%2F%2Fgf13.ucs.indiana.edu%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetKmlForDate%3FdateStr%3D"
+				  + dateStr + "%26resUrl%3Dhttp%3A%2F%2Fgf13.ucs.indiana.edu%2F%2Frdahmmexec%2Fdaily%2FJPL_FILL%2Fstation-status-change-JPL_FILL.xml";
 		var link = callHttpService(url);
 		window.open(link);
 	}
@@ -726,7 +741,7 @@
 		var xPattern2 = xPattern, yPattern2 = yPattern, zPattern2 = zPattern, dirPattern2 = dirPattern; modelPattern2 = modelPattern;
           
 		var idx = inputPattern2.lastIndexOf(".");
-                var rawInputPattern2 = rawInputPattern; 
+        var rawInputPattern2 = rawInputPattern; 
 
 		var preFix = urlPattern2.replace(/{!station-id!}/g, stationId) + "/" + dirPattern2.replace(/{!station-id!}/g, stationId) + "/";
 		var modelLink = urlPattern2.replace(/{!station-id!}/g, stationId) + "/" + modelPattern2.replace(/{!station-id!}/g, stationId);
