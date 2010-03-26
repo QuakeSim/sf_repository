@@ -18,5 +18,4 @@ do
         JARS=$JARS:$i;
 done;
 
-java -classpath $JARS:$CLASSPATH cgl.webservices.DailyRDAHMMRunner $PROPFILE 1 5 1994-01-01 2006-09-30 2006-10-01 &
-
+java -classpath $JARS:$CLASSPATH cgl.webservices.DailyRDAHMMRunner $PROPFILE 1 &

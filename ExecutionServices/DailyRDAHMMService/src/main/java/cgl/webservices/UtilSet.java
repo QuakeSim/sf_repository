@@ -4,11 +4,22 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Calendar;
+import java.util.StringTokenizer;
+
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.taskdefs.ExecTask;
+
 
 public class UtilSet {
 	
@@ -155,7 +166,7 @@ public class UtilSet {
 	/** get date from a string like 2007-03-08 */
 	public static Calendar getDateFromString(String str) { 	
 	  	Calendar ret = Calendar.getInstance();
-	  	setDateByString(ret, str);  	
+	  	setDateByString(ret, str);	
 	  	return ret;
 	}
 	
@@ -213,7 +224,7 @@ public class UtilSet {
 	}
 	
 	/** get date-time from a string like "2007-03-08T08:08:08" */
-	public static Calendar getTimeDateFromString(String str) { 	
+	public static Calendar getDateTimeFromString(String str) { 	
 	  	Calendar ret = Calendar.getInstance();
 	  	setDateTimeByString(ret, str);  	
 	  	return ret;
@@ -221,28 +232,28 @@ public class UtilSet {
 	
 	/**
 	 * Get the date part of a string like "2007-03-08T08:08:08"
-	 * @param str
+	 * @param dateTimeStr
 	 * @return
 	 */
-	public static String getDatePart(String str) {
-		int idx = str.indexOf('T');
+	public static String getDatePart(String dateTimeStr) {
+		int idx = dateTimeStr.indexOf('T');
 		if (idx < 0)
-			return str;
+			return dateTimeStr;
 		else
-			return str.substring(0, idx);
+			return dateTimeStr.substring(0, idx);
 	}
 	
 	/**
 	 * Get the time part of a string like "2007-03-08T08:08:08"
-	 * @param str
+	 * @param dateTimeStr
 	 * @return
 	 */
-	public static String getTimePart(String str) {
-		int idx = str.indexOf('T');
+	public static String getTimePart(String dateTimeStr) {
+		int idx = dateTimeStr.indexOf('T');
 		if (idx < 0)
-			return str;
+			return dateTimeStr;
 		else
-			return str.substring(idx+1);
+			return dateTimeStr.substring(idx+1);
 	}
 	
 	/**
@@ -279,24 +290,67 @@ public class UtilSet {
 		// if file of newPath exists, delete it
 		if (newPathFile.exists()) {
 			if (!newPathFile.delete()) {
-				System.out.println("Failed to delete the old RDAHMM result file!");
+				System.out.println("Failed to delete the old file " + newPath);
 				return;
 			}
 		}
 
 		// rename the srcFile
 		if (!srcFile.renameTo(newPathFile)) {
-			System.out.println("Failed to rename the temporary file to the destined xml file!");
+			System.out.println("Failed to rename the source file to the destined file!");
 		}
 	}
 	
 	/**
 	 * concatenate two files into a single file of path targetPath
 	 */
-	public static void catTwoFiles(String path1, String path2, String targetPath) {
-		String res = exec("cat " + path1 + " " +  path2 + " > " + targetPath);
-		if (res.length() > 0)
-			System.out.println("result of cat two files " + path1 + " " + path2 + ":" + res);
+	public static void catTwoFiles(String path1, String path2, String targetPath) throws Exception{
+		InputStream in1 = new FileInputStream(path1);
+		OutputStream out = new FileOutputStream(targetPath);
+		byte[] buf = new byte[1024];
+		int length;
+		while ((length = in1.read(buf)) > 0) {
+			out.write(buf, 0, length);
+		}
+		in1.close();
+		
+		InputStream in2 = new FileInputStream(path2);
+		while ((length = in2.read(buf)) > 0) {
+			out.write(buf, 0, length);
+		}
+		in2.close();
+		out.flush();
+		out.close();
+	}
+	
+	/**
+	 * paste colFilePath as a new column to srcFilePath, and save results in destFilePath
+	 * @param srcFilePath
+	 * @param colFilePath
+	 * @param destFilePath
+	 */
+	public static void pasteFileAsColumn(String srcFilePath, String colFilePath, 
+			String destFilePath, char delimiter) throws Exception {
+		BufferedReader brSrc = new BufferedReader(new FileReader(srcFilePath));
+		BufferedReader brCol = new BufferedReader(new FileReader(colFilePath));
+		PrintWriter pwDest = new PrintWriter(new FileWriter(destFilePath));
+		String lineSrc = brSrc.readLine();
+		String lineCol = brCol.readLine();
+		while(lineSrc != null || lineCol != null) {
+			String lineDest = "";
+			if (lineSrc != null)
+				lineDest += lineSrc;
+			lineDest += delimiter;
+			if (lineCol != null)
+				lineDest += lineCol;
+			pwDest.println(lineDest);
+			lineSrc = brSrc.readLine();
+			lineCol = brCol.readLine();			
+		}
+		brSrc.close();
+		brCol.close();
+		pwDest.flush();
+		pwDest.close();
 	}
 	
 	/**
@@ -316,6 +370,124 @@ public class UtilSet {
     }
     
     /**
+     * Another famous method that I googled. This downloads contents
+     * from the given URL to a local file.
+     */ 
+    public static void copyUrlToFile(URL inputFileUrl,String destFile) throws Exception {
+		  URLConnection uconn=inputFileUrl.openConnection();
+		  InputStream in=inputFileUrl.openStream();
+		  OutputStream out=new FileOutputStream(destFile);
+
+		  byte[] buf=new byte[1024];
+		  int length;
+		  while((length=in.read(buf))>0) {
+				out.write(buf,0,length);
+		  }
+		  in.close();
+		  out.close();	  
+    }
+    
+    /**
+     * get the last line of a file
+     * @param path
+     * @return
+     */
+    public static String getLastLineOfFile(String path) {
+    	String res = null;
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(path));
+			String line = br.readLine();
+			while (line != null) {
+				res = line;
+				line = br.readLine();
+			}
+			br.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res;
+    }
+    
+    /**
+     * get the first line of a file
+     * @param path
+     * @return
+     */
+    public static String getFirstLineOfFile(String path) {
+    	String res = null;
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(path));
+			res = br.readLine();
+			br.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res;
+    }
+
+    /**
+     * extract certain columns from srcPath, and save the extracted columns to destPath.
+     * column index starts from 0
+     * @param srcPath
+     * @param destPath
+     * @param colStartIdx
+     * @param colEndIdx
+     * @return
+     */
+    public static boolean extractColumnsFromFile(String srcPath, String destPath, int colStartIdx, int colEndIdx) {
+    	String tmpDestPath = destPath;
+		if (srcPath.equals(destPath)) {
+			tmpDestPath = destPath + ".tmp";
+		}
+    	
+    	try {
+    		BufferedReader br = new BufferedReader(new FileReader(srcPath));
+			PrintWriter printer = new PrintWriter(new FileWriter(tmpDestPath));
+			String line = br.readLine();
+			while(line != null) {
+				 StringTokenizer st = new StringTokenizer(line, " \t");
+				 String newLine="";
+				 int count = st.countTokens();
+				 for (int j=0; j<count; j++) {
+					  String temp = st.nextToken();
+					  if(j >= colStartIdx && j <= colEndIdx){
+							newLine += temp + ' ';
+							if (j == colEndIdx) {
+								break;
+							}
+					  }
+				 }
+				 printer.println(newLine.trim());
+				 line = br.readLine();
+			}
+			br.close();
+			printer.flush();
+			printer.close();
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		return false;
+    	}
+    	
+    	// replace the file of srcPath with tmpDestPath if srcPath and destPath are the same
+		if (srcPath.equals(destPath)) {
+			File srcFile = new File(srcPath);
+			if (!srcFile.delete()) {
+				System.out.println("Failed to extract columns from " + srcPath + " and save them to "
+									+ destPath + ": can't delete original file!");
+				return false;
+			}
+			File tmpFile = new File(tmpDestPath);
+			if (!tmpFile.renameTo(srcFile)) {
+				System.out.println("Failed to extract columns from " + srcPath + " and save them to "
+									+ destPath + ": can't rename tmp file to original file name!");
+				return false;
+			}
+		}
+    	
+    	return true;
+    }
+    
+    /**
      * get the file name part of a path
      * @param path
      * @return
@@ -323,6 +495,20 @@ public class UtilSet {
     public static String getFileNamePart(String path) {
     	int idx = path.lastIndexOf(File.separatorChar);
     	return path.substring(idx + 1);
+    }
+    
+    /**
+     * get the directory part of a path
+     * @param path
+     * @return
+     */
+    public static String getDirPart(String path) {
+    	int idx = path.lastIndexOf(File.separatorChar);
+    	if (idx >= 0) {
+    		return path.substring(0, idx);
+    	} else {
+    		return "";
+    	}
     }
     
     /**
@@ -342,8 +528,9 @@ public class UtilSet {
 						return false;
 				}
 			}
+			return dir.delete();
 		}
-		return dir.delete();
+		return true;
     }
     
     /**
@@ -366,4 +553,134 @@ public class UtilSet {
 		}
     	return true;
     }
+    
+    /**
+     * count the number of lines in a file
+     * @param filePath
+     * @return
+     */
+    public static int countLinesInFile(String filePath) {
+		int count = 0;
+		try {
+			BufferedReader br = new LineNumberReader(new FileReader(filePath));
+			String line = br.readLine();
+			while (line != null) {
+				count++;
+				line = br.readLine();
+
+			}
+			br.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			count = -1;
+		}
+
+		return count;
+	}
+    
+    /**
+	 * execute a command line program from ant
+	 * 
+	 * @param program
+	 * @param args
+	 * @param workDir
+	 * @param inputPath
+	 * @param outputPath
+	 * @param errPath
+	 */
+    public static void antExecute(String program, String[] args, String workDir, String inputPath, String inputString, String outputPath, String errPath) {
+    	File fWorkDir = null;
+    	if (workDir != null && workDir.length() > 0)
+    		fWorkDir = new File (workDir);
+    	
+    	Project antproject = new Project();
+		antproject.init();
+		if (fWorkDir != null)
+			antproject.setBaseDir(fWorkDir);
+		
+		ExecTask execTask = new ExecTask();
+		execTask.init();
+		execTask.setProject(antproject);
+    	if (fWorkDir != null)
+    		execTask.setDir(new File (workDir));
+		execTask.setExecutable(program);
+		
+		for (int i=0; i<args.length; i++) {
+			execTask.createArg().setValue(args[i]);
+		}
+		
+		if (inputPath != null && inputPath.length() > 0)
+			execTask.setInput(new File(inputPath));
+		
+		if (inputString != null)
+			execTask.setInputString(inputString);
+		
+		if (outputPath != null && outputPath.length() > 0)
+			execTask.setOutput(new File(outputPath));
+		
+		if (errPath != null && errPath.length() > 0)
+			execTask.setError(new File(errPath));
+		
+		execTask.execute();
+    }
+    
+    /**
+	 * get the program name from a command line such as "cp ./test.txt ./test2.txt"
+	 * @param cmdLine
+	 * @return
+	 */
+	public static String getProgFromCmdLine(String cmdLine) {
+		int idx = cmdLine.indexOf(' ');
+		if (idx < 0)
+			return cmdLine;
+		else
+			return cmdLine.substring(0, idx);
+	}
+	
+	/**
+	 * get the arguments array from a command line such as "cp ./test.txt ./test2.txt"
+	 * @param cmdLine
+	 * @return
+	 */
+	public static String[] getArgsFromCmdLine(String cmdLine) {
+		StringTokenizer st = new StringTokenizer(cmdLine, " ");
+		int argNum = st.countTokens() - 1;
+		if (argNum < 1) {
+			String[] args = {};
+			return args;
+		}
+		
+		String[] args = new String[argNum];
+		// the first token is the program name
+		st.nextToken();
+		int idx = 0;
+		while (st.hasMoreTokens()) {
+			args[idx++] = st.nextToken();
+		}
+		return args;
+	}
+	
+	/**
+	 * read the content of a file to a string and return the string
+	 * @param file
+	 * @return
+	 */
+	public static String readFileContentAsString (File file) {
+		if (!file.exists() || file.isDirectory() || file.length() == 0)
+			return "";
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			StringBuffer bRes = new StringBuffer();
+			String line = br.readLine();
+			while (line != null) {
+				bRes.append(line).append('\n');
+				line = br.readLine();
+			}
+			br.close();
+			return bRes.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
 }
