@@ -22,8 +22,27 @@ public class DailyRdahmmResultAnalyzer {
 	protected DailyRdahmmStation[] stationArray = null;	//array of all stations recorded in the xml result file
 	
 	private Calendar calLastUpdate = null;
-	
 	private String dataLatestDate = null;
+	
+	String urlPattern;
+	String scnPattern;
+	String videoUrl;
+	String allInputPattern;
+	String dirPattern;
+	String aPattern;
+	String bPattern;
+	String inputPattern;
+	String rawInputPattern;
+	String lPattern;
+	String xPattern;
+	String yPattern;
+	String zPattern;
+	String piPattern;
+	String qPattern;
+	String maxPattern;
+	String minPattern;
+	String rangePattern;
+	String modelPattern;
 	
 	public DailyRdahmmResultAnalyzer (String xmlResUrl) {
 		this.xmlResUrl = xmlResUrl;
@@ -35,6 +54,26 @@ public class DailyRdahmmResultAnalyzer {
 		Document statusDoc = getXmlResDoc();
 		
 		Element eleXml = statusDoc.getRootElement();
+		Element eleOutput = eleXml.element("output-pattern");
+		urlPattern = eleOutput.element("server-url").getText();
+		scnPattern = eleOutput.element("stateChangeNumTxtFile").getText();
+		videoUrl = eleOutput.element("video-url").getText();
+		allInputPattern = eleOutput.element("allStationInputName").getText();
+		dirPattern = eleOutput.element("pro-dir").getText();
+		aPattern = eleOutput.element("AFile").getText();
+		bPattern = eleOutput.element("BFile").getText();
+		inputPattern = eleOutput.element("InputFile").getText();
+		rawInputPattern = eleOutput.element("RawInputFile").getText();
+		lPattern = eleOutput.element("LFile").getText();
+		xPattern = eleOutput.element("XPngFile").getText();
+		yPattern = eleOutput.element("YPngFile").getText();
+		zPattern = eleOutput.element("ZPngFile").getText();
+		piPattern = eleOutput.element("PiFile").getText();
+		qPattern = eleOutput.element("QFile").getText();
+		maxPattern = eleOutput.element("MaxValFile").getText();
+		minPattern = eleOutput.element("MinValFile").getText();
+		rangePattern = eleOutput.element("RangeFile").getText();
+		modelPattern = eleOutput.element("ModelFiles").getText();
 		
 		List lStations = eleXml.elements("station");
 		stationArray = new DailyRdahmmStation[lStations.size()];
@@ -214,13 +253,7 @@ public class DailyRdahmmResultAnalyzer {
 		int nodataIdx = getNoDataIdx(theDate, station);
 		// if no data for a month before the date, then there is no need to check state change
 		if (nodataIdx >= 0 && station.noDataSections[nodataIdx+1] < startTime)
-			return '3';
-		
-		/*
-		if (station.stationID.equals("gnps"))
-			System.out.println("calc color for gnps, endtime:" + endTime + "; first change time:" 
-															+ station.stateChanges[0] + " len:" + station.stateChanges.length);
-		*/                                                   
+			return '3';                                              
 		
 		if (station.stateChanges == null) {
 			if (nodataIdx >= 0)

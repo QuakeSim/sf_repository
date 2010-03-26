@@ -65,6 +65,9 @@
 								<copy overwrite="true" failonerror="false" todir="${catalina.home}/webapps/axis2/WEB-INF/services/${pom.artifactId}">
 									<fileset dir="${basedir}/build/classes"/>
 					 			</copy>
+								<mkdir dir="${catalina.home}/webapps/${pom.artifactId}"/>
+								<mkdir dir="${catalina.home}/webapps/${pom.artifactId}/kml"/>
+								<mkdir dir="${catalina.home}/webapps/${pom.artifactId}/plots"/>
 							</tasks>
 						</configuration>
 						<goals>

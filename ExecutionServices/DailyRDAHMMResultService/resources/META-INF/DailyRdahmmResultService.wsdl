@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:ns="http://webservices.cgl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://webservices.cgl">
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:axis2="http://webservices.cgl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://webservices.cgl/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://webservices.cgl/">
+    <wsdl:documentation>DailyRdahmmResultService</wsdl:documentation>
     <wsdl:types>
-        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://webservices.cgl">
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://webservices.cgl/xsd">
             <xs:element name="calcStationColors">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="date" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="resUrl" nillable="true" type="xs:string"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -16,7 +18,29 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element name="getDataLatestDate">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="resUrl" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
             <xs:element name="getDataLatestDateResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getKmlForDate">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="dateStr" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="resUrl" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getKmlForDateResponse">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
@@ -27,6 +51,7 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="stationId" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="resUrl" nillable="true" type="xs:string"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -37,8 +62,52 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element name="getStateChangeNumberPlot">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="dataSource" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="minLat" type="xs:float"/>
+                        <xs:element minOccurs="0" name="maxLat" type="xs:float"/>
+                        <xs:element minOccurs="0" name="minLong" type="xs:float"/>
+                        <xs:element minOccurs="0" name="maxLong" type="xs:float"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getStateChangeNumberPlotResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="proxyCallHttpService">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="serviceUrl" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="proxyCallHttpServiceResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
         </xs:schema>
     </wsdl:types>
+    <wsdl:message name="getStateChangeNumberPlotRequest">
+        <wsdl:part name="parameters" element="ns:getStateChangeNumberPlot"/>
+    </wsdl:message>
+    <wsdl:message name="getStateChangeNumberPlotResponse">
+        <wsdl:part name="parameters" element="ns:getStateChangeNumberPlotResponse"/>
+    </wsdl:message>
+    <wsdl:message name="proxyCallHttpServiceRequest">
+        <wsdl:part name="parameters" element="ns:proxyCallHttpService"/>
+    </wsdl:message>
+    <wsdl:message name="proxyCallHttpServiceResponse">
+        <wsdl:part name="parameters" element="ns:proxyCallHttpServiceResponse"/>
+    </wsdl:message>
     <wsdl:message name="calcStationColorsRequest">
         <wsdl:part name="parameters" element="ns:calcStationColors"/>
     </wsdl:message>
@@ -51,26 +120,64 @@
     <wsdl:message name="getLatLongForStationResponse">
         <wsdl:part name="parameters" element="ns:getLatLongForStationResponse"/>
     </wsdl:message>
-    <wsdl:message name="getDataLatestDateRequest"/>
+    <wsdl:message name="getDataLatestDateRequest">
+        <wsdl:part name="parameters" element="ns:getDataLatestDate"/>
+    </wsdl:message>
     <wsdl:message name="getDataLatestDateResponse">
         <wsdl:part name="parameters" element="ns:getDataLatestDateResponse"/>
     </wsdl:message>
+    <wsdl:message name="getKmlForDateRequest">
+        <wsdl:part name="parameters" element="ns:getKmlForDate"/>
+    </wsdl:message>
+    <wsdl:message name="getKmlForDateResponse">
+        <wsdl:part name="parameters" element="ns:getKmlForDateResponse"/>
+    </wsdl:message>
     <wsdl:portType name="DailyRdahmmResultServicePortType">
+        <wsdl:operation name="getStateChangeNumberPlot">
+            <wsdl:input message="axis2:getStateChangeNumberPlotRequest" wsaw:Action="urn:getStateChangeNumberPlot"/>
+            <wsdl:output message="axis2:getStateChangeNumberPlotResponse" wsaw:Action="urn:getStateChangeNumberPlotResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="proxyCallHttpService">
+            <wsdl:input message="axis2:proxyCallHttpServiceRequest" wsaw:Action="urn:proxyCallHttpService"/>
+            <wsdl:output message="axis2:proxyCallHttpServiceResponse" wsaw:Action="urn:proxyCallHttpServiceResponse"/>
+        </wsdl:operation>
         <wsdl:operation name="calcStationColors">
-            <wsdl:input message="ns:calcStationColorsRequest" wsaw:Action="urn:calcStationColors"/>
-            <wsdl:output message="ns:calcStationColorsResponse" wsaw:Action="urn:calcStationColorsResponse"/>
+            <wsdl:input message="axis2:calcStationColorsRequest" wsaw:Action="urn:calcStationColors"/>
+            <wsdl:output message="axis2:calcStationColorsResponse" wsaw:Action="urn:calcStationColorsResponse"/>
         </wsdl:operation>
         <wsdl:operation name="getLatLongForStation">
-            <wsdl:input message="ns:getLatLongForStationRequest" wsaw:Action="urn:getLatLongForStation"/>
-            <wsdl:output message="ns:getLatLongForStationResponse" wsaw:Action="urn:getLatLongForStationResponse"/>
+            <wsdl:input message="axis2:getLatLongForStationRequest" wsaw:Action="urn:getLatLongForStation"/>
+            <wsdl:output message="axis2:getLatLongForStationResponse" wsaw:Action="urn:getLatLongForStationResponse"/>
         </wsdl:operation>
         <wsdl:operation name="getDataLatestDate">
-            <wsdl:input message="ns:getDataLatestDateRequest" wsaw:Action="urn:getDataLatestDate"/>
-            <wsdl:output message="ns:getDataLatestDateResponse" wsaw:Action="urn:getDataLatestDateResponse"/>
+            <wsdl:input message="axis2:getDataLatestDateRequest" wsaw:Action="urn:getDataLatestDate"/>
+            <wsdl:output message="axis2:getDataLatestDateResponse" wsaw:Action="urn:getDataLatestDateResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getKmlForDate">
+            <wsdl:input message="axis2:getKmlForDateRequest" wsaw:Action="urn:getKmlForDate"/>
+            <wsdl:output message="axis2:getKmlForDateResponse" wsaw:Action="urn:getKmlForDateResponse"/>
         </wsdl:operation>
     </wsdl:portType>
-    <wsdl:binding name="DailyRdahmmResultServiceSoap11Binding" type="ns:DailyRdahmmResultServicePortType">
+    <wsdl:binding name="DailyRdahmmResultServiceSoap11Binding" type="axis2:DailyRdahmmResultServicePortType">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="getStateChangeNumberPlot">
+            <soap:operation soapAction="urn:getStateChangeNumberPlot" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="proxyCallHttpService">
+            <soap:operation soapAction="urn:proxyCallHttpService" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="calcStationColors">
             <soap:operation soapAction="urn:calcStationColors" style="document"/>
             <wsdl:input>
@@ -98,9 +205,36 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="getKmlForDate">
+            <soap:operation soapAction="urn:getKmlForDate" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
     </wsdl:binding>
-    <wsdl:binding name="DailyRdahmmResultServiceSoap12Binding" type="ns:DailyRdahmmResultServicePortType">
+    <wsdl:binding name="DailyRdahmmResultServiceSoap12Binding" type="axis2:DailyRdahmmResultServicePortType">
         <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="getStateChangeNumberPlot">
+            <soap12:operation soapAction="urn:getStateChangeNumberPlot" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="proxyCallHttpService">
+            <soap12:operation soapAction="urn:proxyCallHttpService" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="calcStationColors">
             <soap12:operation soapAction="urn:calcStationColors" style="document"/>
             <wsdl:input>
@@ -128,9 +262,36 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="getKmlForDate">
+            <soap12:operation soapAction="urn:getKmlForDate" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
     </wsdl:binding>
-    <wsdl:binding name="DailyRdahmmResultServiceHttpBinding" type="ns:DailyRdahmmResultServicePortType">
+    <wsdl:binding name="DailyRdahmmResultServiceHttpBinding" type="axis2:DailyRdahmmResultServicePortType">
         <http:binding verb="POST"/>
+        <wsdl:operation name="getStateChangeNumberPlot">
+            <http:operation location="DailyRdahmmResultService/getStateChangeNumberPlot"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getStateChangeNumberPlot"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getStateChangeNumberPlot"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="proxyCallHttpService">
+            <http:operation location="DailyRdahmmResultService/proxyCallHttpService"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="proxyCallHttpService"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="proxyCallHttpService"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="calcStationColors">
             <http:operation location="DailyRdahmmResultService/calcStationColors"/>
             <wsdl:input>
@@ -158,16 +319,25 @@
                 <mime:content type="text/xml" part="getDataLatestDate"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="getKmlForDate">
+            <http:operation location="DailyRdahmmResultService/getKmlForDate"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getKmlForDate"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getKmlForDate"/>
+            </wsdl:output>
+        </wsdl:operation>
     </wsdl:binding>
     <wsdl:service name="DailyRdahmmResultService">
-        <wsdl:port name="DailyRdahmmResultServiceHttpSoap11Endpoint" binding="ns:DailyRdahmmResultServiceSoap11Binding">
-            <soap:address location="http://localhost:8080/axis2/services/DailyRdahmmResultService"/>
+        <wsdl:port name="DailyRdahmmResultServiceHttpSoap11Endpoint" binding="axis2:DailyRdahmmResultServiceSoap11Binding">
+            <soap:address location="http://156.56.104.93:80/axis2/services/DailyRdahmmResultService.DailyRdahmmResultServiceHttpSoap11Endpoint/"/>
         </wsdl:port>
-        <wsdl:port name="DailyRdahmmResultServiceHttpSoap12Endpoint" binding="ns:DailyRdahmmResultServiceSoap12Binding">
-            <soap12:address location="http://localhost:8080/axis2/services/DailyRdahmmResultService"/>
+        <wsdl:port name="DailyRdahmmResultServiceHttpSoap12Endpoint" binding="axis2:DailyRdahmmResultServiceSoap12Binding">
+            <soap12:address location="http://156.56.104.93:80/axis2/services/DailyRdahmmResultService.DailyRdahmmResultServiceHttpSoap12Endpoint/"/>
         </wsdl:port>
-        <wsdl:port name="DailyRdahmmResultServiceHttpEndpoint" binding="ns:DailyRdahmmResultServiceHttpBinding">
-            <http:address location="http://localhost:8080/axis2/services/DailyRdahmmResultService"/>
+        <wsdl:port name="DailyRdahmmResultServiceHttpEndpoint" binding="axis2:DailyRdahmmResultServiceHttpBinding">
+            <http:address location="http://156.56.104.93:80/axis2/services/DailyRdahmmResultService.DailyRdahmmResultServiceHttpEndpoint/"/>
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>
