@@ -1845,8 +1845,7 @@ public class SimplexBean extends GenericSopacBean {
 		tmpfault.setFaultLatStarts(getFaultdrawLatStarts());
 		tmpfault.setFaultLonEnds(getFaultdrawLonEnds());
 		tmpfault.setFaultLonStarts(getFaultdrawLonStarts());
-
-		tmpfault.setFaultLength(tmp_Fault.getFaultLength());
+		
 
 		db.set(tmpfault);
 		db.commit();
