@@ -47,7 +47,7 @@
 *                                                                     *
 \*********************************************************************/
 // CGL Version   11 Jan 2010 - Loading multiple KML files at once
-// CGL Version   11 Jan 2010 - Listing polyobjects of the KML files in the sidebar
+// CGL Version   11 Jan 2010 - Listing polyobjects of the KML files in the sidebar using jquery.treeview
 // CGL Version   11 Jan 2010 - Supporting to add a trigger for a clicking a fault on a map
 
 
@@ -95,15 +95,16 @@ function EGeoXml(myvar, map, url, opts) {
 
   // [CGL Version] CGL Ver. supports to manage faults from multiURLs as a list
   this.urlcounter = 0;
-  this.overlaycounter = 0;
+  this.overlaycounter = 0;  
 
 }
+
 
 // Create Marker
 
 EGeoXml.prototype.createMarker = function(point,name,desc,style) {
   var icon = G_DEFAULT_ICON;
-  var myvar=this.myvar;
+  var myvar = this.myvar;
   var iwoptions = this.opts.iwoptions || {};
   var markeroptions = this.opts.markeroptions || {};
   var icontype = this.opts.icontype || "style";
@@ -216,6 +217,7 @@ EGeoXml.prototype.createMarker = function(point,name,desc,style) {
 
 EGeoXml.prototype.createPolyline = function(points,color,width,opacity,pbounds,name,desc) {  
   var thismap = this.map;
+  var clickpolyobjfn = this.clickpolyobjfn;
   var iwoptions = this.opts.iwoptions || {};
   var p = new GPolyline(points,color,width,opacity);
   this.map.addOverlay(p);
@@ -228,10 +230,11 @@ EGeoXml.prototype.createPolyline = function(points,color,width,opacity,pbounds,n
   GEvent.addListener(p,"click", function() {
     thismap.openInfoWindowHtml(p.getVertex(Math.floor(p.getVertexCount()/2)),html,iwoptions);
     // [CGL Version] It's a temporary solution.
-    GEvent.trigger(document.getElementById('faultKMLSelectorForm:faultName'),'click', name, p, 'frommap', desc);
+    // GEvent.trigger(document.getElementById('faultKMLSelectorForm:faultName'),'click', name, p, 'frommap', desc);
   } );
+
   // [CGL Version] For trigger a click event to choose the fault as a selected one when a fault line is clicked
-  // GEvent.addListener(p,"click", function(p) { this.clickpolyobjfn(p); });
+  GEvent.addListener(p,"click", function() { clickpolyobjfn(p, name, desc) });
 
 
 
@@ -248,6 +251,7 @@ EGeoXml.prototype.createPolyline = function(points,color,width,opacity,pbounds,n
 
 EGeoXml.prototype.createPolygon = function(points,color,width,opacity,fillcolor,fillopacity,pbounds, name, desc) {  
   var thismap = this.map;
+  var clickpolyobjfn = this.clickpolyobjfn;
   var iwoptions = this.opts.iwoptions || {};
   var p = new GPolygon(points,color,width,opacity,fillcolor,fillopacity)
   this.map.addOverlay(p);
@@ -265,15 +269,11 @@ EGeoXml.prototype.createPolygon = function(points,color,width,opacity,fillcolor,
     // thismap.openInfoWindowHtml(pbounds.getCenter(),html,iwoptions);
     thismap.openInfoWindowHtml(p.getVertex(Math.floor(p.getVertexCount()/2)),html,iwoptions);
     // [CGL Version] It's a temporary solution.
-    GEvent.trigger(document.getElementById('faultKMLSelectorForm:faultName'),'click', name, p, 'frommap', desc);
+    // GEvent.trigger(document.getElementById('faultKMLSelectorForm:faultName'),'click', name, p, 'frommap', desc);
   } );
-
-  // [CGL Version] For trigger a click event to choose the fault as a selected one when a fault line is clicked
-  // GEvent.addListener(p,"click", this.clickpolyobjfn());
-  // [CGL Version] For trigger a click event to choose the fault as a selected one when a fault line is clicked
-  // GEvent.addListener(p,"click", function(p) { this.clickpolyobjfn(p); });
-
   
+  // [CGL Version] For trigger a click event to choose the fault as a selected one when a fault line is clicked
+  GEvent.addListener(p,"click", function() { clickpolyobjfn(p, name, desc) });
 
   if (this.opts.sidebarid) {
 
@@ -296,6 +296,15 @@ EGeoXml.addSidebar = function(myvar,name,type,i,graphic) {
   }  
 }
 
+// [CGL Version] to do something when a fault is clicked
+EGeoXml.addClickpolyobj = function(p, name, desc) {
+  // nothing to do as a default
+  return ""; 
+}
+
+
+
+
 // Dropdown factory method
 EGeoXml.addDropdown = function(myvar,name,type,i,graphic) {
     return '<option value="' + i + '">' + name +'</option>';
@@ -311,6 +320,16 @@ EGeoXml.addClickpolyobj = function() {
 // Request to Parse an XML file
 
 EGeoXml.prototype.parse = function() {
+
+  // [CGL Version] Setting a jquery treeview
+  $(document).ready(function(){
+	
+	$("#browser").treeview({
+		animated:"normal",
+		persist: "cookie"
+	});	
+  });
+
  var that = this;
  this.progress = this.urls.length;
  for (u=0; u<this.urls.length; u++) {

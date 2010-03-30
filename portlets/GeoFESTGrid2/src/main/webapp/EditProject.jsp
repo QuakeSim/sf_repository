@@ -21,8 +21,7 @@
 <html>
 <head>
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here"
-type="text/javascript"></script>
- <script src="@host.base.url@@artifactId@/egeoxml.js" type="text/javascript"></script>
+type="text/javascript"></script> 
 
 <link rel="stylesheet" type="text/css"
 	href='<%= request.getContextPath() + "/stylesheet.css" %>'>
@@ -87,6 +86,9 @@ function dataTableSelectOneRadio(radio) {
 					<f:selectItem id="item3"
 						itemLabel="Add Layer from DB: Click to select a layer from the database."
 						itemValue="AddLayerFromDB" />
+					<f:selectItem id="item4"
+						itemLabel="Add Fault from DB: Click to select a fault segment from the database."
+						itemValue="AddFaultSelection" />
 					<f:selectItem id="item5"
 						itemLabel="Add Fault from Map: Click to select a fault segment using the map interface."
 						itemValue="FaultMapSelection" />
