@@ -21,8 +21,27 @@ public class Observation  implements java.io.Serializable {
     private java.lang.String obsvType;
 
     private java.lang.String obsvValue;
+    
+    boolean update;
+    boolean delete;
 
-    public Observation() {
+    public boolean getUpdate() {
+		return update;
+	}
+
+	public void setUpdate(boolean update) {
+		this.update = update;
+	}
+
+	public boolean getDelete() {
+		return delete;
+	}
+
+	public void setDelete(boolean delete) {
+		this.delete = delete;
+	}
+
+	public Observation() {
     }
 
     public Observation(
@@ -40,6 +59,8 @@ public class Observation  implements java.io.Serializable {
            this.obsvRefSite = obsvRefSite;
            this.obsvType = obsvType;
            this.obsvValue = obsvValue;
+           this.update = false;
+           this.delete = false;
     }
 
 

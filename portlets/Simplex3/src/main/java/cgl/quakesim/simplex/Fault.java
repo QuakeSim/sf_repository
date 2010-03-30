@@ -53,6 +53,11 @@ public class Fault  implements java.io.Serializable {
     private java.lang.String faultWidth;
 
     private boolean faultWidthVary;
+    
+    boolean update;
+    boolean delete;
+    
+    
 
     public Fault() {
     }
@@ -104,7 +109,28 @@ public class Fault  implements java.io.Serializable {
            this.faultStrikeSlipVary = faultStrikeSlipVary;
            this.faultWidth = faultWidth;
            this.faultWidthVary = faultWidthVary;
+           this.update = false;
+           this.delete = false;
+           
+           
+           
     }
+    
+    public boolean getUpdate() {
+		return update;
+	}
+
+	public void setUpdate(boolean update) {
+		this.update = update;
+	}
+
+	public boolean getDelete() {
+		return delete;
+	}
+
+	public void setDelete(boolean delete) {
+		this.delete = delete;
+	}
 
 
     /**
