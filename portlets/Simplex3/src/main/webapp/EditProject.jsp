@@ -64,8 +64,9 @@ for(int i=0;i<stationList.size();i++) {
 </style>
 
 <head>
-<link rel="stylesheet" type="text/css"
-	href='<%= request.getContextPath() + "/stylesheet.css" %>'>
+<link rel="stylesheet" type="text/css" href='<%= request.getContextPath() + "/stylesheet.css" %>'>
+<link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css">
+
 <title>Edit Project</title>
 <script
 	src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here"
@@ -373,7 +374,7 @@ function togglemarker(array, e, option)
 
 	map.removeOverlay(marker[index]);
 
-// Set up the icon marker
+	// Set up the icon marker
 	var baseIcon=new GIcon(G_DEFAULT_ICON);
 	baseIcon.iconSize=new GSize(15,20);
 	baseIcon.shadowSize = new GSize(10, 10);
@@ -382,7 +383,7 @@ function togglemarker(array, e, option)
 	baseIcon.infoShadowAnchor = new GPoint(5, 5);	      
 
 
-	if (b==0 || option == "in"){
+	if (b== 0 || option == "in"){
 		array.push(e);
 
 		baseIcon.image = "http://labs.google.com/ridefinder/images/mm_20_yellow.png";
@@ -533,7 +534,7 @@ marker_NE.getPoint()];
 }
 
 function toggleBorder() {
-	if (searcharea.value == "false") {  
+	if (searcharea.checked == false) {  
 
 		map.removeOverlay(border);
 		map.removeOverlay(marker_NE);

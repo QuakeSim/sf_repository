@@ -48,15 +48,28 @@ public class editProjectForm extends GenericProjectBean {
 	 List myFaultDBEntryList = new ArrayList();
 	 String selectdbURL="";
 
-	 String mapFaultName;
-	 String faultLatStart = new String();
-	 String faultLatEnd = new String();
-	 String faultLonStart = new String();
-	 String faultLonEnd = new String();
+	 String mapFaultName;	 
+
+	 String faultName = "newfault";
+	 
+	 public String getFaultName() {
+		return faultName;
+	}
+	public void setFaultName(String faultName) {
+		this.faultName = faultName;
+	}
+
+	String faultLatStart;
+	 String faultLatEnd;
+	 String faultLonStart;
+	 String faultLonEnd;
+
+		
 	 private HtmlDataTable myFaultDataTable;
 	 double projectOriginLon, projectOriginLat;
 	 
 	 projectEntry currentProject;
+
 
 	 String kmlfiles = ""; // This should be passed from SimplexBean (faces-config.xml)
 	 String codeName = ""; // This should be passed from SimplexBean (faces-config.xml)
@@ -273,6 +286,86 @@ public class editProjectForm extends GenericProjectBean {
 
 	// }
 	
+	public void createFaultFromMap() {
+		
+		Fault tmp_fault = new Fault();
+		System.out.println ("[createFaultFromMap] started");
+		
+		double dip = 0;
+		double depth = 0;
+		double width = 0;    
+
+		double latEnd = Double.parseDouble(faultLatEnd);
+		double latStart = Double.parseDouble(faultLatStart);
+		double lonStart = Double.parseDouble(faultLonStart);
+		double lonEnd = Double.parseDouble(faultLonEnd);
+
+
+		// Calculate the length			
+		double d2r = Math.acos(-1.0) / 180.0;
+		double flatten=1.0/298.247;
+
+		double x = (lonEnd - lonStart) * factor(lonStart,latStart);
+		double y = (latEnd - latStart) * 111.32;
+
+		// String length = df.format(Math.sqrt(x * x + y * y));
+		double length=Double.parseDouble(df.format(Math.sqrt(x * x + y * y)));
+		tmp_fault.setFaultName(faultName);
+		tmp_fault.setoldFaultName(faultName);
+		tmp_fault.setFaultLength(length+"");
+		tmp_fault.setFaultWidth(width+"");
+		tmp_fault.setFaultDepth (depth+"");
+		tmp_fault.setFaultDipAngle(dip+"");
+		
+		//Probably hokey default values
+		tmp_fault.setFaultSlip ("1.0"); 
+		tmp_fault.setFaultRakeAngle("1.0");
+		tmp_fault.setFaultLonStarts(lonStart+"");
+		tmp_fault.setFaultLatStarts(latStart+"");
+		tmp_fault.setFaultLonEnds(lonEnd+"");
+		tmp_fault.setFaultLatEnds(latEnd+"");
+		
+		//Set the strike
+		double strike=Math.atan2(x,y)/d2r;
+		tmp_fault.setFaultStrikeAngle(strike+"");
+		
+		//Set the origin
+		//This is the (x,y) of the fault relative to the project's origin
+		//The project origin is the lower left lat/lon of the first fault.
+		//If any of these conditions hold, we need to reset.
+		
+		System.out.println("Check Project Origin: "
+								+currentProject.getOrigin_lat()
+								+currentProject.getOrigin_lon());
+		
+		if(currentProject.getOrigin_lat()==projectEntry.DEFAULT_LAT
+			|| currentProject.getOrigin_lon()==projectEntry.DEFAULT_LON ) {
+			currentProject.setOrigin_lat(latStart);
+			currentProject.setOrigin_lon(lonStart);
+		}
+		double projectOriginLat=currentProject.getOrigin_lat();
+		double projectOriginLon=currentProject.getOrigin_lon();
+
+		System.out.println("Confirm Project Origin: "
+								+currentProject.getOrigin_lat()
+								+currentProject.getOrigin_lon());
+					
+		//The following should be done in any case.  If the origin was just (re)set above,
+		//we will get a harmless (0,0);
+		System.out.println("lonStart : " + lonStart);
+		System.out.println("latStart : " + latStart);
+		double x1=(lonStart-projectOriginLon)*factor(projectOriginLon,projectOriginLat);
+		double y1=(latStart-projectOriginLat)*111.32;
+		System.out.println("Fault origin: "+x1+" "+y1);
+		tmp_fault.setFaultLocationX(df.format(x1));
+		tmp_fault.setFaultLocationY(df.format(y1));
+		
+		currentFault = tmp_fault;
+		
+		
+	}
+	
+	
 	public Fault QueryFaultFromDB(String faultname) {
 		// Check request with fallback
 
@@ -313,6 +406,7 @@ public class editProjectForm extends GenericProjectBean {
 			// String length = df.format(Math.sqrt(x * x + y * y));
 			double length=Double.parseDouble(df.format(Math.sqrt(x * x + y * y)));
 			tmp_fault.setFaultName(theFault+"");
+			tmp_fault.setoldFaultName(theFault+"");
 			tmp_fault.setFaultLength(length+"");
 			tmp_fault.setFaultWidth(width+"");
 			tmp_fault.setFaultDepth (depth+"");
@@ -353,6 +447,8 @@ public class editProjectForm extends GenericProjectBean {
 						
 			//The following should be done in any case.  If the origin was just (re)set above,
 			//we will get a harmless (0,0);
+			System.out.println("lonStart : " + lonStart);
+			System.out.println("latStart : " + latStart);
 			double x1=(lonStart-projectOriginLon)*factor(projectOriginLon,projectOriginLat);
 			double y1=(latStart-projectOriginLat)*111.32;
 			System.out.println("Fault origin: "+x1+" "+y1);
@@ -629,37 +725,7 @@ public class editProjectForm extends GenericProjectBean {
     }
     
 
-	public String getFaultLatStart() {
-		return this.faultLatStart;
-	}
 
-	public void setFaultLatStart(String tmp_str) {
-		this.faultLatStart = tmp_str;
-	}
-
-	public String getFaultLatEnd() {
-		return this.faultLatEnd;
-	}
-
-	public void setFaultLatEnd(String tmp_str) {
-		this.faultLatEnd = tmp_str;
-	}
-
-	public String getFaultLonStart() {
-		return this.faultLonStart;
-	}
-
-	public void setFaultLonStart(String tmp_str) {
-		this.faultLonStart = tmp_str;
-	}
-
-	public String getFaultLonEnd() {
-		return this.faultLonEnd;
-	}
-
-	public void setFaultLonEnd(String tmp_str) {
-		this.faultLonEnd = tmp_str;
-	}
 
 	public HtmlDataTable getMyFaultDataTable() {
 		return myFaultDataTable;
@@ -709,7 +775,31 @@ public class editProjectForm extends GenericProjectBean {
 		  this.renderObsvEntries=renderObsvEntries;
 	 }
 
-
+	 public String getFaultLatStart() {
+			return faultLatStart;
+		}
+		public void setFaultLatStart(String faultLatStart) {
+			this.faultLatStart = faultLatStart;
+		}
+		public String getFaultLatEnd() {
+			return faultLatEnd;
+		}
+		public void setFaultLatEnd(String faultLatEnd) {
+			this.faultLatEnd = faultLatEnd;
+		}
+		public String getFaultLonStart() {
+			return faultLonStart;
+		}
+		public void setFaultLonStart(String faultLonStart) {
+			this.faultLonStart = faultLonStart;
+		}
+		public String getFaultLonEnd() {
+			return faultLonEnd;
+		}
+		public void setFaultLonEnd(String faultLonEnd) {
+			this.faultLonEnd = faultLonEnd;
+		}
+		
 	 public String getKmlfiles() {
 		return kmlfiles;
 	 }

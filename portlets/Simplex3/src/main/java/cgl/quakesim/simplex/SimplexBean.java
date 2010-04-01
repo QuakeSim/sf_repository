@@ -5,6 +5,7 @@ import java.io.*;
 import java.net.*;
 import java.rmi.server.UID;
 import java.util.*;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import javax.faces.context.FacesContext;
@@ -144,10 +145,6 @@ public class SimplexBean extends GenericSopacBean {
 	String selectedminlat = null;
 	String selectedmaxlat = null;
 
-	String faultdrawLatEnds = null;
-	String faultdrawLatStarts = null;
-	String faultdrawLonEnds = null;
-	String faultdrawLonStarts = null;
 
 	String[] latArray;
 	String[] lonArray;
@@ -240,39 +237,7 @@ public class SimplexBean extends GenericSopacBean {
 	public void setSelectedmaxlat(String selectedmaxlat) {
 		this.selectedmaxlat = selectedmaxlat;
 	}
-
-	public String getFaultdrawLatEnds() {
-		return faultdrawLatEnds;
-	}
-
-	public void setFaultdrawLatEnds(String faultdrawLatEnds) {
-		this.faultdrawLatEnds = faultdrawLatEnds;
-	}
-
-	public String getFaultdrawLatStarts() {
-		return faultdrawLatStarts;
-	}
-
-	public void setFaultdrawLatStarts(String faultdrawLatStarts) {
-		this.faultdrawLatStarts = faultdrawLatStarts;
-	}
-
-	public String getFaultdrawLonEnds() {
-		return faultdrawLonEnds;
-	}
-
-	public void setFaultdrawLonEnds(String faultdrawLonEnds) {
-		this.faultdrawLonEnds = faultdrawLonEnds;
-	}
-
-	public String getFaultdrawLonStarts() {
-		return faultdrawLonStarts;
-	}
-
-	public void setFaultdrawLonStarts(String faultdrawLonStarts) {
-		this.faultdrawLonStarts = faultdrawLonStarts;
-	}
-
+	
 	public String getGpsStationLat() {
 		return gpsStationLat;
 	}
@@ -1635,7 +1600,7 @@ public class SimplexBean extends GenericSopacBean {
 				tmp_Fault = (Fault) myFaultsForProjectList.get(i);
 
 				// This is the info about the fault.
-				String tmp_faultName = tmp_Fault.getFaultName();
+				String tmp_faultName = tmp_Fault.getoldFaultName();
 				boolean tmp_update = tmp_Fault.getUpdate();
 				boolean tmp_delete = tmp_Fault.getDelete();
 
@@ -1648,7 +1613,7 @@ public class SimplexBean extends GenericSopacBean {
 				if ((tmp_update == true) && (tmp_delete == false)) {
 
 					System.out.println("[toggleUpdateFaults] Updating "
-							+ tmp_faultName + " " + tmp_Fault.getFaultSlip());
+							+ tmp_Fault.getFaultName() + "(old name)" + tmp_faultName + " " + tmp_Fault.getFaultSlip());
 
 					db = Db4o.openFile(getBasePath() + "/"
 							+ getContextBasePath() + "/" + userName + "/"
@@ -1683,6 +1648,7 @@ public class SimplexBean extends GenericSopacBean {
 						toUpdate.setFaultLonStarts(tmp_Fault
 								.getFaultLonStarts());
 						toUpdate.setFaultName(tmp_Fault.getFaultName());
+						toUpdate.setoldFaultName(tmp_Fault.getFaultName());
 						toUpdate.setFaultOriginXVary(tmp_Fault
 								.isFaultOriginXVary());
 						toUpdate.setFaultOriginYVary(tmp_Fault
@@ -1818,17 +1784,25 @@ public class SimplexBean extends GenericSopacBean {
 			tmpfault = (Fault) result.next();
 			db.delete(tmpfault);
 		}
+		faultdrawing = false;
 		db.set(currentEditProjectForm.currentFault);
 		db.commit();
 		db.close();
-
+		
 		saveSimplexProjectEntry(currentProjectEntry);
 		// Print this out as KML
-		faultKmlUrl = createFaultKmlFile();
+		faultKmlUrl = createFaultKmlFile();		
 	}
 
 	public void toggleDrawFaultFromMap(ActionEvent ev) {
-
+		
+		System.out.println("[toggleDrawFaultFromMap] started");
+		
+		currentEditProjectForm.createFaultFromMap();
+		
+		currentEditProjectForm.initEditFormsSelection();
+		System.out.println("[toggleDrawFaultFromMap] currentFault.getFaultName() " + currentEditProjectForm.currentFault.getFaultName());
+		
 		db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 				+ userName + "/" + codeName + "/" + projectName + ".db");
 
@@ -1840,14 +1814,7 @@ public class SimplexBean extends GenericSopacBean {
 			tmpfault = (Fault) result.next();
 			db.delete(tmpfault);
 		}
-
-		tmpfault.setFaultLatEnds(getFaultdrawLatEnds());
-		tmpfault.setFaultLatStarts(getFaultdrawLatStarts());
-		tmpfault.setFaultLonEnds(getFaultdrawLonEnds());
-		tmpfault.setFaultLonStarts(getFaultdrawLonStarts());
-		
-
-		db.set(tmpfault);
+		db.set(currentEditProjectForm.currentFault);
 		db.commit();
 		db.close();
 
@@ -1856,6 +1823,7 @@ public class SimplexBean extends GenericSopacBean {
 		faultKmlUrl = createFaultKmlFile();
 	}
 
+	 
 	public void toggleAddGPSObsvForProject(ActionEvent ev) {
 
 		readStations();
