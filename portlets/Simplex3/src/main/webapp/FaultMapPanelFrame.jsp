@@ -1,6 +1,6 @@
 <h:form id="faultKMLSelectorForm" rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}">
 <h:inputHidden id="faultName" value="#{SimplexBean.currentEditProjectForm.mapFaultName}"/>
-
+<h:inputHidden id="faultlistsize" value="#{SimplexBean.myFaultsForProjectListsize}"/>
 
 <h:panelGrid id="faultKmlploter" columns="1" border="1">
   <h:panelGrid id="gridforbutton" columns="1" border="0" style="vertical-align:top;">
@@ -39,14 +39,23 @@
       <f:facet name="header">
 	<h:outputText id="nfa1" escape="false" value="<b>Name</b>" />
       </f:facet>
-      <h:inputText id="faultnamet" style="text-align:right;width:60px" value="#{myentry32.faultName}" required="true" />
+      <h:inputText id="faultnamet" style="text-align:right;width:60px" value="#{myentry32.faultName}" required="true" />								
     </h:column>
+
     <h:column>
       <f:facet name="header">
-	<h:outputText id="nfa3" escape="false" value="<b>Lat End</b>" />
+	<h:outputText id="nfa9" escape="false" value="<b>Lon Start</b>" />
       </f:facet>
-      <h:inputText id="faultdrawLatEndst" value="#{myentry32.faultLatEnd}" required="true" />
+      <h:inputText id="faultdrawLonStartst" value="#{myentry32.faultLonStart}" required="true" />
     </h:column>
+
+    <h:column>
+      <f:facet name="header">
+	<h:outputText id="nfa7" escape="false" value="<b>Lat Start</b>" />
+      </f:facet>
+      <h:inputText id="faultdrawLatStartst" value="#{myentry32.faultLatStart}" required="true" />
+    </h:column>
+
     <h:column>
       <f:facet name="header">
 	<h:outputText id="nfa5" escape="false" value="<b>Lon End</b>" />
@@ -55,16 +64,11 @@
     </h:column>
     <h:column>
       <f:facet name="header">
-	<h:outputText id="nfa7" escape="false" value="<b>Lat Start</b>" />
+	<h:outputText id="nfa3" escape="false" value="<b>Lat End</b>" />
       </f:facet>
-      <h:inputText id="faultdrawLatStartst" value="#{myentry32.faultLatStart}" required="true" />
+      <h:inputText id="faultdrawLatEndst" value="#{myentry32.faultLatEnd}" required="true" />
     </h:column>
-    <h:column>
-      <f:facet name="header">
-	<h:outputText id="nfa9" escape="false" value="<b>Lon Start</b>" />
-      </f:facet>
-      <h:inputText id="faultdrawLonStartst" value="#{myentry32.faultLonStart}" required="true" />
-    </h:column>
+
   </h:dataTable>
   <h:commandButton id="addfaultsd" value="Add a new fault" actionListener="#{SimplexBean.toggleDrawFaultFromMap}"/>
   
@@ -78,7 +82,12 @@
 	var faultMap=null;
 	faultMap=new GMap2(document.getElementById("faultMap"));
 	
-	
+	var flistsize = document.getElementById("faultKMLSelectorForm:faultlistsize");
+	var flistpolyline = new Array();
+	for (var nA = 0 ; nA < flistsize.value ; nA++){
+	  flistpolyline[nA] = null;
+	}
+
 
 	// The gridsphere container doesn't work with urls. That should be solved
 	// var kmllist = ["@host.base.url@@artifactId@/geo_000520-001216-sim_HDR_4rlks.unw.kml","@host.base.url@@artifactId@/QuakeTables_CGS_1996.kml","@host.base.url@@artifactId@/QuakeTables_CGS_2002.kml"];
@@ -173,6 +182,76 @@
 	  }
   }
 
+  function togglefaultname(t) {
+
+	  var bits = t.id;
+	  bits = bits.split(":");    
+	  var prefix = bits[1].split("_");
+
+	if (flistpolyline[prefix[1]]) {
+		faultMap.removeOverlay(flistpolyline[prefix[1]]);
+		flistpolyline[prefix[1]] = null;
+	}
+
+	else {
+	  
+
+	  var p = "UpdateSelectFaultsForm:dflelerh966_"+prefix[1];
+	  var n;	  
+	  var html = "<div style='font-weight: bold; font-size: medium; margin-bottom: 0em;'>"+document.getElementById(p+":dflelerklh968").value+"</div>"
+
+	  html += "<div style='font-family: Arial, sans-serif;font-size: small;width:"+this.iwwidth+"px'>";	  
+	  html += "<b>Fault Name</b>:" + document.getElementById(p+":dflelerklh968").value + "<br/>";
+	  html += "<b>Location X</b>:" + document.getElementById(p+":FaultLocationX2").value + "<br/>";
+	  html += "<b>Location X Vary</b>:" + document.getElementById(p+":faultOriginXVary2").checked + "<br/>";
+	  html += "<b>Location Y</b>:" + document.getElementById(p+":FaultLocationY2").value + "<br/>";
+	  html += "<b>Location Y Vary</b>:" + document.getElementById(p+":faultOriginYVary2").checked + "<br/>";
+	  html += "<b>Length</b>:" + document.getElementById(p+":FaultLength2").value + "<br/>";
+	  html += "<b>Length Vary</b>:" + document.getElementById(p+":faultLengthVary2").checked + "<br/>";
+	  html += "<b>Width</b>:" + document.getElementById(p+":FaultWidth2").value + "<br/>";
+	  html += "<b>Width Vary</b>:" + document.getElementById(p+":faultWidthVary2").checked + "<br/>";
+	  html += "<b>Depth</b>:" + document.getElementById(p+":FaultDepth2").value + "<br/>";
+	  html += "<b>Depth Vary</b>:" + document.getElementById(p+":faultDepthVary2").checked + "<br/>";
+	  html += "<b>Dip Angle</b>:" + document.getElementById(p+":FaultDipAngle2").value + "<br/>";
+	  html += "<b>Dip Angle Vary</b>:" + document.getElementById(p+":faultDipAngleVary2").checked + "<br/>";
+	  html += "<b>Strike Angle</b>:" + document.getElementById(p+":FaultStrikeAngle2").value + "<br/>";
+	  html += "<b>Strike Angle Vary</b>:" + document.getElementById(p+":faultStrikeAngleVary2").checked + "<br/>";
+	  html += "<b>Dip Slip</b>:" + document.getElementById(p+":FaultSlip2").value + "<br/>";
+	  html += "<b>Dip Slip Vary</b>:" + document.getElementById(p+":faultDipSlipVary2").checked + "<br/>";
+	  html += "<b>Strike Slip</b>:" + document.getElementById(p+":FaultRakeAngle2").value + "<br/>";
+	  html += "<b>Strike Slip Vary</b>:" + document.getElementById(p+":faultStrikeSlipVary2").checked + "<br/>";
+	  html += "<b>Fault Lon Starts(optional)</b>:" + document.getElementById(p+":FaultLonStarts2").value + "<br/>";
+	  html += "<b>Fault Lat Starts(optional)</b>:" + document.getElementById(p+":FaultLatStarts2").value + "<br/>";
+	  html += "<b>Fault Lon Ends(optional)</b>:" + document.getElementById(p+":FaultLonEnds2").value + "<br/>";
+	  html += "<b>Fault Lat Ends(optional)</b>:" + document.getElementById(p+":FaultLatEnds2").value + "<br/>";
+	  html += "</div>";
+
+	  n = p+":FaultLatEnds2";
+	  var faultdrawLatEnds = document.getElementById(n);	  
+	  n = p+":FaultLatStarts2";	  
+
+	  var faultdrawLatStarts = document.getElementById(n);	  
+	  n = p+":FaultLonEnds2";
+	  var faultdrawLonEnds = document.getElementById(n);
+	  n = p+":FaultLonStarts2";
+	  var faultdrawLonStarts = document.getElementById(n);
+
+	  var points = [new GLatLng(faultdrawLatEnds.value, faultdrawLonEnds.value),
+			new GLatLng(faultdrawLatStarts.value, faultdrawLonStarts.value)];
+	
+	  flistpolyline[prefix[1]] = new GPolyline(points, "#FF0000", 5, 0.45);
+
+	  
+	  GEvent.addListener(flistpolyline[prefix[1]],"click", function() {
+	    faultMap.openInfoWindowHtml(flistpolyline[prefix[1]].getVertex(Math.floor(flistpolyline[prefix[1]].getVertexCount()/2)),html,{});
+	   
+	  });
+
+	  faultMap.addOverlay(flistpolyline[prefix[1]]);
+	}
+  }
+
+
 function initialFaultdrawing() {
 
 	var bounds = faultMap.getBounds();
@@ -258,20 +337,14 @@ new GLatLng(marker_NE.getPoint().lat(), marker_NE.getPoint().lng())
 
 
 
-
-
-
-
-
-
-
-
-
   
 </script>
 </f:verbatim>
 
 </h:form>
+
+
+
 
 
 
