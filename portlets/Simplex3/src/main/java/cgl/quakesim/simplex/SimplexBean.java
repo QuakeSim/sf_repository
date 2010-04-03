@@ -89,6 +89,9 @@ public class SimplexBean extends GenericSopacBean {
 
 	List myFaultEntryForProjectList = new ArrayList();
 	List myFaultsForProjectList = new ArrayList();
+	int myFaultsForProjectListsize;
+
+
 
 	List myObservationEntryForProjectList = new ArrayList();
 
@@ -414,6 +417,16 @@ public class SimplexBean extends GenericSopacBean {
 		return this.deleteProjectsList;
 	}
 
+	
+	public int getMyFaultsForProjectListsize() {
+		
+		return myFaultsForProjectList.size();
+	}
+
+	public void setMyFaultsForProjectListsize(int myFaultsForProjectListsize) {
+		this.myFaultsForProjectListsize = myFaultsForProjectListsize;
+	}
+	
 	public void setMyProjectNameList(List tmp_str) {
 		this.myProjectNameList = tmp_str;
 	}
