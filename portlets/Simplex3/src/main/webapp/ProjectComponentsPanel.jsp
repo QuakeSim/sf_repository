@@ -16,8 +16,11 @@
 							      <f:facet name="header">
 								<h:outputText id="dflelerh967" escape="false" value="<b>Name</b>" />
 							      </f:facet>
-							      <h:inputText id="dflelerklh968" style="text-align:right;width:60px"
-								  value="#{myentry31.faultName}" required="true" />
+
+							      <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+								<h:inputText id="dflelerklh968" style="text-align:right;width:60px" value="#{myentry31.faultName}" required="true" />
+								<h:selectBooleanCheckbox id="faultnamec" onclick="togglefaultname(this)" value="" />
+							      </h:panelGrid>
 							    </h:column>
 
 							    <h:column>
