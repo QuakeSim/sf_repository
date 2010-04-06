@@ -22,7 +22,7 @@
 <script type="text/javascript" src="@host.base.url@@artifactId@/jquery.treeview.js"></script>
 
 <script type="text/javascript" src="@host.base.url@@artifactId@/demo.js"></script>
-
+<script type="text/javascript" src="@host.base.url@@artifactId@/egeoxml.js"></script>
 
 <div style="clear:both"></div>
 
