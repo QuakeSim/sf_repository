@@ -616,6 +616,7 @@ public class SimpleXDataKml {
 		if (longestlength != 0)	{
 			 scale_rate =  arrowScale/longestlength;		 
 		}
+		System.out.println("Scale rate: "+scale_rate);
 		 		 
 		for (int i = 0; i < datalist.length; i++) { 
 			// create and add a Placemark containing a Point 
