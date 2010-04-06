@@ -2,8 +2,8 @@
 <h:inputHidden id="faultName" value="#{SimplexBean.currentEditProjectForm.mapFaultName}"/>
 <h:inputHidden id="faultlistsize" value="#{SimplexBean.myFaultsForProjectListsize}"/>
 
-<h:panelGrid id="faultKmlploter" columns="1" border="1">
-  <h:panelGrid id="gridforbutton" columns="1" border="0" style="vertical-align:top;">
+
+  <h:panelGrid id="gridforbutton" columns="1" border="1" style="vertical-align:top;width: 800px;">
     <f:verbatim>
       Click the button below to get chosen fault params
     </f:verbatim>
@@ -28,11 +28,11 @@
     </h:panelGrid>
   </f:verbatim>	
 
-  <h:panelGrid columns="2" border="0">
-      <h:outputText id="daflelerkl513" escape="false" value="Drawing a fault : "/>
-      <h:selectBooleanCheckbox id="dflab2" onclick="togglefaultdrawing()" value="#{SimplexBean.faultdrawing}"/>
-   </h:panelGrid>
 
+<h:panelGroup id="dflel235231">
+  <h:outputText id="daflelerkl513" escape="false" value="Drawing a fault : "/>
+  <h:selectBooleanCheckbox id="dflab2" onclick="togglefaultdrawing()" value="#{SimplexBean.faultdrawing}"/>
+  <h:panelGrid columns="3" border="0">
   <h:dataTable border="1" cellpadding="0" cellspacing="0" id="dflelerh93" headerClass="componentstableh"
 		value="#{SimplexBean.currentEditProjectForm}" var="myentry32">
     <h:column>
@@ -46,35 +46,34 @@
       <f:facet name="header">
 	<h:outputText id="nfa9" escape="false" value="<b>Lon Start</b>" />
       </f:facet>
-      <h:inputText id="faultdrawLonStartst" value="#{myentry32.faultLonStart}" required="true" />
+      <h:inputText id="faultdrawLonStartst" value="#{myentry32.faultLonStart}" required="false" />
     </h:column>
 
     <h:column>
       <f:facet name="header">
 	<h:outputText id="nfa7" escape="false" value="<b>Lat Start</b>" />
       </f:facet>
-      <h:inputText id="faultdrawLatStartst" value="#{myentry32.faultLatStart}" required="true" />
+      <h:inputText id="faultdrawLatStartst" value="#{myentry32.faultLatStart}" required="false" />
     </h:column>
 
     <h:column>
       <f:facet name="header">
 	<h:outputText id="nfa5" escape="false" value="<b>Lon End</b>" />
       </f:facet>
-      <h:inputText id="faultdrawLonEndst" value="#{myentry32.faultLonEnd}" required="true" />
+      <h:inputText id="faultdrawLonEndst" value="#{myentry32.faultLonEnd}" required="false" />
     </h:column>
     <h:column>
       <f:facet name="header">
 	<h:outputText id="nfa3" escape="false" value="<b>Lat End</b>" />
       </f:facet>
-      <h:inputText id="faultdrawLatEndst" value="#{myentry32.faultLatEnd}" required="true" />
+      <h:inputText id="faultdrawLatEndst" value="#{myentry32.faultLatEnd}" required="false" />
     </h:column>
 
   </h:dataTable>
-  <h:commandButton id="addfaultsd" value="Add a new fault" actionListener="#{SimplexBean.toggleDrawFaultFromMap}"/>
-  
 </h:panelGrid>
-
-
+</h:panelGroup>
+<h:commandButton id="addfaultsd" value="Add a new fault" actionListener="#{SimplexBean.toggleDrawFaultFromMap}"/>
+ 
 <f:verbatim>
 <script language="JavaScript">
 

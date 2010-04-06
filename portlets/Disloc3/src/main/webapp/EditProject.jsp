@@ -45,7 +45,7 @@ mapcenter_y = center_xy[1];
 <title>Edit Project</title>
 <!--Google and related APIs are imported here -->
 
-<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>      
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTf0RZ3CvQOmi-GOjEFoiamz50c8BRdcsDMSPvaTAMTVPL7sMxMzuZWCQ" type="text/javascript"></script>      
 </head> 
 
 <body onload="" onunload="GUnload()">
@@ -85,7 +85,7 @@ mapcenter_y = center_xy[1];
 
 
 //This is used to calculate the length and strike angle.
-function doMath(){
+function calculatelength(){
 var lonStart=document.getElementById("Faultform:faultLon");
 var lonEnd=document.getElementById("Faultform:faultLonende3r");
 var latStart=document.getElementById("Faultform:faultLat");
@@ -102,13 +102,62 @@ var flatten=1.0/298.247;
 
 var x=(lonEnd.value-lonStart.value)*theFactor;
 var y=(latEnd.value-latStart.value)*111.32;
+var xv = document.getElementById("Faultform:FaultLocationX");
+var yv = document.getElementById("Faultform:FaultLocationY");
+xv.value = x;
+yv.value = y;
+
+//alert("x : " + x + " y : " + y);
+
 var lengthVal=Math.sqrt(x*x+y*y);
 
 length.value=Math.round(lengthVal*1000)/1000;
 
 var strikeValue=Math.atan2(x,y)/d2r;
 strike.value=Math.round(strikeValue*1000)/1000;
-} 
+}
+
+
+function calculateendpoint(){
+
+// alert("debug");
+var lonStart=document.getElementById("Faultform:faultLon");
+var lonEnd=document.getElementById("Faultform:faultLonende3r");
+var latStart=document.getElementById("Faultform:faultLat");
+var latEnd=document.getElementById("Faultform:faultLatendere");
+
+var length=document.getElementById("Faultform:FaultLength");
+var strike=document.getElementById("Faultform:FaultStrikeAngle");
+
+
+var d2r = Math.acos(-1.0) / 180.0;
+var flatten=1.0/298.247;
+var theFactor = d2r* Math.cos(d2r * latStart.value)
+        * 6378.139 * (1.0 - Math.sin(d2r * lonStart.value) * Math.sin(d2r * lonStart.value) * flatten);
+
+var x = document.getElementById("Faultform:FaultLocationX");
+var y = document.getElementById("Faultform:FaultLocationY");
+
+//x.value = parseInt(x.value);
+//y.value = parseInt(y.value);
+//alert(x.value/theFactor + " is " + typeof(x.value/theFactor));
+lonEnd.value = ((x.value)*1.0)/theFactor + (lonStart.value*1.0);
+latEnd.value = (y.value)/111.32 + (latStart.value*1.0);
+
+lonEnd.value = Math.round(lonEnd.value*100)/100.0;
+latEnd.value = Math.round(latEnd.value*100)/100.0;
+
+//x.value=(lonEnd.value-lonStart.value)*theFactor;
+//y.value=(latend.value-latStart.value)*111.32;
+
+var lengthVal=Math.sqrt((x.value)*(x.value)+(y.value)*(y.value));
+// alert("x :" + x.value + " y :" + y.value);
+length.value=Math.round(lengthVal*1000)/1000;
+
+var strikeValue=Math.atan2(x.value,y.value)/d2r;
+strike.value=Math.round(strikeValue*1000)/1000;
+
+}
 
 function dataTableSelectOneRadio(radio) { 
     var id = radio.name.substring(radio.name.lastIndexOf(':')); 

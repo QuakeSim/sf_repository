@@ -38,9 +38,6 @@
 							itemLabel="Create New Fault: Click to specify geometry for a fault segment."
 							itemValue="CreateNewFault" />
 
-						<f:selectItem id="item4"
-							itemLabel="Add Fault from DB: Click to select a fault segment from the database."
-							itemValue="AddFaultSelection" />
 					</h:selectOneRadio>
 					<h:commandButton id="button1" value="Make Selection"
 						actionListener="#{SimplexBean.currentEditProjectForm.toggleProjectSelection}">
