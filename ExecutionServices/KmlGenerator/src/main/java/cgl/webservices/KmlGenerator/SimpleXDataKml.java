@@ -593,21 +593,19 @@ public class SimpleXDataKml {
 		setLineStyle(container, linestyleid, LineColor, LineWidth); 
 		 
 		double longestlength = 0.;
-		double projectMinX=Double.valueOf(datalist[0].getXValue());
-		double projectMaxX=Double.valueOf(datalist[0].getXValue());
-		double projectMinY=Double.valueOf(datalist[0].getYValue());
-		double projectMaxY=Double.valueOf(datalist[0].getYValue());
+		double projectMinX=Double.valueOf(datalist[0].get());
+		double projectMaxX=Double.valueOf(datalist[0].getX());
+		double projectMinY=Double.valueOf(datalist[0].getY());
+		double projectMaxY=Double.valueOf(datalist[0].getY());
 		 
 		for (int i = 0; i < datalist.length; i++) { 
 			 
-			 double x=Double.valueOf(datalist[i].getXValue());
+			 double x=Double.valueOf(datalist[i].getX());
+			 double y=Double.valueOf(datalist[i].getXValue());
 			 if(x<projectMinX) projectMinX=x;
 			 if(x>projectMaxX) projectMaxX=x;
 			 if(y<projectMinY) projectMinY=y;
 			 if(y>projectMaxY) projectMaxY=y;
-
-			 double y=Double.valueOf(datalist[i].getXValue());
-			 
 
 			 double dx = Double.valueOf(datalist[i].getDeltaXValue()) 
 				  .doubleValue(); 
