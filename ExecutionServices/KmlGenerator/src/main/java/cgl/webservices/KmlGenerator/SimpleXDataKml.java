@@ -26,8 +26,6 @@ import javax.servlet.http.HttpServlet;
 import org.apache.axis.MessageContext; 
 import org.apache.axis.transport.http.HTTPConstants; 
  
- 
- 
 import com.keithpower.gekmlib.Folder; 
 import com.keithpower.gekmlib.Kml; 
 import com.keithpower.gekmlib.LineString; 
@@ -50,6 +48,10 @@ import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 public class SimpleXDataKml { 
  
 	// private Document doc; 
+	 
+	 private double eqrad= 6378.139;
+	 private double flattening= 1.0/298.247;
+	 private double yfactor=111.32;
  
 	private double original_lat = 0; 
 	private double original_lon = 0; 
@@ -131,7 +133,6 @@ public class SimpleXDataKml {
 		 pointEntryList[1].setDeltaZValue("2"); 
 		 pointEntryList[1].setFolderTag("Arrow"); 
 		  
-		  
 		 pointEntryList[2]=new PointEntry(); 
 		 pointEntryList[2].setX("-86.0"); 
 		 pointEntryList[2].setY("-120.0"); 
@@ -143,7 +144,6 @@ public class SimpleXDataKml {
 		 pointEntryList[2].setDeltaZValue("-1"); 
 		 pointEntryList[2].setFolderTag("Arrow"); 
 		  
-		  
 		 pointEntryList[3]=new PointEntry(); 
 		 pointEntryList[3].setX("16.0"); 
 		 pointEntryList[3].setY("36.0"); 
@@ -154,15 +154,13 @@ public class SimpleXDataKml {
 		 pointEntryList[3].setDeltaZName("dz"); 
 		 pointEntryList[3].setDeltaZValue("0"); 
 		 pointEntryList[3].setFolderTag("Arrow"); 
- 
- 
+  
 		 test.setDatalist(pointEntryList); 
 		 test.setOriginalCoordinate("-115.72","30.25"); 
 		 test.setCoordinateUnit("1000"); 
+		  	  
 		  
-		  
-		  
-		 test.setGridLine("fault folder", -117.35, 32.59, -115.35, 30.59, 1, 1); 
+		 //		 test.setGridLine("fault folder", -117.35, 32.59, -115.35, 30.59, 1, 1); 
 		 test.setFaultPlot("fault folder", "test fault1", "-117.35", "32.59", "-115.35", "30.59", "641478DC", 3); 
  
 		  
@@ -481,7 +479,7 @@ public class SimpleXDataKml {
 			degs = (360 + degs) % 360; 
 			// Convert degrees to radian 
 			rads = Math.toRadians((double) degs); 
-			double length = Math.sqrt(dx * dx + dy * dy); 
+			double length = Math.sqrt(dx * dx + dy * dy);
 			String UTMZone=ConverterUTM.getUTMZone(23, original_lon, original_lat); 
 			Coordinate original_xy = ConverterUTM.LLtoUTM(23,original_lon, original_lat, UTMZone); 
 			double tmp_x = original_xy.getX() + x * coordinateUnit; 
@@ -549,15 +547,13 @@ public class SimpleXDataKml {
 		// plot start point 
 		Coordinate tmp_lonlat ; 
 		tmp_lonlat = new Coordinate(Double.valueOf(lonstart).doubleValue(), Double.valueOf(latstart).doubleValue()); 
-//		tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
-//				tmp_lonlat.getY()); 
+
 		line_value = line_value + tmp_lonlat.getX() + "," + tmp_lonlat.getY() + ",0  "; 
+		//Set the fault description in the popup window.
 		String descriptionValue= cdataStart+fontStart+"Starting lat: "+fontEnd+tmp_lonlat.getY()+" "+br; 
 		descriptionValue=descriptionValue + fontStart+"Starting lon: "+fontEnd+tmp_lonlat.getX()+" "+br; 
 		// plot end point 
 		tmp_lonlat = new Coordinate(Double.valueOf(lonend).doubleValue(), Double.valueOf(latend).doubleValue()); 
-//		tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
-//				tmp_lonlat.getY()); 
 		line_value = line_value + tmp_lonlat.getX() + "," 
 				+ tmp_lonlat.getY() + ",0  ";	 
 		descriptionValue=descriptionValue + fontStart+"Ending lat: "+fontEnd+tmp_lonlat.getY()+" "+br; 
@@ -576,7 +572,10 @@ public class SimpleXDataKml {
 		  setArrowPlacemark(folderName, LineColor, LineWidth, defaultArrowScale); 
 	 } 
  
-	 public void setArrowPlacemark(String folderName, String LineColor, double LineWidth, double arrowScale) { 
+	 public void setArrowPlacemark(String folderName, 
+											 String LineColor, 
+											 double LineWidth, 
+											 double arrowScale) { 
 		   
 		Folder container = new Folder(); 
 		if (!folderName.equals("") && !folderName.equals("null")) { 
@@ -616,7 +615,7 @@ public class SimpleXDataKml {
 		double scale_rate = 0; 
 		 
 		if (longestlength != 0)			 
-			scale_rate = (100 * arrowScale)/longestlength;		 
+			scale_rate =  arrowScale/longestlength;		 
 		 		 
 		for (int i = 0; i < datalist.length; i++) { 
 			// create and add a Placemark containing a Point 
@@ -638,21 +637,30 @@ public class SimpleXDataKml {
 			 
 			double length = Math.sqrt(dx * dx + dy * dy);         ////////  
 			 
-			 
-			String UTMZone=ConverterUTM.getUTMZone(23, original_lon, original_lat); 
-			Coordinate original_xy = ConverterUTM.LLtoUTM(23, original_lon, original_lat,UTMZone); 
-			double tmp_x = original_xy.getX() + x * coordinateUnit; 
-			double tmp_y = original_xy.getY() + y * coordinateUnit; 
-			Coordinate new_lonlat = ConverterUTM.UTMtoLL(23, tmp_x, tmp_y, UTMZone);			 			 
+			//			String UTMZone=ConverterUTM.getUTMZone(23, original_lon, original_lat); 
+			//			Coordinate original_xy = ConverterUTM.LLtoUTM(23, original_lon, original_lat,UTMZone); 
+			
+			// double tmp_x = original_xy.getX() + x * coordinateUnit; 
+			// double tmp_y = original_xy.getY() + y * coordinateUnit; 
+			// Coordinate new_lonlat = ConverterUTM.UTMtoLL(23, tmp_x, tmp_y, UTMZone);			 			 
 //			new_lonlat = MapFunction.MercatorProject(new_lonlat.getX(), 
 //					new_lonlat.getY()); 
-			double lat = new_lonlat.getY(); 
-			double lon = new_lonlat.getX(); 
-			 
+			// double lat = new_lonlat.getY(); 
+			// double lon = new_lonlat.getX(); 
+
+			//Formula for converting xy to lat/lon.  The project origin lat/lon is 
+			//set in the. original_lon, original_lat.  These are the lat/lon values
+			//for the observation points (base of the plotted arrows).
+
+			//Create the popup description of the point
 			String br="<br/>"; 
 			String fontStart="<font color=blue>"; 
 			String fontEnd="</font>"; 
  
+			//Point origin
+			double lon=x/factor(original_lon, original_lat)+original_lon;
+			double lat=y/111.32+original_lat;
+
 			String descriptionValue = "<![CDATA["; 
 			descriptionValue = descriptionValue 
 					+ "<font color=blue>lat: </font>" + lat + ""+br; 
@@ -670,7 +678,7 @@ public class SimpleXDataKml {
 			descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaZName() 
 					+ ": " +fontEnd+ datalist[i].getDeltaZValue() + " cm <br/>"; 
 			descriptionValue = descriptionValue + "<font color=blue>scale rate </font>" 
-			+ " :" +fontEnd+ longestlength + "cm  : " + arrowScale/1000 + "km <br/>";			 
+			+ " :" +fontEnd+ longestlength + "cm  : " + scale_rate + "km <br/>";			 
 			descriptionValue = descriptionValue 
 					+ "<font color=blue>tag name:</font>" 
 					+ datalist[i].getFolderTag()+br; 
@@ -678,150 +686,93 @@ public class SimpleXDataKml {
 			mark1.setDescription(descriptionValue); 
  
 			LineString newline = new LineString(); 
-			mark1.setStyleUrl("#"+linestyleid); 
-			String line_value = ""; 
-			// double startx = original_xy.getX() + x * coordinateUnit; 
-			// double starty = original_xy.getY() + y * coordinateUnit; 
- 			// double endx = startx + dx * coordinateUnit; 
-			// double endy = starty + dy * coordinateUnit; 
-			// double endx = startx + dx*arrowScale; 
-			// double endy = starty + dy*arrowScale; 
-			 
-			double startx = original_xy.getX() + x * coordinateUnit; 
-			double starty = original_xy.getY() + y * coordinateUnit; 
-			double endx = startx + dx * 0.01; 
-			double endy = starty + dy * 0.01;			 
-			 
-			double x_sub_adj = (endx-startx)/2; 
-			double y_sub_adj = (endy-starty)/2; 
-			 			 
-			/*   
-			double x_sub_adj = 0; 
-			double y_sub_adj = 0; 
-			*/ 
-			 
-			// System.out.println("end : x = " + endx + " y = " + endy);			 
-			// System.out.println("scale_rate : " + scale_rate); 
-			 
-			// endx = (double)(endx * scale_rate); 
-			// endy = (double)(endy * scale_rate);		 
-			 			 
-			endx = startx + dx * 0.01 * scale_rate; 
-			endy = starty + dy * 0.01 * scale_rate; 
-			 
-			// System.out.println("original_xy : x = " + original_xy.getX() + " y = " + original_xy.getY());			 
-			// System.out.println("x = " + x + " y = " + y); 
-			// System.out.println("tmp_xy : x = " + tmp_x + " y = " + tmp_y); 
-			 
-			 
-			// System.out.println("start_xy : x = " + startx + " y = " + starty); 
-			// System.out.println("end_xy : x = " + endx + " y = " + endy); 
-			 
-			// System.out.println("orignial lat, lon : x = " + original_lat + " y = " + original_lon); 
-			// System.out.println("new lat, lon : x = " + lat + " y = " + lon);			 
-			 
-			double x_sub = (endx-startx)/2; 
-			double y_sub = (endy-starty)/2; 
-			 
-			// System.out.println("sub : x = " + x_sub + " y = " + y_sub); 
-			// System.out.println("sub_adj : x = " + x_sub_adj + " y = " + y_sub_adj); 
-			 
-			/* 
-			double x_sub = 0; 
-			double y_sub = 0; 
-			*/ 
-			 
-			ArrowLine curarrow = CreateArrowByCoordinate(startx,starty,endx,endy); 
+			mark1.setStyleUrl("#"+linestyleid);
 
-			// ArrowLine curarrow = CreateArrowByCoordinate(startx - x_sub + x_sub_adj, starty - y_sub + y_sub_adj, endx - x_sub + x_sub_adj, endy - y_sub + y_sub_adj); 
+			double startx = x;
+			double starty = y;
+			double endx = startx + dx*scale_rate;
+			double endy = starty + dy*scale_rate;
+			ArrowLine curarrow = CreateArrowByCoordinate(startx,starty,endx,endy); 
 			 
-			// ArrowLine curarrow = CreateArrowByCoordinate(startx - x_sub, starty - y_sub, endx - x_sub, endy - y_sub); 
-			 
-			// plot start point 
-			double mapx = curarrow.getStartPoint().getX(); 
-			double mapy = curarrow.getStartPoint().getY(); 
-			Coordinate tmp_lonlat = ConverterUTM.UTMtoLL(23, mapx, mapy, UTMZone); 
-//			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
-//					tmp_lonlat.getY()); 
-			line_value = line_value + tmp_lonlat.getX() + "," 
-					+ tmp_lonlat.getY() + ",0  "; 
-			// plot end point 
-			mapx = curarrow.getEndPoint().getX(); 
-			mapy = curarrow.getEndPoint().getY(); 
-			tmp_lonlat = ConverterUTM.UTMtoLL(23, mapx, mapy, UTMZone); 
-//			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
-//					tmp_lonlat.getY()); 
-			line_value = line_value + tmp_lonlat.getX() + "," 
-					+ tmp_lonlat.getY() + ",0  "; 
-			// plot arrow tail1 
-			mapx = curarrow.getArrowTail1().getX(); 
-			mapy = curarrow.getArrowTail1().getY(); 
-			tmp_lonlat = ConverterUTM.UTMtoLL(23, mapx, mapy, UTMZone); 
-//			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
-//					tmp_lonlat.getY()); 
-			line_value = line_value + tmp_lonlat.getX() + "," 
-					+ tmp_lonlat.getY() + ",0  "; 
-			// roll back to end point 
-			mapx = curarrow.getEndPoint().getX(); 
-			mapy = curarrow.getEndPoint().getY(); 
-			tmp_lonlat = ConverterUTM.UTMtoLL(23, mapx, mapy, UTMZone); 
-//			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
-//					tmp_lonlat.getY()); 
-			line_value = line_value + tmp_lonlat.getX() + "," 
-					+ tmp_lonlat.getY() + ",0  "; 
-			// plot arrow tail2 
-			mapx = curarrow.getArrowTail2().getX(); 
-			mapy = curarrow.getArrowTail2().getY(); 
-			tmp_lonlat = ConverterUTM.UTMtoLL(23, mapx, mapy, UTMZone); 
-//			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
-//					tmp_lonlat.getY()); 
-			line_value = line_value + tmp_lonlat.getX() + "," 
-					+ tmp_lonlat.getY() + ",0  "; 
-			// roll back to end point 
-			mapx = curarrow.getEndPoint().getX(); 
-			mapy = curarrow.getEndPoint().getY(); 
-			tmp_lonlat = ConverterUTM.UTMtoLL(23, mapx, mapy, UTMZone); 
-//			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
-//					tmp_lonlat.getY()); 
-			line_value = line_value + tmp_lonlat.getX() + "," 
-					+ tmp_lonlat.getY() + ",0  "; 
+			//Plot the arrow's base relative to the project's origin.
+			double arrowOrigX = curarrow.getStartPoint().getX(); 
+			double arrowOrigY = curarrow.getStartPoint().getY();
+			double arrowLonStart=arrowOrigX/factor(original_lon, original_lat)+original_lon;
+			double arrowLatStart=arrowOrigY/111.32+original_lat;
+			
+			//Plot the arrow's ending point (head) relative to the project
+			//origin.
+			double arrowEndX = curarrow.getEndPoint().getX(); 
+			double arrowEndY = curarrow.getEndPoint().getY();
+			double arrowLonEnd=arrowEndX/factor(original_lon, original_lat)+original_lon;
+			double arrowLatEnd=arrowEndY/111.32+original_lat;
+
+			//Plot the arrow tails
+			double arrowTail1X = curarrow.getArrowTail1().getX(); 
+			double arrowTail1Y = curarrow.getArrowTail1().getY();
+			double arrowLonTail1=arrowTail1X/factor(original_lon, original_lat)+original_lon;
+			double arrowLatTail1=arrowTail1Y/111.32+original_lat;
+
+			double arrowTail2X = curarrow.getArrowTail2().getX(); 
+			double arrowTail2Y = curarrow.getArrowTail2().getY();
+			double arrowLonTail2=arrowTail2X/factor(original_lon, original_lat)+original_lon;
+			double arrowLatTail2=arrowTail2Y/111.32+original_lat;
+			
+			//Plot the arrow. These are just polylines 
+			String line_value = arrowLonStart+","+arrowLatStart+",0 "; 
+			line_value+=arrowLonEnd+","+arrowLatEnd+",0 ";
+			line_value+=arrowLonTail1+","+arrowLatTail1+",0 ";
+			line_value+=arrowLonEnd+","+arrowLatEnd+",0 ";
+			line_value+=arrowLonTail2+","+arrowLatTail2+",0 ";
+			line_value+=arrowLonEnd+","+arrowLatEnd+",0 ";
+
+// 			Coordinate tmp_lonlat = ConverterUTM.UTMtoLL(23, mapx, mapy, UTMZone); 
+// //			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
+// //					tmp_lonlat.getY()); 
+// 			line_value = line_value + tmp_lonlat.getX() + "," 
+// 					+ tmp_lonlat.getY() + ",0  "; 
+// 			// plot end point 
+// 			mapx = curarrow.getEndPoint().getX(); 
+// 			mapy = curarrow.getEndPoint().getY(); 
+// 			tmp_lonlat = ConverterUTM.UTMtoLL(23, mapx, mapy, UTMZone); 
+// //			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
+// //					tmp_lonlat.getY()); 
+// 			line_value = line_value + tmp_lonlat.getX() + "," 
+// 					+ tmp_lonlat.getY() + ",0  "; 
+// 			// plot arrow tail1 
+// 			mapx = curarrow.getArrowTail1().getX(); 
+// 			mapy = curarrow.getArrowTail1().getY(); 
+// 			tmp_lonlat = ConverterUTM.UTMtoLL(23, mapx, mapy, UTMZone); 
+// //			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
+// //					tmp_lonlat.getY()); 
+// 			line_value = line_value + tmp_lonlat.getX() + "," 
+// 					+ tmp_lonlat.getY() + ",0  "; 
+// 			// roll back to end point 
+// 			mapx = curarrow.getEndPoint().getX(); 
+// 			mapy = curarrow.getEndPoint().getY(); 
+// 			tmp_lonlat = ConverterUTM.UTMtoLL(23, mapx, mapy, UTMZone); 
+// //			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
+// //					tmp_lonlat.getY()); 
+// 			line_value = line_value + tmp_lonlat.getX() + "," 
+// 					+ tmp_lonlat.getY() + ",0  "; 
+// 			// plot arrow tail2 
+// 			mapx = curarrow.getArrowTail2().getX(); 
+// 			mapy = curarrow.getArrowTail2().getY(); 
+// 			tmp_lonlat = ConverterUTM.UTMtoLL(23, mapx, mapy, UTMZone); 
+// //			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
+// //					tmp_lonlat.getY()); 
+// 			line_value = line_value + tmp_lonlat.getX() + "," 
+// 					+ tmp_lonlat.getY() + ",0  "; 
+// 			// roll back to end point 
+// 			mapx = curarrow.getEndPoint().getX(); 
+// 			mapy = curarrow.getEndPoint().getY(); 
+// 			tmp_lonlat = ConverterUTM.UTMtoLL(23, mapx, mapy, UTMZone); 
+// //			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
+// //					tmp_lonlat.getY()); 
+// 			line_value = line_value + tmp_lonlat.getX() + "," 
+// 					+ tmp_lonlat.getY() + ",0  "; 
  
 			newline.setCoordinates(line_value); 
-			 
-			/* 
-			Style gridlineStyle = new Style(); 
-			// gridlineStyle.setId(id); 
-			LineStyle newlineStyle = new LineStyle(); 
-			 
-			int w = 0; 
-			 
-			if (length >= 0 && length < 1) 
-				w = 1; 
-			else if (length >= 1 && length < 5) 
-				w = 2; 
-			else if (length >= 5 && length < 10) 
-				w = 3; 
-			else if (length >= 10 && length < 15) 
-				w = 4; 
-			else if (length >= 15 && length < 20) 
-				w = 5; 
-			else if (length >= 20 && length < 25) 
-				w = 6; 
-			else if (length >= 25 && length < 30) 
-				w = 7; 
-			else if (length >= 30 && length < 35) 
-				w = 8; 
-			else if (length >= 35 && length < 40) 
-				w = 9; 
-			else if (length >= 40) 
-				w = 10;			 
-			 
-			newlineStyle.setWidth((float) w);			 
-			gridlineStyle.addLineStyle(newlineStyle); 
-			mark1.addStyle(gridlineStyle); 
-			*/ 
-			 
-			 
 			mark1.addLineString(newline); 
 			 
 			container.addPlacemark(mark1); 
@@ -866,16 +817,6 @@ public class SimpleXDataKml {
 		myArrow.setEndPoint(new Coordinate(endx, endy)); 
 		myArrow.setArrowTail1(new Coordinate(LeftArrowX, LeftArrowY)); 
 		myArrow.setArrowTail2(new Coordinate(RightArrowX, RightArrowY)); 
- 
-		// System.out.println("degs:"+degs); 
-		// System.out.println("arrowlength:"+arrowlength); 
-		// System.out.println("Math.sin(arrowrads):"+Math.sin(arrowrads)); 
-		// System.out.println("offsetdegs:"+offsetdegs); 
-		// System.out.println("newlinelength:"+newlinelength); 
-		// System.out.println("LeftArrowX:"+LeftArrowX); 
-		// System.out.println("LeftArrowY:"+LeftArrowY); 
-		// System.out.println("RightArrowX:"+RightArrowX); 
-		// System.out.println("rightArrowY:"+RightArrowY); 
  
 		return myArrow; 
 	} 
@@ -996,5 +937,15 @@ public class SimpleXDataKml {
 		System.out.println("Working Directory is " + workDir); 
 		new File(workDir).mkdirs(); 
 	} 
- 
+	 
+	 protected double factor(double refLon, double refLat) {
+		  double d2r = Math.acos(-1.0) / 180.0;
+		  double flatten=1.0/298.247;
+		  
+		  double theFactor = d2r* Math.cos(d2r * refLat)
+				* 6378.139 * (1.0 - Math.sin(d2r * refLon) * Math.sin(d2r * refLon) * flatten);
+		  
+		  return theFactor;
+	 }
+	 
 } 
