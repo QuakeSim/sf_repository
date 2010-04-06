@@ -516,7 +516,7 @@ public class SimpleXDataKml {
 			mark1.addPoint(point1); 
 			container.addPlacemark(mark1); 
 		} 
-	} 
+ 	} 
 	 
 	public void setFaultPlot(String folderName, 
 									 String faultName, 
@@ -596,26 +596,26 @@ public class SimpleXDataKml {
 		 
 		for (int i = 0; i < datalist.length; i++) { 
 			 
-			double dx = Double.valueOf(datalist[i].getDeltaXValue()) 
-			.doubleValue(); 
-			double dy = Double.valueOf(datalist[i].getDeltaYValue()) 
-			.doubleValue();			 
-			double length = Math.sqrt(dx * dx + dy * dy); 
+			 double dx = Double.valueOf(datalist[i].getDeltaXValue()) 
+				  .doubleValue(); 
+			 double dy = Double.valueOf(datalist[i].getDeltaYValue()) 
+				  .doubleValue();			 
+			 double length = Math.sqrt(dx * dx + dy * dy); 
 			 
-			if (i == 0) 
-				longestlength = length; 
-			 
-			else 
-			{ 
-				if (length > longestlength) 
-					longestlength = length;				 
-			} 
+			 if (i == 0) {
+				  longestlength = length; 
+			 }
+			 else if (length > longestlength)  {
+				  longestlength = length;			
+			 }	 
+			 System.out.println("Length: "+length+" Longest length: "+longestlength+" Arrow Scale: "+arrowScale);
 		}		 
-		 
+		
 		double scale_rate = 0; 
-		 
-		if (longestlength != 0)			 
-			scale_rate =  arrowScale/longestlength;		 
+		
+		if (longestlength != 0)	{
+			 scale_rate =  arrowScale/longestlength;		 
+		}
 		 		 
 		for (int i = 0; i < datalist.length; i++) { 
 			// create and add a Placemark containing a Point 
@@ -636,21 +636,6 @@ public class SimpleXDataKml {
 			rads = Math.toRadians((double) degs); 
 			 
 			double length = Math.sqrt(dx * dx + dy * dy);         ////////  
-			 
-			//			String UTMZone=ConverterUTM.getUTMZone(23, original_lon, original_lat); 
-			//			Coordinate original_xy = ConverterUTM.LLtoUTM(23, original_lon, original_lat,UTMZone); 
-			
-			// double tmp_x = original_xy.getX() + x * coordinateUnit; 
-			// double tmp_y = original_xy.getY() + y * coordinateUnit; 
-			// Coordinate new_lonlat = ConverterUTM.UTMtoLL(23, tmp_x, tmp_y, UTMZone);			 			 
-//			new_lonlat = MapFunction.MercatorProject(new_lonlat.getX(), 
-//					new_lonlat.getY()); 
-			// double lat = new_lonlat.getY(); 
-			// double lon = new_lonlat.getX(); 
-
-			//Formula for converting xy to lat/lon.  The project origin lat/lon is 
-			//set in the. original_lon, original_lat.  These are the lat/lon values
-			//for the observation points (base of the plotted arrows).
 
 			//Create the popup description of the point
 			String br="<br/>"; 
@@ -678,7 +663,7 @@ public class SimpleXDataKml {
 			descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaZName() 
 					+ ": " +fontEnd+ datalist[i].getDeltaZValue() + " cm <br/>"; 
 			descriptionValue = descriptionValue + "<font color=blue>scale rate </font>" 
-			+ " :" +fontEnd+ longestlength + "cm  : " + scale_rate + "km <br/>";			 
+			+ ":" +fontEnd+ longestlength + "cm  : " + scale_rate + "km <br/>";			 
 			descriptionValue = descriptionValue 
 					+ "<font color=blue>tag name:</font>" 
 					+ datalist[i].getFolderTag()+br; 
