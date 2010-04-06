@@ -35,7 +35,7 @@
 
                  <managed-property>
                    <property-name>dislocServiceUrl</property-name>
-                   <value>http://129.79.49.68:8080/dislocexec/services/DislocExec</value>
+                   <value>http://gf19.ucs.indiana.edu:8080/dislocexec/services/DislocExec</value>
                  </managed-property> 
 
                  <managed-property>
@@ -51,7 +51,7 @@
                  <!--  Needed for the kmlGenerator service -->
                  <managed-property>
                  	<property-name>kmlGeneratorUrl</property-name>
-                 	<value>http://129.79.49.68:8080/KmlGenerator/services/KmlGenerator</value>
+                 	<value>http://gf19.ucs.indiana.edu:8080/KmlGenerator/services/KmlGenerator</value>
                  </managed-property>
 
 	</managed-bean>
