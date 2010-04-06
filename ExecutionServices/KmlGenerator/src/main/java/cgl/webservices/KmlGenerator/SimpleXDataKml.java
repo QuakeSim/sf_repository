@@ -614,7 +614,7 @@ public class SimpleXDataKml {
 		double scale_rate = 0; 
 		
 		if (longestlength != 0)	{
-			 scale_rate =  arrowScale/longestlength;		 
+			 scale_rate = longestlength/arrowScale;  //arrowScale/longestlength;		 
 		}
 		System.out.println("Scale rate: "+scale_rate);
 		 		 
@@ -676,9 +676,10 @@ public class SimpleXDataKml {
 
 			double startx = x;
 			double starty = y;
-			double endx = startx + dx*scale_rate;
-			double endy = starty + dy*scale_rate;
+			double endx = startx + dx; //*scale_rate;
+			double endy = starty + dy; //*scale_rate;
 			ArrowLine curarrow = CreateArrowByCoordinate(startx,starty,endx,endy); 
+			System.out.println("Plotting: "+startx+" "+starty+" "+endx+" "+endy);
 			 
 			//Plot the arrow's base relative to the project's origin.
 			double arrowOrigX = curarrow.getStartPoint().getX(); 
