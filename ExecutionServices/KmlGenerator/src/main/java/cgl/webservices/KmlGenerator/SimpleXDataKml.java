@@ -593,7 +593,7 @@ public class SimpleXDataKml {
 		setLineStyle(container, linestyleid, LineColor, LineWidth); 
 		 
 		double longestlength = 0.;
-		double projectMinX=Double.valueOf(datalist[0].get());
+		double projectMinX=Double.valueOf(datalist[0].getX());
 		double projectMaxX=Double.valueOf(datalist[0].getX());
 		double projectMinY=Double.valueOf(datalist[0].getY());
 		double projectMaxY=Double.valueOf(datalist[0].getY());
@@ -601,7 +601,7 @@ public class SimpleXDataKml {
 		for (int i = 0; i < datalist.length; i++) { 
 			 
 			 double x=Double.valueOf(datalist[i].getX());
-			 double y=Double.valueOf(datalist[i].getXValue());
+			 double y=Double.valueOf(datalist[i].getX());
 			 if(x<projectMinX) projectMinX=x;
 			 if(x>projectMaxX) projectMaxX=x;
 			 if(y<projectMinY) projectMinY=y;
@@ -681,7 +681,7 @@ public class SimpleXDataKml {
 			descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaZName() 
 					+ ": " +fontEnd+ datalist[i].getDeltaZValue() + " cm <br/>"; 
 			descriptionValue = descriptionValue + "<font color=blue>scale rate </font>" 
-			+ ":" +fontEnd+ longestlength + "cm  : " + scale_rate + "km <br/>";			 
+			+ ":" +fontEnd+ longestlength + "cm  : " + scaling + "km <br/>";			 
 			descriptionValue = descriptionValue 
 					+ "<font color=blue>tag name:</font>" 
 					+ datalist[i].getFolderTag()+br; 
