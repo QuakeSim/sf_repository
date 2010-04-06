@@ -592,10 +592,23 @@ public class SimpleXDataKml {
 			 //String linestyleid=""; 
 		setLineStyle(container, linestyleid, LineColor, LineWidth); 
 		 
-		double longestlength = 0; 
+		double longestlength = 0.;
+		double projectMinX=Double.valueOf(datalist[0].getXValue());
+		double projectMaxX=Double.valueOf(datalist[0].getXValue());
+		double projectMinY=Double.valueOf(datalist[0].getYValue());
+		double projectMaxY=Double.valueOf(datalist[0].getYValue());
 		 
 		for (int i = 0; i < datalist.length; i++) { 
 			 
+			 double x=Double.valueOf(datalist[i].getXValue());
+			 if(x<projectMinX) projectMinX=x;
+			 if(x>projectMaxX) projectMaxX=x;
+			 if(y<projectMinY) projectMinY=y;
+			 if(y>projectMaxY) projectMaxY=y;
+
+			 double y=Double.valueOf(datalist[i].getXValue());
+			 
+
 			 double dx = Double.valueOf(datalist[i].getDeltaXValue()) 
 				  .doubleValue(); 
 			 double dy = Double.valueOf(datalist[i].getDeltaYValue()) 
@@ -611,12 +624,18 @@ public class SimpleXDataKml {
 			 System.out.println("Length: "+length+" Longest length: "+longestlength+" Arrow Scale: "+arrowScale);
 		}		 
 		
-		double scale_rate = 0; 
+		double projectLength=(projectMaxX-projectMinX)*(projectMaxX-projectMinX);
+		projectLength+=(projectMaxY-projectMinY)*(projectMaxY-projectMinY);
+		projectLength=Math.sqrt(projectLength);
+		
+		//We arbitrarly set the longest displacement arrow to be 10% of the 
+		//project dimension.
+		double scaling = 0.1*projectLength/longestlength;
 		
 		if (longestlength != 0)	{
-			 scale_rate = longestlength/arrowScale;  //arrowScale/longestlength;		 
+			 scaling = longestlength/arrowScale;  //arrowScale/longestlength;		 
 		}
-		System.out.println("Scale rate: "+scale_rate);
+		System.out.println("Scale rate: "+scaling+" "+longestlength+" "+projectLength);
 		 		 
 		for (int i = 0; i < datalist.length; i++) { 
 			// create and add a Placemark containing a Point 
@@ -676,8 +695,8 @@ public class SimpleXDataKml {
 
 			double startx = x;
 			double starty = y;
-			double endx = startx + dx; //*scale_rate;
-			double endy = starty + dy; //*scale_rate;
+			double endx = startx + dx*scaling;
+			double endy = starty + dy*scaling;
 			ArrowLine curarrow = CreateArrowByCoordinate(startx,starty,endx,endy); 
 			System.out.println("Plotting: "+startx+" "+starty+" "+endx+" "+endy);
 			 
