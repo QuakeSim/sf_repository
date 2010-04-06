@@ -630,9 +630,6 @@ public class SimpleXDataKml {
 		//project dimension.
 		double scaling = 0.1*projectLength/longestlength;
 		
-		if (longestlength != 0)	{
-			 scaling = longestlength/arrowScale;  //arrowScale/longestlength;		 
-		}
 		System.out.println("Scale rate: "+scaling+" "+longestlength+" "+projectLength);
 		 		 
 		for (int i = 0; i < datalist.length; i++) { 
