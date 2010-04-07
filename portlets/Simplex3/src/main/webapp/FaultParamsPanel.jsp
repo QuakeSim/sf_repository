@@ -150,11 +150,10 @@
 
 						<h:commandButton id="addfault" value="Set Values"
 							actionListener="#{SimplexBean.toggleAddFaultForProject}" />
-				      <f:verbatim>
-				         <input id="domath" type="button" name="Update"
-					 				 value="Do Math"
-									 onclick="doMath()"/>
- 				      </f:verbatim>
+				   <f:verbatim>
+				      <input id="domath" type="button" name="Update" value="Calculate length" onclick="calculatelength()"/>
+				      <input id="domath2" type="button" name="Update2" value="Calculate endpoint" onclick="calculateendpoint()"/>
+ 				   </f:verbatim>
 					<f:facet name="footer"> 
 					   <h:outputFormat id="output2" escape="false" 
 						value="Click 'Do Math' to udpate length and strike. 
