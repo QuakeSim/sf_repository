@@ -352,8 +352,6 @@ public class SimpleXDataKml {
 		double tmp_x = smallx; 
 		String UTMZone=ConverterUTM.getUTMZone(23, original_lon, original_lat); 
 		Coordinate original_xy = ConverterUTM.LLtoUTM(23,original_lon, original_lat, UTMZone);		 
-		 
- 
 		int odd_flg = 1; 
 //		Coordinate mercator_lonlat = new Coordinate(); 
 		// int even_flg=0; 
@@ -594,9 +592,9 @@ public class SimpleXDataKml {
 		String linestyleid="arrowedStyle"; 
 		
 			 //String linestyleid=""; 
-		double LineWidth="2.0";
+		double LineWidth2=2.0;
 		System.out.println("Color and width for arrowed: "+LineColor+" "+LineWidth);
-		setLineStyle(container, linestyleid, LineColor, LineWidth); 
+		setLineStyle(container, linestyleid, LineColor, LineWidth2); 
 		 
 		double longestlength = 0.;
 		double projectMinX=Double.valueOf(datalist[0].getX());
