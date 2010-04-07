@@ -158,7 +158,8 @@ else if (strike.value == 90) { xval = length.value; yval = 0;}
 else if (strike.value == 180) { xval = 0; yval = (-1.0) * length.value;}
 else if (strike.value == 270) { xval = (-1.0) * length.value; yval = 0;}
 else {
-var thetan = Math.tan(strike.value*Math.PI/180);
+var sval = 90 - strike.value;
+var thetan = Math.tan(sval*d2r);
 var xval = length.value/Math.sqrt(1 + thetan*thetan);
 var yval = Math.sqrt(length.value*length.value - xval*xval);
 
