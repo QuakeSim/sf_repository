@@ -54,12 +54,12 @@
 
                 <managed-property>
                    <property-name>queueServiceUrl</property-name>
-                   <value>http://129.79.49.68:8080/queueservice/services/QueueExec</value>
+                   <value>http://gf19.ucs.indiana.edu:8080/queueservice/services/QueueExec</value>
                  </managed-property>
 
                 <managed-property>
                    <property-name>gridInfoServiceUrl</property-name>
-                   <value>http://129.79.49.68:8080/gridinfo/services/GridInfoService</value>
+                   <value>http://gf19.ucs.indiana.edu:8080/gridinfo/services/GridInfoService</value>
                  </managed-property>
 
                  <managed-property>
