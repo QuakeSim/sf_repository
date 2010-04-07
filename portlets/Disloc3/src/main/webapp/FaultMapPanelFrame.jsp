@@ -14,19 +14,16 @@
  
 
 <f:verbatim>
-<link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css">
-<link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/jquery.treeview.css">
+<link rel="stylesheet" type="text/css" href="http://129.79.49.68:8080/Disloc3/quakesim_style.css">
+<link rel="stylesheet" type="text/css" href="http://129.79.49.68:8080/Disloc3/jquery.treeview.css">
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
-<script type="text/javascript" src="@host.base.url@@artifactId@/lib/jquery.cookie.js"></script>
-<script type="text/javascript" src="@host.base.url@@artifactId@/jquery.treeview.js"></script>
+<script type="text/javascript" src="http://129.79.49.68:8080/Disloc3/lib/jquery.cookie.js"></script>
+<script type="text/javascript" src="http://129.79.49.68:8080/Disloc3/jquery.treeview.js"></script>
+<script type="text/javascript" src="http://129.79.49.68:8080/Disloc3/egeoxml.js"></script>
 
-<script type="text/javascript" src="@host.base.url@@artifactId@/demo.js"></script>
-<script type="text/javascript" src="@host.base.url@@artifactId@/egeoxml.js"></script>
 
-<div style="clear:both"></div>
 
-</div>
 
 <h:panelGrid id="faultMapsideGrid" columns="2" border="1">
 <f:verbatim>
@@ -58,26 +55,13 @@
 	faultMap=new GMap2(document.getElementById("faultMap"));
 
 	// The gridsphere container doesn't work with urls. That should be solved
-	// var kmllist = ["@host.base.url@@artifactId@/geo_000520-001216-sim_HDR_4rlks.unw.kml","@host.base.url@@artifactId@/QuakeTables_CGS_1996.kml","@host.base.url@@artifactId@/QuakeTables_CGS_2002.kml"];
-	var kmllist = ["geo_000520-001216-sim_HDR_4rlks.unw.kml","QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml"];	
+	var kmllist = ["http://129.79.49.68:8080/Disloc3/geo_000520-001216-sim_HDR_4rlks.unw.kml","http://129.79.49.68:8080/Disloc3/QuakeTables_CGS_1996.kml","http://129.79.49.68:8080/Disloc3/QuakeTables_CGS_2002.kml"];
+	// var kmllist = ["geo_000520-001216-sim_HDR_4rlks.unw.kml","QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml"];	
 	
 	exmlFMap = new EGeoXml("exmlFMap", faultMap, kmllist, {sidebarfn:myside,nozoom:true,sidebarid:"faultMapside",parentformofsidebarid:"faultKMLSelectorForm",clickpolyobjfn:clickpolyobj,iwwidth:200});       
+	// exmlFMap.setTreeview();
 	exmlFMap.parse();
 
-	function jsleep(s){
-		s=s*1000;
-		var a=true;
-		var n=new Date();
-		var w;
-		var sMS=n.getTime();
-		while(a){
-			w=new Date();
-			wMS=w.getTime();
-			if(wMS-sMS>s) a=false;
-		}
-	}
-
-	jsleep(7);
 
 	faultMap.addMapType(G_PHYSICAL_MAP);
 	faultMap.setMapType(G_PHYSICAL_MAP);
@@ -133,9 +117,9 @@
 				return "";
 		}
 
-	
-	 function clickpolyobj() {
-	     return function() {GEvent.trigger(document.getElementById('faultKMLSelectorForm:faultName'),'click', name, p, 'frommap', desc);};
+	 // This overrides the default clickpolyobjfn of egeoxml.js
+	 function clickpolyobj(p, name, desc) {
+	     GEvent.trigger(document.getElementById('faultKMLSelectorForm:faultName'),'click', name, p, 'frommap', desc);	    
 	  }
   
 </script>
