@@ -593,7 +593,7 @@ public class SimpleXDataKml {
 		
 			 //String linestyleid=""; 
 		System.out.println("Color and width for arrowed: "+LineColor+" "+LineWidth);
-		setLineStyle(container, linestyleid, LineColor, LineWidth2); 
+		setLineStyle(container, linestyleid, LineColor, LineWidth); 
 		 
 		double longestlength = 0.;
 		double projectMinX=Double.valueOf(datalist[0].getX());
