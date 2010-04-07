@@ -412,7 +412,7 @@ public class DislocBean extends GenericSopacBean {
 												faults[i].getFaultLatStart()+"", 
 												faults[i].getFaultLonEnd()+"", 
 												faults[i].getFaultLatEnd()+"", 
-												"ff66a1cc", 5);
+												"ff6af0ff", 5);
 		  }
 		  
 		  String myKmlUrl = kmlService.runMakeKml("", userName,
