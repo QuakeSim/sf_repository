@@ -137,13 +137,13 @@ for (i = 0; i < networkInfo.length; ++ i){
 
 //This is used to calculate the length and strike angle.
 function calculatelength(){
-var lonStart=document.getElementById("Faultform:faultLon");
-var lonEnd=document.getElementById("Faultform:faultLonende3r");
-var latStart=document.getElementById("Faultform:faultLat");
-var latEnd=document.getElementById("Faultform:faultLatendere");
+var lonStart = document.getElementById("Faultform:FaultLonStarts");
+var lonEnd = document.getElementById("Faultform:FaultLonEnds");
+var latStart = document.getElementById("Faultform:FaultLatStarts");
+var latEnd = document.getElementById("Faultform:FaultLatEnds");
 
-var length=document.getElementById("Faultform:FaultLength");
-var strike=document.getElementById("Faultform:FaultStrikeAngle");
+var length = document.getElementById("Faultform:FaultLength");
+var strike = document.getElementById("Faultform:FaultStrikeAngle");
 
 if ((latStart.value.length == 0) || (latStart.value == null)) { alert("Fault Origin Latitude is empty!"); }
 else if ((lonStart.value.length == 0) || (lonStart.value == null)) { alert("Fault Origin Longititude is empty!"); }
@@ -177,13 +177,13 @@ strike.value=Math.round(strikeValue*1000)/1000;
 function calculateendpoint(){
 
 // alert("debug");
-var lonStart=document.getElementById("Faultform:faultLon");
-var lonEnd=document.getElementById("Faultform:faultLonende3r");
-var latStart=document.getElementById("Faultform:faultLat");
-var latEnd=document.getElementById("Faultform:faultLatendere");
+var lonStart = document.getElementById("Faultform:FaultLonStarts");
+var lonEnd = document.getElementById("Faultform:FaultLonEnds");
+var latStart = document.getElementById("Faultform:FaultLatStarts");
+var latEnd = document.getElementById("Faultform:FaultLatEnds");
 
-var length=document.getElementById("Faultform:FaultLength");
-var strike=document.getElementById("Faultform:FaultStrikeAngle");
+var length = document.getElementById("Faultform:FaultLength");
+var strike = document.getElementById("Faultform:FaultStrikeAngle");
 
 if ((latStart.value.length == 0) || (latStart.value == null)) { alert("Fault Origin Latitude is empty!"); }
 else if ((lonStart.value.length == 0) || (lonStart.value == null)) { alert("Fault Origin Longititude is empty!"); }
