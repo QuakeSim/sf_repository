@@ -255,7 +255,8 @@
 					<h:commandButton id="addfault" value="Set Values" 
 						actionListener="#{DislocBean2.toggleAddFaultForProject}" /> 
 				   <f:verbatim>
-				      <input type="button" name="Update" value="Do Math" onclick="doMath()"/>
+				      <input id="domath" type="button" name="Update" value="Calculate length" onclick="calculatelength()"/>
+				      <input id="domath2" type="button" name="Update2" value="Calculate endpoint" onclick="calculateendpoint()"/>
  				   </f:verbatim>
 				</h:panelGrid>
 			</h:form> 
