@@ -295,9 +295,9 @@ public class SimpleXDataKml {
 		 LineStyle newlineStyle = new LineStyle(); 
 		 newlineStyle.setWidth((float) (line_width)); 
 		 newlineStyle.setColor(Color_value); 
-		 //		 gridlineStyle.addLineStyle(newlineStyle); 
+		 gridlineStyle.addLineStyle(newlineStyle); 
 		 //		 curfolder.addStyle(gridlineStyle); 
-		 kmlDocument.addStyle(newlineStyle);
+		 kmlDocument.addStyle(gridlineStyle);
 	} 
  
 	public void setIconStyle(String id, String iconhref) { 
