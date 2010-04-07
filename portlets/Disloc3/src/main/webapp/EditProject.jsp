@@ -94,18 +94,22 @@ var latEnd=document.getElementById("Faultform:faultLatendere");
 var length=document.getElementById("Faultform:FaultLength");
 var strike=document.getElementById("Faultform:FaultStrikeAngle");
 
-
+if ((latStart.value.length == 0) || (latStart.value == null)) { alert("Fault Origin Latitude is empty!"); }
+else if ((lonStart.value.length == 0) || (lonStart.value == null)) { alert("Fault Origin Longititude is empty!"); }
+else if ((latEnd.value.length == 0) || (latEnd.value == null)) { alert("Fault End Latitude is empty!"); }
+else if ((lonEnd.value.length == 0) || (lonEnd.value == null)) { alert("Fault End Longitude is empty!"); }
+else {
 var d2r = Math.acos(-1.0) / 180.0;
 var flatten=1.0/298.247;
-      var theFactor = d2r* Math.cos(d2r * latStart.value)
+var theFactor = d2r* Math.cos(d2r * latStart.value)
         * 6378.139 * (1.0 - Math.sin(d2r * lonStart.value) * Math.sin(d2r * lonStart.value) * flatten);
 
 var x=(lonEnd.value-lonStart.value)*theFactor;
 var y=(latEnd.value-latStart.value)*111.32;
-var xv = document.getElementById("Faultform:FaultLocationX");
-var yv = document.getElementById("Faultform:FaultLocationY");
-xv.value = x;
-yv.value = y;
+//var xv = document.getElementById("Faultform:FaultLocationX");
+//var yv = document.getElementById("Faultform:FaultLocationY");
+//xv.value = Math.round(x*1000)/1000;
+//yv.value = Math.round(y*1000)/1000;
 
 //alert("x : " + x + " y : " + y);
 
@@ -115,6 +119,7 @@ length.value=Math.round(lengthVal*1000)/1000;
 
 var strikeValue=Math.atan2(x,y)/d2r;
 strike.value=Math.round(strikeValue*1000)/1000;
+}
 }
 
 
@@ -129,20 +134,45 @@ var latEnd=document.getElementById("Faultform:faultLatendere");
 var length=document.getElementById("Faultform:FaultLength");
 var strike=document.getElementById("Faultform:FaultStrikeAngle");
 
+if ((latStart.value.length == 0) || (latStart.value == null)) { alert("Fault Origin Latitude is empty!"); }
+else if ((lonStart.value.length == 0) || (lonStart.value == null)) { alert("Fault Origin Longititude is empty!"); }
+else if ((length.value.length == 0) || (length.value == null)) { alert("Length is empty!"); }
+else if ((strike.value.length == 0) || (strike.value == null)) { alert("Strike Angle is empty!"); }
+else {
 
 var d2r = Math.acos(-1.0) / 180.0;
 var flatten=1.0/298.247;
 var theFactor = d2r* Math.cos(d2r * latStart.value)
         * 6378.139 * (1.0 - Math.sin(d2r * lonStart.value) * Math.sin(d2r * lonStart.value) * flatten);
 
-var x = document.getElementById("Faultform:FaultLocationX");
-var y = document.getElementById("Faultform:FaultLocationY");
+//var x = document.getElementById("Faultform:FaultLocationX");
+//var y = document.getElementById("Faultform:FaultLocationY");
+
+//Massive math calculation starts here. 
+if (strike.value == 0) {
+    var answer = confirm("Strike Angle is 0, Are you sure?");
+    if (answer) { xval = 0; yval = length.value;}
+    else { return; }
+}
+else if (strike.value == 90) { xval = length.value; yval = 0;}
+else if (strike.value == 180) { xval = 0; yval = (-1.0) * length.value;}
+else if (strike.value == 270) { xval = (-1.0) * length.value; yval = 0;}
+else {
+var thetan = Math.tan(strike.value*Math.PI/180);
+var xval = length.value/Math.sqrt(1 + thetan*thetan);
+var yval = Math.sqrt(length.value*length.value - xval*xval);
+
+if (strike.value > 0 && strike.value < 90) { xval = xval*1.0; yval = yval*1.0;}
+else if (strike.value > 90 && strike.value < 180) { xval = xval*1.0; yval = yval* (-1.0);}
+else if (strike.value > 180 && strike.value < 270) { xval = xval*(-1.0); yval = yval*(-1.0);}
+else if (strike.value > 270 && strike.value < 360) { xval = xval*(-1.0); yval = yval*1.0;}
+}
 
 //x.value = parseInt(x.value);
 //y.value = parseInt(y.value);
 //alert(x.value/theFactor + " is " + typeof(x.value/theFactor));
-lonEnd.value = ((x.value)*1.0)/theFactor + (lonStart.value*1.0);
-latEnd.value = (y.value)/111.32 + (latStart.value*1.0);
+lonEnd.value = (xval*1.0)/theFactor + (lonStart.value*1.0);
+latEnd.value = yval/111.32 + (latStart.value*1.0);
 
 lonEnd.value = Math.round(lonEnd.value*100)/100.0;
 latEnd.value = Math.round(latEnd.value*100)/100.0;
@@ -150,13 +180,13 @@ latEnd.value = Math.round(latEnd.value*100)/100.0;
 //x.value=(lonEnd.value-lonStart.value)*theFactor;
 //y.value=(latend.value-latStart.value)*111.32;
 
-var lengthVal=Math.sqrt((x.value)*(x.value)+(y.value)*(y.value));
+//var lengthVal=Math.sqrt((x.value)*(x.value)+(y.value)*(y.value));
 // alert("x :" + x.value + " y :" + y.value);
-length.value=Math.round(lengthVal*1000)/1000;
+//length.value=Math.round(lengthVal*1000)/1000;
 
-var strikeValue=Math.atan2(x.value,y.value)/d2r;
-strike.value=Math.round(strikeValue*1000)/1000;
-
+//var strikeValue=Math.atan2(x.value,y.value)/d2r;
+//strike.value=Math.round(strikeValue*1000)/1000;
+}
 }
 
 function dataTableSelectOneRadio(radio) { 
