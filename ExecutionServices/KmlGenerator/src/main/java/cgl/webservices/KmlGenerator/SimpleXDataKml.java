@@ -2,7 +2,6 @@
  GmapDataXml generator. 
  */ 
  
- 
 // Modified by Jun Ji of CGL, May 2009		email : jid@cs.indiana.edu 
  
 package cgl.webservices.KmlGenerator; 
@@ -296,8 +295,9 @@ public class SimpleXDataKml {
 		 LineStyle newlineStyle = new LineStyle(); 
 		 newlineStyle.setWidth((float) (line_width)); 
 		 newlineStyle.setColor(Color_value); 
-		 gridlineStyle.addLineStyle(newlineStyle); 
-		 curfolder.addStyle(gridlineStyle); 
+		 //		 gridlineStyle.addLineStyle(newlineStyle); 
+		 //		 curfolder.addStyle(gridlineStyle); 
+		 kmlDocument.addStyle(newlineStyle);
 	} 
  
 	public void setIconStyle(String id, String iconhref) { 
@@ -535,9 +535,11 @@ public class SimpleXDataKml {
 		} else { 
 			container = root; 
 		} 
+
 		String linestyleid=faultName+"Style"; 
-		//		String linestyleid=""; 
-		setLineStyle(container, linestyleid, LineColor, LineWidth); 
+		//We will put the styling information in the root folder
+		setLineStyle(root, linestyleid, LineColor, LineWidth); 
+
 		Placemark mark1 = new Placemark(); 
 		mark1.setName(faultName); 
 		 
