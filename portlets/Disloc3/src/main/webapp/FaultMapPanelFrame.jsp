@@ -134,8 +134,9 @@
 		}
 
 	
-	 function clickpolyobj() {
-	     return function() {GEvent.trigger(document.getElementById('faultKMLSelectorForm:faultName'),'click', name, p, 'frommap', desc);};
+	 // This overrides the default clickpolyobjfn of egeoxml.js
+	 function clickpolyobj(p, name, desc) {
+	     GEvent.trigger(document.getElementById('faultKMLSelectorForm:faultName'),'click', name, p, 'frommap', desc);	    
 	  }
   
 </script>
