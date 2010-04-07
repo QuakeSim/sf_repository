@@ -290,7 +290,7 @@ public class SimpleXDataKml {
 	} 
  
 	public void setLineStyle(Folder curfolder, String id, String Color_value, double line_width) { 
-		System.out.println("Color and width for arrowed: "++linestyleid+" "+LineColor+" "+LineWidth);
+		System.out.println("Color and width for arrowed: "+linestyleid+" "+LineColor+" "+LineWidth);
 		 Style gridlineStyle = new Style(); 
 		 gridlineStyle.setId(id); 
 		 LineStyle newlineStyle = new LineStyle(); 
