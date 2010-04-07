@@ -402,7 +402,7 @@ public class DislocBean extends GenericSopacBean {
 		  //	kmlService.setGridLine("Grid Line", start_x, start_y, end_x, end_y, xinterval,yinterval);
 		  //kmlService.setPointPlacemark("Icon Layer");
 		  //kmlService.setArrowPlacemark("Arrow Layer", "ff66a1cc", 2);
-		  kmlService.setArrowPlacemark("Arrow Layer","0000ffff",2);
+		  kmlService.setArrowPlacemark("Arrow Layer","ff0000ff",2);
 		  
 		  //Plot the faults
 		  for (int i = 0; i < faults.length; i++) {
