@@ -594,6 +594,7 @@ public class SimpleXDataKml {
 		String linestyleid="arrowedStyle"; 
 		
 			 //String linestyleid=""; 
+		double LineWidth="2.0";
 		System.out.println("Color and width for arrowed: "+LineColor+" "+LineWidth);
 		setLineStyle(container, linestyleid, LineColor, LineWidth); 
 		 
