@@ -591,7 +591,9 @@ public class SimpleXDataKml {
 		 
 		//This isn't done correctly so disable in anticipation of future brilliance. 
 		String linestyleid="arrowedStyle"; 
+		
 			 //String linestyleid=""; 
+		System.out.println("Color and width for arrowed: "+LineColor+" "+LineWidth);
 		setLineStyle(container, linestyleid, LineColor, LineWidth); 
 		 
 		double longestlength = 0.;
@@ -621,7 +623,7 @@ public class SimpleXDataKml {
 			 else if (length > longestlength)  {
 				  longestlength = length;			
 			 }	 
-			 System.out.println("Length: "+length+" Longest length: "+longestlength+" Arrow Scale: "+arrowScale);
+			 //			 System.out.println("Length: "+length+" Longest length: "+longestlength+" Arrow Scale: "+arrowScale);
 		}		 
 		
 		double projectLength=(projectMaxX-projectMinX)*(projectMaxX-projectMinX);
@@ -632,7 +634,7 @@ public class SimpleXDataKml {
 		//project dimension.
 		double scaling = 0.1*projectLength/longestlength;
 		
-		System.out.println("Scale rate: "+scaling+" "+longestlength+" "+projectLength);
+		//		System.out.println("Scale rate: "+scaling+" "+longestlength+" "+projectLength);
 		 		 
 		for (int i = 0; i < datalist.length; i++) { 
 			// create and add a Placemark containing a Point 
@@ -695,7 +697,7 @@ public class SimpleXDataKml {
 			double endx = startx + dx*scaling;
 			double endy = starty + dy*scaling;
 			ArrowLine curarrow = CreateArrowByCoordinate(startx,starty,endx,endy); 
-			System.out.println("Plotting: "+startx+" "+starty+" "+endx+" "+endy);
+			//			System.out.println("Plotting: "+startx+" "+starty+" "+endx+" "+endy);
 			 
 			//Plot the arrow's base relative to the project's origin.
 			double arrowOrigX = curarrow.getStartPoint().getX(); 
