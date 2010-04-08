@@ -645,8 +645,7 @@ public class DislocBean extends GenericSopacBean {
 		tmp_fault.setFaultDipAngle(dip);
 		
 		//This is the fault's strike angle
-		
-		strike=Math.atan2(x,y)/d2r;
+		//		strike=Math.atan2(x,y)/d2r;
 		tmp_fault.setFaultStrikeAngle(Double.parseDouble(df.format(strike)));
 		
 		//This is the (x,y) of the fault relative to the project's origin

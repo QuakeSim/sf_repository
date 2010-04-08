@@ -386,7 +386,7 @@ public class editProjectForm extends GenericProjectBean {
 		
 		try {
 			double dip = kdp.getdip();
-			// double strike = kdp.getstrike();
+			double strike = kdp.getstrike();
 			double depth = kdp.getdepth();
 			double width = kdp.getwidth();    
 
@@ -421,7 +421,7 @@ public class editProjectForm extends GenericProjectBean {
 			tmp_fault.setFaultLatEnds(latEnd+"");
 			
 			//Set the strike
-			double strike=Math.atan2(x,y)/d2r;
+			//			double strike=Math.atan2(x,y)/d2r;
 			tmp_fault.setFaultStrikeAngle(strike+"");
 			
 			//Set the origin
