@@ -637,7 +637,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		      tmp_fault.setFaultRakeAngle("0");
 
 		      //This is the fault's strike angle
-				//		      strike=Math.atan2(x,y)/d2r;
+				strike=Math.atan2(x,y)/d2r;
 		      tmp_fault.setFaultStrikeAngle(df.format(strike));			
 
 		      //Get the origin of the first fault.
