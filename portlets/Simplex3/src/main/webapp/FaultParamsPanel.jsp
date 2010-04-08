@@ -29,9 +29,9 @@
 							<h:message id="lkdrq1182" for="FaultLocationX" showDetail="true"
 								showSummary="true" errorStyle="color: red" />
 						</h:panelGroup>
+
 						<h:selectBooleanCheckbox id="faultOriginXVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultOriginXVary}" />
-
 						<h:outputText id="lkdrq1183" value="Location Y:" />
 						<h:panelGroup id="lkdrq1184">
 							<h:inputText id="FaultLocationY"
@@ -40,9 +40,9 @@
 							<h:message id="lkdrq1185" for="FaultLocationY" showDetail="true"
 								showSummary="true" errorStyle="color: red" />
 						</h:panelGroup>
+
 						<h:selectBooleanCheckbox id="faultOriginYVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultOriginYVary}" />
-
 						<h:outputText id="lkdrq1186" value="Length:" />
 						<h:panelGroup id="lkdrq1187">
 							<h:inputText id="FaultLength"
@@ -96,7 +96,6 @@
 						</h:panelGroup>
 						<h:selectBooleanCheckbox id="faultStrikeAngleVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultStrikeAngleVary}" />
-
 
 						<h:outputText id="dflelerkljk3" value="Dip Slip:" />
 						<h:panelGroup id="dflelerkljk4">
