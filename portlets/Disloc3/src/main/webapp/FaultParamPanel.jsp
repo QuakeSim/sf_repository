@@ -50,7 +50,7 @@
 					<h:inputText id="faultLon" value="#{DislocBean2.currentFault.faultLonStart}"
 									 required="true" />
 					</h:panelGroup>
-					<h:outputText  id="lkdj121re32" value="N/A" /> 
+					<h:outputText  id="lkdj121re3dlkj2" value="N/A" /> 
 
 					<h:outputText value="Fault End Latitude:" />
 			      <h:panelGroup>
