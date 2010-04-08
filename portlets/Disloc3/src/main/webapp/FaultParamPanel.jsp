@@ -39,28 +39,28 @@
 					<h:outputText  id="lkdjre3122" value="N/A" /> 
 
 					<h:outputText id="stufflat32" value="Fault Origin Latitude:" />
-			      <h:panelGroup>
+			      <h:panelGroup id="stufflat32we">
 						<h:inputText id="faultLat" value="#{DislocBean2.currentFault.faultLatStart}"
 										 required="true" />
 					</h:panelGroup>
 					<h:outputText  id="lkdj21re32" value="N/A" /> 
 
 					<h:outputText id="stufflon32" value="Fault Origin Longitude" />
-					<h:panelGroup>
+					<h:panelGroup "stufflat323432">
 					<h:inputText id="faultLon" value="#{DislocBean2.currentFault.faultLonStart}"
 									 required="true" />
 					</h:panelGroup>
 					<h:outputText  id="lkdj121re3dlkj2" value="N/A" /> 
 
 					<h:outputText id="stufflonend32" value="Fault End Latitude:" />
-			      <h:panelGroup>
+			      <h:panelGroup "stufflat3q1432">
 						<h:inputText id="faultLatendere" value="#{DislocBean2.currentFault.faultLatEnd}"
 										 required="true" />
 					</h:panelGroup>
 					<h:outputText  id="lkdj23oi232" value="N/A" /> 
 
 					<h:outputText id="stufflonend308" value="Fault End Longitude" />
-					<h:panelGroup>
+					<h:panelGroup "stufflatewe3w32">
 					<h:inputText id="faultLonende3r" value="#{DislocBean2.currentFault.faultLonEnd}"
 									 required="true" />
 					</h:panelGroup>
