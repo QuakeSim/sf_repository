@@ -133,8 +133,6 @@ var networkInfo = new Array (<%=networkNames.size()%>);
 for (i = 0; i < networkInfo.length; ++ i){
 	networkInfo [i] = new Array (2);
 }
-
-
 //This is used to calculate the length and strike angle.
 function calculatelength(){
 var lonStart = document.getElementById("Faultform:FaultLonStarts");
@@ -209,7 +207,8 @@ else if (strike.value == 90) { xval = length.value; yval = 0;}
 else if (strike.value == 180) { xval = 0; yval = (-1.0) * length.value;}
 else if (strike.value == 270) { xval = (-1.0) * length.value; yval = 0;}
 else {
-var thetan = Math.tan(strike.value*Math.PI/180);
+var sval = 90 - strike.value;
+var thetan = Math.tan(sval*d2r);
 var xval = length.value/Math.sqrt(1 + thetan*thetan);
 var yval = Math.sqrt(length.value*length.value - xval*xval);
 
