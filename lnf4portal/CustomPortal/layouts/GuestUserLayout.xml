@@ -62,6 +62,7 @@
           </row-layout>
         </table-layout>
       </portlet-tab>
+<!--
       <portlet-tab label="news">
         <title lang="en">News</title>
         <table-layout>
@@ -74,6 +75,7 @@
           </row-layout>
         </table-layout>
       </portlet-tab>
+-->
     </portlet-tabbed-pane>
   </portlet-tab>
   
