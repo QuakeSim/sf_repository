@@ -50,7 +50,9 @@
                 </column-layout>
 					 -->
             <column-layout width="70%">
-              <portlet-class>rssportlet#RssPortlet</portlet-class>
+              <portlet-frame label="news">
+					 <portlet-class>rssportlet#RssPortlet</portlet-class>
+              </portlet-frame>
             </column-layout>
             <column-layout width="30%">
               <portlet-frame label="login">
