@@ -29,59 +29,64 @@
 
 <!-- Tabbed Panes -->
 <portlet-tabbed-pane selected="0" style="menu">
-    <portlet-tab label="gridsphere">
-        <title lang="zh">QuakeSim2网络门户框架</title>
-        <title lang="en">QuakeSim2</title>
-        <portlet-tabbed-pane selected="0" style="sub-menu">
-            <portlet-tab label="home">
-               	<title lang="zh">首页</title>
-               	<title lang="en">Home</title>
-                <title lang="it">Inizio</title>
-		        <title lang="pl">Start</title>
-		        <title lang="hu">Otthon</title>
-		        <title lang="de">Start</title>
-		        <title lang="cs">Výchozí</title>
-                <title lang="hr">Ulaz</title>
-                <table-layout>
-                    <row-layout>
-                        <column-layout width="70%">
-                            <portlet-content include="/html/main.html"/>
-                        </column-layout>
-                        <column-layout width="30%">
-                            <portlet-frame label="login">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
-                            </portlet-frame>
-                        </column-layout>
-                    </row-layout>
-                </table-layout>
-            </portlet-tab>
-            <portlet-tab label="news">
-               	<title lang="en">News</title>
-                <table-layout>
-                    <row-layout>
-                        <column-layout width="100%">
-                            <portlet-frame label="news">
-                                <portlet-class>rssportlet#RssPortlet</portlet-class>
-                            </portlet-frame>
-                        </column-layout>
-                    </row-layout>
-                </table-layout>
-            </portlet-tab>
-        </portlet-tabbed-pane>
-    </portlet-tab>
-
+  <portlet-tab label="gridsphere">
+    <title lang="zh">QuakeSim2网络门户框架</title>
+    <title lang="en">QuakeSim2</title>
+    <portlet-tabbed-pane selected="0" style="sub-menu">
+      <portlet-tab label="home">
+        <title lang="zh">首页</title>
+        <title lang="en">Home</title>
+        <title lang="it">Inizio</title>
+		  <title lang="pl">Start</title>
+		  <title lang="hu">Otthon</title>
+		  <title lang="de">Start</title>
+		  <title lang="cs">Výchozí</title>
+        <title lang="hr">Ulaz</title>
+        <table-layout>
+          <row-layout>
+				<!--
+					 <column-layout width="70%">
+                  <portlet-content include="/html/main.html"/>
+                </column-layout>
+					 -->
+            <column-layout width="70%">
+              <portlet-class>rssportlet#RssPortlet</portlet-class>
+            </column-layout>
+            <column-layout width="30%">
+              <portlet-frame label="login">
+                <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
+              </portlet-frame>
+            </column-layout>
+          </row-layout>
+        </table-layout>
+      </portlet-tab>
+      <portlet-tab label="news">
+        <title lang="en">News</title>
+        <table-layout>
+          <row-layout>
+            <column-layout width="100%">
+              <portlet-frame label="news">
+                <portlet-class>rssportlet#RssPortlet</portlet-class>
+              </portlet-frame>
+            </column-layout>
+          </row-layout>
+        </table-layout>
+      </portlet-tab>
+    </portlet-tabbed-pane>
+  </portlet-tab>
+  
 </portlet-tabbed-pane>
 
-    <!-- Footer components (if any) -->
-    <portlet-footer>
-        <table-layout style="footer">
-            <row-layout>
-                <column-layout>
-                    <portlet-content include="/WEB-INF/CustomPortal/layouts/html/pagefooter.html"/>
-                </column-layout>
-            </row-layout>
-        </table-layout>
-    </portlet-footer>
+<!-- Footer components (if any) -->
+<portlet-footer>
+  <table-layout style="footer">
+    <row-layout>
+      <column-layout>
+        <portlet-content include="/WEB-INF/CustomPortal/layouts/html/pagefooter.html"/>
+      </column-layout>
+    </row-layout>
+  </table-layout>
+</portlet-footer>
 
 
 </page-layout>
