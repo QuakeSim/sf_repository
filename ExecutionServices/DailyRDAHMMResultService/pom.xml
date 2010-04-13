@@ -23,6 +23,7 @@
 -->
        <tomcat.base.dir>${catalina.home}</tomcat.base.dir>
        <user.home>${user.home}</user.home>
+	   <output.access.url>${dailyRdahmmResult.service.output.url}</output.access.url>
 <!--
        <rdahmm.service.url>${rdahmm.service.url}</rdahmm.service.url>
 -->
@@ -73,6 +74,20 @@
 						<goals>
 							<goal>run</goal>
 						</goals>
+					</execution>
+					<execution>
+						<phase>install</phase>
+						<configuration>
+							<tasks>
+								<copy overwrite="true" failonerror="false" todir="${catalina.home}/webapps/axis2/WEB-INF/services/${pom.artifactId}">
+									<fileset dir="${basedir}/target/classes" includes="*.properties"/>
+					 			</copy>
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+
 					</execution>
 					<execution>
 						<id>Clean Axis2 ${pom.artifactId} Web Service</id>
