@@ -31,6 +31,7 @@
 					   <exclude name="*.tar.gz"/>
 					   <exclude name="*.tgz"/>
 					   <exclude name="pom.xml"/>
+					   <exclude name="httpd_conf"/>
 					   <exclude name="**/.svn"/>
 				   </fileset>
              </delete>
@@ -45,51 +46,47 @@
        <execution>
         <id>untar</id>
 		  <phase>process-resources</phase>
-        <configuration>
-			  <tasks>
-				 <echo message="Unpacking ${basedir}"/>
-				 <!-- These gunzips unfortunately must be done one at a time -->
-				 <gunzip src="${basedir}/${tomcat.version}.tar.gz" 
-							dest="${basedir}/">
-             </gunzip>
+		<configuration>
+			<tasks>
+				<echo message="Unpacking ${basedir}"/>
+				<!-- These gunzips unfortunately must be done one at a time -->
+				<gunzip src="${basedir}/${tomcat.version}.tar.gz" 
+						dest="${basedir}/">
+				</gunzip>
 
-				 <gunzip src="${basedir}/${tomcat.version}-compat.tar.gz" 
-							dest="${basedir}/">
-             </gunzip>
+				<gunzip src="${basedir}/${tomcat.version}-compat.tar.gz" 
+						dest="${basedir}/">
+				</gunzip>
 
-				 <gunzip src="${basedir}/${yui.version}.tar.gz" 
-							dest="${basedir}/">
-             </gunzip>
+				<gunzip src="${basedir}/${yui.version}.tar.gz" 
+						dest="${basedir}/">
+				</gunzip>
 
-				 <gunzip src="${basedir}/axis2.tar.gz" 
-							dest="${basedir}/">
-             </gunzip>
+				<gunzip src="${basedir}/axis2.tar.gz" 
+						dest="${basedir}/">
+				</gunzip>
 
-				 <untar dest="${basedir}">
-                <fileset dir="${basedir}">
+				<untar dest="${basedir}">
+					<fileset dir="${basedir}">
 						<include name="**/*.tar"/>
-                </fileset>
-             </untar>
+					</fileset>
+				</untar>
+			 
+				<!-- Copy the YUI libraries -->
+				<copy overwrite="true" todir="${basedir}/${tomcat.version}/webapps/ROOT/${yui.version}">
+					<fileset dir="${basedir}/${yui.version}"/>
+				</copy>
 
-				 <echo message="Setting execute permissions on tomcat shell scripts"/>
-				 <chmod perm="${tomcat.bin.perm}"
-						 dir="${basedir}/${tomcat.version}/bin/">
+				<copy overwrite="true" todir="${basedir}/${tomcat.version}/webapps/axis2">
+					<fileset dir="${basedir}/axis2"/>
+				</copy>
+			
+				<echo message="Setting execute permissions on tomcat shell scripts"/>
+				<chmod perm="${tomcat.bin.perm}" dir="${basedir}/${tomcat.version}/bin/">
 					<include name="*.sh"/>
-				 </chmod>
-				 
-				 <!-- Copy the YUI libraries -->
-				<copy overwrite="true"
-						todir="${basedir}/${tomcat.version}/webapps/ROOT/${yui.version}">
-				  <fileset dir="${basedir}/${yui.version}"/>
-            </copy>
-
-				<copy overwrite="true"
-						todir="${basedir}/${tomcat.version}/webapps/axis2">
-				  <fileset dir="${basedir}/axis2"/>
-            </copy>
-
-           </tasks>
-        </configuration>
+				</chmod>
+			</tasks>
+		</configuration>
         <goals>
 			  <goal>run</goal>
         </goals>
