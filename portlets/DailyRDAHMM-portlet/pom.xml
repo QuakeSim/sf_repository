@@ -70,7 +70,7 @@
     <!-- We get this from the command line and pass to the resources
          via filtering -->
     <properties>
-       <tomcat.base.dir>${basedir}/../../portal_deploy/${tomcat.version}/</tomcat.base.dir>
+       <tomcat.base.dir>${catalina.home}</tomcat.base.dir>
        <google.key>${google.master.key}</google.key>
     </properties>
 
