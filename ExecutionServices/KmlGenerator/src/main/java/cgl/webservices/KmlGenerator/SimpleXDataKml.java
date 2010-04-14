@@ -872,9 +872,10 @@ public class SimpleXDataKml {
 	 */ 
 	public void printToFile(String detail, String xmlfilename) { 
 		try { 
+			 System.out.println("Printing KML to "+xmlfilename);
 			PrintStream out = new PrintStream(new FileOutputStream(xmlfilename)); 
 			out.println(detail); 
- 
+			System.out.println("File printing complete");
 			out.close(); 
  
 		} catch (FileNotFoundException e) { 
