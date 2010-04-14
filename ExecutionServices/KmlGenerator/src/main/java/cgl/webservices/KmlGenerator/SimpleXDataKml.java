@@ -876,12 +876,8 @@ public class SimpleXDataKml {
 		try { 
 			 System.out.println("Printing KML to "+xmlfilename);
 			 PrintStream out = new PrintStream(new FileOutputStream(xmlfilename)); 
-			 int chunk=detail.length()/10;
-			 System.out.println("Trying to print a string with this lenght: "+detail.length());
-			 for(int i=0;i<10;i++){
-				  out.println(detail.substring(i*chunk, (i+1)*chunk)); 
-				  System.out.println("File printing complete");
-				  out.close(); 
+			 out.println(detail);
+			 out.close(); 
 			 }
  
 		} catch (FileNotFoundException e) { 
