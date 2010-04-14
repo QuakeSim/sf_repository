@@ -872,6 +872,7 @@ public class SimpleXDataKml {
 	 * This method uses Xerces specific classes prints the XML document to file. 
 	 */ 
 	public void printToFile(String detail, String xmlfilename) { 
+		 System.out.println("Printing a file");
 		try { 
 			 System.out.println("Printing KML to "+xmlfilename);
 			PrintStream out = new PrintStream(new FileOutputStream(xmlfilename)); 
@@ -882,6 +883,9 @@ public class SimpleXDataKml {
 		} catch (FileNotFoundException e) { 
 			e.printStackTrace(); 
 		} 
+		catch(Exception ex){
+			 ex.printStackTrace();
+		}
 	} 
  
 	public void setLonref(String tmp_str) { 
