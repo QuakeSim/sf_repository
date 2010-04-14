@@ -880,13 +880,13 @@ public class SimpleXDataKml {
 				out.close(); 
 		  }
 		  
-	 } catch (FileNotFoundException e) { 
-		  e.printStackTrace(); 
+		  catch (FileNotFoundException e) { 
+				e.printStackTrace(); 
+		  } 
+		  catch(Exception ex){
+				ex.printStackTrace();
+		  }
 	 } 
-	 catch(Exception ex){
-		  ex.printStackTrace();
-	 }
-} 
  
 	public void setLonref(String tmp_str) { 
 		this.lonref = Double.valueOf(tmp_str.trim()).doubleValue(); 
