@@ -43,35 +43,56 @@
                         <phase>package</phase>
                            <configuration>
                              <tasks>
-                               <replace dir="${basedir}/target/${pom.artifactId}" 
+								<replace dir="${basedir}/target/${pom.artifactId}" 
                                         token="put.google.map.key.here"
                                         value="${google.master.key}">
 											<include name="**/*.jsp"/>
-										 </replace>
-										 <replace dir="${basedir}/target/${pom.artifactId}" 
-                                        token="put.url.here"
-                                        value="${host.base.url}/${pom.artifactId}">
+								</replace>
+								<replace dir="${basedir}/target/${pom.artifactId}" 
+                                        token="local.hostname"
+                                        value="${local.hostname}">
 											<include name="**/*.jsp"/>
-										 </replace>
-										 <replace file="${basedir}/target/${pom.artifactId}/WEB-INF/faces-config.xml" 
-                                        token="put.catalina.home.here"
-                                        value="${catalina.home}"/>
-                             </tasks>
+								</replace>
+								<replace dir="${basedir}/target/${pom.artifactId}" 
+                                        token="result.service.hostname"
+                                        value="${result.service.hostname}">
+											<include name="**/*.jsp"/>
+								</replace>
+								<replace dir="${basedir}/target/${pom.artifactId}" 
+                                        token="xml.access.hostname"
+                                        value="${xml.access.hostname}">
+											<include name="**/*.jsp"/>
+								</replace>
+							 </tasks>
                            </configuration>
                            <goals>
                              <goal>run</goal>
                            </goals>
                      </execution> 
+					 <execution>
+                        <phase>clean</phase>
+                           <configuration>
+                             <tasks>
+							 	<delete failonerror="false" dir="${catalina.home}/webapps/${pom.artifactId}"/>
+							 </tasks>
+                           </configuration>
+                           <goals>
+                             <goal>run</goal>
+                           </goals>
+                     </execution> 
+
                   </executions>
             </plugin>
         </plugins>
     </build>
 
-    <!-- We get this from the command line and pass to the resources
-         via filtering -->
+    <!-- We get this from the command line and pass to the jsps via replacing-->
     <properties>
        <tomcat.base.dir>${catalina.home}</tomcat.base.dir>
        <google.key>${google.master.key}</google.key>
+	   <local.hostname>${local.hostname}</local.hostname>
+	   <result.service.hostname>${dailyRdahmmResult.service.hostname}</result.service.hostname>
+	   <xml.access.hostname>${dailyRdahmm.service.hostname}</xml.access.hostname>
     </properties>
 
 

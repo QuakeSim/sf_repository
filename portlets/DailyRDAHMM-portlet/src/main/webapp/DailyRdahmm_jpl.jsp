@@ -26,8 +26,8 @@
 	<head>
 	<script
     src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>
-	<script src="http://gw11.quarry.iu.teragrid.org/DailyRDAHMM-portlet/NmapAPI.js" type="text/javascript"></script>
-	<script src="http://gw11.quarry.iu.teragrid.org/DailyRDAHMM-portlet/dateUtil.js" type="text/javascript"></script>
+	<script src="http://local.hostname/DailyRDAHMM-portlet/NmapAPI.js" type="text/javascript"></script>
+	<script src="http://local.hostname/DailyRDAHMM-portlet/dateUtil.js" type="text/javascript"></script>
 	</head>
 	<body>
 
@@ -404,8 +404,8 @@
 			return;
 		}
 
-		var url = "http://gw11.quarry.iu.teragrid.org/axis2/services/DailyRdahmmResultService/proxyCallHttpService?serviceUrl=" + 
-					"http%3A%2F%2Fgf13.ucs.indiana.edu%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetStateChangeNumberPlot%3FdataSource%3DJPL%26minLat%3D"
+		var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/proxyCallHttpService?serviceUrl=" + 
+					"http%3A%2F%2Fresult.service.hostname%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetStateChangeNumberPlot%3FdataSource%3DJPL%26minLat%3D"
 					+ latFrom + "%26maxLat%3D" + latTo + "%26minLong%3D" + longFrom + "%26maxLong%3D" + longTo;
 		var link = callHttpService(url);
 		window.open(link);
@@ -415,9 +415,9 @@
 	function getKmlBtnClick(btn) {
 		var dateStr = document.getElementById("dateText").value;
 
-		var url = "http://gw11.quarry.iu.teragrid.org/axis2/services/DailyRdahmmResultService/proxyCallHttpService?serviceUrl=" + 
-				  "http%3A%2F%2Fgf13.ucs.indiana.edu%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetKmlForDate%3FdateStr%3D"
-				  + dateStr + "%26resUrl%3Dhttp%3A%2F%2Fgf13.ucs.indiana.edu%2F%2Frdahmmexec%2Fdaily%2FJPL_FILL%2Fstation-status-change-JPL_FILL.xml";
+		var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/proxyCallHttpService?serviceUrl=" + 
+				  "http%3A%2F%2Fresult.service.hostname%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetKmlForDate%3FdateStr%3D"
+				  + dateStr + "%26resUrl%3Dhttp%3A%2F%2Fxml.access.hostname%2F%2Frdahmmexec%2Fdaily%2FJPL_FILL%2Fstation-status-change-JPL_FILL.xml";
 		var link = callHttpService(url);
 		window.open(link);
 	}
@@ -541,7 +541,7 @@
 	*/
 <%
 	Document statusDoc = null;
-	String xmlUrl = "http://gf13.ucs.indiana.edu//rdahmmexec/daily/JPL_FILL/station-status-change-JPL_FILL.xml";
+	String xmlUrl = "http://xml.access.hostname//rdahmmexec/daily/JPL_FILL/station-status-change-JPL_FILL.xml";
 	try {
 		// if the file is old or does not exist, copy it from xmlUrl
 		boolean shouldCopy = false;		
@@ -802,7 +802,7 @@
 		var sw = mapBounds.getSouthWest();
 		var ne = mapBounds.getNorthEast();
 		if (showDateStr != "") {
-			url = "http://gw11.quarry.iu.teragrid.org/axis2/services/DailyRdahmmResultService/calcStationColors?date=" + showDateStr + "&resUrl=" + xmlResultUrl;
+			url = "http://local.hostname/axis2/services/DailyRdahmmResultService/calcStationColors?date=" + showDateStr + "&resUrl=" + xmlResultUrl;
 			var colorStr = callHttpService(url);
 			if (colorStr.length != 0) {
 				nMarkerDoneForNewDate = 0;
@@ -928,7 +928,7 @@
 	slider.subscribe("change", onSlideChange);
 	slider.subscribe("slideEnd", onSlideEnd);
 	// set the date to 18 days ago, the latest date that we get data for all stations
-	var url = "http://gw11.quarry.iu.teragrid.org/axis2/services/DailyRdahmmResultService/getDataLatestDate?resUrl=" + xmlResultUrl;
+	var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/getDataLatestDate?resUrl=" + xmlResultUrl;
 	var str = callHttpService(url);
 	var tmpDate = getDateFromString(str);
 	document.getElementById("dateText").setAttribute("value", "");
