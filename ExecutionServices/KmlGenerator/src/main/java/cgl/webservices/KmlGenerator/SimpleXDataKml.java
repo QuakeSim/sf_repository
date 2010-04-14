@@ -189,6 +189,7 @@ public class SimpleXDataKml {
 			 e.printStackTrace();			  
 		 } 
 		  
+		 System.out.println("Printing to file");
 		 this.printToFile(this.doc.toKML(), destDir + "/" + ProjectName + JobUID +".kml"); 
 		 return baseUrl + "/" + ProjectName + JobUID +".kml";		  
 	 } 
