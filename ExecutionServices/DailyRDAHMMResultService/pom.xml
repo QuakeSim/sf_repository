@@ -23,10 +23,8 @@
 -->
        <tomcat.base.dir>${catalina.home}</tomcat.base.dir>
        <user.home>${user.home}</user.home>
-	   <output.access.url>${dailyRdahmmResult.service.output.url}</output.access.url>
-<!--
-       <rdahmm.service.url>${rdahmm.service.url}</rdahmm.service.url>
--->
+	   <local.hostname>${local.hostname}</local.hostname>
+	   <xml.access.hostname>${dailyRdahmm.service.hostname}</xml.access.hostname>
     </properties>
 
     <build>
