@@ -1,4 +1,4 @@
-package cgl.webservices.disloc;
+package cgl.webservices.insarkml;
 
 //Need to import this parent.
 import cgl.webservices.*;
@@ -17,9 +17,6 @@ import org.apache.axis.transport.http.HTTPConstants;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 
-//SOPAC Client Stuff
-//import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
-
 //Needed for some number formatting.
 import java.text.*;
 
@@ -30,7 +27,7 @@ import java.rmi.server.UID;
  * A simple wrapper for Ant.
  */
 
-public class DislocService extends AntVisco implements Runnable {  
+public class InsarKmlService extends AntVisco implements Runnable {  
 
     Properties properties;
 	 String serverUrl;
@@ -44,11 +41,11 @@ public class DislocService extends AntVisco implements Runnable {
 	 //Usefull variable;
 	 final String space=" ";
 
-	 public DislocService() throws Exception {
+	 public InsarKmlService() throws Exception {
 		  this(false);
 	 }
 	 
-	 public DislocService(boolean useClassLoader) throws Exception {
+	 public InsarKmlService(boolean useClassLoader) throws Exception {
 		  super();
 		  
 		  if(useClassLoader) {
@@ -60,7 +57,7 @@ public class DislocService extends AntVisco implements Runnable {
 				
 				//This works if you are using the classloader but not inside
 				//Tomcat.
-				properties.load(loader.getResourceAsStream("dislocconfig.properties"));
+				properties.load(loader.getResourceAsStream("insarkml.properties"));
 		  }
 		  else {
 				//Extract the Servlet Context
