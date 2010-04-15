@@ -1,28 +1,30 @@
 <?xml version="1.0"?>
 <project name="Disloc" default="ExecDisloc" basedir=".">
-
-<!--
-<taskdef name="TransferFile" classname="commgrids.antwebtasks.TransferFile"/>
-<taskdef name="MakeMovie" classname="commgrids.antwebtasks.AntServiceInvoker"/>
-<taskdef name="AntEmail" classname="commgrids.antwebtasks.AntEmail"/>
--->
-
-<target name="MakeWorkDir">
-   <echo message="Creating ${workDir.prop}" />
-   <mkdir dir="${workDir.prop}" />
-</target>
-
-<target name="ExecDisloc" depends="MakeWorkDir">
-   <echo message="Bin directory: ${bindir.prop}"/>
-   <exec executable="${bindir.prop}/disloc" 
-         output="${workDir.prop}/${projectName.prop}.stdout"
-			dir="${workDir.prop}">
-      <arg line="${workDir.prop}/${projectName.prop}.input"/>
-      <arg line="${workDir.prop}/${projectName.prop}.output"/>
-      <env key="PATH" path="${bindir.prop}:/bin/:$PATH"/>
-   </exec>
-</target>
-
+  
+  <!--
+		<taskdef name="TransferFile" classname="commgrids.antwebtasks.TransferFile"/>
+		<taskdef name="MakeMovie" classname="commgrids.antwebtasks.AntServiceInvoker"/>
+		<taskdef name="AntEmail" classname="commgrids.antwebtasks.AntEmail"/>
+		-->
+  
+  <target name="MakeWorkDir">
+	 <echo message="Creating ${workDir.prop}" />
+	 <mkdir dir="${workDir.prop}" />
+  </target>
+  
+  <target name="ExecInsarKml" depends="MakeWorkDir">
+    <echo message="Bin directory: ${bindir.prop}"/>
+    <exec executable="${bindir.prop}/SARImage.py" 
+          output="${workDir.prop}/${projectName.prop}.stdout"
+			 dir="${workDir.prop}">
+      <arg line="${workDir.prop}/${projectName.prop}"/>
+      <arg line="${elevation.prop}"/>
+      <arg line="${azimuth.prop}"/>
+      <arg line="${radarFrequency.prop}"/>
+		<arg line="${outputImageUrl.prop}"/>
+    </exec>
+  </target>
+  
 </project>
 
 

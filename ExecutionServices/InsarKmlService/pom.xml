@@ -5,7 +5,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>cgl.webservices</groupId>
-    <artifactId>dislocexec</artifactId>
+    <artifactId>insarkmlservice</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>Ant Visco execution service</name>
@@ -18,7 +18,7 @@
   </parent>
 
     <build>
-        <finalName>dislocexec</finalName>
+        <finalName>insarkmlservice</finalName>
         <resources>
            <resource>
                <directory>src/main/resources</directory>
@@ -39,13 +39,7 @@
 						  its children.
 					  -->
 					<tasks>			 
-					  <echo message="Copying the binaries:"/>
-					  <copy overwrite="true" 
-							  filtering="true"
-							  failonerror="false"
-							  todir="${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec">
-						 <fileset dir="${disloc.bin.home}"/>
-					  </copy>
+					  <!--Make sure script is executable -->
 					  <chmod perm="${tomcat.bin.perm}" 
 								dir="${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec/">
 						 <include name="*"/>
@@ -62,13 +56,6 @@
 
     </build>
 
-    <!-- We get this from the command line and pass to the resources
-         via filtering -->
-<!--
-    <properties>
-       <bin.path>${tomcat.base.dir}/webapps/${pom.artifactId}/WEB-INF/binaryexec</bin.path>
-    </properties>
--->
     <repositories>
         <repository>
             <releases>
@@ -170,23 +157,6 @@
              <artifactId>ant-launcher</artifactId>
              <version>1.6.5</version>
         </dependency>
-
-        <!--
-        SOPAC Jars
-        -->
-<!--
-        <dependency>
-             <groupId>SOPAC</groupId>
-             <artifactId>GRWS_SubmitQuery</artifactId>
-             <version>4.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-             <groupId>SOPAC</groupId>
-             <artifactId>grwsXmlBeansSchemas</artifactId>
-             <version>1.0</version>
-        </dependency>
--->
 
        </dependencies>
 
