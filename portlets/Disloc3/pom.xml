@@ -8,34 +8,33 @@
     <name>A custom project using myfaces</name>
     <url>http://www.myorganization.org</url>
 
-<!--
+
   <parent>
 	 <groupId>quakesim</groupId>
 	 <artifactId>portlets-driver</artifactId>
 	 <version>1.0</version>
 	 <relativePath>..</relativePath>
   </parent>
--->
 
 
     <!-- We get this from the command line and pass to the resources
          via filtering -->
+<!-- These are inherited from the parent pom -->
+<!--
     <properties>
 	<quakesim.dir>QuakeSim2</quakesim.dir>
-	<project.home>${env.HOME}/workspace/${quakesim.dir}</project.home>
+	<project.home>${env.HOME}/${quakesim.dir}</project.home>
 	<tomcat.bin.perm>755</tomcat.bin.perm>
 	<tomcat.version>apache-tomcat-5.5.20</tomcat.version>
 	<yui.version>yui_0.12.2</yui.version>
-	<catalina.home>${env.HOME}/workspace/${quakesim.dir}/portal_deploy/${tomcat.version}/</catalina.home>
-	<tomcat.base.dir>${env.HOME}/workspace/${quakesim.dir}/portal_deploy/${tomcat.version}/</tomcat.base.dir>
-        <portal.host.name>129.79.49.68</portal.host.name>
+	<catalina.home>${project.home}/portal_deploy/${tomcat.version}/</catalina.home>
+	<tomcat.base.dir>${project.home}/portal_deploy/${tomcat.version}/</tomcat.base.dir>
+   <portal.host.name>129.79.49.102</portal.host.name>
 	<google.master.key>ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTf0RZ3CvQOmi-GOjEFoiamz50c8BRdcsDMSPvaTAMTVPL7sMxMzuZWCQ</google.master.key>
-	<portal.server.ip>129.79.49.68</portal.server.ip>
+	<portal.server.ip>129.79.49.102</portal.server.ip>
 	<host.base.url>http://${portal.server.ip}:8080/</host.base.url>
     </properties>
-    
-    
-    
+-->    
 
     <build>
         <finalName>Disloc3</finalName>
@@ -73,62 +72,54 @@
 				  </fileset>
 				</delete>
 
-				
-
+				<delete file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${pom.artifactId}"/>
           </tasks>
         </configuration>
         <goals>
 			 <goal>run</goal>
         </goals>
        </execution>
-       <execution>
-        <id>Install ${pom.artifactId} portlet</id>
-	<phase>install</phase>
-        <configuration>
-			 <!-- 
-					Allow this to fail on error. This is not great, but we must do this
-					since the parent pom is not abstract and so will get executed along with
-					its children.
-				-->
 
-		
+<!-- This is inherited from the parent
+       <execution>
+			<id>Install ${pom.artifactId} portlet</id>
+			<phase>install</phase>
+			<configuration>
 			 <tasks>
+				<echo message="Copying ${pom.artifactId}"/>
 				<copy overwrite="true" 
 						filtering="false"
 						failonerror="false"
 						todir="${catalina.home}/webapps/${pom.artifactId}">
 				  <fileset dir="${basedir}/target/${pom.artifactId}"/>
 				</copy>												
-
-					
+				
+				<touch file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${pom.artifactId}"/>
 			</tasks>			
-
 			
         </configuration>
-        <goals>
-			 <goal>run</goal>
-        </goals>
+			<goals>
+			  <goal>run</goal>
+			</goals>
        </execution>
-       
+    -->   
        <execution>
-        <id>Convert ${pom.artifactId} portlet</id>
-	<phase>package</phase>
-        <configuration>				
-			<tasks if="to.jsf">
-				<delete file="${basedir}/target/${pom.artifactId}/WEB-INF/lib/portals-bridges-commons-1.0.jar"/>
-				<delete file="${basedir}/target/${pom.artifactId}/WEB-INF/lib/portals-bridges-jsf-1.0.jar"/>			 
-			</tasks>
-        </configuration>
-        <goals>
-	   <goal>run</goal>
-        </goals>
+			<id>Convert ${pom.artifactId} portlet</id>
+			<phase>package</phase>
+			<configuration>				
+			  <tasks if="to.jsf">
+				 <delete file="${basedir}/target/${pom.artifactId}/WEB-INF/lib/portals-bridges-commons-1.0.jar"/>
+				 <delete file="${basedir}/target/${pom.artifactId}/WEB-INF/lib/portals-bridges-jsf-1.0.jar"/>			 
+			  </tasks>
+			</configuration>
+			<goals>
+			  <goal>run</goal>
+			</goals>
        </execution>
-       
        
        <execution>
          <phase>package</phase>
          <configuration>
-	 
            <tasks>
 				 <echo message="Google Master Key: ${google.master.key}"/>
 				 <replace dir="${basedir}/target/${pom.artifactId}" token="put.google.map.key.here" value="${google.master.key}">
@@ -136,36 +127,30 @@
 				 </replace>
 				 
 				 <echo message="Setting the host.base.url: ${host.base.url}"/>
-				 <replace dir="${basedir}/target/${pom.artifactId}"
-					  token="@host.base.url@"
-					  value="${host.base.url}">
+				 <replace dir="${basedir}/target/${pom.artifactId}" token="@host.base.url@" value="${host.base.url}">
 					<include name="**/*.*"/>
 				 </replace>
 				 
-				 <replace dir="${basedir}/target/${pom.artifactId}" 
-					  token="@artifactId@"
-					  value="${pom.artifactId}">
+				 <replace dir="${basedir}/target/${pom.artifactId}" token="@artifactId@" value="${pom.artifactId}">
 					<include name="**/*.*"/>
 				 </replace> 				 
 				 
 				 <copy file="${basedir}/target/${pom.artifactId}/gadget_template.xml" tofile="${project.home}/gadgets/${pom.artifactId}_gadget.xml" overwrite="true"/>
 				 
-				 <replace file="${project.home}/gadgets/${pom.artifactId}_gadget.xml"
-					  token="@host.base.url@"
-					  value="${host.base.url}">
+				 <replace file="${project.home}/gadgets/${pom.artifactId}_gadget.xml" token="@host.base.url@" value="${host.base.url}">
 					<include name="**/*.*"/>
 				 </replace>
 				 
-				 <replace file="${project.home}/gadgets/${pom.artifactId}_gadget.xml"
-					  token="@artifactId@"
-					  value="${pom.artifactId}">
+				 <replace file="${project.home}/gadgets/${pom.artifactId}_gadget.xml" token="@artifactId@" value="${pom.artifactId}">
 					<include name="**/*.*"/>
 				 </replace> 
-				 
-				 
-				 
+<!--				 
+				 <replace file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/layouts/TemplateLayout.xml"
+					  token="Disloc2"
+					  value="Disloc3">					
+				 </replace> 				 
+-->
            </tasks>
-
          </configuration>
          <goals>
            <goal>run</goal>
