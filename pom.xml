@@ -3,11 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <properties>
-<<<<<<< .mine
 	 <!--==================================================-->
 	 <!-- These need to be edited by the deployer -->
 	 <!--==================================================-->
-	 <portal.server.ip>156.56.104.161</portal.server.ip>
+	 <portal.server.ip>156.56.104.99</portal.server.ip>
 	 <host.base.url>http://${portal.server.ip}:8080/</host.base.url>
 	 <google.master.key>ABQIAAAAxOZ1VuCkrWUtft6jtubycBRxYpIIOz9ynlSKjbx-4JMuN5JjrhR5gSOcKdieYppOZ4_yzZc_Ti15qw</google.master.key>
 	 <!--==================================================-->
@@ -18,52 +17,25 @@
 		-->
 	 <!--==================================================-->
     <portlet.container>gridsphere</portlet.container>
-=======
-	<!--==================================================-->
-	<!-- These need to be edited by the deployer -->
-	<!--==================================================-->
-	<portal.server.ip>129.79.49.68</portal.server.ip>
-	<host.base.url>http://${portal.server.ip}:8080/</host.base.url>
-	<google.master.key>ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTf0RZ3CvQOmi-GOjEFoiamz50c8BRdcsDMSPvaTAMTVPL7sMxMzuZWCQ</google.master.key>
-	<!--==================================================-->
-	<!-- 
-		Specify your container.  Currently only gridsphere
-		is supported. See ogce-portal-only/containers for 
-		possible addional choices.
-	-->
-	<!--==================================================-->
-	<portlet.container>gridsphere</portlet.container>
->>>>>>> .r1548
-
 	<!--==================================================-->
 	<!--These can be left as is for most builds, if you 
 		have unpacked everything in $HOME, are using gridsphere,
 		and don't have any unusual .globus requirements.
 		-->
-<<<<<<< .mine
 	 <!--==================================================-->
 	 <project.home>${env.HOME}/QuakeSim2</project.home>
 	 <tomcat.bin.perm>755</tomcat.bin.perm>
 	 <tomcat.version>apache-tomcat-5.5.20</tomcat.version>
 	 <yui.version>yui_0.12.2</yui.version>
-    <catalina.home>${env.HOME}/QuakeSim2/portal_deploy/${tomcat.version}/</catalina.home>
-    <tomcat.base.dir>${env.HOME}/QuakeSim2/portal_deploy/${tomcat.version}/</tomcat.base.dir>
+    <catalina.home>${project.home}/portal_deploy/${tomcat.version}/</catalina.home>
+    <tomcat.base.dir>${project.home}/portal_deploy/${tomcat.version}/</tomcat.base.dir>
 	 <gridsphere.version>gridsphere-2.1.4</gridsphere.version>
-=======
-	<!--==================================================-->
-	<project.home>${env.HOME}/QuakeSim2</project.home>
-	<tomcat.bin.perm>755</tomcat.bin.perm>
-	<tomcat.version>apache-tomcat-5.5.20</tomcat.version>
-	<yui.version>yui_0.12.2</yui.version>
-	<catalina.home>${env.HOME}/QuakeSim2/portal_deploy/${tomcat.version}/</catalina.home>
-	<tomcat.base.dir>${env.HOME}/QuakeSim2/portal_deploy/${tomcat.version}/</tomcat.base.dir>
-	<gridsphere.version>gridsphere-2.1.4</gridsphere.version>
->>>>>>> .r1548
 
 
 	<user.home>${user.home}</user.home>
 
 	<!-- These are the urls for the various services -->
+	<insarkml.service.url>${host.base.url}/insarkmlservice</insarkml.service.url>
 	<analyze_tseri.service.url>${host.base.url}/analyze-tseri-exec</analyze_tseri.service.url>
 	<disloc.service.url>${host.base.url}/dislocexec</disloc.service.url>
 	<geofest.service.url>${host.base.url}/geofestexec</geofest.service.url>
@@ -77,6 +49,7 @@
 	<dailyRdahmmResult.service.hostname>gf13.ucs.indiana.edu</dailyRdahmmResult.service.hostname>
 	<dailyRdahmm.service.hostname>gf13.ucs.indiana.edu</dailyRdahmm.service.hostname>
 	<realtimeRdahmmResult.access.hostname>gf13.ucs.indiana.edu</realtimeRdahmmResult.access.hostname>
+
 	
 	<!-- These are locations of 'third party' binary files -->
 	<bin.path>${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec</bin.path>
@@ -137,88 +110,35 @@
 	
 	<module>GenericQuakeSimProject</module>
 	
-    
-<<<<<<< .mine
-    <!--These are the portlets.  Add new ones here. -->
+   <!--These are the portlets.  Add new ones here. -->
     <module>portlets/DailyRDAHMM-portlet</module>
-
-<!--
-<<<<<<< .mine
     <module>portlets/Disloc-portlet</module>
-=======
-	 <module>portlets/Disloc-portlet</module>
->>>>>>> .r1102
     <module>portlets/GeoFESTGrid-portlet</module>
     <module>portlets/NewMeshGen-portlet</module>
--->
     <module>portlets/RDAHMM-portlet</module>
     <module>portlets/RealTimeRdahmm-portlet</module>
     <module>portlets/STFILTER-portlet</module>
-<!--
     <module>portlets/Simplex-portlet</module>
--->
     <module>portlets/StationMonitor-portlet</module>
     <module>portlets/FaultDB-portlet</module>
 	 <module>portlets/Disloc2</module>
 	 <module>portlets/rssportlet</module>
-=======
-	<!--These are the portlets.  Add new ones here. -->
-	<module>portlets/DailyRDAHMM-portlet</module>
-	<module>portlets/Disloc-portlet</module>
-	<module>portlets/GeoFESTGrid-portlet</module>
-	<module>portlets/NewMeshGen-portlet</module>
-	<module>portlets/RDAHMM-portlet</module>
-	<module>portlets/RealTimeRdahmm-portlet</module>
-	<module>portlets/STFILTER-portlet</module>
-	<module>portlets/Simplex-portlet</module>
-	<module>portlets/StationMonitor-portlet</module>
-	<module>portlets/FaultDB-portlet</module>
-	<module>portlets/Disloc2</module>
-	<module>portlets/rssportlet</module>
-	<module>portlets/GeoFESTGridParallel-portlet</module>
-	<module>portlets/Disloc3</module>
-	<module>portlets/Simplex3</module>
-	<module>portlets/GeoFESTGrid2</module>
->>>>>>> .r1548
+	 <module>portlets/Disloc3</module>
+	 <module>portlets/Simplex3</module>
+	 <module>portlets/GeoFESTGrid2</module>
 
-<<<<<<< .mine
     <!-- These are services.  Add new ones here. -->
     <module>ExecutionServices/AnalyzeTseriService</module>
     <module>ExecutionServices/AntVisco</module>
     <module>ExecutionServices/DislocService</module>
     <module>ExecutionServices/GeoFESTService</module>
     <module>ExecutionServices/GridInfoService</module>
-<!--
     <module>ExecutionServices/KmlGenerator</module>
--->
     <module>ExecutionServices/QueueService</module>
     <module>ExecutionServices/STFilterService</module>
-<!--
     <module>ExecutionServices/SimpleXService</module>
--->
     <module>ExecutionServices/RDAHMMService</module>
 	 <module>ExecutionServices/DailyRDAHMMService</module>
-=======
-	<!-- These are services.  Add new ones here. -->
-
-	<module>ExecutionServices/AnalyzeTseriService</module>
-	<module>ExecutionServices/AntVisco</module>
-	<module>ExecutionServices/DislocService</module>
-	<module>ExecutionServices/GeoFESTService</module>
-	<module>ExecutionServices/GridInfoService</module>
-	<module>ExecutionServices/KmlGenerator</module>
-	<module>ExecutionServices/QueueService</module>
-	<module>ExecutionServices/STFilterService</module>
-	<module>ExecutionServices/SimpleXService</module>
-	<module>ExecutionServices/GeoFESTParallelService</module>
-	<module>ExecutionServices/RDAHMMService</module>
-	
-	<module>ExecutionServices/DailyRDAHMMService</module>
-	<module>ExecutionServices/DailyRDAHMMResultService</module>
-	<module>ExecutionServices/DailyRDAHMMVideoService</module>
-
-
->>>>>>> .r1548
   </modules>
 
 </project>
