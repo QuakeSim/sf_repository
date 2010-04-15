@@ -1,12 +1,6 @@
 <?xml version="1.0"?>
 <project name="Disloc" default="ExecDisloc" basedir=".">
   
-  <!--
-		<taskdef name="TransferFile" classname="commgrids.antwebtasks.TransferFile"/>
-		<taskdef name="MakeMovie" classname="commgrids.antwebtasks.AntServiceInvoker"/>
-		<taskdef name="AntEmail" classname="commgrids.antwebtasks.AntEmail"/>
-		-->
-  
   <target name="MakeWorkDir">
 	 <echo message="Creating ${workDir.prop}" />
 	 <mkdir dir="${workDir.prop}" />
