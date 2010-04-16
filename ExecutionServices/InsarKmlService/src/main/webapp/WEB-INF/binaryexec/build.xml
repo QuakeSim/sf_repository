@@ -10,9 +10,9 @@
     <echo message="Bin directory: ${bindir.prop}"/>
     <exec executable="${bindir.prop}/SARImage.py" 
           output="${workDir.prop}/${projectName.prop}.stdout"
-          error="${workDir.prop}/${projectName.prop}.stdout"
+          error="${workDir.prop}/${projectName.prop}.stderr"
 			 dir="${workDir.prop}">
-      <arg line="${workDir.prop}/${projectName.prop}"/>
+      <arg line="${workDir.prop}/${projectName.prop}.output"/>
       <arg line="${elevation.prop}"/>
       <arg line="${azimuth.prop}"/>
       <arg line="${radarFrequency.prop}"/>
