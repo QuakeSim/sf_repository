@@ -288,7 +288,7 @@ public class InsarKmlService extends AntVisco implements Runnable {
 	  * make "gentle" status queries later.
 	  */
 	 protected String generateJobStamp(){
-		  return (new UID().toString());
+		  return (new UID().hashCode()+"");
 	 }
 
     protected String generateBaseUrl(String userName,
