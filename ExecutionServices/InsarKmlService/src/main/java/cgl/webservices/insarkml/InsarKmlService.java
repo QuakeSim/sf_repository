@@ -129,7 +129,7 @@ public class InsarKmlService extends AntVisco implements Runnable {
 		  //This is fragile as the output file specified by a URL
 		  //that presumably matches its projectName here.
 		  String retString=imageBaseUrl+"/"+projectName+".output"+".kml";
-		  System.out.println("retString");
+		  System.out.println(retString);
 		  return retString;
 	 }
 	 
@@ -155,7 +155,7 @@ public class InsarKmlService extends AntVisco implements Runnable {
 		  setArgs(args);
 		  run();
 		  String retString=imageBaseUrl+"/"+projectName+".output"+".kml";
-		  System.out.println("retString");
+		  System.out.println(retString);
 		  return retString;
 	 }
 	 
