@@ -57,7 +57,7 @@ public class InsarKmlService extends AntVisco implements Runnable {
 												"60",
 												"0",
 												"1.26",
-												"http://localhost:8080/insarkkmlservice",
+												"http://156.56.104.99:8080/insarkkmlservice/",
 												"ExecInsarKml");
 		  }
 		  catch (Exception ex) {
@@ -128,7 +128,9 @@ public class InsarKmlService extends AntVisco implements Runnable {
 		  execute();
 		  //This is fragile as the output file specified by a URL
 		  //that presumably matches its projectName here.
-		  return imageBaseUrl+"/"+projectName+".output"+".kml";
+		  String retString=imageBaseUrl+"/"+projectName+".output"+".kml";
+		  System.out.println("retString");
+		  return retString;
 	 }
 	 
 	 public String runBlockingInsarKml(String userName,
@@ -152,7 +154,9 @@ public class InsarKmlService extends AntVisco implements Runnable {
 												 jobStamp);
 		  setArgs(args);
 		  run();
-		  return imageBaseUrl+"/"+projectName+".output"+".kml";
+		  String retString=imageBaseUrl+"/"+projectName+".output"+".kml";
+		  System.out.println("retString");
+		  return retString;
 	 }
 	 
 	 protected String[] prefabInsarKml(String userName,
