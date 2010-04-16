@@ -46,8 +46,7 @@ def generateKML(extent, outputname, imageurl):
     """
        generate KML  
     """
-    kml = """
-<?xml version="1.0" encoding="UTF-8"?>
+    kml = """<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://earth.google.com/kml/2.2">
   <Folder>
     <name>Ground Overlays</name>
