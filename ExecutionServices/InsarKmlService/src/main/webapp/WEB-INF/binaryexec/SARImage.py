@@ -100,7 +100,7 @@ def drawimage(datatable,lonlatgrid, outputname, imageurl):
                 origin='lower', alpha=0.875,aspect="auto",interpolation=None, extent=[xy0[0],xy1[0],xy0[1],xy1[1]])
 
     plt.axis("off")
-    plt.savefig(outputname + ".png", format="PNG",transparent=True)
+    plt.savefig(outputname + ".png", format="PNG",transparent=False)
     #print xy0, xy1
     generateKML([xy0[0],xy1[0],xy0[1],xy1[1]],outputname, imageurl)
 
