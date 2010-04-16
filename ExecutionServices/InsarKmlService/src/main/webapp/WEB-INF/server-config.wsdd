@@ -35,25 +35,11 @@
   <parameter name="allowedMethods" value="getVersion"/>
   <parameter name="className" value="org.apache.axis.Version"/>
  </service>
- <service name="DislocExec" provider="java:RPC">
-  <parameter name="allowedMethods" value="runBlockingDisloc runNonBlockingDisloc"/>
+ <service name="InsarKmlExec" provider="java:RPC">
+  <parameter name="allowedMethods" value="runBlockingInsarKml runNonBlockingInsarKml"/>
   <parameter name="scope" value="Request"/>
-  <parameter name="className" value="cgl.webservices.disloc.DislocService"/>
+  <parameter name="className" value="cgl.webservices.insarkml.InsarKmlService"/>
   <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns1:ArrayOf_soapenc_string" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:java.lang.String[]" xmlns:ns1="urn:GatewayWS"/>
- <beanMapping qname="myNS:DislocParamsBean" xmlns:myNS="urn:DislocService" languageSpecificType="java:cgl.webservices.disloc.DislocParamsBean"/>
-  <beanMapping qname="myNS:Fault" xmlns:myNS="urn:DislocService" languageSpecificType="java:cgl.webservices.disloc.Fault"/>
-  <beanMapping qname="myNS:DislocResultsBean" xmlns:myNS="urn:DislocService" languageSpecificType="java:cgl.webservices.disloc.DislocResultsBean"/>
- </service>
- <service name="DislocExtendedExec" provider="java:RPC">
-  <parameter name="allowedMethods" value="runBlockingDislocExt runNonBlockingDislocExt testCall"/>
-  <parameter name="scope" value="Request"/>
-  <parameter name="className" value="cgl.webservices.disloc.DislocExtendedService"/>
-  <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns1:ArrayOf_soapenc_string" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:java.lang.String[]" xmlns:ns1="urn:GatewayWS"/>
- <beanMapping qname="myNS:DislocParamsBean" xmlns:myNS="urn:DislocExtendedService" languageSpecificType="java:cgl.webservices.disloc.DislocParamsBean"/>
-  <beanMapping qname="myNS:Fault" xmlns:myNS="urn:DislocExtendedService" languageSpecificType="java:cgl.webservices.disloc.Fault"/>
-  <beanMapping qname="myNS:ObsvPoint" xmlns:myNS="urn:DislocExtendedService" languageSpecificType="java:cgl.webservices.disloc.ObsvPoint"/>
-  <beanMapping qname="myNS:DislocResultsBean" xmlns:myNS="urn:DislocExtendedService" languageSpecificType="java:cgl.webservices.disloc.DislocResultsBean"/>  
-<beanMapping qname="myNS:TestBean" xmlns:myNS="urn:DislocExtendedService" languageSpecificType="java:cgl.webservices.disloc.TestBean"/>
  </service>
  <transport name="http">
   <requestFlow>

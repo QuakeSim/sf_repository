@@ -10,6 +10,7 @@
     <echo message="Bin directory: ${bindir.prop}"/>
     <exec executable="${bindir.prop}/SARImage.py" 
           output="${workDir.prop}/${projectName.prop}.stdout"
+          error="${workDir.prop}/${projectName.prop}.stdout"
 			 dir="${workDir.prop}">
       <arg line="${workDir.prop}/${projectName.prop}"/>
       <arg line="${elevation.prop}"/>

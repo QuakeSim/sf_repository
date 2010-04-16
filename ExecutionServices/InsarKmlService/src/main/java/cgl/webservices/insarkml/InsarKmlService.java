@@ -29,6 +29,9 @@ import java.rmi.server.UID;
 
 public class InsarKmlService extends AntVisco implements Runnable {  
 
+    final String FILE_PROTOCOL="file";
+    final String HTTP_PROTOCOL="http";
+
     Properties properties;
 	 String serverUrl;
 	 String baseWorkDir;
@@ -44,7 +47,23 @@ public class InsarKmlService extends AntVisco implements Runnable {
 	 public InsarKmlService() throws Exception {
 		  this(false);
 	 }
-	 
+
+	 public static void main(String[] args) {
+		  try{
+				InsarKmlService iks=new InsarKmlService(true);
+				iks.runBlockingInsarKml("mpierce",
+												"junk",
+												"http://156.56.104.99:8080//dislocexec/mpierce/TestKML//-69a88da0:127fe548b62:-8000/TestKML.output",
+												"60",
+												"0",
+												"1.26",
+												"http://localhost:8080/insarkkmlservice",
+												"ExecInsarKml");
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+	 }
 	 public InsarKmlService(boolean useClassLoader) throws Exception {
 		  super();
 		  
@@ -66,14 +85,14 @@ public class InsarKmlService extends AntVisco implements Runnable {
 				ServletContext context=((HttpServlet)msgC.getProperty(HTTPConstants.MC_HTTP_SERVLET)).getServletContext();
 				
 				String propertyFile=context.getRealPath("/")
-					 +"/WEB-INF/classes/dislocconfig.properties";
+					 +"/WEB-INF/classes/insark.properties";
 				System.out.println("Prop file location "+propertyFile);
 				
 				properties=new Properties();	    
 				properties.load(new FileInputStream(propertyFile));
 		  }
 
-		  serverUrl=properties.getProperty("disloc.service.url");
+		  serverUrl=properties.getProperty("insarkml.service.url");
 		  baseWorkDir=properties.getProperty("base.workdir");
 		  projectName=properties.getProperty("project.name");
 		  binDir=properties.getProperty("bin.path");
@@ -81,121 +100,165 @@ public class InsarKmlService extends AntVisco implements Runnable {
 		  antTarget=properties.getProperty("ant.target");
 	 }
 	 
-	 public DislocResultsBean runNonBlockingDisloc(String userName,
-																  String projectName,
-																  Fault[] faults,
-																  DislocParamsBean dislocParams,
-																  String targetName) 
+	 /**
+	  * Returns a URL to the generated KML file.
+	  */
+	 public String runNonBlockingInsarKml(String userName,
+													  String projectName,
+													  String dislocOutputUrl,
+													  String elevation,
+													  String azimuth,
+													  String radarFrequency,
+													  String imageBaseUrl,
+													  String targetName)
 		  throws Exception {
 		  System.out.println("RunNonBlocking called");
-		  if(targetName==null) targetName=DislocConstants.DISLOC_DEFAULT_TARGET;
 		  String jobStamp=generateJobStamp();
-
-		  String[] args=prefabDisloc(userName,
-											  projectName,
-											  dislocParams,
-											  faults,
-											  targetName,
-											  jobStamp);
+		  
+		  String[] args=prefabInsarKml(userName,
+												 projectName,
+												 dislocOutputUrl,
+												 elevation,
+												 azimuth,
+												 radarFrequency,
+												 imageBaseUrl,
+												 targetName,
+												 jobStamp);
 		  setArgs(args);
 		  execute();
-		  return createDislocResultsBean(userName,projectName,jobStamp);
+		  //This is fragile as the output file specified by a URL
+		  //that presumably matches its projectName here.
+		  return imageBaseUrl+"/"+projectName+".output"+".kml";
 	 }
 	 
-	 public DislocResultsBean runBlockingDisloc(String userName,
-															 String projectName,
-															 Fault[] faults,
-															 DislocParamsBean dislocParams,
-															 String targetName) 
+	 public String runBlockingInsarKml(String userName,
+												  String projectName,
+												  String dislocOutputUrl,
+												  String elevation,
+												  String azimuth,
+												  String radarFrequency,
+												  String imageBaseUrl,
+												  String targetName)
 		  throws Exception {
-		  if(targetName==null) targetName=DislocConstants.DISLOC_DEFAULT_TARGET;
 		  String jobStamp=generateJobStamp();
-		  String[] args=prefabDisloc(userName,
-											  projectName,
-											  dislocParams,
-											  faults,
-											  targetName,
-											  jobStamp);
+		  String[] args=prefabInsarKml(userName,
+												 projectName,
+												 dislocOutputUrl,
+												 elevation,
+												 azimuth,
+												 radarFrequency,
+												 imageBaseUrl,
+												 targetName,
+												 jobStamp);
 		  setArgs(args);
 		  run();
-		  return createDislocResultsBean(userName,projectName,jobStamp);
+		  return imageBaseUrl+"/"+projectName+".output"+".kml";
 	 }
-
-	 protected String[] prefabDisloc(String userName,
-												String projectName,
-												DislocParamsBean dislocParams,
-												Fault[] faults,
-												String targetName,
-												String jobStamp) 
+	 
+	 protected String[] prefabInsarKml(String userName,
+												  String projectName,
+												  String dislocOutputUrl,
+												  String elevation,
+												  String azimuth,
+												  String radarFrequency,
+												  String outputImageUrl,
+												  String targetName,
+												  String jobStamp) 
 		  throws Exception {
-		  
-		  
 		  workDir=generateWorkDir(userName,projectName,jobStamp);
 		  makeWorkDir(workDir);
-		  createDislocInputFile(userName,
-										projectName,
-										dislocParams,
-										faults);
+		  String destFile=workDir+File.separator+projectName+".output";
+		  downloadDislocOutputFile(dislocOutputUrl, destFile);
+		  
 		  String[] args=setUpArgs(workDir,
 										  projectName,
+										  elevation,
+										  azimuth,
+										  radarFrequency,
+										  outputImageUrl,
 										  targetName);
 		  
 		  return args;
 	 }
 
-	 protected void createDislocInputFile(String userName,
-													  String projectName,
-													  DislocParamsBean dislocParams,
-													  Fault[] faults) 
-		  throws Exception {
-
-		  String inputFile=workDir+File.separator+projectName+".input";
-		  System.out.println("Input File: "+inputFile);
-		  PrintWriter pw=new PrintWriter(new FileWriter(inputFile),true);
-
-		  //Create the input file.  First create the grid points
+	 protected void downloadDislocOutputFile(String dislocOutputUrl,
+														  String destFile) 
+		  throws Exception{
 		  
-		  //Print the header line
-		  if(dislocParams.getObservationPointStyle()==1) {
-				pw.println(dislocParams.getOriginLat()
-							  +space+dislocParams.getOriginLon()
-							  +space+dislocParams.getObservationPointStyle());
-		  }
-		  else if(dislocParams.getObservationPointStyle()==0) {
-		      //This is handled by the extended version of the service
-		  }
+		  URL inputFileUrl=new URL(dislocOutputUrl);
 		  
+		  String protocol=inputFileUrl.getProtocol();
+		  System.out.println("Protocol: "+protocol);
+		  String fileSimpleName=(new File(destFile)).getName();
+		  System.out.println(fileSimpleName);
+		  		  
+		  
+		  if(protocol.equals(HTTP_PROTOCOL)) {
+				copyUrlToFile(inputFileUrl,destFile);
+		  }
 		  else {
-				System.out.println("Malformed disloc problem");
-				throw new Exception();
+				System.out.println("Unknown protocol for accessing inputfile");
+				throw new Exception("Unknown protocol");
 		  }
-
-		  
-		  //Print the observation point information
-		  if(dislocParams.getObservationPointStyle()==DislocConstants.GRID_OBSERVATION_STYLE) {
-				printGridObservationSites(pw, dislocParams);
-		  }
-		  else if(dislocParams.getObservationPointStyle()==DislocConstants.SCATTER_OBSERVATION_STYLE) {
-		      //Doens't do anything
-		  }
-
-		  //Now iterate over the faults.
-		  printFaultParams(pw,faults);
-		  pw.close();
 		  
 	 }
 
+    private void copyFileToFile(File sourceFile,File destFile) 
+		  throws Exception {
+		  InputStream in=new FileInputStream(sourceFile);
+		  OutputStream out=new FileOutputStream(destFile);
+		  byte[] buf=new byte[1024];
+		  int length;
+		  while((length=in.read(buf))>0) {
+				out.write(buf,0,length);
+		  }
+		  in.close();
+		  out.close();
+    }
+	 
+    /**
+     * Another famous method that I googled. This downloads contents
+     * from the given URL to a local file.
+     */
+    
+    private void copyUrlToFile(URL inputFileUrl,String destFile) 
+		  throws Exception {
+		  
+		  URLConnection uconn=inputFileUrl.openConnection();
+		  InputStream in=inputFileUrl.openStream();
+		  OutputStream out=new FileOutputStream(destFile);
+		  
+		  //Extract the name of the file from the url.
+		  
+		  byte[] buf=new byte[1024];
+		  int length;
+		  while((length=in.read(buf))>0) {
+				out.write(buf,0,length);
+		  }
+		  in.close();
+		  out.close();
+		  
+    }
+
 	 protected String[] setUpArgs(String workDir,
 											String projectName,
+											String elevation,
+											String azimuth,
+											String radarFrequency,
+											String outputImageUrl,
 											String targetName) {
 
-		  String[] args=new String[6];
+		  String[] args=new String[10];
 		  args[0]="-Dbindir.prop="+binDir;
 		  args[1]="-DworkDir.prop="+workDir;
 		  args[2]="-DprojectName.prop="+projectName;
-		  args[3]="-buildfile";
-		  args[4]=buildFilePath;
-		  args[5]=targetName;
+		  args[3]="-Delevation.prop="+elevation;
+		  args[4]="-Dazimuth.prop="+azimuth;
+		  args[5]="-DradarFrequency.prop="+radarFrequency;
+		  args[6]="-DoutputImageUrl.prop="+outputImageUrl;
+		  args[7]="-buildfile";
+		  args[8]=buildFilePath;
+		  args[9]=targetName;
 		  
 		  return args;
 	 }
@@ -236,40 +299,6 @@ public class InsarKmlService extends AntVisco implements Runnable {
 		  return baseUrl;
     }
     
-    protected DislocResultsBean createDislocResultsBean(String userName,
-																		  String projectName,
-																		  String jobUIDStamp) {
-		  DislocResultsBean drb=new DislocResultsBean();
-		  
-		  String baseUrl=generateBaseUrl(userName,projectName,jobUIDStamp);
-		  
-		  drb.setJobUIDStamp(jobUIDStamp);
-		  drb.setProjectName(projectName);
-		  drb.setInputFileUrl(baseUrl+"/"+projectName+".input");
-		  drb.setOutputFileUrl(baseUrl+"/"+projectName+".output");
-		  drb.setStdoutUrl(baseUrl+"/"+projectName+".stdout");
-		  
-		  return drb;
-    }
-    
-	 protected void printGridObservationSites(PrintWriter pw, 
-															DislocParamsBean dislocParams) 
-	     throws Exception {
-	     
-	     pw.println(dislocParams.getGridMinXValue()
-						 +space+dislocParams.getGridXSpacing()
-						 +space+dislocParams.getGridXIterations()
-						 +space+dislocParams.getGridMinYValue()
-						 +space+dislocParams.getGridYSpacing()
-						 +space+dislocParams.getGridYIterations());
-	     
-	 }
-
-    protected void printScatterObservationSites(PrintWriter pw, 
-																DislocParamsBean dislocParams)  
-		  throws Exception {
-    }
-    
     protected void makeWorkDir(String workDir) 
 		  throws Exception {
 		  
@@ -284,26 +313,5 @@ public class InsarKmlService extends AntVisco implements Runnable {
         setArgs(args0);
         run();
     }  
-	
-	 protected void printFaultParams(PrintWriter pw, Fault[] faults)
-		  throws Exception {
-		  
-		  for(int i=0;i<faults.length;i++) {
-				pw.println(faults[i].getFaultLocationX()
-							  +space+faults[i].getFaultLocationY()
-							  +space+faults[i].getFaultStrikeAngle());
 
-				pw.println(DislocConstants.FAULT_LINE_PREFIX
-							  +space+faults[i].getFaultDepth()
-							  +space+faults[i].getFaultDipAngle()
-							  +space+faults[i].getFaultLameLambda()
-							  +space+faults[i].getFaultLameMu()
-							  +space+faults[i].getFaultStrikeSlip()
-							  +space+faults[i].getFaultDipSlip()
-							  +space+faults[i].getFaultTensileSlip()
-							  +space+faults[i].getFaultLength()
-							  +space+faults[i].getFaultWidth());
-
-		  }
-	 }
 }  
