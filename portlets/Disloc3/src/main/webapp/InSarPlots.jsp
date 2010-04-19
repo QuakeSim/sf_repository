@@ -50,6 +50,16 @@ function dataTableSelectOneRadio(radio) {
 	</h:form>
 
 	<h:form id="insarf2">
+	
+					    <h:outputText id="insarblaheoru3" value="Elevation"/>
+				       <h:inputText id="insarblaheoru2" value="#{DislocBean2.elevation}"/>
+
+					    <h:outputText id="insarblaheoru3" value="Azimuth"/>
+				       <h:inputText id="insarblaheoru2" value="#{DislocBean.azimuth}"/>
+
+					    <h:outputText id="insarblaheoru3" value="Freq (GHz)"/>
+				       <h:inputText id="insarblaheoru2" value="#{DislocBean.frequency}"/>
+
 		<h:panelGrid id="insarpgridmain" columns="1" border="0">
 			<h:outputText id="insarheader" escape="false" value="<h2>Archived Results</h2>" />
 			<h:outputText id="insardosomework" escape="false"
@@ -73,26 +83,6 @@ function dataTableSelectOneRadio(radio) {
 				       <h:outputText id="insarblaheoru2" value="#{summaryBean.creationDate}"/>
 					</h:column>
 
-					<h:column>
-					    <f:facet name="header">
-					    <h:outputText id="insarblaheoru3" value="Elevation"/>
-						 </f:facet>
-				       <h:inputText id="insarblaheoru2" value="#{DislocBean2.elevation}"/>
-					</h:column>
-
-					<h:column>
-					    <f:facet name="header">
-					    <h:outputText id="insarblaheoru3" value="Azimuth"/>
-						 </f:facet>
-				       <h:inputText id="insarblaheoru2" value="#{DislocBean.azimuth}"/>
-					</h:column>
-
-					<h:column>
-					    <f:facet name="header">
-					    <h:outputText id="insarblaheoru3" value="Freq (GHz)"/>
-						 </f:facet>
-				       <h:inputText id="insarblaheoru2" value="#{DislocBean.frequency}"/>
-					</h:column>
 					
 					<h:column>
 					 <f:facet name="header">

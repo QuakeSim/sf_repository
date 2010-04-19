@@ -125,9 +125,9 @@ public class DislocBean extends GenericSopacBean {
 
 	 //These are used for the InSAR KML service
 	 String insarKmlUrl;
-	 String elevation;
-	 String azimuth;
-	 String frequency;
+	 String elevation="60";
+	 String azimuth="0";
+	 String frequency="1.26";
     
     String realPath;
     String codeName;
@@ -341,16 +341,18 @@ public class DislocBean extends GenericSopacBean {
 	    System.out.println("currentParams : " + currentParams);
 
 
-
+		 
+		 //This step runs disloc
 	    DislocResultsBean dislocResultsBean=
-		dislocExtendedService.runBlockingDislocExt(userName,
-							   projectName,
-							   points,
-							   faults,
-							   currentParams,
-							   null);
+			  dislocExtendedService.runBlockingDislocExt(userName,
+																		projectName,
+																		points,
+																		faults,
+																		currentParams,
+																		null);
 	    setJobToken(dislocResultsBean.getJobUIDStamp());
 	    
+		 //This step makes the kml plots
 	    String myKmlUrl="";
 	    myKmlUrl=createKml(currentParams, dislocResultsBean, faults);
 	    setJobToken(dislocResultsBean.getJobUIDStamp());
@@ -360,6 +362,22 @@ public class DislocBean extends GenericSopacBean {
 				  currentParams,
 				  dislocResultsBean,
 				  myKmlUrl);
+
+		 //This step runs the insar plotting stuff.
+		 InsarKmlService iks=new InsarKmlServiceServiceLocator().
+			  getInsarKmlExec(new URL(insarkmlServiceUrl));
+		 System.out.println("Service URL:"+insarkmlServiceUrl);
+		 
+		 insarKmlUrl=iks.runBlockingInsarKml(userName,
+														 projectName,
+														 dislocResultsBean.getOutputFileUrl(),
+														 this.getElevation(),
+														 this.getAzimuth(),
+														 this.getFrequency(),
+														 "ExecInsarKml");
+		 //This sets the InSAR KML URL, which will be accessed by other pages.
+		 setInsarKmlUrl(insarKmlUrl);
+				
 	}
 	catch (Exception ex) {
 	    ex.printStackTrace();
@@ -457,6 +475,22 @@ public class DislocBean extends GenericSopacBean {
 				  currentParams,
 				  dislocResultsBean,
 				  myKmlUrl);
+
+		 //This step runs the insar plotting stuff.
+		 InsarKmlService iks=new InsarKmlServiceServiceLocator().
+			  getInsarKmlExec(new URL(insarkmlServiceUrl));
+		 System.out.println("Service URL:"+insarkmlServiceUrl);
+		 
+		 insarKmlUrl=iks.runBlockingInsarKml(userName,
+														 projectName,
+														 dislocResultsBean.getOutputFileUrl(),
+														 this.getElevation(),
+														 this.getAzimuth(),
+														 this.getFrequency(),
+														 "ExecInsarKml");
+		 //This sets the InSAR KML URL, which will be accessed by other pages.
+		 setInsarKmlUrl(insarKmlUrl);
+
 	}
 	catch (Exception ex) {
 	    ex.printStackTrace();
@@ -2741,30 +2775,5 @@ public class DislocBean extends GenericSopacBean {
 	 public String getInsarkmlServiceUrl() { return insarkmlServiceUrl; }
 	 public String getInsarKmlUrl() { return insarKmlUrl; }
 
-    public String toggleInsarKmlGen(ActionEvent ev) throws Exception{
-		  System.out.println("Generating InSAR KML");
-		  DislocProjectSummaryBean dpsb=
-				(DislocProjectSummaryBean)getMyProjectSummaryDataTable().getRowData();
-		  System.out.println("Project: "+dpsb.getProjectName());
-		  
-		  DislocResultsBean resultsBean=dpsb.getResultsBean();
-		  
-		  InsarKmlService iks=new InsarKmlServiceServiceLocator().
-				getInsarKmlExec(new URL(insarkmlServiceUrl));
-		  System.out.println("Service URL:"+insarkmlServiceUrl);
-		  
-		  insarKmlUrl=iks.runBlockingInsarKml(userName,
-														  dpsb.getProjectName(),
-														  resultsBean.getOutputFileUrl(),
-														  this.getElevation(),
-														  this.getAzimuth(),
-														  this.getFrequency(),
-														  "ExecInsarKml");
-		  //This sets the InSAR KML URL, which will be accessed by other pages.
-		  setInsarKmlUrl(insarKmlUrl);
-
-		  return "disloc-insar-plot";
-    }
-		  
 	 //--------------------------------------------------
 }
