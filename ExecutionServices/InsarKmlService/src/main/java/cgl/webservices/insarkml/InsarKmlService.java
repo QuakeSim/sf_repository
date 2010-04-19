@@ -57,7 +57,6 @@ public class InsarKmlService extends AntVisco implements Runnable {
 												"60",
 												"0",
 												"1.26",
-												"http://156.56.104.99:8080/insarkkmlservice/",
 												"ExecInsarKml");
 		  }
 		  catch (Exception ex) {
