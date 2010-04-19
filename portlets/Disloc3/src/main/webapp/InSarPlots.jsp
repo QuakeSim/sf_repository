@@ -83,6 +83,25 @@ function dataTableSelectOneRadio(radio) {
 				       <h:outputText id="insarblaheoru2" value="#{summaryBean.creationDate}"/>
 					</h:column>
 
+					<h:column>
+					    <f:facet name="header">
+					    <h:outputText  id="insarblahddfeoru0" value="Elevation (Deg)"/>
+						 </f:facet>
+				       <h:outputText  id="insarblaheoereru1" value="#{summaryBean.elevation}"/>
+					</h:column>
+					<h:column>
+					    <f:facet name="header">
+					    <h:outputText  id="insarblaheoruere0" value="Azimuth (Deg)"/>
+						 </f:facet>
+				       <h:outputText  id="ereinsarblaheoru1" value="#{summaryBean.azimuth}"/>
+					</h:column>
+					<h:column>
+					    <f:facet name="header">
+					    <h:outputText  id="insdferearblaheoru0" value="Frequency (GHz)"/>
+						 </f:facet>
+				       <h:outputText  id="insarblaerereheoru1" value="#{summaryBean.frequency}"/>
+					</h:column>
+
 					
 					<h:column>
 					 <f:facet name="header">
@@ -91,12 +110,12 @@ function dataTableSelectOneRadio(radio) {
 					 </f:facet>
 
 					 <h:panelGroup id="insarpgkml">
-					    <h:commandButton id="insarlinkdre5" action="{DislocBean2.toggleInsarKmlGen}"
+					    <h:outputLink id="insarlinkdre5" action="{summaryBean.insarKmlUrl}"
 						 					 target="_blank">
 							<h:outputText id="insarkdjfjk" value="[<b>Download</b>]" escape="false" />
 						 </h:outputLink>
 						<h:outputText id="insarblaheoru16" escape="false" value="<b> </b>" />
-						<h:outputLink id="insarlinkdre6" value="http://maps.google.com/maps?q=#{summaryBean.kmlurl}" target="_blank">
+						<h:outputLink id="insarlinkdre6" value="http://maps.google.com/maps?q=#{summaryBean.insarKmlUrl}" target="_blank">
 							<h:outputText id="insarblaheoru17" value="[<font size=1px>View In Google map</font>]" escape="false" />
 						</h:outputLink>
 						</h:panelGroup>

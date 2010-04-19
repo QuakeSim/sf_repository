@@ -79,5 +79,4 @@ public class DislocProjectSummaryBean {
 	 public String getElevation() { return elevation; }
 	 public String getFrequency() { return frequency; }
 
-
 }
