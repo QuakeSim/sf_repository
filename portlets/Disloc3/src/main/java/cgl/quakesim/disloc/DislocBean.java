@@ -276,11 +276,15 @@ public class DislocBean extends GenericSopacBean {
     }
     
     protected void storeProjectInContext(String userName,
-					 String projectName,
-					 String jobUIDStamp,
-					 DislocParamsBean paramsBean,
-					 DislocResultsBean dislocResultsBean,
-					 String kml_url) 
+													  String projectName,
+													  String jobUIDStamp,
+													  DislocParamsBean paramsBean,
+													  DislocResultsBean dislocResultsBean,
+													  String kml_url,
+													  String insarKmlUrl,
+													  String elevation,
+													  String azimuth,
+													  String frequency) 
 	throws Exception {
 
 	DislocProjectSummaryBean summaryBean=new DislocProjectSummaryBean();
@@ -291,6 +295,10 @@ public class DislocBean extends GenericSopacBean {
 	summaryBean.setResultsBean(dislocResultsBean);
 	summaryBean.setCreationDate(new Date().toString());
 	summaryBean.setKmlurl(kml_url);
+	summaryBean.setInsarKmlUrl(insarKmlUrl);
+	summaryBean.setElevation(elevation);
+	summaryBean.setAzimuth(azimuth);
+	summaryBean.setFrequency(frequency);
 	
 	//Store the summary bean.
 	db=Db4o.openFile(getBasePath()+"/"
@@ -356,12 +364,6 @@ public class DislocBean extends GenericSopacBean {
 	    String myKmlUrl="";
 	    myKmlUrl=createKml(currentParams, dislocResultsBean, faults);
 	    setJobToken(dislocResultsBean.getJobUIDStamp());
-	    storeProjectInContext(userName,
-				  projectName,
-				  dislocResultsBean.getJobUIDStamp(),
-				  currentParams,
-				  dislocResultsBean,
-				  myKmlUrl);
 
 		 //This step runs the insar plotting stuff.
 		 InsarKmlService iks=new InsarKmlServiceServiceLocator().
@@ -378,6 +380,18 @@ public class DislocBean extends GenericSopacBean {
 		 //This sets the InSAR KML URL, which will be accessed by other pages.
 		 setInsarKmlUrl(insarKmlUrl);
 				
+	    storeProjectInContext(userName,
+									  projectName,
+									  dislocResultsBean.getJobUIDStamp(),
+									  currentParams,
+									  dislocResultsBean,
+									  myKmlUrl,
+									  insarKmlUrl,
+									  elevation,
+									  azimuth,
+									  frequency);
+
+
 	}
 	catch (Exception ex) {
 	    ex.printStackTrace();
@@ -469,12 +483,6 @@ public class DislocBean extends GenericSopacBean {
 	    String myKmlUrl="";
 	    myKmlUrl=createKml(currentParams,dislocResultsBean,faults);
 	    setJobToken(dislocResultsBean.getJobUIDStamp());
-	    storeProjectInContext(userName,
-				  projectName,
-				  dislocResultsBean.getJobUIDStamp(),
-				  currentParams,
-				  dislocResultsBean,
-				  myKmlUrl);
 
 		 //This step runs the insar plotting stuff.
 		 InsarKmlService iks=new InsarKmlServiceServiceLocator().
@@ -490,6 +498,18 @@ public class DislocBean extends GenericSopacBean {
 														 "ExecInsarKml");
 		 //This sets the InSAR KML URL, which will be accessed by other pages.
 		 setInsarKmlUrl(insarKmlUrl);
+
+	    storeProjectInContext(userName,
+									  projectName,
+									  dislocResultsBean.getJobUIDStamp(),
+									  currentParams,
+									  dislocResultsBean,
+									  myKmlUrl,
+									  insarKmlUrl,
+									  elevation,
+									  azimuth,
+									  frequency);
+
 
 	}
 	catch (Exception ex) {

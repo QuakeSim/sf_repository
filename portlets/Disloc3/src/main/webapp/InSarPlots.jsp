@@ -89,8 +89,9 @@ function dataTableSelectOneRadio(radio) {
 								 <h:outputText  id="insarblaheoru15" 
 								 					 escape="false" value="<b>InSAR Kml file</b>" />
 					 </f:facet>
+
 					 <h:panelGroup id="insarpgkml">
-					    <h:commandLink id="insarlinkdre5" action="{DislocBean2.toggleInsarKmlGen}"
+					    <h:commandButton id="insarlinkdre5" action="{DislocBean2.toggleInsarKmlGen}"
 						 					 target="_blank">
 							<h:outputText id="insarkdjfjk" value="[<b>Download</b>]" escape="false" />
 						 </h:outputLink>
