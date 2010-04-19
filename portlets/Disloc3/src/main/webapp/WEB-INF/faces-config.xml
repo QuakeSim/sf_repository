@@ -123,4 +123,12 @@
 		</navigation-case>
 	</navigation-rule>
 
+	<navigation-rule>
+		<from-view-id>/InsarPlots.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>disloc-insar-plot</from-outcome>
+			<to-view-id>/PlotResults.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
 </faces-config>

@@ -2763,7 +2763,7 @@ public class DislocBean extends GenericSopacBean {
 		  //This sets the InSAR KML URL, which will be accessed by other pages.
 		  setInsarKmlUrl(insarKmlUrl);
 
-		  return "disloc-this";
+		  return "disloc-insar-plot";
     }
 		  
 	 //--------------------------------------------------
