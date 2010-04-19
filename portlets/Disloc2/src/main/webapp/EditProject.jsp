@@ -199,6 +199,7 @@ latEnd.value = Math.round(latEnd.value*100)/100.0;
 }
 }
 
+
 function dataTableSelectOneRadio(radio) { 
     var id = radio.name.substring(radio.name.lastIndexOf(':')); 
     var el = radio.form.elements; 

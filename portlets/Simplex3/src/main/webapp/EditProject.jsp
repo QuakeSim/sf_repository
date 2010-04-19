@@ -133,15 +133,18 @@ var networkInfo = new Array (<%=networkNames.size()%>);
 for (i = 0; i < networkInfo.length; ++ i){
 	networkInfo [i] = new Array (2);
 }
+
+
+
 //This is used to calculate the length and strike angle.
 function calculatelength(){
-var lonStart = document.getElementById("Faultform:FaultLonStarts");
-var lonEnd = document.getElementById("Faultform:FaultLonEnds");
-var latStart = document.getElementById("Faultform:FaultLatStarts");
-var latEnd = document.getElementById("Faultform:FaultLatEnds");
+var lonStart=document.getElementById("Faultform:faultLon");
+var lonEnd=document.getElementById("Faultform:faultLonende3r");
+var latStart=document.getElementById("Faultform:faultLat");
+var latEnd=document.getElementById("Faultform:faultLatendere");
 
-var length = document.getElementById("Faultform:FaultLength");
-var strike = document.getElementById("Faultform:FaultStrikeAngle");
+var length=document.getElementById("Faultform:FaultLength");
+var strike=document.getElementById("Faultform:FaultStrikeAngle");
 
 if ((latStart.value.length == 0) || (latStart.value == null)) { alert("Fault Origin Latitude is empty!"); }
 else if ((lonStart.value.length == 0) || (lonStart.value == null)) { alert("Fault Origin Longititude is empty!"); }
@@ -150,8 +153,9 @@ else if ((lonEnd.value.length == 0) || (lonEnd.value == null)) { alert("Fault En
 else {
 var d2r = Math.acos(-1.0) / 180.0;
 var flatten=1.0/298.247;
-var theFactor = d2r* Math.cos(d2r * latStart.value)
-        * 6378.139 * (1.0 - Math.sin(d2r * lonStart.value) * Math.sin(d2r * lonStart.value) * flatten);
+//var theFactor = d2r* Math.cos(d2r * latStart.value)
+//        * 6378.139 * (1.0 - Math.sin(d2r * lonStart.value) * Math.sin(d2r * lonStart.value) * flatten);
+var theFactor = d2r* Math.cos(d2r * latStart.value) * 6378.139 * (1.0 - Math.sin(d2r * latStart.value) * Math.sin(d2r * latStart.value) * flatten);
 
 var x=(lonEnd.value-lonStart.value)*theFactor;
 var y=(latEnd.value-latStart.value)*111.32;
@@ -167,6 +171,7 @@ var lengthVal=Math.sqrt(x*x+y*y);
 length.value=Math.round(lengthVal*1000)/1000;
 
 var strikeValue=Math.atan2(x,y)/d2r;
+if (strikeValue < 0) { strikeVaule = strikeValue + 360; }
 strike.value=Math.round(strikeValue*1000)/1000;
 }
 }
@@ -175,13 +180,13 @@ strike.value=Math.round(strikeValue*1000)/1000;
 function calculateendpoint(){
 
 // alert("debug");
-var lonStart = document.getElementById("Faultform:FaultLonStarts");
-var lonEnd = document.getElementById("Faultform:FaultLonEnds");
-var latStart = document.getElementById("Faultform:FaultLatStarts");
-var latEnd = document.getElementById("Faultform:FaultLatEnds");
+var lonStart=document.getElementById("Faultform:faultLon");
+var lonEnd=document.getElementById("Faultform:faultLonende3r");
+var latStart=document.getElementById("Faultform:faultLat");
+var latEnd=document.getElementById("Faultform:faultLatendere");
 
-var length = document.getElementById("Faultform:FaultLength");
-var strike = document.getElementById("Faultform:FaultStrikeAngle");
+var length=document.getElementById("Faultform:FaultLength");
+var strike=document.getElementById("Faultform:FaultStrikeAngle");
 
 if ((latStart.value.length == 0) || (latStart.value == null)) { alert("Fault Origin Latitude is empty!"); }
 else if ((lonStart.value.length == 0) || (lonStart.value == null)) { alert("Fault Origin Longititude is empty!"); }
@@ -191,8 +196,10 @@ else {
 
 var d2r = Math.acos(-1.0) / 180.0;
 var flatten=1.0/298.247;
-var theFactor = d2r* Math.cos(d2r * latStart.value)
-        * 6378.139 * (1.0 - Math.sin(d2r * lonStart.value) * Math.sin(d2r * lonStart.value) * flatten);
+//var theFactor = d2r* Math.cos(d2r * latStart.value)
+//        * 6378.139 * (1.0 - Math.sin(d2r * lonStart.value) * Math.sin(d2r * lonStart.value) * flatten);
+
+var theFactor = d2r* Math.cos(d2r * latStart.value) * 6378.139 * (1.0 - Math.sin(d2r * latStart.value) * Math.sin(d2r * latStart.value) * flatten);
 
 //var x = document.getElementById("Faultform:FaultLocationX");
 //var y = document.getElementById("Faultform:FaultLocationY");
@@ -238,6 +245,7 @@ latEnd.value = Math.round(latEnd.value*100)/100.0;
 //strike.value=Math.round(strikeValue*1000)/1000;
 }
 }
+
 
 function initialize() {
   
