@@ -146,7 +146,7 @@ public class InsarKmlService extends AntVisco implements Runnable {
 		  throws Exception {
 		  String jobStamp=generateJobStamp();
 		  String slash="/";
-		  String imageBaseUrl=serviceUrl
+		  String imageBaseUrl=serverUrl
 				+slash+userName
 				+slash+projectName
 				+slash+jobStamp;
