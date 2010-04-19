@@ -70,12 +70,10 @@ for(int i=0;i<stationList.size();i++) {
 
 <head>
 <link rel="stylesheet" type="text/css" href='<%= request.getContextPath() + "/stylesheet.css" %>'>
-<link rel="stylesheet" type="text/css" href="http://129.79.49.68:8080/Simplex3/quakesim_style.css">
+<link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css">
 
 <title>Edit Project</title>
-<script
-	src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTf0RZ3CvQOmi-GOjEFoiamz50c8BRdcsDMSPvaTAMTVPL7sMxMzuZWCQ"
-	type="text/javascript"></script>
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>      
 </head>
 
 
