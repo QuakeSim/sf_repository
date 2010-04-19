@@ -50,6 +50,18 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
+              <portlet-tab label="InSAR-disloc3-results">
+                <title lang="en">InSAR Plots of Disloc Results</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="Disloc3-insar-PF">
+                                <portlet-class>Disloc3#insar-plot-portlet</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
         </portlet-tabbed-pane>
     </portlet-tab>
 </portlet-tabbed-pane>

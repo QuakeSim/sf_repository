@@ -61,7 +61,7 @@ xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0"
       <expiration-cache>0</expiration-cache>
       <init-param>
       <name>ViewPage</name>
-      <value>/InSarPlot.jsp</value>
+      <value>/InSarPlots.jsp</value>
      </init-param>
       <init-param>
       <name>HelpPage</name>

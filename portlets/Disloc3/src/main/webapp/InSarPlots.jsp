@@ -81,7 +81,7 @@ function dataTableSelectOneRadio(radio) {
 					</h:column>
 					<h:column>
 					    <f:facet name="header">
-					    <h:outputText  id="insarblaheoruere0" value="Azimuth (Deg)"/>
+					    <h:outputText  id="insarblahe1oruere0" value="Azimuth (Deg)"/>
 						 </f:facet>
 				       <h:outputText  id="ereinsarblaheoru1" value="#{summaryBean.azimuth}"/>
 					</h:column>
@@ -99,11 +99,11 @@ function dataTableSelectOneRadio(radio) {
 								 					 escape="false" value="<b>InSAR Kml file</b>" />
 					 </f:facet>
 						<h:panelGroup id="insarpgkml">
-						<h:outputLink id="insarlinkdre5" value="#{summaryBean.kmlurl}" target="_blank">
+						<h:outputLink id="insarlinkdre5" value="#{summaryBean.insarKmlUrl}" target="_blank">
 							<h:outputText id="insarkdjfjk" value="[<b>Download</b>]" escape="false" />
 						</h:outputLink>
 						<h:outputText id="insarblaheoru16" escape="false" value="<b> </b>" />
-						<h:outputLink id="insarlinkdre6" value="http://maps.google.com/maps?q=#{summaryBean.kmlurl}" target="_blank">
+						<h:outputLink id="insarlinkdre6" value="http://maps.google.com/maps?q=#{summaryBean.insarKmlUrl }" target="_blank">
 							<h:outputText id="insarblaheoru17" value="[<font size=1px>View In Google map</font>]" escape="false" />
 						</h:outputLink>
 						</h:panelGroup>
