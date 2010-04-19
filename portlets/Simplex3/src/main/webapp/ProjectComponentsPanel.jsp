@@ -238,15 +238,26 @@
 									<f:facet name="header">
 										<h:outputText id="dflelerkljk454" escape="false" value="<b>Update</b>" />
 									</f:facet>
-									<h:selectBooleanCheckbox value="#{myentry3.update}"
-																	  id="dflelerkljk455"
-																	  />
+
+							      <h:panelGrid columns="2" cellpadding="0" cellspacing="0" styleClass="centered">
+								<f:facet name="header">								
+								</f:facet>
+								<h:selectBooleanCheckbox value="#{myentry3.update}" id="dflelerkljk455"/>
+								<h:outputText style="text-align:right;width:0px" value ="" />
+							      </h:panelGrid>								
 								</h:column>
+
 								<h:column>
 									<f:facet name="header">
 										<h:outputText id="dflelerkljk456" escape="false" value="<b>Remove</b>" />
-									</f:facet>
-									<h:selectBooleanCheckbox id="dflelerkljk457" value="#{myentry3.delete}"/>
+									</f:facet>									
+
+							      <h:panelGrid columns="2" cellpadding="0" cellspacing="0" styleClass="centered">
+								<f:facet name="header">								
+								</f:facet>
+								<h:selectBooleanCheckbox id="dflelerkljk457" value="#{myentry3.delete}"/>
+								<h:outputText style="text-align:right;width:0px" value ="" />
+							      </h:panelGrid>
 								</h:column>
 							</h:dataTable>
 
@@ -346,15 +357,30 @@
 									<f:facet name="header">
 										<h:outputText id="dflelerkljk954" escape="false" value="<b>Update</b>" />
 									</f:facet>
-									<h:selectBooleanCheckbox value="#{myentry7.update}"
-																	  id="dflelerkljk955"
-																	   />
+									
+							      <h:panelGrid columns="2" cellpadding="0" cellspacing="0" styleClass="centered">
+								<f:facet name="header">								
+								</f:facet>
+								<h:selectBooleanCheckbox value="#{myentry7.update}" id="dflelerkljk955" />
+								<h:outputText style="text-align:right;width:0px" value ="" />
+							      </h:panelGrid>
+
 								</h:column>
+
 								<h:column>
 									<f:facet name="header">
 										<h:outputText id="dflelerkljk956" escape="false" value="<b>Remove</b>" />
 									</f:facet>
-									<h:selectBooleanCheckbox id="dflelerkljk957" value="#{myentry7.delete}"/>
+									
+
+							      <h:panelGrid columns="2" cellpadding="0" cellspacing="0" styleClass="centered">
+								<f:facet name="header">								
+								</f:facet>
+								<h:selectBooleanCheckbox id="dflelerkljk957" value="#{myentry7.delete}"/>
+								<h:outputText style="text-align:right;width:0px" value ="" />
+							      </h:panelGrid>
+
+
 								</h:column>
 							</h:dataTable>
 						    </h:panelGrid>
