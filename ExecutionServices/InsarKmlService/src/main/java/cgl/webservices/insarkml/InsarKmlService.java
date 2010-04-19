@@ -84,7 +84,7 @@ public class InsarKmlService extends AntVisco implements Runnable {
 				ServletContext context=((HttpServlet)msgC.getProperty(HTTPConstants.MC_HTTP_SERVLET)).getServletContext();
 				
 				String propertyFile=context.getRealPath("/")
-					 +"/WEB-INF/classes/insark.properties";
+					 +"/WEB-INF/classes/insarkml.properties";
 				System.out.println("Prop file location "+propertyFile);
 				
 				properties=new Properties();	    
