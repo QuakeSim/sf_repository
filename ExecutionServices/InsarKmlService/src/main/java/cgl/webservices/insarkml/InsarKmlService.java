@@ -109,11 +109,15 @@ public class InsarKmlService extends AntVisco implements Runnable {
 													  String elevation,
 													  String azimuth,
 													  String radarFrequency,
-													  String imageBaseUrl,
 													  String targetName)
 		  throws Exception {
 		  System.out.println("RunNonBlocking called");
 		  String jobStamp=generateJobStamp();
+		  String slash="/";
+		  String imageBaseUrl=serviceUrl
+				+slash+userName
+				+slash+projectName
+				+slash+jobStamp;
 		  
 		  String[] args=prefabInsarKml(userName,
 												 projectName,
@@ -139,10 +143,14 @@ public class InsarKmlService extends AntVisco implements Runnable {
 												  String elevation,
 												  String azimuth,
 												  String radarFrequency,
-												  String imageBaseUrl,
 												  String targetName)
 		  throws Exception {
 		  String jobStamp=generateJobStamp();
+		  String imageBaseUrl=serviceUrl
+				+slash+userName
+				+slash+projectName
+				+slash+jobStamp;
+
 		  String[] args=prefabInsarKml(userName,
 												 projectName,
 												 dislocOutputUrl,
