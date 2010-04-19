@@ -25,7 +25,6 @@ import TestClient.Select.Select;
 import TestClient.Select.SelectService;
 import TestClient.Select.SelectServiceLocator;
 
-
 //Import stuff from db4o
 import com.db4o.*;
 
@@ -122,6 +121,13 @@ public class DislocBean extends GenericSopacBean {
     String faultDBServiceUrl;
     String kmlGeneratorBaseurl;
     String kmlGeneratorUrl;
+	 String insarkmlServiceUrl;
+
+	 //These are used for the InSAR KML service
+	 String insarKmlUrl;
+	 String elevation;
+	 String azimuth;
+	 String frequency;
     
     String realPath;
     String codeName;
@@ -2704,5 +2710,61 @@ public class DislocBean extends GenericSopacBean {
 	 public String getMapFaultName() {
 		  return this.mapFaultName;
 	 }
+	 //--------------------------------------------------
+	 
+	 /** 
+	  * These methods are used by the InSAR KML Generation service
+	  */
+	 public void setAzimuth(String azimuth) {
+		  this.azimuth=azimuth;
+	 }
+
+	 public void setElevation(String elevation){
+		  this.elevation=elevation;
+	 }
+	 
+	 public void setFrequency(String frequency){
+		  this.frequency=frequency;
+	 }
+	 
+	 public void setInsarkmlServiceUrl(String insarkmlServiceUrl) {
+		  this.insarkmlServiceUrl=insarkmlServiceUrl;
+	 }
+
+	 public void setInsarKmlUrl(String insarKmlUrl){
+		  this.insarKmlUrl=insarKmlUrl;
+	 }
+
+	 public String getAzimuth() { return azimuth; }
+	 public String getElevation() { return elevation; }
+	 public String getFrequency() { return frequency; }
+	 public String getInsarkmlServiceUrl() { return insarkmlServiceUrl; }
+	 public String getInsarKmlUrl() { return insarKmlUrl; }
+
+    public String toggleInsarKmlGen(ActionEvent ev) throws Exception{
+		  System.out.println("Generating InSAR KML");
+		  DislocProjectSummaryBean dpsb=
+				(DislocProjectSummaryBean)getMyProjectSummaryDataTable().getRowData();
+		  System.out.println("Project: "+dpsb.getProjectName());
+		  
+		  DislocResultsBean resultsBean=dpsb.getResultsBean();
+		  
+		  InsarKmlService iks=new InsarKmlServiceServiceLocator().
+				getInsarKmlExec(new URL(insarkmlServiceUrl));
+		  System.out.println("Service URL:"+insarkmlServiceUrl);
+		  
+		  insarKmlUrl=iks.runBlockingInsarKml(userName,
+														  dpsb.getProjectName(),
+														  resultsBean.getOutputFileUrl(),
+														  this.getElevation(),
+														  this.getAzimuth(),
+														  this.getFrequency(),
+														  "ExecInsarKml");
+		  //This sets the InSAR KML URL, which will be accessed by other pages.
+		  setInsarKmlUrl(insarKmlUrl);
+
+		  return "disloc-this";
+    }
+		  
 	 //--------------------------------------------------
 }

@@ -17,7 +17,7 @@
                    <value>http://gw11.quarry.iu.teragrid.org:8080</value>
                 </managed-property>
 		
-		<managed-property>
+					 <managed-property>
                    <property-name>kmlfiles</property-name>
                    <value>QuakeTables_CGS_1996.kml QuakeTables_CGS_2002.kml</value>
                 </managed-property>
@@ -52,6 +52,12 @@
                  <managed-property>
                  	<property-name>kmlGeneratorUrl</property-name>
                  	<value>http://gf19.ucs.indiana.edu:8080/KmlGenerator/services/KmlGenerator</value>
+                 </managed-property>
+
+                 <!--  Needed for the INSAR KML Generator service -->
+                 <managed-property>
+                 	<property-name>insarkmlServiceUrl</property-name>
+                 	<value>http://gf19.ucs.indiana.edu:8080/insarkmlservice/services/InsarKmlExec</value>
                  </managed-property>
 
 	</managed-bean>
