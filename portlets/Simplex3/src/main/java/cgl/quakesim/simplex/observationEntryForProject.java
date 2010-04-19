@@ -1,10 +1,11 @@
 package cgl.quakesim.simplex;
 
 public class observationEntryForProject {
-	 String observationName;
-	 boolean view;
-	 boolean delete;
-	 String refSite;
+	
+	String observationName;
+	boolean update;
+	boolean delete;
+	String refSite;
 	 
 	 public void setObservationName(String tmp_str) {
 		  this.observationName = tmp_str;
@@ -14,12 +15,12 @@ public class observationEntryForProject {
 		  return this.observationName;
 	 }		
 	
-	public void setView(boolean tmp_str) {
-		this.view = tmp_str;
+	public void setUpdate(boolean tmp_str) {
+		this.update = tmp_str;
 	}
 
-	public boolean getView() {
-		return this.view;
+	public boolean getUpdate() {
+		return this.update;
 	}		
 	
 	public void setDelete(boolean tmp_str) {

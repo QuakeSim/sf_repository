@@ -5,7 +5,8 @@ import javax.faces.model.SelectItem;
 public class faultEntryForProject {
 	
 	String faultName;
-	boolean view;
+	String oldfaultName;
+	boolean update;
 	boolean delete;
 	
 	
@@ -15,14 +16,22 @@ public class faultEntryForProject {
 
 	public String getFaultName() {
 		return this.faultName;
-	}		
+	}
 	
-	public void setView(boolean tmp_str) {
-		this.view = tmp_str;
+    public java.lang.String getoldFaultName() {
+        return oldfaultName;
+    }
+
+    public void setoldFaultName(java.lang.String oldfaultName) {
+        this.oldfaultName = oldfaultName;
+    }
+	
+	public void setUpdate(boolean tmp_str) {
+		this.update = tmp_str;
 	}
 
-	public boolean getView() {
-		return this.view;
+	public boolean getUpdate() {
+		return this.update;
 	}		
 	
 	public void setDelete(boolean tmp_str) {

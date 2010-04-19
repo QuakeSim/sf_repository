@@ -15,6 +15,8 @@
 	class="cgl.sensorgrid.gui.google.Mapper" />
 
 
+
+
 <%
 Vector networkNames = RSSBeanID.networkNames();
 
@@ -61,15 +63,18 @@ for(int i=0;i<stationList.size();i++) {
 	font-size: 18pt;
 	font-weight: bold;
 }
+
+
+
 </style>
 
 <head>
 <link rel="stylesheet" type="text/css" href='<%= request.getContextPath() + "/stylesheet.css" %>'>
-<link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css">
+<link rel="stylesheet" type="text/css" href="http://129.79.49.68:8080/Simplex3/quakesim_style.css">
 
 <title>Edit Project</title>
 <script
-	src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here"
+	src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTf0RZ3CvQOmi-GOjEFoiamz50c8BRdcsDMSPvaTAMTVPL7sMxMzuZWCQ"
 	type="text/javascript"></script>
 </head>
 
@@ -146,8 +151,6 @@ var latEnd = document.getElementById("Faultform:FaultLatEnds");
 var length = document.getElementById("Faultform:FaultLength");
 var strike = document.getElementById("Faultform:FaultStrikeAngle");
 
-
-
 if ((latStart.value.length == 0) || (latStart.value == null)) { alert("Fault Origin Latitude is empty!"); }
 else if ((lonStart.value.length == 0) || (lonStart.value == null)) { alert("Fault Origin Longititude is empty!"); }
 else if ((latEnd.value.length == 0) || (latEnd.value == null)) { alert("Fault End Latitude is empty!"); }
@@ -189,8 +192,6 @@ var latEnd = document.getElementById("Faultform:FaultLatEnds");
 
 var length = document.getElementById("Faultform:FaultLength");
 var strike = document.getElementById("Faultform:FaultStrikeAngle");
-
-
 
 if ((latStart.value.length == 0) || (latStart.value == null)) { alert("Fault Origin Latitude is empty!"); }
 else if ((lonStart.value.length == 0) || (lonStart.value == null)) { alert("Fault Origin Longititude is empty!"); }
@@ -249,7 +250,6 @@ latEnd.value = Math.round(latEnd.value*100)/100.0;
 //strike.value=Math.round(strikeValue*1000)/1000;
 }
 }
-
 
 function initialize() {
   

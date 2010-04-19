@@ -35,7 +35,7 @@ public class Fault  implements java.io.Serializable {
     private java.lang.String faultLonStarts;
 
     private java.lang.String faultName;
-    private java.lang.String oldfaultName;
+    
 
     private boolean faultOriginXVary;
 
@@ -54,10 +54,6 @@ public class Fault  implements java.io.Serializable {
     private java.lang.String faultWidth;
 
     private boolean faultWidthVary;
-    
-    boolean update;
-    boolean delete;
-    
     
 
     public Fault() {
@@ -110,28 +106,8 @@ public class Fault  implements java.io.Serializable {
            this.faultStrikeSlipVary = faultStrikeSlipVary;
            this.faultWidth = faultWidth;
            this.faultWidthVary = faultWidthVary;
-           this.update = false;
-           this.delete = false;
-           
-           
            
     }
-    
-    public boolean getUpdate() {
-		return update;
-	}
-
-	public void setUpdate(boolean update) {
-		this.update = update;
-	}
-
-	public boolean getDelete() {
-		return delete;
-	}
-
-	public void setDelete(boolean delete) {
-		this.delete = delete;
-	}
 
 
     /**
@@ -413,24 +389,7 @@ public class Fault  implements java.io.Serializable {
         this.faultName = faultName;
     }
 
-    /**
-     * Gets the faultName value for this Fault.
-     * 
-     * @return faultName
-     */
-    public java.lang.String getoldFaultName() {
-        return oldfaultName;
-    }
 
-
-    /**
-     * Sets the faultName value for this Fault.
-     * 
-     * @param faultName
-     */
-    public void setoldFaultName(java.lang.String oldfaultName) {
-        this.oldfaultName = oldfaultName;
-    }
 
     /**
      * Gets the faultOriginXVary value for this Fault.

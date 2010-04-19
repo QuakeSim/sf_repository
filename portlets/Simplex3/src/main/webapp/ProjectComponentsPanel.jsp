@@ -5,12 +5,13 @@
 		<h:outputText value="<br/>" escape="false"/>
 		<h:outputText value="1) Please check a box to allow a value to vary during the simplex optimization. " escape="false"/>
 		<h:outputText value="2) Please click the 'update' button after value changes." escape="false"/>
-					<h:panelGrid id="dflelerkljk162" columns="1" border="1">
-						<h:panelGroup id="dflelerkljk163">
+					<h:panelGrid id="dflelerkljk162" columns="1" border="1" cellpadding="0" cellspacing="0">
 						  <h:outputFormat id="dflelerkljk165" escape="false" value="<b>Fault Components</b>">
 						  </h:outputFormat>
 
-							<h:dataTable border="1" cellpadding="0" cellspacing="0" id="dflelerh966" headerClass="componentstableh" columnClasses="componentcolumn,componentcolumn"
+						  <h:panelGrid id="dflelerkljg162" columns="2" border="0"  cellpadding="0" cellspacing="0">
+
+							<h:dataTable border="1" cellpadding="0" cellspacing="0" id="dflelerh966" headerClass="componentstableh" columnClasses="componentstablec"
 							      value="#{SimplexBean.myFaultsForProjectList}" var="myentry31">
 							    <h:column>
 							      <f:facet name="header">
@@ -225,21 +226,31 @@
 							      </h:panelGrid>
 							    </h:column>
 
-							    <h:column>
-							      <f:facet name="header">
-								<h:outputText id="dflelerkljj969" escape="false" value="<b>Update</b>" />
-							      </f:facet>
-							      <h:selectBooleanCheckbox id="dflelerkljj170" value="#{myentry31.update}"/>
-							    </h:column>
-							
-							    <h:column>
-							      <f:facet name="header">
-								<h:outputText id="dflelerkljj171" escape="false" value="<b>Remove</b>" />
-							      </f:facet>
-							      <h:selectBooleanCheckbox id="dflelerkljj172" value="#{myentry31.delete}"/>
-							    </h:column>
+
 						      </h:dataTable>
-						</h:panelGroup>
+
+
+							<h:dataTable border="1" cellpadding="0" cellspacing="0" id="dflelerh966" headerClass="componentstableh2" columnClasses="componentstablec"
+											  id="dflelerkljk451"
+											  value="#{SimplexBean.myFaultEntryForProjectList}" var="myentry3">
+
+								<h:column>
+									<f:facet name="header">
+										<h:outputText id="dflelerkljk454" escape="false" value="<b>Update</b>" />
+									</f:facet>
+									<h:selectBooleanCheckbox value="#{myentry3.update}"
+																	  id="dflelerkljk455"
+																	  />
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+										<h:outputText id="dflelerkljk456" escape="false" value="<b>Remove</b>" />
+									</f:facet>
+									<h:selectBooleanCheckbox id="dflelerkljk457" value="#{myentry3.delete}"/>
+								</h:column>
+							</h:dataTable>
+
+						</h:panelGrid>						
 					</h:panelGrid>
 					<h:commandButton id="SelectFault4projj" value="UpdateFault"
 						actionListener="#{SimplexBean.toggleUpdateFaults}" />
@@ -256,8 +267,9 @@
 								</h:outputFormat>
 								<h:commandButton id="viewSimplexObsv" value="Display/Hide"
 									actionListener="#{SimplexBean.currentEditProjectForm.toggleShowObsvEntries}"/>
+							<h:panelGrid id="aerbasd1" columns="2" border="0" cellpadding="0" cellspacing="0">    
 
-							<h:dataTable border="1" id="dflelerkljk177" headerClass="componentstableh"
+							<h:dataTable  border="1" cellpadding="0" cellspacing="0" id="dflelerkljk177" headerClass="componentstableh2" columnClasses="componentstablec"
 							   rendered="#{SimplexBean.currentEditProjectForm.renderObsvEntries}"
 								value="#{SimplexBean.myObservationsForProjectList}"
 								var="myentry4">
@@ -323,20 +335,31 @@
 											itemValue="-1" />
 									</h:selectOneMenu>
 								</h:column>
-								<h:column>
-									<f:facet name="header">
-										<h:outputText id="dflelerkljk892" escape="false" value="<b>Update</b>" />
-									</f:facet>
-									<h:selectBooleanCheckbox id="dflelerkljk1878" value="#{myentry4.update}"/>
-								</h:column>
-								<h:column>
-									<f:facet name="header">
-										<h:outputText id="dflelerkljk893" escape="false" value="<b>Remove</b>" />
-									</f:facet>
-									<h:selectBooleanCheckbox id="dflelerkljk180" value="#{myentry4.delete}"/>
-								</h:column>
-
 							</h:dataTable>
+
+							<h:dataTable border="1" cellpadding="0" cellspacing="0" id="dflelerh966" headerClass="componentstableh2" columnClasses="componentstablec"
+											  id="dflelerkljk951"
+											  rendered="#{SimplexBean.currentEditProjectForm.renderObsvEntries}"
+											  value="#{SimplexBean.myObservationEntryForProjectList}" var="myentry7">
+
+								<h:column>
+									<f:facet name="header">
+										<h:outputText id="dflelerkljk954" escape="false" value="<b>Update</b>" />
+									</f:facet>
+									<h:selectBooleanCheckbox value="#{myentry7.update}"
+																	  id="dflelerkljk955"
+																	   />
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+										<h:outputText id="dflelerkljk956" escape="false" value="<b>Remove</b>" />
+									</f:facet>
+									<h:selectBooleanCheckbox id="dflelerkljk957" value="#{myentry7.delete}"/>
+								</h:column>
+							</h:dataTable>
+						    </h:panelGrid>
+
+
 						</h:panelGrid>
 						</h:panelGroup>	
 					<h:commandButton id="SelectObservations4proj"					   

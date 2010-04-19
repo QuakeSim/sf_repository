@@ -311,7 +311,7 @@ public class editProjectForm extends GenericProjectBean {
 		// String length = df.format(Math.sqrt(x * x + y * y));
 		double length=Double.parseDouble(df.format(Math.sqrt(x * x + y * y)));
 		tmp_fault.setFaultName(faultName);
-		tmp_fault.setoldFaultName(faultName);
+		
 		tmp_fault.setFaultLength(length+"");
 		tmp_fault.setFaultWidth(width+"");
 		tmp_fault.setFaultDepth (depth+"");
@@ -405,8 +405,7 @@ public class editProjectForm extends GenericProjectBean {
 
 			// String length = df.format(Math.sqrt(x * x + y * y));
 			double length=Double.parseDouble(df.format(Math.sqrt(x * x + y * y)));
-			tmp_fault.setFaultName(theFault+"");
-			tmp_fault.setoldFaultName(theFault+"");
+			tmp_fault.setFaultName(theFault+"");			
 			tmp_fault.setFaultLength(length+"");
 			tmp_fault.setFaultWidth(width+"");
 			tmp_fault.setFaultDepth (depth+"");
