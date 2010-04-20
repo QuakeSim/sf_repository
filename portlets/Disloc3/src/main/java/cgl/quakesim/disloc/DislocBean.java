@@ -2830,6 +2830,10 @@ public class DislocBean extends GenericSopacBean {
 				if(results.hasNext()) {
 					 DislocProjectSummaryBean tmpbean=
 						  (DislocProjectSummaryBean)results.next();
+					 System.out.println(tmpbean.getProjectName()
+											  +" "+tmpbean.getJobUIDStamp()
+											  +" "+dpsb.getProjectName()
+											  +" "+dpsb.getJobUIDStamp());
 					 if(tmpbean.getProjectName().equals(dpsb.getProjectName())
 						 && tmpbean.getJobUIDStamp().equals(dpsb.getJobUIDStamp())) {
 							  System.out.println("Found the bean so now we will update it.");
