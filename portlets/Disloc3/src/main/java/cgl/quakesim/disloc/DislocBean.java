@@ -2827,7 +2827,7 @@ public class DislocBean extends GenericSopacBean {
 				ObjectSet results=db.get(DislocProjectSummaryBean.class);
 				System.out.println("Result set size: "+results.size());
 
-				if(results.hasNext()) {
+				while(results.hasNext()) {
 					 DislocProjectSummaryBean tmpbean=
 						  (DislocProjectSummaryBean)results.next();
 					 System.out.println(tmpbean.getProjectName()
