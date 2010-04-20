@@ -2795,5 +2795,62 @@ public class DislocBean extends GenericSopacBean {
 	 public String getInsarkmlServiceUrl() { return insarkmlServiceUrl; }
 	 public String getInsarKmlUrl() { return insarKmlUrl; }
 
+	 public void toggleReplotInsar() throws Exception {
+		  try {
+				//Get the project
+				DislocProjectSummaryBean dpsb=
+					 (DislocProjectSummaryBean)getMyProjectSummaryDataTable().getRowData();
+				DislocResultsBean dislocResultsBean=dpsb.getResultsBean();
+				String projectName=dpsb.getProjectName();
+
+				System.out.println(dpsb.getElevation()+" "+dpsb.getAzimuth()+" "+dpsb.getFrequency());
+
+				//Invoke the service
+				InsarKmlService iks=new InsarKmlServiceServiceLocator().
+					 getInsarKmlExec(new URL(insarkmlServiceUrl));
+				insarKmlUrl=iks.runBlockingInsarKml(userName,
+																dpsb.getProjectName(),
+																dislocResultsBean.getOutputFileUrl(),
+																dpsb.getElevation(),
+																dpsb.getAzimuth(),
+																dpsb.getFrequency(),
+																"ExecInsarKml");
+				System.out.println(insarKmlUrl);
+				dpsb.setInsarKmlUrl(insarKmlUrl);
+
+				//Now update the database
+				if(db!=null) db.close();
+				db=Db4o.openFile(getBasePath()
+									  +"/"+getContextBasePath()
+									  +"/"+userName
+									  +"/"+codeName+".db");		  
+				ObjectSet results=db.get(DislocProjectSummaryBean.class);
+				System.out.println("Result set size: "+results.size());
+
+				if(results.hasNext()) {
+					 DislocProjectSummaryBean tmpbean=
+						  (DislocProjectSummaryBean)results.next();
+					 if(tmpbean.getProjectName().equals(dpsb.getProjectName())
+						 && tmpbean.getJobUIDStamp().equals(dpsb.getJobUIDStamp())) {
+							  System.out.println("Found the bean so now we will update it.");
+							  //Delete the old bean.
+							  db.delete(tmpbean);
+							  //Now put the modified bean into the db.
+							  db.set(dpsb);
+					 }
+				}
+				db.commit();
+				db.close();				
+
+
+		  }
+		  
+		  catch (Exception ex) {
+				db.close();
+				ex.printStackTrace();
+		  }
+		  
+	 }
+
 	 //--------------------------------------------------
 }

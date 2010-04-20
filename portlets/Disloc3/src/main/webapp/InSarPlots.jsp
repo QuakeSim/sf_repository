@@ -77,21 +77,20 @@ function dataTableSelectOneRadio(radio) {
 					    <f:facet name="header">
 					    <h:outputText  id="insarblahddfeoru0" value="Elevation (Deg)"/>
 						 </f:facet>
-				       <h:outputText  id="insarblaheoereru1" value="#{summaryBean.elevation}"/>
+				       <h:inputText  id="insarblaheoereru1" value="#{summaryBean.elevation}"/>
 					</h:column>
 					<h:column>
 					    <f:facet name="header">
 					    <h:outputText  id="insarblahe1oruere0" value="Azimuth (Deg)"/>
 						 </f:facet>
-				       <h:outputText  id="ereinsarblaheoru1" value="#{summaryBean.azimuth}"/>
+				       <h:inputText  id="ereinsarblaheoru1" value="#{summaryBean.azimuth}"/>
 					</h:column>
 					<h:column>
 					    <f:facet name="header">
 					    <h:outputText  id="insdferearblaheoru0" value="Frequency (GHz)"/>
 						 </f:facet>
-				       <h:outputText  id="insarblaerereheoru1" value="#{summaryBean.frequency}"/>
+				       <h:inputText  id="insarblaerereheoru1" value="#{summaryBean.frequency}"/>
 					</h:column>
-
 					
 					<h:column>
 					 <f:facet name="header">
@@ -108,7 +107,15 @@ function dataTableSelectOneRadio(radio) {
 						</h:outputLink>
 						</h:panelGroup>
 				</h:column>					
-					
+				<h:column>
+					<f:facet name="header">
+						<h:outputText id="insarblaheoru18" escape="false" value="<b>Replot</b>" />
+					</f:facet>
+						<h:panelGroup id="insarpgreplot">
+							<h:commandButton id="ReplotInsarldk" value="Replot"
+												  action="#{DislocBean2.toggleReplotInsar}"/>
+						</h:panelGroup>
+				</h:column>										
 			</h:dataTable>
       </h:panelGrid>
 	</h:form>
