@@ -53,7 +53,7 @@ function dataTableSelectOneRadio(radio) {
 		<h:panelGrid id="insarpgridmain" columns="1" border="0">
 			<h:outputText id="insarheader" escape="false" value="<h2>Archived Results</h2>" />
 			<h:outputText id="insardosomework" escape="false"
-				value="You have the following archived disloc runs. Click the link to download the desired file to your desk top. To save directly to your desktop, click your mouse's right button over the link and select<br>" />
+				value="You have the following disloc InSAR plots. Click the link to download the desired file to your desk top. To save directly to your desktop, click your mouse's right button over the link and select<br>" />
 
   				<h:dataTable id="insarDislocOutputPanel3" var="summaryBean"
 								 value="#{DislocBean2.myArchivedDislocResultsList}" 

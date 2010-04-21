@@ -8,6 +8,13 @@ public class InsarParamsBean {
 	 
 	 public InsarParamsBean() {
 	 }
+
+	 public void setInsarKmlUrl(String insarKmlUrl){
+		  this.insarKmlUrl=insarKmlUrl;
+	 }
+
+	 public String getInsarKmlUrl() { return this.insarKmlUrl; }
+
 	 public void setAzimuth(String azimuth) {
 		  this.azimuth=azimuth;
 	 }
