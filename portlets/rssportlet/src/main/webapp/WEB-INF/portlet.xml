@@ -27,7 +27,7 @@
       </preference>
       <preference>
         <name>maxEntries</name>
-        <value>15</value>
+        <value>5</value>
       </preference>
       <preference>
         <name>newWindow</name>
