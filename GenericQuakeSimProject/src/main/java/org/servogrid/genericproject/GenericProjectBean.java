@@ -308,7 +308,7 @@ public class GenericProjectBean {
 		  double flatten=1.0/298.247;
 		  
 		  double theFactor = d2r* Math.cos(d2r * refLat)
-				* 6378.139 * (1.0 - Math.sin(d2r * refLon) * Math.sin(d2r * refLon) * flatten);
+				* 6378.139 * (1.0 - Math.sin(d2r * refLat) * Math.sin(d2r * refLat) * flatten);
 
 		  return theFactor;
 	 }
