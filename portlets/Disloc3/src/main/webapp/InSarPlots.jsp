@@ -55,41 +55,41 @@ function dataTableSelectOneRadio(radio) {
 			<h:outputText id="insardosomework" escape="false"
 				value="You have the following disloc InSAR plots. Click the link to download the desired file to your desk top. To save directly to your desktop, click your mouse's right button over the link and select<br>" />
 
-  				<h:dataTable id="insarDislocOutputPanel3" var="summaryBean"
-								 value="#{DislocBean2.myArchivedDislocResultsList}" 
-								 binding="#{DislocBean2.myProjectSummaryDataTable}"
+  				<h:dataTable id="insarDislocOutputPanel3" var="insarParamsBean"
+								 value="#{DislocBean2.myInsarParamsList}" 
+								 binding="#{DislocBean2.myInsarDataTable}"
 								 border="1">
 					<h:column>
 					    <f:facet name="header">
 					    <h:outputText  id="insarblaheoru0" value="Project Name"/>
 						 </f:facet>
-				       <h:outputText  id="insarblaheoru1" value="#{summaryBean.projectName}"/>
+				       <h:outputText  id="insarblaheoru1" value="#{insarParamsBean.projectName}"/>
 					</h:column>
 
 					<h:column>
 					    <f:facet name="header">
 					    <h:outputText id="insarblaheoru3" value="Creation Date"/>
 						 </f:facet>
-				       <h:outputText id="insarblaheoru2" value="#{summaryBean.creationDate}"/>
+				       <h:outputText id="insarblaheoru2" value="#{insarParamsBean.creationDate}"/>
 					</h:column>
 
 					<h:column>
 					    <f:facet name="header">
 					    <h:outputText  id="insarblahddfeoru0" value="Elevation (Deg)"/>
 						 </f:facet>
-				       <h:inputText  id="insarblaheoereru1" value="#{summaryBean.elevation}"/>
+				       <h:inputText  id="insarblaheoereru1" value="#{insarParamsBean.elevation}"/>
 					</h:column>
 					<h:column>
 					    <f:facet name="header">
 					    <h:outputText  id="insarblahe1oruere0" value="Azimuth (Deg)"/>
 						 </f:facet>
-				       <h:inputText  id="ereinsarblaheoru1" value="#{summaryBean.azimuth}"/>
+				       <h:inputText  id="ereinsarblaheoru1" value="#{insarParamsBean.azimuth}"/>
 					</h:column>
 					<h:column>
 					    <f:facet name="header">
 					    <h:outputText  id="insdferearblaheoru0" value="Frequency (GHz)"/>
 						 </f:facet>
-				       <h:inputText  id="insarblaerereheoru1" value="#{summaryBean.frequency}"/>
+				       <h:inputText  id="insarblaerereheoru1" value="#{insarParamsBean.frequency}"/>
 					</h:column>
 					
 					<h:column>
@@ -98,11 +98,11 @@ function dataTableSelectOneRadio(radio) {
 								 					 escape="false" value="<b>InSAR Kml file</b>" />
 					 </f:facet>
 						<h:panelGroup id="insarpgkml">
-						<h:outputLink id="insarlinkdre5" value="#{summaryBean.insarKmlUrl}" target="_blank">
+						<h:outputLink id="insarlinkdre5" value="#{insarParamsBean.insarKmlUrl}" target="_blank">
 							<h:outputText id="insarkdjfjk" value="[<b>Download</b>]" escape="false" />
 						</h:outputLink>
 						<h:outputText id="insarblaheoru16" escape="false" value="<b> </b>" />
-						<h:outputLink id="insarlinkdre6" value="http://maps.google.com/maps?q=#{summaryBean.insarKmlUrl }" target="_blank">
+						<h:outputLink id="insarlinkdre6" value="http://maps.google.com/maps?q=#{insarParamsBean.insarKmlUrl }" target="_blank">
 							<h:outputText id="insarblaheoru17" value="[<font size=1px>View In Google map</font>]" escape="false" />
 						</h:outputLink>
 						</h:panelGroup>

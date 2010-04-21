@@ -637,7 +637,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		      tmp_fault.setFaultRakeAngle("0");
 
 		      //This is the fault's strike angle
-				strike=Math.atan2(x,y)/d2r;
+				//				strike=Math.atan2(x,y)/d2r;
 		      tmp_fault.setFaultStrikeAngle(df.format(strike));			
 
 		      //Get the origin of the first fault.
@@ -667,91 +667,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				      ex.printStackTrace();
 			}
 	    
-	
-	    /*
-
-	    String theFault = faultAndSegment.substring(0, faultAndSegment.indexOf("@"));
-	    String theSegment=faultAndSegment.substring(faultAndSegment.indexOf("@") + 1, faultAndSegment.indexOf("%"));
-	    
-	    String interpId=faultAndSegment.substring(faultAndSegment.indexOf("%") + 1, faultAndSegment.length());
-	    
-	    faultAndSegment = "";
-	    
-	    try {
-		SelectService ss = new SelectServiceLocator();
-		Select select = ss.getSelect(new URL(faultDBServiceUrl));
-		
-		// --------------------------------------------------
-		// Make queries.
-		// --------------------------------------------------
-		String dip = getDBValue(select, "Dip", theFault, theSegment,interpId);
-		String strike = getDBValue(select, "Strike", theFault, theSegment,interpId);
-		String depth = getDBValue(select, "Depth", theFault, theSegment,interpId);
-		String width = getDBValue(select, "Width", theFault, theSegment,interpId);
-		
-		// Get the length and width
-		double latEnd = Double.parseDouble(getDBValue(select, "LatEnd",
-							      theFault, theSegment,interpId));
-		double latStart = Double.parseDouble(getDBValue(select, "LatStart",
-								theFault, theSegment,interpId));
-		double lonStart = Double.parseDouble(getDBValue(select, "LonStart",
-								theFault, theSegment,interpId));
-		double lonEnd = Double.parseDouble(getDBValue(select, "LonEnd",
-							      theFault, theSegment,interpId));
-		
-		// Calculate the length
-		NumberFormat format = NumberFormat.getInstance();
-				    double d2r = Math.acos(-1.0) / 180.0;
-				    double flatten=1.0/298.247;
-    // 				double factor = d2r
-    // 					 * Math.cos(d2r * latStart)
-    // 					 * (6378.139 * (1.0 - Math.sin(d2r * latStart)
-    // 										 * Math.sin(d2r * latStart) / 298.247));
-				    
-				    double x = (lonEnd - lonStart) * factor(lonStart,latStart);
-				    double y = (latEnd - latStart) * 111.32;
-				    String length = df.format(Math.sqrt(x * x + y * y));
-				    tmp_fault.setFaultName (theFault);
-				    tmp_fault.setFaultLength(length);
-				    tmp_fault.setFaultWidth(width);
-				    tmp_fault.setFaultDepth(depth);
-				    tmp_fault.setFaultDipAngle(dip);
-				    tmp_fault.setFaultSlip("");
-				    tmp_fault.setFaultRakeAngle("");
-
-				    //This is the fault's strike angle
-				    double dstrike=Math.atan2(x,y)/d2r;
-			  tmp_fault.setFaultStrikeAngle(df.format(dstrike));				
-
-				    //Get the origin of the first fault.
-				    Fault[] faults=getFaultsFromDB();
-				    if(faults!=null 
-					    && faults[0]!=null
-					    && faults[0].getFaultLonStart()!=null
-					    && faults[0].getFaultLatStart()!=null) {
-					    origin_lon=Double.parseDouble(faults[0].getFaultLonStart());
-					    origin_lat=Double.parseDouble(faults[0].getFaultLatStart());
-				    }
-				    //No fault, so set the p
-				    else {
-					    origin_lon=lonStart;
-					    origin_lat=latStart;
-				    }
-				    
-				    //This is the (x,y) of the fault relative to the project's origin
-				    //The project origin is the lower left lat/lon of the first fault.
-				    double x1=(lonStart-origin_lon)*factor(origin_lon,origin_lat);
-				    double y1=(latStart-origin_lat)*111.32;
-				    System.out.println("Fault origin: "+x1+" "+y1);
-			  tmp_fault.setFaultLocationX(df.format(x1));
-				    tmp_fault.setFaultLocationY(df.format(y1));				
-
-		      } catch (Exception ex) {
-				    ex.printStackTrace();
-		      }
-		  */
-		
-		
 		  return tmp_fault;
     }
     

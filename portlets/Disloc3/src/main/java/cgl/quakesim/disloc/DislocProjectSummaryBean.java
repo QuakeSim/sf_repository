@@ -3,7 +3,7 @@ package cgl.quakesim.disloc;
 import java.util.*;
 import javax.faces.component.html.HtmlDataTable;
 
-public class DislocProjectSummaryBean {
+public class DislocProjectSummaryBean implements TimeOrderedInterface {
 	 DislocResultsBean resultsBean;
 	 DislocParamsBean paramsBean;
 	 String userName;
@@ -15,11 +15,8 @@ public class DislocProjectSummaryBean {
 	 String azimuth;
 	 String elevation;
 	 String frequency;
-	 ArrayList insarParamsList;
-	 HtmlDataTable insarDataTable;
 
 	 public DislocProjectSummaryBean() {
-		  insarParamsList=new ArrayList();
 	 }
 
 	 public String getCreationDate() { return this.creationDate; }
@@ -84,19 +81,4 @@ public class DislocProjectSummaryBean {
 	 public String getElevation() { return elevation; }
 	 public String getFrequency() { return frequency; }
 	 
-	 public ArrayList getInsarParamsList() {
-		  return insarParamsList;
-	 }
-
-	 public void setInsarParamsList(ArrayList insarParamsList){
-		  this.insarParamsList=insarParamsList;
-	 }
-	 
-	 public HtmlDataTable getInsarDataTable() {
-		  return insarDataTable;
-	 }
-
-	 public void setInsarDataTable(HtmlDataTable insarDataTable){
-		  this.insarDataTable=insarDataTable;
-	 }
 }

@@ -106,8 +106,10 @@ public class DislocBean extends GenericSopacBean {
     List myArchivedDislocResultsList=new ArrayList();
     List myPointObservationList=new ArrayList();
     List myInterpIdList=new ArrayList();
+	 List myInsarParamsList=new ArrayList();
 
-    HtmlDataTable myFaultDataTable,myProjectSummaryDataTable,myScatterPointsTable;
+    HtmlDataTable myFaultDataTable,myProjectSummaryDataTable;
+	 HtmlDataTable myScatterPointsTable,myInsarDataTable;
     
     //Create the database
     ObjectContainer db=null;
@@ -152,13 +154,13 @@ public class DislocBean extends GenericSopacBean {
      * The client constructor.
      */
     public DislocBean() throws Exception {
-	super();
-	faultDBEntry=new FaultDBEntry();
-	df = new DecimalFormat(".###");	
-	//		  currentParams.setObservationPointStyle(1);
-	
-	//We are done.	
-	System.out.println("Primary Disloc Bean Created");
+		  super();
+		  faultDBEntry=new FaultDBEntry();
+		  df = new DecimalFormat(".###");	
+		  //		  currentParams.setObservationPointStyle(1);
+		  
+		  //We are done.	
+		  System.out.println("Primary Disloc Bean Created");
     }
     
     //--------------------------------------------------
@@ -166,7 +168,7 @@ public class DislocBean extends GenericSopacBean {
     //--------------------------------------------------
 
     public void runTestCall() throws Exception{
-	ObsvPoint[] testBean=new ObsvPoint[3];
+		  ObsvPoint[] testBean=new ObsvPoint[3];
 	for(int i=0;i<testBean.length;i++) {
 	    testBean[i]=new ObsvPoint();
 	    testBean[i].setLatPoint(10.0+i+"");
@@ -319,39 +321,48 @@ public class DislocBean extends GenericSopacBean {
 	summaryBean.setResultsBean(dislocResultsBean);
 	summaryBean.setCreationDate(new Date().toString());
 	summaryBean.setKmlurl(kml_url);
-	summaryBean.setInsarKmlUrl(insarKmlUrl);
-	summaryBean.setElevation(elevation);
-	summaryBean.setAzimuth(azimuth);
-	summaryBean.setFrequency(frequency);
-	
-	//Store the summary bean.
-	
+	// summaryBean.setInsarKmlUrl(insarKmlUrl);
+	// summaryBean.setElevation(elevation);
+	// summaryBean.setAzimuth(azimuth);
+	// summaryBean.setFrequency(frequency);
+
+	InsarParamsBean ipb=new InsarParamsBean();
+	ipb.setUserName(userName);
+	ipb.setProjectName(projectName);
+	ipb.setJobUIDStamp(jobUIDStamp);
+	ipb.setCreationDate(new Date().toString());
+	ipb.setInsarKmlUrl(insarKmlUrl);
+	ipb.setElevation(elevation);
+	ipb.setAzimuth(azimuth);
+	ipb.setFrequency(frequency);
+	ipb.setDislocOutputUrl(dislocResultsBean.getOutputFileUrl());
+
+	//Store the summary and insar params beans.
 	try {
-		if (db!=null)
-			db.close();
-		db=Db4o.openFile(getBasePath()+"/"
-				 +getContextBasePath()+"/"+userName+"/"+codeName+".db");	
-		db.set(summaryBean);
-		
-		//Say goodbye.
-		db.commit();
-		db.close();
-		
+		 if (db!=null) db.close();
+		 db=Db4o.openFile(getBasePath()+"/"
+								+getContextBasePath()+"/"+userName+"/"+codeName+".db");	
+		 db.set(summaryBean);
+		 db.set(ipb);
+
+		 //Say goodbye.
+		 db.commit();
+		 db.close();
+		 
 		//Store the params bean for the current project, 
 		//deleting any old one as necessary.
-		if (db!=null)
-			db.close();
-		db=Db4o.openFile(getBasePath()+"/"
-				 +getContextBasePath()+"/"
-				 +userName+"/"
-				 +codeName+"/"+projectName+".db");	
-	
-		ObjectSet result=db.get(DislocParamsBean.class);
-		if(result.hasNext()) {
-		    DislocParamsBean tmp=(DislocParamsBean)result.next();
-		    db.delete(tmp);
-		}
-		db.set(paramsBean);
+		 if (db!=null) db.close();
+		 db=Db4o.openFile(getBasePath()+"/"
+								+getContextBasePath()+"/"
+								+userName+"/"
+								+codeName+"/"+projectName+".db");	
+		 
+		 ObjectSet result=db.get(DislocParamsBean.class);
+		 if(result.hasNext()) {
+			  DislocParamsBean tmp=(DislocParamsBean)result.next();
+			  db.delete(tmp);
+		 }
+		 db.set(paramsBean);
 		
 		//Say goodbye.
 		db.commit();
@@ -741,9 +752,9 @@ public class DislocBean extends GenericSopacBean {
 		tmp_fault.setFaultDipAngle(dip);
 		
 		//This is the fault's strike angle
-		strike=Math.atan2(x,y)/d2r;
+		// strike=Math.atan2(x,y)/d2r;
 		tmp_fault.setFaultStrikeAngle(Double.parseDouble(df.format(strike)));
-		
+
 		//This is the (x,y) of the fault relative to the project's origin
 		//The project origin is the lower left lat/lon of the first fault.
 		//If any of these conditions hold, we need to reset.
@@ -2394,7 +2405,8 @@ public class DislocBean extends GenericSopacBean {
 		  }
 		  while(reducedList!=null && reducedList.size()>0) {
 				int first=getFirst(reducedList, fullList);
-				orderedList.add((DislocProjectSummaryBean)fullList.get(((Integer)reducedList.get(first)).intValue()));
+				//				orderedList.add((DislocProjectSummaryBean)fullList.get(((Integer)reducedList.get(first)).intValue()));
+				orderedList.add((TimeOrderedInterface)fullList.get(((Integer)reducedList.get(first)).intValue()));
 				reducedList.remove(first);
 		  }
 		  return orderedList;
@@ -2403,8 +2415,11 @@ public class DislocBean extends GenericSopacBean {
 	 protected int getFirst(List reducedList, List fullList) {
 		  int first=0;
 		  for(int i=1;i<reducedList.size();i++) {
-				DislocProjectSummaryBean mb1=(DislocProjectSummaryBean)fullList.get(((Integer)reducedList.get(first)).intValue());
-				DislocProjectSummaryBean mb2=(DislocProjectSummaryBean)fullList.get(((Integer)reducedList.get(i)).intValue());
+				// DislocProjectSummaryBean mb1=(DislocProjectSummaryBean)fullList.get(((Integer)reducedList.get(first)).intValue());
+				// DislocProjectSummaryBean mb2=(DislocProjectSummaryBean)fullList.get(((Integer)reducedList.get(i)).intValue());
+
+				TimeOrderedInterface mb1=(TimeOrderedInterface)fullList.get(((Integer)reducedList.get(first)).intValue());
+				TimeOrderedInterface mb2=(TimeOrderedInterface)fullList.get(((Integer)reducedList.get(i)).intValue());
 				if(mb1.getCreationDate()==null||mb1.getCreationDate().equals("")) { 
 					 mb1.setCreationDate((new Date()).toString());
 				}
@@ -2974,52 +2989,86 @@ public class DislocBean extends GenericSopacBean {
 	 public String getInsarkmlServiceUrl() { return insarkmlServiceUrl; }
 	 public String getInsarKmlUrl() { return insarKmlUrl; }
 
+	 public HtmlDataTable getMyInsarDataTable() { return myInsarDataTable; }
+	 public void setMyInsarDataTable(HtmlDataTable myInsarDataTable) {
+		  this.myInsarDataTable=myInsarDataTable;
+	 }
+	 public void setMyInsarParamsList(List myInsarParamsList) {
+		  this.myInsarParamsList=myInsarParamsList;
+	 }
+	 
+	 public List getMyInsarParamsList() { 
+		  myInsarParamsList.clear();
+		  List tmpList=new ArrayList();
+		  try {
+			  File f = new File(getBasePath()
+									  +"/"+getContextBasePath()
+									  +"/"+userName
+									  +"/"+codeName+".db");
+			  if (f.exists()) {
+					if (db!=null) db.close();
+					db=Db4o.openFile(getBasePath()
+										  +"/"+getContextBasePath()
+										  +"/"+userName
+										  +"/"+codeName+".db");
+					ObjectSet results=db.get(new InsarParamsBean());
+					
+					while(results.hasNext()) {
+						InsarParamsBean ipb=(InsarParamsBean)results.next();
+						tmpList.add(ipb);
+				}
+				db.close();
+				myInsarParamsList=sortByDate(tmpList);
+			  }
+		  } catch(Exception e) {
+				db.close();
+				e.printStackTrace();
+			}
+		  return myInsarParamsList; 
+	 }
+
 	 public void toggleReplotInsar() throws Exception {
 		  try {
 				//Get the project
-				DislocProjectSummaryBean dpsb=
-					 (DislocProjectSummaryBean)getMyProjectSummaryDataTable().getRowData();
-				DislocResultsBean dislocResultsBean=dpsb.getResultsBean();
-				String projectName=dpsb.getProjectName();
-
-				System.out.println(dpsb.getElevation()+" "+dpsb.getAzimuth()+" "+dpsb.getFrequency());
+				InsarParamsBean ipb=(InsarParamsBean)getMyInsarDataTable().getRowData();
+				ipb.setCreationDate(new Date().toString());
 
 				//Invoke the service
 				InsarKmlService iks=new InsarKmlServiceServiceLocator().
 					 getInsarKmlExec(new URL(insarkmlServiceUrl));
 				insarKmlUrl=iks.runBlockingInsarKml(userName,
-																dpsb.getProjectName(),
-																dislocResultsBean.getOutputFileUrl(),
-																dpsb.getElevation(),
-																dpsb.getAzimuth(),
-																dpsb.getFrequency(),
+																ipb.getProjectName(),
+																ipb.getDislocOutputUrl(),
+																ipb.getElevation(),
+																ipb.getAzimuth(),
+																ipb.getFrequency(),
 																"ExecInsarKml");
-				System.out.println(insarKmlUrl);
-				dpsb.setInsarKmlUrl(insarKmlUrl);
 
 				//Now update the database
 				
-				if (db!=null)
-					db.close();
+				if (db!=null) db.close();
 				
-				db=Db4o.openFile(getBasePath() +"/"+getContextBasePath() +"/"+userName +"/"+codeName+".db");		  
-				ObjectSet results=db.get(DislocProjectSummaryBean.class);
+				db=Db4o.openFile(getBasePath() 
+									  +"/"+getContextBasePath()
+									  +"/"+userName 
+									  +"/"+codeName+".db");		  
+				ObjectSet results=db.get(InsarParamsBean.class);
 				System.out.println("Result set size: "+results.size());
 
 				while(results.hasNext()) {
-					 DislocProjectSummaryBean tmpbean=
-						  (DislocProjectSummaryBean)results.next();
+					 InsarParamsBean tmpbean=
+						  (InsarParamsBean)results.next();
 					 System.out.println(tmpbean.getProjectName()
 											  +" "+tmpbean.getJobUIDStamp()
-											  +" "+dpsb.getProjectName()
-											  +" "+dpsb.getJobUIDStamp());
-					 if(tmpbean.getProjectName().equals(dpsb.getProjectName())
-						 && tmpbean.getJobUIDStamp().equals(dpsb.getJobUIDStamp())) {
+											  +" "+ipb.getProjectName()
+											  +" "+ipb.getJobUIDStamp());
+					 if(tmpbean.getProjectName().equals(ipb.getProjectName())
+						 && tmpbean.getJobUIDStamp().equals(ipb.getJobUIDStamp())) {
 							  System.out.println("Found the bean so now we will update it.");
 							  //Delete the old bean.
 							  db.delete(tmpbean);
 							  //Now put the modified bean into the db.
-							  db.set(dpsb);
+							  db.set(ipb);
 					 }
 				}
 				db.commit();
@@ -3030,9 +3079,6 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 				System.out.println("[toggleReplotInsar] " + e);
 			}
-		  
-
-		  
 	 }
 
 	 //--------------------------------------------------
