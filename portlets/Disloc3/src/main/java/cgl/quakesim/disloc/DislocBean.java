@@ -1388,30 +1388,48 @@ public class DislocBean extends GenericSopacBean {
     /**
      * This will delete projects
      */
-    public void toggleDeleteProjectSummary(ActionEvent ev) {
-    	System.out.println("Deleting Project");
-    	try {
-    		DislocProjectSummaryBean dpsb=
-    			(DislocProjectSummaryBean)getMyProjectSummaryDataTable().getRowData();
-    		
-    		if (db!=null)
-    			db.close();
-    		
-    		db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");
-    		System.out.println("Found project:"+dpsb.getProjectName()+" "+dpsb.getJobUIDStamp());
-    		ObjectSet results=db.get(dpsb);
-    		System.out.println("Result size: "+results.size());
-    		// Should only have one value.
-    		if(results.hasNext()){
-    			dpsb=(DislocProjectSummaryBean)results.next();
-    			db.delete(dpsb);
+    public void toggleDeleteProjectSummary() throws Exception {
+		  System.out.println("Deleting Project");
+		  try {
+				DislocProjectSummaryBean dpsb=
+					 (DislocProjectSummaryBean)getMyProjectSummaryDataTable().getRowData();
+				
+				if (db!=null) db.close();
+				
+				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");
+				System.out.println("Found project:"+dpsb.getProjectName()+" "+dpsb.getJobUIDStamp());
+				ObjectSet results=db.get(dpsb);
+				System.out.println("Result size: "+results.size());
+				// Should only have one value.
+				if(results.hasNext()){
+					 DislocProjectSummaryBean deleteme=(DislocProjectSummaryBean)results.next();
+					 db.delete(deleteme);
     			}
-    		db.close();
-    		
-    	} catch(Exception e) {
-    		db.close();
-    		System.out.println("[toggleDeleteProjectSummary] " + e);
-    	}
+
+				//Delete also the associated insar plots
+				ObjectSet results2=db.get(InsarParamsBean.class);
+				System.out.println("Number of matches:"+results.size());
+				while(results2.hasNext()) {
+					 InsarParamsBean delinsar=(InsarParamsBean)results2.next();
+					 System.out.println(delinsar.getProjectName()
+											  +" "+dpsb.getProjectName()
+											  +" "+ delinsar.getJobUIDStamp()
+											  +" "+dpsb.getJobUIDStamp());
+		  
+					 if(delinsar.getProjectName().equals(dpsb.getProjectName())
+						 && delinsar.getJobUIDStamp().equals(dpsb.getJobUIDStamp())) {
+						  System.out.println("Deleting insar params");
+						  db.delete(delinsar);
+					 }
+				}
+
+				//Close up
+				db.close();
+				
+		  } catch(Exception e) {
+				db.close();
+				System.out.println("[toggleDeleteProjectSummary] " + e);
+		  }
 		  
     }
 
@@ -1463,22 +1481,6 @@ public class DislocBean extends GenericSopacBean {
 		  }
 		  
     }
-
-// 	 protected List populateFaultCollection(String projectName) throws Exception {
-// 		  List myFaultCollection=new ArrayList();
-// 		  	if (db!=null)
-//				db.close();
-// 			db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+"/"+projectName+".db");		  
-// 		  ObjectSet results=db.get(Fault.class);
-// 		  //Should only have one value.
-// 		  Fault currentFault=null;
-// 		  while(results.hasNext()){
-// 				currentFault=(Fault)results.next();
-// 				myFaultCollection.add(currentFault);
-// 		  }
-// 		  db.close();
-// 		  return myFaultCollection;
-// 	 }
 
 	 protected List populateParamsCollection(String projectName) throws Exception {
 		  List myDislocParamsCollection=new ArrayList();
@@ -1657,7 +1659,7 @@ public class DislocBean extends GenericSopacBean {
 									  +getContextBasePath()+"/"+userName+"/"+codeName+".db");
 				if (deleteProjectsArray != null) {
 					 for (int i = 0; i < deleteProjectsArray.length; i++) {
-		    //Delete the project input data
+						  //Delete the project input data
 						  System.out.println("Deleting project input junk");
 						  DislocProjectBean delproj=new DislocProjectBean();
 						  delproj.setProjectName(deleteProjectsArray[i]);
@@ -1674,6 +1676,15 @@ public class DislocBean extends GenericSopacBean {
 						  while(results2.hasNext()){
 								delprojsum=(DislocProjectSummaryBean)results2.next();
 								db.delete(delprojsum);
+						  }						  
+						  //Delete the insar plotting bean, too
+						  System.out.println("Deleting insar plots");
+						  InsarParamsBean delinsar=new InsarParamsBean();
+						  delinsar.setProjectName(deleteProjectsArray[i]);
+						  ObjectSet results3=db.get(delinsar);
+						  while(results3.hasNext()){
+								delinsar=(InsarParamsBean)results3.next();
+								db.delete(delinsar);
 						  }						  
 					 }
 				}
@@ -3027,6 +3038,32 @@ public class DislocBean extends GenericSopacBean {
 		  return myInsarParamsList; 
 	 }
 
+	 public void toggleDeleteInsar() throws Exception {
+		  try {
+				InsarParamsBean ipb=(InsarParamsBean)getMyInsarDataTable().getRowData();
+				if (db!=null) db.close();				
+				db=Db4o.openFile(getBasePath()
+									  +"/"+getContextBasePath()
+									  +"/"+userName
+									  +"/"+codeName+".db");
+				
+				ObjectSet results2=db.get(ipb);
+				System.out.println("Number of matches:"+results2.size());
+
+				if (results2.hasNext()) {
+					 InsarParamsBean delinsar=(InsarParamsBean)results2.next();					 
+					 System.out.println("Deleting insar params");
+					 db.delete(delinsar);
+				}
+				//Close up
+				db.close();
+		  }
+		  catch (Exception ex) {
+				db.close();
+				ex.printStackTrace();
+		  }
+	 }
+
 	 public void toggleReplotInsar() throws Exception {
 		  try {
 				//Get the project
@@ -3045,6 +3082,8 @@ public class DislocBean extends GenericSopacBean {
 																"ExecInsarKml");
 
 				//Now update the database
+				ipb.setInsarKmlUrl(insarKmlUrl);
+				ipb.setCreationDate((new Date()).toString());
 				
 				if (db!=null) db.close();
 				
@@ -3058,18 +3097,7 @@ public class DislocBean extends GenericSopacBean {
 				while(results.hasNext()) {
 					 InsarParamsBean tmpbean=
 						  (InsarParamsBean)results.next();
-					 System.out.println(tmpbean.getProjectName()
-											  +" "+tmpbean.getJobUIDStamp()
-											  +" "+ipb.getProjectName()
-											  +" "+ipb.getJobUIDStamp());
-					 if(tmpbean.getProjectName().equals(ipb.getProjectName())
-						 && tmpbean.getJobUIDStamp().equals(ipb.getJobUIDStamp())) {
-							  System.out.println("Found the bean so now we will update it.");
-							  //Delete the old bean.
-							  db.delete(tmpbean);
-							  //Now put the modified bean into the db.
-							  db.set(ipb);
-					 }
+					 db.set(ipb);
 				}
 				db.commit();
 				db.close();		

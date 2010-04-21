@@ -53,7 +53,7 @@ function dataTableSelectOneRadio(radio) {
 		<h:panelGrid id="insarpgridmain" columns="1" border="0">
 			<h:outputText id="insarheader" escape="false" value="<h2>Archived Results</h2>" />
 			<h:outputText id="insardosomework" escape="false"
-				value="You have the following disloc InSAR plots. Click the link to download the desired file to your desk top. To save directly to your desktop, click your mouse's right button over the link and select<br>" />
+				value="You have the following disloc InSAR plots. Click the link to download the desired file to your desk top. To save directly to your desktop, click your mouse's right button over the link and select.  Clicking <b>replot</b> will replot the InSAR image with new elevation, azimuth, and frequency values.  Clicking <b>delete</b> will delete that image from the database, but it will not delete the entire Disloc project.<br>" />
 
   				<h:dataTable id="insarDislocOutputPanel3" var="insarParamsBean"
 								 value="#{DislocBean2.myInsarParamsList}" 
@@ -103,7 +103,7 @@ function dataTableSelectOneRadio(radio) {
 						</h:outputLink>
 						<h:outputText id="insarblaheoru16" escape="false" value="<b> </b>" />
 						<h:outputLink id="insarlinkdre6" value="http://maps.google.com/maps?q=#{insarParamsBean.insarKmlUrl }" target="_blank">
-							<h:outputText id="insarblaheoru17" value="[<font size=1px>View In Google map</font>]" escape="false" />
+							<h:outputText id="insarblaheoru17" value="[View in Google Map]" escape="false" />
 						</h:outputLink>
 						</h:panelGroup>
 				</h:column>					
@@ -114,6 +114,15 @@ function dataTableSelectOneRadio(radio) {
 						<h:panelGroup id="insarpgreplot">
 							<h:commandButton id="ReplotInsarldk" value="Replot"
 												  action="#{DislocBean2.toggleReplotInsar}"/>
+						</h:panelGroup>
+				</h:column>										
+				<h:column>
+					<f:facet name="header">
+						<h:outputText id="insarblaheor343u18" escape="false" value="<b>Delete</b>" />
+					</f:facet>
+						<h:panelGroup id="insarpdeletre">
+							<h:commandButton id="deletelotIdfensarldk" value="Delete Plot"
+												  action="#{DislocBean2.toggleDeleteInsar}"/>
 						</h:panelGroup>
 				</h:column>										
 			</h:dataTable>

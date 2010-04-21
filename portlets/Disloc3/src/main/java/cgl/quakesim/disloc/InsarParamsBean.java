@@ -84,6 +84,6 @@ public class InsarParamsBean implements TimeOrderedInterface {
 		  this.insarKmlUrl=insarKmlUrl;
 	 }
 
-	 public String getInsarKmlUrl(String insarKmlUrl){ return insarKmlUrl; }
+	 public String getInsarKmlUrl(){ return insarKmlUrl; }
 
 }
