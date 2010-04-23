@@ -221,31 +221,56 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	 
 	 protected Fault[] getFaultsFromDB(){
 		  Fault[] returnFaults=null;
- 		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");		  
-		  Fault faultToGet=new Fault();
-		  ObjectSet results=db.get(faultToGet);
-		  if(results.hasNext()) {
-				returnFaults=new Fault[results.size()];
-				for(int i=0;i<results.size();i++){
-					 returnFaults[i]=(Fault)results.next();
-				}
+		  
+		  try {
+			  
+			  if (db!=null)
+				  db.close();
+	 		  
+			  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");		  
+			  Fault faultToGet=new Fault();
+			  ObjectSet results=db.get(faultToGet);
+			  if(results.hasNext()) {
+					returnFaults=new Fault[results.size()];
+					for(int i=0;i<results.size();i++){
+						 returnFaults[i]=(Fault)results.next();
+					}
+			  }
+			  if (db!=null)
+				  db.close();		  
+		  } catch (Exception e) {			  
+			  if (db!=null)
+				  db.close();			  
+			  System.out.println("[getFaultsFromDB] " + e);
 		  }
-		  db.close();
+		  
+		  
 		  return returnFaults;
 	 }
 
 	 protected Layer[] getLayersFromDB(){
 		  Layer[] returnLayers=null;
- 		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");		  
-		  Layer layerToGet=new Layer();
-		  ObjectSet results=db.get(layerToGet);
-		  if(results.hasNext()) {
-				returnLayers=new Layer[results.size()];
-				for(int i=0;i<results.size();i++){
-					 returnLayers[i]=(Layer)results.next();
-				}
+		  
+		  try {
+			  if (db!=null)
+				  db.close();
+			  
+	 		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");		  
+			  Layer layerToGet=new Layer();
+			  ObjectSet results=db.get(layerToGet);
+			  if(results.hasNext()) {
+					returnLayers=new Layer[results.size()];
+					for(int i=0;i<results.size();i++){
+						 returnLayers[i]=(Layer)results.next();
+					}
+			  }
+			  if (db!=null)
+				  db.close();
+		  } catch (Exception e) {			  
+			  if (db!=null)
+				  db.close();			  
+			  System.out.println("[getLayersFromDB] " + e);
 		  }
-		  db.close();
 
 		  return returnLayers;
 	 }
@@ -306,10 +331,22 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  mega.setMeshStatus(statusString);
 			  
 		  //Set up the database.  This open/close routine may need to be improved later.
-		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");	 
-		  db.set(mega);
-		  db.commit();
-		  db.close(); 
+		  
+		  try {
+			  if (db!=null)
+				  db.close();
+			  
+			  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");
+			  db.set(mega);
+			  db.commit();
+			  
+			  if (db!=null)
+				  db.close();
+		  } catch (Exception e) {			  
+			  if (db!=null)
+				  db.close();			  
+			  System.out.println("[storeMeshRunInContext] " + e);
+		  }
 
 		  return mega;
 	 }
@@ -458,6 +495,11 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  String statusString="GeoFEST."+geofestGridService.queryGeoFESTStatus(getUserName(),projectName,tokenName);
 		  System.out.println("Status at Submission:"+statusString);
 
+		  
+		  try {
+		  if (db!=null)
+			  db.close();
+		  
 		  //Find the matching bean
 		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");
 
@@ -480,7 +522,13 @@ public class MeshGeneratorBean extends GenericSopacBean {
 					 break;
 				}
 		  }
-		  db.close();
+		  if (db!=null)
+			  db.close();
+		  } catch (Exception e) {			  
+			  if (db!=null)
+				  db.close();			  
+			  System.out.println("[saveGeotransParamsToDB] " + e);
+		  }
 		  
 	 }
     //--------------------------------------------------
@@ -1003,6 +1051,10 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  System.out.print("Populating Layer "+tmp_layerName+" for  "+projectName);
 		  String layerStatus = "Update";				
 		 
+		  try {
+		  if (db!=null)
+			  db.close();
+		  
  		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");		  
 
 		  Layer layerToGet=new Layer();
@@ -1013,7 +1065,15 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  if(results.hasNext()){
 				currentLayer=(Layer)results.next();
 		  }
-		  db.close();
+		  if (db!=null)
+			  db.close();
+		  } catch (Exception e) {			  
+			  if (db!=null)
+				  db.close();			  
+			  System.out.println("[populateLayerFromContext] " + e);
+		  }
+		  
+		  
 		  return currentLayer;
 	 }
 
@@ -1053,6 +1113,10 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				//This is the deletion case.
 				if ((tmp_update == true) && (tmp_view == false)) {
 					 System.out.println("Deleteing "+tmp_layerName+" from db");
+					 
+					 try {
+						 if (db!=null)
+							  db.close();
 					 db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");		  
 					 //First, we have to query for the matching layer.
 					 Layer todelete=new Layer();
@@ -1063,7 +1127,13 @@ public class MeshGeneratorBean extends GenericSopacBean {
 						  //Now that we have the specific object, we can delete it.
 						  db.delete(todelete);
 					 }
-					 db.close();
+					 if (db!=null)
+						  db.close();
+					 } catch (Exception e) {			  
+						  if (db!=null)
+							  db.close();			  
+						  System.out.println("[toggleUpdateLayerProjectEntry] " + e);
+					  }
 
 					 if(myLayerCollection.size()>iSelectLayer) {					 
 						  myLayerCollection.remove(iSelectLayer);
@@ -1104,6 +1174,9 @@ public class MeshGeneratorBean extends GenericSopacBean {
 	 protected Fault populateFaultFromContext(String tmp_faultName) throws Exception {
 		  String faultStatus="Update";
 
+		  try {
+		  if (db!=null)
+			  db.close();
 		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");		  
 		  Fault faultToGet=new Fault();
 		  faultToGet.setFaultName(tmp_faultName);
@@ -1113,7 +1186,14 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  if(results.hasNext()){
 				currentFault=(Fault)results.next();
 		  }
-		  db.close();
+		  if (db!=null)
+			  db.close();
+		  } catch (Exception e) {			  
+			  if (db!=null)
+				  db.close();			  
+			  System.out.println("[populateFaultFromContext] " + e);
+		  }
+		  
 		  return currentFault;
 		  
 	 }
@@ -1161,6 +1241,11 @@ public class MeshGeneratorBean extends GenericSopacBean {
 					 //This requires we first search for the desired object
 					 //and then delete the specific value that we get back.
 					 System.out.println("Deleteing "+tmp_faultName+"from db");
+					 
+					 try {						 
+						 if (db!=null)
+							  db.close();
+
 					 db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");		  
 				 
 					 Fault todelete=new Fault();
@@ -1170,7 +1255,13 @@ public class MeshGeneratorBean extends GenericSopacBean {
 						  todelete=(Fault)result.next();
 						  db.delete(todelete);
 					 }
-					 db.close(); 
+					 if (db!=null)
+						  db.close();
+					 } catch (Exception e) {			  
+						  if (db!=null)
+							  db.close();			  
+						  System.out.println("[toggleUpdateFaultProjectEntry] " + e);
+					  }
 
 					 String tmp = projectFullName + SEPARATOR + FAULTS + SEPARATOR
 						  + tmp_faultName;
@@ -1213,6 +1304,9 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  //This simply finds the layer to update by name (which is unique),
 		  //deletes it, and replaces it with the updated layer.
 		  initEditFormsSelection();
+		  try {
+		  if (db!=null)
+			  db.close();
 		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");	
 				 
 		  Layer tmpLayer=new Layer();
@@ -1224,12 +1318,22 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  }
 		  db.set(currentLayer);
 		  db.commit();
-		  db.close();
+		  if (db!=null)
+			  db.close();
+		  } catch (Exception e) {			  
+			  if (db!=null)
+				  db.close();			  
+			  System.out.println("[toggleAddLayerForProject] " + e);
+		  }
 
     }
     
     public void toggleAddFaultForProject(ActionEvent ev) throws Exception {
 		  initEditFormsSelection();
+		  try {
+			  if (db!=null)
+				  db.close();
+		  
 		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");
 				 
 		  Fault tmpfault=new Fault();
@@ -1241,7 +1345,14 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  }
 		  db.set(currentFault);
 		  db.commit();
-		  db.close();
+		  if (db!=null)
+			  db.close();
+		  } catch (Exception e) {			  
+			  if (db!=null)
+				  db.close();			  
+			  System.out.println("[toggleAddFaultForProject] " + e);
+		  }
+		  
     }
     
     public void toggleRenderDBLayerList(ActionEvent ev) {
@@ -1325,6 +1436,10 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				if (deleteProjectsList != null) {
 					 for (int i = 0; i < deleteProjectsList.length; i++) {
 						  System.out.println("Deleting: "+deleteProjectsList[i]);
+						  
+						  try {
+						  if (db!=null)
+							  db.close();
 						  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+".db");
 						  ProjectBean delproj=new ProjectBean();
 						  delproj.setProjectName(deleteProjectsList[i]);
@@ -1333,7 +1448,13 @@ public class MeshGeneratorBean extends GenericSopacBean {
 								delproj=(ProjectBean)results.next();
 								db.delete(delproj);
 						  }
-						  db.close();
+						  if (db!=null)
+							  db.close();
+						  } catch (Exception e) {			  
+							  if (db!=null)
+								  db.close();			  
+							  System.out.println("[toggleDeleteProject] " + e);
+						  }
 					 }
 				}
 		  } catch (Exception ex) {
@@ -1347,12 +1468,22 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  // Do real logic
 		  System.out.println("Creating new project");
 		  makeProjectDirectory();
+		  
+		  try {
+			  if (db!=null)
+				  db.close();
  		  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+".db");		  		  
 		  ProjectBean project=new ProjectBean();
 		  project.setProjectName(projectName);
 		  db.set(project);
 		  db.commit();
-		  db.close();
+		  if (db!=null)
+			  db.close();
+		  } catch (Exception e) {			  
+			  if (db!=null)
+				  db.close();			  
+			  System.out.println("[setProjectname] " + e);
+		  }
 
 		  return "MG-set-project";
     }
@@ -1402,6 +1533,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  String projectFullName = codeName + SEPARATOR + projectName;
 		  this.myFaultEntryForProjectList.clear();
 		  try {
+			  if (db!=null)
+				  db.close();
 				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");
 				 
 				Fault tmpfault=new Fault();
@@ -1415,11 +1548,13 @@ public class MeshGeneratorBean extends GenericSopacBean {
 					 this.myFaultEntryForProjectList
 						  .add(tmp_myFaultEntryForProject);
 				}
-				db.close(); 
+				if (db!=null)
+					  db.close(); 
 
-		  } catch (Exception ex) {
-				ex.printStackTrace();
-				db.close();
+		  } catch (Exception e) {			  
+			  if (db!=null)
+				  db.close();			  
+			  System.out.println("[reconstructMyFaultEntryForProjectList] " + e);
 		  }
 		  
 		  return this.myFaultEntryForProjectList;
@@ -1432,6 +1567,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  String projectFullName = codeName + SEPARATOR + projectName;
 		  this.myLayerEntryForProjectList.clear();
 		  try {
+			  if (db!=null)
+				  db.close();
 				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");		  
 				 
 				Layer tmplayer=new Layer();
@@ -1445,12 +1582,14 @@ public class MeshGeneratorBean extends GenericSopacBean {
 					 this.myLayerEntryForProjectList
 						  .add(tmp_myLayerEntryForProject);
 				}
-				db.close();
+				if (db!=null)
+					  db.close();
+		  } catch (Exception e) {			  
+			  if (db!=null)
+				  db.close();			  
+			  System.out.println("[reconstructMyLayerEntryForProjectList] " + e);
 		  }
-		  catch (Exception ex) {
-				ex.printStackTrace();
-				db.close();
-		  }
+
 		  return this.myLayerEntryForProjectList;
     }
    
@@ -1592,7 +1731,9 @@ public class MeshGeneratorBean extends GenericSopacBean {
     public List getMyProjectNameList() {
 		  this.myProjectNameList.clear();
 		  try {
-				//System.out.println(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");		  
+				//System.out.println(getBasePath()+"/"+getContextBasePath()+"/"+userName+"/"+codeName+".db");
+			  if (db!=null)
+				  db.close();
 				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+".db");		  
 				ProjectBean project=new ProjectBean();
 				ObjectSet results=db.get(ProjectBean.class);
@@ -1603,14 +1744,14 @@ public class MeshGeneratorBean extends GenericSopacBean {
 					 myProjectNameList.add(new SelectItem(project.getProjectName(),
 																	  project.getProjectName()));
 				}
-				db.close();
-				
-		  } catch (Exception ex) {
-				//ex.printStackTrace();
-				System.err.println("Could not open "+getBasePath()+"/"+getContextBasePath()
-										 +"/"+getUserName()+"/"+codeName+".db");		
-				System.err.println("Returning empty list.");  
+				if (db!=null)
+					  db.close();				
+		  } catch (Exception e) {			  
+			  if (db!=null)
+				  db.close();			  
+			  System.out.println("[getMyProjectNameList] " + e);
 		  }
+		  
 		  return this.myProjectNameList;
     }
     
@@ -1742,6 +1883,10 @@ public class MeshGeneratorBean extends GenericSopacBean {
 					 MeshDataMegaBean mega=new MeshDataMegaBean();
 					 mega.setProjectName(projectName);
 					 //					 System.out.println("ProjectName: "+projectName);
+					 
+					 try {
+					 if (db!=null)
+						  db.close();
 					 db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");
 					 //					 ObjectSet results=db.get(mega);
 					 ObjectSet results=db.get(MeshDataMegaBean.class);
@@ -1757,7 +1902,14 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 						  tmpList.add(mega);
 					 }
-					 db.close();
+					 if (db!=null)
+						  db.close();
+					 } catch (Exception e) {			  
+						  if (db!=null)
+							  db.close();			  
+						  System.out.println("[getMyArchivedMeshRunList] " + e);
+					  }
+					 
 				}
 				//				myArchivedMeshRunList=sortByDate(myArchivedMeshRunList);
 				myArchivedMeshRunList=sortByDate(tmpList);
@@ -1781,6 +1933,9 @@ public class MeshGeneratorBean extends GenericSopacBean {
 					 MeshDataMegaBean mega=new MeshDataMegaBean();
 					 String projectName=((SelectItem)myprojectlist.get(i)).getLabel();
 					 
+					 try {
+					 if (db!=null)
+						  db.close();
 					 db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");
 					 ObjectSet results=db.get(MeshDataMegaBean.class);
 					 //Should only have one value.
@@ -1794,7 +1949,13 @@ public class MeshGeneratorBean extends GenericSopacBean {
 								myArchivedMeshRunList2.add(mega);
 						  }
 					 }
-					 db.close();
+					 if (db!=null)
+						  db.close();
+					 } catch (Exception e) {			  
+						  if (db!=null)
+							  db.close();			  
+						  System.out.println("[getMyArchivedMeshRunList2] " + e);
+					  }
 				}
 		  }
 		  return this.myArchivedMeshRunList2;
@@ -1832,11 +1993,12 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  // --------------------------------------------------
 		  String tmp_faults = new String("");
 		  try {
-				boolean close=false;
-				if(db==null) {
-					 db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");
-					 close=true;
-				}
+				
+				
+				if (db!=null)
+					  db.close();
+				
+				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");
 				 
 				Fault faultToGet=new Fault();
 				ObjectSet results=db.get(faultToGet);
@@ -1864,9 +2026,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 						  tmp_faults = tmp_faults + "*" + faultDef;
 					 }
 				}
-				if(close) {
-					 db.close();
-				}
+				if (db!=null)
+					  db.close();
 	
 		  } catch (Exception ex) {
 				ex.printStackTrace();
@@ -1901,11 +2062,13 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		  // --------------------------------------------------
 		  String tmp_layers = new String("");
 		  try {
-				boolean close=false;
-				if(db==null) {
-					 db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");		  
-					 close=true;
-				}
+				
+			  if (db!=null)
+				  db.close();
+			  
+			  db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"+getUserName()+"/"+codeName+"/"+projectName+".db");		  
+					 
+				
 
 				Layer layerToGet=new Layer();
 				ObjectSet results=db.get(layerToGet);
@@ -1925,12 +2088,15 @@ public class MeshGeneratorBean extends GenericSopacBean {
 						  tmp_layers = tmp_layers + "*" + layerDef;
 					 }
 				}
-
-				if(close) db.close();
-	
-		  } catch (Exception ex) {
-				ex.printStackTrace();
+				
+				if (db!=null)
+					  db.close();
+		  } catch (Exception e) {			  
+			  if (db!=null)
+				  db.close();			  
+			  System.out.println("[getMyLayersParamForJnlp] " + e);
 		  }
+		  
 		  this.myLayersParamForJnlp = getBASE64(tmp_layers);
 		  
 		  return this.myLayersParamForJnlp;
@@ -2303,7 +2469,11 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				String queueName=projectName+"."+jobUID;
 			
 
+				
 				//DB, get going
+				if (db!=null)
+					  db.close();
+				
 				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"
 									  +getUserName()+"/"+getCodeName()+"/"+projectName+".db");		  
 				
@@ -2327,12 +2497,16 @@ public class MeshGeneratorBean extends GenericSopacBean {
 					 db.commit();
 				}
 				
-		  }
-		  catch (Exception ex) {
-				ex.printStackTrace();
+				if (db!=null)
+					  db.close();
+				
+		  } catch (Exception e) {			  
+			  if (db!=null)
+				  db.close();			  
+			  System.out.println("[checkTheStatusQueue] " + e);
 		  }
 		  
-		  db.close();
+		  
 		  return statusString;
 	 }
 
@@ -2447,6 +2621,10 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				String jobUID=mdmb.getJobUIDStamp();
 				
 				//DB, get going
+				
+				try {
+					if (db!=null)
+						  db.close();
 				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"
 									  +getUserName()+"/"+getCodeName()+"/"+projectName+".db");		  
 				
@@ -2465,14 +2643,23 @@ public class MeshGeneratorBean extends GenericSopacBean {
 					 db.set(mdmb);
 					 db.commit();
 				}
-				db.close();
+				if (db!=null)
+					  db.close();
+				
+				} catch (Exception e) {			  
+					  if (db!=null)
+						  db.close();			  
+					  System.out.println("[queryMeshGeneratorStatus] " + e);
+				  }
+				
+		  } catch (Exception e) {			  
+
+			  System.out.println("[queryMeshGeneratorStatus] " + e);
 		  }
-		  catch(Exception ex) {
-				db.close();
-				ex.printStackTrace();
-		  }
+		  
+		  
 		  System.out.println("Status:"+statusString);
-		  db.close();
+		  
 		  return statusString;
 	 }
 
@@ -2484,6 +2671,9 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				String jobUID=mdmb.getJobUIDStamp();
 
 				//DB, get going
+				
+				if (db!=null)
+					  db.close();
 				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"
 									  +getUserName()+"/"+getCodeName()+"/"+projectName+".db");		  
 
@@ -2502,13 +2692,14 @@ public class MeshGeneratorBean extends GenericSopacBean {
 					 db.set(mdmb);
 					 db.commit();
 				}
-				db.close();
+				if (db!=null)
+					  db.close();
+		  } catch (Exception e) {			  
+			  if (db!=null)
+				  db.close();			  
+			  System.out.println("[queryGeoFESTStatus] " + e);
 		  }
-		  catch(Exception ex) {
-				db.close();
-				ex.printStackTrace();
-		  }
-		  db.close();
+		  
 		  System.out.println("Status:"+statusString);
 		  return statusString;
 	 }
@@ -2573,6 +2764,9 @@ public class MeshGeneratorBean extends GenericSopacBean {
 
 		  try {
 				//DB, get going
+			  if (db!=null)
+				  db.close();
+			  
 				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"
 									  +getUserName()+"/"+getCodeName()+"/"+mdmb.getProjectName()+".db");
 
@@ -2584,13 +2778,13 @@ public class MeshGeneratorBean extends GenericSopacBean {
 					 System.out.println("Deleted session object");
 				}
 				db.commit();
-				db.close();
+				if (db!=null)
+					  db.close();
 				
-		  }
-		  catch(Exception ex) {
-				System.err.println("Couldn't delete the session entry from the DB.");
-				System.out.println(ex.getMessage());
-				//				ex.printStackTrace();
+		  } catch (Exception e) {			  
+			  if (db!=null)
+				  db.close();			  
+			  System.out.println("[deleteSessionEntry] " + e);
 		  }
 	 }
 

@@ -5,6 +5,7 @@ import java.io.*;
 import java.net.*;
 import java.rmi.server.UID;
 import java.util.*;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import javax.faces.context.FacesContext;
@@ -19,12 +20,16 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.servogrid.genericproject.GenericSopacBean;
 
-import sun.misc.BASE64Encoder;
+
+import WebFlowClient.cm.ContextManagerImp;
+
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 
+
 import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
+
 
 /**
  * Everything you need to set up and run SimpleBean.
@@ -820,13 +825,7 @@ public class SimplexBean extends GenericSopacBean {
 		return this.selectdbURL;
 	}
 
-	// common function for Simplex Bean.
-	public String getBASE64(String s) {
-		if (s == null)
-			return null;
-		String tmp_str = (new BASE64Encoder()).encode(s.getBytes());
-		return tmp_str;
-	}
+
 
 	/**
 	 * This is a placeholder main method that may be used for commandline
