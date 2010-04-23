@@ -5,7 +5,6 @@ import java.io.*;
 import java.net.*;
 import java.rmi.server.UID;
 import java.util.*;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import javax.faces.context.FacesContext;
@@ -21,15 +20,11 @@ import org.dom4j.io.SAXReader;
 import org.servogrid.genericproject.GenericSopacBean;
 
 import sun.misc.BASE64Encoder;
-import WebFlowClient.cm.ContextManagerImp;
-
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 
-
 import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
-
 
 /**
  * Everything you need to set up and run SimpleBean.
@@ -91,8 +86,6 @@ public class SimplexBean extends GenericSopacBean {
 	List myFaultsForProjectList = new ArrayList();
 	int myFaultsForProjectListsize;
 
-
-
 	List myObservationEntryForProjectList = new ArrayList();
 
 	List myObservationsForProjectList = new ArrayList();
@@ -147,7 +140,6 @@ public class SimplexBean extends GenericSopacBean {
 	String selectedmaxlon = null;
 	String selectedminlat = null;
 	String selectedmaxlat = null;
-
 
 	String[] latArray;
 	String[] lonArray;
@@ -240,7 +232,7 @@ public class SimplexBean extends GenericSopacBean {
 	public void setSelectedmaxlat(String selectedmaxlat) {
 		this.selectedmaxlat = selectedmaxlat;
 	}
-	
+
 	public String getGpsStationLat() {
 		return gpsStationLat;
 	}
@@ -295,65 +287,72 @@ public class SimplexBean extends GenericSopacBean {
 		projectDir.mkdirs();
 	}
 
-	public Fault[] getProjectFaultsFromDB(String userName, String projectName,
-			String codeName, String basePath, String relPath) {
+	public Fault[] getProjectFaultsFromDB(String userName, String projectName, String codeName, String basePath, String relPath) {
 		Fault[] returnFaults = null;
 		System.out.println("Opening Fault DB:" + basePath + "/" + relPath + "/"
 				+ userName + "/" + codeName + "/" + projectName + ".db");
 
 		try {
-			if (db!=null)
+
+			if (db != null)
 				db.close();
-			
-			db = Db4o.openFile(basePath + "/" + relPath + "/" + userName + "/" + codeName + "/" + projectName + ".db");
+
+			db = Db4o.openFile(basePath + "/" + relPath + "/" + userName + "/"
+					+ codeName + "/" + projectName + ".db");
 			Fault faultToGet = new Fault();
 			ObjectSet results = db.get(faultToGet);
 			if (results.hasNext()) {
 				returnFaults = new Fault[results.size()];
 				for (int i = 0; i < results.size(); i++)
 					returnFaults[i] = (Fault) results.next();
-				}
-			db.close();			
-		} catch(Exception e) {
-			db.close();
-			System.out.println("[getProjectFaultsFromDB] " + e);			
+			}
+			if (db != null)
+				db.close();
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[getProjectFaultsFromDB] " + e);
 		}
-			
+
 		return returnFaults;
 	}
 
 	protected Fault[] getFaultsFromDB() {
 		Fault[] returnFaults = null;
-		
+
 		try {
-			if (db!=null)
+
+			if (db != null)
 				db.close();
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
-				+ userName + "/" + codeName + "/" + projectName + ".db");
-		Fault faultToGet = new Fault();
-		ObjectSet results = db.get(faultToGet);
-		if (results.hasNext()) {
-			returnFaults = new Fault[results.size()];
-			for (int i = 0; i < results.size(); i++) {
-				returnFaults[i] = (Fault) results.next();
+					+ userName + "/" + codeName + "/" + projectName + ".db");
+			Fault faultToGet = new Fault();
+			ObjectSet results = db.get(faultToGet);
+			if (results.hasNext()) {
+				returnFaults = new Fault[results.size()];
+				for (int i = 0; i < results.size(); i++) {
+					returnFaults[i] = (Fault) results.next();
+				}
 			}
+			if (db != null)
+				db.close();
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[getFaultsFromDB] " + e);
 		}
-		db.close();
-		} catch(Exception e) {
-			db.close();
-			System.out.println("[getFaultsFromDB] " + e);			
-		}
-		
+
 		return returnFaults;
 	}
 
 	protected Observation[] getObservationsFromDB() {
 		Observation[] returnObservations = null;
-		
+
 		try {
-			if (db!=null)
-					db.close();
-				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+
+			if (db != null)
+				db.close();
+			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + "/" + projectName + ".db");
 			Observation ObservationToGet = new Observation();
 			ObjectSet results = db.get(ObservationToGet);
@@ -363,10 +362,12 @@ public class SimplexBean extends GenericSopacBean {
 					returnObservations[i] = (Observation) results.next();
 				}
 			}
-			db.close();
-		} catch(Exception e) {
-			db.close();
-			System.out.println("[getObservationsFromDB] " + e);			
+			if (db != null)
+				db.close();
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[getObservationsFromDB] " + e);
 		}
 
 		return returnObservations;
@@ -414,12 +415,14 @@ public class SimplexBean extends GenericSopacBean {
 			SimpleXOutputBean mega = new SimpleXOutputBean();
 			mega.setProjectName(projectName);
 			// System.out.println("ProjectName: "+projectName);
-			
+
 			try {
-				if (db!=null)
+
+				if (db != null)
 					db.close();
-				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
-						+ userName + "/" + codeName + "/" + projectName + ".db");
+				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath()
+						+ "/" + userName + "/" + codeName + "/" + projectName
+						+ ".db");
 				// ObjectSet results=db.get(mega);
 				// ObjectSet results = db.get(SimpleXOutputBean.class);
 				ObjectSet results = db.get(new SimpleXOutputBean());
@@ -430,12 +433,14 @@ public class SimplexBean extends GenericSopacBean {
 					SimpleXOutputBean sob = (SimpleXOutputBean) results.next();
 					tmpList.add(sob);
 				}
-				db.close();
-			} catch(Exception e) {
-				db.close();
-				System.out.println("[getMyarchivedFileEntryList] " + e);			
+				if (db != null)
+					db.close();
+			} catch (Exception e) {
+				if (db != null)
+					db.close();
+				System.out.println("[getMyarchivedFileEntryList] " + e);
 			}
-			
+
 			myarchivedFileEntryList = sortByDate(tmpList);
 		}
 
@@ -450,16 +455,15 @@ public class SimplexBean extends GenericSopacBean {
 		return this.deleteProjectsList;
 	}
 
-	
 	public int getMyFaultsForProjectListsize() {
-		
+
 		return myFaultsForProjectList.size();
 	}
 
 	public void setMyFaultsForProjectListsize(int myFaultsForProjectListsize) {
 		this.myFaultsForProjectListsize = myFaultsForProjectListsize;
 	}
-	
+
 	public void setMyProjectNameList(List tmp_str) {
 		this.myProjectNameList = tmp_str;
 	}
@@ -468,7 +472,8 @@ public class SimplexBean extends GenericSopacBean {
 		// System.out.println("Reconstructing the project name list");
 		myProjectNameList.clear();
 		try {
-			if (db!=null)
+
+			if (db != null)
 				db.close();
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + ".db");
@@ -481,15 +486,19 @@ public class SimplexBean extends GenericSopacBean {
 				if (project == null || project.getProjectName() == null) {
 					db.delete(project);
 				} else {
-					myProjectNameList.add(new SelectItem(project.getProjectName(), project.getProjectName()));
+					myProjectNameList.add(new SelectItem(project
+							.getProjectName(), project.getProjectName()));
 				}
 			}
-			db.close();
+			if (db != null)
+				db.close();
 		} catch (Exception ex) {
-			
-			db.close();
+
+			if (db != null)
+				db.close();
 			System.out.println("[getMyProjectNameList] " + ex);
-			System.out.println("[getMyProjectNameList] Returning an empty list.");
+			System.out
+					.println("[getMyProjectNameList] Returning an empty list.");
 		}
 		return this.myProjectNameList;
 	}
@@ -509,7 +518,8 @@ public class SimplexBean extends GenericSopacBean {
 			String projectName) {
 		this.myObservationEntryForProjectList.clear();
 		try {
-			if (db!=null)
+
+			if (db != null)
 				db.close();
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + "/" + projectName + ".db");
@@ -535,10 +545,13 @@ public class SimplexBean extends GenericSopacBean {
 				this.myObservationEntryForProjectList
 						.add(tmp_myObservationEntryForProject);
 			}
-			db.close();
-		} catch (Exception ex) {			
-			db.close();
-			System.out.println("[reconstructMyObservationEntryForProjectList] " + ex);
+			if (db != null)
+				db.close();
+		} catch (Exception ex) {
+			if (db != null)
+				db.close();
+			System.out.println("[reconstructMyObservationEntryForProjectList] "
+					+ ex);
 		}
 		return this.myObservationEntryForProjectList;
 	}
@@ -546,8 +559,8 @@ public class SimplexBean extends GenericSopacBean {
 	protected List reconstructMyObservationsForProjectList(String projectName) {
 		this.myObservationsForProjectList.clear();
 		try {
-			
-			if (db!=null)
+
+			if (db != null)
 				db.close();
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + "/" + projectName + ".db");
@@ -555,14 +568,17 @@ public class SimplexBean extends GenericSopacBean {
 			Observation tmpobser = new Observation();
 			ObjectSet results = db.get(tmpobser);
 			while (results.hasNext()) {
-				tmpobser = (Observation) results.next();				
+				tmpobser = (Observation) results.next();
 				myObservationsForProjectList.add(tmpobser);
 			}
 
-			db.close();
+			if (db != null)
+				db.close();
 		} catch (Exception ex) {
-			System.out.println("[reconstructMyObservationsForProjectList] " + ex);
-			db.close();
+			System.out.println("[reconstructMyObservationsForProjectList] "
+					+ ex);
+			if (db != null)
+				db.close();
 		}
 		reconstructMyObservationEntryForProjectList(projectName);
 		return this.myObservationsForProjectList;
@@ -616,28 +632,30 @@ public class SimplexBean extends GenericSopacBean {
 		String observationStatus = "Update";
 
 		Observation currentObservation = null;
-		
+
 		try {
-			if (db!=null)
-					db.close();
-				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+
+			if (db != null)
+				db.close();
+			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + "/" + projectName + ".db");
-	
+
 			Observation observationToGet = new Observation();
 			observationToGet.setObsvName(tmp_observationName);
 			ObjectSet results = db.get(observationToGet);
 			// Should only have one value.
-			
+
 			if (results.hasNext()) {
 				currentObservation = (Observation) results.next();
 			}
-			db.close();
-		} catch(Exception e) {
-			db.close();
-			System.out.println("[populateObservationFromContext] " + e);			
+			if (db != null)
+				db.close();
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[populateObservationFromContext] " + e);
 		}
-		
-		
+
 		return currentObservation;
 	}
 
@@ -647,7 +665,8 @@ public class SimplexBean extends GenericSopacBean {
 	protected List reconstructMyFaultEntryForProjectList(String projectName) {
 		this.myFaultEntryForProjectList.clear();
 		try {
-			if (db!=null)
+
+			if (db != null)
 				db.close();
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + "/" + projectName + ".db");
@@ -659,16 +678,19 @@ public class SimplexBean extends GenericSopacBean {
 				faultEntryForProject tmp_myFaultEntryForProject = new faultEntryForProject();
 				tmp_myFaultEntryForProject
 						.setFaultName(tmpfault.getFaultName());
-				tmp_myFaultEntryForProject.setoldFaultName(tmpfault.getFaultName());
+				tmp_myFaultEntryForProject.setoldFaultName(tmpfault
+						.getFaultName());
 				tmp_myFaultEntryForProject.update = false;
 				tmp_myFaultEntryForProject.delete = false;
 				this.myFaultEntryForProjectList.add(tmp_myFaultEntryForProject);
 			}
-			db.close();
+			if (db != null)
+				db.close();
 
-		} catch(Exception e) {
-			db.close();
-			System.out.println("[reconstructMyFaultEntryForProjectList] " + e);			
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[reconstructMyFaultEntryForProjectList] " + e);
 		}
 
 		return this.myFaultEntryForProjectList;
@@ -680,7 +702,8 @@ public class SimplexBean extends GenericSopacBean {
 	protected List reconstructMyFaultsForProjectList(String projectName) {
 		this.myFaultsForProjectList.clear();
 		try {
-			if (db!=null)
+
+			if (db != null)
 				db.close();
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + "/" + projectName + ".db");
@@ -688,17 +711,19 @@ public class SimplexBean extends GenericSopacBean {
 			Fault tmpfault = new Fault();
 			ObjectSet results = db.get(tmpfault);
 			while (results.hasNext()) {
-				tmpfault = (Fault) results.next();				
+				tmpfault = (Fault) results.next();
 
 				this.myFaultsForProjectList.add(tmpfault);
 			}
-			db.close();
+			if (db != null)
+				db.close();
 
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[reconstructMyFaultsForProjectList] " + e);			
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[reconstructMyFaultsForProjectList] " + e);
 		}
-		
+
 		reconstructMyFaultEntryForProjectList(projectName);
 		return this.myFaultsForProjectList;
 	}
@@ -738,29 +763,31 @@ public class SimplexBean extends GenericSopacBean {
 	}
 
 	protected Fault populateFaultFromContext(String tmp_faultName) {
-		
+
 		String faultStatus = "Update";
 		Fault currentFault = null;
-		
+
 		try {
-			if (db!=null)
-					db.close();
-				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+
+			if (db != null)
+				db.close();
+			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + "/" + projectName + ".db");
 			Fault faultToGet = new Fault();
 			faultToGet.setFaultName(tmp_faultName);
 			ObjectSet results = db.get(faultToGet);
-			// Should only have one value.			
+			// Should only have one value.
 			if (results.hasNext()) {
 				currentFault = (Fault) results.next();
 			}
-			db.close();
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[populateFaultFromContext] " + e);			
+			if (db != null)
+				db.close();
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[populateFaultFromContext] " + e);
 		}
-		
-		
+
 		return currentFault;
 	}
 
@@ -904,15 +931,16 @@ public class SimplexBean extends GenericSopacBean {
 	 * Save and if necessary reassign the project entry.
 	 */
 	protected void saveSimplexProjectEntry(projectEntry currentProjectEntry) {
-		
+
 		try {
-			if (db!=null)
-					db.close();
-				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+
+			if (db != null)
+				db.close();
+			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + ".db");
-	
+
 			ObjectSet results = db.get(projectEntry.class);
-	
+
 			System.out.println("Project entry: "
 					+ currentProjectEntry.getProjectName());
 			while (results.hasNext()) {
@@ -926,12 +954,14 @@ public class SimplexBean extends GenericSopacBean {
 				}
 			}
 			db.set(currentProjectEntry);
-			db.close();
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[saveSimplexProjectEntry] " + e);			
+			if (db != null)
+				db.close();
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[saveSimplexProjectEntry] " + e);
 		}
-		
+
 	}
 
 	/**
@@ -945,14 +975,15 @@ public class SimplexBean extends GenericSopacBean {
 		// mega.setProjectName(projectSimpleXOutput.getProjectName());
 		// mega.setJobUIDStamp(projectSimpleXOutput.getJobUIDStamp());
 		// Find the matching bean
-		
+
 		try {
-			if (db!=null)
-					db.close();
-				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+
+			if (db != null)
+				db.close();
+			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + "/" + projectName + ".db");
 			// ObjectSet results = db.get(mega);
-	
+
 			// if (results.hasNext()) {
 			// // Reassign the bean. Should only be one match.
 			// mega = (SimpleXOutputBean) results.next();
@@ -965,10 +996,12 @@ public class SimplexBean extends GenericSopacBean {
 			// mega.setKmlUrls(kmlurls);
 			db.set(mega);
 			db.commit();
-			db.close();
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[saveSimpleXOutputBeanToDB] " + e);			
+			if (db != null)
+				db.close();
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[saveSimpleXOutputBeanToDB] " + e);
 		}
 
 	}
@@ -1018,16 +1051,17 @@ public class SimplexBean extends GenericSopacBean {
 		// Add the project to the code database, cleaning up if necessary.
 		System.out.println("Creating new project");
 		makeProjectDirectory();
-		
+
 		try {
-			if (db!=null)
-					db.close();
-				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+
+			if (db != null)
+				db.close();
+			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + ".db");
 			// projectEntry tmp_project = new projectEntry();
 			// tmp_project.projectName = this.projectName;
 			// ObjectSet result = db.get(projectEntry.class);
-	
+
 			// while (result.hasNext()) {
 			// tmp_project = (projectEntry) result.next();
 			// //Clean up any null projects
@@ -1042,7 +1076,7 @@ public class SimplexBean extends GenericSopacBean {
 			// break;
 			// }
 			// }
-	
+
 			// --------------------------------------------------
 			// Now recover some of the project properties from
 			// the old project and write this to the current project,
@@ -1059,7 +1093,7 @@ public class SimplexBean extends GenericSopacBean {
 				if (tmpProj == null || tmpProj.getProjectName() == null) {
 					db.delete(tmpProj);
 				}
-	
+
 				if (tmpProj.getProjectName().equals(oldProjectName)) {
 					System.out.println("Old Origin:" + tmpProj.getOrigin_lat()
 							+ " " + tmpProj.getOrigin_lon());
@@ -1073,12 +1107,13 @@ public class SimplexBean extends GenericSopacBean {
 			// Say goodbye.
 			db.set(currentProjectEntry);
 			db.commit();
-			db.close();
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[toggleCopyProject] " + e);			
+			if (db != null)
+				db.close();
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[toggleCopyProject] " + e);
 		}
-		
 
 		// --------------------------------------------------
 		// Copy over the project entry database.
@@ -1115,7 +1150,8 @@ public class SimplexBean extends GenericSopacBean {
 	 */
 	public String toggleDeleteProject() {
 		try {
-			if (db!=null)
+
+			if (db != null)
 				db.close();
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + ".db");
@@ -1145,13 +1181,15 @@ public class SimplexBean extends GenericSopacBean {
 						db.delete(sxob);
 					}
 				}
-				db.close();
+				if (db != null)
+					db.close();
 			} else {
 				System.out.println("No projects selected for deletion.");
 			}
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[toggleDeleteProject] " + e);			
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[toggleDeleteProject] " + e);
 		}
 		return "Simplex2-this";
 	}
@@ -1195,7 +1233,7 @@ public class SimplexBean extends GenericSopacBean {
 			myFaultCollection = populateFaultCollection(myFaultEntryForProjectList);
 			myObservationCollection = populateObservationCollection(myObservationEntryForProjectList);
 
-			if (db!=null)
+			if (db != null)
 				db.close();
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + ".db");
@@ -1212,19 +1250,20 @@ public class SimplexBean extends GenericSopacBean {
 					break;
 				}
 			}
-			db.close();
+			if (db != null)
+				db.close();
 
 			// Just for laughs, print out the origin to make sure it is OK.
 			System.out.println("Project origin: "
 					+ currentProjectEntry.getOrigin_lat() + " "
 					+ currentProjectEntry.getOrigin_lon());
 
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[toggleSelectProject] " + e);			
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[toggleSelectProject] " + e);
 		}
-		
-		
+
 		currentEditProjectForm.projectSelectionCode = "";
 		currentEditProjectForm.faultSelectionCode = "";
 		return "Simplex2-edit-project";
@@ -1251,19 +1290,20 @@ public class SimplexBean extends GenericSopacBean {
 	protected String createNewProject(String projectName) {
 		System.out.println("Creating new project");
 		makeProjectDirectory();
-		
+
 		try {
-			if (db!=null)
-					db.close();
-				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+
+			if (db != null)
+				db.close();
+			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + ".db");
 			// projectEntry project = new projectEntry();
 			// project.projectName = this.projectName;
-	
+
 			projectEntry tmp_project = new projectEntry();
 			tmp_project.projectName = this.projectName;
 			ObjectSet result = db.get(projectEntry.class);
-	
+
 			// Create the new project. These may be overwritten below.
 			// currentProjectEntry=new projectEntry();
 			currentProjectEntry.setProjectName(projectName);
@@ -1271,7 +1311,7 @@ public class SimplexBean extends GenericSopacBean {
 			currentProjectEntry.setOrigin_lat(currentProjectEntry.DEFAULT_LAT);
 			// currentProjectEntry.setMaxIters(currentProjectEntry.maxIters);
 			// currentProjectEntry.setStartTemp(currentProjectEntry.startTemp);
-	
+
 			while (result.hasNext()) {
 				tmp_project = (projectEntry) result.next();
 				// Clean up any null projects
@@ -1289,10 +1329,12 @@ public class SimplexBean extends GenericSopacBean {
 			}
 			db.set(currentProjectEntry);
 			db.commit();
-			db.close();
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[createNewProject] " + e);			
+			if (db != null)
+				db.close();
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[createNewProject] " + e);
 		}
 
 		currentEditProjectForm.setProjectEntry(currentProjectEntry);
@@ -1345,7 +1387,8 @@ public class SimplexBean extends GenericSopacBean {
 				// and then delete the specific value that we get back.
 				System.out.println("Deleteing " + tmp_ObservationName
 						+ "from db");
-				if (db!=null)
+
+				if (db != null)
 					db.close();
 				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath()
 						+ "/" + userName + "/" + codeName + "/" + projectName
@@ -1358,15 +1401,16 @@ public class SimplexBean extends GenericSopacBean {
 					todelete = (Observation) result.next();
 					db.delete(todelete);
 				}
-				db.close();
+				if (db != null)
+					db.close();
 
 			}
 
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[toggleUpdateObservationProjectEntry] " + e);			
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[toggleUpdateObservationProjectEntry] " + e);
 		}
-		
 
 	}
 
@@ -1385,9 +1429,11 @@ public class SimplexBean extends GenericSopacBean {
 
 				// This is the info about the Observation.
 				String tmp_ObservationName = tmp_Observation.getObsvName();
-				
-				boolean tmp_update = ((observationEntryForProject)myObservationEntryForProjectList.get(i)).getUpdate();
-				boolean tmp_delete = ((observationEntryForProject)myObservationEntryForProjectList.get(i)).getDelete();
+
+				boolean tmp_update = ((observationEntryForProject) myObservationEntryForProjectList
+						.get(i)).getUpdate();
+				boolean tmp_delete = ((observationEntryForProject) myObservationEntryForProjectList
+						.get(i)).getDelete();
 
 				currentEditProjectForm.initEditFormsSelection();
 				if ((tmp_update == true) && (tmp_delete == true)) {
@@ -1401,7 +1447,7 @@ public class SimplexBean extends GenericSopacBean {
 							+ tmp_ObservationName + " "
 							+ tmp_Observation.getObsvError());
 
-					if (db!=null)
+					if (db != null)
 						db.close();
 					db = Db4o.openFile(getBasePath() + "/"
 							+ getContextBasePath() + "/" + userName + "/"
@@ -1414,7 +1460,8 @@ public class SimplexBean extends GenericSopacBean {
 					 * todelete = (Observation) result.next();
 					 * db.delete(todelete); }
 					 * 
-					 * db.set(tmp_Observation); db.commit(); db.close();
+					 * db.set(tmp_Observation); db.commit(); if(db!=null)
+					 * db.close();
 					 */
 
 					Observation toUpdate = new Observation();
@@ -1424,7 +1471,7 @@ public class SimplexBean extends GenericSopacBean {
 						System.out.println("[toggleUpdateObservations] "
 								+ toUpdate.getObsvName());
 						toUpdate = (Observation) result.next();
-						
+
 						toUpdate.setObsvError(tmp_Observation.getObsvError());
 						toUpdate.setObsvLocationEast(tmp_Observation
 								.getObsvLocationEast());
@@ -1435,12 +1482,13 @@ public class SimplexBean extends GenericSopacBean {
 								.getObsvRefSite());
 						toUpdate.setObsvType(tmp_Observation.getObsvType());
 						toUpdate.setObsvValue(tmp_Observation.getObsvValue());
-						
+
 					}
 
 					db.set(toUpdate);
 					db.commit();
-					db.close();
+					if (db != null)
+						db.close();
 
 				}
 
@@ -1452,7 +1500,8 @@ public class SimplexBean extends GenericSopacBean {
 					// and then delete the specific value that we get back.
 					System.out.println("[toggleUpdateObservations] Deleting "
 							+ tmp_ObservationName);
-					if (db!=null)
+
+					if (db != null)
 						db.close();
 					db = Db4o.openFile(getBasePath() + "/"
 							+ getContextBasePath() + "/" + userName + "/"
@@ -1465,18 +1514,18 @@ public class SimplexBean extends GenericSopacBean {
 						todelete = (Observation) result.next();
 						db.delete(todelete);
 					}
-					db.close();
+					if (db != null)
+						db.close();
 
 				}
 			}
 
 			reconstructMyObservationsForProjectList(projectName);
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[toggleUpdateObservations] " + e);			
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[toggleUpdateObservations] " + e);
 		}
-
-
 
 	}
 
@@ -1502,9 +1551,10 @@ public class SimplexBean extends GenericSopacBean {
 			String timeStamp = "";
 			this.gmtPlotPdf_timeStamp = timeStamp;
 			if ((tmp_view == true)) {
-				if (db!=null)
-				db.close();
-			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath()
+
+				if (db != null)
+					db.close();
+				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath()
 						+ "/" + userName + "/" + codeName + ".db");
 				projectEntry tmp_proj = new projectEntry();
 				tmp_proj.projectName = this.projectName;
@@ -1514,7 +1564,8 @@ public class SimplexBean extends GenericSopacBean {
 				} else {
 					System.out.println("error: can not find this project");
 				}
-				db.close();
+				if (db != null)
+					db.close();
 				System.out.println(currentProjectEntry.origin_lat);
 				System.out.println(currentProjectEntry.origin_lon);
 
@@ -1526,11 +1577,11 @@ public class SimplexBean extends GenericSopacBean {
 
 			}
 
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[toggleGMTPlot] " + e);			
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[toggleGMTPlot] " + e);
 		}
-		
 
 		return ("Simplex2-gmt-view");
 
@@ -1561,8 +1612,9 @@ public class SimplexBean extends GenericSopacBean {
 			boolean tmp_view = tmp_loadMeshTableEntry.isView();
 			String timeStamp = "";
 			if ((tmp_view == true)) {
-				if (db!=null)
-				db.close();
+
+				if (db != null)
+					db.close();
 				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath()
 						+ "/" + userName + "/" + codeName + ".db");
 				projectEntry tmp_proj = new projectEntry();
@@ -1573,7 +1625,8 @@ public class SimplexBean extends GenericSopacBean {
 				} else {
 					System.out.println("error: can not find this project");
 				}
-				db.close();
+				if (db != null)
+					db.close();
 				System.out.println(currentProjectEntry.origin_lat);
 				System.out.println(currentProjectEntry.origin_lon);
 
@@ -1584,12 +1637,12 @@ public class SimplexBean extends GenericSopacBean {
 				System.out.println(mapXmlUrl);
 			}
 
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[toggleMakeMap] " + e);			
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[toggleMakeMap] " + e);
 		}
-		
-		
+
 		return ("Simplex2-google-map");
 	}
 
@@ -1617,7 +1670,8 @@ public class SimplexBean extends GenericSopacBean {
 				SimpleXOutputBean mega = new SimpleXOutputBean();
 				mega.setProjectName(projectName);
 				// System.out.println("ProjectName: "+projectName);
-				if (db!=null)
+
+				if (db != null)
 					db.close();
 				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath()
 						+ "/" + userName + "/" + codeName + "/" + projectName
@@ -1631,11 +1685,12 @@ public class SimplexBean extends GenericSopacBean {
 					System.out
 							.println("error: can not find this project for SimpleXOutputBean");
 				}
-				db.close();
+				if (db != null)
+					db.close();
 
-				if (db!=null)
-				db.close();
-			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath()
+				if (db != null)
+					db.close();
+				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath()
 						+ "/" + userName + "/" + codeName + ".db");
 				projectEntry tmp_proj = new projectEntry();
 				tmp_proj.projectName = this.projectName;
@@ -1645,18 +1700,19 @@ public class SimplexBean extends GenericSopacBean {
 				} else {
 					System.out.println("error: can not find this project");
 				}
-				db.close();
+				if (db != null)
+					db.close();
 				System.out.println(currentProjectEntry.origin_lat);
 				System.out.println(currentProjectEntry.origin_lon);
 
 			}
 
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[toggleViewKml] " + e);			
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[toggleViewKml] " + e);
 		}
-		
-		
+
 		return ("Simplex2-kml-viewer");
 	}
 
@@ -1703,7 +1759,8 @@ public class SimplexBean extends GenericSopacBean {
 				// This requires we first search for the desired object
 				// and then delete the specific value that we get back.
 				System.out.println("Deleteing " + tmp_faultName + "from db");
-				if (db!=null)
+
+				if (db != null)
 					db.close();
 				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath()
 						+ "/" + userName + "/" + codeName + "/" + projectName
@@ -1716,14 +1773,15 @@ public class SimplexBean extends GenericSopacBean {
 					todelete = (Fault) result.next();
 					db.delete(todelete);
 				}
-				db.close();
+				if (db != null)
+					db.close();
 			}
 
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[toggleUpdateFaultProjectEntry] " + e);			
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[toggleUpdateFaultProjectEntry] " + e);
 		}
-		
 
 		// Print this out as KML
 		faultKmlUrl = createFaultKmlFile();
@@ -1742,11 +1800,13 @@ public class SimplexBean extends GenericSopacBean {
 				tmp_Fault = (Fault) myFaultsForProjectList.get(i);
 
 				// This is the info about the fault.
-				String tmp_faultName = ((faultEntryForProject)myFaultEntryForProjectList.get(i)).getoldFaultName();
-				
-				
-				boolean tmp_update = ((faultEntryForProject)myFaultEntryForProjectList.get(i)).getUpdate();
-				boolean tmp_delete = ((faultEntryForProject)myFaultEntryForProjectList.get(i)).getDelete();
+				String tmp_faultName = ((faultEntryForProject) myFaultEntryForProjectList
+						.get(i)).getoldFaultName();
+
+				boolean tmp_update = ((faultEntryForProject) myFaultEntryForProjectList
+						.get(i)).getUpdate();
+				boolean tmp_delete = ((faultEntryForProject) myFaultEntryForProjectList
+						.get(i)).getDelete();
 
 				currentEditProjectForm.initEditFormsSelection();
 				if ((tmp_update == true) && (tmp_delete == true)) {
@@ -1757,9 +1817,10 @@ public class SimplexBean extends GenericSopacBean {
 				if ((tmp_update == true) && (tmp_delete == false)) {
 
 					System.out.println("[toggleUpdateFaults] Updating "
-							+ tmp_Fault.getFaultName() + "(old name)" + tmp_faultName + " " + tmp_Fault.getFaultSlip());
+							+ tmp_Fault.getFaultName() + "(old name)"
+							+ tmp_faultName + " " + tmp_Fault.getFaultSlip());
 
-					if (db!=null)
+					if (db != null)
 						db.close();
 					db = Db4o.openFile(getBasePath() + "/"
 							+ getContextBasePath() + "/" + userName + "/"
@@ -1771,7 +1832,7 @@ public class SimplexBean extends GenericSopacBean {
 
 					if (result.hasNext()) {
 						toUpdate = (Fault) result.next();
-						
+
 						toUpdate.setFaultDepth(tmp_Fault.getFaultDepth());
 						toUpdate
 								.setFaultDepthVary(tmp_Fault.isFaultDepthVary());
@@ -1794,9 +1855,11 @@ public class SimplexBean extends GenericSopacBean {
 						toUpdate.setFaultLonStarts(tmp_Fault
 								.getFaultLonStarts());
 						toUpdate.setFaultName(tmp_Fault.getFaultName());
-						
-						((faultEntryForProject)myFaultEntryForProjectList.get(i)).setoldFaultName(tmp_Fault.getFaultName());
-						
+
+						((faultEntryForProject) myFaultEntryForProjectList
+								.get(i)).setoldFaultName(tmp_Fault
+								.getFaultName());
+
 						toUpdate.setFaultOriginXVary(tmp_Fault
 								.isFaultOriginXVary());
 						toUpdate.setFaultOriginYVary(tmp_Fault
@@ -1812,11 +1875,12 @@ public class SimplexBean extends GenericSopacBean {
 								.isFaultStrikeSlipVary());
 						toUpdate.setFaultWidth(tmp_Fault.getFaultWidth());
 						toUpdate
-								.setFaultWidthVary(tmp_Fault.isFaultWidthVary());					
+								.setFaultWidthVary(tmp_Fault.isFaultWidthVary());
 					}
 					db.set(toUpdate);
 					db.commit();
-					db.close();
+					if (db != null)
+						db.close();
 				}
 
 				// This is the deletion case.
@@ -1827,7 +1891,8 @@ public class SimplexBean extends GenericSopacBean {
 					// and then delete the specific value that we get back.
 					System.out.println("[toggleUpdateFaults] Deleteing "
 							+ tmp_faultName + "from db");
-					if (db!=null)
+
+					if (db != null)
 						db.close();
 					db = Db4o.openFile(getBasePath() + "/"
 							+ getContextBasePath() + "/" + userName + "/"
@@ -1840,15 +1905,16 @@ public class SimplexBean extends GenericSopacBean {
 						todelete = (Fault) result.next();
 						db.delete(todelete);
 					}
-					db.close();
+					if (db != null)
+						db.close();
 				}
 			}
 
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[toggleUpdateFaults] " + e);			
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[toggleUpdateFaults] " + e);
 		}
-		
 
 		// Print this out as KML
 		faultKmlUrl = createFaultKmlFile();
@@ -1856,27 +1922,29 @@ public class SimplexBean extends GenericSopacBean {
 
 	public void toggleAddObsvTextAreaForProject(ActionEvent ev) {
 		currentEditProjectForm.initEditFormsSelection();
-		
+
 		try {
-			if (db!=null)
-					db.close();
-				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+
+			if (db != null)
+				db.close();
+			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + "/" + projectName + ".db");
 			// System.out.println("Parsing Output");
 			Observation tmpObsv = new Observation();
 			ObjectSet result = db.get(tmpObsv);
 			int obsvCount = result.size();
-	
+
 			StringTokenizer st1, st2;
 			st1 = new StringTokenizer(currentEditProjectForm.getObsvTextArea()
 					.trim(), "\n");
 			String line;
-	
+
 			while (st1.hasMoreTokens()) {
 				line = st1.nextToken();
-				st2 = new StringTokenizer(line.trim(), "\t , "); // Should accept
-																	// spaces, tabs,
-																	// commas
+				st2 = new StringTokenizer(line.trim(), "\t , "); // Should
+																	// accept
+				// spaces, tabs,
+				// commas
 				if (st2.countTokens() == SIMPLEX_OBSV_COUNT) {
 					tmpObsv = new Observation();
 					while (st2.hasMoreTokens()) {
@@ -1896,26 +1964,30 @@ public class SimplexBean extends GenericSopacBean {
 				db.set(tmpObsv);
 			}
 			db.commit();
-			db.close();
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[toggleAddObsvTextAreaForProject] " + e);			
+			if (db != null)
+				db.close();
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[toggleAddObsvTextAreaForProject] " + e);
 		}
 	}
 
 	public void toggleAddObservationForProject(ActionEvent ev) {
 
 		currentEditProjectForm.initEditFormsSelection();
-		
+
 		try {
-			if (db!=null)
-					db.close();
-				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+
+			if (db != null)
+				db.close();
+			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + "/" + projectName + ".db");
-	
+
 			Observation tmpObservation = new Observation();
-			tmpObservation.setObsvName(currentEditProjectForm.currentObservation
-					.getObsvName());
+			tmpObservation
+					.setObsvName(currentEditProjectForm.currentObservation
+							.getObsvName());
 			System.out.println(currentEditProjectForm.currentObservation
 					.getObsvName());
 			ObjectSet result = db.get(tmpObservation);
@@ -1925,10 +1997,12 @@ public class SimplexBean extends GenericSopacBean {
 			}
 			db.set(currentEditProjectForm.currentObservation);
 			db.commit();
-			db.close();
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[toggleAddObservationForProject] " + e);			
+			if (db != null)
+				db.close();
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[toggleAddObservationForProject] " + e);
 		}
 		reconstructMyObservationEntryForProjectList(projectName);
 	}
@@ -1940,13 +2014,14 @@ public class SimplexBean extends GenericSopacBean {
 	 */
 	public void toggleAddFaultForProject(ActionEvent ev) {
 		currentEditProjectForm.initEditFormsSelection();
-		
+
 		try {
-			if (db!=null)
-					db.close();
-				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+
+			if (db != null)
+				db.close();
+			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + "/" + projectName + ".db");
-	
+
 			Fault tmpfault = new Fault();
 			tmpfault.setFaultName(currentEditProjectForm.currentFault
 					.getFaultName());
@@ -1958,32 +2033,37 @@ public class SimplexBean extends GenericSopacBean {
 			faultdrawing = false;
 			db.set(currentEditProjectForm.currentFault);
 			db.commit();
-			db.close();
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[toggleAddFaultForProject] " + e);			
+			if (db != null)
+				db.close();
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[toggleAddFaultForProject] " + e);
 		}
-		
+
 		saveSimplexProjectEntry(currentProjectEntry);
 		// Print this out as KML
-		faultKmlUrl = createFaultKmlFile();		
+		faultKmlUrl = createFaultKmlFile();
 	}
 
 	public void toggleDrawFaultFromMap(ActionEvent ev) {
-		
+
 		System.out.println("[toggleDrawFaultFromMap] started");
-		
+
 		currentEditProjectForm.createFaultFromMap();
-		
+
 		currentEditProjectForm.initEditFormsSelection();
-		System.out.println("[toggleDrawFaultFromMap] currentFault.getFaultName() " + currentEditProjectForm.currentFault.getFaultName());
-		
+		System.out
+				.println("[toggleDrawFaultFromMap] currentFault.getFaultName() "
+						+ currentEditProjectForm.currentFault.getFaultName());
+
 		try {
-			if (db!=null)
-					db.close();
-				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+
+			if (db != null)
+				db.close();
+			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + "/" + projectName + ".db");
-	
+
 			Fault tmpfault = new Fault();
 			tmpfault.setFaultName(currentEditProjectForm.currentFault
 					.getFaultName());
@@ -1994,10 +2074,12 @@ public class SimplexBean extends GenericSopacBean {
 			}
 			db.set(currentEditProjectForm.currentFault);
 			db.commit();
-			db.close();
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[toggleDrawFaultFromMap] " + e);			
+			if (db != null)
+				db.close();
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[toggleDrawFaultFromMap] " + e);
 		}
 
 		saveSimplexProjectEntry(currentProjectEntry);
@@ -2005,57 +2087,56 @@ public class SimplexBean extends GenericSopacBean {
 		faultKmlUrl = createFaultKmlFile();
 	}
 
-	 
 	public void toggleAddGPSObsvForProject(ActionEvent ev) {
 
 		readStations();
 		String dataUrl = "";
-		
+
 		try {
-			if (db!=null)
-					db.close();
-				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+
+			if (db != null)
+				db.close();
+			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + "/" + projectName + ".db");
-	
+
 			System.out.println("searcharea : " + getSearcharea());
 			System.out.println("gpsRefStation : " + getGpsRefStation());
-	
+
 			// if (searcharea == false) {
 			String[] stations = selectedGpsStationName.split(",");
 			for (int nA = 0; nA < stations.length; nA++) {
 				System.out.println("Here are the choices:" + stations[nA] + " "
 						+ gpsStationLat + " " + gpsStationLon);
 				gpsStationName = stations[nA].toLowerCase();
-	
+
 				// I'm not sure if these are even used, but they can't be blank.
-	
-			
-	
-					GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
-	
-					gsq.setFromServlet(gpsStationName, beginDate, endDate,
-							resource, contextGroup, contextId, minMaxLatLon, false);
-	
-					dataUrl = gsq.getResource() + " ";
-					System.out.println(dataUrl);
-	
-					Observation[] obsv = makeGPSObservationPoints(gpsStationName,
-							dataUrl, getGpsRefStation());
-					obsv = setXYLocations(obsv, gpsStationLat, gpsStationLon);
-	
-					for (int i = 0; i < obsv.length; i++) {
-						db.set(obsv[i]);
-	
-					}
-				
-	
+
+				GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
+
+				gsq.setFromServlet(gpsStationName, beginDate, endDate,
+						resource, contextGroup, contextId, minMaxLatLon, false);
+
+				dataUrl = gsq.getResource() + " ";
+				System.out.println(dataUrl);
+
+				Observation[] obsv = makeGPSObservationPoints(gpsStationName,
+						dataUrl, getGpsRefStation());
+				obsv = setXYLocations(obsv, gpsStationLat, gpsStationLon);
+
+				for (int i = 0; i < obsv.length; i++) {
+					db.set(obsv[i]);
+
+				}
+
 			}
-	
+
 			db.commit();
-			db.close();
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[toggleAddGPSObsvForProject] " + e);			
+			if (db != null)
+				db.close();
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[toggleAddGPSObsvForProject] " + e);
 		}
 		saveSimplexProjectEntry(currentProjectEntry);
 		setGpsRefStation(false);
@@ -2090,7 +2171,7 @@ public class SimplexBean extends GenericSopacBean {
 		 * 
 		 * catch (Exception ex) { ex.printStackTrace(); }
 		 * 
-		 * db.commit(); db.close();
+		 * db.commit(); if(db!=null) db.close();
 		 * saveSimplexProjectEntry(currentProjectEntry);
 		 * setGpsRefStation(false); }
 		 */
@@ -2245,7 +2326,7 @@ public class SimplexBean extends GenericSopacBean {
 					+ userName + "/" + codeName + "/" + dpsb.getProjectName()
 					+ ".db");
 
-			if (db!=null)
+			if (db != null)
 				db.close();
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + "/" + dpsb.getProjectName()
@@ -2260,12 +2341,13 @@ public class SimplexBean extends GenericSopacBean {
 				dpsb = (SimpleXOutputBean) results.next();
 				db.delete(dpsb);
 			}
-			db.close();
-		}  catch(Exception e) {
-			db.close();
-			System.out.println("[toggleDeleteProjectSummary] " + e);			
+			if (db != null)
+				db.close();
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[toggleDeleteProjectSummary] " + e);
 		}
-		
 
 	}
 
