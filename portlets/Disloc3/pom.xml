@@ -130,6 +130,9 @@
 				 <replace dir="${basedir}/target/${pom.artifactId}" token="@host.base.url@" value="${host.base.url}">
 					<include name="**/*.*"/>
 				 </replace>
+				 <replace dir="${basedir}/target/${pom.artifactId}/WEB-INF" token="@host.base.url@" value="${host.base.url}">
+					<include name="**/faces-config.xml"/>
+				 </replace>
 				 
 				 <replace dir="${basedir}/target/${pom.artifactId}" token="@artifactId@" value="${pom.artifactId}">
 					<include name="**/*.*"/>

@@ -14,7 +14,7 @@
 
                 <managed-property>
                    <property-name>portalBaseUrl</property-name>
-                   <value>http://gw11.quarry.iu.teragrid.org:8080</value>
+                   <value>@host.base.url@</value>
                 </managed-property>
 		
 					 <managed-property>
