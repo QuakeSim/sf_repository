@@ -2467,16 +2467,13 @@ public class MeshGeneratorBean extends GenericSopacBean {
 				String projectName=mdmb.getProjectName();
 				String jobUID=mdmb.getJobUIDStamp();
 				String queueName=projectName+"."+jobUID;
-			
-
 				
 				//DB, get going
 				if (db!=null)
 					  db.close();
 				
 				db=Db4o.openFile(getBasePath()+"/"+getContextBasePath()+"/"
-									  +getUserName()+"/"+getCodeName()+"/"+projectName+".db");		  
-				
+									  +getUserName()+"/"+getCodeName()+"/"+projectName+".db");
 				
 				//Get the client together
 				System.out.println("Connecting to "+queueServiceUrl);
@@ -2504,8 +2501,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 			  if (db!=null)
 				  db.close();			  
 			  System.out.println("[checkTheStatusQueue] " + e);
-		  }
-		  
+		  }		  
 		  
 		  return statusString;
 	 }
