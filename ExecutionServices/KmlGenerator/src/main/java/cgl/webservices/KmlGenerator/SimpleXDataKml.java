@@ -108,6 +108,7 @@ public class SimpleXDataKml {
 	  */
  
 	 public static void main(String[] av) throws IOException { 
+		 /*
 		 SimpleXDataKml test = new SimpleXDataKml(true); 
 		 PointEntry[] pointEntryList=new PointEntry[4]; 
 		 pointEntryList[0]=new PointEntry(); 
@@ -168,6 +169,7 @@ public class SimpleXDataKml {
 		 // test.setPointPlacemark("point"); 
  
 		 test.printToFile(test.doc.toKML(),"test_original.kml"); 
+		 */
 	}
 
  
@@ -176,8 +178,8 @@ public class SimpleXDataKml {
 		 datalist = InputDataList; 
 	 } 
 	  
-	 public String runMakeKml (String ServerTag,String UserName, String ProjectName, String JobUID) { 
-		  
+	 public String runMakeKml (String ServerTag,String UserName, String ProjectName, String JobUID) {
+		 System.out.println("[runMakeKml] Started");		  
 		 String destDir=generateOutputDestDir(ServerTag,UserName,ProjectName,JobUID); 
 		 String baseUrl=generateBaseUrl(ServerTag,UserName,ProjectName,JobUID); 
 		  
@@ -189,8 +191,44 @@ public class SimpleXDataKml {
 			 e.printStackTrace();			  
 		 } 
 		  
-		 System.out.println("Printing to file");
-		 this.printToFile(this.doc.toKML(), destDir + "/" + ProjectName + JobUID +".kml"); 
+		 // System.out.println("Printing to file");
+		 // this.printToFile(this.doc.toKML(), destDir + "/" + ProjectName + JobUID +".kml");
+		 
+		  System.out.println("Printing a file");
+		  
+		  try { 
+				System.out.println("[runMakeKml] Directly printing KML to "+destDir + "/" + ProjectName + JobUID +".kml");
+				
+				System.out.println("[runMakeKml] this.doc will generate a KML");
+				long start = System.currentTimeMillis();
+				String kmlcontent = this.doc.toKML();
+				// System.out.println("[runMakeKml] [1] the size of the doc : " + this.doc.toKML().length());
+				System.out.println("[runMakeKml] the size of the doc : " + kmlcontent.length());
+				System.out.println("[runMakeKml] the KML generated in " + (System.currentTimeMillis() -start)/1000+"Secs");		        
+		        		         			
+				
+				
+				PrintStream out = new PrintStream(new FileOutputStream(destDir + "/" + ProjectName + JobUID +".kml"));
+				
+				System.out.println("[runMakeKml] now it will make a file using the already executed-this.doc.toKML");
+				start = System.currentTimeMillis();
+				out.println(kmlcontent);
+				System.out.println("[runMakeKml] the size of the doc : " + kmlcontent.length());
+				System.out.println("[runMakeKml] this is finished in " + (System.currentTimeMillis() -start)/1000+"Secs");
+				out.close();
+				
+		  }
+		  
+		  catch (FileNotFoundException e) { 
+				e.printStackTrace(); 
+		  } 
+		  
+		  
+		  catch(Exception ex){
+				ex.printStackTrace();
+		  }
+		  
+		  System.out.println("[runMakeKml] Finished");
 		 return baseUrl + "/" + ProjectName + JobUID +".kml";		  
 	 } 
 	  
@@ -288,6 +326,9 @@ public class SimpleXDataKml {
 		 root.setDescription("This is the root folder"); 
 		 kmlDocument.addFolder(root); 
 		 doc.addDocument(kmlDocument); 
+		 System.out.println("----------------------------------"); 
+		 System.out.println("Initializing KML service finished."); 
+		 System.out.println("----------------------------------"); 
 	} 
  
 	public void setLineStyle(Folder curfolder, String id, String Color_value, double line_width) { 
@@ -577,7 +618,9 @@ public class SimpleXDataKml {
 	 public void setArrowPlacemark(String folderName, 
 											 String LineColor, 
 											 double LineWidth, 
-											 double arrowScale) { 
+											 double arrowScale) {
+		 
+		 System.out.println("[setArrowPlacemark] Started");
 		   
 		Folder container = new Folder(); 
 		if (!folderName.equals("") && !folderName.equals("null")) { 
@@ -636,6 +679,7 @@ public class SimpleXDataKml {
 		
 		//		System.out.println("Scale rate: "+scaling+" "+longestlength+" "+projectLength);
 		 		 
+		System.out.println("[setArrowPlacemark] the size of the datalist : " + datalist.length);
 		for (int i = 0; i < datalist.length; i++) { 
 			// create and add a Placemark containing a Point 
 			Placemark mark1 = new Placemark();			 
@@ -781,7 +825,8 @@ public class SimpleXDataKml {
 			mark1.addLineString(newline); 
 			 
 			container.addPlacemark(mark1); 
-		} 
+		}
+		System.out.println("[setArrowPlacemark] Finished");
 	} 
  
 	public ArrowLine CreateArrowByCoordinate(double startx, double starty, 
