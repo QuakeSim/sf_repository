@@ -6,7 +6,6 @@ import java.net.*;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.text.*;
-import java.text.DecimalFormat;
 
 import javax.faces.model.SelectItem;
 import javax.faces.component.html.HtmlDataTable;
@@ -100,6 +99,8 @@ public class DislocBean extends GenericSopacBean {
 	List myDislocParamsCollection = new ArrayList();
 	List myFaultDBEntryList = new ArrayList();
 	List myFaultEntryForProjectList = new ArrayList();
+	List myFaultsForProjectList = new ArrayList();
+	
 	List myObservationsForProjectList = new ArrayList();
 	List myObsvEntryForProjectList = new ArrayList();
 	List myArchivedDislocResultsList = new ArrayList();
@@ -374,6 +375,8 @@ public class DislocBean extends GenericSopacBean {
 	 * accessors.
 	 */
 	public String runBlockingDislocJSF() throws Exception {
+		
+		System.out.println("[runBlockingDislocJSF] Started");
 
 		try {
 
@@ -394,7 +397,7 @@ public class DislocBean extends GenericSopacBean {
 			setJobToken(dislocResultsBean.getJobUIDStamp());
 
 			// This step makes the kml plots
-			String myKmlUrl = "";
+			String myKmlUrl = "";			
 			myKmlUrl = createKml(currentParams, dislocResultsBean, faults);
 			setJobToken(dislocResultsBean.getJobUIDStamp());
 
@@ -417,6 +420,7 @@ public class DislocBean extends GenericSopacBean {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		System.out.println("[runBlockingDislocJSF] Finished");
 		return DISLOC_NAV_STRING;
 	}
 
@@ -427,8 +431,9 @@ public class DislocBean extends GenericSopacBean {
 	protected String createKml(DislocParamsBean dislocParams,
 			DislocResultsBean dislocResultsBean, Fault[] faults)
 			throws Exception {
-
-		System.out.println("Creating the KML file");
+		System.out.println("[createKml] Started");
+		System.out.println("[createKml] Creating the KML file at " + kmlGeneratorUrl);
+		
 
 		// Get the project lat/lon origin. It is the lat/lon origin of the first
 		// fault.
@@ -445,6 +450,8 @@ public class DislocBean extends GenericSopacBean {
 
 		PointEntry[] tmp_pointentrylist = LoadDataFromUrl(dislocResultsBean
 				.getOutputFileUrl());
+		System.out.println("[createKml] the size of tmp_pointentrylist : " + tmp_pointentrylist.length);
+		System.out.println("[createKml] dislocResultsBean.getOutputFileUrl() " + dislocResultsBean.getOutputFileUrl());
 
 		kmlService.setDatalist(tmp_pointentrylist);
 		kmlService.setOriginalCoordinate(origin_lon, origin_lat);
@@ -483,6 +490,8 @@ public class DislocBean extends GenericSopacBean {
 
 		String myKmlUrl = kmlService.runMakeKml("", userName, projectName,
 				(dislocResultsBean.getJobUIDStamp()).hashCode() + "");
+		
+		System.out.println("[createKml] Finished");
 		return myKmlUrl;
 	}
 
@@ -515,7 +524,7 @@ public class DislocBean extends GenericSopacBean {
 					this.getAzimuth(), this.getFrequency(), "ExecInsarKml");
 			// This sets the InSAR KML URL, which will be accessed by other
 			// pages.
-			setInsarKmlUrl(insarKmlUrl);
+			setInsarKmlUrl(insarKmlUrl);			
 
 			storeProjectInContext(userName, projectName, dislocResultsBean
 					.getJobUIDStamp(), currentParams, dislocResultsBean,
@@ -532,7 +541,7 @@ public class DislocBean extends GenericSopacBean {
 	 * given URL to a local file.
 	 */
 	public PointEntry[] LoadDataFromUrl(String InputUrl) {
-		System.out.println("Creating Point Entry");
+		System.out.println("[LoadDataFromUrl] Creating Point Entry");
 		ArrayList dataset = new ArrayList();
 		try {
 			String line = new String();
@@ -589,6 +598,7 @@ public class DislocBean extends GenericSopacBean {
 		} catch (IOException ex1) {
 			ex1.printStackTrace();
 		}
+		System.out.println("[LoadDataFromUrl] Finished");
 		return (PointEntry[]) (dataset.toArray(new PointEntry[dataset.size()]));
 	}
 
@@ -1222,14 +1232,14 @@ public class DislocBean extends GenericSopacBean {
 			for (int i = 0; i < myFaultEntryForProjectList.size(); i++) {
 				tmp_FaultEntryForProject = (faultEntryForProject) myFaultEntryForProjectList
 						.get(i);
-				if ((tmp_FaultEntryForProject.getView() == true)
+				if ((tmp_FaultEntryForProject.getUpdate() == true)
 						|| (tmp_FaultEntryForProject.getDelete() == true)) {
 					break;
 				}
 			}
 
 			String tmp_faultName = tmp_FaultEntryForProject.getFaultName();
-			boolean tmp_view = tmp_FaultEntryForProject.getView();
+			boolean tmp_view = tmp_FaultEntryForProject.getUpdate();
 			boolean tmp_update = tmp_FaultEntryForProject.getDelete();
 
 			System.out.println(tmp_view + " " + tmp_update);
@@ -1293,6 +1303,120 @@ public class DislocBean extends GenericSopacBean {
 
 	}
 
+	public void toggleUpdateFaults(ActionEvent ev) {
+		System.out.println("[toggleUpdateFaults] started...");
+		String faultStatus = "Update";
+		try {
+
+			int iSelectFault = -1;
+			// Find out which fault was selected.
+
+			for (int i = 0; i < myFaultsForProjectList.size(); i++) {
+				Fault tmp_Fault = new Fault();
+				tmp_Fault = (Fault) myFaultsForProjectList.get(i);
+
+				// This is the info about the fault.
+				String tmp_faultName = ((faultEntryForProject) myFaultEntryForProjectList
+						.get(i)).getoldFaultName();
+
+				boolean tmp_update = ((faultEntryForProject) myFaultEntryForProjectList
+						.get(i)).getUpdate();
+				boolean tmp_delete = ((faultEntryForProject) myFaultEntryForProjectList
+						.get(i)).getDelete();
+
+				initEditFormsSelection();
+				if ((tmp_update == true) && (tmp_delete == true)) {
+					System.out.println("[toggleUpdateFaults] error");
+				}
+
+				// Update the fault.
+				if ((tmp_update == true) && (tmp_delete == false)) {
+
+					System.out.println("[toggleUpdateFaults] Updating "
+							+ tmp_Fault.getFaultName() + "(old name)"
+							+ tmp_faultName);
+
+					if (db != null)
+						db.close();
+					db = Db4o.openFile(getBasePath() + "/"
+							+ getContextBasePath() + "/" + userName + "/"
+							+ codeName + "/" + projectName + ".db");
+
+					Fault toUpdate = new Fault();
+					toUpdate.setFaultName(tmp_faultName);
+					ObjectSet result = db.get(toUpdate);
+
+					if (result.hasNext()) {
+						toUpdate = (Fault) result.next();
+
+						toUpdate.setFaultDepth(tmp_Fault.getFaultDepth());
+						toUpdate.setFaultDipAngle(tmp_Fault.getFaultDipAngle());
+						toUpdate.setFaultDipSlip(tmp_Fault.getFaultDipSlip());
+						toUpdate.setFaultLameLambda(tmp_Fault.getFaultLameLambda());
+						toUpdate.setFaultLameMu(tmp_Fault.getFaultLameMu());
+						toUpdate.setFaultLatEnd(tmp_Fault.getFaultLatEnd());
+						toUpdate.setFaultLatStart(tmp_Fault.getFaultLatStart());
+						toUpdate.setFaultLength(tmp_Fault.getFaultLength());
+						toUpdate.setFaultLocationX(tmp_Fault.getFaultLocationX());
+						toUpdate.setFaultLocationY(tmp_Fault.getFaultLocationY());
+						toUpdate.setFaultLocationZ(tmp_Fault.getFaultLocationZ());
+						toUpdate.setFaultLonEnd(tmp_Fault.getFaultLonEnd());
+						toUpdate.setFaultLonStart(tmp_Fault.getFaultLonStart());
+						toUpdate.setFaultName(tmp_Fault.getFaultName());
+						toUpdate.setFaultRakeAngle(tmp_Fault.getFaultRakeAngle());
+						toUpdate.setFaultStrikeAngle(tmp_Fault.getFaultStrikeAngle());
+						toUpdate.setFaultStrikeSlip(tmp_Fault.getFaultStrikeSlip());
+						toUpdate.setFaultTensileSlip(tmp_Fault.getFaultTensileSlip());
+						toUpdate.setFaultWidth(tmp_Fault.getFaultWidth());
+						
+					}
+					db.set(toUpdate);
+					db.commit();
+					if (db != null)
+						db.close();
+				}
+
+				// This is the deletion case.
+				if ((tmp_update == false) && (tmp_delete == true)) {
+
+					// Delete from the database.
+					// This requires we first search for the desired object
+					// and then delete the specific value that we get back.
+					System.out.println("[toggleUpdateFaults] Deleteing "
+							+ tmp_faultName + "from db");
+
+					if (db != null)
+						db.close();
+					db = Db4o.openFile(getBasePath() + "/"
+							+ getContextBasePath() + "/" + userName + "/"
+							+ codeName + "/" + projectName + ".db");
+
+					Fault todelete = new Fault();
+					todelete.setFaultName(tmp_faultName);
+					ObjectSet result = db.get(todelete);
+					if (result.hasNext()) {
+						todelete = (Fault) result.next();
+						db.delete(todelete);
+					}
+					if (db != null)
+						db.close();
+				}
+			}
+
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[toggleUpdateFaults] " + e);
+		}
+
+		// Print this out as KML
+		faultKmlUrl = createFaultKmlFile();
+	}
+	
+	
+	
+	
+	
 	/**
 	 * Handle fault db entry events.
 	 */
@@ -2043,8 +2167,7 @@ public class DislocBean extends GenericSopacBean {
 	/**
 	 * Reconstructs the fault entry list.
 	 */
-	protected List reconstructMyFaultEntryForProjectList(String projectName) {
-		String projectFullName = codeName + SEPARATOR + projectName;
+	protected List reconstructMyFaultEntryForProjectList(String projectName) {		
 		this.myFaultEntryForProjectList.clear();
 		try {
 
@@ -2053,16 +2176,16 @@ public class DislocBean extends GenericSopacBean {
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + "/" + projectName + ".db");
 
-			// Fault tmpfault=new Fault();
-			// ObjectSet results=db.get(tmpfault);
-			ObjectSet results = db.get(Fault.class);
-			Fault tmpfault;
+			Fault tmpfault = new Fault();
+			ObjectSet results = db.get(tmpfault);
 			while (results.hasNext()) {
 				tmpfault = (Fault) results.next();
 				faultEntryForProject tmp_myFaultEntryForProject = new faultEntryForProject();
 				tmp_myFaultEntryForProject
 						.setFaultName(tmpfault.getFaultName());
-				tmp_myFaultEntryForProject.view = false;
+				tmp_myFaultEntryForProject.setoldFaultName(tmpfault
+						.getFaultName());
+				tmp_myFaultEntryForProject.update = false;
 				tmp_myFaultEntryForProject.delete = false;
 				this.myFaultEntryForProjectList.add(tmp_myFaultEntryForProject);
 			}
@@ -2077,6 +2200,36 @@ public class DislocBean extends GenericSopacBean {
 
 		return this.myFaultEntryForProjectList;
 	}
+	
+	protected List reconstructMyFaultsForProjectList(String projectName) {
+		this.myFaultsForProjectList.clear();
+		try {
+
+			if (db != null)
+				db.close();
+			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+					+ userName + "/" + codeName + "/" + projectName + ".db");
+
+			Fault tmpfault = new Fault();
+			ObjectSet results = db.get(tmpfault);
+			while (results.hasNext()) {
+				tmpfault = (Fault) results.next();
+
+				this.myFaultsForProjectList.add(tmpfault);
+			}
+			if (db != null)
+				db.close();
+
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[reconstructMyFaultsForProjectList] " + e);
+		}
+
+		reconstructMyFaultEntryForProjectList(projectName);
+		return this.myFaultsForProjectList;
+	}
+	
 
 	protected List reconstructMyObservationsForProjectList(String projectName) {
 		// List myObsvEntryForProjectList=new ArrayList();
@@ -2100,10 +2253,10 @@ public class DislocBean extends GenericSopacBean {
 			if (db != null)
 				db.close();
 
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {			
 			if (db != null)
 				db.close();
+			System.out.println("[reconstructMyObservationsForProjectList] " + e);
 		}
 
 		return this.myObsvEntryForProjectList;
@@ -2158,6 +2311,15 @@ public class DislocBean extends GenericSopacBean {
 		this.myFaultEntryForProjectList = tmp_list;
 	}
 
+	public List getMyFaultsForProjectList() throws Exception {
+		String projectName = getProjectName();
+		return reconstructMyFaultsForProjectList(projectName);
+	}
+
+	public void setMyFaultsForProjectList(List tmp_list) {
+		this.myFaultsForProjectList = tmp_list;
+	}
+	
 	public void setMyObsvEntryForProjectList(List tmp_list) {
 		this.myObsvEntryForProjectList = tmp_list;
 	}

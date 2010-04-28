@@ -17,9 +17,9 @@
 							</h:column> 
 							<h:column  id="lid6"> 
 								<f:facet name="header"> 
-									<h:outputText escape="false" value="<b>View</b>" /> 
+									<h:outputText escape="false" value="<b>Update</b>" /> 
 								</f:facet> 
-								<h:selectBooleanCheckbox value="#{myentry3.view}" 
+								<h:selectBooleanCheckbox value="#{myentry3.update}" 
                             id="stuff83" 
 									onchange="selectOne(this.form,this)" 
 									onclick="selectOne(this.form,this)" /> 
@@ -40,6 +40,6 @@
  
 				</h:panelGrid> 
 				<h:commandButton id="SelectFault4proj" value="UpdateFault" 
-					actionListener="#{DislocBean2.toggleUpdateFaultProjectEntry}" /> 
+					actionListener="#{DislocBean2.toggleUpdateFaults}" /> 
  
 			</h:form> 

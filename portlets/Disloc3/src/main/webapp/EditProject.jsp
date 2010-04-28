@@ -42,6 +42,8 @@ mapcenter_y = center_xy[1];
 <link rel="stylesheet" type="text/css" 
 	href='<%= request.getContextPath() + "/stylesheet.css" %>'> 
  
+<link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css">
+
 <title>Edit Project</title>
 <!--Google and related APIs are imported here -->
 

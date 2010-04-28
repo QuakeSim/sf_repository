@@ -40,8 +40,5 @@ public class faultEntryForProject {
 
 	public boolean getDelete() {
 		return this.delete;
-	}		
-
-
-	
+	}	
 }

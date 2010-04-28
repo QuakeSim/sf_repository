@@ -38,6 +38,12 @@
 					actionListener="#{DislocBean2.toggleProjectSelection}"> 
 			</h:commandButton> 
 		</h:form> 
-			</h:panelGroup> 
+
+		<h:form id="RunDisloc" rendered="#{!(empty DislocBean2.myFaultEntryForProjectList) && !(empty DislocBean2.myObsvEntryForProjectList)}" > 
+		  <h:outputFormat escape="false"  id="stuff90"  value="Disloc is ready to run.  Click the button below to launch." /> 
+		  <h:commandButton id="rundisloc" value="Run Disloc" action="#{DislocBean2.runBlockingDislocJSF}" /> 
+		</h:form>
+	    </h:panelGroup> 
+
 
 </h:panelGrid>

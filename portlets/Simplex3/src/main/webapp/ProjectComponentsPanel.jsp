@@ -268,6 +268,9 @@
 						actionListener="#{SimplexBean.toggleUpdateFaults}" />
 				</h:form>
 
+
+
+
 				<h:form id="UpdateSelectObservationForm"
 					rendered="#{!empty SimplexBean.myObservationsForProjectList}">
 				<h:outputText value="<br/>" escape="false"/>				
