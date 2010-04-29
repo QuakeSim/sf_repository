@@ -720,6 +720,8 @@ public class DislocBean extends GenericSopacBean {
 			tmp_fault.setFaultWidth(width);
 			tmp_fault.setFaultDepth(depth);
 			tmp_fault.setFaultDipAngle(dip);
+			tmp_fault.setFaultDipSlip(kdp.getdipslip());
+			tmp_fault.setFaultStrikeSlip(kdp.getstrikeslip());
 
 			// This is the fault's strike angle
 			// strike=Math.atan2(x,y)/d2r;

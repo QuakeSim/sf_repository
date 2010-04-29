@@ -418,7 +418,8 @@ public class editProjectForm extends GenericProjectBean {
 			tmp_fault.setFaultLonStarts(lonStart+"");
 			tmp_fault.setFaultLatStarts(latStart+"");
 			tmp_fault.setFaultLonEnds(lonEnd+"");
-			tmp_fault.setFaultLatEnds(latEnd+"");
+			tmp_fault.setFaultLatEnds(latEnd+"");		
+			
 			
 			//Set the strike
 			//			double strike=Math.atan2(x,y)/d2r;

@@ -683,7 +683,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		      tmp_fault.setFaultDepth(depth+"");
 		      tmp_fault.setFaultDipAngle(dip+"");
 		      tmp_fault.setFaultSlip("0");
-		      tmp_fault.setFaultRakeAngle("0");
+		      tmp_fault.setFaultRakeAngle("0");		      
 
 		      //This is the fault's strike angle
 				//				strike=Math.atan2(x,y)/d2r;
