@@ -28,10 +28,13 @@ public class KMLdescriptionparser {
 	
 	String faultname = "";
     double dip = 0;
+    double dipslip = 0;
     double strike = 0;
+    double strikeslip = 0;
     double depth = 0;
     double width = 0;
     double length = 0;
+    
     double latEnd = 0;
     double latStart = 0;
     double lonStart = 0;
@@ -41,8 +44,16 @@ public class KMLdescriptionparser {
     	return dip;
     }
     
+    public double getdipslip(){    	
+    	return dipslip;
+    }
+    
     public double getstrike(){    	
     	return strike;
+    }
+    
+    public double getstrikeslip(){    	
+    	return strikeslip;
     }
     
     public double getdepth(){    	
@@ -278,6 +289,13 @@ public class KMLdescriptionparser {
 			
 			else if (temp[0].compareTo("<b>Strike Angel</b>") == 0)
 				this.strike= Double.parseDouble(temp[1].split("&")[0]);
+			
+			else if (temp[0].compareTo("<b>Strike Slip</b>") == 0)
+				this.strikeslip= Double.parseDouble(temp[1].split("&")[0]);
+			
+			else if (temp[0].compareTo("<b>Dip Slip</b>") == 0)
+				this.dipslip= Double.parseDouble(temp[1].split("&")[0]);
+			
 			
 			else if (temp[0].compareTo("<b>Location [lat, lon]</b>") == 0) {
 				
