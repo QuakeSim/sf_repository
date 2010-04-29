@@ -31,6 +31,7 @@ public class KMLdescriptionparser {
     double strike = 0;
     double depth = 0;
     double width = 0;
+    double length = 0;
     double latEnd = 0;
     double latStart = 0;
     double lonStart = 0;
@@ -50,6 +51,10 @@ public class KMLdescriptionparser {
     
     public double getwidth(){	
     	return width;
+    }
+    
+    public double getlength(){	
+    	return length;
     }
     
     public double getlatEnd(){    	
@@ -258,13 +263,23 @@ public class KMLdescriptionparser {
 			// System.out.println(temp[0]);
 			if (temp[0].compareTo("<b>Fault Name</b>") == 0)
 				this.faultname = temp[1];
-			else if (temp[0].compareTo("<b>Dip</b>") == 0)
+			
+			else if (temp[0].compareTo("<b>DipAngel</b>") == 0)
 				this.dip = Double.parseDouble(temp[1]);
-			else if (temp[0].compareTo("<b>Down Dip Width</b>") == 0)
+			
+			else if (temp[0].compareTo("<b>Width</b>") == 0)
 				this.width = Double.parseDouble(temp[1].split("&")[0]);
-			else if (temp[0].compareTo("<b>Rupture - Bottom</b>") == 0)
-				this.depth = Double.parseDouble(temp[1].split("&")[0]);			
-			else if (temp[0].compareTo("<b>Location</b>") == 0) {
+			
+			else if (temp[0].compareTo("<b>Depth</b>") == 0)
+				this.depth = Double.parseDouble(temp[1].split("&")[0]);
+			
+			else if (temp[0].compareTo("<b>Length</b>") == 0)
+				this.length = Double.parseDouble(temp[1].split("&")[0]);			
+			
+			else if (temp[0].compareTo("<b>Strike Angel</b>") == 0)
+				this.strike= Double.parseDouble(temp[1].split("&")[0]);
+			
+			else if (temp[0].compareTo("<b>Location [lat, lon]</b>") == 0) {
 				
 				String[] splitlocation = temp[1].split("\\], \\[");
 				splitlocation[0] = splitlocation[0].split("\\[")[1];
@@ -277,7 +292,7 @@ public class KMLdescriptionparser {
 			}
 		}
 		 
-	    this.strike = 0; // will be calculated in each application. (QueryFaultFromDB)
+	    // this.strike = 0; // will be calculated in each application. (QueryFaultFromDB)
 	    
 	    /*
 	    System.out.println(this.dip);

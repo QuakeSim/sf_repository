@@ -662,7 +662,8 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		      double dip = kdp.getdip();
 		      double strike = kdp.getstrike();
 		      double depth = kdp.getdepth();
-		      double width = kdp.getwidth();    
+		      double width = kdp.getwidth();   
+		      String length = Double.toString(kdp.getlength());
 
 		      double latEnd = kdp.getlatEnd();
 		      double latStart = kdp.getlatStart();
@@ -675,7 +676,7 @@ public class MeshGeneratorBean extends GenericSopacBean {
 		      
 		      double x = (lonEnd - lonStart) * factor(lonStart,latStart);
 		      double y = (latEnd - latStart) * 111.32;
-		      String length = df.format(Math.sqrt(x * x + y * y));
+		      // String length = df.format(Math.sqrt(x * x + y * y));
 		      tmp_fault.setFaultName (theFault);
 		      tmp_fault.setFaultLength(length);
 		      tmp_fault.setFaultWidth(width+"");

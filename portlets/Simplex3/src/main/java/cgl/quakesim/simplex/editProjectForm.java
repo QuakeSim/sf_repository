@@ -388,7 +388,8 @@ public class editProjectForm extends GenericProjectBean {
 			double dip = kdp.getdip();
 			double strike = kdp.getstrike();
 			double depth = kdp.getdepth();
-			double width = kdp.getwidth();    
+			double width = kdp.getwidth();
+			double length = kdp.getlength();
 
 			double latEnd = kdp.getlatEnd();
 			double latStart = kdp.getlatStart();
@@ -404,7 +405,7 @@ public class editProjectForm extends GenericProjectBean {
 			double y = (latEnd - latStart) * 111.32;
 
 			// String length = df.format(Math.sqrt(x * x + y * y));
-			double length=Double.parseDouble(df.format(Math.sqrt(x * x + y * y)));
+			// double length=Double.parseDouble(df.format(Math.sqrt(x * x + y * y)));
 			tmp_fault.setFaultName(theFault+"");			
 			tmp_fault.setFaultLength(length+"");
 			tmp_fault.setFaultWidth(width+"");

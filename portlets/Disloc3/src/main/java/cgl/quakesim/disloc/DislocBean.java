@@ -694,6 +694,7 @@ public class DislocBean extends GenericSopacBean {
 			double strike = kdp.getstrike();
 			double depth = kdp.getdepth();
 			double width = kdp.getwidth();
+			double length = kdp.getlength();
 
 			double latEnd = kdp.getlatEnd();
 			double latStart = kdp.getlatStart();
@@ -708,8 +709,8 @@ public class DislocBean extends GenericSopacBean {
 			double x = (lonEnd - lonStart) * factor(lonStart, latStart);
 			double y = (latEnd - latStart) * 111.32;
 
-			double length = Double.parseDouble(df.format(Math.sqrt(x * x + y
-					* y)));
+			// we decided to use the value in the kml 04/29/2010 Jun Ji
+			// double length = Double.parseDouble(df.format(Math.sqrt(x * x + y * y)));
 			tmp_fault.setFaultName(theFault);
 			tmp_fault.setFaultLatStart(latStart);
 			tmp_fault.setFaultLonStart(lonStart);
