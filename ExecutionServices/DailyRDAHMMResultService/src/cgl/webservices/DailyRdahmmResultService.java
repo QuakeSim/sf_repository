@@ -1,18 +1,12 @@
 package cgl.webservices;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.net.URI;
-import java.net.URL;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Properties;
 import java.util.TimeZone;
 
@@ -20,8 +14,8 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
-import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+
 
 public class DailyRdahmmResultService {
 	
@@ -221,6 +215,7 @@ public class DailyRdahmmResultService {
 			Element eleIcon = eleIconStyle.addElement("Icon");
 			Element eleHref = eleIcon.addElement("href");
 			eleHref.setText(urls[i]);
+			eleStyle.addElement("LabelStyle").addElement("scale").setText("0");
 		}
 		
 		for (int i=0; i<stations.length; i++) {
@@ -244,6 +239,11 @@ public class DailyRdahmmResultService {
 			//eleDesc.setText("<![CDATA[" + popUpHtml + "]]");
 			eleDesc.setText(popUpHtml);
 		}
+		
+		// add the "TimeSpan" element
+		Element eleTP = eleDoc.addElement("TimeSpan");
+		eleTP.addElement("begin").setText(dateStr + "T00:00:00Z");
+		eleTP.addElement("end").setText(dateStr + "T23:59:59Z");	
 			
 		try {
 			FileWriter fw = new FileWriter(kmlPath);
