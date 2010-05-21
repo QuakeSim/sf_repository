@@ -40,6 +40,7 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                   <executions>
                      <execution>
+							  <id>Replace Tokens</id>
                         <phase>package</phase>
                            <configuration>
                              <tasks>
@@ -70,6 +71,7 @@
                            </goals>
                      </execution> 
 					 <execution>
+						<id>Delete ${pom.artifactId}</id>
                         <phase>clean</phase>
                            <configuration>
                              <tasks>
@@ -90,7 +92,7 @@
     <properties>
        <tomcat.base.dir>${catalina.home}</tomcat.base.dir>
        <google.key>${google.master.key}</google.key>
-	   <local.hostname>${local.hostname}</local.hostname>
+<!--	   <local.hostname>${local.hostname}</local.hostname>-->
 	   <result.service.hostname>${dailyRdahmmResult.service.hostname}</result.service.hostname>
 	   <xml.access.hostname>${dailyRdahmm.service.hostname}</xml.access.hostname>
     </properties>
