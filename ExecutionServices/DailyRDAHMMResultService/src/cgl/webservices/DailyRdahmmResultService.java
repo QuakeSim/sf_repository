@@ -177,6 +177,7 @@ public class DailyRdahmmResultService {
 		}
 		Calendar today = Calendar.getInstance();
 		String todayStr = UtilSet.getDateString(today);
+		dateStr = UtilSet.getDateString(UtilSet.getDateFromString(dateStr));
 		// dateStr is the date this kml file describes, and todaystr is the date when the kml is created 
 		String kmlFileName = contextGroup + "_" + preTreat + "_" + dateStr + "." + todayStr + ".kml";
 		String kmlPath = destKmlDir + File.separator + kmlFileName;
@@ -243,7 +244,7 @@ public class DailyRdahmmResultService {
 		// add the "TimeSpan" element
 		Element eleTP = eleDoc.addElement("TimeSpan");
 		eleTP.addElement("begin").setText(dateStr + "T00:00:00Z");
-		eleTP.addElement("end").setText(dateStr + "T23:59:59Z");	
+		eleTP.addElement("end").setText(dateStr + "T23:59:59Z");
 			
 		try {
 			FileWriter fw = new FileWriter(kmlPath);
