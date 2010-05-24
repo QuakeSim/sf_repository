@@ -7,7 +7,7 @@ import javax.faces.context.ExternalContext;
 //Servlet and portlet stuff
 import javax.servlet.http.HttpServletRequest;
 import javax.portlet.PortletRequest;
-
+import javax.servlet.http.*;
 
 //Standard Java stuff
 import java.util.Map;
@@ -20,46 +20,40 @@ public class Utility {
 
     public static String getUserName(String defaultName) {
 	
-	//This may change
-	String userName=defaultName;
-	
-	ExternalContext context=getContext();
-	if(context==null) return defaultName;
-	
-	requestObj=context.getRequest();
-	
-	//We may be in a portlet
-	if(requestObj instanceof PortletRequest) {	    
-	    Map userInfo=
-		(Map) ((PortletRequest)requestObj).getAttribute(PortletRequest.USER_INFO);
-	    userName = 
-		(userInfo!=null) ? (String) userInfo.get("user.name") : null;
-	    if (userName == null) {
-		userName = ((PortletRequest)requestObj).getRemoteUser();
-	    }
-
-	    //Still null?
-	    if(userName==null) {
-		userName=defaultName;
-	    }
-	    return userName;
-	}
-
-	//We have have this somehow through other means
-	else if(requestObj instanceof HttpServletRequest) {	    
-	    userName = ((HttpServletRequest)requestObj).getRemoteUser();
-	    
-	    //Still null?
-	    if(userName==null) {
-		userName=defaultName;
-	    }
-	    return userName;
-	}
-	
-	//Use default value
-	else {
-	    return defaultName;
-	}
+        String userName = defaultName;
+        ExternalContext context = getContext();
+        if(context == null)
+            return defaultName;
+        requestObj = context.getRequest();
+        if(requestObj instanceof PortletRequest)
+        {
+            System.out.println("[GenericQuakeSimProject] This request is an instanceof PortletRequest");
+            Map userInfo = (Map)((PortletRequest)requestObj).getAttribute("javax.portlet.userinfo");
+            userName = userInfo == null ? null : (String)userInfo.get("user.name");
+            if(userName == null)
+                userName = ((PortletRequest)requestObj).getRemoteUser();
+            if(userName == null)
+                userName = defaultName;
+            System.out.println("[GenericQuakeSimProject] Username : " + userName + "\n\n");
+            return userName;
+        }
+        if(requestObj instanceof HttpServletRequest)
+        {
+            System.out.println("[GenericQuakeSimProject] This request is an instanceof HttpServletRequest");
+            HttpSession session = (HttpSession)context.getSession(false);
+            HttpServletResponse res = (HttpServletResponse)FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            java.util.Enumeration e = session.getAttributeNames();
+            System.out.println("[GenericQuakeSimProject] Current page : " + req.getRequestURI());
+            userName = (String)((HttpSession)(HttpSession)context.getSession(false)).getAttribute("email");
+            if(userName == null)
+                userName = defaultName;
+            System.out.println("[GenericQuakeSimProject] Username : " + userName + "\n\n");
+            return userName;
+        } else
+        {
+            return defaultName;
+        }
 	
     }
 	
