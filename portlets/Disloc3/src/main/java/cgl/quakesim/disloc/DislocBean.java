@@ -1829,7 +1829,34 @@ public class DislocBean extends GenericSopacBean {
 		}		
 	}
 	
-	
+	public void deleteObsv(ActionEvent ev) throws Exception {
+		
+		try {
+			
+			initEditFormsSelection();
+			if (db != null)
+				db.close();
+			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/" + userName + "/" + codeName + "/" + projectName + ".db");
+			
+			System.out.println("Deleting an observation");
+			// There should only be one of these at most.
+			// Delete the stored one and replace it with the new one.
+			
+			ObjectSet result = db.get(DislocParamsBean.class);
+			if (result.hasNext()) {
+				DislocParamsBean tmp = (DislocParamsBean) result.next();
+				db.delete(tmp);
+				}
+			db.commit();
+			if (db != null)
+				db.close();
+			} catch (Exception e) {
+				if (db != null)
+					db.close();
+				
+				System.out.println("[toggleAddObservationsForProject] " + e);				
+			}
+}	
 	
 	
 

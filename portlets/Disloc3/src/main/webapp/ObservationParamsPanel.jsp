@@ -1,7 +1,12 @@
-	       <h:form id="obsvform" rendered="#{DislocBean2.renderDislocGridParamsForm}"> 
+	       <h:form id="obsvform" rendered="#{!empty DislocBean2.myObsvEntryForProjectList}"> 
+
+	  <h:panelGrid id="dflelerkljk11662" columns="1" border="1" cellpadding="0" cellspacing="0" styleClass="centered">
+		<h:outputFormat id="dflelerkal512" escape="false" value="<b>Observation Component</b>">
+		</h:outputFormat>
+
 				<h:panelGrid id="ObsvTable" columns="2" footerClass="subtitle" 
 					headerClass="subtitlebig" styleClass="medium" 
-					columnClasses="subtitle,medium"> 
+					columnClasses="subtitle,medium">   
  
 					<f:facet name="header"> 
 						<h:outputFormat id="output2" escape="false" 
@@ -38,7 +43,7 @@
 									 id="xypointsq3u">
  						<h:column>
 					     <f:facet name="header"> 
-						   <h:outputFormat id="outputere2" escape="false" 
+						   <h:outputFormat id="outputere32" escape="false" 
 							   value="<b>Lat</b>" /> 
 					     </f:facet> 
 
@@ -46,14 +51,14 @@
     					</h:column>
 						<h:column>
 					     <f:facet name="header"> 
-						   <h:outputFormat id="outputere2" escape="false" 
+						   <h:outputFormat id="outputere42" escape="false" 
 							   value="<b>Lon</b>" /> 
 					     </f:facet> 
 						  <h:outputText id="rerdad62lon" value="#{xypoints.lonPoint}"/>
     					</h:column>
 						<h:column>
 					     <f:facet name="header"> 
-						   <h:outputFormat id="outputere2" escape="false" 
+						   <h:outputFormat id="outputere62" escape="false" 
 							   value="<b>Remove</b>" /> 
 					     </f:facet> 
 						   <h:commandButton value="Delete" id="delxypointr4ero"
@@ -64,7 +69,7 @@
 
 				<h:panelGrid id="eiurojd93" columns="2" rendered="#{DislocBean2.usesGridPoints}">
 					<f:facet name="header"> 
-						<h:outputFormat id="outputere2" escape="false" 
+						<h:outputFormat id="outputere72" escape="false" 
 							value="<b>Define Grid of Observation Points </b>" /> 
 					</f:facet> 
 
@@ -105,7 +110,11 @@
 					</h:panelGroup> 
 				</h:panelGrid>
  
-					<h:commandButton id="addobservation" value="select" 
+				<h:panelGrid id="eiurojd93124" columns="2">
+					<h:commandButton id="addobservation" value="update" 
 						actionListener="#{DislocBean2.toggleAddObservationsForProject}" /> 
-
+					<h:commandButton id="deleteobservation" value="delete" 
+						actionListener="#{DislocBean2.deleteObsv}" /> 
+				</h:panelGrid>
+</h:panelGrid>
 			</h:form> 
