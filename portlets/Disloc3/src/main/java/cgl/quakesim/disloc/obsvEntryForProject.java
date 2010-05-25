@@ -5,11 +5,21 @@ import javax.faces.model.SelectItem;
 
 public class obsvEntryForProject {
 	
+	String observationName;	
 	boolean view;
 	boolean delete;
 	
+	
+	 public void setObservationName(String tmp_str) {
+		  this.observationName = tmp_str;
+	 }
+
+	 public String getObservationName() {
+		  return this.observationName;
+	 }		
+	 
 	public void setView(boolean tmp_str) {
-		this.view = tmp_str;
+		this.view= tmp_str;
 	}
 
 	public boolean getView() {
@@ -22,6 +32,6 @@ public class obsvEntryForProject {
 
 	public boolean getDelete() {
 		return this.delete;
-	}		
+	}			
 	
 }

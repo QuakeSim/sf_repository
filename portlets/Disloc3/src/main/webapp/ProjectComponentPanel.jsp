@@ -294,11 +294,10 @@
 				</h:form>
 
 			<h:form id="UpdateSelectedParamsForm" rendered="#{!empty DislocBean2.myObsvEntryForProjectList}">
-			  <h:outputText value="<br/>" escape="false"/>
-			  <h:outputText value="1) Please click the 'update' button after value changes." escape="false"/>
-			    <h:panelGroup  id="lid9">
+			  <h:panelGrid columns="1" border="1"  id="stuff84"> 
+			    <h:panelGroup  id="lid9"> 
 			      <h:panelGrid  id="stuff85" columns="1"> 
-				 <h:outputText  id="stuff86" escape="false" value="<b>Observations</b>"/> 
+				<h:outputText  id="stuff86" escape="false" value="<b>Observations</b>"/> 
 			      </h:panelGrid> 
 			      
 			      <h:dataTable border="1"  id="stuff87" value="#{DislocBean2.myObsvEntryForProjectList}" var="myentry4"> 
