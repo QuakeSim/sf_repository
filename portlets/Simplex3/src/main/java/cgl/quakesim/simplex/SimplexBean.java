@@ -2116,7 +2116,7 @@ public class SimplexBean extends GenericSopacBean {
 						resource, contextGroup, contextId, minMaxLatLon, false);
 
 				dataUrl = gsq.getResource() + " ";
-				System.out.println(dataUrl);
+				System.out.println("[toggleAddGPSObsvForProject]" + dataUrl);
 
 				Observation[] obsv = makeGPSObservationPoints(gpsStationName,
 						dataUrl, getGpsRefStation());

@@ -60,6 +60,26 @@ mapcenter_y = center_xy[1];
 	 var geoXml;
 	 var geoObsvXml;
 
+	var marker_NE;
+	var marker_SW;
+
+	icon_NE = new GIcon(); 
+	icon_NE.image = 'http://maps.google.com/mapfiles/ms/micons/red-pushpin.png';
+	icon_NE.shadow = '';
+	icon_NE.iconSize = new GSize(32, 32);
+	icon_NE.shadowSize = new GSize(22, 20);
+	icon_NE.iconAnchor = new GPoint(10, 32);
+	icon_NE.dragCrossImage = '';
+
+	icon_SW = icon_NE;
+
+
+	var border;
+
+	var icon_NE;
+	var icon_SW;
+	var icon_move;
+
 
         var req;
         var baseIcon = new GIcon();

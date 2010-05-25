@@ -1,6 +1,6 @@
 <h:form id="faultKMLSelectorForm" rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}">
-<h:inputHidden id="faultName" value="#{SimplexBean.currentEditProjectForm.mapFaultName}"/>
-<h:inputHidden id="faultlistsize" value="#{SimplexBean.myFaultsForProjectListsize}"/>
+  <h:inputHidden id="faultName" value="#{SimplexBean.currentEditProjectForm.mapFaultName}"/>
+  <h:inputHidden id="faultlistsize" value="#{SimplexBean.myFaultsForProjectListsize}"/>
 
 
   <h:panelGrid id="gridforbutton" columns="1" border="1" style="vertical-align:top;width: 800px;">
@@ -94,8 +94,6 @@
 	var kmllist = ["QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml"];		
 	
 	exmlFMap = new EGeoXml("exmlFMap", faultMap, kmllist, {sidebarfn:myside,nozoom:true,sidebarid:"faultMapside",parentformofsidebarid:"faultKMLSelectorForm",clickpolyobjfn:clickpolyobj,iwwidth:200});       
-	
-
 	exmlFMap.parse();
 	
 	

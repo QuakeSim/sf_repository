@@ -361,8 +361,6 @@ public class editProjectForm extends GenericProjectBean {
 		tmp_fault.setFaultLocationY(df.format(y1));
 		
 		currentFault = tmp_fault;
-		
-		
 	}
 	
 	

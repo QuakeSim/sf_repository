@@ -23,7 +23,8 @@ import TestClient.Select.Select;
 import TestClient.Select.SelectService;
 import TestClient.Select.SelectServiceLocator;
 
-//Import stuff from db4o
+
+
 import com.db4o.*;
 
 /**
@@ -83,6 +84,36 @@ public class DislocBean extends GenericSopacBean {
 
 	// These are search parameter strings.
 	String forSearchStr = "";
+	
+	boolean faultdrawing = false;
+	
+	public boolean getFaultdrawing() {
+		return faultdrawing;
+	}
+
+	public void setFaultdrawing(boolean faultdrawing) {
+		this.faultdrawing = faultdrawing;
+	}
+	
+	 String faultName = "newfault";
+	 
+	 public String getFaultName() {
+		return faultName;
+	}
+	public void setFaultName(String faultName) {
+		this.faultName = faultName;
+	}
+	
+	
+	int myFaultsForProjectListsize;
+	public int getMyFaultsForProjectListsize() {
+		return myFaultsForProjectList.size();
+	}
+
+	public void setMyFaultsForProjectListsize(int myFaultsForProjectListsize) {
+		this.myFaultsForProjectListsize = myFaultsForProjectListsize;
+	}
+	
 	String faultLatStart = new String();
 	String faultLatEnd = new String();
 	String faultLonStart = new String();
@@ -720,7 +751,7 @@ public class DislocBean extends GenericSopacBean {
 			tmp_fault.setFaultWidth(width);
 			tmp_fault.setFaultDepth(depth);
 			tmp_fault.setFaultDipAngle(dip);
-			tmp_fault.setFaultDipSlip(kdp.getdipslip());
+			tmp_fault.setFaultDipSlip(kdp.getdipslip());			
 			tmp_fault.setFaultStrikeSlip(kdp.getstrikeslip());
 
 			// This is the fault's strike angle
@@ -1653,6 +1684,154 @@ public class DislocBean extends GenericSopacBean {
 		}
 
 	}
+	public void createFaultFromMap() {
+		
+		Fault tmp_fault = new Fault();
+		System.out.println ("[createFaultFromMap] started");
+		
+		double dip = 0;
+		double depth = 0;
+		double width = 0;    
+
+		double latEnd = Double.parseDouble(faultLatEnd);
+		double latStart = Double.parseDouble(faultLatStart);
+		double lonStart = Double.parseDouble(faultLonStart);
+		double lonEnd = Double.parseDouble(faultLonEnd);
+
+
+		// Calculate the length			
+		double d2r = Math.acos(-1.0) / 180.0;
+		double flatten=1.0/298.247;
+
+		double x = (lonEnd - lonStart) * factor(lonStart,latStart);
+		double y = (latEnd - latStart) * 111.32;
+
+		// String length = df.format(Math.sqrt(x * x + y * y));
+		double length=Double.parseDouble(df.format(Math.sqrt(x * x + y * y)));
+		tmp_fault.setFaultName(faultName);
+		
+		tmp_fault.setFaultLength(length);
+		tmp_fault.setFaultWidth(width);
+		tmp_fault.setFaultDepth (depth);
+		tmp_fault.setFaultDipAngle(dip);
+		
+		//Probably hokey default values		
+		tmp_fault.setFaultDipSlip(1.0);		
+		tmp_fault.setFaultRakeAngle(1.0);
+		
+		tmp_fault.setFaultLonStart(lonStart);
+		tmp_fault.setFaultLatStart(latStart);
+		tmp_fault.setFaultLonEnd(lonEnd);
+		tmp_fault.setFaultLatEnd(latEnd);
+		
+		//Set the strike
+		double strike=Math.atan2(x,y)/d2r;		
+		
+		// This is the fault's strike angle
+		// strike=Math.atan2(x,y)/d2r;
+		tmp_fault.setFaultStrikeAngle(Double.parseDouble(df.format(strike)));
+
+		// This is the (x,y) of the fault relative to the project's origin
+		// The project origin is the lower left lat/lon of the first fault.
+		// If any of these conditions hold, we need to reset.
+		System.out.println("Origin:" + currentParams.getOriginLat() + " "
+				+ currentParams.getOriginLon());
+		if (currentParams.getOriginLat() == DislocParamsBean.DEFAULT_LAT
+				|| currentParams.getOriginLon() == DislocParamsBean.DEFAULT_LON) {
+			currentParams.setOriginLat(latStart);
+			currentParams.setOriginLon(lonStart);
+			// Update the parameters
+
+			try {
+
+				if (db != null)
+					db.close();
+				db = Db4o.openFile(getBasePath() + "/"
+						+ getContextBasePath() + "/" + userName + "/"
+						+ codeName + "/" + projectName + ".db");
+
+				ObjectSet result = db.get(DislocParamsBean.class);
+				if (result.hasNext()) {
+					DislocParamsBean tmp = (DislocParamsBean) result.next();
+					db.delete(tmp);
+				}
+
+				db.set(currentParams);
+
+				// Say goodbye.
+				db.commit();
+				if (db != null)
+					db.close();
+			} catch (Exception e) {
+				if (db != null)
+					db.close();
+				System.out.println("[QueryFaultFromDB] " + e);
+			}
+
+		}
+		System.out.println("Updated Origin:" + currentParams.getOriginLat()
+				+ " " + currentParams.getOriginLon());
+
+		// The following should be done in any case.
+		// If the origin was just (re)set above,
+		// we will get a harmless (0,0);
+		double x1 = (lonStart - currentParams.getOriginLon())
+				* factor(currentParams.getOriginLon(), currentParams
+						.getOriginLat());
+
+		double y1 = (latStart - currentParams.getOriginLat()) * 111.32;
+		System.out.println("Fault origin: " + x1 + " " + y1);
+
+		tmp_fault.setFaultLocationX(Double.parseDouble(df.format(x1)));
+		tmp_fault.setFaultLocationY(Double.parseDouble(df.format(y1)));
+
+		// tmp_fault.setFaultLocationX(x1);
+		// tmp_fault.setFaultLocationY(y1);
+
+
+		currentFault = tmp_fault;
+	}
+	
+	public void toggleDrawFaultFromMap(ActionEvent ev) {
+
+		System.out.println("[toggleDrawFaultFromMap] started");
+
+		createFaultFromMap();
+
+		initEditFormsSelection();
+		System.out
+				.println("[toggleDrawFaultFromMap] currentFault.getFaultName() "
+						+ currentFault.getFaultName());
+
+		try {
+
+			if (db != null)
+				db.close();
+			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+					+ userName + "/" + codeName + "/" + projectName + ".db");
+
+			Fault tmpfault = new Fault();
+			tmpfault.setFaultName(currentFault
+					.getFaultName());
+			ObjectSet result = db.get(tmpfault);
+			if (result.hasNext()) {
+				tmpfault = (Fault) result.next();
+				db.delete(tmpfault);
+			}
+			db.set(currentFault);
+			db.commit();
+			if (db != null)
+				db.close();
+		} catch (Exception e) {
+			if (db != null)
+				db.close();
+			System.out.println("[toggleDrawFaultFromMap] " + e);
+		}		
+	}
+	
+	
+	
+	
 
 	public void toggleAddObservationsForProject(ActionEvent ev)
 			throws Exception {
@@ -1873,8 +2052,7 @@ public class DislocBean extends GenericSopacBean {
 			File f = new File(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + ".db");
 
-			if (f.exists()) {
-				System.out.println("it has a projetname debug");
+			if (f.exists()) {				
 
 				if (db != null)
 					db.close();
@@ -3132,6 +3310,11 @@ public class DislocBean extends GenericSopacBean {
 			ex.printStackTrace();
 		}
 	}
+	
+	
+	
+	
+	
 
 	String mapFaultName;
 

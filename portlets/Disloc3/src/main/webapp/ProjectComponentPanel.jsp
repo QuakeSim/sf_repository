@@ -1,9 +1,8 @@
 <h:panelGrid id="ProjectComponentList" columns="1" border="0">
   <h:panelGroup id="dflelerkljk161">
     <h:form id="UpdateSelectFaultsForm" rendered="#{!empty DislocBean2.myFaultEntryForProjectList || !empty DislocBean2.myObsvEntryForProjectList}"> 
-      <h:outputText value="<br/>" escape="false"/>
-      <h:outputText value="1) Please check a box to allow a value to vary during the simplex optimization. " escape="false"/>
-      <h:outputText value="2) Please click the 'update' button after value changes." escape="false"/>
+      <h:outputText value="<br/>" escape="false"/>      
+      <h:outputText value="1) Please click the 'update' button after value changes." escape="false"/>
       <h:outputText value="2) Please click the checkbox next to the 'name' to draw the fault on the map" escape="false"/>
 	<h:panelGrid id="dflelerkljk162" columns="1" border="1" cellpadding="0" cellspacing="0">
 	  <h:outputFormat id="dflelerkljk165" escape="false" value="<b>Fault Components</b>">
@@ -295,10 +294,11 @@
 				</h:form>
 
 			<h:form id="UpdateSelectedParamsForm" rendered="#{!empty DislocBean2.myObsvEntryForProjectList}">
-			  <h:panelGrid columns="1" border="1"  id="stuff84"> 
-			    <h:panelGroup  id="lid9"> 
+			  <h:outputText value="<br/>" escape="false"/>
+			  <h:outputText value="1) Please click the 'update' button after value changes." escape="false"/>
+			    <h:panelGroup  id="lid9">
 			      <h:panelGrid  id="stuff85" columns="1"> 
-				<h:outputText  id="stuff86" escape="false" value="<b>Observations</b>"/> 
+				 <h:outputText  id="stuff86" escape="false" value="<b>Observations</b>"/> 
 			      </h:panelGrid> 
 			      
 			      <h:dataTable border="1"  id="stuff87" value="#{DislocBean2.myObsvEntryForProjectList}" var="myentry4"> 
