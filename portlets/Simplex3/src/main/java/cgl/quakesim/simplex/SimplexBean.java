@@ -2110,12 +2110,44 @@ public class SimplexBean extends GenericSopacBean {
 
 				// I'm not sure if these are even used, but they can't be blank.
 
-				GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
 
-				gsq.setFromServlet(gpsStationName, beginDate, endDate,
-						resource, contextGroup, contextId, minMaxLatLon, false);
-
-				dataUrl = gsq.getResource() + " ";
+				
+				// modified to use unavco .vel files. 05/28/2010 Jun Ji
+				String snf01 = "ftp://data-out.unavco.org/pub/products/velocity/pbo.final_snf01.vel";
+				String igs05 = "ftp://data-out.unavco.org/pub/products/velocity/pbo.final_igs05.vel";
+				UnavcoVelParser uvp = new UnavcoVelParser();
+				uvp.getFile(snf01);
+				String v = uvp.getStationVelocity(gpsStationName);
+				
+				if (v != null) {
+					System.out.println("[toggleAddGPSObsvForProject] " + gpsStationName +" is from " + snf01);
+					dataUrl = v;
+				}
+				
+				
+				if (dataUrl == "") {
+					uvp.getFile(igs05);
+					v = uvp.getStationVelocity(gpsStationName);
+					
+					if (v != null) {
+						System.out.println("[toggleAddGPSObsvForProject] " + gpsStationName +" is from " + igs05);						
+						dataUrl = v;
+					}
+				}
+				
+				if (dataUrl == "") {
+					
+					System.out.println("[toggleAddGPSObsvForProject] " + gpsStationName +" is from the GRWS db");
+				
+					GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
+	
+					gsq.setFromServlet(gpsStationName, beginDate, endDate,
+							resource, contextGroup, contextId, minMaxLatLon, false);
+	
+					dataUrl = gsq.getResource() + " ";
+				}
+				
+				
 				System.out.println("[toggleAddGPSObsvForProject]" + dataUrl);
 
 				Observation[] obsv = makeGPSObservationPoints(gpsStationName,

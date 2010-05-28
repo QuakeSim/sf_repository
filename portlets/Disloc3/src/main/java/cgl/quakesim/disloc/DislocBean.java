@@ -466,8 +466,7 @@ public class DislocBean extends GenericSopacBean {
 		System.out.println("[createKml] Creating the KML file at " + kmlGeneratorUrl);
 		
 
-		// Get the project lat/lon origin. It is the lat/lon origin of the first
-		// fault.
+		// Get the project lat/lon origin. It is the lat/lon origin of the first fault.
 		String origin_lat = dislocParams.getOriginLat() + "";
 		String origin_lon = dislocParams.getOriginLon() + "";
 
@@ -476,11 +475,11 @@ public class DislocBean extends GenericSopacBean {
 		// get my kml
 		SimpleXDataKml kmlService;
 		SimpleXDataKmlServiceLocator locator = new SimpleXDataKmlServiceLocator();
-		locator.setMaintainSession(true);
+		locator.setMaintainSession(true);		
 		kmlService = locator.getKmlGenerator(new URL(kmlGeneratorUrl));
 
-		PointEntry[] tmp_pointentrylist = LoadDataFromUrl(dislocResultsBean
-				.getOutputFileUrl());
+		PointEntry[] tmp_pointentrylist = LoadDataFromUrl(dislocResultsBean.getOutputFileUrl());
+		
 		System.out.println("[createKml] the size of tmp_pointentrylist : " + tmp_pointentrylist.length);
 		System.out.println("[createKml] dislocResultsBean.getOutputFileUrl() " + dislocResultsBean.getOutputFileUrl());
 
