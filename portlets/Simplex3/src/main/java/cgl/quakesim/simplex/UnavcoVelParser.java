@@ -64,10 +64,8 @@ public class UnavcoVelParser {
 		
 		for (int nA = 0 ; nA < line.length ; nA++) {
 			if (line[nA].contains("Release") && (date == null))
-			{
-				System.out.println("[getStationline] release is there");
 				date = (line[nA]+"\n");
-			}
+			
 			else {
 			
 				String[] elements = line[nA].split(" ");
