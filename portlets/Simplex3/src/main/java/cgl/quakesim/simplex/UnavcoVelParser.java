@@ -59,27 +59,36 @@ public class UnavcoVelParser {
 	private String getStationline(String dotnumber){
 		// System.out.println(vel);
 		String[] line = vel.split("\n");
-		String result = null;
+		String date = null;
+		String r = null;
 		
 		for (int nA = 0 ; nA < line.length ; nA++) {
-			if (line[nA].contains("Release") && (result == null))
-				result = (line[nA]+"\n");
+			if (line[nA].contains("Release") && (date == null))
+			{
+				System.out.println("[getStationline] release is there");
+				date = (line[nA]+"\n");
+			}
+			else {
 			
-			String[] elements = line[nA].split(" ");
-			
-			for (int nB = 0 ; nB < elements.length ; nB++) {
-			
-				if (elements[nB].compareToIgnoreCase(dotnumber) == 0) {
-					
-					if (result == null)
-						result = (line[nA]+"\n");
-					result += (line[nA]+"\n");
+				String[] elements = line[nA].split(" ");
+				
+				for (int nB = 0 ; nB < elements.length ; nB++) {
+				
+					if (elements[nB].compareToIgnoreCase(dotnumber) == 0) {
+						r = line[nA];
+					}
 				}
 			}
 			
-		}	
+		}
 		
-		return result;
+		
+		if (r == null)
+			return null;
+		else if (date == null)
+			return r;
+		
+		return date+r;
 	}
 	
 	private String getNeu(String line) {
