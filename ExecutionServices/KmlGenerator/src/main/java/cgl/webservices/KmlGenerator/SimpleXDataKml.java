@@ -478,8 +478,8 @@ public class SimpleXDataKml {
 //				tmp_lonlat2.getY()); 
 //		line_value = line_value + mercator_lonlat.getX() + "," 
 //				+ mercator_lonlat.getY() + ",0  "; 
-		line_value=line_value +tmp_lonlat2.getX() + "," + tmp_lonlat2.getY() + ",0  "; 
-		mapx2 = original_xy.getX() + smallx; 
+		line_value=line_value +tmp_lonlat2.getX() + "," + tmp_lonlat2.getY() + ",0  ";
+		mapx2 = original_xy.getX() + smallx;
 		tmp_lonlat2 = ConverterUTM.UTMtoLL(23,mapx2, mapy2, UTMZone); 
 //		mercator_lonlat = MapFunction.MercatorProject(tmp_lonlat2.getX(), 
 //				tmp_lonlat2.getY()); 
