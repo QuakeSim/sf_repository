@@ -1090,7 +1090,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 	 protected void extractFaultFromOutput(String outputFileLocation, String faultFileLocation) 
 		  throws Exception {
 		  BufferedReader buf=new BufferedReader(new FileReader(outputFileLocation));
-		  PrintWriter printer=new PrintWriter(new FileWriter(faultFileLocation));
+		  PrintWriter printer=new PrintWriter(new FileWriter(faultFileLocation), true);
 		  String line=buf.readLine();
 
 		  //Skip over files until you get to the fault section.
@@ -1104,6 +1104,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 				//System.out.println("Fault line:"+line);
 				line=buf.readLine();
 		  }
+		  pw.close();
 		  System.out.println("End of the fault output");
 	 }
 }
