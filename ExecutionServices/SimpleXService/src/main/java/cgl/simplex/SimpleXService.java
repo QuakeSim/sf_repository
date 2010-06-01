@@ -1100,8 +1100,8 @@ public class SimpleXService extends AntVisco implements Runnable {
 		  // Print out all the fault information to the output file.  Stop when we get to the
 		  // second "residual" section.
 		  while(line!=null && line.indexOf("Residual")<0) {
-				//				printer.println(line);
-				System.out.println("Fault line:"+line);
+				printer.println(line);
+				//System.out.println("Fault line:"+line);
 				line=buf.readLine();
 		  }
 		  System.out.println("End of the fault output");
