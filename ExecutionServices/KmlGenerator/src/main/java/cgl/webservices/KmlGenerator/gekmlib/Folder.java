@@ -201,6 +201,7 @@ public class Folder extends Container
     }
     public String toKML(boolean suppressEnclosingTags)
     {
+    	System.out.println("[toKML] It is an improved toKML()");
         StringBuilder kml= new StringBuilder();
         if(!suppressEnclosingTags)
         {
