@@ -331,11 +331,6 @@ public class SimpleXService extends AntVisco implements Runnable {
 
 	/**
 	 * Actually runs Simplex. Always runs in non-blocking mode.
-	 * 
-	 * Returns the timestamp as String[0]. The rest are URLs of various output
-	 * files. String[1] is the Simplex input file. String[2] is the Simplex
-	 * output file. String [3] is the standard output of geofest. String [4] is
-	 * the simplex log file.
 	 */
 	 public SimpleXOutputBean runSimplex(String userName, 
 													 String projectName,
@@ -392,14 +387,18 @@ public class SimpleXService extends AntVisco implements Runnable {
 		String destDir = generateOutputDestDir(userName, projectName,
 				jobUIDStamp);
 		String workDir = generateWorkDir(userName, projectName, jobUIDStamp);
+		String inputFileDestLoc=destDir + "/" + projectName + ".input";
+		String outputFileDestLoc=destDir + "/" + projectName + ".output";
+		String stdoutFileDestLoc=destDir + "/" + projectName + ".stdout";
+		String faultFileDestLoc=destDir + "/" + projectName + ".fault";
 		try {
 			makeWorkDir(destDir);
 			copyFileToFile(new File(workDir + "/" + projectName + ".input"),
-					new File(destDir + "/" + projectName + ".input"));
+								new File(inputFileDestLoc));
 			copyFileToFile(new File(workDir + "/" + projectName + ".output"),
-					new File(destDir + "/" + projectName + ".output"));
+								new File(outputFileDestLoc));
 			copyFileToFile(new File(workDir + "/" + projectName + ".stdout"),
-					new File(destDir + "/" + projectName + ".stdout"));
+								new File(stdoutFileDestLoc));
 			// copyFileToFile(new File(workDir + "/" + projectName + ".fault"),
 			// 		new File(destDir + "/" + projectName + ".fault"));
 		} // End of the try
@@ -407,8 +406,16 @@ public class SimpleXService extends AntVisco implements Runnable {
 		catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		String[] kmlurls = new String[4];
+		
+		//Extract the fault information to a separate file
+		try {
+			 extractFaultFromOutput(outputFileDestLoc,faultFileDestLoc);
+		}														
+		catch (Exception ex) {
+			 ex.printStackTrace();
+		}
 
+		//Set the metadata
 		sxoutput.setProjectName(projectName);
 		sxoutput.setJobUIDStamp(jobUIDStamp);
 		sxoutput.setInputUrl(baseUrl + "/" + projectName + ".input");
@@ -417,6 +424,8 @@ public class SimpleXService extends AntVisco implements Runnable {
 		sxoutput.setFaultUrl(baseUrl + "/" + projectName + ".fault");
 		sxoutput.setCreationDate(creationDate);
 
+		//Set up the KML service, execute it, and add to the output object
+		String[] kmlurls = new String[4];
 		try {
 			 System.out.println("Making the kml for the output");
 			String outputfilename = workDir + "/" + projectName + ".output";
@@ -1070,5 +1079,29 @@ public class SimpleXService extends AntVisco implements Runnable {
 	 protected String createCreationDate() {
 		  creationDate=(new Date()).toString();
 		  return creationDate;
+	 }
+
+	 /**
+	  * This method is specialized to the format of the Simplex output file.  It 
+	  * extracts the optimized fault model parameters calculated by Simplex and 
+	  * writes them to a file.  There may be more than one fault.  All faults are 
+	  * written to the same file.
+	  */
+	 protected void extractFaultFromOutput(String outputFileLocation, String faultFileLocation) 
+		  throws Exception {
+		  BufferedReader buf=new BufferedReader(new FileReader(outputFileLocation));
+		  PrintWriter printer=new PrintWriter(new FileWriter(faultFileLocation));
+		  String line=buf.readLine();
+
+		  //Skip over files until you get to the fault section.
+		  while(line.indexOf("Fault #")<0 && line!=null) {
+				line=buf.readLine();
+		  }
+		  // Print out all the fault information to the output file.  Stop when we get to the
+		  // second "residual" section.
+		  while(line.indexOf("Residual")<0 && line!=null) {
+				printer.println(line);
+				buf.readLine();
+		  }
 	 }
 }
