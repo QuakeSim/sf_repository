@@ -1104,7 +1104,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 				//System.out.println("Fault line:"+line);
 				line=buf.readLine();
 		  }
-		  pw.close();
+		  printer.close();
 		  System.out.println("End of the fault output");
 	 }
 }
