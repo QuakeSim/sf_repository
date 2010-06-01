@@ -1094,14 +1094,16 @@ public class SimpleXService extends AntVisco implements Runnable {
 		  String line=buf.readLine();
 
 		  //Skip over files until you get to the fault section.
-		  while(line.indexOf("Fault #")<0 && line!=null) {
+		  while(line!=null && line.indexOf("Fault #")<0) {
 				line=buf.readLine();
 		  }
 		  // Print out all the fault information to the output file.  Stop when we get to the
 		  // second "residual" section.
-		  while(line.indexOf("Residual")<0 && line!=null) {
-				printer.println(line);
-				buf.readLine();
+		  while(line!=null && line.indexOf("Residual")<0) {
+				//				printer.println(line);
+				System.out.println("Fault line:"+line);
+				line=buf.readLine();
 		  }
+		  System.out.println("End of the fault output");
 	 }
 }
