@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServlet;
 import org.apache.axis.MessageContext; 
 import org.apache.axis.transport.http.HTTPConstants; 
  
-import test.gekmlib.*;
+import cgl.webservices.KmlGenerator.gekmlib.*;
  
 import com.sun.org.apache.xml.internal.serialize.OutputFormat; 
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer; 
