@@ -25,18 +25,7 @@ import javax.servlet.http.HttpServlet;
 import org.apache.axis.MessageContext; 
 import org.apache.axis.transport.http.HTTPConstants; 
  
-import com.keithpower.gekmlib.Folder; 
-import com.keithpower.gekmlib.Kml; 
-import com.keithpower.gekmlib.LineString; 
-import com.keithpower.gekmlib.Placemark; 
-import com.keithpower.gekmlib.Point; 
-import com.keithpower.gekmlib.Style; 
-import com.keithpower.gekmlib.LineStyle; 
-import com.keithpower.gekmlib.IconStyle; 
-import com.keithpower.gekmlib.Icon; 
-import com.keithpower.gekmlib.vec2; 
-import com.keithpower.gekmlib.Node; 
-import com.keithpower.gekmlib.Document; 
+import test.gekmlib.*;
  
 import com.sun.org.apache.xml.internal.serialize.OutputFormat; 
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer; 
