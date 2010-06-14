@@ -91,7 +91,7 @@ def drawimage(datatable,lonlatgrid, outputname, imageurl):
     xy1=max(xy)
 
     z = np.array(data)
-    z = z.reshape(lonlatgrid[0],lonlatgrid[1])
+    z = z.reshape(lonlatgrid[1],lonlatgrid[0])
 
     fig = plt.figure()
     fig.subplots_adjust(left=0.0,bottom=0.0,top=1.0,right=1.0)
