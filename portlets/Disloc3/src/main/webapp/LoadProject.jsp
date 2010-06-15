@@ -54,6 +54,7 @@ function dataTableSelectOneRadio(radio) {
 
 <f:view>
 	<h:outputText id="lptv1" styleClass="header2" value="Project Archive"/>
+				  
         <p/>
 		  <h:outputText id="lptv11" value="You don't have any archived projects."
 							 rendered="#{empty DislocBean2.myProjectNameList}"/>
@@ -81,11 +82,21 @@ function dataTableSelectOneRadio(radio) {
 
 			<h:form>
 			<h:panelGrid columns="1" border="0">
+				<h:message id="NoCopyProject" for="newProjectName" 
+							  showDetail="#{true}" showSummary="#{true}"
+				  errorStyle="color:red"
+				  styleClass="errors"/>
+				<h:message id="projectlistforcopyMsg" for="projectlistforcopy" 
+							  showDetail="#{true}" showSummary="#{true}"
+				  errorStyle="color:red"
+				  styleClass="errors"/>
+
 				<h:outputText escape="false" value="<b>Copy Project</b><br><br>" />
 				<h:outputText escape="false"
 					value="Please select from one of the previous projects." />
 	
-				<h:selectManyCheckbox id="projectlistforcopy" 
+				<h:selectManyCheckbox id="projectlistforcopy"  
+											 required="true"
 											 value="#{DislocBean2.copyProjectsArray}"
 					onchange="dataTableSelectOneRadio(this)"
 					onclick="dataTableSelectOneRadio(this)"
