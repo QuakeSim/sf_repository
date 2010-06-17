@@ -3,8 +3,8 @@
 <p>
 <iframe src="http://quakesim.org/quaketables/fault.jsp"
 		  frameborder=0 
-		  width="100%" 
-		  height="700" 
+		  width="1000" 
+		  height="1000" 
 		  scrolling="true"/>
 </body>
 </html>
