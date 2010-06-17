@@ -539,6 +539,18 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
 				  </row-layout>
 				</table-layout>
 			 </portlet-tab>
+			 <portlet-tab label="FetchDB-UAVSAR">
+				<title lang="en">FaultDB InSAR</title>
+				<table-layout>
+				  <row-layout>
+					 <column-layout>
+						<portlet-frame label="FaultDB-UAVSAR-PF">
+						  <portlet-class>FaultDB-portlet#FaultDB-UAVSAR</portlet-class>
+						</portlet-frame>
+					 </column-layout>
+				  </row-layout>
+				</table-layout>
+			 </portlet-tab>
 
 		  </portlet-tabbed-pane>
 		</portlet-tab>
