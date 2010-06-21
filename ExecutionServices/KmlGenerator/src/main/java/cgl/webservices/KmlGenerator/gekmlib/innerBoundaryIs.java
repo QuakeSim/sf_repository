@@ -10,7 +10,11 @@ import java.util.Iterator;
 public class innerBoundaryIs extends boundary
 {
 
+	public String getTagName() {
+		return "innerBoundaryIs";		
+	}
 
+	
     public innerBoundaryIs()
     {
         super();

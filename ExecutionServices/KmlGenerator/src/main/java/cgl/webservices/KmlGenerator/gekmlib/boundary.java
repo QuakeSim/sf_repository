@@ -47,13 +47,23 @@ public class boundary extends Node
     {
         return toKML(false);
     }
+    
+    public String getTagName() {
+    	return "boundary";
+    }
+
+    
+    	
+    	
     public String toKML(boolean suppressEnclosingTags)
     {
         String kml="";
         if(!suppressEnclosingTags)
         {
-        kml+="<boundary";
-        kml+=">\n";
+        	
+        // kml+="<boundary";
+        	kml+="<"+this.getTagName();
+        	kml+=">\n";
         }
         kml+=super.toKML(true);
         if(this.linearRing!=null)
@@ -62,7 +72,8 @@ public class boundary extends Node
         }
         if(!suppressEnclosingTags)
         {
-            kml+="</boundary>\n";
+            // kml+="</boundary>\n";
+        	kml+="</"+this.getTagName()+">\n";
         }
         return kml;
     }

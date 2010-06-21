@@ -25,8 +25,8 @@ import javax.servlet.http.HttpServlet;
 import org.apache.axis.MessageContext; 
 import org.apache.axis.transport.http.HTTPConstants; 
  
-import cgl.webservices.KmlGenerator.gekmlib.*;
- 
+import cgl.webservices.KmlGenerator.gekmlib.*; 
+
 import com.sun.org.apache.xml.internal.serialize.OutputFormat; 
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer; 
  
@@ -193,9 +193,7 @@ public class SimpleXDataKml {
 				String kmlcontent = this.doc.toKML();
 				// System.out.println("[runMakeKml] [1] the size of the doc : " + this.doc.toKML().length());
 				System.out.println("[runMakeKml] the size of the doc : " + kmlcontent.length());
-				System.out.println("[runMakeKml] the KML generated in " + (System.currentTimeMillis() -start)/1000+"Secs");		        
-		        		         			
-				
+				System.out.println("[runMakeKml] the KML generated in " + (System.currentTimeMillis() -start)/1000+"Secs");
 				
 				PrintStream out = new PrintStream(new FileOutputStream(destDir + "/" + ProjectName + JobUID +".kml"));
 				
@@ -222,7 +220,7 @@ public class SimpleXDataKml {
 	 } 
 	  
 	 // 
-	 public PointEntry[] LoadDataFromFile(String InputFileName) { 
+	 public PointEntry[] LoadDataFromFile(String InputFileName) {
 		 ArrayList dataset = new ArrayList(); 
 		  
 		 try {			  
@@ -603,7 +601,190 @@ public class SimpleXDataKml {
 	 public void setArrowPlacemark(String folderName, String LineColor, double LineWidth) { 
 		  setArrowPlacemark(folderName, LineColor, LineWidth, defaultArrowScale); 
 	 } 
+
+	 
+	 public void setArrowPlacemark(String folderName, String LineColor, double LineWidth, double arrowScale) {
+		 
+		 System.out.println("[setArrowPlacemark] Started");		 
+		 Folder container = new Folder();
+		 if (!folderName.equals("") && !folderName.equals("null")) { 
+	 
+			container.setName(folderName); 
+			container.setDescription("This is a folder contained by the root"); 
+			root.addFolder(container); 
+			} else { 
+			container = root; 
+			} 
+			
+			//This isn't done correctly so disable in anticipation of future brilliance. 
+			String linestyleid="arrowedStyle"; 
+			
+			//String linestyleid=""; 
+			System.out.println("Color and width for arrowed: "+LineColor+" "+LineWidth);
+			setLineStyle(container, linestyleid, LineColor, LineWidth); 
+			
+			double longestlength = 0.;
+			double projectMinX=Double.valueOf(datalist[0].getX());
+			double projectMaxX=Double.valueOf(datalist[0].getX());
+			double projectMinY=Double.valueOf(datalist[0].getY());
+			double projectMaxY=Double.valueOf(datalist[0].getY());
+			
+			for (int i = 0; i < datalist.length; i++) {
+				
+				double x=Double.valueOf(datalist[i].getX());
+				double y=Double.valueOf(datalist[i].getX());
+				if(x<projectMinX) projectMinX=x;
+				if(x>projectMaxX) projectMaxX=x;
+				if(y<projectMinY) projectMinY=y;
+				if(y>projectMaxY) projectMaxY=y;
+				
+				double dx = Double.valueOf(datalist[i].getDeltaXValue()) 
+				.doubleValue(); 
+				double dy = Double.valueOf(datalist[i].getDeltaYValue()) 
+				.doubleValue();			 
+				double length = Math.sqrt(dx * dx + dy * dy); 
+				
+				if (i == 0)
+					longestlength = length; 
+				
+				else if (length > longestlength)
+					longestlength = length;	
+				 
+			}		 
+			
+			double projectLength=(projectMaxX-projectMinX)*(projectMaxX-projectMinX);
+			projectLength+=(projectMaxY-projectMinY)*(projectMaxY-projectMinY);
+			projectLength=Math.sqrt(projectLength);
+			
+			//We arbitrarly set the longest displacement arrow to be 10% of the 
+			//project dimension.
+			double scaling = 0.1*projectLength/longestlength;
+			
+			//		System.out.println("Scale rate: "+scaling+" "+longestlength+" "+projectLength);
+			
+			System.out.println("[setArrowPlacemark] the size of the datalist : " + datalist.length);
+			for (int i = 0; i < datalist.length; i++) { 
+			// create and add a Placemark containing a Point 
+			Placemark mark1 = new Placemark();			 
+			mark1.setName(datalist[i].getFolderTag() + i); 
+			double rads; 
+			int degs; 
+			double dx = Double.valueOf(datalist[i].getDeltaXValue()) 
+			.doubleValue(); 
+			double dy = Double.valueOf(datalist[i].getDeltaYValue()) 
+			.doubleValue(); 
+			double x = Double.valueOf(datalist[i].getX()).doubleValue(); 
+			double y = Double.valueOf(datalist[i].getY()).doubleValue(); 
+			// Obtain angle in degrees from user 
+			degs = (int) Math.toDegrees(Math.atan2(dx, dy)); 
+			degs = (360 + degs) % 360; 
+			// Convert degrees to radian 
+			rads = Math.toRadians((double) degs); 
+			
+			double length = Math.sqrt(dx * dx + dy * dy);         ////////  
+			
+			//Create the popup description of the point
+			String br="<br/>"; 
+			String fontStart="<font color=blue>"; 
+			String fontEnd="</font>"; 
+			
+			//Point origin
+			double lon=x/factor(original_lon, original_lat)+original_lon;
+			double lat=y/111.32+original_lat;
+			
+			String descriptionValue = "<![CDATA["; 
+			descriptionValue = descriptionValue 
+			+ "<font color=blue>lat: </font>" + lat + ""+br; 
+			descriptionValue = descriptionValue 
+			+ "<font color=blue>lon: </font>" + lon + ""+br; 
+			descriptionValue = descriptionValue 
+			+ "<font color=blue>length: </font>" + length + " cm "+br; 
+			descriptionValue = descriptionValue 
+			+ "<font color=blue>degree: </font>" + degs + ""+br; 
+			
+			descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaXName() 
+			+ ": " +fontEnd+ datalist[i].getDeltaXValue() + " cm <br/>"; 
+			descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaYName() 
+			+ ": " +fontEnd+ datalist[i].getDeltaYValue() + " cm <br/>"; 
+			descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaZName() 
+			+ ": " +fontEnd+ datalist[i].getDeltaZValue() + " cm <br/>"; 
+			descriptionValue = descriptionValue + "<font color=blue>scale rate </font>" 
+			+ ":" +fontEnd+ longestlength + "cm  : " + scaling + "km <br/>";			 
+			descriptionValue = descriptionValue 
+			+ "<font color=blue>tag name:</font>" 
+			+ datalist[i].getFolderTag()+br; 
+			descriptionValue = descriptionValue + "]]>"; 
+			mark1.setDescription(descriptionValue); 
+			
+			LineString newline = new LineString(); 
+			mark1.setStyleUrl("#"+linestyleid);
+			
+			double startx = x;
+			double starty = y;
+			double endx = startx + dx*scaling;
+			double endy = starty + dy*scaling;
+			ArrowLine curarrow = CreateArrowByCoordinate(startx,starty,endx,endy); 
+			//			System.out.println("Plotting: "+startx+" "+starty+" "+endx+" "+endy);
+			
+			//Plot the arrow's base relative to the project's origin.
+			double arrowOrigX = curarrow.getStartPoint().getX(); 
+			double arrowOrigY = curarrow.getStartPoint().getY();
+			double arrowLonStart=arrowOrigX/factor(original_lon, original_lat)+original_lon;
+			double arrowLatStart=arrowOrigY/111.32+original_lat;
+			
+			//Plot the arrow's ending point (head) relative to the project
+			//origin.
+			double arrowEndX = curarrow.getEndPoint().getX(); 
+			double arrowEndY = curarrow.getEndPoint().getY();
+			double arrowLonEnd=arrowEndX/factor(original_lon, original_lat)+original_lon;
+			double arrowLatEnd=arrowEndY/111.32+original_lat;
+			
+			//Plot the arrow. These are just polylines 
+			String line_value = arrowLonStart+","+arrowLatStart+",0 ";
+			line_value+=arrowLonEnd+","+arrowLatEnd+",0 ";
+			newline.setCoordinates(line_value); 
+			mark1.addLineString(newline); 
+			
+			// Draw the arrow head by a polygon.
+			
+			Polygon p = new Polygon();			
+			boundary b = new boundary();
+			
+			LinearRing lr = new LinearRing();
+			
+			
+			//Plot the arrow tails
+			double arrowTail1X = curarrow.getArrowTail1().getX(); 
+			double arrowTail1Y = curarrow.getArrowTail1().getY();
+			double arrowLonTail1=arrowTail1X/factor(original_lon, original_lat)+original_lon;
+			double arrowLatTail1=arrowTail1Y/111.32+original_lat;
+
+			double arrowTail2X = curarrow.getArrowTail2().getX(); 
+			double arrowTail2Y = curarrow.getArrowTail2().getY();
+			double arrowLonTail2=arrowTail2X/factor(original_lon, original_lat)+original_lon;
+			double arrowLatTail2=arrowTail2Y/111.32+original_lat;
+			
+			//Plot the arrow. These are just polylines
+			line_value = arrowLonEnd+","+arrowLatEnd+",0 ";
+			line_value+=arrowLonTail1+","+arrowLatTail1+",0 ";
+			line_value+=arrowLonTail2+","+arrowLatTail2+",0 ";
+			
+			lr.setCoordinates(line_value);
+			b.addLinearRing(lr);			
+			p.addOuterBoundaryIs(b);
+			mark1.addPolygon(p);
+			container.addPlacemark(mark1);
+			
+			}
+			System.out.println("[setArrowPlacemark] Finished");
+			
+	 }
  
+	 
+	 
+	 
+	 
+	 /* Deprecated 06/21/2010 by Jun Ji
 	 public void setArrowPlacemark(String folderName, 
 											 String LineColor, 
 											 double LineWidth, 
@@ -816,7 +997,8 @@ public class SimpleXDataKml {
 			container.addPlacemark(mark1); 
 		}
 		System.out.println("[setArrowPlacemark] Finished");
-	} 
+	}
+	*/ 
  
 	public ArrowLine CreateArrowByCoordinate(double startx, double starty, 
 			double endx, double endy) { 

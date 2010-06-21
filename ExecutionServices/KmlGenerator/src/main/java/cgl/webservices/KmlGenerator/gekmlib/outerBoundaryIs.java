@@ -9,7 +9,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 public class outerBoundaryIs extends boundary
 {
-
+	
+	public String getTagName() {
+		return "outerBoundaryIs";		
+	}
 
     public outerBoundaryIs()
     {
