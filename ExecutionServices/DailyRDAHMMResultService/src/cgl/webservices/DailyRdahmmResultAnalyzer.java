@@ -229,7 +229,6 @@ public class DailyRdahmmResultAnalyzer {
 			res.append(getColorForStation(theDate, stationArray[i])).append(',');
 		}		
 		
-		System.out.println("about to return from calcStationColors");
 		return res.toString();
 	}
 	

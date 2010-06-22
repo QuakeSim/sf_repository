@@ -28,8 +28,14 @@ public class DailyRdahmmResultService {
 	static String destKmlDir;
 	static String kmlUrlPattern;
 	static String popUpWinHtml;
+	static String kmlObsoleteNamePattern;
+	static String plotObsoleteNamePattern;
+	static long kmlObsoleteThreshold;
+	static long plotObsoleteThreshold;
+	static long kmlCleanUpPeriod;
+	static long plotCleanUpPeriod;
 	protected HashMap<String, DailyRdahmmResultAnalyzer> analyzerTable;
-	
+	protected ObsoleteFileDeleter[] oldFileDeleters;	
 	
 	public DailyRdahmmResultService() {
 		analyzerTable = new HashMap<String, DailyRdahmmResultAnalyzer>();
@@ -46,6 +52,32 @@ public class DailyRdahmmResultService {
 			destKmlDir = propConfig.getProperty("destKmlDir");
 			kmlUrlPattern = propConfig.getProperty("kmlUrlPattern");
 			popUpWinHtml = propConfig.getProperty("popUpWinHtml");
+			kmlObsoleteNamePattern = propConfig.getProperty("kmlObsoleteNameRegPattern");
+			plotObsoleteNamePattern = propConfig.getProperty("plotObsoleteNameRegPattern");
+			kmlObsoleteThreshold = Long.parseLong(propConfig.getProperty("kmlObsoleteThresholdDays")) 
+									* ObsoleteFileDeleter.DAY_MILISEC_COUNT;
+			plotObsoleteThreshold = Long.parseLong(propConfig.getProperty("plotObsoleteThresholdDays")) 
+									* ObsoleteFileDeleter.DAY_MILISEC_COUNT;
+			kmlCleanUpPeriod = Long.parseLong(propConfig.getProperty("kmlCleanUpPeriodDays")) 
+								* ObsoleteFileDeleter.DAY_MILISEC_COUNT;
+			plotCleanUpPeriod = Long.parseLong(propConfig.getProperty("plotCleanUpPeriodDays")) 
+								* ObsoleteFileDeleter.DAY_MILISEC_COUNT;
+			
+			oldFileDeleters = new ObsoleteFileDeleter[2];
+			oldFileDeleters[0] = new ObsoleteFileDeleter(kmlObsoleteNamePattern, kmlCleanUpPeriod, kmlObsoleteThreshold);
+			oldFileDeleters[0].addDirPath(destKmlDir);
+			if (kmlObsoleteNamePattern.equals(plotObsoleteNamePattern) &&
+				kmlObsoleteThreshold == plotObsoleteThreshold &&
+				kmlCleanUpPeriod == plotCleanUpPeriod) {
+				oldFileDeleters[0].addDirPath(destPlotDir);
+				oldFileDeleters[1] = oldFileDeleters[0];
+				oldFileDeleters[0].start();
+			} else {
+				oldFileDeleters[1] = new ObsoleteFileDeleter(plotObsoleteNamePattern, plotCleanUpPeriod, plotObsoleteThreshold);
+				oldFileDeleters[1].addDirPath(destPlotDir);
+				oldFileDeleters[0].start();
+				oldFileDeleters[1].start();
+			}				
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -261,6 +293,128 @@ public class DailyRdahmmResultService {
 		}
 	}
 	
+	/**
+	 * make a kml file for time between fromDateStr and toDateStr, and return the url of the kml
+	 * @param fromDateStr
+	 * @param toDateStr
+	 * @param resUrl
+	 * @return
+	 */
+	public String getKmlForDateRange(String fromDateStr, String toDateStr, String resUrl) {
+		String contextGroup = "SOPAC";
+		if (resUrl.toUpperCase().indexOf("JPL") >= 0) {
+			contextGroup = "JPL";
+		}
+		String preTreat = "FILL";
+		if (resUrl.toUpperCase().indexOf("NOFILL") >= 0) {
+			preTreat = "NOFILL";
+		}
+		
+		Calendar calFrom = UtilSet.getDateFromString(fromDateStr);
+		Calendar calTo = UtilSet.getDateFromString(toDateStr);
+		if (calFrom.compareTo(calTo) > 0) {
+			Calendar calTmp = calFrom;
+			calFrom = calTo;
+			calTo = calTmp;
+		}
+		Calendar today = Calendar.getInstance();
+		String todayStr = UtilSet.getDateString(today);
+		fromDateStr = UtilSet.getDateString(calFrom);
+		toDateStr = UtilSet.getDateString(calTo);
+		 
+		String kmlFileName = contextGroup + "_" + preTreat + "_" + fromDateStr + "to" + toDateStr + "." + todayStr + ".kml";
+		String kmlPath = destKmlDir + File.separator + kmlFileName;
+		File kmlFile = new File(kmlPath);
+		if (kmlFile.exists() && kmlFile.isFile()) {
+			return kmlUrlPattern.replace("<fileName>", kmlFileName);
+		}
+		
+		DailyRdahmmResultAnalyzer analyzer = analyzerTable.get(resUrl);
+		if (analyzer == null) {
+			analyzer = addAnalyzer(resUrl);
+		}
+		
+		DailyRdahmmStation[] stations = analyzer.stationArray;
+		
+		Document kmlDoc = DocumentHelper.createDocument();
+		Element eleKml = kmlDoc.addElement("kml");
+		eleKml.addAttribute("xmlns", "http://www.opengis.net/kml/2.2");
+		Element eleFolder = eleKml.addElement("Folder");
+		eleFolder.addElement("open").setText("1");
+		Element eleDoc = eleFolder.addElement("Document");
+		eleDoc.addElement("name").setText("Style Definitions");
+		String[] styleIds = {"greenIconStyle", "redIconStyle", "yellowIconStyle", "blueIconStyle", "grayIconStyle"};
+		String[] colorStrs = {"ff00ff00", "ff0000ff", "ff00ffff", "ffff0000", "ff7f7f7f"};
+		String[] urls = {"http://labs.google.com/ridefinder/images/mm_20_green.png",
+						"http://labs.google.com/ridefinder/images/mm_20_red.png",
+						"http://labs.google.com/ridefinder/images/mm_20_yellow.png",
+						"http://labs.google.com/ridefinder/images/mm_20_blue.png",
+						"http://labs.google.com/ridefinder/images/mm_20_gray.png"};
+		for (int i=0; i<5; i++) {
+			Element eleStyle = eleDoc.addElement("Style");
+			eleStyle.addAttribute("id", styleIds[i]);
+			Element eleIconStyle = eleStyle.addElement("IconStyle");
+			Element eleScale = eleIconStyle.addElement("scale");
+			eleScale.setText("0.7");
+			Element eleColor = eleIconStyle.addElement("color");
+			eleColor.setText(colorStrs[i]);
+			Element eleIcon = eleIconStyle.addElement("Icon");
+			Element eleHref = eleIcon.addElement("href");
+			eleHref.setText(urls[i]);
+			eleStyle.addElement("LabelStyle").addElement("scale").setText("0");
+		}
+		
+		while (calFrom.compareTo(calTo) <= 0) {
+			eleDoc = eleFolder.addElement("Document");
+			String dateStr = UtilSet.getDateString(calFrom);
+			eleDoc.addElement("name").setText(contextGroup + "_" + preTreat + "_" + dateStr);
+			// add the "TimeSpan" element
+			Element eleTP = eleDoc.addElement("TimeSpan");
+			eleTP.addElement("begin").setText(dateStr + "T00:00:00Z");
+			eleTP.addElement("end").setText(dateStr + "T23:59:59Z");
+			String colors = analyzer.calcStationColors(dateStr);
+			for (int i = 0; i < stations.length; i++) {
+				Element eleMark = eleDoc.addElement("Placemark");
+				Element eleName = eleMark.addElement("name");
+				eleName.setText(stations[i].stationID);
+				Element elePoint = eleMark.addElement("Point");
+				Element eleCoord = elePoint.addElement("coordinates");
+				eleCoord.setText(stations[i].longitude + "," + stations[i].latitude);
+				Element eleStyleUrl = eleMark.addElement("styleUrl");
+				int colorNum = Integer.valueOf(colors.substring(2*i, 2*i+1));
+				eleStyleUrl.setText("#" + styleIds[colorNum]);
+				if (calFrom.equals(calTo)) {
+					String fileUrlPrefix = analyzer.urlPattern.replace("{!station-id!}", stations[i].stationID) + "/" 
+											+ analyzer.dirPattern.replace("{!station-id!}", stations[i].stationID) + "/";
+					String rawUrl = fileUrlPrefix + analyzer.rawInputPattern.replace("{!station-id!}", stations[i].stationID);
+					String qUrl = fileUrlPrefix	+ analyzer.qPattern.replace("{!station-id!}", stations[i].stationID);
+					String popUpHtml = popUpWinHtml;
+					popUpHtml = popUpHtml.replace("{!rawFileURL!}", rawUrl);
+					popUpHtml = popUpHtml.replace("{!qFileURL!}", qUrl);
+					Element eleDesc = eleMark.addElement("description");
+					// eleDesc.setText("<![CDATA[" + popUpHtml + "]]");
+					eleDesc.setText(popUpHtml);
+				}
+			}
+			
+			calFrom.set(Calendar.DATE, calFrom.get(Calendar.DATE) + 1);
+		}
+		
+		try {
+			FileWriter fw = new FileWriter(kmlPath);
+			OutputFormat format = OutputFormat.createPrettyPrint();
+			XMLWriter writer = new XMLWriter(fw, format);
+			writer.write(kmlDoc);
+			writer.close();
+			fw.close();
+
+			return kmlUrlPattern.replace("<fileName>", kmlFileName);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+	
 	/** 
 	 * call a http service and return the content. used by javascripts for accessing services
 	 * in different domains 
@@ -272,11 +426,22 @@ public class DailyRdahmmResultService {
 		return UtilSet.callHttpService(serviceUrl);
 	}
 	
-	// add an analyzer to the table of analyzers
+	/** add an analyzer to the table of analyzers
+	 * @param xmlResUrl
+	 * @return
+	 */
 	protected DailyRdahmmResultAnalyzer addAnalyzer(String xmlResUrl) {
 		DailyRdahmmResultAnalyzer analyzer = new DailyRdahmmResultAnalyzer(xmlResUrl);
 		analyzerTable.put(xmlResUrl, analyzer);
 		return analyzer;
+	}
+	
+	/** stop all obsolete file deleters before finalization */
+	protected void finalize() throws Throwable {
+		for (int i=0; i<oldFileDeleters.length; i++) {
+			oldFileDeleters[i].elegantStop();
+		}
+		super.finalize();
 	}
 	
 }

@@ -191,4 +191,60 @@ public class UtilSet {
 		
 		return "";
 	}
+	
+	/**
+     * delete a non-empty directory
+     * @param success or not
+     * @return
+     */
+    public static boolean deleteDirectory(File dir) {
+    	if (dir.exists()) {
+			File[] files = dir.listFiles();
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].isDirectory()) {
+					if (!deleteDirectory(files[i]))
+						return false;
+				} else {
+					if (!files[i].delete())
+						return false;
+				}
+			}
+			return dir.delete();
+		}
+		return true;
+    }
+    
+    /**
+     * delete things under a directory
+     * @param dir
+     * @return
+     */
+    public static boolean deleteStuffInDir(File dir) {
+    	if (dir.exists()) {
+			File[] files = dir.listFiles();
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].isDirectory()) {
+					if (!deleteDirectory(files[i]))
+						return false;
+				} else {
+					if (!files[i].delete())
+						return false;
+				}
+			}
+		}
+    	return true;
+    }
+	
+	/**
+	 * This is for test anything handy
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		Calendar cal = Calendar.getInstance();
+		System.out.println(cal.toString());
+		
+		String s = "SOPAC_FILL_2005-06-09to2005-09-08.2010-10-03.kml";
+		String pat = ".*";
+		System.out.println(s.matches(pat));
+	}
 }
