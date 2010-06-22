@@ -99,6 +99,7 @@ public class SimpleXDataKml {
  
 	 public static void main(String[] av) throws IOException {
 		 
+		 /*
 		 
 		 SimpleXDataKml test = new SimpleXDataKml(true); 
 		 PointEntry[] pointEntryList=new PointEntry[4]; 
@@ -155,14 +156,15 @@ public class SimpleXDataKml {
 		 // test.setFaultPlot("fault folder", "test fault1", "-117.35", "32.59", "-115.35", "30.59", "641478DC", 3); 
  
 		  
-		 test.setArrowPlacemark("Arrowed","FF191970", 0.95); 
+		 test.setArrowPlacemark("Arrowed","B22222FF", 0.95); 
 		 // test.setArrowPlacemark("Arrowed","FF191970", 3); 
 		 // test.setPointPlacemark("point"); 
  
 		 test.printToFile(test.doc.toKML(),"test_original.kml"); 
-		 System.out.println("end");		 
+		 System.out.println("end");	 
 		 
-		 System.out.println(Color.YELLOW.getBlue());
+		 
+		 */
 	}
 	 
 
@@ -626,15 +628,29 @@ public class SimpleXDataKml {
 			
 			//String linestyleid=""; 
 			System.out.println("Color and width for arrowed: "+LineColor+" "+LineWidth);
-			setLineStyle(container, linestyleid, LineColor, LineWidth); 
+			// setLineStyle(container, linestyleid, LineColor, LineWidth);
+			
+ 
+				System.out.println("Color and width for arrowed: "+linestyleid+" "+LineColor+" "+LineWidth);
+				 Style gridlineStyle = new Style(); 
+				 gridlineStyle.setId(linestyleid); 
+				 LineStyle newlineStyle = new LineStyle(); 
+				 newlineStyle.setWidth((float) (LineWidth)); 
+				 newlineStyle.setColor(LineColor); 
+				 gridlineStyle.addLineStyle(newlineStyle); 
+				 //		 curfolder.addStyle(gridlineStyle); 
+			
+			 
+			
 			
 			PolyStyle ps = new PolyStyle();
+			ps.setFill(true);
+			ps.setColor(LineColor);
 			
-			ps.setColor("FFFFFF00");
-			Style p1 = new Style();
-			p1.setId("#polyst");
-			p1.addPolyStyle(ps);
-			kmlDocument.addStyle(p1);
+			gridlineStyle.addPolyStyle(ps);
+			
+			 kmlDocument.addStyle(gridlineStyle);
+			
 			
 			
 			double longestlength = 0.;
@@ -730,8 +746,10 @@ public class SimpleXDataKml {
 			descriptionValue = descriptionValue + "]]>"; 
 			mark1.setDescription(descriptionValue); 
 			
-			LineString newline = new LineString(); 
-			mark1.setStyleUrl("#"+linestyleid);
+			LineString newline = new LineString();
+
+			mark1.setStyleUrl("#"+linestyleid);			
+			
 			
 			double startx = x;
 			double starty = y;
@@ -769,6 +787,7 @@ public class SimpleXDataKml {
 			LinearRing lr = new LinearRing();
 			
 			
+			
 			//Plot the arrow tails
 			double arrowTail1X = curarrow.getArrowTail1().getX(); 
 			double arrowTail1Y = curarrow.getArrowTail1().getY();
@@ -787,6 +806,11 @@ public class SimpleXDataKml {
 			line_value+=arrowLonTail2+","+arrowLatTail2+",0 ";
 			*/
 			
+			
+			/*
+			 * The below part drawing the arrow head referred to UNAVCO's arrows map
+			 * <!-- Copyright (C) 2009 UNAVCO , Inc. Boulder Colorado --> */
+			
 			double h = Math.sqrt(dx*dx + dy*dy);
 			double dl = 0.15142;
 			double fracx = dx/h;
@@ -798,6 +822,8 @@ public class SimpleXDataKml {
 			double headerLatP1 = (arrowLatEnd)+( (dl*fracx / 4.0) *merccorr);    
 			double headerLonP2 = (arrowLonEnd)+(dl*fracy / 4.0);
 			double headerLatP2 = (arrowLatEnd)-( (dl*fracx / 4.0) *merccorr);			
+			
+			// until here
 			
 			line_value = headerLonEnd+","+headerLatEnd +",0 ";
 			line_value+=headerLonP1+","+headerLatP1+",0 ";
@@ -819,6 +845,7 @@ public class SimpleXDataKml {
 			p.addOuterBoundaryIs(ob);
 			// mark1.addPolygon(p);
 			container.addPlacemark(mark1);
+			
 			
 			}
 			System.out.println("[setArrowPlacemark] Finished");
