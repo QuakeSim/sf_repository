@@ -6,6 +6,7 @@
  
 package cgl.webservices.KmlGenerator; 
  
+import java.awt.Color;
 import java.io.BufferedReader; 
 import java.io.File; 
 import java.io.FileInputStream; 
@@ -96,8 +97,9 @@ public class SimpleXDataKml {
 	  * This is a main method for testing. 
 	  */
  
-	 public static void main(String[] av) throws IOException { 
-		 /*
+	 public static void main(String[] av) throws IOException {
+		 
+		 
 		 SimpleXDataKml test = new SimpleXDataKml(true); 
 		 PointEntry[] pointEntryList=new PointEntry[4]; 
 		 pointEntryList[0]=new PointEntry(); 
@@ -150,16 +152,19 @@ public class SimpleXDataKml {
 		  	  
 		  
 		 //		 test.setGridLine("fault folder", -117.35, 32.59, -115.35, 30.59, 1, 1); 
-		 test.setFaultPlot("fault folder", "test fault1", "-117.35", "32.59", "-115.35", "30.59", "641478DC", 3); 
+		 // test.setFaultPlot("fault folder", "test fault1", "-117.35", "32.59", "-115.35", "30.59", "641478DC", 3); 
  
 		  
-		 test.setArrowPlacemark("Arrowed","5f1478DC", 3); 
-		 // test.setArrowPlacemark("Arrowed","641478DC", 3); 
+		 test.setArrowPlacemark("Arrowed","FF191970", 0.95); 
+		 // test.setArrowPlacemark("Arrowed","FF191970", 3); 
 		 // test.setPointPlacemark("point"); 
  
 		 test.printToFile(test.doc.toKML(),"test_original.kml"); 
-		 */
+		 System.out.println("end");		 
+		 
+		 System.out.println(Color.YELLOW.getBlue());
 	}
+	 
 
  
 	  
@@ -365,7 +370,7 @@ public class SimpleXDataKml {
 		} else { 
 			container = root; 
 		} 
-		setLineStyle(container, "GridLineStyle", "ffcc00cc", 2); 
+		setLineStyle(container, "GridLineStyle", "5f1478DC", 2); 
 		double smallx = Math.min(start_x, end_x) * coordinateUnit; 
 		double smally = Math.min(start_y, end_y) * coordinateUnit; 
 		double bigx = Math.max(start_x, end_x) * coordinateUnit; 
@@ -623,6 +628,15 @@ public class SimpleXDataKml {
 			System.out.println("Color and width for arrowed: "+LineColor+" "+LineWidth);
 			setLineStyle(container, linestyleid, LineColor, LineWidth); 
 			
+			PolyStyle ps = new PolyStyle();
+			
+			ps.setColor("FFFFFF00");
+			Style p1 = new Style();
+			p1.setId("#polyst");
+			p1.addPolyStyle(ps);
+			kmlDocument.addStyle(p1);
+			
+			
 			double longestlength = 0.;
 			double projectMinX=Double.valueOf(datalist[0].getX());
 			double projectMaxX=Double.valueOf(datalist[0].getX());
@@ -658,7 +672,7 @@ public class SimpleXDataKml {
 			
 			//We arbitrarly set the longest displacement arrow to be 10% of the 
 			//project dimension.
-			double scaling = 0.1*projectLength/longestlength;
+			double scaling = 0.7*projectLength/longestlength;
 			
 			//		System.out.println("Scale rate: "+scaling+" "+longestlength+" "+projectLength);
 			
@@ -743,12 +757,14 @@ public class SimpleXDataKml {
 			String line_value = arrowLonStart+","+arrowLatStart+",0 ";
 			line_value+=arrowLonEnd+","+arrowLatEnd+",0 ";
 			newline.setCoordinates(line_value); 
-			mark1.addLineString(newline); 
+			// mark1.addLineString(newline); 
 			
 			// Draw the arrow head by a polygon.
 			
 			Polygon p = new Polygon();			
-			boundary b = new boundary();
+			
+			p.setExtrude(true);
+			innerBoundaryIs ob = new innerBoundaryIs();
 			
 			LinearRing lr = new LinearRing();
 			
@@ -763,16 +779,45 @@ public class SimpleXDataKml {
 			double arrowTail2Y = curarrow.getArrowTail2().getY();
 			double arrowLonTail2=arrowTail2X/factor(original_lon, original_lat)+original_lon;
 			double arrowLatTail2=arrowTail2Y/111.32+original_lat;
-			
+
 			//Plot the arrow. These are just polylines
+			/*
 			line_value = arrowLonEnd+","+arrowLatEnd+",0 ";
 			line_value+=arrowLonTail1+","+arrowLatTail1+",0 ";
 			line_value+=arrowLonTail2+","+arrowLatTail2+",0 ";
+			*/
+			
+			double h = Math.sqrt(dx*dx + dy*dy);
+			double dl = 0.15142;
+			double fracx = dx/h;
+			double fracy = dy/h;
+			double merccorr = Math.cos(arrowLatStart * 3.141592/180.0); 
+			double headerLonEnd = arrowLonEnd + dl*fracx;
+			double headerLatEnd = arrowLatEnd + dl*fracy;
+			double headerLonP1 = (arrowLonEnd)-(dl*fracy / 4.0);
+			double headerLatP1 = (arrowLatEnd)+( (dl*fracx / 4.0) *merccorr);    
+			double headerLonP2 = (arrowLonEnd)+(dl*fracy / 4.0);
+			double headerLatP2 = (arrowLatEnd)-( (dl*fracx / 4.0) *merccorr);			
+			
+			line_value = headerLonEnd+","+headerLatEnd +",0 ";
+			line_value+=headerLonP1+","+headerLatP1+",0 ";
+			line_value+=headerLonP2+","+headerLatP2+",0 ";
+			
+			
+			
+
+			
+			MultiGeometry mg = new MultiGeometry();
+			mg.addLineString(newline);
+			mg.addPolygon(p);
+
+			mark1.addMultiGeometry(mg);  
+			
 			
 			lr.setCoordinates(line_value);
-			b.addLinearRing(lr);			
-			p.addOuterBoundaryIs(b);
-			mark1.addPolygon(p);
+			ob.addLinearRing(lr);			
+			p.addOuterBoundaryIs(ob);
+			// mark1.addPolygon(p);
 			container.addPlacemark(mark1);
 			
 			}
@@ -1016,7 +1061,7 @@ public class SimpleXDataKml {
 		// Convert degrees to radian 
 		rads = Math.toRadians((double) degs); 
  
-		double arrowlength = length * 0.22; 
+		double arrowlength = length * 0.08; 
  
 		int arrowdegs = 30; 
 		double arrowrads = Math.toRadians((double) arrowdegs); 
@@ -1090,8 +1135,8 @@ public class SimpleXDataKml {
 	 public void printToFile(String detail, String xmlfilename) { 
 		  System.out.println("Printing a file");
 		  try { 
-				System.out.println("Printing KML to "+xmlfilename);
-				PrintStream out = new PrintStream(new FileOutputStream(xmlfilename));
+				System.out.println("Printing KML to "+xmlfilename + detail);
+				PrintStream out = new PrintStream(new FileOutputStream(xmlfilename));				
 				out.println(detail);
 				out.close(); 
 		  }
