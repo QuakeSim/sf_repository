@@ -39,12 +39,12 @@
 	<script type="text/javascript" src="/yui_0.12.2/build/calendar/calendar.js"></script>
 	<script type="text/javascript" src="/yui_0.12.2/build/slider/slider.js"></script>
 	<script type="text/javascript" src="/yui_0.12.2/build/yahoo-dom-event/yahoo-dom-event.js" ></script> 
-	<script type="text/javascript" src="/yui_0.12.2/build/dragdrop/dragdrop-min.js" ></script> 
-	<script type="text/javascript" src="/yui_0.12.2/build/slider/slider-min.js" ></script> 
+	<script type="text/javascript" src="/yui_0.12.2/build/dragdrop/dragdrop-min.js" ></script>
+	<script type="text/javascript" src="/yui_0.12.2/build/slider/slider-min.js" ></script>
 	<link type="text/css" rel="stylesheet" href="/yui_0.12.2/build/calendar/assets/calendar.css">
   
 	<style>
-		#cal1Container {position:relative; width:170px;}
+		#cal1Container {position:relative; width:210px;}
 		#slider-bg { 
 			position: relative; 
 			background:url(/yui_0.12.2/build/slider/assets/horizBg.png) 5px 0; 
@@ -66,7 +66,8 @@
 		.ooihx { border-style: none none solid; border-color: #CC3333; }
 	</style>
 
-	<script>
+	<script type="text/javascript">
+
 	//for manipulating the tabs
 	function ghbq(td) {
 		var tr = document.getElementById("tabRow");
@@ -230,12 +231,23 @@
 			</td>
 		</tr>
 		<tr>
-			<td valign="top" width="180">
+			<td valign="top" width="220">
 				<div id="loadInfo"> </div>
 				<div id="networksDiv"> Status changes and Colors:    </div>
-				<div id="cal1Container"> </div>          
+				<div id="cal1Container" align="center"> </div>          
 				<div>    Or choose a date by dragging the slider under the map. </div>
-				<div> <button id="getKmlBtn" onClick="getKmlBtnClick(this)" style="width:170px;height:20px\">Get KML For This Day</button> </div>
+				<div>
+					<table border="1" width="220">
+						<tr border="0"><td colspan="2">Get KML For Date Range:</td></tr>
+						<tr border="0"><td>From: </td><td><input type="text" id="getKmlFromDateText" size="10"/> </td></tr>
+						<tr border="0"><td>To:   </td><td><input type="text" id="getKmlToDateText" size="10" onkeydown="onKmlToDateTextKeyDown(event)"/> </td></tr>
+						<tr border="0">
+							<td  align="center" colspan="2">
+								<button id="getKmlBtn" onClick="getKmlBtnClick(this)" style="width:100px;height:20px\">Get KML</button>
+							</td>
+						</tr>
+					</table>
+				</div>
 			</td>
 			<td valign="top" width="600">
 				<table class="ooih" border="0" cellspacing="0" cellpadding="0" width="767" height="19">
@@ -354,8 +366,8 @@
 		}
 		html = html + " </table> <br/> <br/>" 
 					+ "Select a date for changes on that day:"
-					+ "<table border='0'> <tr> <td> <input type=\"text\" id=\"dateText\" size=\"10\" value=\"\" onkeydown=\"onDateTextKeyDown(event)\"/> </td>"
-					+ "<td> <button id=\"clearDateBtn\" onClick=\"clearBtnClick(this)\" style=\"width:70px;height:20px\">Today</button>  </td> </tr> </table>";
+					+ "<table border='0' align='center'> <tr> <td> <input type='text' id='dateText' size='15' value='' onkeydown='onDateTextKeyDown(event)'/> </td>"
+					+ "<td> <button id='clearDateBtn' onClick='clearBtnClick(this)' style='width:70px;height:22px'>Today</button>  </td> </tr> </table>";
 		var idiv = window.document.getElementById("networksDiv");
 		idiv.innerHTML = html;
 	}
@@ -403,21 +415,54 @@
 		}
 
 		var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/proxyCallHttpService?serviceUrl=" + 
-					"http%3A%2F%2Fresult.service.hostname%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetStateChangeNumberPlot%3FdataSource%3DSOPAC%26minLat%3D"
+					"http%3A%2F%2Fservice.hostname%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetStateChangeNumberPlot%3FdataSource%3DSOPAC%26minLat%3D"
 					+ latFrom + "%26maxLat%3D" + latTo + "%26minLong%3D" + longFrom + "%26maxLong%3D" + longTo;
 		var link = callHttpService(url);
 		window.open(link);
 	}
 
+	// what to do when the user pressed a key in the input textbox for the end date of the get kml service
+	function onKmlToDateTextKeyDown(e) {
+		var keynum, targ;
+		if(window.event) {   // IE
+			keynum = e.keyCode;
+		} else if (e.which) { // Netscape/Firefox/Opera
+			keynum = e.which;
+		} else if (e.keyCode) {
+			keynum = e.keyCode;
+		}
+  				
+		if (e.target) {
+			targ=e.target;
+		} else if (e.srcElement) {
+			targ=e.srcElement;
+		}
+        	
+		var dateTxt = document.getElementById("getKmlToDateText");
+		if(keynum == 13 && targ == dateTxt) {
+			getKmlBtnClick(document.getElementById("getKmlBtn"));
+		}
+	}
+
+
 	// get kml for the selected date
 	function getKmlBtnClick(btn) {
-		var dateStr = document.getElementById("dateText").value;
+		var fromDateStr = document.getElementById("getKmlFromDateText").value;
+		var toDateStr = document.getElementById("getKmlToDateText").value;
+ 
+		if (!validDateStr(fromDateStr) || !validDateStr(toDateStr)) {
+			alert("Please input the dates in the format like 'yyyy-mm-dd'");
+			return;
+		}
 
 		var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/proxyCallHttpService?serviceUrl=" + 
-				  "http%3A%2F%2Fresult.service.hostname%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetKmlForDate%3FdateStr%3D"
-				  + dateStr + "%26resUrl%3Dhttp%3A%2F%2Fxml.access.hostname%2F%2Frdahmmexec%2Fdaily%2FSOPAC_FILL%2Fstation-status-change-SOPAC_FILL.xml";
+				  "http%3A%2F%2Fservice.hostname%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetKmlForDateRange%3FfromDateStr%3D"
+				  + fromDateStr + "%26toDateStr%3D" + toDateStr 
+				  + "%26resUrl%3Dhttp%3A%2F%2Fservice.hostname%2F%2Frdahmmexec%2Fdaily%2FSOPAC_FILL%2Fstation-status-change-SOPAC_FILL.xml";
+		document.getElementById("waitScreen").style.visibility="visible";
 		var link = callHttpService(url);
 		window.open(link);
+		document.getElementById("waitScreen").style.visibility="hidden";
 	}
         
 	// what to do when the user pressed a key in the date text box
@@ -539,7 +584,7 @@
 	*/
 <%
 	Document statusDoc = null;
-	String xmlUrl = "http://xml.access.hostname//rdahmmexec/daily/SOPAC_FILL/station-status-change-SOPAC_FILL.xml";
+	String xmlUrl = "http://service.hostname//rdahmmexec/daily/SOPAC_FILL/station-status-change-SOPAC_FILL.xml";
 	try {
 		// if the file is old or does not exist, copy it from xmlUrl
 		boolean shouldCopy = false;		
