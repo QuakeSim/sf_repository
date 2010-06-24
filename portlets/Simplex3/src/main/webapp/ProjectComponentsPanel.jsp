@@ -53,7 +53,7 @@
 								<h:inputText id="FaultLocationY2" style="text-align:right;width:60px" 
 								  value="#{myentry31.faultLocationY}"
 								  required="true" />
-								<h:message id="lkdrqh185" for="FaultLocationY" showDetail="true"
+								<h:message id="lkdrqh185" for="FaultLocationY2" showDetail="true"
 								  showSummary="true" errorStyle="color: red" />								
 								<h:selectBooleanCheckbox id="faultOriginYVary2"
 								  value="#{myentry31.faultOriginYVary}" />
@@ -70,7 +70,7 @@
 								<h:inputText id="FaultLength2" style="text-align:right;width:60px" 
 								  value="#{myentry31.faultLength}"
 								  required="true" />
-								<h:message id="lkdrae188" for="FaultLength" showDetail="true" showSummary="false"
+								<h:message id="lkdrae188" for="FaultLength2" showDetail="true" showSummary="false"
 								  errorStyle="color: red" />
 								<h:selectBooleanCheckbox id="faultLengthVary2"
 								  value="#{myentry31.faultLengthVary}" />
@@ -87,7 +87,7 @@
 								<h:inputText id="FaultWidth2" style="text-align:right;width:60px" 
 								  value="#{myentry31.faultWidth}"
 								  required="true" />
-								<h:message id="lkdrqh11812" for="FaultWidth" showDetail="true" showSummary="true"
+								<h:message id="lkdrqh11812" for="FaultWidth2" showDetail="true" showSummary="true"
 								  errorStyle="color: red" />
 								<h:selectBooleanCheckbox id="faultWidthVary2"
 								  value="#{myentry31.faultWidthVary}" />
@@ -104,7 +104,7 @@
 								<h:inputText id="FaultDepth2" style="text-align:right;width:60px" 
 								  value="#{myentry31.faultDepth}"
 								  required="true" />
-								<h:message id="lkdrqr11815" for="FaultDepth" showDetail="true" showSummary="true"
+								<h:message id="lkdrqr11815" for="FaultDepth2" showDetail="true" showSummary="true"
 								  errorStyle="color: red" />
 								<h:selectBooleanCheckbox id="faultDepthVary2"
 								  value="#{myentry31.faultDepthVary}" />
@@ -121,7 +121,7 @@
 								<h:inputText id="FaultDipAngle2" style="text-align:right;width:60px" 
 								  value="#{myentry31.faultDipAngle}"
 								  required="true" />
-								<h:message id="lkdrqj11818" for="FaultDipAngle" showDetail="true"
+								<h:message id="lkdrqj11818" for="FaultDipAngle2" showDetail="true"
 								  showSummary="true" errorStyle="color: red" />
 								<h:selectBooleanCheckbox id="faultDipAngleVary2"
 								  value="#{myentry31.faultDipAngleVary}" />
@@ -138,7 +138,7 @@
 								<h:inputText id="FaultStrikeAngle2" style="text-align:right;width:60px" 
 								  value="#{myentry31.faultStrikeAngle}"
 								  required="false" />
-								<h:message id="dflelerkljj2" for="FaultStrikeAngle" showDetail="true"
+								<h:message id="dflelerkljj2" for="FaultStrikeAngle2" showDetail="true"
 								  showSummary="true" errorStyle="color: red" />
 								<h:selectBooleanCheckbox id="faultStrikeAngleVary2"
 								  value="#{myentry31.faultStrikeAngleVary}" />
@@ -155,7 +155,7 @@
 								<h:inputText id="FaultSlip2" style="text-align:right;width:60px" 
 								  value="#{myentry31.faultSlip}"
 								  required="true" />
-								<h:message for="FaultSlip" showDetail="true" showSummary="true"
+								<h:message for="FaultSlip2" showDetail="true" showSummary="true"
 								  errorStyle="color: red" />
 								<h:selectBooleanCheckbox id="faultDipSlipVary2"
 								  value="#{myentry31.faultDipSlipVary}" />
@@ -172,7 +172,7 @@
 								<h:inputText id="FaultRakeAngle2" style="text-align:right;width:60px" 
 								  value="#{myentry31.faultRakeAngle}"
 								  required="true" />
-								<h:message  id="dflelerkljj7" for="FaultRakeAngle" showDetail="true"
+								<h:message  id="dflelerkljj7" for="FaultRakeAngle2" showDetail="true"
 								  showSummary="true" errorStyle="color: red" />
 								<h:selectBooleanCheckbox id="faultStrikeSlipVary2"
 								  value="#{myentry31.faultStrikeSlipVary}" />
