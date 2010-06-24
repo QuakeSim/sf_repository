@@ -106,7 +106,7 @@
 		    <h:inputText id="FaultLonEnd" style="text-align:right;width:60px" 
 		      value="#{myentry31.faultLonEnd}"
 		      required="true" />
-		    <h:message id="lkdrqh11812" for="LonEnd" showDetail="true" showSummary="true"
+		    <h:message id="lkdrqh11812" for="FaultLonEnd" showDetail="true" showSummary="true"
 		      errorStyle="color: red" />
 		  </h:panelGrid>
 		</h:column>						
