@@ -34,6 +34,7 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
 		  <portlet-tabbed-pane selected="0" style="sub-menu">
 			 
 			 <!-- RDAHMM -->
+			 <!--
 			 <portlet-tab label="RDAHMM-Portlet">
 				<title lang="en">RDAHMM-Portlet</title>
 				<portlet-tabbed-pane style="sub-menu">
@@ -63,18 +64,31 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
               </portlet-tab>
 				</portlet-tabbed-pane>
 			 </portlet-tab>
-			 
+			 -->
+
 			 <!-- Daily RDAHMM -->
 			 <portlet-tab label="DailyRDAHMM-Portlet">
 				<title lang="en">DailyRDAHMM-Portlet</title>
 				<portlet-tabbed-pane style="sub-menu">
-              <portlet-tab label="DailyRDAHMM-portlet">
-                <title lang="en">DailyRDAHMM Portlet</title>
+              <portlet-tab label="SOPAC-GLOBK">
+                <title lang="en">SOPAC GLOPK Solutions</title>
                 <table-layout>
                   <row-layout>
                     <column-layout>
-                      <portlet-frame label="DailyRDAHMM-PF">
-                        <portlet-class>DailyRDAHMM-portlet#DailyRDAHMM-portlet</portlet-class>
+                      <portlet-frame label="DailyRDAHMM-SOPAC-PF">
+                        <portlet-class>DailyRDAHMM-portlet#SOPAC-GLOBK-portlet</portlet-class>
+                      </portlet-frame>
+                    </column-layout>
+                  </row-layout>
+                </table-layout>
+              </portlet-tab>
+              <portlet-tab label="JPL-GIPSY">
+                <title lang="en">JPL GIPSY Solutions</title>
+                <table-layout>
+                  <row-layout>
+                    <column-layout>
+                      <portlet-frame label="DailyRDAHMM-JPL-PF">
+                        <portlet-class>DailyRDAHMM-portlet#JPL-GIPSY-portlet</portlet-class>
                       </portlet-frame>
                     </column-layout>
                   </row-layout>
@@ -84,6 +98,7 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
 			 </portlet-tab>
 
 			 <!-- RT RDAHMM -->
+			 <!--
 			 <portlet-tab label="RealTimeRDAHMM-Portlet">
 				<title lang="en">RealTimeRDAHMM-Portlet</title>
 				<portlet-tabbed-pane style="sub-menu">
@@ -101,8 +116,10 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
               </portlet-tab>
 				</portlet-tabbed-pane>
 			 </portlet-tab>
+			 -->
 
 			 <!-- Station Monitor -->
+			 <!--
 			 <portlet-tab label="StationMonitor-Portlet">
 				<title lang="en">StationMonitor-Portlet</title>
 				<portlet-tabbed-pane style="sub-menu">
@@ -120,7 +137,7 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
               </portlet-tab>
 				</portlet-tabbed-pane>
 			 </portlet-tab>
-
+			 -->
 			 <!-- STFilter -->
 <!--
 			 <portlet-tab label="STFILTER-Portlet">
