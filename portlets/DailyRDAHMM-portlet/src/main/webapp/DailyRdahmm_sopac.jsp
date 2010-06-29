@@ -202,7 +202,7 @@
 				var htmlStr = markerWinHtmlStr;
 				htmlStr = htmlStr.replace(/{!rawFileURL!}/g, rawURL);
 				htmlStr = htmlStr.replace(/{!qFileURL!}/g, qURL);
-				marker.openInfoWindowHtml(htmlStr);
+				marker.openInfoWindowHtml(htmlStr, {suppressMapPan:true});
 				sel = document.getElementById("stationSelect");
 				sel.selectedIndex = idx;
 				sltChange(sel);
