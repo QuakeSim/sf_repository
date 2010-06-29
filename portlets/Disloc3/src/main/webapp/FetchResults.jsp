@@ -107,7 +107,7 @@ function dataTableSelectOneRadio(radio) {
 							<h:outputText id="kdjfjk" value="[<b>Download</b>]" escape="false" />
 						</h:outputLink>
 						<h:outputText id="blaheoru16" escape="false" value="<b> </b>" />
-						<h:outputLink id="linkdre6" value="http://maps.google.com/maps?q=#{summaryBean.kmlurl}" target="_blank">
+						<h:outputLink id="linkdre6" value="http://maps.google.com/maps?q=#{summaryBean.kmlurl}&t=p" target="_blank">
 							<h:outputText id="blaheoru17" value="[<font size=1px>View In Google map</font>]" escape="false" />
 						</h:outputLink>
 						</h:panelGroup>

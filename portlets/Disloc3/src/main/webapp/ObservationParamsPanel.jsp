@@ -1,4 +1,4 @@
-	       <h:form id="obsvform" rendered="#{!empty DislocBean2.myObsvEntryForProjectList}"> 
+	       <h:form id="obsvform" rendered="#{DislocBean2.renderDislocGridParamsForm}"> 
 
 	  <h:panelGrid id="dflelerkljk11662" columns="1" border="1" cellpadding="0" cellspacing="0" styleClass="centered">
 		<h:outputFormat id="dflelerkal512" escape="false" value="<b>Observation Component</b>">
