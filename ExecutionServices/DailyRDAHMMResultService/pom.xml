@@ -20,10 +20,10 @@
     <properties>
 <!--
        <tomcat.base.dir>${basedir}/../../portal_deploy/${tomcat.version}</tomcat.base.dir>
--->
        <tomcat.base.dir>${catalina.home}</tomcat.base.dir>
        <user.home>${user.home}</user.home>
 	   <local.hostname>${local.hostname}</local.hostname>
+-->
 	   <xml.access.hostname>${dailyRdahmm.service.hostname}</xml.access.hostname>
     </properties>
 
