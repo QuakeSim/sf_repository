@@ -138,7 +138,8 @@
     <module>ExecutionServices/STFilterService</module>
     <module>ExecutionServices/SimpleXService</module>
     <module>ExecutionServices/RDAHMMService</module>
-	 <module>ExecutionServices/DailyRDAHMMService</module>
+	<module>ExecutionServices/DailyRDAHMMService</module>
+	<module>ExecutionServices/DailyRDAHMMResultService</module>
   </modules>
 
 </project>
