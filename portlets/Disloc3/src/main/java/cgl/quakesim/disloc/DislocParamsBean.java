@@ -25,7 +25,7 @@ public class DislocParamsBean  implements java.io.Serializable {
 
     private double gridYSpacing=10.0;
 
-    private int observationPointStyle;
+    private int observationPointStyle=1;
 
     private double originLat=DEFAULT_LAT;
 
