@@ -416,8 +416,8 @@
 		}
 
 		var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/proxyCallHttpService?serviceUrl=" + 
-					"http%3A%2F%2Fservice.hostname%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetStateChangeNumberPlot%3FdataSource%3DJPL%26minLat%3D"
-					+ latFrom + "%26maxLat%3D" + latTo + "%26minLong%3D" + longFrom + "%26maxLong%3D" + longTo;
+					"http%3A%2F%2Fresult.service.hostname%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetStateChangeNumberPlot%3F"
+					+ "dataSource%3DJPL%26minLat%3D" + latFrom + "%26maxLat%3D" + latTo + "%26minLong%3D" + longFrom + "%26maxLong%3D" + longTo;
 		var link = callHttpService(url);
 		window.open(link);
 	}
@@ -449,16 +449,24 @@
 	function getKmlBtnClick(btn) {
 		var fromDateStr = document.getElementById("getKmlFromDateText").value;
 		var toDateStr = document.getElementById("getKmlToDateText").value;
- 
+		var modelStartDate = new Date(1994, 0, 1, 0, 0, 0);
+        var today = new Date();
+        var fromDate = getDateFromString(fromDateStr);
+        var toDate = getDateFromString(toDateStr);
+
 		if (!validDateStr(fromDateStr) || !validDateStr(toDateStr)) {
 			alert("Please input the dates in the format like 'yyyy-mm-dd'");
 			return;
 		}
+		if (fromDate < modelStartDate || fromDate > today || toDate < modelStartDate || toDate > today) {
+			alert("Please input dates between 1994-01-01 and today!");
+			return;
+		}
 
 		var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/proxyCallHttpService?serviceUrl=" + 
-				  "http%3A%2F%2Fservice.hostname%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetKmlForDateRange%3FfromDateStr%3D"
+				  "http%3A%2F%2Fresult.service.hostname%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetKmlForDateRange%3FfromDateStr%3D"
 				  + fromDateStr + "%26toDateStr%3D" + toDateStr 
-				  + "%26resUrl%3Dhttp%3A%2F%2Fservice.hostname%2F%2Frdahmmexec%2Fdaily%2FJPL_FILL%2Fstation-status-change-JPL_FILL.xml";
+				  + "%26resUrl%3Dhttp%3A%2F%2Fxml.access.hostname%2F%2Frdahmmexec%2Fdaily%2FJPL_FILL%2Fstation-status-change-JPL_FILL.xml";
 		document.getElementById("waitScreen").style.visibility="visible";
 		var link = callHttpService(url);
 		window.open(link);
@@ -584,7 +592,7 @@
 	*/
 <%
 	Document statusDoc = null;
-	String xmlUrl = "http://service.hostname//rdahmmexec/daily/JPL_FILL/station-status-change-JPL_FILL.xml";
+	String xmlUrl = "http://xml.access.hostname//rdahmmexec/daily/JPL_FILL/station-status-change-JPL_FILL.xml";
 	try {
 		// if the file is old or does not exist, copy it from xmlUrl
 		boolean shouldCopy = false;		
