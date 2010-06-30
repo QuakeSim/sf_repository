@@ -1085,6 +1085,12 @@ public class SimplexBean extends GenericSopacBean {
 	 */
 	public String NewProjectThenEditProject() {
 		String returnMessage = "";
+		
+		mycandidateObservationsForProjectList.clear();
+		selectedGpsStationName = "";
+		gpsStationName = "";
+		
+		
 		try {
 			currentEditProjectForm = new editProjectForm(selectdbURL);
 			currentEditProjectForm.setKmlfiles(getKmlfiles());
@@ -1277,6 +1283,9 @@ public class SimplexBean extends GenericSopacBean {
 		if (selectProjectsList != null) {
 			this.projectName = selectProjectsList[0];
 			System.out.println("Project name selected" + projectName);
+			mycandidateObservationsForProjectList.clear();
+			selectedGpsStationName = "";
+			gpsStationName = "";
 			returnString = toggleSelectProject(projectName);
 			System.out.println("Return value: " + returnString);
 		} else {
@@ -1298,6 +1307,8 @@ public class SimplexBean extends GenericSopacBean {
 
 		try {
 			// Reconstruct the project lists
+			
+			
 			myFaultEntryForProjectList = reconstructMyFaultEntryForProjectList(projectName);
 			myObservationEntryForProjectList = reconstructMyObservationEntryForProjectList(projectName);
 
@@ -2381,6 +2392,10 @@ public class SimplexBean extends GenericSopacBean {
 
 			db.commit();
 			mycandidateObservationsForProjectList.clear();
+			selectedGpsStationName = "";
+			gpsStationName = "";
+			
+			
 			if (db != null)
 				db.close();
 		} catch (Exception e) {
@@ -2513,10 +2528,11 @@ public class SimplexBean extends GenericSopacBean {
 		}
 		return observations;
 	}
+	
 
 	public void toggleCloseMap(ActionEvent ev) {
 		System.out.println("Turn off the map display");
-		getCurrentEditProjectForm().setRenderGPSStationMap(false);
+		getCurrentEditProjectForm().setRenderGPSStationMap(false);		
 	}
 
 	protected static String getRealPath() {

@@ -277,7 +277,7 @@
 						<h:panelGroup id="dflelerkljk174">
 						  <h:panelGrid id="obsvpanelgrid" columns="1" border="1">
 								<b><h:outputFormat escape="false" id="dflelerkljk176"
-									value="<b>Observation Components</b>">
+									value="Observation Components">
 								</h:outputFormat></b>
 								<h:commandButton id="viewSimplexObsv" value="Display/Hide"
 									actionListener="#{SimplexBean.currentEditProjectForm.toggleShowObsvEntries}"/>

@@ -61,7 +61,7 @@ for(int i=0;i<stationList.size();i++) {
 	Element station=(Element)stationList.get(i);
 	latArray[i]=station.element("latitude").getText();
 	lonArray[i]=station.element("longitude").getText();
-	nameArray[i]=station.element("id").getText();
+	nameArray[i]=station.element("id").getText().toLowerCase();
 }
 
 for(int i=0;i<permsize;i++) {
@@ -70,7 +70,7 @@ for(int i=0;i<permsize;i++) {
 
 	latArray[i+rssnewsize]=kdp.getEle("</b>", "<b>Latitude:").trim();
 	lonArray[i+rssnewsize]=kdp.getEle("</b>", "<b>Longitude:").trim();
-	nameArray[i+rssnewsize]=kdp.getEle("</b>", "<b>Monument Code:").trim();
+	nameArray[i+rssnewsize]=kdp.getEle("</b>", "<b>Monument Code:").trim().toLowerCase();
 	// System.out.println(i + " " + nameArray[i+rssnewsize]);
 }
 
@@ -328,8 +328,8 @@ function initialize() {
 	map.addOverlay(geoXml);
 
 	var gpslist=document.getElementById("obsvGPSMap:GPSStationList");
+	
 
-	gpslist.value="";
 	GEvent.addListener(gpslist,"click",function(e){
 		var a = new Array();
 		if (gpslist.value != "")
@@ -347,9 +347,9 @@ function initialize() {
 		if (c==0)
 		{
 			togglemarker(a,e,"none");
-			gpslist.value=a;
-			document.getElementById("obsvGPSMap:GPSStationNum").value = a.length;
+			gpslist.value=a;			
 		}
+		document.getElementById("obsvGPSMap:GPSStationNum").value = a.length;
 	})
 
 
@@ -421,8 +421,7 @@ function initialize() {
 		    if (((CandidateObservation)l2.get(nA)).getStationName().contains(nameArray[i].toLowerCase())) {
 		    color = "http://labs.google.com/ridefinder/images/mm_20_yellow.png";
 %>
-		    GEvent.trigger(document.getElementById("obsvGPSMap:GPSStationList"),'click', 
-				      "<%=((CandidateObservation)l2.get(nA)).getStationName()+"/"+((CandidateObservation)l2.get(nA)).getGpsStationLat()+"/"+((CandidateObservation)l2.get(nA)).getGpsStationLon()%>");
+
 <%
 		    } 
 		} 
@@ -501,13 +500,13 @@ function togglemarker(array, e, option)
 	var b = 0;
 
 	var es = e.split("/");
+	
 
 	for(var nA = 0; nA < array.length; nA++ )
 	{
-		if(array[nA]==e)
+		var as = array[nA].split("/");
+		if(as[0] ==es[0])
 			b=1;
-
-
 	}
 
 	var index=1;
@@ -531,7 +530,6 @@ function togglemarker(array, e, option)
 
 	if (b== 0 || option == "in"){
 		array.push(e);
-
 		baseIcon.image = "http://labs.google.com/ridefinder/images/mm_20_yellow.png";
 
 	}
