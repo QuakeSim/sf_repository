@@ -44,7 +44,7 @@ List stationList = eleXml.elements("station");
 KMLdescriptionparser kdp = new KMLdescriptionparser();
 
 
-kdp.parseXml(config.getServletContext().getRealPath("perm.xml").split("perm.xml")[0], "perm_test.kml");
+kdp.parseXml(config.getServletContext().getRealPath("perm.xml").split("perm.xml")[0], "perm.kml");
 System.out.println("[getPlacemarkSize] " + config.getServletContext().getRealPath("perm.xml").split("perm_test.xml")[0]);
 System.out.println("[getPlacemarkSize] " + kdp.getPlacemarkSize());
 
