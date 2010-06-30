@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-<ModulePrefs title="@artifactId@"
+<ModulePrefs title="Simplex3"
 
-	description="QuakeSim2 @artifactId@ gadget"
+	description="QuakeSim2 Simplex3 gadget"
 	author="IU QuakeSim Team"
 	author_email="mpierce@cs.indiana.edu"
-	title_url="http://www.quakesim.org/gadgets/@artifactId@/@artifactId@_gadget.xml"
+	title_url="http://www.quakesim.org/gadgets/Simplex3/Simplex3_gadget.xml"
 	directory_title="QuakeSim2"
 
 
 scrolling="false" width="400" height="600"/>
-<Content type="url" view="home,canvas" href="@host.base.url@@artifactId@/index.faces"/>
+<Content type="url" view="home,canvas" href="http://129.79.49.68:8080/Simplex3/index.faces"/>
 </Module>

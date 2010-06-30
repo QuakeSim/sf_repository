@@ -11,7 +11,7 @@
 <body>
 
 <script language="JavaScript">
-
+//<![CDATA[ 
 function selectOne(form , button)
 {
   turnOffRadioForForm(form);
@@ -40,19 +40,19 @@ function dataTableSelectOneRadio(radio) {
     }
     radio.checked = true;
 }
-
+//]]>
 </script>
 <f:view>
 	<h:form>
 		<h:panelGrid columns="1" border="0">
-			<h:outputText escape="false" value="<h3>Archived Data</h3><br>" />
+			<h3><h:outputText escape="false" value="Archived Data" /></h3><br>
 			<h:outputText escape="false"
 							  value="You don't have any archived results."
 							  rendered="#{empty SimplexBean.myarchivedFileEntryList}"/>
 
 			<h:outputText escape="false"
   						 	 rendered="#{!(empty SimplexBean.myarchivedFileEntryList)}"
-							 value="You have the following archived data files. Select the radio button to create GMT plots. Download the input and output files for more information on the data.<br>" />
+							 value="You have the following archived data files. Select the radio button to create GMT plots. Download the input and output files for more information on the data." /><br>
 
 
 			<h:dataTable border="1"
@@ -60,13 +60,13 @@ function dataTableSelectOneRadio(radio) {
 						 	 value="#{SimplexBean.myarchivedFileEntryList}" var="myentry3">
 				<h:column>
 					<f:facet name="header">
-						<h:outputText escape="false" value="<b>Project Name</b>" />
+						<b><h:outputText escape="false" value="Project Name" /></b>
 					</f:facet>
 					<h:outputText value="#{myentry3.projectName}" />
 				</h:column>
 				<h:column>
 					<f:facet name="header">
-						<h:outputText escape="false" value="<b>	Archived DATA File</b>" />
+						<b><h:outputText escape="false" value="Archived DATA File" /></b>
 					</f:facet>
 					<h:panelGrid columns="4" border="1">
 						<h:outputLink id="link1" value="#{myentry3.inputUrl}" target="_blank">
@@ -85,21 +85,21 @@ function dataTableSelectOneRadio(radio) {
 				</h:column>
 				<h:column>
 					<f:facet name="header">
-						<h:outputText escape="false" value="<b>Kml file</b>" />
+						<b><h:outputText escape="false" value="Kml file" /></b>
 					</f:facet>
 						<h:panelGroup>
 						<h:outputLink id="link5" value="#{myentry3.kmlUrls[0]}" target="_blank">
-							<h:outputText value="[<b>Download</b>]" escape="false" />
+							<b><h:outputText value="[Download]" escape="false" /></b>
 						</h:outputLink>
-						<h:outputText escape="false" value="<b> </b>" />
+						<b><h:outputText escape="false" value=" " /></b>
 						<h:outputLink id="link6" value="http://maps.google.com/maps?q=#{myentry3.kmlUrls[0]}" target="_blank">
-							<h:outputText value="[<font size=1px>View In Google map</font>]" escape="false" />
+							<font size=1px><h:outputText value="[View In Google map]" escape="false" /></font>
 						</h:outputLink>
 						</h:panelGroup>
 				</h:column>
 				<h:column>
 					<f:facet name="header">
-						<h:outputText escape="false" value="<b>Select to Plot</b>" />
+						<b><h:outputText escape="false" value="Select to Plot" /></b>
 					</f:facet>
 					<h:selectBooleanCheckbox value="#{myentry3.view}"
 						onchange="selectOne(this.form,this)"

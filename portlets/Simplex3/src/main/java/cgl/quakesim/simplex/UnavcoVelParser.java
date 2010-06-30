@@ -26,7 +26,7 @@ public class UnavcoVelParser {
 		UnavcoVelParser t = new UnavcoVelParser();
 		
 		t.getFile(snf01);
-		System.out.println(t.getStationVelocity("P100"));
+		System.out.println(t.getStationVelocity("cat1"));
 		System.out.println("[Finished]");	
 	}
 	*/
@@ -60,7 +60,7 @@ public class UnavcoVelParser {
 		// System.out.println(vel);
 		String[] line = vel.split("\n");
 		String date = null;
-		String r = null;
+		String r = "";
 		
 		for (int nA = 0 ; nA < line.length ; nA++) {
 			if (line[nA].contains("Release") && (date == null))
@@ -73,7 +73,7 @@ public class UnavcoVelParser {
 				for (int nB = 0 ; nB < elements.length ; nB++) {
 				
 					if (elements[nB].compareToIgnoreCase(dotnumber) == 0) {
-						r = line[nA];
+						r += date + line[nA] + "\n";
 					}
 				}
 			}
@@ -84,9 +84,9 @@ public class UnavcoVelParser {
 		if (r == null)
 			return null;
 		else if (date == null)
-			return r;
+			return null;
 		
-		return date+r;
+		return r;
 	}
 	
 	private String getNeu(String line) {
@@ -127,6 +127,8 @@ public class UnavcoVelParser {
 		int ee = 24;
 		int uu = 25;
 		
+		if (elements.length >= 25) {
+		
 		neu = (elements[0].toLowerCase() + " ");
 		neu += date + " ";
 		neu += (elements[n] + " ");
@@ -134,9 +136,9 @@ public class UnavcoVelParser {
 		neu += (elements[u] + " ");
 		neu += (elements[nn] + " ");
 		neu += (elements[ee] + " ");
-		neu += (elements[uu] + " ");
-		
+		neu += (elements[uu] + " ");		
 		neu = neu.trim();
+		}
 		
 		return neu;
 	}

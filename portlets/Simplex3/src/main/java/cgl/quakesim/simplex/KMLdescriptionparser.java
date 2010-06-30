@@ -108,8 +108,19 @@ public class KMLdescriptionparser {
 				e.printStackTrace();
 			}		
 			listofnodelist.add(docEle.getElementsByTagName("Placemark"));
+		}		
+	}
+	
+	public int getPlacemarkSize() {
+		int size = 0;
+	
+		for (int nA = 0 ; nA < listofnodelist.size() ; nA++)
+		{
+			NodeList nodelist = (NodeList) listofnodelist.get(nA);
+			size = size + nodelist.getLength();
 		}
 		
+		return size;
 	}
 	
 	public String getDesc(String faultname){
@@ -137,6 +148,46 @@ public class KMLdescriptionparser {
 		
 		return null;	
 	}
+	
+
+	public String getDesc(int index){
+		
+		for (int nA = 0 ; nA < listofnodelist.size() ; nA++)
+		{
+			NodeList nodelist = (NodeList) listofnodelist.get(nA);
+			desc = ((Element)(((Element)nodelist.item(index)).getElementsByTagName("description").item(0).getParentNode())).getElementsByTagName("description").item(0).getTextContent();
+			if (desc != null)
+				return desc;			
+		}
+		
+		System.out.println("none");
+		
+		return null;	
+	}
+	
+	
+	
+	public String getEle(String delimiter, String ele) {
+		
+		String[] splitvalues = desc.split("<br>");
+		String result = null;
+		
+		for (int nA = 0 ; nA < splitvalues.length ; nA++)
+		{	
+			String[] temp = splitvalues[nA].split(delimiter);
+			if (temp.length > 1) {
+				// System.out.println(temp[0] + temp[1] + ele);
+				if (temp[0].trim().compareTo(ele.trim()) == 0){					
+					// System.out.println("[getEle] matched");
+					result = temp[1];			
+				}
+			}
+		}
+		
+		return result;
+		
+	}
+	
 	
 	// box consists of starting lat, ending lat, starting lon, ending lon
 	private boolean isItinaBox(String box) {
@@ -326,6 +377,7 @@ public class KMLdescriptionparser {
 	/**
 	 * @param args
 	 */
+	
 	/*
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -340,13 +392,11 @@ public class KMLdescriptionparser {
 		// kdp.getFaultList("Name", "San Andreas (Coachella)");
 		
 		// box consists of starting lat, ending lat, starting lon, ending lon
-		System.out.println("List : " + kdp.getFaultList("LonLat", "30.92 33.35 -116.48 -115.71").size());
-
-		for (int nA = 0; nA < kdp.getFaultList("LonLat", "30.92 33.35 -116.48 -115.71").size() ; nA++)
-		{			
-			System.out.println("List : " + ((FaultDBEntry)kdp.getFaultList("LonLat", "30.92 33.35 -116.48 -115.71").get(nA)).faultName.getValue());
-		}
+		// System.out.println("List : " + kdp.getFaultList("LonLat", "30.92 33.35 -116.48 -115.71").size());
+		System.out.println("size : " + kdp.getPlacemarkSize());		
 	}
 	*/
+	
+	
 
 }

@@ -40,9 +40,21 @@ SAXReader reader = new SAXReader();
 Document statusDoc = reader.read( new StringReader(sb.toString()) );
 Element eleXml = (Element)statusDoc.getRootElement();
 List stationList = eleXml.elements("station");
-String[] latArray=new String[stationList.size()];
-String[] lonArray=new String[stationList.size()];
-String[] nameArray=new String[stationList.size()];
+
+KMLdescriptionparser kdp = new KMLdescriptionparser();
+
+
+kdp.parseXml(config.getServletContext().getRealPath("perm.xml").split("perm.xml")[0], "perm_test.kml");
+System.out.println("[getPlacemarkSize] " + config.getServletContext().getRealPath("perm.xml").split("perm_test.xml")[0]);
+System.out.println("[getPlacemarkSize] " + kdp.getPlacemarkSize());
+
+int rssnewsize = stationList.size();
+int permsize = kdp.getPlacemarkSize();
+int totalstations = rssnewsize + permsize;
+
+String[] latArray=new String[rssnewsize+permsize];
+String[] lonArray=new String[rssnewsize+permsize];
+String[] nameArray=new String[rssnewsize+permsize];
 
 // Set upt the arrays
 for(int i=0;i<stationList.size();i++) {
@@ -51,7 +63,25 @@ for(int i=0;i<stationList.size();i++) {
 	lonArray[i]=station.element("longitude").getText();
 	nameArray[i]=station.element("id").getText();
 }
+
+for(int i=0;i<permsize;i++) {
+	kdp.getDesc(i);
+// System.out.println(kdp.getDesc(i));
+
+	latArray[i+rssnewsize]=kdp.getEle("</b>", "<b>Latitude:").trim();
+	lonArray[i+rssnewsize]=kdp.getEle("</b>", "<b>Longitude:").trim();
+	nameArray[i+rssnewsize]=kdp.getEle("</b>", "<b>Monument Code:").trim();
+	// System.out.println(i + " " + nameArray[i+rssnewsize]);
+}
+
+
+
+
+
+
 %>
+
+
 
 <style type="text/css">
 .alignTop {
@@ -73,7 +103,7 @@ for(int i=0;i<stationList.size();i++) {
 <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css">
 
 <title>Edit Project</title>
-<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>      
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>
 </head>
 
 
@@ -81,7 +111,7 @@ for(int i=0;i<stationList.size();i++) {
 
 <f:view>
 	<script language="JavaScript" type="text/javascript">
-
+//<![CDATA[
 // These are various gmap definitions.
 var map;
 var geoXml;
@@ -103,15 +133,15 @@ var pinmarker = new Array(2);
 var pinmarkervalue = new Array(2);
 var pin_index = -1;
 
-var marker = new Array(<%=stationList.size()%>);
+var marker = new Array(<%=totalstations%>);
 
-var markerlonlist = new Array(<%=stationList.size()%>);
-var markerlatlist = new Array(<%=stationList.size()%>);
-var markernamelist = new Array(<%= stationList.size() %>);
-var markedmarkernamelist = new Array(<%= stationList.size() %>);
-var unmarkedmarkernamelist = new Array(<%= stationList.size() %>);
+var markerlonlist = new Array(<%=totalstations%>);
+var markerlatlist = new Array(<%=totalstations%>);
+var markernamelist = new Array(<%= totalstations %>);
+var markedmarkernamelist = new Array(<%= totalstations %>);
+var unmarkedmarkernamelist = new Array(<%= totalstations %>);
 
-var html = new Array(<%=stationList.size()%>);
+var html = new Array(<%=totalstations%>);
 
 var req;
 var baseIcon = new GIcon();
@@ -297,7 +327,30 @@ function initialize() {
 
 	map.addOverlay(geoXml);
 
+	var gpslist=document.getElementById("obsvGPSMap:GPSStationList");
 
+	gpslist.value="";
+	GEvent.addListener(gpslist,"click",function(e){
+		var a = new Array();
+		if (gpslist.value != "")
+			a = gpslist.value.split(",");
+
+		var c = 0;
+		var es = e.split("/");
+		for (var nA = 0; nA < markedmarkernamelist.length ; nA++)
+		{
+			if (markedmarkernamelist[nA] == es[0])
+				c = 1;
+
+		}
+
+		if (c==0)
+		{
+			togglemarker(a,e,"none");
+			gpslist.value=a;
+			document.getElementById("obsvGPSMap:GPSStationNum").value = a.length;
+		}
+	})
 
 
 
@@ -327,6 +380,7 @@ function initialize() {
 
 	SimplexBean SB = null;
 	List l = null;	
+	List l2 = null;
 
 	if(requestObj instanceof PortletRequest) {
 		System.out.println("[EditProject.jsp] requestObj is an instance of PortletRequest");
@@ -340,9 +394,10 @@ function initialize() {
 
 
 	l = SB.getMyObservationEntryForProjectList();
+	l2 = SB.getMycandidateObservationsForProjectList();
 
 
-	for(int i=0;i<stationList.size();i++){
+	for(int i=0;i<totalstations;i++){
 
 		String color = "http://labs.google.com/ridefinder/images/mm_20_green.png";
 		int check = 0;
@@ -361,6 +416,17 @@ function initialize() {
 			}
 		}
 
+		for (int nA = 0 ; nA < l2.size() ; nA++)
+		{
+		    if (((CandidateObservation)l2.get(nA)).getStationName().contains(nameArray[i].toLowerCase())) {
+		    color = "http://labs.google.com/ridefinder/images/mm_20_yellow.png";
+%>
+		    GEvent.trigger(document.getElementById("obsvGPSMap:GPSStationList"),'click', 
+				      "<%=((CandidateObservation)l2.get(nA)).getStationName()+"/"+((CandidateObservation)l2.get(nA)).getGpsStationLat()+"/"+((CandidateObservation)l2.get(nA)).getGpsStationLon()%>");
+<%
+		    } 
+		} 
+
 		if (check == 0) {		
 			%>
 			unmarkedmarkernamelist[<%=i%>] = "<%=nameArray[i].toLowerCase()%>";
@@ -369,8 +435,15 @@ function initialize() {
 		}
 		%>
 
+		var baseIcon = new GIcon();
+		baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
+		baseIcon.iconSize = new GSize(15, 20);
+		baseIcon.shadowSize = new GSize(10, 10);
+		baseIcon.iconAnchor = new GPoint(1, 10);
+		baseIcon.infoWindowAnchor = new GPoint(5, 1);
+		baseIcon.infoShadowAnchor = new GPoint(5, 5);
 		baseIcon.image = "<%=color%>";
-		markerOptions={ icon:baseIcon };
+		var markerOptions={ icon:baseIcon };
 
 		var lon=<%=lonArray[i] %>;
 		var lat=<%=latArray[i] %>;
@@ -384,16 +457,19 @@ function initialize() {
 		html[<%=i%>]+="<b>Latitude:</b> "+lat+"<br>";
 		html[<%=i%>]+="<b>Longitude:</b> "+lon+"<br>";
 		GEvent.addListener(marker[<%=i%>],"click",function() {
-			marker[<%=i%>].openInfoWindow(html[<%=i%>]);
+
 			var newElement=document.getElementById("obsvGPSMap:stationName");
 			newElement.setAttribute("value","<%= nameArray[i] %>");
+	    
+		      
 			var newElement2=document.getElementById("obsvGPSMap:stationLat");
 			newElement2.setAttribute("value","<%= latArray[i] %>");
 			var newElement3=document.getElementById("obsvGPSMap:stationLon");
 			newElement3.setAttribute("value","<%= lonArray[i] %>");
 
-
-			GEvent.trigger(document.getElementById("obsvGPSMap:GPSStationList"),'click', newElement.value);
+			var newElement4="<%= nameArray[i] + "/" + latArray[i] + "/" + lonArray[i]%>";
+			GEvent.trigger(document.getElementById("obsvGPSMap:GPSStationList"),'click', newElement4);
+			marker[<%=i%>].openInfoWindow(html[<%=i%>]);
 
 
 
@@ -407,30 +483,6 @@ function initialize() {
 // printNetworkColors(networkInfo);
 
 
-
-	var gpslist=document.getElementById("obsvGPSMap:GPSStationList");
-
-	gpslist.value="";
-	GEvent.addListener(gpslist,"click",function(e){
-		var a = new Array();
-		if (gpslist.value != "")
-			a = gpslist.value.split(",");
-
-		var c = 0;
-		for (var nA = 0; nA < markedmarkernamelist.length ; nA++)
-		{
-			if (markedmarkernamelist[nA] == e)
-				c = 1;
-
-		}
-
-		if (c==0)
-		{
-			togglemarker(a,e,"none");
-			gpslist.value=a;
-			document.getElementById("obsvGPSMap:GPSStationNum").value = a.length;
-		}
-	})
 }
 
 Array.prototype.remove = function(e)
@@ -447,17 +499,21 @@ Array.prototype.remove = function(e)
 function togglemarker(array, e, option)
 {
 	var b = 0;
+
+	var es = e.split("/");
+
 	for(var nA = 0; nA < array.length; nA++ )
 	{
 		if(array[nA]==e)
 			b=1;
+
 
 	}
 
 	var index=1;
 	for (var nA = 0 ; nA < markernamelist.length ; nA++)
 	{	
-		if (markernamelist[nA] == e)
+		if (markernamelist[nA] == es[0])
 			index = nA;
 
 	}
@@ -492,7 +548,7 @@ function togglemarker(array, e, option)
 	var lat= markerlatlist[index];
 	marker[index]=new GMarker(new GLatLng(lat,lon),markerOptions);		
 	GEvent.addListener(marker[index],"click",function() {
-		marker[index].openInfoWindow(html[index]);
+
 		var newElement=document.getElementById("obsvGPSMap:stationName");
 		newElement.setAttribute("value",markernamelist[index]);
 		var newElement2=document.getElementById("obsvGPSMap:stationLat");
@@ -500,7 +556,10 @@ function togglemarker(array, e, option)
 		var newElement3=document.getElementById("obsvGPSMap:stationLon");
 		newElement3.setAttribute("value",markerlonlist[index]);
 
-		GEvent.trigger(document.getElementById("obsvGPSMap:GPSStationList"),'click', newElement.value);
+		var newElement4= markernamelist[index] + '/' + markerlatlist[index] + '/' +  markerlonlist[index];
+		GEvent.trigger(document.getElementById("obsvGPSMap:GPSStationList"),'click', newElement4);
+		marker[index].openInfoWindow(html[index]);
+		
 
 
 
@@ -587,12 +646,12 @@ function updateGPSinthebox() {
 			{			
 
 
-				togglemarker(a, markernamelist[nA], "none");
+				togglemarker(a, markernamelist[nA] + '/' + markerlatlist[nA] + '/' +  markerlonlist[nA], "none");
 // b.push(markernamelist[nA]);
 
 			}
 			else
-				togglemarker(a, markernamelist[nA], "out");
+				togglemarker(a, markernamelist[nA] + '/' + markerlatlist[nA] + '/' +  markerlonlist[nA], "out");
 		}
 
 
@@ -727,7 +786,8 @@ function overlayNetworks(){
 
 function createMarker(networkName, name, lon, lat, icon) {
 	var marker = new GMarker(new GPoint(lon, lat),icon);
-// Show this marker's name in the info window when it is clicked
+	
+
 	var html = "<b>Station Name= </b>" + name + "<br><b>Lat=</b>" + lat + "<br><b>Lon= </b>" + lon + "<br><b>Network= </b>" + networkName;
 
 
@@ -782,14 +842,14 @@ function getScrolling() {
 	}
 	return x + "," + y;
 }
-
+//]]>
 </script>
 
 	<h:outputText id="lkdrq1" styleClass="header2"
 		value="Project Component Manager" />
 	<h:inputHidden id="faultKmlUrl" value="#{SimplexBean.faultKmlUrl}" />
-	<h:outputText id="lkdrq2" escape="false"
-		value="<br>You must provide at least one fault and one observation point before you can run Simplex" />
+	<br><h:outputText id="lkdrq2" escape="false"
+		value="You must provide at least one fault and one observation point before you can run Simplex" />
 	<%/* This is the main grid container */%>
 	<h:panelGrid id="EditProject" columnClasses="alignTop,alignTop"
 		columns="2" border="1">

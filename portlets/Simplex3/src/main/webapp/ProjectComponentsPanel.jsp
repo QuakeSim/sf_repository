@@ -2,21 +2,21 @@
 			<h:panelGroup id="dflelerkljk161">
 				<h:form id="UpdateSelectFaultsForm"
 					rendered="#{!empty SimplexBean.myFaultEntryForProjectList}">
-		<h:outputText value="<br/>" escape="false"/>
+		<h:outputText value="" escape="false"/><br/>
 		<h:outputText value="1) Please check a box to allow a value to vary during the simplex optimization. " escape="false"/>
 		<h:outputText value="2) Please click the 'update' button after value changes." escape="false"/>
 		<h:outputText value="2) Please click the checkbox next to the 'name' to draw the fault on the map" escape="false"/>
 					<h:panelGrid id="dflelerkljk162" columns="1" border="1" cellpadding="0" cellspacing="0">
-						  <h:outputFormat id="dflelerkljk165" escape="false" value="<b>Fault Components</b>">
-						  </h:outputFormat>
+						  <b><h:outputFormat id="dflelerkljk165" escape="false" value="Fault Components">
+						  </h:outputFormat></b>
 
 						  <h:panelGrid id="dflelerkljg162" columns="2" border="0"  cellpadding="0" cellspacing="0">
 
-							<h:dataTable border="1" cellpadding="0" cellspacing="0" id="dflelerh966" headerClass="componentstableh" columnClasses="componentstablec"
+							<h:dataTable id="dflelerh966"  border="1" cellpadding="0" cellspacing="0"  headerClass="componentstableh" columnClasses="componentstablec"
 							      value="#{SimplexBean.myFaultsForProjectList}" var="myentry31">
 							    <h:column>
 							      <f:facet name="header">
-								<h:outputText id="dflelerh967" escape="false" value="<b>Name</b>" />
+								<b><h:outputText id="dflelerh967" escape="false" value="Name" /></b>
 							      </f:facet>
 
 							      <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
@@ -231,13 +231,12 @@
 						      </h:dataTable>
 
 
-							<h:dataTable border="1" cellpadding="0" cellspacing="0" id="dflelerh966" headerClass="componentstableh2" columnClasses="componentstablec"
-											  id="dflelerkljk451"
+							<h:dataTable border="1" cellpadding="0" cellspacing="0" id="dflelerh9124" headerClass="componentstableh2" columnClasses="componentstablec"											  
 											  value="#{SimplexBean.myFaultEntryForProjectList}" var="myentry3">
 
 								<h:column>
 									<f:facet name="header">
-										<h:outputText id="dflelerkljk454" escape="false" value="<b>Update</b>" />
+										<b><h:outputText id="dflelerkljk454" escape="false" value="Update" /></b>
 									</f:facet>
 
 							      <h:panelGrid columns="2" cellpadding="0" cellspacing="0" styleClass="centered">
@@ -250,7 +249,7 @@
 
 								<h:column>
 									<f:facet name="header">
-										<h:outputText id="dflelerkljk456" escape="false" value="<b>Remove</b>" />
+										<b><h:outputText id="dflelerkljk456" escape="false" value="Remove" /></b>
 									</f:facet>									
 
 							      <h:panelGrid columns="2" cellpadding="0" cellspacing="0" styleClass="centered">
@@ -273,24 +272,24 @@
 
 				<h:form id="UpdateSelectObservationForm"
 					rendered="#{!empty SimplexBean.myObservationsForProjectList}">
-				<h:outputText value="<br/>" escape="false"/>				
+				<h:outputText value="" escape="false"/><br/>				
 				<h:outputText value="1) Please click the 'update' button after value changes." escape="false"/>
 						<h:panelGroup id="dflelerkljk174">
 						  <h:panelGrid id="obsvpanelgrid" columns="1" border="1">
-								<h:outputFormat escape="false" id="dflelerkljk176"
+								<b><h:outputFormat escape="false" id="dflelerkljk176"
 									value="<b>Observation Components</b>">
-								</h:outputFormat>
+								</h:outputFormat></b>
 								<h:commandButton id="viewSimplexObsv" value="Display/Hide"
 									actionListener="#{SimplexBean.currentEditProjectForm.toggleShowObsvEntries}"/>
 							<h:panelGrid id="aerbasd1" columns="2" border="0" cellpadding="0" cellspacing="0">    
 
-							<h:dataTable  border="1" cellpadding="0" cellspacing="0" id="dflelerkljk177" headerClass="componentstableh2" columnClasses="componentstablec"
+							<h:dataTable  border="1" cellpadding="0" cellspacing="0" id="dflelerkljk1277" headerClass="componentstableh2" columnClasses="componentstablec"
 							   rendered="#{SimplexBean.currentEditProjectForm.renderObsvEntries}"
 								value="#{SimplexBean.myObservationsForProjectList}"
 								var="myentry4">
 								<h:column>
 									<f:facet name="header">
-										<h:outputText id="dflelerkljk178" escape="false" value="<b>Name</b>" />
+										<b><h:outputText id="dflelerkljk178" escape="false" value="Name" /></b>
 									</f:facet>
 									<h:inputText id="dflelerkljk179" style="text-align:right;width:60px"
 									  value="#{myentry4.obsvName}" required="true" />
@@ -298,7 +297,7 @@
 
 								<h:column>
 									<f:facet name="header">
-										<h:outputText id="dflelerkljk538" escape="false" value="<b>Type</b>" />
+										<b><h:outputText id="dflelerkljk538" escape="false" value="Type" /></b>
 									</f:facet>									
 									<h:selectOneMenu id="obsvType2"
 										value="#{myentry4.obsvType}">
@@ -313,34 +312,34 @@
 
 								<h:column>
 									<f:facet name="header">
-										<h:outputText id="dflelerkljk548" escape="false" value="<b>Value</b>" />
+										<b><h:outputText id="dflelerkljk548" escape="false" value="Value" /></b>
 									</f:facet>
 									<h:inputText id="dflelerklj71" style="text-align:right;width:110px;" value="#{myentry4.obsvValue}" />
 								</h:column>
 
 								<h:column>
 									<f:facet name="header">
-										<h:outputText id="dflelerkljk558" escape="false" value="<b>Error</b>" />
+										<b><h:outputText id="dflelerkljk558" escape="false" value="Error" /></b>
 									</f:facet>
 									<h:inputText id="dflelerklj72" style="text-align:right;width:110px;" value="#{myentry4.obsvError}" />
 								</h:column>
 
 								<h:column>
 									<f:facet name="header">
-										<h:outputText id="dflelerkljk568" escape="false" value="<b>Location East</b>" />
+										<b><h:outputText id="dflelerkljk568" escape="false" value="Location East" /></b>
 									</f:facet>
 									<h:inputText id="dflelerklj73" style="text-align:right;" value="#{myentry4.obsvLocationEast}" />
 								</h:column>
 
 								<h:column>
 									<f:facet name="header">
-										<h:outputText id="dflelerkljk578" escape="false" value="<b>Location North</b>" />
+										<b><h:outputText id="dflelerkljk578" escape="false" value="Location North" /></b>
 									</f:facet>
 									<h:inputText id="dflelerklj74" style="text-align:right;" value="#{myentry4.obsvLocationNorth}" />
 								</h:column>
 								<h:column>
 									<f:facet name="header">
-										<h:outputText id="dflelerkljk388" escape="false" value="<b>Ref Site</b>" />
+										<b><h:outputText id="dflelerkljk388" escape="false" value="Ref Site" /></b>
 									</f:facet>
 									<h:selectOneMenu id="obsvRefSite2"
 										value="#{myentry4.obsvRefSite}">
@@ -352,14 +351,13 @@
 								</h:column>
 							</h:dataTable>
 
-							<h:dataTable border="1" cellpadding="0" cellspacing="0" id="dflelerh966" headerClass="componentstableh2" columnClasses="componentstablec"
-											  id="dflelerkljk951"
+							<h:dataTable border="1" cellpadding="0" cellspacing="0" id="dflelerz166" headerClass="componentstableh2" columnClasses="componentstablec"								
 											  rendered="#{SimplexBean.currentEditProjectForm.renderObsvEntries}"
 											  value="#{SimplexBean.myObservationEntryForProjectList}" var="myentry7">
 
 								<h:column>
 									<f:facet name="header">
-										<h:outputText id="dflelerkljk954" escape="false" value="<b>Update</b>" />
+										<b><h:outputText id="dflelerkljk954" escape="false" value="Update" /></b>
 									</f:facet>
 									
 							      <h:panelGrid columns="2" cellpadding="0" cellspacing="0" styleClass="centered">
@@ -373,7 +371,7 @@
 
 								<h:column>
 									<f:facet name="header">
-										<h:outputText id="dflelerkljk956" escape="false" value="<b>Remove</b>" />
+										<b><h:outputText id="dflelerkljk956" escape="false" value="Remove" /></b>
 									</f:facet>
 									
 

@@ -6,8 +6,8 @@
 						columnClasses="subtitle,medium">
 
 						<f:facet name="header">
-							<h:outputFormat id="output2" escape="false"
-								value="<b>Input Observation Parameters</b>" />
+							<b><h:outputFormat id="output2" escape="false"
+								value="Input Observation Parameters" /></b>
 						</f:facet>
 
 						<h:outputText id="lkdrq9" value="Observation Name:" />

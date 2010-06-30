@@ -37,34 +37,34 @@
 		value="#{SimplexBean.currentEditProjectForm}" var="myentry32">
     <h:column>
       <f:facet name="header">
-	<h:outputText id="nfa1" escape="false" value="<b>Name</b>" />
+	<b><h:outputText id="nfa1" escape="false" value="Name" /></b>
       </f:facet>
       <h:inputText id="faultnamet" style="text-align:right;width:60px" value="#{myentry32.faultName}" required="true" />								
     </h:column>
 
     <h:column>
       <f:facet name="header">
-	<h:outputText id="nfa9" escape="false" value="<b>Lon Start</b>" />
+	<b><h:outputText id="nfa9" escape="false" value="Lon Start" /></b>
       </f:facet>
       <h:inputText id="faultdrawLonStartst" value="#{myentry32.faultLonStart}" required="false" />
     </h:column>
 
     <h:column>
       <f:facet name="header">
-	<h:outputText id="nfa7" escape="false" value="<b>Lat Start</b>" />
+	<b><h:outputText id="nfa7" escape="false" value="Lat Start" /></b>
       </f:facet>
       <h:inputText id="faultdrawLatStartst" value="#{myentry32.faultLatStart}" required="false" />
     </h:column>
 
     <h:column>
       <f:facet name="header">
-	<h:outputText id="nfa5" escape="false" value="<b>Lon End</b>" />
+	<b><h:outputText id="nfa5" escape="false" value="Lon End" /></b>
       </f:facet>
       <h:inputText id="faultdrawLonEndst" value="#{myentry32.faultLonEnd}" required="false" />
     </h:column>
     <h:column>
       <f:facet name="header">
-	<h:outputText id="nfa3" escape="false" value="<b>Lat End</b>" />
+	<b><h:outputText id="nfa3" escape="false" value="Lat End" /></b>
       </f:facet>
       <h:inputText id="faultdrawLatEndst" value="#{myentry32.faultLatEnd}" required="false" />
     </h:column>
@@ -76,7 +76,7 @@
  
 <f:verbatim>
 <script language="JavaScript">
-
+//<![CDATA[
 
 	var faultMap=null;
 	faultMap=new GMap2(document.getElementById("faultMap"));
@@ -91,7 +91,7 @@
 	// The gridsphere container doesn't work with urls. That should be solved
 	// var kmllist = ["@host.base.url@@artifactId@/geo_000520-001216-sim_HDR_4rlks.unw.kml","@host.base.url@@artifactId@/QuakeTables_CGS_1996.kml","@host.base.url@@artifactId@/QuakeTables_CGS_2002.kml"];
 	// var kmllist = ["geo_000520-001216-sim_HDR_4rlks.unw.kml","QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml"];
-	var kmllist = ["QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml"];		
+	var kmllist = ["QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml"];	
 	
 	exmlFMap = new EGeoXml("exmlFMap", faultMap, kmllist, {sidebarfn:myside,nozoom:true,sidebarid:"faultMapside",parentformofsidebarid:"faultKMLSelectorForm",clickpolyobjfn:clickpolyobj,iwwidth:200});       
 	exmlFMap.parse();
@@ -333,7 +333,7 @@ new GLatLng(marker_NE.getPoint().lat(), marker_NE.getPoint().lng())
 
 
 
-
+//]]>
   
 </script>
 </f:verbatim>

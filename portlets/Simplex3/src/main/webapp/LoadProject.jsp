@@ -1,65 +1,60 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <html>
-<style>
-	.alignTop {
-		vertical-align:top;
-	}
-	.header2 {
-		font-family: Arial, sans-serif;
-		font-size: 18pt;
-		font-weight: bold;
-	}
-</style>
-
-<head>
-
-<title>Simplex2 Load and Delete Project</title>
-</head>
-<body>
-
-	<%
-	 	System.out.println("session.getAttribute(\"email\") in LoadProject.jsp of Simplex : " + session.getAttribute("email"));
-	%>
-
-<script language="JavaScript">
-
-function selectOne(form , button)
-{
-  turnOffRadioForForm(form);
-  button.checked = true;
-}
-
-function turnOffRadioForForm(form)
-{
-  for(var i=0; i<form.elements.length; i++)
-  {
-  form.elements[i].checked = false;
-      
+  <style>
+  .alignTop {
+    vertical-align:top;
   }
-}
+  .header2 {
+    font-family: Arial, sans-serif;
+    font-size: 18pt;
+    font-weight: bold;
+  }
+  </style>
 
-function dataTableSelectOneRadio(radio) {
+ <head>
+  <title>Simplex2 Load and Delete Project</title>
+ </head>
+  
+  <body>
+   <%
+    System.out.println("session.getAttribute(\"email\") in LoadProject.jsp of Simplex : " + session.getAttribute("email"));
+   %>
+  
+
+   <script language="JavaScript">
+//<![CDATA[ 
+    function selectOne(form, button)
+    {
+      turnOffRadioForForm(form);
+      button.checked = true;
+    }
+
+    function turnOffRadioForForm(form)
+    {
+      for(var i = 0 ; i < form.elements.length ; i++)
+       form.elements[i].checked = false;
+    }
+  
+   function dataTableSelectOneRadio(radio) {
     var id = radio.name.substring(radio.name.lastIndexOf(':'));
     var el = radio.form.elements;
-    //alert (el.length);
+    
     for (var i = 0; i < el.length; i++) {
-	if (el[i].name.substring(el[i].name.lastIndexOf(':')) == id) {
-	//alert (el[i].checked)
+	if (el[i].name.substring(el[i].name.lastIndexOf(':')) == id) {	
 	    el[i].checked = false;
 	    el[i].checked = false;
 	}
     }
     radio.checked = true;
-}
+   }
+//]]>
+  </script>
 
-</script>
-
-<f:view>
-	<h:form id="lkdjf1">
+<f:view>	
+	<h:form>
 	<h:outputText  id="lkdjf2" styleClass="header2" value="Project Archive"/>
 	<p/>
 		<h:outputText  id="lkdjf3" value="You don't have any archived projects."
@@ -71,7 +66,7 @@ function dataTableSelectOneRadio(radio) {
 						rendered="#{!(empty SimplexBean.myProjectNameList)}"		 
 						border="1">
 			<h:panelGrid  id="lkdjf5" columns="1" border="0">
-				<h:outputText  id="lkdjf6" escape="false" value="<b>Select Projects</b><br>" />
+				<b><h:outputText  id="lkdjf6" escape="false" value="Select Projects" /></b><br>
 				<h:outputText id="lkdjf7" 
 								  escape="false"
 								value="Please select from one of the previous projects." />
@@ -88,7 +83,7 @@ function dataTableSelectOneRadio(radio) {
 			</h:panelGrid>
 			
 			<h:panelGrid id="dlrfih1" columns="1" border="0">
-				<h:outputText escape="false" value="<b>Copy Project</b><br>" />
+				<b><h:outputText escape="false" value="Copy Project" /></b><br>
 				<h:outputText escape="false"
 					value="Please select from one of the previous projects." />
 	
@@ -109,7 +104,7 @@ function dataTableSelectOneRadio(radio) {
 			</h:panelGrid>
 			
 			<h:panelGrid id="lkdjf9" columns="1" border="0">
-				<h:outputText id="lkdjf10" escape="false" value="<b>Select Projects</b><br>" />
+				<b><h:outputText id="lkdjf10" escape="false" value="Select Projects" /></b><br>
 				<h:outputText  id="lkdjf11" escape="false"
 					value="Please select from one of the previous projects." />
 				<h:selectManyCheckbox id="projectfordelete" value="#{SimplexBean.deleteProjectsList}"

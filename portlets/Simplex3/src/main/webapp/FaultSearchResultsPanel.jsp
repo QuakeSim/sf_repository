@@ -2,9 +2,9 @@
 			<h:panelGroup id="ere43dr342d" rendered="#{SimplexBean.currentEditProjectForm.renderAddFaultFromDBForm}">
 				<h:form id="SelectFaultDBEntryForm">
 
-				<h:outputText id="dbisdownklj" escape="false"
-								  value="<b>Error:</b> Data base returned no response.  Contact portal administrator."
-								  rendered="#{empty SimplexBean.currentEditProjectForm.myFaultDBEntryList}"/>
+				<b><h:outputText id="dbisdownklj" escape="false"
+								  value="Error: Data base returned no response.  Contact portal administrator."
+								  rendered="#{empty SimplexBean.currentEditProjectForm.myFaultDBEntryList}"/></b>
 
 					<h:dataTable  id="dflelerkljk149"
 					   rendered="#{!empty SimplexBean.currentEditProjectForm.myFaultDBEntryList}"
@@ -14,7 +14,7 @@
 
 						<h:column>
 							<f:facet name="header">
-								<h:outputText id="dflelerkljk150" escape="false" value="<b>FaultName</b>" />
+								<b><h:outputText id="dflelerkljk150" escape="false" value="FaultName" /></b>
 							</f:facet>
 							<h:selectOneRadio id="dflelerkljk151" layout="pageDirection"
 								valueChangeListener="#{SimplexBean.currentEditProjectForm.handleFaultsRadioValueChange}"
@@ -26,27 +26,27 @@
 
 						<h:column>
 							<f:facet name="header">
-								<h:outputText id="dflelerkljk152" escape="false" value="<b>SegmentName</b>" />
+								<b><h:outputText id="dflelerkljk152" escape="false" value="SegmentName" /></b>
 							</f:facet>
 							<h:outputText id="dflelerkljk153" value="#{myentry1.faultSegmentName}" />
 						</h:column>
 
 						<h:column>
 							<f:facet name="header">
-								<h:outputText id="dflelerkljk154" escape="false" value="<b>Author1</b>" />
+								<b><h:outputText id="dflelerkljk154" escape="false" value="Author1" /></b>
 							</f:facet>
 							<h:outputText id="dflelerkljk155" value="#{myentry1.faultAuthor}" />
 						</h:column>
 
 						<h:column>
 							<f:facet name="header">
-								<h:outputText id="dflelerkljk156" escape="false" value="<b>Segment Coordinates</b>" />
+								<b><h:outputText id="dflelerkljk156" escape="false" value="Segment Coordinates" /></b>
 							</f:facet>
 							<h:outputText id="dflelerkljk157" value="#{myentry1.faultSegmentCoordinates}" />
 						</h:column>
 						<h:column>
 							<f:facet name="header">
-								<h:outputText id="dflelerkljk158" escape="false" value="<b>Action</b>" />
+								<b><h:outputText id="dflelerkljk158" escape="false" value="Action" /></b>
 							</f:facet>
 							<h:commandLink  id="dflelerkljk159"
 								actionListener="#{SimplexBean.currentEditProjectForm.handleFaultEntryEdit}">

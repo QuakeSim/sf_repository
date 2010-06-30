@@ -7,8 +7,8 @@
 						columnClasses="subtitle,medium">
 
 						<f:facet name="header">
-							<h:outputFormat id="output3" escape="false"
-								value="<b>Input Fault Geometry</b>" />
+							<b><h:outputFormat id="output3" escape="false"
+								value="Input Fault Geometry" /></b>
 						</f:facet>
 
 						<h:outputText id="lkdrq117" value="Fault Name:" />

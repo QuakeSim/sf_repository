@@ -19,7 +19,6 @@
 <script type="text/javascript">
 
 
-
 var tab1 = '<iframe scrolling="yes" width=100% height="700" frameborder="1" src="@host.base.url@@artifactId@/LoadProject.faces?email=<%=session.getAttribute("email")%>"></iframe>'
 var tab2 = '<iframe scrolling="yes" width=100% height="700" frameborder="1" src="@host.base.url@@artifactId@/ArchivedData.faces?email=<%=session.getAttribute("email")%>"></iframe>'
 var tab3 = '<iframe scrolling="yes" width=100% height="700" frameborder="1" src="@host.base.url@@artifactId@/PlotGrid.faces?email=<%=session.getAttribute("email")%>"></iframe>'

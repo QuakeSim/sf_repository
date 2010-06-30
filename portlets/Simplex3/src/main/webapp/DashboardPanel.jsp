@@ -5,16 +5,16 @@
 		<h:panelGroup id="lkdrq3">
 			   <h:form id="selectproj">  
 					<h:outputFormat id="lkdrq4" escape="false"
-						value="<b>Project Name:</b> #{SimplexBean.projectName} <br>" />
+						value="<b>Project Name:</b> #{SimplexBean.projectName}<br>" />
 					<h:outputFormat id="lkdrq5" escape="false"
-						value="<b>Starting Temperature:</b> #{SimplexBean.currentProjectEntry.startTemp} <br>" />
+						value="<b>Starting Temperature:</b> #{SimplexBean.currentProjectEntry.startTemp}<br>"/>
 					<h:outputFormat id="lkdrq6" escape="false"
-						value="<b>Maximum Iterations:</b> #{SimplexBean.currentProjectEntry.maxIters} <br>" />
+						value="<b>Maximum Iterations:</b> #{SimplexBean.currentProjectEntry.maxIters}<br>"/>
 					<h:outputText id="lkj3034f" escape="false"
-						      value="<b>Project Lat/Lon Origin:</b> (#{SimplexBean.currentProjectEntry.origin_lat}, #{SimplexBean.currentProjectEntry.origin_lon})"/>
+						      value="<b>Project Lat/Lon Origin</b>: (#{SimplexBean.currentProjectEntry.origin_lat}, #{SimplexBean.currentProjectEntry.origin_lon})<br>"/>
 						
 					<h:outputText id="instructionezzze" escape="false"
-					  				  value="<br>You must add at least one observation point and one fault.  The preferred method is to use the GPS station map option."/>
+					  				  value="You must add at least one observation point and one fault.  The preferred method is to use the GPS station map option."/>
 
 					<h:selectOneRadio layout="pageDirection" id="subscriptions"
 						value="#{SimplexBean.currentEditProjectForm.projectSelectionCode}">
@@ -43,10 +43,10 @@
 					</h:commandButton>
 			   </h:form>
 
-  		      <h:form id="dflelerkljk185" rendered="#{!empty SimplexBean.myObservationEntryForProjectList && !empty SimplexBean.myFaultEntryForProjectList}">
+  		      <h:form id="dflelerkljk185" rendered="#{!empty SimplexBean.myObservationEntryForProjectList and	 !empty SimplexBean.myFaultEntryForProjectList}">
             <h:outputText value="Simplex is ready to run.  Click the button below to launch."/>
 		      <h:commandButton rendered="#{!empty SimplexBean.myObservationEntryForProjectList
-							  				  && !empty SimplexBean.myFaultEntryForProjectList}"
+							  				  and !empty SimplexBean.myFaultEntryForProjectList}"
 							  				  id="runSimplex2" value="Run Simplex"
 							  				  action="#{SimplexBean.toggleRunSimplex2}" />
 			   </h:form>	

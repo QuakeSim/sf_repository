@@ -231,6 +231,13 @@
         </repository>
 	
 	
+	
+	<repository>
+            <id>db4o</id>
+            <url>https://source.db4o.com/maven/</url>
+        </repository>
+	
+	
 
         <repository>
         <id>jboss</id>
@@ -278,13 +285,14 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- Junit testing -->
+        <!-- Junit testing
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>3.8.1</version>
             <scope>compile</scope>
         </dependency>
+	-->
 
         
         <dependency>
@@ -428,9 +436,9 @@
 	
 
         <dependency>
-             <groupId>QuakeSim2</groupId>
+             <groupId>com.db4o</groupId>
              <artifactId>db4o-java5</artifactId>
-             <version>6.1</version>
+             <version>7.4-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

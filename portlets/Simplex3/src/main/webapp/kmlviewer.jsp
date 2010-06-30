@@ -7,7 +7,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" 
 xmlns:v="urn:schemas-microsoft-com:vml">
   <head>
-    <script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=put.google.map.key.here"
+  <script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=put.google.map.key.here"
       type="text/javascript"></script>
 
   </head>
@@ -27,6 +27,10 @@ xmlns:v="urn:schemas-microsoft-com:vml">
     }
     </style>
     <script type="text/javascript"> 
+
+
+//<![CDATA[ 
+
 var map;
 var userAdded = 1;
 
@@ -136,7 +140,7 @@ function toggleGeoXML(id, checked) {
     map.removeOverlay(layers[id].geoXml);
   }
 }
-
+//]]>
   </script>  
     	
 <!--***************************************************************************************-->  	
@@ -155,7 +159,7 @@ function toggleGeoXML(id, checked) {
     </div>
     <div id="send_kml_googlemap" style="width:100%;height:20px ;float:left;border: 1px solidblack;">
 						<h:outputLink id="link6" value="http://maps.google.com/maps?q=#{SimplexBean.projectSimpleXOutput.kmlUrls[0]}" target="_blank">
-							<h:outputText value="[<font size=1px>View In Google map</font>]" escape="false" />
+							<font size=1px><h:outputText value="[View In Google map]" escape="false" /></font>
 						</h:outputLink>
   </div>
   

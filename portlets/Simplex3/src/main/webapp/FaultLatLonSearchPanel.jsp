@@ -4,10 +4,10 @@
 					<h:panelGrid id="FaultLatLonSearch" columns="1"
 						footerClass="subtitle" headerClass="subtitlebig"
 						styleClass="medium" columnClasses="subtitle,medium">
-						<h:outputFormat escape="false" id="dflelerkljk123"
-							value="<b>Search Fault DB by Bounding Latitude and Longitude</b><br><br>" />
+						<b><h:outputFormat escape="false" id="dflelerkljk123"
+							value="Search Fault DB by Bounding Latitude and Longitude" /></b><br><br>
 						<h:outputFormat escape="false" id="dflelerkljk124"
-							value="Enter the starting and ending latitude and longitude values (in decimal degrees) of the search bounding box. All faults completely within the bounding box will be returned.<br><br>" />
+							value="Enter the starting and ending latitude and longitude values (in decimal degrees) of the search bounding box. All faults completely within the bounding box will be returned." /><br><br>
 
 
 						<h:panelGrid columns="2" border="0" id="dflelerkljk125">

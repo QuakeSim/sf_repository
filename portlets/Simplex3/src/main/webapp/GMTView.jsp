@@ -12,6 +12,8 @@
 
 <script language="JavaScript">
 
+//<![CDATA[ 
+
 function selectOne(form , button)
 {
   turnOffRadioForForm(form);
@@ -40,7 +42,7 @@ function dataTableSelectOneRadio(radio) {
     }
     radio.checked = true;
 }
-
+//]]>
 </script>
 <f:view>
 	<h:form id="linkDummyForm">
@@ -59,8 +61,8 @@ function dataTableSelectOneRadio(radio) {
 					columnClasses="subtitle,medium">
 
 					<f:facet name="header">
-						<h:outputFormat id="output3" escape="false"
-							value="<br>Use this form to modify your plot. Click <b>Replot</b> with no modified fields to restore default values." />
+						<br><h:outputFormat id="output3" escape="false"
+							value="Use this form to modify your plot. Click Replot with no modified fields to restore default values." />
 					</f:facet>
 
 					<h:outputText value="Plot Area:" />
