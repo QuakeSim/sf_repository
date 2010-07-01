@@ -49,9 +49,9 @@
 
 							    <h:column>
 							      <f:facet name="header">
-								<h:outputText  id="bawee21" value="Station" />
+								<h:outputText id="bawee21" value="Station" />
 							      </f:facet>
-							      <h:panelGrid columns="1" cellpadding="0" cellspacing="0" styleClass="centered">
+							      <h:panelGrid id="gplgmpp2" columns="1" cellpadding="0" cellspacing="0" styleClass="centered">
 								<f:facet name="header">								
 								</f:facet>
 								<h:inputText id="bawee22" style="text-align:right;width:60px" 
@@ -63,7 +63,7 @@
 							      <f:facet name="header">
 								<h:outputText id="bawee23" value="Sources" />
 							      </f:facet>
-							      <h:panelGrid columns="1" cellpadding="0" cellspacing="0" styleClass="centered">
+							      <h:panelGrid id="gplgmpp3" columns="1" cellpadding="0" cellspacing="0" styleClass="centered">
 								<f:facet name="header">								
 								</f:facet>
 							      <h:selectOneListbox id="sselectl" value="#{myentry5.selectedSource}">

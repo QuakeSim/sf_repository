@@ -109,7 +109,7 @@ function dataTableSelectOneRadio(radio) {
 					<f:facet name="header">
 						<b><h:outputText  id="kjb3" escape="false" value="Kml file" /></b>
 					</f:facet>
-						<h:panelGroup  id="kjb4">
+						<h:panelGroup id="kjb4">
 						<h:outputLink id="link5" value="#{myentry3.kmlUrls[0]}" target="_blank">
 							<b><h:outputText  id="kjb6" value="[Download]" escape="false" /></b>
 						</h:outputLink>
