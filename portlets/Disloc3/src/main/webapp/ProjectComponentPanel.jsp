@@ -1,13 +1,16 @@
+
+
 <h:panelGrid id="ProjectComponentList" columns="1" border="0">
-  <h:panelGroup id="dflelerkljk161">
     <h:form id="UpdateSelectFaultsForm" rendered="#{!empty DislocBean2.myFaultEntryForProjectList || !empty DislocBean2.myObsvEntryForProjectList}"> 
-      <h:outputText value="<br/>" escape="false"/>      
-      <h:outputText value="1) Please click the 'update' button after value changes." escape="false"/>
-      <h:outputText value="2) Please click the checkbox next to the 'name' to draw the fault on the map" escape="false"/>
-	<h:panelGrid id="dflelerkljk162" columns="1" border="1" cellpadding="0" cellspacing="0">
+      <h:outputText id="lherh" value="<br/>" escape="false"/>      
+      <h:outputText id="lierlk3" value="1) Please click the 'update' button after value changes." escape="false"/>
+      <h:outputText id="elirelh" value="2) Please click the checkbox next to the 'name' to draw the fault on the map" escape="false"/>
+	<h:panelGrid id="dflelerkljk162" columns="1" border="0" cellpadding="0" cellspacing="0">
 	  <h:outputFormat id="dflelerkljk165" escape="false" value="<b>Fault Components</b>">
 	  </h:outputFormat>
-	  <h:panelGrid id="dflelerkljg162" columns="2" border="0"  cellpadding="0" cellspacing="0">
+
+	  <h:panelGrid id="dflelerkljg162" columns="2" border="0"  cellpadding="0" cellspacing="0" columnClasses="alignTop,alignTop">
+	  <h:column>
 	    <h:dataTable border="1" cellpadding="0" cellspacing="0" id="dflelerh966" headerClass="componentstableh" columnClasses="componentstablec"
 				value="#{DislocBean2.myFaultsForProjectList}" var="myentry31">
 	      <h:column>
@@ -15,7 +18,7 @@
 		  <h:outputText id="dflelerh967" escape="false" value="<b>Name</b>" />
 		</f:facet>
 
-		<h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+		<h:panelGrid columns="2" cellpadding="0" cellspacing="0" id="kljerje22">
 		  <h:inputText id="dflelerklh968" style="text-align:right;width:60px" value="#{myentry31.faultName}" required="true" />
 		  <h:selectBooleanCheckbox id="faultnamec" onclick="togglefaultname(this)" value="" />
 		</h:panelGrid>
@@ -25,7 +28,7 @@
 		<f:facet name="header">
 		  <h:outputText id="lkdrh119" value="Location X" />
 		</f:facet>
-		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0" id="ljerlke12j">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="FaultLocationX2" style="text-align:right;width:60px"
@@ -39,7 +42,7 @@
 		  <f:facet name="header">
 		    <h:outputText id="lkdrqh1183" value="Location Y" />
 		  </f:facet>
-		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0" id="ljlejre122">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="FaultLocationY2" style="text-align:right;width:60px" 
@@ -182,7 +185,7 @@
 		    <h:inputText id="FaultSlip" style="text-align:right;width:60px" 
 		      value="#{myentry31.faultDipSlip}"
 		      required="true" />
-		    <h:message for="FaultSlip" showDetail="true" showSummary="true"
+		    <h:message id="lehre2i1" for="FaultSlip" showDetail="true" showSummary="true"
 		      errorStyle="color: red" />
 		  </h:panelGrid>
 		</h:column>
@@ -223,7 +226,7 @@
 		  <f:facet name="header">
 		    <h:outputText id="dflelerklj1252" value="Tensile Slip" />
 		  </f:facet>
-		  <h:panelGrid columns="1" cellpadding="0" cellspacing="0" styleClass="centered">
+		  <h:panelGrid columns="1" cellpadding="0" cellspacing="0" styleClass="centered" id="erej1iu2">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="FaultTensileSlip" style="text-align:right;width:60px" 
@@ -233,9 +236,9 @@
 
 		<h:column>
 		  <f:facet name="header">
-		    <h:outputText id="dflelerkljj81" value="LameLambda" />
+		    <h:outputText id="dflelerkljj81" value="Lame Lambda" />
 		  </f:facet>
-		  <h:panelGrid columns="1" cellpadding="0" cellspacing="0" styleClass="centered">
+		  <h:panelGrid columns="1" cellpadding="0" cellspacing="0" styleClass="centered" id="erejs82">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="LameLambda" style="text-align:right;width:60px" 
@@ -245,9 +248,9 @@
 
 		<h:column>
 		  <f:facet name="header">
-		    <h:outputText  id="dflelerkljj171" value="LameMu" />
+		    <h:outputText  id="dflelerkljj171" value="Lame Mu" />
 		  </f:facet>
-		  <h:panelGrid columns="1" cellpadding="0" cellspacing="0" styleClass="centered">
+		  <h:panelGrid columns="1" cellpadding="0" cellspacing="0" styleClass="centered" id="lejjdj12id">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="LameMu" style="text-align:right;width:60px" 
@@ -255,44 +258,35 @@
 		  </h:panelGrid>
 		</h:column>
 	  </h:dataTable>
-  
-	  <h:dataTable border="1" cellpadding="0" cellspacing="0" id="dflelerh966" headerClass="componentstableh2" columnClasses="componentstablec"
+  	  </h:column>
+	  <h:column>
+	  <h:dataTable border="1" cellpadding="0" cellspacing="0" headerClass="componentstableh2" columnClasses="componentstablec"
 											  id="dflelerkljk451"
 											  value="#{DislocBean2.myFaultEntryForProjectList}" var="myentry3">
 
 								<h:column>
 									<f:facet name="header">
-										<h:outputText id="dflelerkljk454" escape="false" value="<b>Update</b>" />
+										<h:outputText id="dflelerkljk454" value="Update Values" />
 									</f:facet>
 
-							      <h:panelGrid columns="2" cellpadding="0" cellspacing="0" styleClass="centered">
-								<f:facet name="header">								
-								</f:facet>
+
 								<h:selectBooleanCheckbox value="#{myentry3.update}" id="dflelerkljk455"/>
-								<h:outputText style="text-align:right;width:0px" value ="" />
-							      </h:panelGrid>								
 								</h:column>
 
 								<h:column>
 									<f:facet name="header">
-										<h:outputText id="dflelerkljk456" escape="false" value="<b>Remove</b>" />
+										<h:outputText id="dflelerkljk456" value="Remove Fault" />
 									</f:facet>									
 
-							      <h:panelGrid columns="2" cellpadding="0" cellspacing="0" styleClass="centered">
-								<f:facet name="header">								
-								</f:facet>
 								<h:selectBooleanCheckbox id="dflelerkljk457" value="#{myentry3.delete}"/>
-								<h:outputText style="text-align:right;width:0px" value ="" />
-							      </h:panelGrid>
 								</h:column>
 							</h:dataTable>
+		</h:column>
 
 						</h:panelGrid>						
-					</h:panelGrid>
+					</h:panelGrid>l
 					<h:commandButton id="SelectFault4projj" value="UpdateFault"
 						actionListener="#{DislocBean2.toggleUpdateFaults}" />
 				</h:form>
+          </h:panelGrid>						
 
-
-		</h:panelGroup> 
-	</h:panelGrid> 
