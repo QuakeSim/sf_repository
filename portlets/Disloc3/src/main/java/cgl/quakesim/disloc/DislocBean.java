@@ -427,29 +427,40 @@ public class DislocBean extends GenericSopacBean {
 							faults, currentParams, null);
 			setJobToken(dislocResultsBean.getJobUIDStamp());
 
-			// This step makes the kml plots
+			// This step makes the kml plots.  We allow this to fail.
 			String myKmlUrl = "";			
-			myKmlUrl = createKml(currentParams, dislocResultsBean, faults);
-			setJobToken(dislocResultsBean.getJobUIDStamp());
+			try {
+				 myKmlUrl = createKml(currentParams, dislocResultsBean, faults);
+				 setJobToken(dislocResultsBean.getJobUIDStamp());
+			}
+			catch (Exception ex) {
+				 ex.printStackTrace();
+			}
 
-			// This step runs the insar plotting stuff.
+			// This step runs the insar plotting stuff.  We also allow this
+			// to fail.
 			InsarKmlService iks = new InsarKmlServiceServiceLocator()
 					.getInsarKmlExec(new URL(insarkmlServiceUrl));
-			System.out.println("Service URL:" + insarkmlServiceUrl);
 
-			insarKmlUrl = iks.runBlockingInsarKml(userName, projectName,
-					dislocResultsBean.getOutputFileUrl(), this.getElevation(),
-					this.getAzimuth(), this.getFrequency(), "ExecInsarKml");
+			insarKmlUrl="";
+			try {
+				 insarKmlUrl = iks.runBlockingInsarKml(userName, projectName,
+																	dislocResultsBean.getOutputFileUrl(), this.getElevation(),
+																	this.getAzimuth(), this.getFrequency(), "ExecInsarKml");
+			}
+			catch (Exception ex) {
+				 ex.printStackTrace();
+			}
 			// This sets the InSAR KML URL, which will be accessed by other
 			// pages.
 			setInsarKmlUrl(insarKmlUrl);
 
 			storeProjectInContext(userName, projectName, dislocResultsBean
-					.getJobUIDStamp(), currentParams, dislocResultsBean,
-					myKmlUrl, insarKmlUrl, elevation, azimuth, frequency);
-
+										 .getJobUIDStamp(), currentParams, dislocResultsBean,
+										 myKmlUrl, insarKmlUrl, elevation, azimuth, frequency);
+			
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			 ex.printStackTrace();
 		}
 		System.out.println("[runBlockingDislocJSF] Finished");
 		return DISLOC_NAV_STRING;
