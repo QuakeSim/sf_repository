@@ -73,7 +73,10 @@ public class UnavcoVelParser {
 				for (int nB = 0 ; nB < elements.length ; nB++) {
 				
 					if (elements[nB].compareToIgnoreCase(dotnumber) == 0) {
-						r += date + line[nA] + "\n";
+						if (r == "")
+							r = date + line[nA] + "\n";
+						else
+							r += line[nA] + "\n";
 					}
 				}
 			}
@@ -81,28 +84,31 @@ public class UnavcoVelParser {
 		}
 		
 		
-		if (r == null)
+		if (r == "")
 			return null;
 		else if (date == null)
 			return null;
+		
+		System.out.println("[getStationline] r : " + r);
 		
 		return r;
 	}
 	
 	private String getNeu(String line) {
 		
-		String neu =null;
+		String neu = null;
+		String result = "";
 		String date = "0000-00-00T00:00:00";
 		
 		if (line == null)
 			return null;
 		
 		// System.out.println(line);
-		String[] twoline = line.split("\n");
-		if (twoline.length == 2) {
+		String[] lines = line.split("\n");
+		if (lines.length > 1) {
 			
-			twoline[0] = twoline[0].trim();
-			String[] s = twoline[0].split(" ");
+			lines[0] = lines[0].trim();
+			String[] s = lines[0].split(" ");
 			
 			System.out.println("[getNew] " + s[s.length-1]);
 			
@@ -113,34 +119,35 @@ public class UnavcoVelParser {
 			date += s[s.length-1].substring(8, 10) + ":";
 			date += s[s.length-1].substring(10, 12) + ":";
 			date += s[s.length-1].substring(12, 14);
-			
-			
-			line = twoline[1];
 		}
+		
+		for (int nA = 1 ; nA < lines.length ; nA++) {
+			line = lines[1];		
 						
-		String[] elements = line.split(" ");
-		
-		int n = 20;
-		int e = 21;
-		int u = 22;
-		int nn = 23;
-		int ee = 24;
-		int uu = 25;
-		
-		if (elements.length >= 25) {
-		
-		neu = (elements[0].toLowerCase() + " ");
-		neu += date + " ";
-		neu += (elements[n] + " ");
-		neu += (elements[e] + " ");
-		neu += (elements[u] + " ");
-		neu += (elements[nn] + " ");
-		neu += (elements[ee] + " ");
-		neu += (elements[uu] + " ");		
-		neu = neu.trim();
+			String[] elements = line.split(" ");
+			
+			int n = 20;
+			int e = 21;
+			int u = 22;
+			int nn = 23;
+			int ee = 24;
+			int uu = 25;
+			
+			if (elements.length >= 25) {
+				neu = (elements[0].toLowerCase() + " ");
+				neu += date + " ";
+				neu += (elements[n] + " ");
+				neu += (elements[e] + " ");
+				neu += (elements[u] + " ");
+				neu += (elements[nn] + " ");
+				neu += (elements[ee] + " ");
+				neu += (elements[uu] + " ");		
+				neu = neu.trim();
+			}
+			result += neu + "\n";
 		}
 		
-		return neu;
+		return result;
 	}
 	
 	public String getStationVelocity(String dotnumber) {

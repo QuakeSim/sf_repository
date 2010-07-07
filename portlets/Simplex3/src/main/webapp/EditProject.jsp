@@ -395,12 +395,13 @@ function initialize() {
 
 	l = SB.getMyObservationEntryForProjectList();
 	l2 = SB.getMycandidateObservationsForProjectList();
-
+	
 
 	for(int i=0;i<totalstations;i++){
 
 		String color = "http://labs.google.com/ridefinder/images/mm_20_green.png";
 		int check = 0;
+		
 
 		for (int nA = 0; nA < l.size() ; nA++)
 		{
@@ -420,6 +421,7 @@ function initialize() {
 		{
 		    if (((CandidateObservation)l2.get(nA)).getStationName().contains(nameArray[i].toLowerCase())) {
 		    color = "http://labs.google.com/ridefinder/images/mm_20_yellow.png";
+		    
 %>
 
 <%
@@ -477,6 +479,11 @@ function initialize() {
 		<%
 	}
 	%>
+
+
+document.getElementById("obsvGPSMap:GPSStationNum").value = <%=l2.size()%>;
+
+
 
 // overlayNetworks();
 // printNetworkColors(networkInfo);

@@ -1746,74 +1746,89 @@ public class SimplexBean extends GenericSopacBean {
 		System.out.println("[getvalues] called");
 		mycandidateObservationsForProjectList.clear();
 		
-		String[] stations = selectedGpsStationName.split(",");
-		String s = null;
-		
-		// modified to use unavco .vel files. 05/28/2010 Jun Ji
-		String snf01 = "ftp://data-out.unavco.org/pub/products/velocity/pbo.final_snf01.vel";
-		String igs05 = "ftp://data-out.unavco.org/pub/products/velocity/pbo.final_igs05.vel";
-		UnavcoVelParser uvp1 = new UnavcoVelParser();
-		uvp1.getFile(snf01);
-		UnavcoVelParser uvp2 = new UnavcoVelParser();
-		uvp2.getFile(igs05);
-		String dataUrl = "";
-		
-		for (int nA = 0; nA < stations.length; nA++) {
-			String[] station = stations[nA].split("/");
-			s = station[0];
-			s = s.toLowerCase().trim();
-			CandidateObservation co = new CandidateObservation();
-			co.setStationName(s);
-			co.setGpsStationLat(station[1]);
-			co.setGpsStationLon(station[2]);
-			List stationlist = new ArrayList();
-						
-			String v = uvp1.getStationVelocity(co.getStationName());
-			int i = 0;
+		if (selectedGpsStationName.trim() != "") {
 			
-			if (v != null && s.trim() != "") {
+			String[] stations = selectedGpsStationName.split(",");
+			String s = null;
+			
+			// modified to use unavco .vel files. 05/28/2010 Jun Ji
+			String snf01 = "ftp://data-out.unavco.org/pub/products/velocity/pbo.final_snf01.vel";
+			String igs05 = "ftp://data-out.unavco.org/pub/products/velocity/pbo.final_igs05.vel";
+			UnavcoVelParser uvp1 = new UnavcoVelParser();
+			uvp1.getFile(snf01);
+			UnavcoVelParser uvp2 = new UnavcoVelParser();
+			uvp2.getFile(igs05);
+			String dataUrl = "";
+			
+			System.out.println("[getvalues] stationlist : " + selectedGpsStationName);
+			System.out.println("[getvalues] stationlist size : " + stations.length);
+			
+			for (int nA = 0; nA < stations.length; nA++) {
+				String[] station = stations[nA].split("/");
+				s = station[0];
+				s = s.toLowerCase().trim();
+				CandidateObservation co = new CandidateObservation();
+				co.setStationName(s);
+				co.setGpsStationLat(station[1]);
+				co.setGpsStationLon(station[2]);
+				List stationlist = new ArrayList();
+							
+				String v = uvp1.getStationVelocity(co.getStationName());
+				int i = 0;
 				
-				System.out.println("[toggleAddGPSObsvForProject] " + s +" is from " + snf01);
-				dataUrl = v;			
+				if (v != null && s.trim() != "") {
+					
+					System.out.println("[getvalues] " + s +" is from " + snf01);
+					dataUrl = v;			
+					
+					String[] s1 = dataUrl.split("\n");
+					
+					for (int nB = 0 ; nB < s1.length ; nB++) {
+						stationlist.add(new SelectItem(Integer.toString(i), "snf01" + "/" + s1[nB]));
+						i++;
+					}
+									
+				}
 				
-				String[] s1 = dataUrl.split("\n");
-				for (int nB = 0 ; nB < s1.length ; nB++)
-					stationlist.add(new SelectItem(Integer.toString(i), "snf01" + "/" + s1[nB]));
-				i++;				
-			}
-			
-			String v1 = uvp2.getStationVelocity(co.getStationName());
-			
-			if (v1 != null && s.trim() != "") {
+				String v1 = uvp2.getStationVelocity(co.getStationName());
 				
-				System.out.println("[toggleAddGPSObsvForProject] " + s +" is from " + igs05);
-				dataUrl = v1;
+				if (v1 != null && s.trim() != "") {
+					
+					System.out.println("[getvalues] " + s +" is from " + igs05);
+					dataUrl = v1;
+					
+					String[] s1 = dataUrl.split("\n");
+					for (int nB = 0 ; nB < s1.length ; nB++) {
+						stationlist.add(new SelectItem(Integer.toString(i), "igs05" + "/" + s1[nB]));
+						i++;
+					}				
+				}
 				
-				String[] s1 = dataUrl.split("\n");
-				for (int nB = 0 ; nB < s1.length ; nB++)
-					stationlist.add(new SelectItem(Integer.toString(i), "igs05" + "/" + s1[nB]));
-				i++;				
-			}
-			
-			
-			if (s.trim() != "") {
 				
-				System.out.println("[toggleAddGPSObsvForProject] " + s +" is from the GRWS db");
-			
-				GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
+				if (s.trim() != "") {
+					
+					System.out.println("[toggleAddGPSObsvForProject] " + s +" is from the GRWS db");
+				
+					GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
+	
+					gsq.setFromServlet(s, beginDate, endDate, resource, contextGroup, contextId, minMaxLatLon, false);
+	
+					dataUrl = gsq.getResource() + " ";
+					String[] s1 = dataUrl.split("\n");				
+					for (int nB = 0 ; nB < s1.length ; nB++)
+						if (!s1[nB].contains("ERROR")){
+							stationlist.add(new SelectItem(Integer.toString(i), "GRWS" + "/" + s1[nB]));
+							i++;
+						}
+				}
 
-				gsq.setFromServlet(s, beginDate, endDate, resource, contextGroup, contextId, minMaxLatLon, false);
-
-				dataUrl = gsq.getResource() + " ";
-				String[] s1 = dataUrl.split("\n");
-				for (int nB = 0 ; nB < s1.length ; nB++)
-					stationlist.add(new SelectItem(Integer.toString(i), "GRWS" + "/" + s1[nB]));
-				i++;
+				co.setStationSources(stationlist);
+				mycandidateObservationsForProjectList.add(co);
+				if (stationlist.size() > 0)
+					co.setSelectedSource(((SelectItem) stationlist.get(0)).getValue().toString());
+				
 			}
-			co.setStationSources(stationlist);
-			mycandidateObservationsForProjectList.add(co);
-			co.setSelectedSource(((SelectItem) stationlist.get(0)).getValue().toString());
-		}	
+		}
 
 	}
 	
