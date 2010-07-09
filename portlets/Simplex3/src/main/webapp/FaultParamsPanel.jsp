@@ -11,8 +11,8 @@
 								value="Input Fault Geometry" /></b>
 						</f:facet>
 
-						<h:outputText id="lkdrq117" value="Fault Name:" />
-						<h:panelGroup id="lkdrq118">
+						<h:outputText id="lkdmt117" value="Fault Name:" />
+						<h:panelGroup id="lkbarq118">
 							<h:inputText id="FaultName"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultName}"
 								required="true" />
@@ -54,51 +54,51 @@
 						<h:selectBooleanCheckbox id="faultLengthVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLengthVary}" />
 						<h:outputText id="lkdrq1189" value="Width:" />
-						<h:panelGroup id="lkdrq11811">
+						<h:panelGroup id="lkdwao11">
 							<h:inputText id="FaultWidth"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultWidth}"
 								required="true" />
-							<h:message id="lkdrq11812" for="FaultWidth" showDetail="true" showSummary="true"
+							<h:message id="lkps2" for="FaultWidth" showDetail="true" showSummary="true"
 								errorStyle="color: red" />
 						</h:panelGroup>
 						<h:selectBooleanCheckbox id="faultWidthVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultWidthVary}" />
 
-						<h:outputText id="lkdrq11813" value="Depth:" />
-						<h:panelGroup id="lkdrq11814">
+						<h:outputText id="lkdrnae813" value="Depth:" />
+						<h:panelGroup id="lkoea814">
 							<h:inputText id="FaultDepth"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultDepth}"
 								required="true" />
-							<h:message id="lkdrq11815" for="FaultDepth" showDetail="true" showSummary="true"
+							<h:message id="lkikkm15" for="FaultDepth" showDetail="true" showSummary="true"
 								errorStyle="color: red" />
 						</h:panelGroup>
 						<h:selectBooleanCheckbox id="faultDepthVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultDepthVary}" />
 
-						<h:outputText id="lkdrq11816" value="Dip Angle:" />
-						<h:panelGroup id="lkdrq11817">
+						<h:outputText id="lkasdf1" value="Dip Angle:" />
+						<h:panelGroup id="lkdnadf317">
 							<h:inputText id="FaultDipAngle"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultDipAngle}"
 								required="true" />
-							<h:message id="lkdrq11818" for="FaultDipAngle" showDetail="true"
+							<h:message id="lafabw8" for="FaultDipAngle" showDetail="true"
 								showSummary="true" errorStyle="color: red" />
 						</h:panelGroup>
 						<h:selectBooleanCheckbox id="faultDipAngleVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultDipAngleVary}" />
 
-						<h:outputText id="lkdrq11819" value="Strike Angle:" />
-						<h:panelGroup id="dflelerkljk1">
+						<h:outputText id="lkdrbas19" value="Strike Angle:" />
+						<h:panelGroup id="bae2lerba">
 							<h:inputText id="FaultStrikeAngle"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultStrikeAngle}"
 								required="false" />
-							<h:message id="dflelerkljk2" for="FaultStrikeAngle" showDetail="true"
+							<h:message id="dflelbaa42" for="FaultStrikeAngle" showDetail="true"
 								showSummary="true" errorStyle="color: red" />
 						</h:panelGroup>
 						<h:selectBooleanCheckbox id="faultStrikeAngleVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultStrikeAngleVary}" />
 
-						<h:outputText id="dflelerkljk3" value="Dip Slip:" />
-						<h:panelGroup id="dflelerkljk4">
+						<h:outputText id="dbad23" value="Dip Slip:" />
+						<h:panelGroup id="dfbt211">
 							<h:inputText id="FaultSlip"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultSlip}"
 								required="true" />
@@ -108,30 +108,30 @@
 						<h:selectBooleanCheckbox id="faultDipSlipVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultDipSlipVary}" />
 
-						<h:outputText  id="dflelerkljk5" value="Strike Slip:" />
-						<h:panelGroup id="dflelerkljk6">
+						<h:outputText  id="dfbaf341" value="Strike Slip:" />
+						<h:panelGroup id="dfbad133">
 							<h:inputText id="FaultRakeAngle"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultRakeAngle}"
 								required="true" />
-							<h:message  id="dflelerkljk7" for="FaultRakeAngle" showDetail="true"
+							<h:message  id="dflzzz17" for="FaultRakeAngle" showDetail="true"
 								showSummary="true" errorStyle="color: red" />
 						</h:panelGroup>
 						<h:selectBooleanCheckbox id="faultStrikeSlipVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultStrikeSlipVary}" />
 
-						<h:outputText id="dflelerkljk8" value="Fault Lon Starts:" />
-						<h:panelGroup id="dflelerkljk9">
+						<h:outputText id="dfadfaa8" value="Fault Lon Starts:" />
+						<h:panelGroup id="dnnnak9">
 							<h:inputText id="FaultLonStarts"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultLonStarts}" />
 						</h:panelGroup>
-						<h:outputText  id="dflelerkljk10" value="optional" />
+						<h:outputText  id="dnnasd10" value="optional" />
 
-						<h:outputText id="dflelerkljk11" value="Fault Lat Starts:" />
+						<h:outputText id="dfleanad11" value="Fault Lat Starts:" />
 						<h:panelGroup id="dflelerkljk12">
 							<h:inputText id="FaultLatStarts"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultLatStarts}" />
 						</h:panelGroup>
-						<h:outputText  id="dflelerkljk13" value="optional" />
+						<h:outputText  id="dfadfb43k13" value="optional" />
 
 						<h:outputText  id="dflelerkljk14" value="Fault Lon Ends:" />
 						<h:panelGroup id="dflelerkljk15">

@@ -21,7 +21,7 @@
 
 							      <h:panelGrid  id="spxpcp5"columns="2" cellpadding="0" cellspacing="0">
 								<h:inputText id="dflelerklh968" style="text-align:right;width:60px" value="#{myentry31.faultName}" required="true" />
-								<h:selectBooleanCheckbox id="faultnamec" onclick="togglefaultname(this)" value="" />
+								<h:selectBooleanCheckbox rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}" id="faultnamec" onclick="togglefaultname(this)" value="" />
 							      </h:panelGrid>
 							    </h:column>
 

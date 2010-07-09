@@ -4,7 +4,7 @@
   <br><h:outputText id="cutinstruct111" escape="false" value="ObservationType LocationEast LocationNorth Value Uncertainty" />
   <br><h:outputText id="cutinstruct112" escape="false" value="Values can be either space or comma separated."/></b>
 
-     <h:panelGrid id="ObsvTextArea" columns="1">
+     <h:panelGrid id="ObsvTextAreada" columns="1">
   <h:inputTextarea id="obsvTextArea"
 							   rows="20" cols="50"
 							 	value="#{SimplexBean.currentEditProjectForm.obsvTextArea}"/>

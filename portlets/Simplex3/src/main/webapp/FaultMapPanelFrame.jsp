@@ -32,7 +32,7 @@
 <h:panelGroup id="dflel235231">
   <h:outputText id="daflelerkl513" escape="false" value="Drawing a fault : "/>
   <h:selectBooleanCheckbox id="dflab2" onclick="togglefaultdrawing()" value="#{SimplexBean.faultdrawing}"/>
-  <h:panelGrid columns="3" border="0">
+  <h:panelGrid id="ffmpawe1" columns="3" border="0">
   <h:dataTable border="1" cellpadding="0" cellspacing="0" id="dflelerh93" headerClass="componentstableh"
 		value="#{SimplexBean.currentEditProjectForm}" var="myentry32">
     <h:column>
