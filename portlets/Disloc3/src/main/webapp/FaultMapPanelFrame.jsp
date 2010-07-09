@@ -178,8 +178,9 @@
   
 
 function togglefaultdrawing() {
-	  if (faultdrawing.checked == false) {  
-		  
+	  if (faultdrawing.checked == false) {
+  
+		  faultMap.removeOverlay(border);
 		  faultMap.removeOverlay(marker_NE);
 		  faultMap.removeOverlay(marker_SW);  
 	  }
