@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<kml xmlns="http://earth.google.com/kml/2.0">
+   <Document>
+      <Style id="Style0">
+         <IconStyle>
+            <color>ff0000ff</color>
+            <Icon>
+               <href>GE-camp-icon.png</href>
+            </Icon>
+         </IconStyle>
+         <LineStyle color="ff0000ff" />
+      </Style>
+      <Style id="Style1">
+         <IconStyle>
+            <color>ffff5500</color>
+            <Icon>
+               <href>GE-camp-icon.png</href>
+            </Icon>
+         </IconStyle>
+         <LineStyle color="ffff5500" />
+      </Style>
+      <Style id="Style2">
+         <IconStyle>
+            <color>ff007bff</color>
+            <Icon>
+               <href>GE-camp-icon.png</href>
+            </Icon>
+         </IconStyle>
+         <LineStyle color="ff007bff" />
+      </Style>
+      <Style id="Style3">
+         <IconStyle>
+            <color>ff00f7ff</color>
+            <Icon>
+               <href>GE-camp-icon.png</href>
+            </Icon>
+         </IconStyle>
+         <LineStyle color="ff00f7ff" />
+      </Style>
+      <Style id="Style4">
+         <IconStyle>
+            <color>ff00ffc8</color>
+            <Icon>
+               <href>GE-camp-icon.png</href>
+            </Icon>
+         </IconStyle>
+         <LineStyle color="ff00ffc8" />
+      </Style>
+      <Style id="Style5">
+         <IconStyle>
+            <color>ff383540</color>
+            <Icon>
+               <href>GE-camp-icon.png</href>
+            </Icon>
+         </IconStyle>
+         <LineStyle color="ff383540" />
+      </Style>
+      <Style id="Style6">
+         <IconStyle>
+            <color>ffffd500</color>
+            <Icon>
+               <href>GE-camp-icon.png</href>
+            </Icon>
+         </IconStyle>
+         <LineStyle color="ffffd500" />
+      </Style>
+      <Style id="Style7">
+         <IconStyle>
+            <color>ffff00ff</color>
+            <Icon>
+               <href>GE-camp-icon.png</href>
+            </Icon>
+         </IconStyle>
+         <LineStyle color="ffff00ff" />
+      </Style>
+      <Style id="Style8">
+         <IconStyle>
+            <color>ffff83ff</color>
+            <Icon>
+               <href>GE-camp-icon.png</href>
+            </Icon>
+         </IconStyle>
+         <LineStyle color="ffff83ff" />
+      </Style>
+      <Style id="Style9">
+         <IconStyle>
+            <color>ff00ff00</color>
+            <Icon>
+               <href>GE-perm-sta-icon.png</href>
+            </Icon>
+         </IconStyle>
+         <LineStyle color="ffff5500" />
+      </Style>
+      <Folder id="UNAVCO Permanent Stations">
+         <name>UNAVCO Permanent Stations</name>
+         <LookAt>
+            <latitude>40</latitude>
+            <longitude>-118</longitude>
+            <range>5000000</range>
+            <tilt>0</tilt>
+            <heading>-5.589566841297337</heading>
+         </LookAt>
+         <flyToView>1</flyToView>
+         <visibility>1</visibility>
+         <open>0</open>
+         <altitudeMode>clampedToGround</altitudeMode>
+         <drawOrder>1</drawOrder>
+         <Placemark>
+            <name>1LSU</name>
+            <description><![CDATA[		<b>Monument Code:</b> 1LSU<br>
+		<b>Monument Name:</b> Louisiana State University<br>
+		<b>Latitude:</b> 30.407424629<br>
+		<b>Longitude:</b> -91.180261226<br>
+		<b>Elevation:</b> -6.4368<br>
+		<b>Date Established:</b> 01-MAR-03<br>
+		<b>Associated Groups:</b> GULFNET GPS Network<br>
+<a href='http://facility.unavco.org/data/gnss/select_data.php?code=1LSU'>Download data</a><br>]]></description>
+            <styleUrl>#Style9</styleUrl>
+            <Point>
+               <coordinates>-91.180261226,30.407424629</coordinates>
+            </Point>
+         </Placemark>
+         <Placemark>
+            <name>1NSU</name>
+            <description><![CDATA[		<b>Monument Code:</b> 1NSU<br>
+		<b>Monument Name:</b> 1NSU<br>
+		<b>Latitude:</b> 31.750800459<br>
+		<b>Longitude:</b> -93.097603037<br>
+		<b>Elevation:</b> 28.1412<br>
+		<b>Date Established:</b> 15-JAN-04<br>
+		<b>Associated Groups:</b> GULFNET GPS Network<br>
+<a href='http://facility.unavco.org/data/gnss/select_data.php?code=1NSU'>Download data</a><br>]]></description>
+            <styleUrl>#Style9</styleUrl>
+            <Point>
+               <coordinates>-93.097603037,31.750800459</coordinates>
+            </Point>
+         </Placemark>
+         <Placemark>
+            <name>1ULM</name>
+            <description><![CDATA[		<b>Monument Code:</b> 1ULM<br>
+		<b>Monument Name:</b> U of Louisiana-Monroe<br>
+		<b>Latitude:</b> 32.529033863<br>
+		<b>Longitude:</b> -92.075905881<br>
+		<b>Elevation:</b> 16.1055<br>
+		<b>Date Established:</b> 02-JUN-03<br>
+		<b>Associated Groups:</b> GULFNET GPS Network<br>
+<a href='http://facility.unavco.org/data/gnss/select_data.php?code=1ULM'>Download data</a><br>]]></description>
+            <styleUrl>#Style9</styleUrl>
+            <Point>
+               <coordinates>-92.075905881,32.529033863</coordinates>
+            </Point>
+         </Placemark>
+         <Placemark>
+            <name>299C</name>
+            <description><![CDATA[		<b>Monument Code:</b> 299C<br>
+		<b>Monument Name:</b> 2999 Continuous<br>
+		<b>Latitude:</b> 64.028926105<br>
+		<b>Longitude:</b> -142.075778318<br>
+		<b>Elevation:</b> 748.2126<br>
+		<b>Date Established:</b> 15-NOV-02<br>
+		<b>Associated Groups:</b> Denali Fault GPS Network<br>
+<a href='http://facility.unavco.org/data/gnss/select_data.php?code=299C'>Download data</a><br>]]></description>
+            <styleUrl>#Style9</styleUrl>
+            <Point>
+               <coordinates>-142.075778318,64.028926105</coordinates>
+            </Point>
+         </Placemark>
+         <Placemark>
+            <name>7ODM</name>
+            <description><![CDATA[		<b>Monument Code:</b> 7ODM<br>
+		<b>Monument Name:</b> Seven Oaks Dam<br>
+		<b>Latitude:</b> 34.116407078<br>
+		<b>Longitude:</b> -117.09319352<br>
+		<b>Elevation:</b> 762.0734<br>
+		<b>Date Established:</b> 30-NOV-00<br>
+		<b>Associated Groups:</b> SCIGN USGS GPS Network<br>
+<a href='http://facility.unavco.org/data/gnss/select_data.php?code=7ODM'>Download data</a><br>]]></description>
+            <styleUrl>#Style9</styleUrl>
+            <Point>
+               <coordinates>-117.09319352,34.116407078</coordinates>
+            </Point>
+         </Placemark>
+         <Placemark>
+            <name>AASI</name>
+            <description><![CDATA[		<b>Monument Code:</b> AASI<br>
+		<b>Monument Name:</b> AASI<br>
+		<b>Latitude:</b> 68.719306<br>
+		<b>Longitude:</b> -52.79334<br>
+		<b>Elevation:</b> 56.816<br>
+		<b>Date Established:</b> 01-JUN-07<br>
+		<b>Associated Groups:</b> Greenland GPS Network<br>
+<a href='http://facility.unavco.org/data/gnss/select_data.php?code=AASI'>Download data</a><br>]]></description>
+            <styleUrl>#Style9</styleUrl>
+            <Point>
+               <coordinates>-52.79334,68.719306</coordinates>
+            </Point>
+         </Placemark>
+         <Placemark>
+            <name>AB01</name>
+            <description><![CDATA[		<b>Monument Code:</b> AB01<br>
+		<b>Monument Name:</b> AtkaIslandAK2007<br>
+		<b>Latitude:</b> 52.20950466<br>
+		<b>Longitude:</b> -174.20475476999999<br>
+		<b>Elevation:</b> 25.6<br>
+		<b>Date Established:</b> 17-MAY-07<br>
+		<b>Associated Groups:</b> PBO GPS Network<br>
+<a href='http://facility.unavco.org/data/gnss/select_data.php?code=AB01'>Download data</a><br>]]></description>
+            <styleUrl>#Style9</styleUrl>
+            <Point>
+               <coordinates>-174.20475476999999,52.20950466</coordinates>
+            </Point>
+         </Placemark>
+         <Placemark>
+            <name>AB02</name>
+            <description><![CDATA[		<b>Monument Code:</b> AB02<br>
+		<b>Monument Name:</b> Nikolski__AK2007<br>
+		<b>Latitude:</b> 52.9706056<br>
+		<b>Longitude:</b> -168.85467034<br>
+		<b>Elevation:</b> 192.7873<br>
+		<b>Date Established:</b> 22-MAY-07<br>
+		<b>Associated Groups:</b> PBO GPS Network, PBO High Rate GPS Network<br>
+<a href='http://facility.unavco.org/data/gnss/select_data.php?code=AB02'>Download data</a><br>]]></description>
+            <styleUrl>#Style9</styleUrl>
+            <Point>
+               <coordinates>-168.85467034,52.9706056</coordinates>
+            </Point>
+         </Placemark>
+
+         <Placemark>
+            <name>YBHB</name>
+            <description><![CDATA[		<b>Monument Code:</b> YBHB<br>
+		<b>Monument Name:</b> Yreka, CA<br>
+		<b>Latitude:</b> 41.73166<br>
+		<b>Longitude:</b> -122.71074<br>
+		<b>Elevation:</b> 1065.701<br>
+		<b>Date Established:</b> 24-OCT-96<br>
+		<b>Associated Groups:</b> BARD GPS Network<br>
+<a href='http://facility.unavco.org/data/gnss/select_data.php?code=YBHB'>Download data</a><br>]]></description>
+            <styleUrl>#Style9</styleUrl>
+            <Point>
+               <coordinates>-122.71074,41.73166</coordinates>
+            </Point>
+         </Placemark>
+         <Placemark>
+            <name>YEEP</name>
+            <description><![CDATA[		<b>Monument Code:</b> YEEP<br>
+		<b>Monument Name:</b> Yee Hop<br>
+		<b>Latitude:</b> 19.2621<br>
+		<b>Longitude:</b> -155.74617<br>
+		<b>Elevation:</b> 2265.9571<br>
+		<b>Date Established:</b> 18-AUG-04<br>
+		<b>Associated Groups:</b> Hawaii GPS Network<br>
+<a href='http://facility.unavco.org/data/gnss/select_data.php?code=YEEP'>Download data</a><br>]]></description>
+            <styleUrl>#Style9</styleUrl>
+            <Point>
+               <coordinates>-155.74617,19.2621</coordinates>
+            </Point>
+         </Placemark>
+         <Placemark>
+            <name>YELL</name>
+            <description><![CDATA[		<b>Monument Code:</b> YELL<br>
+		<b>Monument Name:</b> YELL CACS-ACP<br>
+		<b>Latitude:</b> 62.48089541<br>
+		<b>Longitude:</b> -114.480698008<br>
+		<b>Elevation:</b> 180.7237<br>
+		<b>Date Established:</b> 21-JAN-91<br>
+		<b>Associated Groups:</b> PBO Analysis Support GPS Network<br>
+<a href='http://facility.unavco.org/data/gnss/select_data.php?code=YELL'>Download data</a><br>]]></description>
+            <styleUrl>#Style9</styleUrl>
+            <Point>
+               <coordinates>-114.480698008,62.48089541</coordinates>
+            </Point>
+         </Placemark>
+         <Placemark>
+            <name>YESX</name>
+            <description><![CDATA[		<b>Monument Code:</b> YESX<br>
+		<b>Monument Name:</b> Yecora<br>
+		<b>Latitude:</b> 28.378336497<br>
+		<b>Longitude:</b> -108.919637803<br>
+		<b>Elevation:</b> 1506.5593<br>
+		<b>Date Established:</b> 13-JUN-04<br>
+		<b>Associated Groups:</b> Northwest Mexico GPS Network<br>
+<a href='http://facility.unavco.org/data/gnss/select_data.php?code=YESX'>Download data</a><br>]]></description>
+            <styleUrl>#Style9</styleUrl>
+            <Point>
+               <coordinates>-108.919637803,28.378336497</coordinates>
+            </Point>
+         </Placemark>
+         <Placemark>
+            <name>YKRO</name>
+            <description><![CDATA[		<b>Monument Code:</b> YKRO<br>
+		<b>Monument Name:</b> Yamoussoukro<br>
+		<b>Latitude:</b> 6.870560281<br>
+		<b>Longitude:</b> -5.240092969<br>
+		<b>Elevation:</b> 270<br>
+		<b>Date Established:</b> 18-JUL-99<br>
+		<b>Associated Groups:</b> GGN GPS Network<br>
+<a href='http://facility.unavco.org/data/gnss/select_data.php?code=YKRO'>Download data</a><br>]]></description>
+            <styleUrl>#Style9</styleUrl>
+            <Point>
+               <coordinates>-5.240092969,6.870560281</coordinates>
+            </Point>
+         </Placemark>
+         <Placemark>
+            <name>YMER</name>
+            <description><![CDATA[		<b>Monument Code:</b> YMER<br>
+		<b>Monument Name:</b> Ymer Nunatak<br>
+		<b>Latitude:</b> 77.4329<br>
+		<b>Longitude:</b> -24.3263<br>
+		<b>Elevation:</b> 1070.7<br>
+		<b>Date Established:</b> 18-AUG-09<br>
+		<b>Associated Groups:</b> Greenland GPS Network<br>
+<a href='http://facility.unavco.org/data/gnss/select_data.php?code=YMER'>Download data</a><br>]]></description>
+            <styleUrl>#Style9</styleUrl>
+            <Point>
+               <coordinates>-24.3263,77.4329</coordinates>
+            </Point>
+         </Placemark>
+         <Placemark>
+            <name>YOMB</name>
+            <description><![CDATA[		<b>Monument Code:</b> YOMB<br>
+		<b>Monument Name:</b> YOMB<br>
+		<b>Latitude:</b> 38.950434019<br>
+		<b>Longitude:</b> -117.51698618<br>
+		<b>Elevation:</b> 2127.0678514<br>
+		<b>Date Established:</b> 01-JAN-50<br>
+		<b>Associated Groups:</b> MAGNET<br>
+<a href='http://facility.unavco.org/data/gnss/select_data.php?code=YOMB'>Download data</a><br>]]></description>
+            <styleUrl>#Style9</styleUrl>
+            <Point>
+               <coordinates>-117.51698618,38.950434019</coordinates>
+            </Point>
+         </Placemark>
+         <Placemark>
+            <name>YSSK</name>
+            <description><![CDATA[		<b>Monument Code:</b> YSSK<br>
+		<b>Monument Name:</b> Yuzhno-Sakhalinsk<br>
+		<b>Latitude:</b> 47.029735832<br>
+		<b>Longitude:</b> 142.716719198<br>
+		<b>Elevation:</b> 91.2887<br>
+		<b>Date Established:</b> 28-JUL-99<br>
+		<b>Associated Groups:</b> GGN GPS Network<br>
+<a href='http://facility.unavco.org/data/gnss/select_data.php?code=YSSK'>Download data</a><br>]]></description>
+            <styleUrl>#Style9</styleUrl>
+            <Point>
+               <coordinates>142.716719198,47.029735832</coordinates>
+            </Point>
+         </Placemark>
+         <Placemark>
+            <name>ZAMB</name>
+            <description><![CDATA[		<b>Monument Code:</b> ZAMB<br>
+		<b>Monument Name:</b> Lusaka, Zambia<br>
+		<b>Latitude:</b> -15.425540812<br>
+		<b>Longitude:</b> 28.31101235<br>
+		<b>Elevation:</b> 1324.9144<br>
+		<b>Date Established:</b> 28-MAR-02<br>
+		<b>Associated Groups:</b> GGN GPS Network<br>
+<a href='http://facility.unavco.org/data/gnss/select_data.php?code=ZAMB'>Download data</a><br>]]></description>
+            <styleUrl>#Style9</styleUrl>
+            <Point>
+               <coordinates>28.31101235,-15.425540812</coordinates>
+            </Point>
+         </Placemark>
+         <Placemark>
+            <name>ZIHP</name>
+            <description><![CDATA[		<b>Monument Code:</b> ZIHP<br>
+		<b>Monument Name:</b> Zihuatanejo<br>
+		<b>Latitude:</b> 17.6069<br>
+		<b>Longitude:</b> -101.4649<br>
+		<b>Elevation:</b> 23.72<br>
+		<b>Date Established:</b> 07-JUL-00<br>
+		<b>Associated Groups:</b> Guerrero Coast GPS Network<br>
+<a href='http://facility.unavco.org/data/gnss/select_data.php?code=ZIHP'>Download data</a><br>]]></description>
+            <styleUrl>#Style9</styleUrl>
+            <Point>
+               <coordinates>-101.4649,17.6069</coordinates>
+            </Point>
+         </Placemark>
+         <Placemark>
+            <name>ZUMA</name>
+            <description><![CDATA[		<b>Monument Code:</b> ZUMA<br>
+		<b>Monument Name:</b> ZUMA<br>
+		<b>Latitude:</b> 37.558166085<br>
+		<b>Longitude:</b> -117.49021941<br>
+		<b>Elevation:</b> 1925.5564392<br>
+		<b>Date Established:</b> 01-JAN-50<br>
+		<b>Associated Groups:</b> MAGNET<br>
+<a href='http://facility.unavco.org/data/gnss/select_data.php?code=ZUMA'>Download data</a><br>]]></description>
+            <styleUrl>#Style9</styleUrl>
+            <Point>
+               <coordinates>-117.49021941,37.558166085</coordinates>
+            </Point>
+         </Placemark>
+         <ScreenOverlay id="logo">
+            <name>UNAVCO Logo</name>
+            <Icon>
+               <href>GE-UV-Logo-Key.png</href>
+            </Icon>
+            <overlayXY x="0.01" y="0.99" xunits="fraction" yunits="fraction" />
+            <screenXY x="0.01" y="0.99" xunits="fraction" yunits="fraction" />
+            <rotationXY x="0.5" y="0.5" xunits="fraction" yunits="fraction" />
+            <size x="0" y="0" xunits="fraction" yunits="fraction" />
+         </ScreenOverlay>
+      </Folder>
+   </Document>
+</kml>

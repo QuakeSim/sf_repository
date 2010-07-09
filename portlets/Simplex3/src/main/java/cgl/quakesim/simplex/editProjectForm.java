@@ -204,6 +204,7 @@ public class editProjectForm extends GenericProjectBean {
 			// myFaultDBEntryList=ViewAllFaults(selectdbURL);
 			KMLdescriptionparser kdp = new KMLdescriptionparser();
 			kdp.parseXml(getBasePath() + "/" + codeName + "/", kmlfiles);
+
 			myFaultDBEntryList = kdp.getFaultList("All", "");
 			
 			renderAddFaultFromDBForm = !renderAddFaultFromDBForm;
