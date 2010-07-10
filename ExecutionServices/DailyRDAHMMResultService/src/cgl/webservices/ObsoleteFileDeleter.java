@@ -12,9 +12,9 @@ public class ObsoleteFileDeleter extends Thread {
 	LinkedList<String> destDirList;
 	/** regular-expression name pattern of the files to be deleted */
 	String namePattern;
-	/** how frequent should this thread be run */
+	/** how frequent should this thread be run, a value <= 0 means only run once */
 	long runPeriod;
-	/** threshold tells files of how old should be deleted */
+	/** threshold tells files of how old should be deleted, must be longer than a day */
 	long threshold;
 	/** whether obsolete directories should be deleted */
 	boolean deleteDir;
@@ -25,7 +25,9 @@ public class ObsoleteFileDeleter extends Thread {
 		if (namePattern == null || namePattern.length() == 0) {
 			throw new IllegalArgumentException("Name Pattern cannot be null or empty!");
 		}
-		if (runPeriod < DAY_MILISEC_COUNT || threshold < DAY_MILISEC_COUNT) {
+		
+		// runPeriod <= 0 means only run once, otherwise must be more than a day 
+		if ((runPeriod > 0 && runPeriod < DAY_MILISEC_COUNT) || threshold < DAY_MILISEC_COUNT) {
 			throw new IllegalArgumentException("Run Period or Obsolete Threshold cannot be less than a day!");
 		}
 		
@@ -67,14 +69,18 @@ public class ObsoleteFileDeleter extends Thread {
 				}
 			}
 			
-			try {
-				Thread.sleep(runPeriod);
-				interruptCount = 0;
-			} catch (InterruptedException e) {
-				// it's OK to get interrupted when trying to sleep; we'll try to sleep again.
-				e.printStackTrace();
-				if (++interruptCount > 15)
-					break;
+			if (runPeriod <= 0) {
+				toContinue = false;
+			} else {
+				try {
+					Thread.sleep(runPeriod);
+					interruptCount = 0;
+				} catch (InterruptedException e) {
+					// it's OK to get interrupted when trying to sleep; we'll try to sleep again.
+					e.printStackTrace();
+					if (++interruptCount > 15)
+						break;
+				}
 			}
 		}
 	}

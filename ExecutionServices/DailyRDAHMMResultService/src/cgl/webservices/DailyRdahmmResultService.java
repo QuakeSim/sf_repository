@@ -35,10 +35,13 @@ public class DailyRdahmmResultService {
 	static long kmlCleanUpPeriod;
 	static long plotCleanUpPeriod;
 	protected HashMap<String, DailyRdahmmResultAnalyzer> analyzerTable;
-	protected ObsoleteFileDeleter[] oldFileDeleters;	
+	protected long lastKmlDeletionTime;
+	protected long lastPlotDeletionTime;
 	
 	public DailyRdahmmResultService() {
 		analyzerTable = new HashMap<String, DailyRdahmmResultAnalyzer>();
+		lastKmlDeletionTime = 0;
+		lastPlotDeletionTime = 0;
 		try {
 			URI propFileUri = getClass().getClassLoader().getResource(PROP_FILE_NAME).toURI();
 			Properties propConfig = new Properties();
@@ -62,22 +65,6 @@ public class DailyRdahmmResultService {
 								* ObsoleteFileDeleter.DAY_MILISEC_COUNT;
 			plotCleanUpPeriod = Long.parseLong(propConfig.getProperty("plotCleanUpPeriodDays")) 
 								* ObsoleteFileDeleter.DAY_MILISEC_COUNT;
-			
-			oldFileDeleters = new ObsoleteFileDeleter[2];
-			oldFileDeleters[0] = new ObsoleteFileDeleter(kmlObsoleteNamePattern, kmlCleanUpPeriod, kmlObsoleteThreshold);
-			oldFileDeleters[0].addDirPath(destKmlDir);
-			if (kmlObsoleteNamePattern.equals(plotObsoleteNamePattern) &&
-				kmlObsoleteThreshold == plotObsoleteThreshold &&
-				kmlCleanUpPeriod == plotCleanUpPeriod) {
-				oldFileDeleters[0].addDirPath(destPlotDir);
-				oldFileDeleters[1] = oldFileDeleters[0];
-				oldFileDeleters[0].start();
-			} else {
-				oldFileDeleters[1] = new ObsoleteFileDeleter(plotObsoleteNamePattern, plotCleanUpPeriod, plotObsoleteThreshold);
-				oldFileDeleters[1].addDirPath(destPlotDir);
-				oldFileDeleters[0].start();
-				oldFileDeleters[1].start();
-			}				
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -111,7 +98,8 @@ public class DailyRdahmmResultService {
 	}
 	
 	public String getStateChangeNumberPlot(String dataSource, float minLat, float maxLat, float minLong, float maxLong) {
-		System.out.println("minLat:" + minLat + " maxLat:" + maxLat + " minLong:" + minLong + " maxLong:" + maxLong);
+		deleteObsoletePlot();
+		
 		String resUrl = "";
 		if (dataSource.equals("JPL"))
 			resUrl = defaultJplResultUrl;
@@ -199,6 +187,7 @@ public class DailyRdahmmResultService {
 	 * @return
 	 */
 	public String getKmlForDate(String dateStr, String resUrl) {
+		deleteObsoleteKml();
 		String contextGroup = "SOPAC";
 		if (resUrl.toUpperCase().indexOf("JPL") >= 0) {
 			contextGroup = "JPL";
@@ -285,7 +274,7 @@ public class DailyRdahmmResultService {
 			writer.write(kmlDoc);
 			writer.close();
 			fw.close();
-
+			
 			return kmlUrlPattern.replace("<fileName>", kmlFileName);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -301,6 +290,7 @@ public class DailyRdahmmResultService {
 	 * @return
 	 */
 	public String getKmlForDateRange(String fromDateStr, String toDateStr, String resUrl) {
+		deleteObsoleteKml();
 		String contextGroup = "SOPAC";
 		if (resUrl.toUpperCase().indexOf("JPL") >= 0) {
 			contextGroup = "JPL";
@@ -436,12 +426,32 @@ public class DailyRdahmmResultService {
 		return analyzer;
 	}
 	
-	/** stop all obsolete file deleters before finalization */
-	protected void finalize() throws Throwable {
-		for (int i=0; i<oldFileDeleters.length; i++) {
-			oldFileDeleters[i].elegantStop();
+	protected void deleteObsoleteKml() {
+		long timeNow = System.currentTimeMillis();
+		if (timeNow - lastKmlDeletionTime > kmlCleanUpPeriod) {
+			try {
+				ObsoleteFileDeleter oldKmlDeleter = new ObsoleteFileDeleter(kmlObsoleteNamePattern, -1, kmlObsoleteThreshold);
+				oldKmlDeleter.addDirPath(destKmlDir);
+				oldKmlDeleter.start();
+				lastKmlDeletionTime = timeNow;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 		}
-		super.finalize();
 	}
 	
+	protected void deleteObsoletePlot() {
+		long timeNow = System.currentTimeMillis();
+		if (timeNow - lastPlotDeletionTime > plotCleanUpPeriod) {
+			try {
+				ObsoleteFileDeleter oldPlotDeleter = new ObsoleteFileDeleter(plotObsoleteNamePattern, -1, plotObsoleteThreshold);
+				oldPlotDeleter.addDirPath(destPlotDir);
+				oldPlotDeleter.start();
+				lastPlotDeletionTime = timeNow;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }
