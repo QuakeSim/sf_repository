@@ -398,7 +398,7 @@ public class DailyRdahmmResultService {
 			writer.close();
 			fw.close();
 			
-			String kmzFileName = kmlFileName.substring(0, kmlFileName.length()-2) + 'z';
+			String kmzFileName = kmlFileName.substring(0, kmlFileName.length()-1) + 'z';
 			String kmzPath = destKmlDir + File.separator + kmzFileName;
 			String res = UtilSet.exec("zip " + kmzPath + " " + kmlPath, new File(destKmlDir));
 			res = res.toLowerCase();
