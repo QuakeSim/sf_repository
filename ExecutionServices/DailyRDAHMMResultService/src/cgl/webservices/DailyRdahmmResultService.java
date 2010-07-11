@@ -397,8 +397,18 @@ public class DailyRdahmmResultService {
 			writer.write(kmlDoc);
 			writer.close();
 			fw.close();
-
-			return kmlUrlPattern.replace("<fileName>", kmlFileName);
+			
+			String kmzFileName = kmlFileName.substring(0, kmlFileName.length()-2) + 'z';
+			String kmzPath = destKmlDir + File.separator + kmzFileName;
+			String res = UtilSet.exec("zip " + kmzPath + " " + kmlPath, new File(destKmlDir));
+			res = res.toLowerCase();
+			if (res.indexOf("error") >= 0 || res.indexOf("not found") >= 0) {
+				return kmlUrlPattern.replace("<fileName>", kmlFileName);
+			} else {
+				File fileKml = new File(kmlPath);
+				fileKml.delete();
+				return kmlUrlPattern.replace("<fileName>", kmzFileName);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "";
@@ -437,7 +447,6 @@ public class DailyRdahmmResultService {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
 		}
 	}
 	
