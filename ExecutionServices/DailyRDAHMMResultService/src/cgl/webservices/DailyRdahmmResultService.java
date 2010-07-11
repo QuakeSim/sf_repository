@@ -314,6 +314,12 @@ public class DailyRdahmmResultService {
 		 
 		String kmlFileName = contextGroup + "_" + preTreat + "_" + fromDateStr + "to" + toDateStr + "." + todayStr + ".kml";
 		String kmlPath = destKmlDir + File.separator + kmlFileName;
+		String kmzFileName = kmlFileName + ".zip";
+		String kmzPath = destKmlDir + File.separator + kmzFileName;
+		File kmzFile = new File(kmzPath);
+		if (kmzFile.exists() && kmzFile.isFile()) {
+			return kmlUrlPattern.replace("<fileName>", kmzFileName);
+		}
 		File kmlFile = new File(kmlPath);
 		if (kmlFile.exists() && kmlFile.isFile()) {
 			return kmlUrlPattern.replace("<fileName>", kmlFileName);
@@ -398,8 +404,6 @@ public class DailyRdahmmResultService {
 			writer.close();
 			fw.close();
 			
-			String kmzFileName = kmlFileName.substring(0, kmlFileName.length()-1) + 'z';
-			String kmzPath = destKmlDir + File.separator + kmzFileName;
 			String res = UtilSet.exec("zip " + kmzPath + " " + kmlPath, new File(destKmlDir));
 			res = res.toLowerCase();
 			if (res.indexOf("error") >= 0 || res.indexOf("not found") >= 0) {
