@@ -74,6 +74,10 @@ public class DailyRDAHMMStation {
 	static String denoiseCmdPattern;
 	/** library directory path for the de-noising application */
 	static String denoiseLibDir;
+	/** if input data needs to be de-trended before analysis */
+	static boolean detrendEnabled;
+	/** if input data needs to be de-noised before analysis */
+	static boolean denoiseEnabled;
 	
 	String stationId;
 	float latitude;
@@ -205,6 +209,8 @@ public class DailyRDAHMMStation {
 		detrendCmdPattern = prop.getProperty("dailyRdahmm.detrend.cmd.pattern");
 		denoiseLibDir = prop.getProperty("dailyRdahmm.denoise.libDir");
 		denoiseCmdPattern = prop.getProperty("dailyRdahmm.denoise.cmd.pattern");
+		detrendEnabled = Boolean.valueOf(prop.getProperty("dailyRdahmm.detrend.enabled"));
+		denoiseEnabled = Boolean.valueOf(prop.getProperty("dailyRdahmm.denoise.enabled"));
 	}
 	
 	/**
@@ -340,13 +346,21 @@ public class DailyRDAHMMStation {
 			return false;
 		}
 		
-		// do de-trending on raw input
-		String dtFilePath = fileLocalPath + ".detrend";
-		detrendAndDenoiseData(fileLocalPath, dtFilePath);
+		String inputPathForFill = fileLocalPath;
+		if (detrendEnabled && denoiseEnabled) {
+			// do de-trending on raw input
+			String dtDnFilePath = fileLocalPath + ".dtDn";
+			if (detrendAndDenoiseData(fileLocalPath, dtDnFilePath)) {
+				inputPathForFill = dtDnFilePath;
+			} else {
+				System.out.println("Failed to de-trend and de-noise input data for station " + stationId);
+				return false;
+			}
+		}
 		
 		// fill missing data
 		String modelRawPath = modelDir + File.separator + modelBaseName + ".raw";
-		if (!fillMissingDataWithDup(dtFilePath, modelRawPath)) {
+		if (!fillMissingDataWithDup(inputPathForFill, modelRawPath)) {
 			System.out.println("Failed to fill missing input data for station " + stationId);
 			return false;
 		}
@@ -762,6 +776,12 @@ public class DailyRDAHMMStation {
 				return false;
 			}
 			
+			// make input for the swf plotting component
+			String allQPath = evalDir + File.separator + projectName + ".all.Q";
+			String allRawPath = evalDir + File.separator + projectName + ".all.raw";
+			String plotSwfInputPath = evalDir + File.separator + projectName + ".all.swf.input";
+			makePlotSwfInput(allQPath, allRawPath, plotSwfInputPath);
+			
 			// plot evaluation results
 			executePlotCmd(projectName);
 		}
@@ -812,9 +832,51 @@ public class DailyRDAHMMStation {
 			System.out.println("Standard Error: " + stdErrStr);
 			return false;
 		} else {
-			UtilSet.renameFile(proDir + File.separator + projectName + ".Q",
-								proDir + File.separator + projectName + ".all.Q");
+			String allQPath = proDir + File.separator + projectName + ".all.Q";
+			UtilSet.renameFile(proDir + File.separator + projectName + ".Q", allQPath);
 			return true;
+		}
+	}
+	
+	/**
+	 * make input file for the flash plotting swf
+	 * @param qFilePath
+	 * @param rawFilePath
+	 * @param resultPath
+	 */
+	protected void makePlotSwfInput(String qFilePath, String rawFilePath, String resultPath){
+		try {
+			BufferedReader brQ = new BufferedReader(new FileReader(qFilePath));
+			BufferedReader brRaw = new BufferedReader(new FileReader(rawFilePath));
+			PrintWriter pwRes = new PrintWriter(new FileWriter(resultPath));
+			
+			String lineQ = brQ.readLine();
+			String lineRaw = brRaw.readLine();
+			while (lineQ != null && lineRaw != null) {
+				lineQ = lineQ.trim();
+				lineRaw = lineRaw.trim();
+				
+				//lineRaw is like "dond 2007-02-22T12:00:00 -2517566.0543 -4415531.3935 3841177.1618 0.0035 0.0055 0.0047"
+				int idx1 = lineRaw.indexOf(' ');
+				int idx2 = lineRaw.indexOf(' ', idx1+1);
+				int idx3 = lineRaw.indexOf(' ', idx2+1);
+				int idx4 = lineRaw.indexOf(' ', idx3+1);
+				int idx5 = lineRaw.indexOf(' ', idx4+1);
+				int idxT = lineRaw.indexOf('T', idx1);
+				
+				pwRes.print(lineQ);  // state number
+				pwRes.print(lineRaw.substring(idx1, idxT)); // date
+				pwRes.print(lineRaw.substring(idx2, idx5)); // coordinates
+				pwRes.println();
+				
+				lineQ = brQ.readLine();
+				lineRaw = brRaw.readLine();
+			}
+			brQ.close();
+			brRaw.close();
+			pwRes.close();			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -829,18 +891,23 @@ public class DailyRDAHMMStation {
 			// first, de-trend the GRWS raw file
 			String proDir = baseDestDir + File.separator + projectName;
 			String grwsFilePath = proDir + File.separator + grwsFileName;
-			String grwsDtFilePath = grwsFilePath + ".detrend";
-			if (!detrendAndDenoiseData(grwsFilePath, grwsDtFilePath)) {
-				System.out.println("Failed to create evaluation input for station " + stationId
-									+ "! Error when de-trending the evaluation raw input.");
-				return false;
+			String inputPathForCat = grwsFilePath;
+			if (detrendEnabled && denoiseEnabled) {
+				String grwsDtDnFilePath = grwsFilePath + ".dtDn";
+				if (detrendAndDenoiseData(grwsFilePath, grwsDtDnFilePath)) {
+					inputPathForCat = grwsDtDnFilePath;
+				} else {
+					System.out.println("Failed to create evaluation input for station " + stationId
+										+ "! Error when de-trending the evaluation raw input.");
+					return false;
+				}
 			}
 			
 			// cat the GRWS file to the .raw file of the model file
 			String modelDir = baseWorkDir + File.separator + modelBaseName;
 			String tmpFilePath = proDir + File.separator + projectName + ".all.raw.tmp";
 			String modelRawPath = modelDir + File.separator + modelBaseName + ".raw";
-			UtilSet.catTwoFiles(modelRawPath, grwsDtFilePath, tmpFilePath);
+			UtilSet.catTwoFiles(modelRawPath, inputPathForCat, tmpFilePath);
 			
 			// fill missing data to the ".all.raw.tmp" file
 			String allRawPath = proDir + File.separator + projectName + ".all.raw";

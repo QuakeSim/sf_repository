@@ -511,6 +511,13 @@ public class DailyRDAHMMThread implements Runnable {
 			tmpNode = elePattern.addElement("allStationInputName");
 			tmpNode.setText(DailyRDAHMMStation.allStationInputName);
 			
+			String filters = "Fill-Missing";
+			if (DailyRDAHMMStation.detrendEnabled && DailyRDAHMMStation.denoiseEnabled) {
+				filters += ",De-trend,De-noise";
+			}
+			tmpNode = elePattern.addElement("Filters");
+			tmpNode.setText(filters);
+			
 			String projectName = station.getProjectName();
 			String proNamePat = projectName.replaceAll(station.getStationId(), "{!station-id!}");
 			String modelBaseName = station.getModelBaseName();
@@ -526,6 +533,8 @@ public class DailyRDAHMMThread implements Runnable {
 			tmpNode.setText(proNamePat + ".all.input");
 			tmpNode = elePattern.addElement("RawInputFile");
 			tmpNode.setText(proNamePat + ".all.raw");
+			tmpNode = elePattern.addElement("SwfInputFile");
+			tmpNode.setText(proNamePat + ".all.swf.input");
 			tmpNode = elePattern.addElement("LFile");
 			tmpNode.setText(modelBasePat + ".L");			
 			tmpNode = elePattern.addElement("XPngFile");
