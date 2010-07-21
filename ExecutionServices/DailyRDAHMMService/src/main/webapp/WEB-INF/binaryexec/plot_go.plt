@@ -9,7 +9,7 @@
 #                                                       #
 #                                                       #
 #########################################################
-	system " cut -c6-15 INPUT.raw | sed '/^$/d' > INPUT.raw.dates.txt "
+	  system " cut -c6-15 INPUT.raw | sed '/^$/d' > INPUT.raw.dates.txt "
       system " paste INPUT.raw.dates.txt INPUT.xyz | sed 's/\t/ /' | sed 's/\n/ /' > INPUT.xyz.combine.txt "
       #system " sed = INPUT.xyz | sed 'N;s/\n/ /' > INPUT.xyz.combine.txt "
       system " paste INPUT.Q INPUT.xyz.combine.txt | sed '/^$/d' >  INPUT.xyz.combine.tmp.txt"
@@ -22,11 +22,7 @@
       class_start = 0
       y_max =` cat INPUT.xyz | awk '$1 != "0.0" {print $1}'|sort -g|sed -e '/^$/d' |sed -n '$p' `
       y_min =` cat INPUT.xyz | awk '$1 != "0.0" {print $1}'|sort -g|sed -e '/^$/d' |sed -n '1p' `
-	  print y_max
-	  print y_min
       y_base = 0.0
-      #y_max = y_max-y_base + 0.02
-      #y_min = y_min-y_base - 0.02
       x_max =` wc -l INPUT.xyz | awk '{print $1}' `
       x_min =0
 
@@ -36,8 +32,7 @@
 #                                                       #
 #########################################################
       print "plotting ... INPUT.xyz.X.png"
-     # call 'INPUT.xyzplot.plt' 'INPUT.xyz.combine.txt' 'INPUT.xyz.X.png' '3' " ` cat INPUT.xyz | awk '$1 != "0.0" {print $1}'|sort -g|sed -e '/^$/d' |sed -n '1p' ` "  "`cat INPUT.xyz.starttime`" "`cat INPUT.xyz.endtime`"
-	call 'INPUT.xyzplot.plt' 'INPUT.xyz.combine.txt' 'INPUT.xyz.X.png' '3' "0.0 "  "`cat INPUT.xyz.starttime`" "`cat INPUT.xyz.endtime`"
+      call 'INPUT.xyzplot.plt' 'INPUT.xyz.combine.txt' 'INPUT.xyz.X.png' '3' "0.0 "  "`cat INPUT.xyz.starttime`" "`cat INPUT.xyz.endtime`"
 
 
 #########################################################
@@ -50,13 +45,7 @@
       class_start = 0
       y_max =` cat INPUT.xyz | awk '$2 != "0.0" {print $2}'|sort -g|sed -e '/^$/d' |sed -n '$p' `
       y_min =` cat INPUT.xyz | awk '$2 != "0.0" {print $2}'|sort -g|sed -e '/^$/d' |sed -n '1p' `
-print y_max
-	  print y_min
-
-	y_base = 0.0
-     # y_base = y_min
-     # y_max = y_max-y_base + 0.02
-     # y_min = y_min-y_base - 0.02
+      y_base = 0.0
 
 #########################################################
 #  Draw for y                                           #
@@ -64,8 +53,7 @@ print y_max
 #                                                       #
 #########################################################
       print "plotting ... INPUT.xyz.Y.png"
-     # call 'INPUT.xyzplot.plt' 'INPUT.xyz.combine.txt' 'INPUT.xyz.Y.png' '4' " ` cat INPUT.xyz | awk '$2 != "0.0" {print $2}'|sort -g|sed -e '/^$/d' |sed -n '1p' ` " "`cat INPUT.xyz.starttime`" "`cat INPUT.xyz.endtime`"
-	call 'INPUT.xyzplot.plt' 'INPUT.xyz.combine.txt' 'INPUT.xyz.Y.png' '4' "0.0" "`cat INPUT.xyz.starttime`" "`cat INPUT.xyz.endtime`"
+      call 'INPUT.xyzplot.plt' 'INPUT.xyz.combine.txt' 'INPUT.xyz.Y.png' '4' "0.0" "`cat INPUT.xyz.starttime`" "`cat INPUT.xyz.endtime`"
 
 
 #########################################################
@@ -78,13 +66,7 @@ print y_max
       class_start = 0
       y_max =` cat INPUT.xyz | awk '$3 != "0.0" {print $3}'|sort -g|sed -e '/^$/d' |sed -n '$p' `
       y_min =` cat INPUT.xyz | awk '$3 != "0.0" {print $3}'|sort -g|sed -e '/^$/d' |sed -n '1p' `
-print y_max
-	  print y_min
-
-	y_base = 0.0
-     # y_base = y_min
-     # y_max = y_max-y_base + 0.02
-     # y_min = y_min-y_base - 0.02
+      y_base = 0.0
 
 #########################################################
 #  Draw for z                                           #
@@ -92,7 +74,6 @@ print y_max
 #                                                       #
 #########################################################
       print "plotting ... INPUT.xyz.Z.png"
-      #call 'INPUT.xyzplot.plt' 'INPUT.xyz.combine.txt' 'INPUT.xyz.Z.png' '5' " ` cat INPUT.xyz | awk '$3 != "0.0" {print $3}'|sort -g|sed -e '/^$/d' |sed -n '1p' ` " "`cat INPUT.xyz.starttime`" "`cat INPUT.xyz.endtime`"
       call 'INPUT.xyzplot.plt' 'INPUT.xyz.combine.txt' 'INPUT.xyz.Z.png' '5' "0.0" "`cat INPUT.xyz.starttime`" "`cat INPUT.xyz.endtime`"
  
 
