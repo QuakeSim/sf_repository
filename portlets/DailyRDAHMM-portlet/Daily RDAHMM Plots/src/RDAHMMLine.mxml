@@ -85,16 +85,16 @@
 				//getStationData.send();
 				//combobox.addEventListener(ListEvent.CHANGE, combobox_Change_Handler);
 				//Alert.show(String(combobox.selectedLabel));
-				//baseURL = "http://gridfarm013.ucs.indiana.edu//rdahmmexec/daily/SOPAC_FILL/daily_project_";
+				//baseURL = "http://gridfarm013.ucs.indiana.edu//daily_rdahmmexec/daily/SOPAC_FILL/daily_project_";
 				if (Application.application.parameters.rawDataURL == 'blyt')
 				{
 					//rawDataURL = Application.application.parameters.rawDataURL;
-					rawDataURL = "http://gridfarm013.ucs.indiana.edu//rdahmmexec/daily/SOPAC_FILL/daily_project_p597_2010-01-20/daily_project_p597_2010-01-20.all.raw";
+					rawDataURL = "http://gridfarm013.ucs.indiana.edu//daily_rdahmmexec/daily/SOPAC_FILL/daily_project_p597_2010-01-20/daily_project_p597_2010-01-20.all.raw";
 				}
 				 else
 				{
 					// for test purposes
-					rawDataURL = "http://gridfarm013.ucs.indiana.edu//rdahmmexec/daily/SOPAC_FILL/daily_project_p597_2010-01-20/daily_project_p597_2010-01-20.all.raw";
+					rawDataURL = "http://gridfarm013.ucs.indiana.edu//daily_rdahmmexec/daily/SOPAC_FILL/daily_project_p597_2010-01-20/daily_project_p597_2010-01-20.all.raw";
 				}
 				
 				//stationname = combobox.selectedLabel;
@@ -102,12 +102,12 @@
 				if (Application.application.parameters.statesDataURL == '2010-01-19')
 				{
 					//statesDataURL = Application.application.parameters.statesDataURL;
-					statesDataURL = "http://gridfarm013.ucs.indiana.edu//rdahmmexec/daily/SOPAC_FILL/daily_project_p597_2010-01-20/daily_project_p597_2010-01-20.all.Q";
+					statesDataURL = "http://gridfarm013.ucs.indiana.edu//daily_rdahmmexec/daily/SOPAC_FILL/daily_project_p597_2010-01-20/daily_project_p597_2010-01-20.all.Q";
 				}
 				else
 				{
 					//for test purposes
-					statesDataURL = "http://gridfarm013.ucs.indiana.edu//rdahmmexec/daily/SOPAC_FILL/daily_project_p597_2010-01-20/daily_project_p597_2010-01-20.all.Q";
+					statesDataURL = "http://gridfarm013.ucs.indiana.edu//daily_rdahmmexec/daily/SOPAC_FILL/daily_project_p597_2010-01-20/daily_project_p597_2010-01-20.all.Q";
 				} 
 				
 				//SOPAC_FILL/daily_project_arm1_2009-11-12/daily_project_arm1_2009-11-12.all.raw

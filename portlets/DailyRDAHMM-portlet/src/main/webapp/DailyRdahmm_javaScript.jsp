@@ -587,7 +587,7 @@
 				/* The status change xml file is formated like:
 				<xml>
   				<output-pattern>
-    				<server-url>http://156-56-104-131.dhcp-bl.indiana.edu:8080//rdahmmexec</server-url>
+    				<server-url>http://156-56-104-131.dhcp-bl.indiana.edu:8080//daily_rdahmmexec</server-url>
     				<pro-dir>daily_project_{!station-id!}_2007-12-18</pro-dir>
     				<AFile>daily_project_{!station-id!}.A</AFile>
     				<BFile>daily_project_{!station-id!}.B</BFile>

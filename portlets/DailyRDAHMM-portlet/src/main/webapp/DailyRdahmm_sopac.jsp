@@ -466,7 +466,7 @@
 		var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/proxyCallHttpService?serviceUrl="
 				  + "http%3A%2F%2Fresult.service.hostname%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetKmlForDateRange%3FfromDateStr%3D"
 				  + fromDateStr + "%26toDateStr%3D" + toDateStr 
-				  + "%26resUrl%3Dhttp%3A%2F%2Fxml.access.hostname%2F%2Frdahmmexec%2Fdaily%2FSOPAC_FILL%2Fstation-status-change-SOPAC_FILL.xml";
+				  + "%26resUrl%3Dhttp%3A%2F%2Fxml.access.hostname%2F%2Fdaily_rdahmmexec%2Fdaily%2FSOPAC_FILL%2Fstation-status-change-SOPAC_FILL.xml";
 		document.getElementById("waitScreen").style.visibility="visible";
 		var link = callHttpService(url);
 		window.open(link);
@@ -558,7 +558,7 @@
 	/* The status change xml file is formated like:
 	<xml>
 		<output-pattern>
-		<server-url>http://156-56-104-131.dhcp-bl.indiana.edu:8080//rdahmmexec</server-url>
+		<server-url>http://156-56-104-131.dhcp-bl.indiana.edu:8080//daily_rdahmmexec</server-url>
 		<pro-dir>daily_project_{!station-id!}_2007-12-18</pro-dir>
 		<AFile>daily_project_{!station-id!}.A</AFile>
 		<BFile>daily_project_{!station-id!}.B</BFile>
@@ -592,7 +592,7 @@
 	*/
 <%
 	Document statusDoc = null;
-	String xmlUrl = "http://xml.access.hostname//rdahmmexec/daily/SOPAC_FILL/station-status-change-SOPAC_FILL.xml";
+	String xmlUrl = "http://xml.access.hostname//daily_rdahmmexec/daily/SOPAC_FILL/station-status-change-SOPAC_FILL.xml";
 	try {
 		// if the file is old or does not exist, copy it from xmlUrl
 		boolean shouldCopy = false;		
