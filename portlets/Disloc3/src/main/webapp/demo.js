@@ -10,6 +10,7 @@ $(document).ready(function(){
 	
 	// second example
 	$("#browser").treeview({
+		collapsed: true,
 		animated:"normal",
 		persist: "cookie"
 	});

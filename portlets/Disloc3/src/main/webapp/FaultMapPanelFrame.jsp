@@ -337,23 +337,6 @@ new GLatLng(marker_NE.getPoint().lat(), marker_NE.getPoint().lng())
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </script>
 </f:verbatim>
 
