@@ -22,7 +22,9 @@
 function TapAcess(index){
 	
 
-	
+	<%
+	 	System.out.println("session.getAttribute(\"email\") : " + session.getAttribute("email"));
+	%>
 	
 	document.getElementById("TabDiv").innerHTML = document.getElementById("TabDiv"+index).innerHTML;
  }

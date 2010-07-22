@@ -232,10 +232,6 @@
             <url>http://www.crisisgrid.org/maven2</url>
         </repository>
 
-	<repository>
-	    <id>sun-jersey</id>
-	     <url>http://download.java.net/maven/2/</url>
-	</repository>
 
         <repository>
             <id>sopac</id>
@@ -265,19 +261,12 @@
 	 </repository>
 	 -->
     
-<repository>
-    <id>maven2-repository.dev.java.net</id>
-    <name>Java.net Repository for Maven</name>
-    <url>http://download.java.net/maven/2/</url>
-    <layout>default</layout>
-</repository> 
-<repository>
-    <id>maven-repository.dev.java.net</id>
-    <name>Java.net Maven 1 Repository (legacy)</name>
-    <url>http://download.java.net/maven/1</url>
-    <layout>legacy</layout>
-</repository>
 
+	<repository>
+            <id>db4o</id>
+            <url>https://source.db4o.com/maven/</url>
+        </repository>
+	
 
     </repositories>
 
@@ -474,23 +463,12 @@
 	
 
         <dependency>
-             <groupId>QuakeSim2</groupId>
+             <groupId>com.db4o</groupId>
              <artifactId>db4o-java5</artifactId>
              <version>6.1</version>
-	</dependency>
-	
-	<dependency>
-	  <groupId>com.sun.jersey</groupId>
-	  <artifactId>jersey</artifactId>
-	  <version>0.8-ea-SNAPSHOT</version>
-	</dependency>
-	
-	<dependency>
-	  <groupId>javax.ws.rs</groupId>
-	  <artifactId>jsr311-api</artifactId>
-	  <version>0.8-SNAPSHOT</version>
-	</dependency>
-	
-	
+        </dependency>
+
     </dependencies>
+
+
 </project>

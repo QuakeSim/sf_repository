@@ -12,7 +12,8 @@
     <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/jquery.treeview.css">
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
     <script type="text/javascript" src="@host.base.url@@artifactId@/lib/jquery.cookie.js"></script>
-    <script type="text/javascript" src="@host.base.url@@artifactId@/jquery.treeview.js"></script>    
+    <script type="text/javascript" src="@host.base.url@@artifactId@/jquery.treeview.js"></script>
+    <script type="text/javascript" src="@host.base.url@@artifactId@/demo.js"></script>
     <script type="text/javascript" src="@host.base.url@@artifactId@/egeoxml.js"></script>
     <div style="clear:both"></div>
 
@@ -177,9 +178,8 @@
   
 
 function togglefaultdrawing() {
-	  if (faultdrawing.checked == false) {
-  
-		  faultMap.removeOverlay(border);
+	  if (faultdrawing.checked == false) {  
+		  
 		  faultMap.removeOverlay(marker_NE);
 		  faultMap.removeOverlay(marker_SW);  
 	  }
@@ -334,6 +334,23 @@ new GLatLng(marker_NE.getPoint().lat(), marker_NE.getPoint().lng())
 
 	faultMap.addOverlay(border);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
