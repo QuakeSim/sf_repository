@@ -218,13 +218,13 @@ public class GenericProjectBean {
     }
 
     public String getContextUrl() {
-		  //		  System.out.println(this.toString()+":getContextUrl:"+contextUrl);
+		  // System.out.println(this.toString()+":getContextUrl:"+contextUrl);
 		  return contextUrl;
     }
 	 
     public void setContextUrl(String cUrl) {
 		  this.contextUrl=cUrl;
-		  System.out.println(this.toString()+":setContextUrl:"+contextUrl);
+		  // System.out.println(this.toString()+":setContextUrl:"+contextUrl);
     }
 	 
     public String getContextBasePath() {
@@ -238,17 +238,17 @@ public class GenericProjectBean {
     /**
      * default empty constructor
      */
-    public GenericProjectBean(){   
-		  System.out.println("Generic Project Bean Created");
+    public GenericProjectBean(){
 		  userName=getPortalUserName();
 		  contextListVector=new Vector();
 		  contextListHash=new Hashtable();
 		  projectsToDelete=new ArrayList();
+		  System.out.println("[" + getUserName() + "/GenericProjectBean/GenericProjectBean] Created");
     }	 
     
     public String getPortalUserName() {
 		  userName=Utility.getUserName(defaultName);
-		  System.out.println("Username is "+userName);
+		  // System.out.println("[" + getUserName() + "/GenericProjectBean/getPortalUserName] " + userName);
 		  return userName;
     }
 
@@ -276,7 +276,7 @@ public class GenericProjectBean {
 	  */
 	 protected String getBasePath() {
 		  String realPath="";
-		  //		  System.out.println("Here is the real path from context");
+		  // System.out.println("Here is the real path from context");
 		  FacesContext fc=FacesContext.getCurrentInstance();
 		  ExternalContext ec=fc.getExternalContext();
 		  Object context=ec.getContext();
@@ -295,7 +295,7 @@ public class GenericProjectBean {
 		  if(realPath.indexOf("/webapps/")>-1) {
 				realPath=realPath.substring(0,realPath.indexOf("/webapps/")+"/webapps/".length());
 		  }
-		  //		  System.out.println("realPath is "+realPath);
+		  // System.out.println("realPath is "+realPath);
 		  return realPath;
 	 }
 
@@ -337,7 +337,7 @@ public class GenericProjectBean {
     public void deletePersistentObj(String dbFilePath, Object obj) {
 		  db=Db4o.openFile(dbFilePath);
 		  ObjectSet results=db.get(obj);
-		  System.out.println("Delete result seet: "+results.size());
+		  // System.out.println("Delete result seet: "+results.size());
 		  if(results.hasNext()){
 				db.delete(obj);
 		  }
@@ -428,7 +428,7 @@ public class GenericProjectBean {
 	    String tmp_str = select.select(tmp_query_sql);
 	    tmp_str = tmp_str.substring(DB_RESPONSE_HEADER.length());
 	    StringTokenizer st1 = new StringTokenizer(tmp_str, "\n");
-		 System.out.println("Here is the FaultDB output:");
+		
 	    // They begin with blank lines ?!
 	    String junk=st1.nextToken();
 	    junk=st1.nextToken();
@@ -452,7 +452,7 @@ public class GenericProjectBean {
 			     String interpId) throws Exception {
 	
 	String DB_RESPONSE_HEADER = "results of the query:";
-	System.out.println("SQL Query on:" + param);
+	// System.out.println("SQL Query on:" + param);
 
 	String sqlQuery="";
 	
@@ -475,7 +475,7 @@ public class GenericProjectBean {
 	}
 	    
 	
-	System.out.println("SQL Query is "+sqlQuery);
+	System.out.println("[" + getUserName() + "/GenericProjectBean/getDBValue] " + sqlQuery);
 	
 	String tmp = select.select(sqlQuery);
 	if (tmp == null || tmp.equals("null") || tmp.equals("")) {
@@ -678,8 +678,8 @@ public class GenericProjectBean {
 	  * Stole this from http://www.java2s.com/Code/Java/File-Input-Output/CopyfilesusingJavaIOAPI.htm
 	  */
 	 public void copyFile(File oldFileDB, File newFileDB) throws Exception {
-		  
-		  System.out.println("Files to copy:"+oldFileDB.toString()+" "+newFileDB.toString());
+		 
+		  System.out.println("[" + getUserName() + "/GenericProjectBean/copyFile] From " + oldFileDB.toString() + " to " + newFileDB.toString());
 		  if(oldFileDB.exists() && oldFileDB.canRead() 
 			  && newFileDB.exists() && newFileDB.canWrite()) {
 				FileInputStream from = null;
@@ -708,7 +708,7 @@ public class GenericProjectBean {
 				 }
 		  }
 		  else {
-				System.err.println("Couldn't create new project DB file");
+				System.err.println("[GenericProjectBean/copyFile] Copy failed");
 		  }
 	 }
 }

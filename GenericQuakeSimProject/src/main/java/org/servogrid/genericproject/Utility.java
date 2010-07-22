@@ -27,34 +27,33 @@ public class Utility {
         requestObj = context.getRequest();
         if(requestObj instanceof PortletRequest)
         {
-            System.out.println("[GenericQuakeSimProject] This request is an instanceof PortletRequest");
+            // System.out.println("[Utility/getUserName] This request is an instanceof PortletRequest");
             Map userInfo = (Map)((PortletRequest)requestObj).getAttribute("javax.portlet.userinfo");
             userName = userInfo == null ? null : (String)userInfo.get("user.name");
             if(userName == null)
                 userName = ((PortletRequest)requestObj).getRemoteUser();
             if(userName == null)
                 userName = defaultName;
-            System.out.println("[GenericQuakeSimProject] Username : " + userName + "\n\n");
+            // System.out.println("[Utility/getUserName] Username : " + userName + "\n\n");
             return userName;
         }
         if(requestObj instanceof HttpServletRequest)
         {
-            System.out.println("[GenericQuakeSimProject] This request is an instanceof HttpServletRequest");
+            // System.out.println("[Utility/getUserName] This request is an instanceof HttpServletRequest");
             HttpSession session = (HttpSession)context.getSession(false);
             HttpServletResponse res = (HttpServletResponse)FacesContext.getCurrentInstance().getExternalContext().getResponse();
             HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
             java.util.Enumeration e = session.getAttributeNames();
-            System.out.println("[GenericQuakeSimProject] Current page : " + req.getRequestURI());
+            // System.out.println("[Utility/getUserName] Current page : " + req.getRequestURI());
             userName = (String)((HttpSession)(HttpSession)context.getSession(false)).getAttribute("email");
             if(userName == null)
                 userName = defaultName;
-            System.out.println("[GenericQuakeSimProject] Username : " + userName + "\n\n");
+            // System.out.println("[Utility/getUserName] Username : " + userName + "\n\n");
             return userName;
         } else
         {
             return defaultName;
-        }
-	
+        }	
     }
 	
     /**
