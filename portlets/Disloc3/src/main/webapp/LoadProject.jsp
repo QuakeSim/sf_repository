@@ -3,8 +3,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
-<%@ page
-	import="java.util.*, java.io.*, java.util.*, java.net.URL, java.lang.*, org.dom4j.*, org.dom4j.io.*, cgl.quakesim.disloc.*, javax.faces.context.ExternalContext, javax.servlet.http.HttpServletRequest, javax.portlet.PortletRequest, javax.faces.context.FacesContext, javax.faces.model.SelectItem"%>
 <html>
 <style>
 	.alignTop {
@@ -52,59 +50,38 @@ function dataTableSelectOneRadio(radio) {
     }
     radio.checked = true;
 }
-
-
-function setprojectsource(s) {
-
-  var source =document.getElementById("bbasd123:projectsource");  
-  source.setAttribute("value",s);
-  turnOffRadioForForm(document.getElementById("bbasd123"));
-
-}
-
-function setprojectname(n) {
-
-  var source =document.getElementById("bbasd123:projectname");  
-  source.setAttribute("value",n);
-
-
-}
-
-
 </script>
 
 <f:view>
-<h:form id="ioppll1">	
-	<h:outputText id="lptv1" styleClass="header2" value="Project Archive"/>	
-</h:form>
+	<h:outputText id="lptv1" styleClass="header2" value="Project Archive"/>
+				  
         <p/>
 		  <h:outputText id="lptv11" value="You don't have any archived projects."
-							 rendered="#{empty DislocBean2.myProjectNameList && empty DislocBean2.dbProjectNameList}"/>
+							 rendered="#{empty DislocBean2.myProjectNameList}"/>
 		<h:panelGrid id="lptv12" columnClasses="alignTop,alignTop,alignTop" columns="3" 
-						 rendered="#{!(empty DislocBean2.myProjectNameList) || !empty DislocBean2.dbProjectNameList}"		 
+						 rendered="#{!(empty DislocBean2.myProjectNameList)}"		 
 						 border="1">
-
-			<h:form id="baasz1">
-			<h:panelGrid id="asdvww1" columns="1" border="0">
+	     <h:form>
+		<h:panelGrid columns="1" border="0">
 				<h:outputText id="lptv21" escape="false" value="<b>Select Project</b><br><br>" />
 				<h:outputText id="lptv22" escape="false"
 					value="Please select from one of the previous projects." />
 	
-				<h:selectManyCheckbox id="projectlistforload" value="#{DislocBean2.selectProjectsArray}"
+				<h:selectManyCheckbox id="projectlistforload" 
+											 value="#{DislocBean2.selectProjectsArray}"
 					onchange="dataTableSelectOneRadio(this)"
 					onclick="dataTableSelectOneRadio(this)"
 					layout="pageDirection">
-				    <f:selectItems value="#{DislocBean2.myProjectNameList}" />
+					
+					<f:selectItems value="#{DislocBean2.myProjectNameList}" />
 				</h:selectManyCheckbox>
 				<h:commandButton value="Select"
 					action="#{DislocBean2.toggleSelectProject}" />
 			</h:panelGrid>
 			</h:form>
 
-			<h:form id="bbasd123">
-			<h:inputHidden id="projectsource" value="#{DislocBean2.projectsource}"/>
-			<h:inputHidden id="projectname" value="#{DislocBean2.projectname}"/>
-			<h:panelGrid id="asdvww2" columns="1" border="0">
+			<h:form>
+			<h:panelGrid columns="1" border="0">
 				<h:message id="NoCopyProject" for="newProjectName" 
 							  showDetail="#{true}" showSummary="#{true}"
 				  errorStyle="color:red"
@@ -118,100 +95,15 @@ function setprojectname(n) {
 				<h:outputText escape="false"
 					value="Please select from one of the previous projects." />
 	
-				<h:selectManyCheckbox id="projectlistforcopy" value="#{DislocBean2.copyProjectsArray}"
-					onchange="setprojectsource('my');dataTableSelectOneRadio(this)"
+				<h:selectManyCheckbox id="projectlistforcopy"  
+											 required="true"
+											 value="#{DislocBean2.copyProjectsArray}"
+					onchange="dataTableSelectOneRadio(this)"
 					onclick="dataTableSelectOneRadio(this)"
 
 					layout="pageDirection">					
 					<f:selectItems value="#{DislocBean2.myProjectNameList}" />
 				</h:selectManyCheckbox>
-
-				<h:outputText id="lptvm2" escape="false"
-					value="Please select from the USGS earthquakes RSS" />
-
-
-<f:verbatim>
-    <link rel="stylesheet" href="http://129.79.49.68:8080/Disloc3/jquery.treeview.css" />
-
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
-    <script type="text/javascript" src="@host.base.url@@artifactId@/lib/jquery.cookie.js"></script>
-    <script type="text/javascript" src="@host.base.url@@artifactId@/jquery.treeview.js"></script>
-    <script type="text/javascript" src="@host.base.url@@artifactId@/demo.js"></script>
-<%
-
-	ExternalContext context = null;
-
-	FacesContext facesContext=FacesContext.getCurrentInstance();
-/*
-	if(facesContext==null)
-		System.out.println("[LoadProject.jsp] a null facesContext error");
-	else
-		System.out.println("[LoadProject.jsp] the facesContext isn't null");
-*/
-
-
-	try {
-		context=facesContext.getExternalContext();
-	}
-	catch(Exception ex) {
-		ex.printStackTrace();
-	}	
-
-	Object requestObj=null;
-	requestObj=context.getRequest();
-
-
-	DislocBean dsb = null;
-	List l = null;	
-	List l2 = null;
-
-	if(requestObj instanceof PortletRequest) {
-		// System.out.println("[LoadProject.jsp] requestObj is an instance of PortletRequest");
-		dsb = (DislocBean)((PortletRequest)requestObj).getPortletSession().getAttribute("DislocBean2");
-	}
-
-	else if(requestObj instanceof HttpServletRequest) {
-		// System.out.println("[LoadProject.jsp] requestObj is an instance of HttpServletRequest");
-		dsb = (DislocBean)request.getSession().getAttribute("DislocBean2");
-	}
-
-// System.out.println(dsb.getCodeName());
-
-%>
-
-<ul id="browser">	
-
-<%
-HashMap hm = dsb.getDbProjectNameList();
-Set set = hm.entrySet();
-Iterator itr = set.iterator();
-List l3 = null;
-
-while(itr.hasNext()) {
-  Map.Entry me = (Map.Entry)itr.next();
-  l3 = (ArrayList)me.getValue();  
-%>
-
- <li><%=me.getKey()%></span>
-  <ul>
-
-<%
-for (int nA = 0 ; nA < l3.size() ; nA++) {
-%>
-   <li><input type="checkbox" onchange="setprojectsource('db');setprojectname('<%=((l3.get(nA))).toString()%>');dataTableSelectOneRadio(this);" onclick="dataTableSelectOneRadio(this)"><%=((l3.get(nA))).toString()%></span></li>
-<%
-}
-%>
-  </ul>
- </li>
-<%
-}
-%>
-</ul>	
-			
-
-</f:verbatim>
-
 
 				   <h:outputText value="New ProjectName:"/>
 				   <h:inputText id="newProjectName" 
@@ -223,8 +115,9 @@ for (int nA = 0 ; nA < l3.size() ; nA++) {
 			</h:panelGrid>
 			</h:form>
 
-			<h:form id="bazzz1b">
-			<h:panelGrid id="asdvww3"  columns="1" border="0">
+			<h:form>
+			<h:panelGrid columns="1" 
+							 border="0">
 				<h:outputText escape="false" value="<b>Delete Projects</b><br><br>" />
 				<h:outputText escape="false"
 					value="Please select from one of the previous projects." />
@@ -240,9 +133,9 @@ for (int nA = 0 ; nA < l3.size() ; nA++) {
 		</h:panelGrid>
 
 <p/>
-	<h:form id="nasdfwe1">
+	<h:form>
 		<b>New Project Name</b>
-		<h:panelGrid id="asdvww4" columns="2" border="1">
+		<h:panelGrid columns="2" border="1">
 			<h:outputText id="lpj_projectname" value="Project Name:" />
 			<h:panelGroup>
 			<h:inputText id="projectName" value="#{DislocBean2.projectName}"
