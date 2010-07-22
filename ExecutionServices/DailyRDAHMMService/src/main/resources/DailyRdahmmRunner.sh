@@ -7,7 +7,7 @@ echo $SUBDIR
 echo $PROPFILE
 
 rm -f -r ${tomcat.base.dir}/webapps/${pom.artifactId}/daily/$SUBDIR/*-*
-mkdir ${tomcat.base.dir}/webapps/${pom.artifactId}/daily/$SUBDIR
+mkdirhier ${tomcat.base.dir}/webapps/${pom.artifactId}/daily/$SUBDIR
 rm -f -r ${tomcat.base.dir}/webapps/DailyRDAHMM-portlet/WEB-INF/config/*tmp*
 rm -f -r ${user.home}/DAILY_RDAHMM_WDIR/$SUBDIR/*-*
 
