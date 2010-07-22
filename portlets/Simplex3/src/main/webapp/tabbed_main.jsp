@@ -25,9 +25,7 @@ var tab3 = '<iframe scrolling="yes" width=100% height="700" frameborder="1" src=
 
 
 function TapAcess(index){
-	<%
-	 	System.out.println("session.getAttribute(\"email\") : " + session.getAttribute("email"));
-	%>
+	
 	// document.getElementById("TabDiv").innerHTML = document.getElementById("TabDiv"+index).innerHTML;
 	if (index==1)
 	  document.getElementById("TabDiv").innerHTML = tab1;

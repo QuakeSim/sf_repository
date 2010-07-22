@@ -19,9 +19,7 @@
  </head>
   
   <body>
-   <%
-    System.out.println("session.getAttribute(\"email\") in LoadProject.jsp of Simplex : " + session.getAttribute("email"));
-   %>
+
   
 
    <script language="JavaScript">

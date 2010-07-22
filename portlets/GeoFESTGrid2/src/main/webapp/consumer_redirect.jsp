@@ -14,7 +14,7 @@
         newmgr.setAssociations(new InMemoryConsumerAssociationStore());
         newmgr.setNonceVerifier(new InMemoryNonceVerifier(5000));
         pageContext.setAttribute("consumermanager", newmgr, PageContext.APPLICATION_SCOPE);
-		System.out.println("consumermanager is created");
+	// System.out.println("consumermanager is created");
     }
 
 
@@ -61,7 +61,7 @@
                 // Option 1: GET HTTP-redirect to the OpenID Provider endpoint
                 // The only method supported in OpenID 1.x
                 // redirect-URL usually limited ~2048 bytes
-				System.out.println("!discovered.isVersion2()");
+		// System.out.println("!discovered.isVersion2()");
                 response.sendRedirect(authReq.getDestinationUrl(true));
 				
             }
@@ -86,11 +86,7 @@
 	
 	function clicksubmit(){
 	
-	<%
-	System.out.println("submitted");
-	%>
 	document.forms['openid-form-redirection'].submit();
-	
 		
 	}
 	
@@ -102,10 +98,6 @@
 <!-- <body> -->
 
 
-<%
-System.out.println("authReq.getOPEndpoint() : " + authReq.getOPEndpoint());
-
-%>
 <form name="openid-form-redirection" action="<%=authReq.getOPEndpoint()%>" method="post" accept-charset="utf-8">
 	
 <%
@@ -119,10 +111,7 @@ System.out.println("authReq.getOPEndpoint() : " + authReq.getOPEndpoint());
 	{
 		key=keyit.next();
 		value=pm.get(key);
-		
-		System.out.println("key : " + key);
-		System.out.println("value : " + value);
-		System.out.println("");
+
 		
 %>
 

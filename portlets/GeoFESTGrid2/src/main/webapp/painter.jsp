@@ -75,7 +75,7 @@ String mylayers=request.getParameter("layers");
 //Here we must loop over the number of layers
 if(mylayers!=null) {
 		String tmp_mylayers= getFromBASE64(mylayers);
-		System.out.println(tmp_mylayers);
+		// System.out.println(tmp_mylayers);
     while(tmp_mylayers.lastIndexOf("*")>-1) {
     	int cur_index=tmp_mylayers.lastIndexOf("*");
         String layer= tmp_mylayers.substring( cur_index+1);
@@ -94,7 +94,7 @@ String myfaults=request.getParameter("faults");
 //Here we must loop over the number of layers
 if(myfaults!=null) {
 		String tmp_myfaults= getFromBASE64(myfaults);
-		System.out.println(tmp_myfaults);
+		// System.out.println(tmp_myfaults);
     while(tmp_myfaults.lastIndexOf("*")>-1) {
     	int cur_index=tmp_myfaults.lastIndexOf("*");
         String fault= tmp_myfaults.substring( cur_index+1);
@@ -128,19 +128,19 @@ String baseOutputUrl=baseUrl+slash
 
 // Plot the mesh if requested.  If the request value is anything other than
 // "true" then don't plot.
-System.out.println("plotMesh value is "+plotMesh);
+// System.out.println("plotMesh value is "+plotMesh);
 String localUrl=null;
 
 String nodeUrl=baseOutputUrl+projectName+".node";		 
 String tetraUrl=baseOutputUrl+projectName+".tetra";		 
-System.out.println(nodeUrl);
-System.out.println(tetraUrl);
+// System.out.println(nodeUrl);
+// System.out.println(tetraUrl);
 
 try {
    String localDest=application.getRealPath("/meshdownloads");
    //localDest=localDest+"/meshdownloads";
-   System.out.println("localDest is "+localDest);
-   System.out.println("ProjectName is "+projectName);
+   // System.out.println("localDest is "+localDest);
+   // System.out.println("ProjectName is "+projectName);
 	
 	String localNodeFile=localDest+"/"+projectName+".node";
 	String localTetraFile=localDest+"/"+projectName+".tetra";
@@ -160,7 +160,7 @@ if(plotMesh!=null && plotMesh.equals("true") && localUrl!=null) {
    	String meshCmd="mesh"+space;
 	meshCmd+=localUrl+space;
 	meshCmd+="1";
-System.out.println("Mesh Command is "+meshCmd);
+// System.out.println("Mesh Command is "+meshCmd);
 %>
       <argument><%=meshCmd%></argument>
 <%

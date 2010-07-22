@@ -45,8 +45,6 @@ KMLdescriptionparser kdp = new KMLdescriptionparser();
 
 
 kdp.parseXml(config.getServletContext().getRealPath("perm.xml").split("perm.xml")[0], "perm.kml");
-System.out.println("[getPlacemarkSize] " + config.getServletContext().getRealPath("perm.xml").split("perm.xml")[0]);
-System.out.println("[getPlacemarkSize] " + kdp.getPlacemarkSize());
 
 int rssnewsize = stationList.size();
 int permsize = kdp.getPlacemarkSize();
@@ -99,7 +97,7 @@ for(int i=0;i<permsize;i++) {
 </style>
 
 <head>
-<link rel="stylesheet" type="text/css" href='<%= request.getContextPath() + "/stylesheet.css" %>'>
+<link rel="stylesheet" type="text/css" href='<%= request.getContextPath() + "/stylesheet.css"%>'>
 <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css">
 
 <title>Edit Project</title>
@@ -361,11 +359,7 @@ function initialize() {
 	ExternalContext context = null;
 
 	FacesContext facesContext=FacesContext.getCurrentInstance();
-	if(facesContext==null)
-		System.out.println("[EditProject.jsp] a null facesContext error");
-	else
-		System.out.println("[EditProject.jsp] the facesContext isn't null");
-
+	
 
 	try {
 		context=facesContext.getExternalContext();
@@ -383,12 +377,12 @@ function initialize() {
 	List l2 = null;
 
 	if(requestObj instanceof PortletRequest) {
-		System.out.println("[EditProject.jsp] requestObj is an instance of PortletRequest");
+		// System.out.println("[EditProject.jsp] requestObj is an instance of PortletRequest");
 		SB = (SimplexBean)((PortletRequest)requestObj).getPortletSession().getAttribute("SimplexBean");
 	}
 
 	else if(requestObj instanceof HttpServletRequest) {
-		System.out.println("[EditProject.jsp] requestObj is an instance of HttpServletRequest");
+		// System.out.println("[EditProject.jsp] requestObj is an instance of HttpServletRequest");
 		SB = (SimplexBean)request.getSession().getAttribute("SimplexBean");
 	}
 
