@@ -87,7 +87,30 @@ public class DislocBean extends GenericSopacBean {
 	
 	boolean faultdrawing = false;
 	
-	public boolean getFaultdrawing() {
+	public ObjectServer getDbs() {
+		return dbs;
+	}
+
+	public void setDbs(ObjectServer dbs) {
+		this.dbs = dbs;
+		db = dbs.openClient();
+		System.out.println("setDbs() called");
+		
+	}
+
+	public ObjectContainer getDb() {
+		return db;
+	}
+
+	public void setDb(ObjectContainer db) {
+		this.db = db;
+	}
+
+	ObjectServer dbs = null;
+
+	
+	public boolean getFaultdrawing(ObjectServer dbb) {
+		
 		return faultdrawing;
 	}
 
@@ -787,7 +810,7 @@ public class DislocBean extends GenericSopacBean {
 					db = Db4o.openFile(getBasePath() + "/"
 							+ getContextBasePath() + "/" + userName + "/"
 							+ codeName + "/" + projectName + ".db");
-
+					
 					ObjectSet result = db.get(DislocParamsBean.class);
 					if (result.hasNext()) {
 						DislocParamsBean tmp = (DislocParamsBean) result.next();
@@ -1872,6 +1895,7 @@ public class DislocBean extends GenericSopacBean {
 
 	public void toggleAddObservationsForProject(ActionEvent ev)
 			throws Exception {
+		
 		try {
 			initEditFormsSelection();
 
@@ -3175,6 +3199,7 @@ public class DislocBean extends GenericSopacBean {
 	}
 
 	protected void storeParamsInDB() throws Exception {
+		
 		try {
 
 			if (db != null)
