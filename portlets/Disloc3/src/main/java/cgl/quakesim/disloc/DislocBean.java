@@ -109,7 +109,7 @@ public class DislocBean extends GenericSopacBean {
 	ObjectServer dbs = null;
 
 	
-	public boolean getFaultdrawing(ObjectServer dbb) {
+	public boolean getFaultdrawing() {
 		
 		return faultdrawing;
 	}
