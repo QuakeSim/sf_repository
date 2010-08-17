@@ -57,7 +57,7 @@
 		  <f:facet name="header">
 		    <h:outputText id="lkdrqh1351" value="Fault Origin Latitude" />
 		  </f:facet>
-		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0" id="bjaisndf1">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="FaultLatStart" style="text-align:right;width:60px" 
@@ -72,7 +72,7 @@
 		  <f:facet name="header">
 		    <h:outputText id="lkdrqh1352" value="Fault Origin Longitude" />
 		  </f:facet>
-		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0" id="biajsnd4">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="FaultLonStart" style="text-align:right;width:60px" 
@@ -88,7 +88,7 @@
 		  <f:facet name="header">
 		    <h:outputText id="lkdrqh1186" value="Fault End Latitude" />
 		  </f:facet>
-		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0" id="bavsd45">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="FaultLatEnd" style="text-align:right;width:60px" 
@@ -103,7 +103,7 @@
 		  <f:facet name="header">
 		    <h:outputText id="lkdrh1189" value="Fault End Longitude" />
 		  </f:facet>
-		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0" id="lmbman2">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="FaultLonEnd" style="text-align:right;width:60px" 
@@ -118,7 +118,7 @@
 		  <f:facet name="header">
 		    <h:outputText id="lkdrq11842" value="Length" />
 		  </f:facet>
-		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0" id="bkans24">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="FaultLength" style="text-align:right;width:60px" 
@@ -134,7 +134,7 @@
 		  <f:facet name="header">
 		    <h:outputText id="lkdrq11813" value="Width" />
 		  </f:facet>
-		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0" id="bnans4">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="FaultWidth" style="text-align:right;width:60px" 
@@ -149,11 +149,11 @@
 		  <f:facet name="header">
 		    <h:outputText id="lkdrq11213" value="Depth" />
 		  </f:facet>
-		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0" id="bnnn5">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="FaultDepth" style="text-align:right;width:60px" 
-		      value="#{myentry31.faultWidth}"
+		      value="#{myentry31.faultDepth}"
 		      required="true" />
 		    <h:message id="lkdrqr11512" for="FaultDepth" showDetail="true" showSummary="true"
 		      errorStyle="color: red" />
@@ -164,7 +164,7 @@
 		  <f:facet name="header">
 		    <h:outputText id="lkdrqj11816" value="Dip Angle" />
 		  </f:facet>
-		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0" id"bnabs4">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="FaultDipAngle" style="text-align:right;width:60px" 
@@ -179,7 +179,7 @@
 		  <f:facet name="header">
 		    <h:outputText id="dflelerk123" value="Dip Slip" />
 		  </f:facet>
-		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0" id="bnanb64">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="FaultSlip" style="text-align:right;width:60px" 
@@ -195,7 +195,7 @@
 		  <f:facet name="header">
 		    <h:outputText id="lkdrq1521" value="Strike Angle" />
 		  </f:facet>
-		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0" id="oinwb4">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="FaultStrikeAngle" style="text-align:right;width:60px" 
@@ -211,7 +211,7 @@
 		  <f:facet name="header">
 		    <h:outputText id="dflelerkljj61" value="Strike Slip" />
 		  </f:facet>
-		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0" id="obry5">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="FaultStrikeSlip" style="text-align:right;width:60px" 
@@ -226,7 +226,7 @@
 		  <f:facet name="header">
 		    <h:outputText id="dflelerklj1252" value="Tensile Slip" />
 		  </f:facet>
-		  <h:panelGrid columns="1" cellpadding="0" cellspacing="0" styleClass="centered" id="erej1iu2">
+		  <h:panelGrid columns="1" cellpadding="0" cellspacing="0" styleClass="centered" id="erejbiu2">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="FaultTensileSlip" style="text-align:right;width:60px" 
@@ -238,7 +238,7 @@
 		  <f:facet name="header">
 		    <h:outputText id="dflelerkljj81" value="Lame Lambda" />
 		  </f:facet>
-		  <h:panelGrid columns="1" cellpadding="0" cellspacing="0" styleClass="centered" id="erejs82">
+		  <h:panelGrid columns="1" cellpadding="0" cellspacing="0" styleClass="centered" id="bjs85">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="LameLambda" style="text-align:right;width:60px" 
@@ -250,7 +250,7 @@
 		  <f:facet name="header">
 		    <h:outputText  id="dflelerkljj171" value="Lame Mu" />
 		  </f:facet>
-		  <h:panelGrid columns="1" cellpadding="0" cellspacing="0" styleClass="centered" id="lejjdj12id">
+		  <h:panelGrid columns="1" cellpadding="0" cellspacing="0" styleClass="centered" id="njdj12id">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="LameMu" style="text-align:right;width:60px" 
