@@ -164,7 +164,7 @@
 		  <f:facet name="header">
 		    <h:outputText id="lkdrqj11816" value="Dip Angle" />
 		  </f:facet>
-		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0" id"bnabs4">
+		  <h:panelGrid columns="2" cellpadding="0" cellspacing="0" id="bnabs4">
 		    <f:facet name="header">								
 		    </f:facet>
 		    <h:inputText id="FaultDipAngle" style="text-align:right;width:60px" 
