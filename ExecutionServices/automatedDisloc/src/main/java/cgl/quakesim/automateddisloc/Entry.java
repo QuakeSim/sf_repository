@@ -70,7 +70,7 @@ public class Entry {
 		this.category = category;
 	}
 	public Double getM() {
-		M = Double.parseDouble((getTitle().split(","))[0].split(" ")[1]);
+		M = Double.parseDouble((getTitle().split(","))[0].substring(1));		
 		return M;
 	}
 	

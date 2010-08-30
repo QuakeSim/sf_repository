@@ -60,7 +60,7 @@ public class DislocExtendedService extends DislocService implements Runnable {
 						     ObsvPoint[] obsvPoints,
 						     Fault[] faults,
 						     DislocParamsBean dislocParams,
-						     String targetName) 
+						     String targetName)
 	throws Exception {
 	System.out.println("RunNonBlocking called");
 	if(targetName==null) targetName=DislocConstants.DISLOC_DEFAULT_TARGET;

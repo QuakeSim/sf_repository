@@ -13,15 +13,15 @@ public class DislocParamsBean  implements java.io.Serializable {
 
     public static double DEFAULT_LON=0.0;
     
-    private double gridMinXValue=-20.0;
+    private double gridMinXValue=-100.0;
 
-    private double gridMinYValue=-20.0;
+    private double gridMinYValue=-100.0;
 
-    private int gridXIterations=5;
+    private int gridXIterations=21;
 
     private double gridXSpacing=10.0;
 
-    private int gridYIterations=5;
+    private int gridYIterations=21;
 
     private double gridYSpacing=10.0;
 

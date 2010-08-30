@@ -244,13 +244,15 @@ public class DislocService extends AntVisco implements Runnable {
 																		  String jobUIDStamp) {
 		  DislocResultsBean drb=new DislocResultsBean();
 		  
-		  String baseUrl=generateBaseUrl(userName,projectName,jobUIDStamp);
+		  String baseUrl=generateBaseUrl(userName, projectName,  jobUIDStamp);
+		  System.out.println("[DislocResultsBean/createDislocResultsBean] baseUrl : " + baseUrl);
 		  
 		  drb.setJobUIDStamp(jobUIDStamp);
 		  drb.setProjectName(projectName);
-		  drb.setInputFileUrl(baseUrl+"/"+projectName+".input");
-		  drb.setOutputFileUrl(baseUrl+"/"+projectName+".output");
-		  drb.setStdoutUrl(baseUrl+"/"+projectName+".stdout");
+		  drb.setInputFileUrl(baseUrl +"/"+ projectName +".input");
+		  drb.setOutputFileUrl(baseUrl +"/"+ projectName +".output");
+		  drb.setStdoutUrl(baseUrl +"/"+ projectName +".stdout");
+		  
 		  
 		  return drb;
     }

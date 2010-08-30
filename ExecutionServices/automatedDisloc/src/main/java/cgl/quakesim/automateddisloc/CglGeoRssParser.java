@@ -66,7 +66,8 @@ public class CglGeoRssParser {
 			Entry en = new Entry();
 			Element e = (Element)listofnodelist.item(nA);
 			en.setId(e.getElementsByTagName("id").item(0).getTextContent());
-			en.setTitle(e.getElementsByTagName("title").item(0).getTextContent());
+			// en.setTitle(e.getElementsByTagName("title").item(0).getTextContent());
+			en.setTitle((e.getElementsByTagName("title").item(0).getTextContent()).replace(" ", ""));
 			en.setUpdated(e.getElementsByTagName("updated").item(0).getTextContent());
 			en.setGeorss_point(e.getElementsByTagName("georss:point").item(0).getTextContent());
 			en.setGeorss_elev(e.getElementsByTagName("georss:elev").item(0).getTextContent());

@@ -15,9 +15,9 @@ public class Fault  implements java.io.Serializable {
 
     private double faultDipSlip;
 
-    private double faultLameLambda=1.0;
+    private double faultLameLambda;
 
-    private double faultLameMu=1.0;
+    private double faultLameMu;
 
     private double faultLatEnd;
 
