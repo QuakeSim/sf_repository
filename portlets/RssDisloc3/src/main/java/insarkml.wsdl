@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://gf19.ucs.indiana.edu:8080/insarkmlservice/services/InsarKmlExec" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://gf19.ucs.indiana.edu:8080/insarkmlservice/services/InsarKmlExec" xmlns:intf="http://gf19.ucs.indiana.edu:8080/insarkmlservice/services/InsarKmlExec" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+
+   <wsdl:message name="runNonBlockingInsarKmlRequest">
+
+      <wsdl:part name="userName" type="soapenc:string"/>
+
+      <wsdl:part name="projectName" type="soapenc:string"/>
+
+      <wsdl:part name="dislocOutputUrl" type="soapenc:string"/>
+
+      <wsdl:part name="elevation" type="soapenc:string"/>
+
+      <wsdl:part name="azimuth" type="soapenc:string"/>
+
+      <wsdl:part name="radarFrequency" type="soapenc:string"/>
+
+      <wsdl:part name="targetName" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runNonBlockingInsarKmlResponse">
+
+      <wsdl:part name="runNonBlockingInsarKmlReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runBlockingInsarKmlResponse">
+
+      <wsdl:part name="runBlockingInsarKmlReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runBlockingInsarKmlRequest">
+
+      <wsdl:part name="userName" type="soapenc:string"/>
+
+      <wsdl:part name="projectName" type="soapenc:string"/>
+
+      <wsdl:part name="dislocOutputUrl" type="soapenc:string"/>
+
+      <wsdl:part name="elevation" type="soapenc:string"/>
+
+      <wsdl:part name="azimuth" type="soapenc:string"/>
+
+      <wsdl:part name="radarFrequency" type="soapenc:string"/>
+
+      <wsdl:part name="targetName" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="InsarKmlService">
+
+      <wsdl:operation name="runNonBlockingInsarKml" parameterOrder="userName projectName dislocOutputUrl elevation azimuth radarFrequency targetName">
+
+         <wsdl:input message="impl:runNonBlockingInsarKmlRequest" name="runNonBlockingInsarKmlRequest"/>
+
+         <wsdl:output message="impl:runNonBlockingInsarKmlResponse" name="runNonBlockingInsarKmlResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runBlockingInsarKml" parameterOrder="userName projectName dislocOutputUrl elevation azimuth radarFrequency targetName">
+
+         <wsdl:input message="impl:runBlockingInsarKmlRequest" name="runBlockingInsarKmlRequest"/>
+
+         <wsdl:output message="impl:runBlockingInsarKmlResponse" name="runBlockingInsarKmlResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="InsarKmlExecSoapBinding" type="impl:InsarKmlService">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="runNonBlockingInsarKml">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="runNonBlockingInsarKmlRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://insarkml.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="runNonBlockingInsarKmlResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/insarkmlservice/services/InsarKmlExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runBlockingInsarKml">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="runBlockingInsarKmlRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://insarkml.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="runBlockingInsarKmlResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/insarkmlservice/services/InsarKmlExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="InsarKmlServiceService">
+
+      <wsdl:port binding="impl:InsarKmlExecSoapBinding" name="InsarKmlExec">
+
+         <wsdlsoap:address location="http://gf19.ucs.indiana.edu:8080/insarkmlservice/services/InsarKmlExec"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

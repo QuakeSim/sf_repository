@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"
+    xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2">
+    <Document>
+        <name>InSAR Interferogram 2000-05-20 to 2000-12-16</name>
+        <description><![CDATA[InSAR Interferogram obtained from Paul Lundgren at JPL]]></description>
+        <atom:author>
+            <atom:name>QuakeSim Project</atom:name>
+        </atom:author>
+        <atom:link href="http://quakesim.org/" rel="related" type="text/html"/>
+        <Folder>
+            <name>Reference Points</name>
+            <Placemark>
+                <name>Reference 1</name>
+                <description><![CDATA[<b>Source</b>: InSAR Interferogram 2000-05-20 to 2000-12-16<br><b>Details</b>: http://quakesim.org/quaketables/insar.jsp?iid=52<br><b>Location</b>: [35.982, -116.643]]]></description>
+                <styleUrl>http://gf19.ucs.indiana.edu:9898/maps/styles.kml#sm_ylw-pushpin</styleUrl>
+                <Point>
+                    <coordinates>-116.643, 35.982, 0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark>
+                <name>Reference 2</name>
+                <description><![CDATA[<b>Source</b>: InSAR Interferogram 2000-05-20 to 2000-12-16<br><b>Details</b>: http://quakesim.org/quaketables/insar.jsp?iid=52<br><b>Location</b>: [36.1947, -117.905]]]></description>
+                <styleUrl>http://gf19.ucs.indiana.edu:9898/maps/styles.kml#sm_ylw-pushpin</styleUrl>
+                <Point>
+                    <coordinates>-117.905, 36.1947, 0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark>
+                <name>Reference 3</name>
+                <description><![CDATA[<b>Source</b>: InSAR Interferogram 2000-05-20 to 2000-12-16<br><b>Details</b>: http://quakesim.org/quaketables/insar.jsp?iid=52<br><b>Location</b>: [33.2542, -117.37]]]></description>
+                <styleUrl>http://gf19.ucs.indiana.edu:9898/maps/styles.kml#sm_ylw-pushpin</styleUrl>
+                <Point>
+                    <coordinates>-117.37, 33.2542, 0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark>
+                <name>Reference 4</name>
+                <description><![CDATA[<b>Source</b>: InSAR Interferogram 2000-05-20 to 2000-12-16<br><b>Details</b>: http://quakesim.org/quaketables/insar.jsp?iid=52<br><b>Location</b>: [33.4652, -118.586]]]></description>
+                <styleUrl>http://gf19.ucs.indiana.edu:9898/maps/styles.kml#sm_ylw-pushpin</styleUrl>
+                <Point>
+                    <coordinates>-118.586, 33.4652, 0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark>
+                <name>InSAR Interferogram 2000-05-20 to 2000-12-16</name>
+                <description><![CDATA[InSAR Interferogram obtained from Paul Lundgren at JPL<br><b>Location</b>: [35.982, -116.643], [36.1947, -117.905], [33.2542, -117.37], [33.4652, -118.586]<br><b>Details</b>: <a href="http://quakesim.org/quaketables/insar.jsp?iid=52">http://quakesim.org/quaketables/insar.jsp?iid=52</a><br><b>Download</b>: <a href="http://gf19.ucs.indiana.edu:9898/insar-data/geo_000520-001216/geo_000520-001216-sim_HDR_4rlks.unw">Data</a>, <a href="http://gf19.ucs.indiana.edu:9898/insar-data/geo_000520-001216/geo_000520-001216-sim_HDR_4rlks.unw.rsc">Metadata</a>, <a href="http://gf19.ucs.indiana.edu:9898/insar-data/geo_000520-001216/geo_000520-001216-sim_HDR_4rlks.unw.jpg">Image</a>]]></description>
+                <styleUrl>http://gf19.ucs.indiana.edu:9898/maps/styles.kml#s_polygon</styleUrl>
+                <Polygon>
+                    <tessellate>1</tessellate>
+                    <outerBoundaryIs>
+                        <LinearRing>
+                            <coordinates>-116.643, 35.982, 0 -117.905, 36.1947, 0 -118.586, 33.4652, 0 -117.37, 33.2542, 0 </coordinates>
+                        </LinearRing>
+                    </outerBoundaryIs>
+                </Polygon>
+            </Placemark>
+        </Folder>
+        <Folder>
+            <name>InSAR Image Overlay</name>
+            <GroundOverlay>
+                <name>InSAR Interferogram 2000-05-20 to 2000-12-16</name>
+                <description><![CDATA[InSAR Interferogram obtained from Paul Lundgren at JPL<br><b>Location</b>: [35.982, -116.643], [36.1947, -117.905], [33.2542, -117.37], [33.4652, -118.586]<br><b>Details</b>: <a href="http://quakesim.org/quaketables/insar.jsp?iid=52">http://quakesim.org/quaketables/insar.jsp?iid=52</a><br><b>Download</b>: <a href="http://gf19.ucs.indiana.edu:9898/insar-data/geo_000520-001216/geo_000520-001216-sim_HDR_4rlks.unw">Data</a>, <a href="http://gf19.ucs.indiana.edu:9898/insar-data/geo_000520-001216/geo_000520-001216-sim_HDR_4rlks.unw.rsc">Metadata</a>, <a href="http://gf19.ucs.indiana.edu:9898/insar-data/geo_000520-001216/geo_000520-001216-sim_HDR_4rlks.unw.jpg">Image</a>]]></description>
+                <color>66ffffff</color>
+                <Icon>
+                    <href>http://gf19.ucs.indiana.edu:9898/insar-data/geo_000520-001216/geo_000520-001216-sim_HDR_4rlks.unw.jpg</href>
+                </Icon>
+                <LatLonBox>
+                    <north>36.1947</north>
+                    <south>33.2542</south>
+                    <east>-116.643</east>
+                    <west>-118.586</west>
+                </LatLonBox>
+            </GroundOverlay>
+        </Folder>
+    </Document>
+</kml>
+

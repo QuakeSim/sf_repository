@@ -1,0 +1,76 @@
+<portlet-tabbed-pane>
+  <portlet-tab label="RssDisloc3-Portlet">
+    <title lang="en">RssDisloc3</title>
+    <portlet-tabbed-pane style="sub-menu">
+    <portlet-tab label="RssDisloc3-Setup">
+      <title lang="en">Run Disloc</title>
+      <table-layout>
+      <row-layout>
+	<column-layout>
+	<portlet-frame label="Disloc3-PF">
+	  <portlet-class>RssDisloc3#Disloc3</portlet-class>
+	</portlet-frame>
+	</column-layout>
+      </row-layout>
+      </table-layout>
+    </portlet-tab>
+    
+    <portlet-tab label="Fetch-disloc3-results">
+      <title lang="en">Fetch Disloc Results</title>
+      <table-layout>
+      <row-layout>
+	<column-layout>
+	<portlet-frame label="Disloc3-fetchmesh-PF">
+	  <portlet-class>RssDisloc3#fetchresults-portlet</portlet-class>
+	</portlet-frame>
+	</column-layout>
+      </row-layout>
+      </table-layout>
+    </portlet-tab>
+    
+    <portlet-tab label="InSAR-disloc3-results">
+      <title lang="en">InSAR Plots of Disloc Results</title>
+      <table-layout>
+      <row-layout>
+	<column-layout>
+	<portlet-frame label="Disloc3-insar-PF">
+	  <portlet-class>RssDisloc3#insar-plot-portlet</portlet-class>
+	</portlet-frame>
+	</column-layout>
+      </row-layout>
+      </table-layout>
+    </portlet-tab>
+    
+    <!--
+    <portlet-tab label="Plot-disloc3-results">
+      <title lang="en">Plot Disloc Results</title>
+      <table-layout>
+      <row-layout>
+	<column-layout>
+	<portlet-frame label="Disloc3-plot-grid-PF">
+	  <portlet-class>Disloc3#plot-results-portlet</portlet-class>
+	</portlet-frame>
+	</column-layout>
+      </row-layout>
+      </table-layout>
+    </portlet-tab>
+    -->
+    
+    <portlet-tab label="Disloc3-Pick-Location">
+      <title lang="en">Pick Location</title>
+      <table-layout>
+      <row-layout>
+	<column-layout>
+	<portlet-frame label="Disloc3-pick-location-PF">
+	  <portlet-class>RssDisloc3#pick-location-portlet</portlet-class>
+	</portlet-frame>
+	</column-layout>
+      </row-layout>
+      </table-layout>
+    </portlet-tab>
+    </portlet-tabbed-pane>
+  </portlet-tab>		    
+</portlet-tabbed-pane>
+
+
+
