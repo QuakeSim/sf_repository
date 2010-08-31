@@ -460,6 +460,7 @@ class RunautomatedDisloc extends Thread {
 		List entry_list = new ArrayList();
 		List pns = new ArrayList();
 		entry_list = cgrp.getEntryList();
+		System.out.println("[RunautomatedDisloc/run] entry_list.size() : " + entry_list.size());
 		
 		HashMap<String, Fault> hm = new HashMap<String, Fault>();
 		
@@ -771,8 +772,7 @@ class RunautomatedDisloc extends Thread {
 			DislocExtendedService dislocExtendedService = new DislocExtendedServiceServiceLocator().getDislocExtendedExec(new URL(dislocExtendedServiceUrl));
 			
 			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] The project name: " + projectName);
-			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] Points : " + points);
-			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] Faults : " + faults);
+			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] Faults : " + faults[0].getFaultName());
 			
 
 			// This step runs disloc
