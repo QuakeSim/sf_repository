@@ -307,7 +307,7 @@ class RunautomatedDisloc extends Thread {
 					
 						
 		} catch (Exception e) {			
-			System.out.println("[RunautomatedDisloc/getProject] " + e);
+			System.out.println("[RunautomatedDisloc/getDislocProjectSummaryBeanCount] " + e);
 		}
 		finally {
 			if (db != null)
@@ -439,10 +439,14 @@ class RunautomatedDisloc extends Thread {
 			createProjectsFromRss(url);
 			
 			// to allow other process to have access to overm5.db while this webservice is updating, it's working on a temporary file and copying it at the end.
-			File oldFileDB = new File(getContextBasePath() + "/overm5_temp.db");
+			File oldFileDB = new File(getContextBasePath() + "/overm5_temp.db");			
 			File newFileDB = new File(getContextBasePath() + "/overm5.db");
 			
 			try {
+				
+				if (!newFileDB.exists())				
+					newFileDB.createNewFile();
+				
 				copyFile(oldFileDB, newFileDB);
 				
 			} catch (Exception e) {
@@ -774,6 +778,11 @@ class RunautomatedDisloc extends Thread {
 			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] The project name: " + projectName);
 			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] Faults : " + faults[0].getFaultName());
 			
+			
+			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] projectName : " + projectName);
+			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] points : " + points);
+			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] faults : " + faults);
+			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] currentParams : " + currentParams);
 
 			// This step runs disloc
 			DislocResultsBean dislocResultsBean = dislocExtendedService.runBlockingDislocExt("automatedDisloc", projectName, points, faults, currentParams, null);
