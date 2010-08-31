@@ -67,7 +67,7 @@ public class Db4oServletContextListener implements ServletContextListener {
         
 		ServletContext scontext = arg0.getServletContext();
 		
-        String filePath = scontext.getRealPath("../Disloc3.db");        
+        String filePath = scontext.getRealPath("../RssDisloc3.db");        
 		userdb = Db4o.openServer(filePath, 0);   		
 		
 		String filePath2 = scontext.getRealPath("../WebServices/WEB-INF/Descriptors/users/automatedDislocDB/overm5.db");
