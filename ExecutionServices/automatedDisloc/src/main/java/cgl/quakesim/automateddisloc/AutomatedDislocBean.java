@@ -297,21 +297,28 @@ class RunautomatedDisloc extends Thread {
 			projectDir.mkdirs();
 		
 		try {
-			db = Db4o.openFile(getContextBasePath() + "/overm5_temp.db");
-			
-			
-			ObjectSet results = db.get(DislocProjectSummaryBean.class);
-
-			System.out.println("[RunautomatedDisloc/DislocProjectSummaryBean] results.size() : " + results.size());
-
-					
+			File f = new File(getContextBasePath() + "/overm5_temp.db");
+			if (!f.exists())
+				System.out.println("[RunautomatedDisloc/DislocProjectSummaryBean] overm5_temp isn't existing.");
+				
+			else{
+				
+				db = Db4o.openFile(getContextBasePath() + "/overm5_temp.db");
+				
+				
+				ObjectSet results = db.get(DislocProjectSummaryBean.class);
+	
+				System.out.println("[RunautomatedDisloc/DislocProjectSummaryBean] results.size() : " + results.size());
+			}					
 						
 		} catch (Exception e) {			
 			System.out.println("[RunautomatedDisloc/getDislocProjectSummaryBeanCount] " + e);
 		}
 		finally {
-			if (db != null)
-				db.close();			
+			if (db != null){
+				db.close();
+				System.out.println("[RunautomatedDisloc/getDislocProjectSummaryBeanCount] db closed");
+			}
 		}	
 	}
 	
@@ -999,12 +1006,11 @@ class RunautomatedDisloc extends Thread {
 			codedb = Db4o.openFile(getContextBasePath() + "/overm5_temp.db");			
 		
 			codedb.set(summaryBean);
-			codedb.commit();
+			
 			
 			codedb.set(ipb);
 
-			// Say goodbye.
-			codedb.commit();
+			
 			
 
 			// Store the params bean for the current project,
