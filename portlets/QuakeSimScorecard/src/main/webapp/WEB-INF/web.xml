@@ -176,7 +176,7 @@
 
     <servlet-mapping>
         <servlet-name>PortletServlet</servlet-name>
-        <url-pattern>/jsr/FaultDB-portlet</url-pattern>
+        <url-pattern>/jsr/QuakeSimScorecard</url-pattern>
     </servlet-mapping>
 
     <!-- Welcome files -->

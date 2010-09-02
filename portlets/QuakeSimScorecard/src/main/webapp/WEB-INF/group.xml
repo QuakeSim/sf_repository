@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <portlet-group>
-    <group-name>FaultDB-portlet</group-name>
-    <group-description>FaultDB Portlet</group-description>
+    <group-name>QuakeSimScorecard</group-name>
+    <group-description>QuakeSim Scorecard</group-description>
     <group-visibility>PUBLIC</group-visibility>
     <portlet-role-info>
-        <portlet-class>FaultDB-portlet#FaultDB-portlet</portlet-class>
+        <portlet-class>QuakeSimScorecard#QuakeSimScorecard</portlet-class>
         <required-role>USER</required-role>
     </portlet-role-info>
 </portlet-group>
