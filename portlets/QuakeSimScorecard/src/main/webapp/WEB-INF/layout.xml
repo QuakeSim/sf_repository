@@ -1,0 +1,22 @@
+<portlet-tabbed-pane>
+  <portlet-tab label="QuakeSimScorecard">
+    <title lang="en">QuakeTables</title>
+    <portlet-tabbed-pane style="sub-menu">
+      <portlet-tab label="QuakeSimScorecard">
+        <title lang="en">QuakeSimScorecard</title>
+        <table-layout>
+          <row-layout>
+            <column-layout>
+              <portlet-frame label="QuakeSimScorecard-PF">
+                <portlet-class>QuakeSimScorecard#QuakeSimScorecard</portlet-class>
+              </portlet-frame>
+            </column-layout>
+          </row-layout>
+        </table-layout>
+      </portlet-tab>
+    </portlet-tabbed-pane>
+  </portlet-tab>
+</portlet-tabbed-pane>
+
+
+

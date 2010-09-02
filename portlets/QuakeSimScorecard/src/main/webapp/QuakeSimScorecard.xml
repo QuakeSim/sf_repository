@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="QuakeSim Scorecard" description="New California Earthquake Forecast Scorecard" author_email='yoder@physics.ucdavis.edu' width="420" height="455" />
+<Content type="url" href="http://gw11.quarry.iu.teragrid.org/myoder/quakemaps/ygmap.psp"></Content>
+</Module>
