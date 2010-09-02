@@ -306,9 +306,12 @@ class RunautomatedDisloc extends Thread {
 				db = Db4o.openFile(getContextBasePath() + "/overm5_temp.db");
 				
 				
-				ObjectSet results = db.get(DislocProjectSummaryBean.class);
-	
-				System.out.println("[RunautomatedDisloc/DislocProjectSummaryBean] results.size() : " + results.size());
+				ObjectSet results = db.get(DislocProjectSummaryBean.class);	
+				System.out.println("[RunautomatedDisloc/DislocProjectSummaryBean] the number of DislocProjectSummaryBean in the overm5_temp.db : " + results.size());
+				
+				results = db.get(InsarParamsBean.class);
+				System.out.println("[RunautomatedDisloc/DislocProjectSummaryBean] the number of InsarParamasBean in the overm5_temp.db : " + results.size());
+				
 			}					
 						
 		} catch (Exception e) {			
