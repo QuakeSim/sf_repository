@@ -58,6 +58,9 @@
               <portlet-frame label="login">
                 <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
               </portlet-frame>
+              <portlet-frame label="scorecard">
+					 <portlet-class>QuakeSimScorecard#QuakeSimScorecard</portlet-class>
+              </portlet-frame>
             </column-layout>
           </row-layout>
         </table-layout>
