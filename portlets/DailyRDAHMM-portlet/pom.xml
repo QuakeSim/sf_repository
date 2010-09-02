@@ -63,7 +63,7 @@
                                         token="xml.access.hostname"
                                         value="${xml.access.hostname}">
 											<include name="**/*.jsp"/>
-											<include name="**/form/*.htm/>
+											<include name="**/form/*.htm"/>
 								</replace>
 							 </tasks>
                            </configuration>
