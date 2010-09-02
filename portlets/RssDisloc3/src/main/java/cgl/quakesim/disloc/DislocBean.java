@@ -820,7 +820,7 @@ public class DislocBean extends GenericSopacBean {
 		try {
 			projectdb = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/" + userName + "/" + codeName + "/" + projectName + ".db");
 			ObjectSet results = projectdb.get(DislocParamsBean.class);
-			System.out.println("Getting params from db:" + results.size());
+			System.out.println("[" + getUserName() + "/RssDisloc3/DislocBean/getDislocParamsFromDB] Getting params from db:" + results.size());
 			if (results.hasNext()) {
 				paramsBean = (DislocParamsBean) results.next();
 			}
@@ -2760,9 +2760,29 @@ public class DislocBean extends GenericSopacBean {
 
 				if (dpsb != null) {
 					codedb = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/" + userName + "/" + codeName + ".db");
-					codedb.set(dpsb);
-					codedb.commit();
+					codedb.set(dpsb);					
 				}
+				else
+					System.out.println("[" + getUserName() + "/RssDisloc3/DislocBean/toggleCopyRssProject] This project doesn't have a DislocProjectSummaryBean.");
+				
+				InsarParamsBean ipb = null;
+				results = shareddb.get(new InsarParamsBean());
+				while (results.hasNext()) {
+					InsarParamsBean temp = (InsarParamsBean)results.next();
+					if (temp.getProjectName().equals(oldProjectName))
+						ipb = temp;
+				}
+				
+				if (ipb != null) {					
+					codedb.set(ipb);
+				}
+				else
+					System.out.println("[" + getUserName() + "/RssDisloc3/DislocBean/toggleCopyRssProject] This project doesn't have a InsarParamsBean.");
+				
+				
+				
+				codedb.commit();			
+				
 
 			} catch (Exception e) {
 				System.out.println("[" + getUserName() + "/RssDisloc3/DislocBean/toggleCopyRssProject] " + e);
