@@ -193,15 +193,17 @@
 		var marker = new GMarker(point, {icon: icon1, clickable: true, title:stationArray[idx][0]});
 		GEvent.addListener(marker, "click", function() {
 				var stationId = stationArray[idx][0];
-				var urlPattern2 = urlPattern, dirPattern2 = dirPattern, rawInputPattern2 = rawInputPattern, qPattern2 = qPattern;
+				var lat = "" + stationArray[idx][1];
+				var long = "" + stationArray[idx][2];
+				var urlPattern2 = urlPattern, dirPattern2 = dirPattern, swfInputPattern2 = swfInputPattern;
 				var preFix = urlPattern2.replace(/{!station-id!}/g, stationId) + "/" + dirPattern2.replace(/{!station-id!}/g, stationId) + "/";
-				var rawURL = preFix + rawInputPattern2.replace(/{!station-id!}/g, stationId);
-				var qURL = preFix + qPattern2.replace(/{!station-id!}/g, stationId);
+				var swfURL = preFix + swfInputPattern2.replace(/{!station-id!}/g, stationId);
 				var htmlStr = markerWinHtmlStr;
-				htmlStr = htmlStr.replace(/{!rawFileURL!}/g, rawURL);
-				htmlStr = htmlStr.replace(/{!qFileURL!}/g, qURL);
+				htmlStr = htmlStr.replace(/{!swfInputURL!}/g, swfURL);
+				htmlStr = htmlStr.replace(/{!stationId!}/g, stationId);
+				htmlStr = htmlStr.replace(/{!latitude!}/g, lat);
+				htmlStr = htmlStr.replace(/{!longitude!}/g, long);
 				marker.openInfoWindowHtml(htmlStr, {suppressMapPan:true});
-				sel = document.getElementById("stationSelect");
 				sel.selectedIndex = idx;
 				sltChange(sel);
 			});
@@ -650,6 +652,7 @@
 	var bPattern = '<%=eleOutput.element("BFile").getText()%>';
 	var inputPattern = '<%=eleOutput.element("InputFile").getText()%>';
 	var rawInputPattern = '<%=eleOutput.element("RawInputFile").getText()%>';
+	var swfInputPattern = '<%=eleOutput.element("SwfInputFile").getText()%>';
 	var lPattern = '<%=eleOutput.element("LFile").getText()%>';
 	var xPattern = '<%=eleOutput.element("XPngFile").getText()%>';
 	var yPattern = '<%=eleOutput.element("YPngFile").getText()%>';

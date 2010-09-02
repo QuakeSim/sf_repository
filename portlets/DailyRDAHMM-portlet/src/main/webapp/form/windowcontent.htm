@@ -7,14 +7,14 @@
 			<param name="bgcolor" value="#869ca7" />
 			<param name="allowScriptAccess" value="sameDomain" />
 			<param name="flashVars" value="rawDataURL={!rawFileURL!}&statesDataURL={!qFileURL!}"/>
-			<embed src="http://gf14.ucs.indiana.edu:4321/floodgrid/version2/RDAHMMLine.swf" quality="high" bgcolor="#869ca7"
+			<embed src="http://gf13.ucs.indiana.edu/daily_rdahmmexec/dailyRdahmmPlot.swf" quality="high" bgcolor="#869ca7"
 				width="650" height="500" name="RDAHMMLine" align="middle"
 				play="true"
 				loop="false"
 				quality="high"
 				allowScriptAccess="sameDomain"
 				type="application/x-shockwave-flash"
-				flashVars="rawDataURL={!rawFileURL!}&statesDataURL={!qFileURL!}"
+				flashVars="url={!swfInputURL!}&stationID={!stationId!}&lat={!latitude!}&long={!longitude!}"
 				pluginspage="http://www.adobe.com/go/getflashplayer">
 			</embed>
 	</object>
