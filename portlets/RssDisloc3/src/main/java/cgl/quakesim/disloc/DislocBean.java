@@ -156,6 +156,17 @@ public class DislocBean extends GenericSopacBean {
 	// These are useful object lists.
 	String[] selectProjectsArray;
 	boolean usesGridPoints;
+	
+	
+	String automatedDislocServiceUrl;
+	
+
+	public String getAutomatedDislocServiceUrl() {
+		return automatedDislocServiceUrl;
+	}
+	public void setAutomatedDislocServiceUrl(String automatedDislocServiceUrl) {
+		this.automatedDislocServiceUrl = automatedDislocServiceUrl;
+	}
 
 	// KML stuff, need to move this to another place.
 	String xmlHead = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
@@ -682,7 +693,7 @@ public class DislocBean extends GenericSopacBean {
 		System.out.println("[" + getUserName() + "/DislocBean/getDbProjectNameList] called");
 
 		Client c = Client.create();
-		WebResource webResource = c.resource("http://129.79.49.68:8080/axis2/services/AutomatedDislocBean/run?url=http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml");
+		WebResource webResource = c.resource(getAutomatedDislocServiceUrl() + "/run?url=http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml");
 		webResource.get(String.class);
 		dbProjectNameList.clear();
 		List sl = null;

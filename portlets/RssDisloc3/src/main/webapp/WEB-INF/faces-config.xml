@@ -59,6 +59,11 @@
                  	<property-name>insarkmlServiceUrl</property-name>
                  	<value>http://gf19.ucs.indiana.edu:8080/insarkmlservice/services/InsarKmlExec</value>
                  </managed-property>
+		 
+		 <managed-property>
+                 	<property-name>automatedDislocServiceUrl</property-name>
+                 	<value>http://gf19.ucs.indiana.edu:8080/axis2/services/AutomatedDislocBean</value>
+                 </managed-property>
 
 	</managed-bean>
 
