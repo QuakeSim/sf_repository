@@ -759,6 +759,11 @@ class RunautomatedDisloc extends Thread {
 		
 		oldFile = new File(localDestination);
 		
+		d = new File(getContextBasePath() + "/../../../../../" + rssdisloc_dir_name);
+		
+		if (!d.exists())
+			d.mkdirs();
+		
 		try {
 			if(!newFile_rssdisloc.exists())
 				newFile_rssdisloc.createNewFile();
