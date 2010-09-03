@@ -754,6 +754,8 @@ class RunautomatedDisloc extends Thread {
 		oldFile = new File(localDestination);
 		
 		try {
+			if(!newFile_rssdisloc.exists())
+				newFile_rssdisloc.createNewFile();
 			copyFile(oldFile, newFile_rssdisloc);
 			
 		} catch (Exception e) {
