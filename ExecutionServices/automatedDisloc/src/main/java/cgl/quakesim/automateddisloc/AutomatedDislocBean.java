@@ -499,6 +499,9 @@ class RunautomatedDisloc extends Thread {
 			System.out.println("[RunautomatedDisloc/run] Deleting old fault kml file");
 			oldFile.delete();			
 		}
+		else
+			oldFile.mkdirs();
+			
 		
 		long timeStamp = (new Date()).getTime();
 		PrintWriter out = null;
