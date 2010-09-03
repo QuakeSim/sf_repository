@@ -14,7 +14,7 @@
 
                 <managed-property>
                    <property-name>portalBaseUrl</property-name>
-                   <value>http://129.79.49.68:8080/</value>
+                   <value>@host.base.url@</value>
                 </managed-property>
 		
 		<managed-property>
