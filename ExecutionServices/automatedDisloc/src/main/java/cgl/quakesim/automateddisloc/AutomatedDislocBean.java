@@ -494,13 +494,16 @@ class RunautomatedDisloc extends Thread {
 		String localDestination = getContextBasePath() + "/../../../../../" + "gridsphere" + "/overm5.kml";
 		
 		System.out.println("[RunautomatedDisloc/run] Old fault kml file:" + localDestination);
+		
+		File d = new File(getContextBasePath() + "/../../../../../" + "gridsphere");
+		if (!d.exists())
+			d.mkdirs();	
+		
 		File oldFile = new File(localDestination);
 		if (oldFile.exists()) {
 			System.out.println("[RunautomatedDisloc/run] Deleting old fault kml file");
 			oldFile.delete();			
 		}
-		else
-			oldFile.mkdirs();
 			
 		
 		long timeStamp = (new Date()).getTime();
