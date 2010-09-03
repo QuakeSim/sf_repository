@@ -694,6 +694,8 @@ public class DislocBean extends GenericSopacBean {
 
 		Client c = Client.create();
 		WebResource webResource = c.resource(getAutomatedDislocServiceUrl() + "/run?url=http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml");
+		System.out.println("[" + getUserName() + "/DislocBean/getDbProjectNameList] " + getAutomatedDislocServiceUrl());
+		
 		webResource.get(String.class);
 		dbProjectNameList.clear();
 		List sl = null;
