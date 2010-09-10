@@ -226,46 +226,53 @@ public class SimpleXDataKml {
 	  
 	 // 
 	 public PointEntry[] LoadDataFromFile(String InputFileName) {
-		 ArrayList dataset = new ArrayList(); 
-		  
-		 try {			  
-			 String line = new String(); 
-			 int skipthreelines = 1; 
-			 BufferedReader in = new BufferedReader(new FileReader(InputFileName)); 
-			 while ((line = in.readLine()) != null) { 
-				 if (skipthreelines <= 4) { 
-					  
-					  
-				 } else { 
-					  
-					 if (!line.trim().equalsIgnoreCase("")) { 
-						 PointEntry tempPoint = new PointEntry(); 
-						 Pattern p = Pattern.compile(" {1,20}"); 
-						 String tmp[] = p.split(line); 
-						 tempPoint.setX(tmp[1].trim()); 
-						 tempPoint.setY(tmp[2].trim()); 
-						 tempPoint.setDeltaXName("dx"); 
-						 tempPoint.setDeltaXValue(tmp[3].trim()); 
-						 tempPoint.setDeltaYName("dy"); 
-						 tempPoint.setDeltaYValue(tmp[4].trim()); 
-						 tempPoint.setDeltaZName("dz"); 
-						 tempPoint.setDeltaZValue(tmp[5].trim()); 
-						 tempPoint.setFolderTag("point"); 
-						 dataset.add(tempPoint); 
-						 } else { 
-							 break;							  
-						 }					  
-				 } 
-				  
-				 skipthreelines++;				  
-			 } 
-			  
-			 in.close(); 
-			  
-		 } catch (IOException ex1) { 
-			 ex1.printStackTrace();			  
-		 } 
-		  
+
+		 ArrayList dataset = new ArrayList();
+
+		 try {
+			 String line = new String();
+
+			 
+			 BufferedReader in = new BufferedReader(new FileReader(InputFileName));
+			 in = new BufferedReader(new FileReader(InputFileName));
+			 
+			 int skipthreelines = 1;
+			 
+			 while ((line = in.readLine()) != null) {
+				 if (skipthreelines <= 4) {
+
+				 } else {
+
+					 if (!line.trim().equalsIgnoreCase("")) {
+						 
+						 PointEntry tempPoint = new PointEntry();
+						 Pattern p = Pattern.compile(" {1,20}");
+						 String tmp[] = p.split(line);
+						 tempPoint.setX(tmp[1].trim());
+						 tempPoint.setY(tmp[2].trim());
+						 tempPoint.setDeltaXName("dx");
+						 tempPoint.setDeltaXValue(tmp[3].trim());
+						 tempPoint.setDeltaYName("dy");
+						 tempPoint.setDeltaYValue(tmp[4].trim());
+						 tempPoint.setDeltaZName("dz");
+						 tempPoint.setDeltaZValue(tmp[5].trim());
+						 tempPoint.setFolderTag("point");
+						 dataset.add(tempPoint);
+						 
+						 } else {
+							 break;
+						 }
+				 }
+
+				 skipthreelines++;
+			 }
+			 in.close();			
+			 
+
+		 } catch (IOException ex1) {
+			 ex1.printStackTrace();
+		 }
+
 		 return (PointEntry[]) (dataset.toArray(new PointEntry[dataset.size()])); 
 	} 
  

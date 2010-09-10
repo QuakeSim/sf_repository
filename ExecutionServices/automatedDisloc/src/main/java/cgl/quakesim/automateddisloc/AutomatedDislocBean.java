@@ -721,7 +721,7 @@ class RunautomatedDisloc extends Thread {
 				out.println("<name>"+projectname+"</name>");
 				
 				out.println(descBegin);				
-				String s = "<![CDATA[<b>Fault Name</b>: " + projectname + "<br><b>Length</b>: " + fault.getFaultLength() + " <br><b>Width</b>: " + fault.getFaultWidth() + "<br><b>Depth</b>: " + fault.getFaultDepth() + "<br><b>DipAngle</b>: " + fault.getFaultDipAngle() + "<br><b>Strike Angel</b>: " + fault.getFaultStrikeAngle() + "<br><b>Dip Slip</b>: " + fault.getFaultDipSlip() + "<br><b>Strike Slip</b>: " + fault.getFaultStrikeSlip() + "<br><b>Location [x, y]</b>: [" + fault.getFaultLocationX() + ", " + fault.getFaultLocationY() + "]<br><b>Updated</b>:  " + entry.getUpdated() + "<br><a href= \"" + ouls.getDislocoutputURL() + "\"><b>DislocOutputURL</b></a><br><a href=\"http://maps.google.com/maps?q=" + ouls.getDisplacementkmlURL() + "&t=p\"><b>DisplacementKmlURL</b></a><br><a href=\"http://maps.google.com/maps?q=" + ouls.getInsarkmlURL() +"&t=p\"><b>InsarKmlURL</b></a><br><b>Comment</b>: http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml,<br><b>- Community Grids Lab</b><br>]]>";				
+				String s = "<![CDATA[<b>Fault Name</b>: " + projectname + "<br><b>LatStart</b>: " + fault.getFaultLatStart() + "<br><b>LonStart</b>: " + fault.getFaultLonStart() + "<br><b>Length</b>: " + fault.getFaultLength() + " <br><b>Width</b>: " + fault.getFaultWidth() + "<br><b>Depth</b>: " + fault.getFaultDepth() + "<br><b>DipAngle</b>: " + fault.getFaultDipAngle() + "<br><b>Strike Angel</b>: " + fault.getFaultStrikeAngle() + "<br><b>Dip Slip</b>: " + fault.getFaultDipSlip() + "<br><b>Strike Slip</b>: " + fault.getFaultStrikeSlip() + "<br><b>Location [x, y]</b>: [" + fault.getFaultLocationX() + ", " + fault.getFaultLocationY() + "]<br><b>Updated</b>:  " + entry.getUpdated() + "<br><a href= \"" + ouls.getDislocoutputURL() + "\"><b>DislocOutputURL</b></a><br><a href=\"http://maps.google.com/maps?q=" + ouls.getDisplacementkmlURL() + "&t=p\"><b>DisplacementKmlURL</b></a><br><a href=\"http://maps.google.com/maps?q=" + ouls.getInsarkmlURL() +"&t=p\"><b>InsarKmlURL</b></a><br><b>Comment</b>: http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml,<br><b>- Community Grids Lab</b><br>]]>";				
 				out.println(s);
 				out.println(descEnd);
 				
@@ -953,14 +953,10 @@ class RunautomatedDisloc extends Thread {
 		double start_x, start_y, end_x, end_y, xiterationsNumber, yiterationsNumber;
 		start_x = Double.valueOf(dislocParams.getGridMinXValue()).doubleValue();
 		start_y = Double.valueOf(dislocParams.getGridMinYValue()).doubleValue();
-		xiterationsNumber = Double.valueOf(dislocParams.getGridXIterations())
-				.doubleValue();
-		yiterationsNumber = Double.valueOf(dislocParams.getGridYIterations())
-				.doubleValue();
-		int xinterval = (int) (Double.valueOf(dislocParams.getGridXSpacing())
-				.doubleValue());
-		int yinterval = (int) (Double.valueOf(dislocParams.getGridYSpacing())
-				.doubleValue());
+		xiterationsNumber = Double.valueOf(dislocParams.getGridXIterations()).doubleValue();
+		yiterationsNumber = Double.valueOf(dislocParams.getGridYIterations()).doubleValue();
+		int xinterval = (int) (Double.valueOf(dislocParams.getGridXSpacing()).doubleValue());
+		int yinterval = (int) (Double.valueOf(dislocParams.getGridYSpacing()).doubleValue());
 		end_x = start_x + xinterval * (xiterationsNumber - 1);
 		end_y = start_y + yinterval * (yiterationsNumber - 1);
 

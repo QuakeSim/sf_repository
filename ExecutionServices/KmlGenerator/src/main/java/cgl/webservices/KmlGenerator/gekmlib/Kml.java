@@ -248,9 +248,9 @@ public class Kml extends Node
 
     public String toUpdateKML(boolean suppressEnclosingTags)
     {
-	StringBuilder change = new StringBuilder();
-	change.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-	change.append("<kml xmlns=\"http://earth.google.com/kml/2.1\">");
+    	StringBuilder change = new StringBuilder();
+    	change.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    	change.append("<kml xmlns=\"http://earth.google.com/kml/2.1\">");
         change.append("<NetworkLinkControl>\n");
         change.append("<Update>\n");
         change.append("<targetHref>"+this.href+"</targetHref>\n");
