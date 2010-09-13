@@ -607,6 +607,7 @@ public class DislocBean extends GenericSopacBean {
 	public PointEntry[] LoadDataFromUrl(String InputUrl) {
 		System.out.println("[LoadDataFromUrl] Creating Point Entry");
 		ArrayList dataset = new ArrayList();
+		ArrayList dataset_temp = new ArrayList();
 		try {
 			String line = new String();
 			int skipthreelines = 1;
