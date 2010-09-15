@@ -325,7 +325,7 @@ class RunautomatedDisloc extends Thread {
 		}	
 	}
 	
-	
+	/*
 	public void addFault(HashMap hm) {
 		
 		Set entryset = hm.entrySet();
@@ -375,6 +375,7 @@ class RunautomatedDisloc extends Thread {
 		}
 		// System.out.println("[addFault] " + i);
 	}
+	*/
 	
 	public void run() {
 		
@@ -431,7 +432,7 @@ class RunautomatedDisloc extends Thread {
 		System.out.println("[RunautomatedDisloc/run] the current time : " +  dateFormat.format(date));
 		
 		//1 hour = 3600000
-		 getDislocProjectSummaryBeanCount();
+		getDislocProjectSummaryBeanCount();
 		
 		if (date2.getTime() > 3600000) {
 			logwriter(logfile, dateFormat.format(date));
@@ -822,8 +823,8 @@ class RunautomatedDisloc extends Thread {
 				 System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] KmlUrl : " + myKmlUrl);
 				 // setJobToken(dislocResultsBean.getJobUIDStamp());
 			}
-			catch (Exception ex) {
-				 ex.printStackTrace();
+			catch (Exception e) {
+				 e.printStackTrace();
 			}
 			
 			ourls.setDisplacementkmlURL(myKmlUrl);
@@ -839,8 +840,8 @@ class RunautomatedDisloc extends Thread {
 				 System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] insarKmlUrl : " + insarKmlUrl);
 			}			
 			
-			catch (Exception ex) {
-				 ex.printStackTrace();
+			catch (Exception e) {
+				 e.printStackTrace();
 			}
 			
 			ourls.setInsarkmlURL(insarKmlUrl);
@@ -849,8 +850,8 @@ class RunautomatedDisloc extends Thread {
 			// setInsarKmlUrl(insarKmlUrl);
 			storeProjectInContext("automatedDisloc", projectName, dislocResultsBean.getJobUIDStamp(), currentParams, dislocResultsBean, myKmlUrl, insarKmlUrl, elevation, azimuth, frequency);
 			
-		} catch (Exception ex) {
-			 ex.printStackTrace();
+		} catch (Exception e) {
+			 e.printStackTrace();
 		}
 		System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] Finished");
 		
@@ -918,8 +919,7 @@ class RunautomatedDisloc extends Thread {
 		return (PointEntry[]) (dataset.toArray(new PointEntry[dataset.size()]));
 	}
 	
-	protected String createKml(DislocParamsBean dislocParams, DislocResultsBean dislocResultsBean, Fault[] faults, String projectName)
-			throws Exception {
+	protected String createKml(DislocParamsBean dislocParams, DislocResultsBean dislocResultsBean, Fault[] faults, String projectName) throws Exception {
 		System.out.println("[AutomatedDislocBean/createKml] Started");
 		System.out.println("[AutomatedDislocBean/createKml] Creating the KML file at " + kmlGeneratorUrl);
 		
