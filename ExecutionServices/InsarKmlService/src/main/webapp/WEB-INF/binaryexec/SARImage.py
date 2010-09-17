@@ -7,7 +7,7 @@
 # output: image 
 #
 # usage:
-#   python SARImage.py
+#   python SARImage.py (testing with default data set and parameters)
 #   python SARIMage.py dislocOutput imageURL
 #   python SARImage.py dislocOutput elevation(degree) azimuth(degree) radarFrequency(in GHz) imageURL
 #
@@ -16,7 +16,7 @@
 #   [dislocOutput].kml
 #============================================
 
-import csv, math, sys, os
+import csv, math, sys, os, math
 
 import numpy as np
 import matplotlib.cm as cm
@@ -29,6 +29,7 @@ def dxy2lonlat(xy, ref):
         convert dx, dy to lon, lat
         parameters: dx, dy, reflonlat
     """
+
     flattening = 1.0/298.247
     yfactor = 111.32
 
@@ -70,12 +71,61 @@ def generateKML(extent, outputname, imageurl):
     south = str(extent[2])
     north = str(extent[3])
     href = imageurl + "/" + outputname + ".png"
+    if imageurl == "":
+        href = outputname + ".png"
 
     #print kml % (north,south,east,west)
     kml = kml % (href, north,south,east,west)
     kmlf = open(outputname + ".kml",'w')
     kmlf.write(kml)
     kmlf.close()
+
+
+def color_wheel(fcw):
+    """ make goldstein color wheel """
+
+    #fcw=1 flips order of colors
+    wheel = [[None]*16 for i in range(3)]
+    for i in range(16):
+        if i==0:
+            ib=255
+            ir=ib
+            ig=ib
+        elif i>=1 and i<=5:
+            ib = 255
+            ir = (i-1)*51
+            ig = 255 - 51*(i-1)
+        elif i>=6 and i<=10:
+            ir = 255
+            ig = (i-6)*51
+            ib = 255 - (i-6)*51
+        elif i>=11 and i<=15:
+            ig = 255
+            ib = (i-11)*51
+            ir = 255 -(i-11)*51
+        else:
+            print "something wrong!"
+        wheel[0][i]=math.floor(ir/255.0*225)+30
+        wheel[1][i]=math.floor(ig/255.0*225)+30
+        wheel[2][i]=math.floor(ib/255.0*225)+30
+
+    if fcw == 1:
+        #flip the color wheel
+        for i in range(3):
+            junk = wheel[i][1:]
+            junk.reverse()
+            wheel[i][1:]=junk
+            
+    colormatrx = []
+    for j in range(256):
+        mag = math.floor(j/16)
+        i = j % 16
+        red = math.floor(mag/16.0*wheel[0][i]*16/15)
+        green = math.floor(mag/16.0*wheel[1][i]*16/15)
+        blue = math.floor(mag/16.0*wheel[2][i]*16/15)
+        colormatrx.append([red/255.0,green/255.0,blue/255.0])
+
+    return colormatrx
     
 def drawimage(datatable,lonlatgrid, outputname, imageurl):
     """
@@ -90,22 +140,40 @@ def drawimage(datatable,lonlatgrid, outputname, imageurl):
     xy0=min(xy)
     xy1=max(xy)
 
+##    z = np.array(data)
+##    z = z.reshape(lonlatgrid[1],lonlatgrid[0])
+##
+##    fig = plt.figure()
+##    fig.subplots_adjust(left=0.0,bottom=0.0,top=1.0,right=1.0)
+##
+##    im = plt.imshow(z,cmap=cm.jet,
+##                origin='lower', alpha=0.875,aspect="auto",interpolation=None, extent=[xy0[0],xy1[0],xy0[1],xy1[1]])
+##
+##    plt.axis("off")
+##    plt.savefig(outputname + ".png", format="PNG",transparent=True)
+##    #print xy0, xy1
+##    generateKML([xy0[0],xy1[0],xy0[1],xy1[1]],outputname, imageurl)
+
+    # new color wheel
     z = np.array(data)
-    z = z.reshape(lonlatgrid[1],lonlatgrid[0])
-
-    fig = plt.figure()
+    minz, maxz = min(z), max(z)
+    #scale it to [0~14]
+    z = np.fix((z-minz)/(maxz-minz)*14+ 0.001)
+    z = z.astype("int")
+    colormatrx = color_wheel(0)
+    # the brightness of colorwheel
+    p=14
+    colm = np.array(colormatrx[(p - 1)*16+1:p*16])
+    newimg = colm[z]
+    newimg = newimg.reshape(lonlatgrid[1],lonlatgrid[0],3)
+    # figsize
+    fig = plt.figure(figsize=(lonlatgrid[1]/12.0,lonlatgrid[0]/12.0))
     fig.subplots_adjust(left=0.0,bottom=0.0,top=1.0,right=1.0)
-
-    im = plt.imshow(z,cmap=cm.jet,
-                origin='lower', alpha=0.875,aspect="auto",interpolation=None, extent=[xy0[0],xy1[0],xy0[1],xy1[1]])
-
+    im = plt.imshow(newimg,interpolation='spline16',origin='lower')
     plt.axis("off")
-    plt.savefig(outputname + ".png", format="PNG",transparent=True)
-    #print xy0, xy1
-    generateKML([xy0[0],xy1[0],xy0[1],xy1[1]],outputname, imageurl)
+    plt.savefig(outputname + ".png", format="PNG",transparent=True,dpi=(96))
 
-    
-    
+    generateKML([xy0[0],xy1[0],xy0[1],xy1[1]],outputname, imageurl)
     
 def lineofsight (ele,azi,radarWL,disO,url):
     """
@@ -171,29 +239,31 @@ if __name__ == "__main__":
     if numargv == 1:
         ## ----- testing case ---##
         elevation = 60
-        azimuth = 0
+        azimuth = -5
         radarFrequency = 1.26*10**9
         radarWaveLength = 299792458.0/radarFrequency * 100.0
-        disclocOutput = "ShakeOutRuptureDetail2.output"
-	imageURL = "file://" + os.getcwd()
-        print "testing plot function with ShakeOutRuptureDetail2.output ..."
+        disclocOutput = "M61.output"
+        imageURL = "file://" + os.getcwd()
+        imageURL = ""
+        print "testing plot function with " + disclocOutput
     elif numargv == 3:
         elevation = 60
-        azimuth = 0
+        azimuth = -5
         radarFrequency = 1.26*10**9
         radarWaveLength = 299792458.0/radarFrequency * 100.0
         disclocOutput = sys.argv[1]
-	imageURL = sys.argv[2]
+        imageURL = sys.argv[2]
     elif numargv == 6:
         disclocOutput = sys.argv[1]
         elevation = float(sys.argv[2])
         azimuth = float(sys.argv[3])
         radarFrequency = float(sys.argv[4])*10**9 
         radarWaveLength = 299792458.0/radarFrequency * 100.0
-	imageURL = sys.argv[5]
+        imageURL = sys.argv[5]
 
     else:        
         sys.exit("not enough parameters!")
 
         
     lineofsight(elevation, azimuth,radarWaveLength,disclocOutput, imageURL)
+
