@@ -16,10 +16,11 @@
 #   [dislocOutput].kml 
 #============================================ 
  
-#============================================ 
+#===================================================== 
 # History: 
 #   2010/09/07: fix nan problem 
-#============================================ 
+#   2010/09/20: fix white stripes 
+#===================================================== 
  
 import csv, math, sys, os, math 
  
@@ -175,11 +176,11 @@ def drawimage(datatable,lonlatgrid, outputname, imageurl):
     newimg = colm[z] 
     newimg = newimg.reshape(lonlatgrid[1],lonlatgrid[0],3) 
     # figsize 
-    fig = plt.figure(figsize=(lonlatgrid[1]/12.0,lonlatgrid[0]/12.0)) 
+    fig = plt.figure(figsize=(lonlatgrid[0]/12.0,lonlatgrid[1]/12.0)) 
     fig.subplots_adjust(left=0.0,bottom=0.0,top=1.0,right=1.0) 
     im = plt.imshow(newimg,interpolation='spline16',origin='lower') 
     plt.axis("off") 
-    plt.savefig(outputname + ".png", format="PNG",transparent=True,dpi=(96)) 
+    plt.savefig(outputname + ".png", format="PNG",aspect="auto",transparent=True,dpi=(96)) 
  
     generateKML([xy0[0],xy1[0],xy0[1],xy1[1]],outputname, imageurl) 
      
