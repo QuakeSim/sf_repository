@@ -31,7 +31,7 @@ public class DislocResultsBean  implements java.io.Serializable {
            this.jobUIDStamp = jobUIDStamp;
            this.outputFileUrl = outputFileUrl;
            this.projectName = projectName;
-           this.stdoutUrl = stdoutUrl;
+           this.stdoutUrl = stdoutUrl;           
     }
 
 
