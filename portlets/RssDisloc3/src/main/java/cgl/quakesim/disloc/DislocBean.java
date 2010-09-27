@@ -746,8 +746,7 @@ public class DislocBean extends GenericSopacBean {
 		return dbs;
 	}
 
-	public String getDBValue(Select select, String param, String theLayer)
-	throws Exception {
+	public String getDBValue(Select select, String param, String theLayer) throws Exception {
 
 		String DB_RESPONSE_HEADER = "results of the query:";
 
@@ -757,6 +756,7 @@ public class DislocBean extends GenericSopacBean {
 		tmp = tmp.substring(DB_RESPONSE_HEADER.length() + 1);
 		tmp = tmp.substring(param.length() + 1);
 		tmp = tmp.trim();
+		
 		if (tmp != null && !tmp.equals("null")) {
 			return tmp.trim();
 		} else {
@@ -1451,7 +1451,7 @@ public class DislocBean extends GenericSopacBean {
 					 int index_e = 0;
 					 
 					 // System.out.println("hello. " + total_points);			 
-					 
+					 /*
 					 if (nA < 700) {
 						 // 700
 						 ratio = 0.5;
@@ -1486,6 +1486,9 @@ public class DislocBean extends GenericSopacBean {
 							 nIndex -= 1;							 
 					 }
 					 
+					 */
+					 dist = 1300;
+					 int nIndex = (int) ((total_points * ratio)/dist * nA) + index_e;
 					 dataset.add(dataset_temp.get(nIndex));
 					 
 				 }
@@ -2855,10 +2858,7 @@ public class DislocBean extends GenericSopacBean {
 				else
 					System.out.println("[" + getUserName() + "/RssDisloc3/DislocBean/toggleCopyRssProject] This project doesn't have a InsarParamsBean.");
 				
-				
-				
-				codedb.commit();			
-				
+				codedb.commit();					
 
 			} catch (Exception e) {
 				System.out.println("[" + getUserName() + "/RssDisloc3/DislocBean/toggleCopyRssProject] " + e);
