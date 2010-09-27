@@ -1,6 +1,7 @@
 package cgl.quakesim.automateddisloc;
 
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.rmi.server.UID;
@@ -28,6 +30,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Pattern;
+
+import javax.xml.rpc.ServiceException;
 
 
 import cgl.quakesim.disloc.DislocExtendedService;
@@ -87,6 +91,7 @@ class RunautomatedDisloc extends Thread {
 	DecimalFormat df = new DecimalFormat(".###");
 	String contextBasePath;
 	String url = "";
+	String tomcatbase;
 	
 	String dislocServiceUrl;
 	String dislocExtendedServiceUrl;
@@ -194,6 +199,7 @@ class RunautomatedDisloc extends Thread {
 		insarkmlServiceUrl = properties.getProperty("insarkmlServiceUrl"); 
 		rssdisloc_dir_name= properties.getProperty("rssdisloc.dir.name");
 		baseurl = properties.getProperty("baseurl");
+		tomcatbase = properties.getProperty("tomcat.base");
 		// insarKmlUrl = properties.getProperty("output.dest.dir");
 		// System.out.println("[getContextBasePath] " + properties.getProperty("output.dest.dir"));
 	}
@@ -204,6 +210,16 @@ class RunautomatedDisloc extends Thread {
 
 	public void setContextBasePath(String contextBasePath) {
 		this.contextBasePath = contextBasePath;
+	}
+	
+	
+
+	public String getTomcatbase() {
+		return tomcatbase;
+	}
+
+	public void setTomcatbase(String tomcatbase) {
+		this.tomcatbase = tomcatbase;
 	}
 
 	public void createProject(String[] arrayList) {
@@ -672,8 +688,9 @@ class RunautomatedDisloc extends Thread {
 				fault.setFaultLatEnd(lat_end);
 				
 				
-				String projectname =  entry.getTitle() + "(" + entry.getId().split(":")[3] + ")_n_DA" + (double)Math.round((double)fault.getFaultDipAngle()*1000)/1000 + "_SA" + (double)Math.round((double)fault.getFaultStrikeAngle()*1000)/1000 + "_DS" + (double)Math.round((double)fault.getFaultDipSlip()*1000)/1000 + "_SS" + (double)Math.round((double)fault.getFaultStrikeSlip()*1000)/1000;
-				// String projectname = entry.getTitle() + "(" + entry.getId().split(":")[3] + ")" + (nB+1);
+				String projectname =  entry.getTitle() + "(" + entry.getId().split(":")[3] + ")_n_DA" + (double)Math.round((double)fault.getFaultDipAngle()*1000)/1000 + "_SA" + (double)Math.round((double)fault.getFaultStrikeAngle()*1000)/1000 + "_DS" + (double)Math.round((double)fault.getFaultDipSlip()*1000)/1000 + "_SS" + (double)Math.round((double)fault.getFaultStrikeSlip()*1000)/1000 + "_CASE_" + nB;
+				// String projectname = entry.getTitle() + "_" + nB;
+				
 				
 				pns.add(projectname);
 				hm.put(projectname, fault);
@@ -697,6 +714,14 @@ class RunautomatedDisloc extends Thread {
 					tmp = new DislocParamsBean();
 					tmp.setOriginLat(fault.getFaultLatStart());
 					tmp.setOriginLon(fault.getFaultLonStart());
+					
+					tmp.setGridMinXValue(-100);
+					tmp.setGridMinYValue(-100);
+					tmp.setGridXIterations(420);
+					tmp.setGridXSpacing(0.5);
+					tmp.setGridYIterations(420);
+					tmp.setGridYSpacing(0.5);
+					
 					db.set(tmp);
 					db.commit();				
 					
@@ -713,6 +738,11 @@ class RunautomatedDisloc extends Thread {
 				// System.out.println("[addFault] " + e.getKey() + "/" + tmp.getOriginLat() + ", " + tmp.getOriginLon());
 				
 				OutputURLs ouls = null;
+				
+				// Now we assign x20 density by -100, -100, 0.5, 420. 09/22/2010 Jun Ji
+				
+
+				
 				
 				try {
 					ouls = runBlockingDislocJSF(projectname, tmp, fault, entry.getM(), nB);
@@ -790,6 +820,82 @@ class RunautomatedDisloc extends Thread {
 		createProject(str);	
 	}
 	
+	/*
+	private OutputURLs runBlockingDislocJSF(String projectName, DislocParamsBean currentParams, Fault fault, double M, int s_case) throws Exception {		
+		
+			
+			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] Started");
+			OutputURLs ourls = new OutputURLs();
+
+			try {
+
+				Fault[] faults = new Fault[1];
+				faults[0] = fault;
+				
+				ObsvPoint[] points = null;
+				DislocExtendedService dislocExtendedService = new DislocExtendedServiceServiceLocator().getDislocExtendedExec(new URL(dislocExtendedServiceUrl));
+				
+				System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] The project name: " + projectName);
+				System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] Faults : " + faults[0].getFaultName());
+				
+				
+				System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] projectName : " + projectName);
+				System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] points : " + points);
+				System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] faults : " + faults);
+				System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] currentParams : " + currentParams);
+
+				// This step runs disloc
+				DislocResultsBean dislocResultsBean = dislocExtendedService.runBlockingDislocExt("automatedDisloc", projectName, points, faults, currentParams, null);
+				// setJobToken(dislocResultsBean.getJobUIDStamp());
+				
+				System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] dislocResultsBean.getOutputFileUrl() :" + dislocResultsBean.getOutputFileUrl());
+				ourls.setDislocoutputURL(dislocResultsBean.getOutputFileUrl());
+
+				// This step makes the kml plots.  We allow this to fail.
+				String myKmlUrl = "";			
+				try {
+					 myKmlUrl = createKml(currentParams, dislocResultsBean, faults, projectName);
+					 System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] KmlUrl : " + myKmlUrl);
+					 // setJobToken(dislocResultsBean.getJobUIDStamp());
+				}
+				catch (Exception e) {
+					 e.printStackTrace();
+				}
+				
+				ourls.setDisplacementkmlURL(myKmlUrl);
+
+				// This step runs the insar plotting stuff.  We also allow this
+				// to fail.
+				InsarKmlService iks = new InsarKmlServiceServiceLocator().getInsarKmlExec(new URL(insarkmlServiceUrl));
+
+				insarKmlUrl="";
+				
+				try {
+					 insarKmlUrl = iks.runBlockingInsarKml("automatedDisloc", projectName, dislocResultsBean.getOutputFileUrl(), elevation, azimuth, frequency, "ExecInsarKml");
+					 System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] insarKmlUrl : " + insarKmlUrl);
+				}			
+				
+				catch (Exception e) {
+					 e.printStackTrace();
+				}
+				
+				ourls.setInsarkmlURL(insarKmlUrl);
+				// This sets the InSAR KML URL, which will be accessed by other
+				// pages.
+				// setInsarKmlUrl(insarKmlUrl);
+				storeProjectInContext("automatedDisloc", projectName, dislocResultsBean.getJobUIDStamp(), currentParams, dislocResultsBean, myKmlUrl, insarKmlUrl, elevation, azimuth, frequency);
+				
+			} catch (Exception e) {
+				 e.printStackTrace();
+			}
+			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] Finished");
+			
+			return ourls;
+		}
+		
+	*/
+	
+	// Using the pre-calculated insar images, disloc outputs. 09/23/2010 Jun Ji
 	
 	private OutputURLs runBlockingDislocJSF(String projectName, DislocParamsBean currentParams, Fault fault, double M, int s_case) throws Exception {
 		
@@ -802,7 +908,7 @@ class RunautomatedDisloc extends Thread {
 			faults[0] = fault;
 			
 			ObsvPoint[] points = null;
-			DislocExtendedService dislocExtendedService = new DislocExtendedServiceServiceLocator().getDislocExtendedExec(new URL(dislocExtendedServiceUrl));
+			
 			
 			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] The project name: " + projectName);
 			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] Faults : " + faults[0].getFaultName());
@@ -814,15 +920,13 @@ class RunautomatedDisloc extends Thread {
 			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] currentParams : " + currentParams);			
 
 			// This step runs disloc
+			// DislocExtendedService dislocExtendedService = new DislocExtendedServiceServiceLocator().getDislocExtendedExec(new URL(dislocExtendedServiceUrl));
 			// DislocResultsBean dislocResultsBean = dislocExtendedService.runBlockingDislocExt("automatedDisloc", projectName, points, faults, currentParams, null);
 			// setJobToken(dislocResultsBean.getJobUIDStamp());
 			
 			// 09/17/2010 We will assign pre-calculated dislocResultsBean
 			
-			DislocResultsBean dislocResultsBean = getDislocResultsBean(projectName, currentParams, faults, points, M, s_case);		
-			
-			// createDislocInputFile(String projectName, DislocParamsBean dislocParams, Fault[] faults, ObsvPoint[] obsvPoints, String jobUID) throws Exception {
-			
+			DislocResultsBean dislocResultsBean = getDislocResultsBean(projectName, currentParams, faults, points, M, s_case);	
 			
 			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] dislocResultsBean.getOutputFileUrl() :" + dislocResultsBean.getOutputFileUrl());
 			ourls.setDislocoutputURL(dislocResultsBean.getOutputFileUrl());
@@ -830,6 +934,7 @@ class RunautomatedDisloc extends Thread {
 			// This step makes the kml plots.  We allow this to fail.
 			String myKmlUrl = "";			
 			try {
+				// currentParams.
 				 myKmlUrl = createKml(currentParams, dislocResultsBean, faults, projectName);
 				 System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] KmlUrl : " + myKmlUrl);
 				 // setJobToken(dislocResultsBean.getJobUIDStamp());
@@ -848,6 +953,7 @@ class RunautomatedDisloc extends Thread {
 			insarKmlUrl= getPrecalculatednsar(projectName, fault.getFaultLonStart(), fault.getFaultLatStart(), M, s_case, dislocResultsBean.getJobUIDStamp(), dislocResultsBean);
 			
 			/*
+			
 			InsarKmlService iks = new InsarKmlServiceServiceLocator().getInsarKmlExec(new URL(insarkmlServiceUrl));			
 			
 			try {
@@ -859,6 +965,7 @@ class RunautomatedDisloc extends Thread {
 				 e.printStackTrace();
 			}
 			*/
+			
 			
 			ourls.setInsarkmlURL(insarKmlUrl);
 			// This sets the InSAR KML URL, which will be accessed by other
@@ -873,6 +980,9 @@ class RunautomatedDisloc extends Thread {
 		
 		return ourls;
 	}
+
+
+
 	
 	public Double[] dxy2lonlat(double x, double y, double reflon, double reflat) {
 		
@@ -880,14 +990,15 @@ class RunautomatedDisloc extends Thread {
 	    double yfactor = 111.32;
 	    
 	    double xfactor = 111.32*Math.cos(Math.toRadians(reflat))*(1.0 - flattening*Math.pow(Math.sin(Math.toRadians(reflat)), 2));
-	    System.out.println("xfacotr : " + xfactor);
+	    System.out.println("x, y : " + x + ", " + y);
+	    System.out.println("xfactor : " + xfactor);
 	    
 	    double lon2 = x/xfactor + reflon; 
 	    double lat2 = y/yfactor + reflat;
 	    
 	    System.out.println("lon : " + lon2);
 	    System.out.println("lat : " + lat2);
-	    Double results[] = null;
+	    Double results[] = new Double[2];
 	    results[0] = lon2;
 	    results[1] = lat2;
 	    
@@ -896,86 +1007,199 @@ class RunautomatedDisloc extends Thread {
 	
 	public String getPrecalculatednsar(String projectName, Double reflon, Double reflat, Double M, int s_case, String jobUID, DislocResultsBean drb) {		
 		
-		
-		
 		// http://156.56.104.99:8080//insarkmlservice/j.jun16@gmail.com/t1/-956396755/t1.output.png
-		String insarURL = "";
+		
+		File f = new File(tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case + "/M" + M + "_" + s_case + ".output.png");
+		String insarURL = null;
+		String insarimageURL = null;
+		
+		if (f.exists()) {		
 			
-		String north = "";
-		String south = "";
-		String east = "";
-		String west = "";
-		
-		Double ts[] = null;
-		ts = dxy2lonlat(-100, -100, reflon, reflat);
-		
-		west = ts[0].toString();
-		south = ts[1].toString();
-		
-		ts = dxy2lonlat(109.5, 109.5, reflon, reflat);
-		
-		east = ts[0].toString();
-		north = ts[1].toString();
-		
-		File d = new File(getContextBasePath() + "/insar/" + jobUID);		
-		if (!d.exists())
-			d.mkdirs();
-		
-		d = new File(getContextBasePath() + "/insar/" + jobUID + "/" + projectName + ".output.kml");
-		
-		insarURL = baseurl + "webapps/WebServices/WEB-INF/Descriptors/users/automatedDislocDB/insar/" + jobUID + "/" + projectName + ".output.kml";
-		
-		Kml doc = new Kml();
-		Folder root = new Folder();
-		Document kmlDocument=new Document();
-		
-		root.setName("root Folder");
-		root.setDescription("This is the root folder");
-		kmlDocument.addFolder(root);
-		doc.addDocument(kmlDocument);
-
-		PrintWriter out = null;
-		try {
-			out = new PrintWriter(new FileWriter(d));
-			out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-			out.println("<kml xmlns=\"http://earth.google.com/kml/2.2\">");
-			out.println("  <Folder>");
-			out.println("    <name>Ground Overlays</name>");
-			out.println("    <description>" + projectName + "</description>");
-			out.println("    <GroundOverlay>");
-			out.println("      <Icon>");
-			out.println("        <href>" + insarURL + "</href>");
-			out.println("      </Icon>");
-			out.println("      <LatLonBox>");
-			out.println("        <north>" + north + "</north>");
-			out.println("        <south>" + south + "</south>");
-			out.println("        <east>" + east + "</east>");
-			out.println("        <west>" + west + "</west>");
-			out.println("      </LatLonBox>");
-			out.println("    </GroundOverlay>");
-			out.println("  </Folder>");
-			out.println("</kml>");
-    
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("[AutomatedDislocBean/getPrecalculatednsar] " + projectName + " is using a precalculated insar image");
+			
+			String north = "";
+			String south = "";
+			String east = "";
+			String west = "";
+			
+			insarimageURL = baseurl + "/insar_precalculated/" + "M" + M + "_" + s_case + "/M" + M + "_" + s_case + ".output.png";
+			
+			
+			Double ts[] = null;
+			ts = dxy2lonlat(-100, -100, reflon, reflat);
+			
+			west = ts[0].toString();
+			south = ts[1].toString();
+			
+			ts = dxy2lonlat(109.5, 109.5, reflon, reflat);
+			
+			east = ts[0].toString();
+			north = ts[1].toString();
+			
+			File d = new File(tomcatbase + "/webapps/insar_precalculated/insar/" + jobUID);		
+			if (!d.exists())
+				d.mkdirs();
+			
+			d = new File(tomcatbase + "/webapps/insar_precalculated/insar/" + jobUID + "/" + projectName + ".output.kml");
+			
+			insarURL = baseurl + "/insar_precalculated/insar/" + jobUID + "/" + projectName + ".output.kml";
+			
+			Kml doc = new Kml();
+			Folder root = new Folder();
+			Document kmlDocument=new Document();
+			
+			root.setName("root Folder");
+			root.setDescription("This is the root folder");
+			kmlDocument.addFolder(root);
+			doc.addDocument(kmlDocument);
+			
+			PrintWriter out = null;
+			try {
+				out = new PrintWriter(new FileWriter(d));
+				out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				out.println("<kml xmlns=\"http://earth.google.com/kml/2.2\">");
+				out.println("  <Folder>");
+				out.println("    <name>Ground Overlays</name>");
+				out.println("    <description>" + projectName + "</description>");
+				out.println("    <GroundOverlay>");
+				out.println("      <Icon>");
+				out.println("        <href>" + insarimageURL + "</href>");
+				out.println("      </Icon>");
+				out.println("      <LatLonBox>");
+				out.println("        <north>" + north + "</north>");
+				out.println("        <south>" + south + "</south>");
+				out.println("        <east>" + east + "</east>");
+				out.println("        <west>" + west + "</west>");
+				out.println("      </LatLonBox>");
+				out.println("    </GroundOverlay>");
+				out.println("  </Folder>");
+				out.println("</kml>");
+	    
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	
+			out.flush();
+			out.close();
 		}
-
-		out.flush();
-		out.close();
+		
+		else {		
+			
+			System.out.println("[AutomatedDislocBean/getPrecalculatednsar] " + projectName + " is generating a new precalculated insar image");
+			
+			InsarKmlService iks;
+			try {
+				iks = new InsarKmlServiceServiceLocator().getInsarKmlExec(new URL(insarkmlServiceUrl));
+				insarURL = iks.runBlockingInsarKml("automatedDisloc", projectName, drb.getOutputFileUrl(), elevation, azimuth, frequency, "ExecInsarKml");
+				System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] insarKmlUrl : " + insarURL);
+				
+				f = new File(tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case);
+				if (!f.exists())
+					f.mkdirs();
+				
+				
+				File d = new File(tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case);		
+				if (!d.exists())
+					d.mkdirs();
+				
+				insarimageURL = insarURL.replace(".kml", ".png");
+				SavefileFromUrl(insarimageURL, tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case + "/M" + M + "_" + s_case + ".output.png");
+				
+								 
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ServiceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+			catch (Exception e) {
+				 e.printStackTrace();
+			}
+		}
 		
 		return insarURL;		
 	}
 	
+	
+	private void SavefileFromUrl(String inputUrl, String fileName)
+	{	
+			URL Url;
+			
+			try {
+				
+				Url = new URL(inputUrl);
+				
+				URLConnection Uc = Url.openConnection();
+				
+				FileOutputStream savedFile;
+				
+				int contentLength = 2048;
+				InputStream inStream = new BufferedInputStream(Uc.getInputStream());
+				
+				savedFile = new FileOutputStream(fileName);
+							
+				byte[] data = new byte[contentLength];
+				
+				int bytesRead = 0;
+				
+				while ((bytesRead = inStream.read(data, 0, contentLength)) > 0) {		    	
+					savedFile.write(data, 0, bytesRead);
+					savedFile.flush();					
+				}
+				
+				inStream.close();
+				savedFile.close();
+				
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+	}
+	
 	public DislocResultsBean getDislocResultsBean(String projectName, DislocParamsBean dislocParams, Fault[] faults, ObsvPoint[] obsvPoints, Double M, int s_case) throws Exception {
-		DislocResultsBean drb = new DislocResultsBean();
-		drb.setProjectName(projectName);
-		drb.setJobUIDStamp((new UID().toString()));
 		
-		drb.setInputFileUrl(createDislocInputFile(projectName, dislocParams, faults, obsvPoints, drb.getJobUIDStamp()));
+		File f = new File(tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case + "/M" + M + "_" + s_case + ".output");
+		DislocResultsBean drb = null;
 		
+		if (f.exists()) {
+			
+			System.out.println("[AutomatedDislocBean/getDislocResultsBean] " + projectName + " is using a precalculated disloc results");
+			
+			drb = new DislocResultsBean();
+			drb.setProjectName(projectName);
+			drb.setJobUIDStamp((new UID().toString()));
+			
+			drb.setInputFileUrl(createDislocInputFile(projectName, dislocParams, faults, obsvPoints, drb.getJobUIDStamp()));
+					
+			String outputurl = baseurl + "/insar_precalculated/" + "M" + M + "_" + s_case + "/M" + M + "_" + s_case + ".output";
+			String stdouturl = baseurl + "/insar_precalculated/" + "M" + M + "_" + s_case + "/M" + M + "_" + s_case + ".stdout";
+			
+			drb.setOutputFileUrl(outputurl);
+			drb.setStdoutUrl(stdouturl);
+		}
 		
-		drb.setOutputFileUrl("");
+		else {			
+			
+			System.out.println("[AutomatedDislocBean/getDislocResultsBean] " + projectName + " is generating a new precalculated disloc results");
+			
+			DislocExtendedService dislocExtendedService = new DislocExtendedServiceServiceLocator().getDislocExtendedExec(new URL(dislocExtendedServiceUrl));
+			drb = dislocExtendedService.runBlockingDislocExt("automatedDisloc", projectName, obsvPoints, faults, dislocParams, null);
+			
+			f = new File(tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case);
+			if (!f.exists())
+				f.mkdirs();
+			
+			SavefileFromUrl(drb.getOutputFileUrl(), tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case + "/M" + M + "_" + s_case + ".output");
+			
+			String stdout = drb.getOutputFileUrl().replace(".output", ".stdout");
+			SavefileFromUrl(stdout, tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case + "/M" + M + "_" + s_case + ".stdout");
+		}
+		
 		return drb;
 	}
 	
@@ -983,7 +1207,11 @@ class RunautomatedDisloc extends Thread {
 	private String createDislocInputFile(String projectName, DislocParamsBean dislocParams, Fault[] faults, ObsvPoint[] obsvPoints, String jobUID) throws Exception {
 
 				
-		String inputFile = getContextBasePath() + "/insar/" + jobUID + "/" + projectName + ".input";
+		File f = new File(tomcatbase + "/webapps/insar_precalculated/insar/" + jobUID + "/");
+		if (!f.exists())
+			f.mkdirs();
+		
+		String inputFile = tomcatbase + "/webapps/insar_precalculated/insar/" + jobUID + "/" + projectName + ".input";
 		System.out.println("Input File: "+inputFile);
 		PrintWriter pw=new PrintWriter(new FileWriter(inputFile),true);
 
@@ -1132,7 +1360,7 @@ class RunautomatedDisloc extends Thread {
 					 int index_e = 0;
 					 
 					 // System.out.println("hello. " + total_points);			 
-					 
+					 /*
 					 if (nA < 700) {
 						 // 700
 						 ratio = 0.5;
@@ -1167,6 +1395,9 @@ class RunautomatedDisloc extends Thread {
 							 nIndex -= 1;							 
 					 }
 					 
+					 */
+					 dist = 1300;
+					 int nIndex = (int) ((total_points * ratio)/dist * nA) + index_e;
 					 dataset.add(dataset_temp.get(nIndex));
 					 
 				 }
@@ -1278,12 +1509,7 @@ class RunautomatedDisloc extends Thread {
 			codedb = Db4o.openFile(getContextBasePath() + "/overm5_temp.db");			
 		
 			codedb.set(summaryBean);
-			
-			
 			codedb.set(ipb);
-
-			
-			
 
 			// Store the params bean for the current project,
 			// deleting any old one as necessary.
