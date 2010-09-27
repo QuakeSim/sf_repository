@@ -1113,7 +1113,7 @@ class RunautomatedDisloc extends Thread {
 			} catch (ServiceException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}			
+			}
 			catch (Exception e) {
 				 e.printStackTrace();
 			}
@@ -1212,6 +1212,7 @@ class RunautomatedDisloc extends Thread {
 			f.mkdirs();
 		
 		String inputFile = tomcatbase + "/webapps/insar_precalculated/insar/" + jobUID + "/" + projectName + ".input";
+		String inputFileUrl = baseurl + "/insar_precalculated/insar/" + jobUID + "/" + projectName + ".input";
 		System.out.println("Input File: "+inputFile);
 		PrintWriter pw=new PrintWriter(new FileWriter(inputFile),true);
 
@@ -1243,7 +1244,7 @@ class RunautomatedDisloc extends Thread {
 		printFaultParams(pw,faults);
 		pw.close();
 		
-		return inputFile;
+		return inputFileUrl;
 	}
 	
 	protected void printFaultParams(PrintWriter pw, Fault[] faults) throws Exception {
