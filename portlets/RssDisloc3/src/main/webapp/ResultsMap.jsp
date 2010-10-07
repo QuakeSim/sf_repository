@@ -143,7 +143,7 @@
 	  <div id="faultMapside" style="width: 300px; height: 800px; overflow:auto;"></div>
       </f:verbatim>
       <f:verbatim>
-	<div id="faultMap" style="width: 700px; height: 800px;"></div>
+	<div id="faultMap" style="width: 850px; height: 800px;"></div>
 	</f:verbatim> 
     </h:panelGrid>
   </f:verbatim>
