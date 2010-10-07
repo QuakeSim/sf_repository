@@ -935,7 +935,9 @@ class RunautomatedDisloc extends Thread {
 			String myKmlUrl = "";			
 			try {
 				// currentParams.
-				 myKmlUrl = createKml(currentParams, dislocResultsBean, faults, projectName);
+				
+				// Deprecated until we improve the KMLGenerator not to make the memory space error. Oct/07/2010				
+				 // myKmlUrl = createKml(currentParams, dislocResultsBean, faults, projectName);
 				 System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] KmlUrl : " + myKmlUrl);
 				 // setJobToken(dislocResultsBean.getJobUIDStamp());
 			}
