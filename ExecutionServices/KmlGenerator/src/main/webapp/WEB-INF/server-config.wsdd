@@ -42,6 +42,39 @@
   <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns1:ArrayOf_soapenc_string" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:java.lang.String[]" xmlns:ns1="urn:GatewayWS"/>
         <beanMapping qname="myNS:PointEntry" xmlns:myNS="urn:SimpleXDataKml" languageSpecificType="java:cgl.webservices.KmlGenerator.PointEntry"/>
  </service>
+
+
+
+ <service name="ExtendedKmlGenerator" provider="java:RPC">
+  <parameter name="allowedMethods" value="setOriginalCoordinate setCoordinateUnit setFaultPlot runMakeSubKmls"/>
+  <parameter name="scope" value="Session"/>
+  <parameter name="className" value="cgl.webservices.KmlGenerator.ExtendedSimpleXDataKml"/>
+  <typeMapping deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" qname="ns1:ArrayOf_soapenc_string" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" type="java:java.lang.String[]" xmlns:ns1="urn:GatewayWS"/>
+  <beanMapping qname="myNS:PointEntry" xmlns:myNS="urn:SimpleXDataKml" languageSpecificType="java:cgl.webservices.KmlGenerator.PointEntry"/>
+
+      <arrayMapping
+        xmlns:ns="http://KmlGenerator.webservices.cgl"
+        qname="ns:ArrayOfPointEntry"
+        type="java:cgl.webservices.KmlGenerator.PointEntry[]"
+        innerType="cmp-ns:PointEntry" xmlns:cmp-ns="http://KmlGenerator.webservices.cgl"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://KmlGenerator.webservices.cgl"
+        qname="ns:PointEntry"
+        type="java:cgl.webservices.KmlGenerator.PointEntry"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+
+
+
+
+ </service>
+
+
+
  <transport name="http">
   <requestFlow>
    <handler type="URLMapper"/>

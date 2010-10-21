@@ -50,13 +50,11 @@ public class SimpleXDataKml {
 	private double latref = 0; 
 	private double lonref = 0; 
  
-	private Kml doc = new Kml(); 
-	 
-	private Folder root = new Folder(); 
-	 
-	private Document kmlDocument=new Document(); 
+	protected Kml doc = new Kml(); 	 
+	protected Folder root = new Folder(); 	 
+	protected Document kmlDocument=new Document(); 
  
-	private PointEntry[] datalist = null; 
+	protected PointEntry[] datalist = null; 
 	 
 	private String serverUrl;	 
 	private String baseOutputDestDir; 
@@ -81,7 +79,20 @@ public class SimpleXDataKml {
  
 	public SimpleXDataKml(boolean useClassLoader) { 
 		init(useClassLoader); 
-	} 
+	}
+	
+	public void doc_init(){
+		
+		doc = new Kml();
+		kmlDocument=new Document();
+		root = new Folder();
+		
+		
+		root.setName("root Folder");
+		root.setDescription("This is the root folder");
+		kmlDocument.addFolder(root);
+		doc.addDocument(kmlDocument);
+	}
  
 	public SimpleXDataKml(String OriginalLon, String OriginalLat, boolean useClassLoader) { 
 		this.setOriginal_lon(OriginalLon); 
@@ -166,13 +177,11 @@ public class SimpleXDataKml {
 		 
 		 */
 	}
-	 
-
- 
 	  
-	 public void setDatalist(PointEntry[] InputDataList) { 
+	 public void setDatalist(PointEntry[] InputDataList) {
 		 datalist = InputDataList; 
-	 } 
+		 System.out.println("datalist.length = " + datalist.length);
+	 }
 	  
 	 public String runMakeKml (String ServerTag,String UserName, String ProjectName, String JobUID) {
 		 System.out.println("[SimpleXDataKml/runMakeKml] started");		  
@@ -180,7 +189,7 @@ public class SimpleXDataKml {
 		 String baseUrl=generateBaseUrl(ServerTag,UserName,ProjectName,JobUID); 
 		  
 		 try{ 
-			 makeWorkDir(destDir);			  
+			 makeWorkDir(destDir);
 		 } 
 		  
 		 catch (Exception e) { 
@@ -299,8 +308,7 @@ public class SimpleXDataKml {
 					// Extract the Servlet Context 
 					// System.out.println("Using Servlet Context"); 
 					MessageContext msgC = MessageContext.getCurrentContext(); 
-					ServletContext context = ((HttpServlet) msgC.getProperty(HTTPConstants.MC_HTTP_SERVLET)) 
-						 .getServletContext(); 
+					ServletContext context = ((HttpServlet) msgC.getProperty(HTTPConstants.MC_HTTP_SERVLET)).getServletContext(); 
 					String propertyFile = context.getRealPath("/") + "/WEB-INF/classes/kmlgenerator.properties"; 
 					System.out.println("Prop file location " + propertyFile); 
 					properties = new Properties(); 
@@ -319,10 +327,7 @@ public class SimpleXDataKml {
 		 catch (Exception ex) { 
 			  ex.printStackTrace(); 
 		 } 
-		 root.setName("root Folder"); 
-		 root.setDescription("This is the root folder"); 
-		 kmlDocument.addFolder(root); 
-		 doc.addDocument(kmlDocument); 
+		 doc_init();
 		 System.out.println("----------------------------------"); 
 		 System.out.println("Initializing KML service finished."); 
 		 System.out.println("----------------------------------"); 
@@ -373,6 +378,7 @@ public class SimpleXDataKml {
 			container.setDescription("This is a folder contained by the root"); 
 			root.addFolder(container); 
 		} else { 
+			System.out.println("roooooooot debug point");
 			container = root; 
 		} 
 		setLineStyle(container, "GridLineStyle", "5f1478DC", 2); 
@@ -501,7 +507,8 @@ public class SimpleXDataKml {
 		} 
 		set360IconStyle(serverUrl+"/icon/base_green",".png","pointstyle"); 
 		 
-		//set360IconStyle(container,"http://156.56.104.146/maps/"+"/icon/base_green",".png","pointstyle"); 
+		//set360IconStyle(container,"http://156.56.104.146/maps/"+"/icon/base_green",".png","pointstyle");
+		System.out.println("datalist.length = " + datalist.length);
 		for (int i = 0; i < datalist.length; i++) { 
 			// create and add a Placemark containing a Point 
 			Placemark mark1 = new Placemark(); 
@@ -604,53 +611,17 @@ public class SimpleXDataKml {
 	 
 	 public void setArrowPlacemark(String folderName, String LineColor, double LineWidth) { 
 		  setArrowPlacemark(folderName, LineColor, LineWidth, defaultArrowScale); 
-	 } 
-
+	 }
 	 
 	 public void setArrowPlacemark(String folderName, String LineColor, double LineWidth, double arrowScale) {
 		 
-		 System.out.println("[SimpleXDataKml/setArrowPlacemark] started");		 
-		 Folder container = new Folder();
-		 if (!folderName.equals("") && !folderName.equals("null")) { 
-	 
-			container.setName(folderName); 
-			container.setDescription("This is a folder contained by the root"); 
-			root.addFolder(container); 
-			} else { 
-			container = root; 
-			} 
-			
-			//This isn't done correctly so disable in anticipation of future brilliance. 
-			String linestyleid="arrowedStyle"; 
-			
-			//String linestyleid=""; 
-			// System.out.println("[SimpleXDataKml/setArrowPlacemark] Color and width for arrowed: "+LineColor+" "+LineWidth);
-			// setLineStyle(container, linestyleid, LineColor, LineWidth);
-			
-			// System.out.println("[SimpleXDataKml/setArrowPlacemark] Color and width for arrowed: "+linestyleid+" "+LineColor+" "+LineWidth);
-			Style gridlineStyle = new Style();
-			gridlineStyle.setId(linestyleid);
-			LineStyle newlineStyle = new LineStyle();
-			newlineStyle.setWidth((float) (LineWidth));
-			newlineStyle.setColor(LineColor);
-			gridlineStyle.addLineStyle(newlineStyle);
-			// curfolder.addStyle(gridlineStyle);
-			
-			PolyStyle ps = new PolyStyle();
-			ps.setFill(true);
-			ps.setColor(LineColor);
-			
-			gridlineStyle.addPolyStyle(ps);
-			
-			kmlDocument.addStyle(gridlineStyle);
-						
 			double longestlength = 0.;
 			double projectMinX=Double.valueOf(datalist[0].getX());
 			double projectMaxX=Double.valueOf(datalist[0].getX());
 			double projectMinY=Double.valueOf(datalist[0].getY());
 			double projectMaxY=Double.valueOf(datalist[0].getY());
 			
-			// System.out.println("[SimplexDataKml/setArrowPlacemark] datalist.length : " + datalist.length);
+			System.out.println("[SimplexDataKml/setArrowPlacemark] datalist.length : " + datalist.length);
 			for (int i = 0; i < datalist.length; i++) {
 				
 				double x=Double.valueOf(datalist[i].getX());
@@ -684,7 +655,51 @@ public class SimpleXDataKml {
 			//project dimension.
 			double scaling = 0.7*projectLength/longestlength;
 			
-			System.out.println("[SimplexDataKml/setArrowPlacemark] projectLength : " + projectLength);
+			System.out.println("[SimplexDataKml/setArrowPlacemark] projectLength : " + projectLength);			
+			
+			setArrowPlacemarkProcess(folderName, LineColor, LineWidth, arrowScale, longestlength, scaling);			
+	 }
+	 
+	 public void setArrowPlacemarkProcess(String folderName, String LineColor, double LineWidth, double longestlength, double scaling) {
+		 setArrowPlacemarkProcess(folderName, LineColor, LineWidth, arrowScale, longestlength, scaling);		 
+	 }
+	 
+	 public void setArrowPlacemarkProcess(String folderName, String LineColor, double LineWidth, double arrowScale, double longestlength, double scaling) {
+		 
+		 System.out.println("[SimpleXDataKml/setArrowPlacemark] started");
+		 Folder container = new Folder();
+		 if (!folderName.equals("") && !folderName.equals("null")) { 
+	 
+			container.setName(folderName); 
+			container.setDescription("This is a folder contained by the root"); 
+			root.addFolder(container); 
+			} else {
+				container = root; 
+			}
+			
+			//This isn't done correctly so disable in anticipation of future brilliance. 
+			String linestyleid="arrowedStyle"; 
+			
+			//String linestyleid=""; 
+			// System.out.println("[SimpleXDataKml/setArrowPlacemark] Color and width for arrowed: "+LineColor+" "+LineWidth);
+			// setLineStyle(container, linestyleid, LineColor, LineWidth);
+			
+			// System.out.println("[SimpleXDataKml/setArrowPlacemark] Color and width for arrowed: "+linestyleid+" "+LineColor+" "+LineWidth);
+			Style gridlineStyle = new Style();
+			gridlineStyle.setId(linestyleid);
+			LineStyle newlineStyle = new LineStyle();
+			newlineStyle.setWidth((float) (LineWidth));
+			newlineStyle.setColor(LineColor);
+			gridlineStyle.addLineStyle(newlineStyle);
+			// curfolder.addStyle(gridlineStyle);
+			
+			PolyStyle ps = new PolyStyle();
+			ps.setFill(true);
+			ps.setColor(LineColor);
+			
+			gridlineStyle.addPolyStyle(ps);
+			
+			kmlDocument.addStyle(gridlineStyle);
 			
 			
 			//		System.out.println("Scale rate: "+scaling+" "+longestlength+" "+projectLength);
@@ -745,7 +760,7 @@ public class SimpleXDataKml {
 				
 				LineString newline = new LineString();
 	
-				mark1.setStyleUrl("#"+linestyleid);			
+				mark1.setStyleUrl("#"+linestyleid);
 				
 				
 				double startx = x;
@@ -841,31 +856,22 @@ public class SimpleXDataKml {
 				line_value+=headerLonP1+","+headerLatP1+",0 ";
 				line_value+=headerLonP2+","+headerLatP2+",0 ";
 				
-				
-				
-	
-				
 				MultiGeometry mg = new MultiGeometry();
 				mg.addLineString(newline);
 				mg.addPolygon(p);
-	
-				mark1.addMultiGeometry(mg);  
 				
+				mark1.addMultiGeometry(mg);
 				
 				lr.setCoordinates(line_value);
-				ob.addLinearRing(lr);			
+				ob.addLinearRing(lr);
 				p.addOuterBoundaryIs(ob);
 				// mark1.addPolygon(p);
 				container.addPlacemark(mark1);
-			
-			
+				
 			}
-			System.out.println("[SimplexDataKml/setArrowPlacemark] Finished");
 			
+			System.out.println("[SimplexDataKml/setArrowPlacemark] Finished");
 	 }
- 
-	 
-	 
 	 
 	 
 	 /* Deprecated 06/21/2010 by Jun Ji
@@ -1084,7 +1090,7 @@ public class SimpleXDataKml {
 	}
 	*/ 
  
-	public ArrowLine CreateArrowByCoordinate(double startx, double starty, 
+	private ArrowLine CreateArrowByCoordinate(double startx, double starty, 
 			double endx, double endy) { 
 		ArrowLine myArrow = new ArrowLine(); 
  
@@ -1239,7 +1245,7 @@ public class SimpleXDataKml {
  
 	} 
  
-	private void makeWorkDir(String workDir) throws Exception { 
+	protected void makeWorkDir(String workDir) throws Exception { 
  
 		System.out.println("[SimplexDataKml/makeWorkDir] Working Directory is " + workDir); 
 		new File(workDir).mkdirs(); 
