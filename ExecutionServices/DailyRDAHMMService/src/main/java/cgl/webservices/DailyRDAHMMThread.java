@@ -78,7 +78,7 @@ public class DailyRDAHMMThread implements Runnable {
 						
 						// draw the plot for number of stations with state changes vs time
 						String scnPath = DailyRDAHMMStation.stateChangeNumTracePath;
-						saveStateChangeNums(scnPath);
+						saveStateChangeNums(scnPath, DailyRDAHMMStation.stateChangeNumJsiPath);
 						plotStateChangeNums(scnPath, DailyRDAHMMStation.binDir);
 						runner.stateChangeNums.clear();
 						runner.saveStationXml();
@@ -508,6 +508,10 @@ public class DailyRDAHMMThread implements Runnable {
 			String scnPath = DailyRDAHMMStation.stateChangeNumTracePath;
 			tmpNode.setText(scnPath.substring(scnPath.lastIndexOf(File.separator)+1));
 			
+			tmpNode = elePattern.addElement("stateChangeNumJsInput");
+			String scnJsiPath = DailyRDAHMMStation.stateChangeNumJsiPath;
+			tmpNode.setText(scnJsiPath.substring(scnJsiPath.lastIndexOf(File.separator)+1));
+			
 			tmpNode = elePattern.addElement("allStationInputName");
 			tmpNode.setText(DailyRDAHMMStation.allStationInputName);
 			
@@ -534,7 +538,7 @@ public class DailyRDAHMMThread implements Runnable {
 			tmpNode = elePattern.addElement("RawInputFile");
 			tmpNode.setText(proNamePat + ".all.raw");
 			tmpNode = elePattern.addElement("SwfInputFile");
-			tmpNode.setText(proNamePat + ".all.swf.input");
+			tmpNode.setText(proNamePat + ".plotswf.input");
 			tmpNode = elePattern.addElement("LFile");
 			tmpNode.setText(modelBasePat + ".L");			
 			tmpNode = elePattern.addElement("XPngFile");
@@ -778,7 +782,7 @@ public class DailyRDAHMMThread implements Runnable {
 	}
 	
 	// save the state change numbers to a file
-	protected void saveStateChangeNums(String filePath) {
+	protected void saveStateChangeNums(String scnPath, String jsiPath) {
 		Calendar calTmp = UtilSet.getDateFromString(DailyRDAHMMStation.defaultModelStartDate);
 		Calendar calToday = Calendar.getInstance();
 		calToday.set(Calendar.HOUR_OF_DAY, 12);
@@ -787,21 +791,27 @@ public class DailyRDAHMMThread implements Runnable {
 		calToday.set(Calendar.MILLISECOND, 0);
 		
 		try {
-			FileWriter fw = new FileWriter(filePath, false);
+			FileWriter fw = new FileWriter(scnPath, false);
+			FileWriter fwJsi = new FileWriter(jsiPath, false);
+			fwJsi.write("Date,Count");
 			synchronized (runner.stateChangeNums) {
 				while (calTmp.compareTo(calToday) <= 0) {
 					String strDate = UtilSet.getDateString(calTmp);
 					fw.write(strDate + " ");
+					fwJsi.write(strDate + ","); 
 					if (runner.stateChangeNums.containsKey(strDate)) {
-						fw.write(runner.stateChangeNums.get(strDate).intValue() + "\n");
+						String count = runner.stateChangeNums.get(strDate).toString();
+						fw.write(count + "\n");
+						fwJsi.write(count + "\n");
 					} else {
 						fw.write("0\n");
+						fwJsi.write("0\n");
 					}				
 					calTmp.set(Calendar.DATE, calTmp.get(Calendar.DATE) + 1);
 				}
 			}
-			fw.flush();
 			fw.close();
+			fwJsi.close();
 		} catch (Exception e){
 			e.printStackTrace();
 		}

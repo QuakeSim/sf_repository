@@ -42,6 +42,9 @@ public class DailyRDAHMMStation {
 	static String stateChangeXMLPath;
 	/** path to the file containing the trace of number of state changes of the whole network */
 	static String stateChangeNumTracePath;
+	/** path to the file containing the trace of number of state changes of the whole network, 
+	 * input for plotting Javascript in the portal */
+	static String stateChangeNumJsiPath;
 	/** name of the file containing all station's input. this file is saved under baseDestDir */
 	static String allStationInputName;
 	/** GRWS context group name for the input GPS data corresponding to dataSource */
@@ -193,6 +196,7 @@ public class DailyRDAHMMStation {
 		modelDatesFilePath = prop.getProperty("dailyRdahmm.model.datesFile");
 		stateChangeXMLPath = prop.getProperty("dailyRdahmm.stateChangeXML.path");
 		stateChangeNumTracePath = prop.getProperty("dailyRdahmm.stateChangeNumTrace.path");
+		stateChangeNumJsiPath = prop.getProperty("dailyRdahmm.stateChangeNumJsi.path");
 		allStationInputName = prop.getProperty("dailyRdahmm.allStationInput.name");
 		inputContextGroup = prop.getProperty("dailyRdahmm.input.contextGroup");
 		inputContextId = prop.getProperty("dailyRdahmm.input.contextId");
@@ -448,7 +452,7 @@ public class DailyRDAHMMStation {
 			return res;
 		}
 		
-		res = compositePostDnRawFile(nanRawPath, dnPchOutputPath, outputPath);
+		res = composePostDnRawFile(nanRawPath, dnPchOutputPath, outputPath);
 		if (!res) {
 			System.out.println("Failed to detrend the raw input file, error when compositing the de-trended raw input!");
 		}
@@ -509,7 +513,7 @@ public class DailyRDAHMMStation {
 				lineDt = lineDt.trim();
 				lineDn = lineDn.trim();
 				// if the de-trended data is "NaN NaN NaN", just copy it to the patched results 
-				if (lineDt.indexOf("NaN") >= 0) {
+				if (lineDt.indexOf(nan) >= 0) {
 					pwPch.println(lineDt);
 				} else {
 					StringTokenizer st = new StringTokenizer(lineDn);
@@ -563,28 +567,28 @@ public class DailyRDAHMMStation {
 	 * @param dnPatchPath
 	 * @return
 	 */
-	protected boolean compositePostDnRawFile(String nanRawPath, String dnPatchPath, String outputPath) {
+	protected boolean composePostDnRawFile(String nanRawPath, String dnPatchPath, String outputPath) {
 		BufferedReader brRaw = null;
-		BufferedReader brDt = null;
+		BufferedReader brDn = null;
 		PrintWriter pwOut = null;
 		try {
 			brRaw = new BufferedReader(new FileReader(nanRawPath));
-			brDt = new BufferedReader(new FileReader(dnPatchPath));
+			brDn = new BufferedReader(new FileReader(dnPatchPath));
 			pwOut = new PrintWriter(new FileWriter(outputPath));
 			
 			//lineRaw: "dond 2007-02-22T12:00:00 -2517566.0543 -4415531.3935 3841177.1618 0.0035 0.0055 0.0047"
 			String lineRaw = brRaw.readLine();
-			String lineDt = brDt.readLine();
+			String lineDn = brDn.readLine();
 			while (lineRaw != null) {
-				if (lineDt == null) {
+				if (lineDn == null) {
 					System.out.println("Error when composite de-trended raw input: unequal lines of input!");
 					return false;
 				}
 				lineRaw = lineRaw.trim();
-				lineDt = lineDt.trim();
-				if (lineRaw.length() == 0  || lineDt.length() == 0 || lineRaw.indexOf("NaN") >= 0) {
+				lineDn = lineDn.trim();
+				if (lineRaw.length() == 0  || lineDn.length() == 0 || lineRaw.indexOf("NaN") >= 0) {
 					lineRaw = brRaw.readLine();
-					lineDt = brDt.readLine();
+					lineDn = brDn.readLine();
 					continue;
 				}
 				int idx1 = lineRaw.indexOf(' ');
@@ -592,11 +596,11 @@ public class DailyRDAHMMStation {
 				int idx3 = lineRaw.indexOf(' ', idx2+1);
 				int idx4 = lineRaw.indexOf(' ', idx3+1);
 				int idx5 = lineRaw.indexOf(' ', idx4+1);
-				String newLine = lineRaw.substring(0, idx2) + ' ' + lineDt + lineRaw.substring(idx5);
+				String newLine = lineRaw.substring(0, idx2) + ' ' + lineDn + lineRaw.substring(idx5);
 				pwOut.println(newLine);
 				
 				lineRaw = brRaw.readLine();
-				lineDt = brDt.readLine();
+				lineDn = brDn.readLine();
 			}
 			return true;
 		} catch (Exception e) {
@@ -606,8 +610,8 @@ public class DailyRDAHMMStation {
 			try {
 				if (brRaw != null)
 					brRaw.close();
-				if (brDt != null)
-					brDt.close();
+				if (brDn != null)
+					brDn.close();
 				if (pwOut != null)
 					pwOut.close();
 			} catch (Exception e) {
@@ -779,7 +783,7 @@ public class DailyRDAHMMStation {
 			// make input for the swf plotting component
 			String allQPath = evalDir + File.separator + projectName + ".all.Q";
 			String allRawPath = evalDir + File.separator + projectName + ".all.raw";
-			String plotSwfInputPath = evalDir + File.separator + projectName + ".all.swf.input";
+			String plotSwfInputPath = evalDir + File.separator + projectName + ".plotswf.input";
 			makePlotSwfInput(allQPath, allRawPath, plotSwfInputPath);
 			
 			// plot evaluation results
@@ -928,7 +932,7 @@ public class DailyRDAHMMStation {
 					new File(proDir + File.separator + modelBaseName + ".A"));
 			UtilSet.copyFileToFile(new File(modelDir + File.separator + modelBaseName + ".B"), 
 					new File(proDir + File.separator + modelBaseName + ".B"));
-			UtilSet.copyFileToFile(new File(modelDir + File.separator + modelBaseName + ".L"), 
+			UtilSet.copyFileToFile(new File(modelDir + File.separator + modelBaseName + ".L"),
 					new File(proDir + File.separator + modelBaseName + ".L"));
 			UtilSet.copyFileToFile(new File(modelDir + File.separator + modelBaseName + ".maxval"), 
 					new File(proDir + File.separator + modelBaseName + ".maxval"));
