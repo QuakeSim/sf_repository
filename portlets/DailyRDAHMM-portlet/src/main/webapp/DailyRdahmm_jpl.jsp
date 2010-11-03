@@ -28,6 +28,7 @@
     src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>
 	<script src="http://local.hostname/DailyRDAHMM-portlet/NmapAPI.js" type="text/javascript"></script>
 	<script src="http://local.hostname/DailyRDAHMM-portlet/dateUtil.js" type="text/javascript"></script>
+	<script src="http://danvk.org/dygraphs/dygraph-combined.js" type="text/javascript"></script>
 	</head>
 	<body>
 
@@ -150,16 +151,13 @@
 		} else {
 			return;
 		}
-  	
-		var tmpDate = null;
+
 		var str = document.getElementById("dateText").value;
-		if (validDateStr(str)) {
-			tmpDate = getDateFromString(str); 			
-		} else {
+		var tmpDate = getDateFromString(str);
+		if (isNaN(tmpDate.getDate())) {
 			var slider_val = slider.getValue();
 			var endDate = new Date();
 			var timeSinceStart = slider_val * (endDate.getTime() - modelStartDate.getTime()) / slider_range;
-			tmpDate = new Date();
 			tmpDate.setTime(modelStartDate.getTime() + timeSinceStart);
 		}
   	
@@ -280,7 +278,7 @@
 					</tr>
 					<tr valign="top" style="display: none">
 						<td valign="top" align="center">
-						<img id="scnPlotImg" align="middle" src="">
+						<div id="scnPlotDiv" align="middle" src="">
 						<br/>
 						<table border="1" valign="top" align="center" width="765">
 							<tr>
@@ -456,8 +454,8 @@
         var fromDate = getDateFromString(fromDateStr);
         var toDate = getDateFromString(toDateStr);
 
-		if (!validDateStr(fromDateStr) || !validDateStr(toDateStr)) {
-			alert("Please input the dates in the format like 'yyyy-mm-dd'");
+		if (isNaN(fromDate.getDate()) || isNaN(toDate.getDate())) {
+			alert("Please input the dates in the format of 'yyyy-mm-dd', 'yyyy/MM/dd', 'MM/dd/yyyy', 'MMMM dd, yyyy', or 'MMM dd, yyyy'");
 			return;
 		}
 		if (fromDate < modelStartDate || fromDate > today || toDate < modelStartDate || toDate > today) {
@@ -495,12 +493,12 @@
 		var dateTxt = document.getElementById("dateText");
 		if(keynum == 13 && targ == dateTxt) {
 			var str = dateTxt.value;
-			if (!validDateStr(str)) {
-				alert("Please input the date in the format like 'yyyy-mm-dd'");
-				return;
-			}
 			if (str != dateTxt.getAttribute("value")) {
 				var tmpDate = getDateFromString(str);
+				if (isNaN(tmpDate.getDate()) {
+					alert("Please input the dates in the format of 'yyyy-mm-dd', 'yyyy/MM/dd', 'MM/dd/yyyy', 'MMMM dd, yyyy', or 'MMM dd, yyyy'");
+					return;
+				}
 				var today = new Date();
 				today.setHours(12);
 				today.setMinutes(0);
@@ -518,29 +516,7 @@
 			}
 		}
 	}
-        
-	// check if a string is in the right date format
-	function validDateStr(dateStr) {
-		var i1, i2;     	
-      	
-		i1 = dateStr.indexOf("-");
-		if (i1 < 0 || i1 == dateStr.length - 1)
-			return false;
-        	
-		i2 = dateStr.indexOf("-", i1+1);
-		if (i2 < 0 || i2 == dateStr.length - 1 || i2-i1 > 3 || i2-i1 < 2)
-			return false;
-        		
-		var j;
-		// charCode: 0:48; 9:57
-		for (j=0; j<dateStr.length; j++) {
-			if (!(dateStr.charCodeAt(j) >= 48 && dateStr.charCodeAt(j) <= 57) && j != i1 && j != i2)
-				return false;
-		}
-        			
-		return true;
-	}
-        
+
 	// if the date is like '2007-02-02', remove the '0's before '2's
 	function simplifyDateStr(dateStr) {
 		var str;
@@ -556,7 +532,7 @@
         		
 		return str;       		
 	}
-        
+
 	/* The status change xml file is formated like:
 	<xml>
 		<output-pattern>
@@ -629,20 +605,37 @@
 			sb.append(br.readLine());
 		}
 		SAXReader reader = new SAXReader();
-		statusDoc = reader.read( new StringReader(sb.toString()) );          
+		statusDoc = reader.read( new StringReader(sb.toString()) );
+		Element eleXml = statusDoc.getRootElement();
+		Element eleOutput = eleXml.element("output-pattern");
+
+		// download the state change number input file for the plotting javascript
+		String outputUrlPattern = eleOutput.element("server-url").getText();
+		String scnJsiFileName = eleOutput.element("stateChangeNumJsInput").getText();                  
+		String scnJsiUrl = outputUrlPattern + "/" + scnJsiFileName;                                    
+		
+		File localScnJsiFile = new File(config.getServletContext().getRealPath(scnJsiFileName));
+		InputStream inScnJsiUrl = new URL(scnJsiUrl).openStream();
+		OutputStream outLocalScnJsiFile = new FileOutputStream(localScnJsiFile);
+		byte[] buf2 = new byte[1024];
+		int length2;
+		while((length2 = inScnJsiUrl.read(buf2))>0) {
+			outLocalScnJsiFile.write(buf2,0,length2);
+		}
+        inScnJsiUrl.close();
+		outLocalScnJsiFile.close();
 	} catch (DocumentException ex) {
 		ex.printStackTrace();
 	}
-	Element eleXml = statusDoc.getRootElement();
-	Element eleOutput = eleXml.element("output-pattern");
 %>
 	var xmlResultUrl = "<%=xmlUrl%>"; 
 	var urlPattern = '<%=eleOutput.element("server-url").getText()%>';
-	var scnPattern = '<%=eleOutput.element("stateChangeNumTxtFile").getText()%>';
+	var scnPattern = '<%=eleOutput.element("stateChangeNumJsInput").getText()%>';
 	var videoUrl = '<%=eleOutput.element("video-url").getText()%>';
 	var allInputPattern = '<%=eleOutput.element("allStationInputName").getText()%>';
 	
-	document.getElementById("scnPlotImg").src = urlPattern + "/" + scnPattern + ".png";
+	//document.getElementById("scnPlotImg").src = urlPattern + "/" + scnPattern + ".png";
+	var scnPlotGraph = new Dygraph(document.getElementById("scnPlotDiv"), scnPattern, {});
 	document.getElementById("scnTxtLink").href = urlPattern + "/" + scnPattern;
 	document.getElementById("videoLink").href = videoUrl;
 	document.getElementById("allInputLink").href = urlPattern + "/" + allInputPattern;
