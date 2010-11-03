@@ -1,5 +1,13 @@
 #!/bin/sh
 
+if [ $# -lt 2 ]
+then
+    echo "Error in $0 - Invalid Argument Count"
+	echo "Syntax: $0 <sub-directory name for the results> <property file name>"
+	exit
+fi
+
+
 SUBDIR=$1
 PROPFILE=$2
 

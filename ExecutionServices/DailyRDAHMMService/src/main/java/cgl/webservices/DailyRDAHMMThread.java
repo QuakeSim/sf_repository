@@ -793,7 +793,7 @@ public class DailyRDAHMMThread implements Runnable {
 		try {
 			FileWriter fw = new FileWriter(scnPath, false);
 			FileWriter fwJsi = new FileWriter(jsiPath, false);
-			fwJsi.write("Date,Count");
+			fwJsi.write("Date,Count\n");
 			synchronized (runner.stateChangeNums) {
 				while (calTmp.compareTo(calToday) <= 0) {
 					String strDate = UtilSet.getDateString(calTmp);
