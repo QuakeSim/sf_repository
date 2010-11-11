@@ -280,23 +280,33 @@
 					</tr>
 					<tr valign="top" style="display: none">
 						<td valign="top" align="center">
-						<div id="scnPlotDiv" align="middle" src="">
-						<br/>
-						<table border="1" valign="top" align="center" width="765">
+						<table>
+							<tr>
+								<td><div id="scnPlotDiv" style="width: 759px; height: 539px"></div></td>
+							</tr>
+							<tr align="center">
+								<td>(Usage: move mouse to see value, select an area to zoom in, and double click to zoom out.)</td>
+							</tr>
 							<tr>
 								<td>
-									Get the plot for a bounded area:
-									<br/>
-									Latitude: from  <input type="text" id="scnLatFromText" size="8"/>  to  <input type="text" id="scnLatToText" size="8"/>
-									<br/>
-									Longitude: from  <input type="text" id="scnLongFromText" size="8"/>  to  <input type="text" id="scnLongToText" size="8"/>  <button id="scnPlotBtn" onClick="scnPlotBtnClick(this)" style="width:70px;height:20px">Plot</button> 
-								</td>
-								<td>
-									<a id="scnTxtLink" target="_blank" href="">Click here to view the detailed data.</a>
-									<br/>
-									<a id="videoLink" target="_blank" href="">Click here to get a video of the whole time since 1994.</a>
-									<br/>
-									<a id="allInputLink" target="_blank" href="">Click here to get a file containing the input of all stations.</a>
+								<table border="1" valign="top" align="center" width="759px">
+								<tr>
+									<td>
+										Get the plot for a bounded area:
+										<br/>
+										Latitude: from  <input type="text" id="scnLatFromText" size="8"/>  to  <input type="text" id="scnLatToText" size="8"/>
+										<br/>
+										Longitude: from  <input type="text" id="scnLongFromText" size="8"/>  to  <input type="text" id="scnLongToText" size="8"/>  <button id="scnPlotBtn" onClick="scnPlotBtnClick(this)" style="width:70px;height:20px">Plot</button> 
+									</td>
+									<td>
+										<a id="scnTxtLink" target="_blank" href="">Click here to view the detailed data.</a>
+										<br/>
+										<a id="videoLink" target="_blank" href="">Click here to get a video of the whole time since 1994.</a>
+										<br/>
+										<a id="allInputLink" target="_blank" href="">Click here to get a file containing the input of all stations.</a>
+									</td>
+								</tr>
+								</table>
 								</td>
 							</tr>
 						</table>
@@ -495,7 +505,7 @@
 			var str = dateTxt.value;
 			if (str != dateTxt.getAttribute("value")) {
 				var tmpDate = getDateFromString(str);
-				if (isNaN(tmpDate.getDate()) {
+				if (isNaN(tmpDate.getDate())) {
 					alert("Please input the dates in the format of 'yyyy-mm-dd', 'yyyy/MM/dd', 'MM/dd/yyyy', 'MMMM dd, yyyy', or 'MMM dd, yyyy'");
 					return;
 				}
@@ -571,6 +581,8 @@
 <%
 	Document statusDoc = null;
 	String xmlUrl = "http://xml.access.hostname//daily_rdahmmexec/daily/SOPAC_FILL/station-status-change-SOPAC_FILL.xml";
+	Element eleXml = null;
+	Element eleOutput = null;
 	try {
 		// if the file is old or does not exist, copy it from xmlUrl
 		boolean shouldCopy = false;		
@@ -606,8 +618,8 @@
 		}
 		SAXReader reader = new SAXReader();
 		statusDoc = reader.read( new StringReader(sb.toString()) );
-		Element eleXml = statusDoc.getRootElement();
-		Element eleOutput = eleXml.element("output-pattern");
+		eleXml = statusDoc.getRootElement();
+		eleOutput = eleXml.element("output-pattern");
 		
 		// download the state change number input file for the plotting javascript
 		String outputUrlPattern = eleOutput.element("server-url").getText();
@@ -635,8 +647,14 @@
 	var videoUrl = '<%=eleOutput.element("video-url").getText()%>';
 	var allInputPattern = '<%=eleOutput.element("allStationInputName").getText()%>';
 	
-	// document.getElementById("scnPlotImg").src = urlPattern + "/" + scnPattern + ".png";
-	var scnPlotGraph = new Dygraph(document.getElementById("scnPlotDiv"), scnPattern, {});
+	var scnPlotGraph = new Dygraph(document.getElementById("scnPlotDiv"), 
+							"http://local.hostname/DailyRDAHMM-portlet/" + scnPattern, 
+							{
+								colors:['#007FFF'],
+								strokeWidth:0.7,
+								pixelsPerXLabel:50,
+								rightGap:2
+							});
 	document.getElementById("scnTxtLink").href = urlPattern + "/" + scnPattern;
 	document.getElementById("videoLink").href = videoUrl;
 	document.getElementById("allInputLink").href = urlPattern + "/" + allInputPattern;
