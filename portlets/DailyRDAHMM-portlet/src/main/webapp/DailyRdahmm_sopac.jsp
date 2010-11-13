@@ -460,9 +460,9 @@
 		var fromDateStr = document.getElementById("getKmlFromDateText").value;
 		var toDateStr = document.getElementById("getKmlToDateText").value;
 		var modelStartDate = new Date(1994, 0, 1, 0, 0, 0);
-        var today = new Date();
-        var fromDate = getDateFromString(fromDateStr);
-        var toDate = getDateFromString(toDateStr);
+		var today = new Date();
+		var fromDate = getDateFromString(fromDateStr);
+		var toDate = getDateFromString(toDateStr);
 
 		if (isNaN(fromDate.getDate()) || isNaN(toDate.getDate())) {
 			alert("Please input the dates in the format of 'yyyy-mm-dd', 'yyyy/MM/dd', 'MM/dd/yyyy', 'MMMM dd, yyyy', or 'MMM dd, yyyy'");
@@ -472,7 +472,8 @@
 			alert("Please input dates between 1994-01-01 and today!");
 			return;
 		}
-
+		fromDateStr = getDateString(fromDate);
+		toDateStr = getDateString(toDate);
 		var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/proxyCallHttpService?serviceUrl="
 				  + "http%3A%2F%2Fresult.service.hostname%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetKmlForDateRange%3FfromDateStr%3D"
 				  + fromDateStr + "%26toDateStr%3D" + toDateStr 
@@ -867,6 +868,8 @@
 		var mapBounds = map.getBounds();
 		var sw = mapBounds.getSouthWest();
 		var ne = mapBounds.getNorthEast();
+		// convert the showDateStr to the format of "yyyy-mm-dd"
+		showDateStr = getDateString(getDateFromString(showDateStr));
 		if (showDateStr != "") {
 			url = "http://local.hostname/axis2/services/DailyRdahmmResultService/calcStationColors?date=" + showDateStr + "&resUrl=" + xmlResultUrl;
 			var colorStr = callHttpService(url);
