@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:portlet="http://java.sun.com/xml/ns/portlet"
+xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/portlet" version="1.0">
+   <portlet>
+    <portlet-name>QuakeSim-Scorecard</portlet-name>
+    <portlet-class>org.apache.portals.bridges.jsf.FacesPortlet</portlet-class>
+      <expiration-cache>0</expiration-cache>
+      <init-param>
+      <!--
+      <name>default-view</name>
+       -->
+      <name>ViewPage</name>
+      <value>/QuakeSimScorecard.jsp</value>
+     </init-param>
+     <supports>
+       <mime-type>text/html</mime-type>
+       <portlet-mode>VIEW</portlet-mode>
+     </supports>
+     <portlet-info>
+      <title>QuakeSim Scorecard</title>
+      <keywords>faults</keywords>
+     </portlet-info>        
+   </portlet>
+   
+   <user-attribute>
+    <description>User Name</description>
+    <name>user.name</name>
+   </user-attribute>
+</portlet-app> 
+
