@@ -459,34 +459,34 @@ $Id: TemplateLayout.xml 4302 2005-10-16 20:43:02Z novotny $
 			 </portlet-tab>
 			 
 			 <!-- Simplex -->			 
-			 <portlet-tab label="Simplex3">
+			 <portlet-tab label="Simplex">
 				<title lang="en">Simplex</title>
 				<portlet-tabbed-pane style="sub-menu">
-              <portlet-tab label="Simplex3">
+              <portlet-tab label="Simplex">
                 <title lang="en">Simplex Project Manager</title>
                 <table-layout>
                   <row-layout>
                     <column-layout>
-                      <portlet-frame label="Simplex3-PF">
+                      <portlet-frame label="Simplex3-PF-123">
                         <portlet-class>Simplex3#Simplex3</portlet-class>
                       </portlet-frame>
                     </column-layout>
                   </row-layout>
                 </table-layout>
               </portlet-tab>
-              <portlet-tab label="Fetch3-simplex-results">
+              <portlet-tab label="Fetch3-simplex-results-123">
                 <title lang="en">Fetch Simplex Results</title>
                 <table-layout>
                   <row-layout>
                     <column-layout>
-                      <portlet-frame label="Simplex3-fetchdata-PF">
+                      <portlet-frame label="Simplex3-fetchdata-PF-123">
                         <portlet-class>Simplex3#Simplex-archive-portlet</portlet-class>
                       </portlet-frame>
                     </column-layout>
                   </row-layout>
                 </table-layout>
               </portlet-tab>
-              <portlet-tab label="Simplex3-plots-portlet">
+              <portlet-tab label="Simplex3-plots-portlet-123">
                 <title lang="en">Simplex Plot Portlet</title>
                 <table-layout>
                   <row-layout>
