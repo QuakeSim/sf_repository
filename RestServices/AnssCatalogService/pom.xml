@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 <!--
-	 This POM is intended to be "abstract" and will not be called directly.
+	 This is the POM for the ANSS Catalog KML service.
 -->
   <modelVersion>4.0.0</modelVersion>
   <groupId>quakesim</groupId>
-  <artifactId>anssCatalogService</artifactId>
-  <packaging>pom</packaging>
+  <artifactId>AnssCatalogService</artifactId>
+  <packaging>war</packaging>
   <version>1.0</version>
-  <name>anssCatalogService</name>
+  <name>AnssCatalogService</name>
   <url>http://www.collab-ogce.com</url>
   <parent>
 	 <groupId>quakesim</groupId>
@@ -15,4 +15,16 @@
 	 <version>1.0</version>
 	 <relativePath>..</relativePath>
   </parent>
+  
+  <properties>
+	 <catalina.home>${env.HOME}/AnssSeismicGadget/apache-tomcat-6.0.20</catalina.home>
+  </properties>
+
+  <dependencies>
+	 <dependency>
+		<groupId>commons-io</groupId>
+		<artifactId>commons-io</artifactId>
+		<version>2.0</version>
+	 </dependency>
+  </dependencies>
 </project>
