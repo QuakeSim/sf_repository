@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:components="components.*"
+	creationComplete="init();" xmlns:code="http://code.google.com/p/flexlib/" currentState="North">
+		<mx:states>
+				<mx:State name="North">
+						<mx:SetProperty target="{stateToggle}" name="selectedIndex" value="0"/>
+						<mx:RemoveChild target="{eastChart}"/>
+						<mx:RemoveChild target="{upChart}"/>
+						<mx:RemoveChild target="{label1}"/>
+						<mx:RemoveChild target="{label2}"/>
+						<mx:RemoveChild target="{label3}"/>
+						
+				</mx:State>
+				<mx:State name="East">
+						<mx:RemoveChild target="{northChart}"/>
+						<mx:RemoveChild target="{upChart}"/>
+						<mx:SetProperty target="{stateToggle}" name="selectedIndex" value="1"/>
+						<mx:RemoveChild target="{label1}"/>
+						<mx:RemoveChild target="{label2}"/>
+						<mx:RemoveChild target="{label3}"/>
+				</mx:State>
+				<mx:State name="Up">
+						<mx:SetProperty target="{stateToggle}" name="selectedIndex" value="2"/>
+						<mx:RemoveChild target="{northChart}"/>
+						<mx:RemoveChild target="{eastChart}"/>
+						<mx:RemoveChild target="{label1}"/>
+						<mx:RemoveChild target="{label3}"/>
+						<mx:RemoveChild target="{label2}"/>
+				</mx:State>
+		</mx:states>
+		<mx:Script>
+		<![CDATA[
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.ObjectUtil;
+		
+
+			[Bindable] public var northData:ArrayCollection = new ArrayCollection();
+			[Bindable] public var eastData: ArrayCollection = new ArrayCollection();
+			[Bindable] public var upData:ArrayCollection = new ArrayCollection();
+			[Bindable] public var dateArray:Array = new Array();
+			[Bindable] public var stationID:String;
+			[Bindable] public var lat:String;
+			[Bindable] public var long:String;
+			private const millisecondsPerDay:int = 1000 * 60 * 60 * 24;
+			
+			private function init():void
+			{
+				this.stationID = Application.application.parameters.stationID;
+				this.lat = Application.application.parameters.lat;
+				this.long = Application.application.parameters.long;
+				this.getInfo.url = Application.application.parameters.url;
+				this.getInfo.send();
+			}
+		
+			protected function getInfo_resultHandler(event:ResultEvent):void
+			{
+				// TODO Auto-generated method stub
+				var tempNorth:ArrayCollection = new ArrayCollection();
+				var tempEast:ArrayCollection = new ArrayCollection();
+				var tempUp:ArrayCollection = new ArrayCollection();
+				
+				
+				var dayArray:Array = event.result.toString().split('\n');
+				dayArray = dayArray.slice(0,dayArray.length-1);
+				var minNorth:Number;
+				var minEast:Number;
+				var minUp:Number;
+				var beginDate:Date;
+				var closeDate:Date;
+				for each (var currDay:String in dayArray)
+				{
+					var currDayArray:Array = currDay.split(' ');
+					var temp:Object = new Object();
+					temp.state = currDayArray[0];
+					var dateArray:Array = String(currDayArray[1]).split('-');
+					temp.date = new Date(dateArray[0],dateArray[1]-1,dateArray[2]);
+					
+					if (!beginDate)
+					{
+						beginDate = temp.date;
+					}
+					closeDate = temp.date;
+					this.dateArray.push(temp.date);
+				/* 	if ((!minNorth) || (currDayArray[2] < minNorth))
+						minNorth = currDayArray[2];
+					if ((!minEast) || (currDayArray[3] < minEast))
+						minEast = currDayArray[3];
+					if ((!minUp) || (currDayArray[4] < minUp))
+						minUp = currDayArray[4]; */
+					
+					switch (temp.state)
+					{
+						case '1':
+							temp.value = Number(currDayArray[2]);
+							temp.value1 = Number(currDayArray[2]);
+							tempNorth.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[3]);
+							temp.value1 = Number(currDayArray[3]);
+							tempEast.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[4]);
+							temp.value1 = Number(currDayArray[4]);
+							tempUp.addItem(ObjectUtil.copy(temp));
+							break;
+						case '2':
+							temp.value = Number(currDayArray[2]);
+							temp.value2 = Number(currDayArray[2]);
+							tempNorth.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[3]);
+							temp.value2 = Number(currDayArray[3]);
+							tempEast.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[4]);
+							temp.value2 = Number(currDayArray[4]);
+							tempUp.addItem(ObjectUtil.copy(temp));
+							break;
+						case '3':
+							temp.value = Number(currDayArray[2]);
+							temp.value3 = Number(currDayArray[2]);
+							tempNorth.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[3]);
+							temp.value3 = Number(currDayArray[3]);
+							tempEast.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[4]);
+							temp.value3 = Number(currDayArray[4]);
+							tempUp.addItem(ObjectUtil.copy(temp));
+							break;
+						case '4':
+							temp.value = Number(currDayArray[2]);
+							temp.value4 = Number(currDayArray[2]);
+							tempNorth.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[3]);
+							temp.value4 = Number(currDayArray[3]);
+							tempEast.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[4]);
+							temp.value4 = Number(currDayArray[4]);
+							tempUp.addItem(ObjectUtil.copy(temp));
+							break;
+						case '5':
+							temp.value = Number(currDayArray[2]);
+							temp.value5 = Number(currDayArray[2]);
+							tempNorth.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[3]);
+							temp.value5 = Number(currDayArray[3]);
+							tempEast.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[4]);
+							temp.value5 = Number(currDayArray[4]);
+							tempUp.addItem(ObjectUtil.copy(temp));
+							break;
+					}
+				}
+/* 				for each (var temp:Object in tempNorth)
+				{
+					temp.plot = temp.value - minNorth;
+					if (temp.value1)
+						temp.plot1 = temp.value1-minNorth;
+					if (temp.value2)
+						temp.plot2 = temp.value2-minNorth;
+					if (temp.value3)
+						temp.plot3 = temp.value3-minNorth;
+					if (temp.value4)
+						temp.plot4 = temp.value4-minNorth;
+					if (temp.value5)
+						temp.plot5 = temp.value5-minNorth;
+				}
+				for each (var temp:Object in tempEast)
+				{
+					temp.plot = temp.value - minEast;
+					if (temp.value1)
+						temp.plot1 = temp.value1-minEast;
+					if (temp.value2)
+						temp.plot2 = temp.value2-minEast;
+					if (temp.value3)
+						temp.plot3 = temp.value3-minEast;
+					if (temp.value4)
+						temp.plot4 = temp.value4-minEast;
+					if (temp.value5)
+						temp.plot5 = temp.value5-minEast;
+				}
+				for each (var temp:Object in tempUp)
+				{
+					temp.plot = temp.value - minUp;
+					if (temp.value1)
+						temp.plot1 = temp.value1-minUp;
+					if (temp.value2)
+						temp.plot2 = temp.value2-minUp;
+					if (temp.value3)
+						temp.plot3 = temp.value3-minUp;
+					if (temp.value4)
+						temp.plot4 = temp.value4-minUp;
+					if (temp.value5)
+						temp.plot5 = temp.value5-minUp;
+				} */
+				
+				northData = tempNorth;
+				eastData = tempEast;
+				upData = tempUp;
+				
+				dateRange.minimum = beginDate.getTime();
+				dateRange.maximum = closeDate.getTime();
+				dateRange.values = [beginDate.getTime(), closeDate.getTime()]
+				dateRange.snapInterval = millisecondsPerDay;
+				startDate.selectedDate = beginDate;
+				endDate.selectedDate = closeDate;
+			}
+			
+			private function dateChange():void
+			{
+				startDate.selectedDate = new Date(dateRange.values[0]);
+				endDate.selectedDate = new Date(dateRange.values[1]);
+			}
+			
+			private function startChange():void
+			{
+				var temp:Array = dateRange.values;
+				temp[0] = startDate.selectedDate.getTime();
+				dateRange.values = temp;
+				updateGraphs();
+			}
+
+			private function endChange():void
+			{
+				var temp:Array = dateRange.values;
+				temp[1] = endDate.selectedDate.getTime();
+				dateRange.values = temp;
+				updateGraphs();
+			}
+			
+			private function updateGraphs():void
+			{
+				northChart.updateGraph();
+				eastChart.updateGraph();
+				upChart.updateGraph();
+			}
+			
+			private function stateChange():void
+			{
+				switch (stateToggle.selectedIndex)
+				{
+					case 0: this.setCurrentState('North');
+						break;
+					case 1: this.setCurrentState('East');
+						break;
+					case 2: this.setCurrentState('Up');
+						break;
+					case 3: this.setCurrentState('');
+						break;
+				}
+			}
+		]]>
+	</mx:Script>
+	<mx:HTTPService id="getInfo" url="feeds/testInfo" result="getInfo_resultHandler(event)" resultFormat="text"/>
+	<mx:Panel height="100%" width="100%" title="Station : {stationID} Latitude : {lat} Longitude : {long}">
+		<mx:VBox height="100%" width="100%">
+			<mx:ToggleButtonBar selectedIndex="3" id="stateToggle" itemClick="stateChange();">
+				<mx:dataProvider>
+					<mx:Array>
+						<mx:String>North</mx:String>
+						<mx:String>East</mx:String>
+						<mx:String>Up</mx:String>
+						<mx:String>All</mx:String>
+					</mx:Array>
+				</mx:dataProvider>
+			</mx:ToggleButtonBar>
+			<mx:Label text="North" id="label1"/>
+			<mx:VBox width="100%" height="100%">
+				<components:rdahmmLineChart  data="{northData}" id="northChart" height="100%" width="100%" beginDate="{this.startDate.selectedDate}" endDate="{this.endDate.selectedDate}"/>
+				<mx:Label text="East" id="label2"/>
+				<components:rdahmmLineChart data="{eastData}" id="eastChart" height="100%" width="100%" beginDate="{this.startDate.selectedDate}" endDate="{this.endDate.selectedDate}"/>
+				<mx:Label text="Up" id="label3"/>
+				<components:rdahmmLineChart data="{upData}" id="upChart" height="100%" width="100%" beginDate="{this.startDate.selectedDate}" endDate="{this.endDate.selectedDate}"/>
+				
+				
+			</mx:VBox>
+			<!--<mx:LineChart id="timeChart" dataProvider="{upData}" height="30" verticalAxisStyleNames="tickPlacement:none" horizontalAxisStyleNames="tickPlacement:none,">
+					<mx:series>
+						<mx:LineSeries displayName="Series 1" yField="value"/>
+					</mx:series>
+				</mx:LineChart>-->
+			<code:HSlider id="dateRange" allowThumbOverlap="false" thumbCount="2" showDataTip="false"
+				liveDragging="true" lockRegionsWhileDragging="true"
+				change="dateChange();" width="100%" 
+				showTrackHighlight="true" tickThickness="1" mouseUp="updateGraphs()"/>
+			
+			<mx:Canvas width="100%">
+				<mx:Label text="Start Date:"/>
+	            <mx:DateField id="startDate" change="startChange()" x="65"/>
+	           
+	        
+	            <mx:Label text="End Date:" id="label4" right="65"/>
+	            <mx:DateField id="endDate" change="endChange()" right="10"/>
+			</mx:Canvas>
+			
+             
+		</mx:VBox>
+	</mx:Panel>
+</mx:Application>
