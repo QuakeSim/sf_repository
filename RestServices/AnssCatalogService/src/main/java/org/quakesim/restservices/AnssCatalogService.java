@@ -205,11 +205,17 @@ public class AnssCatalogService {
 		  
 		  StringBuffer memKmlBuffer=new StringBuffer(memKml);
 		  String startTimeStamp="<TimeSpan><begin>";
-		  String endTimeStamp="</begin></TimeSpan>";
+		  String middleStamp="</begin><end>";
+		  String endTimeStamp="</end></TimeSpan>";
 		  
+		  String datePlusMonth=null;
 		  int index=0;
 		  while(pmMatcher.find()){
-				String toInsert=startTimeStamp+dateMatchArray.get(index)+endTimeStamp;
+				String toInsert=startTimeStamp
+					 +dateMatchArray.get(index)
+					 +middleStamp
+					 +datePlusMonth((String)dateMatchArray.get(index))
+					 +endTimeStamp;
 				memKmlBuffer=memKmlBuffer.insert(pmMatcher.end()+index*(toInsert.length()),toInsert);
 				index++;
 		  }
@@ -217,6 +223,25 @@ public class AnssCatalogService {
 		  memKml=memKmlBuffer.toString();
 		  
 		  return memKml;
+	 }
+	 
+	 protected String datePlusMonth(String oldDate){
+		  String beginning=oldDate.substring(0,oldDate.indexOf("T"));
+		  String ending=oldDate.substring(oldDate.indexOf("T"),oldDate.length());
+		  System.out.println(beginning+" "+ending);
+		  StringTokenizer st=new StringTokenizer(beginning,"-");
+		  //Year,month,day
+		  Calendar calendar=Calendar.getInstance();
+		  calendar.set(Integer.parseInt(st.nextToken()),
+							Integer.parseInt(st.nextToken()),
+							Integer.parseInt(st.nextToken()));
+		  //Increment 30 days
+		  calendar.add(Calendar.DATE,30);
+		  beginning=calendar.get(Calendar.YEAR)+"-"+calendar.get(Calendar.MONTH)+"-"+calendar.get(Calendar.DATE);
+		  System.out.println(beginning+" "+ending);
+		  return beginning+ending;
+		  
+		  
 	 }
 
 	 //--------------------------------------------------
