@@ -11,8 +11,14 @@ import org.apache.commons.io.*;
 
 //These are Jersey jars
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Produces;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.UriInfo;
 
 @Path("/catalog")
 public class AnssCatalogService {
@@ -27,17 +33,19 @@ public class AnssCatalogService {
 
 	 String kmzDownloadLocation="/tmp/junk.kmz";
 	 
-	 @GET
-		  @Produces("text/plain")
-		  public String getCatalog() {
+	 @GET 
+		  @Produces("application/vnd.google-earth.kml+xml") 
+		  public String getCatalog(@Context UriInfo ui) {
+		  MultivaluedMap<String,String> queryParams=ui.getQueryParameters();
 		  
 		  String memKml=null;
 		  try {
-				String ftpUrl=fetchAnssDataSetFtpUrl(ANSSURL,getParamArray(),getParamValArray());
+				String ftpUrl=fetchAnssDataSetFtpUrl(ANSSURL,queryParams);
 				downloadCatalog(ftpUrl,getKmzDownloadLocation());
 				memKml=extractKmlFile(getKmzDownloadLocation());
 				ArrayList dateMatches=extractMatchingDates(memKml);
 				memKml=revisedKmlWithTimeStamps(memKml,dateMatches);
+				return memKml;
 		  }
 		  catch (Exception ex) {
 				ex.printStackTrace();
@@ -45,31 +53,168 @@ public class AnssCatalogService {
 		  return memKml;
 	 }
 	 
-	 protected String fetchAnssDataSetFtpUrl(String catalogServiceUrl, 
-														  String[] paramArray, 
-														  String[] paramValArray) throws Exception {
-		  String ftpUrl=null;
-		  //Do the thing.
+	 @POST
+		  @Consumes("application/x-www-form-urlencoded")
+		  @Produces("application/vnd.google-earth.kml+xml") 
+		  public String postCatalog(MultivaluedMap<String,String> queryParams) {
+		  
+		  String memKml=null;
+		  try {
+				String ftpUrl=fetchAnssDataSetFtpUrl(ANSSURL,queryParams);
+				downloadCatalog(ftpUrl,getKmzDownloadLocation());
+				memKml=extractKmlFile(getKmzDownloadLocation());
+				ArrayList dateMatches=extractMatchingDates(memKml);
+				memKml=revisedKmlWithTimeStamps(memKml,dateMatches);
+				return memKml;
+		  }
+		  catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  return memKml;
+		  
+	 }
 
+	 protected String fetchAnssDataSetFtpUrl(String anssUrl, 
+														  MultivaluedMap queryParams) throws Exception {
+		  String ftpUrl=null, data=null;
+		  //Construct data
+		  Iterator it=queryParams.keySet().iterator();
+		  //Set the first value
+		  String theKey=(String)it.next();
+		  data=URLEncoder.encode(theKey,"UTF-8")+"="+URLEncoder.encode((String)queryParams.getFirst(theKey),"UTF-8");
+		  //Now set the rest.
+		  while(it.hasNext()) {
+				theKey=(String)it.next();
+				data += "&" + URLEncoder.encode(theKey,"UTF-8")+"="+URLEncoder.encode((String)queryParams.getFirst(theKey),"UTF-8");
+		  }
+		  System.out.println("Query params: "+data);
+		  
+		  OutputStreamWriter wr=null;
+		  BufferedReader rd=null;
+		  try {
+		  		URL url = new URL(anssUrl);
+		  		URLConnection conn = url.openConnection();
+		  		conn.setDoOutput(true);
+		  		wr = new OutputStreamWriter(conn.getOutputStream());
+		  		wr.write(data);
+		  		wr.flush();
+				
+		  		// Get the response
+		  		rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		  		String line="";
+		  		while ((line = rd.readLine()) != null) {
+		  			 //Look for the line that begins with URL
+		  			 if(line.indexOf("URL")>0) {
+		  				  ftpUrl=line.substring(line.indexOf("ftp://"),line.indexOf(".kmz")+".kmz".length());
+		  				  //We are done, so break out of the while loop.
+		  				  break;
+		  			 }			 
+		  		}
+		  }
+		  catch (Exception ex) {
+		  		throw ex;
+		  }
+		  finally {
+		  		wr.close();
+		  		rd.close();
+		  }
+		  System.out.println("Ftp URL is "+ftpUrl);
 		  return ftpUrl;
 	 }
 
 	 protected void downloadCatalog(String ftpUrl, 
 											  String downloadLocation) throws Exception {
+		  BufferedInputStream bis=null;
+		  BufferedOutputStream bos=null;
+		  try {
+				URLConnection ftpConn=(new URL(ftpUrl)).openConnection();
+				ftpConn.setDoOutput(true); 
+				//	 OutputStreamWriter ftpWriter=new OutputStreamWriter(ftpConn.getOutputStream());
+				bis=new BufferedInputStream(ftpConn.getInputStream());
+				bos=new BufferedOutputStream(new FileOutputStream(downloadLocation));
+				int i;
+				while((i=bis.read()) != -1) {
+					 bos.write(i);
+				}
+		  }
+		  catch (Exception ex) { throw ex; }
+		  finally {
+				bis.close();
+				bos.close();
+		  }
 	 }
 
 	 protected String extractKmlFile(String downloadLocation) throws Exception {
-		  String kmlFile=null;
-		  return kmlFile;
-	 }
+		  String kmlFile=null, memKml=null;
 
+		  JarFile kmzJar=new JarFile(downloadLocation);
+		  
+		  //First, get the name off the KML file
+		  Enumeration entries=kmzJar.entries();
+		  if(entries!=null && entries.hasMoreElements()){
+				kmlFile=kmzJar.entries().nextElement().toString();
+		  }
+		  
+		  //--------------------------------------------------
+		  //Next, extract the KML and put it into a String
+		  //--------------------------------------------------
+		  InputStream jarIn=null;
+		  try {
+				jarIn=kmzJar.getInputStream(kmzJar.getEntry(kmlFile));
+				StringWriter memKmlWriter=new StringWriter();
+				IOUtils.copy(jarIn,memKmlWriter);
+				memKml=memKmlWriter.toString();
+		  }
+		  catch (Exception ex) { throw ex; }
+		  
+		  finally {
+				//Clean up.
+				jarIn.close();
+		  }
+		  return memKml;
+	 }
+	 
 	 protected ArrayList extractMatchingDates(String memKml) throws Exception {
 		  ArrayList dateMatchArray=new ArrayList();
 
+		  String dateRegex="[1-2][0-9][0-9][0-9]/[0-1][0-9]/[0-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9][0-9]";
+		  Pattern datePattern=Pattern.compile(dateRegex);	 
+		  Matcher dateMatcher=datePattern.matcher(memKml);
+		  
+		  while(dateMatcher.find()){
+				//Reformat the strings so that they will work with KML
+				String dateMatch=dateMatcher.group();
+				dateMatch=dateMatch.replaceAll("/","-");		 
+				//Replace the space between the date and time with a "T"
+				dateMatch=dateMatch.replace(" ","T");						 
+				//Append a "Z" at the end				
+				dateMatch+="Z";						 				
+				
+				//Now put it in an array
+				dateMatchArray.add(dateMatch);
+		  }
+		  
 		  return dateMatchArray;
 	 }
 	 
 	 protected String revisedKmlWithTimeStamps(String memKml, ArrayList dateMatchArray) throws Exception {
+		  String placemarkRegex="<Placemark>";
+		  Pattern placemarkPattern=Pattern.compile(placemarkRegex);
+		  Matcher pmMatcher=placemarkPattern.matcher(memKml);
+		  
+		  StringBuffer memKmlBuffer=new StringBuffer(memKml);
+		  String startTimeStamp="<TimeSpan><begin>";
+		  String endTimeStamp="</begin></TimeSpan>";
+		  
+		  int index=0;
+		  while(pmMatcher.find()){
+				String toInsert=startTimeStamp+dateMatchArray.get(index)+endTimeStamp;
+				memKmlBuffer=memKmlBuffer.insert(pmMatcher.end()+index*(toInsert.length()),toInsert);
+				index++;
+		  }
+		  
+		  memKml=memKmlBuffer.toString();
+		  
 		  return memKml;
 	 }
 

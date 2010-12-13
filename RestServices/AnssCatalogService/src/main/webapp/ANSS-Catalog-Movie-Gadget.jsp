@@ -7,6 +7,7 @@ String anssUrl="http://www.ncedc.org/cgi-bin/catalog-search2.pl";
 String[] paramArray = {"output","format","mintime","maxtime","minmag","maxmag","etype","outputloc"};
 String[] paramValArray = {"kml","cnss","2002/01/01,00:00:00","2010/12/01,00:00:00","8.0","10.0","E","web"};
 
+
 String data="";
 String kmzDest="/tmp/junk.kmz";
 String ftpUrl;
@@ -58,6 +59,7 @@ if(paramArray.length>0 && paramArray.length==paramValArray.length) {
 	    bos.write(i);
     }
 	 bis.close();
+
 	 bos.close();
 	 
 	 //--------------------------------------------------
