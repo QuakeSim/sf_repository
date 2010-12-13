@@ -68,6 +68,7 @@ public class AnssCatalogService {
 				return memKml;
 		  }
 		  catch (Exception ex) {
+				memKml="Unable to retreive KML file.";
 				ex.printStackTrace();
 		  }
 		  return memKml;
