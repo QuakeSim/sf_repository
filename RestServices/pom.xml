@@ -27,8 +27,9 @@
 				<configuration>
 				  <tasks>			 
 					 <echo message="Project home: ${project.home}"/>
+					 <echo message="Cleaning ${catalina.home}/webapps/${pom.name}"/>
 					 <delete failonerror="false">
-						<fileset dir="${catalina.home}/webapps/${pom.artifactId}">
+						<fileset dir="${catalina.home}/webapps/${pom.name}">
 						  <include name="**/*.jar"/>
 						  <include name="**/*.xml"/>
 						  <include name="**/*.properties"/>
@@ -51,11 +52,12 @@
 				<phase>install</phase>
 				<configuration>
 				  <tasks>			 
+					 <echo message="Copying ${basedir}/target/${pom.artifactId} to ${catalina.home}/webapps/${pom.name}"/>
 					 <copy overwrite="true" 
 							 filtering="false"
 							 failonerror="false"
-							 todir="${catalina.home}/webapps/${pom.artifactId}">
-						<fileset dir="${basedir}/target/${pom.artifactId}"/>
+							 todir="${catalina.home}/webapps/${pom.name}">
+						<fileset dir="${basedir}/target/${pom.artifactId}-${pom.version}"/>
 					 </copy>
 				  </tasks>
 				</configuration>

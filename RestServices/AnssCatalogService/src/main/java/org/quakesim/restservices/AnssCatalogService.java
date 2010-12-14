@@ -216,6 +216,7 @@ public class AnssCatalogService {
 					 +middleStamp
 					 +datePlusMonth((String)dateMatchArray.get(index))
 					 +endTimeStamp;
+				//				System.out.println(toInsert+" "+toInsert.length());
 				memKmlBuffer=memKmlBuffer.insert(pmMatcher.end()+index*(toInsert.length()),toInsert);
 				index++;
 		  }
@@ -228,7 +229,7 @@ public class AnssCatalogService {
 	 protected String datePlusMonth(String oldDate){
 		  String beginning=oldDate.substring(0,oldDate.indexOf("T"));
 		  String ending=oldDate.substring(oldDate.indexOf("T"),oldDate.length());
-		  System.out.println(beginning+" "+ending);
+		  //		  System.out.println(beginning+ending);
 		  StringTokenizer st=new StringTokenizer(beginning,"-");
 		  //Year,month,day
 		  Calendar calendar=Calendar.getInstance();
@@ -237,8 +238,23 @@ public class AnssCatalogService {
 							Integer.parseInt(st.nextToken()));
 		  //Increment 30 days
 		  calendar.add(Calendar.DATE,30);
-		  beginning=calendar.get(Calendar.YEAR)+"-"+calendar.get(Calendar.MONTH)+"-"+calendar.get(Calendar.DATE);
-		  System.out.println(beginning+" "+ending);
+		  String year=calendar.get(Calendar.YEAR)+"";
+		  String month="";
+		  if(calendar.get(Calendar.MONTH)<10){
+				month="0"+calendar.get(Calendar.MONTH);
+		  }
+		  else {
+				month=calendar.get(Calendar.MONTH)+"";
+		  }
+		  String day="";
+		  if(calendar.get(Calendar.DATE)<10) {
+				day="0"+calendar.get(Calendar.DATE);
+		  }
+		  else {
+				day=calendar.get(Calendar.DATE)+"";
+		  }
+		  beginning=year+"-"+month+"-"+day;
+		  //		  System.out.println(beginning+ending);
 		  return beginning+ending;
 		  
 		  
