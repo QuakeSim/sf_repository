@@ -747,6 +747,12 @@ public class DailyRDAHMMStation {
 							"or even model files for station " + stationId + "!");
 					return false;
 				}
+				
+				// make input for the swf plotting component
+				String allQPath = evalDir + File.separator + projectName + ".all.Q";
+				String allRawPath = evalDir + File.separator + projectName + ".all.raw";
+				String plotSwfInputPath = evalDir + File.separator + projectName + ".plotswf.input";
+				makePlotSwfInput(allQPath, allRawPath, plotSwfInputPath);
 				executePlotCmd(projectName);
 			}
 		} else {
@@ -1090,6 +1096,8 @@ public class DailyRDAHMMStation {
 					new File(proDir + File.separator + modelBaseName + ".pi"));
 			UtilSet.copyFileToFile(new File(latestProDir + File.separator + modelBaseName + ".range"), 
 					new File(proDir + File.separator + modelBaseName + ".range"));
+			UtilSet.copyFileToFile(new File(latestProDir + File.separator + latestProName + ".plotswf.input"), 
+					new File(proDir + File.separator + projectName + ".plotswf.input"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Failed to copy old evaluations for " + projectName + ": error in file copies!");
