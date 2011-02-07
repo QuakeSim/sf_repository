@@ -6,7 +6,7 @@
 	 <!--==================================================-->
 	 <!-- These need to be edited by the deployer -->
 	 <!--==================================================-->
-	 <portal.server.ip>156.56.104.99</portal.server.ip>
+	 <portal.server.ip>localhost</portal.server.ip>
 	 <host.base.url>http://${portal.server.ip}:8080/</host.base.url>
 	 <google.master.key>ABQIAAAAxOZ1VuCkrWUtft6jtubycBRxYpIIOz9ynlSKjbx-4JMuN5JjrhR5gSOcKdieYppOZ4_yzZc_Ti15qw</google.master.key>
 	 <!--==================================================-->
