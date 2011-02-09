@@ -618,20 +618,20 @@ EGeoXml.prototype.processing = function(doc) {
 	this.urlcounter = this.urlcounter + 1;
 
 	if(n==0)
-		that.side_bar_html = '<ul id="browser">';
+		that.side_bar_html = '<ul id="browser" class="filetree">';
 
-	that.side_bar_html += '<li>' + '<input type="checkbox" id="li_' + url_bits[0] + '"' + ' onchange="' + this.myvar + '.togglechboxofAllOverlays(' + '\'' + url_bits[0] + '\',' + this.overlaycounter + ')" checked/>' + url_bits[0];
+	that.side_bar_html += '<li><span class="folder">' + '<input type="checkbox" id="li_' + url_bits[0] + '"' + ' onchange="' + this.myvar + '.togglechboxofAllOverlays(' + '\'' + url_bits[0] + '\',' + this.overlaycounter + ')" checked/>' + url_bits[0]+"</span>";
 	that.side_bar_html += '<ul>';
 
         for (var i=this.overlaycounter; i<that.side_bar_list.length; i++) {	  
           var bits = that.side_bar_list[i].split("$$$",4);
-          that.side_bar_html += '<li><div id = \'sidebarlist'+ (i-this.overlaycounter) +'\'>' + '<input type="checkbox" name="' + url_bits[0] + '_overlays"' + 'id="' + url_bits[0] + '_overlays_' + (i-this.overlaycounter) + '"' + ' onchange="' + this.myvar + '.togglechboxofOverlay(' + '\'' + url_bits[0] + '\',' + i + ',' + this.overlaycounter + ')" checked/>' + that.sidebarfn(that.myvar,bits[0],bits[1],bits[2],bits[3]) + '</div></li>';
+          that.side_bar_html += '<li><div id = \'sidebarlist'+ (i-this.overlaycounter) +'\'>' + '<input type="checkbox" name="' + url_bits[0] + '_overlays"' + 'id="' + url_bits[0] + '_overlays_' + (i-this.overlaycounter) + '"' + ' onchange="' + this.myvar + '.togglechboxofOverlay(' + '\'' + url_bits[0] + '\',' + i + ',' + this.overlaycounter + ')" checked/>' + that.sidebarfn(that.myvar,bits[0],bits[1],bits[2],bits[3]) + '</div></span></li>';
         }
 
 	this.overlaycounter = that.side_bar_list.length;
 
 	that.side_bar_html += '</ul>';
-	that.side_bar_html += '</li>';
+	that.side_bar_html += '</span></li>';
 	if(n==this.urls.length-1)
 		that.side_bar_html += '</ul>';
 	
