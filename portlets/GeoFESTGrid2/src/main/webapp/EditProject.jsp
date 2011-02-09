@@ -28,8 +28,15 @@ type="text/javascript"></script>
 
 <title>Edit Project</title>
 </head>
-<body>
+<body onload="myInit() onunload="GUnload()">
 <script language="JavaScript">
+function myInit() {
+  	$("#browser").treeview({
+		animated:"normal",
+		persist: "cookie"
+		});
+ }
+
 
 function selectOne(form , button)
 {

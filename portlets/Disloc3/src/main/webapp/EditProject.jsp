@@ -51,9 +51,15 @@ mapcenter_y = center_xy[1];
 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>      
 </head> 
 
-<body onload="" onunload="GUnload()">
+<body onload="myInit()" onunload="GUnload()">
 
 <script language="JavaScript">
+function myInit() {
+  	$("#browser").treeview({
+		animated:"normal",
+		persist: "cookie"
+		});
+ }
 
 		  //These are various gmap definitions.
 	 var geocoder=null; 
