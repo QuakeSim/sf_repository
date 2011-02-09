@@ -10,5 +10,5 @@
 
 
 scrolling="false" width="400" height="600"/>
-<Content type="url" view="home,canvas" href="http://129.79.49.68:8080/Simplex3/index.faces"/>
+<Content type="url" view="home,canvas" href="http://localhost:8080/Simplex3/index.faces"/>
 </Module>

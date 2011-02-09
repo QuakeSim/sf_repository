@@ -55,7 +55,7 @@
 	<h:form>
 	<h:outputText  id="lkdjf2" styleClass="header2" value="Project Archive"/>
 	<p/>
-		<h:outputText  id="lkdjf3" value="You don't have any archived projects."
+		<h:outputText  id="lkdjf3" value="You don't have any archived projects. Use the form below to create a new one."
 							rendered="#{empty SimplexBean.myProjectNameList}"/>
 
 	        <h:panelGrid id="lkdjf4"

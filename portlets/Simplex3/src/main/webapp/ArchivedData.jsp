@@ -60,12 +60,18 @@ function dataTableSelectOneRadio(radio) {
 <f:view>
 	<h:form id="theFormid">
 		<h:panelGrid id="pgidsimplex" columns="1" border="0">
-			<h3><h:outputText escape="false" value="Archived Data" /></h3><br>
-			<h:outputText id="message1" escape="false"							  
+			<h:outputText escape="false" styleClass="header2" value="Archived Data" />
+			<h:outputText id="message1" escape="false"
+							  rendered="#{(empty SimplexBean.myarchivedFileEntryList)}"							  
+							  value="You don't have any archived results yet." /><br>
+
+			<h:outputText id="message1" escape="false"
+							  rendered="#{!(empty SimplexBean.myarchivedFileEntryList)}"							  
 							  value="You have the following archived data files. Download the input and output files for more information on the data." /><br>
 			
 			<h:dataTable border="1"
 							 id="SimplexOutputPanel"
+   						 rendered="#{!(empty SimplexBean.myarchivedFileEntryList)}"										 
 							 binding="#{SimplexBean.myArchiveDataTable}" 							 
 							 value="#{SimplexBean.myarchivedFileEntryList}"
 							 var="myentry3">

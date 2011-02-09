@@ -97,7 +97,6 @@ for(int i=0;i<permsize;i++) {
 </style>
 
 <head>
-<link rel="stylesheet" type="text/css" href='<%= request.getContextPath() + "/stylesheet.css"%>'>
 <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css">
 
 <title>Edit Project</title>
@@ -105,11 +104,21 @@ for(int i=0;i<permsize;i++) {
 </head>
 
 
-<body onload="" onunload="GUnload()">
+<body onload="myInit()" onunload="GUnload()">
+<script type="text/javascript">
+</script>
 
 <f:view>
 	<script language="JavaScript" type="text/javascript">
 //<![CDATA[
+//The myInit() funciton initializes the tree view for the FaultMapPanelFrame sidebar.
+function myInit() {
+  	$("#browser").treeview({
+		animated:"normal",
+		persist: "cookie"
+		});
+ }
+
 // These are various gmap definitions.
 var map;
 var geoXml;

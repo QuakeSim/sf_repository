@@ -96,12 +96,11 @@
 	exmlFMap = new EGeoXml("exmlFMap", faultMap, kmllist, {sidebarfn:myside,nozoom:true,sidebarid:"faultMapside",parentformofsidebarid:"faultKMLSelectorForm",clickpolyobjfn:clickpolyobj,iwwidth:200});       
 	exmlFMap.parse();
 	
-	
 	faultMap.addMapType(G_PHYSICAL_MAP);
 	faultMap.setMapType(G_PHYSICAL_MAP);
 	faultMap.setCenter(new GLatLng(35.0,-118.5),6);
-	faultMap.addControl(new GLargeMapControl());
-	faultMap.addControl(new GMapTypeControl());
+	faultMap.addControl(new GSmallMapControl());
+//	faultMap.addControl(new GMapTypeControl());
    
 	var faultdrawing = document.getElementById("faultKMLSelectorForm:dflab2");
 	faultdrawing.checked = false;
