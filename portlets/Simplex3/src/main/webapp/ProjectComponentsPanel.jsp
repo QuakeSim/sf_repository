@@ -5,7 +5,7 @@
 		<h:outputText id="spxpcp1" value="" escape="false"/><br/>
 		<h:outputText id="spxpcp2" value="1) Please check a box to allow a value to vary during the simplex optimization. " escape="false"/>
 		<h:outputText id="spxpcp3" value="2) Please click the 'update' button after value changes." escape="false"/>
-		<h:outputText id="spxpcp4" value="2) Please click the checkbox next to the 'name' to draw the fault on the map" escape="false"/>
+		<h:outputText id="spxpcp4" value="3) Please click the checkbox next to the 'name' to draw the fault on the map" escape="false"/>
 					<h:panelGrid id="dflelerkljk162" columns="1" border="1" cellpadding="0" cellspacing="0">
 						  <b><h:outputFormat id="dflelerkljk165" escape="false" value="Fault Components">
 						  </h:outputFormat></b>
