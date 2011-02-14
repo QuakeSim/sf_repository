@@ -1,4 +1,3 @@
-
 /*********************************************************************\
 *                                                                     *
 * egeoxml.js                                         by Mike Williams *
@@ -235,8 +234,6 @@ EGeoXml.prototype.createPolyline = function(points,color,width,opacity,pbounds,n
 
   // [CGL Version] For trigger a click event to choose the fault as a selected one when a fault line is clicked
   GEvent.addListener(p,"click", function() { clickpolyobjfn(p, name, desc) });
-
-
 
   if (this.opts.sidebarid) {
     // var n = this.gpolylines.length-1;

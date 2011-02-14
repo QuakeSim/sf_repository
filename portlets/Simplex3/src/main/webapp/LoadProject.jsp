@@ -123,7 +123,7 @@
 			<h:outputText id="lkdjf15" value="Provide a Project Name:" />
 			<h:panelGroup id="lkdjf16">
 			<h:inputText id="projectName" value="#{SimplexBean.projectName}"
-				required="false" />
+				required="true" />
 			<h:message for="projectName" showDetail="true" showSummary="true"
 				errorStyle="color: red" />
 			</h:panelGroup>
@@ -131,7 +131,7 @@
 			<h:outputText id="lkdjf17" value="Problem starting temperature:" />
 			<h:panelGroup id="lkdjf18">
 			<h:inputText id="startTemp" value="#{SimplexBean.currentProjectEntry.startTemp}"
-				required="false" />
+				required="true" />
 			<h:message for="startTemp" showDetail="true" showSummary="true"
 				errorStyle="color: red" />
 			</h:panelGroup>
@@ -139,7 +139,7 @@
 			<h:outputText id="lkdjf19" value="Specify the maximum number of iterations:" />
 			<h:panelGroup id="lkdjf111">
 			<h:inputText id="maxIters" value="#{SimplexBean.currentProjectEntry.maxIters}"
-				required="false" />
+				required="true" />
 			<h:message  id="lkdjf112" for="maxIters" showDetail="true" showSummary="true"
 				errorStyle="color: red" />
 			</h:panelGroup>			

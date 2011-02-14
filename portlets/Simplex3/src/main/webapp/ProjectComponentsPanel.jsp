@@ -1,38 +1,42 @@
-		    <h:panelGrid id="ProjectComponentList" columns="1" border="0">
-			<h:panelGroup id="dflelerkljk161">
-				<h:form id="UpdateSelectFaultsForm"
-					rendered="#{!empty SimplexBean.myFaultEntryForProjectList}">
-		<h:outputText id="spxpcp1" value="" escape="false"/><br/>
-		<h:outputText id="spxpcp2" value="1) Please check a box to allow a value to vary during the simplex optimization. " escape="false"/>
-		<h:outputText id="spxpcp3" value="2) Please click the 'update' button after value changes." escape="false"/>
-		<h:outputText id="spxpcp4" value="3) Please click the checkbox next to the 'name' to draw the fault on the map" escape="false"/>
-					<h:panelGrid id="dflelerkljk162" columns="1" border="1" cellpadding="0" cellspacing="0">
-						  <b><h:outputFormat id="dflelerkljk165" escape="false" value="Fault Components">
-						  </h:outputFormat></b>
+<h:panelGrid id="ProjectComponentList" columns="1" border="1">
+  <h:panelGroup id="dflelerkljk161">
+	<h:form id="UpdateSelectFaultsForm"
+			  rendered="#{!empty SimplexBean.myFaultEntryForProjectList}">
+		<h:outputText id="spxpcp1" value="<br/>" escape="false"/>
+		<h:outputText id="dflelerkljk165" escape="false" value="<b>Fault Components</b><br/>"/>
+		<h:outputText id="spxpcp2" 
+						  value="1) Please check a box to allow a value to vary during the simplex optimization. " 
+						  escape="false"/>
+		<h:outputText id="spxpcp3" 
+						  value="2) Please click the 'update' button after value changes." 
+						  escape="false"/>
+		<h:outputText id="spxpcp4" 
+						  value="3) Please click the checkbox next to the 'name' to draw the fault on the map" 
+						  escape="false"/>
+		<h:panelGrid id="dflelerkljk162" columns="1" border="0" cellpadding="0" cellspacing="0">
+			<h:panelGrid id="dflelerkljg162" columns="2" border="0"  cellpadding="0" cellspacing="0">
+				<h:dataTable id="dflelerh966"  
+								 border="1" 
+								 cellpadding="0" 
+								 cellspacing="0"  
+								 headerClass="componentstableh" columnClasses="componentstablec"
+							    value="#{SimplexBean.myFaultsForProjectList}" var="myentry31">
+				   <h:column>
+					  <f:facet name="header">
+						<h:outputText id="dflelerh967" escape="false" value="</b>Name</b>" />
+					  </f:facet>
+					  <h:panelGrid  id="spxpcp5"columns="2" cellpadding="0" cellspacing="0">
+						<h:inputText id="dflelerklh968" style="text-align:right;width:60px" value="#{myentry31.faultName}" required="true" />
+						<h:selectBooleanCheckbox rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}" id="faultnamec" onclick="togglefaultname(this)" value="" />
+					  </h:panelGrid>
+					</h:column>
 
-						  <h:panelGrid id="dflelerkljg162" columns="2" border="0"  cellpadding="0" cellspacing="0">
+					<h:column>
+					  <f:facet name="header">
+							<h:outputText id="lkdrh119" value="Location X" />
+						</f:facet>
+					   <h:panelGrid  id="spxpcp6"columns="3" cellpadding="0" cellspacing="0">
 
-							<h:dataTable id="dflelerh966"  border="1" cellpadding="0" cellspacing="0"  headerClass="componentstableh" columnClasses="componentstablec"
-							      value="#{SimplexBean.myFaultsForProjectList}" var="myentry31">
-							    <h:column>
-							      <f:facet name="header">
-								<b><h:outputText id="dflelerh967" escape="false" value="Name" /></b>
-							      </f:facet>
-
-							      <h:panelGrid  id="spxpcp5"columns="2" cellpadding="0" cellspacing="0">
-								<h:inputText id="dflelerklh968" style="text-align:right;width:60px" value="#{myentry31.faultName}" required="true" />
-								<h:selectBooleanCheckbox rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}" id="faultnamec" onclick="togglefaultname(this)" value="" />
-							      </h:panelGrid>
-							    </h:column>
-
-							    <h:column>
-							      <f:facet name="header">
-								<h:outputText id="lkdrh119" value="Location X" />
-							      </f:facet>
-
-							      <h:panelGrid  id="spxpcp6"columns="3" cellpadding="0" cellspacing="0">
-								<f:facet name="header">								
-								</f:facet>
 								<h:inputText id="FaultLocationX2" style="text-align:right;width:60px"
 								  value="#{myentry31.faultLocationX}" required="true" />
 								<h:message id="lkdrh1182" for="FaultLocationX2" showDetail="true"
@@ -48,8 +52,6 @@
 							      </f:facet>
 
 							      <h:panelGrid  id="spxpcp7"columns="3" cellpadding="0" cellspacing="0">
-								<f:facet name="header">								
-								</f:facet>
 								<h:inputText id="FaultLocationY2" style="text-align:right;width:60px" 
 								  value="#{myentry31.faultLocationY}"
 								  required="true" />
@@ -65,8 +67,6 @@
 								<h:outputText id="lkdrqh1186" value="Length" />
 							      </f:facet>
 							      <h:panelGrid  id="spxpcp8"columns="3" cellpadding="0" cellspacing="0">
-								<f:facet name="header">								
-								</f:facet>
 								<h:inputText id="FaultLength2" style="text-align:right;width:60px" 
 								  value="#{myentry31.faultLength}"
 								  required="true" />
@@ -82,8 +82,7 @@
 								<h:outputText id="lkdrh1189" value="Width" />
 							      </f:facet>
 							      <h:panelGrid  id="spxpcp9" columns="3" cellpadding="0" cellspacing="0">
-								<f:facet name="header">								
-								</f:facet>
+
 								<h:inputText id="FaultWidth2" style="text-align:right;width:60px" 
 								  value="#{myentry31.faultWidth}"
 								  required="true" />
@@ -116,8 +115,6 @@
 								<h:outputText id="lkdrqj11816" value="Dip Angle" />
 							      </f:facet>
 							      <h:panelGrid id="spxpcp11" columns="3" cellpadding="0" cellspacing="0">
-								<f:facet name="header">								
-								</f:facet>
 								<h:inputText id="FaultDipAngle2" style="text-align:right;width:60px" 
 								  value="#{myentry31.faultDipAngle}"
 								  required="true" />
@@ -150,8 +147,6 @@
 								<h:outputText id="dflelerkljj3" value="Dip Slip" />
 							      </f:facet>
 							      <h:panelGrid id="spxpcp13" columns="3" cellpadding="0" cellspacing="0">
-								<f:facet name="header">								
-								</f:facet>
 								<h:inputText id="FaultSlip2" style="text-align:right;width:60px" 
 								  value="#{myentry31.faultSlip}"
 								  required="true" />
@@ -184,8 +179,6 @@
 								<h:outputText id="dflelerkljj8" value="Fault Lon Starts(optional)" />
 							      </f:facet>
 							      <h:panelGrid id="spxpcp15" columns="1" cellpadding="0" cellspacing="0" styleClass="centered">
-								<f:facet name="header">								
-								</f:facet>
 								<h:inputText id="FaultLonStarts2" style="text-align:right;width:60px" 
 								  value="#{myentry31.faultLonStarts}" />
 							      </h:panelGrid>
@@ -208,8 +201,6 @@
 								<h:outputText  id="dflelerkljj14" value="Fault Lon Ends(optional)" />
 							      </f:facet>
 							      <h:panelGrid id="spxpcp17" columns="1" cellpadding="0" cellspacing="0" styleClass="centered">
-								<f:facet name="header">								
-								</f:facet>
 								<h:inputText id="FaultLonEnds2" style="text-align:right;width:60px" 
 								  value="#{myentry31.faultLonEnds}" />
 							      </h:panelGrid>
@@ -220,28 +211,27 @@
 								<h:outputText id="dflelerkljj17" value="Fault Lat Ends(optional)" />
 							      </f:facet>
 							      <h:panelGrid id="spxpcp18" columns="1" cellpadding="0" cellspacing="0" styleClass="centered">
-								<f:facet name="header">								
-								</f:facet>
 								<h:inputText id="FaultLatEnds2" style="text-align:right;width:60px" 
 								  value="#{myentry31.faultLatEnds}" />
 							      </h:panelGrid>
 							    </h:column>
-
-
 						      </h:dataTable>
 
 
-							<h:dataTable border="1" cellpadding="0" cellspacing="0" id="dflelegq24" headerClass="componentstableh2" columnClasses="componentstablec"											  
+							<h:dataTable border="1" 
+											 cellpadding="0" 
+											 cellspacing="0" 
+											 id="dflelegq24" 
+											 headerClass="componentstableh2" 
+											 columnClasses="componentstablec"											  
 											  value="#{SimplexBean.myFaultEntryForProjectList}" var="myentry3">
-
 								<h:column>
 									<f:facet name="header">
 										<b><h:outputText id="dflelerkljk454" escape="false" value="Update" /></b>
 									</f:facet>
 
 							      <h:panelGrid id="spxpcp19" columns="2" cellpadding="0" cellspacing="0" styleClass="centered">
-								<f:facet name="header">								
-								</f:facet>
+
 								<h:selectBooleanCheckbox value="#{myentry3.update}" id="dflelerkljk455"/>
 								<h:outputText style="text-align:right;width:0px" value ="" />
 							      </h:panelGrid>								
@@ -252,9 +242,11 @@
 										<b><h:outputText id="dflelerkljk456" escape="false" value="Remove" /></b>
 									</f:facet>									
 
-							      <h:panelGrid id="spxpcp20" columns="2" cellpadding="0" cellspacing="0" styleClass="centered">
-								<f:facet name="header">								
-								</f:facet>
+							      <h:panelGrid id="spxpcp20" 
+													 columns="2" 
+													 cellpadding="0" 
+													 cellspacing="0" 
+													 styleClass="centered">
 								<h:selectBooleanCheckbox id="dflelerkljk457" value="#{myentry3.delete}"/>
 								<h:outputText style="text-align:right;width:0px" value ="" />
 							      </h:panelGrid>
@@ -272,12 +264,12 @@
 
 				<h:form id="UpdateSelectObservationForm"
 					rendered="#{!empty SimplexBean.myObservationsForProjectList}">
-				<h:outputText value="" escape="false"/><br/>				
+				<h:outputText value="<br/>" escape="false"/>
 				<h:outputText value="1) Please click the 'update' button after value changes." escape="false"/>
 						<h:panelGroup id="dflelerkljk174">
 						  <h:panelGrid id="obsvpanelgrid" columns="1" border="1">
-								<b><h:outputFormat escape="false" id="dflelerkljk176"
-									value="Observation Components">
+								<h:outputFormat escape="false" id="dflelerkljk176"
+									value="<b>Observation Components</b>">
 								</h:outputFormat></b>
 								<h:commandButton id="viewSimplexObsv" value="Display/Hide"
 									actionListener="#{SimplexBean.currentEditProjectForm.toggleShowObsvEntries}"/>
@@ -289,7 +281,9 @@
 								var="myentry4">
 								<h:column>
 									<f:facet name="header">
-										<b><h:outputText id="dflelerkljk178" escape="false" value="Name" /></b>
+										<h:outputText id="dflelerkljk178" 
+														  escape="false" 
+														  value="<b>Name</b>" />
 									</f:facet>
 									<h:inputText id="dflelerkljk179" style="text-align:right;width:60px"
 									  value="#{myentry4.obsvName}" required="true" />
@@ -297,7 +291,9 @@
 
 								<h:column>
 									<f:facet name="header">
-										<b><h:outputText id="dflelerkljk538" escape="false" value="Type" /></b>
+										<h:outputText id="dflelerkljk538" 
+														  escape="false" 
+														  value="<b>Type</b>" />
 									</f:facet>									
 									<h:selectOneMenu id="obsvType2"
 										value="#{myentry4.obsvType}">
@@ -312,30 +308,43 @@
 
 								<h:column>
 									<f:facet name="header">
-										<b><h:outputText id="dflelerkljk548" escape="false" value="Value" /></b>
+										<h:outputText id="dflelerkljk548" 
+														  escape="false" 
+														  value="<b>Value</b>" />
 									</f:facet>
 									<h:inputText id="dflelerklj71" style="text-align:right;width:110px;" value="#{myentry4.obsvValue}" />
 								</h:column>
 
 								<h:column>
 									<f:facet name="header">
-										<b><h:outputText id="dflelerkljk558" escape="false" value="Error" /></b>
+										<h:outputText id="dflelerkljk558" 
+														  escape="false" 
+														  value="<b>Error</b>" /></b>
 									</f:facet>
-									<h:inputText id="dflelerklj72" style="text-align:right;width:110px;" value="#{myentry4.obsvError}" />
+									<h:inputText id="dflelerklj72" 
+													 style="text-align:right;width:110px;" 
+													 value="#{myentry4.obsvError}" />
 								</h:column>
 
 								<h:column>
 									<f:facet name="header">
-										<b><h:outputText id="dflelerkljk568" escape="false" value="Location East" /></b>
+										<h:outputText id="dflelerkljk568" 
+														  escape="false" 
+														  value="<b>Location East</b>" />
 									</f:facet>
-									<h:inputText id="dflelerklj73" style="text-align:right;" value="#{myentry4.obsvLocationEast}" />
+									<h:inputText id="dflelerklj73" 
+													 style="text-align:right;" 
+													 value="#{myentry4.obsvLocationEast}" />
 								</h:column>
 
 								<h:column>
 									<f:facet name="header">
-										<b><h:outputText id="dflelerkljk578" escape="false" value="Location North" /></b>
+										<h:outputText id="dflelerkljk578" 
+														  escape="false" 
+														  value="<b>Location North</b>" />
 									</f:facet>
-									<h:inputText id="dflelerklj74" style="text-align:right;" value="#{myentry4.obsvLocationNorth}" />
+									<h:inputText id="dflelerklj74" style="text-align:right;" 
+													 value="#{myentry4.obsvLocationNorth}" />
 								</h:column>
 								<h:column>
 									<f:facet name="header">
@@ -357,7 +366,8 @@
 
 								<h:column>
 									<f:facet name="header">
-										<b><h:outputText id="dflelerkljk954" escape="false" value="Update" /></b>
+										<h:outputText id="dflelerkljk954" escape="false" 
+										value="<b>Update</b>" />
 									</f:facet>
 									
 							      <h:panelGrid id="spxpcp31" columns="2" cellpadding="0" cellspacing="0" styleClass="centered">
@@ -371,7 +381,8 @@
 
 								<h:column>
 									<f:facet name="header">
-										<b><h:outputText id="dflelerkljk956" escape="false" value="Remove" /></b>
+										<h:outputText id="dflelerkljk956" escape="false" 
+										value="<b>Remove</b>" />
 									</f:facet>
 									
 

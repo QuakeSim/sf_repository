@@ -14,9 +14,6 @@
 <jsp:useBean id="MapperID" scope="session"
 	class="cgl.sensorgrid.gui.google.Mapper" />
 
-
-
-
 <%
 Vector networkNames = RSSBeanID.networkNames();
 
@@ -72,14 +69,7 @@ for(int i=0;i<permsize;i++) {
 	// System.out.println(i + " " + nameArray[i+rssnewsize]);
 }
 
-
-
-
-
-
 %>
-
-
 
 <style type="text/css">
 .alignTop {
@@ -91,8 +81,6 @@ for(int i=0;i<permsize;i++) {
 	font-size: 18pt;
 	font-weight: bold;
 }
-
-
 
 </style>
 
@@ -173,8 +161,6 @@ var networkInfo = new Array (<%=networkNames.size()%>);
 for (i = 0; i < networkInfo.length; ++ i){
 	networkInfo [i] = new Array (2);
 }
-
-
 
 //This is used to calculate the length and strike angle.
 function calculatelength(){
@@ -305,7 +291,6 @@ function initialize() {
 	// icon_SW.iconAnchor = new GPoint(10, 32);
 	// icon_SW.dragCrossImage = '';
 
-
 	
 	map=new GMap2(document.getElementById("defaultmap"));
 	map.addMapType(G_PHYSICAL_MAP);
@@ -313,9 +298,6 @@ function initialize() {
 	map.addControl(new GLargeMapControl());
 	map.addControl(new GMapTypeControl());
 	map.addControl(new GScaleControl());
-
-
-
 
 
 // Show the faults
@@ -336,7 +318,6 @@ function initialize() {
 
 	var gpslist=document.getElementById("obsvGPSMap:GPSStationList");
 	
-
 	GEvent.addListener(gpslist,"click",function(e){
 		var a = new Array();
 		if (gpslist.value != "")
@@ -364,12 +345,10 @@ function initialize() {
 	<%
 // Display the markers
 
-
 	ExternalContext context = null;
 
 	FacesContext facesContext=FacesContext.getCurrentInstance();
 	
-
 	try {
 		context=facesContext.getExternalContext();
 	}
@@ -379,7 +358,6 @@ function initialize() {
 
 	Object requestObj=null;
 	requestObj=context.getRequest();
-
 
 	SimplexBean SB = null;
 	List l = null;	
@@ -483,14 +461,10 @@ function initialize() {
 	}
 	%>
 
-
 document.getElementById("obsvGPSMap:GPSStationNum").value = <%=l2.size()%>;
-
-
 
 // overlayNetworks();
 // printNetworkColors(networkInfo);
-
 
 }
 
@@ -567,18 +541,10 @@ function togglemarker(array, e, option)
 		var newElement4= markernamelist[index] + '/' + markerlatlist[index] + '/' +  markerlonlist[index];
 		GEvent.trigger(document.getElementById("obsvGPSMap:GPSStationList"),'click', newElement4);
 		marker[index].openInfoWindow(html[index]);
-		
-
-
-
 	});
 	map.addOverlay(marker[index]);
 
-
 }
-
-
-
 
 function initialPosition() {
 // map.clearOverlays();
@@ -610,7 +576,6 @@ function initialPosition() {
 	updatePolyline();
 }
 
-
 function updateGPSinthebox() {
 
 	var minlat = document.getElementById("obsvGPSMap:minlat");	
@@ -624,7 +589,6 @@ function updateGPSinthebox() {
 	maxlon.value = marker_NE.getPoint().lng();
 
 
-
 	if (marker_SW.getPoint().lat() >= marker_NE.getPoint().lat())
 	{
 		maxlat.value = marker_SW.getPoint().lat();
@@ -636,7 +600,6 @@ function updateGPSinthebox() {
 		maxlon.value = marker_SW.getPoint().lng();
 		minlon.value = marker_NE.getPoint().lng();
 	}
-
 
 	var a = new Array();
 	var b = new Array();
@@ -670,9 +633,6 @@ function updateGPSinthebox() {
 
 }
 
-
-
-
 function updatePolyline() {
 	if (border) {
 		map.removeOverlay(border);
@@ -703,11 +663,6 @@ function toggleBorder() {
 		initialPosition();
 	}
 }
-
-
-
-
-
 
 function selectOne(form , button) {
 	turnOffRadioForForm(form);
@@ -770,8 +725,6 @@ function overlayNetworks(){
 				stations [i] = new Array (3);
 			}
 
-
-
 			<%
 			for (int i = 0; i < stationsVec.size(); i++) {
 				String name = (String)stationsVec.get(i);
@@ -794,10 +747,8 @@ function overlayNetworks(){
 
 function createMarker(networkName, name, lon, lat, icon) {
 	var marker = new GMarker(new GPoint(lon, lat),icon);
-	
 
 	var html = "<b>Station Name= </b>" + name + "<br><b>Lat=</b>" + lat + "<br><b>Lon= </b>" + lon + "<br><b>Network= </b>" + networkName;
-
 
 	GEvent.addListener(marker, "click", function() {
 		marker.openInfoWindowHtml(html);;

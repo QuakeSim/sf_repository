@@ -7,8 +7,8 @@
 						columnClasses="subtitle,medium">
 
 						<f:facet name="header">
-							<b><h:outputFormat id="output3" escape="false"
-								value="Input Fault Geometry" /></b>
+							<h:outputFormat id="output3" escape="false"
+								value="<b>Input Fault Geometry</b>" />
 						</f:facet>
 
 						<h:outputText id="lkdmt117" value="Fault Name:" />
@@ -108,12 +108,12 @@
 						<h:selectBooleanCheckbox id="faultDipSlipVary"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultDipSlipVary}" />
 
-						<h:outputText  id="dfbaf341" value="Strike Slip:" />
+						<h:outputText id="dfbaf341" value="Strike Slip:" />
 						<h:panelGroup id="dfbad133">
 							<h:inputText id="FaultRakeAngle"
 								value="#{SimplexBean.currentEditProjectForm.currentFault.faultRakeAngle}"
 								required="true" />
-							<h:message  id="dflzzz17" for="FaultRakeAngle" showDetail="true"
+							<h:message id="dflzzz17" for="FaultRakeAngle" showDetail="true"
 								showSummary="true" errorStyle="color: red" />
 						</h:panelGroup>
 						<h:selectBooleanCheckbox id="faultStrikeSlipVary"
