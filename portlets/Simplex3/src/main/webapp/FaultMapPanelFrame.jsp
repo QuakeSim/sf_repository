@@ -1,7 +1,10 @@
+<h:panelGrid id="faultMapPanelFrameContainerGrid"
+			  border="0"
+			  rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}"
+			  columns="1">
 <h:form id="faultKMLSelectorForm" rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}">
   <h:inputHidden id="faultName" value="#{SimplexBean.currentEditProjectForm.mapFaultName}"/>
   <h:inputHidden id="faultlistsize" value="#{SimplexBean.myFaultsForProjectListsize}"/>
-
 
   <f:verbatim>
     <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/jquery.treeview.css">
@@ -38,7 +41,9 @@
 							actionListener="#{SimplexBean.currentEditProjectForm.toggleSetFaultFromMap}"/> 
 	</h:panelGroup>
   </h:panelGrid>
+</h:form>
 
+<h:form id="faultKMLDrawerForm" rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}">
 <h:panelGrid id="DrawingFaultPanel" columns="1" border="1" style="vertical-align:top;width: 800px;">
 <h:panelGroup id="dflel235231">
   <h:outputText id="DrawFaultSimplexDesc" escape="false" value="<b>Drawing a fault:</b> If you wish to draw a new fault that doesn't exist in the catalogs above, select here. <br/>"/>
@@ -59,27 +64,27 @@
       <f:facet name="header">
 		  <h:outputText id="nfa9" escape="false" value="<b>Lon Start</b>" />
       </f:facet>
-      <h:inputText id="faultdrawLonStartst" value="#{myentry32.faultLonStart}" required="false" />
+      <h:inputText id="faultdrawLonStartst" value="#{myentry32.faultLonStart}" required="true" />
     </h:column>
 
     <h:column>
       <f:facet name="header">
 		  <h:outputText id="nfa7" escape="false" value="<b>Lat Start</b>" />
       </f:facet>
-      <h:inputText id="faultdrawLatStartst" value="#{myentry32.faultLatStart}" required="false" />
+      <h:inputText id="faultdrawLatStartst" value="#{myentry32.faultLatStart}" required="true" />
     </h:column>
 
     <h:column>
       <f:facet name="header">
 	 	  <h:outputText id="nfa5" escape="false" value="<b>Lon End</b>" />
       </f:facet>
-      <h:inputText id="faultdrawLonEndst" value="#{myentry32.faultLonEnd}" required="false" />
+      <h:inputText id="faultdrawLonEndst" value="#{myentry32.faultLonEnd}" required="true" />
     </h:column>
     <h:column>
       <f:facet name="header">
 					<h:outputText id="nfa3" escape="false" value="<b>Lat End</b>" />
       </f:facet>
-      <h:inputText id="faultdrawLatEndst" value="#{myentry32.faultLatEnd}" required="false" />
+      <h:inputText id="faultdrawLatEndst" value="#{myentry32.faultLatEnd}" required="true" />
     </h:column>
   </h:dataTable>
 </h:panelGrid>
@@ -340,7 +345,7 @@ new GLatLng(marker_NE.getPoint().lat(), marker_NE.getPoint().lng())
 </f:verbatim>
 
 </h:form>
-
+</h:panelGrid>
 
 
 

@@ -52,24 +52,32 @@
   </script>
 
 <f:view>	
-	<h:form>
-	<h:outputText  id="lkdjf2" styleClass="header2" value="Project Archive"/>
-	<p/>
-		<h:outputText  id="lkdjf3" value="You don't have any archived projects. Use the form below to create a new one."
-							rendered="#{empty SimplexBean.myProjectNameList}"/>
+   <h:messages id="simplexMessagesLoadProject" 
+					  showDetail="true"
+					  showSummary="true"
+					  errorStyle="color: red"/>
 
-	        <h:panelGrid id="lkdjf4"
+
+	<h:outputText  id="lkdjf2" styleClass="header2" value="Project Archive"/>
+	<h:outputText  id="lkdjf3" 
+						value="You don't have any archived projects. Use the form below to create a new one."
+						rendered="#{empty SimplexBean.myProjectNameList}"/>
+
+	<h:panelGrid id="lkdjf4"
 			  			columnClasses="alignTop,alignTop,alignTop"
 						columns="3" 
 						rendered="#{!(empty SimplexBean.myProjectNameList)}"		 
 						border="1">
+
+		  <h:form id="SimplexNewProjCheckBox">
 			<h:panelGrid  id="lkdjf5" columns="1" border="0">
-				<b><h:outputText  id="lkdjf6" escape="false" value="Select Projects" /></b><br>
+				<h:outputText  id="lkdjf6" escape="false" value="<b>Select Projects</b><br/>" /><
 				<h:outputText id="lkdjf7" 
 								  escape="false"
-								value="Please select from one of the previous projects." />
+								  value="Please select from one of the previous projects." />
 				<h:selectManyCheckbox id="projectlistforload" 
-											value="#{SimplexBean.selectProjectsList}"
+											 required="true"
+											 value="#{SimplexBean.selectProjectsList}"
 											onchange="dataTableSelectOneRadio(this)"
 											onclick="dataTableSelectOneRadio(this)"
 											layout="pageDirection">
@@ -79,13 +87,16 @@
 				<h:commandButton id="lkdjf8" value="Select"
 									  action="#{SimplexBean.toggleSelectProject}" />
 			</h:panelGrid>
-			
+		  </h:form>
+		  
+		  <h:form id="SimplexCopyProjCheckBox">					 
 			<h:panelGrid id="dlrfih1" columns="1" border="0">
-				<b><h:outputText escape="false" value="Copy Project" /></b><br>
+				<h:outputText escape="false" value="<b>Copy Project</b><br/>" />
 				<h:outputText escape="false"
 					value="Please select from one of the previous projects." />
 	
 				<h:selectManyCheckbox id="projectlistforcopy" 
+											 required="true"
 											 value="#{SimplexBean.copyProjectsList}"
 											 onchange="dataTableSelectOneRadio(this)"
 											 onclick="dataTableSelectOneRadio(this)"
@@ -95,30 +106,36 @@
 
 				   <h:outputText value="New Project Name:"/>
 				   <h:inputText id="newProjectName" 
+									 required="true"
 									 value="#{SimplexBean.projectName}"/>
 
 				<h:commandButton value="Copy"
-					action="#{SimplexBean.toggleCopyProject}" />
+									  action="#{SimplexBean.toggleCopyProject}" />
 			</h:panelGrid>
+		  </h:form>
 			
+		  <h:form id="SimplexDeleteProjCheckBox">
 			<h:panelGrid id="lkdjf9" columns="1" border="0">
-				<b><h:outputText id="lkdjf10" escape="false" value="Select Projects" /></b><br>
+			<h:outputText id="lkdjf10" escape="false" value="<b>Delete Projects</b><br/>" />
 				<h:outputText  id="lkdjf11" escape="false"
 					value="Please select from one of the previous projects." />
-				<h:selectManyCheckbox id="projectfordelete" value="#{SimplexBean.deleteProjectsList}"
-					layout="pageDirection">
+				<h:selectManyCheckbox id="projectfordelete" 
+											 value="#{SimplexBean.deleteProjectsList}"
+											 required="true"
+											 layout="pageDirection">
 					<f:selectItems value="#{SimplexBean.myProjectNameList}" />
 				</h:selectManyCheckbox>
 				<h:commandButton id="lkdjf12" value="Delete"
 					action="#{SimplexBean.toggleDeleteProject}" />
 			</h:panelGrid>
+	     </h:form>
 
 		</h:panelGrid>
 
-	</h:form>
-
 	<h:form id="lkdjf13">
-		<b>New Project Name</b>
+		<h:outputText escape="false" 
+						  id="simplexnewprojname29"
+						  value="<b>New Project Name</b>"/>
 		<h:panelGrid id="lkdjf14" columns="2" border="0">
 			<h:outputText id="lkdjf15" value="Provide a Project Name:" />
 			<h:panelGroup id="lkdjf16">
@@ -150,7 +167,7 @@
 	</h:form>	
 
 	<h:form id="lkdjf114">
-		<hr />
+		<h:outputText escape="false" value="<hr/>"/>
 		<h:commandLink  id="lkdjf115" action="Simplex2-back">
 			<h:outputText id="lkdjf116" value="#{SimplexBean.codeName} Main Menu" />
 		</h:commandLink>

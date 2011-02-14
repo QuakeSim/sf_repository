@@ -803,6 +803,10 @@ function getScrolling() {
 }
 //]]>
 </script>
+   <h:messages id="simplexMessagesDynamicFault" 
+					  showDetail="true"
+					  showSummary="true"
+					  errorStyle="color: red"/>
 
 	<h:outputText id="lkdrq1" styleClass="header2"
 		value="Project Component Manager" />
