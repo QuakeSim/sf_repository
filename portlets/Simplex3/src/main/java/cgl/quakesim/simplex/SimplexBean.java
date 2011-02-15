@@ -1008,7 +1008,6 @@ public class SimplexBean extends GenericSopacBean {
 			if (db != null)
 				db.close();			
 		}
-
 	}
 
 	/**
