@@ -3,7 +3,7 @@
 				<h:panelGrid id="AddFaultSelection" columns="1" 
 					footerClass="subtitle" headerClass="subtitlebig" 
 					styleClass="medium" columnClasses="subtitle,medium"> 
-					<h:panelGroup   id="stuff41"> 
+					<h:panelGroup id="stuff41"> 
 						<h:outputFormat escape="false" 
 						    id="stuff42" 
 							value="<b>Fault Database Selection</b><br><br>" /> 

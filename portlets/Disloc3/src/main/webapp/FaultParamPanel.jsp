@@ -6,7 +6,6 @@
 					headerClass="subtitlebig" styleClass="medium" 
 					columnClasses="subtitle,medium"> 
  
-
 			      <h:outputText id="outputer3" escape="false" 
 							  		value="<b>Name</b>" /> 
 

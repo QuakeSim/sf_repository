@@ -27,7 +27,6 @@
     </h:panelGrid>
   </f:verbatim>
 
-
 <h:panelGroup id="dflel235231">
   <h:outputText id="daflelerkl513" escape="false" value="Drawing a fault : "/>
   <h:selectBooleanCheckbox id="dflab2" onclick="togglefaultdrawing()" value="#{DislocBean2.faultdrawing}"/>
@@ -74,9 +73,7 @@
 <h:commandButton id="addfaultsd" value="Add a new fault" actionListener="#{DislocBean2.toggleDrawFaultFromMap}"/>
 
 
-
 <f:verbatim>
-
 
 <script language="JavaScript">
 
@@ -334,22 +331,6 @@ new GLatLng(marker_NE.getPoint().lat(), marker_NE.getPoint().lng())
 
 	faultMap.addOverlay(border);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

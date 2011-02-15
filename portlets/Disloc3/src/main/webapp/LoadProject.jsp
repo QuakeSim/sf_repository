@@ -54,8 +54,7 @@ function dataTableSelectOneRadio(radio) {
 
 <f:view>
 	<h:outputText id="lptv1" styleClass="header2" value="Project Archive"/>
-				  
-        <p/>
+
 		  <h:outputText id="lptv11" value="You don't have any archived projects."
 							 rendered="#{empty DislocBean2.myProjectNameList}"/>
 		<h:panelGrid id="lptv12" columnClasses="alignTop,alignTop,alignTop" columns="3" 
