@@ -4,13 +4,13 @@
 					<h:panelGrid id="FaultSearchName" columns="1"
 						footerClass="subtitle" headerClass="subtitlebig"
 						styleClass="medium" columnClasses="subtitle,medium">
-						<b><h:outputFormat  id="dfleleawjk116" escape="false"
-							value="Search Fault DB by Fault Name" /></b><br><br>
+						<h:outputFormat  id="dfleleawjk116" escape="false"
+							value="Search Fault DB by Fault Name<br/>" />
 						<h:panelGroup id="dfleaagljk117">
 							<h:panelGroup id="dflbrkljk118">
 								<h:outputText escape="false"  id="dflelerkljk119"
 									value="Enter the name of the fault. The search will return partial matches." />
-								<h:outputText escape="false" value="" /><br>
+								<h:outputText escape="false" value="<br/>" />
 							</h:panelGroup>
 
 							<h:panelGroup id="dflelbljk120">

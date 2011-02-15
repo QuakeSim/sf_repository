@@ -1480,6 +1480,11 @@ public class SimplexBean extends GenericSopacBean {
 			int iSelectObservation = -1;
 			// Find out which Observations were selected.  Loop over all of them
 			// and take appropriate actions in each case.
+			
+			db = Db4o.openFile(getBasePath() + "/"
+									 + getContextBasePath() + "/" + userName + "/"
+									 + codeName + "/" + projectName + ".db");
+			
 			for (int i = 0; i < myObservationsForProjectList.size(); i++) {
 				Observation tmp_Observation = new Observation();
 				tmp_Observation = (Observation) myObservationsForProjectList
@@ -1502,10 +1507,6 @@ public class SimplexBean extends GenericSopacBean {
 					System.out.println("[" + getUserName() + "/SimplexBean/toggleUpdateObservations] Updating "
 							+ tmp_ObservationName + " "
 							+ tmp_Observation.getObsvError());
-					
-					db = Db4o.openFile(getBasePath() + "/"
-							+ getContextBasePath() + "/" + userName + "/"
-							+ codeName + "/" + projectName + ".db");
 
 					/*
 					 * Observation todelete = new Observation();
@@ -1551,9 +1552,9 @@ public class SimplexBean extends GenericSopacBean {
 					System.out.println("[" + getUserName() + "/SimplexBean/toggleUpdateObservations] Deleting "
 							+ tmp_ObservationName);
 
-					db = Db4o.openFile(getBasePath() + "/"
-							+ getContextBasePath() + "/" + userName + "/"
-							+ codeName + "/" + projectName + ".db");
+					// db = Db4o.openFile(getBasePath() + "/"
+					// 		+ getContextBasePath() + "/" + userName + "/"
+					// 		+ codeName + "/" + projectName + ".db");
 
 					Observation todelete = new Observation();
 					todelete.setObsvName(tmp_ObservationName);
@@ -1565,6 +1566,9 @@ public class SimplexBean extends GenericSopacBean {
 				}
 			}
 			reconstructMyObservationsForProjectList(projectName);
+			if (db != null)
+				 db.close();			
+			
 		} catch (Exception e) {			
 			System.out.println("[" + getUserName() + "/SimplexBean/toggleUpdateObservations] " + e);
 		}
@@ -1960,8 +1964,13 @@ public class SimplexBean extends GenericSopacBean {
 		
 		try {
 			int iSelectFault = -1;
-			// Find out which fault was selected.
+			//Open the database
+			db = Db4o.openFile(getBasePath() + "/"
+									 + getContextBasePath() + "/" + userName + "/"
+									 + codeName + "/" + projectName + ".db");
 
+			
+			// Find out which fault was selected.
 			for (int i = 0; i < myFaultsForProjectList.size(); i++) {
 				Fault tmp_Fault = new Fault();
 				tmp_Fault = (Fault) myFaultsForProjectList.get(i);
@@ -1987,9 +1996,6 @@ public class SimplexBean extends GenericSopacBean {
 							+ tmp_Fault.getFaultName() + "(old name)"
 							+ tmp_faultName + " " + tmp_Fault.getFaultSlip());
 
-					db = Db4o.openFile(getBasePath() + "/"
-							+ getContextBasePath() + "/" + userName + "/"
-							+ codeName + "/" + projectName + ".db");
 
 					Fault toUpdate = new Fault();
 					toUpdate.setFaultName(tmp_faultName);
@@ -2040,10 +2046,6 @@ public class SimplexBean extends GenericSopacBean {
 					System.out.println("[" + getUserName() + "/SimplexBean/toggleUpdateFaults] Deleteing "
 							+ tmp_faultName + "from db");
 
-					db = Db4o.openFile(getBasePath() + "/"
-							+ getContextBasePath() + "/" + userName + "/"
-							+ codeName + "/" + projectName + ".db");
-
 					Fault todelete = new Fault();
 					todelete.setFaultName(tmp_faultName);
 					ObjectSet result = db.get(todelete);
@@ -2053,6 +2055,9 @@ public class SimplexBean extends GenericSopacBean {
 					}
 				}
 			}
+
+			//Close the database.
+			if (db != null)  db.close();			
 
 		} catch (Exception e) {
 			System.out.println("[" + getUserName() + "/SimplexBean/toggleUpdateFaults] " + e);

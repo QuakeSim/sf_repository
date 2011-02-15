@@ -84,10 +84,11 @@
 </h:panelGrid>
 </h:panelGroup>
  <h:panelGroup id="SimplexDrawingFaultActionPanel">
-   <h:outputText id="DrawFaultSimplexAction" escape="false" value="Add the fault after drawing it."/>		  
+   <h:outputText id="DrawFaultSimplexAction" escape="false" value="Add the fault after drawing it: "/>		  
    <h:commandButton id="addfaultsd" value="Add a drawn fault" actionListener="#{SimplexBean.toggleDrawFaultFromMap}"/>
 </h:panelGroup>
  </h:panelGrid>
+
 <f:verbatim>
 <script type="text/javascript">
 

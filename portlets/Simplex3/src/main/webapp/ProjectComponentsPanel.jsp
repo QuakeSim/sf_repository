@@ -272,7 +272,7 @@
 								<h:outputFormat escape="false" 
 													 id="dflelerkljk176"
 													 value="<b>Observation Components</b>:Please click the 'update' button after value changes.">
-								</h:outputFormat></b>
+								</h:outputFormat>
 								<h:commandButton id="viewSimplexObsv" value="Display/Hide"
 									actionListener="#{SimplexBean.currentEditProjectForm.toggleShowObsvEntries}"/>
 							<h:panelGrid id="aerbasd1" columns="2" border="0" cellpadding="0" cellspacing="0">    
@@ -350,7 +350,7 @@
 								</h:column>
 								<h:column>
 									<f:facet name="header">
-										<b><h:outputText id="dflelerkljk388" escape="false" value="Ref Site" /></b>
+										<h:outputText id="dflelerkljk388" escape="false" value="<b>Ref Site</b>" />
 									</f:facet>
 									<h:selectOneMenu id="obsvRefSite2"
 										value="#{myentry4.obsvRefSite}">

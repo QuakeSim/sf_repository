@@ -811,7 +811,8 @@ function getScrolling() {
 	<h:outputText id="lkdrq1" styleClass="header2"
 		value="Project Component Manager" />
 	<h:inputHidden id="faultKmlUrl" value="#{SimplexBean.faultKmlUrl}" />
-	<br><h:outputText id="lkdrq2" escape="false"
+	<h:outputText id="lkdrq2" escape="false" value="<br>"/>
+	  <h:outputText id="lkdrq2" escape="false"
 		value="You must provide at least one fault and one observation point before you can run Simplex" />
 	<%/* This is the main grid container */%>
 	<h:panelGrid id="EditProject" columnClasses="alignTop,alignTop"

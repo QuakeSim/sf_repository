@@ -5,12 +5,12 @@
 						footerClass="subtitle" headerClass="subtitlebig"
 						styleClass="medium" columnClasses="subtitle,medium">
 						<h:panelGroup id="dflelerkljk111">
-							<b><h:outputFormat  id="dflelerkljk112" escape="false"
-								value="Fault Database Selection" /></b><br><br>
+							<h:outputFormat  id="dflelerkljk112" escape="false"
+								value="Fault Database Selection<br/>" />
 							<h:outputFormat  id="dflelerkljk113" escape="false"
-								value="You may select faults from the Fault Database using author search, latitude/longitude bounding box, or by viewing the master list (long)." /><br><br>
-							<b><h:outputFormat  id="dflelerkljk114" escape="false"
-								value="Please choose a radio button and click Select."/></b><br><br>
+								value="You may select faults from the Fault Database using author search, latitude/longitude bounding box, or by viewing the master list (long).<br/>" />
+							<h:outputFormat  id="dflelerkljk114" escape="false"
+								value="Please choose a radio button and click Select.<br/>"/>
 						</h:panelGroup>
 
 						<h:panelGroup id="dflelerkljk115">

@@ -1,8 +1,8 @@
 			<h:panelGroup id="lck093ks"
 					rendered="#{SimplexBean.currentEditProjectForm.renderGPSStationMap}">
 					 <h:form id="obsvGPSMap">
-                <b><h:outputText id="clrlc093" escape="false"
-					    value="Select Stations from Map: Select the stations that you want to use as observation points."/></b>
+                <h:outputText id="clrlc093" escape="false"
+					    value="Select Stations from Map: Select the stations that you want to use as observation points."/>
 						 <h:panelGrid id="mapsAndCrap" columns="3" columnClasses="alignTop,alignTop">
 						    <h:panelGroup id="mapncrap1">
 						 <f:verbatim>
