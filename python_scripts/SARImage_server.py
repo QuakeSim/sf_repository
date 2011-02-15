@@ -112,7 +112,7 @@ def generateKML(extent, params):
         aga, ath, ph = params['flight']
         fs = string.join(['Average GPS Altitude (meter): ', "%.3f" % aga,'<br>',
                           'Average Terrain Height (meter): ', "%.3f" % ath,'<br>',
-                          'Peg Heading: ', "%.3f" % ph])
+                          'Peg Heading (degree): ', "%.3f" % ph])
         desc = desc + fs
         
     description = description % (desc)
