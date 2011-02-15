@@ -20,7 +20,7 @@
 <title>Disloc Load and Delete Project</title>
 </head>
 <body>
-<script language="JavaScript">
+<script type="text/javascript">
 
 function selectOne(form , button)
 {

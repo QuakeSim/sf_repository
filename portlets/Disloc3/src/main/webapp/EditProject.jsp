@@ -53,7 +53,7 @@ mapcenter_y = center_xy[1];
 
 <body onload="myInit()" onunload="GUnload()">
 
-<script language="JavaScript">
+<script type="text/javascript">
 function myInit() {
   	$("#browser").treeview({
 		animated:"normal",

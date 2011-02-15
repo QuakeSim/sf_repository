@@ -18,8 +18,7 @@
  </head>
   
   <body>
-   <script language="JavaScript">
-//<![CDATA[ 
+   <script type="text/javascript">
     function selectOne(form, button)
     {
       turnOffRadioForForm(form);
@@ -44,7 +43,6 @@
     }
     radio.checked = true;
    }
-//]]>
   </script>
 
 <f:view>	

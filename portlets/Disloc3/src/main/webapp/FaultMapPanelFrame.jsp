@@ -75,7 +75,7 @@
 
 <f:verbatim>
 
-<script language="JavaScript">
+<script type="text/javascript">
 
 
 	// These are used by the fault map 	
