@@ -23,8 +23,6 @@ import TestClient.Select.Select;
 import TestClient.Select.SelectService;
 import TestClient.Select.SelectServiceLocator;
 
-
-
 import com.db4o.*;
 
 /**
