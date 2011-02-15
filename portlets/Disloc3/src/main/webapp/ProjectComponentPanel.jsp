@@ -1,6 +1,7 @@
-
-
-<h:panelGrid id="ProjectComponentList" columns="1" border="0">
+<h:panelGrid id="ProjectComponentList" 
+				 rendered="#{!empty DislocBean2.myFaultEntryForProjectList || !empty DislocBean2.myObsvEntryForProjectList}"
+				 columns="1" 
+				 border="0">
     <h:form id="UpdateSelectFaultsForm" rendered="#{!empty DislocBean2.myFaultEntryForProjectList || !empty DislocBean2.myObsvEntryForProjectList}"> 
       <h:outputText id="lherh" value="<br/>" escape="false"/>      
       <h:outputText id="lierlk3" value="1) Please click the 'update' button after value changes." escape="false"/>

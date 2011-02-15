@@ -286,6 +286,10 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 			System.out.println("[getFaultsFromDB] " + e);
 		}
+		finally {
+			if (db != null)
+				db.close();			
+		}
 
 		return returnFaults;
 	}
@@ -351,6 +355,11 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 			System.out.println("[getDislocParamsFromDB] " + e);
 		}
+		finally {
+			if (db != null)
+				db.close();			
+		}
+
 		return paramsBean;
 	}
 
@@ -420,7 +429,10 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 			System.out.println("[storeProjectInContext] " + e);
 		}
-
+		finally {
+			if (db != null)
+				db.close();			
+		}
 	}
 
 	/**
@@ -893,7 +905,11 @@ public class DislocBean extends GenericSopacBean {
 						db.close();
 					System.out.println("[QueryFaultFromDB] " + e);
 				}
-
+				finally {
+					 if (db != null)
+						  db.close();			
+				}
+				
 			}
 			System.out.println("Updated Origin:" + currentParams.getOriginLat()
 					+ " " + currentParams.getOriginLon());
@@ -1123,6 +1139,11 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 			System.out.println("[toggleSelectProject] " + e);
 		}
+		finally {
+			if (db != null)
+				db.close();			
+		}
+
 
 		// Reconstruct the fault and layer object collections from the context
 		// myFaultCollection=populateFaultCollection(projectName);
@@ -1180,6 +1201,10 @@ public class DislocBean extends GenericSopacBean {
 			if (db != null)
 				db.close();
 			System.out.println("[toggleCopyProject] " + e);
+		}
+		finally {
+			if (db != null)
+				db.close();			
 		}
 
 		// //Reconstruct the fault and layer object collections from the context
@@ -1345,7 +1370,11 @@ public class DislocBean extends GenericSopacBean {
 						db.close();
 					System.out.println("[toggleUpdateProjectObservations] " + e);
 				}
-
+				finally {
+					 if (db != null)
+						  db.close();			
+				}
+				
 			}
 
 		} catch (Exception e) {
@@ -1421,7 +1450,10 @@ public class DislocBean extends GenericSopacBean {
 						db.close();
 					System.out.println("[toggleUpdateFaultProjectEntry] " + e);
 				}
-
+				finally {
+					 if (db != null)
+						  db.close();			
+				}
 			}
 
 			// Possibly update the project origin. Need to do this if the
@@ -1441,8 +1473,13 @@ public class DislocBean extends GenericSopacBean {
 		try {
 
 			int iSelectFault = -1;
+			
+			if (db != null) db.close();
+			db = Db4o.openFile(getBasePath() + "/"
+									 + getContextBasePath() + "/" + userName + "/"
+									 + codeName + "/" + projectName + ".db");
+			
 			// Find out which fault was selected.
-
 			for (int i = 0; i < myFaultsForProjectList.size(); i++) {
 				Fault tmp_Fault = new Fault();
 				tmp_Fault = (Fault) myFaultsForProjectList.get(i);
@@ -1468,11 +1505,6 @@ public class DislocBean extends GenericSopacBean {
 							+ tmp_Fault.getFaultName() + "(old name)"
 							+ tmp_faultName);
 
-					if (db != null)
-						db.close();
-					db = Db4o.openFile(getBasePath() + "/"
-							+ getContextBasePath() + "/" + userName + "/"
-							+ codeName + "/" + projectName + ".db");
 
 					Fault toUpdate = new Fault();
 					toUpdate.setFaultName(tmp_faultName);
@@ -1504,8 +1536,6 @@ public class DislocBean extends GenericSopacBean {
 					}
 					db.set(toUpdate);
 					db.commit();
-					if (db != null)
-						db.close();
 				}
 
 				// This is the deletion case.
@@ -1517,11 +1547,11 @@ public class DislocBean extends GenericSopacBean {
 					System.out.println("[toggleUpdateFaults] Deleteing "
 							+ tmp_faultName + "from db");
 
-					if (db != null)
-						db.close();
-					db = Db4o.openFile(getBasePath() + "/"
-							+ getContextBasePath() + "/" + userName + "/"
-							+ codeName + "/" + projectName + ".db");
+					// if (db != null)
+					// 	db.close();
+					// db = Db4o.openFile(getBasePath() + "/"
+					// 		+ getContextBasePath() + "/" + userName + "/"
+					// 		+ codeName + "/" + projectName + ".db");
 
 					Fault todelete = new Fault();
 					todelete.setFaultName(tmp_faultName);
@@ -1540,15 +1570,15 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 			System.out.println("[toggleUpdateFaults] " + e);
 		}
-
+		finally {
+			 if (db != null)
+				  db.close();			
+		}
+		
 		// Print this out as KML
 		faultKmlUrl = createFaultKmlFile();
 	}
-	
-	
-	
-	
-	
+	 	
 	/**
 	 * Handle fault db entry events.
 	 */
@@ -1648,6 +1678,10 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 			System.out.println("[toggleDeleteProjectSummary] " + e);
 		}
+		finally {
+			if (db != null)
+				db.close();			
+		}
 
 	}
 
@@ -1729,6 +1763,10 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 			System.out.println("[populateParamsCollection] " + e);
 		}
+		finally {
+			if (db != null)
+				db.close();			
+		}
 
 		return myDislocParamsCollection;
 	}
@@ -1780,7 +1818,10 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 			System.out.println("[toggleAddFaultForProject] " + e);
 		}
-
+		finally {
+			if (db != null)
+				db.close();			
+		}
 	}
 	public void createFaultFromMap() {
 		
@@ -1865,8 +1906,12 @@ public class DislocBean extends GenericSopacBean {
 					db.close();
 				System.out.println("[QueryFaultFromDB] " + e);
 			}
-
+			finally {
+				 if (db != null)
+					  db.close();			
+			}
 		}
+
 		System.out.println("Updated Origin:" + currentParams.getOriginLat()
 				+ " " + currentParams.getOriginLon());
 
@@ -1925,6 +1970,10 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 			System.out.println("[toggleDrawFaultFromMap] " + e);
 		}		
+		finally {
+			if (db != null)
+				db.close();			
+		}
 	}
 	
 	public void deleteObsv(ActionEvent ev) throws Exception {
@@ -1954,10 +2003,13 @@ public class DislocBean extends GenericSopacBean {
 				
 				System.out.println("[toggleAddObservationsForProject] " + e);				
 			}
-}	
+		finally {
+			 if (db != null)
+				  db.close();			
+		}
+		
+	}	
 	
-	
-
 	public void toggleAddObservationsForProject(ActionEvent ev)
 			throws Exception {
 		
@@ -2012,7 +2064,10 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 			System.out.println("[toggleAddObservationsForProject] " + e);
 		}
-
+		finally {
+			if (db != null)
+				db.close();			
+		}
 	}
 
 	/**
@@ -2102,6 +2157,10 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 			System.out.println("[toggleDeleteProject] " + e);
 		}
+		finally {
+			if (db != null)
+				db.close();			
+		}
 
 		return "disloc-this";
 	}
@@ -2150,6 +2209,10 @@ public class DislocBean extends GenericSopacBean {
 			if (db != null)
 				db.close();
 			System.out.println("[createNewProject] " + e);
+		}
+		finally {
+			if (db != null)
+				db.close();			
 		}
 
 		currentParams = getDislocParamsFromDB(projectName);
@@ -2200,6 +2263,10 @@ public class DislocBean extends GenericSopacBean {
 			if (db != null)
 				db.close();
 			System.out.println("[getMyProjectNameList] " + e);
+		}
+		finally {
+			if (db != null)
+				db.close();			
 		}
 
 		return this.myProjectNameList;
@@ -2504,6 +2571,10 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 			System.out.println("[reconstructMyFaultEntryForProjectList] " + e);
 		}
+		finally {
+			if (db != null)
+				db.close();			
+		}
 
 		return this.myFaultEntryForProjectList;
 	}
@@ -2531,6 +2602,10 @@ public class DislocBean extends GenericSopacBean {
 			if (db != null)
 				db.close();
 			System.out.println("[reconstructMyFaultsForProjectList] " + e);
+		}
+		finally {
+			if (db != null)
+				db.close();			
 		}
 
 		reconstructMyFaultEntryForProjectList(projectName);
@@ -2565,6 +2640,10 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 			System.out.println("[reconstructMyObservationsForProjectList] " + e);
 		}
+		finally {
+			if (db != null)
+				db.close();			
+		}
 
 		return this.myObsvEntryForProjectList;
 	}
@@ -2595,6 +2674,10 @@ public class DislocBean extends GenericSopacBean {
 			if (db != null)
 				db.close();
 			System.out.println("[reconstructMyObsvForProjectList] " + e);
+		}
+		finally {
+			if (db != null)
+				db.close();			
 		}
 
 		return this.myObsvEntryForProjectList;
@@ -2703,6 +2786,10 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 			System.out.println("[populateFaultFromContext] " + e);
 		}
+		finally {
+			if (db != null)
+				db.close();			
+		}
 
 		return currentFault;
 	}
@@ -2730,6 +2817,10 @@ public class DislocBean extends GenericSopacBean {
 			if (db != null)
 				db.close();
 			System.out.println("[populateParamsFromContext] " + e);
+		}
+		finally {
+			if (db != null)
+				db.close();			
 		}
 
 		return params;
@@ -2781,6 +2872,10 @@ public class DislocBean extends GenericSopacBean {
 			if (db != null)
 				db.close();
 			System.out.println("[getMyArchivedDislocResultsList] " + e);
+		}
+		finally {
+			if (db != null)
+				db.close();			
 		}
 
 		return myArchivedDislocResultsList;
@@ -2853,6 +2948,10 @@ public class DislocBean extends GenericSopacBean {
 		} catch (Exception ex) {
 			System.out.println("Unable to download kml file");
 			ex.printStackTrace();
+		}
+		finally {
+			if (db != null)
+				db.close();			
 		}
 	}
 
@@ -3198,6 +3297,11 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 			System.out.println("[getProjectFaultsFromDB] " + e);
 		}
+		finally {
+			if (db != null)
+				db.close();			
+		}
+
 		return returnFaults;
 	}
 
@@ -3287,6 +3391,10 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 			System.out.println("[storeParamsInDB] " + e);
 		}
+		finally {
+			if (db != null)
+				db.close();			
+		}
 
 	}
 
@@ -3315,7 +3423,10 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 			System.out.println("[storeObsvPointsInDB] " + e);
 		}
-
+		finally {
+			if (db != null)
+				db.close();			
+		}
 	}
 
 	/**
@@ -3405,6 +3516,10 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 			System.out.println("[deleteScatterPoint] " + e);
 		}
+		finally {
+			if (db != null)
+				db.close();			
+		}
 
 		// Convert array list to standard array.
 		ObsvPoint[] newPoints = new ObsvPoint[scatterPointList.size()];
@@ -3438,11 +3553,6 @@ public class DislocBean extends GenericSopacBean {
 		}
 	}
 	
-	
-	
-	
-	
-
 	String mapFaultName;
 
 	public void setMapFaultName(String mapFaultName) {
@@ -3536,6 +3646,10 @@ public class DislocBean extends GenericSopacBean {
 				db.close();
 			System.out.println("[getMyInsarParamsList] " + e);
 		}
+		finally {
+			if (db != null)
+				db.close();			
+		}
 		return myInsarParamsList;
 	}
 
@@ -3563,6 +3677,10 @@ public class DislocBean extends GenericSopacBean {
 			if (db != null)
 				db.close();
 			System.out.println("[toggleDeleteInsar] " + e);
+		}
+		finally {
+			if (db != null)
+				db.close();			
 		}
 	}
 
@@ -3605,6 +3723,10 @@ public class DislocBean extends GenericSopacBean {
 			if (db != null)
 				db.close();
 			System.out.println("[toggleReplotInsar] " + e);
+		}
+		finally {
+			 if (db != null)
+				 db.close();			
 		}
 	}
 
