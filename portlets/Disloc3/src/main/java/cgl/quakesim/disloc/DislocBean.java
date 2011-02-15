@@ -2391,19 +2391,19 @@ public class DislocBean extends GenericSopacBean {
 		return faultDBServiceUrl;
 	}
 
-	public void setProjectName(String projectName) {
-		// Get rid of dubious characters
-		projectName = filterTheBadGuys(projectName);
+	// public void setProjectName(String projectName) {
+	// 	// Get rid of dubious characters
+	// 	projectName = filterTheBadGuys(projectName);
 
-		// Remove spaces and less dubious stuff.
-		projectName = URLDecoder.decode(projectName);
-		projectName = URLEncoder.encode(projectName);
-		this.projectName = projectName;
-	}
+	// 	// Remove spaces and less dubious stuff.
+	// 	projectName = URLDecoder.decode(projectName);
+	// 	projectName = URLEncoder.encode(projectName);
+	// 	this.projectName = projectName;
+	// }
 
-	public String getProjectName() {
-		return projectName;
-	}
+	// public String getProjectName() {
+	// 	return projectName;
+	// }
 
 	public String getProjectSelectionCode() {
 		return this.projectSelectionCode;

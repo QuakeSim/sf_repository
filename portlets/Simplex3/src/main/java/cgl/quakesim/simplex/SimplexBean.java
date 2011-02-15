@@ -1092,7 +1092,7 @@ public class SimplexBean extends GenericSopacBean {
 		System.out.println("[" + getUserName() + "/SimplexBean/toggleCopyProject] Old project name: " + oldProjectName);
 
 		// --------------------------------------------------
-		// Create an empty project and add toe the parent code database
+		// Create an empty project and add to the parent code database
 		// --------------------------------------------------
 		String newProjectName = this.getProjectName();
 		currentEditProjectForm = new editProjectForm(selectdbURL);
