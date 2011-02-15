@@ -15,13 +15,9 @@
   </style>
 
  <head>
-  <title>Simplex2 Load and Delete Project</title>
  </head>
   
   <body>
-
-  
-
    <script language="JavaScript">
 //<![CDATA[ 
     function selectOne(form, button)
@@ -71,7 +67,7 @@
 
 		  <h:form id="SimplexNewProjCheckBox">
 			<h:panelGrid  id="lkdjf5" columns="1" border="0">
-				<h:outputText  id="lkdjf6" escape="false" value="<b>Select Projects</b><br/>" /><
+				<h:outputText  id="lkdjf6" escape="false" value="<b>Select Projects</b><br/>" />
 				<h:outputText id="lkdjf7" 
 								  escape="false"
 								  value="Please select from one of the previous projects." />

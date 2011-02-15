@@ -2,7 +2,6 @@
   <h:inputHidden id="faultName" value="#{SimplexBean.currentEditProjectForm.mapFaultName}"/>
   <h:inputHidden id="faultlistsize" value="#{SimplexBean.myFaultsForProjectListsize}"/>
 
-
   <f:verbatim>
     <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/jquery.treeview.css">
 
@@ -84,11 +83,13 @@
   </h:dataTable>
 </h:panelGrid>
 </h:panelGroup>
- <h:outputText id="DrawFaultSimplexAction" escape="false" value="Add the fault after drawing it."/>		  
-<h:commandButton id="addfaultsd" value="Add a new fault" actionListener="#{SimplexBean.toggleDrawFaultFromMap}"/>
+ <h:panelGroup id="SimplexDrawingFaultActionPanel">
+   <h:outputText id="DrawFaultSimplexAction" escape="false" value="Add the fault after drawing it."/>		  
+   <h:commandButton id="addfaultsd" value="Add a drawn fault" actionListener="#{SimplexBean.toggleDrawFaultFromMap}"/>
+</h:panelGroup>
  </h:panelGrid>
 <f:verbatim>
-<script language="JavaScript">
+<script type="text/javascript">
 
 	var faultMap=null;
 	faultMap=new GMap2(document.getElementById("faultMap"));
@@ -334,8 +335,6 @@ new GLatLng(marker_NE.getPoint().lat(), marker_NE.getPoint().lng())
 	faultMap.addOverlay(border);
 }
 
-//]]>
-  
 </script>
 </f:verbatim>
 
