@@ -1,10 +1,7 @@
-<h:panelGrid id="faultMapPanelFrameContainerGrid"
-			  border="0"
-			  rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}"
-			  columns="1">
 <h:form id="faultKMLSelectorForm" rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}">
   <h:inputHidden id="faultName" value="#{SimplexBean.currentEditProjectForm.mapFaultName}"/>
   <h:inputHidden id="faultlistsize" value="#{SimplexBean.myFaultsForProjectListsize}"/>
+
 
   <f:verbatim>
     <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/jquery.treeview.css">
@@ -41,9 +38,7 @@
 							actionListener="#{SimplexBean.currentEditProjectForm.toggleSetFaultFromMap}"/> 
 	</h:panelGroup>
   </h:panelGrid>
-</h:form>
 
-<h:form id="faultKMLDrawerForm" rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}">
 <h:panelGrid id="DrawingFaultPanel" columns="1" border="1" style="vertical-align:top;width: 800px;">
 <h:panelGroup id="dflel235231">
   <h:outputText id="DrawFaultSimplexDesc" escape="false" value="<b>Drawing a fault:</b> If you wish to draw a new fault that doesn't exist in the catalogs above, select here. <br/>"/>
@@ -64,27 +59,27 @@
       <f:facet name="header">
 		  <h:outputText id="nfa9" escape="false" value="<b>Lon Start</b>" />
       </f:facet>
-      <h:inputText id="faultdrawLonStartst" value="#{myentry32.faultLonStart}" required="true" />
+      <h:inputText id="faultdrawLonStartst" value="#{myentry32.faultLonStart}" required="false" />
     </h:column>
 
     <h:column>
       <f:facet name="header">
 		  <h:outputText id="nfa7" escape="false" value="<b>Lat Start</b>" />
       </f:facet>
-      <h:inputText id="faultdrawLatStartst" value="#{myentry32.faultLatStart}" required="true" />
+      <h:inputText id="faultdrawLatStartst" value="#{myentry32.faultLatStart}" required="false" />
     </h:column>
 
     <h:column>
       <f:facet name="header">
 	 	  <h:outputText id="nfa5" escape="false" value="<b>Lon End</b>" />
       </f:facet>
-      <h:inputText id="faultdrawLonEndst" value="#{myentry32.faultLonEnd}" required="true" />
+      <h:inputText id="faultdrawLonEndst" value="#{myentry32.faultLonEnd}" required="false" />
     </h:column>
     <h:column>
       <f:facet name="header">
 					<h:outputText id="nfa3" escape="false" value="<b>Lat End</b>" />
       </f:facet>
-      <h:inputText id="faultdrawLatEndst" value="#{myentry32.faultLatEnd}" required="true" />
+      <h:inputText id="faultdrawLatEndst" value="#{myentry32.faultLatEnd}" required="false" />
     </h:column>
   </h:dataTable>
 </h:panelGrid>
@@ -93,7 +88,7 @@
 <h:commandButton id="addfaultsd" value="Add a new fault" actionListener="#{SimplexBean.toggleDrawFaultFromMap}"/>
  </h:panelGrid>
 <f:verbatim>
-<script type="text/javascript">
+<script language="JavaScript">
 
 	var faultMap=null;
 	faultMap=new GMap2(document.getElementById("faultMap"));
@@ -124,10 +119,11 @@
 
 	var faultField=document.getElementById("faultKMLSelectorForm:faultName");
 	GEvent.addDomListener(faultField,"click",function(param1,param2,param3,param4){
-		  alert("clicked!");
+
 					var interpHead=" (InterpId:";
 					var faultName,segmentName;
 					var segmentNamePlusId, interpId;
+
 					var newElement1=document.getElementById("faultKMLSelectorForm:faultName");
 
 					// Parse out the segment name
@@ -146,6 +142,10 @@
 					
 						faultName=faultName+"@"+segmentName+"%"+interpId;						
 					
+						// Now show the values.
+
+						// alert(param4);
+						
 						newElement1.value = param1
 
 						// Trigger the polyline click event to show the popup window.
@@ -154,6 +154,7 @@
 					}
 					//Update the displayed fault name
 					document.getElementById('faultKMLSelectorForm:CurrentSelectedFaultValue').innerHTML="<b>Current Selected Fault:</b> "+newElement1.value;
+					
 				});
 
 	 // This function overrides the default side panel.
@@ -163,6 +164,7 @@
 					shortName=name;
 					return '<a id="'+name+'" href="javascript:GEvent.trigger(document.getElementById(\'faultKMLSelectorForm:faultName\'),\'click\',\''+name+'\','+myvar+'.gpolyobjs['+i+'], \'script\', '+myvar+'.gpolyobjs_desc['+i+'])">' + shortName + '</a>';					
 				}
+
 				return "";
 		}
 
@@ -338,7 +340,7 @@ new GLatLng(marker_NE.getPoint().lat(), marker_NE.getPoint().lng())
 </f:verbatim>
 
 </h:form>
-</h:panelGrid>
+
 
 
 
