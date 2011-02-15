@@ -206,6 +206,9 @@ public class GenericProjectBean {
 		  projectName=URLDecoder.decode(projectName);
 		  projectName=URLEncoder.encode(projectName);
 		  
+		  //Make sure we didn't introduce any crappy characters
+		  projectName=filterTheBadGuys(projectName);
+
 		  this.projectName=projectName;
     }
     
