@@ -183,8 +183,6 @@ public class SimplexBean extends GenericSopacBean {
 	protected String portalBaseUrl;
 	
 	 
-	 
-
 	public boolean getGpsRefStation() {		
 		return this.gpsRefStation;
 	}
@@ -192,8 +190,6 @@ public class SimplexBean extends GenericSopacBean {
 	public void setGpsRefStation(boolean gpsRefStation) {
 		this.gpsRefStation = gpsRefStation;
 	}
-
-
 
 	public String getGpsStationName() {
 		return gpsStationName;
@@ -203,9 +199,6 @@ public class SimplexBean extends GenericSopacBean {
 		this.gpsStationName = gpsStationName;
 	}
 
-	
-	
-	
 	public String getSelectedGpsStationName() {
 		return selectedGpsStationName;
 	}
@@ -1478,20 +1471,15 @@ public class SimplexBean extends GenericSopacBean {
 			if (db != null)
 				db.close();			
 		}
-
 	}
 
 	public void toggleUpdateObservations(ActionEvent ev) {
-
 		String observationStatus = "Update";
-		
 		ObjectContainer db = null;
-		
 		try {
 			int iSelectObservation = -1;
-
-			// Find out which Observation was selected.
-
+			// Find out which Observations were selected.  Loop over all of them
+			// and take appropriate actions in each case.
 			for (int i = 0; i < myObservationsForProjectList.size(); i++) {
 				Observation tmp_Observation = new Observation();
 				tmp_Observation = (Observation) myObservationsForProjectList
@@ -1499,7 +1487,6 @@ public class SimplexBean extends GenericSopacBean {
 
 				// This is the info about the Observation.
 				String tmp_ObservationName = tmp_Observation.getObsvName();
-
 				boolean tmp_update = ((observationEntryForProject) myObservationEntryForProjectList
 						.get(i)).getUpdate();
 				boolean tmp_delete = ((observationEntryForProject) myObservationEntryForProjectList
@@ -1512,7 +1499,6 @@ public class SimplexBean extends GenericSopacBean {
 
 				// Update the Observation.
 				if ((tmp_update == true) && (tmp_delete == false)) {
-
 					System.out.println("[" + getUserName() + "/SimplexBean/toggleUpdateObservations] Updating "
 							+ tmp_ObservationName + " "
 							+ tmp_Observation.getObsvError());
@@ -1550,7 +1536,6 @@ public class SimplexBean extends GenericSopacBean {
 								.getObsvRefSite());
 						toUpdate.setObsvType(tmp_Observation.getObsvType());
 						toUpdate.setObsvValue(tmp_Observation.getObsvValue());
-
 					}
 
 					db.set(toUpdate);
@@ -1579,7 +1564,6 @@ public class SimplexBean extends GenericSopacBean {
 					}
 				}
 			}
-
 			reconstructMyObservationsForProjectList(projectName);
 		} catch (Exception e) {			
 			System.out.println("[" + getUserName() + "/SimplexBean/toggleUpdateObservations] " + e);
@@ -1588,64 +1572,6 @@ public class SimplexBean extends GenericSopacBean {
 			if (db != null)
 				db.close();			
 		}
-
-	}
-
-	/**
-	 * This is obsolete.
-	 */
-	public String toggleGMTPlot() {
-		ObjectContainer db = null;
-		
-		try {
-
-			// Catch the MyData item during the third phase of the JSF
-			// lifecycle.
-			SimpleXOutputBean tmp_loadMeshTableEntry = new SimpleXOutputBean();
-			for (int i = 0; i < myarchivedFileEntryList.size(); i++) {
-				tmp_loadMeshTableEntry = (SimpleXOutputBean) myarchivedFileEntryList
-						.get(i);
-				if ((tmp_loadMeshTableEntry.isView() == true)) {
-					break;
-				}
-			}
-			String tmp_projectName = tmp_loadMeshTableEntry.getProjectName();
-			projectName = tmp_projectName;
-			boolean tmp_view = tmp_loadMeshTableEntry.isView();
-			String timeStamp = "";
-			this.gmtPlotPdf_timeStamp = timeStamp;
-			if ((tmp_view == true)) {
-				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath()
-						+ "/" + userName + "/" + codeName + ".db");
-				projectEntry tmp_proj = new projectEntry();
-				tmp_proj.projectName = this.projectName;
-				ObjectSet results = db.get(tmp_proj);
-				if (results.hasNext()) {
-					this.currentProjectEntry = (projectEntry) results.next();
-				} else {
-					System.out.println("[" + getUserName() + "/SimplexBean/toggleGMTPlot] error: can not find this project");
-				}
-				
-				System.out.println("[" + getUserName() + "/SimplexBean/toggleGMTPlot] " + currentProjectEntry.origin_lat);
-				System.out.println("[" + getUserName() + "/SimplexBean/toggleGMTPlot] " + currentProjectEntry.origin_lon);
-
-				initSimplexService();
-				this.currentGMTViewForm = simplexService.runPlotGMT(userName,
-						projectName, currentProjectEntry.getOrigin_lat() + "",
-						currentProjectEntry.getOrigin_lon() + "", timeStamp);
-				this.gmtPlotPdfUrl = this.currentGMTViewForm.getGmtPlotPdfUrl();
-
-			}
-
-		} catch (Exception e) {			
-			System.out.println("[" + getUserName() + "/SimplexBean/toggleGMTPlot] " + e);
-		}
-		finally {
-			if (db != null)
-				db.close();			
-		}
-		return ("Simplex2-gmt-view");
-
 	}
 
 	/**
@@ -2033,7 +1959,6 @@ public class SimplexBean extends GenericSopacBean {
 		ObjectContainer db = null;
 		
 		try {
-
 			int iSelectFault = -1;
 			// Find out which fault was selected.
 
@@ -2074,48 +1999,33 @@ public class SimplexBean extends GenericSopacBean {
 						toUpdate = (Fault) result.next();
 
 						toUpdate.setFaultDepth(tmp_Fault.getFaultDepth());
-						toUpdate
-								.setFaultDepthVary(tmp_Fault.isFaultDepthVary());
+						toUpdate.setFaultDepthVary(tmp_Fault.isFaultDepthVary());
 						toUpdate.setFaultDipAngle(tmp_Fault.getFaultDipAngle());
-						toUpdate.setFaultDipAngleVary(tmp_Fault
-								.isFaultDipAngleVary());
-						toUpdate.setFaultDipSlipVary(tmp_Fault
-								.isFaultDipSlipVary());
+						toUpdate.setFaultDipAngleVary(tmp_Fault.isFaultDipAngleVary());
+						toUpdate.setFaultDipSlipVary(tmp_Fault.isFaultDipSlipVary());
 						toUpdate.setFaultLatEnds(tmp_Fault.getFaultLatEnds());
-						toUpdate.setFaultLatStarts(tmp_Fault
-								.getFaultLatStarts());
+						toUpdate.setFaultLatStarts(tmp_Fault.getFaultLatStarts());
 						toUpdate.setFaultLength(tmp_Fault.getFaultLength());
-						toUpdate.setFaultLengthVary(tmp_Fault
-								.isFaultLengthVary());
-						toUpdate.setFaultLocationX(tmp_Fault
-								.getFaultLocationX());
-						toUpdate.setFaultLocationY(tmp_Fault
-								.getFaultLocationY());
+						toUpdate.setFaultLengthVary(tmp_Fault.isFaultLengthVary());
+						toUpdate.setFaultLocationX(tmp_Fault.getFaultLocationX());
+						toUpdate.setFaultLocationY(tmp_Fault.getFaultLocationY());
 						toUpdate.setFaultLonEnds(tmp_Fault.getFaultLonEnds());
-						toUpdate.setFaultLonStarts(tmp_Fault
-								.getFaultLonStarts());
+						toUpdate.setFaultLonStarts(tmp_Fault.getFaultLonStarts());
 						toUpdate.setFaultName(tmp_Fault.getFaultName());
 
 						((faultEntryForProject) myFaultEntryForProjectList
 								.get(i)).setoldFaultName(tmp_Fault
 								.getFaultName());
 
-						toUpdate.setFaultOriginXVary(tmp_Fault
-								.isFaultOriginXVary());
-						toUpdate.setFaultOriginYVary(tmp_Fault
-								.isFaultOriginYVary());
-						toUpdate.setFaultRakeAngle(tmp_Fault
-								.getFaultRakeAngle());
+						toUpdate.setFaultOriginXVary(tmp_Fault.isFaultOriginXVary());
+						toUpdate.setFaultOriginYVary(tmp_Fault.isFaultOriginYVary());
+						toUpdate.setFaultRakeAngle(tmp_Fault.getFaultRakeAngle());
 						toUpdate.setFaultSlip(tmp_Fault.getFaultSlip());
-						toUpdate.setFaultStrikeAngle(tmp_Fault
-								.getFaultStrikeAngle());
-						toUpdate.setFaultStrikeAngleVary(tmp_Fault
-								.isFaultStrikeAngleVary());
-						toUpdate.setFaultStrikeSlipVary(tmp_Fault
-								.isFaultStrikeSlipVary());
+						toUpdate.setFaultStrikeAngle(tmp_Fault.getFaultStrikeAngle());
+						toUpdate.setFaultStrikeAngleVary(tmp_Fault.isFaultStrikeAngleVary());
+						toUpdate.setFaultStrikeSlipVary(tmp_Fault.isFaultStrikeSlipVary());
 						toUpdate.setFaultWidth(tmp_Fault.getFaultWidth());
-						toUpdate
-								.setFaultWidthVary(tmp_Fault.isFaultWidthVary());
+						toUpdate.setFaultWidthVary(tmp_Fault.isFaultWidthVary());
 					}
 					db.set(toUpdate);
 					db.commit();

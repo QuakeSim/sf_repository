@@ -1,4 +1,7 @@
-<h:panelGrid id="ProjectComponentList" columns="1" border="1">
+<h:panelGrid id="ProjectComponentList" 
+				 rendered="#{!empty SimplexBean.myFaultEntryForProjectList || !empty SimplexBean.myObservationsForProjectList}"
+				 columns="1" 
+				 border="1">
   <h:panelGroup id="dflelerkljk161">
 	<h:form id="UpdateSelectFaultsForm"
 			  rendered="#{!empty SimplexBean.myFaultEntryForProjectList}">
@@ -26,8 +29,12 @@
 						<h:outputText id="dflelerh967" escape="false" value="</b>Name</b>" />
 					  </f:facet>
 					  <h:panelGrid  id="spxpcp5"columns="2" cellpadding="0" cellspacing="0">
-						<h:inputText id="dflelerklh968" style="text-align:right;width:60px" value="#{myentry31.faultName}" required="true" />
-						<h:selectBooleanCheckbox rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}" id="faultnamec" onclick="togglefaultname(this)" value="" />
+						<h:inputText id="dflelerklh968" 
+										 style="text-align:right;width:60px" 
+										 value="#{myentry31.faultName}" required="true" />
+						<h:selectBooleanCheckbox rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}" 
+														 id="faultnamec" 
+														 onclick="togglefaultname(this)" value="" />
 					  </h:panelGrid>
 					</h:column>
 
@@ -36,7 +43,6 @@
 							<h:outputText id="lkdrh119" value="Location X" />
 						</f:facet>
 					   <h:panelGrid  id="spxpcp6"columns="3" cellpadding="0" cellspacing="0">
-
 								<h:inputText id="FaultLocationX2" style="text-align:right;width:60px"
 								  value="#{myentry31.faultLocationX}" required="true" />
 								<h:message id="lkdrh1182" for="FaultLocationX2" showDetail="true"
@@ -48,10 +54,10 @@
 
 							    <h:column>
 							      <f:facet name="header">
-								<h:outputText id="lkdrqh1183" value="Location Y" />
+										<h:outputText id="lkdrqh1183" value="Location Y" />
 							      </f:facet>
 
-							      <h:panelGrid  id="spxpcp7"columns="3" cellpadding="0" cellspacing="0">
+							     	<h:panelGrid  id="spxpcp7"columns="3" cellpadding="0" cellspacing="0">
 								<h:inputText id="FaultLocationY2" style="text-align:right;width:60px" 
 								  value="#{myentry31.faultLocationY}"
 								  required="true" />
@@ -217,17 +223,16 @@
 							    </h:column>
 						      </h:dataTable>
 
-
 							<h:dataTable border="1" 
 											 cellpadding="0" 
 											 cellspacing="0" 
 											 id="dflelegq24" 
 											 headerClass="componentstableh2" 
 											 columnClasses="componentstablec"											  
-											  value="#{SimplexBean.myFaultEntryForProjectList}" var="myentry3">
+											 value="#{SimplexBean.myFaultEntryForProjectList}" var="myentry3">
 								<h:column>
 									<f:facet name="header">
-										<b><h:outputText id="dflelerkljk454" escape="false" value="Update" /></b>
+										<h:outputText id="dflelerkljk454" escape="false" value="<b>Update</b>" />
 									</f:facet>
 
 							      <h:panelGrid id="spxpcp19" columns="2" cellpadding="0" cellspacing="0" styleClass="centered">
@@ -239,7 +244,7 @@
 
 								<h:column>
 									<f:facet name="header">
-										<b><h:outputText id="dflelerkljk456" escape="false" value="Remove" /></b>
+										<h:outputText id="dflelerkljk456" escape="false" value="<b>Remove</b>" />
 									</f:facet>									
 
 							      <h:panelGrid id="spxpcp20" 
@@ -259,17 +264,14 @@
 						actionListener="#{SimplexBean.toggleUpdateFaults}" />
 				</h:form>
 
-
-
-
 				<h:form id="UpdateSelectObservationForm"
 					rendered="#{!empty SimplexBean.myObservationsForProjectList}">
 				<h:outputText value="<br/>" escape="false"/>
-				<h:outputText value="1) Please click the 'update' button after value changes." escape="false"/>
 						<h:panelGroup id="dflelerkljk174">
 						  <h:panelGrid id="obsvpanelgrid" columns="1" border="1">
-								<h:outputFormat escape="false" id="dflelerkljk176"
-									value="<b>Observation Components</b>">
+								<h:outputFormat escape="false" 
+													 id="dflelerkljk176"
+													 value="<b>Observation Components</b>:Please click the 'update' button after value changes.">
 								</h:outputFormat></b>
 								<h:commandButton id="viewSimplexObsv" value="Display/Hide"
 									actionListener="#{SimplexBean.currentEditProjectForm.toggleShowObsvEntries}"/>
@@ -360,23 +362,25 @@
 								</h:column>
 							</h:dataTable>
 
-							<h:dataTable border="1" cellpadding="0" cellspacing="0" id="dflelerz166" headerClass="componentstableh2" columnClasses="componentstablec"								
-											  rendered="#{SimplexBean.currentEditProjectForm.renderObsvEntries}"
-											  value="#{SimplexBean.myObservationEntryForProjectList}" var="myentry7">
+							<h:dataTable border="1" 
+											 cellpadding="0" 
+											 cellspacing="0" 
+											 id="dflelerz166" 
+											 headerClass="componentstableh2" columnClasses="componentstablec"								
+											 rendered="#{SimplexBean.currentEditProjectForm.renderObsvEntries}"
+											 value="#{SimplexBean.myObservationEntryForProjectList}" 
+											 var="myentry7">
 
 								<h:column>
 									<f:facet name="header">
 										<h:outputText id="dflelerkljk954" escape="false" 
-										value="<b>Update</b>" />
+														  value="<b>Update</b>" />
 									</f:facet>
 									
 							      <h:panelGrid id="spxpcp31" columns="2" cellpadding="0" cellspacing="0" styleClass="centered">
-								<f:facet name="header">								
-								</f:facet>
-								<h:selectBooleanCheckbox value="#{myentry7.update}" id="dflelerkljk955" />
-								<h:outputText  id="spxpcp32"style="text-align:right;width:0px" value ="" />
+								     <h:selectBooleanCheckbox value="#{myentry7.update}" id="dflelerkljk955" />
+								     <h:outputText  id="spxpcp32"style="text-align:right;width:0px" value ="" />
 							      </h:panelGrid>
-
 								</h:column>
 
 								<h:column>
@@ -385,26 +389,20 @@
 										value="<b>Remove</b>" />
 									</f:facet>
 									
-
 							      <h:panelGrid id="spxpcp35" columns="2" cellpadding="0" cellspacing="0" styleClass="centered">
-								<f:facet name="header">								
-								</f:facet>
-								<h:selectBooleanCheckbox id="dflelerkljk957" value="#{myentry7.delete}"/>
-								<h:outputText id="spxpcp36" style="text-align:right;width:0px" value ="" />
+								     <h:selectBooleanCheckbox id="dflelerkljk957" value="#{myentry7.delete}"/>
+								     <h:outputText id="spxpcp36" style="text-align:right;width:0px" value ="" />
 							      </h:panelGrid>
-
 
 								</h:column>
 							</h:dataTable>
-						    </h:panelGrid>
-
+						  </h:panelGrid>
 
 						</h:panelGrid>
 						</h:panelGroup>	
 					<h:commandButton id="SelectObservations4proj"					   
-						value="Update Observations"
-						actionListener="#{SimplexBean.toggleUpdateObservations}" />
-				
+										  value="Update Observations"
+										  actionListener="#{SimplexBean.toggleUpdateObservations}" />
 				</h:form>
 			</h:panelGroup>
 		</h:panelGrid>

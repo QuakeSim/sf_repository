@@ -18,11 +18,9 @@
 
 <script type="text/javascript">
 
-
-var tab1 = '<iframe scrolling="yes" width=100% height="700" frameborder="1" src="@host.base.url@@artifactId@/LoadProject.faces?email=<%=session.getAttribute("email")%>"></iframe>'
-var tab2 = '<iframe scrolling="yes" width=100% height="700" frameborder="1" src="@host.base.url@@artifactId@/ArchivedData.faces?email=<%=session.getAttribute("email")%>"></iframe>'
-var tab3 = '<iframe scrolling="yes" width=100% height="700" frameborder="1" src="@host.base.url@@artifactId@/PlotGrid.faces?email=<%=session.getAttribute("email")%>"></iframe>'
-
+var tab1 = '<iframe scrolling="yes" width="100%" height="1200" frameborder="1" src="@host.base.url@@artifactId@/LoadProject.faces?email=<%=session.getAttribute("email")%>"></iframe>'
+var tab2 = '<iframe scrolling="yes" width="100%" height="1200" frameborder="1" src="@host.base.url@@artifactId@/ArchivedData.faces?email=<%=session.getAttribute("email")%>"></iframe>'
+var tab3 = '<iframe scrolling="yes" width="100%" height="1200" frameborder="1" src="@host.base.url@@artifactId@/PlotGrid.faces?email=<%=session.getAttribute("email")%>"></iframe>'
 
 function TapAcess(index){
 	
@@ -46,21 +44,6 @@ function TapAcess(index){
 <li><a href="javascript:TapAcess('2')" rel="TabDiv">ArchivedData</a></li>
 <li><a href="javascript:TapAcess('3')" rel="TabDiv">PlotGrid</a></li>
 </ul>
-
-<!--
-<div id="TabDiv1" name="TabDiv1" style="display:none">
-<iframe scrolling="yes" width=100% height="700" frameborder="1" src="http://129.79.49.68:8080/Simplex-portlet/LoadProject.faces?email=<%=session.getAttribute("email")%>"></iframe>
-</div>
-
-<div id="TabDiv2" name="TabDiv2" style="display:none">
-<iframe scrolling="yes" width=100% height="700" frameborder="1" src="http://129.79.49.68:8080/Simplex-portlet/ArchivedData.faces?email=<%=session.getAttribute("email")%>"></iframe>
-</div>
-
-
-<div id="TabDiv3" name="TabDiv3" style="display:none">
-<iframe scrolling="yes" width=100% height="700" frameborder="1" src="http://129.79.49.68:8080/Simplex-portlet/PlotGrid.faces?email=<%=session.getAttribute("email")%>"></iframe>
-</div>
--->
 
 <div id="TabDiv" name="TabDiv" style="display:select">
 <iframe scrolling="yes" width=100% height="700" frameborder="1" src="@host.base.url@@artifactId@/LoadProject.faces?email=<%=session.getAttribute("email")%>"></iframe>

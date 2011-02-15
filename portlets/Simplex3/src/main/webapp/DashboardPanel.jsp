@@ -1,6 +1,6 @@
 	<h:panelGrid id="DashboradPanelgrid"
 		columnClasses="alignTop,alignTop"
-		columns="2" border="0">			
+		columns="1" border="0">			
 
 		<h:panelGroup id="lkdrq3">
 			   <h:form id="selectproj">  

@@ -93,7 +93,7 @@
 <h:commandButton id="addfaultsd" value="Add a new fault" actionListener="#{SimplexBean.toggleDrawFaultFromMap}"/>
  </h:panelGrid>
 <f:verbatim>
-<script language="JavaScript">
+<script type="text/javascript">
 
 	var faultMap=null;
 	faultMap=new GMap2(document.getElementById("faultMap"));
@@ -124,11 +124,10 @@
 
 	var faultField=document.getElementById("faultKMLSelectorForm:faultName");
 	GEvent.addDomListener(faultField,"click",function(param1,param2,param3,param4){
-
+		  alert("clicked!");
 					var interpHead=" (InterpId:";
 					var faultName,segmentName;
 					var segmentNamePlusId, interpId;
-
 					var newElement1=document.getElementById("faultKMLSelectorForm:faultName");
 
 					// Parse out the segment name
@@ -147,10 +146,6 @@
 					
 						faultName=faultName+"@"+segmentName+"%"+interpId;						
 					
-						// Now show the values.
-
-						// alert(param4);
-						
 						newElement1.value = param1
 
 						// Trigger the polyline click event to show the popup window.
@@ -159,7 +154,6 @@
 					}
 					//Update the displayed fault name
 					document.getElementById('faultKMLSelectorForm:CurrentSelectedFaultValue').innerHTML="<b>Current Selected Fault:</b> "+newElement1.value;
-					
 				});
 
 	 // This function overrides the default side panel.
@@ -169,7 +163,6 @@
 					shortName=name;
 					return '<a id="'+name+'" href="javascript:GEvent.trigger(document.getElementById(\'faultKMLSelectorForm:faultName\'),\'click\',\''+name+'\','+myvar+'.gpolyobjs['+i+'], \'script\', '+myvar+'.gpolyobjs_desc['+i+'])">' + shortName + '</a>';					
 				}
-
 				return "";
 		}
 
