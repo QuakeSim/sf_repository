@@ -23,7 +23,7 @@
 </head>
 <body>
 
-<script language="JavaScript">
+<script type="text/javascript">
 
 function selectOne(form , button)
 {

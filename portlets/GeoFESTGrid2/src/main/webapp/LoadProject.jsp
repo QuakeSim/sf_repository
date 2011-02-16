@@ -9,7 +9,7 @@
 <title>MeshGenerator Load and Delete Project</title>
 </head>
 <body>
-<script language="JavaScript">
+<script text="text/javascript">
 
 function selectOne(form , button)
 {

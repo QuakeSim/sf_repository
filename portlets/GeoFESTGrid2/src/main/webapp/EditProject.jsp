@@ -29,7 +29,7 @@ type="text/javascript"></script>
 <title>Edit Project</title>
 </head>
 <body onload="myInit() onunload="GUnload()">
-<script language="JavaScript">
+<script type="text/javascript">
 function myInit() {
   	$("#browser").treeview({
 		animated:"normal",

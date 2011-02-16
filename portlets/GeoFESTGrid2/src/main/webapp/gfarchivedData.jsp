@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<script language="JavaScript">
+<script text="text/javascript">
 
 function selectOne(form , button)
 {
