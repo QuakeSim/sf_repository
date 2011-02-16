@@ -624,7 +624,6 @@ function updateGPSinthebox() {
 				togglemarker(a, markernamelist[nA] + '/' + markerlatlist[nA] + '/' +  markerlonlist[nA], "out");
 		}
 
-
 	}
 
 	document.getElementById("obsvGPSMap:GPSStationList").value = a;
