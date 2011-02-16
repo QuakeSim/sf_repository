@@ -8,25 +8,14 @@
 <%@ page
 	import="java.util.*, java.io.*, java.util.*, java.net.URL, java.lang.*, org.dom4j.*, org.dom4j.io.*, cgl.sensorgrid.common.*, cgl.sensorgrid.sopac.gps.GetStationsRSS,cgl.sensorgrid.gui.google.MapBean, cgl.quakesim.simplex.*, javax.faces.context.ExternalContext, javax.servlet.http.HttpServletRequest, javax.portlet.PortletRequest, javax.faces.context.FacesContext"%>
 
-
-<jsp:useBean id="RSSBeanID" scope="session"
-	class="cgl.sensorgrid.sopac.gps.GetStationsRSS" />
-<jsp:useBean id="MapperID" scope="session"
-	class="cgl.sensorgrid.gui.google.Mapper" />
-
 <%
-Vector networkNames = RSSBeanID.networkNames();
+//Code below probably belongs in GPSMapPanel.
 
-// Vector stationsVec = RSSBeanID.getAllStationsVec();
+//Set the map center. Hard-coded, need a better way.
 String mapcenter_x = "33.036";
 String mapcenter_y = "-117.24";
 
-String [] center_xy = RSSBeanID.getMapCenter();
-mapcenter_x = center_xy[0];
-mapcenter_y = center_xy[1];
-%>
-
-<%
+//Read and parse the stations list from the old XML file.
 File localFile = new File(config.getServletContext().getRealPath("stations-rss-new.xml"));
 BufferedReader br=new BufferedReader(new FileReader(localFile));
 StringBuffer sb = new StringBuffer();
@@ -38,11 +27,11 @@ Document statusDoc = reader.read( new StringReader(sb.toString()) );
 Element eleXml = (Element)statusDoc.getRootElement();
 List stationList = eleXml.elements("station");
 
+//This is a KML file we got from somewhere. Parse it to extract stations.
 KMLdescriptionparser kdp = new KMLdescriptionparser();
-
-
 kdp.parseXml(config.getServletContext().getRealPath("perm.xml").split("perm.xml")[0], "perm.kml");
 
+//The total number of stations.  We need a more general way to handle this
 int rssnewsize = stationList.size();
 int permsize = kdp.getPlacemarkSize();
 int totalstations = rssnewsize + permsize;
@@ -71,6 +60,7 @@ for(int i=0;i<permsize;i++) {
 
 %>
 
+<!-- These styles should be in a separate stylesheet file -->
 <style type="text/css">
 .alignTop {
 	vertical-align: top;
@@ -88,15 +78,17 @@ for(int i=0;i<permsize;i++) {
 <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css">
 
 <title>Edit Project</title>
-<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>
+    <!-- These are needed by the fault map panel and are repeated there.  Remove redundancies.-->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+    <script type="text/javascript" src="@host.base.url@@artifactId@/lib/jquery.cookie.js"></script>
+    <script type="text/javascript" src="@host.base.url@@artifactId@/jquery.treeview.js"></script>
+
 </head>
 
 
 <body onload="myInit()" onunload="GUnload()">
-<script type="text/javascript">
-</script>
 
-<f:view>
 	<script type="text/javascript">
 //The myInit() funciton initializes the tree view for the FaultMapPanelFrame sidebar.
 function myInit() {
@@ -156,11 +148,7 @@ colors[5] = "yellow";
 colors[6] = "purple";
 colors[7] = "brown";
 
-var networkInfo = new Array (<%=networkNames.size()%>);
-for (i = 0; i < networkInfo.length; ++ i){
-	networkInfo [i] = new Array (2);
-}
-
+//Following two math functions should probably go into a separate script file.
 //This is used to calculate the length and strike angle.
 function calculatelength(){
 var lonStart = document.getElementById("Faultform:FaultLonStarts");
@@ -184,15 +172,7 @@ var theFactor = d2r* Math.cos(d2r * latStart.value) * 6378.139 * (1.0 - Math.sin
 
 var x=(lonEnd.value-lonStart.value)*theFactor;
 var y=(latEnd.value-latStart.value)*111.32;
-//var xv = document.getElementById("Faultform:FaultLocationX");
-//var yv = document.getElementById("Faultform:FaultLocationY");
-//xv.value = Math.round(x*1000)/1000;
-//yv.value = Math.round(y*1000)/1000;
-
-//alert("x : " + x + " y : " + y);
-
 var lengthVal=Math.sqrt(x*x+y*y);
-
 length.value=Math.round(lengthVal*1000)/1000;
 
 var strikeValue=Math.atan2(x,y)/d2r;
@@ -201,9 +181,8 @@ strike.value=Math.round(strikeValue*1000)/1000;
 }
 }
 
-
+//This calculates the endpoint, given other parameters.
 function calculateendpoint(){
-
 // alert("debug");
 var lonStart = document.getElementById("Faultform:FaultLonStarts");
 var lonEnd = document.getElementById("Faultform:FaultLonEnds");
@@ -221,13 +200,7 @@ else {
 
 var d2r = Math.acos(-1.0) / 180.0;
 var flatten=1.0/298.247;
-//var theFactor = d2r* Math.cos(d2r * latStart.value)
-//        * 6378.139 * (1.0 - Math.sin(d2r * lonStart.value) * Math.sin(d2r * lonStart.value) * flatten);
-
 var theFactor = d2r* Math.cos(d2r * latStart.value) * 6378.139 * (1.0 - Math.sin(d2r * latStart.value) * Math.sin(d2r * latStart.value) * flatten);
-
-//var x = document.getElementById("Faultform:FaultLocationX");
-//var y = document.getElementById("Faultform:FaultLocationY");
 
 //Massive math calculation starts here. 
 if (strike.value == 0) {
@@ -250,24 +223,11 @@ else if (strike.value > 180 && strike.value < 270) { xval = xval*(-1.0); yval = 
 else if (strike.value > 270 && strike.value < 360) { xval = xval*(-1.0); yval = yval*1.0;}
 }
 
-//x.value = parseInt(x.value);
-//y.value = parseInt(y.value);
-//alert(x.value/theFactor + " is " + typeof(x.value/theFactor));
 lonEnd.value = (xval*1.0)/theFactor + (lonStart.value*1.0);
 latEnd.value = yval/111.32 + (latStart.value*1.0);
 
 lonEnd.value = Math.round(lonEnd.value*100)/100.0;
 latEnd.value = Math.round(latEnd.value*100)/100.0;
-
-//x.value=(lonEnd.value-lonStart.value)*theFactor;
-//y.value=(latend.value-latStart.value)*111.32;
-
-//var lengthVal=Math.sqrt((x.value)*(x.value)+(y.value)*(y.value));
-// alert("x :" + x.value + " y :" + y.value);
-//length.value=Math.round(lengthVal*1000)/1000;
-
-//var strikeValue=Math.atan2(x.value,y.value)/d2r;
-//strike.value=Math.round(strikeValue*1000)/1000;
 }
 }
 
@@ -290,7 +250,6 @@ function initialize() {
 	// icon_SW.iconAnchor = new GPoint(10, 32);
 	// icon_SW.dragCrossImage = '';
 
-	
 	map=new GMap2(document.getElementById("defaultmap"));
 	map.addMapType(G_PHYSICAL_MAP);
 	map.setCenter(new GLatLng(33,-117),7);
@@ -304,17 +263,13 @@ function initialize() {
 	geoXml=new GGeoXml(faultKmlUrl.value, function() {
 
 		while (!geoXml.hasLoaded()) {
-// message.innerHTML="Loading...";
 		}
-// message.innerHTML="";
 		geoXml.gotoDefaultViewport(map);
-// Show the map.
+		// Show the map.
 		map.addOverlay(geoXml);
-// overlayNetworks();
 	});
 
 	map.addOverlay(geoXml);
-
 	var gpslist=document.getElementById("obsvGPSMap:GPSStationList");
 	
 	GEvent.addListener(gpslist,"click",function(e){
@@ -338,7 +293,6 @@ function initialize() {
 		}
 		document.getElementById("obsvGPSMap:GPSStationNum").value = a.length;
 	})
-
 
 
 	<%
@@ -461,9 +415,6 @@ function initialize() {
 	%>
 
 document.getElementById("obsvGPSMap:GPSStationNum").value = <%=l2.size()%>;
-
-// overlayNetworks();
-// printNetworkColors(networkInfo);
 
 }
 
@@ -691,56 +642,9 @@ function dataTableSelectOneRadio(radio) {
 
 function addFault(latStart, latEnd, lonStart, lonEnd) {
 	var polyline = new GPolyline([
-new GLatLng(latStart, lonStart),
-new GLatLng(latEnd, lonEnd)], "#ff0000", 10);
+   new GLatLng(latStart, lonStart),
+   new GLatLng(latEnd, lonEnd)], "#ff0000", 10);
 	map.addOverlay(polyline);	 
-}
-
-function overlayNetworks(){
-
-	var icon = new GIcon(baseIcon);
-	icon.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";
-
-	<%
-	for (int j = 0; j < networkNames.size(); j++) {
-		String networkName = (String)networkNames.get(j);
-		Vector stationsVec = RSSBeanID.getStationsVec(networkName);
-		%>
-		networkInfo [<%=j%>] [0] = "<%=networkName%>";
-
-		var k;
-		if(<%=j%>>=colors.length)
-			k = 0;
-		else
-			k=<%=j%>;
-			icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + colors[k] + ".png";
-			networkInfo [<%=j%>] [1] = "http://labs.google.com/ridefinder/images/mm_20_" + colors[k] + ".png";
-
-			var stationCount = <%=stationsVec.size()%>;
-			var stations = new Array (stationCount);
-			var Markers = new Array (stationCount);
-			for (i = 0; i < stations.length; ++ i){
-				stations [i] = new Array (3);
-			}
-
-			<%
-			for (int i = 0; i < stationsVec.size(); i++) {
-				String name = (String)stationsVec.get(i);
-				String lat = RSSBeanID.getStationInfo(name)[0];
-				String lon = RSSBeanID.getStationInfo(name)[1];	      
-
-				%>
-				stations [<%=i%>] [0] = "<%=name%>";
-				stations [<%=i%>] [1] = "<%=lat%>";
-				stations [<%=i%>] [2] = "<%=lon%>";
-
-				Markers[<%=i%>] = createMarker("<%=networkName%>", "<%=name%>", "<%=lon%>", "<%=lat%>", icon);
-				map.addOverlay(Markers[<%=i%>]);
-
-				<%
-			}
-	}
-	%>
 }
 
 function createMarker(networkName, name, lon, lat, icon) {
@@ -800,6 +704,7 @@ function getScrolling() {
 	return x + "," + y;
 }
 </script>
+<f:view>
    <h:messages id="simplexMessagesDynamicFault" 
 					  showDetail="true"
 					  showSummary="true"
@@ -812,8 +717,7 @@ function getScrolling() {
 	  <h:outputText id="lkdrq2" escape="false"
 		value="You must provide at least one fault and one observation point before you can run Simplex" />
 	<%/* This is the main grid container */%>
-	<h:panelGrid id="EditProject" columnClasses="alignTop,alignTop"
-		columns="2" border="1">
+	<h:panelGrid id="EditProject" columnClasses="alignTop,alignTop" columns="2" border="1">
 
 		<%@include file="DashboardPanel.jsp"%>
 		<%@include file="ObservationPanel.jsp"%>
@@ -830,7 +734,7 @@ function getScrolling() {
 
 	<%@include file="ProjectComponentsPanel.jsp"%>
 
-	<hr />
+	<h:outputText id="simplexHorizontalLine" escape="false" value="<hr/>"/>
 	<h:form id="dflelerkljk186">
 		<h:commandLink id="dflelerkljk187" action="Simplex2-back">
 			<h:outputText value="#{SimplexBean.codeName} Main Menu" />

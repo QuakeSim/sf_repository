@@ -18,7 +18,6 @@ import org.xml.sax.SAXException;
 
 import org.servogrid.genericproject.FaultDBEntry;
 
-
 public class KMLdescriptionparser {	
 		
 	Document dom = null;
