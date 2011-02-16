@@ -34,7 +34,8 @@
 										 value="#{myentry31.faultName}" required="true" />
 						<h:selectBooleanCheckbox rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}" 
 														 id="faultnamec" 
-														 onclick="togglefaultname(this)" value="" />
+														 onclick="togglefaultname(this)" 
+														 value="" />
 					  </h:panelGrid>
 					</h:column>
 

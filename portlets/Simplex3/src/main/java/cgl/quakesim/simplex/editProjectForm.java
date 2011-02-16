@@ -41,6 +41,7 @@ public class editProjectForm extends GenericProjectBean {
 	 boolean renderGPSStationMap = false;
 	 boolean renderObsvEntries = false;
 	 boolean renderFaultMap = false;
+	 boolean renderDrawingMap = false;
 
 	 String faultSelectionCode = "";
 	 boolean renderAddFaultFromDBForm = false;
@@ -104,6 +105,7 @@ public class editProjectForm extends GenericProjectBean {
 		 renderAddFaultFromDBForm = false;
 		 renderGPSStationMap = false;
 		 renderFaultMap =  false;
+		 renderDrawingMap = false;
 	}	
 	 
 	 public void toggleShowObsvEntries(ActionEvent ev) {
@@ -142,6 +144,11 @@ public class editProjectForm extends GenericProjectBean {
 		else if (projectSelectionCode.equals("ShowFaultMap")) {
 			 System.out.println("Showing Fault Map");
 			 renderFaultMap=!renderFaultMap;
+		}
+
+		else if (projectSelectionCode.equals("ShowDrawingMap")) {
+			 System.out.println("Showing Drawing Map");
+			 renderDrawingMap=!renderDrawingMap;
 		}
 		
 		else if (projectSelectionCode.equals("")) {
@@ -724,8 +731,15 @@ public class editProjectForm extends GenericProjectBean {
 		  this.renderFaultMap=renderFaultMap;
     }
     
-
-
+	 public boolean getRenderDrawingMap() {
+		  System.out.println("Getting drawing map");
+		  return this.renderDrawingMap;
+	 }
+	 
+	 public void setRenderDrawingMap(boolean renderDrawingMap) {
+		  System.out.println("Setting drawing map");
+		  this.renderDrawingMap=renderDrawingMap;
+	 }
 
 	public HtmlDataTable getMyFaultDataTable() {
 		return myFaultDataTable;

@@ -97,8 +97,7 @@ for(int i=0;i<permsize;i++) {
 </script>
 
 <f:view>
-	<script language="JavaScript" type="text/javascript">
-//<![CDATA[
+	<script type="text/javascript">
 //The myInit() funciton initializes the tree view for the FaultMapPanelFrame sidebar.
 function myInit() {
   	$("#browser").treeview({
@@ -801,7 +800,6 @@ function getScrolling() {
 	}
 	return x + "," + y;
 }
-//]]>
 </script>
    <h:messages id="simplexMessagesDynamicFault" 
 					  showDetail="true"

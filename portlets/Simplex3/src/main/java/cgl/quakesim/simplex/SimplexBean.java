@@ -19,18 +19,17 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+
+//Import some of our packages.
 import org.servogrid.genericproject.GenericSopacBean;
-
-
 import WebFlowClient.cm.ContextManagerImp;
 
+//DB4O imports
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 
-
 import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
-
 
 /**
  * Everything you need to set up and run SimpleBean.

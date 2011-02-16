@@ -1,7 +1,4 @@
-<h:form id="faultKMLSelectorForm" rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}">
-  <h:inputHidden id="faultName" value="#{SimplexBean.currentEditProjectForm.mapFaultName}"/>
-  <h:inputHidden id="faultlistsize" value="#{SimplexBean.myFaultsForProjectListsize}"/>
-
+<h:panelGroup id="FaultMapPanelFrame"rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}">
   <f:verbatim>
     <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/jquery.treeview.css">
 
@@ -11,6 +8,13 @@
     <script type="text/javascript" src="@host.base.url@@artifactId@/egeoxml.js"></script>
   </f:verbatim>	
 
+<h:form id="faultKMLSelectorForm">
+  <h:inputHidden id="faultName" value="#{SimplexBean.currentEditProjectForm.mapFaultName}"/>
+  <h:inputHidden id="faultlistsize" value="#{SimplexBean.myFaultsForProjectListsize}"/>
+
+    <h:outputText id="FaultMapSelectingInstructions"
+	 					escape="false"
+						value="<b>Selecting a Fault</b><br/>"/>
     <h:outputText id="FaultMapInstructionsStep1" 
 	 					escape="false"
 	 					value="<b>Step 1</b>: Select a fault by either clicking it on the map or its link in theleft hand navigator.  Click the checkboxes to toggle the fault display.<br/>"/>
@@ -37,7 +41,9 @@
 							actionListener="#{SimplexBean.currentEditProjectForm.toggleSetFaultFromMap}"/> 
 	</h:panelGroup>
   </h:panelGrid>
+</h:form>
 
+<h:form id="faultKMLDrawingForm">
 <h:panelGrid id="DrawingFaultPanel" columns="1" border="1" style="vertical-align:top;width: 800px;">
 <h:panelGroup id="dflel235231">
   <h:outputText id="DrawFaultSimplexDesc" escape="false" value="<b>Drawing a fault:</b> If you wish to draw a new fault that doesn't exist in the catalogs above, select here. <br/>"/>
@@ -58,27 +64,27 @@
       <f:facet name="header">
 		  <h:outputText id="nfa9" escape="false" value="<b>Lon Start</b>" />
       </f:facet>
-      <h:inputText id="faultdrawLonStartst" value="#{myentry32.faultLonStart}" required="false" />
+      <h:inputText id="faultdrawLonStartst" value="#{myentry32.faultLonStart}" required="true" />
     </h:column>
 
     <h:column>
       <f:facet name="header">
 		  <h:outputText id="nfa7" escape="false" value="<b>Lat Start</b>" />
       </f:facet>
-      <h:inputText id="faultdrawLatStartst" value="#{myentry32.faultLatStart}" required="false" />
+      <h:inputText id="faultdrawLatStartst" value="#{myentry32.faultLatStart}" required="true" />
     </h:column>
 
     <h:column>
       <f:facet name="header">
 	 	  <h:outputText id="nfa5" escape="false" value="<b>Lon End</b>" />
       </f:facet>
-      <h:inputText id="faultdrawLonEndst" value="#{myentry32.faultLonEnd}" required="false" />
+      <h:inputText id="faultdrawLonEndst" value="#{myentry32.faultLonEnd}" required="true" />
     </h:column>
     <h:column>
       <f:facet name="header">
 					<h:outputText id="nfa3" escape="false" value="<b>Lat End</b>" />
       </f:facet>
-      <h:inputText id="faultdrawLatEndst" value="#{myentry32.faultLatEnd}" required="false" />
+      <h:inputText id="faultdrawLatEndst" value="#{myentry32.faultLatEnd}" required="true" />
     </h:column>
   </h:dataTable>
 </h:panelGrid>
@@ -88,6 +94,7 @@
    <h:commandButton id="addfaultsd" value="Add a drawn fault" actionListener="#{SimplexBean.toggleDrawFaultFromMap}"/>
 </h:panelGroup>
  </h:panelGrid>
+</h:form>
 
 <f:verbatim>
 <script type="text/javascript">
@@ -114,9 +121,9 @@
 	faultMap.setMapType(G_PHYSICAL_MAP);
 	faultMap.setCenter(new GLatLng(35.0,-118.5),6);
 	faultMap.addControl(new GSmallMapControl());
-//	faultMap.addControl(new GMapTypeControl());
+//	faultMap.addControl(new GMapTypeControl());  //Don't show; takes up too much space.
    
-	var faultdrawing = document.getElementById("faultKMLSelectorForm:dflab2");
+	var faultdrawing = document.getElementById("faultKMLDrawingForm:dflab2");
 	faultdrawing.checked = false;
 
 	var faultField=document.getElementById("faultKMLSelectorForm:faultName");
@@ -184,7 +191,6 @@
 	  }
 
 	  else {    
-
 		  initialFaultdrawing();
 	  }
   }
@@ -291,10 +297,10 @@ function initialFaultdrawing() {
 
 function updateFaultdrawn() {
 
-	var faultdrawLatEnds = document.getElementById("faultKMLSelectorForm:dflelerh93_0:faultdrawLatEndst");	
-	var faultdrawLatStarts = document.getElementById("faultKMLSelectorForm:dflelerh93_0:faultdrawLatStartst");     
-	var faultdrawLonEnds = document.getElementById("faultKMLSelectorForm:dflelerh93_0:faultdrawLonEndst");
-	var faultdrawLonStarts = document.getElementById("faultKMLSelectorForm:dflelerh93_0:faultdrawLonStartst");
+	var faultdrawLatEnds = document.getElementById("faultKMLDrawingForm:dflelerh93_0:faultdrawLatEndst");	
+	var faultdrawLatStarts = document.getElementById("faultKMLDrawingForm:dflelerh93_0:faultdrawLatStartst");     
+	var faultdrawLonEnds = document.getElementById("faultKMLDrawingForm:dflelerh93_0:faultdrawLonEndst");
+	var faultdrawLonStarts = document.getElementById("faultKMLDrawingForm:dflelerh93_0:faultdrawLonStartst");
 
 	faultdrawLatEnds.value = marker_SW.getPoint().lat();
 	faultdrawLonEnds.value = marker_SW.getPoint().lng();
@@ -338,8 +344,7 @@ new GLatLng(marker_NE.getPoint().lat(), marker_NE.getPoint().lng())
 
 </script>
 </f:verbatim>
-
-</h:form>
+</h:panelGroup>
 
 
 
