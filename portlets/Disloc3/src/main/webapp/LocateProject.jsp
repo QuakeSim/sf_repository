@@ -4,7 +4,7 @@
       type="text/javascript"></script>
 </head>
 <body onload="" onunload="GUnload()">
-<script language="JavaScript"> 
+<script type="text/javascript">
 
 	 var map=null;
 	 var geocoder=null;

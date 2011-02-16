@@ -5,7 +5,7 @@
 			<h:panelGroup id="mapncrap1">
 				<f:verbatim>
 					<div id="map" style="width: 600px; height: 400px"></div>
-					<script language="JavaScript">
+					<script type="text/javascript">
 						initialize();
 					</script>
 				</f:verbatim>	

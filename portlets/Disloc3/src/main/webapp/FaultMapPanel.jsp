@@ -27,7 +27,7 @@
 </h:form>
 </f:view>
 
-<script language="JavaScript">
+<script type="text/javascript">
 	 var faultMap=null;
 
     //These are used by the fault map 
