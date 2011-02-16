@@ -103,9 +103,8 @@
 							</h:panelGrid>
 
 <f:verbatim>
-<script language="JavaScript">
+<script type="text/javascript">
 
-//<![CDATA[ 
 	initialize();
 
 function toggleoff(form){
@@ -154,10 +153,6 @@ for (var nA = 0 ; nA < permsize ; nA++)
 
 
 }
-
-
-//]]>
-
 	
 </script>
 </f:verbatim>

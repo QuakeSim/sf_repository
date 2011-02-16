@@ -22,9 +22,7 @@
 <body>
 
 
-<script language="JavaScript">
-
-//<![CDATA[ 
+<script type="text/javascript">
 
 function selectOne(form , button)
 {
@@ -54,7 +52,6 @@ function dataTableSelectOneRadio(radio) {
     }
     radio.checked = true;
 }
-//]]>
 
 </script>
 <f:view>
