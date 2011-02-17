@@ -1,6 +1,485 @@
 <h:panelGroup id="lck093ks"
 				  rendered="#{SimplexBean.currentEditProjectForm.renderGPSStationMap}">
-  <f:verbatim>
+
+<%
+//Set the map center. Hard-coded, need a better way.
+String mapcenter_x = "33.036";
+String mapcenter_y = "-117.24";
+
+//Read and parse the stations list from the old XML file.
+File localFile = new File(config.getServletContext().getRealPath("stations-rss-new.xml"));
+BufferedReader br=new BufferedReader(new FileReader(localFile));
+StringBuffer sb = new StringBuffer();
+while (br.ready()) {
+	sb.append(br.readLine());
+}
+SAXReader reader = new SAXReader();
+Document statusDoc = reader.read( new StringReader(sb.toString()) );
+Element eleXml = (Element)statusDoc.getRootElement();
+List stationList = eleXml.elements("station");
+
+//This is a KML file we got from somewhere. Parse it to extract stations.
+KMLdescriptionparser kdp = new KMLdescriptionparser();
+kdp.parseXml(config.getServletContext().getRealPath("perm.xml").split("perm.xml")[0], "perm.kml");
+
+//The total number of stations.  We need a more general way to handle this
+int rssnewsize = stationList.size();
+int permsize = kdp.getPlacemarkSize();
+int totalstations = rssnewsize + permsize;
+
+String[] latArray=new String[rssnewsize+permsize];
+String[] lonArray=new String[rssnewsize+permsize];
+String[] nameArray=new String[rssnewsize+permsize];
+
+// Set upt the arrays
+for(int i=0;i<stationList.size();i++) {
+	Element station=(Element)stationList.get(i);
+	latArray[i]=station.element("latitude").getText();
+	lonArray[i]=station.element("longitude").getText();
+	nameArray[i]=station.element("id").getText().toLowerCase();
+}
+
+for(int i=0;i<permsize;i++) {
+	kdp.getDesc(i);
+// System.out.println(kdp.getDesc(i));
+
+	latArray[i+rssnewsize]=kdp.getEle("</b>", "<b>Latitude:").trim();
+	lonArray[i+rssnewsize]=kdp.getEle("</b>", "<b>Longitude:").trim();
+	nameArray[i+rssnewsize]=kdp.getEle("</b>", "<b>Monument Code:").trim().toLowerCase();
+	// System.out.println(i + " " + nameArray[i+rssnewsize]);
+}
+%>
+<f:verbatim>
+<script type="text/javascript">
+// These are various gmap definitions.
+var map;
+var geoXml;
+var selectedGPSstationlist = new Array();
+
+var searcharea;
+
+var marker_NE;
+var marker_SW;
+
+var border;
+
+var icon_NE;
+var icon_SW;
+var icon_move;
+
+// Add the markers
+var pinmarker = new Array(2);
+var pinmarkervalue = new Array(2);
+var pin_index = -1;
+
+var marker = new Array(<%=totalstations%>);
+
+var markerlonlist = new Array(<%=totalstations%>);
+var markerlatlist = new Array(<%=totalstations%>);
+var markernamelist = new Array(<%= totalstations %>);
+var markedmarkernamelist = new Array(<%= totalstations %>);
+var unmarkedmarkernamelist = new Array(<%= totalstations %>);
+
+var html = new Array(<%=totalstations%>);
+
+var req;
+var baseIcon = new GIcon();
+baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
+baseIcon.iconSize = new GSize(15, 20);
+baseIcon.shadowSize = new GSize(10, 10);
+baseIcon.iconAnchor = new GPoint(1, 10);
+baseIcon.infoWindowAnchor = new GPoint(5, 1);
+baseIcon.infoShadowAnchor = new GPoint(5, 5);
+
+var colors = new Array (6);
+colors[0] = "red";
+colors[1] = "green";
+colors[2] = "blue";
+colors[3] = "black";
+colors[4] = "white";
+colors[5] = "yellow";
+colors[6] = "purple";
+colors[7] = "brown";
+function initialize() {
+  
+	searcharea = document.getElementById("obsvGPSMap:gpsRefStation23211b");
+	icon_NE = new GIcon(); 
+	icon_NE.image = 'http://maps.google.com/mapfiles/ms/micons/red-pushpin.png';
+	icon_NE.shadow = '';
+	icon_NE.iconSize = new GSize(32, 32);
+	icon_NE.shadowSize = new GSize(22, 20);
+	icon_NE.iconAnchor = new GPoint(10, 32);
+	icon_NE.dragCrossImage = '';
+
+	icon_SW = icon_NE;
+	// icon_SW.image = 'http://maps.google.com/mapfiles/ms/micons/red-pushpin.png';
+	// icon_SW.shadow = '';
+	// icon_SW.iconSize = new GSize(32, 32);
+	// icon_SW.shadowSize = new GSize(22, 20);
+	// icon_SW.iconAnchor = new GPoint(10, 32);
+	// icon_SW.dragCrossImage = '';
+
+	map=new GMap2(document.getElementById("defaultmap"));
+	map.addMapType(G_PHYSICAL_MAP);
+	map.setCenter(new GLatLng(33,-117),7);
+	map.addControl(new GLargeMapControl());
+	map.addControl(new GMapTypeControl());
+	map.addControl(new GScaleControl());
+
+
+// Show the faults
+	var faultKmlUrl=document.getElementById("faultKmlUrl");
+	geoXml=new GGeoXml(faultKmlUrl.value, function() {
+
+		while (!geoXml.hasLoaded()) {
+		}
+		geoXml.gotoDefaultViewport(map);
+		// Show the map.
+		map.addOverlay(geoXml);
+	});
+
+	map.addOverlay(geoXml);
+	var gpslist=document.getElementById("obsvGPSMap:GPSStationList");
+	
+	GEvent.addListener(gpslist,"click",function(e){
+		var a = new Array();
+		if (gpslist.value != "")
+			a = gpslist.value.split(",");
+
+		var c = 0;
+		var es = e.split("/");
+		for (var nA = 0; nA < markedmarkernamelist.length ; nA++)
+		{
+			if (markedmarkernamelist[nA] == es[0])
+				c = 1;
+
+		}
+
+		if (c==0)
+		{
+			togglemarker(a,e,"none");
+			gpslist.value=a;			
+		}
+		document.getElementById("obsvGPSMap:GPSStationNum").value = a.length;
+	});
+	<%
+// Display the markers
+
+	ExternalContext context = null;
+
+	FacesContext facesContext=FacesContext.getCurrentInstance();
+	
+	try {
+		context=facesContext.getExternalContext();
+	}
+	catch(Exception ex) {
+		ex.printStackTrace();
+	}	
+
+	Object requestObj=null;
+	requestObj=context.getRequest();
+
+	SimplexBean SB = null;
+	List l = null;	
+	List l2 = null;
+
+	if(requestObj instanceof PortletRequest) {
+		// System.out.println("[EditProject.jsp] requestObj is an instance of PortletRequest");
+		SB = (SimplexBean)((PortletRequest)requestObj).getPortletSession().getAttribute("SimplexBean");
+	}
+
+	else if(requestObj instanceof HttpServletRequest) {
+		// System.out.println("[EditProject.jsp] requestObj is an instance of HttpServletRequest");
+		SB = (SimplexBean)request.getSession().getAttribute("SimplexBean");
+	}
+
+
+	l = SB.getMyObservationEntryForProjectList();
+	l2 = SB.getMycandidateObservationsForProjectList();
+	
+
+	for(int i=0;i<totalstations;i++){
+
+		String color = "http://labs.google.com/ridefinder/images/mm_20_green.png";
+		int check = 0;
+		
+
+		for (int nA = 0; nA < l.size() ; nA++)
+		{
+			if (((observationEntryForProject)l.get(nA)).getObservationName().contains(nameArray[i].toLowerCase()))
+			{
+				color = "http://labs.google.com/ridefinder/images/mm_20_red.png";
+				check = 1;
+				%>
+				markedmarkernamelist[<%=nA%>]="<%=nameArray[i].toLowerCase()%>";
+				unmarkedmarkernamelist[<%=i%>]="marked";
+
+				<%
+			}
+		}
+
+		for (int nA = 0 ; nA < l2.size() ; nA++)
+		{
+		    if (((CandidateObservation)l2.get(nA)).getStationName().contains(nameArray[i].toLowerCase())) {
+		    color = "http://labs.google.com/ridefinder/images/mm_20_yellow.png";
+		    
+%>
+
+<%
+		    } 
+		} 
+
+		if (check == 0) {		
+			%>
+			unmarkedmarkernamelist[<%=i%>] = "<%=nameArray[i].toLowerCase()%>";
+			<%	
+
+		}
+		%>
+
+		var baseIcon = new GIcon();
+		baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
+		baseIcon.iconSize = new GSize(15, 20);
+		baseIcon.shadowSize = new GSize(10, 10);
+		baseIcon.iconAnchor = new GPoint(1, 10);
+		baseIcon.infoWindowAnchor = new GPoint(5, 1);
+		baseIcon.infoShadowAnchor = new GPoint(5, 5);
+		baseIcon.image = "<%=color%>";
+		var markerOptions={ icon:baseIcon };
+
+		var lon=<%=lonArray[i] %>;
+		var lat=<%=latArray[i] %>;
+		markerlonlist[<%=i%>] = lon;
+		markerlatlist[<%=i%>] = lat;
+
+		markernamelist[<%=i%>]="<%=nameArray[i]%>";
+		marker[<%=i%>]=new GMarker(new GLatLng(lat,lon),markerOptions);
+
+		html[<%=i%>]="<b>Station Name=</b>"+"<%=nameArray[i] %> <br>";
+		html[<%=i%>]+="<b>Latitude:</b> "+lat+"<br>";
+		html[<%=i%>]+="<b>Longitude:</b> "+lon+"<br>";
+		GEvent.addListener(marker[<%=i%>],"click",function() {
+
+			var newElement=document.getElementById("obsvGPSMap:stationName");
+			newElement.setAttribute("value","<%= nameArray[i] %>");
+	    
+		      
+			var newElement2=document.getElementById("obsvGPSMap:stationLat");
+			newElement2.setAttribute("value","<%= latArray[i] %>");
+			var newElement3=document.getElementById("obsvGPSMap:stationLon");
+			newElement3.setAttribute("value","<%= lonArray[i] %>");
+
+			var newElement4="<%= nameArray[i] + "/" + latArray[i] + "/" + lonArray[i]%>";
+			GEvent.trigger(document.getElementById("obsvGPSMap:GPSStationList"),'click', newElement4);
+			marker[<%=i%>].openInfoWindow(html[<%=i%>]);
+
+
+
+		});
+		map.addOverlay(marker[<%=i%>]);
+		<%
+	}
+	%>
+
+document.getElementById("obsvGPSMap:GPSStationNum").value = <%=l2.size()%>;
+
+}
+
+Array.prototype.remove = function(e)
+{
+	for(var nA = 0; nA < this.length; nA++ )
+	{
+// alert (this[nA] + " " + e);
+		if(this[nA]==e)
+			this.splice(nA,1);
+	}
+}
+
+
+function togglemarker(array, e, option)
+{
+	var b = 0;
+
+	var es = e.split("/");
+	
+
+	for(var nA = 0; nA < array.length; nA++ )
+	{
+		var as = array[nA].split("/");
+		if(as[0] ==es[0])
+			b=1;
+	}
+
+	var index=1;
+	for (var nA = 0 ; nA < markernamelist.length ; nA++)
+	{	
+		if (markernamelist[nA] == es[0])
+			index = nA;
+
+	}
+
+	map.removeOverlay(marker[index]);
+
+	// Set up the icon marker
+	var baseIcon=new GIcon(G_DEFAULT_ICON);
+	baseIcon.iconSize=new GSize(15,20);
+	baseIcon.shadowSize = new GSize(10, 10);
+	baseIcon.iconAnchor = new GPoint(1, 10);
+	baseIcon.infoWindowAnchor = new GPoint(5, 1);
+	baseIcon.infoShadowAnchor = new GPoint(5, 5);	      
+
+
+	if (b== 0 || option == "in"){
+		array.push(e);
+		baseIcon.image = "http://labs.google.com/ridefinder/images/mm_20_yellow.png";
+
+	}
+
+	if (b== 1 || option == "out") {
+		array.remove(e);
+		baseIcon.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";
+	}	
+
+
+	markerOptions={ icon:baseIcon };
+
+	var lon= markerlonlist[index];
+	var lat= markerlatlist[index];
+	marker[index]=new GMarker(new GLatLng(lat,lon),markerOptions);		
+	GEvent.addListener(marker[index],"click",function() {
+
+		var newElement=document.getElementById("obsvGPSMap:stationName");
+		newElement.setAttribute("value",markernamelist[index]);
+		var newElement2=document.getElementById("obsvGPSMap:stationLat");
+		newElement2.setAttribute("value",markerlatlist[index]);
+		var newElement3=document.getElementById("obsvGPSMap:stationLon");
+		newElement3.setAttribute("value",markerlonlist[index]);
+
+		var newElement4= markernamelist[index] + '/' + markerlatlist[index] + '/' +  markerlonlist[index];
+		GEvent.trigger(document.getElementById("obsvGPSMap:GPSStationList"),'click', newElement4);
+		marker[index].openInfoWindow(html[index]);
+	});
+	map.addOverlay(marker[index]);
+
+}
+
+function initialPosition() {
+// map.clearOverlays();
+	var bounds = map.getBounds();
+	var span = bounds.toSpan();
+	var newSW = new GLatLng(bounds.getSouthWest().lat() + span.lat()/3, 
+			bounds.getSouthWest().lng() + span.lng()/3);
+	var newNE = new GLatLng(bounds.getNorthEast().lat() - span.lat()/3, 
+			bounds.getNorthEast().lng() - span.lng()/3);
+
+	var newBounds = new GLatLngBounds(newSW, newNE);
+
+	marker_NE = new GMarker(newBounds.getNorthEast(), {draggable: true, icon: icon_NE});
+	GEvent.addListener(marker_NE, 'dragend', function() {
+		updatePolyline();
+		updateGPSinthebox();
+	});
+
+	marker_SW = new GMarker(newBounds.getSouthWest(), {draggable: true, icon: icon_SW});
+	GEvent.addListener(marker_SW, 'dragend', function() {
+		updatePolyline();
+		updateGPSinthebox();
+	});  
+
+	map.addOverlay(marker_NE);
+	map.addOverlay(marker_SW);
+// map.addOverlay(marker_move);
+
+	updatePolyline();
+}
+
+function updateGPSinthebox() {
+
+	var minlat = document.getElementById("obsvGPSMap:minlat");	
+	var minlon = document.getElementById("obsvGPSMap:minlon");     
+	var maxlat = document.getElementById("obsvGPSMap:maxlat");
+	var maxlon = document.getElementById("obsvGPSMap:maxlon");
+
+	minlat.value = marker_SW.getPoint().lat();
+	minlon.value = marker_SW.getPoint().lng();
+	maxlat.value = marker_NE.getPoint().lat();
+	maxlon.value = marker_NE.getPoint().lng();
+
+
+	if (marker_SW.getPoint().lat() >= marker_NE.getPoint().lat())
+	{
+		maxlat.value = marker_SW.getPoint().lat();
+		minlat.value = marker_NE.getPoint().lat();
+	}
+
+	if (marker_SW.getPoint().lng() >= marker_NE.getPoint().lng())
+	{
+		maxlon.value = marker_SW.getPoint().lng();
+		minlon.value = marker_NE.getPoint().lng();
+	}
+
+	var a = new Array();
+	var b = new Array();
+
+	if (document.getElementById("obsvGPSMap:GPSStationList").value != "")
+		b = document.getElementById("obsvGPSMap:GPSStationList").value.split(",");
+
+	for (var nA = 0 ; nA < markernamelist.length ; nA++)
+	{
+		if(unmarkedmarkernamelist[nA] != "marked") {
+
+
+			if ((markerlonlist[nA] <= maxlon.value && markerlonlist[nA] >= minlon.value) && 
+					(markerlatlist[nA] <= maxlat.value && markerlatlist[nA] >= minlat.value))
+			{			
+
+
+				togglemarker(a, markernamelist[nA] + '/' + markerlatlist[nA] + '/' +  markerlonlist[nA], "none");
+// b.push(markernamelist[nA]);
+
+			}
+			else
+				togglemarker(a, markernamelist[nA] + '/' + markerlatlist[nA] + '/' +  markerlonlist[nA], "out");
+		}
+
+	}
+
+	document.getElementById("obsvGPSMap:GPSStationList").value = a;
+	document.getElementById("obsvGPSMap:GPSStationNum").value = a.length;
+
+}
+
+function updatePolyline() {
+	if (border) {
+		map.removeOverlay(border);
+	}
+
+
+	var points = [
+marker_NE.getPoint(),
+new GLatLng(marker_SW.getPoint().lat(), marker_NE.getPoint().lng()),
+marker_SW.getPoint(),
+new GLatLng(marker_NE.getPoint().lat(), marker_SW.getPoint().lng()),
+marker_NE.getPoint()];
+	border = new GPolyline(points, "#FF0000");
+
+	map.addOverlay(border);
+}
+
+function toggleBorder() {
+	if (searcharea.checked == false) {  
+
+		map.removeOverlay(border);
+		map.removeOverlay(marker_NE);
+		map.removeOverlay(marker_SW);  
+	}
+
+	else {    
+
+		initialPosition();
+	}
+}
+</script>
   </f:verbatim>
 					 <h:form id="obsvGPSMap">
                 <h:outputText id="clrlc093" escape="false"
@@ -42,7 +521,6 @@
 						 <h:inputHidden id="stationLon" value="#{SimplexBean.gpsStationLon}"/>
 						</h:panelGrid>
 						
-
 						</h:panelGrid>
 
 						<h:panelGrid id="mnauw1" columns="1" border="0" cellpadding="0" cellspacing="0">
