@@ -654,8 +654,6 @@ public class SimplexBean extends GenericSopacBean {
 		this.mycandidateObservationsForProjectList = tmp_list;
 	}
 	
-	
-
 	public List getMyObservationsForProjectList() {
 		String projectName = getProjectName();
 		System.out.println("[" + getUserName() + "/SimplexBean/getMyObservationsForProjectList] ProjectName : "
@@ -2523,10 +2521,10 @@ public class SimplexBean extends GenericSopacBean {
 				String kmlUrlString = dpsb.getKmlUrls()[0];
 				String kmlName = kmlUrlString.substring(kmlUrlString.lastIndexOf("/") + 1, kmlUrlString.length());
 
-				downloadKmlFile(kmlUrlString, this.getBasePath() + "/"+ "gridsphere" + "/" + kmlName);
+				downloadKmlFile(kmlUrlString, this.getBasePath() + "/"+ codeName + "/" + kmlName);
 
 				System.out.println("[" + getUserName() + "/SimplexBean/togglePlotProject] kmlpath :  "
-						+ this.getBasePath() + "/" + "gridsphere" + "/"
+						+ this.getBasePath() + "/" + codeName + "/"
 						+ kmlName);
 				setKmlProjectFile(kmlName);
 			} else
@@ -2644,7 +2642,7 @@ public class SimplexBean extends GenericSopacBean {
 
 	public String createFaultKmlFile() {
 		String newFaultFilename = "";
-		String oldLocalDestination = this.getBasePath() + "/" + "gridsphere"
+		String oldLocalDestination = this.getBasePath() + "/" + codeName
 				+ "/" + getFaultKmlFilename();
 		String localDestination = "";
 
@@ -2663,7 +2661,7 @@ public class SimplexBean extends GenericSopacBean {
 					+ "-" + timeStamp + ".kml";
 			setFaultKmlFilename(newFaultFilename);
 			// This should be the new file name.
-			localDestination = this.getBasePath() + "/" + "gridsphere" + "/"
+			localDestination = this.getBasePath() + "/" + codeName + "/"
 					+ getFaultKmlFilename();
 
 			Fault[] faults = getProjectFaultsFromDB(userName, projectName,
@@ -2698,7 +2696,7 @@ public class SimplexBean extends GenericSopacBean {
 			ex.printStackTrace();
 		}
 
-		String returnString = portalBaseUrl + "/gridsphere/"
+		String returnString = portalBaseUrl + "/Simplex3/"
 				+ getFaultKmlFilename();
 		System.out.println("[" + getUserName() + "/SimplexBean/createFaultKmlFile] KML:" + returnString);
 		return returnString;

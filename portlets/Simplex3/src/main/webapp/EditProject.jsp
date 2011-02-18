@@ -46,7 +46,8 @@ function myInit() {
 		persist: "cookie"
 		});
  }
-
+</script>
+<script type="text/javascript">
 //--------------------------------------------------
 //Following two math functions should probably go into a separate script file.
 //--------------------------------------------------
@@ -165,30 +166,6 @@ function dataTableSelectOneRadio(radio) {
 	radio.checked = true;
 }       
 
-function addFault(latStart, latEnd, lonStart, lonEnd) {
-	var polyline = new GPolyline([
-   new GLatLng(latStart, lonStart),
-   new GLatLng(latEnd, lonEnd)], "#ff0000", 10);
-	map.addOverlay(polyline);	 
-}
-
-function createMarker(networkName, name, lon, lat, icon) {
-	var marker = new GMarker(new GPoint(lon, lat),icon);
-
-	var html = "<b>Station Name= </b>" + name + "<br><b>Lat=</b>" + lat + "<br><b>Lon= </b>" + lon + "<br><b>Network= </b>" + networkName;
-
-	GEvent.addListener(marker, "click", function() {
-		marker.openInfoWindowHtml(html);;
-		var newElement=document.getElementById("obsvGPSMap:stationName");
-		newElement.setAttribute("value",name);
-		var newElement2=document.getElementById("obsvGPSMap:stationLat");
-		newElement2.setAttribute("value",lat);
-		var newElement3=document.getElementById("obsvGPSMap:stationLon");
-		newElement3.setAttribute("value",lon);
-	});
-
-	return marker;
-}
 
 function printNetworkColors (array) {
 	var html = "<table border='0'><tr><td><b>Network</b></td><td nowrap><b>Icon Color<b></td></tr>";
@@ -237,7 +214,7 @@ function getScrolling() {
 
 	<h:outputText id="lkdrq1" styleClass="header2"
 		value="Project Component Manager" />
-	<h:inputHidden id="faultKmlUrl" value="#{SimplexBean.faultKmlUrl}" />
+	<%-- <h:inputHidden id="faultKmlUrl" value="#{SimplexBean.faultKmlUrl}" /> --%>
 	<h:outputText id="lkdrq2" escape="false" value="<br>"/>
 	  <h:outputText id="lkdrq2" escape="false"
 		value="You must provide at least one fault and one observation point before you can run Simplex" />
@@ -262,11 +239,11 @@ function getScrolling() {
 	<h:outputText id="simplexHorizontalLine" escape="false" value="<hr/>"/>
 	<h:form id="dflelerkljk186">
 		<h:commandLink id="dflelerkljk187" action="Simplex2-back">
-			<h:outputText value="#{SimplexBean.codeName} Main Menu" />
+			<h:outputText id="Simplex3NavigationLink" value="#{SimplexBean.codeName} Main Menu" />
 		</h:commandLink>
 	</h:form>
 
 </f:view>
 
 </body>
-<html></html>
+</html>

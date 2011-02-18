@@ -1,5 +1,6 @@
 <h:panelGroup id="lck093ks"
 				  rendered="#{SimplexBean.currentEditProjectForm.renderGPSStationMap}">
+  <h:inputHidden id="faultKmlUrl" value="#{SimplexBean.faultKmlUrl}" />
 
 <%
 //Set the map center. Hard-coded, need a better way.
@@ -49,48 +50,40 @@ for(int i=0;i<permsize;i++) {
 	// System.out.println(i + " " + nameArray[i+rssnewsize]);
 }
 %>
+
 <f:verbatim>
 <script type="text/javascript">
-// These are various gmap definitions.
+//These are variables needed for the GPS station selection features.
 var map;
 var geoXml;
 var selectedGPSstationlist = new Array();
 
 var searcharea;
-
 var marker_NE;
 var marker_SW;
-
 var border;
-
 var icon_NE;
 var icon_SW;
 var icon_move;
 
-// Add the markers
+// Are these used?
 var pinmarker = new Array(2);
 var pinmarkervalue = new Array(2);
 var pin_index = -1;
 
+//Arrays to handle GPS stations, both marked and unmarked.
 var marker = new Array(<%=totalstations%>);
-
 var markerlonlist = new Array(<%=totalstations%>);
 var markerlatlist = new Array(<%=totalstations%>);
 var markernamelist = new Array(<%= totalstations %>);
 var markedmarkernamelist = new Array(<%= totalstations %>);
 var unmarkedmarkernamelist = new Array(<%= totalstations %>);
 
+//This is an array to handle HTML in the GPS marker popup window.
 var html = new Array(<%=totalstations%>);
 
+//Obsolete?
 var req;
-var baseIcon = new GIcon();
-baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
-baseIcon.iconSize = new GSize(15, 20);
-baseIcon.shadowSize = new GSize(10, 10);
-baseIcon.iconAnchor = new GPoint(1, 10);
-baseIcon.infoWindowAnchor = new GPoint(5, 1);
-baseIcon.infoShadowAnchor = new GPoint(5, 5);
-
 var colors = new Array (6);
 colors[0] = "red";
 colors[1] = "green";
@@ -100,9 +93,26 @@ colors[4] = "white";
 colors[5] = "yellow";
 colors[6] = "purple";
 colors[7] = "brown";
+
+//Styling for the GPS marker icons.  This is repeated below, so one should be deleted.
+var baseIcon = new GIcon();
+baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
+baseIcon.iconSize = new GSize(15, 20);
+baseIcon.shadowSize = new GSize(10, 10);
+baseIcon.iconAnchor = new GPoint(1, 10);
+baseIcon.infoWindowAnchor = new GPoint(5, 1);
+baseIcon.infoShadowAnchor = new GPoint(5, 5);
+//Now done with all the initialization work.
+
+//--------------------------------------------------
+// This function initializes the area selection feature.
+// REVIEW: Probably deserves a more specific name.
+//--------------------------------------------------
 function initialize() {
-  
+	//This is associated with the checkbox.
 	searcharea = document.getElementById("obsvGPSMap:gpsRefStation23211b");
+
+	//Create the icons for the search area.
 	icon_NE = new GIcon(); 
 	icon_NE.image = 'http://maps.google.com/mapfiles/ms/micons/red-pushpin.png';
 	icon_NE.shadow = '';
@@ -110,15 +120,9 @@ function initialize() {
 	icon_NE.shadowSize = new GSize(22, 20);
 	icon_NE.iconAnchor = new GPoint(10, 32);
 	icon_NE.dragCrossImage = '';
-
 	icon_SW = icon_NE;
-	// icon_SW.image = 'http://maps.google.com/mapfiles/ms/micons/red-pushpin.png';
-	// icon_SW.shadow = '';
-	// icon_SW.iconSize = new GSize(32, 32);
-	// icon_SW.shadowSize = new GSize(22, 20);
-	// icon_SW.iconAnchor = new GPoint(10, 32);
-	// icon_SW.dragCrossImage = '';
 
+	//Create the map area, center it, etc.
 	map=new GMap2(document.getElementById("defaultmap"));
 	map.addMapType(G_PHYSICAL_MAP);
 	map.setCenter(new GLatLng(33,-117),7);
@@ -126,33 +130,33 @@ function initialize() {
 	map.addControl(new GMapTypeControl());
 	map.addControl(new GScaleControl());
 
-
-// Show the faults
+	//This centers the map on fault. 
+   //REVIEW: this method really looks mangled.
 	var faultKmlUrl=document.getElementById("faultKmlUrl");
 	geoXml=new GGeoXml(faultKmlUrl.value, function() {
-
 		while (!geoXml.hasLoaded()) {
 		}
 		geoXml.gotoDefaultViewport(map);
 		// Show the map.
 		map.addOverlay(geoXml);
 	});
-
 	map.addOverlay(geoXml);
+
+	//Get the list of selected GPS stations
 	var gpslist=document.getElementById("obsvGPSMap:GPSStationList");
-	
+
+	//Handle some formatting issues for the stations.	They are comman-separated
+   //in the above list.
 	GEvent.addListener(gpslist,"click",function(e){
 		var a = new Array();
 		if (gpslist.value != "")
 			a = gpslist.value.split(",");
-
 		var c = 0;
 		var es = e.split("/");
 		for (var nA = 0; nA < markedmarkernamelist.length ; nA++)
 		{
 			if (markedmarkernamelist[nA] == es[0])
 				c = 1;
-
 		}
 
 		if (c==0)
@@ -162,20 +166,23 @@ function initialize() {
 		}
 		document.getElementById("obsvGPSMap:GPSStationNum").value = a.length;
 	});
+
+	//Note we are still in the initialize() function at this point, althoug we need to break
+   //out into so Java code.
+	//REVIEW: this is really akward and hard to edit, maintain.
+
 	<%
-// Display the markers
-
+   // Display the markers
+   // Get the context and from it the request object so that we can get the 
+   // SimplexBean.  Surely there is an easier way.
 	ExternalContext context = null;
-
 	FacesContext facesContext=FacesContext.getCurrentInstance();
-	
 	try {
 		context=facesContext.getExternalContext();
 	}
 	catch(Exception ex) {
 		ex.printStackTrace();
 	}	
-
 	Object requestObj=null;
 	requestObj=context.getRequest();
 
@@ -183,6 +190,7 @@ function initialize() {
 	List l = null;	
 	List l2 = null;
 
+	//Get the SimplexBean from the session in either the portlet or standalone case.
 	if(requestObj instanceof PortletRequest) {
 		// System.out.println("[EditProject.jsp] requestObj is an instance of PortletRequest");
 		SB = (SimplexBean)((PortletRequest)requestObj).getPortletSession().getAttribute("SimplexBean");
@@ -193,57 +201,58 @@ function initialize() {
 		SB = (SimplexBean)request.getSession().getAttribute("SimplexBean");
 	}
 
-
+	//Finally, get the list of observations already in the project and also
+	//candidate observations.
+	//REVIEW: these variable names are terrible.
 	l = SB.getMyObservationEntryForProjectList();
-	l2 = SB.getMycandidateObservationsForProjectList();
-	
+	l2 = SB.getMycandidateObservationsForProjectList();	
 
 	for(int i=0;i<totalstations;i++){
-
 		String color = "http://labs.google.com/ridefinder/images/mm_20_green.png";
 		int check = 0;
 		
-
-		for (int nA = 0; nA < l.size() ; nA++)
-		{
+		//Determine which markers correspond to added observation points and color them red.
+		for (int nA = 0; nA < l.size() ; nA++) {
 			if (((observationEntryForProject)l.get(nA)).getObservationName().contains(nameArray[i].toLowerCase()))
 			{
 				color = "http://labs.google.com/ridefinder/images/mm_20_red.png";
 				check = 1;
 				%>
+				//Switch back to javascript and add the marked station to the 
+				//appropriate array.
 				markedmarkernamelist[<%=nA%>]="<%=nameArray[i].toLowerCase()%>";
 				unmarkedmarkernamelist[<%=i%>]="marked";
-
+				//Now back to Java to close the if and for statements.
 				<%
 			}
 		}
 
-		for (int nA = 0 ; nA < l2.size() ; nA++)
-		{
+		//Determine if the marked station is a candidate for addition.  Candidate stations 
+		//have been clicked but not yet added to the project's observation list.  These 
+		//are colored yellow.
+		for (int nA = 0 ; nA < l2.size() ; nA++) {
 		    if (((CandidateObservation)l2.get(nA)).getStationName().contains(nameArray[i].toLowerCase())) {
-		    color = "http://labs.google.com/ridefinder/images/mm_20_yellow.png";
-		    
-%>
-
-<%
+		    color = "http://labs.google.com/ridefinder/images/mm_20_yellow.png";		    
 		    } 
 		} 
 
+		//Add the candidate station to the unmarked array list.
+		//REVIEW:This if statement is probably unnecessary.
 		if (check == 0) {		
 			%>
 			unmarkedmarkernamelist[<%=i%>] = "<%=nameArray[i].toLowerCase()%>";
 			<%	
-
 		}
 		%>
 
-		var baseIcon = new GIcon();
-		baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
-		baseIcon.iconSize = new GSize(15, 20);
-		baseIcon.shadowSize = new GSize(10, 10);
-		baseIcon.iconAnchor = new GPoint(1, 10);
-		baseIcon.infoWindowAnchor = new GPoint(5, 1);
-		baseIcon.infoShadowAnchor = new GPoint(5, 5);
+		//REVIEW: This is redundant with the earlier baseIcon defs.
+		//var baseIcon = new GIcon();
+		//baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
+		//baseIcon.iconSize = new GSize(15, 20);
+		//baseIcon.shadowSize = new GSize(10, 10);
+		//baseIcon.iconAnchor = new GPoint(1, 10);
+		//baseIcon.infoWindowAnchor = new GPoint(5, 1);
+		//baseIcon.infoShadowAnchor = new GPoint(5, 5);
 		baseIcon.image = "<%=color%>";
 		var markerOptions={ icon:baseIcon };
 
@@ -377,13 +386,13 @@ function initialPosition() {
 	marker_NE = new GMarker(newBounds.getNorthEast(), {draggable: true, icon: icon_NE});
 	GEvent.addListener(marker_NE, 'dragend', function() {
 		updatePolyline();
-		updateGPSinthebox();
+//		updateGPSinthebox();
 	});
 
 	marker_SW = new GMarker(newBounds.getSouthWest(), {draggable: true, icon: icon_SW});
 	GEvent.addListener(marker_SW, 'dragend', function() {
 		updatePolyline();
-		updateGPSinthebox();
+//		updateGPSinthebox();
 	});  
 
 	map.addOverlay(marker_NE);
@@ -406,14 +415,12 @@ function updateGPSinthebox() {
 	maxlon.value = marker_NE.getPoint().lng();
 
 
-	if (marker_SW.getPoint().lat() >= marker_NE.getPoint().lat())
-	{
+	if (marker_SW.getPoint().lat() >= marker_NE.getPoint().lat()) {
 		maxlat.value = marker_SW.getPoint().lat();
 		minlat.value = marker_NE.getPoint().lat();
 	}
 
-	if (marker_SW.getPoint().lng() >= marker_NE.getPoint().lng())
-	{
+	if (marker_SW.getPoint().lng() >= marker_NE.getPoint().lng()) {
 		maxlon.value = marker_SW.getPoint().lng();
 		minlon.value = marker_NE.getPoint().lng();
 	}
@@ -424,15 +431,11 @@ function updateGPSinthebox() {
 	if (document.getElementById("obsvGPSMap:GPSStationList").value != "")
 		b = document.getElementById("obsvGPSMap:GPSStationList").value.split(",");
 
-	for (var nA = 0 ; nA < markernamelist.length ; nA++)
-	{
+	for (var nA = 0 ; nA < markernamelist.length ; nA++) {
 		if(unmarkedmarkernamelist[nA] != "marked") {
 
-
 			if ((markerlonlist[nA] <= maxlon.value && markerlonlist[nA] >= minlon.value) && 
-					(markerlatlist[nA] <= maxlat.value && markerlatlist[nA] >= minlat.value))
-			{			
-
+					(markerlatlist[nA] <= maxlat.value && markerlatlist[nA] >= minlat.value)) {			
 
 				togglemarker(a, markernamelist[nA] + '/' + markerlatlist[nA] + '/' +  markerlonlist[nA], "none");
 // b.push(markernamelist[nA]);
@@ -456,11 +459,11 @@ function updatePolyline() {
 
 
 	var points = [
-marker_NE.getPoint(),
-new GLatLng(marker_SW.getPoint().lat(), marker_NE.getPoint().lng()),
-marker_SW.getPoint(),
-new GLatLng(marker_NE.getPoint().lat(), marker_SW.getPoint().lng()),
-marker_NE.getPoint()];
+		 marker_NE.getPoint(),
+		 new GLatLng(marker_SW.getPoint().lat(), marker_NE.getPoint().lng()),
+		 marker_SW.getPoint(),
+		 new GLatLng(marker_NE.getPoint().lat(), marker_SW.getPoint().lng()),
+		 marker_NE.getPoint()];
 	border = new GPolyline(points, "#FF0000");
 
 	map.addOverlay(border);
@@ -479,8 +482,43 @@ function toggleBorder() {
 		initialPosition();
 	}
 }
+function addFault(latStart, latEnd, lonStart, lonEnd) {
+	var polyline = new GPolyline([
+   new GLatLng(latStart, lonStart),
+   new GLatLng(latEnd, lonEnd)], "#ff0000", 10);
+	map.addOverlay(polyline);	 
+}
+
+function createMarker(networkName, name, lon, lat, icon) {
+	var marker = new GMarker(new GPoint(lon, lat),icon);
+
+	var html = "<b>Station Name= </b>" + name + "<br><b>Lat=</b>" + lat + "<br><b>Lon= </b>" + lon + "<br><b>Network= </b>" + networkName;
+
+	GEvent.addListener(marker, "click", function() {
+		marker.openInfoWindowHtml(html);;
+		var newElement=document.getElementById("obsvGPSMap:stationName");
+		newElement.setAttribute("value",name);
+		var newElement2=document.getElementById("obsvGPSMap:stationLat");
+		newElement2.setAttribute("value",lat);
+		var newElement3=document.getElementById("obsvGPSMap:stationLon");
+		newElement3.setAttribute("value",lon);
+	});
+
+	return marker;
+}
+
+function displayChosenGPS(){
+		alert("Updating the map");
+		var updateButton=document.getElementById("obsvGPSMap:SimplexFetchGPSStations");
+		GEvent.addListener(updateButton,"click",function(){
+		   updateGPSinthebox();
+		});
+}
+
 </script>
-  </f:verbatim>
+
+</f:verbatim>
+<%-- Visible part starts here  --%>
 					 <h:form id="obsvGPSMap">
                 <h:outputText id="clrlc093" escape="false"
 					    value="Select Stations from Map: Select the stations that you want to use as observation points."/>
@@ -565,10 +603,17 @@ function toggleBorder() {
 						 <h:outputText id="dkljr3dssra" value="Use search area:"/>
 						 <h:selectBooleanCheckbox id="gpsRefStation23211b" onclick="toggleBorder()" 
 							value="#{SimplexBean.searcharea}"/>
+						 <h:outputText id="SimplexGetGPSSelectionArea" value="Get Values in Box"/>
+						 <h:commandButton id="SimplexFetchGPSStations"
+						 						type="button" 
+						 						onclick="displayChosenGPS()" 
+												value="Get Values"/>
 						 <h:inputHidden id="minlon" value="#{SimplexBean.selectedminlon}"/>
 						 <h:inputHidden id="minlat" value="#{SimplexBean.selectedminlat}"/>
 						 <h:inputHidden id="maxlon" value="#{SimplexBean.selectedmaxlon}"/>
 						 <h:inputHidden id="maxlat" value="#{SimplexBean.selectedmaxlat}"/>
+						 
+						 
 						 <h:commandButton id="addGPSObsv" value="Add Station"
 						 		actionListener="#{SimplexBean.toggleAddGPSObsvForProject}"/>
 						 <h:commandButton id="closeMap" value="Close Map"
