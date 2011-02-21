@@ -1,8 +1,8 @@
 <h:panelGrid id="DashboradPanelgrid"
 				 columnClasses="alignTop,alignTop"
 				 columns="1" 
-				 width="300"
-				 border="0">			
+				 width="400"
+				 border="1">			
   
   <h:panelGroup id="lkdrq3">
 	 <h:form id="selectproj">  
@@ -48,7 +48,11 @@
 	 </h:form>
 	 
 	 <h:form id="dflelerkljk185" 
-				rendered="#{!empty SimplexBean.myObservationEntryForProjectList and !empty SimplexBean.myFaultEntryForProjectList}">
+				rendered="#{!empty SimplexBean.myObservationEntryForProjectList 
+							 and !empty SimplexBean.myFaultEntryForProjectList}">
+		<h:outputText id="simplexSubmitSeparator" 
+						  escape="false"
+						  value="<hr/>"/>
 		<h:outputText value="Simplex is ready to run.  Click the button below to launch."/>
 		<h:commandButton rendered="#{!empty SimplexBean.myObservationEntryForProjectList
 											and !empty SimplexBean.myFaultEntryForProjectList}"

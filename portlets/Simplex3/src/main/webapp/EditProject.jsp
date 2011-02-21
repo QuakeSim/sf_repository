@@ -222,7 +222,7 @@ function getScrolling() {
 	<h:panelGrid id="EditProject" 
 					 columnClasses="alignTop,alignTop" 
 					 columns="2" 
-					 border="1">
+					 border="0">
 		<%@include file="DashboardPanel.jsp"%>
 		<%@include file="ObservationPanel.jsp"%>
 		<%@include file="GPSMapPanel.jsp"%>

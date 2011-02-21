@@ -509,39 +509,41 @@ updatePolyline();
 		}
 
 	 </script>
-
   </f:verbatim>
   <%-- Visible part starts here  --%>
   <h:form id="obsvGPSMap">
-	 <h:outputText id="clrlc093" escape="false"
-						value="<b>Select Stations from Map:</b> Select the stations that you want to use as observation points. Then, fetch the values and add them to your project observation list."/>
-	 <h:panelGrid id="mapsAndCrap" columns="3" columnClasses="alignTop,alignTop">
-		<h:panelGroup id="mapncrap1">
-		  <f:verbatim> 
-			 <div id="defaultmap" style="width: 600px; height: 400px"></div>
-		  </f:verbatim>
-		</h:panelGroup>
-		<h:panelGroup id="mapncrap2">
-		  <h:panelGrid id="manncraplayoutgrid"
-							border="1"
-							columns="1">
-			 <h:panelGroup id="mapncrapLayoutGroup1">
-				<h:outputText id="SimplexGPSInstructions1"
-								  value="First, select stations to import into your project."/>
-				<h:panelGrid id="dfjdlkj" 
-								 border="0"
-								 columns="2">
-
-				  <h:panelGrid id="nploe" columns="2">
-					 <h:outputText id="dkb2" value="stations.xml"/>
-					 <h:selectBooleanCheckbox id="gpssource1" 
-													  onchange="togglesource('box1')" 
-													  value="#{SimplexBean.gpssource1}" />
-				  </h:panelGrid>
-				  
-				  <h:panelGrid id="npbbv" columns="2">
-					 <h:outputText id="dkb3" value="perm.kml"/>
-					 <h:selectBooleanCheckbox id="gpssource2" 
+	 <h:panelGrid id="simplexSelectionMapGrid"
+					  columns="1"
+					  border="1">
+		<h:outputText id="clrlc093" escape="false"
+						  value="<b>Select Stations from Map:</b> Select the stations that you want to use as observation points. Then, fetch the values and add them to your project observation list."/>
+		<h:panelGrid id="mapsAndCrap" columns="3" columnClasses="alignTop,alignTop">
+		  <h:panelGroup id="mapncrap1">
+			 <f:verbatim> 
+				<div id="defaultmap" style="width: 800px; height: 600px"></div>
+			 </f:verbatim>
+		  </h:panelGroup>
+		  <h:panelGroup id="mapncrap2">
+			 <h:panelGrid id="manncraplayoutgrid"
+							  border="1"
+							  columns="1">
+				<h:panelGroup id="mapncrapLayoutGroup1">
+				  <h:outputText id="SimplexGPSInstructions1"
+									 value="First, select stations to import into your project."/>
+				  <h:panelGrid id="dfjdlkj" 
+									border="0"
+									columns="2">
+					 
+					 <h:panelGrid id="nploe" columns="2">
+						<h:outputText id="dkb2" value="stations.xml"/>
+						<h:selectBooleanCheckbox id="gpssource1" 
+														 onchange="togglesource('box1')" 
+														 value="#{SimplexBean.gpssource1}" />
+					 </h:panelGrid>
+					 
+					 <h:panelGrid id="npbbv" columns="2">
+						<h:outputText id="dkb3" value="perm.kml"/>
+						<h:selectBooleanCheckbox id="gpssource2" 
 													  onchange="togglesource('box2')" 
 													  value="#{SimplexBean.gpssource2}"/>  
 				  </h:panelGrid>
@@ -693,8 +695,9 @@ updatePolyline();
 		<h:graphicImage id="simplexKeyGreenPin"
 							 value="http://labs.google.com/ridefinder/images/mm_20_green.png"/>
 	 </h:panelGrid>
-	 <f:verbatim>
-		<script type="text/javascript">
+  </h:panelGrid>
+  <f:verbatim>
+	 <script type="text/javascript">
 		  
 		  initialize();
 
@@ -743,6 +746,5 @@ updatePolyline();
 		  }
 		</script>
 	 </f:verbatim>
-	 
   </h:form>
 </h:panelGroup>
