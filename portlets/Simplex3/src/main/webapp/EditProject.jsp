@@ -219,8 +219,10 @@ function getScrolling() {
 	  <h:outputText id="lkdrq2" escape="false"
 		value="You must provide at least one fault and one observation point before you can run Simplex" />
 	<%/* This is the main grid container */%>
-	<h:panelGrid id="EditProject" columnClasses="alignTop,alignTop" columns="2" border="1">
-
+	<h:panelGrid id="EditProject" 
+					 columnClasses="alignTop,alignTop" 
+					 columns="2" 
+					 border="1">
 		<%@include file="DashboardPanel.jsp"%>
 		<%@include file="ObservationPanel.jsp"%>
 		<%@include file="GPSMapPanel.jsp"%>

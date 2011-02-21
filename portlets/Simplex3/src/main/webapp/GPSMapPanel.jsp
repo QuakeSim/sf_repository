@@ -1,8 +1,8 @@
 <h:panelGroup id="lck093ks"
 				  rendered="#{SimplexBean.currentEditProjectForm.renderGPSStationMap}">
   <h:inputHidden id="faultKmlUrl" value="#{SimplexBean.faultKmlUrl}" />
-
-<%
+  
+  <%
 //Set the map center. Hard-coded, need a better way.
 String mapcenter_x = "33.036";
 String mapcenter_y = "-117.24";
@@ -305,15 +305,11 @@ Array.prototype.remove = function(e)
 }
 
 
-function togglemarker(array, e, option)
-{
+function togglemarker(array, e, option) {
 	var b = 0;
-
 	var es = e.split("/");
 	
-
-	for(var nA = 0; nA < array.length; nA++ )
-	{
+	for(var nA = 0; nA < array.length; nA++ ) {
 		var as = array[nA].split("/");
 		if(as[0] ==es[0])
 			b=1;
@@ -338,17 +334,16 @@ function togglemarker(array, e, option)
 	baseIcon.infoShadowAnchor = new GPoint(5, 5);	      
 
 
-	if (b== 0 || option == "in"){
+	if (b==0 || option == "in"){
 		array.push(e);
 		baseIcon.image = "http://labs.google.com/ridefinder/images/mm_20_yellow.png";
 
 	}
 
-	if (b== 1 || option == "out") {
+	if (b==1 || option == "out") {
 		array.remove(e);
 		baseIcon.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";
 	}	
-
 
 	markerOptions={ icon:baseIcon };
 
@@ -369,9 +364,9 @@ function togglemarker(array, e, option)
 		marker[index].openInfoWindow(html[index]);
 	});
 	map.addOverlay(marker[index]);
-
 }
 
+//This plots the selection area box. 
 function initialPosition() {
 // map.clearOverlays();
 	var bounds = map.getBounds();
@@ -414,7 +409,6 @@ function updateGPSinthebox() {
 	maxlat.value = marker_NE.getPoint().lat();
 	maxlon.value = marker_NE.getPoint().lng();
 
-
 	if (marker_SW.getPoint().lat() >= marker_NE.getPoint().lat()) {
 		maxlat.value = marker_SW.getPoint().lat();
 		minlat.value = marker_NE.getPoint().lat();
@@ -425,38 +419,39 @@ function updateGPSinthebox() {
 		minlon.value = marker_NE.getPoint().lng();
 	}
 
+	//REVIEW: Terrible variable names.
 	var a = new Array();
 	var b = new Array();
 
 	if (document.getElementById("obsvGPSMap:GPSStationList").value != "")
 		b = document.getElementById("obsvGPSMap:GPSStationList").value.split(",");
 
+		
 	for (var nA = 0 ; nA < markernamelist.length ; nA++) {
 		if(unmarkedmarkernamelist[nA] != "marked") {
 
 			if ((markerlonlist[nA] <= maxlon.value && markerlonlist[nA] >= minlon.value) && 
 					(markerlatlist[nA] <= maxlat.value && markerlatlist[nA] >= minlat.value)) {			
-
-				togglemarker(a, markernamelist[nA] + '/' + markerlatlist[nA] + '/' +  markerlonlist[nA], "none");
-// b.push(markernamelist[nA]);
+					  togglemarker(a, markernamelist[nA] 
+					  						+ '/' + markerlatlist[nA] 
+											+ '/' +  markerlonlist[nA], "none");
 
 			}
 			else
-				togglemarker(a, markernamelist[nA] + '/' + markerlatlist[nA] + '/' +  markerlonlist[nA], "out");
+				togglemarker(a, markernamelist[nA] 
+									 + '/' + markerlatlist[nA] 
+									 + '/' +  markerlonlist[nA], "out");
 		}
-
 	}
 
 	document.getElementById("obsvGPSMap:GPSStationList").value = a;
 	document.getElementById("obsvGPSMap:GPSStationNum").value = a.length;
-
 }
 
 function updatePolyline() {
 	if (border) {
 		map.removeOverlay(border);
 	}
-
 
 	var points = [
 		 marker_NE.getPoint(),
@@ -508,187 +503,246 @@ function createMarker(networkName, name, lon, lat, icon) {
 }
 
 function displayChosenGPS(){
-		alert("Updating the map");
-		var updateButton=document.getElementById("obsvGPSMap:SimplexFetchGPSStations");
-		GEvent.addListener(updateButton,"click",function(){
-		   updateGPSinthebox();
-		});
-}
+alert("Updating the map");
+updatePolyline();
+		updateGPSinthebox();
+		}
 
-</script>
+	 </script>
 
-</f:verbatim>
-<%-- Visible part starts here  --%>
-					 <h:form id="obsvGPSMap">
-                <h:outputText id="clrlc093" escape="false"
-					    value="Select Stations from Map: Select the stations that you want to use as observation points."/>
-						 <h:panelGrid id="mapsAndCrap" columns="3" columnClasses="alignTop,alignTop">
-						    <h:panelGroup id="mapncrap1">
-						 <f:verbatim>
-						 <div id="defaultmap" style="width: 600px; height: 400px"></div>
+  </f:verbatim>
+  <%-- Visible part starts here  --%>
+  <h:form id="obsvGPSMap">
+	 <h:outputText id="clrlc093" escape="false"
+						value="<b>Select Stations from Map:</b> Select the stations that you want to use as observation points. Then, fetch the values and add them to your project observation list."/>
+	 <h:panelGrid id="mapsAndCrap" columns="3" columnClasses="alignTop,alignTop">
+		<h:panelGroup id="mapncrap1">
+		  <f:verbatim> 
+			 <div id="defaultmap" style="width: 600px; height: 400px"></div>
+		  </f:verbatim>
+		</h:panelGroup>
+		<h:panelGroup id="mapncrap2">
+		  <h:panelGrid id="manncraplayoutgrid"
+							border="1"
+							columns="1">
+			 <h:panelGroup id="mapncrapLayoutGroup1">
+				<h:outputText id="SimplexGPSInstructions1"
+								  value="First, select stations to import into your project."/>
+				<h:panelGrid id="dfjdlkj" 
+								 border="0"
+								 columns="2">
 
-						 </f:verbatim>
-                      </h:panelGroup>
-                      <h:panelGroup id="mapncrap2">
-						 <h:panelGrid id="dfjdlkj" columns="2">
-						  
-						<h:panelGrid id="nploe" columns="2">
-						  <h:outputText id="dkb2" value="stations.xml"/>
-						  <h:selectBooleanCheckbox id="gpssource1" onchange="togglesource('box1')" value="#{SimplexBean.gpssource1}" />
+				  <h:panelGrid id="nploe" columns="2">
+					 <h:outputText id="dkb2" value="stations.xml"/>
+					 <h:selectBooleanCheckbox id="gpssource1" 
+													  onchange="togglesource('box1')" 
+													  value="#{SimplexBean.gpssource1}" />
+				  </h:panelGrid>
+				  
+				  <h:panelGrid id="npbbv" columns="2">
+					 <h:outputText id="dkb3" value="perm.kml"/>
+					 <h:selectBooleanCheckbox id="gpssource2" 
+													  onchange="togglesource('box2')" 
+													  value="#{SimplexBean.gpssource2}"/>  
+				  </h:panelGrid>
+				
+				  <h:outputText id="dkljrabd2" value="Current Station:"/> 
+				  <h:inputText id="stationName" 
+									value="#{SimplexBean.gpsStationName}" 
+									style="text-align:center;width:45px" 
+									readonly="true"/>
+				  
+				  <h:outputText id="dkljr3dssraea" value="Selected GPS list:"/> 
+				  <h:inputText id="GPSStationList" 
+									value="#{SimplexBean.selectedGpsStationName}" 
+									readonly="true"/>
+				  <h:outputText id="dkljr3dssabfd" value="Selected GPS Number:"/> 
+				  <h:inputText id="GPSStationNum" value="" readonly="true"/>
+				
+				  <h:outputText id="dkljr3dssrf" value="Ref Station?:"/>
+				  <h:selectBooleanCheckbox id="gpsRefStation23211s"
+													value="#{SimplexBean.gpsRefStation}" />
+				</h:panelGrid>
+			 </h:panelGroup>
+
+			 <h:panelGroup id="mapncrapLayoutGroup2">
+				<h:outputText id="SimplexGPSInstructions2" 
+								  value="Instead of individual stations, you can grab all 
+											the stations in a selection area."/>
+				<h:panelGrid id="simplexGPSStationSelectionArea" 
+								 columns="2">
+				  <h:outputText id="dkljr3dssra" value="Use Search Area:"/>
+				  <h:selectBooleanCheckbox id="gpsRefStation23211b" onclick="toggleBorder()" 
+													value="#{SimplexBean.searcharea}"/>
+				  <h:outputText id="SimplexGetGPSSelectionArea" value="Select Stations in Box:"/>
+				  <h:commandButton id="SimplexFetchGPSStations"
+										 type="button" 
+										 onclick="updateGPSinthebox()"
+										 value="Select Stations in Box"/>
+				  <h:inputHidden id="minlon" value="#{SimplexBean.selectedminlon}"/>
+				  <h:inputHidden id="minlat" value="#{SimplexBean.selectedminlat}"/>
+				  <h:inputHidden id="maxlon" value="#{SimplexBean.selectedmaxlon}"/>
+				  <h:inputHidden id="maxlat" value="#{SimplexBean.selectedmaxlat}"/>
+				</h:panelGrid>
+			 </h:panelGroup>
+			 
+			 <h:panelGroup id="mapncrapLayoutGroup3">
+				<h:outputText id="SimplexGPSInstructions3" 
+								  value="Next, click the button below to retrieve the station values."/>
+				
+				<h:panelGrid id="simplexGPSStationFetchValues" 
+								 columns="2">
+				  <h:commandButton id="dummysubmit" 
+										 value="Get values"
+										 actionListener="#{SimplexBean.getvalues}"/>
+				  
+				  <h:panelGrid id="npbas12" columns="2">												  
+					 <h:inputHidden id="stationLat" value="#{SimplexBean.gpsStationLat}"/>
+					 <h:inputHidden id="stationLon" value="#{SimplexBean.gpsStationLon}"/>
+				  </h:panelGrid>
+				</h:panelGrid>
+			 </h:panelGroup>
+
+			 <h:panelGroup id="mapncrapLayoutGroup4">				
+				<h:panelGrid id="mnauw1" 
+								 rendered="#{!empty SimplexBean.mycandidateObservationsForProjectList}" 
+								 columns="1" 
+								 border="0" 
+								 cellpadding="0" 
+								 cellspacing="0">
+				  <h:dataTable border="1" 
+									cellpadding="0" 
+									cellspacing="0" 
+									id="dflezzz277" 
+									headerClass="componentstableh2" 
+									columnClasses="componentstablec"
+									value="#{SimplexBean.mycandidateObservationsForProjectList}" 
+									var="myentry5">
+					 <h:column>
+						<f:facet name="header">
+						  <h:outputText id="bawee21" value="Station" />
+						</f:facet>
+						<h:panelGrid id="gplgmpp2" 
+										 columns="1" 
+										 cellpadding="0" 
+										 cellspacing="0" 
+										 styleClass="centered">
+						  <f:facet name="header">								
+						  </f:facet>
+						  <h:inputText id="bawee22" style="text-align:right;width:60px" 
+											value="#{myentry5.stationName}" />
 						</h:panelGrid>
-
-						<h:panelGrid id="npbbv" columns="2">
-						  <h:outputText id="dkb3" value="perm.kml"/>
-						  <h:selectBooleanCheckbox id="gpssource2" onchange="togglesource('box2')" value="#{SimplexBean.gpssource2}"/>  
+					 </h:column>
+					 
+					 <h:column>
+						<f:facet name="header">
+						  <h:outputText id="bawee23" value="Sources" />
+						</f:facet>
+						<h:panelGrid id="gplgmpp3" 
+										 columns="1" 
+										 cellpadding="0" 
+										 cellspacing="0" 
+										 styleClass="centered">
+						  <f:facet name="header">								
+						  </f:facet>
+						  <h:selectOneListbox id="sselectl" value="#{myentry5.selectedSource}">
+							 <f:selectItems value="#{myentry5.stationSources}" />
+						  </h:selectOneListbox> 
 						</h:panelGrid>
+					 </h:column>
+				  </h:dataTable>
+				</h:panelGrid>
+			 </h:panelGroup>
+			 
+			 <h:panelGroup id="mapncrapLayoutGroup5">
+				<h:outputText id="simplexStationSelection3"
+								  value="Finally, import the selected stations into your project."/>
+				
+				<h:panelGrid id="nploebba" columns="2">
+				  <h:commandButton id="addGPSObsv" value="Add Station"
+										 actionListener="#{SimplexBean.toggleAddGPSObsvForProject}"/>
+				  <h:commandButton id="closeMap" value="Close Map"
+										 actionListener="#{SimplexBean.toggleCloseMap}"/>
+				  
+				</h:panelGrid>
+			 </h:panelGroup>
+		  </h:panelGrid>
+		  <f:verbatim>
+			 <div id="networksDiv"></div>
+		  </f:verbatim>
+		</h:panelGroup>
+	 </h:panelGrid>
+	 <h:outputText id="simplexMapKey" 
+						escape="false"
+						value="<b>Map Key</b><br/>"/>
+	 <h:panelGrid id="simplexKeyGrid" 
+					  columns="6">
+		<h:outputText id="simplexMapKeyRed" 
+						  escape="false"
+						  value="Imported Station:"/>
+		<h:graphicImage id="simplexKeyRedPin"
+							 value="http://labs.google.com/ridefinder/images/mm_20_red.png"/>
+		<h:outputText id="simplexMapKeyYellow" 
+						  escape="false"
+						  value="Selected Station:"/>
+		<h:graphicImage id="simplexKeyYellowPin"
+							 value="http://labs.google.com/ridefinder/images/mm_20_yellow.png"/>
+		<h:outputText id="simplexMapKeyGreen" 
+						  escape="false"
+						  value="Unselected Station:"/>
+		<h:graphicImage id="simplexKeyGreenPin"
+							 value="http://labs.google.com/ridefinder/images/mm_20_green.png"/>
+	 </h:panelGrid>
+	 <f:verbatim>
+		<script type="text/javascript">
+		  
+		  initialize();
 
-						 <h:outputText id="dkljrabd2" value="Station:"/> 
-						 <h:inputText id="stationName" value="#{SimplexBean.gpsStationName}" style="text-align:center;width:45px" readonly="true"/>
+		  function toggleoff(form){
+		    form.checked = false;
+		  }
 
-						 <h:outputText id="dkljr3dssraea" value="Selected GPS list:"/> 
-						 <h:inputText id="GPSStationList" value="#{SimplexBean.selectedGpsStationName}" readonly="true"/>
-						 <h:outputText id="dkljr3dssabfd" value="Selected GPS Number:"/> 
-						 <h:inputText id="GPSStationNum" value="" readonly="true"/>
+		  function stationsourcechange(){
+		  alert("aa");
+		  document.getElementById("obsvGPSMap:dummysubmit").click();
+		  }
 
+		  function togglesource(s){
 
-						  <h:commandButton id="dummysubmit" value="Get values"
-						 		actionListener="#{SimplexBean.getvalues}"/>
+		  var box1 = document.getElementById("obsvGPSMap:gpssource1");
+		  var box2 = document.getElementById("obsvGPSMap:gpssource2");
 
-						<h:panelGrid id="npbas12" columns="2">												  
-						 <h:inputHidden id="stationLat" value="#{SimplexBean.gpsStationLat}"/>
-						 <h:inputHidden id="stationLon" value="#{SimplexBean.gpsStationLon}"/>
-						</h:panelGrid>
-						
-						</h:panelGrid>
+		  var rssnewsize=<%=rssnewsize%>
+		  var permsize=<%=permsize%>
 
-						<h:panelGrid id="mnauw1" columns="1" border="0" cellpadding="0" cellspacing="0">
-						  <h:dataTable  border="1" cellpadding="0" cellspacing="0" id="dflezzz277" headerClass="componentstableh2" columnClasses="componentstablec"
-								    rendered="#{!empty SimplexBean.mycandidateObservationsForProjectList}" value="#{SimplexBean.mycandidateObservationsForProjectList}" var="myentry5">
+		  if (s == "box1") {
 
-							    <h:column>
-							      <f:facet name="header">
-								<h:outputText id="bawee21" value="Station" />
-							      </f:facet>
-							      <h:panelGrid id="gplgmpp2" columns="1" cellpadding="0" cellspacing="0" styleClass="centered">
-								<f:facet name="header">								
-								</f:facet>
-								<h:inputText id="bawee22" style="text-align:right;width:60px" 
-								  value="#{myentry5.stationName}" />
-							      </h:panelGrid>
-							    </h:column>
+		  if (box1.checked == false) {
+		  for (var nA = 0 ; nA < rssnewsize ; nA++)
+		  map.removeOverlay(marker[nA]);
+		  }
 
-							    <h:column>
-							      <f:facet name="header">
-								<h:outputText id="bawee23" value="Sources" />
-							      </f:facet>
-							      <h:panelGrid id="gplgmpp3" columns="1" cellpadding="0" cellspacing="0" styleClass="centered">
-								<f:facet name="header">								
-								</f:facet>
-							      <h:selectOneListbox id="sselectl" value="#{myentry5.selectedSource}">
-							      <f:selectItems value="#{myentry5.stationSources}" />
-							      </h:selectOneListbox> 
-							      </h:panelGrid>
-							    </h:column>
+		  if (box1.checked == true) {
+		  for (var nA = 0 ; nA < rssnewsize ; nA++)
+		  map.addOverlay(marker[nA]);
+		  }
+		  }
 
+		  if (s == "box2") {
 
-						      </h:dataTable>
-						</h:panelGrid>
+		  if (box2.checked == false) {
+		  for (var nA = 0 ; nA < permsize ; nA++)
+		  map.removeOverlay(marker[nA+rssnewsize]);
+		  }
 
-
-						<h:panelGrid id="nploebba" columns="2">
-
-             					 <h:outputText id="dkljr3dssrf" value="Ref Station?:"/>
-						 <h:selectBooleanCheckbox id="gpsRefStation23211s"
-							value="#{SimplexBean.gpsRefStation}" />
-						 <h:outputText id="dkljr3dssra" value="Use search area:"/>
-						 <h:selectBooleanCheckbox id="gpsRefStation23211b" onclick="toggleBorder()" 
-							value="#{SimplexBean.searcharea}"/>
-						 <h:outputText id="SimplexGetGPSSelectionArea" value="Get Values in Box"/>
-						 <h:commandButton id="SimplexFetchGPSStations"
-						 						type="button" 
-						 						onclick="displayChosenGPS()" 
-												value="Get Values"/>
-						 <h:inputHidden id="minlon" value="#{SimplexBean.selectedminlon}"/>
-						 <h:inputHidden id="minlat" value="#{SimplexBean.selectedminlat}"/>
-						 <h:inputHidden id="maxlon" value="#{SimplexBean.selectedmaxlon}"/>
-						 <h:inputHidden id="maxlat" value="#{SimplexBean.selectedmaxlat}"/>
-						 
-						 
-						 <h:commandButton id="addGPSObsv" value="Add Station"
-						 		actionListener="#{SimplexBean.toggleAddGPSObsvForProject}"/>
-						 <h:commandButton id="closeMap" value="Close Map"
-						 		actionListener="#{SimplexBean.toggleCloseMap}"/>
-	
-
-								</h:panelGrid>
-                    <f:verbatim>
-						 <div id="networksDiv"></div>
-						 </f:verbatim>
-						   </h:panelGroup>
-							</h:panelGrid>
-
-<f:verbatim>
-<script type="text/javascript">
-
-	initialize();
-
-function toggleoff(form){
-form.checked = false;
-}
-
-function stationsourcechange(){
-
-alert("aa");
-document.getElementById("obsvGPSMap:dummysubmit").click();
-}
-
-function togglesource(s){
-
-var box1 = document.getElementById("obsvGPSMap:gpssource1");
-var box2 = document.getElementById("obsvGPSMap:gpssource2");
-
-var rssnewsize=<%=rssnewsize%>
-var permsize=<%=permsize%>
-
-if (s == "box1") {
-
-if (box1.checked == false) {
-for (var nA = 0 ; nA < rssnewsize ; nA++)
-  map.removeOverlay(marker[nA]);
-}
-
-if (box1.checked == true) {
-for (var nA = 0 ; nA < rssnewsize ; nA++)
-  map.addOverlay(marker[nA]);
-}
-}
-
-if (s == "box2") {
-
-if (box2.checked == false) {
-for (var nA = 0 ; nA < permsize ; nA++)
-  map.removeOverlay(marker[nA+rssnewsize]);
-}
-
-if (box2.checked == true) {
-for (var nA = 0 ; nA < permsize ; nA++)
-  map.addOverlay(marker[nA+rssnewsize]);
-}
-}
-
-
-}
-	
-</script>
-</f:verbatim>
-
-					 </h:form>
-
-
-
-
-
-
-
-
-			</h:panelGroup>
+		  if (box2.checked == true) {
+		  for (var nA = 0 ; nA < permsize ; nA++)
+		  map.addOverlay(marker[nA+rssnewsize]);
+		  }
+		  }
+		  }
+		</script>
+	 </f:verbatim>
+	 
+  </h:form>
+</h:panelGroup>
