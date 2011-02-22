@@ -39,12 +39,16 @@
 
 <body onload="myInit()" onunload="GUnload()">
 	<script type="text/javascript">
-//The myInit() funciton initializes the tree view for the FaultMapPanelFrame sidebar.
+//Any "onload" operations for subcomponent includes need to go here.
 function myInit() {
+//Script below initializes the tree view for the FaultMapPanelFrame sidebar.
   	$("#browser").treeview({
 		animated:"normal",
 		persist: "cookie"
 		});
+
+//This initializes the UNAVCO map
+initializeUnavcoMap();
  }
 </script>
 <script type="text/javascript">
@@ -234,6 +238,7 @@ function getScrolling() {
 		<%@include file="FaultAuthorSearchPanel.jsp"%>
 		<%@include file="FaultSearchResultsPanel.jsp"%>
 		<%@include file="FaultMapPanelFrame.jsp"%>
+		<%@include file="UnavcoGPSMapPanel.jsp"%>
 	</h:panelGrid>
 
 	<%@include file="ProjectComponentsPanel.jsp"%>

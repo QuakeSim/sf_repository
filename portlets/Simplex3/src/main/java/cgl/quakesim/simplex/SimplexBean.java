@@ -158,8 +158,6 @@ public class SimplexBean extends GenericSopacBean {
 	String selectedstation = null;
 	
 	String selectedss = null;
-	
-	
 
 	String[] latArray;
 	String[] lonArray;
@@ -180,7 +178,6 @@ public class SimplexBean extends GenericSopacBean {
 	protected String faultKmlUrl;
 	protected String faultKmlFilename;
 	protected String portalBaseUrl;
-	
 	 
 	public boolean getGpsRefStation() {		
 		return this.gpsRefStation;

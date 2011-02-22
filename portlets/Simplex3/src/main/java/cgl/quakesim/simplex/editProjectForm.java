@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-
 import javax.faces.component.html.HtmlDataTable;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
@@ -41,7 +40,8 @@ public class editProjectForm extends GenericProjectBean {
 	 boolean renderGPSStationMap = false;
 	 boolean renderObsvEntries = false;
 	 boolean renderFaultMap = false;
-	 boolean renderDrawingMap = false;
+	 boolean renderDrawingMap = false;  //Not used
+	 boolean renderUnavcoGPSStationMap=false;
 
 	 String faultSelectionCode = "";
 	 boolean renderAddFaultFromDBForm = false;
@@ -64,20 +64,17 @@ public class editProjectForm extends GenericProjectBean {
 	 String faultLatEnd;
 	 String faultLonStart;
 	 String faultLonEnd;
-
 		
 	 private HtmlDataTable myFaultDataTable;
 	 double projectOriginLon, projectOriginLat;
 	 
 	 projectEntry currentProject;
 
-
 	 String kmlfiles = ""; // This should be passed from SimplexBean (faces-config.xml)
 	 String codeName = ""; // This should be passed from SimplexBean (faces-config.xml)
 
 	 DecimalFormat df;
 	 
-
 	 /**
 	  * Create the bean
 	  */
@@ -106,6 +103,7 @@ public class editProjectForm extends GenericProjectBean {
 		 renderGPSStationMap = false;
 		 renderFaultMap =  false;
 		 renderDrawingMap = false;
+		 renderUnavcoGPSStationMap=false;
 	}	
 	 
 	 public void toggleShowObsvEntries(ActionEvent ev) {
@@ -150,6 +148,11 @@ public class editProjectForm extends GenericProjectBean {
 			 System.out.println("Showing Drawing Map");
 			 renderDrawingMap=!renderDrawingMap;
 		}
+
+		else if (projectSelectionCode.equals("ShowUnavcoGPSObsv")) {
+			 System.out.println("Showing Unavco GPS Map");
+			 renderUnavcoGPSStationMap=!renderUnavcoGPSStationMap;
+		}
 		
 		else if (projectSelectionCode.equals("")) {
 			 ;
@@ -158,7 +161,6 @@ public class editProjectForm extends GenericProjectBean {
 		else {
 			 ;
 		}
-
 	}
 
 	public void handleFaultsRadioValueChange(ValueChangeEvent event) {
@@ -739,6 +741,14 @@ public class editProjectForm extends GenericProjectBean {
 	 public void setRenderDrawingMap(boolean renderDrawingMap) {
 		  System.out.println("Setting drawing map");
 		  this.renderDrawingMap=renderDrawingMap;
+	 }
+
+	 public void setRenderUnavcoGPSStationMap(boolean renderUnavcoGPSStationMap){
+		  this.renderUnavcoGPSStationMap=renderUnavcoGPSStationMap;
+	 }
+	 
+	 public boolean getRenderUnavcoGPSStationMap(){
+		  return this.renderUnavcoGPSStationMap;
 	 }
 
 	public HtmlDataTable getMyFaultDataTable() {

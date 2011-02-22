@@ -31,7 +31,7 @@
 				  <f:facet name="header">
 					 <h:outputText id="dflelerh967" escape="false" value="</b>Name</b>" />
 				  </f:facet>
-				  <h:panelGrid  id="spxpcp5"columns="2" cellpadding="0" cellspacing="0">
+				  <h:panelGrid  id="spxpcp5" columns="2" cellpadding="0" cellspacing="0">
 					 <h:inputText id="dflelerklh968" 
 									  size="25"
 									  style="text-align:right;width:60px" 

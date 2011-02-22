@@ -16,7 +16,7 @@
 						  value="<b>Project Lat/Lon Origin</b>: (#{SimplexBean.currentProjectEntry.origin_lat}, #{SimplexBean.currentProjectEntry.origin_lon})<br>"/>
 		
 		<h:outputText id="instructionezzze" escape="false"
-						  value="You must add at least one observation point and one fault.  The preferred method is to use the GPS station map option."/>
+						  value="You must add at least one observation point and one fault."/>
 		
 		<h:selectOneRadio layout="pageDirection" id="subscriptions"
 								value="#{SimplexBean.currentEditProjectForm.projectSelectionCode}">
@@ -24,6 +24,11 @@
 							 itemLabel="Add GPS Observation Point (Preferred): Use map to 
 											choose GPS station input."
 							 itemValue="ShowGPSObsv" />
+
+		  <f:selectItem id="itemSimplexUnavco"
+							 itemLabel="Add UNAVCO GPS Observation Point (Preferred): Use map to 
+											choose GPS station input."
+							 itemValue="ShowUnavcoGPSObsv" />
 		  
 		  <f:selectItem id="item1"
 							 itemLabel="Add Observation Point: Click to specify observation point parameters."
