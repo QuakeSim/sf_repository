@@ -4,68 +4,79 @@
 	 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBRxYpIIOz9ynlSKjbx-4JMuN5JjrhR5gSOcKdieYppOZ4_yzZc_Ti15qw"type="text/javascript"></script>
     <script src='http://geon.unavco.org/unavco/cookies.js' type='text/javascript'></script> 
     <script src='http://geon.unavco.org/unavco/dragzoom.js' type='text/javascript'></script> 
-    <script type='text/javascript'>  
-         var map;       
-         var usecookies=0;       
-         var center=new GLatLng(33.036, -117.24); 
-         var zoomfactor=8;          
-         var declutter=1;          
-         var speedToDgr=0.0024;     
-         var vectorpointcolor='#00FF00'; 
-         var vectorstemcolor='#000000'; 
-         var earthquakecolor  ='#000000'; 
-         var earthquakecolor3 ='#9966cc'; 
-         var volcanocolor2 ='#000000'; 
-         var volcanocolor  ='#000000'; 
-         var drawellipses=1;        
-         var drawvertellipses=1;    
-         var drawvectors=1;         
-         var drawmarkers=1;         
-         var drawverticals=1;       
-			var drawplates=0;
-			var drawvolcanoes=0;
-			var draweqs=0;
-         var latmax,lngmax,latmin,lngmin,deltalat,deltalng;    
-         var vn,ve,vu,x1,y1,dx,dy,dcf, stddevN, stddevE,stddevU, corrNE,term1,term2,alpha;  
-         var id='';    
-         var ids = new Array();    
-         var sts = new Array();    
-         var lats = new Array();    
-         var lngs = new Array();    
-         var ves  = new Array();    
-         var vns  = new Array();    
-         var vus  = new Array();    
-         var stddevNs= new Array();    
-         var stddevEs= new Array();    
-         var stddevUs= new Array();    
-         var corrNEs = new Array();    
-         var staname; 
-         var eq_lats = new Array();    
-         var glatlngs = new Array();    
-         var eq_lngs = new Array();    
-         var eq_mags = new Array();    
-         var eq_deps = new Array();    
-         var vol_lats = new Array();    
-         var vol_lngs = new Array();    
-         var vol_locs = new Array();    
-         var vol_names = new Array();    
-         var vol_elevs = new Array();    
-         var vol_types = new Array();    
-         var vol_times = new Array();    
-         var multiplate_verticesARRAY = new Array();  
-         var f3CookieName ='GPSviewerstate';    
-         var f3CookieValue ='';    
-         var cookie ='';    
-         var mapsizer;    
-         var ellipseSizer = 1.000;    
-         var generatedImages= 'http://facdev.unavco.org/data/gnss/dai-globals/lib/images/generated-icons';
-			function submitallform()  { document.submitallform.submit(); } 
-			function submitrestartform()  { document.submitrestartform.submit(); } 
-			var load_plate_data_here = ''; 
-			var term; 
-			
-			var pbpoints= new Array(); 
-   ids[0]='AB01';    sts[0]='AtkaIslandAK2007';    lats[0]=52.2095049455;    lngs[0]=185.7952432959;    ves[0]=-7.76;    vns[0]=1.17;    vus[0]=2.36;    stddevNs[0]=1.2;    stddevEs[0]=0.94;    stddevUs[0]=1.18;    corrNEs[0]=0.001; 
+	 <script type='text/javascript'>  
+		//<![CDATA[
+		var map;       
+		var greenIcon="http://labs.google.com/ridefinder/images/mm_20_green.png";
+		var yellowIcon="http://labs.google.com/ridefinder/images/mm_20_yellow.png";
+		var redIcon="http://labs.google.com/ridefinder/images/mm_20_red.png";
+		var usecookies=0;       
+		var center=new GLatLng(33.036, -117.24); 
+		var zoomfactor=8;          
+		var declutter=1;          
+		var speedToDgr=0.0024;     
+		var vectorpointcolor='#00FF00'; 
+		var vectorstemcolor='#000000'; 
+		var earthquakecolor  ='#000000'; 
+		var earthquakecolor3 ='#9966cc'; 
+		var volcanocolor2 ='#000000'; 
+		var volcanocolor  ='#000000'; 
+		var drawellipses=1;        
+		var drawvertellipses=1;    
+		var drawvectors=1;         
+		var drawmarkers=1;         
+		var drawverticals=1;       
+		var drawplates=0;
+		var drawvolcanoes=0;
+		var draweqs=0;
+		var latmax,lngmax,latmin,lngmin,deltalat,deltalng;    
+		var vn,ve,vu,x1,y1,dx,dy,dcf, stddevN, stddevE,stddevU, corrNE,term1,term2,alpha;  
+		var id='';    
+		var ids = new Array();    
+		var sts = new Array();    
+		var lats = new Array();    
+		var lngs = new Array();    
+		var ves  = new Array();    
+		var vns  = new Array();    
+		var vus  = new Array();    
+		var stddevNs= new Array();    
+		var stddevEs= new Array();    
+		var stddevUs= new Array();    
+		var corrNEs = new Array();    
+		var iconColors=new Array();
+
+		//These two objects store the markers of selected (yellow) and 
+		//imported (red) stations. 
+		var selectedStations={};
+		var importedStations={};
+
+		var staname; 
+		var eq_lats = new Array();    
+		var glatlngs = new Array();    
+		var eq_lngs = new Array();    
+		var eq_mags = new Array();    
+		var eq_deps = new Array();    
+		var vol_lats = new Array();    
+		var vol_lngs = new Array();    
+		var vol_locs = new Array();    
+		var vol_names = new Array();    
+		var vol_elevs = new Array();    
+		var vol_types = new Array();    
+		var vol_times = new Array();    
+		var multiplate_verticesARRAY = new Array();  
+		var f3CookieName ='GPSviewerstate';    
+		var f3CookieValue ='';    
+		var cookie ='';    
+		var mapsizer;    
+		var ellipseSizer = 1.000;    
+		var generatedImages= 'http://facdev.unavco.org/data/gnss/dai-globals/lib/images/generated-icons';
+		function submitallform()  { document.submitallform.submit(); } 
+		function submitrestartform()  { document.submitrestartform.submit(); } 
+		var load_plate_data_here = ''; 
+		var term; 
+		
+		var pbpoints= new Array(); 
+		ids[0]='AB01';    sts[0]='AtkaIslandAK2007';    lats[0]=52.2095049455;    lngs[0]=185.7952432959;    ves[0]=-7.76;    vns[0]=1.17;    vus[0]=2.36;    stddevNs[0]=1.2;    stddevEs[0]=0.94;    stddevUs[0]=1.18;    corrNEs[0]=0.001; 
    ids[1]='AB02';    sts[1]='Nikolski__AK2007';    lats[1]=52.9706058271;    lngs[1]=191.1453295852;    ves[1]=-3.91;    vns[1]=-2.12;    vus[1]=2.13;    stddevNs[1]=0.98;    stddevEs[1]=0.89;    stddevUs[1]=1.64;    corrNEs[1]=0.001; 
    ids[2]='AB04';    sts[2]='Savoonga__AK2007';    lats[2]=63.6568649874;    lngs[2]=189.4325568280;    ves[2]=0.63;    vns[2]=-2.99;    vus[2]=-1.17;    stddevNs[2]=0.76;    stddevEs[2]=0.49;    stddevUs[2]=1.15;    corrNEs[2]=0.003; 
    ids[3]='AB06';    sts[3]='FalsePass_AK2005';    lats[3]=54.8853227965;    lngs[3]=196.5765460345;    ves[3]=-7.2;    vns[3]=-0.88;    vus[3]=3.87;    stddevNs[3]=0.71;    stddevEs[3]=0.56;    stddevUs[3]=1.81;    corrNEs[3]=-0.012; 
@@ -1529,24 +1540,22 @@
    ids[1461]='YELL';    sts[1461]='Yellowknife';    lats[1461]=5633638.29340;    lngs[1461]=62.4808937719;    ves[1461]=-0.35;    vns[1461]=-684;    vus[1461]=-0.23;    stddevNs[1461]=3.56;    stddevEs[1461]=0.24;    stddevUs[1461]=0.17;    corrNEs[1461]=0.00065; 
    ids[1462]='YELL';    sts[1462]='Yellowknife';    lats[1462]=5633638.29246;    lngs[1462]=62.4808937601;    ves[1462]=-0.35;    vns[1462]=-684;    vus[1462]=-0.23;    stddevNs[1462]=3.56;    stddevEs[1462]=0.24;    stddevUs[1462]=0.17;    corrNEs[1462]=0.00065; 
 
-	      //Create our style icons
-			var baseIcon = new GIcon();
-			baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
-			baseIcon.iconSize = new GSize(15, 20);
-			baseIcon.shadowSize = new GSize(10, 10);
-			baseIcon.iconAnchor = new GPoint(1, 10);
-			baseIcon.infoWindowAnchor = new GPoint(5, 1);
-			baseIcon.infoShadowAnchor = new GPoint(5, 5);
+	//Create our style icons
+	var baseIcon = new GIcon();
+	baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
+	baseIcon.iconSize = new GSize(15, 20);
+	baseIcon.shadowSize = new GSize(10, 10);
+	baseIcon.iconAnchor = new GPoint(1, 10);
+	baseIcon.infoWindowAnchor = new GPoint(5, 1);
+	baseIcon.infoShadowAnchor = new GPoint(5, 5);
+	
+	//--------------------------------------------------
+	// Done with declarations.
+	//--------------------------------------------------
 
-			//--------------------------------------------------
-			// Done with declarations.
-			//--------------------------------------------------
-
-			//This should be called when the body() function is called.
-			function initializeUnavcoMap() {
-
-			map = new GMap2(document.getElementById('unavcomap_canvas'));  
-			
+	//This should be called when the body() function is called.
+	function initializeUnavcoMap() {
+	      map = new GMap2(document.getElementById('unavcomap_canvas'));  
 			speedToDgr = 0.0024 ; 
 			cookieTest();   
 			deleteCookie(f3CookieName);
@@ -1564,22 +1573,32 @@
 			map.addControl(new GLargeMapControl(), cleft);   
 			map.addControl(new GScaleControl());   
 			map.enableContinuousZoom();   
+			
+			setIconColors();
 			getLimits();    
 			drawSymbols(); 
 			GEvent.addListener(map, 'moveend', function() {getLimits();drawSymbols();});   
 			GEvent.addListener(map, 'zoomend', function() {getLimits();drawSymbols();});   
-			GEvent.addListener(map,'click', function(overlay, latlng) {       
-         if (latlng) {   
-         var lng1 = ''+latlng.lng(); 
-         var lng1 = lng1.substring(0,9); 
-         var lat1 = ''+latlng.lat(); 
-         var lat1 = lat1.substring(0,7); 
-         var myHtml = 'latitude,longitude '+lat1+' '+lng1  ;   
-         map.openInfoWindow(latlng, myHtml);   
-         }   
-			});   
-			}  
+//			GEvent.addListener(map,'click', function(overlay, latlng) {       
+//         if (latlng) {   
+//         var lng1 = ''+latlng.lng(); 
+//         var lng1 = lng1.substring(0,9); 
+//         var lat1 = ''+latlng.lat(); 
+//         var lat1 = lat1.substring(0,7); 
+//         var myHtml = 'latitude,longitude '+lat1+' '+lng1  ;   
+//         map.openInfoWindow(latlng, myHtml);   
+//         }   
+//			});   
+      }  
 			
+	 //Set the icon color array's initial values.  Note we assume
+    //this array and others are all the size of ids.
+	 function setIconColors() {
+	    for (var j=0;j<ids.length;j++) {
+		   iconColors[j]=greenIcon;  
+		 }
+	 }
+
     function getLimits() {
         var bounds =  map.getBounds();    
         center =  map.getCenter();    
@@ -1644,9 +1663,9 @@
 
     function drawSymbols() {   
       mapsizer =   speedToDgr * deltalng ; 
-      map.clearOverlays(); 
+		map.clearOverlays(); 
       if (drawvectors==1)    drawVectors(); 
-      if (drawvectors==1)    drawSpeedScale () ;  
+//      if (drawvectors==1)    drawSpeedScale () ;  
 //      if (drawverticals==1)  drawVerticalSpeedSymbols(); 
       if (drawmarkers ==1)   drawMarkers(); 
 //      if (drawplates ==1)    drawPlates(); 
@@ -1771,17 +1790,68 @@
       return marker;             
     }    
 
-    function createMarker(point, staHtml) {         
-	   baseIcon.image="http://labs.google.com/ridefinder/images/mm_20_green.png";
+    function createMarker(index,point,id,x0,y0,staHtml) {  
+	   var selectedId;
+	   baseIcon.image=iconColors[index];
 		var markerOptions={icon:baseIcon};
-		//var blueIcon = new GIcon(G_DEFAULT_ICON); 
-      //blueIcon.image = 'http://www.google.com/intl/en_us/mapfiles/ms/micons/blue-dot.png'; 
-      //markerOptions = { icon:blueIcon }; 
       var marker = new GMarker(point, markerOptions);  
       marker.value = 1;    
       GEvent.addListener(marker, 'click', function() {    
-        map.openInfoWindowHtml(point, staHtml);    
-      });                                          
+		  var iconColor=marker.getIcon().image;
+		  if(iconColor==redIcon) {;}
+		  else if (iconColor==greenIcon) {
+		  
+			 //Make a new object to store the marker's metadata.
+			 var markerMetadata={};
+			 markerMetadata["id"]=ids[index];
+          markerMetadata["x0"]=x0;
+			 markerMetadata["y0"]=y0;
+			 markerMetadata["ve"]=ves[index];
+			 markerMetadata["vn"]=vns[index];
+			 markerMetadata["vu"]=vus[index];
+			 markerMetadata["stddevE"]=stddevEs[index];
+			 markerMetadata["stddevN"]=stddevNs[index];
+			 markerMetadata["stddevU"]=stddevUs[index];
+
+			 baseIcon.image=yellowIcon;
+			 marker.getIcon().image=yellowIcon;
+			 selectedStations[id]=markerMetadata;
+			 iconColors[index]=yellowIcon;
+			 //Update the forms
+			 selectedId=document.getElementById("unavcoobsvGPSMap:unavcostationName");
+			 selectedId.value=id;
+			 selectedList=document.getElementById("unavcoobsvGPSMap:unavcoYellowStations");
+			 var tmplist="";
+			 for(var key in selectedStations) {
+			   tmplist+=selectedStations[key].id+" ";
+			 }
+			 selectedList.value=tmplist;
+			 //selectedList.value=JSON.stringify(selectedStations);
+          //alert(JSON.stringify(selectedStations));
+			 map.removeOverlay(marker);
+			 map.addOverlay(marker);
+			 }
+		   else if(iconColor==yellowIcon){
+			   baseIcon.image=greenIcon;
+				marker.getIcon().image=greenIcon;
+				iconColors[index]=greenIcon;
+				delete selectedStations[id];
+				//Update the forms
+				selectedId=document.getElementById("unavcoobsvGPSMap:unavcostationName");
+				selectedId.value="";
+				selectedList=document.getElementById("unavcoobsvGPSMap:unavcoYellowStations");
+				var tmplist="";
+			   for(var key in selectedStations) {
+			     tmplist+=selectedStations[key].id+" ";
+			   }
+				selectedList.value=tmplist;
+				//selectedList.value=JSON.stringify(selectedStations);
+            //alert(JSON.stringify(selectedStations));
+				map.removeOverlay(marker);
+				map.addOverlay(marker);
+			}
+			map.openInfoWindowHtml(point, staHtml);    
+		  });
       return marker;
     }    
 
@@ -1836,11 +1906,13 @@
           lng9char= lng9char.substr(0,9); 
           staHtml = 'Station  '+id_link+'   '+staname+'<font size=-1><BR>horizontal speed: '+aspeed+' mm/yr &nbsp; direction: '+abearing+'<br>Latitude '+lat8char+' &nbsp; Longitude '+lng9char+'<BR>Speed components: East '+ve+' North '+vn+' Up '+vu+' mm/yr ' +' <BR>Std deviations:  &nbsp; &nbsp; &nbsp; &nbsp;  East '+stddevE+'; North '+stddevN+' Up '+stddevU+' mm/yr '+ts +smallimage + '</p>';   
 
-          map.addOverlay(createMarker(markerpt, staHtml));
+
+          map.addOverlay(createMarker(j,markerpt,id,x0,y0,staHtml));
       }
     }
 
     function drawVectors() {   
+	   var iconColor;
       var deltalng = Math.abs(lngmax - lngmin) ; 
       var lt,dxn,dyn,x1,x2,x3,x4,y1,y2,y3,y4,stddevN,stddevE,corrNE,term1,term2,semimajoraxis,semiminoraxis,alpha;
       var xe,ye,xprev, yprev; 
@@ -2000,6 +2072,7 @@
         map.addOverlay(createMarker(markerpt, staHtml));  
       }   
     }   
+//]]>
     </script> 	
   </f:verbatim>
 
@@ -2012,7 +2085,7 @@
 	 <h:panelGrid id="unavcomapsAndCrap" columns="3" columnClasses="alignTop,alignTop">
 		<h:panelGroup id="unavcomapncrap1">
 		  <f:verbatim> 
-			 <div id="unavcomap_canvas" style="width: 800px; height: 600px"></div>
+			 <div id="unavcomap_canvas" style="width: 850px; height: 700px"></div>
 		  </f:verbatim>
 		</h:panelGroup>
 		<h:panelGroup id="unavcomapncrap2">
@@ -2021,24 +2094,11 @@
 							columns="1">
 			 <h:panelGroup id="unavcomapncrapLayoutGroup1">
 				<h:outputText id="unavcoSimplexGPSInstructions1"
-								  value="First, select stations to import into your project."/>
+								  value="First, select stations to import into your project by clicking. 
+											Selected stations are yellow."/>
 				<h:panelGrid id="unavcodfjdlkj" 
 								 border="0"
 								 columns="2">
-				  
-				  <h:panelGrid id="unavconploe" columns="2">
-					 <h:outputText id="unavcodkb2" value="stations.xml"/>
-					 <h:selectBooleanCheckbox id="unavcogpssource1" 
-													  onchange="togglesource('box1')" 
-													  value="#{SimplexBean.gpssource1}" />
-				  </h:panelGrid>
-				  
-				  <h:panelGrid id="unavconpbbv" columns="2">
-					 <h:outputText id="unavcodkb3" value="perm.kml"/>
-					 <h:selectBooleanCheckbox id="unavcogpssource2" 
-													  onchange="togglesource('box2')" 
-													  value="#{SimplexBean.gpssource2}"/>  
-				  </h:panelGrid>
 				  
 				  <h:outputText id="unavcodkljrabd2" value="Current Station:"/> 
 				  <h:inputText id="unavcostationName" 
@@ -2047,15 +2107,7 @@
 									readonly="true"/>
 				  
 				  <h:outputText id="unavcodkljr3dssraea" value="Selected GPS list:"/> 
-				  <h:inputText id="unavcoGPSStationList" 
-									value="#{SimplexBean.selectedGpsStationName}" 
-									readonly="true"/>
-				  <h:outputText id="unavcodkljr3dssabfd" value="Selected GPS Number:"/> 
-				  <h:inputText id="unavcoGPSStationNum" value="" readonly="true"/>
-				  
-				  <h:outputText id="unavcodkljr3dssrf" value="Ref Station?:"/>
-				  <h:selectBooleanCheckbox id="unavcogpsRefStation23211s"
-													value="#{SimplexBean.gpsRefStation}" />
+				  <h:inputText id="unavcoYellowStations" readonly="true" value=""/> 
 				</h:panelGrid>
 			 </h:panelGroup>
 			 
@@ -2080,90 +2132,18 @@
 				</h:panelGrid>
 			 </h:panelGroup>
 			 
-			 <h:panelGroup id="unavcomapncrapLayoutGroup3">
-				<h:outputText id="unavcoSimplexGPSInstructions3" 
-								  value="Next, click the button below to retrieve the station values."/>
-				
-				<h:panelGrid id="unavcosimplexGPSStationFetchValues" 
-								 columns="2">
-				  <h:commandButton id="unavcodummysubmit" 
-										 value="Get values"
-										 actionListener="#{SimplexBean.getvalues}"/>
-				  
-				  <h:panelGrid id="unavconpbas12" columns="2">												  
-					 <h:inputHidden id="unavcostationLat" value="#{SimplexBean.gpsStationLat}"/>
-					 <h:inputHidden id="unavcostationLon" value="#{SimplexBean.gpsStationLon}"/>
-				  </h:panelGrid>
-				</h:panelGrid>
-			 </h:panelGroup>
-			 
-			 <h:panelGroup id="unavcomapncrapLayoutGroup4">				
-				<h:panelGrid id="unavcomnauw1" 
-								 rendered="#{!empty SimplexBean.mycandidateObservationsForProjectList}" 
-								 columns="1" 
-								 border="0" 
-								 cellpadding="0" 
-								 cellspacing="0">
-				  <h:dataTable border="1" 
-									cellpadding="0" 
-									cellspacing="0" 
-									id="unavcodflezzz277" 
-									headerClass="componentstableh2" 
-									columnClasses="componentstablec"
-									value="#{SimplexBean.mycandidateObservationsForProjectList}" 
-									var="myentry5">
-					 <h:column>
-						<f:facet name="header">
-						  <h:outputText id="unavcobawee21" value="Station" />
-						</f:facet>
-						<h:panelGrid id="unavcogplgmpp2" 
-										 columns="1" 
-										 cellpadding="0" 
-										 cellspacing="0" 
-										 styleClass="centered">
-						  <f:facet name="header">								
-						  </f:facet>
-						  <h:inputText id="unavcobawee22" style="text-align:right;width:60px" 
-											value="#{myentry5.stationName}" />
-						</h:panelGrid>
-					 </h:column>
-					 
-					 <h:column>
-						<f:facet name="header">
-						  <h:outputText id="unavcobawee23" value="Sources" />
-						</f:facet>
-						<h:panelGrid id="unavcogplgmpp3" 
-										 columns="1" 
-										 cellpadding="0" 
-										 cellspacing="0" 
-										 styleClass="centered">
-						  <f:facet name="header">								
-						  </f:facet>
-						  <h:selectOneListbox id="unavcosselectl" value="#{myentry5.selectedSource}">
-							 <f:selectItems value="#{myentry5.stationSources}" />
-						  </h:selectOneListbox> 
-						</h:panelGrid>
-					 </h:column>
-				  </h:dataTable>
-				</h:panelGrid>
-			 </h:panelGroup>
-			 
 			 <h:panelGroup id="unavcomapncrapLayoutGroup5">
 				<h:outputText id="unavcosimplexStationSelection3"
 								  value="Finally, import the selected stations into your project."/>
 				
 				<h:panelGrid id="unavconploebba" columns="2">
 				  <h:commandButton id="unavcoaddGPSObsv" value="Add Station"
-										 actionListener="#{SimplexBean.toggleAddGPSObsvForProject}"/>
+										 actionListener="#{SimplexBean.toggleAddJSONGPSObsvForProject}"/>
 				  <h:commandButton id="unavcocloseMap" value="Close Map"
 										 actionListener="#{SimplexBean.toggleCloseMap}"/>
-				  
 				</h:panelGrid>
 			 </h:panelGroup>
 		  </h:panelGrid>
-		  <f:verbatim>
-			 <div id="unavconetworksDiv"></div>
-		  </f:verbatim>
 		</h:panelGroup>
 	 </h:panelGrid>
 	 <h:outputText id="unavcosimplexMapKey" 
@@ -2171,22 +2151,22 @@
 						value="<b>Map Key</b><br/>"/>
 	 <h:panelGrid id="unavcosimplexKeyGrid" 
 					  columns="6">
-		<h:outputText id="unavcosimplexMapKeyRed" 
-						  escape="false"
-						  value="Imported Station:"/>
-		<h:graphicImage id="unavcosimplexKeyRedPin"
-							 value="http://labs.google.com/ridefinder/images/mm_20_red.png"/>
-		<h:outputText id="unavcosimplexMapKeyYellow" 
-						  escape="false"
-						  value="Selected Station:"/>
-		<h:graphicImage id="unavcosimplexKeyYellowPin"
-							 value="http://labs.google.com/ridefinder/images/mm_20_yellow.png"/>
 		<h:outputText id="unavcosimplexMapKeyGreen" 
 						  escape="false"
 						  value="Unselected Station:"/>
 		<h:graphicImage id="unavcosimplexKeyGreenPin"
 							 value="http://labs.google.com/ridefinder/images/mm_20_green.png"/>
+		<h:outputText id="unavcosimplexMapKeyYellow" 
+						  escape="false"
+						  value="Selected Station:"/>
+		<h:graphicImage id="unavcosimplexKeyYellowPin"
+							 value="http://labs.google.com/ridefinder/images/mm_20_yellow.png"/>
+		<h:outputText id="unavcosimplexMapKeyRed" 
+						  escape="false"
+						  value="Imported Station:"/>
+		<h:graphicImage id="unavcosimplexKeyRedPin"
+							 value="http://labs.google.com/ridefinder/images/mm_20_red.png"/>
 	 </h:panelGrid>
   </h:panelGrid>
 </h:form>
-</h:panelGroup> 
+</h:panelGroup>

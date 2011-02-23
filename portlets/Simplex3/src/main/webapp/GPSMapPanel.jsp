@@ -3,56 +3,59 @@
   <h:inputHidden id="faultKmlUrl" value="#{SimplexBean.faultKmlUrl}" />
   
   <%
-//Set the map center. Hard-coded, need a better way.
-String mapcenter_x = "33.036";
-String mapcenter_y = "-117.24";
-
-//Read and parse the stations list from the old XML file.
-File localFile = new File(config.getServletContext().getRealPath("stations-rss-new.xml"));
-BufferedReader br=new BufferedReader(new FileReader(localFile));
-StringBuffer sb = new StringBuffer();
-while (br.ready()) {
-	sb.append(br.readLine());
-}
-SAXReader reader = new SAXReader();
-Document statusDoc = reader.read( new StringReader(sb.toString()) );
-Element eleXml = (Element)statusDoc.getRootElement();
-List stationList = eleXml.elements("station");
-
-//This is a KML file we got from somewhere. Parse it to extract stations.
-KMLdescriptionparser kdp = new KMLdescriptionparser();
-kdp.parseXml(config.getServletContext().getRealPath("perm.xml").split("perm.xml")[0], "perm.kml");
-
-//The total number of stations.  We need a more general way to handle this
-int rssnewsize = stationList.size();
-int permsize = kdp.getPlacemarkSize();
-int totalstations = rssnewsize + permsize;
-
-String[] latArray=new String[rssnewsize+permsize];
-String[] lonArray=new String[rssnewsize+permsize];
-String[] nameArray=new String[rssnewsize+permsize];
-
-// Set upt the arrays
-for(int i=0;i<stationList.size();i++) {
-	Element station=(Element)stationList.get(i);
-	latArray[i]=station.element("latitude").getText();
-	lonArray[i]=station.element("longitude").getText();
-	nameArray[i]=station.element("id").getText().toLowerCase();
-}
-
-for(int i=0;i<permsize;i++) {
-	kdp.getDesc(i);
-// System.out.println(kdp.getDesc(i));
-
-	latArray[i+rssnewsize]=kdp.getEle("</b>", "<b>Latitude:").trim();
-	lonArray[i+rssnewsize]=kdp.getEle("</b>", "<b>Longitude:").trim();
-	nameArray[i+rssnewsize]=kdp.getEle("</b>", "<b>Monument Code:").trim().toLowerCase();
-	// System.out.println(i + " " + nameArray[i+rssnewsize]);
-}
-%>
-
-<f:verbatim>
-<script type="text/javascript">
+  //<![CDATA[
+  //Set the map center. Hard-coded, need a better way.
+  String mapcenter_x = "33.036";
+  String mapcenter_y = "-117.24";
+  
+  //Read and parse the stations list from the old XML file.
+  File localFile = new File(config.getServletContext().getRealPath("stations-rss-new.xml"));
+  BufferedReader br=new BufferedReader(new FileReader(localFile));
+  StringBuffer sb = new StringBuffer();
+  while (br.ready()) {
+  sb.append(br.readLine());
+  }
+  SAXReader reader = new SAXReader();
+  Document statusDoc = reader.read( new StringReader(sb.toString()) );
+  Element eleXml = (Element)statusDoc.getRootElement();
+  List stationList = eleXml.elements("station");
+  
+  //This is a KML file we got from somewhere. Parse it to extract stations.
+  KMLdescriptionparser kdp = new KMLdescriptionparser();
+  kdp.parseXml(config.getServletContext().getRealPath("perm.xml").split("perm.xml")[0], "perm.kml");
+  
+  //The total number of stations.  We need a more general way to handle this
+  int rssnewsize = stationList.size();
+  int permsize = kdp.getPlacemarkSize();
+  int totalstations = rssnewsize + permsize;
+  
+  String[] latArray=new String[rssnewsize+permsize];
+  String[] lonArray=new String[rssnewsize+permsize];
+  String[] nameArray=new String[rssnewsize+permsize];
+  
+  // Set upt the arrays
+  for(int i=0;i<stationList.size();i++) {
+  Element station=(Element)stationList.get(i);
+  latArray[i]=station.element("latitude").getText();
+  lonArray[i]=station.element("longitude").getText();
+  nameArray[i]=station.element("id").getText().toLowerCase();
+  }
+  
+  for(int i=0;i<permsize;i++) {
+  kdp.getDesc(i);
+  // System.out.println(kdp.getDesc(i));
+  
+  latArray[i+rssnewsize]=kdp.getEle("</b>", "<b>Latitude:").trim();
+  lonArray[i+rssnewsize]=kdp.getEle("</b>", "<b>Longitude:").trim();
+  nameArray[i+rssnewsize]=kdp.getEle("</b>", "<b>Monument Code:").trim().toLowerCase();
+  // System.out.println(i + " " + nameArray[i+rssnewsize]);
+  }
+//]]
+  %>
+  
+  <f:verbatim>
+	 <script type="text/javascript">
+		//<![CDATA[
 //These are variables needed for the GPS station selection features.
 var map;
 var geoXml;
@@ -507,7 +510,7 @@ alert("Updating the map");
 updatePolyline();
 		updateGPSinthebox();
 		}
-
+//]]
 	 </script>
   </f:verbatim>
   <%-- Visible part starts here  --%>

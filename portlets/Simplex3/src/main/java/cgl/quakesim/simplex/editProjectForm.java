@@ -55,12 +55,13 @@ public class editProjectForm extends GenericProjectBean {
 	 
 	 public String getFaultName() {
 		return faultName;
-	}
-	public void setFaultName(String faultName) {
-		this.faultName = faultName;
-	}
-
-	String faultLatStart;
+	 }
+	 
+	 public void setFaultName(String faultName) {
+		  this.faultName = faultName;
+	 }
+	 
+	 String faultLatStart;
 	 String faultLatEnd;
 	 String faultLonStart;
 	 String faultLonEnd;
@@ -82,6 +83,7 @@ public class editProjectForm extends GenericProjectBean {
 		  //The db url will need to be set separately.
 		  this("");
 	 }
+
 	 public editProjectForm(String selectdbURL) {
 		  super();
 		  this.selectdbURL=selectdbURL;

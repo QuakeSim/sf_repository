@@ -1,68 +1,72 @@
 <h:panelGrid id="DashboradPanelgrid"
-				 columnClasses="alignTop,alignTop"
+				 columnClasses="alignTop"
 				 columns="1" 
-				 width="400"
-				 border="1">			
+				 border="0">			
+  <h:outputText id="instructionezzze" 
+					 escape="false"
+					 value="You must add at least one observation point and one fault 
+							  before you can run the Simplex Simulation."/>
   
-  <h:panelGroup id="lkdrq3">
-	 <h:form id="selectproj">  
+  <h:form id="selectproj">  
+	 <%-- This is the first row --%>
+	 <h:panelGrid id="simplexDashboardMenu" 
+					  cellspacing="3"
+					  columns="4" 
+					  border="1">
 		<h:outputFormat id="lkdrq4" escape="false"
-							 value="<b>Project Name:</b> #{SimplexBean.projectName}<br>" />
+							 value="<b>Project Name:</b> #{SimplexBean.projectName}" />
 		<h:outputFormat id="lkdrq5" escape="false"
-							 value="<b>Starting Temperature:</b> #{SimplexBean.currentProjectEntry.startTemp}<br>"/>
+							 value="<b>Starting Temperature:</b> #{SimplexBean.currentProjectEntry.startTemp}"/>
 		<h:outputFormat id="lkdrq6" escape="false"
-							 value="<b>Maximum Iterations:</b> #{SimplexBean.currentProjectEntry.maxIters}<br>"/>
+							 value="<b>Maximum Iterations:</b> #{SimplexBean.currentProjectEntry.maxIters}"/>
 		<h:outputText id="lkj3034f" escape="false"
-						  value="<b>Project Lat/Lon Origin</b>: (#{SimplexBean.currentProjectEntry.origin_lat}, #{SimplexBean.currentProjectEntry.origin_lon})<br>"/>
-		
-		<h:outputText id="instructionezzze" escape="false"
-						  value="You must add at least one observation point and one fault."/>
-		
-		<h:selectOneRadio layout="pageDirection" id="subscriptions"
-								value="#{SimplexBean.currentEditProjectForm.projectSelectionCode}">
-		  <f:selectItem id="item021"
-							 itemLabel="Add GPS Observation Point (Preferred): Use map to 
-											choose GPS station input."
-							 itemValue="ShowGPSObsv" />
-
-		  <f:selectItem id="itemSimplexUnavco"
-							 itemLabel="Add UNAVCO GPS Observation Point (Preferred): Use map to 
-											choose GPS station input."
-							 itemValue="ShowUnavcoGPSObsv" />
-		  
-		  <f:selectItem id="item1"
-							 itemLabel="Add Observation Point: Click to specify observation point parameters."
-							 itemValue="ShowObservation" />
-		  
-		  <f:selectItem id="item0"
-							 itemLabel="Add Observation List (Advanced): Cut and paste a list of 
-											observation points. "
-							 itemValue="ShowObsvCutPaste" />
-		  
-		  <f:selectItem id="item33221"
-							 itemLabel="Add Fault from Map (Preferred): Use map to choose input fault."
-							 itemValue="ShowFaultMap" />
-		  
-		  <f:selectItem id="item2"
-							 itemLabel="Create New Fault: Click to specify geometry for a fault segment."
-							 itemValue="CreateNewFault" />
-		</h:selectOneRadio>
-		<h:commandButton id="button1" value="Make Selection"
-							  actionListener="#{SimplexBean.currentEditProjectForm.toggleProjectSelection}">
-		</h:commandButton>
-	 </h:form>
+						  value="<b>Project Lat/Lon Origin</b>: (#{SimplexBean.currentProjectEntry.origin_lat}, #{SimplexBean.currentProjectEntry.origin_lon})"/>
+	 </h:panelGrid>
 	 
-	 <h:form id="dflelerkljk185" 
-				rendered="#{!empty SimplexBean.myObservationEntryForProjectList 
-							 and !empty SimplexBean.myFaultEntryForProjectList}">
-		<h:outputText id="simplexSubmitSeparator" 
-						  escape="false"
-						  value="<hr/>"/>
-		<h:outputText value="Simplex is ready to run.  Click the button below to launch."/>
-		<h:commandButton rendered="#{!empty SimplexBean.myObservationEntryForProjectList
-											and !empty SimplexBean.myFaultEntryForProjectList}"
-							  id="runSimplex2" value="Run Simplex"
-							  action="#{SimplexBean.toggleRunSimplex2}" />
-	 </h:form>	
-  </h:panelGroup>  
+	 <%-- This is the second row --%>
+	 <h:selectOneMenu id="subscriptions"
+							title="Use this drop down to add faults and observation points to your project."
+							value="#{SimplexBean.currentEditProjectForm.projectSelectionCode}">
+		<f:selectItem id="item021"
+						  itemLabel="Add GPS Observation Point (Preferred)"
+						  itemValue="ShowGPSObsv" />
+		
+		<f:selectItem id="itemSimplexUnavco"
+						  itemLabel="Add UNAVCO GPS Observation Point (Preferred)"
+						  itemValue="ShowUnavcoGPSObsv" />
+		
+		<f:selectItem id="item1"
+						  itemLabel="Add Observation Point"
+						  itemValue="ShowObservation" />
+		
+		<f:selectItem id="item0"
+						  itemLabel="Add Observation List (Advanced)"
+						  itemValue="ShowObsvCutPaste" />
+		
+		<f:selectItem id="item33221"
+						  itemLabel="Add Fault from Map (Preferred)"
+						  itemValue="ShowFaultMap" />
+		
+		<f:selectItem id="item2"
+						  itemLabel="Create New Fault"
+						  itemValue="CreateNewFault" />
+	 </h:selectOneMenu>
+	 <h:commandButton id="button1" value="Make Selection"
+							actionListener="#{SimplexBean.currentEditProjectForm.toggleProjectSelection}">
+	 </h:commandButton>
+  </h:form>
+  
+  
+  <h:form id="dflelerkljk185" 
+			 rendered="#{!empty SimplexBean.myObservationEntryForProjectList 
+						  and !empty SimplexBean.myFaultEntryForProjectList}">
+	 <h:outputText id="simplexSubmitSeparator" 
+						escape="false"
+						value="<hr/>"/>
+	 <h:outputText value="Simplex is ready to run."/>
+	 <h:commandButton rendered="#{!empty SimplexBean.myObservationEntryForProjectList
+										 and !empty SimplexBean.myFaultEntryForProjectList}"
+							id="runSimplex2" value="Run Simplex"
+							action="#{SimplexBean.toggleRunSimplex2}" />
+  </h:form>	
 </h:panelGrid>
