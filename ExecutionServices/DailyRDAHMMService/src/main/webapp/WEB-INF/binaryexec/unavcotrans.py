@@ -7,7 +7,7 @@
 # output: original unavco station data file, and converted GRWS raw input format
 #
 # usage:
-#   python unavcotrans.py stationID destdir
+#   python unavcotrans.py stationID destdir beginDate endDate
 #
 # output:
 #   stationID.pbo.igs05.csv [daily_project_stationID].unavco.raw
@@ -20,16 +20,18 @@ unavco_client_path = "./unavcoClients"
 cs2cs_exec = "./cs2cs"
 
 if numargv == 1:
-    sys.exit("usage: unavcotrans.py stationID destdir")
-elif numargv == 3:
+    sys.exit("usage: unavcotrans.py stationID destdir beginDate endDate")
+elif numargv == 5:
     stationID = sys.argv[1]
     destdir = sys.argv[2]
+    bdate = sys.argv[3]
+    edate = sys.argv[4]
 
     # change current working directory
     # os.chdir(destdir)
 
     # query UNAVCO for station data file in .pbo.igs05.csv format
-    cmd = "java -jar " + unavco_client_path + "/unavcoFiles.jar -4charEqu " + stationID.upper() + " -positionCSV"
+    cmd = "java -jar " + unavco_client_path + "/unavcoFiles.jar -4charEqu " + stationID.upper() + " -dataStartDate " + bdate + " -dataEndDate " + edate + " -positionCSV"
     filelist = subprocess.Popen([cmd], shell=True, stdout=subprocess.PIPE).communicate()[0].split("\n")
     fileloc = None
     for item in filelist:
