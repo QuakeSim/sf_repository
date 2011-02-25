@@ -29,7 +29,11 @@ import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 
+//GRWS imports
 import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
+
+//Jacskon JSON handling imports
+import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * Everything you need to set up and run SimpleBean.
@@ -163,6 +167,10 @@ public class SimplexBean extends GenericSopacBean {
 	String[] lonArray;
 	String[] nameArray;
 
+	 //Parameters needed for UNAVCO GPS parameters
+	 String gpsJSONValues="";
+	 String selectedGPSJSONValues="";
+
 	// These are needed for the SOPAC GRWS query.
 	// These dates are arbitrary but apparently needed.
 	String beginDate = "2006-01-10";
@@ -179,6 +187,14 @@ public class SimplexBean extends GenericSopacBean {
 	protected String faultKmlFilename;
 	protected String portalBaseUrl;
 	 
+	 public String getGpsJSONValues(){
+		  return this.gpsJSONValues;
+	 }
+	 
+	 public void setGpsJSONValues(String gpsJSONValues) {
+		  this.gpsJSONValues=gpsJSONValues;
+	 }
+
 	public boolean getGpsRefStation() {		
 		return this.gpsRefStation;
 	}
@@ -2151,8 +2167,7 @@ public class SimplexBean extends GenericSopacBean {
 			System.out.println("[" + getUserName() + "/SimplexBean/toggleAddFaultForProject] " + e);
 		}
 		finally {
-			if (db != null)
-				db.close();			
+			if (db != null) db.close();			
 		}
 
 		saveSimplexProjectEntry(currentProjectEntry);
@@ -2199,10 +2214,83 @@ public class SimplexBean extends GenericSopacBean {
 	}
 
 	 /**
-	  * Add selected UNAVCO stations to the project
+	  * Add selected UNAVCO stations to the project.  
+	  * Each station will actually correspond to 3 (N, E, and U) observations.
+	  * TODO: may look more elegant if we used object casting. This will also remove
+	  * the dangers of hardcoding the parameter names below, whic must correspond to the 
+	  * values used in the JSF page.
 	  */ 
 	 public void toggleAddJSONGPSObsvForProject(ActionEvent ev) {
-		  
+		  //		  System.out.println("Unavaco JSON:"+this.getGpsJSONValues());
+		  Observation[] obsvs=new Observation[3];
+		  ObjectContainer db = null;
+		  try{
+				
+				ObjectMapper mapper=new ObjectMapper();
+				Map<String,Object> stationData=mapper.readValue(this.getGpsJSONValues(),Map.class);
+				Iterator it=stationData.values().iterator();
+				
+				while(it.hasNext()) {
+					 Map stationValues=(Map)it.next();
+
+					 //This is an obsolete debugging method
+					 Iterator it2=stationValues.keySet().iterator();
+					 while(it2.hasNext()){
+						  String stationKey=(String)it2.next();
+						  System.out.println(stationKey+"="+stationValues.get(stationKey));
+					 }
+
+					 //The following assumes I know the key values.   These
+					 //must be matched to UnavacoGPSMapPanel.
+					 //East Stations
+					 obsvs[0]=new Observation();
+					 obsvs[0].setObsvName((String)stationValues.get("id"));
+					 obsvs[0].setObsvType("1");
+					 obsvs[0].setObsvRefSite("1");
+					 obsvs[0].setObsvValue(stationValues.get("ve").toString());
+					 obsvs[0].setObsvError(stationValues.get("stddevE").toString());
+					 
+					 //North stations
+					 obsvs[1]=new Observation();
+					 obsvs[1].setObsvName((String)stationValues.get("id"));
+					 obsvs[1].setObsvType("2");
+					 obsvs[1].setObsvRefSite("1");
+					 obsvs[1].setObsvValue(stationValues.get("vn").toString());
+					 obsvs[1].setObsvError(stationValues.get("stddevN").toString());
+		
+					 //Up stations
+					 obsvs[2]=new Observation();
+					 obsvs[2].setObsvName((String)stationValues.get("id"));
+					 obsvs[2].setObsvType("3");
+					 obsvs[2].setObsvRefSite("1");
+					 obsvs[2].setObsvValue(stationValues.get("vu").toString());
+					 obsvs[2].setObsvError(stationValues.get("stddevU").toString());
+
+					 obsvs=setXYLocations(obsvs,
+												 stationValues.get("y0").toString(),
+												 stationValues.get("x0").toString());
+					 
+					 //Now open the DB and insert.
+					 db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+											  + userName + "/" + codeName + "/" + projectName + ".db");
+					 //Add the observations
+					 for(int i=0;i<obsvs.length;i++){
+						  db.set(obsvs[i]);
+					 }
+					 
+					 db.commit();
+					 db.close();
+
+				}
+		  }
+		  catch(Exception ex){
+				ex.printStackTrace();
+		  }
+		  finally {
+				if(db != null) db.close();			
+		  }
+		  //Is this needed?
+		  saveSimplexProjectEntry(currentProjectEntry);
 	 }
 
 	 /**
@@ -2317,6 +2405,10 @@ public class SimplexBean extends GenericSopacBean {
 		return obsv;
 	}
 
+	 /**
+	  * This converts a single selected station in to 3 observation
+	  * points (for East, North, and Up).
+	  */
 	private Observation[] makeGPSObservationPoints(String stationName,
 			String rawGRWSResponse, boolean gpsRefStation) {
 
@@ -2476,7 +2568,8 @@ public class SimplexBean extends GenericSopacBean {
 	public void togglePlotProject(ActionEvent ev) {
 		try {
 			if (getMyArchiveDataTable() != null) {
-				System.out.println("[" + getUserName() + "/SimplexBean/togglePlotProject] getMyArchiveDataTable() isn't null");
+				System.out.println("[" + getUserName() 
+										 + "/SimplexBean/togglePlotProject] getMyArchiveDataTable() isn't null");
 				SimpleXOutputBean dpsb = (SimpleXOutputBean) (getMyArchiveDataTable()
 						.getRowData());
 
@@ -2712,4 +2805,32 @@ public class SimplexBean extends GenericSopacBean {
 		this.copyProjectsList = copyProjectsList;
 	}
 
+	 public void setSelectedGPSJSONValues(String selectedGPSJSONValues){
+		  this.selectedGPSJSONValues=selectedGPSJSONValues;
+	 }
+
+	 public String getSelectedGPSJSONValues() {
+		  System.out.println("Getting the selected gps stations' json values.");
+		  Map<String,String> selectedStations=new HashMap();		  
+		  
+		  List stationList=getMyObservationEntryForProjectList();
+		  System.out.println("List size:"+stationList.size());
+
+		  ObjectMapper mapper=new ObjectMapper();
+		  for(int i=0;i<stationList.size();i++){
+				String stationName=((observationEntryForProject)stationList.get(i)).getObservationName();
+				System.out.println(stationName);
+				if(!selectedStations.containsKey(stationName)){
+					 selectedStations.put(stationName,stationName);
+				}
+		  }
+		  try {
+				selectedGPSJSONValues=mapper.writeValueAsString(selectedStations);
+				System.out.println("Here's the resulting JSON:"+selectedGPSJSONValues);
+		  }
+		  catch(Exception ex){
+				ex.printStackTrace();
+		  }
+		  return selectedGPSJSONValues;
+	 }
 }

@@ -38,6 +38,7 @@
 <body onload="myInit()" onunload="GUnload()">
   <script type="text/javascript">
 	 //<![CDATA[
+
 	 //Any "onload" operations for subcomponent includes need to go here.
 	 function myInit() {
 	 //Script below initializes the tree view for the FaultMapPanelFrame sidebar.

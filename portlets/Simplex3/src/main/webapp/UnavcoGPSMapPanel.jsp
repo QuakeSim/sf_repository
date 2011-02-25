@@ -1,12 +1,14 @@
+<h:inputHidden id="unavcoRedJsonStations" value="#{SimplexBean.selectedGPSJSONValues}"/>
 <h:panelGroup id="unavcoMapncrap" 
 				 rendered="#{SimplexBean.currentEditProjectForm.renderUnavcoGPSStationMap}">
   <f:verbatim>
-	 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBRxYpIIOz9ynlSKjbx-4JMuN5JjrhR5gSOcKdieYppOZ4_yzZc_Ti15qw"type="text/javascript"></script>
+  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBRxYpIIOz9ynlSKjbx-4JMuN5JjrhR5gSOcKdieYppOZ4_yzZc_Ti15qw"type="text/javascript"></script>
     <script src='http://geon.unavco.org/unavco/cookies.js' type='text/javascript'></script> 
     <script src='http://geon.unavco.org/unavco/dragzoom.js' type='text/javascript'></script> 
 	 <script type='text/javascript'>  
 		//<![CDATA[
 		var map;       
+		var redStationsJson={};
 		var greenIcon="http://labs.google.com/ridefinder/images/mm_20_green.png";
 		var yellowIcon="http://labs.google.com/ridefinder/images/mm_20_yellow.png";
 		var redIcon="http://labs.google.com/ridefinder/images/mm_20_red.png";
@@ -1555,6 +1557,7 @@
 
 	//This should be called when the body() function is called.
 	function initializeUnavcoMap() {
+	      redStationsJson=JSON.parse(document.getElementById("unavcoRedJsonStations").value);
 	      map = new GMap2(document.getElementById('unavcomap_canvas'));  
 			speedToDgr = 0.0024 ; 
 			cookieTest();   
@@ -1589,13 +1592,20 @@
 //         map.openInfoWindow(latlng, myHtml);   
 //         }   
 //			});   
+        
       }  
 			
 	 //Set the icon color array's initial values.  Note we assume
-    //this array and others are all the size of ids.
+    //this array and others are all the size of ids.  Two loops, so this 
+    //may need some improvement.
 	 function setIconColors() {
 	    for (var j=0;j<ids.length;j++) {
 		   iconColors[j]=greenIcon;  
+	      for(var key in redStationsJson){
+			   if(redStationsJson[key].toString()==ids[j].toString()) {
+			     iconColors[j]=redIcon;  
+            }
+		   }
 		 }
 	 }
 
@@ -1796,12 +1806,19 @@
 		var markerOptions={icon:baseIcon};
       var marker = new GMarker(point, markerOptions);  
       marker.value = 1;    
+		selectedId=document.getElementById("unavcoobsvGPSMap:unavcostationName");
+		visibleSelectedList=document.getElementById("unavcoobsvGPSMap:unavcoYellowStations");
+		candidateList=document.getElementById("unavcoobsvGPSMap:unavcoCandidateStations");
+		
       GEvent.addListener(marker, 'click', function() {    
-		  var iconColor=marker.getIcon().image;
-		  if(iconColor==redIcon) {;}
-		  else if (iconColor==greenIcon) {
+		  var space=" ";
+//		  alert(ids[index]+space+ves[index]+space+stddevEs[index]);
+//		  var iconColor=marker.getIcon().image;
+		  var selectedIconColor=iconColors[index];
+		  if(selectedIconColor==redIcon) {;}
+		  else if (selectedIconColor==greenIcon) {
 		  
-			 //Make a new object to store the marker's metadata.
+			 //Make new objects to store the station's metadata.
 			 var markerMetadata={};
 			 markerMetadata["id"]=ids[index];
           markerMetadata["x0"]=x0;
@@ -1818,35 +1835,31 @@
 			 selectedStations[id]=markerMetadata;
 			 iconColors[index]=yellowIcon;
 			 //Update the forms
-			 selectedId=document.getElementById("unavcoobsvGPSMap:unavcostationName");
+
 			 selectedId.value=id;
-			 selectedList=document.getElementById("unavcoobsvGPSMap:unavcoYellowStations");
 			 var tmplist="";
 			 for(var key in selectedStations) {
 			   tmplist+=selectedStations[key].id+" ";
 			 }
-			 selectedList.value=tmplist;
-			 //selectedList.value=JSON.stringify(selectedStations);
+			 visibleSelectedList.value=tmplist;
+			 candidateList.value=JSON.stringify(selectedStations);
           //alert(JSON.stringify(selectedStations));
 			 map.removeOverlay(marker);
 			 map.addOverlay(marker);
 			 }
-		   else if(iconColor==yellowIcon){
+		   else if(selectedIconColor==yellowIcon){
 			   baseIcon.image=greenIcon;
 				marker.getIcon().image=greenIcon;
 				iconColors[index]=greenIcon;
 				delete selectedStations[id];
 				//Update the forms
-				selectedId=document.getElementById("unavcoobsvGPSMap:unavcostationName");
 				selectedId.value="";
-				selectedList=document.getElementById("unavcoobsvGPSMap:unavcoYellowStations");
 				var tmplist="";
 			   for(var key in selectedStations) {
 			     tmplist+=selectedStations[key].id+" ";
 			   }
-				selectedList.value=tmplist;
-				//selectedList.value=JSON.stringify(selectedStations);
-            //alert(JSON.stringify(selectedStations));
+				visibleSelectedList.value=tmplist;
+				candidateList.value=JSON.stringify(selectedStations);
 				map.removeOverlay(marker);
 				map.addOverlay(marker);
 			}
@@ -1860,7 +1873,9 @@
       var lt,dxn,dyn,x1,x2,x3,x4,y1,y2,y3,y4,stddevN,stddevE,corrNE,term1,term2,semimajoraxis,semiminoraxis,alpha;
       var xe,ye,xprev, yprev; 
       var dc=0;       
+
       var dtr=3.141592/180.0; 
+
       for (var j=0; j<ids.length; j++) {       
         y0=lats[j];      
         x0=lngs[j];      
@@ -2077,6 +2092,9 @@
   </f:verbatim>
 
   <h:form id="unavcoobsvGPSMap">
+<%--
+	 <h:inputHidden id="unavcoRedJsonStations" value="#{SimplexBean.selectedGPSJSONValues}"/>
+--%>
 	 <h:panelGrid id="unavcosimplexSelectionMapGrid"
 					  columns="1"
 					  border="1">
@@ -2135,9 +2153,10 @@
 			 <h:panelGroup id="unavcomapncrapLayoutGroup5">
 				<h:outputText id="unavcosimplexStationSelection3"
 								  value="Finally, import the selected stations into your project."/>
-				
+				<h:inputHidden id="unavcoCandidateStations"
+									value="#{SimplexBean.gpsJSONValues}"/>
 				<h:panelGrid id="unavconploebba" columns="2">
-				  <h:commandButton id="unavcoaddGPSObsv" value="Add Station"
+				  <h:commandButton id="unavcoaddGPSObsv" value="Add Station(s)"
 										 actionListener="#{SimplexBean.toggleAddJSONGPSObsvForProject}"/>
 				  <h:commandButton id="unavcocloseMap" value="Close Map"
 										 actionListener="#{SimplexBean.toggleCloseMap}"/>
@@ -2146,11 +2165,11 @@
 		  </h:panelGrid>
 		</h:panelGroup>
 	 </h:panelGrid>
-	 <h:outputText id="unavcosimplexMapKey" 
-						escape="false"
-						value="<b>Map Key</b><br/>"/>
 	 <h:panelGrid id="unavcosimplexKeyGrid" 
-					  columns="6">
+					  columns="7">
+		<h:outputText id="unavcosimplexMapKey" 
+						  escape="false"
+						  value="<b>Map Key</b><br/>"/>
 		<h:outputText id="unavcosimplexMapKeyGreen" 
 						  escape="false"
 						  value="Unselected Station:"/>

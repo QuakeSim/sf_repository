@@ -213,6 +213,10 @@
         </repository>
 -->
         <repository>
+			 <id>codehaus</id>
+			 <url>http://repository.codehaus.org/</url>
+		  </repository>
+        <repository>
             <id>apache-maven</id>
             <url>http://www.ibiblio.org/maven2</url>
         </repository>
@@ -440,7 +444,25 @@
              <artifactId>db4o-java5</artifactId>
              <version>7.4-SNAPSHOT</version>
         </dependency>
-
+		  
+		  <!-- Jackson Dependencies -->
+		  <dependency>
+			 <groupId>org.codehaus.jackson</groupId>
+			 <artifactId>jackson-core-asl</artifactId>
+			 <version>1.7.3</version>
+		  </dependency>
+		  <dependency>
+			 <groupId>org.codehaus.jackson</groupId>
+			 <artifactId>jackson-mapper-asl</artifactId>
+			 <version>1.7.3</version>
+		  </dependency>
+<!--
+		  <dependency>
+			 <groupId>org.codehaus.jackson</groupId>
+			 <artifactId>jackson-mapper-asl</artifactId>
+			 <version>1.7.3</version>
+		  </dependency>
+-->
     </dependencies>
 
 

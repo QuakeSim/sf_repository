@@ -50,13 +50,13 @@
   nameArray[i+rssnewsize]=kdp.getEle("</b>", "<b>Monument Code:").trim().toLowerCase();
   // System.out.println(i + " " + nameArray[i+rssnewsize]);
   }
-//]]
+  //]]
   %>
   
   <f:verbatim>
 	 <script type="text/javascript">
 		//<![CDATA[
-//These are variables needed for the GPS station selection features.
+		//These are variables needed for the GPS station selection features.
 var map;
 var geoXml;
 var selectedGPSstationlist = new Array();
@@ -664,7 +664,7 @@ updatePolyline();
 								  value="Finally, import the selected stations into your project."/>
 				
 				<h:panelGrid id="nploebba" columns="2">
-				  <h:commandButton id="addGPSObsv" value="Add Station"
+				  <h:commandButton id="addGPSObsv" value="Add Station(s)"
 										 actionListener="#{SimplexBean.toggleAddGPSObsvForProject}"/>
 				  <h:commandButton id="closeMap" value="Close Map"
 										 actionListener="#{SimplexBean.toggleCloseMap}"/>
