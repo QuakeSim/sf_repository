@@ -2810,11 +2810,11 @@ public class SimplexBean extends GenericSopacBean {
 	 }
 
 	 public String getSelectedGPSJSONValues() {
-		  System.out.println("Getting the selected gps stations' json values.");
+		  //		  System.out.println("Getting the selected gps stations' json values.");
 		  Map<String,String> selectedStations=new HashMap();		  
 		  
 		  List stationList=getMyObservationEntryForProjectList();
-		  System.out.println("List size:"+stationList.size());
+		  //		  System.out.println("List size:"+stationList.size());
 
 		  ObjectMapper mapper=new ObjectMapper();
 		  for(int i=0;i<stationList.size();i++){
@@ -2826,7 +2826,7 @@ public class SimplexBean extends GenericSopacBean {
 		  }
 		  try {
 				selectedGPSJSONValues=mapper.writeValueAsString(selectedStations);
-				System.out.println("Here's the resulting JSON:"+selectedGPSJSONValues);
+				//				System.out.println("Here's the resulting JSON:"+selectedGPSJSONValues);
 		  }
 		  catch(Exception ex){
 				ex.printStackTrace();

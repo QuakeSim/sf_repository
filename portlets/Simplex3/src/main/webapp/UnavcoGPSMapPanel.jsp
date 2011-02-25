@@ -7,6 +7,15 @@
     <script src='http://geon.unavco.org/unavco/dragzoom.js' type='text/javascript'></script> 
 	 <script type='text/javascript'>  
 		//<![CDATA[
+		//These are needed for the search area.
+		var searcharea;
+		var marker_NE;
+		var marker_SW;
+		var border;
+		var icon_NE;
+		var icon_SW;
+		var icon_move;
+
 		var map;       
 		var redStationsJson={};
 		var greenIcon="http://labs.google.com/ridefinder/images/mm_20_green.png";
@@ -33,7 +42,8 @@
 		var draweqs=0;
 		var latmax,lngmax,latmin,lngmin,deltalat,deltalng;    
 		var vn,ve,vu,x1,y1,dx,dy,dcf, stddevN, stddevE,stddevU, corrNE,term1,term2,alpha;  
-		var id='';    
+		var id=''; 
+		var gpsStationMarker=new Array();
 		var ids = new Array();    
 		var sts = new Array();    
 		var lats = new Array();    
@@ -1557,6 +1567,19 @@
 
 	//This should be called when the body() function is called.
 	function initializeUnavcoMap() {
+	   //This is associated with the checkbox.
+		searcharea = document.getElementById("unavcoobsvGPSMap:unavcoGpsSelectionArea");
+
+		//Create the icons for the search area.
+		icon_NE = new GIcon(); 
+		icon_NE.image = 'http://maps.google.com/mapfiles/ms/micons/red-pushpin.png';
+		icon_NE.shadow = '';
+		icon_NE.iconSize = new GSize(32, 32);
+		icon_NE.shadowSize = new GSize(22, 20);
+		icon_NE.iconAnchor = new GPoint(10, 32);
+		icon_NE.dragCrossImage = '';
+		icon_SW = icon_NE;
+
 	      redStationsJson=JSON.parse(document.getElementById("unavcoRedJsonStations").value);
 	      map = new GMap2(document.getElementById('unavcomap_canvas'));  
 			speedToDgr = 0.0024 ; 
@@ -1921,8 +1944,8 @@
           lng9char= lng9char.substr(0,9); 
           staHtml = 'Station  '+id_link+'   '+staname+'<font size=-1><BR>horizontal speed: '+aspeed+' mm/yr &nbsp; direction: '+abearing+'<br>Latitude '+lat8char+' &nbsp; Longitude '+lng9char+'<BR>Speed components: East '+ve+' North '+vn+' Up '+vu+' mm/yr ' +' <BR>Std deviations:  &nbsp; &nbsp; &nbsp; &nbsp;  East '+stddevE+'; North '+stddevN+' Up '+stddevU+' mm/yr '+ts +smallimage + '</p>';   
 
-
-          map.addOverlay(createMarker(j,markerpt,id,x0,y0,staHtml));
+          gpsStationMarker[j]=createMarker(j,markerpt,id,x0,y0,staHtml);
+          map.addOverlay(gpsStationMarker[j]);
       }
     }
 
@@ -2087,6 +2110,127 @@
         map.addOverlay(createMarker(markerpt, staHtml));  
       }   
     }   
+//--------------------------------------------------
+//Here is the code for mananging the selection box.
+//--------------------------------------------------
+//This plots the selection area box. 
+function initialPosition() {
+// map.clearOverlays();
+	var bounds = map.getBounds();
+	var span = bounds.toSpan();
+	var newSW = new GLatLng(bounds.getSouthWest().lat() + span.lat()/3, 
+			bounds.getSouthWest().lng() + span.lng()/3);
+	var newNE = new GLatLng(bounds.getNorthEast().lat() - span.lat()/3, 
+			bounds.getNorthEast().lng() - span.lng()/3);
+
+	var newBounds = new GLatLngBounds(newSW, newNE);
+
+	marker_NE = new GMarker(newBounds.getNorthEast(), {draggable: true, icon: icon_NE});
+	GEvent.addListener(marker_NE, 'dragend', function() {
+		updatePolyline();
+//		updateGPSinthebox();
+	});
+
+	marker_SW = new GMarker(newBounds.getSouthWest(), {draggable: true, icon: icon_SW});
+	GEvent.addListener(marker_SW, 'dragend', function() {
+		updatePolyline();
+//		updateGPSinthebox();
+	});  
+
+	map.addOverlay(marker_NE);
+	map.addOverlay(marker_SW);
+// map.addOverlay(marker_move);
+
+	updatePolyline();
+}
+
+function updateGPSinthebox() {
+
+	var minlat = document.getElementById("unavcoobsvGPSMap:unavcominlat");	
+	var minlon = document.getElementById("unavcoobsvGPSMap:unavcominlon");     
+	var maxlat = document.getElementById("unavcoobsvGPSMap:unavcomaxlat");
+	var maxlon = document.getElementById("unavcoobsvGPSMap:unavcomaxlon");
+
+	minlat.value = marker_SW.getPoint().lat();
+	minlon.value = marker_SW.getPoint().lng();
+	maxlat.value = marker_NE.getPoint().lat();
+	maxlon.value = marker_NE.getPoint().lng();
+
+	if (marker_SW.getPoint().lat() >= marker_NE.getPoint().lat()) {
+		maxlat.value = marker_SW.getPoint().lat();
+		minlat.value = marker_NE.getPoint().lat();
+	}
+
+	if (marker_SW.getPoint().lng() >= marker_NE.getPoint().lng()) {
+		maxlon.value = marker_SW.getPoint().lng();
+		minlon.value = marker_NE.getPoint().lng();
+	}
+
+   for(var j=0;j<gpsStationMarker.length;j++) {
+	     stationLat=gpsStationMarker[j].getLatLng().lat();
+	     stationLng=gpsStationMarker[j].getLatLng().lng();
+	     if((stationLng<=maxlon.value && stationLng>=minlon.value)
+           &&(stationLat<=maxlat.value && stationLat>=minlat.value)) {
+			 var markerMetadata={};
+			 markerMetadata["id"]=ids[index];
+          markerMetadata["x0"]=x0;
+			 markerMetadata["y0"]=y0;
+			 markerMetadata["ve"]=ves[index];
+			 markerMetadata["vn"]=vns[index];
+			 markerMetadata["vu"]=vus[index];
+			 markerMetadata["stddevE"]=stddevEs[index];
+			 markerMetadata["stddevN"]=stddevNs[index];
+			 markerMetadata["stddevU"]=stddevUs[index];
+
+			 baseIcon.image=yellowIcon;
+			 marker.getIcon().image=yellowIcon;
+			 selectedStations[id]=markerMetadata;
+			 iconColors[index]=yellowIcon;
+			 //Update the forms
+
+			 selectedId.value=id;
+			 var tmplist="";
+			 for(var key in selectedStations) {
+			   tmplist+=selectedStations[key].id+" ";
+			 }
+			 visibleSelectedList.value=tmplist;
+			 candidateList.value=JSON.stringify(selectedStations);
+          //alert(JSON.stringify(selectedStations));
+			 map.removeOverlay(marker);
+			 map.addOverlay(marker);
+        }
+	}
+}
+
+function updatePolyline() {
+	if (border) {
+		map.removeOverlay(border);
+	}
+
+	var points = [
+		 marker_NE.getPoint(),
+		 new GLatLng(marker_SW.getPoint().lat(), marker_NE.getPoint().lng()),
+		 marker_SW.getPoint(),
+		 new GLatLng(marker_NE.getPoint().lat(), marker_SW.getPoint().lng()),
+		 marker_NE.getPoint()];
+	border = new GPolyline(points, "#FF0000");
+
+	map.addOverlay(border);
+}
+
+function toggleBorder() {
+	if (searcharea.checked == false) {  
+
+		map.removeOverlay(border);
+		map.removeOverlay(marker_NE);
+		map.removeOverlay(marker_SW);  
+	}
+
+	else {    
+
+		initialPosition();
+	}
+}
 //]]>
     </script> 	
   </f:verbatim>
@@ -2136,9 +2280,11 @@
 				<h:panelGrid id="unavcosimplexGPSStationSelectionArea" 
 								 columns="2">
 				  <h:outputText id="unavcodkljr3dssra" value="Use Search Area:"/>
-				  <h:selectBooleanCheckbox id="unavcogpsRefStation23211b" onclick="toggleBorder()" 
+				  <h:selectBooleanCheckbox id="unavcoGpsSelectionArea" 
+													onclick="toggleBorder()" 
 													value="#{SimplexBean.searcharea}"/>
-				  <h:outputText id="unavcoSimplexGetGPSSelectionArea" value="Select Stations in Box:"/>
+				  <h:outputText id="unavcoSimplexGetGPSSelectionArea" 
+									 value="Select Stations in Box:"/>
 				  <h:commandButton id="unavcoSimplexFetchGPSStations"
 										 type="button" 
 										 onclick="updateGPSinthebox()"
