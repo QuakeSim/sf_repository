@@ -2234,11 +2234,11 @@ public class SimplexBean extends GenericSopacBean {
 					 Map stationValues=(Map)it.next();
 
 					 //This is an obsolete debugging method
-					 Iterator it2=stationValues.keySet().iterator();
-					 while(it2.hasNext()){
-						  String stationKey=(String)it2.next();
-						  System.out.println(stationKey+"="+stationValues.get(stationKey));
-					 }
+					 // Iterator it2=stationValues.keySet().iterator();
+					 // while(it2.hasNext()){
+					 // 	  String stationKey=(String)it2.next();
+					 // 	  System.out.println(stationKey+"="+stationValues.get(stationKey));
+					 // }
 
 					 //The following assumes I know the key values.   These
 					 //must be matched to UnavacoGPSMapPanel.
@@ -2289,6 +2289,8 @@ public class SimplexBean extends GenericSopacBean {
 		  finally {
 				if(db != null) db.close();			
 		  }
+		  setSearcharea(false);
+		  setGpsRefStation(false);
 		  //Is this needed?
 		  saveSimplexProjectEntry(currentProjectEntry);
 	 }
@@ -2366,6 +2368,7 @@ public class SimplexBean extends GenericSopacBean {
 		  finally {
 				if (db != null) db.close();			
 		  }
+		  setSearcharea(false);
 		  saveSimplexProjectEntry(currentProjectEntry);
 		  setGpsRefStation(false);
 	 }

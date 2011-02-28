@@ -2,7 +2,10 @@
 <h:panelGroup id="unavcoMapncrap" 
 				 rendered="#{SimplexBean.currentEditProjectForm.renderUnavcoGPSStationMap}">
   <f:verbatim>
-  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBRxYpIIOz9ynlSKjbx-4JMuN5JjrhR5gSOcKdieYppOZ4_yzZc_Ti15qw"type="text/javascript"></script>
+
+<!--  Inherit this from EditProject.jsp
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBRxYpIIOz9ynlSKjbx-4JMuN5JjrhR5gSOcKdieYppOZ4_yzZc_Ti15qw"type="text/javascript"></script>
+-->
     <script src='http://geon.unavco.org/unavco/cookies.js' type='text/javascript'></script> 
     <script src='http://geon.unavco.org/unavco/dragzoom.js' type='text/javascript'></script> 
 	 <script type='text/javascript'>  

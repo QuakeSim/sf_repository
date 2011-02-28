@@ -25,15 +25,16 @@
 	 
 	 <%-- This is the second row --%>
 	 <h:selectOneMenu id="subscriptions"
-							title="Use this drop down to add faults and observation points to your project."
+							title="Use this drop down to add faults and observation points to 
+									 your project."
 							value="#{SimplexBean.currentEditProjectForm.projectSelectionCode}">
+		<f:selectItem id="itemSimplexUnavco"
+						  itemLabel="Add UNAVCO GSRM North America GPS Observation Point (Preferred)"
+						  itemValue="ShowUnavcoGPSObsv" />
+
 		<f:selectItem id="item021"
 						  itemLabel="Add GPS Observation Point (Preferred)"
-						  itemValue="ShowGPSObsv" />
-		
-		<f:selectItem id="itemSimplexUnavco"
-						  itemLabel="Add UNAVCO GPS Observation Point (Preferred)"
-						  itemValue="ShowUnavcoGPSObsv" />
+						  itemValue="ShowGPSObsv" />		
 		
 		<f:selectItem id="item1"
 						  itemLabel="Add Observation Point"
