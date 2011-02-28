@@ -1905,10 +1905,13 @@
 								 
         space=" ";
         if (x0>180.0) x0= lngs[j] - 360.0 ;  						
-        if ( (y0<latmax && y0>latmin && x0<lngmax && x0>lngmin) )  {  ; } 
-        else { continue; }    
-        if ( j % declutter == 0 ) { ; } 
-        else { continue; };       
+
+		  //Obsolete conditions from original code
+//        if ( (y0<latmax && y0>latmin && x0<lngmax && x0>lngmin) )  {  ; } 
+//        else { continue; }    
+        //Ignore decluttering for now.
+//        if ( j % declutter == 0 ) { ; } 
+//        else { continue; };       
 
         ve= ves[j];  
         vn= vns[j];  
@@ -2167,28 +2170,32 @@ function updateGPSinthebox() {
 	}
 
    for(var j=0;j<gpsStationMarker.length;j++) {
-	     stationLat=gpsStationMarker[j].getLatLng().lat();
-	     stationLng=gpsStationMarker[j].getLatLng().lng();
+        //Could also use lats[j], lngs[j] for this.
+	     var latLng=gpsStationMarker[j].getLatLng();
+	     stationLat=latLng.lat();
+	     stationLng=latLng.lng();
 	     if((stationLng<=maxlon.value && stationLng>=minlon.value)
            &&(stationLat<=maxlat.value && stationLat>=minlat.value)) {
+          var id=ids[j]
+          var x0=lngs[j];
+          var y0=lats[j];
+			 if(x0>180.0) x0=lngs[j]-360.0;
 			 var markerMetadata={};
-			 markerMetadata["id"]=ids[index];
+			 markerMetadata["id"]=ids[j];
           markerMetadata["x0"]=x0;
 			 markerMetadata["y0"]=y0;
-			 markerMetadata["ve"]=ves[index];
-			 markerMetadata["vn"]=vns[index];
-			 markerMetadata["vu"]=vus[index];
-			 markerMetadata["stddevE"]=stddevEs[index];
-			 markerMetadata["stddevN"]=stddevNs[index];
-			 markerMetadata["stddevU"]=stddevUs[index];
+			 markerMetadata["ve"]=ves[j];
+			 markerMetadata["vn"]=vns[j];
+			 markerMetadata["vu"]=vus[j];
+			 markerMetadata["stddevE"]=stddevEs[j];
+			 markerMetadata["stddevN"]=stddevNs[j];
+			 markerMetadata["stddevU"]=stddevUs[j];
 
 			 baseIcon.image=yellowIcon;
-			 marker.getIcon().image=yellowIcon;
+			 gpsStationMarker[j].getIcon().image=yellowIcon;
 			 selectedStations[id]=markerMetadata;
-			 iconColors[index]=yellowIcon;
-			 //Update the forms
+			 iconColors[j]=yellowIcon;
 
-			 selectedId.value=id;
 			 var tmplist="";
 			 for(var key in selectedStations) {
 			   tmplist+=selectedStations[key].id+" ";
@@ -2196,8 +2203,8 @@ function updateGPSinthebox() {
 			 visibleSelectedList.value=tmplist;
 			 candidateList.value=JSON.stringify(selectedStations);
           //alert(JSON.stringify(selectedStations));
-			 map.removeOverlay(marker);
-			 map.addOverlay(marker);
+			 map.removeOverlay(gpsStationMarker[j]);
+			 map.addOverlay(gpsStationMarker[j]);
         }
 	}
 }
