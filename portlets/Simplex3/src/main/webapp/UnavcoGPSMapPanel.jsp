@@ -2330,17 +2330,17 @@ function toggleBorder() {
 						  escape="false"
 						  value="Unselected Station:"/>
 		<h:graphicImage id="unavcosimplexKeyGreenPin"
-							 value="http://labs.google.com/ridefinder/images/mm_20_green.png"/>
+							 url="images/mm_20_green.png"/>
 		<h:outputText id="unavcosimplexMapKeyYellow" 
 						  escape="false"
 						  value="Selected Station:"/>
 		<h:graphicImage id="unavcosimplexKeyYellowPin"
-							 value="http://labs.google.com/ridefinder/images/mm_20_yellow.png"/>
+							 url="images/mm_20_yellow.png"/>
 		<h:outputText id="unavcosimplexMapKeyRed" 
 						  escape="false"
 						  value="Imported Station:"/>
 		<h:graphicImage id="unavcosimplexKeyRedPin"
-							 value="http://labs.google.com/ridefinder/images/mm_20_red.png"/>
+							 url="images/mm_20_red.png"/>
 	 </h:panelGrid>
   </h:panelGrid>
 </h:form>
