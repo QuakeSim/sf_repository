@@ -21,6 +21,10 @@ import WebFlowClient.ViscoViz.MyVTKServicePortType;
 import org.servogrid.genericproject.GenericProjectBean;
 import org.servogrid.genericproject.FaultDBEntry;
 
+//Needed by log4j
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
+
 public class editProjectForm extends GenericProjectBean {
 	 
 	 String obsvTextArea="";
@@ -52,7 +56,10 @@ public class editProjectForm extends GenericProjectBean {
 	 String mapFaultName;	 
 
 	 String faultName = "newfault";
-	 
+
+	 //Create the logger.
+	 private static Logger logger;
+
 	 public String getFaultName() {
 		return faultName;
 	 }
@@ -86,8 +93,12 @@ public class editProjectForm extends GenericProjectBean {
 
 	 public editProjectForm(String selectdbURL) {
 		  super();
+		  //Set up logging
+		  logger=Logger.getLogger("editProjectForm.class");
+		  //		  logger.setLevel(Level.DEBUG);
+		  
 		  this.selectdbURL=selectdbURL;
-		  System.out.println("editProjectForm Created");
+		  logger.debug("editProjectForm Created");
 		  df = new DecimalFormat(".###");
 	 }
 	 
@@ -137,22 +148,22 @@ public class editProjectForm extends GenericProjectBean {
 		}
 
 		else if (projectSelectionCode.equals("ShowGPSObsv")) {
-			 System.out.println("Showing GPS Map");
+			 logger.debug("Showing GPS Map");
 			 renderGPSStationMap=!renderGPSStationMap;
 		}
 		
 		else if (projectSelectionCode.equals("ShowFaultMap")) {
-			 System.out.println("Showing Fault Map");
+			 logger.debug("Showing Fault Map");
 			 renderFaultMap=!renderFaultMap;
 		}
 
 		else if (projectSelectionCode.equals("ShowDrawingMap")) {
-			 System.out.println("Showing Drawing Map");
+			 logger.debug("Showing Drawing Map");
 			 renderDrawingMap=!renderDrawingMap;
 		}
 
 		else if (projectSelectionCode.equals("ShowUnavcoGPSObsv")) {
-			 System.out.println("Showing Unavco GPS Map");
+			 logger.debug("Showing Unavco GPS Map");
 			 renderUnavcoGPSStationMap=!renderUnavcoGPSStationMap;
 		}
 		
@@ -301,7 +312,7 @@ public class editProjectForm extends GenericProjectBean {
 	public void createFaultFromMap() {
 		
 		Fault tmp_fault = new Fault();
-		System.out.println ("[createFaultFromMap] started");
+		logger.debug ("[createFaultFromMap] started");
 		
 		double dip = 0;
 		double depth = 0;
@@ -346,7 +357,7 @@ public class editProjectForm extends GenericProjectBean {
 		//The project origin is the lower left lat/lon of the first fault.
 		//If any of these conditions hold, we need to reset.
 		
-		System.out.println("Check Project Origin: "
+		logger.debug("Check Project Origin: "
 								+currentProject.getOrigin_lat()
 								+currentProject.getOrigin_lon());
 		
@@ -358,17 +369,17 @@ public class editProjectForm extends GenericProjectBean {
 		double projectOriginLat=currentProject.getOrigin_lat();
 		double projectOriginLon=currentProject.getOrigin_lon();
 
-		System.out.println("Confirm Project Origin: "
+		logger.debug("Confirm Project Origin: "
 								+currentProject.getOrigin_lat()
 								+currentProject.getOrigin_lon());
 					
 		//The following should be done in any case.  If the origin was just (re)set above,
 		//we will get a harmless (0,0);
-		System.out.println("lonStart : " + lonStart);
-		System.out.println("latStart : " + latStart);
+		logger.debug("lonStart : " + lonStart);
+		logger.debug("latStart : " + latStart);
 		double x1=(lonStart-projectOriginLon)*factor(projectOriginLon,projectOriginLat);
 		double y1=(latStart-projectOriginLat)*111.32;
-		System.out.println("Fault origin: "+x1+" "+y1);
+		logger.debug("Fault origin: "+x1+" "+y1);
 		tmp_fault.setFaultLocationX(df.format(x1));
 		tmp_fault.setFaultLocationY(df.format(y1));
 		
@@ -384,7 +395,7 @@ public class editProjectForm extends GenericProjectBean {
 
 		Fault tmp_fault = new Fault();
 
-		System.out.println ("[QueryFaultFromDB] faultname : " + faultname);
+		logger.debug ("[QueryFaultFromDB] faultname : " + faultname);
 
 		String theFault = faultname;	    
 
@@ -440,7 +451,7 @@ public class editProjectForm extends GenericProjectBean {
 			//The project origin is the lower left lat/lon of the first fault.
 			//If any of these conditions hold, we need to reset.
 			
-			System.out.println("Check Project Origin: "
+			logger.debug("Check Project Origin: "
 									+currentProject.getOrigin_lat()
 									+currentProject.getOrigin_lon());
 			
@@ -452,17 +463,17 @@ public class editProjectForm extends GenericProjectBean {
 			double projectOriginLat=currentProject.getOrigin_lat();
 			double projectOriginLon=currentProject.getOrigin_lon();
 
-			System.out.println("Confirm Project Origin: "
+			logger.debug("Confirm Project Origin: "
 									+currentProject.getOrigin_lat()
 									+currentProject.getOrigin_lon());
 						
 			//The following should be done in any case.  If the origin was just (re)set above,
 			//we will get a harmless (0,0);
-			System.out.println("lonStart : " + lonStart);
-			System.out.println("latStart : " + latStart);
+			logger.debug("lonStart : " + lonStart);
+			logger.debug("latStart : " + latStart);
 			double x1=(lonStart-projectOriginLon)*factor(projectOriginLon,projectOriginLat);
 			double y1=(latStart-projectOriginLat)*111.32;
-			System.out.println("Fault origin: "+x1+" "+y1);
+			logger.debug("Fault origin: "+x1+" "+y1);
 			tmp_fault.setFaultLocationX(df.format(x1));
 			tmp_fault.setFaultLocationY(df.format(y1));
 			
@@ -736,12 +747,12 @@ public class editProjectForm extends GenericProjectBean {
     }
     
 	 public boolean getRenderDrawingMap() {
-		  System.out.println("Getting drawing map");
+		  logger.debug("Getting drawing map");
 		  return this.renderDrawingMap;
 	 }
 	 
 	 public void setRenderDrawingMap(boolean renderDrawingMap) {
-		  System.out.println("Setting drawing map");
+		  logger.debug("Setting drawing map");
 		  this.renderDrawingMap=renderDrawingMap;
 	 }
 
@@ -849,18 +860,18 @@ public class editProjectForm extends GenericProjectBean {
 	 public void toggleSetFaultFromMap(ActionEvent ev) throws Exception {
 		  renderFaultMap=false;
 		  try {
-				System.out.println("Adding fault from map");
+				logger.debug("Adding fault from map");
 				
 				initEditFormsSelection();
 				
 				String dbQuery=getMapFaultName();
-				System.out.println("DB qeury:"+dbQuery);
+				logger.debug("DB qeury:"+dbQuery);
 				currentFault=QueryFaultFromDB(dbQuery);
 				
 				renderCreateNewFaultForm = true;
 		  }
 		  catch (Exception ex){
-				System.out.println("Map fault selection error.");
+				logger.debug("Map fault selection error.");
 				ex.printStackTrace();
 		  }
 	 } 

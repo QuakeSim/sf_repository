@@ -2254,7 +2254,7 @@ function toggleBorder() {
 					  border="1">
 		<h:outputText id="unavcoclrlc093" escape="false"
 						  value="<b>Select Stations from Map:</b> Select the stations that you want to use as observation points. Then, fetch the values and add them to your project observation list."/>
-	 <h:panelGrid id="unavcomapsAndCrap" columns="3" columnClasses="alignTop,alignTop">
+	 <h:panelGrid id="unavcomapsAndCrap" columns="2" columnClasses="alignTop,alignTop">
 		<h:panelGroup id="unavcomapncrap1">
 		  <f:verbatim> 
 			 <div id="unavcomap_canvas" style="width: 850px; height: 700px"></div>
