@@ -2,27 +2,21 @@
 <h:inputHidden id="faultName" value="#{DislocBean2.mapFaultName}"/>
 <h:inputHidden id="faultlistsize" value="#{DislocBean2.myFaultsForProjectListsize}"/>
 
-
-  <h:panelGrid id="gridforbutton" columns="1" border="0" style="vertical-align:top;">
+<h:panelGrid id="gridforbutton" columns="1" border="0" style="vertical-align:top;">
     <f:verbatim> Click the button below to get chosen fault params </f:verbatim>
     <h:commandButton id="queryDBFromMap" value="Get Fault Params" actionListener="#{DislocBean2.toggleSetFaultFromMap}"/> 
   </h:panelGrid>
   <f:verbatim>
-    <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css">
-    <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/jquery.treeview.css">
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
-    <script type="text/javascript" src="@host.base.url@@artifactId@/lib/jquery.cookie.js"></script>
-    <script type="text/javascript" src="@host.base.url@@artifactId@/jquery.treeview.js"></script>
     <script type="text/javascript" src="@host.base.url@@artifactId@/demo.js"></script>
     <script type="text/javascript" src="@host.base.url@@artifactId@/egeoxml.js"></script>
     <div style="clear:both"></div>
 
     <h:panelGrid id="faultMapsideGrid" columns="2" border="1">
       <f:verbatim>
-	  <div id="faultMapside" style="width: 200px; height: 400px; overflow:auto;"></div>
+	  <div id="faultMapside" style="width: 200px; height: 600px; overflow:auto;"></div>
       </f:verbatim>      
       <f:verbatim>
-	<div id="faultMap" style="width: 600px; height: 400px;"></div>
+	<div id="faultMap" style="width: 800px; height: 600px;"></div>
 	</f:verbatim> 
     </h:panelGrid>
   </f:verbatim>
@@ -91,7 +85,7 @@
 
 	// The gridsphere container doesn't work with urls. That should be solved
 	// var kmllist = ["@host.base.url@@artifactId@/geo_000520-001216-sim_HDR_4rlks.unw.kml","@host.base.url@@artifactId@/QuakeTables_CGS_1996.kml","@host.base.url@@artifactId@/QuakeTables_CGS_2002.kml"];
-	var kmllist = ["geo_000520-001216-sim_HDR_4rlks.unw.kml","QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml"];	
+	var kmllist = ["QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml"];	
 	
 	exmlFMap = new EGeoXml("exmlFMap", faultMap, kmllist, {sidebarfn:myside,nozoom:true,sidebarid:"faultMapside",parentformofsidebarid:"faultKMLSelectorForm",clickpolyobjfn:clickpolyobj,iwwidth:200});       
 	exmlFMap.parse();
@@ -199,8 +193,6 @@ function togglefaultdrawing() {
 	}
 
 	else {
-	  
-
 	  var p = "UpdateSelectFaultsForm:dflelerh966_"+prefix[1];
 	  var n;	  
 	  var html = "<div style='font-weight: bold; font-size: medium; margin-bottom: 0em;'>"+document.getElementById(p+":dflelerklh968").value+"</div>"
@@ -251,7 +243,6 @@ function togglefaultdrawing() {
 	  faultMap.addOverlay(flistpolyline[prefix[1]]);
 	}
   }
-
 
 function initialFaultdrawing() {
 

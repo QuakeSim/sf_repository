@@ -1,3 +1,23 @@
+.alignTop { 
+	 vertical-align:top; 
+} 
+
+.h2 { 
+	 font-family: Arial, sans-serif; 
+	 font-size: 18pt; 
+	 font-weight: bold; 
+	 margin-top:10px;
+	 margin-bottom: 10px;
+} 
+
+.h3 {
+	 font-family: Arial, sans-serif;
+	 font-size: 12pt;
+	 font-weight: bold;
+	 margin-top: 10px;
+	 margin-bottom: 10px;
+}
+
 .componentstableh {
 
   width: 100px;

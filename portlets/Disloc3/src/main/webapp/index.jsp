@@ -13,7 +13,7 @@
 	if (session.getAttribute("openid")==null) {
 %>
 <form method="POST" action="consumer_redirect.jsp">
-<strong><br>QuakeSim2 OpenID login test page:<br><br>
+<strong><br>QuakeSim2 OpenID login page:<br><br>
 </strong>
 <input type="hidden" name="openid" value="https://www.google.com/accounts/o8/id" size="60"/><br>
 <input type="submit" value="log in into google"/>

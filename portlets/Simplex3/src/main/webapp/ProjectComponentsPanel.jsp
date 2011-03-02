@@ -1,5 +1,6 @@
 <h:panelGrid id="ProjectComponentList" 
-				 rendered="#{!empty SimplexBean.myFaultEntryForProjectList || !empty SimplexBean.myObservationsForProjectList}"
+				 rendered="#{!empty SimplexBean.myFaultEntryForProjectList 
+							  || !empty SimplexBean.myObservationsForProjectList}"
 				 columns="1" 
 				 border="0">
   <h:panelGroup id="dflelerkljk161">
@@ -29,7 +30,9 @@
 							  var="myentry31">
 				<h:column>
 				  <f:facet name="header">
-					 <h:outputText id="dflelerh967" escape="false" value="</b>Name</b>" />
+					 <h:outputText id="dflelerh967" escape="false" 
+										style="font-weight:bold"
+										value="Name" />
 				  </f:facet>
 				  <h:panelGrid  id="spxpcp5" columns="2" cellpadding="0" cellspacing="0">
 					 <h:inputText id="dflelerklh968" 
@@ -48,7 +51,7 @@
 				  <f:facet name="header">
 					 <h:outputText id="lkdrh119" value="Location X" />
 				  </f:facet>
-				  <h:panelGrid  id="spxpcp6"columns="3" cellpadding="0" cellspacing="0">
+				  <h:panelGrid  id="spxpcp6" columns="3" cellpadding="0" cellspacing="0">
 					 <h:inputText id="FaultLocationX2" style="text-align:right;width:60px"
 									  value="#{myentry31.faultLocationX}" required="true" />
 					 <h:message id="lkdrh1182" for="FaultLocationX2" showDetail="true"
@@ -63,7 +66,7 @@
 					 <h:outputText id="lkdrqh1183" value="Location Y" />
 				  </f:facet>
 				  
-				  <h:panelGrid  id="spxpcp7"columns="3" cellpadding="0" cellspacing="0">
+				  <h:panelGrid  id="spxpcp7" columns="3" cellpadding="0" cellspacing="0">
 					 <h:inputText id="FaultLocationY2" style="text-align:right;width:60px" 
 									  value="#{myentry31.faultLocationY}"
 									  required="true" />
@@ -78,7 +81,7 @@
 				  <f:facet name="header">
 					 <h:outputText id="lkdrqh1186" value="Length" />
 				  </f:facet>
-				  <h:panelGrid  id="spxpcp8"columns="3" cellpadding="0" cellspacing="0">
+				  <h:panelGrid  id="spxpcp8" columns="3" cellpadding="0" cellspacing="0">
 					 <h:inputText id="FaultLength2" style="text-align:right;width:60px" 
 									  value="#{myentry31.faultLength}"
 									  required="true" />
@@ -188,7 +191,7 @@
 				
 				<h:column>
 				  <f:facet name="header">
-					 <h:outputText id="dflelerkljj8" value="Fault Lon Starts(optional)" />
+					 <h:outputText id="dflelerkljj8" value="Fault Lon Starts (optional)" />
 				  </f:facet>
 				  <h:panelGrid id="spxpcp15" columns="1" cellpadding="0" cellspacing="0" styleClass="centered">
 					 <h:inputText id="FaultLonStarts2" style="text-align:right;width:60px" 
@@ -198,7 +201,7 @@
 				
 				<h:column>
 				  <f:facet name="header">
-					 <h:outputText id="dflelerkljj11" value="Fault Lat Starts(optional)" />
+					 <h:outputText id="dflelerkljj11" value="Fault Lat Starts (optional)" />
 				  </f:facet>
 				  <h:panelGrid id="spxpcp16" columns="1" cellpadding="0" cellspacing="0" styleClass="centered">
 					 <f:facet name="header">								
@@ -210,7 +213,7 @@
 				
 				<h:column>
 				  <f:facet name="header">
-					 <h:outputText  id="dflelerkljj14" value="Fault Lon Ends(optional)" />
+					 <h:outputText  id="dflelerkljj14" value="Fault Lon Ends (optional)" />
 				  </f:facet>
 				  <h:panelGrid id="spxpcp17" columns="1" cellpadding="0" cellspacing="0" styleClass="centered">
 					 <h:inputText id="FaultLonEnds2" style="text-align:right;width:60px" 
@@ -220,7 +223,7 @@
 				
 				<h:column>
 				  <f:facet name="header">
-					 <h:outputText id="dflelerkljj17" value="Fault Lat Ends(optional)" />
+					 <h:outputText id="dflelerkljj17" value="Fault Lat Ends (optional)" />
 				  </f:facet>
 				  <h:panelGrid id="spxpcp18" columns="1" cellpadding="0" cellspacing="0" styleClass="centered">
 					 <h:inputText id="FaultLatEnds2" style="text-align:right;width:60px" 
@@ -235,7 +238,8 @@
 							  id="dflelegq24" 
 							  headerClass="componentstableh2" 
 							  columnClasses="componentstablec"											  
-							  value="#{SimplexBean.myFaultEntryForProjectList}" var="myentry3">
+							  value="#{SimplexBean.myFaultEntryForProjectList}" 
+							  var="myentry3">
 				<h:column>
 				  <f:facet name="header">
 					 <h:outputText id="dflelerkljk454" escape="false" value="<b>Update</b>" />
@@ -385,8 +389,10 @@
 				
 				<h:column>
 				  <f:facet name="header">
-					 <h:outputText id="dflelerkljk954" escape="false" 
-										value="<b>Update</b>" />
+					 <h:outputText id="dflelerkljk954" 
+										style="font:bold"
+										escape="false" 
+										value="Update" />
 				  </f:facet>
 				  
 				  <h:panelGrid id="spxpcp31" columns="2" cellpadding="0" cellspacing="0" styleClass="centered">
@@ -397,8 +403,10 @@
 				
 				<h:column>
 				  <f:facet name="header">
-					 <h:outputText id="dflelerkljk956" escape="false" 
-										value="<b>Remove</b>" />
+					 <h:outputText id="dflelerkljk956" 
+										style="font:bold"
+										escape="false" 
+										value="Remove" />
 				  </f:facet>
 				  
 				  <h:panelGrid id="spxpcp35" columns="2" cellpadding="0" cellspacing="0" styleClass="centered">

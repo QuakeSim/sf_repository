@@ -50,7 +50,7 @@
   nameArray[i+rssnewsize]=kdp.getEle("</b>", "<b>Monument Code:").trim().toLowerCase();
   // System.out.println(i + " " + nameArray[i+rssnewsize]);
   }
-  //]]
+  //]]>
   %>
   
   <f:verbatim>
@@ -510,7 +510,7 @@ alert("Updating the map");
 updatePolyline();
 		updateGPSinthebox();
 		}
-//]]
+//]]>
 	 </script>
   </f:verbatim>
   <%-- Visible part starts here  --%>

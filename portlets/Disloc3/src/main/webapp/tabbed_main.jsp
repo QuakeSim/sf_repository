@@ -42,21 +42,21 @@ function TapAcess(index){
 </ul>
 
 <div id="TabDiv1" name="TabDiv1" style="display:none">
-<iframe scrolling="yes" width=100% height="700" frameborder="1" src="@host.base.url@@artifactId@/LoadProject.faces?email=<%=session.getAttribute("email")%>"></iframe>
+<iframe scrolling="yes" width=100% height="1200" frameborder="1" src="@host.base.url@@artifactId@/LoadProject.faces?email=<%=session.getAttribute("email")%>"></iframe>
 </div>
 
 <div id="TabDiv2" name="TabDiv2" style="display:none">
-<iframe scrolling="yes" width=100% height="700" frameborder="1" src="@host.base.url@@artifactId@/FetchResults.faces?email=<%=session.getAttribute("email")%>"></iframe>
+<iframe scrolling="yes" width=100% height="1200" frameborder="1" src="@host.base.url@@artifactId@/FetchResults.faces?email=<%=session.getAttribute("email")%>"></iframe>
 </div>
 
 
 <div id="TabDiv3" name="TabDiv3" style="display:none">
-<iframe scrolling="yes" width=100% height="700" frameborder="1" src="@host.base.url@@artifactId@/LocateProject.faces?email=<%=session.getAttribute("email")%>"></iframe>
+<iframe scrolling="yes" width=100% height="1200" frameborder="1" src="@host.base.url@@artifactId@/LocateProject.faces?email=<%=session.getAttribute("email")%>"></iframe>
 </div>
 
 
 <div id="TabDiv" name="TabDiv" style="display:select">
-<iframe scrolling="yes" width=100% height="700" frameborder="1" src="@host.base.url@@artifactId@/LoadProject.faces?email=<%=session.getAttribute("email")%>"></iframe>
+<iframe scrolling="yes" width=100% height="1200" frameborder="1" src="@host.base.url@@artifactId@/LoadProject.faces?email=<%=session.getAttribute("email")%>"></iframe>
 </div>
 
 

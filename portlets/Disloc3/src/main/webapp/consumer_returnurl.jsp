@@ -1,30 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page session="true" %>
 <%@ page import="org.openid4java.discovery.Identifier, org.openid4java.discovery.DiscoveryInformation, org.openid4java.message.ax.FetchRequest, org.openid4java.message.ax.FetchResponse, org.openid4java.message.ax.AxMessage, org.openid4java.message.*, org.openid4java.OpenIDException, java.util.List, java.io.IOException, javax.servlet.http.HttpSession, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.openid4java.consumer.ConsumerManager, org.openid4java.consumer.InMemoryConsumerAssociationStore, org.openid4java.consumer.VerificationResult" %>
 
-<%
-    ConsumerManager manager=(ConsumerManager) pageContext.getAttribute("consumermanager", PageContext.APPLICATION_SCOPE);
-	
-try
-        {
-            // --- processing the authentication response
+<jsp:scriptlet>
+ConsumerManager manager=(ConsumerManager) pageContext.getAttribute("consumermanager", PageContext.APPLICATION_SCOPE);
 
-            // extract the parameters from the authentication response
-            // (which comes in as a HTTP request from the OpenID provider)
-            ParameterList responselist =
-                    new ParameterList(request.getParameterMap());
+try {
+// --- processing the authentication response
 
-            // retrieve the previously stored discovery information
-            DiscoveryInformation discovered =
-                    (DiscoveryInformation) session.getAttribute("openid-disco");
+// extract the parameters from the authentication response
+// (which comes in as a HTTP request from the OpenID provider)
+ParameterList responselist =
+new ParameterList(request.getParameterMap());
 
-	
-            // extract the receiving URL from the HTTP request
-            StringBuffer receivingURL = request.getRequestURL();
-            String queryString = request.getQueryString();
-            if (queryString != null && queryString.length() > 0)
-                receivingURL.append("?").append(request.getQueryString());
+// retrieve the previously stored discovery information
+DiscoveryInformation discovered =
+(DiscoveryInformation) session.getAttribute("openid-disco");
 
-            // verify the response; ConsumerManager needs to be the same
+
+// extract the receiving URL from the HTTP request
+StringBuffer receivingURL = request.getRequestURL();
+String queryString = request.getQueryString();
+if (queryString != null && queryString.length() > 0)
+receivingURL.append("?").append(request.getQueryString());
+
+// verify the response; ConsumerManager needs to be the same
             // (static) instance used to place the authentication request
             VerificationResult verification = manager.verify(
                     receivingURL.toString(),
@@ -64,17 +64,17 @@ try
             }
             else
             {
-%>
+				</jsp:scriptlet>
             Failed to login!
-<%
+<jsp:scriptlet>
             }
         }
         catch (OpenIDException e)
         {
-%>
+		  </jsp:scriptlet>
             Login error!
-<%
+<jsp:scriptlet>
             // present error to the user
         }
 
-%>
+</jsp:scriptlet>

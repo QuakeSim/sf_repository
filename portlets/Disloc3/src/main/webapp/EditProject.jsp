@@ -1,18 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" 
-	pageEncoding="ISO-8859-1"%> 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%> 
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%> 
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%> 
-
-
-
 <%@page import="java.util.*, cgl.sensorgrid.sopac.gps.GetStationsRSS,cgl.sensorgrid.gui.google.MapBean, java.io.*"%>
 <%@page import="cgl.quakesim.disloc.*"%>
-
 <jsp:useBean id="RSSBeanID" scope="session" class="cgl.sensorgrid.sopac.gps.GetStationsRSS"/>
-
 <jsp:useBean id="MapperID" scope="session" class="cgl.sensorgrid.gui.google.Mapper"/>
-<%
+
+<jsp:scriptlet>
 Vector networkNames = RSSBeanID.networkNames();
 
 //Vector stationsVec = RSSBeanID.getAllStationsVec();
@@ -23,37 +17,26 @@ String [] center_xy = RSSBeanID.getMapCenter();
 mapcenter_x = center_xy[0];
 mapcenter_y = center_xy[1];
 
-%>
+</jsp:scriptlet>
 
-<style> 
-	.alignTop { 
-		vertical-align:top; 
-	} 
-	.header2 { 
-		font-family: Arial, sans-serif; 
-		font-size: 18pt; 
-		font-weight: bold; 
-	} 
-
-</style> 
- 
- 
 <html> 
-<head> 
-<link rel="stylesheet" type="text/css" 
-	href='<%= request.getContextPath() + "/stylesheet.css" %>'> 
- 
-<link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css">
+  <head> 
+	 <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css"/>
+    <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/jquery.treeview.css"/>
+	 <!-- These are needed by the fault map panel and are repeated there.  Remove redundancies.-->
+	 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+	 <script type="text/javascript" src="@host.base.url@@artifactId@/lib/jquery.cookie.js"></script>
+	 <script type="text/javascript" src="@host.base.url@@artifactId@/jquery.treeview.js"></script>
 
-<title>Edit Project</title>
-<!--Google and related APIs are imported here -->
-
-<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>      
-</head> 
+	 <!--Google and related APIs are imported here -->
+	 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" 
+				type="text/javascript"></script>
+  </head> 
 
 <body onload="myInit()" onunload="GUnload()">
 
 <script type="text/javascript">
+  //<![CDATA[
 function myInit() {
   	$("#browser").treeview({
 		animated:"normal",
@@ -409,36 +392,39 @@ function getScrolling() {
     		}
     		return x + "," + y;
 }
- 
+//]]>
 </script> 
 
 <f:view>
-	<h:outputText id="epjf1" styleClass="header2" value="Project Input"/> 
-	<h:outputText id="message" value=""/>
-	<h:inputHidden id="faultKmlUrl" value="#{DislocBean2.faultKmlUrl}"/>
-	<h:inputHidden id="obsvKmlUrl" value="#{DislocBean2.obsvKmlUrl}"/>
-        <h:outputText id="epjf1_text1" escape="false"
-		value="<p>Create your geometry out of observation points and faults.<br/>The project origin will be the starting lat/lon of the first fault.</p>"/>
-	<h:panelGrid id="EditProject"
-		columnClasses="alignTop,alignTop"
-		columns="2" border="1">
-
-   <%@include file="DashboardPanel.jsp" %>
-   <%@include file="ObsvStyle.jsp" %>
-   <%@include file="ObservationParamsPanel.jsp" %>
-   <%@include file="FaultParamPanel.jsp" %>
-   <%@include file="FaultSearchOptionPanel.jsp" %>
-   <%@include file="SearchFaultNamePanel.jsp" %>
-   <%@include file="SearchFaultLatLonPanel.jsp" %>
-   <%@include file="SearchFaultAuthorPanel.jsp" %>
-   <%@include file="FaultDisplaySearchResultsPanel.jsp" %>
-   <%@include file="ScatterMap.jsp" %>
-   <%@include file="FaultMapPanelFrame.jsp"%>
-
-	</h:panelGrid>
-   <%@include file="ProjectComponentPanel.jsp" %>
-   <%@include file="footer.jsp" %>
-
+  <h:outputText id="epjf1" styleClass="h2" value="Project Component Manager"/> 
+  <h:outputText id="message" value=""/>
+  <h:inputHidden id="faultKmlUrl" value="#{DislocBean2.faultKmlUrl}"/>
+  <h:inputHidden id="obsvKmlUrl" value="#{DislocBean2.obsvKmlUrl}"/>
+  <h:outputText id="epjf1_text1" 
+					 escape="false"
+					 value="Create your geometry out of observation points and faults. 
+							  The project origin will be the starting lat/lon of the first fault."/>
+  <h:panelGrid id="EditProject"
+					columnClasses="alignTop"
+					columns="1" 
+					border="0">
+	 
+	 <%@include file="DashboardPanel.jsp" %>
+	 <%@include file="ObsvStyle.jsp" %>
+	 <%@include file="ObservationParamsPanel.jsp" %>
+	 <%@include file="FaultParamPanel.jsp" %>
+	 <%@include file="FaultSearchOptionPanel.jsp" %>
+	 <%@include file="SearchFaultNamePanel.jsp" %>
+	 <%@include file="SearchFaultLatLonPanel.jsp" %>
+	 <%@include file="SearchFaultAuthorPanel.jsp" %>
+	 <%@include file="FaultDisplaySearchResultsPanel.jsp" %>
+	 <%@include file="ScatterMap.jsp" %>
+	 <%@include file="FaultMapPanelFrame.jsp"%>
+	 
+  </h:panelGrid>
+  <%@include file="ProjectComponentPanel.jsp" %>
+  <%@include file="footer.jsp" %>
+  
 </f:view>
 
 </body>

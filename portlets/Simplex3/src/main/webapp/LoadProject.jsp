@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <html>
@@ -49,15 +49,15 @@
 	 <h:messages id="simplexMessagesLoadProject" 
 					 showDetail="true"
 					 showSummary="true"
-					 errorStyle="color: red"/>
-	 
+					 errorStyle="color: red"/>	 
 	 
 	 <h:outputText  id="lkdjf2" styleClass="header2" value="Project Archive"/>
 	 <h:outputText  id="lkdjf3"
 						 escape="false"
-						 value="<br/>You don't have any archived projects. Use the form below to create a new one."
-	 rendered="#{empty SimplexBean.myProjectNameList}"/>
-	 
+						 value="You don't have any archived projects. Use the 
+								  form below to create a new one."
+						 rendered="#{empty SimplexBean.myProjectNameList}"/>
+
 	 <h:panelGrid id="lkdjf4"
 					  columnClasses="alignTop,alignTop,alignTop"
 					  columns="3" 

@@ -7,24 +7,24 @@
 					 value="You must add at least one observation point and one fault 
 							  before you can run the Simplex Simulation."/>
   
-  <h:form id="selectproj">  
+  <h:form id="selectprojSimplex">  
 	 <%-- This is the first row --%>
 	 <h:panelGrid id="simplexDashboardMenu" 
 					  cellspacing="3"
 					  columns="4" 
 					  border="1">
-		<h:outputFormat id="lkdrq4" escape="false"
+		<h:outputText id="lkdrq4" escape="false"
 							 value="<b>Project Name:</b> #{SimplexBean.projectName}" />
-		<h:outputFormat id="lkdrq5" escape="false"
+		<h:outputText id="lkdrq5" escape="false"
 							 value="<b>Starting Temperature:</b> #{SimplexBean.currentProjectEntry.startTemp}"/>
-		<h:outputFormat id="lkdrq6" escape="false"
+		<h:outputText id="lkdrq6" escape="false"
 							 value="<b>Maximum Iterations:</b> #{SimplexBean.currentProjectEntry.maxIters}"/>
 		<h:outputText id="lkj3034f" escape="false"
 						  value="<b>Project Lat/Lon Origin</b>: (#{SimplexBean.currentProjectEntry.origin_lat}, #{SimplexBean.currentProjectEntry.origin_lon})"/>
 	 </h:panelGrid>
 	 
 	 <%-- This is the second row --%>
-	 <h:selectOneMenu id="subscriptions"
+	 <h:selectOneMenu id="SimplexSelectionMenu"
 							title="Use this drop down to add faults and observation points to 
 									 your project."
 							value="#{SimplexBean.currentEditProjectForm.projectSelectionCode}">

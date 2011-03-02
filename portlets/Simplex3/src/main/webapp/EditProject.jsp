@@ -10,84 +10,84 @@
 <%
 //Code below probably belongs in GPSMapPanel (removed)
 %>
-
-<!-- These styles should be in a separate stylesheet file -->
-<style type="text/css">
-.alignTop {
-	vertical-align: top;
-}
-
-.header2 {
-	font-family: Arial, sans-serif;
-	font-size: 18pt;
-	font-weight: bold;
-}
-</style>
-
-<head>
-<link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css">
-
-<title>Edit Project</title>
-    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>
-    <!-- These are needed by the fault map panel and are repeated there.  Remove redundancies.-->
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
-    <script type="text/javascript" src="@host.base.url@@artifactId@/lib/jquery.cookie.js"></script>
-    <script type="text/javascript" src="@host.base.url@@artifactId@/jquery.treeview.js"></script>
-</head>
-
-<body onload="myInit()" onunload="GUnload()">
-  <script type="text/javascript">
-	 //<![CDATA[
-
-	 //Any "onload" operations for subcomponent includes need to go here.
-	 function myInit() {
-	 //Script below initializes the tree view for the FaultMapPanelFrame sidebar.
-  	$("#browser").treeview({
-	animated:"normal",
-	persist: "cookie"
-	});
-	
-	//This initializes the UNAVCO map
-	initializeUnavcoMap();
-	}
-	//]]
-</script>
-<script type="text/javascript">
-  //<![CDATA[
-  //--------------------------------------------------
-  //Following two math functions should probably go into a separate script file.
-  //--------------------------------------------------
-  //This is used to calculate the length and strike angle.
-  function calculatelength(){
-  var lonStart = document.getElementById("Faultform:FaultLonStarts");
-  var lonEnd = document.getElementById("Faultform:FaultLonEnds");
-  var latStart = document.getElementById("Faultform:FaultLatStarts");
-  var latEnd = document.getElementById("Faultform:FaultLatEnds");
+<html>
+  <!-- These styles should be in a separate stylesheet file -->
+  <style type="text/css">
+	 .alignTop {
+	 vertical-align: top;
+	 }
+	 
+	 .header2 {
+	 font-family: Arial, sans-serif;
+	 font-size: 18pt;
+	 font-weight: bold;
+	 }
+  </style>
   
-  var length = document.getElementById("Faultform:FaultLength");
-  var strike = document.getElementById("Faultform:FaultStrikeAngle");
+  <head>
+	 <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css"/>
+	 
+	 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" 
+				type="text/javascript"></script>
+	 <!-- These are needed by the fault map panel and are repeated there.  Remove redundancies.-->
+	 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+	 <script type="text/javascript" src="@host.base.url@@artifactId@/lib/jquery.cookie.js"></script>
+	 <script type="text/javascript" src="@host.base.url@@artifactId@/jquery.treeview.js"></script>
+  </head>
   
-  if ((latStart.value.length == 0) || (latStart.value == null)) { alert("Fault Origin Latitude is empty!"); }
-  else if ((lonStart.value.length == 0) || (lonStart.value == null)) { alert("Fault Origin Longititude is empty!"); }
-  else if ((latEnd.value.length == 0) || (latEnd.value == null)) { alert("Fault End Latitude is empty!"); }
-  else if ((lonEnd.value.length == 0) || (lonEnd.value == null)) { alert("Fault End Longitude is empty!"); }
-  else {
-  var d2r = Math.acos(-1.0) / 180.0;
-  var flatten=1.0/298.247;
-  //var theFactor = d2r* Math.cos(d2r * latStart.value)
-  //        * 6378.139 * (1.0 - Math.sin(d2r * lonStart.value) * Math.sin(d2r * lonStart.value) * flatten);
-  var theFactor = d2r* Math.cos(d2r * latStart.value) * 6378.139 * (1.0 - Math.sin(d2r * latStart.value) * Math.sin(d2r * latStart.value) * flatten);
-  
-  var x=(lonEnd.value-lonStart.value)*theFactor;
-  var y=(latEnd.value-latStart.value)*111.32;
-  var lengthVal=Math.sqrt(x*x+y*y);
-  length.value=Math.round(lengthVal*1000)/1000;
-  
-  var strikeValue=Math.atan2(x,y)/d2r;
-  if (strikeValue < 0) { strikeVaule = strikeValue + 360; }
-  strike.value=Math.round(strikeValue*1000)/1000;
-  }
-  }
+  <body onload="myInit()" onunload="GUnload()">
+	 <script type="text/javascript">
+		//<![CDATA[
+		
+		//Any "onload" operations for subcomponent includes need to go here.
+		function myInit() {
+		//Script below initializes the tree view for the FaultMapPanelFrame sidebar.
+		$("#browser").treeview({
+		animated:"normal",
+		persist: "cookie"
+		});
+		
+		//This initializes the UNAVCO map
+		initializeUnavcoMap();
+		}
+		//]]>
+	 </script>
+	 <script type="text/javascript">
+		//<![CDATA[
+		//--------------------------------------------------
+		//Following two math functions should probably go into a separate script file.
+		//--------------------------------------------------
+		//This is used to calculate the length and strike angle.
+		function calculatelength(){
+		var lonStart = document.getElementById("Faultform:FaultLonStarts");
+		var lonEnd = document.getElementById("Faultform:FaultLonEnds");
+		var latStart = document.getElementById("Faultform:FaultLatStarts");
+		var latEnd = document.getElementById("Faultform:FaultLatEnds");
+		
+		var length = document.getElementById("Faultform:FaultLength");
+		var strike = document.getElementById("Faultform:FaultStrikeAngle");
+		
+		if ((latStart.value.length == 0) || (latStart.value == null)) { alert("Fault Origin Latitude is empty!"); }
+		else if ((lonStart.value.length == 0) || (lonStart.value == null)) { alert("Fault Origin Longititude is empty!"); }
+		else if ((latEnd.value.length == 0) || (latEnd.value == null)) { alert("Fault End Latitude is empty!"); }
+		else if ((lonEnd.value.length == 0) || (lonEnd.value == null)) { alert("Fault End Longitude is empty!"); }
+		else {
+		var d2r = Math.acos(-1.0) / 180.0;
+		var flatten=1.0/298.247;
+		//var theFactor = d2r* Math.cos(d2r * latStart.value)
+		//        * 6378.139 * (1.0 - Math.sin(d2r * lonStart.value) * Math.sin(d2r * lonStart.value) * flatten);
+		var theFactor = d2r* Math.cos(d2r * latStart.value) * 6378.139 * (1.0 - Math.sin(d2r * latStart.value) * Math.sin(d2r * latStart.value) * flatten);
+		
+		var x=(lonEnd.value-lonStart.value)*theFactor;
+		var y=(latEnd.value-latStart.value)*111.32;
+		var lengthVal=Math.sqrt(x*x+y*y);
+		length.value=Math.round(lengthVal*1000)/1000;
+		
+		var strikeValue=Math.atan2(x,y)/d2r;
+		if (strikeValue < 0) { strikeVaule = strikeValue + 360; }
+		strike.value=Math.round(strikeValue*1000)/1000;
+		}
+		}
   
   //This calculates the endpoint, given other parameters.
   function calculateendpoint(){
@@ -227,7 +227,7 @@
 						  value="You must provide at least one fault and one observation point before you can run Simplex" />
 		<%/* This is the main grid container */%>
 		<h:panelGrid id="EditProject" 
-						 columnClasses="alignTop,alignTop" 
+						 columnClasses="alignTop" 
 						 columns="1" 
 						 border="0">
 		  <%@include file="DashboardPanel.jsp"%>
