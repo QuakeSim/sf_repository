@@ -46,8 +46,8 @@
 						showSummary="true"
 						errorStyle="color: red"/>
 		
-		<h:outputText id="lptv1" styleClass="h2" value="Project Archive"/>
-		
+	   <h:outputText id="dislocLoadProjectTitle" styleClass="h2"
+						  value="Project Archive Management"/>
 		<h:outputText id="lptv11" value="You don't have any archived projects."
 						  rendered="#{empty DislocBean2.myProjectNameList}"/>
 
@@ -55,7 +55,7 @@
 						 columnClasses="alignTop,alignTop,alignTop" 
 						 columns="3"  
 						 rendered="#{!(empty DislocBean2.myProjectNameList)}"		  
-						 border="1"> 
+						 border="1">
 		  <h:form id="dislocLoadProject">
 			 <h:panelGrid columns="1" border="0"> 
 				<h:outputText id="lptv21" escape="false" 
@@ -64,6 +64,7 @@
 				<h:outputText id="lptv22" escape="false" 
 								  value="Please select from one of the previous projects." /> 
 				<h:selectManyCheckbox id="projectlistforload"  
+											 required="true"
 											 value="#{DislocBean2.selectProjectsArray}" 		
 											 onchange="dataTableSelectOneRadio(this)"
 											 onclick="dataTableSelectOneRadio(this)"
@@ -74,7 +75,7 @@
 									  action="#{DislocBean2.toggleSelectProject}" /> 
 			 </h:panelGrid> 
 		  </h:form> 
-		  
+
 		  <h:form id="dislocCopyProject">
 			 <h:panelGrid columns="1" border="0">
 			  <h:outputText id="dislocCopyProjectTitle"
@@ -105,8 +106,9 @@
 			  <h:commandButton value="Copy"
 									 action="#{DislocBean2.toggleCopyProject}" />
 			</h:panelGrid>
+
 		 </h:form>
-		 
+
 		 <h:form id="dislocDeleteProject"> 
 			<h:panelGrid columns="1"  
 							 border="0"> 
@@ -118,6 +120,7 @@
 								  id="dislocDeleteProjectText"
 								  value="Please select from one of the previous projects." /> 
 				<h:selectManyCheckbox id="projectfordelete" 
+											 required="true"
 											 value="#{DislocBean2.deleteProjectsArray}" 
 											 onchange="dataTableSelectOneRadio(this)"
 											 onclick="dataTableSelectOneRadio(this)"
@@ -128,31 +131,31 @@
 									  action="#{DislocBean2.toggleDeleteProject}" /> 
 			 </h:panelGrid> 
 		  </h:form> 
-		  
 		</h:panelGrid> 
+     
+		<f:verbatim><p/></f:verbatim>
 		
 		<h:form id="dislocMakeNewProject"> 
-		  <h:outputText id="dislocNewProjectName"
-							 styleClass="h3"
-							 value="New Project Name"/>
-			 <h:panelGrid columns="2" border="1"> 
-				<h:outputText id="lpj_projectname" value="Project Name:" /> 
-				<h:panelGroup> 
-			  <h:inputText id="projectName" 
-								value="#{DislocBean2.projectName}" 
-								required="true" /> 
-			  <h:message for="projectName" showDetail="true" showSummary="true" 
-							 errorStyle="color: red" /> 
-				</h:panelGroup> 
-				
-			 </h:panelGrid> 
-			 <h:commandButton id="lpj_makeselection" value="Make Selection" 
-									action="#{DislocBean2.NewProjectThenEditProject}" /> 
+		  <f:verbatim>
+			 <fieldset><legend class="portlet-form-label">Create New Project</legend>
+		  </f:verbatim>	 
+		  <h:outputText id="dislocCNPInstructions"
+							 value="To create a new, blank project, type in a name and hit enter."/>
+		  
+		  <h:panelGrid columns="3" border="0"> 
+			 <h:outputText id="lpj_projectname" value="Project Name:" /> 
+			 <h:inputText id="projectName" 
+							  value="#{DislocBean2.projectName}" 
+							  required="true" /> 
 			 
-		  </h:form> 
-
-   <%@ include file="footer.jsp" %> 
- 
-</f:view> 
-</body> 
+			 <h:commandButton id="lpj_makeselection" value="Create Project" 
+									action="#{DislocBean2.NewProjectThenEditProject}" /> 
+		  </h:panelGrid> 
+		  <f:verbatim></fieldset></f:verbatim>
+		</h:form> 
+		
+		<%@ include file="footer.jsp" %> 
+		  
+		</f:view> 
+	 </body> 
 </html> 

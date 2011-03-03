@@ -4,9 +4,20 @@
 				 border="0">
   
   <h:panelGroup id="pg1"> 
-	 <h:form id="selectprojDisloc">
-		<h:panelGrid id="projectMetadataDisloc"
-						 border="1"
+	 <%-- Open the fieldset.  This will not be valid xml, since we must close it below. --%>
+	 <f:verbatim>
+		<fieldset>
+		  <legend class="portlet-form-label"> Project Dashboard </legend>
+		</f:verbatim>
+
+	 <h:outputText id="epjf1_text1" 
+						escape="false"
+						value="Create your geometry out of observation points and faults. 
+								 The project origin will be the starting lat/lon of the first fault."/>
+	 
+		<h:form id="dislocDashboardMain">
+		  <h:panelGrid id="projectMetadataDisloc"
+						 border="0"
 						 cellspacing="3"
 						 cellpadding="3"
 						 columns="3">
@@ -49,10 +60,12 @@
 							  actionListener="#{DislocBean2.toggleProjectSelection}"> 
 		</h:commandButton> 
 	 </h:form> 
+
 	 
 	 <h:form id="RunDisloc" 
 				rendered="#{!(empty DislocBean2.myFaultEntryForProjectList) 
 							 && !(empty DislocBean2.myObsvEntryForProjectList)}" > 
+		<f:verbatim><hr/></f:verbatim>
 		<h:outputFormat escape="false"  
 							 id="stuff90"  
 							 value="Disloc is ready to run.  Click the button below to launch." /> 
@@ -60,6 +73,6 @@
 							  value="Run Disloc" 
 							  action="#{DislocBean2.runBlockingDislocJSF}" /> 
 	 </h:form>
+	 <f:verbatim></fieldset></f:verbatim>
   </h:panelGroup> 
-  
 </h:panelGrid>

@@ -396,14 +396,13 @@ function getScrolling() {
 </script> 
 
 <f:view>
-  <h:outputText id="epjf1" styleClass="h2" value="Project Component Manager"/> 
-  <h:outputText id="message" value=""/>
+  <h:messages id="dislocMessagesLoadProject" 
+				  showDetail="true"
+				  showSummary="true"
+				  errorStyle="color: red"/>
+  
   <h:inputHidden id="faultKmlUrl" value="#{DislocBean2.faultKmlUrl}"/>
   <h:inputHidden id="obsvKmlUrl" value="#{DislocBean2.obsvKmlUrl}"/>
-  <h:outputText id="epjf1_text1" 
-					 escape="false"
-					 value="Create your geometry out of observation points and faults. 
-							  The project origin will be the starting lat/lon of the first fault."/>
   <h:panelGrid id="EditProject"
 					columnClasses="alignTop"
 					columns="1" 

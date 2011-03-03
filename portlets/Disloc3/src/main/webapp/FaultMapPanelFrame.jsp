@@ -1,71 +1,84 @@
 <h:form id="faultKMLSelectorForm" rendered="#{DislocBean2.renderFaultMap}">
-<h:inputHidden id="faultName" value="#{DislocBean2.mapFaultName}"/>
-<h:inputHidden id="faultlistsize" value="#{DislocBean2.myFaultsForProjectListsize}"/>
-
-<h:panelGrid id="gridforbutton" columns="1" border="0" style="vertical-align:top;">
-    <f:verbatim> Click the button below to get chosen fault params </f:verbatim>
-    <h:commandButton id="queryDBFromMap" value="Get Fault Params" actionListener="#{DislocBean2.toggleSetFaultFromMap}"/> 
+  <h:inputHidden id="faultName" value="#{DislocBean2.mapFaultName}"/>
+  <h:inputHidden id="faultlistsize" value="#{DislocBean2.myFaultsForProjectListsize}"/>
+  <f:verbatim>
+	 <fieldset><legend class="portlet-form-label">Fault Map</legend>
+  </f:verbatim>
+  
+  <h:panelGrid id="gridforbutton" columns="1" border="0" style="vertical-align:top;">
+	 <f:verbatim> Click the button below to get chosen fault params </f:verbatim>
+	 <h:commandButton id="queryDBFromMap" 
+							value="Get Fault Params" 
+							actionListener="#{DislocBean2.toggleSetFaultFromMap}"/> 
   </h:panelGrid>
   <f:verbatim>
-    <script type="text/javascript" src="@host.base.url@@artifactId@/demo.js"></script>
-    <script type="text/javascript" src="@host.base.url@@artifactId@/egeoxml.js"></script>
-    <div style="clear:both"></div>
-
-    <h:panelGrid id="faultMapsideGrid" columns="2" border="1">
-      <f:verbatim>
-	  <div id="faultMapside" style="width: 200px; height: 600px; overflow:auto;"></div>
-      </f:verbatim>      
-      <f:verbatim>
-	<div id="faultMap" style="width: 800px; height: 600px;"></div>
-	</f:verbatim> 
-    </h:panelGrid>
+	 <script type="text/javascript" src="@host.base.url@@artifactId@/demo.js"></script>
+	 <script type="text/javascript" src="@host.base.url@@artifactId@/egeoxml.js"></script>
+	 <div style="clear:both"></div>
+	 
+	 <h:panelGrid id="faultMapsideGrid" columns="2" border="1">
+		<f:verbatim>
+		  <div id="faultMapside" style="width: 200px; height: 600px; overflow:auto;"></div>
+		</f:verbatim>      
+		<f:verbatim>
+		  <div id="faultMap" style="width: 800px; height: 600px;"></div>
+		</f:verbatim> 
+	 </h:panelGrid>
   </f:verbatim>
-
-<h:panelGroup id="dflel235231">
-  <h:outputText id="daflelerkl513" escape="false" value="Drawing a fault : "/>
-  <h:selectBooleanCheckbox id="dflab2" onclick="togglefaultdrawing()" value="#{DislocBean2.faultdrawing}"/>
-  <h:panelGrid columns="3" border="0">
-  <h:dataTable border="1" cellpadding="0" cellspacing="0" id="dflelerh93" headerClass="componentstableh"
-		value="#{DislocBean2}" var="myentry32">
-    <h:column>
-      <f:facet name="header">
-	<h:outputText id="nfa1" escape="false" value="<b>Name</b>" />
-      </f:facet>
-      <h:inputText id="faultnamet" style="text-align:right;width:60px" value="#{myentry32.faultName}" required="true" />								
-    </h:column>
-
-    <h:column>
-      <f:facet name="header">
-	<h:outputText id="nfa9" escape="false" value="<b>Lon Start</b>" />
-      </f:facet>
-      <h:inputText id="faultdrawLonStartst" value="#{myentry32.faultLonStart}" required="false" />
-    </h:column>
-
-    <h:column>
-      <f:facet name="header">
-	<h:outputText id="nfa7" escape="false" value="<b>Lat Start</b>" />
-      </f:facet>
-      <h:inputText id="faultdrawLatStartst" value="#{myentry32.faultLatStart}" required="false" />
-    </h:column>
-
-    <h:column>
-      <f:facet name="header">
-	<h:outputText id="nfa5" escape="false" value="<b>Lon End</b>" />
-      </f:facet>
-      <h:inputText id="faultdrawLonEndst" value="#{myentry32.faultLonEnd}" required="false" />
-    </h:column>
-    <h:column>
-      <f:facet name="header">
-	<h:outputText id="nfa3" escape="false" value="<b>Lat End</b>" />
-      </f:facet>
-      <h:inputText id="faultdrawLatEndst" value="#{myentry32.faultLatEnd}" required="false" />
-    </h:column>
-
-  </h:dataTable>
-</h:panelGrid>
-</h:panelGroup>
-<h:commandButton id="addfaultsd" value="Add a new fault" actionListener="#{DislocBean2.toggleDrawFaultFromMap}"/>
-
+  
+  <h:panelGroup id="dflel235231">
+	 <h:outputText id="daflelerkl513" escape="false" value="Drawing a fault : "/>
+	 <h:selectBooleanCheckbox id="dflab2" onclick="togglefaultdrawing()" value="#{DislocBean2.faultdrawing}"/>
+	 <h:panelGrid columns="3" border="0">
+		<h:dataTable border="1" 
+						 cellpadding="0" 
+						 cellspacing="0" 
+						 id="dflelerh93" 
+						 headerClass="componentstableh"
+						 value="#{DislocBean2}" var="myentry32">
+		  <h:column>
+			 <f:facet name="header">
+				<h:outputText id="nfa1" escape="false" value="<b>Name</b>" />
+			 </f:facet>
+			 <h:inputText id="faultnamet" 
+							  style="text-align:right;width:60px" 
+							  value="#{myentry32.faultName}" 
+							  required="true" />								
+		  </h:column>
+		  
+		  <h:column>
+			 <f:facet name="header">
+				<h:outputText id="nfa9" escape="false" value="<b>Lon Start</b>" />
+			 </f:facet>
+			 <h:inputText id="faultdrawLonStartst" value="#{myentry32.faultLonStart}" required="false" />
+		  </h:column>
+		  
+		  <h:column>
+			 <f:facet name="header">
+				<h:outputText id="nfa7" escape="false" value="<b>Lat Start</b>" />
+			 </f:facet>
+			 <h:inputText id="faultdrawLatStartst" value="#{myentry32.faultLatStart}" required="false" />
+		  </h:column>
+		  
+		  <h:column>
+			 <f:facet name="header">
+				<h:outputText id="nfa5" escape="false" value="<b>Lon End</b>" />
+			 </f:facet>
+			 <h:inputText id="faultdrawLonEndst" value="#{myentry32.faultLonEnd}" required="false" />
+		  </h:column>
+		  <h:column>
+			 <f:facet name="header">
+				<h:outputText id="nfa3" escape="false" value="<b>Lat End</b>" />
+			 </f:facet>
+			 <h:inputText id="faultdrawLatEndst" value="#{myentry32.faultLatEnd}" required="false" />
+		  </h:column>
+		  
+		</h:dataTable>
+	 </h:panelGrid>
+  </h:panelGroup>
+  <h:commandButton id="addfaultsd" 
+						 value="Add a new fault" 
+						 actionListener="#{DislocBean2.toggleDrawFaultFromMap}"/>
 
 <f:verbatim>
 
@@ -328,7 +341,7 @@ new GLatLng(marker_NE.getPoint().lat(), marker_NE.getPoint().lng())
 
 </script>
 </f:verbatim>
-
+<f:verbatim></fieldset></f:verbatim>			 
 </h:form>
 
 

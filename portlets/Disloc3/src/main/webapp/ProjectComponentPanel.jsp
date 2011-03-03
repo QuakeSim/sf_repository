@@ -4,13 +4,12 @@
 				 columns="1" 
 				 border="0">
   <h:panelGroup id="dislocFaultContainerPanel">
+	 <f:verbatim>
+		<fieldset><legend class="portlet-form-label">Fault Components</legend>
+	 </f:verbatim>	 
   <h:form id="UpdateSelectFaultsForm" 
 			 rendered="#{!empty DislocBean2.myFaultEntryForProjectList 
 						  || !empty DislocBean2.myObsvEntryForProjectList}"> 
-	 <h:outputText id="dflelerkljk165" 
-						escape="false" 
-						styleClass="h3"
-						value="Fault Components"/>
 	 <h:panelGrid id="dislocdirtyworkaroundgroup"
 					  columns="2">
 		<h:outputText id="lierlk3" 
@@ -226,5 +225,6 @@
  <h:commandButton id="SelectFault4projj" value="UpdateFault"
 						actionListener="#{DislocBean2.toggleUpdateFaults}" />
 </h:form>
+<f:verbatim></fieldset></f:verbatim>
 </h:panelGroup>
 </h:panelGrid>
