@@ -378,12 +378,14 @@
         </dependency>
 
         <!-- Web Service Dependencies -->
+<!--
         <dependency>
              <groupId>QuakeSim2</groupId>
              <artifactId>WebServices</artifactId>
              <version>1.0</version>
              <scope>compile</scope>
         </dependency>
+-->
 
         <!-- The following are given "provided" scope 
              to allow me to compile without actually using 
