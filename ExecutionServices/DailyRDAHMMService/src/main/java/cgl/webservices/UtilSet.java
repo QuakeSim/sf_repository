@@ -682,5 +682,31 @@ public class UtilSet {
 			e.printStackTrace();
 			return "";
 		}
+		
+	}
+	
+	public static void testSth(String[] args) {
+		/*try {
+			copyUrlToFile(new URL(args[0]), args[1]);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}*/
+		
+		int values[] = new int[13];
+		for (int i = 0; i<13; i++) {
+			values[i] = 0;
+		}
+		for (int i = 1; i<=6; i++) {
+			for (int j = 1; j<=6; j++) {
+				values[i+j]++;
+			}
+		}
+		for (int i=0; i<13; i++) {
+			System.out.println(i + " : " + values[i]);
+		}
+	}
+	
+	public static void main(String[] args) {
+		testSth(args);
 	}
 }

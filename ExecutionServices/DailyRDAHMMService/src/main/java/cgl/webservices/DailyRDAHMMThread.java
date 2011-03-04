@@ -156,11 +156,11 @@ public class DailyRDAHMMThread implements Runnable {
 				// write results to xml file, change the file name of the form A.xml to the form of A_tmp.xml
 				resPath = DailyRDAHMMStation.stateChangeXMLPath;
 				resPath = resPath.substring(0, resPath.length() - 4) + "_tmp.xml";
-				writeResToXML(today, resPath, station);				
+				writeResToXML(today, resPath, station);
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
-				// ignore the error on one station, just see it as completed
+				// ignore the error on one station, just treat it as if it's completed
 				synchronized (lock_nStationsDone) {
 					if (station != null)
 						nStationsDone++;

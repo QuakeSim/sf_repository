@@ -81,6 +81,10 @@ public class DailyRDAHMMStation {
 	static boolean detrendEnabled;
 	/** if input data needs to be de-noised before analysis */
 	static boolean denoiseEnabled;
+	/** command line pattern for converting data in xyz to lat long height */
+	static String xyz2llhCmdPattern;
+	/** command line pattern for querying data from the UNAVCO context group */
+	static String unavcoQueryCmdPattern;
 	
 	String stationId;
 	float latitude;
@@ -215,6 +219,8 @@ public class DailyRDAHMMStation {
 		denoiseCmdPattern = prop.getProperty("dailyRdahmm.denoise.cmd.pattern");
 		detrendEnabled = Boolean.valueOf(prop.getProperty("dailyRdahmm.detrend.enabled"));
 		denoiseEnabled = Boolean.valueOf(prop.getProperty("dailyRdahmm.denoise.enabled"));
+		xyz2llhCmdPattern = prop.getProperty("dailyRdahmm.xyz2llh.cmd.pattern");
+		unavcoQueryCmdPattern = prop.getProperty("dailyRdahmm.unavcoQuery.cmd.pattern");
 	}
 	
 	/**
@@ -350,11 +356,18 @@ public class DailyRDAHMMStation {
 			return false;
 		}
 		
-		String inputPathForFill = fileLocalPath;
+		// the file at fileLocalPath contains data in xyz dimensions. change them to latitude, longitude, elevation
+		String llhRawPath = xyzToLlhForRaw(fileLocalPath);
+		if (llhRawPath == null || llhRawPath.length() <= 0) {
+			System.out.println("Failed in llh translation of the model input for station " + stationId);
+			return false;
+		}
+		
+		String inputPathForFill = llhRawPath;
 		if (detrendEnabled && denoiseEnabled) {
 			// do de-trending on raw input
-			String dtDnFilePath = fileLocalPath + ".dtDn";
-			if (detrendAndDenoiseData(fileLocalPath, dtDnFilePath)) {
+			String dtDnFilePath = llhRawPath + ".dtDn";
+			if (detrendAndDenoiseData(llhRawPath, dtDnFilePath)) {
 				inputPathForFill = dtDnFilePath;
 			} else {
 				System.out.println("Failed to de-trend and de-noise input data for station " + stationId);
@@ -849,6 +862,37 @@ public class DailyRDAHMMStation {
 	}
 	
 	/**
+	 * execute the UNAVCO query command to get input data from the UNAVCO context group
+	 * @param destDir
+	 * @param beginDate
+	 * @param endDate
+	 * @return
+	 */
+	protected String executeUnavcoQueryCmd(String destDir, String beginDate, String endDate) {
+		String queryCmd = unavcoQueryCmdPattern;
+		queryCmd = queryCmd.replaceFirst("<unavcoExeDir>", binDir).replaceFirst("<stationId>", stationId);
+		queryCmd = queryCmd.replaceFirst("<destDir>", destDir).replaceFirst("<beginDate>", beginDate);
+		queryCmd = queryCmd.replaceAll("<endDate>", endDate);
+		
+		String progPath = UtilSet.getProgFromCmdLine(queryCmd);
+		String[] args = UtilSet.getArgsFromCmdLine(queryCmd);
+		String outputPath = destDir + File.separator + "unavcoQuery.out";
+		String errPath = destDir + File.separator + "unavcoQuery.err";
+		UtilSet.antExecute(progPath, args, binDir, null, null, outputPath, errPath);
+		String stdOutStr = UtilSet.readFileContentAsString(new File(outputPath));
+		String stdErrStr = UtilSet.readFileContentAsString(new File(errPath));
+		if (stdErrStr.length() <= 0 || stdErrStr.toLowerCase().indexOf("no data") >= 0) {
+			System.out.println("Failed to get UNAVCO data when executing evaluating command:");
+			System.out.println(queryCmd);
+			System.out.println("Standard Output: " + stdOutStr);
+			System.out.println("Standard Error: " + stdErrStr);
+			return "ERROR: " + stdErrStr;
+		} else {
+			return stdOutStr;
+		}
+	}
+	
+	/**
 	 * make input file for the flash plotting swf
 	 * @param qFilePath
 	 * @param rawFilePath
@@ -898,13 +942,23 @@ public class DailyRDAHMMStation {
 	 */
 	protected boolean makeEvalInput(String projectName, String grwsFileName) {
 		try {
-			// first, de-trend the GRWS raw file
+			
 			String proDir = baseDestDir + File.separator + projectName;
 			String grwsFilePath = proDir + File.separator + grwsFileName;
-			String inputPathForCat = grwsFilePath;
+			
+			// translate xyz to llh
+			String llhGrwsFilePath = xyzToLlhForRaw(grwsFilePath);
+			if (llhGrwsFilePath == null || llhGrwsFilePath.length() <= 0) {
+				System.out.println("Failed to create evaluation input for station " + stationId
+									+ "! Error when translating xyz to llh.");
+				return false;
+			}
+			
+			// de-trend the GRWS raw file
+			String inputPathForCat = llhGrwsFilePath;
 			if (detrendEnabled && denoiseEnabled) {
-				String grwsDtDnFilePath = grwsFilePath + ".dtDn";
-				if (detrendAndDenoiseData(grwsFilePath, grwsDtDnFilePath)) {
+				String grwsDtDnFilePath = llhGrwsFilePath + ".dtDn";
+				if (detrendAndDenoiseData(llhGrwsFilePath, grwsDtDnFilePath)) {
 					inputPathForCat = grwsDtDnFilePath;
 				} else {
 					System.out.println("Failed to create evaluation input for station " + stationId
@@ -1274,16 +1328,40 @@ public class DailyRDAHMMStation {
 	 * @return
 	 */
 	protected String queryGrwsGetUrl(String beginDate, String endDate) {
-		String resource = "procCoords";
-		String contextGroup = inputContextGroup;
-		String minMaxLatLon = "";
-		String contextId = inputContextId;
+		if (dataSource.equalsIgnoreCase("UNAVCO")) {
+			String tmpDir = baseWorkDir + File.separator + modelBaseName + File.separator + "unavcoTmp";
+			File fileTmpDir = new File(tmpDir);
+			int c = 1;
+			while (fileTmpDir.exists() && fileTmpDir.isFile()) {
+				tmpDir = tmpDir + c++;
+				fileTmpDir = new File(tmpDir);
+			}
+			
+			// once we get here, tmpDir is either an existing directory, or not there yet as anything
+			if (!fileTmpDir.exists() && !fileTmpDir.mkdirs()) {
+				System.out.println("Can't create unavco temporary directory " + tmpDir + " for station " + stationId);
+				return "ERROR: can't create temporary directory";
+			}
+			
+			// execute the unavco scripts for getting the input data
+			String queryRes = executeUnavcoQueryCmd(tmpDir, beginDate, endDate);
+			if (queryRes.toUpperCase().indexOf("ERROR") >= 0) {
+				return queryRes;
+			} else {
+				return "file://" + queryRes;
+			}
+		} else {
+			String resource = "procCoords";
+			String contextGroup = inputContextGroup;
+			String minMaxLatLon = "";
+			String contextId = inputContextId;
 		
-		GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
-		gsq.setFromServlet(stationId, beginDate, endDate, resource, contextGroup, contextId, minMaxLatLon, true);
-		String dataUrl = gsq.getResource();
-		System.out.println("GRWS data url for station " + stationId + " : " + dataUrl);
-		return dataUrl;
+			GRWS_SubmitQuery gsq = new GRWS_SubmitQuery();
+			gsq.setFromServlet(stationId, beginDate, endDate, resource, contextGroup, contextId, minMaxLatLon, true);
+			String dataUrl = gsq.getResource();
+			System.out.println("GRWS data url for station " + stationId + " : " + dataUrl);
+			return dataUrl;
+		}
 	}
 	
 	/**
@@ -1431,5 +1509,65 @@ public class DailyRDAHMMStation {
 
 	public void setModelBaseName(String modelBaseName) {
 		this.modelBaseName = modelBaseName;
+	}
+	
+	/**
+	 * change the data in xyz dimension in raw file to lat, long, height dimensions, and return the
+	 * path to the result file
+	 * @param xyzRawPath
+	 * @return
+	 */
+	public String xyzToLlhForRaw(String xyzRawPath) {
+		// get the xyz data columns from xyzRawPath
+		String tmpXyzPath = xyzRawPath + ".tmpxyz";
+		boolean suc = UtilSet.extractColumnsFromFile(xyzRawPath, tmpXyzPath, 2, 4);
+		if (!suc) {
+			System.out.println("Failed to extract xyz input data from raw file " + xyzRawPath);
+			return null;
+		}
+		
+		// translate xyz in tmpXyzPath to llh
+		String tmpLlhPath = xyzToLlhForInput(tmpXyzPath);
+		if (tmpLlhPath == null || tmpLlhPath.length() == 0) {
+			return null;
+		}
+		
+		// composePostDnRawFile can be used here to replace the xyz data in xyzRawPath with the llh
+		// data in tmpLlhPath
+		String llhRawPath = xyzRawPath + ".llh";
+		suc = composePostDnRawFile(xyzRawPath, tmpLlhPath, llhRawPath);
+		if (suc) {
+			return llhRawPath;
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * change the data in xyz dimension in input file to lat, long, height dimensions, and return the
+	 * path to the result file (input file contains only data without staionId and date information)
+	 * @param xyzInputPath
+	 * @return
+	 */
+	public String xyzToLlhForInput(String xyzInputPath) {
+		String transCmd = xyz2llhCmdPattern;
+		transCmd = transCmd.replaceFirst("<xyz2llhDir>", binDir).replaceFirst("<xyzInputPath>", xyzInputPath);
+		
+		String progPath = UtilSet.getProgFromCmdLine(transCmd);
+		String[] args = UtilSet.getArgsFromCmdLine(transCmd);
+		String outputPath = xyzInputPath + ".llh_out";
+		String errPath = xyzInputPath + ".llh_err";
+		UtilSet.antExecute(progPath, args, null, null, null, outputPath, errPath);
+		String stdOutStr = UtilSet.readFileContentAsString(new File(outputPath));
+		String stdErrStr = UtilSet.readFileContentAsString(new File(errPath));
+		if (stdOutStr.toLowerCase().indexOf("error") >= 0 || stdErrStr.toLowerCase().indexOf("error") >= 0) {
+			System.out.println("XYZ to LLH translation failed when executing command:");
+			System.out.println(transCmd);
+			System.out.println("Standard Output: " + stdOutStr);
+			System.out.println("Standard Error: " + stdErrStr);
+			return null;
+		} else {
+			return stdOutStr;
+		}
 	}
 }
