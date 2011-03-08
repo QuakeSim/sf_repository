@@ -11,18 +11,6 @@
 //Code below probably belongs in GPSMapPanel (removed)
 %>
 <html>
-  <!-- These styles should be in a separate stylesheet file -->
-  <style type="text/css">
-	 .alignTop {
-	 vertical-align: top;
-	 }
-	 
-	 .header2 {
-	 font-family: Arial, sans-serif;
-	 font-size: 18pt;
-	 font-weight: bold;
-	 }
-  </style>
   
   <head>
 	 <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css"/>
@@ -219,12 +207,6 @@
 						showSummary="true"
 					  errorStyle="color: red"/>
 		
-		<h:outputText id="lkdrq1" styleClass="header2"
-						  value="Project Component Manager" />
-		<%-- <h:inputHidden id="faultKmlUrl" value="#{SimplexBean.faultKmlUrl}" /> --%>
-		<h:outputText id="lkdrq2" escape="false" value="<br>"/>
-		<h:outputText id="lkdrq2" escape="false"
-						  value="You must provide at least one fault and one observation point before you can run Simplex" />
 		<%/* This is the main grid container */%>
 		<h:panelGrid id="EditProject" 
 						 columnClasses="alignTop" 

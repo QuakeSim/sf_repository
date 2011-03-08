@@ -3,24 +3,30 @@ package cgl.quakesim.simplex;
 public class projectEntry {
 	 String projectName;
 	 String projectDirectory;
-	 String startTemp ;
-	 String maxIters;
+	 // String startTemp ;
+	 // String maxIters;
 	 String hostName;	 
 	 String creationDate;
 
 	 static double DEFAULT_LON=-9999.99;
 	 static double DEFAULT_LAT=-9999.99;
+	 static String DEFAULT_MAX_ITERS="10000";
+	 static String DEFAULT_START_TEMP="1";
+
 	 double origin_lon=DEFAULT_LON;	 
 	 double origin_lat=DEFAULT_LAT;	 
+	 String maxIters=DEFAULT_MAX_ITERS;
+	 String startTemp=DEFAULT_START_TEMP;
 	 
+
 	 public projectEntry() {
 	 }
 	 
 	 public void reset() {
 		  projectName="";
 		  projectDirectory="";
-		  startTemp = "";
-		  maxIters = "";
+		  maxIters=DEFAULT_MAX_ITERS;
+		  startTemp=DEFAULT_START_TEMP;
 		  hostName = "";
 		  creationDate = "";
 	 }

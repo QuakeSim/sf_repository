@@ -1487,9 +1487,8 @@ public class SimplexBean extends GenericSopacBean {
 									 + codeName + "/" + projectName + ".db");
 			
 			for (int i = 0; i < myObservationsForProjectList.size(); i++) {
-				Observation tmp_Observation = new Observation();
-				tmp_Observation = (Observation) myObservationsForProjectList
-						.get(i);
+				Observation tmp_Observation = 
+					 (Observation) myObservationsForProjectList.get(i);
 
 				// This is the info about the Observation.
 				String tmp_ObservationName = tmp_Observation.getObsvName();
@@ -1503,22 +1502,12 @@ public class SimplexBean extends GenericSopacBean {
 					logger.info("[" + getUserName() + "/SimplexBean/toggleUpdateObservations] info");
 				}
 
-				// Update the Observation.
-				if ((tmp_update == true) && (tmp_delete == false)) {
+				// Update the Observation. This will take precedence over deletion if 
+				//both are selected for the same station.
+				if ((tmp_update == true)) {
 					logger.info("[" + getUserName() + "/SimplexBean/toggleUpdateObservations] Updating "
 							+ tmp_ObservationName + " "
 							+ tmp_Observation.getObsvError());
-
-					/*
-					 * Observation todelete = new Observation();
-					 * todelete.setObsvName(tmp_ObservationName); ObjectSet
-					 * result = db.get(todelete); if (result.hasNext()) {
-					 * todelete = (Observation) result.next();
-					 * db.delete(todelete); }
-					 * 
-					 * db.set(tmp_Observation); db.commit(); if(db!=null)
-					 * db.close();
-					 */
 
 					Observation toUpdate = new Observation();
 					toUpdate.setObsvName(tmp_ObservationName);
@@ -1544,7 +1533,8 @@ public class SimplexBean extends GenericSopacBean {
 					db.commit();
 				}
 
-				// This is the deletion case.
+				// This is the deletion case. Update must be false as well as delete
+				//set to true.
 				if ((tmp_update == false) && (tmp_delete == true)) {
 
 					// Delete from the database.
@@ -1552,13 +1542,12 @@ public class SimplexBean extends GenericSopacBean {
 					// and then delete the specific value that we get back.
 					logger.info("[" + getUserName() + "/SimplexBean/toggleUpdateObservations] Deleting "
 							+ tmp_ObservationName);
-
-					// db = Db4o.openFile(getBasePath() + "/"
-					// 		+ getContextBasePath() + "/" + userName + "/"
-					// 		+ codeName + "/" + projectName + ".db");
-
 					Observation todelete = new Observation();
-					todelete.setObsvName(tmp_ObservationName);
+					todelete.setObsvName(tmp_Observation.getObsvName());
+					todelete.setObsvRefSite(tmp_Observation
+													.getObsvRefSite());
+					todelete.setObsvType(tmp_Observation.getObsvType());
+					
 					ObjectSet result = db.get(todelete);
 					if (result.hasNext()) {
 						todelete = (Observation) result.next();

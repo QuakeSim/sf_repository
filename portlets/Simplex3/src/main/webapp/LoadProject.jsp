@@ -3,55 +3,45 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <html>
-  <style>
-  .alignTop {
-    vertical-align:top;
-  }
-  .header2 {
-    font-family: Arial, sans-serif;
-    font-size: 18pt;
-    font-weight: bold;
-  }
-  </style>
-
  <head>
+	<link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css"/>
  </head>
-  
   <body>
-   <script type="text/javascript">
-    function selectOne(form, button)
-    {
+	 <script type="text/javascript">
+		//<![CDATA[
+		function selectOne(form, button)
+		{
       turnOffRadioForForm(form);
-      button.checked = true;
-    }
-
-    function turnOffRadioForForm(form)
-    {
-      for(var i = 0 ; i < form.elements.length ; i++)
-       form.elements[i].checked = false;
-    }
-  
-   function dataTableSelectOneRadio(radio) {
-    var id = radio.name.substring(radio.name.lastIndexOf(':'));
-    var el = radio.form.elements;
-    
-    for (var i = 0; i < el.length; i++) {
-	if (el[i].name.substring(el[i].name.lastIndexOf(':')) == id) {	
-	    el[i].checked = false;
-	    el[i].checked = false;
-	}
-    }
-    radio.checked = true;
-   }
-  </script>
-  
-  <f:view>	
-	 <h:messages id="simplexMessagesLoadProject" 
-					 showDetail="true"
-					 showSummary="true"
-					 errorStyle="color: red"/>	 
+		button.checked = true;
+		}
+		
+		function turnOffRadioForForm(form) {
+		for(var i = 0 ; i < form.elements.length ; i++)
+		form.elements[i].checked = false;
+		}
+		
+		function dataTableSelectOneRadio(radio) {
+		var id = radio.name.substring(radio.name.lastIndexOf(':'));
+		var el = radio.form.elements;
+		
+		for (var i = 0; i < el.length; i++) {
+		if (el[i].name.substring(el[i].name.lastIndexOf(':')) == id) {	
+		el[i].checked = false;
+		el[i].checked = false;
+		}
+		}
+		radio.checked = true;
+		}
+		//]]>
+	 </script>
 	 
-	 <h:outputText  id="lkdjf2" styleClass="header2" value="Project Archive"/>
+	 <f:view>	
+		<h:messages id="simplexMessagesLoadProject" 
+						showDetail="true"
+						showSummary="true"
+						errorStyle="color: red"/>	 
+		
+	 <h:outputText  id="lkdjf2" styleClass="h2" value="Project Archive Management"/>
 	 <h:outputText  id="lkdjf3"
 						 escape="false"
 						 value="You don't have any archived projects. Use the 
@@ -126,47 +116,50 @@
 		  </h:form>
 		  
 		</h:panelGrid>
-		
-	<h:form id="lkdjf13">
-	  <h:outputText escape="false" 
-						 id="simplexnewprojname29"
-						 value="<b>New Project Name</b>"/>
-	  <h:panelGrid id="lkdjf14" columns="2" border="0">
-		 <h:outputText id="lkdjf15" value="Provide a Project Name:" />
-		 <h:panelGroup id="lkdjf16">
-			<h:inputText id="projectName" value="#{SimplexBean.projectName}"
-							 required="true" />
-			<h:message for="projectName" showDetail="true" showSummary="true"
-						  errorStyle="color: red" />
-		 </h:panelGroup>
-		 
-		 <h:outputText id="lkdjf17" value="Problem starting temperature:" />
-		 <h:panelGroup id="lkdjf18">
-			<h:inputText id="startTemp" value="#{SimplexBean.currentProjectEntry.startTemp}"
-							 required="true" />
-			<h:message for="startTemp" showDetail="true" showSummary="true"
-						  errorStyle="color: red" />
-		 </h:panelGroup>
-		 
-			<h:outputText id="lkdjf19" value="Specify the maximum number of iterations:" />
-			<h:panelGroup id="lkdjf111">
-			  <h:inputText id="maxIters" value="#{SimplexBean.currentProjectEntry.maxIters}"
-								required="true" />
-			  <h:message id="lkdjf112" for="maxIters" showDetail="true" showSummary="true"
+		<f:verbatim><p/></f:verbatim>
+		<h:form id="lkdjf13">
+		  <f:verbatim>
+			 <fieldset style="width:50%">
+				<legend class="portlet-form-label">Create New Project</legend>
+		  </f:verbatim>	 
+		  
+		  <h:panelGrid id="lkdjf14" columns="2" border="0">
+			 <h:outputText id="lkdjf15" value="Provide a Project Name:" />
+			 <h:panelGroup id="lkdjf16">
+				<h:inputText id="projectName" value="#{SimplexBean.projectName}"
+								 required="true" />
+				<h:message for="projectName" showDetail="true" showSummary="true"
 							  errorStyle="color: red" />
-			</h:panelGroup>			
-	  </h:panelGrid>
-	  
-	  <h:commandButton id="lkdjf113" value="Create Project"
-							 action="#{SimplexBean.NewProjectThenEditProject}" />
-	</h:form>	
-	
-	<h:form id="lkdjf114">
-	  <h:outputText escape="false" value="<hr/>"/>
-	  <h:commandLink  id="lkdjf115" action="Simplex2-back">
-		 <h:outputText id="lkdjf116" value="#{SimplexBean.codeName} Main Menu" />
-	  </h:commandLink>
-	</h:form>
- </f:view>
-</body>
+			 </h:panelGroup>
+			 
+			 <h:outputText id="lkdjf17" value="Problem starting temperature:" />
+			 <h:panelGroup id="lkdjf18">
+				<h:inputText id="startTemp" value="#{SimplexBean.currentProjectEntry.startTemp}"
+								 required="true" />
+				<h:message for="startTemp" showDetail="true" showSummary="true"
+							  errorStyle="color: red" />
+			 </h:panelGroup>
+			 
+			 <h:outputText id="lkdjf19" value="Specify the maximum number of iterations:" />
+			 <h:panelGroup id="lkdjf111">
+				<h:inputText id="maxIters" value="#{SimplexBean.currentProjectEntry.maxIters}"
+								 required="true" />
+				<h:message id="lkdjf112" for="maxIters" showDetail="true" showSummary="true"
+							  errorStyle="color: red" />
+			 </h:panelGroup>			
+		  </h:panelGrid>
+		  
+		  <h:commandButton id="lkdjf113" value="Create Project"
+								 action="#{SimplexBean.NewProjectThenEditProject}" />
+		  <f:verbatim></fieldset></f:verbatim>	  
+		</h:form>	
+		
+		<h:form id="lkdjf114">
+		  <h:outputText escape="false" value="<hr/>"/>
+		  <h:commandLink  id="lkdjf115" action="Simplex2-back">
+			 <h:outputText id="lkdjf116" value="#{SimplexBean.codeName} Main Menu" />
+		  </h:commandLink>
+		</h:form>
+	 </f:view>
+  </body>
 </html>

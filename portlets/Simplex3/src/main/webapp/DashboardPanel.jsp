@@ -1,18 +1,24 @@
 <h:panelGrid id="DashboradPanelgrid"
 				 columnClasses="alignTop"
 				 columns="1" 
-				 border="0">			
+				 border="0">		
+  <h:panelGroup id="simplexDashPanelGrouper">
+	 <f:verbatim>
+		<fieldset>
+		  <legend class="portlet-form-label"> Project Dashboard </legend>
+		</f:verbatim>
+	
   <h:outputText id="instructionezzze" 
 					 escape="false"
 					 value="You must add at least one observation point and one fault 
-							  before you can run the Simplex Simulation."/>
+							  before you can run Simplex."/>
   
   <h:form id="selectprojSimplex">  
 	 <%-- This is the first row --%>
 	 <h:panelGrid id="simplexDashboardMenu" 
 					  cellspacing="3"
 					  columns="4" 
-					  border="1">
+					  border="0">
 		<h:outputText id="lkdrq4" escape="false"
 							 value="<b>Project Name:</b> #{SimplexBean.projectName}" />
 		<h:outputText id="lkdrq5" escape="false"
@@ -70,4 +76,6 @@
 							id="runSimplex2" value="Run Simplex"
 							action="#{SimplexBean.toggleRunSimplex2}" />
   </h:form>	
+	 <f:verbatim></fieldset></f:verbatim>
+  </h:panelGroup>
 </h:panelGrid>

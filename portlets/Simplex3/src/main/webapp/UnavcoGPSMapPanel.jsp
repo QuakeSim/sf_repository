@@ -2246,27 +2246,29 @@ function toggleBorder() {
   </f:verbatim>
 
   <h:form id="unavcoobsvGPSMap">
-<%--
+	 <%--
 	 <h:inputHidden id="unavcoRedJsonStations" value="#{SimplexBean.selectedGPSJSONValues}"/>
---%>
+	 --%>
 	 <h:panelGrid id="unavcosimplexSelectionMapGrid"
 					  columns="1"
 					  border="1">
-		<h:outputText id="unavcoclrlc093" escape="false"
-						  value="<b>Select Stations from Map:</b> Select the stations that you want to use as observation points. Then, fetch the values and add them to your project observation list."/>
-	 <h:panelGrid id="unavcomapsAndCrap" columns="2" columnClasses="alignTop,alignTop">
-		<h:panelGroup id="unavcomapncrap1">
-		  <f:verbatim> 
-			 <div id="unavcomap_canvas" style="width: 850px; height: 700px"></div>
-		  </f:verbatim>
-		</h:panelGroup>
-		<h:panelGroup id="unavcomapncrap2">
-		  <h:panelGrid id="unavcomanncraplayoutgrid"
-							border="1"
-							columns="1">
-			 <h:panelGroup id="unavcomapncrapLayoutGroup1">
-				<h:outputText id="unavcoSimplexGPSInstructions1"
-								  value="First, select stations to import into your project by clicking. 
+		<f:verbatim>
+		  <b>Select Stations from Map:</b> Select the stations that you want to use as observation points. Then, fetch the values and add them to your project observation list. This map interface and data are derived from the
+		<a href="http://geon.unavco.org/unavco/GPSVelocityViewer.php">UNAVCO GPS Velocity Viewer</a>.
+		</f:verbatim>
+		<h:panelGrid id="unavcomapsAndCrap" columns="2" columnClasses="alignTop,alignTop">
+		  <h:panelGroup id="unavcomapncrap1">
+			 <f:verbatim> 
+				<div id="unavcomap_canvas" style="width: 850px; height: 700px"></div>
+			 </f:verbatim>
+		  </h:panelGroup>
+		  <h:panelGroup id="unavcomapncrap2">
+			 <h:panelGrid id="unavcomanncraplayoutgrid"
+							  border="1"
+							  columns="1">
+				<h:panelGroup id="unavcomapncrapLayoutGroup1">
+				  <h:outputText id="unavcoSimplexGPSInstructions1"
+									 value="First, select stations to import into your project by clicking. 
 											Selected stations are yellow."/>
 				<h:panelGrid id="unavcodfjdlkj" 
 								 border="0"

@@ -254,7 +254,9 @@
 				
 				<h:column>
 				  <f:facet name="header">
-					 <h:outputText id="dflelerkljk456" escape="false" value="<b>Remove</b>" />
+					 <%--					 
+					 <h:outputText id="dflelerkljk456" escape="false" value="<b>Remove</b>" /> --%>
+					 <f:verbatim><b>Remove</b></f:verbatim>
 				  </f:facet>									
 				  
 				  <h:panelGrid id="spxpcp20" 
@@ -276,27 +278,68 @@
 	 
 	 <h:form id="UpdateSelectObservationForm"
 				rendered="#{!empty SimplexBean.myObservationsForProjectList}">
-		<h:outputText value="<br/>" escape="false"/>
-		<h:panelGroup id="dflelerkljk174">
-		  <h:panelGrid id="obsvpanelgrid" columns="1" border="0">
-			 <h:outputText escape="false" 
-								id="dflelerkljk176"
-								value="<b>Observation Components</b>:Please click the 'update' button after value changes."/>
-		  <h:commandButton id="viewSimplexObsv" value="Display/Hide"
-								 actionListener="#{SimplexBean.currentEditProjectForm.toggleShowObsvEntries}"/>
-		  <h:panelGrid id="aerbasd1" columns="2" border="0" cellpadding="0" cellspacing="0">    
+		<f:verbatim>
+		  <fieldset><legend class="portlet-form-label">Observation Components</legend>
+		  Please click the 'update' button 
+		  after value changes.
+		</f:verbatim>
+		
+		<h:commandButton id="viewSimplexObsv" value="Display/Hide"
+							  actionListener="#{SimplexBean.currentEditProjectForm.toggleShowObsvEntries}"/>
+		<h:panelGrid id="aerbasd1" columns="2" border="0" cellpadding="0" cellspacing="0">    
+		  
+		  <h:dataTable border="1" 
+							cellpadding="0" 
+							cellspacing="0" 
+							id="dflelerz166" 
+							headerClass="componentstableh2" columnClasses="componentstablec"						
+							rendered="#{SimplexBean.currentEditProjectForm.renderObsvEntries}"
+							value="#{SimplexBean.myObservationEntryForProjectList}" 
+							var="myentry7">
 			 
-			 <h:dataTable  border="1" 
-								cellpadding="0" 
-								cellspacing="0" 
-								id="dflelerkljk1277" 
-								headerClass="componentstableh2" 
-								columnClasses="componentstablec"
-								rendered="#{SimplexBean.currentEditProjectForm.renderObsvEntries}"
-								value="#{SimplexBean.myObservationsForProjectList}"
-								var="myentry4">
 				<h:column>
 				  <f:facet name="header">
+					 <h:outputText id="dflelerkljk954" 
+										style="font:bold"
+										escape="false" 
+										value="Update" />
+				  </f:facet>
+				  
+				  <h:panelGrid id="spxpcp31" columns="2" cellpadding="0" 
+									cellspacing="0" styleClass="centered">
+					 <h:selectBooleanCheckbox value="#{myentry7.update}" id="dflelerkljk955" />
+					 <h:outputText  id="spxpcp32"style="text-align:right;width:0px" value ="" />
+				  </h:panelGrid>
+				</h:column>
+				
+				<h:column>
+				  <f:facet name="header">
+					 <h:outputText id="dflelerkljk956" 
+										style="font:bold"
+										escape="false" 
+										value="Remove" />
+				  </f:facet>
+				  
+				  <h:panelGrid id="spxpcp35" columns="2" cellpadding="0" 
+									cellspacing="0" styleClass="centered">
+					 <h:selectBooleanCheckbox id="dflelerkljk957" value="#{myentry7.delete}"/>
+					 <h:outputText id="spxpcp36" style="text-align:right;width:0px" value ="" />
+				  </h:panelGrid>
+				  
+				</h:column>
+			 </h:dataTable>
+
+				<h:dataTable  border="1" 
+								  cellpadding="0" 
+								  cellspacing="0" 
+								  id="dflelerkljk1277" 
+								  headerClass="componentstableh2" 
+								  columnClasses="componentstablec"
+								  rendered="#{SimplexBean.currentEditProjectForm.renderObsvEntries}"
+								  value="#{SimplexBean.myObservationsForProjectList}"
+								  var="myentry4">
+				  <h:column>
+					 <f:facet name="header">
 					 <h:outputText id="dflelerkljk178" 
 										escape="false" 
 										value="<b>Name</b>" />
@@ -378,51 +421,12 @@
 				</h:column>
 			 </h:dataTable>
 			 
-			 <h:dataTable border="1" 
-							  cellpadding="0" 
-							  cellspacing="0" 
-							  id="dflelerz166" 
-							  headerClass="componentstableh2" columnClasses="componentstablec"								
-							  rendered="#{SimplexBean.currentEditProjectForm.renderObsvEntries}"
-							  value="#{SimplexBean.myObservationEntryForProjectList}" 
-							  var="myentry7">
-				
-				<h:column>
-				  <f:facet name="header">
-					 <h:outputText id="dflelerkljk954" 
-										style="font:bold"
-										escape="false" 
-										value="Update" />
-				  </f:facet>
-				  
-				  <h:panelGrid id="spxpcp31" columns="2" cellpadding="0" cellspacing="0" styleClass="centered">
-					 <h:selectBooleanCheckbox value="#{myentry7.update}" id="dflelerkljk955" />
-					 <h:outputText  id="spxpcp32"style="text-align:right;width:0px" value ="" />
-				  </h:panelGrid>
-				</h:column>
-				
-				<h:column>
-				  <f:facet name="header">
-					 <h:outputText id="dflelerkljk956" 
-										style="font:bold"
-										escape="false" 
-										value="Remove" />
-				  </f:facet>
-				  
-				  <h:panelGrid id="spxpcp35" columns="2" cellpadding="0" cellspacing="0" styleClass="centered">
-					 <h:selectBooleanCheckbox id="dflelerkljk957" value="#{myentry7.delete}"/>
-					 <h:outputText id="spxpcp36" style="text-align:right;width:0px" value ="" />
-				  </h:panelGrid>
-				  
-				</h:column>
-			 </h:dataTable>
-		  </h:panelGrid>
-		  
 		</h:panelGrid>
-	 </h:panelGroup>	
 	 <h:commandButton id="SelectObservations4proj"					   
+							rendered="#{SimplexBean.currentEditProjectForm.renderObsvEntries}"
 							value="Update Observations"
 							actionListener="#{SimplexBean.toggleUpdateObservations}" />
+	 <f:verbatim></fieldset></f:verbatim>		  
   </h:form>
 </h:panelGroup>
 </h:panelGrid>

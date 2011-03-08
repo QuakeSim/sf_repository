@@ -11,7 +11,7 @@
   </head>
   <body>
 	 <script type="text/javascript"> 
-		<![CDATA[
+		//<![CDATA[
 		
 		function selectOne(form , button) { 
 		turnOffRadioForForm(form); 
