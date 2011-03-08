@@ -175,7 +175,6 @@ public class DailyRDAHMMThread implements Runnable {
 			return;
 		try {
 			vec.removeAllElements();
-			UtilSet.log(threadNum, "readFileToVector : " + path);
 			String line;
 			int count = 0;
 			BufferedReader br = new BufferedReader(new FileReader(path));
@@ -187,7 +186,6 @@ public class DailyRDAHMMThread implements Runnable {
 				}
 				line = br.readLine();
 			}
-			UtilSet.log(threadNum, count + "lines read from " + path);
 			br.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -201,7 +199,6 @@ public class DailyRDAHMMThread implements Runnable {
 		if (path == null || path.length() == 0 || lineNum < -1)
 			return null;
 		try {
-			UtilSet.log(threadNum, "readOneLineFromFile : " + path + " " + lineNum);
 			String line = null;
 			int count = -1;
 			BufferedReader br = new BufferedReader(new FileReader(path));
@@ -216,7 +213,6 @@ public class DailyRDAHMMThread implements Runnable {
 				lastLine = line;
 				line = br.readLine();
 			}
-			UtilSet.log(threadNum, count + "lines read from " + path);
 			br.close();
 			if (count == lineNum)
 				return line;
@@ -252,7 +248,6 @@ public class DailyRDAHMMThread implements Runnable {
 			synchronized (fileMutex) {
 				boolean doNextStep = true, newFile = false;
 				resPath = resPath.replace('/', File.separatorChar);
-				UtilSet.log(threadNum, "resPath: " + resPath);
 				File outputFile = new File(resPath);
 				File outputPretty = new File(resPath.substring(0, resPath.length()-4) + "2.xml");
 				// if result file out of date, create a new one

@@ -275,10 +275,7 @@ public class UtilSet {
 	 * @param srcPath
 	 * @param newPath
 	 */
-	public static void renameFile(String srcPath, String newPath) {
-		System.out.println("renameFile -- srcPath : " + srcPath);
-		System.out.println("renameFile -- newPath : " + newPath);
-		
+	public static void renameFile(String srcPath, String newPath) {		
 		if (srcPath == null || newPath == null)
 			return;
 	
