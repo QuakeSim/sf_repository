@@ -677,6 +677,8 @@ public class UtilSet {
 				line = br.readLine();
 			}
 			br.close();
+			// delete the appended '\n' in the last line 
+			bRes.deleteCharAt(bRes.length()-1);
 			return bRes.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -692,18 +694,8 @@ public class UtilSet {
 			e.printStackTrace();
 		}*/
 		
-		int values[] = new int[13];
-		for (int i = 0; i<13; i++) {
-			values[i] = 0;
-		}
-		for (int i = 1; i<=6; i++) {
-			for (int j = 1; j<=6; j++) {
-				values[i+j]++;
-			}
-		}
-		for (int i=0; i<13; i++) {
-			System.out.println(i + " : " + values[i]);
-		}
+		File f = new File(args[0]);
+		System.out.println("eixistence of file " + args[0] + ": " + f.exists());
 	}
 	
 	public static void main(String[] args) {

@@ -18,5 +18,5 @@ input=$1
 output=$input.llh
 CS2CSBIN=./cs2cs
 
-$CS2CSBIN -f '%.10f' +proj=geocent +datum=WGS84 +to +proj=latlong +datum=WGS84 $input > $output
+$CS2CSBIN -f '%.10f' +proj=geocent +datum=WGS84 +to +proj=latlong +datum=WGS84 $input | sed "s/\t/ /g" > $output
 echo $output

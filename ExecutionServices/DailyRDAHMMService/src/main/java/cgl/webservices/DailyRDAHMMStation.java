@@ -881,8 +881,8 @@ public class DailyRDAHMMStation {
 		UtilSet.antExecute(progPath, args, binDir, null, null, outputPath, errPath);
 		String stdOutStr = UtilSet.readFileContentAsString(new File(outputPath));
 		String stdErrStr = UtilSet.readFileContentAsString(new File(errPath));
-		if (stdErrStr.length() <= 0 || stdErrStr.toLowerCase().indexOf("no data") >= 0) {
-			System.out.println("Failed to get UNAVCO data when executing evaluating command:");
+		if (stdOutStr.length() <= 0 || stdErrStr.toLowerCase().indexOf("no data") >= 0) {
+			System.out.println("Failed to get UNAVCO data when executing command:");
 			System.out.println(queryCmd);
 			System.out.println("Standard Output: " + stdOutStr);
 			System.out.println("Standard Error: " + stdErrStr);
@@ -1557,7 +1557,7 @@ public class DailyRDAHMMStation {
 		String[] args = UtilSet.getArgsFromCmdLine(transCmd);
 		String outputPath = xyzInputPath + ".llh_out";
 		String errPath = xyzInputPath + ".llh_err";
-		UtilSet.antExecute(progPath, args, null, null, null, outputPath, errPath);
+		UtilSet.antExecute(progPath, args, binDir, null, null, outputPath, errPath);
 		String stdOutStr = UtilSet.readFileContentAsString(new File(outputPath));
 		String stdErrStr = UtilSet.readFileContentAsString(new File(errPath));
 		if (stdOutStr.toLowerCase().indexOf("error") >= 0 || stdErrStr.toLowerCase().indexOf("error") >= 0) {
