@@ -42,6 +42,7 @@
 	 </script>
 	 <script type="text/javascript">
 		//<![CDATA[
+
 		//--------------------------------------------------
 		//Following two math functions should probably go into a separate script file.
 		//--------------------------------------------------

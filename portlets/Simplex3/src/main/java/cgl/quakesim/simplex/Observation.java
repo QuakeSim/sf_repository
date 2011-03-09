@@ -21,7 +21,7 @@ public class Observation  implements java.io.Serializable {
     private java.lang.String obsvType;
 
     private java.lang.String obsvValue;
-    
+
 
 	public Observation() {
     }

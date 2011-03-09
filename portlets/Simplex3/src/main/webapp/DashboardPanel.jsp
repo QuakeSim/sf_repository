@@ -4,7 +4,7 @@
 				 border="0">		
   <h:panelGroup id="simplexDashPanelGrouper">
 	 <f:verbatim>
-		<fieldset>
+		<fieldset style="width:100%">
 		  <legend class="portlet-form-label"> Project Dashboard </legend>
 		</f:verbatim>
 	

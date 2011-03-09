@@ -18,14 +18,19 @@ import org.xml.sax.SAXException;
 
 import org.servogrid.genericproject.FaultDBEntry;
 
+//Commons logging
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
+
 public class KMLdescriptionparser {	
-		
-	Document dom = null;
-	Element docEle = null;
-	String desc = null;
-	ArrayList listofnodelist = new ArrayList();
+	 private static Logger logger;
+	 
+	 Document dom = null;
+	 Element docEle = null;
+	 String desc = null;
+	 ArrayList listofnodelist = new ArrayList();
 	
-	String faultname = "";
+	 String faultname = "";
     double dip = 0;
     double dipslip = 0;
     double strike = 0;
@@ -39,6 +44,10 @@ public class KMLdescriptionparser {
     double lonStart = 0;
     double lonEnd = 0;
     
+	 public KMLdescriptionparser(){
+		  logger=Logger.getLogger(KMLdescriptionparser.class);
+	 }
+
     public double getdip(){    	
     	return dip;
     }
@@ -92,7 +101,8 @@ public class KMLdescriptionparser {
 			DocumentBuilderFactory dbf = DocumentBuilderFactoryImpl.newInstance();		
 			try {
 				DocumentBuilder db = dbf.newDocumentBuilder();
-				System.out.println("[KMLdescriptionparser] " + "dir : " + dir + " temp[" + nA + "] : " + temp[nA]);
+				logger.debug("[KMLdescriptionparser] " 
+								 + "dir : " + dir + " temp[" + nA + "] : " + temp[nA]);
 				dom = db.parse(dir + temp[nA]);
 				docEle = dom.getDocumentElement();
 				

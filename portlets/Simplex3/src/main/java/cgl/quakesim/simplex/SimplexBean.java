@@ -543,7 +543,7 @@ public class SimplexBean extends GenericSopacBean {
 	}
 
 	public List getMyProjectNameList() {
-		logger.info("Reconstructing the project name list");
+		logger.debug("Reconstructing the project name list");
 		myProjectNameList.clear();
 		
 		ObjectContainer db = null;
@@ -618,8 +618,7 @@ public class SimplexBean extends GenericSopacBean {
 			}
 
 		} catch (Exception e) {
-			logger.info("[" + getUserName() 
-							 + "/SimplexBean/reconstructMyObservationEntryForProjectList] " + e);
+			 logger.info(e);
 		}
 		finally {
 			if (db != null) db.close();			
@@ -643,8 +642,7 @@ public class SimplexBean extends GenericSopacBean {
 				myObservationsForProjectList.add(tmpobser);
 			}
 		} catch (Exception e) {
-			logger.error("[" + getUserName() 
-							 + "/SimplexBean/reconstructMyObservationsForProjectList] "+ e);
+			 logger.error(e);
 		}
 		finally {
 			if (db != null)
@@ -657,7 +655,7 @@ public class SimplexBean extends GenericSopacBean {
 
 	public List getMyObservationEntryForProjectList() {
 		String projectName = getProjectName();
-		logger.info ("[" + getUserName() 
+		logger.debug ("[" + getUserName() 
 						  + "/SimplexBean/getMyObservationEntryForProjectList] ProjectName : "	
 						  + projectName);
 		return reconstructMyObservationEntryForProjectList(projectName);
@@ -682,7 +680,7 @@ public class SimplexBean extends GenericSopacBean {
 	
 	public List getMyObservationsForProjectList() {
 		String projectName = getProjectName();
-		logger.info("[" + getUserName() 
+		logger.debug("[" + getUserName() 
 						 + "/SimplexBean/getMyObservationsForProjectList] ProjectName : "
 						 + projectName);
 		return reconstructMyObservationsForProjectList(projectName);
@@ -691,10 +689,10 @@ public class SimplexBean extends GenericSopacBean {
 	public void setMyObservationsForProjectList(List tmp_list) {
 		this.myObservationsForProjectList = tmp_list;
 	}
-
-	/**
-	 * Create the Observation collection
-	 */
+	 
+	 /**
+	  * Create the Observation collection
+	  */
 	 protected List populateObservationCollection(List myObservationEntryProjectList) 
 		  throws Exception {
 		  List myObservationCollection = new ArrayList();
@@ -711,7 +709,7 @@ public class SimplexBean extends GenericSopacBean {
 
 	protected Observation populateObservationFromContext(String tmp_observationName) 
 		 throws Exception {
-		 logger.info("Populating Layer " + tmp_observationName 
+		 logger.debug("Populating observation " + tmp_observationName 
 						  + " for  "+ projectName);
 		 String observationStatus = "Update";
 		 
@@ -1289,7 +1287,6 @@ public class SimplexBean extends GenericSopacBean {
 		try {
 			// Reconstruct the project lists
 			
-			
 			myFaultEntryForProjectList = reconstructMyFaultEntryForProjectList(projectName);
 			myObservationEntryForProjectList = reconstructMyObservationEntryForProjectList(projectName);
 
@@ -1403,171 +1400,173 @@ public class SimplexBean extends GenericSopacBean {
 
 		return "MG-set-project";
 	}
-
-	public void toggleUpdateObservationProjectEntry(ActionEvent ev) {
-
-		String observationStatus = "Update";
-		
-		ObjectContainer db = null;
-		
-		try {
-			int iSelectObservation = -1;
-
-			// Find out which Observation was selected.
-			observationEntryForProject tmp_ObservationEntryForProject = new observationEntryForProject();
-			for (int i = 0; i < myObservationEntryForProjectList.size(); i++) {
-				tmp_ObservationEntryForProject = (observationEntryForProject) myObservationEntryForProjectList
-						.get(i);
-				if ((tmp_ObservationEntryForProject.getUpdate() == true)
-						|| (tmp_ObservationEntryForProject.getDelete() == true)) {
-					iSelectObservation = i;
-					break;
+	 
+	 /**
+	  * This may be an obsolete method.
+	  */ 
+	 public void toggleUpdateObservationProjectEntry(ActionEvent ev) {
+		  String observationStatus = "Update";
+		  ObjectContainer db = null;
+		  try {
+				int iSelectObservation = -1;
+				// Find out which Observation was selected.
+				observationEntryForProject tmp_ObservationEntryForProject =
+					 new observationEntryForProject();
+				for (int i = 0; i < myObservationEntryForProjectList.size(); i++) {
+					 tmp_ObservationEntryForProject = 
+						  (observationEntryForProject) myObservationEntryForProjectList.get(i);
+					 if ((tmp_ObservationEntryForProject.getUpdate() == true)
+						  || (tmp_ObservationEntryForProject.getDelete() == true)) {
+						  iSelectObservation = i;
+						  break;
+					 }
 				}
-			}
-
-			// This is the info about the Observation.
-			String tmp_ObservationName = tmp_ObservationEntryForProject
-					.getObservationName();
-			boolean tmp_view = tmp_ObservationEntryForProject.getUpdate();
-			boolean tmp_update = tmp_ObservationEntryForProject.getDelete();
-
-			currentEditProjectForm.initEditFormsSelection();
-			if ((tmp_view == true) && (tmp_update == true)) {
-				logger.info("[" + getUserName() + "/SimplexBean/toggleUpdateObservationProjectEntry] info");
-			}
-
-			// Update the Observation.
-			if ((tmp_view == true) && (tmp_update == false)) {
-
-				currentEditProjectForm.currentObservation = (Observation) (populateObservationFromContext(tmp_ObservationName));
-				currentEditProjectForm.renderCreateObservationForm = !currentEditProjectForm.renderCreateObservationForm;
-
-			}
-
-			// This is the deletion case.
-			if ((tmp_update == true) && (tmp_view == false)) {
-
-				// Delete from the database.
-				// This requires we first search for the desired object
-				// and then delete the specific value that we get back.
-				logger.info("[" + getUserName() + "/SimplexBean/toggleUpdateObservationProjectEntry] Deleteing " + tmp_ObservationName + "from db");
 				
-				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath()
-						+ "/" + userName + "/" + codeName + "/" + projectName
-						+ ".db");
-
-				Observation todelete = new Observation();
-				todelete.setObsvName(tmp_ObservationName);
-				ObjectSet result = db.get(todelete);
-				if (result.hasNext()) {
-					todelete = (Observation) result.next();
-					db.delete(todelete);
-				}
-			}
-
-		} catch (Exception e) {
-			logger.error("[" + getUserName() + "/SimplexBean/toggleUpdateObservationProjectEntry] " + e);
-		}
-		finally {
-			if (db != null)
-				db.close();			
-		}
-	}
-
-	public void toggleUpdateObservations(ActionEvent ev) {
-		String observationStatus = "Update";
-		ObjectContainer db = null;
-		try {
-			int iSelectObservation = -1;
-			// Find out which Observations were selected.  Loop over all of them
-			// and take appropriate actions in each case.
-			
-			db = Db4o.openFile(getBasePath() + "/"
-									 + getContextBasePath() + "/" + userName + "/"
-									 + codeName + "/" + projectName + ".db");
-			
-			for (int i = 0; i < myObservationsForProjectList.size(); i++) {
-				Observation tmp_Observation = 
-					 (Observation) myObservationsForProjectList.get(i);
-
 				// This is the info about the Observation.
-				String tmp_ObservationName = tmp_Observation.getObsvName();
-				boolean tmp_update = ((observationEntryForProject) myObservationEntryForProjectList
-						.get(i)).getUpdate();
-				boolean tmp_delete = ((observationEntryForProject) myObservationEntryForProjectList
-						.get(i)).getDelete();
-
+				String tmp_ObservationName = 
+					 tmp_ObservationEntryForProject.getObservationName();
+				boolean tmp_view = tmp_ObservationEntryForProject.getUpdate();
+				boolean tmp_update = tmp_ObservationEntryForProject.getDelete();
+				
 				currentEditProjectForm.initEditFormsSelection();
-				if ((tmp_update == true) && (tmp_delete == true)) {
-					logger.info("[" + getUserName() + "/SimplexBean/toggleUpdateObservations] info");
+				if ((tmp_view == true) && (tmp_update == true)) {
+					 logger.info("[" + getUserName() 
+									 + "/SimplexBean/toggleUpdateObservationProjectEntry] info");
 				}
-
-				// Update the Observation. This will take precedence over deletion if 
-				//both are selected for the same station.
-				if ((tmp_update == true)) {
-					logger.info("[" + getUserName() + "/SimplexBean/toggleUpdateObservations] Updating "
-							+ tmp_ObservationName + " "
-							+ tmp_Observation.getObsvError());
-
-					Observation toUpdate = new Observation();
-					toUpdate.setObsvName(tmp_ObservationName);
-					ObjectSet result = db.get(toUpdate);
-					if (result.hasNext()) {
-						logger.info("[" + getUserName() + "/SimplexBean/toggleUpdateObservations] "
-								+ toUpdate.getObsvName());
-						toUpdate = (Observation) result.next();
-
-						toUpdate.setObsvError(tmp_Observation.getObsvError());
-						toUpdate.setObsvLocationEast(tmp_Observation
-								.getObsvLocationEast());
-						toUpdate.setObsvLocationNorth(tmp_Observation
-								.getObsvLocationNorth());
-						toUpdate.setObsvName(tmp_Observation.getObsvName());
-						toUpdate.setObsvRefSite(tmp_Observation
-								.getObsvRefSite());
-						toUpdate.setObsvType(tmp_Observation.getObsvType());
-						toUpdate.setObsvValue(tmp_Observation.getObsvValue());
-					}
-
-					db.set(toUpdate);
-					db.commit();
+				
+				// Update the Observation.
+				if ((tmp_view == true) && (tmp_update == false)) {
+					 currentEditProjectForm.currentObservation = 
+						  (Observation) (populateObservationFromContext(tmp_ObservationName));
+					 currentEditProjectForm.renderCreateObservationForm = 
+						  !currentEditProjectForm.renderCreateObservationForm;
 				}
-
-				// This is the deletion case. Update must be false as well as delete
-				//set to true.
-				if ((tmp_update == false) && (tmp_delete == true)) {
-
-					// Delete from the database.
-					// This requires we first search for the desired object
-					// and then delete the specific value that we get back.
-					logger.info("[" + getUserName() + "/SimplexBean/toggleUpdateObservations] Deleting "
-							+ tmp_ObservationName);
-					Observation todelete = new Observation();
-					todelete.setObsvName(tmp_Observation.getObsvName());
-					todelete.setObsvRefSite(tmp_Observation
-													.getObsvRefSite());
-					todelete.setObsvType(tmp_Observation.getObsvType());
-					
-					ObjectSet result = db.get(todelete);
-					if (result.hasNext()) {
-						todelete = (Observation) result.next();
-						db.delete(todelete);
-					}
+				
+				// This is the deletion case.
+				if ((tmp_update == true) && (tmp_view == false)) {
+					 // Delete from the database.
+					 // This requires we first search for the desired object
+					 // and then delete the specific value that we get back.
+					 logger.info("[" + getUserName() 
+									 + "/SimplexBean/toggleUpdateObservationProjectEntry] Deleteing " 
+									 + tmp_ObservationName + "from db");
+					 
+					 db = Db4o.openFile(getBasePath() + "/" + getContextBasePath()
+											  + "/" + userName + "/" + codeName + "/" + projectName
+											  + ".db");
+					 
+					 Observation todelete = new Observation();
+					 todelete.setObsvName(tmp_ObservationName);
+					 ObjectSet result = db.get(todelete);
+					 if (result.hasNext()) {
+						  todelete = (Observation) result.next();
+						  db.delete(todelete);
+					 }
 				}
-			}
-			reconstructMyObservationsForProjectList(projectName);
-			if (db != null)
-				 db.close();			
-			
-		} catch (Exception e) {			
-			logger.error("[" + getUserName() + "/SimplexBean/toggleUpdateObservations] " + e);
-		}
-		finally {
-			if (db != null)
-				db.close();			
-		}
-	}
-
+		  } catch (Exception e) {
+				logger.error("[" + getUserName() 
+								 + "/SimplexBean/toggleUpdateObservationProjectEntry] " + e);
+		  }
+		  finally {
+				if (db != null)
+					 db.close();			
+		  }
+	 }
+	 
+	 /**
+	  * This method is associated with actions of the observations data table in 
+	  * ProjectComponentsPanel.jsp
+	  */
+	 public void toggleUpdateObservations(ActionEvent ev) {
+		  String observationStatus = "Update";
+		  ObjectContainer db = null;
+		  try {
+				int iSelectObservation = -1;
+				// Find out which Observations were selected.  Loop over all of them
+				// and take appropriate actions in each case.
+				
+				db = Db4o.openFile(getBasePath() + "/"
+										 + getContextBasePath() + "/" + userName + "/"
+										 + codeName + "/" + projectName + ".db");
+				
+				for (int i = 0; i < myObservationsForProjectList.size(); i++) {
+					 Observation tmp_Observation = 
+						  (Observation) myObservationsForProjectList.get(i);
+					 
+					 // This is the info about the Observation.
+					 String tmp_ObservationName = tmp_Observation.getObsvName();
+					 boolean tmp_update = ((observationEntryForProject) myObservationEntryForProjectList
+												  .get(i)).getUpdate();
+					 boolean tmp_delete = ((observationEntryForProject) myObservationEntryForProjectList
+												  .get(i)).getDelete();
+					 
+					 currentEditProjectForm.initEditFormsSelection();
+					 
+					 //Update the Observation. This will take precedence over deletion if 
+					 //both are selected for the same station.
+					 if ((tmp_update == true)) {
+						  logger.info(getUserName() + "Updating "
+										  + tmp_ObservationName + " "
+										  + tmp_Observation.getObsvError());
+						  
+						  Observation toUpdate = new Observation();
+						  toUpdate.setObsvName(tmp_Observation.getObsvName());
+						  toUpdate.setObsvType(tmp_Observation.getObsvType());
+						  ObjectSet result = db.get(toUpdate);
+						  if (result.hasNext()) {
+								logger.info("["+getUserName() 
+												+ "/SimplexBean/toggleUpdateObservations] "
+												+ toUpdate.getObsvName()+" "
+												+ toUpdate.getObsvRefSite());
+								toUpdate = (Observation) result.next();
+								
+								toUpdate.setObsvError(tmp_Observation.getObsvError());
+								toUpdate.setObsvLocationEast(tmp_Observation
+																	  .getObsvLocationEast());
+								toUpdate.setObsvLocationNorth(tmp_Observation
+																		.getObsvLocationNorth());
+								toUpdate.setObsvName(tmp_Observation.getObsvName());
+								toUpdate.setObsvRefSite(tmp_Observation.getObsvRefSite());
+								toUpdate.setObsvType(tmp_Observation.getObsvType());
+								toUpdate.setObsvValue(tmp_Observation.getObsvValue());
+						  }
+						  
+						  db.set(toUpdate);
+					 }
+					 
+					 // This is the deletion case. Update must be false as well as delete
+					 //set to true.
+					 if ((tmp_update == false) && (tmp_delete == true)) {
+						  
+						  // Delete from the database.
+						  // This requires we first search for the desired object
+						  // and then delete the specific value that we get back.
+						  logger.info("[" + getUserName() + "/SimplexBean/toggleUpdateObservations] Deleting "
+										  + tmp_ObservationName);
+						  Observation todelete = new Observation();
+						  todelete.setObsvName(tmp_Observation.getObsvName());
+						  todelete.setObsvRefSite(tmp_Observation
+														  .getObsvRefSite());
+						  todelete.setObsvType(tmp_Observation.getObsvType());
+						  
+						  ObjectSet result = db.get(todelete);
+						  if (result.hasNext()) {
+								todelete = (Observation) result.next();
+								db.delete(todelete);
+						  }
+					 }
+				}
+				db.commit();
+				if (db != null) db.close();			
+				reconstructMyObservationsForProjectList(projectName);				
+		  } catch (Exception e) {			
+				logger.error("[" + getUserName() + "/SimplexBean/toggleUpdateObservations] " + e);
+		  }
+		  finally {
+				if (db != null) db.close();			
+		  }
+	 }
+	 
 	/**
 	 * This is an obsolete method.
 	 */
@@ -1869,11 +1868,8 @@ public class SimplexBean extends GenericSopacBean {
 	}
 
 	public void toggleUpdateFaultProjectEntry(ActionEvent ev) {
-
 		String faultStatus = "Update";
-		
 		ObjectContainer db = null;
-		
 		try {
 			int iSelectFault = -1;
 
@@ -1932,8 +1928,7 @@ public class SimplexBean extends GenericSopacBean {
 			logger.error("[" + getUserName() + "/SimplexBean/toggleUpdateFaultProjectEntry] " + e);
 		}
 		finally {
-			if (db != null)
-				db.close();			
+			if (db != null) db.close();			
 		}
 
 		// Print this out as KML
@@ -1953,7 +1948,6 @@ public class SimplexBean extends GenericSopacBean {
 									 + getContextBasePath() + "/" + userName + "/"
 									 + codeName + "/" + projectName + ".db");
 
-			
 			// Find out which fault was selected.
 			for (int i = 0; i < myFaultsForProjectList.size(); i++) {
 				Fault tmp_Fault = new Fault();
@@ -2047,8 +2041,7 @@ public class SimplexBean extends GenericSopacBean {
 			logger.error("[" + getUserName() + "/SimplexBean/toggleUpdateFaults] " + e);
 		}
 		finally {
-			if (db != null)
-				db.close();			
+			if (db != null) db.close();			
 		}
 
 		// Print this out as KML
