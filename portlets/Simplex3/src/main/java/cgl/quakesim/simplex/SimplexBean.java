@@ -587,8 +587,7 @@ public class SimplexBean extends GenericSopacBean {
 	/**
 	 * Reconstruct the Observation list from the context.
 	 */
-	protected List reconstructMyObservationEntryForProjectList(
-			String projectName) {
+	protected List reconstructMyObservationEntryForProjectList(String projectName) {
 		this.myObservationEntryForProjectList.clear();
 		ObjectContainer db = null;
 		try {
@@ -645,11 +644,17 @@ public class SimplexBean extends GenericSopacBean {
 			 logger.error(e);
 		}
 		finally {
-			if (db != null)
-				db.close();			
+			if (db != null) db.close();			
 		}
 		
 		reconstructMyObservationEntryForProjectList(projectName);
+		Collections.sort(this.myObservationsForProjectList,new Comparator(){
+				  public int compare(Object o1, Object o2) {
+						Observation ob1=(Observation) o1;
+						Observation ob2=(Observation) o2;
+						return ob1.getObsvName().compareToIgnoreCase(ob2.getObsvName());
+				  }
+			 });
 		return this.myObservationsForProjectList;
 	}
 
@@ -799,11 +804,18 @@ public class SimplexBean extends GenericSopacBean {
 			logger.error("[" + getUserName() + "/SimplexBean/reconstructMyFaultsForProjectList] " + e);
 		}
 		finally {
-			if (db != null)
-				db.close();			
+			if (db != null) db.close();			
 		}
 
 		reconstructMyFaultEntryForProjectList(projectName);
+		Collections.sort(this.myFaultsForProjectList,new Comparator(){
+				  public int compare(Object o1, Object o2) {
+						Fault f1=(Fault) o1;
+						Fault f2=(Fault) o2;
+						return f1.getFaultName().compareToIgnoreCase(f2.getFaultName());
+				  }
+			 });
+
 		return this.myFaultsForProjectList;
 	}
 

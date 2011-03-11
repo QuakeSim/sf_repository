@@ -27,6 +27,10 @@
   </f:verbatim>
   
   <h:panelGroup id="dflel235231">
+	 <f:verbatim>
+		<p/><b>Draw a fault: </b>Instead of selecting a fault from the map, 
+		you can draw a new fault on the map.<p/>
+	 </f:verbatim>
 	 <h:outputText id="daflelerkl513" escape="false" value="Drawing a fault : "/>
 	 <h:selectBooleanCheckbox id="dflab2" onclick="togglefaultdrawing()" value="#{DislocBean2.faultdrawing}"/>
 	 <h:panelGrid columns="3" border="0">

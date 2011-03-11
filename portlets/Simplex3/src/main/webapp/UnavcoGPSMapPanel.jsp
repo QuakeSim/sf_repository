@@ -2254,9 +2254,9 @@ function toggleBorder() {
 					  border="1">
 		<f:verbatim>
 		  <b>Select Stations from Map:</b> Select the stations that you want to use as observation points. Then, fetch the values and add them to your project observation list. This map interface and data are derived from the
-		<a href="http://geon.unavco.org/unavco/GPSVelocityViewer.php" target="_blank">
-		  UNAVCO GPS Velocity Viewer
-		  </a>.
+		  <a href="http://geon.unavco.org/unavco/GPSVelocityViewer.php" target="_blank">
+			 UNAVCO GPS Velocity Viewer
+			 </a>.
 		</f:verbatim>
 		<h:panelGrid id="unavcomapsAndCrap" columns="2" columnClasses="alignTop,alignTop">
 		  <h:panelGroup id="unavcomapncrap1">

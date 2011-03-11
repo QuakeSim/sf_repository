@@ -28,8 +28,14 @@
 							 escape="false" 
 							 value="<b>Project Origin (lat/lon):</b> (#{DislocBean2.currentParams.originLat}, #{DislocBean2.currentParams.originLon})" /> 
 		  <h:outputText id="stufw3f1" 
+							 rendered="#{DislocBean2.currentParams.observationPointStyle==1}"
 							 escape="false" 
-							 value="<b>Observation Style:</b> #{DislocBean2.currentParams.observationPointStyle}" /> 
+							 value="<b>Observation Style:</b> Grid" />
+
+		  <h:outputText id="stufw3f234" 
+							 rendered="#{DislocBean2.currentParams.observationPointStyle==0}"
+							 escape="false" 
+							 value="<b>Observation Style:</b> Scatter" />
 		</h:panelGrid>
 		<h:selectOneMenu id="DislocSelectionMenu" 
 							  title="Use this drop down to add faults and observation points to 

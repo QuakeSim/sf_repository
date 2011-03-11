@@ -1,9 +1,4 @@
 <h:form id="obsvform" rendered="#{DislocBean2.renderDislocGridParamsForm}"> 
-  <h:panelGrid id="dflelerkljk11662" 
-					columns="1" 
-					border="0" 
-					cellpadding="0" 
-					cellspacing="0" styleClass="centered">
 	 <f:verbatim>
 		<fieldset><legend class="portlet-form-label">Observation Components</legend>
 	 </f:verbatim>	 
@@ -30,10 +25,12 @@
 		</h:panelGroup> 
 		
 		<h:outputText  id="stuf334" value="Observation Style:" /> 
-		<h:panelGroup>
-		  <h:outputText id="stylejkrejonlkd" 
-							 value="#{DislocBean2.currentParams.observationPointStyle}"/>
-		</h:panelGroup>	      
+		<h:outputText id="stylejkrejonlkd" 
+						  rendered="#{DislocBean2.currentParams.observationPointStyle==1}"
+						  value="Grid"/>
+		<h:outputText id="stylejkrejonlkd3431" 
+						  rendered="#{DislocBean2.currentParams.observationPointStyle==0}"
+						  value="Scatter"/>
 	 </h:panelGrid>
 	 
 	 <h:panelGrid id="erep912e3" rendered="#{!DislocBean2.usesGridPoints}">
@@ -121,5 +118,4 @@
 							  actionListener="#{DislocBean2.deleteObsv}" /> 
 	 </h:panelGrid>
 	 <f:verbatim></fieldset></f:verbatim>			 
-  </h:panelGrid>
-</h:form> 
+</h:form>

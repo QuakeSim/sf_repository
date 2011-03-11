@@ -1973,40 +1973,34 @@ public class DislocBean extends GenericSopacBean {
 				db.close();			
 		}
 	}
-	
-	public void deleteObsv(ActionEvent ev) throws Exception {
-		
-		try {
-			
-			initEditFormsSelection();
-			if (db != null)
-				db.close();
-			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/" + userName + "/" + codeName + "/" + projectName + ".db");
-			
-			System.out.println("Deleting an observation");
-			// There should only be one of these at most.
-			// Delete the stored one and replace it with the new one.
-			
-			ObjectSet result = db.get(DislocParamsBean.class);
-			if (result.hasNext()) {
+	 
+	 public void deleteObsv(ActionEvent ev) throws Exception {
+		  try {
+			 initEditFormsSelection();
+			 if (db != null) db.close();
+			 db = Db4o.openFile(getBasePath() + "/" 
+									  + getContextBasePath() + "/" + userName + "/" 
+									  + codeName + "/" + projectName + ".db");
+			 
+			 System.out.println("Deleting an observation");
+			 // There should only be one of these at most.
+			 // Delete the stored one and replace it with the new one.
+			 
+			 ObjectSet result = db.get(DislocParamsBean.class);
+			 if (result.hasNext()) {
 				DislocParamsBean tmp = (DislocParamsBean) result.next();
 				db.delete(tmp);
 				}
-			db.commit();
-			if (db != null)
-				db.close();
-			} catch (Exception e) {
-				if (db != null)
-					db.close();
-				
+			 db.commit();
+			 if (db != null) db.close();
+		  } catch (Exception e) {
+				if (db != null) db.close();
 				System.out.println("[toggleAddObservationsForProject] " + e);				
-			}
-		finally {
-			 if (db != null)
-				  db.close();			
-		}
-		
-	}	
+		  }
+		  finally {
+				if (db != null) db.close();			
+		  }
+	 }	
 	
 	public void toggleAddObservationsForProject(ActionEvent ev)
 			throws Exception {
