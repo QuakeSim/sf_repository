@@ -224,7 +224,7 @@
 	<table>
 		<tr>
 			<td width="650" colspan="2">
-				<b><font size="4" face="Verdana">Daily RDAHMM GPS Data Analysis - JPL GIPSY Context Group</font></b><p>
+				<b><font size="4" face="Verdana">Daily RDAHMM GPS Data Analysis - UNAVCO Nucleus</font></b><p>
 				<font face="Verdana" size="2">Note:The default date is set to the latest day when GPS data is available. Click on a station symbol for more information.</font><p></p>
 			</td>
 		</tr>
@@ -427,7 +427,7 @@
 
 		var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/proxyCallHttpService?serviceUrl="
 					+ "http%3A%2F%2Fresult.service.hostname%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetStateChangeNumberPlot%3F"
-					+ "dataSource%3DJPL%26minLat%3D" + latFrom + "%26maxLat%3D" + latTo + "%26minLong%3D" + longFrom + "%26maxLong%3D" + longTo;
+					+ "dataSource%3DUNAVCO%26minLat%3D" + latFrom + "%26maxLat%3D" + latTo + "%26minLong%3D" + longFrom + "%26maxLong%3D" + longTo;
 		var link = callHttpService(url);
 		window.open(link);
 	}
@@ -477,7 +477,7 @@
 		var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/proxyCallHttpService?serviceUrl="
 				  + "http%3A%2F%2Fresult.service.hostname%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetKmlForDateRange%3FfromDateStr%3D"
 				  + fromDateStr + "%26toDateStr%3D" + toDateStr 
-				  + "%26resUrl%3Dhttp%3A%2F%2Fxml.access.hostname%2F%2Fdaily_rdahmmexec%2Fdaily%2FJPL_FILL%2Fstation-status-change-JPL_FILL.xml";
+				  + "%26resUrl%3Dhttp%3A%2F%2Fxml.access.hostname%2F%2Fdaily_rdahmmexec%2Fdaily%2FUNAVCO_FILL%2Fstation-status-change-UNAVCO_FILL.xml";
 		document.getElementById("waitScreen").style.visibility="visible";
 		var link = callHttpService(url);
 		window.open(link);
@@ -581,13 +581,13 @@
 	*/
 <%
 	Document statusDoc = null;
-	String xmlUrl = "http://xml.access.hostname//daily_rdahmmexec/daily/JPL_FILL/station-status-change-JPL_FILL.xml";
+	String xmlUrl = "http://xml.access.hostname//daily_rdahmmexec/daily/UNAVCO_FILL/station-status-change-UNAVCO_FILL.xml";
 	Element eleXml = null;
 	Element eleOutput = null;
 	try {
 		// if the file is old or does not exist, copy it from xmlUrl
 		boolean shouldCopy = false;		
-		File localFile = new File(config.getServletContext().getRealPath("station-status-change-JPL_FILL.xml"));
+		File localFile = new File(config.getServletContext().getRealPath("station-status-change-UNAVCO_FILL.xml"));
 		if (localFile.exists()) {		
 			Calendar calFile1 = Calendar.getInstance();
 			Calendar calFile2 = Calendar.getInstance();
