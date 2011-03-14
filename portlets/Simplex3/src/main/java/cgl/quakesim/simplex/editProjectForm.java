@@ -28,6 +28,7 @@ import org.apache.log4j.Level;
 public class editProjectForm extends GenericProjectBean {
 	 
 	 String obsvTextArea="";
+	 String obsvAriaTextArea="";
 	 Fault currentFault = new Fault();
 	 Observation currentObservation = new Observation();
 	 String projectSelectionCode = "";
@@ -802,6 +803,14 @@ public class editProjectForm extends GenericProjectBean {
 		  return renderGPSStationMap;
 	 }
 	 
+	 public void setObsvAriaTextArea(String obsvAriaTextArea) {
+		  this.obsvAriaTextArea=obsvAriaTextArea;
+	 }
+	 
+	 public String getObsvAriaTextArea() {
+		  return obsvAriaTextArea;
+	 }
+
 	 public void setObsvTextArea(String obsvTextArea) {
 		  this.obsvTextArea=obsvTextArea;
 	 }

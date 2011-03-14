@@ -307,6 +307,18 @@
 		  
 		  var newBounds = new GLatLngBounds(newSW, newNE);
 		  
+		  var border;
+		  var icon_NE, icon_SW;
+		  icon_NE = new GIcon(); 
+		  icon_NE.image = 'http://maps.google.com/mapfiles/ms/micons/red-pushpin.png';
+		  icon_NE.shadow = '';
+		  icon_NE.iconSize = new GSize(32, 32);
+		  icon_NE.shadowSize = new GSize(22, 20);
+		  icon_NE.iconAnchor = new GPoint(10, 32);
+		  icon_NE.dragCrossImage = '';
+
+		  icon_SW = icon_NE;
+
 		  marker_NE = new GMarker(newBounds.getNorthEast(), {draggable: true, icon: icon_NE});
 		  GEvent.addListener(marker_NE, 'dragend', function() {
 		  updateFaultline();

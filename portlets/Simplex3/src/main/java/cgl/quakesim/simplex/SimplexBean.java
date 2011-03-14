@@ -2151,31 +2151,46 @@ public class SimplexBean extends GenericSopacBean {
 	public void toggleAddFaultForProject(ActionEvent ev) {
 		currentEditProjectForm.initEditFormsSelection();
 
+		
+		logger.info("Check Project Origin: "
+						+currentProjectEntry.getOrigin_lat()
+						+currentProjectEntry.getOrigin_lon());
+		
+		double latStart=Double.parseDouble(currentEditProjectForm.currentFault.getFaultLatStarts());
+		double lonStart=Double.parseDouble(currentEditProjectForm.currentFault.getFaultLonStarts());
+		if(currentProjectEntry.getOrigin_lat()==projectEntry.DEFAULT_LAT
+			|| currentProjectEntry.getOrigin_lon()==projectEntry.DEFAULT_LON ) {
+			 currentProjectEntry.setOrigin_lat(latStart);
+			 currentProjectEntry.setOrigin_lon(lonStart);
+		}
+		double projectOriginLat=currentProjectEntry.getOrigin_lat();
+		double projectOriginLon=currentProjectEntry.getOrigin_lon();
+		
 		ObjectContainer db = null;
 		
 		try {
-
-			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
-					+ userName + "/" + codeName + "/" + projectName + ".db");
-
-			Fault tmpfault = new Fault();
+			 
+			 db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+									  + userName + "/" + codeName + "/" + projectName + ".db");
+			 
+			 Fault tmpfault = new Fault();
 			tmpfault.setFaultName(currentEditProjectForm.currentFault
-					.getFaultName());
+										 .getFaultName());
 			ObjectSet result = db.get(tmpfault);
 			if (result.hasNext()) {
-				tmpfault = (Fault) result.next();
+				 tmpfault = (Fault) result.next();
 				db.delete(tmpfault);
 			}
 			faultdrawing = false;
 			db.set(currentEditProjectForm.currentFault);
 			db.commit();
 		} catch (Exception e) {
-			logger.error("[" + getUserName() + "/SimplexBean/toggleAddFaultForProject] " + e);
+			 logger.error("[" + getUserName() + "/SimplexBean/toggleAddFaultForProject] " + e);
 		}
 		finally {
-			if (db != null) db.close();			
+			 if (db != null) db.close();			
 		}
-
+		
 		saveSimplexProjectEntry(currentProjectEntry);
 		// Print this out as KML
 		faultKmlUrl = createFaultKmlFile();
