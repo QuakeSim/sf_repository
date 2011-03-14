@@ -49,6 +49,10 @@
 		<f:selectItem id="item0"
 						  itemLabel="Add Observation List (Advanced)"
 						  itemValue="ShowObsvCutPaste" />
+
+		<f:selectItem id="ariaDisplacementForm"
+						  itemLabel="Import ARIA Coseismic Displacements"
+						  itemValue="ShowAriaObsvCutPaste" />
 		
 		<f:selectItem id="item33221"
 						  itemLabel="Add Fault from Map (Preferred)"

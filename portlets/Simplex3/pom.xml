@@ -223,7 +223,7 @@
 
         <!-- This is the apache repository for bridges -->
         <repository>
-            <id>apache-maven</id>
+            <id>apache-maven-cvs</id>
             <url>http://cvs.apache.org/repository</url>
         </repository>
 
@@ -233,12 +233,11 @@
             <id>crisisgrid-maven-repo</id>
             <url>http://www.crisisgrid.org/maven2</url>
         </repository>
-	
-	
-	
-	<repository>
-            <id>db4o</id>
-            <url>https://source.db4o.com/maven/</url>
+		  
+		  
+		  <repository>
+          <id>db4o</id>
+          <url>https://source.db4o.com/maven/</url>
         </repository>
 	
 	

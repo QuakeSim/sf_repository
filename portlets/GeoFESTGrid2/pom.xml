@@ -205,26 +205,16 @@
             <url>http://repo1.maven.org/maven2</url>
         </repository>
 
-
         <!-- This is the apache repository for bridges
         <repository>
-            <id>apache-maven</id>
+            <id>apache-maven-cvs</id>
             <url>http://cvs.apache.org/repository</url>
         </repository> -->
-
-
-        <!-- This is our local repository -->
-        <repository>
-            <id>crisisgrid-maven-repo</id>
-            <url>http://www.crisisgrid.org/maven2</url>
-        </repository>
-
 
         <repository>
             <id>sopac</id>
             <url>http://sopac.ucsd.edu/repositories/maven2/SOPAC/</url>
         </repository>
-
 
         <repository>
         <id>jboss</id>

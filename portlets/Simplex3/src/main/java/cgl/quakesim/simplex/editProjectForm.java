@@ -46,6 +46,7 @@ public class editProjectForm extends GenericProjectBean {
 	 boolean renderFaultMap = false;
 	 boolean renderDrawingMap = false;  //Not used
 	 boolean renderUnavcoGPSStationMap=false;
+	 boolean renderAriaObsvCutPaste=false;
 
 	 String faultSelectionCode = "";
 	 boolean renderAddFaultFromDBForm = false;
@@ -117,6 +118,7 @@ public class editProjectForm extends GenericProjectBean {
 		 renderFaultMap =  false;
 		 renderDrawingMap = false;
 		 renderUnavcoGPSStationMap=false;
+		 renderAriaObsvCutPaste=false;
 	}	
 	 
 	 public void toggleShowObsvEntries(ActionEvent ev) {
@@ -165,6 +167,10 @@ public class editProjectForm extends GenericProjectBean {
 		else if (projectSelectionCode.equals("ShowUnavcoGPSObsv")) {
 			 logger.debug("Showing Unavco GPS Map");
 			 renderUnavcoGPSStationMap=!renderUnavcoGPSStationMap;
+		}
+		
+		else if(projectSelectionCode.equals("ShowAriaObsvCutPaste")) {
+			 renderAriaObsvCutPaste=!renderAriaObsvCutPaste;
 		}
 		
 		else if (projectSelectionCode.equals("")) {
@@ -665,6 +671,14 @@ public class editProjectForm extends GenericProjectBean {
 	public void setFaultSelectionCode(String tmp_str) {
 		this.faultSelectionCode = tmp_str;
 	}
+
+	 public boolean getRenderAriaObsvCutPaste() {
+		  return this.renderAriaObsvCutPaste;
+	 }
+
+	 public void setRenderAriaObsvCutPaste(boolean renderAriaObsvCutPaste){
+		  this.renderAriaObsvCutPaste=renderAriaObsvCutPaste;
+	 }
 
 	public boolean getRenderSearchByFaultNameForm() {
 		return renderSearchByFaultNameForm;
