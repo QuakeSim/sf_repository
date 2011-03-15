@@ -216,11 +216,12 @@
 			 <id>codehaus</id>
 			 <url>http://repository.codehaus.org/</url>
 		  </repository>
+		  <!--
         <repository>
             <id>apache-maven</id>
             <url>http://www.ibiblio.org/maven2</url>
         </repository>
-
+-->
         <!-- This is the apache repository for bridges -->
         <repository>
             <id>apache-maven-cvs</id>
