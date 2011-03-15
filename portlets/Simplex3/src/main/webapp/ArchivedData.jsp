@@ -64,7 +64,7 @@ function dataTableSelectOneRadio(radio) {
 
 			<h:outputText id="message1" escape="false"
 							  rendered="#{!(empty SimplexBean.myarchivedFileEntryList)}"							  
-							  value="You have the following archived data files. Download the input and output files for more information on the data." /><br>
+							  value="You have the following archived data files. Download the input and output files for more information on the data. <br/>" />
 			
 			<h:dataTable border="1"
 							 id="SimplexOutputPanel"
@@ -74,21 +74,27 @@ function dataTableSelectOneRadio(radio) {
 							 var="myentry3">
 				<h:column>
 					<f:facet name="header">
-						<b><h:outputText  id="kjb16" escape="false" value="Project Name" /></b>
+					  <f:verbatim>
+						 <b>Project Name</b>
+					  </f:verbatim>
 					</f:facet>
 					<h:outputText id="kjb15" value="#{myentry3.projectName}" />
 				</h:column>
 
 				<h:column>
 					<f:facet name="header">
-						<b><h:outputText  id="kjb1623" escape="false" value="Creation Date"/></b>
+					  <f:verbatim>
+						 <b>Creation Date</b>
+					  </f:verbatim>
 					</f:facet>
 					<h:outputText id="kjb15123c" value="#{myentry3.creationDate}" />
 				</h:column>
 
 				<h:column>
 					<f:facet name="header">
-						<b><h:outputText  id="kjb14" escape="false" value="Archived Data File" /></b>
+					  <f:verbatim>
+						 <b>Archived Data File</b>
+					  </f:verbatim>
 					</f:facet>
 					<h:panelGrid columns="4" border="1">
 						<h:outputLink id="link1" value="#{myentry3.inputUrl}" target="_blank">
@@ -108,22 +114,26 @@ function dataTableSelectOneRadio(radio) {
 
 				<h:column>
 					<f:facet name="header">
-						<b><h:outputText  id="kjb3" escape="false" value="Kml file" /></b>
+					  <f:verbatim>
+						 <b>KML File</b>
+					  </f:verbatim>
 					</f:facet>
-						<h:panelGroup id="kjb4">
-						<h:outputLink id="link5" value="#{myentry3.kmlUrls[0]}" target="_blank">
-							<b><h:outputText  id="kjb6" value="[Download]" escape="false" /></b>
-						</h:outputLink>
-						<b><h:outputText  id="kjb2" escape="false" value=" " /></b>
-						<h:outputLink id="link6" value="http://maps.google.com/maps?q=#{myentry3.kmlUrls[0]}" target="_blank">
-							<font size="1px"><h:outputText id="kjb1" value="[View In Google map]" escape="false" /></font>
-						</h:outputLink>
-						</h:panelGroup>
+					<h:panelGroup id="kjb4">
+					  <h:outputLink id="link5" value="#{myentry3.kmlUrls[0]}" target="_blank">
+						 <h:outputText  id="kjb6" value="[Download]" escape="false" />
+					  </h:outputLink>
+					  <h:outputText  id="kjb2" escape="false" value=" " />
+					  <h:outputLink id="link6" value="http://maps.google.com/maps?q=#{myentry3.kmlUrls[0]}" target="_blank">
+						 <font size="1px"><h:outputText id="kjb1" value="[View In Google map]" escape="false" /></font>
+					  </h:outputLink>
+					</h:panelGroup>
 				</h:column>
-
+				
 				<h:column>
-					<f:facet name="header">
-						<b><h:outputText id="blah18" escape="false" value="Delete"/></b>
+				  <f:facet name="header">
+					  <f:verbatim>
+						 <b>Delete</b>
+					  </f:verbatim>
 					</f:facet>
 						<h:panelGroup id="deletepanel">
 							<h:commandButton id="DeleteSummary" value="Delete"
