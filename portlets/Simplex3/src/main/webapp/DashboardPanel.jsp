@@ -61,6 +61,10 @@
 		<f:selectItem id="item2"
 						  itemLabel="Create New Fault"
 						  itemValue="CreateNewFault" />
+
+		<f:selectItem id="itemProjectMap"
+						  itemLabel="Show Project Map"
+						  itemValue="ShowProjectMap" />
 	 </h:selectOneMenu>
 	 <h:commandButton id="button1" value="Make Selection"
 							actionListener="#{SimplexBean.currentEditProjectForm.toggleProjectSelection}">
