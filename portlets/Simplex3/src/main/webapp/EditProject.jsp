@@ -225,6 +225,7 @@
 		  <%@include file="FaultSearchResultsPanel.jsp"%>
 		  <%@include file="FaultMapPanelFrame.jsp"%>
 		  <%@include file="UnavcoGPSMapPanel.jsp"%>
+		  <%@include file="AriaObservationPanel.jsp"%>
 		</h:panelGrid>
 		
 		<%@include file="ProjectComponentsPanel.jsp"%>

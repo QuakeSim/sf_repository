@@ -172,6 +172,7 @@ public class editProjectForm extends GenericProjectBean {
 		
 		else if(projectSelectionCode.equals("ShowAriaObsvCutPaste")) {
 			 renderAriaObsvCutPaste=!renderAriaObsvCutPaste;
+			 logger.info("Showing Aria cut and paste field: "+renderAriaObsvCutPaste);
 		}
 		
 		else if (projectSelectionCode.equals("")) {
@@ -179,7 +180,7 @@ public class editProjectForm extends GenericProjectBean {
 		}
 
 		else {
-			 ;
+			 logger.error("Unhandled project selection code: "+projectSelectionCode);
 		}
 	}
 

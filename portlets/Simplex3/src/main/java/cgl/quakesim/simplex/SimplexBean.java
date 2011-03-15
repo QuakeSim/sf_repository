@@ -75,6 +75,7 @@ public class SimplexBean extends GenericSopacBean {
 
 	String codeName = "";
 	private int SIMPLEX_OBSV_COUNT = 5;
+	private int ARIA_OBSV_COUNT = 8;
 
 	// This is the db4o database	
 
@@ -1316,7 +1317,8 @@ public class SimplexBean extends GenericSopacBean {
 				tmp_proj = (projectEntry) results.next();
 				if (tmp_proj.getProjectName() != null
 						&& tmp_proj.getProjectName().equals(projectName)) {
-					logger.info("[" + getUserName() + "/SimplexBean/toggleSelectProject] Found project, reassigning");
+					logger.info("[" + getUserName() 
+									+ "/SimplexBean/toggleSelectProject] Found project, reassigning");
 					this.currentProjectEntry = tmp_proj;
 					currentEditProjectForm.setProjectEntry(currentProjectEntry);
 					break;
@@ -2055,10 +2057,81 @@ public class SimplexBean extends GenericSopacBean {
 		finally {
 			if (db != null) db.close();			
 		}
-
 		// Print this out as KML
 		faultKmlUrl = createFaultKmlFile();
 	}
+	 
+	 public void toggleAddAriaObsvForProject(ActionEvent ev){
+		currentEditProjectForm.initEditFormsSelection();
+		
+		ObjectContainer db = null;
+		
+		try {
+			 db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+									  + userName + "/" + codeName + "/" + projectName + ".db");
+			 Observation[] tmpObsv=new Observation[2];
+			 
+			 StringTokenizer st1, st2;
+			 st1 = new StringTokenizer(currentEditProjectForm.getObsvAriaTextArea().trim(), "\n");
+			 String line;
+			 
+			 while (st1.hasMoreTokens()) {
+				  line = st1.nextToken();
+				  if(line.indexOf("#")>-1) {
+						logger.info("Comment line: "+line);
+				  }
+				  else {
+						// Should accept spaces, tabs, commas
+						st2 = new StringTokenizer(line.trim(), "\t , "); 
+						String firstToken=st2.nextToken();
+						//Not a comment but make sure the line is properly formatted.
+						logger.debug("Aria line token count: "+st2.countTokens());
+
+						//NOTE: We don't have anything to check for malformed lines.
+						//Each row corresponds to two simplex observations: one
+						//"east" type and one "north" type.
+						tmpObsv[0] = new Observation();
+						tmpObsv[1] = new Observation();
+						while (st2.hasMoreTokens()) {
+							 String lon=firstToken;
+							 String lat=st2.nextToken();
+							 String eastDisp=st2.nextToken();
+							 String northDisp=st2.nextToken();
+							 String errorDisp=st2.nextToken();
+							 //Next two are not used.
+							 String zero1=st2.nextToken();
+							 String zero2=st2.nextToken();
+							 String stationName=st2.nextToken();
+							 
+							 //This is the East displacement
+							 tmpObsv[0].setObsvType("1");							 
+							 tmpObsv[0].setObsvName(projectName + stationName);
+							 tmpObsv[0].setObsvValue(eastDisp);
+							 tmpObsv[0].setObsvError(errorDisp);
+							 tmpObsv[0].setObsvRefSite("0");
+							 
+							 //This is the North displacement
+							 tmpObsv[1].setObsvType("2");							 
+							 tmpObsv[1].setObsvName(projectName + stationName);
+							 tmpObsv[1].setObsvValue(northDisp);
+							 tmpObsv[1].setObsvError(errorDisp);
+							 tmpObsv[1].setObsvRefSite("0");
+							 
+							 tmpObsv=setXYLocations(tmpObsv, lat, lon);
+						}
+				  }
+				  db.set(tmpObsv[0]);
+				  db.set(tmpObsv[1]);
+			 }
+			 db.commit();
+		} catch (Exception e) {
+			 logger.error("[" + getUserName() + "/SimplexBean/toggleAddObsvTextAreaForProject] " + e);
+			 e.printStackTrace();
+		}
+		finally {
+			 if (db != null) db.close();			
+		}
+	 }
 
 	public void toggleAddObsvTextAreaForProject(ActionEvent ev) {
 		currentEditProjectForm.initEditFormsSelection();
@@ -2096,9 +2169,8 @@ public class SimplexBean extends GenericSopacBean {
 						tmpObsv.setObsvError(st2.nextToken());
 						tmpObsv.setObsvRefSite("1");
 					}
-					logger.error("\n");
 				} else {
-					logger.info("[" + getUserName() + "/SimplexBean/toggleAddObsvTextAreaForProject] Line malformed: " + line);
+					logger.warn("[" + getUserName() + "/SimplexBean/toggleAddObsvTextAreaForProject] Line malformed: " + line);
 				}
 				obsvCount++;
 				db.set(tmpObsv);
@@ -2169,21 +2241,20 @@ public class SimplexBean extends GenericSopacBean {
 		ObjectContainer db = null;
 		
 		try {
-			 
 			 db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 									  + userName + "/" + codeName + "/" + projectName + ".db");
 			 
 			 Fault tmpfault = new Fault();
-			tmpfault.setFaultName(currentEditProjectForm.currentFault
-										 .getFaultName());
-			ObjectSet result = db.get(tmpfault);
-			if (result.hasNext()) {
-				 tmpfault = (Fault) result.next();
-				db.delete(tmpfault);
-			}
-			faultdrawing = false;
-			db.set(currentEditProjectForm.currentFault);
-			db.commit();
+			 tmpfault.setFaultName(currentEditProjectForm.currentFault
+										  .getFaultName());
+			 ObjectSet result = db.get(tmpfault);
+			 if (result.hasNext()) {
+				  tmpfault = (Fault) result.next();
+				  db.delete(tmpfault);
+			 }
+			 faultdrawing = false;
+			 db.set(currentEditProjectForm.currentFault);
+			 db.commit();
 		} catch (Exception e) {
 			 logger.error("[" + getUserName() + "/SimplexBean/toggleAddFaultForProject] " + e);
 		}
