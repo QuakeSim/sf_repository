@@ -102,44 +102,110 @@
     </repository>
   </repositories>
  
-  <modules>
-	<!-- Various set up stuff -->
-	<module>portal_deploy</module>
-	<module>containers</module>
-	<module>lnf4portal</module>
-	
-	<module>GenericQuakeSimProject</module>
-	
-   <!--These are the portlets.  Add new ones here. -->
-    <module>portlets/DailyRDAHMM-portlet</module>
-    <module>portlets/Disloc-portlet</module>
-    <module>portlets/GeoFESTGrid-portlet</module>
-    <module>portlets/NewMeshGen-portlet</module>
-    <module>portlets/RDAHMM-portlet</module>
-    <module>portlets/RealTimeRdahmm-portlet</module>
-    <module>portlets/STFILTER-portlet</module>
-    <module>portlets/Simplex-portlet</module>
-    <module>portlets/StationMonitor-portlet</module>
-    <module>portlets/FaultDB-portlet</module>
-	 <module>portlets/Disloc2</module>
-	 <module>portlets/rssportlet</module>
-	 <module>portlets/Disloc3</module>
-	 <module>portlets/Simplex3</module>
-	 <module>portlets/GeoFESTGrid2</module>
-
-    <!-- These are services.  Add new ones here. -->
-    <module>ExecutionServices/AnalyzeTseriService</module>
-    <module>ExecutionServices/AntVisco</module>
-    <module>ExecutionServices/DislocService</module>
-    <module>ExecutionServices/GeoFESTService</module>
-    <module>ExecutionServices/GridInfoService</module>
-    <module>ExecutionServices/KmlGenerator</module>
-    <module>ExecutionServices/QueueService</module>
-    <module>ExecutionServices/STFilterService</module>
-    <module>ExecutionServices/SimpleXService</module>
-    <module>ExecutionServices/RDAHMMService</module>
-	<module>ExecutionServices/DailyRDAHMMService</module>
-	<module>ExecutionServices/DailyRDAHMMResultService</module>
-  </modules>
-
+  <profiles>
+	 <profile>
+		<id>build-all</id>
+		<activation>
+		  <activeByDefault>true</activeByDefault>
+		</activation>
+		<modules>
+		  <!-- Various set up stuff -->
+		  <module>portal_deploy</module>
+		  <module>containers</module>
+		  <module>lnf4portal</module>
+		  
+		  <module>GenericQuakeSimProject</module>
+		  
+		  <!--These are the portlets.  Add new ones here. -->
+		  <module>portlets/DailyRDAHMM-portlet</module>
+		  <module>portlets/Disloc-portlet</module>
+		  <module>portlets/GeoFESTGrid-portlet</module>
+		  <module>portlets/NewMeshGen-portlet</module>
+		  <module>portlets/RDAHMM-portlet</module>
+		  <module>portlets/RealTimeRdahmm-portlet</module>
+		  <module>portlets/STFILTER-portlet</module>
+		  <module>portlets/Simplex-portlet</module>
+		  <module>portlets/StationMonitor-portlet</module>
+		  <module>portlets/FaultDB-portlet</module>
+		  <module>portlets/Disloc2</module>
+		  <module>portlets/rssportlet</module>
+		  <module>portlets/Disloc3</module>
+		  <module>portlets/Simplex3</module>
+		  <module>portlets/GeoFESTGrid2</module>
+		  
+		  <!-- These are services.  Add new ones here. -->
+		  <module>ExecutionServices/AnalyzeTseriService</module>
+		  <module>ExecutionServices/AntVisco</module>
+		  <module>ExecutionServices/DislocService</module>
+		  <module>ExecutionServices/GeoFESTService</module>
+		  <module>ExecutionServices/GridInfoService</module>
+		  <module>ExecutionServices/KmlGenerator</module>
+		  <module>ExecutionServices/QueueService</module>
+		  <module>ExecutionServices/STFilterService</module>
+		  <module>ExecutionServices/SimpleXService</module>
+		  <module>ExecutionServices/RDAHMMService</module>
+		  <module>ExecutionServices/DailyRDAHMMService</module>
+		  <module>ExecutionServices/DailyRDAHMMResultService</module>
+		</modules>
+	 </profile>
+	 <profile>
+		<id>build-portal</id>
+		<activation>
+		  <activeByDefault>false</activeByDefault>
+		  <property><name>quakesim-portal</name></property> 
+		</activation>
+		<modules>
+		  <!-- Various set up stuff -->
+		  <module>portal_deploy</module>
+		  <module>containers</module>
+		  <module>lnf4portal</module>
+		  
+		  <module>GenericQuakeSimProject</module>
+		  
+		  <!--These are the portlets.  Add new ones here. -->
+		  <module>portlets/DailyRDAHMM-portlet</module>
+		  <module>portlets/Disloc-portlet</module>
+		  <module>portlets/GeoFESTGrid-portlet</module>
+		  <module>portlets/NewMeshGen-portlet</module>
+		  <module>portlets/RDAHMM-portlet</module>
+		  <module>portlets/RealTimeRdahmm-portlet</module>
+		  <module>portlets/STFILTER-portlet</module>
+		  <module>portlets/Simplex-portlet</module>
+		  <module>portlets/StationMonitor-portlet</module>
+		  <module>portlets/FaultDB-portlet</module>
+		  <module>portlets/Disloc2</module>
+		  <module>portlets/rssportlet</module>
+		  <module>portlets/Disloc3</module>
+		  <module>portlets/Simplex3</module>
+		  <module>portlets/GeoFESTGrid2</module>
+		</modules>
+	 </profile>
+	 <profile>
+		<id>build-services</id>
+		<activation>
+		  <activeByDefault>false</activeByDefault>
+		  <property><name>quakesim-services</name></property> 
+		</activation>
+		<modules>
+		  <!-- Various set up stuff -->
+		  <module>portal_deploy</module>
+		  
+		  <module>GenericQuakeSimProject</module>
+		  
+		  <!-- These are services.  Add new ones here. -->
+		  <module>ExecutionServices/AnalyzeTseriService</module>
+		  <module>ExecutionServices/AntVisco</module>
+		  <module>ExecutionServices/DislocService</module>
+		  <module>ExecutionServices/GeoFESTService</module>
+		  <module>ExecutionServices/GridInfoService</module>
+		  <module>ExecutionServices/KmlGenerator</module>
+		  <module>ExecutionServices/QueueService</module>
+		  <module>ExecutionServices/STFilterService</module>
+		  <module>ExecutionServices/SimpleXService</module>
+		  <module>ExecutionServices/RDAHMMService</module>
+		  <module>ExecutionServices/DailyRDAHMMService</module>
+		  <module>ExecutionServices/DailyRDAHMMResultService</module>
+		</modules>
+	 </profile>
+  </profiles>
 </project>

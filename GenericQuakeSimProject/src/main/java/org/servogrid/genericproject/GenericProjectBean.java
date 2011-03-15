@@ -417,14 +417,14 @@ public class GenericProjectBean {
     }
 
     public List QueryFaultsBySQL(String tmp_query_sql, 
-				 String faultDBServiceUrl) {
-	List tmp_list = new ArrayList();
-	try {
-	    
-	    String DB_RESPONSE_HEADER = "results of the query:";
-	    SelectService ss = new SelectServiceLocator();
-	    Select select = ss.getSelect(new URL(faultDBServiceUrl));
-	    
+											String faultDBServiceUrl) {
+		  List tmp_list = new ArrayList();
+		  try {
+				
+				String DB_RESPONSE_HEADER = "results of the query:";
+				SelectService ss = new SelectServiceLocator();
+				Select select = ss.getSelect(new URL(faultDBServiceUrl));
+				
 	    // --------------------------------------------------
 	    // Make queries.
 	    // --------------------------------------------------
