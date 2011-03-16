@@ -6,9 +6,12 @@
 	 <!--==================================================-->
 	 <!-- These need to be edited by the deployer -->
 	 <!--==================================================-->
-	 <portal.server.ip>localhost</portal.server.ip>
+	 <portal.server.ip>129.79.49.102</portal.server.ip>
 	 <host.base.url>http://${portal.server.ip}:8080/</host.base.url>
+	 <!--
 	 <google.master.key>ABQIAAAAxOZ1VuCkrWUtft6jtubycBRxYpIIOz9ynlSKjbx-4JMuN5JjrhR5gSOcKdieYppOZ4_yzZc_Ti15qw</google.master.key>
+	 -->
+	 <google.master.key>ABQIAAAAxOZ1VuCkrWUtft6jtubycBRondEx7h7u3u8PwuunrGUWlbqzqhTJGVjiJCCikfESuSdSxDL5Oe5BEw</google.master.key>
 	 <!--==================================================-->
 	 <!-- 
 			Specify your container.  Currently only gridsphere
@@ -52,7 +55,7 @@
 
 	
 	<!-- These are locations of 'third party' binary files -->
-	<bin.path>${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec</bin.path>
+	<bin.path>${catalina.home}/webapps/${project.artifactId}/WEB-INF/binaryexec</bin.path>
 	<geofest.bin.home>${env.HOME}/GEMCodes/GeoFEST/bin/</geofest.bin.home>
 	<parallel.geofest.bin.home>${env.HOME}/GEMCodes/GeoFEST-4.8/bin/</parallel.geofest.bin.home>
 	<rdahmm.bin.home>${env.HOME}/GEMCodes/RDAHMM2/bin/</rdahmm.bin.home>
@@ -162,14 +165,15 @@
 		  
 		  <module>GenericQuakeSimProject</module>
 		  
-		  <!--These are the portlets.  Add new ones here. -->
+		  <!--
+				These are the portlets.  Add new ones here. This list
+				is edited to remove obsolete ones. 
+			 -->
 		  <module>portlets/DailyRDAHMM-portlet</module>
-		  <module>portlets/Disloc-portlet</module>
 		  <module>portlets/GeoFESTGrid-portlet</module>
 		  <module>portlets/NewMeshGen-portlet</module>
 		  <module>portlets/RDAHMM-portlet</module>
 		  <module>portlets/RealTimeRdahmm-portlet</module>
-		  <module>portlets/STFILTER-portlet</module>
 		  <module>portlets/Simplex-portlet</module>
 		  <module>portlets/StationMonitor-portlet</module>
 		  <module>portlets/FaultDB-portlet</module>

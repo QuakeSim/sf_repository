@@ -100,11 +100,6 @@
 									  style="text-align:right" 
 									  value="#{myentry31.faultName}" 
 									  required="true" />
-					 <h:selectBooleanCheckbox id="faultnamec" 
-													  style="text-align:center"
-													  rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}" 
-													  onclick="togglefaultname(this)" 
-													  value="" />
 				  </h:panelGrid>
 				</h:column>
 				
@@ -128,7 +123,7 @@
 					 <h:outputText id="lkdrqh1183" value="Y" />
 				  </f:facet>
 				  
-				  <h:panelGrid  id="spxpcp7" columns="3" cellpadding="0" cellspacing="0">
+				  <h:panelGrid  id="spxpcp7" columns="2" cellpadding="0" cellspacing="0">
 					 <h:inputText id="FaultLocationY2" 
 									  size="7"
 									  style="text-align:right" 

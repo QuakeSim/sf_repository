@@ -21,6 +21,7 @@
 	 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
 	 <script type="text/javascript" src="@host.base.url@@artifactId@/lib/jquery.cookie.js"></script>
 	 <script type="text/javascript" src="@host.base.url@@artifactId@/jquery.treeview.js"></script>
+	 <script type="text/javascript" src="@host.base.url@@artifactId@/egeoxml.js"></script>
   </head>
   
   <body onload="myInit()" onunload="GUnload()">
@@ -226,6 +227,7 @@
 		  <%@include file="FaultMapPanelFrame.jsp"%>
 		  <%@include file="UnavcoGPSMapPanel.jsp"%>
 		  <%@include file="AriaObservationPanel.jsp"%>
+		  <%@include file="ProjectMapPanel.jsp"%>
 		</h:panelGrid>
 		
 		<%@include file="ProjectComponentsPanel.jsp"%>

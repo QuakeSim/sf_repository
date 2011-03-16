@@ -49,7 +49,7 @@
 		<artifactId>maven-antrun-plugin</artifactId>
       <executions>
        <execution>
-        <id>Clean ${pom.artifactId} portlet</id>
+        <id>Clean ${project.artifactId} portlet</id>
 		  <phase>clean</phase>
         <configuration>
 			 <!-- 
@@ -58,10 +58,10 @@
 					its children.
 				-->
 			 <tasks>			 
-				<delete dir="${catalina.home}/webapps/${pom.artifactId}">
+				<delete dir="${catalina.home}/webapps/${project.artifactId}">
 				</delete>
 
-				<delete file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${pom.artifactId}"/>
+				<delete file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${project.artifactId}"/>
           </tasks>
         </configuration>
         <goals>
@@ -70,16 +70,16 @@
        </execution>
 		 <!-- Inherited from the parent 
 				<execution>
-				  <id>Install ${pom.artifactId} portlet</id>
+				  <id>Install ${project.artifactId} portlet</id>
 				  <phase>install</phase>
 				  <configuration>
 					 
 					 <tasks>
-						<copy overwrite="true" filtering="false" failonerror="false" todir="${catalina.home}/webapps/${pom.artifactId}">
-						  <fileset dir="${basedir}/target/${pom.artifactId}"/>
+						<copy overwrite="true" filtering="false" failonerror="false" todir="${catalina.home}/webapps/${project.artifactId}">
+						  <fileset dir="${basedir}/target/${project.artifactId}"/>
 						</copy>				  
 						
-						<touch file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${pom.artifactId}"/>
+						<touch file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${project.artifactId}"/>
 					 </tasks>
 					 
 				  </configuration>
@@ -89,12 +89,12 @@
 				</execution>
 				-->
 		 <execution>
-			<id>Convert ${pom.artifactId} portlet</id>
+			<id>Convert ${project.artifactId} portlet</id>
 			<phase>package</phase>
 			<configuration>				
 					 <tasks if="to.jsf">
-						<delete file="${basedir}/target/${pom.artifactId}/WEB-INF/lib/portals-bridges-commons-1.0.jar"/>
-						<delete file="${basedir}/target/${pom.artifactId}/WEB-INF/lib/portals-bridges-jsf-1.0.jar"/>			 
+						<delete file="${basedir}/target/${project.artifactId}/WEB-INF/lib/portals-bridges-commons-1.0.jar"/>
+						<delete file="${basedir}/target/${project.artifactId}/WEB-INF/lib/portals-bridges-jsf-1.0.jar"/>			 
 					 </tasks>
 				  </configuration>
 				  <goals>
@@ -107,38 +107,38 @@
          <configuration>
            <tasks>
 				 <echo message="Google Master Key: ${google.master.key}"/>
-				 <replace dir="${basedir}/target/${pom.artifactId}" token="put.google.map.key.here" value="${google.master.key}">
+				 <replace dir="${basedir}/target/${project.artifactId}" token="put.google.map.key.here" value="${google.master.key}">
 					<include name="**/*.jsp"/>
 				 </replace>
 				 
 				 				 
 				 <echo message="Setting the host.base.url: ${host.base.url}"/>
-				 <replace dir="${basedir}/target/${pom.artifactId}"
+				 <replace dir="${basedir}/target/${project.artifactId}"
 					  token="@host.base.url@"
 					  value="${host.base.url}">
 					<include name="**/*.*"/>
 				 </replace>
-				 <replace dir="${basedir}/target/${pom.artifactId}/WEB-INF" token="@host.base.url@" value="${host.base.url}">
+				 <replace dir="${basedir}/target/${project.artifactId}/WEB-INF" token="@host.base.url@" value="${host.base.url}">
 					<include name="**/faces-config.xml"/>
 				 </replace>
 				 
-				 <replace dir="${basedir}/target/${pom.artifactId}" 
+				 <replace dir="${basedir}/target/${project.artifactId}" 
 					  token="@artifactId@"
-					  value="${pom.artifactId}">
+					  value="${project.artifactId}">
 					<include name="**/*.*"/>
 				 </replace>
 				 
-				 <copy file="${basedir}/target/${pom.artifactId}/gadget_template.xml" tofile="${project.home}/gadgets/${pom.artifactId}_gadget.xml" overwrite="true"/>
+				 <copy file="${basedir}/target/${project.artifactId}/gadget_template.xml" tofile="${project.home}/gadgets/${project.artifactId}_gadget.xml" overwrite="true"/>
 				 
-				 <replace file="${project.home}/gadgets/${pom.artifactId}_gadget.xml"
+				 <replace file="${project.home}/gadgets/${project.artifactId}_gadget.xml"
 					  token="@host.base.url@"
 					  value="${host.base.url}">
 					<include name="**/*.*"/>
 				 </replace>
 				 
-				 <replace file="${project.home}/gadgets/${pom.artifactId}_gadget.xml"
+				 <replace file="${project.home}/gadgets/${project.artifactId}_gadget.xml"
 					  token="@artifactId@"
-					  value="${pom.artifactId}">
+					  value="${project.artifactId}">
 					<include name="**/*.*"/>
 				 </replace>
 <!--				 

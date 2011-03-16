@@ -7,6 +7,7 @@
 		<script type="text/javascript" src="@host.base.url@@artifactId@/lib/jquery.cookie.js"></script>
 		<script type="text/javascript" src="@host.base.url@@artifactId@/jquery.treeview.js"></script>
 		<script type="text/javascript" src="@host.base.url@@artifactId@/egeoxml.js"></script>
+
 	 </f:verbatim>	
 	 
 	 <h:form id="faultKMLSelectorForm">

@@ -2861,6 +2861,9 @@ public class SimplexBean extends GenericSopacBean {
 		this.faultKmlFilename = faultKmlFilename;
 	}
 
+	 //REVIEW: Note this creates a NEW url every single time it is called, and
+	 //it removes the previous KML file.  It is not your usual, inert get function.  
+	 //Only call it once per page.
 	public String getFaultKmlUrl() {
 		faultKmlUrl = createFaultKmlFile();
 		return faultKmlUrl;

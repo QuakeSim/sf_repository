@@ -22,7 +22,7 @@
 		<artifactId>maven-antrun-plugin</artifactId>
       <executions>
        <execution>
-        <id>Clean ${pom.artifactId} portlet</id>
+        <id>Clean ${project.artifactId} portlet</id>
 		  <phase>clean</phase>
         <configuration>
 			 <!-- 
@@ -32,7 +32,7 @@
 				-->
 			 <tasks>			 
 				<delete failonerror="false">
-				  <fileset dir="${catalina.home}/webapps/${pom.artifactId}">
+				  <fileset dir="${catalina.home}/webapps/${project.artifactId}">
 					 <include name="**/*.jar"/>
 					 <include name="**/*.xml"/>
 					 <include name="**/*.properties"/>
@@ -42,7 +42,7 @@
 				  </fileset>
 				</delete>
 
-				<delete file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${pom.artifactId}"/>
+				<delete file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${project.artifactId}"/>
           </tasks>
         </configuration>
         <goals>
@@ -50,7 +50,7 @@
         </goals>
        </execution>
        <execution>
-        <id>Install ${pom.artifactId} portlet</id>
+        <id>Install ${project.artifactId} portlet</id>
 		  <phase>install</phase>
         <configuration>
 			 <!-- 
@@ -62,8 +62,8 @@
 				<copy overwrite="true" 
 						filtering="false"
 						failonerror="false"
-						todir="${catalina.home}/webapps/${pom.artifactId}">
-				  <fileset dir="${basedir}/target/${pom.artifactId}"/>
+						todir="${catalina.home}/webapps/${project.artifactId}">
+				  <fileset dir="${basedir}/target/${project.artifactId}"/>
 				</copy>
 				
 				<!--
@@ -72,13 +72,13 @@
 				<copy overwrite="true" 
 						filtering="true"
 						failonerror="false"
-						todir="${catalina.home}/webapps/${pom.artifactId}">
-				  <fileset dir="${basedir}/target/${pom.artifactId}">
+						todir="${catalina.home}/webapps/${project.artifactId}">
+				  <fileset dir="${basedir}/target/${project.artifactId}">
 					 <include name="**/portlet.xml"/>
 				  </fileset>
 				  
 				</copy>
-				<touch file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${pom.artifactId}"/>
+				<touch file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${project.artifactId}"/>
           </tasks>
         </configuration>
         <goals>
@@ -90,13 +90,13 @@
          <configuration>
            <tasks>
 				 <echo message="Google Master Key: ${google.master.key}"/>
-				 <replace dir="${basedir}/target/${pom.artifactId}" 
+				 <replace dir="${basedir}/target/${project.artifactId}" 
                       token="put.google.map.key.here"
                       value="${google.master.key}">
 					<include name="**/*.jsp"/>
 				 </replace>
 				 <echo message="Setting the host.base.url: ${host.base.url}"/>
-				 <replace dir="${basedir}/target/${pom.artifactId}" 
+				 <replace dir="${basedir}/target/${project.artifactId}" 
                       token="@host.base.url@"
                       value="${host.base.url}">
 					<include name="**/*.jsp"/>
