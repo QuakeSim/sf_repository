@@ -1,7 +1,7 @@
 ########################################################
 #      input XYZ file name = "INPUT.xyz"                #
 #      input Q file name = "INPUT.Q"                    #
-#                                                      #
+#      input raw file name = "INPUT.raw"                                                #
 ########################################################
 
 #########################################################
@@ -9,7 +9,7 @@
 #                                                       #
 #                                                       #
 #########################################################
-	  system " cut -c6-15 INPUT.raw | sed '/^$/d' > INPUT.raw.dates.txt "
+      system " cut -c6-15 INPUT.raw | sed '/^$/d' > INPUT.raw.dates.txt "
       system " paste INPUT.raw.dates.txt INPUT.xyz | sed 's/\t/ /' | sed 's/\n/ /' > INPUT.xyz.combine.txt "
       #system " sed = INPUT.xyz | sed 'N;s/\n/ /' > INPUT.xyz.combine.txt "
       system " paste INPUT.Q INPUT.xyz.combine.txt | sed '/^$/d' >  INPUT.xyz.combine.tmp.txt"
