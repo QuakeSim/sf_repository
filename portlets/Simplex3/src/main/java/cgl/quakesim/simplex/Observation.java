@@ -41,9 +41,7 @@ public class Observation  implements java.io.Serializable {
            this.obsvRefSite = obsvRefSite;
            this.obsvType = obsvType;
            this.obsvValue = obsvValue;
-
     }
-
 
     /**
      * Gets the obsvError value for this Observation.

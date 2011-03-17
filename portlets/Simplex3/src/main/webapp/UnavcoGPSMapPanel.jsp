@@ -2246,9 +2246,6 @@ function toggleBorder() {
   </f:verbatim>
 
   <h:form id="unavcoobsvGPSMap">
-	 <%--
-	 <h:inputHidden id="unavcoRedJsonStations" value="#{SimplexBean.selectedGPSJSONValues}"/>
-	 --%>
 	 <h:panelGrid id="unavcosimplexSelectionMapGrid"
 					  columns="1"
 					  border="1">

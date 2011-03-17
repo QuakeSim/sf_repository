@@ -190,6 +190,8 @@ public class SimplexBean extends GenericSopacBean {
 
 	protected String faultKmlUrl;
 	protected String faultKmlFilename;
+	 protected String obsvKmlFilename;
+	 protected String obsvKmlUrl;
 	protected String portalBaseUrl;
 
 	 //This is the logger
@@ -1650,6 +1652,10 @@ public class SimplexBean extends GenericSopacBean {
 		
 	}  
 	
+	 /**
+	  * This method returns the UNAVCO velocity values from the FTP site.
+	  * REVIEW: Need to check if this method should be public or protected. 
+	  */
 	public void getvalues(ActionEvent ev) throws IOException {
 		
 		logger.info("[" + getUserName() + "/SimplexBean/getvalues] called");
@@ -1669,8 +1675,11 @@ public class SimplexBean extends GenericSopacBean {
 			uvp2.getFile(igs05);
 			String dataUrl = "";
 			
-			logger.info("[" + getUserName() + "/SimplexBean/getvalues] stationlist : " + selectedGpsStationName);
-			logger.info("[" + getUserName() + "/SimplexBean/getvalues] stationlist size : " + stations.length);
+			logger.info("[" + getUserName() 
+							+ "/SimplexBean/getvalues] stationlist : " + selectedGpsStationName);
+			logger.info("[" 
+							+ getUserName() + "/SimplexBean/getvalues] stationlist size : " 
+							+ stations.length);
 			
 			for (int nA = 0; nA < stations.length; nA++) {
 				String[] station = stations[nA].split("/");
@@ -1818,8 +1827,6 @@ public class SimplexBean extends GenericSopacBean {
 	}
 	
 	
-	
-	
 	public String toggleViewKml() {
 
 		logger.info("[" + getUserName() + "/SimplexBean/toggleViewKml] Kml viewer");
@@ -1854,8 +1861,8 @@ public class SimplexBean extends GenericSopacBean {
 				if (results.hasNext()) {
 					projectSimpleXOutput = (SimpleXOutputBean) results.next();
 				} else {
-					logger.info("[" + getUserName() 
-									 + "/SimplexBean/toggleViewKml] info: can not find this project for SimpleXOutputBean");
+					logger.error("[" + getUserName() 
+									 + "/SimplexBean/toggleViewKml] error: can not find project: "+projectName);
 				}
 				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath()
 						+ "/" + userName + "/" + codeName + ".db");
@@ -2108,14 +2115,14 @@ public class SimplexBean extends GenericSopacBean {
 							 tmpObsv[0].setObsvName(projectName + stationName);
 							 tmpObsv[0].setObsvValue(eastDisp);
 							 tmpObsv[0].setObsvError(errorDisp);
-							 tmpObsv[0].setObsvRefSite("0");
+							 tmpObsv[0].setObsvRefSite("1");
 							 
 							 //This is the North displacement
 							 tmpObsv[1].setObsvType("2");							 
 							 tmpObsv[1].setObsvName(projectName + stationName);
 							 tmpObsv[1].setObsvValue(northDisp);
 							 tmpObsv[1].setObsvError(errorDisp);
-							 tmpObsv[1].setObsvRefSite("0");
+							 tmpObsv[1].setObsvRefSite("1");
 							 
 							 tmpObsv=setXYLocations(tmpObsv, lat, lon);
 						}
@@ -2465,6 +2472,36 @@ public class SimplexBean extends GenericSopacBean {
 		  setGpsRefStation(false);
 	 }
 
+	 /**
+	  * Reconstructs the lat/lon positions for a given project from the 
+	  * project origin and the (x,y) coordinate.  We use the convention that
+	  * latLonVals[0]=latitude and latLonVals[1]=longitude.
+	  */
+	 private double[] getObsvLatLonFromXY(Observation obsv){
+		  double[] latLonVals=new double[2];
+		  
+		  //Note we are assuming here the project origin has 
+		  //been set. This is a bad assumption.
+		  double origin_lat = currentProjectEntry.getOrigin_lat();
+		  double origin_lon = currentProjectEntry.getOrigin_lon();
+		 
+		  double xloc=Double.parseDouble(obsv.getObsvLocationEast());
+		  double yloc=Double.parseDouble(obsv.getObsvLocationNorth());
+		  
+		  latLonVals[0]=yloc/111.32+origin_lat;
+		  latLonVals[1]=xloc/factor(origin_lon,origin_lat)+origin_lon;
+
+		  return latLonVals;
+	 }
+
+	 /**
+	  * Returns the relative cartesian coordinates for a given observation.
+	  * Note we throw away the original lat/lon values.
+	  * 
+	  * REVIEW: Really should keep the lat/lon, but modifying Observation.java
+	  * and all the related server-side code is tricky.  Also unsure how well
+	  * the database query stuff would work (forward and backward compatibility).
+	  */
 	private Observation[] setXYLocations(Observation[] obsv,
 			String gpsStationLat, String gpsStationLon) {
 		// Get project origin.
@@ -2499,6 +2536,7 @@ public class SimplexBean extends GenericSopacBean {
 		// We have probably updated the origin, so save to db.
 		return obsv;
 	}
+	 
 
 	 /**
 	  * This converts a single selected station in to 3 observation
@@ -2787,6 +2825,94 @@ public class SimplexBean extends GenericSopacBean {
 		return first;
 	}
 
+	 /**
+	  * Create an kml file of observations. This method is currently 
+	  * broken since we don't keep track of the observation points'
+	  * original lat/lons.
+	  */
+	 public String createObsvKmlFile(){
+		  String newObsvFilename = "";
+		  String oldLocalDestination = this.getBasePath() + "/" + codeName
+				+ "/" + getObsvKmlFilename();
+		  String localDestination = "";
+		  
+		  try {
+				// Remove the previous file.
+				logger.info("[" + getUserName() 
+								+ "/SimplexBean/createObsvKmlFile] Old obsv kml file:" 
+								+ localDestination);
+				File oldFile = new File(oldLocalDestination);
+				if (oldFile.exists()) {
+					 logger.info("[" + getUserName() 
+									 + "/SimplexBean/createObsvKmlFile] Deleting old obsv kml file");
+					 oldFile.delete();
+				}
+				
+				// Create the new file.
+				long timeStamp = (new Date()).getTime();
+				newObsvFilename = userName + "-" + codeName + "-" + projectName
+					 + "-" + "observations"+"-"+timeStamp + ".kml";
+				setObsvKmlFilename(newObsvFilename);
+				// This should be the new file name.
+				localDestination = this.getBasePath() + "/" 
+					 + codeName + "/"
+					 + getObsvKmlFilename();
+				
+				Observation[] obsvs = getObservationsFromDB();
+				PrintWriter out = new PrintWriter(new FileWriter(localDestination));
+				logger.info("Number of observations:"+obsvs.length);
+				
+				if (obsvs != null && obsvs.length > 0) {
+					 out.println(xmlHead);
+					 out.println(kmlHead);
+					 out.println(docBegin);
+					 for (int i = 0; i < obsvs.length; i++) {
+						  double[] obsvLatLon=getObsvLatLonFromXY(obsvs[i]);
+						  out.println(pmBegin);
+						  out.println(descBegin);
+						  out.println("<b>Obsv: </b>" + obsvs[i].getObsvName());
+						  out.println(descEnd);
+						  out.println(pointBegin);
+						  out.println(coordBegin);
+						  out.println(obsvLatLon[1] + comma
+										  + obsvLatLon[0] + comma + "0");
+						  out.println(coordEnd);
+						  out.println(pointEnd);
+						  out.println(pmEnd);
+					 }
+					 out.println(docEnd);
+					 out.println(kmlEnd);
+					 out.flush();
+					 out.close();
+				}
+		  } catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  
+		  String returnString = portalBaseUrl + "/Simplex3/"
+				+ getObsvKmlFilename();
+		  logger.info("[" + getUserName() + "/SimplexBean/createObsvKmlFile] KML:" + returnString);
+		  return returnString;
+	 }
+
+	public String getObsvKmlFilename() {
+		return obsvKmlFilename;
+	}
+
+	public void setObsvKmlFilename(String obsvKmlFilename) {
+		this.obsvKmlFilename = obsvKmlFilename;
+	}
+
+	 //Note this overrides the previous KML file every time it is called.
+	 public String getObsvKmlUrl() {
+		  obsvKmlUrl=createObsvKmlFile();
+		  return obsvKmlUrl;
+	 }
+
+	 public void setObsvKmlUrl(String obsvKmlUrl){
+		  this.obsvKmlUrl=obsvKmlUrl;
+	 }
+
 	/**
 	 * Create a KML file of the faults. The method assumes access to global
 	 * variables.
@@ -2799,17 +2925,19 @@ public class SimplexBean extends GenericSopacBean {
 
 		try {
 			// Remove the previous file.
-			logger.info("[" + getUserName() + "/SimplexBean/createFaultKmlFile] Old fault kml file:" + localDestination);
+			logger.debug("[" + getUserName() 
+							+ "/SimplexBean/createFaultKmlFile] Old fault kml file:" + localDestination);
 			File oldFile = new File(oldLocalDestination);
 			if (oldFile.exists()) {
-				logger.info("[" + getUserName() + "/SimplexBean/createFaultKmlFile] Deleting old fault kml file");
+				logger.debug("[" + getUserName() 
+								+ "/SimplexBean/createFaultKmlFile] Deleting old fault kml file");
 				oldFile.delete();
 			}
 
 			// Create the new file.
 			long timeStamp = (new Date()).getTime();
 			newFaultFilename = userName + "-" + codeName + "-" + projectName
-					+ "-" + timeStamp + ".kml";
+					+ "-" + "faults"+ "-" +timeStamp + ".kml";
 			setFaultKmlFilename(newFaultFilename);
 			// This should be the new file name.
 			localDestination = this.getBasePath() + "/" + codeName + "/"

@@ -10,31 +10,30 @@
       // This toggles displays of fieldsets.
 		//--------------------------------------------------
 		function toggleDisplay1(fieldset) {
-		var panelGrid1=document.getElementById("UpdateSelectFaultsForm:dflelerkljg162");
-		
-		if(panelGrid1.style.display=='none') {
-		panelGrid1.style.display='block';
+		   var panelGrid1=document.getElementById("UpdateSelectFaultsForm:dflelerkljg162");
+		   var commandButton=document.getElementById("UpdateSelectFaultsForm:SelectFault4projj");
+		   doDisplayToggle(panelGrid1,commandButton,'block');
 		}
-		else if (panelGrid1.style.display!='none'){
-		panelGrid1.style.display='none';
-		}
-		else {
-		panelGrid1.style.display='block';
-		}
-		}
-		
+
 		function toggleDisplay2(fieldset) {
-		var panelGrid=document.getElementById("UpdateSelectObservationForm:aerbasd1");
-		
-		if(panelGrid.style.display=='none') {
-		panelGrid.style.display='block';
-		}
-		else if (panelGrid.style.display!='none'){
-		panelGrid.style.display='none';
-		}
-		else {
-		panelGrid.style.display='block';
-		}
+		   var panelGrid=document.getElementById("UpdateSelectObservationForm:aerbasd1");
+		   var commandButton=document.getElementById("UpdateSelectObservationForm:SelectObservations4proj1");
+		   doDisplayToggle(panelGrid,commandButton,'none');
+		}		
+
+		function doDisplayToggle(panelGrid1,commandButton,defaultVal){
+		   if(panelGrid1.style.display=='none') {
+		     panelGrid1.style.display='block';
+		     commandButton.style.display='block';
+		   }
+		   else if (panelGrid1.style.display!='none'){
+			  panelGrid1.style.display='none';
+			  commandButton.style.display='none';
+			}
+		   else {
+			  panelGrid1.style.display=defaultVal;
+			  commandButton.style.display=defaultVal;
+		   }
 		}
 		
 		  //]]>
@@ -310,7 +309,8 @@
 				</h:column>
 			 </h:dataTable>
 		</h:panelGrid>
-		<h:commandButton id="SelectFault4projj" value="UpdateFault"
+		<h:commandButton id="SelectFault4projj" 
+							  value="UpdateFault"
 							  actionListener="#{SimplexBean.toggleUpdateFaults}" />
 	 <f:verbatim></fieldset></f:verbatim>		  
 	 </h:form>
@@ -324,7 +324,8 @@
 			 <u>Toggle the fault display on/off by double clicking anywhere in this fieldset.</u>
 		</f:verbatim>
 		
-		<h:commandButton id="SelectObservations4proj1"					   
+		<h:commandButton id="SelectObservations4proj1"		
+							  style="display:none"
 							  value="Update Observations"
 							  actionListener="#{SimplexBean.toggleUpdateObservations}" />
 		
@@ -339,7 +340,8 @@
 							cellpadding="0" 
 							cellspacing="0" 
 							id="dflelerz166" 
-							headerClass="componentstableh2" columnClasses="componentstablec"						
+							headerClass="componentstableh2" 
+							columnClasses="componentstablec"						
 							value="#{SimplexBean.myObservationEntryForProjectList}" 
 							var="myentry7">
 			 
