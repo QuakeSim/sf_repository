@@ -248,44 +248,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Web Service Dependencies -->
-		  <!--
-        <dependency>
-             <groupId>QuakeSim2</groupId>
-             <artifactId>WebServices</artifactId>
-             <version>1.0</version>
-             <scope>compile</scope>
-        </dependency>
-		  -->
-        <!-- The following are given "provided" scope 
-             to allow me to compile without actually using 
-             these exact jars.  The real jars in in 
-             WEB-INF/lib.  Not good, but these are 
-             archaic services, so I don't want to waste time
-             resolving these dependencies
-        -->
-<!--
-        <dependency>
-             <groupId>axis</groupId>
-             <artifactId>axis</artifactId>
-             <version>1.1</version>
-             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-             <groupId>axis</groupId>
-             <artifactId>axis-jaxrpc</artifactId>
-             <version>1.2</version>
-             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-             <groupId>commons-discovery</groupId>
-             <artifactId>commons-discovery</artifactId>
-             <version>0.2</version>
-             <scope>provided</scope>
-        </dependency>
--->
         <dependency>
              <groupId>axis</groupId>
              <artifactId>axis</artifactId>
