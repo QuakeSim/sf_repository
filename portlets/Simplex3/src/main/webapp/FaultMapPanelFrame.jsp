@@ -1,137 +1,149 @@
-	 <h:panelGroup id="FaultMapPanelFrame"
-rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}">
-	 <f:verbatim>
+<h:panelGroup id="FaultMapPanelFrame"
+				  rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}">
+  <f:verbatim>
 	 <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/jquery.treeview.css">
-	 
-	 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+		
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
 		<script type="text/javascript" src="@host.base.url@@artifactId@/lib/jquery.cookie.js"></script>
-	 <script type="text/javascript" src="@host.base.url@@artifactId@/jquery.treeview.js"></script>
-	 <script type="text/javascript" src="@host.base.url@@artifactId@/egeoxml.js"></script>
-	 
+		<script type="text/javascript" src="@host.base.url@@artifactId@/jquery.treeview.js"></script>
+		<script type="text/javascript" src="@host.base.url@@artifactId@/egeoxml.js"></script>
+		
 	 </f:verbatim>	
 	 
-
 	 <h:form id="faultKMLSelectorForm">
-		<h:inputHidden id="faultName" value="#{SimplexBean.currentEditProjectForm.mapFaultName}"/>
-		<h:inputHidden id="faultlistsize" value="#{SimplexBean.myFaultsForProjectListsize}"/>
-		
-		<h:panelGrid id="faultKMLSelectorPanelGrid"
-						 border="1"
+		<h:panelGroup id="panelGroupSelectFaultContainer">
+		  <f:verbatim>
+			 <fieldset>
+				<legend><b>Option 1: Select a Fault</b></legend>
+		  </f:verbatim>
+		  
+		  <h:inputHidden id="faultName" value="#{SimplexBean.currentEditProjectForm.mapFaultName}"/>
+		  <h:inputHidden id="faultlistsize" value="#{SimplexBean.myFaultsForProjectListsize}"/>
+		  
+		  <h:panelGrid id="faultKMLSelectorPanelGrid"
+							border="0"
 						 columns="1">
-		  
-		  <h:outputText id="FaultMapSelectingInstructions"
-							 escape="false"
-							 value="<b>Selecting a Fault</b><br/>"/>
-		  <h:outputText id="FaultMapInstructionsStep1" 
-							 escape="false"
-							 value="<b>Step 1</b>: Select a fault by either clicking it on the map or its link in theleft hand navigator.  Click the checkboxes to toggle the fault display.<br/>"/>
-		  <h:outputText id="CurrentSelectedFaultValue" 
-							 escape="false"
-							 value="<b>Current Selected Fault:</b> None"/>
-		  
-		  <h:panelGrid id="faultMapsideGrid" columns="2" border="0">
+			 <h:outputText id="CurrentSelectedFaultValue" 
+								escape="false"
+								value="<b>Current Selected Fault:</b> None"/>
+			 
 			 <f:verbatim>
-				<div id="faultMapside" style="width: 200px; height: 600px; overflow:auto;"></div>
+				<b>Step 1</b>: Select a fault by either clicking it on the map or its link in theleft hand navigator.  Click the checkboxes to toggle the fault display.<br/>
 			 </f:verbatim>
-			 <f:verbatim>
-				<div id="faultMap" style="width: 800px; height: 600px;"></div>
-			 </f:verbatim>
-		  </h:panelGrid>
 		  
-		  <h:panelGrid id="gridforbutton" columns="1" border="0" style="vertical-align:top;width: 800px;">
-			 <h:panelGroup id="faultparambuttonpanel">
-				<h:outputText id="FaultMapInstructionsStep2"
-								  escape="false"
+			 <h:panelGrid id="faultMapsideGrid" columns="2" border="0">
+				<f:verbatim>
+				  <div id="faultMapside" style="width: 200px; height: 600px; overflow:auto;"></div>
+				</f:verbatim>
+				<f:verbatim>
+				  <div id="faultMap" style="width: 800px; height: 600px;"></div>
+			 </f:verbatim>
+			 </h:panelGrid>
+			 
+			 <h:panelGrid id="gridforbutton" columns="1" border="0" style="vertical-align:top;width: 800px;">
+				<h:panelGroup id="faultparambuttonpanel">
+				  <h:outputText id="FaultMapInstructionsStep2"
+									 escape="false"
 								  value="<b>Step 2</b>: Click the button below to get chosen fault params.  "/>
-				<h:commandButton id="queryDBFromMap" 
-									  value="Get Fault Params" 
-									  actionListener="#{SimplexBean.currentEditProjectForm.toggleSetFaultFromMap}"/> 
-		  </h:panelGroup>
-		</h:panelGrid>
-	 </h:panelGrid>
-  </h:form>
-  
-  <h:form id="faultKMLDrawingForm">
-	 <h:panelGrid id="DrawingFaultPanel" 
-					  columns="1" 
-					  border="1" 
-					  style="vertical-align:top;width: 800px;">
-		<h:panelGroup id="dflel235231">
-		  <h:outputText id="DrawFaultSimplexDesc" 
-							 escape="false" 
-							 value="<b>Drawing a fault:</b> If you wish to draw a new fault that doesn't exist in the catalogs above, select here. <br/>"/>
-		  <h:outputText id="DrawFaultSimplexCheck" 
-							 escape="false" 
-							 value="<b>Enable Fault Drawing:</b> "/>		  
-		  <h:selectBooleanCheckbox id="dflab2" 
-											onclick="togglefaultdrawing()" 
-											value="#{SimplexBean.faultdrawing}"/>
-		  
-		  <h:panelGrid id="ffmpawe1" 
-							columns="3" 
-							border="0">
-			 <h:dataTable border="1" 
-							  cellpadding="0" 
-							  cellspacing="0" 
-							  id="dflelerh93" 
-							  headerClass="componentstableh"
-							  value="#{SimplexBean.currentEditProjectForm}" var="myentry32">
-				<h:column>
-				  <f:facet name="header">
-					 <h:outputText id="nfa1" escape="false" value="<b>Name</b>" />
-				  </f:facet>
-				  <h:inputText id="faultnamet" 
-									style="text-align:right;width:60px" 
-									  value="#{myentry32.faultName}" 
-									  required="true" />								
-				</h:column>
-				
-				<h:column>
-				  <f:facet name="header">
-					 <h:outputText id="nfa9" escape="false" value="<b>Lon Start</b>" />
-				  </f:facet>
-				  <h:inputText id="faultdrawLonStartst" 
-									value="#{myentry32.faultLonStart}" 
-									required="true" />
-				</h:column>
-				
-				<h:column>
-				  <f:facet name="header">
-					 <h:outputText id="nfa7" escape="false" value="<b>Lat Start</b>" />
-				  </f:facet>
-				  <h:inputText id="faultdrawLatStartst" 
-									value="#{myentry32.faultLatStart}" 
-									required="true" />
-				</h:column>
-				
-				<h:column>
-				  <f:facet name="header">
-					 <h:outputText id="nfa5" escape="false" value="<b>Lon End</b>" />
-				  </f:facet>
-				  <h:inputText id="faultdrawLonEndst" 
-									value="#{myentry32.faultLonEnd}" 
-									required="true" />
-				</h:column>
-				<h:column>
-				  <f:facet name="header">
-					 <h:outputText id="nfa3" escape="false" value="<b>Lat End</b>" />
-				  </f:facet>
-				  <h:inputText id="faultdrawLatEndst" value="#{myentry32.faultLatEnd}" required="true" />
-				</h:column>
-			 </h:dataTable>
+				  <h:commandButton id="queryDBFromMap" 
+										 value="Get Fault Params" 
+										 actionListener="#{SimplexBean.currentEditProjectForm.toggleSetFaultFromMap}"/> 
+				</h:panelGroup>
+			 </h:panelGrid>
 		  </h:panelGrid>
+		  <f:verbatim></fieldset></f:verbatim>
 		</h:panelGroup>
-		<h:panelGroup id="SimplexDrawingFaultActionPanel">
-		  <h:outputText id="DrawFaultSimplexAction" 
-							 escape="false" 
-							 value="Add the fault after drawing it: "/>		  
-		  <h:commandButton id="addfaultsd" 
-								 value="Add a drawn fault" 
-								 actionListener="#{SimplexBean.toggleDrawFaultFromMap}"/>
-		</h:panelGroup>
-	 </h:panelGrid>
-  </h:form>
+	 </h:form>
 	 
+		<h:form id="faultKMLDrawingForm">
+		  <h:panelGroup id="panelGroupDrawFaultContainer">
+			 <f:verbatim>
+				<fieldset>
+				  <legend><b>Option 2: Draw a Fault</b></legend>
+			 </f:verbatim>
+			 <h:panelGrid id="DrawingFaultPanel" 
+							columns="1" 
+							border="0" 
+							style="vertical-align:top;width: 800px;">
+			 
+			 <h:panelGroup id="dflel235231">
+				<h:outputText id="DrawFaultSimplexDesc" 
+								  escape="false" 
+								  value="<b>Drawing a fault:</b> If you wish to draw a new fault that doesn't exist in the catalogs above, select here. <br/>"/>
+				<h:outputText id="DrawFaultSimplexCheck" 
+								  escape="false" 
+								  value="<b>Enable Fault Drawing:</b> "/>		  
+				<h:selectBooleanCheckbox id="dflab2" 
+												 onclick="togglefaultdrawing()" 
+												 value="#{SimplexBean.faultdrawing}"/>
+				
+				<h:panelGrid id="ffmpawe1" 
+								 columns="3" 
+								 border="0">
+				  <h:dataTable border="1" 
+									cellpadding="0" 
+									cellspacing="0" 
+									id="dflelerh93" 
+									headerClass="componentstableh"
+									value="#{SimplexBean.currentEditProjectForm}" var="myentry32">
+					 <h:column>
+						<f:facet name="header">
+						  <h:outputText id="nfa1" escape="false" value="<b>Name</b>" />
+						</f:facet>
+						<h:inputText id="faultnamet" 
+										 style="text-align:right;width:60px" 
+										 value="#{myentry32.faultName}" 
+										 required="true" />								
+					 </h:column>
+				
+					 <h:column>
+						<f:facet name="header">
+						  <h:outputText id="nfa9" escape="false" value="<b>Lon Start</b>" />
+						</f:facet>
+						<h:inputText id="faultdrawLonStartst" 
+										 value="#{myentry32.faultLonStart}" 
+									required="true" />
+					 </h:column>
+					 
+					 <h:column>
+						<f:facet name="header">
+						  <h:outputText id="nfa7" escape="false" value="<b>Lat Start</b>" />
+						</f:facet>
+						<h:inputText id="faultdrawLatStartst" 
+										 value="#{myentry32.faultLatStart}" 
+										 required="true" />
+					 </h:column>
+					 
+					 <h:column>
+						<f:facet name="header">
+						  <h:outputText id="nfa5" escape="false" value="<b>Lon End</b>" />
+						</f:facet>
+						<h:inputText id="faultdrawLonEndst" 
+										 value="#{myentry32.faultLonEnd}" 
+										 required="true" />
+					 </h:column>
+					 <h:column>
+						<f:facet name="header">
+						  <h:outputText id="nfa3" escape="false" value="<b>Lat End</b>" />
+						</f:facet>
+						<h:inputText id="faultdrawLatEndst" value="#{myentry32.faultLatEnd}" required="true" />
+					 </h:column>
+				  </h:dataTable>
+				</h:panelGrid>
+			 </h:panelGroup>
+			 <h:panelGroup id="SimplexDrawingFaultActionPanel">
+				<h:outputText id="DrawFaultSimplexAction" 
+								  escape="false" 
+								  value="Add the fault after drawing it: "/>		  
+				<h:commandButton id="addfaultsd" 
+									  value="Add a drawn fault" 
+									  actionListener="#{SimplexBean.toggleDrawFaultFromMap}"/>
+			 </h:panelGroup>
+		  </h:panelGrid>
+		  <f:verbatim></fieldset></f:verbatim>
+		</h:panelGroup>
+	 </h:form>
+
 	 <f:verbatim>
 	 <script type="text/javascript">
 	 //Instantiate the map
@@ -329,15 +341,15 @@ function initialFaultdrawing() {
 	 //Create the NE marker
 	 marker_NE = new GMarker(newBounds.getNorthEast(), {draggable: true, icon: icon_NE});
 	 GEvent.addListener(marker_NE, 'dragend', function() {
-		  updateFaultline(marker_NE,marker_SW,border);
-		  updateFaultdrawn(marker_NE,marker_SW,border);
+		  updateFaultline();
+		  updateFaultdrawn();
 	 });
 	 
 	 //Create the SW marker
 	 marker_SW = new GMarker(newBounds.getSouthWest(), {draggable: true, icon: icon_SW});
 	 GEvent.addListener(marker_SW, 'dragend', function() {
-		  updateFaultline(marker_NE,marker_SW,border);
-		  updateFaultdrawn(marker_NE,marker_SW,border);
+		  updateFaultline();
+		  updateFaultdrawn();
 	 });  
 	 
 	 //Draw a line between them
@@ -357,7 +369,7 @@ function initialFaultdrawing() {
 //This updates the displayed endpoint values of
 //the fault drawing form input fields.
 //--------------------------------------------------
-function updateFaultdrawn(marker_NE,marker_SW,border) {
+function updateFaultdrawn(){
 	 
 	 var faultdrawLatEnds = document.getElementById("faultKMLDrawingForm:dflelerh93_0:faultdrawLatEndst");	
 	 var faultdrawLatStarts = document.getElementById("faultKMLDrawingForm:dflelerh93_0:faultdrawLatStartst");     
@@ -373,7 +385,7 @@ function updateFaultdrawn(marker_NE,marker_SW,border) {
 //--------------------------------------------------
 //This replots the fault.
 //--------------------------------------------------
-function updateFaultline(marker_NE,marker_SW,border) {
+function updateFaultline() {
 	 faultMap.removeOverlay(border);	 
 	 var points = [new GLatLng(marker_SW.getPoint().lat(), marker_SW.getPoint().lng()),
 						new GLatLng(marker_NE.getPoint().lat(), marker_NE.getPoint().lng())
