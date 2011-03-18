@@ -17,24 +17,6 @@
 		<relativePath>..</relativePath>
 	 </parent>
 
-    <!-- We get this from the command line and pass to the resources
-         via filtering -->
-	 <!-- These are inherited from the parent. 
-    <properties>
-		<quakesim.dir>QuakeSim2</quakesim.dir>
-		<project.home>${env.HOME}/workspace/${quakesim.dir}</project.home>
-		<tomcat.bin.perm>755</tomcat.bin.perm>
-		<tomcat.version>apache-tomcat-5.5.20</tomcat.version>
-		<yui.version>yui_0.12.2</yui.version>
-		<catalina.home>${env.HOME}/workspace/${quakesim.dir}/portal_deploy/${tomcat.version}/</catalina.home>
-		<tomcat.base.dir>${env.HOME}/workspace/${quakesim.dir}/portal_deploy/${tomcat.version}/</tomcat.base.dir>
-      <portal.host.name>129.79.49.68</portal.host.name>
-		<google.master.key>ABQIAAAAgYAii_xZWT_zf_1Dj7VvgBTf0RZ3CvQOmi-GOjEFoiamz50c8BRdcsDMSPvaTAMTVPL7sMxMzuZWCQ</google.master.key>
-		<portal.server.ip>129.79.49.68</portal.server.ip>
-		<host.base.url>http://${portal.server.ip}:8080/</host.base.url>
-    </properties>
-	 -->
-
     <build>
         <finalName>Simplex3</finalName>
         <resources>
@@ -68,26 +50,6 @@
 			 <goal>run</goal>
         </goals>
        </execution>
-		 <!-- Inherited from the parent 
-				<execution>
-				  <id>Install ${project.artifactId} portlet</id>
-				  <phase>install</phase>
-				  <configuration>
-					 
-					 <tasks>
-						<copy overwrite="true" filtering="false" failonerror="false" todir="${catalina.home}/webapps/${project.artifactId}">
-						  <fileset dir="${basedir}/target/${project.artifactId}"/>
-						</copy>				  
-						
-						<touch file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${project.artifactId}"/>
-					 </tasks>
-					 
-				  </configuration>
-				  <goals>
-					 <goal>run</goal>
-				  </goals>
-				</execution>
-				-->
 		 <execution>
 			<id>Convert ${project.artifactId} portlet</id>
 			<phase>package</phase>
@@ -110,7 +72,6 @@
 				 <replace dir="${basedir}/target/${project.artifactId}" token="put.google.map.key.here" value="${google.master.key}">
 					<include name="**/*.jsp"/>
 				 </replace>
-				 
 				 				 
 				 <echo message="Setting the host.base.url: ${host.base.url}"/>
 				 <replace dir="${basedir}/target/${project.artifactId}"
@@ -141,17 +102,6 @@
 					  value="${project.artifactId}">
 					<include name="**/*.*"/>
 				 </replace>
-<!--				 
-				 <replace file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/layouts/TemplateLayout.xml"
-					  token="Simplex-portlet"
-					  value="Simplex3">					
-				 </replace> 
-				 
-				 <replace file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/layouts/TemplateLayout.xml"
-					  token="Simplex-Portlet"
-					  value="Simplex3">					
-				 </replace> 
--->				 
            </tasks>
 
          </configuration>
@@ -197,62 +147,6 @@
             </dependencies>
         </profile>
     </profiles>
-
-
-    <repositories>
-<!--
-        <repository>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <id>apache-maven-snapshots</id>
-            <url>http://cvs.apache.org/maven-snapshot-repository</url>
-        </repository>
--->
-        <repository>
-			 <id>codehaus</id>
-			 <url>http://repository.codehaus.org/</url>
-		  </repository>
-		  <!--
-        <repository>
-            <id>apache-maven</id>
-            <url>http://www.ibiblio.org/maven2</url>
-        </repository>
--->
-        <!-- This is the apache repository for bridges -->
-        <repository>
-            <id>apache-maven-cvs</id>
-            <url>http://cvs.apache.org/repository</url>
-        </repository>
-
-        <!-- This is our local repository -->
-	
-        <repository>
-            <id>crisisgrid-maven-repo</id>
-            <url>http://www.crisisgrid.org/maven2</url>
-        </repository>
-		  
-		  
-		  <repository>
-          <id>db4o</id>
-          <url>https://source.db4o.com/maven/</url>
-        </repository>
-	
-	
-
-        <repository>
-        <id>jboss</id>
-        <name>JBoss Repository</name>
-        <url>http://repository.jboss.org/maven2</url>
-        <snapshots>
-        <enabled>false</enabled>
-        </snapshots>
-        </repository>
-
-    </repositories>
 
     <!-- Repositories for plugins -->
     <pluginRepositories>

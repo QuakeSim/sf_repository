@@ -1,11 +1,11 @@
 /* 
- GmapDataXml generator. 
- */ 
- 
+	GmapDataXml generator. 
+*/ 
+
 // Modified by Jun Ji of CGL, May 2009		email : jid@cs.indiana.edu 
- 
+
 package cgl.webservices.KmlGenerator; 
- 
+
 import java.awt.Color;
 import java.io.BufferedReader; 
 import java.io.File; 
@@ -35,59 +35,54 @@ import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
  * Make up and write an XML document, using DOM UPDATED FOR JAXP. 
  */ 
 public class SimpleXDataKml { 
- 
-	// private Document doc; 
+	 // private Document doc; 
 	 
+	 //These are used for (x,y) <-> (lat,lon) conversions
 	 private double eqrad= 6378.139;
 	 private double flattening= 1.0/298.247;
 	 private double yfactor=111.32;
  
-	private double original_lat = 0; 
-	private double original_lon = 0; 
- 
-	private double coordinateUnit = 1000.0; 
- 
-	private double latref = 0; 
-	private double lonref = 0; 
- 
-	protected Kml doc = new Kml(); 	 
-	protected Folder root = new Folder(); 	 
-	protected Document kmlDocument=new Document(); 
- 
-	protected PointEntry[] datalist = null; 
+	 private double original_lat = 0; 
+	 private double original_lon = 0; 
+	 private double coordinateUnit = 1000.0; 
+	 private double latref = 0; 
+	 private double lonref = 0; 
 	 
-	private String serverUrl;	 
-	private String baseOutputDestDir; 
+	 protected Kml doc = new Kml(); 	 
+	 protected Folder root = new Folder(); 	 
+	 protected Document kmlDocument=new Document(); 
+	 protected PointEntry[] datalist = null; 
 	 
-	private String length_measure = "km"; 
+	 private String serverUrl;	 
+	 private String baseOutputDestDir; 
 	 
-	private Properties properties; 
- 
-	private double arrowScale, defaultArrowScale; 
- 
-	//Some useful string constants 
+	 private String length_measure = "km"; 
 	 
-	String fontStart="<font color=blue>"; 
-	String fontEnd="</font>"; 
-	String br="<br/>"; 
-	String cdataStart="<![CDATA[ <br/> <hr/>"; 
-	String cdataEnd="]]>"; 
+	 private Properties properties; 
+	 
+	 private double arrowScale, defaultArrowScale; 
+	 
+	 //Some useful string constants 
+	 
+	 String fontStart="<font color=blue>"; 
+	 String fontEnd="</font>"; 
+	 String br="<br/>"; 
+	 String cdataStart="<![CDATA[ <br/> <hr/>"; 
+	 String cdataEnd="]]>"; 
  
-	public SimpleXDataKml() { 
-		this(false); 
-	} 
+	 public SimpleXDataKml() { 
+		  this(false); 
+	 } 
  
-	public SimpleXDataKml(boolean useClassLoader) { 
-		init(useClassLoader); 
-	}
-	
+	 public SimpleXDataKml(boolean useClassLoader) { 
+		  init(useClassLoader); 
+	 }
+	 
 	public void doc_init(){
 		
 		doc = new Kml();
 		kmlDocument=new Document();
 		root = new Folder();
-		
-		
 		root.setName("root Folder");
 		root.setDescription("This is the root folder");
 		kmlDocument.addFolder(root);
@@ -103,96 +98,28 @@ public class SimpleXDataKml {
 	public SimpleXDataKml(String OriginalLon, String OriginalLat) { 
 		this(OriginalLon, OriginalLat, false); 
 	} 
- 
-	/** 
+	 
+	 /** 
 	  * This is a main method for testing. 
 	  */
- 
 	 public static void main(String[] av) throws IOException {
-		 
-		 /*
-		 
-		 SimpleXDataKml test = new SimpleXDataKml(true); 
-		 PointEntry[] pointEntryList=new PointEntry[4]; 
-		 pointEntryList[0]=new PointEntry(); 
-		 pointEntryList[0].setX("-10.0"); 
-		 pointEntryList[0].setY("-10.0"); 
-		 pointEntryList[0].setDeltaXName("dx"); 
-		 pointEntryList[0].setDeltaXValue("-10"); 
-		 pointEntryList[0].setDeltaYName("dy"); 
-		 pointEntryList[0].setDeltaYValue("-100"); 
-		 pointEntryList[0].setDeltaZName("dz"); 
-		 pointEntryList[0].setDeltaZValue("0"); 
-		 pointEntryList[0].setFolderTag("Arrow"); 
-		  
-		 pointEntryList[1]=new PointEntry(); 
-		 pointEntryList[1].setX("-30.0"); 
-		 pointEntryList[1].setY("-27.0"); 
-		 pointEntryList[1].setDeltaXName("dx"); 
-		 pointEntryList[1].setDeltaXValue("45"); 
-		 pointEntryList[1].setDeltaYName("dy"); 
-		 pointEntryList[1].setDeltaYValue("10"); 
-		 pointEntryList[1].setDeltaZName("dz"); 
-		 pointEntryList[1].setDeltaZValue("2"); 
-		 pointEntryList[1].setFolderTag("Arrow"); 
-		  
-		 pointEntryList[2]=new PointEntry(); 
-		 pointEntryList[2].setX("-86.0"); 
-		 pointEntryList[2].setY("-120.0"); 
-		 pointEntryList[2].setDeltaXName("dx"); 
-		 pointEntryList[2].setDeltaXValue("87"); 
-		 pointEntryList[2].setDeltaYName("dy"); 
-		 pointEntryList[2].setDeltaYValue("35"); 
-		 pointEntryList[2].setDeltaZName("dz"); 
-		 pointEntryList[2].setDeltaZValue("-1"); 
-		 pointEntryList[2].setFolderTag("Arrow"); 
-		  
-		 pointEntryList[3]=new PointEntry(); 
-		 pointEntryList[3].setX("16.0"); 
-		 pointEntryList[3].setY("36.0"); 
-		 pointEntryList[3].setDeltaXName("dx"); 
-		 pointEntryList[3].setDeltaXValue("68"); 
-		 pointEntryList[3].setDeltaYName("dy"); 
-		 pointEntryList[3].setDeltaYValue("12"); 
-		 pointEntryList[3].setDeltaZName("dz"); 
-		 pointEntryList[3].setDeltaZValue("0"); 
-		 pointEntryList[3].setFolderTag("Arrow"); 
-  
-		 test.setDatalist(pointEntryList); 
-		 test.setOriginalCoordinate("-115.72","30.25"); 
-		 test.setCoordinateUnit("1000"); 
-		  	  
-		  
-		 //		 test.setGridLine("fault folder", -117.35, 32.59, -115.35, 30.59, 1, 1); 
-		 // test.setFaultPlot("fault folder", "test fault1", "-117.35", "32.59", "-115.35", "30.59", "641478DC", 3); 
- 
-		  
-		 test.setArrowPlacemark("Arrowed","B22222FF", 0.95); 
-		 // test.setArrowPlacemark("Arrowed","FF191970", 3); 
-		 // test.setPointPlacemark("point"); 
- 
-		 test.printToFile(test.doc.toKML(),"test_original.kml"); 
-		 System.out.println("end");	 
-		 
-		 
-		 */
-	}
-	  
-	 public void setDatalist(PointEntry[] InputDataList) {
-		 datalist = InputDataList; 
-		 System.out.println("datalist.length = " + datalist.length);
+		  doTest();
 	 }
-	  
+	 
+	 public void setDatalist(PointEntry[] InputDataList) {
+		  datalist = InputDataList; 
+		  System.out.println("datalist.length = " + datalist.length);
+	 }
+	 
 	 public String runMakeKml (String ServerTag,String UserName, String ProjectName, String JobUID) {
-		 System.out.println("[SimpleXDataKml/runMakeKml] started");		  
-		 String destDir=generateOutputDestDir(ServerTag,UserName,ProjectName,JobUID); 
-		 String baseUrl=generateBaseUrl(ServerTag,UserName,ProjectName,JobUID); 
+		  System.out.println("[SimpleXDataKml/runMakeKml] started");		  
+		  String destDir=generateOutputDestDir(ServerTag,UserName,ProjectName,JobUID); 
+		  String baseUrl=generateBaseUrl(ServerTag,UserName,ProjectName,JobUID); 
 		  
-		 try{ 
-			 makeWorkDir(destDir);
-		 } 
-		  
-		 catch (Exception e) { 
+		  try{ 
+				makeWorkDir(destDir);
+		  } 
+		  catch (Exception e) { 
 			 e.printStackTrace();			  
 		 } 
 		  
@@ -240,7 +167,6 @@ public class SimpleXDataKml {
 
 		 try {
 			 String line = new String();
-
 			 
 			 BufferedReader in = new BufferedReader(new FileReader(InputFileName));
 			 in = new BufferedReader(new FileReader(InputFileName));
@@ -660,39 +586,45 @@ public class SimpleXDataKml {
 			setArrowPlacemarkProcess(folderName, LineColor, LineWidth, arrowScale, longestlength, scaling);			
 	 }
 	 
-	 public void setArrowPlacemarkProcess(String folderName, String LineColor, double LineWidth, double longestlength, double scaling) {
-		 setArrowPlacemarkProcess(folderName, LineColor, LineWidth, arrowScale, longestlength, scaling);		 
+	 public void setArrowPlacemarkProcess(String folderName, 
+													  String LineColor, 
+													  double LineWidth, 
+													  double longestlength, 
+													  double scaling) {
+		  setArrowPlacemarkProcess(folderName, LineColor, LineWidth, arrowScale, longestlength, scaling);		 
 	 }
 	 
-	 public void setArrowPlacemarkProcess(String folderName, String LineColor, double LineWidth, double arrowScale, double longestlength, double scaling) {
-		 
-		 System.out.println("[SimpleXDataKml/setArrowPlacemark] started");
-		 Folder container = new Folder();
-		 if (!folderName.equals("") && !folderName.equals("null")) { 
-	 
-			container.setName(folderName); 
-			container.setDescription("This is a folder contained by the root"); 
-			root.addFolder(container); 
-			} else {
+	 public void setArrowPlacemarkProcess(String folderName, 
+													  String LineColor, 
+													  double LineWidth, 
+													  double arrowScale, 
+													  double longestlength, 
+													  double scaling) {
+		  
+		  System.out.println("[SimpleXDataKml/setArrowPlacemark] started");
+		  Folder container = new Folder();
+		  if (!folderName.equals("") && !folderName.equals("null")) { 
+				
+				container.setName(folderName); 
+				container.setDescription("This is a folder contained by the root"); 
+				root.addFolder(container); 
+		  } else {
 				container = root; 
-			}
-			
-			//This isn't done correctly so disable in anticipation of future brilliance. 
-			String linestyleid="arrowedStyle"; 
-			
-			//String linestyleid=""; 
-			// System.out.println("[SimpleXDataKml/setArrowPlacemark] Color and width for arrowed: "+LineColor+" "+LineWidth);
-			// setLineStyle(container, linestyleid, LineColor, LineWidth);
-			
-			// System.out.println("[SimpleXDataKml/setArrowPlacemark] Color and width for arrowed: "+linestyleid+" "+LineColor+" "+LineWidth);
-			Style gridlineStyle = new Style();
-			gridlineStyle.setId(linestyleid);
-			LineStyle newlineStyle = new LineStyle();
-			newlineStyle.setWidth((float) (LineWidth));
-			newlineStyle.setColor(LineColor);
-			gridlineStyle.addLineStyle(newlineStyle);
-			// curfolder.addStyle(gridlineStyle);
-			
+		  }
+		  
+		  //REVIEW: This ID should be a passed in method parameter, but this is 
+		  //hard to easily (must change out the client stubs and who knows what else
+		  //will break.  Setting the linestyle to the LineColor is a shameful workaround.
+		  String linestyleid=LineColor;
+		  
+		  Style gridlineStyle = new Style();
+		  gridlineStyle.setId(linestyleid);
+		  LineStyle newlineStyle = new LineStyle();
+		  newlineStyle.setWidth((float) (LineWidth));
+		  newlineStyle.setColor(LineColor);
+		  gridlineStyle.addLineStyle(newlineStyle);
+		  // curfolder.addStyle(gridlineStyle);
+		  
 			PolyStyle ps = new PolyStyle();
 			ps.setFill(true);
 			ps.setColor(LineColor);
@@ -701,18 +633,18 @@ public class SimpleXDataKml {
 			
 			kmlDocument.addStyle(gridlineStyle);
 			
-			
 			//		System.out.println("Scale rate: "+scaling+" "+longestlength+" "+projectLength);
 			
-			System.out.println("[SimplexDataKml/setArrowPlacemark] the size of the datalist : " + datalist.length);
+			System.out.println("[SimplexDataKml/setArrowPlacemark] the size of the datalist : " 
+									 + datalist.length);
 			for (int i = 0; i < datalist.length; i++) { 
-				// create and add a Placemark containing a Point 
-				Placemark mark1 = new Placemark();			 
-				mark1.setName(datalist[i].getFolderTag() + i); 
-				double rads; 
-				int degs; 
+				 // create and add a Placemark containing a Point 
+				 Placemark mark1 = new Placemark();			 
+				 mark1.setName(datalist[i].getFolderTag() + i); 
+				 double rads; 
+				 int degs; 
 				double dx = Double.valueOf(datalist[i].getDeltaXValue()) 
-				.doubleValue(); 
+					 .doubleValue(); 
 				double dy = Double.valueOf(datalist[i].getDeltaYValue()) 
 				.doubleValue(); 
 				double x = Double.valueOf(datalist[i].getX()).doubleValue(); 
@@ -813,8 +745,6 @@ public class SimpleXDataKml {
 				
 				LinearRing lr = new LinearRing();
 				
-				
-				
 				//Plot the arrow tails
 				double arrowTail1X = curarrow.getArrowTail1().getX(); 
 				double arrowTail1Y = curarrow.getArrowTail1().getY();
@@ -872,223 +802,6 @@ public class SimpleXDataKml {
 			
 			System.out.println("[SimplexDataKml/setArrowPlacemark] Finished");
 	 }
-	 
-	 
-	 /* Deprecated 06/21/2010 by Jun Ji
-	 public void setArrowPlacemark(String folderName, 
-											 String LineColor, 
-											 double LineWidth, 
-											 double arrowScale) {
-		 
-		 System.out.println("[setArrowPlacemark] Started");
-		   
-		Folder container = new Folder(); 
-		if (!folderName.equals("") && !folderName.equals("null")) { 
-			// create and add another folder to root 
-			container.setName(folderName); 
-			container.setDescription("This is a folder contained by the root"); 
-			root.addFolder(container); 
-		} else { 
-			container = root; 
-		} 
-		 
-		//This isn't done correctly so disable in anticipation of future brilliance. 
-		String linestyleid="arrowedStyle"; 
-		
-			 //String linestyleid=""; 
-		System.out.println("Color and width for arrowed: "+LineColor+" "+LineWidth);
-		setLineStyle(container, linestyleid, LineColor, LineWidth); 
-		 
-		double longestlength = 0.;
-		double projectMinX=Double.valueOf(datalist[0].getX());
-		double projectMaxX=Double.valueOf(datalist[0].getX());
-		double projectMinY=Double.valueOf(datalist[0].getY());
-		double projectMaxY=Double.valueOf(datalist[0].getY());
-		 
-		for (int i = 0; i < datalist.length; i++) { 
-			 
-			 double x=Double.valueOf(datalist[i].getX());
-			 double y=Double.valueOf(datalist[i].getX());
-			 if(x<projectMinX) projectMinX=x;
-			 if(x>projectMaxX) projectMaxX=x;
-			 if(y<projectMinY) projectMinY=y;
-			 if(y>projectMaxY) projectMaxY=y;
-
-			 double dx = Double.valueOf(datalist[i].getDeltaXValue()) 
-				  .doubleValue(); 
-			 double dy = Double.valueOf(datalist[i].getDeltaYValue()) 
-				  .doubleValue();			 
-			 double length = Math.sqrt(dx * dx + dy * dy); 
-			 
-			 if (i == 0) {
-				  longestlength = length; 
-			 }
-			 else if (length > longestlength)  {
-				  longestlength = length;			
-			 }	 
-			 //			 System.out.println("Length: "+length+" Longest length: "+longestlength+" Arrow Scale: "+arrowScale);
-		}		 
-		
-		double projectLength=(projectMaxX-projectMinX)*(projectMaxX-projectMinX);
-		projectLength+=(projectMaxY-projectMinY)*(projectMaxY-projectMinY);
-		projectLength=Math.sqrt(projectLength);
-		
-		//We arbitrarly set the longest displacement arrow to be 10% of the 
-		//project dimension.
-		double scaling = 0.1*projectLength/longestlength;
-		
-		//		System.out.println("Scale rate: "+scaling+" "+longestlength+" "+projectLength);
-		 		 
-		System.out.println("[setArrowPlacemark] the size of the datalist : " + datalist.length);
-		for (int i = 0; i < datalist.length; i++) { 
-			// create and add a Placemark containing a Point 
-			Placemark mark1 = new Placemark();			 
-			mark1.setName(datalist[i].getFolderTag() + i); 
-			double rads; 
-			int degs; 
-			double dx = Double.valueOf(datalist[i].getDeltaXValue()) 
-					.doubleValue(); 
-			double dy = Double.valueOf(datalist[i].getDeltaYValue()) 
-					.doubleValue(); 
-			double x = Double.valueOf(datalist[i].getX()).doubleValue(); 
-			double y = Double.valueOf(datalist[i].getY()).doubleValue(); 
-			// Obtain angle in degrees from user 
-			degs = (int) Math.toDegrees(Math.atan2(dx, dy)); 
-			degs = (360 + degs) % 360; 
-			// Convert degrees to radian 
-			rads = Math.toRadians((double) degs); 
-			 
-			double length = Math.sqrt(dx * dx + dy * dy);         ////////  
-
-			//Create the popup description of the point
-			String br="<br/>"; 
-			String fontStart="<font color=blue>"; 
-			String fontEnd="</font>"; 
- 
-			//Point origin
-			double lon=x/factor(original_lon, original_lat)+original_lon;
-			double lat=y/111.32+original_lat;
-
-			String descriptionValue = "<![CDATA["; 
-			descriptionValue = descriptionValue 
-					+ "<font color=blue>lat: </font>" + lat + ""+br; 
-			descriptionValue = descriptionValue 
-					+ "<font color=blue>lon: </font>" + lon + ""+br; 
-			descriptionValue = descriptionValue 
-					+ "<font color=blue>length: </font>" + length + " cm "+br; 
-			descriptionValue = descriptionValue 
-					+ "<font color=blue>degree: </font>" + degs + ""+br; 
-			 
-			descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaXName() 
-					+ ": " +fontEnd+ datalist[i].getDeltaXValue() + " cm <br/>"; 
-			descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaYName() 
-					+ ": " +fontEnd+ datalist[i].getDeltaYValue() + " cm <br/>"; 
-			descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaZName() 
-					+ ": " +fontEnd+ datalist[i].getDeltaZValue() + " cm <br/>"; 
-			descriptionValue = descriptionValue + "<font color=blue>scale rate </font>" 
-			+ ":" +fontEnd+ longestlength + "cm  : " + scaling + "km <br/>";			 
-			descriptionValue = descriptionValue 
-					+ "<font color=blue>tag name:</font>" 
-					+ datalist[i].getFolderTag()+br; 
-			descriptionValue = descriptionValue + "]]>"; 
-			mark1.setDescription(descriptionValue); 
- 
-			LineString newline = new LineString(); 
-			mark1.setStyleUrl("#"+linestyleid);
-
-			double startx = x;
-			double starty = y;
-			double endx = startx + dx*scaling;
-			double endy = starty + dy*scaling;
-			ArrowLine curarrow = CreateArrowByCoordinate(startx,starty,endx,endy); 
-			//			System.out.println("Plotting: "+startx+" "+starty+" "+endx+" "+endy);
-			 
-			//Plot the arrow's base relative to the project's origin.
-			double arrowOrigX = curarrow.getStartPoint().getX(); 
-			double arrowOrigY = curarrow.getStartPoint().getY();
-			double arrowLonStart=arrowOrigX/factor(original_lon, original_lat)+original_lon;
-			double arrowLatStart=arrowOrigY/111.32+original_lat;
-			
-			//Plot the arrow's ending point (head) relative to the project
-			//origin.
-			double arrowEndX = curarrow.getEndPoint().getX(); 
-			double arrowEndY = curarrow.getEndPoint().getY();
-			double arrowLonEnd=arrowEndX/factor(original_lon, original_lat)+original_lon;
-			double arrowLatEnd=arrowEndY/111.32+original_lat;
-
-			//Plot the arrow tails
-			double arrowTail1X = curarrow.getArrowTail1().getX(); 
-			double arrowTail1Y = curarrow.getArrowTail1().getY();
-			double arrowLonTail1=arrowTail1X/factor(original_lon, original_lat)+original_lon;
-			double arrowLatTail1=arrowTail1Y/111.32+original_lat;
-
-			double arrowTail2X = curarrow.getArrowTail2().getX(); 
-			double arrowTail2Y = curarrow.getArrowTail2().getY();
-			double arrowLonTail2=arrowTail2X/factor(original_lon, original_lat)+original_lon;
-			double arrowLatTail2=arrowTail2Y/111.32+original_lat;
-			
-			//Plot the arrow. These are just polylines 
-			String line_value = arrowLonStart+","+arrowLatStart+",0 "; 
-			line_value+=arrowLonEnd+","+arrowLatEnd+",0 ";
-			line_value+=arrowLonTail1+","+arrowLatTail1+",0 ";
-			line_value+=arrowLonEnd+","+arrowLatEnd+",0 ";
-			line_value+=arrowLonTail2+","+arrowLatTail2+",0 ";
-			line_value+=arrowLonEnd+","+arrowLatEnd+",0 ";
-
-// 			Coordinate tmp_lonlat = ConverterUTM.UTMtoLL(23, mapx, mapy, UTMZone); 
-// //			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
-// //					tmp_lonlat.getY()); 
-// 			line_value = line_value + tmp_lonlat.getX() + "," 
-// 					+ tmp_lonlat.getY() + ",0  "; 
-// 			// plot end point 
-// 			mapx = curarrow.getEndPoint().getX(); 
-// 			mapy = curarrow.getEndPoint().getY(); 
-// 			tmp_lonlat = ConverterUTM.UTMtoLL(23, mapx, mapy, UTMZone); 
-// //			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
-// //					tmp_lonlat.getY()); 
-// 			line_value = line_value + tmp_lonlat.getX() + "," 
-// 					+ tmp_lonlat.getY() + ",0  "; 
-// 			// plot arrow tail1 
-// 			mapx = curarrow.getArrowTail1().getX(); 
-// 			mapy = curarrow.getArrowTail1().getY(); 
-// 			tmp_lonlat = ConverterUTM.UTMtoLL(23, mapx, mapy, UTMZone); 
-// //			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
-// //					tmp_lonlat.getY()); 
-// 			line_value = line_value + tmp_lonlat.getX() + "," 
-// 					+ tmp_lonlat.getY() + ",0  "; 
-// 			// roll back to end point 
-// 			mapx = curarrow.getEndPoint().getX(); 
-// 			mapy = curarrow.getEndPoint().getY(); 
-// 			tmp_lonlat = ConverterUTM.UTMtoLL(23, mapx, mapy, UTMZone); 
-// //			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
-// //					tmp_lonlat.getY()); 
-// 			line_value = line_value + tmp_lonlat.getX() + "," 
-// 					+ tmp_lonlat.getY() + ",0  "; 
-// 			// plot arrow tail2 
-// 			mapx = curarrow.getArrowTail2().getX(); 
-// 			mapy = curarrow.getArrowTail2().getY(); 
-// 			tmp_lonlat = ConverterUTM.UTMtoLL(23, mapx, mapy, UTMZone); 
-// //			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
-// //					tmp_lonlat.getY()); 
-// 			line_value = line_value + tmp_lonlat.getX() + "," 
-// 					+ tmp_lonlat.getY() + ",0  "; 
-// 			// roll back to end point 
-// 			mapx = curarrow.getEndPoint().getX(); 
-// 			mapy = curarrow.getEndPoint().getY(); 
-// 			tmp_lonlat = ConverterUTM.UTMtoLL(23, mapx, mapy, UTMZone); 
-// //			tmp_lonlat = MapFunction.MercatorProject(tmp_lonlat.getX(), 
-// //					tmp_lonlat.getY()); 
-// 			line_value = line_value + tmp_lonlat.getX() + "," 
-// 					+ tmp_lonlat.getY() + ",0  "; 
- 
-			newline.setCoordinates(line_value); 
-			mark1.addLineString(newline); 
-			 
-			container.addPlacemark(mark1); 
-		}
-		System.out.println("[setArrowPlacemark] Finished");
-	}
-	*/ 
  
 	private ArrowLine CreateArrowByCoordinate(double startx, double starty, 
 			double endx, double endy) { 
@@ -1261,4 +974,68 @@ public class SimpleXDataKml {
 		  return theFactor;
 	 }
 	 
+	 /**
+	  * This is called by the main() for testing.
+	  */ 
+	 private static void doTest() {
+
+		 SimpleXDataKml test = new SimpleXDataKml(true); 
+		 PointEntry[] pointEntryList=new PointEntry[4]; 
+		 pointEntryList[0]=new PointEntry(); 
+		 pointEntryList[0].setX("-10.0"); 
+		 pointEntryList[0].setY("-10.0"); 
+		 pointEntryList[0].setDeltaXName("dx"); 
+		 pointEntryList[0].setDeltaXValue("-10"); 
+		 pointEntryList[0].setDeltaYName("dy"); 
+		 pointEntryList[0].setDeltaYValue("-100"); 
+		 pointEntryList[0].setDeltaZName("dz"); 
+		 pointEntryList[0].setDeltaZValue("0"); 
+		 pointEntryList[0].setFolderTag("Arrow"); 
+		  
+		 pointEntryList[1]=new PointEntry(); 
+		 pointEntryList[1].setX("-30.0"); 
+		 pointEntryList[1].setY("-27.0"); 
+		 pointEntryList[1].setDeltaXName("dx"); 
+		 pointEntryList[1].setDeltaXValue("45"); 
+		 pointEntryList[1].setDeltaYName("dy"); 
+		 pointEntryList[1].setDeltaYValue("10"); 
+		 pointEntryList[1].setDeltaZName("dz"); 
+		 pointEntryList[1].setDeltaZValue("2"); 
+		 pointEntryList[1].setFolderTag("Arrow"); 
+		  
+		 pointEntryList[2]=new PointEntry(); 
+		 pointEntryList[2].setX("-86.0"); 
+		 pointEntryList[2].setY("-120.0"); 
+		 pointEntryList[2].setDeltaXName("dx"); 
+		 pointEntryList[2].setDeltaXValue("87"); 
+		 pointEntryList[2].setDeltaYName("dy"); 
+		 pointEntryList[2].setDeltaYValue("35"); 
+		 pointEntryList[2].setDeltaZName("dz"); 
+		 pointEntryList[2].setDeltaZValue("-1"); 
+		 pointEntryList[2].setFolderTag("Arrow"); 
+		  
+		 pointEntryList[3]=new PointEntry(); 
+		 pointEntryList[3].setX("16.0"); 
+		 pointEntryList[3].setY("36.0"); 
+		 pointEntryList[3].setDeltaXName("dx"); 
+		 pointEntryList[3].setDeltaXValue("68"); 
+		 pointEntryList[3].setDeltaYName("dy"); 
+		 pointEntryList[3].setDeltaYValue("12"); 
+		 pointEntryList[3].setDeltaZName("dz"); 
+		 pointEntryList[3].setDeltaZValue("0"); 
+		 pointEntryList[3].setFolderTag("Arrow"); 
+  
+		 test.setDatalist(pointEntryList); 
+		 test.setOriginalCoordinate("-115.72","30.25"); 
+		 test.setCoordinateUnit("1000"); 
+		 //		 test.setGridLine("fault folder", -117.35, 32.59, -115.35, 30.59, 1, 1); 
+		 // test.setFaultPlot("fault folder", "test fault1", "-117.35", "32.59", "-115.35", "30.59", "641478DC", 3); 
+		 test.setArrowPlacemark("Arrowed","B22222FF", 0.95); 
+		 // test.setArrowPlacemark("Arrowed","FF191970", 3); 
+		 // test.setPointPlacemark("point"); 
+ 
+		 test.printToFile(test.doc.toKML(),"test_original.kml"); 
+		 System.out.println("end");	 
+
+	 }
 } 

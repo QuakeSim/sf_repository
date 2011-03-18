@@ -92,7 +92,7 @@
 		</plugin>
 	 </plugins>
   </build>
-
+  
   <repositories>
 	 <repository>
 		<id>ogce-maven-repo</id>
@@ -102,6 +102,49 @@
       <id>ogce-maven1-legacy-repo</id>
       <url>http://www.collab-ogce.org/maven</url>
       <layout>legacy</layout>
+    </repository>
+    <repository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>apache-maven-snapshots</id>
+      <url>http://cvs.apache.org/maven-snapshot-repository</url>
+    </repository>
+    <repository>
+		<id>codehaus</id>
+		<url>http://repository.codehaus.org/</url>
+	 </repository>
+    <repository>
+      <id>apache-maven</id>
+      <url>http://www.ibiblio.org/maven2</url>
+    </repository>
+    <!-- This is the apache repository for bridges -->
+    <repository>
+      <id>apache-maven-cvs</id>
+      <url>http://cvs.apache.org/repository</url>
+    </repository>
+	 
+    <!-- This is our local repository -->
+    <repository>
+      <id>crisisgrid-maven-repo</id>
+      <url>http://www.crisisgrid.org/maven2</url>
+    </repository>
+	 
+	 <repository>
+      <id>db4o</id>
+      <url>https://source.db4o.com/maven/</url>
+    </repository>
+	 
+    <repository>
+      <id>jboss</id>
+      <name>JBoss Repository</name>
+      <url>http://repository.jboss.org/maven2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </repository>
   </repositories>
  
