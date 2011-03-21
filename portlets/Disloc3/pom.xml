@@ -80,29 +80,6 @@
         </goals>
        </execution>
 
-<!-- This is inherited from the parent
-       <execution>
-			<id>Install ${pom.artifactId} portlet</id>
-			<phase>install</phase>
-			<configuration>
-			 <tasks>
-				<echo message="Copying ${pom.artifactId}"/>
-				<copy overwrite="true" 
-						filtering="false"
-						failonerror="false"
-						todir="${catalina.home}/webapps/${pom.artifactId}">
-				  <fileset dir="${basedir}/target/${pom.artifactId}"/>
-				</copy>												
-				
-				<touch file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${pom.artifactId}"/>
-			</tasks>			
-			
-        </configuration>
-			<goals>
-			  <goal>run</goal>
-			</goals>
-       </execution>
-    -->   
        <execution>
 			<id>Convert ${pom.artifactId} portlet</id>
 			<phase>package</phase>

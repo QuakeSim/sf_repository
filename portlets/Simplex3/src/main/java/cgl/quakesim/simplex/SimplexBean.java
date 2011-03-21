@@ -2140,6 +2140,10 @@ public class SimplexBean extends GenericSopacBean {
 		}
 	 }
 
+	 /**
+	  * This is used to add a list of already formatted Simplex observation points.
+	  * This is typically useful for importing projects developed outside the portal.
+	  */
 	public void toggleAddObsvTextAreaForProject(ActionEvent ev) {
 		currentEditProjectForm.initEditFormsSelection();
 
@@ -2168,23 +2172,40 @@ public class SimplexBean extends GenericSopacBean {
 				if (st2.countTokens() == SIMPLEX_OBSV_COUNT) {
 					tmpObsv = new Observation();
 					while (st2.hasMoreTokens()) {
+						 String obsvType=st2.nextToken();
+						 String obsvLocationEast=st2.nextToken();
+						 String obsvLocationNorth=st2.nextToken();
+						 String obsvValue=st2.nextToken();
+						 String obsvError=st2.nextToken();
+						 
+						 int obsvTypeInt=Integer.parseInt(obsvType);
+						 if(obsvTypeInt<0){
+							  tmpObsv.setObsvRefSite("-1");
+							  tmpObsv.setObsvType(-obsvTypeInt+"");
+						 }
+						 else {
+							  tmpObsv.setObsvRefSite("1");
+							  tmpObsv.setObsvType(obsvTypeInt+"");
+						 }
+
 						tmpObsv.setObsvName(projectName + obsvCount);
-						tmpObsv.setObsvType(st2.nextToken());
-						tmpObsv.setObsvLocationEast(st2.nextToken());
-						tmpObsv.setObsvLocationNorth(st2.nextToken());
-						tmpObsv.setObsvValue(st2.nextToken());
-						tmpObsv.setObsvError(st2.nextToken());
-						tmpObsv.setObsvRefSite("1");
+						tmpObsv.setObsvLocationEast(obsvLocationEast);
+						tmpObsv.setObsvLocationNorth(obsvLocationNorth);
+						tmpObsv.setObsvValue(obsvValue);
+						tmpObsv.setObsvError(obsvError);
 					}
 				} else {
-					logger.warn("[" + getUserName() + "/SimplexBean/toggleAddObsvTextAreaForProject] Line malformed: " + line);
+					logger.warn("[" + getUserName() 
+									+ "/SimplexBean/toggleAddObsvTextAreaForProject] Line malformed: " 
+									+ line);
 				}
 				obsvCount++;
 				db.set(tmpObsv);
 			}
 			db.commit();
 		} catch (Exception e) {
-			logger.error("[" + getUserName() + "/SimplexBean/toggleAddObsvTextAreaForProject] " + e);
+			logger.error("[" + getUserName() 
+							 + "/SimplexBean/toggleAddObsvTextAreaForProject] " + e);
 		}
 		finally {
 			if (db != null)
