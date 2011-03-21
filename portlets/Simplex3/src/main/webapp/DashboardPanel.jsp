@@ -51,7 +51,7 @@
 						  itemValue="ShowObsvCutPaste" />
 
 		<f:selectItem id="ariaDisplacementForm"
-						  itemLabel="Import ARIA Coseismic Displacements"
+						  itemLabel="Import ARIA Data Files"
 						  itemValue="ShowAriaObsvCutPaste" />
 		
 		<f:selectItem id="item33221"

@@ -1,6 +1,3 @@
-<h:outputText id="ljdfljdkjfld"
-				  rendered="#{!SimplexBean.currentEditProjectForm.renderProjectMap}"
-				  value="Render map: #{SimplexBean.currentEditProjectForm.renderProjectMap}"/>
 <h:panelGroup id="ProjectMapPanelFrame"
 				  rendered="#{SimplexBean.currentEditProjectForm.renderProjectMap}">
   <f:verbatim>

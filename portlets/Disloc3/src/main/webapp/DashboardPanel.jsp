@@ -44,6 +44,7 @@
 		  <f:selectItem id="item02132"
 							 itemLabel="Interactively select faults from a map." 
 							 itemValue="ShowFaultMap" />		  
+
 		  <f:selectItem id="item021"
 							 itemLabel="Pick observation points on an interactive map."
 							 itemValue="ShowMap" />

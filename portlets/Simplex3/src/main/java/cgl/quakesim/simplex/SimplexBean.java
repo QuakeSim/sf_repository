@@ -75,7 +75,10 @@ public class SimplexBean extends GenericSopacBean {
 
 	String codeName = "";
 	private int SIMPLEX_OBSV_COUNT = 5;
-	private int ARIA_OBSV_COUNT = 8;
+	 //Original format had no verticial displacement and two dummy columns.
+	private int ARIA_TOKEN_COUNT_V0 = 8;
+	 //Updated version adds vertical displacements and deletes the two dummy columns
+	private int ARIA_TOKEN_COUNT_V1= 7;
 
 	// This is the db4o database	
 
@@ -2076,7 +2079,7 @@ public class SimplexBean extends GenericSopacBean {
 		try {
 			 db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 									  + userName + "/" + codeName + "/" + projectName + ".db");
-			 Observation[] tmpObsv=new Observation[2];
+			 Observation[] tmpObsv=new Observation[3];
 			 
 			 StringTokenizer st1, st2;
 			 st1 = new StringTokenizer(currentEditProjectForm.getObsvAriaTextArea().trim(), "\n");
@@ -2090,16 +2093,21 @@ public class SimplexBean extends GenericSopacBean {
 				  else {
 						// Should accept spaces, tabs, commas
 						st2 = new StringTokenizer(line.trim(), "\t , "); 
-						String firstToken=st2.nextToken();
-						//Not a comment but make sure the line is properly formatted.
 						logger.debug("Aria line token count: "+st2.countTokens());
-
-						//NOTE: We don't have anything to check for malformed lines.
-						//Each row corresponds to two simplex observations: one
-						//"east" type and one "north" type.
 						tmpObsv[0] = new Observation();
 						tmpObsv[1] = new Observation();
-						while (st2.hasMoreTokens()) {
+						tmpObsv[2] = new Observation();  //Not used in V0
+						
+						if(st2.countTokens()==ARIA_TOKEN_COUNT_V0) {
+							 logger.debug("Detected V0 style ARIA input file");							 
+
+							 String firstToken=st2.nextToken();
+							 //Not a comment but make sure the line is properly formatted.
+							 
+							 //NOTE: We don't have anything to check for malformed lines.
+							 //Each row corresponds to two simplex observations: one
+							 //"east" type and one "north" type.
+							 
 							 String lon=firstToken;
 							 String lat=st2.nextToken();
 							 String eastDisp=st2.nextToken();
@@ -2125,10 +2133,54 @@ public class SimplexBean extends GenericSopacBean {
 							 tmpObsv[1].setObsvRefSite("1");
 							 
 							 tmpObsv=setXYLocations(tmpObsv, lat, lon);
+							 
+							 db.set(tmpObsv[0]);
+							 db.set(tmpObsv[1]);
+						}
+						else if(st2.countTokens()==ARIA_TOKEN_COUNT_V1) {
+							 logger.debug("Detected V1 style ARIA input file");
+							 String firstToken=st2.nextToken();
+							 //Not a comment but make sure the line is properly formatted.
+							 
+							 //NOTE: We don't have anything to check for malformed lines.
+							 //Each row corresponds to two simplex observations: one
+							 //"east" type and one "north" type.
+							 String lon=firstToken;
+							 String lat=st2.nextToken();
+							 String eastDisp=st2.nextToken();
+							 String northDisp=st2.nextToken();
+							 String vertDisp=st2.nextToken();
+							 String errorDisp=st2.nextToken();
+							 String stationName=st2.nextToken();
+							 
+							 //This is the East displacement
+							 tmpObsv[0].setObsvType("1");							 
+							 tmpObsv[0].setObsvName(projectName + stationName);
+							 tmpObsv[0].setObsvValue(eastDisp);
+							 tmpObsv[0].setObsvError(errorDisp);
+							 tmpObsv[0].setObsvRefSite("1");
+							 
+							 //This is the North displacement
+							 tmpObsv[1].setObsvType("2");							 
+							 tmpObsv[1].setObsvName(projectName + stationName);
+							 tmpObsv[1].setObsvValue(northDisp);
+							 tmpObsv[1].setObsvError(errorDisp);
+							 tmpObsv[1].setObsvRefSite("1");
+							 
+							 //This is the Vertical (Up) displacement
+							 tmpObsv[2].setObsvType("3");							 
+							 tmpObsv[2].setObsvName(projectName + stationName);
+							 tmpObsv[2].setObsvValue(vertDisp);
+							 tmpObsv[2].setObsvError(errorDisp);
+							 tmpObsv[2].setObsvRefSite("1");
+							 
+							 tmpObsv=setXYLocations(tmpObsv, lat, lon);
+							 
+							 db.set(tmpObsv[0]);
+							 db.set(tmpObsv[1]);
+							 db.set(tmpObsv[2]);
 						}
 				  }
-				  db.set(tmpObsv[0]);
-				  db.set(tmpObsv[1]);
 			 }
 			 db.commit();
 		} catch (Exception e) {
