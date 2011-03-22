@@ -404,7 +404,7 @@ public class DailyRdahmmResultService {
 			writer.close();
 			fw.close();
 			
-			String res = UtilSet.exec("zip -D " + kmzPath + " " + kmlPath, new File(destKmlDir));
+			String res = UtilSet.exec("zip -D " + kmzPath + " " + kmlFileName, new File(destKmlDir));
 			res = res.toLowerCase();
 			if (res.indexOf("error") >= 0 || res.indexOf("not found") >= 0) {
 				return kmlUrlPattern.replace("<fileName>", kmlFileName);
@@ -595,7 +595,7 @@ public class DailyRdahmmResultService {
 			writer.close();
 			fw.close();
 			
-			String res = UtilSet.exec("zip -D " + kmzFilePath + " " + kmlPath, new File(destKmlDir));
+			String res = UtilSet.exec("zip -D " + kmzFilePath + " " + kmlFileName, new File(destKmlDir));
 			res = res.toLowerCase();
 			if (res.indexOf("error") >= 0 || res.indexOf("not found") >= 0) {
 				return kmlUrlPattern.replace("<fileName>", kmlFileName);
