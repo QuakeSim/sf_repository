@@ -13,7 +13,8 @@ set yrange [0:446]
 set xrange ["START_TIME":"END_TIME"]
 set format x "%Y-%m-%d"
 set multiplot
-plot "FILE" using 1:2 with lines linetype 4
+set style fill solid 1.0
+plot "FILE" using 1:2 with boxes linetype 3
 set key
 set nomultiplot
 reset

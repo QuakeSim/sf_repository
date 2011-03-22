@@ -3,7 +3,7 @@
 #============================================
 # Download UNAVCO data file and convert into GRWS input format
 #
-# input: station ID, destination directory
+# input: station ID, destination directory, begin date, end date
 # output: original unavco station data file, and converted GRWS raw input format
 #
 # usage:
