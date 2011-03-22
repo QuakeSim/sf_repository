@@ -653,7 +653,9 @@
 								colors:['#007FFF'],
 								strokeWidth:0.7,
 								pixelsPerXLabel:50,
-								rightGap:2
+								rightGap:2,
+								stepPlot:true,
+								fillGraph:true
 							});
 	document.getElementById("scnTxtLink").href = urlPattern + "/" + scnPattern;
 	document.getElementById("videoLink").href = videoUrl;
@@ -873,6 +875,7 @@
 			url = "http://local.hostname/axis2/services/DailyRdahmmResultService/calcStationColors?date=" + showDateStr + "&resUrl=" + xmlResultUrl;
 			var colorStr = callHttpService(url);
 			if (colorStr.length != 0) {
+				map.clearOverlays();
 				nMarkerDoneForNewDate = 0;
 				for (var i=0; i<stationArray.length; i++) {
 					stationArray[i][3] = false;									
