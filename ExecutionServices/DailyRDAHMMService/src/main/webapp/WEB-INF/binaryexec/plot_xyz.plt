@@ -21,6 +21,7 @@
       set xlabel "Time(days [$4 $5])"
       show label
       set size 1.7,0.8
+      set rmargin 8
       set pointsize 0.2
       #set key left
       set nokey

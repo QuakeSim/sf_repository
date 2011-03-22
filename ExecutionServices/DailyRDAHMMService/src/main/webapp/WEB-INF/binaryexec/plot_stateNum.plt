@@ -6,7 +6,8 @@ set timefmt "%Y-%m-%d"
 set ylabel "Number of Stations with state Changes"
 set xlabel "Time(days [START_TIME END_TIME])"
 show label
-set size 1.17,1.2
+set size 1.25,1.2
+set rmargin 8
 #set key left
 set nokey
 set yrange [0:446]
