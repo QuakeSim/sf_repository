@@ -312,9 +312,9 @@ public class DailyRdahmmResultService {
 		fromDateStr = UtilSet.getDateString(calFrom);
 		toDateStr = UtilSet.getDateString(calTo);
 		 
-		String kmlFileName = contextGroup + "_" + preTreat + "_" + fromDateStr + "to" + toDateStr + "." + todayStr + ".kml";
+		String kmlFileName = contextGroup + "_" + preTreat + "_" + fromDateStr + "to" + toDateStr + "on" + todayStr + ".kml";
 		String kmlPath = destKmlDir + File.separator + kmlFileName;
-		String kmzFileName = kmlFileName + ".zip";
+		String kmzFileName = contextGroup + "_" + preTreat + "_" + fromDateStr + "to" + toDateStr + "on" + todayStr + ".kmz";
 		String kmzPath = destKmlDir + File.separator + kmzFileName;
 		File kmzFile = new File(kmzPath);
 		if (kmzFile.exists() && kmzFile.isFile()) {
