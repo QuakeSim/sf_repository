@@ -1,4 +1,3 @@
-<f:verbatim><hr/></f:verbatim>
 <h:form>
   <h:commandLink action="disloc-back">
 	 <h:outputText value="#{DislocBean2.codeName} Main Menu" />

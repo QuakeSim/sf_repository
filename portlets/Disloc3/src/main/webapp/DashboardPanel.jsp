@@ -1,3 +1,17 @@
+<f:verbatim>
+<script type="text/javascript">
+  function showLoading() {
+  $("#loading").show();
+  }
+</script>  
+<div id="loading">
+<center>
+<p>
+<img src="images/animation_processing.gif"/>
+</p>
+</center>
+</div>
+</f:verbatim>
 <h:panelGrid id="DashboradPanelgrid"
 				 columnClasses="alignTop"
 				 columns="1" 
@@ -78,6 +92,7 @@
 							 value="Disloc is ready to run.  Click the button below to launch." /> 
 		<h:commandButton id="rundisloc" 
 							  value="Run Disloc" 
+							  onclick="showLoading()"
 							  action="#{DislocBean2.runBlockingDislocJSF}" /> 
 	 </h:form>
 	 <f:verbatim></fieldset></f:verbatim>
