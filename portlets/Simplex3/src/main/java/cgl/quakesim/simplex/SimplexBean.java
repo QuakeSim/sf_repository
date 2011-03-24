@@ -576,9 +576,17 @@ public class SimplexBean extends GenericSopacBean {
 							 + "/SimplexBean/getMyProjectNameList] Returning an empty list.");
 		}
 		finally {
-			if (db != null)
-				db.close();			
+			if (db != null) db.close();			
 		}
+		Collections.sort(this.myProjectNameList, new Comparator() {
+				  public int compare (Object o1, Object o2) {
+						String p1=(String) ((SelectItem)o1).getValue();
+						String p2=(String) ((SelectItem)o2).getValue();
+						//							System.out.println(p2.getProjectName() +" "+p1.getProjectName());
+						return p1.compareToIgnoreCase(p2);
+				  }
+			 });
+		
 		return this.myProjectNameList;
 	}
 
@@ -658,7 +666,7 @@ public class SimplexBean extends GenericSopacBean {
 				  public int compare(Object o1, Object o2) {
 						Observation ob1=(Observation) o1;
 						Observation ob2=(Observation) o2;
-						return ob1.getObsvName().compareToIgnoreCase(ob2.getObsvName());
+						return ob1.getObsvName().compareTo(ob2.getObsvName());
 				  }
 			 });
 		return this.myObservationsForProjectList;
@@ -1215,57 +1223,65 @@ public class SimplexBean extends GenericSopacBean {
 	 * Delete the selected project. This is called by a JSF page. Projects are
 	 * deleted by name.
 	 */
-	public String toggleDeleteProject() {
-		ObjectContainer db = null;
-		
-		try {
-			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
-					+ userName + "/" + codeName + ".db");
-			if (deleteProjectsList != null) {
-				for (int i = 0; i < deleteProjectsList.length; i++) {
-					logger.info("[" + getUserName() 
-											 + "/SimplexBean/toggleDeleteProject] Deleting:" 
-											 + deleteProjectsList[i]);
-					// Delete the input bean
-					projectEntry delproj = new projectEntry();
-					ObjectSet results = db.get(projectEntry.class);
-					logger.info("[" + getUserName() 
-											 + "/SimplexBean/toggleDeleteProject] results size:" 
-											 + results.size());
-					while (results.hasNext()) {
-						delproj = (projectEntry) results.next();
-						if (delproj.getProjectName().equals(
-								(String) deleteProjectsList[i])) {
-							logger.info("[" + getUserName() 
+	 public String toggleDeleteProject() {
+		  ObjectContainer db = null;
+		  
+		  try {
+				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+										 + userName + "/" + codeName + ".db");
+				if (deleteProjectsList != null) {
+					 for (int i = 0; i < deleteProjectsList.length; i++) {
+						  logger.info("[" + getUserName() 
+										  + "/SimplexBean/toggleDeleteProject] Deleting:" 
+										  + deleteProjectsList[i]);
+						  // Delete the input bean
+						  projectEntry delproj = new projectEntry();
+						  ObjectSet results = db.get(projectEntry.class);
+						  logger.info("[" + getUserName() 
+										  + "/SimplexBean/toggleDeleteProject] results size:" 
+										  + results.size());
+						  while (results.hasNext()) {
+								delproj = (projectEntry) results.next();
+								if (delproj.getProjectName().equals(
+																				(String) deleteProjectsList[i])) {
+									 logger.info("[" + getUserName() 
 													 + "/SimplexBean/toggleDeleteProject] Deleting:"
 													 + delproj.getProjectName());
-							db.delete(delproj);
-						}
-					}
-					
-					// Delete the output bean
-					SimpleXOutputBean sxob = new SimpleXOutputBean();
-					sxob.setProjectName((String) deleteProjectsList[i]);
-					results = db.get(sxob);
-					if (results.hasNext()) {
-						sxob = (SimpleXOutputBean) results.next();
-						db.delete(sxob);
-					}
+									 db.delete(delproj);
+								}
+						  }
+						  
+						  // Delete the output bean
+						  SimpleXOutputBean sxob = new SimpleXOutputBean();
+						  sxob.setProjectName((String) deleteProjectsList[i]);
+						  results = db.get(sxob);
+						  if (results.hasNext()) {
+								sxob = (SimpleXOutputBean) results.next();
+								db.delete(sxob);
+						  }
+					 }
+					 
+				} else {
+					 logger.info("[" + getUserName() 
+									 + "/SimplexBean/toggleDeleteProject] No projects selected for deletion.");
 				}
+				
+				//Delete also the project db itself.
+				File projectDbFile=new File(getBasePath() + "/" + getContextBasePath()
+													 + "/" + userName + "/" + codeName + "/" + projectName
+													 + ".db");
+				boolean delBool=projectDbFile.delete();
+				logger.info("Successfully deleted the project db file: "+delBool);
 
-			} else {
-				logger.info("[" + getUserName() 
-										 + "/SimplexBean/toggleDeleteProject] No projects selected for deletion.");
-			}
-		} catch (Exception e) {
-			logger.info("[" + getUserName() + "/SimplexBean/toggleDeleteProject] " + e);
-		}
-		finally {
-			if (db != null)
+		  } catch (Exception e) {
+				logger.info("[" + getUserName() + "/SimplexBean/toggleDeleteProject] " + e);
+		  }
+		  finally {
+				if (db != null)
 				db.close();			
-		}
-		return "Simplex2-this";
-	}
+		  }
+		  return "Simplex2-this";
+	 }
 
 	/**
 	 * Loads the selected project from the database, sets the current project

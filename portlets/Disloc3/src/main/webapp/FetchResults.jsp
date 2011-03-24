@@ -48,11 +48,11 @@
 		  <h:panelGrid id="pgridmain" columns="1" border="0">
 			 <h:outputText id="header" escape="false" value="<h2>Archived Results</h2>" />
 			 <h:outputText id="message1" escape="false"
-								rendered="#{(empty Disloc2.myArchivedDislocResultsList)}"
+								rendered="#{(empty DislocBean2.myArchivedDislocResultsList)}"
 								value="You don't have any archived results yet." />
 			 
 			 <h:outputText id="dosomework" 
-								rendered="#{(!empty Disloc2.myArchivedDislocResultsList)}"
+								rendered="#{(!empty DislocBean2.myArchivedDislocResultsList)}"
 								escape="false"
 								value="You have the following archived disloc runs. Click the 
 										 link to download the desired file to your desk top. To 
@@ -60,7 +60,7 @@
 										 button over the link and select." />
 			 
 			 <h:dataTable id="DislocOutputPanel3" var="summaryBean"
-							  rendered="#{(!empty Disloc2.myArchivedDislocResultsList)}"
+							  rendered="#{(!empty DislocBean2.myArchivedDislocResultsList)}"
 							  value="#{DislocBean2.myArchivedDislocResultsList}" 
 							  binding="#{DislocBean2.myProjectSummaryDataTable}"
 							  border="1">
@@ -146,7 +146,7 @@
 		  </h:panelGrid>
 		</h:form>
 		
-		<hr />
+		<f:verbatim><hr/> </f:verbatim>
 		<h:form id="f3">
 		  
 		  <h:commandLink id="blaheoru20" action="disloc-this">

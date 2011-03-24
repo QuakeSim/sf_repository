@@ -25,6 +25,11 @@ import TestClient.Select.SelectServiceLocator;
 
 import com.db4o.*;
 
+//Commons logging
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
+
+
 /**
  * Everything you need to set up and run MeshGenerator.
  */
@@ -84,6 +89,8 @@ public class DislocBean extends GenericSopacBean {
 	String forSearchStr = "";
 	
 	boolean faultdrawing = false;
+	 
+	 private static Logger logger;
 	
 	public ObjectServer getDbs() {
 		return dbs;
@@ -210,9 +217,11 @@ public class DislocBean extends GenericSopacBean {
 		faultDBEntry = new FaultDBEntry();
 		df = new DecimalFormat(".###");
 		// currentParams.setObservationPointStyle(1);
+		
+		logger=Logger.getLogger(DislocBean.class);
 
 		// We are done.
-		System.out.println("Primary Disloc Bean Created");
+		logger.info("Primary Disloc Bean Created");
 	}
 
 	// --------------------------------------------------
@@ -360,14 +369,15 @@ public class DislocBean extends GenericSopacBean {
 
 		return paramsBean;
 	}
-
-	protected void storeProjectInContext(String userName, String projectName,
-			String jobUIDStamp, DislocParamsBean paramsBean,
-			DislocResultsBean dislocResultsBean, String kml_url,
-			String insarKmlUrl, String elevation, String azimuth,
-			String frequency) throws Exception {
-
-		DislocProjectSummaryBean summaryBean = new DislocProjectSummaryBean();
+	 
+	 protected void storeProjectInContext(String userName, String projectName,
+													  String jobUIDStamp, DislocParamsBean paramsBean,
+													  DislocResultsBean dislocResultsBean, String kml_url,
+													  String insarKmlUrl, String elevation, String azimuth,
+													  String frequency) throws Exception {
+		  
+		  logger.info("Storing the project results");
+		  DislocProjectSummaryBean summaryBean = new DislocProjectSummaryBean();
 		summaryBean.setUserName(userName);
 		summaryBean.setProjectName(projectName);
 		summaryBean.setJobUIDStamp(jobUIDStamp);
@@ -393,17 +403,16 @@ public class DislocBean extends GenericSopacBean {
 
 		// Store the summary and insar params beans.
 		try {
-			if (db != null)
-				db.close();
+			if (db != null) db.close();
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + ".db");
+			logger.info("Setting summary and insar beans");
 			db.set(summaryBean);
 			db.set(ipb);
 
 			// Say goodbye.
 			db.commit();
-			if (db != null)
-				db.close();
+			if (db != null)db.close();
 
 			// Store the params bean for the current project,
 			// deleting any old one as necessary.
@@ -416,22 +425,19 @@ public class DislocBean extends GenericSopacBean {
 				DislocParamsBean tmp = (DislocParamsBean) result.next();
 				db.delete(tmp);
 			}
+			logger.info("Setting params bean");
 			db.set(paramsBean);
 
 			// Say goodbye.
-			db.commit();
-			if (db != null)
-				db.close();
+			db.commit();			
+			if (db != null) db.close();
 		} catch (Exception e) {
-			if (db != null)
-				db.close();
-			System.out.println("[storeProjectInContext] " + e);
+			 System.out.println("[storeProjectInContext] " + e);
 		}
 		finally {
-			if (db != null)
-				db.close();			
+			 if (db != null) db.close();			
 		}
-	}
+	 }
 
 	/**
 	 * This is a JSF compatible method for running Disloc in blocking mode. That
@@ -615,7 +621,9 @@ public class DislocBean extends GenericSopacBean {
 	 * given URL to a local file.
 	 */
 	public PointEntry[] LoadDataFromUrl(String InputUrl) {
-		System.out.println("[LoadDataFromUrl] Creating Point Entry");
+		logger.info("[LoadDataFromUrl] Creating Point Entry");
+		logger.info("Disloc output url:"+InputUrl);
+		
 		ArrayList dataset = new ArrayList();
 		ArrayList dataset_temp = new ArrayList();
 		try {
@@ -626,33 +634,33 @@ public class DislocBean extends GenericSopacBean {
 			URLConnection uconn = inUrl.openConnection();
 			InputStream instream = inUrl.openStream();
 
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					instream));
-
+			BufferedReader in = new BufferedReader(new InputStreamReader(instream));
+			
 			// Need to make sure this will work with multiple faults.
 			Pattern p = Pattern.compile(" {1,20}");
 			while ((line = in.readLine()) != null) {
+				 logger.info("Parse line:"+line);
 				String tmp[] = p.split(line);
 
 				if (tmp[1].trim().equals("x") && tmp[2].trim().equals("y")) {
-					System.out.println("Past the faults");
+					logger.info("Past the faults");
 					break;
 				}
 			}
-
+			logger.info("Ready to process grid points.");
 			while ((line = in.readLine()) != null) {
-				if (!line.trim().equalsIgnoreCase("")) {
-					PointEntry tempPoint = new PointEntry();
-
-					String tmp[] = p.split(line);
-
-					// Look for NaN or other problems.
-					for (int i = 0; i < tmp.length; i++) {
-						String oldtmp = tmp[i];
-						if (tmp[i].trim().equalsIgnoreCase("nan")) {
-							tmp[i] = "0.0";
-						}
-					}
+				 logger.info("Line to read:"+line);
+				 if (!line.trim().equalsIgnoreCase("")) {
+					  PointEntry tempPoint = new PointEntry();
+					  String tmp[] = p.split(line);
+					  logger.info("Number of entries on line: "+tmp.length);
+					  // Look for NaN or other problems.
+					  for (int i = 0; i < tmp.length; i++) {
+							String oldtmp = tmp[i];
+							if (tmp[i].trim().equalsIgnoreCase("nan")) {
+								 tmp[i] = "0.0";
+							}
+					  }
 
 					tempPoint.setX(tmp[1].trim());
 					tempPoint.setY(tmp[2].trim());
@@ -663,7 +671,7 @@ public class DislocBean extends GenericSopacBean {
 					tempPoint.setDeltaZName("dz");
 					tempPoint.setDeltaZValue(tmp[5].trim());
 					tempPoint.setFolderTag("point");
-					dataset.add(tempPoint);
+					dataset_temp.add(tempPoint);
 				} else {
 					break;
 				}
@@ -671,10 +679,10 @@ public class DislocBean extends GenericSopacBean {
 			in.close();
 			instream.close();
 			
-			
 			int total_points = dataset_temp.size();
 			
-			System.out.println("[" + getUserName() + "/RssDisloc3/DislocBean/LoadDataFromUrl] dataset_temp.size() : " + dataset_temp.size());
+			System.out.println("[" + getUserName() 
+									 + "/RssDisloc3/DislocBean/LoadDataFromUrl] dataset_temp.size() : " + dataset_temp.size());
 			
 			if (total_points <= 1300)
 				dataset = dataset_temp;
@@ -729,12 +737,10 @@ public class DislocBean extends GenericSopacBean {
 				 }
 			}
 			
-			
-			
 		} catch (IOException ex1) {
 			ex1.printStackTrace();
 		}
-		System.out.println("[LoadDataFromUrl] Finished");
+		System.out.println("[LoadDataFromUrl] Finished: will plot "+dataset.size()+" points.");
 		return (PointEntry[]) (dataset.toArray(new PointEntry[dataset.size()]));
 	}
 
@@ -2834,43 +2840,38 @@ public class DislocBean extends GenericSopacBean {
 	}
 
 	public List getMyArchivedDislocResultsList() {
-		myArchivedDislocResultsList.clear();
-		List tmpList = new ArrayList();
-
-		try {
-			File f = new File(getBasePath() + "/" + getContextBasePath() + "/"
-					+ userName + "/" + codeName + ".db");
-
-			if (f.exists()) {
-
-				if (db != null)
-					db.close();
-
-				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath()
-						+ "/" + userName + "/" + codeName + ".db");
-				ObjectSet results = db.get(new DislocProjectSummaryBean());
-
-				while (results.hasNext()) {
-					DislocProjectSummaryBean dpsb = (DislocProjectSummaryBean) results
-							.next();
+		 myArchivedDislocResultsList.clear();
+		 List tmpList = new ArrayList();
+		 logger.info("Reconstructing the archived results list.");
+		 try {
+			  File f = new File(getBasePath() + "/" + getContextBasePath() + "/"
+									  + userName + "/" + codeName + ".db");
+			  logger.info("DB file to open: "+f.toString());
+			  
+			  
+			  if (db != null) db.close();
+			  
+			  db = Db4o.openFile(getBasePath() + "/" + getContextBasePath()
+										+ "/" + userName + "/" + codeName + ".db");
+			  ObjectSet results = db.get(new DislocProjectSummaryBean());
+			  
+			  while (results.hasNext()) {
+					DislocProjectSummaryBean dpsb = (DislocProjectSummaryBean) results.next();
 					// myArchivedDislocResultsList.add(dpsb);
 					tmpList.add(dpsb);
-				}
-				if (db != null)
-					db.close();
-				myArchivedDislocResultsList = sortByDate(tmpList);
-			}
-		} catch (Exception e) {
-			if (db != null)
-				db.close();
-			System.out.println("[getMyArchivedDislocResultsList] " + e);
-		}
-		finally {
-			if (db != null)
-				db.close();			
-		}
-
-		return myArchivedDislocResultsList;
+			  }
+			  if (db != null)db.close();
+			  myArchivedDislocResultsList = sortByDate(tmpList);
+		 } catch (Exception e) {
+			  if (db != null)					db.close();
+			  System.out.println("[getMyArchivedDislocResultsList] " + e);
+		 }
+		 finally {
+			  if (db != null)
+					db.close();			
+		 }
+		 
+		 return myArchivedDislocResultsList;
 	}
 
 	public void setKmlGeneratorUrl(String tmp_str) {

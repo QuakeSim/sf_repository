@@ -73,9 +73,15 @@
             </copy>
 
 				<!-- Copy the log4j props -->
+				<!--
 				<copy overwrite="true"
-						todir="${catalina.home}/webapps/gridsphere/WEB-INF/classes"
+						todir="${catalina.home}/webapps/common/classes"
 				      file="${basedir}/log4j/log4j.properties"/>
+				-->
+				<echo message="Copy log file: ${basedir}/log4j/log4j.xml to ${catalina.home}/webapps/common/classes"/>
+				<copy overwrite="true"
+						todir="${catalina.home}/webapps/common/classes"
+				      file="${basedir}/log4j/log4j.xml"/>
 
 
 				<!-- Copy the layouts -->
