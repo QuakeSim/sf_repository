@@ -10,7 +10,7 @@ set size 1.25,1.2
 set rmargin 8
 #set key left
 set nokey
-set yrange [0:446]
+set yrange [0:Y_MAX]
 set xrange ["START_TIME":"END_TIME"]
 set format x "%Y-%m-%d"
 set multiplot
