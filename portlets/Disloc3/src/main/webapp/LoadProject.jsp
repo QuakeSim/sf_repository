@@ -57,7 +57,7 @@
 						 rendered="#{!(empty DislocBean2.myProjectNameList)}"		  
 						 border="1">
 		  <h:form id="dislocLoadProject">
-			 <h:panelGrid columns="1" border="0"> 
+			 <h:panelGrid id="dislocpgridselect" columns="1" border="0"> 
 				<h:outputText id="lptv21" escape="false" 
 								  style="font-weight:bold" 
 								  value="Select Project" /> 
@@ -71,13 +71,13 @@
 											 layout="pageDirection"> 
 				  <f:selectItems value="#{DislocBean2.myProjectNameList}" /> 
 				</h:selectManyCheckbox> 
-				<h:commandButton value="Select" 
+				<h:commandButton id="dislocSelectProject" value="Select" 
 									  action="#{DislocBean2.toggleSelectProject}" /> 
 			 </h:panelGrid> 
 		  </h:form> 
 
 		  <h:form id="dislocCopyProject">
-			 <h:panelGrid columns="1" border="0">
+			 <h:panelGrid id="dislocpgridCopy" columns="1" border="0">
 			  <h:outputText id="dislocCopyProjectTitle"
 								 escape="false" 
 								 style="font-weight:bold" 								 
@@ -103,14 +103,14 @@
 								  value="#{DislocBean2.projectName}"
 								  required="true"/>
 			  </h:panelGroup>
-			  <h:commandButton value="Copy"
+			  <h:commandButton id="dislocCpyProjectCmd" value="Copy"
 									 action="#{DislocBean2.toggleCopyProject}" />
 			</h:panelGrid>
 
 		 </h:form>
 
 		 <h:form id="dislocDeleteProject"> 
-			<h:panelGrid columns="1"  
+			<h:panelGrid id="deleteProjectPGrid" columns="1"  
 							 border="0"> 
 			  <h:outputText escape="false" 
 								 id="dislocDeleteProjectTitle"
@@ -127,7 +127,7 @@
 											 layout="pageDirection"> 
 				  <f:selectItems value="#{DislocBean2.myProjectNameList}" /> 
 				</h:selectManyCheckbox> 
-				<h:commandButton value="Delete" 
+				<h:commandButton id="dislocDeleteCmdButton" value="Delete" 
 									  action="#{DislocBean2.toggleDeleteProject}" /> 
 			 </h:panelGrid> 
 		  </h:form> 
