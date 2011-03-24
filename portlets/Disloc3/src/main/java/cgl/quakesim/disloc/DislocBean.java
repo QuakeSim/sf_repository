@@ -639,21 +639,21 @@ public class DislocBean extends GenericSopacBean {
 			// Need to make sure this will work with multiple faults.
 			Pattern p = Pattern.compile(" {1,20}");
 			while ((line = in.readLine()) != null) {
-				 logger.info("Parse line:"+line);
+				 logger.debug("Parse line:"+line);
 				String tmp[] = p.split(line);
 
 				if (tmp[1].trim().equals("x") && tmp[2].trim().equals("y")) {
-					logger.info("Past the faults");
+					logger.debug("Past the faults");
 					break;
 				}
 			}
 			logger.info("Ready to process grid points.");
 			while ((line = in.readLine()) != null) {
-				 logger.info("Line to read:"+line);
+				 logger.debug("Line to read:"+line);
 				 if (!line.trim().equalsIgnoreCase("")) {
 					  PointEntry tempPoint = new PointEntry();
 					  String tmp[] = p.split(line);
-					  logger.info("Number of entries on line: "+tmp.length);
+					  logger.debug("Number of entries on line: "+tmp.length);
 					  // Look for NaN or other problems.
 					  for (int i = 0; i < tmp.length; i++) {
 							String oldtmp = tmp[i];
@@ -740,7 +740,7 @@ public class DislocBean extends GenericSopacBean {
 		} catch (IOException ex1) {
 			ex1.printStackTrace();
 		}
-		System.out.println("[LoadDataFromUrl] Finished: will plot "+dataset.size()+" points.");
+		logger.info("[LoadDataFromUrl] Finished: will plot "+dataset.size()+" points.");
 		return (PointEntry[]) (dataset.toArray(new PointEntry[dataset.size()]));
 	}
 
