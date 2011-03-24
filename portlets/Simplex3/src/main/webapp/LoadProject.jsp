@@ -94,7 +94,8 @@
 							  required="true"
 							  value="#{SimplexBean.projectName}"/>
 			 
-			 <h:commandButton value="Copy"
+			 <h:commandButton id="simplex3CopyCmdButton" 
+									value="Copy"
 									action="#{SimplexBean.toggleCopyProject}" />
 		  </h:panelGrid>
 		</h:form>
