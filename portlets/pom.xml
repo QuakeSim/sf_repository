@@ -22,7 +22,7 @@
 		<artifactId>maven-antrun-plugin</artifactId>
       <executions>
        <execution>
-        <id>Clean ${project.artifactId} portlet</id>
+        <id>Clean ${project.artifactId} portlet (super) </id>
 		  <phase>clean</phase>
         <configuration>
 			 <!-- 
