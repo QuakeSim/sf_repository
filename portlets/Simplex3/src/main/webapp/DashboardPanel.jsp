@@ -81,7 +81,9 @@
 	 <h:outputText value="Simplex is ready to run."/>
 	 <h:commandButton rendered="#{!empty SimplexBean.myObservationEntryForProjectList
 										 and !empty SimplexBean.myFaultEntryForProjectList}"
-							id="runSimplex2" value="Run Simplex"
+							id="runSimplex2" 
+							onclick="showLoading()"
+							value="Run Simplex"
 							action="#{SimplexBean.toggleRunSimplex2}" />
   </h:form>	
 	 <f:verbatim></fieldset></f:verbatim>

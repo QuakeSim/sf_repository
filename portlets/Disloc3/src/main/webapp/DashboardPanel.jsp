@@ -1,17 +1,3 @@
-<f:verbatim>
-<script type="text/javascript">
-  function showLoading() {
-  $("#loading").show();
-  }
-</script>  
-<div id="loading">
-<center>
-<p>
-<img src="images/animation_processing.gif"/>
-</p>
-</center>
-</div>
-</f:verbatim>
 <h:panelGrid id="DashboradPanelgrid"
 				 columnClasses="alignTop"
 				 columns="1" 

@@ -52,3 +52,6 @@ height: 40px;
    text-align:left;
    text-decoration:none;
 }
+
+/* This handles loading displays */
+#loading { display:none; position:fixed; left:33%; top:33%;	}

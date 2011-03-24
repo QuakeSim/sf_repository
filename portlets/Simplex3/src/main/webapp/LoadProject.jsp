@@ -5,8 +5,22 @@
 <html>
  <head>
 	<link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css"/>
+	 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
  </head>
   <body>
+	 <script type="text/javascript">
+		function showLoading() {
+		$("#loading").show();
+		}
+	 </script>  
+	 <div id="loading">
+		<center>
+		  <p>
+			 <img src="@host.base.url@@artifactId@/images/animation_processing.gif"/>
+		  </p>
+		</center>
+	 </div>
+
 	 <script type="text/javascript">
 		//<![CDATA[
 		function selectOne(form, button)
@@ -69,7 +83,9 @@
 					
 				<f:selectItems value="#{SimplexBean.myProjectNameList}" />
 			 </h:selectManyCheckbox>
-			 <h:commandButton id="lkdjf8" value="Select"
+			 <h:commandButton id="lkdjf8" 							  
+									onclick="showLoading()"
+									value="Select"
 									action="#{SimplexBean.toggleSelectProject}" />
 		  </h:panelGrid>
 		</h:form>
@@ -95,6 +111,7 @@
 							  value="#{SimplexBean.projectName}"/>
 			 
 			 <h:commandButton id="simplex3CopyCmdButton" 
+									onclick="showLoading()"
 									value="Copy"
 									action="#{SimplexBean.toggleCopyProject}" />
 		  </h:panelGrid>
@@ -111,7 +128,9 @@
 										  layout="pageDirection">
 				<f:selectItems value="#{SimplexBean.myProjectNameList}" />
 			 </h:selectManyCheckbox>
-				<h:commandButton id="lkdjf12" value="Delete"
+				<h:commandButton id="lkdjf12" 
+									  onclick="showLoading()"
+									  value="Delete"
 									  action="#{SimplexBean.toggleDeleteProject}" />
 			 </h:panelGrid>
 		  </h:form>
@@ -150,13 +169,14 @@
 			 </h:panelGroup>			
 		  </h:panelGrid>
 		  
-		  <h:commandButton id="lkdjf113" value="Create Project"
+		  <h:commandButton id="lkdjf113" 
+								 onclick="showLoading()"
+								 value="Create Project"
 								 action="#{SimplexBean.NewProjectThenEditProject}" />
 		  <f:verbatim></fieldset></f:verbatim>	  
 		</h:form>	
 		
 		<h:form id="lkdjf114">
-		  <h:outputText escape="false" value="<hr/>"/>
 		  <h:commandLink  id="lkdjf115" action="Simplex2-back">
 			 <h:outputText id="lkdjf116" value="#{SimplexBean.codeName} Main Menu" />
 		  </h:commandLink>

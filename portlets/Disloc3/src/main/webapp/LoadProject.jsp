@@ -8,8 +8,22 @@
 <html>
   <head> 
 	 <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css"/>
+	 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
   </head>
   <body>
+	 <script type="text/javascript">
+		function showLoading() {
+		$("#loading").show();
+		}
+	 </script>  
+	 <div id="loading">
+		<center>
+		  <p>
+			 <img src="@host.base.url@@artifactId@/images/animation_processing.gif"/>
+		  </p>
+		</center>
+	 </div>
+
 	 <script type="text/javascript"> 
 		//<![CDATA[
 		
@@ -71,7 +85,9 @@
 											 layout="pageDirection"> 
 				  <f:selectItems value="#{DislocBean2.myProjectNameList}" /> 
 				</h:selectManyCheckbox> 
-				<h:commandButton id="dislocSelectProject" value="Select" 
+				<h:commandButton id="dislocSelectProject" 
+									  onclick="showLoading()"
+									  value="Select" 
 									  action="#{DislocBean2.toggleSelectProject}" /> 
 			 </h:panelGrid> 
 		  </h:form> 
@@ -103,7 +119,9 @@
 								  value="#{DislocBean2.projectName}"
 								  required="true"/>
 			  </h:panelGroup>
-			  <h:commandButton id="dislocCpyProjectCmd" value="Copy"
+			  <h:commandButton id="dislocCpyProjectCmd" 
+									 onclick="showLoading()"
+									 value="Copy"
 									 action="#{DislocBean2.toggleCopyProject}" />
 			</h:panelGrid>
 
@@ -127,7 +145,9 @@
 											 layout="pageDirection"> 
 				  <f:selectItems value="#{DislocBean2.myProjectNameList}" /> 
 				</h:selectManyCheckbox> 
-				<h:commandButton id="dislocDeleteCmdButton" value="Delete" 
+				<h:commandButton id="dislocDeleteCmdButton" 
+									  onclick="showLoading()"
+									  value="Delete" 
 									  action="#{DislocBean2.toggleDeleteProject}" /> 
 			 </h:panelGrid> 
 		  </h:form> 
@@ -148,7 +168,8 @@
 							  value="#{DislocBean2.projectName}" 
 							  required="true" /> 
 			 
-			 <h:commandButton id="lpj_makeselection" value="Create Project" 
+			 <h:commandButton id="lpj_makeselection" 
+									value="Create Project" 
 									action="#{DislocBean2.NewProjectThenEditProject}" /> 
 		  </h:panelGrid> 
 		  <f:verbatim></fieldset></f:verbatim>

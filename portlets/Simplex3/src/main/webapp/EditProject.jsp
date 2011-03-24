@@ -26,6 +26,18 @@
   
   <body onload="myInit()" onunload="GUnload()">
 	 <script type="text/javascript">
+		function showLoading() {
+		$("#loading").show();
+		}
+	 </script>  
+	 <div id="loading">
+		<center>
+		  <p>
+			 <img src="@host.base.url@@artifactId@/images/animation_processing.gif"/>
+		  </p>
+		</center>
+	 </div>
+	 <script type="text/javascript">
 		//<![CDATA[
 		
 		//Any "onload" operations for subcomponent includes need to go here.
