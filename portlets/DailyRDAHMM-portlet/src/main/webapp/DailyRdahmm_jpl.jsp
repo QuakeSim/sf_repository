@@ -59,9 +59,9 @@
 
 	<style>
 		td      { font-size: 9pt;}
-		.ooib { border-width: 1px; border-style: none solid solid; border-color: #CC3333; background-color: #E4E5EE;}
+		.ooib { border-width: 1px; border-style: none solid solid; border-color: #CC3333; background-color: #EDEDED;}
 		.ooih td { border-width: 1px; padding: 0 5; }
-		.ooihj { color: #CC3333; background-color: #E4E5EE; border-style: solid solid none; border-color: #CC3333; cursor: pointer}
+		.ooihj { color: #CC3333; background-color: #EDEDED; border-style: solid solid none; border-color: #CC3333; cursor: pointer}
 		.ooihs { color: #6600CC; background-color: #ccccFF; border-style: solid; border-color: #6600CC #6600CC #CC3333; cursor: pointer}
 		.ooihx { border-style: none none solid; border-color: #CC3333; }
 	</style>
@@ -251,7 +251,8 @@
 				<table class="ooih" border="0" cellspacing="0" cellpadding="0" width="767" height="19">
 					<tr id="tabRow">
 						<td class="ooihj" nowrap onclick="ghbq(this)">View Map</td>
-						<td class="ooihs" nowrap onclick="ghbq(this)">State Change Number VS Time (Plot)</td>
+						<td class="ooihs" nowrap onclick="ghbq(this)">State Change Number vs. Time Plot</td>
+						<td class="ooihs" nowrap onclick="ghbq(this)">Static State Change Number Plot</td>
 						<td class="ooihx" style="width:100%">&nbsp;</td>
 						</tr>
 				</table>
@@ -273,7 +274,7 @@
 										<img id="rightSliderArrow" src="/yui_0.12.2/build/slider/assets/arrow_right.png" style="cursor: pointer" onClick="sliderArrowClick(this)">
 									</td>
 								</tr>
-                                			</table>
+							</table>
 						</td>
 					</tr>
 					<tr valign="top" style="display: none">
@@ -285,17 +286,11 @@
 							<tr align="center">
 								<td>(Usage: move mouse to see value, select an area to zoom in, and double click to zoom out.)</td>
 							</tr>
+							<tr><td><br/></td></tr>
 							<tr>
 								<td>
-								<table border="1" valign="top" align="center" width="759px">
+								<table valign="top" align="center" width="759px">
 								<tr>
-									<td>
-										Get the plot for a bounded area:
-										<br/>
-										Latitude: from  <input type="text" id="scnLatFromText" size="8"/>  to  <input type="text" id="scnLatToText" size="8"/>
-										<br/>
-										Longitude: from  <input type="text" id="scnLongFromText" size="8"/>  to  <input type="text" id="scnLongToText" size="8"/>  <button id="scnPlotBtn" onClick="scnPlotBtnClick(this)" style="width:70px;height:20px">Plot</button> 
-									</td>
 									<td>
 										<a id="scnTxtLink" target="_blank" href="">Click here to view the detailed data.</a>
 										<br/>
@@ -308,6 +303,31 @@
 								</td>
 							</tr>
 						</table>
+						</td>
+					</tr>
+					<tr valign="top" style="display: none">
+						<td>
+							<table align="left">
+								<tr><td colspan="7"><img id="scnPngImg" style="width:100%;height:100%;"></td></tr>
+								<tr><td colspan="7"><br/></td></tr>
+								<tr><td colspan="7">Get the plot for a bounded area:<br/></td></tr>
+								<tr>
+									<td width="70">Latitude: </td>
+									<td width="30">from</td>
+									<td width="80"><input type="text" id="scnLatFromText" size="9"/></td> 
+									<td width="15"> to </td>
+									<td colspan="3" width="80"><input type="text" id="scnLatToText" size="9"/></td>
+								</tr>
+								<tr>
+									<td width="70">Longitude: </td>
+									<td width="30">from</td>
+									<td width="80"><input type="text" id="scnLongFromText" size="9"/></td>
+									<td width="15"> to </td>
+									<td width="80"><input type="text" id="scnLongToText" size="9"/></td>
+									<td width="85"><button id="scnPlotBtn" onClick="scnPlotBtnClick(this)" style="width:70px;height:25px">Plot</button></td>
+									<td><button id="scnWholeAreaBtn" onClick="scnWholeAreaBtnClick(this)" style="width:200px;height:25px">Plot for the whole network</button></td>
+								</tr>
+							</table>
 						</td>
 					</tr>
 				</table>
@@ -429,7 +449,17 @@
 					+ "http%3A%2F%2Fresult.service.hostname%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetStateChangeNumberPlot%3F"
 					+ "dataSource%3DJPL%26minLat%3D" + latFrom + "%26maxLat%3D" + latTo + "%26minLong%3D" + longFrom + "%26maxLong%3D" + longTo;
 		var link = callHttpService(url);
-		window.open(link);
+		document.getElementById("scnPngImg").src = link;
+		//window.open(link);
+	}
+
+	// show the state change number vs. time plot for the whole area
+	function scnWholeAreaBtnClick(btn) {
+		document.getElementById("scnPngImg").src = scnWholeAreaPngUrl;
+		document.getElementById("scnLatFromText").value = minLat;
+		document.getElementById("scnLatToText").value = maxLat;
+		document.getElementById("scnLongFromText").value = minLon;
+		document.getElementById("scnLongToText").value = maxLon;
 	}
 
 	// what to do when the user pressed a key in the input textbox for the end date of the get kml service
@@ -644,6 +674,8 @@
 	var xmlResultUrl = "<%=xmlUrl%>"; 
 	var urlPattern = '<%=eleOutput.element("server-url").getText()%>';
 	var scnPattern = '<%=eleOutput.element("stateChangeNumJsInput").getText()%>';
+	var scnTxtPattern= '<%=eleOutput.element("stateChangeNumTxtFile").getText()%>';
+	var scnWholeAreaPngUrl = urlPattern + "/" + scnTxtPattern + ".png";
 	var videoUrl = '<%=eleOutput.element("video-url").getText()%>';
 	var allInputPattern = '<%=eleOutput.element("allStationInputName").getText()%>';
 	
@@ -655,9 +687,11 @@
 								pixelsPerXLabel:50,
 								rightGap:2,
 								stepPlot:true,
-								fillGraph:true
+								fillGraph:true,
+								fillAlpha:0.8
 							});
 	document.getElementById("scnTxtLink").href = urlPattern + "/" + scnPattern;
+	document.getElementById("scnPngImg").src = scnWholeAreaPngUrl;
 	document.getElementById("videoLink").href = videoUrl;
 	document.getElementById("allInputLink").href = urlPattern + "/" + allInputPattern;
 
@@ -781,7 +815,16 @@
 	var timeDiff = parseInt(Date.UTC(1970,0,2)/DAY_MILLI) - <%=(tmpCaldr.getTime().getTime()/DAY_MILLI)%>;	
 	var mapCenterY = <%=mapcenter_y%>;
 	var mapCenterX = <%=mapcenter_x%>;	
-	
+	var minLon = <%=ymin%>;
+	var maxLon = <%=ymax%>;
+	var minLat = <%=xmin%>;
+	var maxLat = <%=xmax%>;
+
+	document.getElementById("scnLatFromText").value = minLat;
+	document.getElementById("scnLatToText").value = maxLat;
+	document.getElementById("scnLongFromText").value = minLon;
+	document.getElementById("scnLongToText").value = maxLon;
+
 	map.centerAndZoom(new GPoint(mapCenterY, mapCenterX), 10);
 	GEvent.addListener(map, "moveend", function() {	onMapMove(); } );
 	GEvent.addListener(map, "zoomend", function(oldLevel, newLevel) {
