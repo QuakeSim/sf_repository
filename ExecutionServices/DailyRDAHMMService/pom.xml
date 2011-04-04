@@ -62,6 +62,10 @@
 										dir="${tomcat.base.dir}/webapps/${pom.artifactId}/WEB-INF/binaryexec/">
 									<include name="*"/>
 								</chmod>
+								<chmod perm="${tomcat.bin.perm}" 
+										dir="${tomcat.base.dir}/webapps/${pom.artifactId}/WEB-INF/classes/">
+									<include name="*.sh"/>
+								</chmod>
 							</tasks>
 						</configuration>
 						<goals>
