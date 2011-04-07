@@ -1,5 +1,7 @@
 package cgl.webservices;
 
+import java.util.HashMap;
+
 public class DailyRdahmmStation {
 	
 	String stationID;
@@ -7,6 +9,7 @@ public class DailyRdahmmStation {
 	float longitude;
 	int[] stateChanges;
 	int[] noDataSections;
+	HashMap<Long, Byte> stateSequence;
 	
 	public DailyRdahmmStation() {
 		stationID = null;
@@ -14,6 +17,6 @@ public class DailyRdahmmStation {
 		longitude = 0;
 		stateChanges = null;
 		noDataSections = null;
+		stateSequence = null;
 	}
-
 }

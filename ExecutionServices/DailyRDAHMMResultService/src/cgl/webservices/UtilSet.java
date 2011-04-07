@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Calendar;
+import java.util.Vector;
 
 public class UtilSet {
 	
@@ -234,17 +235,49 @@ public class UtilSet {
 		}
     	return true;
     }
+    
+    /**
+     * read the content of file located by "path" to "vec" 
+     * @param path
+     * @param vec
+     */
+    public static void readFileToVector(String path, Vector<String> vec) {
+		if (path == null || path.length() == 0 || vec == null)
+			return;
+		try {
+			vec.removeAllElements();
+			String line;
+			int count = 0;
+			BufferedReader br = new BufferedReader(new FileReader(path));
+			line = br.readLine();
+			while (line != null) {
+				if (line.length() > 0) {
+					vec.add(line);
+					count++;
+				}
+				line = br.readLine();
+			}
+			br.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	/**
 	 * This is for test anything handy
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		/*
 		Calendar cal = Calendar.getInstance();
 		System.out.println(cal.toString());
 		
 		String s = "SOPAC_FILL_2005-06-09to2005-09-08.2010-10-03.kml";
 		String pat = ".*";
-		System.out.println(s.matches(pat));
+		System.out.println(s.matches(pat)); */
+		
+		DailyRdahmmResultService service = new DailyRdahmmResultService();
+		String res = service.calcStationColors(args[0], args[1]);
+		System.out.println(res);
 	}
 }

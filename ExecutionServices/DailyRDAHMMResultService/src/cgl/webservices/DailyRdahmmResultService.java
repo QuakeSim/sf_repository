@@ -34,6 +34,7 @@ public class DailyRdahmmResultService {
 	static long plotObsoleteThreshold;
 	static long kmlCleanUpPeriod;
 	static long plotCleanUpPeriod;
+	static String resultLocalDir;
 	protected HashMap<String, DailyRdahmmResultAnalyzer> analyzerTable;
 	protected long lastKmlDeletionTime;
 	protected long lastPlotDeletionTime;
@@ -57,14 +58,11 @@ public class DailyRdahmmResultService {
 			popUpWinHtml = propConfig.getProperty("popUpWinHtml");
 			kmlObsoleteNamePattern = propConfig.getProperty("kmlObsoleteNameRegPattern");
 			plotObsoleteNamePattern = propConfig.getProperty("plotObsoleteNameRegPattern");
-			kmlObsoleteThreshold = Long.parseLong(propConfig.getProperty("kmlObsoleteThresholdDays")) 
-									* ObsoleteFileDeleter.DAY_MILISEC_COUNT;
-			plotObsoleteThreshold = Long.parseLong(propConfig.getProperty("plotObsoleteThresholdDays")) 
-									* ObsoleteFileDeleter.DAY_MILISEC_COUNT;
-			kmlCleanUpPeriod = Long.parseLong(propConfig.getProperty("kmlCleanUpPeriodDays")) 
-								* ObsoleteFileDeleter.DAY_MILISEC_COUNT;
-			plotCleanUpPeriod = Long.parseLong(propConfig.getProperty("plotCleanUpPeriodDays")) 
-								* ObsoleteFileDeleter.DAY_MILISEC_COUNT;
+			kmlObsoleteThreshold = Long.parseLong(propConfig.getProperty("kmlObsoleteThresholdDays")) * ObsoleteFileDeleter.DAY_MILISEC_COUNT;
+			plotObsoleteThreshold = Long.parseLong(propConfig.getProperty("plotObsoleteThresholdDays"))	* ObsoleteFileDeleter.DAY_MILISEC_COUNT;
+			kmlCleanUpPeriod = Long.parseLong(propConfig.getProperty("kmlCleanUpPeriodDays")) * ObsoleteFileDeleter.DAY_MILISEC_COUNT;
+			plotCleanUpPeriod = Long.parseLong(propConfig.getProperty("plotCleanUpPeriodDays"))	* ObsoleteFileDeleter.DAY_MILISEC_COUNT;
+			resultLocalDir = propConfig.getProperty("resultLocalDir");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -77,6 +75,15 @@ public class DailyRdahmmResultService {
 		}
 		
 		return analyzer.calcStationColors(date);
+	}
+	
+	public String calcStationStates(String date, String resUrl) {
+		DailyRdahmmResultAnalyzer analyzer = analyzerTable.get(resUrl);
+		if (analyzer == null) {
+			analyzer = addAnalyzer(resUrl);
+		}
+		
+		return analyzer.calcStationStates(date);
 	}
 	
 	public String getLatLongForStation(String stationId, String resUrl) {

@@ -1,20 +1,53 @@
 package cgl.webservices;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.Vector;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 public class DailyRdahmmResultAnalyzer {
+	
+	protected class StateSeqLoader extends Thread {
+		public void run() {
+			// load all stations' state sequences
+			String stationSwfInputPattern = DailyRdahmmResultService.resultLocalDir + File.separator + dataSourceSubDir
+											+ File.separator + dirPattern + File.separator + swfInputPattern;
+			if (stationArray != null) {
+				Calendar calTmp = Calendar.getInstance();
+				for (int i=0; i<stationArray.length; i++) {
+					String swfInputPath = stationSwfInputPattern.replaceAll("{!station-id!}", stationArray[i].stationID);					
+					Vector<String> vecSwfInput = new Vector<String>(3000);
+					UtilSet.readFileToVector(swfInputPath, vecSwfInput);
+					stationArray[i].stateSequence = new HashMap<Long, Byte>(vecSwfInput.size());
+					for (int j=0; j<vecSwfInput.size(); j++) {
+						String line = vecSwfInput.get(i);
+						// line is like "1 2001-04-20 -2407750.8815 -4706536.7110 3557571.3914"
+						int idx1 = line.indexOf(' ');
+						int idx2 = line.indexOf(' ', idx1 + 1);
+						UtilSet.setDateByString(calTmp, line.substring(idx1+1, idx2));
+						stationArray[i].stateSequence.put(calTmp.getTimeInMillis(), Byte.parseByte(line.substring(0, idx1)));
+					}
+				}
+			}
+			synchronized (dataSourceSubDir) {
+				stateSeqLoaded = true;
+				dataSourceSubDir.notifyAll();
+			}
+		}
+	}
+	
 	public static long DAY_MILLI = 86400000;
 	
 	private String xmlResUrl = "http://gf13.ucs.indiana.edu:8080//rdahmmexec/station-status-change-rss.xml";			//the url of the result xml file of daily rdahmm service, used when local copy is out of date
@@ -43,6 +76,9 @@ public class DailyRdahmmResultAnalyzer {
 	String minPattern;
 	String rangePattern;
 	String modelPattern;
+	String swfInputPattern;
+	String dataSourceSubDir;
+	boolean stateSeqLoaded;
 	
 	public DailyRdahmmResultAnalyzer (String xmlResUrl) {
 		this.xmlResUrl = xmlResUrl;
@@ -56,6 +92,8 @@ public class DailyRdahmmResultAnalyzer {
 		Element eleXml = statusDoc.getRootElement();
 		Element eleOutput = eleXml.element("output-pattern");
 		urlPattern = eleOutput.element("server-url").getText();
+		// urlPattern is like: http://gf5.ucs.indiana.edu:8080//daily_rdahmmexec/daily/SOPAC_FILL
+		dataSourceSubDir = urlPattern.substring(urlPattern.lastIndexOf('/') + 1);
 		scnPattern = eleOutput.element("stateChangeNumTxtFile").getText();
 		videoUrl = eleOutput.element("video-url").getText();
 		allInputPattern = eleOutput.element("allStationInputName").getText();
@@ -74,6 +112,7 @@ public class DailyRdahmmResultAnalyzer {
 		minPattern = eleOutput.element("MinValFile").getText();
 		rangePattern = eleOutput.element("RangeFile").getText();
 		modelPattern = eleOutput.element("ModelFiles").getText();
+		swfInputPattern = eleOutput.element("SwfInputFile").getText();
 		
 		List lStations = eleXml.elements("station");
 		stationArray = new DailyRdahmmStation[lStations.size()];
@@ -189,6 +228,10 @@ public class DailyRdahmmResultAnalyzer {
 			}					
 		}
 		dataLatestDate = UtilSet.getDateString(dataLatest);
+		stateSeqLoaded = false;
+		
+		StateSeqLoader stateLoader = new StateSeqLoader();
+		stateLoader.start();
 	}
 	
 	protected Document getXmlResDoc() {
@@ -265,12 +308,14 @@ public class DailyRdahmmResultAnalyzer {
 		int idx2 = station.stateChanges.length / 3 - 1;
 		char color = '*';
 		
-		int midTime;        	
+		int midTime;
+		int yellowMidTime = -1;
 		if (idx1 == idx2) {
 			midTime = station.stateChanges[idx1*3];
 			if (midTime == endTime) {
 				color = '1';
 			} else if (midTime >= startTime && midTime < endTime) {
+				yellowMidTime = midTime;
 				color = '2';
 			} else {
 				color = '0';
@@ -288,6 +333,7 @@ public class DailyRdahmmResultAnalyzer {
 					break;
 				} else {
 					if (midTime >= startTime && midTime < endTime) {
+						yellowMidTime = midTime;
 						color = '2';
 					}
 
@@ -295,10 +341,12 @@ public class DailyRdahmmResultAnalyzer {
 						// this implies that idx1 == idx2-1; so we just check
 						// idx2 and get out
 						midTime = station.stateChanges[idx2 * 3];
-						if (midTime == endTime)
+						if (midTime == endTime) {
 							color = '1';
-						else if (midTime >= startTime && midTime < endTime)
+						} else if (midTime >= startTime && midTime < endTime) {
+							yellowMidTime = midTime;
 							color = '2';
+						}
 						break;
 					}
 
@@ -319,8 +367,56 @@ public class DailyRdahmmResultAnalyzer {
 				color = '3';
 		}
 		
-		//System.out.println("color for " + station.stationID + ":" + color);
+		/*
+		if (color == '2') {
+			System.out.println("color for " + station.stationID + ":" + color + " startTime:" + startTime 
+								+ " endTime:" + endTime + " midTime:" + yellowMidTime);
+			Calendar calStart = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+			calStart.setTimeInMillis(startTime * DAY_MILLI);
+			Calendar calEnd = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+			calEnd.setTimeInMillis(endTime * DAY_MILLI);
+			Calendar calMiddle = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+			calMiddle.setTimeInMillis(yellowMidTime * DAY_MILLI);
+			System.out.println("startTime:" + UtilSet.getDateString(calStart) + " endTime:" + UtilSet.getDateString(calEnd) 
+								+ " midTime:" + UtilSet.getDateString(calMiddle));
+		}*/
 		return color;
+	}
+	
+	/**
+	 * get the states of all stations for date
+	 * @param date
+	 * @return
+	 */
+	public String calcStationStates(String date) {
+		try {
+			if (isUpdateNeeded()) {
+				getAndAnalyzeXmlRes();
+				calLastUpdate.setTimeInMillis(System.currentTimeMillis());
+			}			
+			synchronized (dataSourceSubDir) {
+				if (!stateSeqLoaded) {
+					dataSourceSubDir.wait();
+				}
+			}
+			Calendar cal = UtilSet.getDateFromString(date);
+			long time = cal.getTimeInMillis();
+			StringBuffer res;
+			res = new StringBuffer();
+			for (int i=0; i<stationArray.length; i++) {
+				Byte state = stationArray[i].stateSequence.get(time);
+				if (state == null) {
+					res.append('0');
+				} else {
+					res.append(state.toString());
+				}
+				res.append(',');
+			}
+			return res.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
 	}
 	
 	/**
@@ -397,9 +493,8 @@ public class DailyRdahmmResultAnalyzer {
 		if (stationArray == null)
 			return true;
 		Calendar now = Calendar.getInstance();
-		return now.get(Calendar.DATE) != calLastUpdate.get(Calendar.DATE)
-				|| (now.get(Calendar.HOUR_OF_DAY) >= 5
-					&& calLastUpdate.get(Calendar.HOUR_OF_DAY) < 5);	
+		return !(calLastUpdate.get(Calendar.YEAR) == now.get(Calendar.YEAR) && calLastUpdate.get(Calendar.MONTH) == now.get(Calendar.MONTH) 
+				&& calLastUpdate.get(Calendar.DATE) == now.get(Calendar.DATE) && calLastUpdate.get(Calendar.HOUR_OF_DAY) > 5);
 	}
 
 	public String getDataLatestDate() {
