@@ -169,62 +169,7 @@ public class DailyRDAHMMThread implements Runnable {
 		}
 	}
 	
-	/** read the content of a file to a vector */
-	void readFileToVector(String path, Vector<String> vec) {
-		if (path == null || path.length() == 0 || vec == null)
-			return;
-		try {
-			vec.removeAllElements();
-			String line;
-			int count = 0;
-			BufferedReader br = new BufferedReader(new FileReader(path));
-			line = br.readLine();
-			while (line != null) {
-				if (line.length() > 0) {
-					vec.add(line);
-					count++;
-				}
-				line = br.readLine();
-			}
-			br.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 	
-	/** 
-	 * read the "lineNum"th line of a file; lineNum ==  -1: get the last line
-	 * */
-	String readOneLineFromFile(String path, int lineNum) {
-		if (path == null || path.length() == 0 || lineNum < -1)
-			return null;
-		try {
-			String line = null;
-			int count = -1;
-			BufferedReader br = new BufferedReader(new FileReader(path));
-			line = br.readLine();
-			String lastLine = line;
-			while (line != null) {
-				if (line.length() > 0) {
-					count++;
-					if (count == lineNum)
-						break;					
-				}
-				lastLine = line;
-				line = br.readLine();
-			}
-			br.close();
-			if (count == lineNum)
-				return line;
-			else if (lineNum == -1)
-				return lastLine;
-			else
-				return null;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}		
-	}
 
 	/** 
 	 * get the status change status from lastLines, add them to the result xml file 
@@ -239,10 +184,10 @@ public class DailyRDAHMMThread implements Runnable {
 			throws InterruptedException {
 		try {
 			String projectName = station.getProjectName();
-			readFileToVector(DailyRDAHMMStation.baseDestDir + File.separator + projectName + File.separator
-								 + projectName + ".all.raw", evalRawLines);
-			readFileToVector(DailyRDAHMMStation.baseDestDir + File.separator + projectName + File.separator
-								 + projectName + ".all.Q", evalQLines);
+			UtilSet.readFileToVector(DailyRDAHMMStation.baseDestDir + File.separator + projectName + File.separator
+								 	+ projectName + ".all.raw", evalRawLines);
+			UtilSet.readFileToVector(DailyRDAHMMStation.baseDestDir + File.separator + projectName + File.separator
+									+ projectName + ".all.Q", evalQLines);
 			UtilSet.log(threadNum, "station " + station.getStationId() + ": evalRawLines " + evalRawLines.size() + "; evalQLines " + evalQLines.size());
 			
 			synchronized (fileMutex) {
@@ -337,6 +282,20 @@ public class DailyRDAHMMThread implements Runnable {
 	 * @param eleRoot
 	 */
 	private void addResToXMLDoc(Calendar today, DailyRDAHMMStation station, Element eleRoot, Element eleRootPretty) {
+		Calendar now = Calendar.getInstance();
+		String nowStr = UtilSet.getDateTimeString(now);
+		Element eleUpdateTime = eleRoot.element("update-time");
+		if (eleUpdateTime == null) {
+			eleUpdateTime = eleRoot.addElement("update-time");
+		}
+		eleUpdateTime.setText(nowStr);
+		
+		eleUpdateTime = eleRootPretty.element("update-time");
+		if (eleUpdateTime == null) {
+			eleUpdateTime = eleRoot.addElement("update-time");
+		}
+		eleUpdateTime.setText(nowStr);		
+		
 		// if the rdahmm result output-pattern element is not there, create a new one
 		addElePattern(station, eleRoot);
 		addElePattern(station, eleRootPretty);
@@ -379,7 +338,7 @@ public class DailyRDAHMMThread implements Runnable {
 		int missCount = 0;
 		if (evalQLines.size() > 0) {
 			// data missing between last "data-available" date and "today"?
-			date2 = getDateFromRawLine((String)evalRawLines.get(evalQLines.size()-1));
+			date2 = UtilSet.getDateFromRawLine((String)evalRawLines.get(evalQLines.size()-1));
 			UtilSet.setDateByString(cal2, date2);
 			UtilSet.ndaysBeforeToday(cal2, -1, cal2);
 			if (cal2.compareTo(calToday2) < 0) {
@@ -391,8 +350,8 @@ public class DailyRDAHMMThread implements Runnable {
 			// get data-missing time sections and state changes during the evaluation time
 			for (int i = evalQLines.size() - 1; i > 0; i--) {
 				// record section with missing data
-				String dateTime1 = getDateTimeFromRawLine((String)evalRawLines.get(i-1));
-				String dateTime2 = getDateTimeFromRawLine((String)evalRawLines.get(i));
+				String dateTime1 = UtilSet.getDateTimeFromRawLine((String)evalRawLines.get(i-1));
+				String dateTime2 = UtilSet.getDateTimeFromRawLine((String)evalRawLines.get(i));
 				UtilSet.setDateTimeByString(cal1, dateTime1);
 				UtilSet.setDateTimeByString(cal2, dateTime2);
 				date1 = UtilSet.getDatePart(dateTime1);
@@ -458,7 +417,7 @@ public class DailyRDAHMMThread implements Runnable {
 			
 			// data missing between 1994-01-01 and the first "data-available" date?
 			date1 = DailyRDAHMMStation.defaultModelStartDate;
-			date2 = getDateFromRawLine((String)evalRawLines.get(0));
+			date2 = UtilSet.getDateFromRawLine((String)evalRawLines.get(0));
 			UtilSet.setDateByString(cal1, date1);
 			UtilSet.setDateByString(cal2, date2);
 			UtilSet.ndaysBeforeToday(cal2, 1, cal2);
@@ -555,34 +514,6 @@ public class DailyRDAHMMThread implements Runnable {
 			tmpNode = elePattern.addElement("ModelFiles");
 			tmpNode.setText(modelBasePat + ".zip");
 		}
-	}
-	
-	/**  get the date string from the a line of the raw data file received from GRWS query */
-	static String getDateFromRawLine(String rawLine) {
-		// a raw line is like "dond 2007-02-22T12:00:00 -2517566.0543 -4415531.3935 3841177.1618 0.0035 0.0055 0.0047"
-		int idx = rawLine.indexOf(' ');
-		if (idx < 0)
-			return null;
-		
-		int idx2 = rawLine.indexOf('T', idx);
-		if (idx2 < 0)
-			return null;
-		
-		return rawLine.substring(idx+1, idx2);
-	}
-	
-	/**  get the date-time string from the a line of the raw data file received from GRWS query */
-	static String getDateTimeFromRawLine(String rawLine) {
-		// a raw line is like "dond 2007-02-22T12:00:00 -2517566.0543 -4415531.3935 3841177.1618 0.0035 0.0055 0.0047"
-		int idx = rawLine.indexOf(' ');
-		if (idx < 0)
-			return null;
-		
-		int idx2 = rawLine.indexOf(' ', idx+1);
-		if (idx2 < 0)
-			return null;
-		
-		return rawLine.substring(idx+1, idx2);
 	}
 
 	/**

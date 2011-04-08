@@ -16,6 +16,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Calendar;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.ExecTask;
@@ -681,7 +682,91 @@ public class UtilSet {
 			e.printStackTrace();
 			return "";
 		}
+	}
+	
+	/** read the content of a file to a vector */
+	public static void readFileToVector(String path, Vector<String> vec) {
+		if (path == null || path.length() == 0 || vec == null)
+			return;
+		try {
+			vec.removeAllElements();
+			String line;
+			int count = 0;
+			BufferedReader br = new BufferedReader(new FileReader(path));
+			line = br.readLine();
+			while (line != null) {
+				if (line.length() > 0) {
+					vec.add(line);
+					count++;
+				}
+				line = br.readLine();
+			}
+			br.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/** 
+	 * read the "lineNum"th line of a file; lineNum ==  -1: get the last line
+	 * */
+	public static String readOneLineFromFile(String path, int lineNum) {
+		if (path == null || path.length() == 0 || lineNum < -1)
+			return null;
+		try {
+			String line = null;
+			int count = -1;
+			BufferedReader br = new BufferedReader(new FileReader(path));
+			line = br.readLine();
+			String lastLine = line;
+			while (line != null) {
+				if (line.length() > 0) {
+					count++;
+					if (count == lineNum)
+						break;					
+				}
+				lastLine = line;
+				line = br.readLine();
+			}
+			br.close();
+			if (count == lineNum)
+				return line;
+			else if (lineNum == -1)
+				return lastLine;
+			else
+				return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}		
+	}
+	
+	/**  get the date string from the a line of the raw data file received from GRWS query */
+	static String getDateFromRawLine(String rawLine) {
+		// a raw line is like "dond 2007-02-22T12:00:00 -2517566.0543 -4415531.3935 3841177.1618 0.0035 0.0055 0.0047"
+		int idx = rawLine.indexOf(' ');
+		if (idx < 0)
+			return null;
 		
+		int idx2 = rawLine.indexOf('T', idx);
+		if (idx2 < 0)
+			return null;
+		
+		return rawLine.substring(idx+1, idx2);
+	}
+	
+	/**  get the date-time string from the a line of the raw data file received from GRWS query */
+	static String getDateTimeFromRawLine(String rawLine) {
+		// a raw line is like "dond 2007-02-22T12:00:00 -2517566.0543 -4415531.3935 3841177.1618 0.0035 0.0055 0.0047"
+		int idx = rawLine.indexOf(' ');
+		if (idx < 0)
+			return null;
+		
+		int idx2 = rawLine.indexOf(' ', idx+1);
+		if (idx2 < 0)
+			return null;
+		
+		return rawLine.substring(idx+1, idx2);
 	}
 	
 	public static void testSth(String[] args) {
