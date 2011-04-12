@@ -3,6 +3,7 @@ package cgl.quakesim.disloc;
 //Imports from the mother ship
 import java.io.*;
 import java.net.*;
+
 import java.util.*;
 import java.util.regex.Pattern;
 import java.text.*;
@@ -75,6 +76,7 @@ public class DislocBean extends GenericSopacBean {
 	boolean renderFaultMap = false;
 	boolean usesGridPoints;
 	boolean renderChooseObsvStyleForm = false;
+	 boolean renderFaultDrawing=false;
 
 	Fault currentFault = new Fault();
 	// DislocParamsBean dislocParams=new DislocParamsBean();
@@ -219,6 +221,17 @@ public class DislocBean extends GenericSopacBean {
 		// currentParams.setObservationPointStyle(1);
 		
 		logger=Logger.getLogger(DislocBean.class);
+
+		//This method is normally called after loading a project,
+		//but we also put it here so that a default project is automatically
+		//created.
+
+		//Provide a default project name.  We may override it later.
+		this.projectName="anonymousProject"+java.util.UUID.randomUUID().hashCode();
+		
+		//Create an anonymous project using the above default name. We may 
+		//override it later.
+		NewProjectThenEditProject();
 
 		// We are done.
 		logger.info("Primary Disloc Bean Created");
@@ -1104,6 +1117,7 @@ public class DislocBean extends GenericSopacBean {
 		renderMap = false;
 		renderFaultMap = false;
 		renderChooseObsvStyleForm = false;
+		renderFaultDrawing=false;
 	}
 
 	/**
@@ -1123,8 +1137,7 @@ public class DislocBean extends GenericSopacBean {
 
 		try {
 
-			if (db != null)
-				db.close();
+			if (db != null) db.close();
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + ".db");
 			// First, get the project bean
@@ -1136,16 +1149,13 @@ public class DislocBean extends GenericSopacBean {
 				currentProject = (DislocProjectBean) results.next();
 			}
 			// Say goodbye.
-			if (db != null)
-				db.close();
+			if (db != null) db.close();
 		} catch (Exception e) {
-			if (db != null)
-				db.close();
+			if (db != null) db.close();
 			System.out.println("[toggleSelectProject] " + e);
 		}
 		finally {
-			if (db != null)
-				db.close();			
+			if (db != null) db.close();			
 		}
 
 
@@ -1258,6 +1268,8 @@ public class DislocBean extends GenericSopacBean {
 			renderFaultMap = !renderFaultMap;
 		} else if (projectSelectionCode.equals("ChooseObsvStyleForm")) {
 			renderChooseObsvStyleForm = !renderChooseObsvStyleForm;
+		} else if (projectSelectionCode.equals("ShowFaultDrawingMap")) {
+			 renderFaultDrawing=!renderFaultDrawing;
 		} else if (projectSelectionCode.equals("")) {
 			;
 		}
@@ -2173,9 +2185,7 @@ public class DislocBean extends GenericSopacBean {
 
 		try {
 
-			if (db != null)
-				db.close();
-
+			if (db != null) db.close();
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + ".db");
 			DislocProjectBean tmp = new DislocProjectBean();
@@ -2500,6 +2510,15 @@ public class DislocBean extends GenericSopacBean {
 	public void setRenderFaultMap(boolean renderFaultMap) {
 		this.renderFaultMap = renderFaultMap;
 	}
+	 
+	 public void setRenderFaultDrawing(boolean renderFaultDrawing){
+		  this.renderFaultDrawing=renderFaultDrawing;
+	 }
+
+	 public boolean getRenderFaultDrawing(){
+		  return this.renderFaultDrawing;
+	 }
+
 
 	public boolean getUsesGridPoints() {
 		if (currentParams.getObservationPointStyle() == 1) {

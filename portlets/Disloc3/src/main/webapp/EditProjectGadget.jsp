@@ -430,8 +430,7 @@ function getScrolling() {
 	 <%@include file="SearchFaultAuthorPanel.jsp" %>
 	 <%@include file="FaultDisplaySearchResultsPanel.jsp" %>
 	 <%@include file="ScatterMap.jsp" %>
-	 <%@include file="FaultMapPanelFrame.jsp"%>
-	 
+	 <%@include file="FaultMapPanelFrameGadget.jsp"%>
   </h:panelGrid>
   <%@include file="ProjectComponentPanel.jsp" %>
   <%@include file="footer.jsp" %>

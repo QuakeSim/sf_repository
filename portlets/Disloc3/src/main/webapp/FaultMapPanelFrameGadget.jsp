@@ -21,7 +21,7 @@
 		  <div id="faultMapside" style="width: 200px; height: 600px; overflow:auto;"></div>
 		</f:verbatim>      
 		<f:verbatim>
-		  <div id="faultMap" style="width: 800px; height: 600px;"></div>
+		  <div id="faultMap" style="width: 700px; height: 600px;"></div>
 		</f:verbatim> 
 	 </h:panelGrid>
   </f:verbatim>
@@ -107,7 +107,6 @@
 	exmlFMap = new EGeoXml("exmlFMap", faultMap, kmllist, {sidebarfn:myside,nozoom:true,sidebarid:"faultMapside",parentformofsidebarid:"faultKMLSelectorForm",clickpolyobjfn:clickpolyobj,iwwidth:200});       
 	exmlFMap.parse();
 
-	//REVIEW: Why do this?  Simplex doesn't need this.
 	function jsleep(s){
 		s=s*1000;
 		var a=true;
@@ -121,7 +120,7 @@
 		}
 	}
 
-	jsleep(2);
+	jsleep(7);
 
 	faultMap.addMapType(G_PHYSICAL_MAP);
 	faultMap.setMapType(G_PHYSICAL_MAP);
