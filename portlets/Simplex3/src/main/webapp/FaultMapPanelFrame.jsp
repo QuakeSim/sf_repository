@@ -161,7 +161,7 @@ for (var nA = 0 ; nA < flistsize.value ; nA++){
 // Parse the KML.
 // The gridsphere container doesn't work with urls. That should be solved
 var kmllist = ["QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml"];	
-exmlFMap = new EGeoXml("exmlFMap", faultMap, kmllist, {sidebarfn:myside,nozoom:true,sidebarid:"faultMapside",parentformofsidebarid:"faultKMLSelectorForm",clickpolyobjfn:clickpolyobj,iwwidth:200});       
+exmlFMap = new EGeoXml("exmlFMap", faultMap, kmllist, {sidebarfn:myside,nozoom:true,sidebarid:"faultMapside",parentformofsidebarid:"faultKMLSelectorForm",clickpolyobjfn:clickpolyobj,iwwidth:400});       
 exmlFMap.parse();
 
 //Decorate the map
