@@ -18,10 +18,10 @@
 	 
 	 <h:panelGrid id="faultMapsideGrid" columns="2" border="1">
 		<f:verbatim>
-		  <div id="faultMapside" style="width: 200px; height: 600px; overflow:auto;"></div>
+		  <div id="faultMapside" style="width: 200px; height: 450px; overflow:auto;"></div>
 		</f:verbatim>      
 		<f:verbatim>
-		  <div id="faultMap" style="width: 800px; height: 600px;"></div>
+		  <div id="faultMap" style="width: 600px; height: 450px;"></div>
 		</f:verbatim> 
 	 </h:panelGrid>
   </f:verbatim>
