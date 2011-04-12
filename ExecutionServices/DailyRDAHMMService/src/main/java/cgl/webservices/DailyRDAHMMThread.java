@@ -292,7 +292,7 @@ public class DailyRDAHMMThread implements Runnable {
 		
 		eleUpdateTime = eleRootPretty.element("update-time");
 		if (eleUpdateTime == null) {
-			eleUpdateTime = eleRoot.addElement("update-time");
+			eleUpdateTime = eleRootPretty.addElement("update-time");
 		}
 		eleUpdateTime.setText(nowStr);		
 		
@@ -501,6 +501,12 @@ public class DailyRDAHMMThread implements Runnable {
 			tmpNode.setText(proNamePat + ".all.input.Y.png");			
 			tmpNode = elePattern.addElement("ZPngFile");
 			tmpNode.setText(proNamePat + ".all.input.Z.png");			
+			tmpNode = elePattern.addElement("XTinyPngFile");
+			tmpNode.setText(proNamePat + ".all.input.X_tiny.png");			
+			tmpNode = elePattern.addElement("YTinyPngFile");
+			tmpNode.setText(proNamePat + ".all.input.Y_tiny.png");			
+			tmpNode = elePattern.addElement("ZTinyPngFile");
+			tmpNode.setText(proNamePat + ".all.input.Z_tiny.png");
 			tmpNode = elePattern.addElement("PiFile");
 			tmpNode.setText(modelBasePat + ".pi");	
 			tmpNode = elePattern.addElement("QFile");
