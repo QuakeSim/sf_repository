@@ -30,12 +30,15 @@ import com.db4o.*;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
 
+//Servlet API imports
+import javax.servlet.http.HttpSessionBindingListener;
+import javax.servlet.http.HttpSessionBindingEvent;
 
 /**
  * Everything you need to set up and run MeshGenerator.
  */
 
-public class DislocBean extends GenericSopacBean {
+public class DislocBean extends GenericSopacBean implements HttpSessionBindingListener {
 
 	// KML stuff, need to move this to another place.
 	String xmlHead = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
@@ -58,6 +61,7 @@ public class DislocBean extends GenericSopacBean {
 	// Some navigation strings.
 	static final String DEFAULT_USER_NAME = "disloc_default_user";
 	static final String DISLOC_NAV_STRING = "disloc-submitted";
+	static final String DISLOC_ANON_NAV_STRING = "anon-disloc-submitted";
 	static final String SEPARATOR = "/";
 
 	/**
@@ -226,12 +230,17 @@ public class DislocBean extends GenericSopacBean {
 		//but we also put it here so that a default project is automatically
 		//created.
 
-		//Provide a default project name.  We may override it later.
-		this.projectName="anonymousProject"+java.util.UUID.randomUUID().hashCode();
+		//Provide a default project name if this session is associated with
+		//an anonymous user.
+		logger.info("Username: "+getUserName());
+		if(getUserName().equals(getDefaultName())){
+			 this.projectName=ANONYMOUS_PROJECT_PREFIX+java.util.UUID.randomUUID().hashCode();
+			 logger.info("Detected default user, so create new project:"+this.projectName);
 		
-		//Create an anonymous project using the above default name. We may 
-		//override it later.
-		NewProjectThenEditProject();
+			 //Create an anonymous project using the above default name. We may 
+			 //override it later.
+			 NewProjectThenEditProject();
+		}
 
 		// We are done.
 		logger.info("Primary Disloc Bean Created");
@@ -459,7 +468,7 @@ public class DislocBean extends GenericSopacBean {
 	 */
 	public String runBlockingDislocJSF() throws Exception {
 		
-		System.out.println("[runBlockingDislocJSF] Started");
+		logger.info("[runBlockingDislocJSF] Started");
 
 		try {
 
@@ -517,6 +526,16 @@ public class DislocBean extends GenericSopacBean {
 		System.out.println("[runBlockingDislocJSF] Finished");
 		return DISLOC_NAV_STRING;
 	}
+
+	 /**
+	  * This method is a simple wrapper around runBlockingDislocJSF() that 
+	  * just returns a different navigation string.  This is used in the 
+	  * anonymous verison of the user interface.
+	  */
+	 public String runBlockingDislocJSFAnon() throws Exception {
+		  runBlockingDislocJSF();
+		  return DISLOC_ANON_NAV_STRING;
+	 }
 
 	/**
 	 * This method is used to generate the output plots with the remote KML
@@ -2121,12 +2140,15 @@ public class DislocBean extends GenericSopacBean {
 		return "disloc-edit-project";
 	}
 
+	 /**
+	  * This deletes projects in String[] deleteProjectsArray.  It has no
+	  * argument because it needs to be called by JSF.
+	  */ 
 	public String toggleDeleteProject() {
 		System.out.println("Deleting a project");
 		try {
 
-			if (db != null)
-				db.close();
+			if (db != null)db.close();
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + ".db");
 			if (deleteProjectsArray != null) {
@@ -2251,8 +2273,7 @@ public class DislocBean extends GenericSopacBean {
 
 			if (f.exists()) {				
 
-				if (db != null)
-					db.close();
+				if (db != null) db.close();
 
 				db = Db4o.openFile(getBasePath() + "/" + getContextBasePath()
 						+ "/" + userName + "/" + codeName + ".db");
@@ -2268,8 +2289,7 @@ public class DislocBean extends GenericSopacBean {
 					db.close();
 			}
 		} catch (Exception e) {
-			if (db != null)
-				db.close();
+			if (db != null) db.close();
 			System.out.println("[getMyProjectNameList] " + e);
 		}
 		finally {
@@ -3743,4 +3763,37 @@ public class DislocBean extends GenericSopacBean {
 	}
 
 	// --------------------------------------------------
+
+	 /**
+	  * This method is used to clean up anonymously created projects.  It is called
+	  * by several other methods.  It only contains the logic of the DB deletion; it 
+	  * does not decide which anonymous projects should be deleted.
+	  */
+	 protected void cleanUpAnonymousProjects(String[] deleteProjectsArray) {
+		  //Set the array for projects to be deleted.
+		  setDeleteProjectsArray(deleteProjectsArray);
+		  
+		  //Do the thing.  deleteProjectsArray is passed implicitly.
+		  toggleDeleteProject();
+	 }
+	 
+	 /**
+	  * This is used to clean up anonymous projects.  This is an implementation
+	  * required by the HttpSessionBindingListener interface.
+	  */
+	 public void valueUnbound(HttpSessionBindingEvent event){
+		  logger.info("Session unbound, deleting anonymous projects.");
+		  String[] anonProjectArray=new String[1];
+		  if(getProjectName().indexOf(ANONYMOUS_PROJECT_PREFIX)>-1) {
+				//Arrays are used for compliance with legacy methods. 
+				anonProjectArray[0]=getProjectName();
+				logger.info("Anonymous project found: "+getProjectName());
+				cleanUpAnonymousProjects(anonProjectArray);
+		  }
+	 }
+	 
+	 public void valueBound(HttpSessionBindingEvent event){
+		  // This is not implemented.
+		  logger.info("Bound to session:"+event.getSession());
+	 }
 }

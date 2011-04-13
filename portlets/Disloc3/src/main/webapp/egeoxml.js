@@ -226,6 +226,8 @@ EGeoXml.prototype.createPolyline = function(points,color,width,opacity,pbounds,n
   this.gpolyobjs_desc.push(desc); // [CGL Version] insert a description
   var html = "<div style='font-weight: bold; font-size: medium; margin-bottom: 0em;'>"+name+"</div>"
              +"<div style='font-family: Arial, sans-serif;font-size: small;width:"+this.iwwidth+"px'>"+desc+"</div>";
+	 
+	 html+="<form id='testform'><input type='button' id='testsubmit' value='select' onclick='submitProject()'/></form>";
 
   GEvent.addListener(p,"click", function() {
     thismap.openInfoWindowHtml(p.getVertex(Math.floor(p.getVertexCount()/2)),html,iwoptions);

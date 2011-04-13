@@ -178,7 +178,6 @@
 
 				return "";
 		}
-
 	
 	 // This overrides the default clickpolyobjfn of egeoxml.js
 	 function clickpolyobj(p, name, desc) {
@@ -342,6 +341,10 @@ new GLatLng(marker_NE.getPoint().lat(), marker_NE.getPoint().lng())
 	faultMap.addOverlay(border);
 }
 
+	function submitProject(){
+	   var submitForm=document.getElementById("faultKMLSelectorForm");
+		submitForm.submit();
+	}
 
 
 

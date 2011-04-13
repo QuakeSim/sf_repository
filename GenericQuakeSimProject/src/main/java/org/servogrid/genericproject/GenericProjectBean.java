@@ -40,6 +40,9 @@ import TestClient.Select.SelectServiceLocator;
 
 public class GenericProjectBean {
 
+	 //Static strings
+	 public static final String ANONYMOUS_PROJECT_PREFIX="anonymousProject";
+
     //Internal properties
     protected boolean isInitialized=false;
     protected ContextManagerImp cm=null;
@@ -75,7 +78,6 @@ public class GenericProjectBean {
     //These are left blank.  They will be overwritten by the child class.
     List myFaultDBEntryList = new ArrayList();    
     
-
     ObjectContainer db=null;
 
     //--------------------------------------------------
@@ -249,6 +251,14 @@ public class GenericProjectBean {
 		  System.out.println("[" + getUserName() + "/GenericProjectBean/GenericProjectBean] Created");
     }	 
     
+	 public String getDefaultName(){
+		  return this.defaultName;
+	 }
+	 
+	 public void setDefaultName(String defaultName){
+		  this.defaultName=defaultName;
+	 }
+
     public String getPortalUserName() {
 		  userName=Utility.getUserName(defaultName);
 		  // System.out.println("[" + getUserName() + "/GenericProjectBean/getPortalUserName] " + userName);
