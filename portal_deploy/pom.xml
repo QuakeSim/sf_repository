@@ -91,8 +91,21 @@
 			  <goal>run</goal>
         </goals>
        </execution>
-      </executions>       
-     </plugin>
+		 <execution>
+			<id>Make user descriptor directory </id>
+			<phase>install</phase>
+			<configuration>
+			  <tasks>
+				 <echo message="${catalina.home/webapps/WebServices/WEB-INF/Descriptors/users/}"/>
+				 <mkdir dir="${catalina.home}/webapps/WebServices/WEB-INF/Descriptors/users/"/>
+			  </tasks>
+			</configuration>
+			<goals>
+			  <goal>run</goal>
+			</goals>
+		 </execution>
+		</executions>       
+	  </plugin>
     </plugins>
   </build>
 </project>
