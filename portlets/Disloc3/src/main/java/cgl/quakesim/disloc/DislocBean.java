@@ -3568,8 +3568,8 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	 **/
 	public void toggleSetFaultFromMap(ActionEvent ev) throws Exception {
 		renderFaultMap = false;
+		logger.info("Trying to add fault from map");
 		try {
-			System.out.println("Adding fault from map");
 
 			initEditFormsSelection();
 
@@ -3580,8 +3580,8 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 				renderCreateNewFaultForm = true;
 			}
 		} catch (Exception ex) {
-			System.out.println("Map fault selection error.");
-			ex.printStackTrace();
+			 logger.error("Map fault selection error:"+ex.getMessage());
+			 ex.printStackTrace();
 		}
 	}
 	
