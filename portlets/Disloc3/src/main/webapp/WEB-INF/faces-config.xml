@@ -62,9 +62,23 @@
 
 	</managed-bean>
 
-
 	<navigation-rule>
-		<from-view-id>/FautMapPanel.jsp</from-view-id>
+	  <from-view-id>/AnonProject.jsp</from-view-id>
+	  <navigation-case>
+		 <from-outcome>disloc-edit-project</from-outcome>
+		 <to-view-id>/EditProjectAnon.jsp</to-view-id>
+	  </navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+	  <from-view-id>/EditProjectAnon.jsp</from-view-id>
+	  <navigation-case>
+		 <from-outcome>anon-disloc-submitted</from-outcome>
+		 <to-view-id>/EditProjectAnon.jsp</to-view-id>
+	  </navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/FaultMapPanel.jsp</from-view-id>
 		<navigation-case>
 			<from-outcome>disloc-this</from-outcome>
 			<to-view-id>/EditProject.jsp</to-view-id>

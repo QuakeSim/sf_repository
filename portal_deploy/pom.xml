@@ -96,7 +96,7 @@
 			<phase>install</phase>
 			<configuration>
 			  <tasks>
-				 <echo message="${catalina.home/webapps/WebServices/WEB-INF/Descriptors/users/}"/>
+				 <echo message="${catalina.home}/webapps/WebServices/WEB-INF/Descriptors/users/"/>
 				 <mkdir dir="${catalina.home}/webapps/WebServices/WEB-INF/Descriptors/users/"/>
 			  </tasks>
 			</configuration>

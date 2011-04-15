@@ -230,17 +230,6 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		//but we also put it here so that a default project is automatically
 		//created.
 
-		//Provide a default project name if this session is associated with
-		//an anonymous user.
-		logger.info("Username: "+getUserName());
-		if(getUserName().equals(getDefaultName())){
-			 this.setProjectName(ANONYMOUS_PROJECT_PREFIX+java.util.UUID.randomUUID().hashCode());
-			 logger.info("Detected default user, so create new project:"+this.projectName);
-		
-			 //Create an anonymous project using the above default name. We may 
-			 //override it later.
-			 NewProjectThenEditProject();
-		}
 
 		// We are done.
 		logger.info("Primary Disloc Bean Created");
@@ -283,7 +272,8 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	protected void makeProjectDirectory() {
 		File projectDir = new File(getBasePath() + "/" + getContextBasePath()
 				+ "/" + userName + "/" + codeName + "/");
-		projectDir.mkdirs();
+		boolean mkdirSuccess=projectDir.mkdirs();
+		logger.info("Making project directory:"+projectDir.toString()+": "+mkdirSuccess);
 	}
 
 	/**
@@ -1125,8 +1115,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		// Now replace empty new project pieces with old stuff.
 		try {
 
-			if (db != null)
-				db.close();
+			if (db != null) db.close();
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + ".db");
 
@@ -2031,14 +2020,22 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	/**
 	 * Create the new project bean, store it in the db, and initialize.
 	 */
-	public String NewProjectThenEditProject() throws Exception {
-		System.out.println("From NewProjectThenEditProject...");
-		System.out.println("portalBaseUrl" + getPortalBaseUrl());
-		System.out.println("faultDBServiceUrl : " + getFaultDBServiceUrl());
-		System.out.println("kmlGeneratorUrl : " + getKmlGeneratorUrl());
-		System.out.println("ContextBasePath : " + getContextBasePath());
-
-		try {
+	 public String NewProjectThenEditProject() throws Exception {
+		  //Provide a default project name if this session is associated with
+		  //an anonymous user.
+		  logger.info("Username: "+getUserName());
+		  if(getUserName().equals(getDefaultName())){
+				this.setProjectName(ANONYMOUS_PROJECT_PREFIX+java.util.UUID.randomUUID().hashCode());
+				logger.info("Detected default user, so create new project:"+this.projectName);
+		  }
+		  
+		  logger.info("From NewProjectThenEditProject...");
+		  logger.info("portalBaseUrl:" + getPortalBaseUrl());
+		  logger.info("faultDBServiceUrl : " + getFaultDBServiceUrl());
+		  logger.info("kmlGeneratorUrl : " + getKmlGeneratorUrl());
+		  logger.info("ContextBasePath : " + getContextBasePath());
+		  
+		  try {
 			// dislocParams=new DislocParamsBean();
 			createNewProject(projectName);
 			init_edit_project();
