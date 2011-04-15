@@ -59,10 +59,6 @@
   </context-param>  
   
 
-
-
-
-
   <!-- Extensions Filter -->  
   <filter>  
     <filter-name>extensionsFilter</filter-name>  
@@ -211,6 +207,14 @@
         <url-pattern>/jsr/Disloc3</url-pattern>
     </servlet-mapping>
 
-
+	 <error-page>
+		<error-code>500</error-code>
+		<location>/errorpages/ServerError.html</location>
+	 </error-page>
+	 <error-page>
+		<exception-type>java.lang.Exception</exception-type>
+		<location>/errorpages/ExceptionError.html</location>
+	 </error-page>
+	 
 </web-app> 
  
