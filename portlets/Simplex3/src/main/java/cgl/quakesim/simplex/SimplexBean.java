@@ -2739,8 +2739,7 @@ public class SimplexBean extends GenericSopacBean {
 							 + "/SimplexBean/toggleDeleteProjectSummary] Getting selected archived project row");
 			HtmlDataTable hdt=getMyArchiveDataTable();
 			logger.info(hdt.getRowCount()+hdt.getId());
-			SimpleXOutputBean dpsb = (SimpleXOutputBean) (getMyArchiveDataTable()
-					.getRowData());
+			SimpleXOutputBean dpsb = (SimpleXOutputBean) (getMyArchiveDataTable().getRowData());
 
 			logger.info("[" + getUserName() + "/SimplexBean/toggleDeleteProjectSummary] " 
 							 + getBasePath() + "/" + getContextBasePath() + "/"+ userName 
@@ -2754,7 +2753,8 @@ public class SimplexBean extends GenericSopacBean {
 							 + dpsb.getProjectName() + " " + dpsb.getJobUIDStamp());
 			ObjectSet results = db.get(dpsb);
 			logger.info("[" + getUserName() 
-							 + "/SimplexBean/toggleDeleteProjectSummary] Result size: " + results.size());
+							+ "/SimplexBean/toggleDeleteProjectSummary] Result size: " 
+							+ results.size());
 			// Should only have one value.
 			if (results.hasNext()) {
 				dpsb = (SimpleXOutputBean) results.next();
@@ -2764,10 +2764,8 @@ public class SimplexBean extends GenericSopacBean {
 			logger.info("[" + getUserName() + "/SimplexBean/toggleDeleteProjectSummary] " + e);
 		}
 		finally {
-			if (db != null)
-				db.close();			
+			if (db != null) db.close();			
 		}
-
 	}
 
 	public UIData getMyArchiveDataTable2() {

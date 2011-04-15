@@ -127,8 +127,8 @@
 					 <h:outputText id="blaheoru18" escape="false" value="<b>Delete</b>" />
 				  </f:facet>
 				  <h:panelGroup id="pgdelete">
-					 <h:commandButton id="DeleteSummary" value="Delete"
-											action="#{DislocBean2.toggleDeleteProjectSummary}"/>
+					 <h:commandButton id="DeleteSummaryDisloc" value="Delete"
+											actionListener="#{DislocBean2.toggleDeleteProjectSummary}"/>
 				  </h:panelGroup>
 				  
 				</h:column>					

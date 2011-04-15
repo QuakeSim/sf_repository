@@ -44,7 +44,7 @@
 			  
 			  <h:panelGrid columns="2" cellpadding="0" cellspacing="0" id="kljerje22">
 				 <h:inputText id="dflelerklh968" 
-								  style="text-align:right;width:20px" 
+								  style="text-align:right;width:35px" 
 								  value="#{myentry31.faultName}" 
 								  required="true" />
 				 <h:selectBooleanCheckbox id="faultnamec" onclick="togglefaultname(this)" value="" />
@@ -56,7 +56,7 @@
 				 <h:outputText id="lkdrh119" value="Location X" />
 			  </f:facet>
 			  <h:panelGrid columns="1" cellpadding="0" cellspacing="0" id="ljerlke12j">
-				 <h:inputText id="FaultLocationX2" style="text-align:right;width:20px"
+				 <h:inputText id="FaultLocationX2" style="text-align:right;width:35px"
 								  value="#{myentry31.faultLocationX}" required="true" />
 			  </h:panelGrid>
 			</h:column>

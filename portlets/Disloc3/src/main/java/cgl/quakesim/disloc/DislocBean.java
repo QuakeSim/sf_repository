@@ -234,7 +234,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		//an anonymous user.
 		logger.info("Username: "+getUserName());
 		if(getUserName().equals(getDefaultName())){
-			 this.projectName=ANONYMOUS_PROJECT_PREFIX+java.util.UUID.randomUUID().hashCode();
+			 this.setProjectName(ANONYMOUS_PROJECT_PREFIX+java.util.UUID.randomUUID().hashCode());
 			 logger.info("Detected default user, so create new project:"+this.projectName);
 		
 			 //Create an anonymous project using the above default name. We may 
@@ -971,95 +971,6 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 
 		}
 
-		/*
-		 * 
-		 * 
-		 * String theFault = faultAndSegment.substring(0,
-		 * faultAndSegment.indexOf("@")); String
-		 * theSegment=faultAndSegment.substring(faultAndSegment.indexOf("@") +
-		 * 1, faultAndSegment.indexOf("%"));
-		 * 
-		 * String
-		 * interpId=faultAndSegment.substring(faultAndSegment.indexOf("%") + 1,
-		 * faultAndSegment.length());
-		 * 
-		 * 
-		 * try { SelectService ss = new SelectServiceLocator(); Select select =
-		 * ss.getSelect(new URL(faultDBServiceUrl));
-		 * 
-		 * // -------------------------------------------------- // Make
-		 * queries. // -------------------------------------------------- double
-		 * dip = Double.parseDouble(getDBValue(select, "Dip", theFault,
-		 * theSegment,interpId)); double strike =
-		 * Double.parseDouble(getDBValue(select, "Strike", theFault,
-		 * theSegment,interpId)); double depth =
-		 * Double.parseDouble(getDBValue(select, "Depth", theFault,
-		 * theSegment,interpId)); double width =
-		 * Double.parseDouble(getDBValue(select, "Width", theFault,
-		 * theSegment,interpId));
-		 * 
-		 * // Get the length and width double latEnd =
-		 * Double.parseDouble(getDBValue(select, "LatEnd", theFault,
-		 * theSegment,interpId)); double latStart =
-		 * Double.parseDouble(getDBValue(select, "LatStart", theFault,
-		 * theSegment,interpId)); double lonStart =
-		 * Double.parseDouble(getDBValue(select, "LonStart", theFault,
-		 * theSegment,interpId)); double lonEnd =
-		 * Double.parseDouble(getDBValue(select, "LonEnd", theFault,
-		 * theSegment,interpId)); // Calculate the length double d2r =
-		 * Math.acos(-1.0) / 180.0; double flatten=1.0/298.247;
-		 * 
-		 * double x = (lonEnd - lonStart) * factor(lonStart,latStart); double y
-		 * = (latEnd - latStart) * 111.32; // String length =
-		 * df.format(Math.sqrt(x * x + y * y)); // double length = Math.sqrt(x *
-		 * x + y * y);
-		 * 
-		 * double length=Double.parseDouble(df.format(Math.sqrt(x * x + y *
-		 * y))); tmp_fault.setFaultName(theFault);
-		 * tmp_fault.setFaultLatStart(latStart);
-		 * tmp_fault.setFaultLonStart(lonStart);
-		 * tmp_fault.setFaultLonEnd(lonEnd); tmp_fault.setFaultLatEnd(latEnd);
-		 * tmp_fault.setFaultLength(length); tmp_fault.setFaultWidth(width);
-		 * tmp_fault.setFaultDepth(depth); tmp_fault.setFaultDipAngle(dip);
-		 * 
-		 * //This is the fault's strike angle strike=Math.atan2(x,y)/d2r;
-		 * tmp_fault.setFaultStrikeAngle(Double.parseDouble(df.format(strike)));
-		 * 
-		 * //This is the (x,y) of the fault relative to the project's origin
-		 * //The project origin is the lower left lat/lon of the first fault.
-		 * //If any of these conditions hold, we need to reset.
-		 * System.out.println("Origin:"+currentParams.getOriginLat()+" "
-		 * +currentParams.getOriginLon());
-		 * if(currentParams.getOriginLat()==DislocParamsBean.DEFAULT_LAT ||
-		 * currentParams.getOriginLon()==DislocParamsBean.DEFAULT_LON ) {
-		 * currentParams.setOriginLat(latStart);
-		 * currentParams.setOriginLon(lonStart); //Update the parameters
-		 * 
-		 * if(db!=null) db.close(); db=Db4o.openFile(getBasePath()+"/"
-		 * +getContextBasePath() +"/"+userName
-		 * +"/"+codeName+"/"+projectName+".db"); ObjectSet
-		 * result=db.get(DislocParamsBean.class); if(result.hasNext()) {
-		 * DislocParamsBean tmp=(DislocParamsBean)result.next(); db.delete(tmp);
-		 * } db.set(currentParams);
-		 * 
-		 * //Say goodbye. db.commit(); if(db!=null) db.close();
-		 * 
-		 * }
-		 * System.out.println("Updated Origin:"+currentParams.getOriginLat()+" "
-		 * +currentParams.getOriginLon());
-		 * 
-		 * //The following should be done in any case. //If the origin was just
-		 * (re)set above, //we will get a harmless (0,0); double
-		 * x1=(lonStart-currentParams.getOriginLon())
-		 * factor(currentParams.getOriginLon(), currentParams.getOriginLat());
-		 * double y1=(latStart-currentParams.getOriginLat())*111.32;
-		 * System.out.println("Fault origin: "+x1+" "+y1);
-		 * tmp_fault.setFaultLocationX(Double.parseDouble(df.format(x1)));
-		 * tmp_fault.setFaultLocationY(Double.parseDouble(df.format(y1))); //
-		 * tmp_fault.setFaultLocationX(x1); // tmp_fault.setFaultLocationY(y1);
-		 * 
-		 * } catch (Exception ex) { ex.printStackTrace(); }
-		 */
 		return tmp_fault;
 	}
 
@@ -1664,11 +1575,13 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	/**
 	 * This will delete projects
 	 */
-	public void toggleDeleteProjectSummary() throws Exception {
+	public void toggleDeleteProjectSummary(ActionEvent ev) {
 		logger.info("Deleting Project");
 		try {
-			DislocProjectSummaryBean dpsb = (DislocProjectSummaryBean) getMyProjectSummaryDataTable()
-					.getRowData();
+			 HtmlDataTable testTable=getMyProjectSummaryDataTable();
+			 logger.info(testTable.getRowCount()+" "+testTable.getId());
+			 DislocProjectSummaryBean dpsb = (DislocProjectSummaryBean) (getMyProjectSummaryDataTable().getRowData());
+			logger.info("Got DislocProjectSummaryBean");
 
 			if (db != null) db.close();
 
@@ -1689,7 +1602,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 			logger.info("Number of matches:" + results.size());
 			while (results2.hasNext()) {
 				 InsarParamsBean delinsar = (InsarParamsBean) results2.next();
-				 System.out.println(delinsar.getProjectName() + " "
+				 logger.info(delinsar.getProjectName() + " "
 										  + dpsb.getProjectName() + " "
 										  + delinsar.getJobUIDStamp() + " "
 										  + dpsb.getJobUIDStamp());
@@ -1708,6 +1621,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		} catch (Exception e) {
 			if (db != null) db.close();
 			logger.error("[toggleDeleteProjectSummary] " + e.getMessage());
+			e.printStackTrace();
 		}
 		finally {
 			if (db != null) db.close();			
@@ -2142,13 +2056,14 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		System.out.println("Deleting a project");
 		try {
 
-			if (db != null)db.close();
+			if (db != null) db.close();
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + ".db");
+			logger.info("DB opened; delete project array size: "+deleteProjectsArray.length);
 			if (deleteProjectsArray != null) {
 				for (int i = 0; i < deleteProjectsArray.length; i++) {
 					// Delete the project input data
-					System.out.println("Deleting project input junk");
+					logger.info("Deleting project input junk");
 					DislocProjectBean delproj = new DislocProjectBean();
 					delproj.setProjectName(deleteProjectsArray[i]);
 					ObjectSet results = db.get(delproj);
@@ -2157,7 +2072,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 						db.delete(delproj);
 					}
 					// Delete the results summary bean also.
-					System.out.println("Deleting project summaries");
+					logger.info("Deleting project summaries");
 					DislocProjectSummaryBean delprojsum = new DislocProjectSummaryBean();
 					delprojsum.setProjectName(deleteProjectsArray[i]);
 					ObjectSet results2 = db.get(delprojsum);
@@ -2166,7 +2081,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 						db.delete(delprojsum);
 					}
 					// Delete the insar plotting bean, too
-					System.out.println("Deleting insar plots");
+					logger.error("Deleting insar plots");
 					InsarParamsBean delinsar = new InsarParamsBean();
 					delinsar.setProjectName(deleteProjectsArray[i]);
 					ObjectSet results3 = db.get(delinsar);
@@ -2176,16 +2091,13 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 					}
 				}
 			}
-			if (db != null)
-				db.close();
+			if (db != null) db.close();
 		} catch (Exception e) {
-			if (db != null)
-				db.close();
-			System.out.println("[toggleDeleteProject] " + e);
+			if (db != null) db.close();
+			logger.error("[toggleDeleteProject] " + e.getMessage());
 		}
 		finally {
-			if (db != null)
-				db.close();			
+			if (db != null) db.close();			
 		}
 
 		return "disloc-this";
@@ -2374,8 +2286,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		return myProjectSummaryDataTable;
 	}
 
-	public void setMyProjectSummaryDataTable(
-			HtmlDataTable myProjectSummaryDataTable) {
+	public void setMyProjectSummaryDataTable(HtmlDataTable myProjectSummaryDataTable) {
 		this.myProjectSummaryDataTable = myProjectSummaryDataTable;
 	}
 
@@ -2875,11 +2786,11 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	public List getMyArchivedDislocResultsList() {
 		 myArchivedDislocResultsList.clear();
 		 List tmpList = new ArrayList();
-		 logger.info("Reconstructing the archived results list.");
+		 logger.debug("Reconstructing the archived results list.");
 		 try {
 			  File f = new File(getBasePath() + "/" + getContextBasePath() + "/"
 									  + userName + "/" + codeName + ".db");
-			  logger.info("DB file to open: "+f.toString());
+			  logger.debug("DB file to open: "+f.toString());
 			  
 			  
 			  if (db != null) db.close();
@@ -2897,7 +2808,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 			  myArchivedDislocResultsList = sortByDate(tmpList);
 		 } catch (Exception e) {
 			  if (db != null)					db.close();
-			  System.out.println("[getMyArchivedDislocResultsList] " + e);
+			  logger.error("[getMyArchivedDislocResultsList] " + e);
 		 }
 		 finally {
 			  if (db != null)
