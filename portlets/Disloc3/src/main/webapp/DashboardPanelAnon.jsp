@@ -6,7 +6,7 @@
   <h:panelGroup id="pg1"> 
 	 <%-- Open the fieldset.  This will not be valid xml, since we must close it below. --%>
 	 <f:verbatim>
-		<fieldset>
+		<fieldset style="width:940px">
 		  <legend class="portlet-form-label"> Project Dashboard </legend>
 		</f:verbatim>
 

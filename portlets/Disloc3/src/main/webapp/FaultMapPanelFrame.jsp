@@ -6,11 +6,11 @@
 	 <script type="text/javascript" src="@host.base.url@@artifactId@/egeoxml.js"></script>
   </f:verbatim>
   <f:verbatim>
-	 <fieldset><legend class="portlet-form-label">Fault Map</legend>
+	 <fieldset style="width:940px"><legend class="portlet-form-label">Fault Map</legend>
   </f:verbatim>
   
   <h:panelGrid id="gridforbutton" columns="1" border="0" style="vertical-align:top;">
-	 <f:verbatim> <b>Option 1: Choose a fault:</b>Click the button below to get chosen fault params </f:verbatim>
+	 <f:verbatim> <b>Choose a fault (Option 1): </b>Click the button below to get chosen fault params </f:verbatim>
 	 <h:commandButton id="queryDBFromMap" 
 							value="Get Fault Params" 
 							actionListener="#{DislocBean2.toggleSetFaultFromMap}"/> 
@@ -27,7 +27,7 @@
   
   <h:panelGroup id="dflel235231">
 	 <f:verbatim>
-		<p/><b>Option 2: Draw a fault: </b>Instead of selecting a fault from the map, 
+		<p/><b> Draw a fault (Option 2): </b>Instead of selecting a fault from the map, 
 		you can draw a new fault on the map.<p/>
 	 </f:verbatim>
 	 <h:outputText id="daflelerkl513" escape="false" value="Drawing a fault : "/>
