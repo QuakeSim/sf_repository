@@ -1665,20 +1665,18 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	 * This will delete projects
 	 */
 	public void toggleDeleteProjectSummary() throws Exception {
-		System.out.println("Deleting Project");
+		logger.info("Deleting Project");
 		try {
 			DislocProjectSummaryBean dpsb = (DislocProjectSummaryBean) getMyProjectSummaryDataTable()
 					.getRowData();
 
-			if (db != null)
-				db.close();
+			if (db != null) db.close();
 
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + ".db");
-			System.out.println("Found project:" + dpsb.getProjectName() + " "
-					+ dpsb.getJobUIDStamp());
+			logger.info("Found project:" + dpsb.getProjectName() + " " + dpsb.getJobUIDStamp());
 			ObjectSet results = db.get(dpsb);
-			System.out.println("Result size: " + results.size());
+			logger.info("Result size: " + results.size());
 			// Should only have one value.
 			if (results.hasNext()) {
 				DislocProjectSummaryBean deleteme = (DislocProjectSummaryBean) results
@@ -1688,36 +1686,32 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 
 			// Delete also the associated insar plots
 			ObjectSet results2 = db.get(InsarParamsBean.class);
-			System.out.println("Number of matches:" + results.size());
+			logger.info("Number of matches:" + results.size());
 			while (results2.hasNext()) {
-				InsarParamsBean delinsar = (InsarParamsBean) results2.next();
-				System.out.println(delinsar.getProjectName() + " "
-						+ dpsb.getProjectName() + " "
-						+ delinsar.getJobUIDStamp() + " "
-						+ dpsb.getJobUIDStamp());
-
-				if (delinsar.getProjectName().equals(dpsb.getProjectName())
-						&& delinsar.getJobUIDStamp().equals(
-								dpsb.getJobUIDStamp())) {
-					System.out.println("Deleting insar params");
-					db.delete(delinsar);
-				}
+				 InsarParamsBean delinsar = (InsarParamsBean) results2.next();
+				 System.out.println(delinsar.getProjectName() + " "
+										  + dpsb.getProjectName() + " "
+										  + delinsar.getJobUIDStamp() + " "
+										  + dpsb.getJobUIDStamp());
+				 
+				 if (delinsar.getProjectName().equals(dpsb.getProjectName())
+					  && delinsar.getJobUIDStamp().equals(
+																	  dpsb.getJobUIDStamp())) {
+					  logger.info("Deleting insar params");
+					  db.delete(delinsar);
+				 }
 			}
 
 			// Close up
-			if (db != null)
-				db.close();
+			if (db != null) db.close();
 
 		} catch (Exception e) {
-			if (db != null)
-				db.close();
-			System.out.println("[toggleDeleteProjectSummary] " + e);
+			if (db != null) db.close();
+			logger.error("[toggleDeleteProjectSummary] " + e.getMessage());
 		}
 		finally {
-			if (db != null)
-				db.close();			
+			if (db != null) db.close();			
 		}
-
 	}
 
 	/**
