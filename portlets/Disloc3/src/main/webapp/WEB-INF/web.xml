@@ -215,6 +215,10 @@
 		<exception-type>java.lang.Exception</exception-type>
 		<location>/errorpages/ExceptionError.html</location>
 	 </error-page>
+	 <error-page>
+		<exception-type>javax.faces.FacesException</exception-type>
+		<location>/errorpages/ExceptionError.html</location>
+	 </error-page>
 	 
 </web-app> 
  

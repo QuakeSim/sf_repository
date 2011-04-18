@@ -424,16 +424,13 @@ function getScrolling() {
 	 <%@include file="ObsvStyle.jsp" %>
 	 <%@include file="ObservationParamsPanel.jsp" %>
 	 <%@include file="FaultParamPanel.jsp" %>
-	 <%@include file="FaultSearchOptionPanel.jsp" %>
-	 <%@include file="SearchFaultNamePanel.jsp" %>
-	 <%@include file="SearchFaultLatLonPanel.jsp" %>
-	 <%@include file="SearchFaultAuthorPanel.jsp" %>
-	 <%@include file="FaultDisplaySearchResultsPanel.jsp" %>
 	 <%@include file="ScatterMap.jsp" %>
 	 <%@include file="FaultMapPanelFrame.jsp"%>
+	 <%@include file="ProjectOutputMap.jsp"%>
+
   </h:panelGrid>
   <%@include file="ProjectComponentPanel.jsp" %>
-  <%@include file="footer.jsp" %>
+  <%@include file="footerAnon.jsp" %>
   
 </f:view>
 

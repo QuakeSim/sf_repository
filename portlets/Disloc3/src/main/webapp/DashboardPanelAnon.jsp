@@ -6,7 +6,7 @@
   <h:panelGroup id="pg1"> 
 	 <%-- Open the fieldset.  This will not be valid xml, since we must close it below. --%>
 	 <f:verbatim>
-		<fieldset style="width:940px">
+		<fieldset style="width:920px">
 		  <legend class="portlet-form-label"> Project Dashboard </legend>
 		</f:verbatim>
 
@@ -58,8 +58,12 @@
 							 itemValue="ChooseObsvStyleForm"/> 
 		  
 		  <f:selectItem id="item1" 
-							 itemLabel="Verify and update project information." 
+							 itemLabel="Verify or update project parameters." 
 							 itemValue="CreateObservationGrid" /> 
+
+		  <f:selectItem id="itemShowResultsDisloc" 
+							 itemLabel="Plot simulation outputs on a map."
+							 itemValue="ShowProjectOutputMap" /> 
 		  		  
 		</h:selectOneMenu> 
 		<h:commandButton id="button1" 
@@ -75,7 +79,7 @@
 		<f:verbatim><hr/></f:verbatim>
 		<h:outputFormat escape="false"  
 							 id="stuff90"  
-							 value="Disloc is ready to run.  Click the button below to launch." /> 
+							 value="<b>Disloc is ready to run.</b>  Click the button to launch:" /> 
 		<h:commandButton id="rundisloc" 
 							  value="Run Disloc" 
 							  onclick="showLoading()"

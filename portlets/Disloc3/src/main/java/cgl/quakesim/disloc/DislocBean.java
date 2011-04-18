@@ -33,6 +33,7 @@ import org.apache.log4j.Level;
 //Servlet API imports
 import javax.servlet.http.HttpSessionBindingListener;
 import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSession;
 
 /**
  * Everything you need to set up and run MeshGenerator.
@@ -68,19 +69,20 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	 * The following are property fields. Associated get/set methods are at the
 	 * end of the code listing.
 	 */
-	boolean renderCreateNewFaultForm = false;
-	boolean renderAddFaultSelectionForm = false;
-	boolean renderDislocGridParamsForm = false;
-	boolean renderSearchByFaultNameForm = false;
-	boolean renderSearchByAuthorForm = false;
-	boolean renderSearchByLatLonForm = false;
-	boolean renderViewAllFaultsForm = false;
-	boolean renderAddFaultFromDBForm = false;
-	boolean renderMap = false;
-	boolean renderFaultMap = false;
-	boolean usesGridPoints;
-	boolean renderChooseObsvStyleForm = false;
+	 boolean renderCreateNewFaultForm = false;
+	 boolean renderAddFaultSelectionForm = false;
+	 boolean renderDislocGridParamsForm = false;
+	 boolean renderSearchByFaultNameForm = false;
+	 boolean renderSearchByAuthorForm = false;
+	 boolean renderSearchByLatLonForm = false;
+	 boolean renderViewAllFaultsForm = false;
+	 boolean renderAddFaultFromDBForm = false;
+	 boolean renderMap = false;
+	 boolean renderFaultMap = false;
+	 boolean usesGridPoints;
+	 boolean renderChooseObsvStyleForm = false;
 	 boolean renderFaultDrawing=false;
+	 boolean renderProjectOutputMap=false;
 
 	Fault currentFault = new Fault();
 	// DislocParamsBean dislocParams=new DislocParamsBean();
@@ -90,6 +92,10 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	String faultSelectionCode = "";
 	String projectSelectionCode = "";
 	String obsvStyleSelectionCode = "";
+
+	 //These are used for plotting outputs of the most recent run.
+	 String myKmlUrl=null;
+	 
 
 	// These are search parameter strings.
 	String forSearchStr = "";
@@ -191,7 +197,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	String insarkmlServiceUrl;
 
 	// These are used for the InSAR KML service
-	String insarKmlUrl;
+	String insarKmlUrl=null;
 	String elevation = "60";
 	String azimuth = "0";
 	String frequency = "1.26";
@@ -466,11 +472,11 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 			ObsvPoint[] points = getObsvPointsFromDB();
 			initDislocExtendedService();
 
-			System.out.println("userName : " + userName);
-			System.out.println("projectName : " + projectName);
-			System.out.println("points : " + points);
-			System.out.println("faults : " + faults);
-			System.out.println("currentParams : " + currentParams);
+			logger.info("userName : " + userName);
+			logger.info("projectName : " + projectName);
+			logger.info("points : " + points);
+			logger.info("faults : " + faults);
+			logger.info("currentParams : " + currentParams);
 
 			// This step runs disloc
 			DislocResultsBean dislocResultsBean = dislocExtendedService
@@ -479,7 +485,8 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 			setJobToken(dislocResultsBean.getJobUIDStamp());
 
 			// This step makes the kml plots.  We allow this to fail.
-			String myKmlUrl = "";			
+			// We now make myKmlUrl a globally visible parameter.
+			//			String myKmlUrl = "";			
 			try {
 				 myKmlUrl = createKml(currentParams, dislocResultsBean, faults);
 				 setJobToken(dislocResultsBean.getJobUIDStamp());
@@ -493,8 +500,8 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 			InsarKmlService iks = new InsarKmlServiceServiceLocator()
 					.getInsarKmlExec(new URL(insarkmlServiceUrl));
 
-			insarKmlUrl="";
 			try {
+				 //insarKmlUrl is a globally visable parameter.
 				 insarKmlUrl = iks.runBlockingInsarKml(userName, projectName,
 																	dislocResultsBean.getOutputFileUrl(), this.getElevation(),
 																	this.getAzimuth(), this.getFrequency(), "ExecInsarKml");
@@ -524,6 +531,8 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	  */
 	 public String runBlockingDislocJSFAnon() throws Exception {
 		  runBlockingDislocJSF();
+		  //Always display the output map after running disloc
+		  renderProjectOutputMap=true;
 		  return DISLOC_ANON_NAV_STRING;
 	 }
 
@@ -1038,6 +1047,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		renderFaultMap = false;
 		renderChooseObsvStyleForm = false;
 		renderFaultDrawing=false;
+		renderProjectOutputMap=false;
 	}
 
 	/**
@@ -1189,6 +1199,8 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 			renderChooseObsvStyleForm = !renderChooseObsvStyleForm;
 		} else if (projectSelectionCode.equals("ShowFaultDrawingMap")) {
 			 renderFaultDrawing=!renderFaultDrawing;
+		} else if (projectSelectionCode.equals("ShowProjectOutputMap")) {
+			 renderProjectOutputMap=!renderProjectOutputMap;
 		} else if (projectSelectionCode.equals("")) {
 			;
 		}
@@ -2050,9 +2062,8 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	  * argument because it needs to be called by JSF.
 	  */ 
 	public String toggleDeleteProject() {
-		System.out.println("Deleting a project");
+		logger.info("Deleting a project");
 		try {
-
 			if (db != null) db.close();
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + ".db");
@@ -2344,6 +2355,13 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	public void setProjectSelectionCode(String projectSelectionCode) {
 		this.projectSelectionCode = projectSelectionCode;
 	}
+	 
+	 public boolean getRenderProjectOutputMap(){
+		  return this.renderProjectOutputMap;
+	 }
+	 public void setRenderProjectOutputMap(boolean renderProjectOutputMap) {
+		  this.renderProjectOutputMap=renderProjectOutputMap;
+	 }
 
 	public boolean getRenderChooseObsvStyleForm() {
 		return this.renderChooseObsvStyleForm;
@@ -3521,7 +3539,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	public void setInsarKmlUrl(String insarKmlUrl) {
 		this.insarKmlUrl = insarKmlUrl;
 	}
-
+	 
 	public String getAzimuth() {
 		return azimuth;
 	}
@@ -3697,5 +3715,16 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	 public void valueBound(HttpSessionBindingEvent event){
 		  // This is not implemented.
 		  logger.info("Bound to session:"+event.getSession());
+	 }
+
+	 /**
+	  *  These two accessor methods are used to expose the most recent disloc
+	  * simulation run through the browser session instead of the database.
+	  */
+	 public String getMyKmlUrl() {
+		  return this.myKmlUrl;
+	 }
+	 public void setMyKmlUrl(String myKmlUrl) {
+		  this.myKmlUrl=myKmlUrl;
 	 }
 }

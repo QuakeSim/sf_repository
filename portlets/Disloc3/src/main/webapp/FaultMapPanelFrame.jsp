@@ -6,7 +6,7 @@
 	 <script type="text/javascript" src="@host.base.url@@artifactId@/egeoxml.js"></script>
   </f:verbatim>
   <f:verbatim>
-	 <fieldset style="width:940px"><legend class="portlet-form-label">Fault Map</legend>
+	 <fieldset style="width:920px"><legend class="portlet-form-label">Fault Map</legend>
   </f:verbatim>
   
   <h:panelGrid id="gridforbutton" columns="1" border="0" style="vertical-align:top;">
@@ -27,6 +27,7 @@
   
   <h:panelGroup id="dflel235231">
 	 <f:verbatim>
+		<hr/>
 		<p/><b> Draw a fault (Option 2): </b>Instead of selecting a fault from the map, 
 		you can draw a new fault on the map.<p/>
 	 </f:verbatim>
@@ -97,7 +98,6 @@
 	for (var nA = 0 ; nA < flistsize.value ; nA++){
 	  flistpolyline[nA] = null;
 	}
-
 
 	// The gridsphere container doesn't work with urls. That should be solved
 	// var kmllist = ["@host.base.url@@artifactId@/geo_000520-001216-sim_HDR_4rlks.unw.kml","@host.base.url@@artifactId@/QuakeTables_CGS_1996.kml","@host.base.url@@artifactId@/QuakeTables_CGS_2002.kml"];
@@ -354,8 +354,6 @@ new GLatLng(marker_NE.getPoint().lat(), marker_NE.getPoint().lng())
 		alert(submitForm.childNodes[0].nodeValue);
 		submitForm.submit();
 	}
-
-
 
 </script>
 </f:verbatim>
