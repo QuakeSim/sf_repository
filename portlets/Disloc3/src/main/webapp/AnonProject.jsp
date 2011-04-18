@@ -4,9 +4,7 @@
 <html>
 <head>
   <!-- Replace this with your google map key -->
-  <script
-		src="http://maps.google.com/maps?file=api&amp;v=2amp;key=put.google.map.key.here"
-		type="text/javascript"></script>
+  <script src="http://maps.google.com/maps?file=api&amp;v=2amp;key=put.google.map.key.here" type="text/javascript"></script>
   
 </head>
 <body>    
