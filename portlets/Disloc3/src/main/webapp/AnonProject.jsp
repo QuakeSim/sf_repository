@@ -19,10 +19,15 @@
 		  <b>Click here it to run a simulation:</b>
 		</f:verbatim>
 		<h:commandButton id="DislocAnonProjectInit"
-							  value="Create Sample Project"
+							  value="Start"
 							  action="#{DislocBean2.NewProjectThenEditProject}"/>
 		<f:verbatim>
 		  <div id="projectMapDiv" style="width: 800px; height: 600px;"></div>
+		</f:verbatim>
+		<f:verbatim>
+		  <p/>To create persistent projects, you must create an account in the 
+		  <a href="http://portal.quakesim.org/">QuakeSim Portal</a>.  Account creation is 
+		  automated and requires only a response to an automated confirmation email.
 		</f:verbatim>
 		<script type="text/javascript">
 		  var projectMapDiv=new GMap2(document.getElementById("projectMapDiv"));

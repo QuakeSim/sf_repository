@@ -1175,6 +1175,18 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		return "disloc-edit-project";
 	}
 
+
+	 /**
+	  * These are two trivial wrappers around toggleProjectSelection() that are 
+	  * useful for DashboardPanelAnon.
+	  */
+	 public void toggleProjectSelectionAnon1(ActionEvent ev) {
+		  toggleProjectSelection(ev);
+	 }
+	 public void toggleProjectSelectionAnon2(ActionEvent ev) {
+		  toggleProjectSelection(ev);
+	 }
+
 	/**
 	 * Handle action events in the project selection area.
 	 */

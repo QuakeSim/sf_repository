@@ -7,7 +7,9 @@
   <h:form id="obsvStyleForm">
 	 <h:outputText id="clrr33asz3" escape="false"
 						value="Click to choose either grid or scatter point observation style."/>
-	 <h:selectOneRadio layout="pageDirection" id="ere34ionssss" 
+	 <h:selectOneRadio layout="pageDirection" 
+							 required="true"
+							 id="ObservationStyleDislocRadio" 
 							 value="#{DislocBean2.obsvStyleSelectionCode}"> 
 		<f:selectItem id="item02121" 
 						  itemLabel="Rectangular grid of observation points" 
