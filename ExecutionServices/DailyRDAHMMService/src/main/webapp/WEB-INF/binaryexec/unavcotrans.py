@@ -14,6 +14,7 @@
 #============================================
 
 import csv, sys, os, subprocess, urllib
+from datetime import datetime
 
 numargv = len(sys.argv)
 unavco_client_path = "./unavcoClients"
@@ -27,11 +28,16 @@ elif numargv == 5:
     bdate = sys.argv[3]
     edate = sys.argv[4]
 
+    bdate = datetime.strptime(bdate, "%Y-%m-%d")
+    edate = datetime.strptime(edate, "%Y-%m-%d")
+
+
     # change current working directory
     # os.chdir(destdir)
 
     # query UNAVCO for station data file in .pbo.igs05.csv format
-    cmd = "java -jar " + unavco_client_path + "/unavcoFiles.jar -4charEqu " + stationID.upper() + " -dataStartDate " + bdate + " -dataEndDate " + edate + " -positionCSV"
+    #cmd = "java -jar " + unavco_client_path + "/unavcoFiles.jar -4charEqu " + stationID.upper() + " -dataStartDate " + bdate + " -dataEndDate " + edate + " -positionCSV"
+    cmd = "java -jar " + unavco_client_path + "/unavcoFiles.jar -4charEqu " + stationID.upper() + " -positionCSV"
     filelist = subprocess.Popen([cmd], shell=True, stdout=subprocess.PIPE).communicate()[0].split("\n")
     fileloc = None
     for item in filelist:
@@ -57,12 +63,14 @@ elif numargv == 5:
             cmd = cs2cs_exec + " -f '%.4f' +proj=latlong +datum=WGS84 +to +proj=geocent +datum=WGS84 <<EOF \n" + long + " " + lat + " " + vert
             x, y, z = map(float, subprocess.Popen([cmd], shell=True, stdout=subprocess.PIPE).communicate()[0].split())
         if len(row) >= 8 and row[0][:4].isdigit():
-            date = row[0] + "T12:00:00"
-            xx, yy, zz, dx, dy, dz = [val/1000.0 for val in map(float, row[1:7])]
-            ux = x + xx
-            uy = y + yy
-            uz = z + zz
-            outputWriter.writerow([stationID, date, ux, uy, uz, dx, dy, dz])
+            rdate = datetime.strptime(row[0], "%Y-%m-%d")
+            if rdate >= bdate and rdate <= edate: 
+                date = row[0] + "T12:00:00"
+                xx, yy, zz, dx, dy, dz = [val/1000.0 for val in map(float, row[1:7])]
+                ux = x + xx
+                uy = y + yy
+                uz = z + zz
+                outputWriter.writerow([stationID, date, ux, uy, uz, dx, dy, dz])
     del inputReader, outputWriter
     print rawfile
 else:
