@@ -10,8 +10,13 @@
   </f:verbatim>
   
   <h:panelGrid id="gridforbutton" columns="1" border="0" style="vertical-align:top;">
-	 <f:verbatim> <b>Choose a fault (Option 1): </b>Click the button below to get chosen fault params </f:verbatim>
+	 <f:verbatim> <b>Choose a fault (Option 1): </b>Click a fault from either the map or the left-hand sidebar to see information. </f:verbatim>
+	 <h:outputText id="queryDBFromMapInstructions"
+						style="display:none"
+						escape="false"
+						value="<b>Add Your Fault:</b> Click the button to add its parameters to your project."/>
 	 <h:commandButton id="queryDBFromMap" 
+							style="display:none"
 							value="Get Fault Params" 
 							actionListener="#{DislocBean2.toggleSetFaultFromMap}"/> 
   </h:panelGrid>
@@ -52,14 +57,14 @@
 		  
 		  <h:column>
 			 <f:facet name="header">
-				<h:outputText id="nfa9" escape="false" value="<b>Lon Start</b>" />
+				<f:verbatim><b>Lon Start</b></f:verbatim>
 			 </f:facet>
 			 <h:inputText id="faultdrawLonStartst" value="#{myentry32.faultLonStart}" required="false" />
 		  </h:column>
 		  
 		  <h:column>
 			 <f:facet name="header">
-				<h:outputText id="nfa7" escape="false" value="<b>Lat Start</b>" />
+				<f:verbatim><b>Lat Start</b></f:verbatim>
 			 </f:facet>
 			 <h:inputText id="faultdrawLatStartst" value="#{myentry32.faultLatStart}" required="false" />
 		  </h:column>
@@ -133,6 +138,14 @@
 	
 	// Handle sidebar events.  Param1 is the fault+segment name, param2 is the polyline.
 	var faultField=document.getElementById("faultKMLSelectorForm:faultName");
+	var faultCommandButton=document.getElementById("faultKMLSelectorForm:queryDBFromMap");
+	var faultCommandInstructions=document.getElementById("faultKMLSelectorForm:queryDBFromMapInstructions");
+	GEvent.addDomListener(faultCommandInstructions,"click",function(){
+	  faultCommandInstructions.style.display='block';
+   });
+	GEvent.addDomListener(faultCommandButton,"click",function(){
+	  faultCommandButton.style.display='block';
+   });
 	GEvent.addDomListener(faultField,"click",function(param1,param2,param3,param4){
 
 					var interpHead=" (InterpId:";
@@ -181,6 +194,8 @@
 	 // This overrides the default clickpolyobjfn of egeoxml.js
 	 function clickpolyobj(p, name, desc) {
 	     GEvent.trigger(document.getElementById('faultKMLSelectorForm:faultName'),'click', name, p, 'frommap', desc);	    
+		  GEvent.trigger(document.getElementById('faultKMLSelectorForm:queryDBFromMap'),'click');
+		  GEvent.trigger(document.getElementById('faultKMLSelectorForm:queryDBFromMapInstructions'),'click');
 	  }
   
 

@@ -154,6 +154,7 @@ EGeoXml.prototype.createMarker = function(point,name,desc,style) {
   var html = "<div style = 'width:"+this.iwwidth+"px'>"
                + "<h1 "+this.titlestyle+">"+name+"</h1>"
                +"<div "+this.descstyle+">"+desc+"</div>";
+					
 
   if (this.opts.directions) {
     var html1 = html + '<div '+this.directionstyle+'>'
@@ -303,9 +304,6 @@ EGeoXml.addClickpolyobj = function(p, name, desc) {
   // nothing to do as a default
   return ""; 
 }
-
-
-
 
 // Dropdown factory method
 EGeoXml.addDropdown = function(myvar,name,type,i,graphic) {
