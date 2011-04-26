@@ -768,7 +768,8 @@ public class SimpleXDataKml {
 				 * <!-- Copyright (C) 2009 UNAVCO , Inc. Boulder Colorado --> */
 				
 				double h = Math.sqrt(dx*dx + dy*dy);
-				double dl = 0.15142;
+				//				double dl = 0.15142;
+				double dl = 0.05;
 				double fracx = dx/h;
 				double fracy = dy/h;
 				double merccorr = Math.cos(arrowLatStart * 3.141592/180.0); 
@@ -778,8 +779,9 @@ public class SimpleXDataKml {
 				double headerLatP1 = (arrowLatEnd)+( (dl*fracx / 4.0) *merccorr);    
 				double headerLonP2 = (arrowLonEnd)+(dl*fracy / 4.0);
 				double headerLatP2 = (arrowLatEnd)-( (dl*fracx / 4.0) *merccorr);			
-				String space="";
-				System.out.println("Arrow Head:"+h+space+fracx+space+fracy+space+merccorr);
+				String space=" ";
+				System.out.println("Arrow Head:"+arrowLonEnd+space+arrowLatEnd+space+h+space+fracx+space+fracy+space+merccorr);
+				System.out.println(dl*fracx+space+dl*fracy+space+dl*fracy/4.0+space+(dl*fracx/4.0)*merccorr);
 				
 				// until here
 				
