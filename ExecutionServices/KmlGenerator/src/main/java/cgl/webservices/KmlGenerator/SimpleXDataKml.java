@@ -694,7 +694,6 @@ public class SimpleXDataKml {
 	
 				mark1.setStyleUrl("#"+linestyleid);
 				
-				
 				double startx = x;
 				double starty = y;
 				
