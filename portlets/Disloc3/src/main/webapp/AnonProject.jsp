@@ -24,7 +24,7 @@
 		<f:verbatim><p/></f:verbatim>
 		<h:graphicImage value="images/FaultGeometry.jpg" 
 							 style="border:thin solid black"
-							 width="900px"/>
+							 width="800px"/>
 		<f:verbatim>
 		  <p/>To create persistent projects, you must create an account in the 
 		  <a href="http://portal.quakesim.org/">QuakeSim Portal</a>.  Account creation is 
