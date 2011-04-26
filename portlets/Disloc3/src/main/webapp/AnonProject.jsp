@@ -12,7 +12,7 @@
 	 <h:form id="hitTheButtonform">
 		<f:verbatim>
 		  QuakeSim's elastic forward modeling code calculates surface deformations based on
-		  geometric fault models.  Click a fault to see a sample input. 
+		  geometric fault models: see image below for parameter definitions. 
 		  <p/>
 		</f:verbatim>
 		<f:verbatim>
@@ -21,32 +21,15 @@
 		<h:commandButton id="DislocAnonProjectInit"
 							  value="Start"
 							  action="#{DislocBean2.NewProjectThenEditProject}"/>
-		<f:verbatim>
-		  <div id="projectMapDiv" style="width: 800px; height: 600px;"></div>
-		</f:verbatim>
+		<f:verbatim><p/></f:verbatim>
+		<h:graphicImage value="images/FaultGeometry.jpg" 
+							 style="border:thin solid black"
+							 width="900px"/>
 		<f:verbatim>
 		  <p/>To create persistent projects, you must create an account in the 
 		  <a href="http://portal.quakesim.org/">QuakeSim Portal</a>.  Account creation is 
 		  automated and requires only a response to an automated confirmation email.
 		</f:verbatim>
-		<script type="text/javascript">
-		  var projectMapDiv=new GMap2(document.getElementById("projectMapDiv"));
-		  var projectFaultKml="@host.base.url@@artifactId@/QuakeTables_CGS_2002.kml";
-		
-		  projectMapDiv.addMapType(G_HYBRID_MAP);
-		  projectMapDiv.addMapType(G_PHYSICAL_MAP);
-		  projectMapDiv.addMapType(G_SATELLITE_MAP);
-		  
-		  projectMapDiv.setMapType(G_PHYSICAL_MAP);
-		  
-		  projectMapDiv.addControl(new GSmallMapControl());
-		  projectMapDiv.addControl(new GMapTypeControl());
-		  projectMapDiv.setCenter(new GLatLng(37.0, -119),6);
-		  
-		  //Decorate the map with the KML.
-		  var faultOverlay=new GGeoXml(projectFaultKml);
-		  projectMapDiv.addOverlay(faultOverlay);
-		</script>
 	 </h:form>	 
   </f:view>
 </body>
