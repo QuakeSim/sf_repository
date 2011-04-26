@@ -779,6 +779,8 @@ public class SimpleXDataKml {
 				double headerLatP1 = (arrowLatEnd)+( (dl*fracx / 4.0) *merccorr);    
 				double headerLonP2 = (arrowLonEnd)+(dl*fracy / 4.0);
 				double headerLatP2 = (arrowLatEnd)-( (dl*fracx / 4.0) *merccorr);			
+				String space="";
+				System.out.println("Arrow Head:"+h+space+fracx+space+fracy+space+merccorr);
 				
 				// until here
 				
