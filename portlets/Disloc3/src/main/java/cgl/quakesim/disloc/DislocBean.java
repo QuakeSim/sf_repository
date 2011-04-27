@@ -1893,43 +1893,44 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	
 	public void toggleDrawFaultFromMap(ActionEvent ev) {
 
-		System.out.println("[toggleDrawFaultFromMap] started");
-
-		createFaultFromMap();
+		 logger.info("[toggleDrawFaultFromMap] started");
+		 
+		 createFaultFromMap();
 
 		initEditFormsSelection();
-		System.out
-				.println("[toggleDrawFaultFromMap] currentFault.getFaultName() "
+		logger.info("[toggleDrawFaultFromMap] currentFault.getFaultName() "
 						+ currentFault.getFaultName());
 
 		try {
-
-			if (db != null)
-				db.close();
-			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
-					+ userName + "/" + codeName + "/" + projectName + ".db");
-
-			Fault tmpfault = new Fault();
-			tmpfault.setFaultName(currentFault
-					.getFaultName());
-			ObjectSet result = db.get(tmpfault);
-			if (result.hasNext()) {
-				tmpfault = (Fault) result.next();
-				db.delete(tmpfault);
-			}
-			db.set(currentFault);
-			db.commit();
-			if (db != null)
-				db.close();
+			 if (db != null)
+				  db.close();
+			 db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+									  + userName + "/" + codeName + "/" + projectName + ".db");
+			 
+			 Fault tmpfault = new Fault();
+			 tmpfault.setFaultName(currentFault
+										  .getFaultName());
+			 ObjectSet result = db.get(tmpfault);
+			 if (result.hasNext()) {
+				  tmpfault = (Fault) result.next();
+				  db.delete(tmpfault);
+			 }
+			 db.set(currentFault);
+			 db.commit();
+			 if (db != null)
+				  db.close();
 		} catch (Exception e) {
-			if (db != null)
-				db.close();
-			System.out.println("[toggleDrawFaultFromMap] " + e);
+			 if (db != null)
+				  db.close();
+			 System.out.println("[toggleDrawFaultFromMap] " + e);
 		}		
 		finally {
-			if (db != null)
-				db.close();			
+			 if (db != null)
+				  db.close();			
 		}
+
+		//Display the fault parameter page.
+		renderCreateNewFaultForm = true;
 	}
 	 
 	 public void deleteObsv(ActionEvent ev) throws Exception {

@@ -69,10 +69,6 @@
 							 itemLabel="Select observation points on an interactive map (scatter style only)."
 							 itemValue="ShowMap" />
 
-		  <f:selectItem id="itemShowResultsDisloc" 
-							 itemLabel="Plot simulation outputs on a map."
-							 itemValue="ShowProjectOutputMap" /> 
-
 		</h:selectOneMenu> 
 		<h:commandButton id="button2" 
 							  value="Make Selection" 
