@@ -221,6 +221,10 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	DecimalFormat df;
 	FaultDBEntry faultDBEntry;
 
+	 //Used to provide simple access to to input and output files.
+	 String dislocInputUrl="";
+	 String dislocOutputUrl="";
+	 
 	/**
 	 * The client constructor.
 	 */
@@ -483,6 +487,9 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 					.runBlockingDislocExt(userName, projectName, points,
 							faults, currentParams, null);
 			setJobToken(dislocResultsBean.getJobUIDStamp());
+			
+			dislocOutputUrl=dislocResultsBean.getOutputFileUrl();
+			dislocInputUrl=dislocResultsBean.getInputFileUrl();
 
 			// This step makes the kml plots.  We allow this to fail.
 			// We now make myKmlUrl a globally visible parameter.
@@ -3584,6 +3591,20 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	public void setMyInsarParamsList(List myInsarParamsList) {
 		this.myInsarParamsList = myInsarParamsList;
 	}
+
+	 public void setDislocInputUrl(String dislocInputUrl){
+		  this.dislocInputUrl=dislocInputUrl;
+	 }
+	 public void setDislocOutputUrl(String dislocOutputUrl){
+		  this.dislocOutputUrl=dislocOutputUrl;
+	 }
+	 public String getDislocInputUrl(){
+		  return this.dislocInputUrl;
+	 }
+	 public String getDislocOutputUrl(){
+		  return this.dislocOutputUrl;
+	 }
+
 
 	public List getMyInsarParamsList() {
 		myInsarParamsList.clear();

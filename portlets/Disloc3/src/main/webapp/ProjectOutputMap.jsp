@@ -51,11 +51,17 @@
 			 <h:outputText id="outputLinkLable" 
 								style="font-weight:bold" 
 								value="Click links to download output KML"/>
-			 <h:outputLink id="myDislocOutputLink" value="#{DislocBean2.myKmlUrl}">
+			 <h:outputLink id="myDislocOutputLink" target="_blank" value="#{DislocBean2.myKmlUrl}">
 				<h:outputText id="dislocOutputText" value="Disloc Output KML"/>
 			 </h:outputLink>
-			 <h:outputLink id="myDislocInsarLink" value="#{DislocBean2.insarKmlUrl}">
+			 <h:outputLink id="myDislocInsarLink" target="_blank" value="#{DislocBean2.insarKmlUrl}">
 				<h:outputText id="dislocInSArText" value="Disloc InSAR KML"/>
+			 </h:outputLink>
+			 <h:outputLink id="myDislocInputLink" target="_blank" value="#{DislocBean2.dislocInputUrl}">
+				<h:outputText id="dislocInputText" value="Disloc Input File"/>
+			 </h:outputLink>
+			 <h:outputLink id="myDislocOutputFileUrl" target="_blank" value="#{DislocBean2.dislocOutputUrl}">
+				<h:outputText id="dislocOutputFileText" value="Disloc Output File"/>
 			 </h:outputLink>
 		  </h:panelGrid>
 		</h:panelGrid>
