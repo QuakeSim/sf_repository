@@ -741,6 +741,33 @@ public class UtilSet {
 		}		
 	}
 	
+	/** 
+	 * search tgtStr in the file located at path and return the line containing tgtStr
+	 * */
+	public static String searchStringInFile(String path, String tgtStr) {
+		if (path == null || path.length() == 0 || tgtStr == null)
+			return null;
+		try {
+			String line = null;
+			String result = null;
+			BufferedReader br = new BufferedReader(new FileReader(path));
+			line = br.readLine();
+			while (line != null) {
+				if (line.indexOf(tgtStr) >= 0) {
+					result = line;
+					break;
+				}
+				line = br.readLine();
+			}
+			br.close();
+			
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}		
+	}
+	
 	/**  get the date string from the a line of the raw data file received from GRWS query */
 	static String getDateFromRawLine(String rawLine) {
 		// a raw line is like "dond 2007-02-22T12:00:00 -2517566.0543 -4415531.3935 3841177.1618 0.0035 0.0055 0.0047"

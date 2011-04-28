@@ -57,6 +57,8 @@ public class DailyRDAHMMStation {
 	static String modelCmdPattern;
 	/** command line pattern for rdahmm evaluation process */
 	static String evalCmdPattern;
+	/** command line pattern for rdahmm evaluation process with the "-addstate" parameter*/
+	static String evalAddStateCmdPattern;
 	/** command line pattern for plotting GPS data*/
 	static String plotCmdPattern;
 	/** command line pattern for making the state change number vs. time plot*/
@@ -207,6 +209,7 @@ public class DailyRDAHMMStation {
 		videoServiceUrlPrefix = prop.getProperty("dailyRdahmm.video.serviceUrlPrefix");
 		modelCmdPattern = prop.getProperty("dailyRdahmm.model.cmd.pattern");
 		evalCmdPattern = prop.getProperty("dailyRdahmm.evaluate.cmd.pattern");
+		evalAddStateCmdPattern = prop.getProperty("dailyRdahmm.evaluate2.cmd.pattern");
 		plotCmdPattern = prop.getProperty("dailyRdahmm.plot.cmd.pattern");
 		plotScnCmdPattern = prop.getProperty("dailyRdahmm.plotScn.cmd.pattern");
 		zipCmdPattern = prop.getProperty("dailyRdahmm.zip.cmd.pattern");
@@ -329,9 +332,10 @@ public class DailyRDAHMMStation {
 					UtilSet.copyUrlToFile(inputFileUrl, fileLocalPath);
 
 					int inputCount = countNonDuplicates(fileLocalPath);
+					System.out.println(stationId + " tmpModelDate: " + endDate + " input count: " + inputCount);
 					if (inputCount >= minModelInputNum) {
 						needAdjust = false;
-					} else {
+					} else {						
 						new File(fileLocalPath).delete();
 						tmpEndCal.set(Calendar.YEAR, tmpEndCal.get(Calendar.YEAR) + 1);
 						if (tmpEndCal.after(today)) {
@@ -347,20 +351,26 @@ public class DailyRDAHMMStation {
 		}
 		
 		// once we are here, fileLoalPath must have enough modeling input for stationId
-		if (modelEndDate == null || modelEndDate.compareTo(tmpEndCal) < 0) {
-			modelEndDate = tmpEndCal;
-			runner.setStationXmlModelEndDate(stationId, UtilSet.getDateString(modelEndDate));
+		if (modelEndDate == null || !modelEndDate.equals(tmpEndCal)) {
+			String endDateStr = UtilSet.getDateString(tmpEndCal);
+			runner.setStationXmlModelEndDate(stationId, endDateStr);
 		}
+		modelEndDate = tmpEndCal;
+		
 		if (fileName.length() <= 0 || fileLocalPath.length() <= 0) {
 			System.out.println("Failed to get model input for station " + stationId);
 			return false;
 		}
 		
-		// the file at fileLocalPath contains data in xyz dimensions. change them to latitude, longitude, elevation
-		String llhRawPath = xyzToLlhForRaw(fileLocalPath);
-		if (llhRawPath == null || llhRawPath.length() <= 0) {
-			System.out.println("Failed in llh translation of the model input for station " + stationId);
-			return false;
+		// If the file at fileLocalPath contains data in xyz dimensions, change them to latitude, longitude, height
+		String llhRawPath = fileLocalPath;
+		// UNAVCO data are in llh format, so don't need to be changed.
+		if (!dataSource.toLowerCase().contains("unavco")) {
+			llhRawPath = xyzToLlhForRaw(fileLocalPath);
+			if (llhRawPath == null || llhRawPath.length() <= 0) {
+				System.out.println("Failed in llh translation of the model input for station " + stationId);
+				return false;
+			}
 		}
 		
 		String inputPathForFill = llhRawPath;
@@ -854,11 +864,34 @@ public class DailyRDAHMMStation {
 			System.out.println("Standard Output: " + stdOutStr);
 			System.out.println("Standard Error: " + stdErrStr);
 			return false;
-		} else {
-			String allQPath = proDir + File.separator + projectName + ".all.Q";
-			UtilSet.renameFile(proDir + File.separator + projectName + ".Q", allQPath);
-			return true;
 		}
+
+		String tmpQPath = proDir + File.separator + projectName + ".Q";		
+		String line0 = UtilSet.searchStringInFile(tmpQPath, "0");
+		// if the result .Q file contains state number "0", redo the evaluation process with the "-addstate" parameter
+		if (line0 != null) {
+			evalCmd = evalAddStateCmdPattern;
+			evalCmd = evalCmd.replaceFirst("<rdahmmDir>", binDir).replaceFirst("<proBaseName>", projectName);
+			evalCmd = evalCmd.replaceFirst("<dataCount>", Integer.toString(count)).replaceFirst("<dimensionCount>", "3");
+			evalCmd = evalCmd.replaceAll("<modelBaseName>", modelBaseName);
+			
+			progPath = UtilSet.getProgFromCmdLine(evalCmd);
+			args = UtilSet.getArgsFromCmdLine(evalCmd);
+			UtilSet.antExecute(progPath, args, proDir, null, null, outputPath, errPath);
+			stdOutStr = UtilSet.readFileContentAsString(new File(outputPath));
+			stdErrStr = UtilSet.readFileContentAsString(new File(errPath));
+			if (stdOutStr.toLowerCase().indexOf("error") >= 0 || stdErrStr.toLowerCase().indexOf("error") >= 0) {
+				System.out.println("Evaluation failed when executing evaluating command:");
+				System.out.println(evalCmd);
+				System.out.println("Standard Output: " + stdOutStr);
+				System.out.println("Standard Error: " + stdErrStr);
+				return false;
+			}
+		}
+		
+		String allQPath = proDir + File.separator + projectName + ".all.Q";
+		UtilSet.renameFile(tmpQPath, allQPath);
+		return true;
 	}
 	
 	/**
@@ -1328,8 +1361,8 @@ public class DailyRDAHMMStation {
 	 * @return
 	 */
 	protected String queryGrwsGetUrl(String beginDate, String endDate) {
-		if (dataSource.equalsIgnoreCase("UNAVCO")) {
-			String tmpDir = baseWorkDir + File.separator + modelBaseName + File.separator + "unavcoTmp";
+		if (dataSource.toUpperCase().contains("UNAVCO")) {
+			String tmpDir = baseWorkDir + File.separator + modelBaseName + File.separator + dataSource + "Tmp";
 			File fileTmpDir = new File(tmpDir);
 			int c = 1;
 			while (fileTmpDir.exists() && fileTmpDir.isFile()) {
