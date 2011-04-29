@@ -365,7 +365,7 @@ public class DailyRDAHMMStation {
 		// If the file at fileLocalPath contains data in xyz dimensions, change them to latitude, longitude, height
 		String llhRawPath = fileLocalPath;
 		// UNAVCO data are in llh format, so don't need to be changed.
-		if (!dataSource.toLowerCase().contains("unavco")) {
+		if (!dataSource.toUpperCase().contains("UNAVCO")) {
 			llhRawPath = xyzToLlhForRaw(fileLocalPath);
 			if (llhRawPath == null || llhRawPath.length() <= 0) {
 				System.out.println("Failed in llh translation of the model input for station " + stationId);
@@ -979,12 +979,15 @@ public class DailyRDAHMMStation {
 			String proDir = baseDestDir + File.separator + projectName;
 			String grwsFilePath = proDir + File.separator + grwsFileName;
 			
-			// translate xyz to llh
-			String llhGrwsFilePath = xyzToLlhForRaw(grwsFilePath);
-			if (llhGrwsFilePath == null || llhGrwsFilePath.length() <= 0) {
-				System.out.println("Failed to create evaluation input for station " + stationId
-									+ "! Error when translating xyz to llh.");
-				return false;
+			// If the file at grwsFilePath contains data in xyz dimensions, change them to latitude, longitude, height
+			String llhGrwsFilePath = grwsFilePath;
+			// UNAVCO data are in llh format, so don't need to be changed.
+			if (!dataSource.toUpperCase().contains("UNAVCO")) {
+				llhGrwsFilePath = xyzToLlhForRaw(grwsFilePath);
+				if (llhGrwsFilePath == null || llhGrwsFilePath.length() <= 0) {
+					System.out.println("Failed to create evaluation input for station " + stationId	+ "! Error when translating xyz to llh.");
+					return false;
+				}
 			}
 			
 			// de-trend the GRWS raw file
