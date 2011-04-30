@@ -24,14 +24,14 @@
 %>
 
 <html>
-	<head>
-	<script
+<head>
+<script
     src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>
-	<script src="http://local.hostname/DailyRDAHMM-portlet/NmapAPI.js" type="text/javascript"></script>
-	<script src="http://local.hostname/DailyRDAHMM-portlet/dateUtil.js" type="text/javascript"></script>
-	<script src="http://danvk.org/dygraphs/dygraph-combined.js" type="text/javascript"></script>
-	</head>
-	<body>
+<script src="http://local.hostname/DailyRDAHMM-portlet/NmapAPI.js" type="text/javascript"></script>
+<script src="http://local.hostname/DailyRDAHMM-portlet/dateUtil.js" type="text/javascript"></script>
+<script src="http://danvk.org/dygraphs/dygraph-combined.js" type="text/javascript"></script>
+</head>
+<body>
 
 	<!-- Initiating the yui controls -->
 	<script type="text/javascript" src="/yui_0.12.2/build/yahoo/yahoo.js"></script>
@@ -86,15 +86,19 @@
 	var denotedDate = new Date();
 	var modelStartDate = new Date(1994, 0, 1, 0, 0, 0);
 	
-	//Add an alert window.
+	var tmpNoActOnCalSelect = false;
 	function myShowDateHandler(type,args,obj) {
+		if (tmpNoActOnCalSelect) {
+			tmpNoActOnCalSelect = false;
+			return;
+		}
 		var dates=args[0];
 		var date=dates[0];
 		var year=date[0],month=date[1],day=date[2];
 		if (month[0] == '0')
 			month = "" + month[1];
 		if (day[0] == '0')
-			day = "" + day[1];		
+			day = "" + day[1];
 		var showDate = year + "-" + month + "-" + day;
 		var dateToShow = document.getElementById("dateText");
 	 	if (showDate != dateToShow.value) {
@@ -103,15 +107,15 @@
 			if (tmpDate > today || tmpDate < modelStartDate) {
 				alert("Please choose a date between " + getDateString(modelStartDate) + " and " + getDateString(today));
 				return;
-			}	 		
+			}
 			dateToShow.setAttribute("value",showDate);
 			dateToShow.value = showDate;
 			tmpNoActOnSlideChange = true;
 			setSliderValByDate(tmpDate);
-			overlayMarkers();		
+			overlayMarkers();
 		}
-	}	
-  
+	}
+
 	function setSliderValByDate(theDate) {
 		var today = new Date();
 		slider.setValue( (theDate.getTime() - modelStartDate.getTime()) * slider_range / (today.getTime() - modelStartDate.getTime()) );
@@ -163,10 +167,10 @@
 			tmpDate.setTime(modelStartDate.getTime() + timeSinceStart);
 		}
   	
-		tmpDate = nDaysBefore(n, tmpDate);  
-		today = new Date();  		
+		tmpDate = nDaysBefore(n, tmpDate);
+		today = new Date();
 		if (tmpDate > today || tmpDate < modelStartDate )
-			return;  	
+			return;
 		// since the slider bar is not precise, we use the date text to adjust the date
 		str = getDateString(tmpDate);
 		var dateTxt = document.getElementById("dateText");
@@ -177,13 +181,15 @@
 		setCalByDate(tmpDate);
 		overlayMarkers();
 	}
-  
+
 	function setCalByDate(theDate) {
 		YAHOO.example.calendar.cal1.setYear(theDate.getFullYear());
 		YAHOO.example.calendar.cal1.setMonth(theDate.getMonth());
+		tmpNoActOnCalSelect = true;                                                              
+		YAHOO.example.calendar.cal1.select(theDate);
 		YAHOO.example.calendar.cal1.render();
 	}
-	</script> 
+	</script>
 
 <!-- inline functions about map api -->	
 	<script type="text/javascript">
@@ -204,6 +210,7 @@
 				htmlStr = htmlStr.replace(/{!latitude!}/g, lat);
 				htmlStr = htmlStr.replace(/{!longitude!}/g, long);
 				marker.openInfoWindowHtml(htmlStr, {suppressMapPan:true});
+				sel = document.getElementById("stationSelect");
 				sel.selectedIndex = idx;
 				sltChange(sel);
 			});
@@ -397,7 +404,7 @@
 		html = html + " </table> <br/> <br/>" 
 					+ "Select a date for changes on that day:"
 					+ "<table border='0' align='center'> <tr> <td> <input type='text' id='dateText' size='15' value='' onkeydown='onDateTextKeyDown(event)'/> </td>"
-					+ "<td> <button id='clearDateBtn' onClick='clearBtnClick(this)' style='width:70px;height:22px'>Today</button>  </td> </tr> </table>";
+					+ "<td> <button id='clearDateBtn' onClick='clearBtnClick(this)' style='width:70px;height:22px'>Latest</button>  </td> </tr> </table>";
 		var idiv = window.document.getElementById("networksDiv");
 		idiv.innerHTML = html;
 	}
@@ -407,16 +414,14 @@
 	// what to do when the "Clear" Button is clicked
 	function clearBtnClick(btn) {
 		var dateToShow=document.getElementById("dateText");
-		var d = new Date();
-		var ds = getDateString(d);
-		if (dateToShow.value != ds) {
-			dateToShow.value = ds;
+		if (dateToShow.value != strLatestDate) {
+			dateToShow.value = strLatestDate;
+			dateToShow.setAttribute("value", strLatestDate);
 			overlayMarkers();
-			YAHOO.example.calendar.cal1.setYear(d.getFullYear());
-			YAHOO.example.calendar.cal1.setMonth(d.getMonth());
-			YAHOO.example.calendar.cal1.render();
-			slider.setValue(slider_range);
-		}	
+			setCalByDate(dataLatestDate);
+			tmpNoActOnSlideChange = true;
+			setSliderValByDate(dataLatestDate);
+		}
 	}
 
 	// plot state change number vs time for a bounded area
@@ -1042,27 +1047,14 @@
 	slider = YAHOO.widget.Slider.getHorizSlider("slider-bg", "slider-thumb", 0, slider_range, 1); 
 	slider.subscribe("change", onSlideChange);
 	slider.subscribe("slideEnd", onSlideEnd);
-	// set the date to 18 days ago, the latest date that we get data for all stations
+	
 	var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/getDataLatestDate?resUrl=" + xmlResultUrl;
-	var str = callHttpService(url);
-	var tmpDate = getDateFromString(str);
-	document.getElementById("dateText").setAttribute("value", "");
-	YAHOO.example.calendar.cal1.setYear(tmpDate.getFullYear());
-	YAHOO.example.calendar.cal1.setMonth(tmpDate.getMonth());
-	YAHOO.example.calendar.cal1.select(tmpDate);
-	YAHOO.example.calendar.cal1.render();
-
+	var strLatestDate = callHttpService(url);
+	var dataLatestDate = getDateFromString(strLatestDate);
+	strLatestDate = getDateString(dataLatestDate);
+	document.getElementById("dateText").value = "";
+	clearBtnClick(document.getElementById("clearDateBtn"));
 	</script>
 
-	<hr/>
-	<f:view>
-		<h:form>
-			<h:commandLink action="go-to-jpl">
-				<h:outputText value="See Results for the JPL GIPSY Context Group"/>
-			</h:commandLink>
-		</h:form>
-	</f:view>
-
-	<p><font face="Verdana" size="2">More information about California Real Time Network (CRTN) is available at	<a href="http://sopac.ucsd.edu/projects/realtime/">SOPAC Web Page</a></font></p>
-	</body>
+</body>
 </html>

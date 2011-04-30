@@ -25,7 +25,7 @@
 <html>
 	<head>
 	<script
-    src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>
+    src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAlW-VacciIjziyRXAuwNEPRToCwzmKPcju0WT8bJ7uVS8tITbtRQndtxXxhE2HFQhC_hkBeEDcR7kZA" type="text/javascript"></script>
 	<script src="http://local.hostname/DailyRDAHMM-portlet/NmapAPI.js" type="text/javascript"></script>
 	<script src="http://local.hostname/DailyRDAHMM-portlet/dateUtil.js" type="text/javascript"></script>
 	<script src="http://danvk.org/dygraphs/dygraph-combined.js" type="text/javascript"></script>
@@ -44,12 +44,12 @@
 	<link type="text/css" rel="stylesheet" href="/yui_0.12.2/build/calendar/assets/calendar.css">
   
 	<style>
-		#cal1Container {position:relative; width:210px;}
+		#cal1Container {position:relative; width:160px;}
 		#slider-bg { 
 			position: relative; 
 			background:url(/yui_0.12.2/build/slider/assets/horizBg.png) 5px 0; 
 			height:26px; 
-			width:710px;  
+			width:693px;  
 		}
 		#slider-thumb { 
 			position: absolute; 
@@ -78,8 +78,9 @@
 	}
 
 	YAHOO.namespace("example.calendar");
+	
 	var slider;
-	var slider_range = 682;
+	var slider_range = 665;
 	var denotedDate = new Date();
 	var modelStartDate = new Date(1994, 0, 1, 0, 0, 0);
 	
@@ -112,7 +113,7 @@
 			overlayMarkers();
 		}
 	}
-
+  
 	function setSliderValByDate(theDate) {
 		var today = new Date();
 		slider.setValue( (theDate.getTime() - modelStartDate.getTime()) * slider_range / (today.getTime() - modelStartDate.getTime()) );
@@ -163,11 +164,11 @@
 			var timeSinceStart = slider_val * (endDate.getTime() - modelStartDate.getTime()) / slider_range;
 			tmpDate.setTime(modelStartDate.getTime() + timeSinceStart);
 		}
-  	
-		tmpDate = nDaysBefore(n, tmpDate);  
-		today = new Date();  		
+
+		tmpDate = nDaysBefore(n, tmpDate);
+		today = new Date();
 		if (tmpDate > today || tmpDate < modelStartDate )
-			return;  	
+			return;
 		// since the slider bar is not precise, we use the date text to adjust the date
 		str = getDateString(tmpDate);
 		var dateTxt = document.getElementById("dateText");
@@ -178,7 +179,7 @@
 		setCalByDate(tmpDate);
 		overlayMarkers();
 	}
-  
+
 	function setCalByDate(theDate) {
 		YAHOO.example.calendar.cal1.setYear(theDate.getFullYear());
 		YAHOO.example.calendar.cal1.setMonth(theDate.getMonth());
@@ -206,16 +207,57 @@
 				htmlStr = htmlStr.replace(/{!stationId!}/g, stationId);
 				htmlStr = htmlStr.replace(/{!latitude!}/g, lat);
 				htmlStr = htmlStr.replace(/{!longitude!}/g, long);
-				marker.openInfoWindowHtml(htmlStr, {suppressMapPan:true});
-				sel = document.getElementById("stationSelect");
-				sel.selectedIndex = idx;
-				sltChange(sel);
+				
+				var inputPattern2 = inputPattern, rangePattern2 = rangePattern, qPattern2 = qPattern, aPattern2 = aPattern;
+				var bPattern2 = bPattern, lPattern2 = lPattern, piPattern2 = piPattern, minPattern2 = minPattern, maxPattern2 = maxPattern;
+				var xPattern2 = xPattern, yPattern2 = yPattern, zPattern2 = zPattern, modelPattern2 = modelPattern, rawInputPattern2 = rawInputPattern;
+				var modelLink = urlPattern2.replace(/{!station-id!}/g, stationId) + "/" + modelPattern2.replace(/{!station-id!}/g, stationId);
+				var outputTable = "<table border='0'> <tr><td> <b>Output Values</b> </td></tr>" + "<tr><td><a target=\"_blank\" href=\"" 
+							+  preFix + inputPattern2.replace(/{!station-id!}/g, stationId) + "\">Input File</a></td></tr>"
+							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + rawInputPattern2.replace(/{!station-id!}/g, stationId) + "\">All Raw Input Data</a></td></tr>"
+							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + rangePattern2.replace(/{!station-id!}/g, stationId) + "\">Range</a></td></tr>"
+							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + qPattern2.replace(/{!station-id!}/g, stationId) + "\">Optimal State Sequence File (Q)</a></td></tr>"
+							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + aPattern2.replace(/{!station-id!}/g, stationId) + "\">Model Transition Probability (A)</a></td></tr>"
+							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + bPattern2.replace(/{!station-id!}/g, stationId) + "\">Model Output Distribution (B)</a></td></tr>"
+							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + lPattern2.replace(/{!station-id!}/g, stationId) + "\">Model Log Likelihood (L)</a></td></tr>"
+							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + piPattern2.replace(/{!station-id!}/g, stationId) + "\">Model Initial State Probability (PI)</a></td></tr>"
+							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + minPattern2.replace(/{!station-id!}/g, stationId) + "\">Minimum Value</a></td></tr>"
+							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + maxPattern2.replace(/{!station-id!}/g, stationId) + "\">Maximum Value</a></td></tr>"
+							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + xPattern2.replace(/{!station-id!}/g, stationId) + "\">Plot of North Values</a></td></tr>"
+							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + yPattern2.replace(/{!station-id!}/g, stationId) + "\">Plot of East Values</a></td></tr>"
+							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + zPattern2.replace(/{!station-id!}/g, stationId) + "\">Plot of Up Values</a></td></tr>"
+							+ "<tr><td><a target=\"_blank\" href=\"" +  swfURL + "\">Plot Component Input</a></td></tr>"
+							+ "<tr><td><b><a target=\"_blank\" href=\"" +  modelLink + "\">Get all model files</a></b></td></tr></table>";
+          
+				var changeTable = "<table border='1'> <tr> <td><b>Date</b></td> <td><b>Old Status</b></td> <td><b>New Status</b></td> </tr>";
+				var dateTmp = new Date();
+				if (stationArray[idx][5] != null) {
+					var changeIdx = 0;
+					var changeCount = stationArray[idx][5].length / 3;
+					for (var i=0; i<changeCount && i<10; i++) {
+						dateTmp.setTime((stationArray[idx][5][changeIdx++] + timeDiff) * DAY_MILLI + 3600000);
+						dateTmp.setUTCHours(12);
+						var dateStr = getUTCDateString(dateTmp);
+						var oldStatus = stationArray[idx][5][changeIdx++];
+						var newStatus = stationArray[idx][5][changeIdx++];
+						changeTable += "<tr><td>" + dateStr + "</td><td>" + oldStatus + "</td><td>" + newStatus + "</td></tr>";
+					}
+				} else {
+					//alert("stationArray[idx][5] == null");
+				}
+				changeTable += "</table>";
+				
+				var htmlStr2 = "<div align=\"center\"><table border=\"0\"><tr valign=\"top\"><td>" + changeTable + "</td><td>" + outputTable + "</td></tr></table></div>";
+				
+				var infoTabs = [new GInfoWindowTab("Time Series", htmlStr),new GInfoWindowTab("Output", htmlStr2)];
+				marker.openInfoWindowTabsHtml(infoTabs, {suppressMapPan:true});
+				//marker.openInfoWindowHtml(htmlStr, {suppressMapPan:true});
 			});
 		return marker;
 	}
 	</script>
 
-	<DIV ID="waitScreen" STYLE="position:absolute;z-index:5;top:30%;left:35%;visibility:hidden;">
+	<DIV ID="waitScreen" STYLE="position:absolute;z-index:5;top:30%;left:20%;visibility:hidden;">
 		<TABLE BGCOLOR="#CCCCFF" BORDER=1 BORDERCOLOR="#6600CC" CELLPADDING=0 CELLSPACING=0 HEIGHT=150 WIDTH=300>
 			<TR>
 				<TD WIDTH="100%" HEIGHT="100%" BGCOLOR="#CCCCFF" ALIGN="CENTER" VALIGN="MIDDLE">
@@ -227,21 +269,21 @@
 		</TABLE>
 	</DIV>
 
-	<table>
+	<table align="left">
 		<tr>
-			<td width="650" colspan="2">
+			<td width="936" colspan="2">
 				<b><font size="4" face="Verdana">Daily RDAHMM GPS Data Analysis - JPL GIPSY Context Group</font></b><p>
 				<font face="Verdana" size="2">Note:The default date is set to the latest day when GPS data is available. Click on a station symbol for more information.</font><p></p>
 			</td>
 		</tr>
 		<tr>
-			<td valign="top" width="220">
-				<div id="loadInfo"> </div>
+			<td valign="top" width="176">
+				<font face="Verdana" size="2">
 				<div id="networksDiv"> Status changes and Colors:    </div>
 				<div id="cal1Container" align="center"> </div>          
 				<div>    Or choose a date by dragging the slider under the map. </div>
 				<div> 
-					<table border="1" width="220">
+					<table border="1" width="172">
 						<tr border="0"><td colspan="2">Get KML For Date Range:</td></tr>
 						<tr border="0"><td>From: </td><td><input type="text" id="getKmlFromDateText" size="10"/> </td></tr>
 						<tr border="0"><td>To:   </td><td><input type="text" id="getKmlToDateText" size="10" onkeydown="onKmlToDateTextKeyDown(event)"/> </td></tr>
@@ -252,9 +294,11 @@
 						</tr>
 					</table>
 				</div>
+				</font>
 			</td>
-			<td valign="top" width="600">
-				<table class="ooih" border="0" cellspacing="0" cellpadding="0" width="767" height="19">
+			<td valign="top" width="750">
+				<font face="Verdana" size="2">
+				<table class="ooih" border="0" cellspacing="0" cellpadding="0" width="750" height="19">
 					<tr id="tabRow">
 						<td class="ooihj" nowrap onclick="ghbq(this)">View Map</td>
 						<td class="ooihs" nowrap onclick="ghbq(this)">State Change Number vs. Time Plot</td>
@@ -262,10 +306,10 @@
 						<td class="ooihx" style="width:100%">&nbsp;</td>
 						</tr>
 				</table>
-				<table class="ooib" id="obody" border="0" cellspacing="0" cellpadding="0" width="767" height="635">
+				<table class="ooib" id="obody" border="0" cellspacing="0" cellpadding="0" width="750" height="635">
 					<tr valign="top">
 						<td valign="top">
-							<div id="map" style="width: 765px; height: 600px">      </div>
+							<div id="map" style="width: 748px; height: 600px">      </div>
 							<table border='0'>
 								<tr>
 									<td>
@@ -276,7 +320,7 @@
 										<div id="slider-thumb"><img src="/yui_0.12.2/build/slider/assets/horizSlider.png" style="cursor: pointer"></div>
 										</div>
 									</td>
-                                                			<td>
+									<td>
 										<img id="rightSliderArrow" src="/yui_0.12.2/build/slider/assets/arrow_right.png" style="cursor: pointer" onClick="sliderArrowClick(this)">
 									</td>
 								</tr>
@@ -287,7 +331,7 @@
 						<td valign="top" align="center">
 						<table>
 							<tr>
-								<td><div id="scnPlotDiv" style="width: 759px; height: 539px"></div></td>
+								<td><div id="scnPlotDiv" style="width: 742px; height: 539px"></div></td>
 							</tr>
 							<tr align="center">
 								<td>(Usage: move mouse to see value, select an area to zoom in, and double click to zoom out.)</td>
@@ -295,7 +339,7 @@
 							<tr><td><br/></td></tr>
 							<tr>
 								<td>
-								<table valign="top" align="center" width="759px">
+								<table valign="top" align="center" width="742px">
 								<tr>
 									<td>
 										<a id="scnTxtLink" target="_blank" href="">Click here to view the detailed data.</a>
@@ -337,10 +381,8 @@
 						</td>
 					</tr>
 				</table>
+				</font>
 			</td>
-			<td valign="top" width = "240">
-				<div id="changeListDiv"> Station List:	</div>
-			</td>        
 		</tr>
 	</table>
 
@@ -387,8 +429,8 @@
 	networkInfo[4][1] = "http://labs.google.com/ridefinder/images/mm_20_blue.png";
 
 	function printNetworkColors(array) {
-		var html = "<table border='1'><tr><td><b>Status</b></td><td nowrap><b>Icon Color<b></td></tr>";
-      var row;
+		var html = "<table border='1'><tr><td><b>Status</b></td><td nowrap><b>Color<b></td></tr>";
+		var row;
 
 		for (row = 0; row < array.length; ++ row) {
 			html = html + " <tr>";
@@ -401,16 +443,16 @@
 			}
 			html = html + " </tr>";
 		}
-		html = html + " </table> <br/> <br/>" 
+		html = html + " </table> <br/>" 
 					+ "Select a date for changes on that day:"
-					+ "<table border='0'> <tr> <td> <input type='text' id='dateText' size='15' value='' onkeydown='onDateTextKeyDown(event)'/> </td>"
-					+ "<td> <button id='clearDateBtn' onClick='clearBtnClick(this)' style='width:70px;height:22px'>Latest</button>  </td> </tr> </table>";
+					+ "<table border='0'><tr><td><input type='text' id='dateText' size='11' value='' onkeydown='onDateTextKeyDown(event)'/></td>"
+					+ "<td> <button id='clearDateBtn' onClick='clearBtnClick(this)' style='width:70px;height:22px'>Latest</button> </td></tr></table>";
 		var idiv = window.document.getElementById("networksDiv");
 		idiv.innerHTML = html;
 	}
 	
 	printNetworkColors(networkInfo);
-        
+
 	// what to do when the "Clear" Button is clicked
 	function clearBtnClick(btn) {
 		var dateToShow=document.getElementById("dateText");
@@ -829,79 +871,14 @@
 	document.getElementById("scnLongFromText").value = minLon;
 	document.getElementById("scnLongToText").value = maxLon;
 
-	map.centerAndZoom(new GPoint(mapCenterY, mapCenterX), 10);
+	map.centerAndZoom(new GPoint(mapCenterY, mapCenterX), 11);
 	GEvent.addListener(map, "moveend", function() {	onMapMove(); } );
 	GEvent.addListener(map, "zoomend", function(oldLevel, newLevel) {
 		// zoomin: newLevel > oldLevel; zoomout: newLevel < oldLevel
 		if (newLevel < oldLevel)
-			onMapMove(); 
+			onMapMove();
 	} );
-				
-	// show the list for staus changes
-	function printChangedStations() {
-		var idiv = window.document.getElementById("changeListDiv");
-		var html = "<table id=\"statusChangeTable\" border='0'> <tr><b>Stations with status changes:</b></tr> "
-						+ "<tr>(Select one for details)</tr> <tr> <select id=\"stationSelect\" style=\"width:240\" onChange=\"sltChange(this)\" selectedIndex=0 >";
-		for (var i=0; i<stationArray.length; i++) {
-			html += "<option>" + stationArray[i][0] + "</option>";
-		}
-		html += "</tr> <tr align='center'>Last 10 Status Changes:</tr> <tr> </tr> <tr> </tr> <tr> </tr> <tr> </tr> </table>";
-		idiv.innerHTML = html;
-	}
-        
-	function sltChange(stationSlt) {
-		var stationId = stationArray[stationSlt.selectedIndex][0];
-		var urlPattern2 = urlPattern, inputPattern2 = inputPattern, rangePattern2 = rangePattern, qPattern2 = qPattern, aPattern2 = aPattern;
-		var bPattern2 = bPattern, lPattern2 = lPattern, piPattern2 = piPattern, minPattern2 = minPattern, maxPattern2 = maxPattern;
-		var xPattern2 = xPattern, yPattern2 = yPattern, zPattern2 = zPattern, dirPattern2 = dirPattern; modelPattern2 = modelPattern;
-          
-		var idx = inputPattern2.lastIndexOf(".");
-        var rawInputPattern2 = rawInputPattern; 
 
-		var preFix = urlPattern2.replace(/{!station-id!}/g, stationId) + "/" + dirPattern2.replace(/{!station-id!}/g, stationId) + "/";
-		var modelLink = urlPattern2.replace(/{!station-id!}/g, stationId) + "/" + modelPattern2.replace(/{!station-id!}/g, stationId);
-		var outputTable = "<table border='0'> <tr><td> <b>Output Values</b> </td></tr>" + "<tr><td><a target=\"_blank\" href=\"" 
-							+  preFix + inputPattern2.replace(/{!station-id!}/g, stationId) + "\">Input File</a></td></tr>"
-							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + rawInputPattern2.replace(/{!station-id!}/g, stationId) + "\">All Raw Input Data</a></td></tr>"
-							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + rangePattern2.replace(/{!station-id!}/g, stationId) + "\">Range</a></td></tr>"
-							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + qPattern2.replace(/{!station-id!}/g, stationId) + "\">Optimal State Sequence File (Q)</a></td></tr>"
-							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + aPattern2.replace(/{!station-id!}/g, stationId) + "\">Model Transition Probability (A)</a></td></tr>"
-							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + bPattern2.replace(/{!station-id!}/g, stationId) + "\">Model Output Distribution (B)</a></td></tr>"
-							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + lPattern2.replace(/{!station-id!}/g, stationId) + "\">Model Log Likelihood (L)</a></td></tr>"
-							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + piPattern2.replace(/{!station-id!}/g, stationId) + "\">Model Initial State Probability (PI)</a></td></tr>"
-							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + minPattern2.replace(/{!station-id!}/g, stationId) + "\">Minimum Value</a></td></tr>"
-							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + maxPattern2.replace(/{!station-id!}/g, stationId) + "\">Maximum Value</a></td></tr>"
-							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + xPattern2.replace(/{!station-id!}/g, stationId) + "\">Plot of North Values</a></td></tr>"
-							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + yPattern2.replace(/{!station-id!}/g, stationId) + "\">Plot of East Values</a></td></tr>"
-							+ "<tr><td><a target=\"_blank\" href=\"" +  preFix + zPattern2.replace(/{!station-id!}/g, stationId) + "\">Plot of Up Values</a></td></tr>" 
-							+ "<tr><td><b><a target=\"_blank\" href=\"" +  modelLink + "\">Get all model files</a></b></td></tr></table>";
-          
-		var changeTable = "<table border='1'> <tr> <td><b>Date</b></td> <td><b>Old Status</b></td> <td><b>New Status</b></td> </tr>";
-		var dateTmp = new Date();
-		if (stationArray[stationSlt.selectedIndex][5] != null) {
-			var changeIdx = 0; 
-			var changeCount = stationArray[stationSlt.selectedIndex][5].length / 3;
-			for (var i=0; i<changeCount && i<10; i++) {
-				dateTmp.setTime((stationArray[stationSlt.selectedIndex][5][changeIdx++] + timeDiff) * DAY_MILLI + 3600000);
-				dateTmp.setUTCHours(12);
-				var dateStr = getUTCDateString(dateTmp);
-				var oldStatus = stationArray[stationSlt.selectedIndex][5][changeIdx++];
-				var newStatus = stationArray[stationSlt.selectedIndex][5][changeIdx++];
-				changeTable += "<tr><td>" + dateStr + "</td><td>" + oldStatus + "</td><td>" + newStatus + "</td></tr>";
-			}
-		} else {
-			//alert("stationArray[stationSlt.selectedIndex][5] == null");
-		}
-		changeTable += "</table>";
-          
-		var tRows = document.getElementById("statusChangeTable").rows;
-		tRows[tRows.length - 3].innerHTML = "<td>" + changeTable + "</td>";
-		tRows[tRows.length - 1].innerHTML = "<td>" + outputTable + "</td>";
-	}
-       
-	printChangedStations();
-	sltChange(document.getElementById("stationSelect"));
-	
 	// every station in the station array has 7 attributes: id, lat, long, hasColored(for the selected date), null(for output table), status change details, marker
 	var globalColorStr = "";
 	function overlayMarkers() {
@@ -909,8 +886,8 @@
 		window.setTimeout('overlayMarkersBody()',1);
 	}
 
-	function overlayMarkersBody(){        	
-		var dateShowText = document.getElementById("dateText");	
+	function overlayMarkersBody(){
+		var dateShowText = document.getElementById("dateText");
 		var showDateStr = dateShowText.getAttribute("value");
 		var icon;
 		var mapBounds = map.getBounds();
@@ -943,12 +920,12 @@
 							color = "blue";
 							break;
 					}
-			    	 		
+			    	
 					if (stationArray[i][6] != null)
 						stationArray[i][6].getIcon().image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
 					else {
-						icon = new GIcon(baseIcon);	
-						icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";			
+						icon = new GIcon(baseIcon);
+						icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
 						stationArray[i][6] = createTabsInfoMarker(new GPoint(stationArray[i][2], stationArray[i][1]) , null, icon, i, document.getElementById("stationSelect"));
 					}
 					map.addOverlay(stationArray[i][6]);
@@ -972,7 +949,7 @@
 	}
 
 	function onMapMoveBody() {
-		var dateShowText = document.getElementById("dateText");	
+		var dateShowText = document.getElementById("dateText");
 		var showDateStr = dateShowText.getAttribute("value");
 		var icon;
 		var mapBounds = map.getBounds();
@@ -998,12 +975,12 @@
 							color = "blue";
 							break;
 					}
-			    	 		
+			    	
 					if (stationArray[i][6] != null)
 						stationArray[i][6].getIcon().image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
 					else {
-						icon = new GIcon(baseIcon);	
-						icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";			
+						icon = new GIcon(baseIcon);
+						icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
 						stationArray[i][6] = createTabsInfoMarker(new GPoint(stationArray[i][2], stationArray[i][1]) , null, icon, i, document.getElementById("stationSelect"));
 					}
 					map.addOverlay(stationArray[i][6]);
@@ -1041,18 +1018,18 @@
 	YAHOO.example.calendar.cal1.selectEvent.subscribe(myShowDateHandler,YAHOO.example.calendar.cal1, true);
 	YAHOO.example.calendar.cal1.Style.CSS_CELL_TODAY = null;
 	YAHOO.example.calendar.cal1.render();
-		
-	slider = YAHOO.widget.Slider.getHorizSlider("slider-bg", "slider-thumb", 0, slider_range, 1); 
+	
+	slider = YAHOO.widget.Slider.getHorizSlider("slider-bg", "slider-thumb", 0, slider_range, 1);
 	slider.subscribe("change", onSlideChange);
 	slider.subscribe("slideEnd", onSlideEnd);
-	
+	// set the date to 18 days ago, the latest date that we get data for all stations
 	var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/getDataLatestDate?resUrl=" + xmlResultUrl;
 	var strLatestDate = callHttpService(url);
 	var dataLatestDate = getDateFromString(strLatestDate);
 	strLatestDate = getDateString(dataLatestDate);
 	document.getElementById("dateText").value = "";
 	clearBtnClick(document.getElementById("clearDateBtn"));
-	
-	</script>
+
+</script>
 </body>
 </html>
