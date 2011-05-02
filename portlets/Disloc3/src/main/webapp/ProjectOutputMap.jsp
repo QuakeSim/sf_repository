@@ -44,6 +44,7 @@
 							value="InSAR KML" 
 							onclick="toggleKmlDisplay(this)"
 							checked/>InSAR KML
+				  <input type="button" value="Make Transparent" class="b_opacity"/>
 				</td></tr>
 			 </table>
 			 </f:verbatim>
@@ -68,6 +69,12 @@
 	 </h:panelGrid>
 	 <f:verbatim>
 		<script type="text/javascript">
+		  //Fade the png
+		  $(document).ready(function(){
+		    $(".b_opacity").click(function() {
+			    $("#projectResultsDiv").find("img[src*='anonymousProject']").fadeTo("fast","0.4");			 
+			  });
+			  });
 		  var projectResultsDiv=new GMap2(document.getElementById("projectResultsDiv"));
 		  var projectFaultKml="@host.base.url@@artifactId@/QuakeTables_CGS_2002.kml";
 		  var projectDislocOutput=document.getElementById("DislocDisplayProjectResults:myDislocOutput");
