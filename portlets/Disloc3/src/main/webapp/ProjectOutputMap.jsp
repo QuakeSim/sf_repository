@@ -44,7 +44,8 @@
 							value="InSAR KML" 
 							onclick="toggleKmlDisplay(this)"
 							checked/>InSAR KML
-				  <input type="button" value="Make Transparent" class="b_opacity"/>
+				  <input type="button" value="Fade" class="faderButton"/>
+				  <input type="button" value="Reset" class="resetButton"/>
 				</td></tr>
 			 </table>
 			 </f:verbatim>
@@ -71,8 +72,11 @@
 		<script type="text/javascript">
 		  //Fade the png
 		  $(document).ready(function(){
-		    $(".b_opacity").click(function() {
-			    $("#projectResultsDiv").find("img[src*='anonymousProject']").fadeTo("fast","0.4");			 
+		    $(".faderButton").click(function() {
+			    $("#projectResultsDiv").find("img[src*='anonymousProject']").fadeTo("fast","0.75");			 
+			  });
+		    $(".resetButton").click(function() {
+			    $("#projectResultsDiv").find("img[src*='anonymousProject']").fadeTo("fast","1.0");			 
 			  });
 			  });
 		  var projectResultsDiv=new GMap2(document.getElementById("projectResultsDiv"));
