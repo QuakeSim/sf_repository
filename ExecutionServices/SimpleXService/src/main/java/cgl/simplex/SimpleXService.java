@@ -462,7 +462,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			kmlService.setOriginalCoordinate(lon, lat);
 			kmlService.setCoordinateUnit("1000");
 			kmlService=setfaultplot(kmlService,faults);
-			kmlService.setPointPlacemark("Icon Layer");
+			//			kmlService.setPointPlacemark("Icon Layer");
 			kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
 			String calcKmlUrl = kmlService.runMakeKml("", userName,
 					projectName,"calc");
@@ -477,7 +477,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			kmlService.setOriginalCoordinate(lon, lat);
 			kmlService.setCoordinateUnit("1000");
 			kmlService=setfaultplot(kmlService,faults);
-			kmlService.setPointPlacemark("Icon Layer");
+			//kmlService.setPointPlacemark("Icon Layer");
 			kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
 			String o_cKmlUrl = kmlService.runMakeKml("", userName, projectName,"o_c");
 
@@ -491,15 +491,15 @@ public class SimpleXService extends AntVisco implements Runnable {
 			kmlService.setOriginalCoordinate(lon, lat);
 			kmlService.setCoordinateUnit("1000");
 			kmlService=setfaultplot(kmlService,faults);
-			kmlService.setPointPlacemark("'Residual Displacements Icon Layer");
+			//			kmlService.setPointPlacemark("'Residual Displacements Icon Layer");
 			kmlService.setArrowPlacemark("'Residual Displacements Arrow Layer", "ffff0000", 2);
 			tmp_pointentrylist = dw.getCalcList();
 			kmlService.setDatalist(tmp_pointentrylist);
-			kmlService.setPointPlacemark("Calculated Displacements Icon Layer");
+			//			kmlService.setPointPlacemark("Calculated Displacements Icon Layer");
 			kmlService.setArrowPlacemark("Calculated Displacements Arrow Layer", "ff00ccff", 2);
 			tmp_pointentrylist = dw.getObservList();
 			kmlService.setDatalist(tmp_pointentrylist);
-			kmlService.setPointPlacemark("Observed Displacements Icon Layer");
+			//			kmlService.setPointPlacemark("Observed Displacements Icon Layer");
 			kmlService.setArrowPlacemark("Observed Displacements Arrow Layer", "ff0000ff", 2);
 			String totalKmlUrl = kmlService.runMakeKml("", userName,
 					projectName,jobUIDStamp);

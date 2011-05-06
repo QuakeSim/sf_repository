@@ -48,6 +48,9 @@ public class InsarKmlService extends AntVisco implements Runnable {
 		  this(false);
 	 }
 
+	 /**
+	  * This is a simple main method for commandline testing.
+	  */
 	 public static void main(String[] args) {
 		  try{
 				InsarKmlService iks=new InsarKmlService(true);
