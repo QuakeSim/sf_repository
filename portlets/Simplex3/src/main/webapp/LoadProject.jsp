@@ -106,9 +106,9 @@
 			 </h:selectManyCheckbox>
 			 
 			 <h:outputText value="New Project Name:"/>
-			 <h:inputText id="newProjectName" 
+			 <h:inputText id="newProjectName2" 
 							  required="true"
-							  value="#{SimplexBean.projectName}"/>
+							  value="#{SimplexBean.projectCopyName}"/>
 			 
 			 <h:commandButton id="simplex3CopyCmdButton" 
 									onclick="showLoading()"

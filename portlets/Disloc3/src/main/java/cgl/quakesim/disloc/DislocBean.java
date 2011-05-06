@@ -1126,6 +1126,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		System.out.println("Old project name: " + oldProjectName);
 
 		// Create an empty project
+		this.setProjectName(this.getProjectCopyName());
 		String newProjectName = this.getProjectName();
 		createNewProject(newProjectName);
 

@@ -116,7 +116,7 @@
 				 <h:outputText id="dislocCopyProjectNewTitle"
 									value="New ProjectName:"/>
 				 <h:inputText id="newSimplexCopyProjectName" 
-								  value="#{DislocBean2.projectName}"
+								  value="#{DislocBean2.projectCopyName}"
 								  required="true"/>
 			  </h:panelGroup>
 			  <h:commandButton id="dislocCpyProjectCmd" 

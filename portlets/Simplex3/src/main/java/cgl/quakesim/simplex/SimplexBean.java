@@ -196,7 +196,7 @@ public class SimplexBean extends GenericSopacBean {
 	 protected String obsvKmlFilename;
 	 protected String obsvKmlUrl;
 	protected String portalBaseUrl;
-
+	 
 	 //This is the logger
 	 private static Logger logger;
 	 
@@ -1125,10 +1125,12 @@ public class SimplexBean extends GenericSopacBean {
 			oldProjectName = copyProjectsList[0];
 		}
 		logger.info("[" + getUserName() + "/SimplexBean/toggleCopyProject] Old project name: " + oldProjectName);
+		logger.info("Name of copied project: "+this.getProjectCopyName());
 
 		// --------------------------------------------------
 		// Create an empty project and add to the parent code database
 		// --------------------------------------------------
+		this.setProjectName(this.getProjectCopyName());
 		String newProjectName = this.getProjectName();
 		currentEditProjectForm = new editProjectForm(selectdbURL);
 		currentEditProjectForm.setKmlfiles(getKmlfiles());
@@ -1136,7 +1138,7 @@ public class SimplexBean extends GenericSopacBean {
 		currentEditProjectForm.initEditFormsSelection();
 
 		// Add the project to the code database, cleaning up if necessary.
-		logger.info("[" + getUserName() + "/SimplexBean/toggleCopyProject] Creating new project");
+		logger.info("[" + getUserName() + "/SimplexBean/toggleCopyProject] Creating new project:"+newProjectName);
 		makeProjectDirectory();
 
 		ObjectContainer db = null;
