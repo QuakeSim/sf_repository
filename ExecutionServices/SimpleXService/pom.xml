@@ -8,7 +8,7 @@
     <artifactId>simplexexec</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>Ant Visco execution service</name>
+    <name>Simplex execution service</name>
     <url>http://www.myorganization.org</url>
    <parent>
 	 <groupId>quakesim</groupId>
