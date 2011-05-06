@@ -60,9 +60,9 @@ public class Tester {
 					String line = "";
 					String inputPath = "";
 					if (path.startsWith("sopac")) {
-						inputPath = sopacInputPathPattern.replaceAll("<stationId>", stationId);
+						inputPath = sopacInputPathPattern.replace("<stationId>", stationId);
 					} else {
-						inputPath = jplInputPathPattern.replaceAll("<stationId>", stationId);
+						inputPath = jplInputPathPattern.replace("<stationId>", stationId);
 					}
 					
 					line = UtilSet.findLineInFile(new File(inputPath), stationId);

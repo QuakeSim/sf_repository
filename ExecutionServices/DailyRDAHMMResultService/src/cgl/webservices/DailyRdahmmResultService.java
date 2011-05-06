@@ -69,6 +69,11 @@ public class DailyRdahmmResultService {
 	}
 	
 	public String calcStationColors(String date, String resUrl) {
+		if (resUrl == null || resUrl.trim().length() == 0) {
+			System.out.println("resUrl is null or empty in calcStationColors(). date: " + date);
+			return "";
+		}
+		
 		DailyRdahmmResultAnalyzer analyzer = analyzerTable.get(resUrl);
 		if (analyzer == null) {
 			analyzer = addAnalyzer(resUrl);
@@ -78,6 +83,11 @@ public class DailyRdahmmResultService {
 	}
 	
 	public String calcStationStates(String date, String resUrl) {
+		if (resUrl == null || resUrl.trim().length() == 0) {
+			System.out.println("resUrl is null or empty in calcStationStates(). date: " + date);
+			return "";
+		}
+		
 		DailyRdahmmResultAnalyzer analyzer = analyzerTable.get(resUrl);
 		if (analyzer == null) {
 			analyzer = addAnalyzer(resUrl);
@@ -87,6 +97,11 @@ public class DailyRdahmmResultService {
 	}
 	
 	public String getLatLongForStation(String stationId, String resUrl) {
+		if (resUrl == null || resUrl.trim().length() == 0) {
+			System.out.println("resUrl is null or empty in getLatLongForStation(). stationId: " + stationId);
+			return "";
+		}
+		
 		DailyRdahmmResultAnalyzer analyzer = analyzerTable.get(resUrl);
 		if (analyzer == null) {
 			analyzer = addAnalyzer(resUrl);
@@ -96,6 +111,12 @@ public class DailyRdahmmResultService {
 	}
 	
 	public String getDataLatestDate(String resUrl) {
+		if (resUrl == null || resUrl.trim().length() == 0) {
+			System.out.println("resUrl is null or empty in getDataLatestDate().");
+			return "";
+		}
+		
+		System.out.println("resUrl in getDataLatestDate: " + resUrl);
 		DailyRdahmmResultAnalyzer analyzer = analyzerTable.get(resUrl);
 		if (analyzer == null) {
 			analyzer = addAnalyzer(resUrl);
@@ -184,7 +205,7 @@ public class DailyRdahmmResultService {
 		String workDir = plotBinPath.substring(0, idx);
 		String res = UtilSet.exec(plotBinPath + " " + txtPath, new File(workDir));
 		System.out.println("output from plotting script: " + res);
-		return plotUrlPattern.replaceAll("<fileName>", fileName + ".png");
+		return plotUrlPattern.replace("<fileName>", fileName + ".png");
 	}
 	
 	/**
@@ -194,6 +215,11 @@ public class DailyRdahmmResultService {
 	 * @return
 	 */
 	public String getKmlForDate(String dateStr, String resUrl) {
+		if (resUrl == null || resUrl.trim().length() == 0) {
+			System.out.println("resUrl is null or empty in getKmlForDate(). date: " + dateStr);
+			return "";
+		}
+		
 		deleteObsoleteKml();
 		String contextGroup = "SOPAC";
 		if (resUrl.toUpperCase().indexOf("JPL") >= 0) {
@@ -297,6 +323,11 @@ public class DailyRdahmmResultService {
 	 * @return
 	 */
 	public String getKmlForDateRange(String fromDateStr, String toDateStr, String resUrl) {
+		if (resUrl == null || resUrl.trim().length() == 0) {
+			System.out.println("resUrl is null or empty in getKmlForDateRange(). fromDate: " + fromDateStr + ", toDate: " + toDateStr);
+			return "";
+		}
+		
 		deleteObsoleteKml();
 		String contextGroup = "SOPAC";
 		if (resUrl.toUpperCase().indexOf("JPL") >= 0) {
@@ -434,6 +465,11 @@ public class DailyRdahmmResultService {
 	 * @return
 	 */
 	public String getKmlForDateRange2(String fromDateStr, String toDateStr, String resUrl) {
+		if (resUrl == null || resUrl.trim().length() == 0) {
+			System.out.println("resUrl is null or empty in getKmlForDateRange2(). fromDate: " + fromDateStr + ", toDate: " + toDateStr);
+			return "";
+		}
+		
 		deleteObsoleteKml();
 		String contextGroup = "SOPAC";
 		if (resUrl.toUpperCase().indexOf("JPL") >= 0) {
@@ -624,6 +660,11 @@ public class DailyRdahmmResultService {
 	 * @return
 	 */
 	public String proxyCallHttpService(String serviceUrl) {
+		if (serviceUrl == null || serviceUrl.trim().length() == 0) {
+			System.out.println("serviceUrl is null or empty in proxyCallHttpService().");
+			return "";
+		}
+		
 		System.out.println("url: " + serviceUrl);
 		return UtilSet.callHttpService(serviceUrl);
 	}

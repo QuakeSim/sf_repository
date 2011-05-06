@@ -262,6 +262,67 @@ public class UtilSet {
 			e.printStackTrace();
 		}
 	}
+    
+    /**
+	 * set the calendar value of theDateTime according to a string like "2008-08-08T08:08:08"
+	 * @param theDateTime
+	 * @param str
+	 */
+	public static void setDateTimeByString(Calendar theDateTime, String str) {
+	  	str = str.trim();
+		String year, month, day;
+	  	int i1, i2, iT;
+	  	i1 = str.indexOf("-");
+	  	i2 = str.indexOf("-", i1+1);
+	  	iT = str.indexOf('T');
+	  	year = str.substring(0, i1);
+	  	month = str.substring(i1+1, i2);
+	  	day = str.substring(i2+1, iT);
+	  	
+	  	theDateTime.set(Calendar.YEAR, Integer.parseInt(year, 10));
+	  	theDateTime.set(Calendar.MONTH, Integer.parseInt(month, 10)-1);
+	  	theDateTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day, 10));
+	  	
+	  	i1 = str.indexOf(':', iT+1);
+	  	i2 = str.indexOf(':', i1+1);
+	  	
+	  	theDateTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(str.substring(iT+1, i1)));
+	  	theDateTime.set(Calendar.MINUTE, Integer.parseInt(str.substring(i1+1, i2)));
+	  	theDateTime.set(Calendar.SECOND, Integer.parseInt(str.substring(i2+1)));
+	  	theDateTime.set(Calendar.MILLISECOND, 0);
+	}
+	
+	/** get date-time from a string like "2007-03-08T08:08:08" */
+	public static Calendar getDateTimeFromString(String str) { 	
+	  	Calendar ret = Calendar.getInstance();
+	  	setDateTimeByString(ret, str);  	
+	  	return ret;
+	}
+	
+	/**
+	 * get the "2007-02-15T13:23:22" alike string form of the date and time
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static String getDateTimeString(Calendar date) {
+		StringBuffer sb = new StringBuffer(getDateString(date));
+		sb.append('T');
+		
+		if (date.get(Calendar.HOUR_OF_DAY) < 10)
+			sb.append('0');
+		sb.append(date.get(Calendar.HOUR_OF_DAY)).append(':');
+		
+		if (date.get(Calendar.MINUTE) < 10)
+			sb.append('0');
+		sb.append(date.get(Calendar.MINUTE)).append(':');
+		
+		if (date.get(Calendar.SECOND) < 10)
+			sb.append('0');
+		sb.append(date.get(Calendar.SECOND));
+		
+		return sb.toString();
+	}
 	
 	/**
 	 * This is for test anything handy
@@ -275,9 +336,10 @@ public class UtilSet {
 		String s = "SOPAC_FILL_2005-06-09to2005-09-08.2010-10-03.kml";
 		String pat = ".*";
 		System.out.println(s.matches(pat)); */
-		
+		/*
 		DailyRdahmmResultService service = new DailyRdahmmResultService();
 		String res = service.calcStationColors(args[0], args[1]);
 		System.out.println(res);
+		*/
 	}
 }
