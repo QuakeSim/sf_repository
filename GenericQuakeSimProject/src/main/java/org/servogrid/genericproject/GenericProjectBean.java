@@ -55,6 +55,7 @@ public class GenericProjectBean {
     protected String contextBasePath;
     protected String FS="FS";
     protected String projectName="";
+	 protected String projectCopyName="";
     protected String chosenProject="";
     protected String[] contextList;
     protected Hashtable contextListHash;
@@ -199,7 +200,7 @@ public class GenericProjectBean {
     public String getProjectName() {
 		  return projectName;
     }
-	 
+
     public void setProjectName(String projectName){
 		  //Get rid of dubious characters
 		  projectName=filterTheBadGuys(projectName);
@@ -213,6 +214,16 @@ public class GenericProjectBean {
 
 		  this.projectName=projectName;
     }
+
+	 public String getProjectCopyName() {
+		  return projectCopyName;
+	 }
+	 
+	 public void setProjectCopyName(String projectCopyName) {
+		  //This assumes we have already cleaned up the name.
+		  //See setProjectName() above.
+		  this.projectCopyName=projectCopyName;
+	 }
     
     public String getCodeName() {
 		  return codeName;
