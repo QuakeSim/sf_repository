@@ -408,7 +408,7 @@ function getScrolling() {
 </script> 
 
 <f:view>
-  <h:messages id="dislocMessagesLoadProject" 
+  <h:messages id="dislocMessagesLoadEditProject" 
 				  showDetail="true"
 				  showSummary="true"
 				  errorStyle="color: red"/>
