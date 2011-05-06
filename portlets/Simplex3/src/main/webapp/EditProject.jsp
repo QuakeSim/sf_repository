@@ -219,7 +219,7 @@
 		<h:messages id="simplexMessagesDynamicFault" 
 						showDetail="true"
 						showSummary="true"
-					  errorStyle="color: red"/>
+						errorStyle="color: red"/>
 		
 		<%/* This is the main grid container */%>
 		<h:panelGrid id="EditProject" 
