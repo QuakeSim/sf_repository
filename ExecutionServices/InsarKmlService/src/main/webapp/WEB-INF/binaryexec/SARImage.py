@@ -19,17 +19,24 @@
 #===================================================== 
 # History: 
 #   2010/09/07: fix nan problem 
-#   2010/09/20: fix white stripes 
+#   2010/09/20: fix white stripes
+#   2011/05/09: add QuakeSim logo
+#   2011/05/09: record parameters in kml files
 #===================================================== 
  
-import csv, math, sys, os, math 
+import csv, math, sys, os, math, string 
  
-import numpy as np 
-import matplotlib.cm as cm 
-import matplotlib.mlab as mlab 
-import matplotlib.pyplot as plt 
-from matplotlib.backends.backend_agg import FigureCanvasAgg 
- 
+try:
+    import numpy as np 
+    import matplotlib.cm as cm 
+    import matplotlib.mlab as mlab 
+    import matplotlib.pyplot as plt 
+    #from matplotlib.backends.backend_agg import FigureCanvasAgg 
+    import matplotlib.image as mpimg
+except ImportError:
+    sys.exit("Import matplotlib failed ")
+
+
 def dxy2lonlat(xy, ref): 
     """ 
         convert dx, dy to lon, lat 
@@ -49,15 +56,15 @@ def dxy2lonlat(xy, ref):
     lat2 = xy[1]/yfactor + lat1 
     return [lon2,lat2] 
  
-def generateKML(extent, outputname, imageurl): 
+def generateKML(extent, outputname, imageurl, params): 
     """ 
        generate KML   
     """ 
     kml = """<?xml version="1.0" encoding="UTF-8"?> 
 <kml xmlns="http://earth.google.com/kml/2.2"> 
   <Folder> 
-    <name>Ground Overlays</name> 
-    <description>Examples of ground overlays</description> 
+    <name>Disloc interferograms</name> 
+    <description>%s</description> 
     <GroundOverlay> 
       <Icon> 
         <href>%s</href> 
@@ -79,9 +86,17 @@ def generateKML(extent, outputname, imageurl):
     href = imageurl + "/" + outputname + ".png" 
     if imageurl == "": 
         href = outputname + ".png" 
+
+    description = "<![CDATA[%s]]>"
+    desc = string.join(["Disloc :", str(params[0]), '<br>',
+                       "Elevation (degree): ", str(params[1]), '<br>',
+                       "Azimuth (degree): ", str(params[2]), '<br>',
+                       "Radar Wavelength (cm): ", "%.3f" % params[3],'<br>'
+                       ])
  
     #print kml % (north,south,east,west) 
-    kml = kml % (href, north,south,east,west) 
+    description = description % (desc)
+    kml = kml % (description, href, north,south,east,west)
     kmlf = open(outputname + ".kml",'w') 
     kmlf.write(kml) 
     kmlf.close() 
@@ -133,7 +148,7 @@ def color_wheel(fcw):
  
     return colormatrx 
      
-def drawimage(datatable,lonlatgrid, outputname, imageurl): 
+def drawimage(datatable,lonlatgrid, outputname, imageurl, params): 
     """ 
        produece image   
     """ 
@@ -179,16 +194,25 @@ def drawimage(datatable,lonlatgrid, outputname, imageurl):
     fig = plt.figure(figsize=(lonlatgrid[0]/12.0,lonlatgrid[1]/12.0)) 
     fig.subplots_adjust(left=0.0,bottom=0.0,top=1.0,right=1.0) 
     im = plt.imshow(newimg,interpolation='spline16',origin='lower') 
-    plt.axis("off") 
+    plt.axis("off")
+
+    # add QuakeSim logo
+    logo = mpimg.imread('QuakeSimLogoGrayEmboss.png')
+    logowidth = 100
+    logoheight = 37
+    fig.figimage(logo, fig.bbox.xmax, 10, zorder=1)
+    
     plt.savefig(outputname + ".png", format="PNG",aspect="auto",transparent=True,dpi=(96)) 
- 
-    generateKML([xy0[0],xy1[0],xy0[1],xy1[1]],outputname, imageurl) 
+
+    generateKML([xy0[0],xy1[0],xy0[1],xy1[1]],outputname, imageurl, params) 
      
 def lineofsight (ele,azi,radarWL,disO,url): 
     """ 
         caculate line of sight 
         parameters:elevation,azimuth,radarWaveLength,disclocOutput 
     """ 
+    params = [disO, ele, azi,radarWL] 
+
     outputReader = csv.reader(open(disO), delimiter = ' ') 
     rawdata=[] 
     header = 0 
@@ -236,8 +260,8 @@ def lineofsight (ele,azi,radarWL,disO,url):
     #del writer 
  
     outputname = os.path.basename(disO) 
-     
-    drawimage(datatable,gridsize, outputname, url) 
+
+    drawimage(datatable,gridsize, outputname, url, params) 
  
      
 if __name__ == "__main__": 
