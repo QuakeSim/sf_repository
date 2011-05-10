@@ -198,7 +198,7 @@ def drawimage(datatable,lonlatgrid, outputname, imageurl, params):
     plt.axis("off")
 
     # add QuakeSim logo
-    if (lonlatgrid[1] < 30) or (lonlatgrid[0] < 30):
+    if (lonlatgrid[1] < 100) or (lonlatgrid[0] < 100):
         logo = mpimg.imread('QuakeSimLogoGrayEmbossSmall.png')
         fig.figimage(logo, xo=fig.bbox.xmax-40, yo=2,zorder=1)
     else:
