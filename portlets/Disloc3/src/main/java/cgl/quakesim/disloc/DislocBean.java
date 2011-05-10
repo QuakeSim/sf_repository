@@ -67,7 +67,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	static final String SEPARATOR = "/";
 	 
 	 //Some useful constants
-	 static final String MAX_PLOT_POINTS=300;
+	 static final int MAX_PLOT_POINTS=1300;
 
 	/**
 	 * The following are property fields. Associated get/set methods are at the
@@ -756,7 +756,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 					 
 					 if (nA < MAX_PLOT_POINTS*0.5) {
 						  ratio = 0.5;
-						 dist = MAX_PLOT_POINTS*0.5;
+						  dist = (int) (MAX_PLOT_POINTS*0.5);
 						 start_point = 0;
 						 index_e = 0;
 						 // System.out.println("1. " + total_points * 0.5);
@@ -764,16 +764,16 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 					 
 					 else if (nA < MAX_PLOT_POINTS*0.8) {
 						  ratio = 0.3;
-						  dist = MAX_PLOT_POINTS*0.3;
-						 start_point = MAX_PLOT_POINTS*0.5;
+						  dist = (int)(MAX_PLOT_POINTS*0.3);
+						  start_point = (int)(MAX_PLOT_POINTS*0.5);
 						 index_e = (int) (total_points * 0.5);
 						 // System.out.println("2. " + nA + " <  " + total_points * 0.8);
 					 }
 					 
 					 else if (nA < MAX_PLOT_POINTS) {
 						  ratio = 0.2;
-						 dist = MAX_PLOT_POINTS*0.2;
-						 start_point = MAX_PLOT_POINTS*0.5+MAX_PLOT_POINTS*0.3;
+						  dist = (int)(MAX_PLOT_POINTS*0.2);
+						  start_point = (int)(MAX_PLOT_POINTS*0.5+MAX_PLOT_POINTS*0.3);
 						 index_e = (int) (total_points * 0.8);
 						 // System.out.println("3. " + nA + " <  " + total_points * 1.0);
 					 }
