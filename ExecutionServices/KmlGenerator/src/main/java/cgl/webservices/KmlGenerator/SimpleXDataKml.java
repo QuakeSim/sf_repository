@@ -646,7 +646,7 @@ public class SimpleXDataKml {
 			//Integer division used here on purpose. 
 			decimationFactor=datalist.length/10+1;
 			//System.out.println("Decimation factor:"+decimationFactor);
-			for (int i = 0; i < datalist.length; i+decimationFactor) { 
+			for (int i = 0; i < datalist.length; i=i+decimationFactor) { 
 				 // create and add a Placemark containing a Point 
 				 Placemark mark1 = new Placemark();			 
 				 mark1.setName(datalist[i].getFolderTag() + i); 
