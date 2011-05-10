@@ -15,9 +15,6 @@ import WebFlowClient.cm.*;
 import WebFlowClient.fsws.*;
 import cgl.webclients.*;
 
-//SOPAC Client Stuff
-import edu.ucsd.sopac.reason.grws.client.GRWS_SubmitQuery;
-
 //Usual java stuff.
 import java.net.*;
 import java.io.*;
@@ -34,11 +31,18 @@ import TestClient.Select.Select;
 import TestClient.Select.SelectService;
 import TestClient.Select.SelectServiceLocator;
 
+//Commons logging
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
+
 /**
- * Everything you need to set up and run RDAHMM.
+ * A generic project class
  */
 
 public class GenericProjectBean {
+
+	 //Logger.  We don't initiate it since this is an abstract class.
+	 private static Logger logger;
 
 	 //Static strings
 	 public static final String ANONYMOUS_PROJECT_PREFIX="anonymousProject";
@@ -72,6 +76,9 @@ public class GenericProjectBean {
     protected String gnuplotHostName;
     //    protected String hostName="danube.ucs.indiana.edu";
     //    protected String gnuplotHostName="gf2.ucs.indiana.edu";
+
+	 //Some useful constants
+	 static final String ZERO_DOT_ZERO="0.0";
 
     protected ArrayList projectsToDelete;
     String faultDBServiceUrl;
@@ -234,13 +241,13 @@ public class GenericProjectBean {
     }
 
     public String getContextUrl() {
-		  // System.out.println(this.toString()+":getContextUrl:"+contextUrl);
+		  // logger.info(this.toString()+":getContextUrl:"+contextUrl);
 		  return contextUrl;
     }
 	 
     public void setContextUrl(String cUrl) {
 		  this.contextUrl=cUrl;
-		  // System.out.println(this.toString()+":setContextUrl:"+contextUrl);
+		  // logger.info(this.toString()+":setContextUrl:"+contextUrl);
     }
 	 
     public String getContextBasePath() {
@@ -259,7 +266,7 @@ public class GenericProjectBean {
 		  contextListVector=new Vector();
 		  contextListHash=new Hashtable();
 		  projectsToDelete=new ArrayList();
-		  System.out.println("[" + getUserName() + "/GenericProjectBean/GenericProjectBean] Created");
+		  //logger.info("[" + getUserName() + "/GenericProjectBean/GenericProjectBean] Created");
     }	 
     
 	 public String getDefaultName(){
@@ -272,7 +279,7 @@ public class GenericProjectBean {
 
     public String getPortalUserName() {
 		  userName=Utility.getUserName(defaultName);
-		  // System.out.println("[" + getUserName() + "/GenericProjectBean/getPortalUserName] " + userName);
+		  // logger.info("[" + getUserName() + "/GenericProjectBean/getPortalUserName] " + userName);
 		  return userName;
     }
 
@@ -300,7 +307,7 @@ public class GenericProjectBean {
 	  */
 	 protected String getBasePath() {
 		  String realPath="";
-		  // System.out.println("Here is the real path from context");
+		  // logger.info("Here is the real path from context");
 		  FacesContext fc=FacesContext.getCurrentInstance();
 		  ExternalContext ec=fc.getExternalContext();
 		  Object context=ec.getContext();
@@ -319,7 +326,7 @@ public class GenericProjectBean {
 		  if(realPath.indexOf("/webapps/")>-1) {
 				realPath=realPath.substring(0,realPath.indexOf("/webapps/")+"/webapps/".length());
 		  }
-		  // System.out.println("realPath is "+realPath);
+		  // logger.info("realPath is "+realPath);
 		  return realPath;
 	 }
 
@@ -361,7 +368,7 @@ public class GenericProjectBean {
     public void deletePersistentObj(String dbFilePath, Object obj) {
 		  db=Db4o.openFile(dbFilePath);
 		  ObjectSet results=db.get(obj);
-		  // System.out.println("Delete result seet: "+results.size());
+		  // logger.info("Delete result seet: "+results.size());
 		  if(results.hasNext()){
 				db.delete(obj);
 		  }
@@ -459,8 +466,9 @@ public class GenericProjectBean {
 	    tmp_list.clear();
 	    while (st1.hasMoreTokens()) {
 		String tmp1 = st1.nextToken().trim();
-		if (tmp1 == null || tmp1.equals("null"))
+		if (tmp1 == null || tmp1.equals("null")) {
 		    tmp1 = "N/A";
+		}
 		tmp_list.add(tmp1);
 	    }
 	} catch (Exception ex) {
@@ -476,7 +484,7 @@ public class GenericProjectBean {
 			     String interpId) throws Exception {
 	
 	String DB_RESPONSE_HEADER = "results of the query:";
-	// System.out.println("SQL Query on:" + param);
+	// logger.info("SQL Query on:" + param);
 
 	String sqlQuery="";
 	
@@ -499,25 +507,25 @@ public class GenericProjectBean {
 	}
 	    
 	
-	System.out.println("[" + getUserName() + "/GenericProjectBean/getDBValue] " + sqlQuery);
+	//logger.info("[" + getUserName() + "/GenericProjectBean/getDBValue] " + sqlQuery);
 	
 	String tmp = select.select(sqlQuery);
 	if (tmp == null || tmp.equals("null") || tmp.equals("")) {
-	    System.out.println();
-	    return "0.0";
+	    return ZERO_DOT_ZERO;
 	}
 	
-	if (tmp.indexOf("no data") > -1)
-	    return "0.0";
+	if (tmp.indexOf("no data") > -1) {
+	    return ZERO_DOT_ZERO;
+	}
 	if (tmp.length() > DB_RESPONSE_HEADER.length() + 1) {
 	    tmp = tmp.substring(DB_RESPONSE_HEADER.length() + 1);
 	    tmp = tmp.substring(param.length() + 1);
 	    if (tmp.trim().equals("null"))
-		return "0.0";
+		return ZERO_DOT_ZERO;
 	    else
 		return tmp.trim();
 	} else {
-	    return "0.0";
+	    return ZERO_DOT_ZERO;
 	}
     }
     /**
@@ -703,7 +711,7 @@ public class GenericProjectBean {
 	  */
 	 public void copyFile(File oldFileDB, File newFileDB) throws Exception {
 		 
-		  System.out.println("[" + getUserName() + "/GenericProjectBean/copyFile] From " + oldFileDB.toString() + " to " + newFileDB.toString());
+		  logger.info("[" + getUserName() + "/GenericProjectBean/copyFile] From " + oldFileDB.toString() + " to " + newFileDB.toString());
 		  if(oldFileDB.exists() && oldFileDB.canRead() 
 			  && newFileDB.exists() && newFileDB.canWrite()) {
 				FileInputStream from = null;
@@ -717,22 +725,24 @@ public class GenericProjectBean {
 					 while ((bytesRead = from.read(buffer)) != -1)
 						  to.write(buffer, 0, bytesRead); // write
 				} finally {
-					 if (from != null)
+					 if (from != null) {
 						  try {
 								from.close();
 						  } catch (IOException e) {
 								;
 						  }
-					 if (to != null)
+					 }
+					 if (to != null) {
 						  try {
 								to.close();
 						  } catch (IOException e) {
 								;
 						  }
+					 }
 				 }
 		  }
 		  else {
-				System.err.println("[GenericProjectBean/copyFile] Copy failed");
+				logger.error("[GenericProjectBean/copyFile] Copy failed");
 		  }
 	 }
 }

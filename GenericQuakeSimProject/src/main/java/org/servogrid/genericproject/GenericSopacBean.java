@@ -24,11 +24,18 @@ import java.util.Vector;
 import java.util.StringTokenizer;
 import java.util.Date;
 
+//Commons logging
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
+
 /**
  * Everything you need to set up and run RDAHMM.
  */
 
 public class GenericSopacBean extends GenericProjectBean{
+
+	 //Logger
+	 private static Logger logger;
 
     //These are SOPAC properties
     protected String siteCode="sio5";
@@ -53,7 +60,7 @@ public class GenericSopacBean extends GenericProjectBean{
      */
     public GenericSopacBean(){   
 	super();
-	System.out.println("[" + getUserName() + "/GenericSopacBean/GenericSopacBean] Created");
+	//	logger.info("[" + getUserName() + "/GenericSopacBean/GenericSopacBean] Created");
     }
 
     /**
@@ -74,13 +81,13 @@ public class GenericSopacBean extends GenericProjectBean{
 	gsq.setFromServlet(siteCode, beginDate, endDate, resource,
 			   contextGroup, contextId, minMaxLatLon, true);
 	sopacQueryResults=gsq.getResource();
-	System.out.println("[" + getUserName() + "/GenericSopacBean/querySOPACGetURL] " + sopacQueryResults);
+	logger.info("[" + getUserName() + "/GenericSopacBean/querySOPACGetURL] " + sopacQueryResults);
 	
 	sopacDataFileUrl=sopacQueryResults;
 		
 	String codeName=getCodeName();
 	codeName=codeName.toLowerCase();
-	System.out.println("[" + getUserName() + "/GenericSopacBean/querySOPACGetURL] Sopac query action string : " +codeName+"-display-query-results");
+	logger.info("[" + getUserName() + "/GenericSopacBean/querySOPACGetURL] Sopac query action string : " +codeName+"-display-query-results");
 	return codeName+"-query-results-url";
     }
     
@@ -93,15 +100,15 @@ public class GenericSopacBean extends GenericProjectBean{
 
 	String minMaxLatLon=null;
 	
-	System.out.println("[" + getUserName() + "/GenericSopacBean/querySOPAC] Do the query");
-	System.out.println("[" + getUserName() + "/GenericSopacBean/querySOPAC] Use bounding box:"+bboxChecked);
-	System.out.println("[" + getUserName() + "/GenericSopacBean/querySOPAC] " + siteCode);
-	System.out.println("[" + getUserName() + "/GenericSopacBean/querySOPAC] " + beginDate);
-	System.out.println("[" + getUserName() + "/GenericSopacBean/querySOPAC] " + endDate);
-	System.out.println("[" + getUserName() + "/GenericSopacBean/querySOPAC] " + resource);	
-	System.out.println("[" + getUserName() + "/GenericSopacBean/querySOPAC] " + contextGroup);	
-	System.out.println("[" + getUserName() + "/GenericSopacBean/querySOPAC] " + contextId);	
-	System.out.println("[" + getUserName() + "/GenericSopacBean/querySOPAC] " + minMaxLatLon);	
+	logger.info("[" + getUserName() + "/GenericSopacBean/querySOPAC] Do the query");
+	logger.info("[" + getUserName() + "/GenericSopacBean/querySOPAC] Use bounding box:"+bboxChecked);
+	logger.info("[" + getUserName() + "/GenericSopacBean/querySOPAC] " + siteCode);
+	logger.info("[" + getUserName() + "/GenericSopacBean/querySOPAC] " + beginDate);
+	logger.info("[" + getUserName() + "/GenericSopacBean/querySOPAC] " + endDate);
+	logger.info("[" + getUserName() + "/GenericSopacBean/querySOPAC] " + resource);	
+	logger.info("[" + getUserName() + "/GenericSopacBean/querySOPAC] " + contextGroup);	
+	logger.info("[" + getUserName() + "/GenericSopacBean/querySOPAC] " + contextId);	
+	logger.info("[" + getUserName() + "/GenericSopacBean/querySOPAC] " + minMaxLatLon);	
 
 
 	if(bboxChecked) {
@@ -113,13 +120,13 @@ public class GenericSopacBean extends GenericProjectBean{
 	gsq.setFromServlet(siteCode, beginDate, endDate, resource,
 			   contextGroup, contextId, minMaxLatLon);
 	sopacQueryResults=gsq.getResource();
-	//	System.out.println(sopacQueryResults);
+	//	logger.info(sopacQueryResults);
 	
 	sopacDataFileContent=sopacQueryResults;
 		
 	String codeName=getCodeName();
 	codeName=codeName.toLowerCase();
-	System.out.println("[" + getUserName() + "/GenericSopacBean/querySOPAC] Sopac query action string:"+codeName+"-display-query-results");
+	logger.info("[" + getUserName() + "/GenericSopacBean/querySOPAC] Sopac query action string:"+codeName+"-display-query-results");
 	return codeName+"-display-query-results";
     }
     
@@ -135,7 +142,7 @@ public class GenericSopacBean extends GenericProjectBean{
 	//We just need to clean it up and add it to the context
 	
 	//	cm.setCurrentProperty(contextName,"sopacDataFileName",sopacDataFileName);
-	System.out.println("[" + getUserName() + "/GenericSopacBean/createSopacDataFile] Writing input file: "+contextDir+"/"+sopacDataFileName);
+	logger.info("[" + getUserName() + "/GenericSopacBean/createSopacDataFile] Writing input file: "+contextDir+"/"+sopacDataFileName);
 	PrintWriter pw=
 	    new PrintWriter(new FileWriter(contextDir+"/"+sopacDataFileName),true);
 	pw.println(sopacDataFileContent);
@@ -148,7 +155,7 @@ public class GenericSopacBean extends GenericProjectBean{
     
     
     public String setTheStation() {
-	System.out.println("[" + getUserName() + "/GenericSopacBean/setTheStation] " + siteCode);
+	logger.info("[" + getUserName() + "/GenericSopacBean/setTheStation] " + siteCode);
 	return "parameters-to-database";
     }
     

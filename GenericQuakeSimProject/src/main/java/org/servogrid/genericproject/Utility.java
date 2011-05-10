@@ -17,7 +17,7 @@ public class Utility {
     static FacesContext facesContext=null;
     static ExternalContext extrenalContext=null;
     static Object requestObj=null;
-
+	 
     public static String getUserName(String defaultName) {
 	
         String userName = defaultName;
@@ -25,20 +25,23 @@ public class Utility {
         if(context == null)
             return defaultName;
         requestObj = context.getRequest();
-        if(requestObj instanceof PortletRequest)
-        {
+        if(requestObj instanceof PortletRequest) {
+				
             // System.out.println("[Utility/getUserName] This request is an instanceof PortletRequest");
             Map userInfo = (Map)((PortletRequest)requestObj).getAttribute("javax.portlet.userinfo");
             userName = userInfo == null ? null : (String)userInfo.get("user.name");
-            if(userName == null)
+            if(userName == null) {
                 userName = ((PortletRequest)requestObj).getRemoteUser();
-            if(userName == null)
+				}
+				//Still null?  Use default name
+            if(userName == null) {
                 userName = defaultName;
+				}
             // System.out.println("[Utility/getUserName] Username : " + userName + "\n\n");
             return userName;
         }
-        if(requestObj instanceof HttpServletRequest)
-        {
+
+        if(requestObj instanceof HttpServletRequest){
             // System.out.println("[Utility/getUserName] This request is an instanceof HttpServletRequest");
             HttpSession session = (HttpSession)context.getSession(false);
             HttpServletResponse res = (HttpServletResponse)FacesContext.getCurrentInstance().getExternalContext().getResponse();
@@ -46,8 +49,9 @@ public class Utility {
             java.util.Enumeration e = session.getAttributeNames();
             // System.out.println("[Utility/getUserName] Current page : " + req.getRequestURI());
             userName = (String)((HttpSession)(HttpSession)context.getSession(false)).getAttribute("email");
-            if(userName == null)
+            if(userName == null) {
                 userName = defaultName;
+				}
             // System.out.println("[Utility/getUserName] Username : " + userName + "\n\n");
             return userName;
         } else
