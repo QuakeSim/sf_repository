@@ -644,7 +644,8 @@ public class SimpleXDataKml {
 			
 			//"Decimation factor" keeps the number of arrows under control.
 			//Integer division used here on purpose. 
-			decimationFactor=datalist.length/100+1;
+			//			decimationFactor=datalist.length/100+1;
+			decimationFactor=1;
 			//System.out.println("Decimation factor:"+decimationFactor);
 			for (int i = 0; i < datalist.length; i=i+decimationFactor) { 
 				 // create and add a Placemark containing a Point 
