@@ -7,8 +7,10 @@
   </target>
 
   <target name="CopyLogo" depends="MakeWorkDir">
-	 <echo message="Copying logo from ${bindir.prop} to working directory ${worDir.prop}"/>
+	 <echo message="Copying logo from ${bindir.prop} to working directory ${workDir.prop}"/>
 	 <copy file="${bindir.prop}/QuakeSimLogoGrayEmboss.png"
+			 todir="${workDir.prop}"/>
+    <copy file="${bindir.prop}/QuakeSimLogoGrayEmbossSmall.png"
 			 todir="${workDir.prop}"/>
   </target>
   
