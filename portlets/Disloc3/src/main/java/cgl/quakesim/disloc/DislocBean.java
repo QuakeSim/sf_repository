@@ -67,7 +67,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	static final String SEPARATOR = "/";
 	 
 	 //Some useful constants
-	 static final int MAX_PLOT_POINTS=1300;
+	 static final int MAX_PLOT_POINTS=500;
 
 	/**
 	 * The following are property fields. Associated get/set methods are at the
@@ -737,10 +737,40 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 			System.out.println("[" + getUserName() 
 									 + "/RssDisloc3/DislocBean/LoadDataFromUrl] dataset_temp.size() : " + dataset_temp.size());
 			
-			//Don't use the decimation routine.
-			//			dataset=dataset_temp;
+			dataset=decimateArrowPoints2(dataset_temp, total_points);
 			
-			//This is a decimation routine 
+		} catch (IOException ex1) {
+			 ex1.printStackTrace();
+		}
+		logger.info("[LoadDataFromUrl] Finished: will plot "+dataset.size()+" points.");
+		return (PointEntry[]) (dataset.toArray(new PointEntry[dataset.size()]));
+	}
+	 
+	 // End main execution method section.
+	 // --------------------------------------------------
+	 
+	 private ArrayList decimateArrowPoints2(ArrayList dataset_temp, int total_points){
+		  ArrayList dataset=new ArrayList();
+		  
+		  int stride=total_points/200+1;
+		  logger.info("Stride:"+stride);
+		  for(int i=0;i<total_points;i=i+stride) {
+				dataset.add(dataset_temp.get(i));
+		  }
+
+		  return dataset;
+		  
+	 }
+
+	 /**
+	  * This is a routine to limit the number of arrows that we plot.
+	  */
+	 private ArrayList decimateArrowPoints(ArrayList dataset_temp, int total_points){
+		  ArrayList dataset=new ArrayList();
+		  //Don't use the decimation routine.
+		  //			dataset=dataset_temp;
+		  
+		  //This is a decimation routine 
 			if (total_points <= MAX_PLOT_POINTS) {
 				dataset = dataset_temp;
 			}
@@ -773,7 +803,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 					 else if (nA < MAX_PLOT_POINTS) {
 						  ratio = 0.2;
 						  dist = (int)(MAX_PLOT_POINTS*0.2);
-						  start_point = (int)(MAX_PLOT_POINTS*0.5+MAX_PLOT_POINTS*0.3);
+						  start_point = (int)(MAX_PLOT_POINTS*0.8);
 						 index_e = (int) (total_points * 0.8);
 						 // System.out.println("3. " + nA + " <  " + total_points * 1.0);
 					 }
@@ -789,16 +819,9 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 					 
 				 }
 			}
-			
-		} catch (IOException ex1) {
-			ex1.printStackTrace();
-		}
-		logger.info("[LoadDataFromUrl] Finished: will plot "+dataset.size()+" points.");
-		return (PointEntry[]) (dataset.toArray(new PointEntry[dataset.size()]));
-	}
+			return dataset;
+	 }
 
-	// End main execution method section.
-	// --------------------------------------------------
 
 	public String getDBValue(Select select, String param, String theLayer)
 			throws Exception {
