@@ -161,7 +161,7 @@
 		  <h:outputText id="dislocCNPInstructions"
 							 value="To create a new, blank project, type in a name and hit enter."/>
 		  
-		  <h:panelGrid columns="3" border="0"> 
+		  <h:panelGrid id="loadprojectpgrid" columns="3" border="0"> 
 			 <h:outputText id="lpj_projectname" value="Project Name:" /> 
 			 <h:inputText id="projectName" 
 							  value="#{DislocBean2.projectName}" 

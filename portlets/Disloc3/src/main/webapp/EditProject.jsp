@@ -427,10 +427,10 @@ function getScrolling() {
 	 <%@include file="ScatterMap.jsp" %>
 	 <%@include file="FaultMapPanelFrame.jsp"%>
 	 <%@include file="ProjectOutputMap.jsp"%>
-
   </h:panelGrid>
+
   <%@include file="ProjectComponentPanel.jsp" %>
-  <%@include file="footerAnon.jsp" %>
+  <%@include file="footer.jsp" %>
   
 </f:view>
 

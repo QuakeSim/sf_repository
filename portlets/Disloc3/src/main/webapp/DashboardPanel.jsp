@@ -85,7 +85,7 @@
 		<h:commandButton id="rundisloc" 
 							  value="Run Disloc" 
 							  onclick="showLoading()"
-							  action="#{DislocBean2.runBlockingDislocJSFAnon}" /> 
+							  action="#{DislocBean2.runBlockingDislocJSFViewResults}" /> 
 	 </h:form>
   <f:verbatim></fieldset></f:verbatim>  
 </h:panelGroup> 

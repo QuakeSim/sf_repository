@@ -63,6 +63,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	static final String DEFAULT_USER_NAME = "disloc_default_user";
 	static final String DISLOC_NAV_STRING = "disloc-submitted";
 	static final String DISLOC_ANON_NAV_STRING = "anon-disloc-submitted";
+	 static final String DISLOC_LOOP_NAV_STRING="disloc-this";
 	static final String SEPARATOR = "/";
 
 	/**
@@ -541,6 +542,17 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		  //Always display the output map after running disloc
 		  renderProjectOutputMap=true;
 		  return DISLOC_ANON_NAV_STRING;
+	 }
+
+	 /**
+	  * This is a method that can be used to display the results of the 
+	  * simulation run on the EditProject page.  
+	  */
+	 public String runBlockingDislocJSFViewResults() throws Exception {
+		  runBlockingDislocJSF();
+		  renderProjectOutputMap=true;
+		  return DISLOC_LOOP_NAV_STRING;
+		  
 	 }
 
 	/**
@@ -3691,8 +3703,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 			ipb.setInsarKmlUrl(insarKmlUrl);
 			ipb.setCreationDate((new Date()).toString());
 
-			if (db != null)
-				db.close();
+			if (db != null) db.close();
 
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
 					+ userName + "/" + codeName + ".db");
@@ -3704,17 +3715,14 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 				db.set(ipb);
 			}
 			db.commit();
-			if (db != null)
-				db.close();
+			if (db != null) db.close();
 
 		} catch (Exception e) {
-			if (db != null)
-				db.close();
+			if (db != null) db.close();
 			System.out.println("[toggleReplotInsar] " + e);
 		}
 		finally {
-			 if (db != null)
-				 db.close();			
+			 if (db != null) db.close();			
 		}
 	}
 

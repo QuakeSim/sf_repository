@@ -73,13 +73,14 @@
 		  //Fade the png
 		  $(document).ready(function(){
 		    $(".faderButton").click(function() {
-			    $("#projectResultsDiv").find("img[src*='anonymousProject']").fadeTo("fast","0.75");			 
+			    $("#projectResultsDiv").find("img[src*='output']").fadeTo("fast","0.75");			 
 			  });
 		    $(".resetButton").click(function() {
-			    $("#projectResultsDiv").find("img[src*='anonymousProject']").fadeTo("fast","1.0");			 
+			    $("#projectResultsDiv").find("img[src*='output']").fadeTo("fast","1.0");			 
 			  });
 			  });
 		  var projectResultsDiv=new GMap2(document.getElementById("projectResultsDiv"));
+		  //This is a not very good workaround to just fade the insar overlay.
 		  var projectFaultKml="@host.base.url@@artifactId@/QuakeTables_CGS_2002.kml";
 		  var projectDislocOutput=document.getElementById("DislocDisplayProjectResults:myDislocOutput");
 		  var projectDislocInsar=document.getElementById("DislocDisplayProjectResults:myDislocInsar");
