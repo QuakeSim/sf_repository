@@ -737,7 +737,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 			//Don't use the decimation routine.
 			dataset=dataset_temp;
 			
-			//This is a decimation routine 
+			// //This is a decimation routine 
 			// if (total_points <= 1300) {
 			// 	dataset = dataset_temp;
 			// }
