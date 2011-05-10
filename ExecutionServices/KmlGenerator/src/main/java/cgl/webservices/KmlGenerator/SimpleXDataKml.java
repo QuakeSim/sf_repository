@@ -42,6 +42,10 @@ public class SimpleXDataKml {
 	 private double flattening= 1.0/298.247;
 	 private double yfactor=111.32;
  
+	 //This is used to control the number of arrows
+	 //plotted.
+	 private int decimationFactor;
+
 	 private double original_lat = 0; 
 	 private double original_lon = 0; 
 	 private double coordinateUnit = 1000.0; 
@@ -637,7 +641,11 @@ public class SimpleXDataKml {
 			
 			System.out.println("[SimplexDataKml/setArrowPlacemark] the size of the datalist : " 
 									 + datalist.length);
-			for (int i = 0; i < datalist.length; i++) { 
+			
+			//"Decimation factor" keeps the number of arrows under control.
+			//Integer division used here on purpose. 
+			decimationFactor=datalist.length/10+1;
+			for (int i = 0; i < datalist.length; i+decimationFactor) { 
 				 // create and add a Placemark containing a Point 
 				 Placemark mark1 = new Placemark();			 
 				 mark1.setName(datalist[i].getFolderTag() + i); 
