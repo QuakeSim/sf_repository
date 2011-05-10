@@ -22,6 +22,7 @@
 #   2010/09/20: fix white stripes
 #   2011/05/09: add QuakeSim logo
 #   2011/05/09: record parameters in kml files
+#   2011/05/10: temporary fix for QuakeSim logo on small image 
 #===================================================== 
  
 import csv, math, sys, os, math, string 
@@ -197,10 +198,13 @@ def drawimage(datatable,lonlatgrid, outputname, imageurl, params):
     plt.axis("off")
 
     # add QuakeSim logo
-    logo = mpimg.imread('QuakeSimLogoGrayEmboss.png')
-    logowidth = 100
-    logoheight = 37
-    fig.figimage(logo, fig.bbox.xmax, 10, zorder=1)
+    if (lonlatgrid[1] < 30) or (lonlatgrid[0] < 30):
+        logo = mpimg.imread('QuakeSimLogoGrayEmbossSmall.png')
+        fig.figimage(logo, xo=fig.bbox.xmax-40, yo=2,zorder=1)
+    else:
+        logo = mpimg.imread('QuakeSimLogoGrayEmboss.png')
+        fig.figimage(logo, xo=fig.bbox.xmax, yo=2,zorder=1)
+    
     
     plt.savefig(outputname + ".png", format="PNG",aspect="auto",transparent=True,dpi=(96)) 
 
