@@ -734,58 +734,61 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 			System.out.println("[" + getUserName() 
 									 + "/RssDisloc3/DislocBean/LoadDataFromUrl] dataset_temp.size() : " + dataset_temp.size());
 			
-			if (total_points <= 1300)
-				dataset = dataset_temp;
+			//Don't use the decimation routine.
+			dataset=dataset_temp;
 			
-			else {
-			
-				 for (int nA = 0 ; nA < 1300 ; nA++) {
+			//This is a decimation routine 
+			// if (total_points <= 1300) {
+			// 	dataset = dataset_temp;
+			// }
+			// else {
+			// 	 for (int nA = 0 ; nA < 1300 ; nA++) {
 					 
-					 double ratio = 1;
-					 int dist = 1;
-					 int start_point = 0;
-					 int index_e = 0;
+			// 		 double ratio = 1;
+			// 		 int dist = 1;
+			// 		 int start_point = 0;
+			// 		 int index_e = 0;
 					 
-					 // System.out.println("hello. " + total_points);			 
+			// 		 // System.out.println("hello. " + total_points);			 
 					 
-					 if (nA < 700) {
-						 // 700
-						 ratio = 0.5;
-						 dist = 700;
-						 start_point = 0;
-						 index_e = 0;
-						 // System.out.println("1. " + total_points * 0.5);
-					 }
+			// 		 if (nA < 700) {
+			// 			 // 700
+			// 			 ratio = 0.5;
+			// 			 dist = 700;
+			// 			 start_point = 0;
+			// 			 index_e = 0;
+			// 			 // System.out.println("1. " + total_points * 0.5);
+			// 		 }
 					 
-					 else if (nA < 1100) {
-						 // 400
-						 ratio = 0.3;
-						 dist = 400;
-						 start_point = 700;
-						 index_e = (int) (total_points * 0.5);
-						 // System.out.println("2. " + nA + " <  " + total_points * 0.8);
-					 }
+			// 		 else if (nA < 1100) {
+			// 			 // 400
+			// 			 ratio = 0.3;
+			// 			 dist = 400;
+			// 			 start_point = 700;
+			// 			 index_e = (int) (total_points * 0.5);
+			// 			 // System.out.println("2. " + nA + " <  " + total_points * 0.8);
+			// 		 }
 					 
-					 else if (nA < 1300) {
-						 // 200
-						 ratio = 0.2;
-						 dist = 200;
-						 start_point = 1100;
-						 index_e = (int) (total_points * 0.8);
-						 // System.out.println("3. " + nA + " <  " + total_points * 1.0);
-					 }
+			// 		 else if (nA < 1300) {
+			// 			 // 200
+			// 			 ratio = 0.2;
+			// 			 dist = 200;
+			// 			 start_point = 1100;
+			// 			 index_e = (int) (total_points * 0.8);
+			// 			 // System.out.println("3. " + nA + " <  " + total_points * 1.0);
+			// 		 }
 					 
-					 int nIndex = (int) ((total_points * ratio)/dist * (nA-start_point)) + index_e;
-					 // System.out.println(nIndex + " = " + total_points + "*" + ratio + "/" + dist + "*" + (nA-start_point));
-					 if (nIndex == total_points) {
-							 System.out.println("hit");
-							 nIndex -= 1;							 
-					 }
+			// 		 int nIndex = (int) ((total_points * ratio)/dist * (nA-start_point)) + index_e;
+			// 		 // System.out.println(nIndex + " = " + total_points + "*" + ratio + "/" + dist + "*" + (nA-start_point));
+			// 		 if (nIndex == total_points) {
+			// 				 System.out.println("hit");
+			// 				 nIndex -= 1;							 
+			// 		 }
 					 
-					 dataset.add(dataset_temp.get(nIndex));
+			// 		 dataset.add(dataset_temp.get(nIndex));
 					 
-				 }
-			}
+			// 	 }
+			// }
 			
 		} catch (IOException ex1) {
 			ex1.printStackTrace();
