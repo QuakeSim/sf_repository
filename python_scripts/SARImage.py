@@ -22,11 +22,14 @@
 #   2010/09/20: fix white stripes
 #   2011/05/09: add QuakeSim logo
 #   2011/05/09: record parameters in kml files
-#   2011/05/10: temporary fix for QuakeSim logo on small image 
+#   2011/05/10: temporary fix for QuakeSim logo on small image
+#   2011/05/12: auto risize logo with Image package
+#   2011/05/12: increase the general image size ( ~20 %)
 #===================================================== 
  
 import csv, math, sys, os, math, string 
- 
+import Image
+
 try:
     import numpy as np 
     import matplotlib.cm as cm 
@@ -191,20 +194,30 @@ def drawimage(datatable,lonlatgrid, outputname, imageurl, params):
     colm = np.array(colormatrx[(p - 1)*16:p*16]) 
     newimg = colm[z] 
     newimg = newimg.reshape(lonlatgrid[1],lonlatgrid[0],3) 
+
     # figsize 
-    fig = plt.figure(figsize=(lonlatgrid[0]/12.0,lonlatgrid[1]/12.0)) 
+    fig = plt.figure(figsize=(lonlatgrid[0]/10.0,lonlatgrid[1]/10.0)) 
     fig.subplots_adjust(left=0.0,bottom=0.0,top=1.0,right=1.0) 
     im = plt.imshow(newimg,interpolation='spline16',origin='lower') 
     plt.axis("off")
 
+    # maxlogowidth < 40% of the image width
+    maxlogowidth = int(round(0.4*96*lonlatgrid[0]/10.0))
+    logo = Image.open('QuakeSimLogoGrayEmboss.png')
+    xshift = 0
+    if logo.size[0] > maxlogowidth:
+        logo = logo.resize((maxlogowidth,int(round(maxlogowidth*1.0/logo.size[0]*logo.size[1]))))
+        xshift = maxlogowidth * 0.7
     # add QuakeSim logo
-    if (lonlatgrid[1] < 30) or (lonlatgrid[0] < 30):
-        logo = mpimg.imread('QuakeSimLogoGrayEmbossSmall.png')
-        fig.figimage(logo, xo=fig.bbox.xmax-40, yo=2,zorder=1)
-    else:
-        logo = mpimg.imread('QuakeSimLogoGrayEmboss.png')
-        fig.figimage(logo, xo=fig.bbox.xmax, yo=2,zorder=1)
+    #if (lonlatgrid[1] < 30) or (lonlatgrid[0] < 30):
+    #    logo = mpimg.imread('QuakeSimLogoGrayEmbossSmall.png')
+    #    fig.figimage(logo, xo=fig.bbox.xmax-40, yo=2,zorder=1)
+    #else:
+    #    logo = mpimg.imread('QuakeSimLogoGrayEmboss.png')
+    #    fig.figimage(logo, xo=fig.bbox.xmax, yo=2,zorder=1)
     
+    logo1 = np.asarray(logo)/255.0
+    fig.figimage(logo1, xo=fig.bbox.xmax - xshift, yo=2,zorder=1)
     
     plt.savefig(outputname + ".png", format="PNG",aspect="auto",transparent=True,dpi=(96)) 
 
