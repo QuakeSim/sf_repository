@@ -282,20 +282,6 @@ public class DailyRDAHMMThread implements Runnable {
 	 * @param eleRoot
 	 */
 	private void addResToXMLDoc(Calendar today, DailyRDAHMMStation station, Element eleRoot, Element eleRootPretty) {
-		Calendar now = Calendar.getInstance();
-		String nowStr = UtilSet.getDateTimeString(now);
-		Element eleUpdateTime = eleRoot.element("update-time");
-		if (eleUpdateTime == null) {
-			eleUpdateTime = eleRoot.addElement("update-time");
-		}
-		eleUpdateTime.setText(nowStr);
-		
-		eleUpdateTime = eleRootPretty.element("update-time");
-		if (eleUpdateTime == null) {
-			eleUpdateTime = eleRootPretty.addElement("update-time");
-		}
-		eleUpdateTime.setText(nowStr);		
-		
 		// if the rdahmm result output-pattern element is not there, create a new one
 		addElePattern(station, eleRoot);
 		addElePattern(station, eleRootPretty);
@@ -452,6 +438,31 @@ public class DailyRDAHMMThread implements Runnable {
 	}
 
 	protected void addElePattern(DailyRDAHMMStation station, Element eleRoot) {
+		Calendar now = Calendar.getInstance();
+		String nowStr = UtilSet.getDateTimeString(now);
+		String todayStr = UtilSet.getDatePart(nowStr);
+		Element eleUpdateTime = eleRoot.element("update-time");
+		if (eleUpdateTime == null) {
+			eleUpdateTime = eleRoot.addElement("update-time");
+		}
+		eleUpdateTime.setText(nowStr);
+		
+		if (eleRoot.element("data-source") == null) {
+			eleRoot.addElement("data-source").setText(DailyRDAHMMStation.dataSource + "_" + DailyRDAHMMStation.noDataTreatment);
+		}
+		if (eleRoot.element("begin-date") == null) {
+			eleRoot.addElement("begin-date").setText(DailyRDAHMMStation.defaultModelStartDate);
+		}
+		if (eleRoot.element("end-date") == null) {
+			eleRoot.addElement("end-date").setText(todayStr);
+		}
+		if (eleRoot.element("center-longitude") == null) {
+			eleRoot.addElement("center-longitude").setText(DailyRDAHMMStation.mapCenterLon);
+		}
+		if (eleRoot.element("center-latitude") == null) {
+			eleRoot.addElement("center-latitude").setText(DailyRDAHMMStation.mapCenterLat);
+		}
+		
 		Element elePattern = eleRoot.element("output-pattern");
 		if (elePattern == null) {
 			elePattern = eleRoot.addElement("output-pattern");						

@@ -87,6 +87,10 @@ public class DailyRDAHMMStation {
 	static String xyz2llhCmdPattern;
 	/** command line pattern for querying data from the UNAVCO context group */
 	static String unavcoQueryCmdPattern;
+	/** center longitude to use when the result is shown in a map */
+	static String mapCenterLon;
+	/** center latitude to use when the result is shown in a map */
+	static String mapCenterLat;
 	
 	String stationId;
 	float latitude;
@@ -224,6 +228,8 @@ public class DailyRDAHMMStation {
 		denoiseEnabled = Boolean.valueOf(prop.getProperty("dailyRdahmm.denoise.enabled"));
 		xyz2llhCmdPattern = prop.getProperty("dailyRdahmm.xyz2llh.cmd.pattern");
 		unavcoQueryCmdPattern = prop.getProperty("dailyRdahmm.unavcoQuery.cmd.pattern");
+		mapCenterLat = prop.getProperty("dailyRdahmm.mapCenter.latitude");
+		mapCenterLon = prop.getProperty("dailyRdahmm.mapCenter.longitude");
 	}
 	
 	/**
@@ -416,12 +422,12 @@ public class DailyRDAHMMStation {
 		}
 		String zipCmd = zipCmdPattern;
 		zipCmd = zipCmd.replaceFirst("<archivePath>", modelZipPath);
-		zipCmd = zipCmd.replaceFirst("<dirPath>", modelDirPath);
+		zipCmd = zipCmd.replaceFirst("<dirPath>", modelBaseName);
 		String progPath = UtilSet.getProgFromCmdLine(zipCmd);
 		String[] args = UtilSet.getArgsFromCmdLine(zipCmd);
 		String outputPath = modelDirPath + File.separator + modelBaseName + ".zip_out";
 		String errPath = modelDirPath + File.separator + modelBaseName + ".zip_err";
-		UtilSet.antExecute(progPath, args, binDir, null, null, outputPath, errPath);
+		UtilSet.antExecute(progPath, args, baseWorkDir, null, null, outputPath, errPath);
 		String stdOutStr = UtilSet.readFileContentAsString(new File(outputPath));
 		String stdErrStr = UtilSet.readFileContentAsString(new File(errPath));
 		if (stdOutStr.toLowerCase().indexOf("error") >= 0 || stdErrStr.toLowerCase().indexOf("error") >= 0) {
