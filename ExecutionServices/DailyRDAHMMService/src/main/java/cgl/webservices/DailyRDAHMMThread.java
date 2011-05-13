@@ -250,7 +250,7 @@ public class DailyRDAHMMThread implements Runnable {
 				if (doNextStep) {
 					addResToXMLDoc(today, station, eleXml, eleXmlPretty);
 
-					// write the document back to file					
+					// write the document back to file
 					OutputFormat format = OutputFormat.createPrettyPrint();
 					FileWriter fw2 = new FileWriter(outputPretty);
 					XMLWriter writer2 = new XMLWriter(fw2, format);
@@ -736,7 +736,7 @@ public class DailyRDAHMMThread implements Runnable {
 		try {
 			FileWriter fw = new FileWriter(scnPath, false);
 			FileWriter fwJsi = new FileWriter(jsiPath, false);
-			fwJsi.write("Date,Count\n");
+			fwJsi.write("Date,NumberOfStateChanges\n");
 			synchronized (runner.stateChangeNums) {
 				while (calTmp.compareTo(calToday) <= 0) {
 					String strDate = UtilSet.getDateString(calTmp);
