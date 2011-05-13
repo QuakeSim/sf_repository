@@ -73,6 +73,8 @@ public class DailyRdahmmResultAnalyzer {
 	
 	private Calendar calLastUpdate = null;
 	private Calendar calResXml = null;
+	private Calendar calBeginDate = null;
+	private Calendar calEndDate = null;
 	private String dataLatestDate = null;
 	
 	String urlPattern;
@@ -96,14 +98,17 @@ public class DailyRdahmmResultAnalyzer {
 	String modelPattern;
 	String swfInputPattern;
 	String dataSourceSubDir;
+	String dataSource;
+	String mapCenterLon;
+	String mapCenterLat;
 	boolean stateSeqLoaded;
 	
 	public DailyRdahmmResultAnalyzer (String xmlResUrl) {
 		try {
 			this.xmlResUrl = xmlResUrl;
 			calResXml = UtilSet.getDateFromString("1994-01-01");
-			getAndAnalyzeXmlRes();
 			calLastUpdate = Calendar.getInstance();
+			getAndAnalyzeXmlRes();			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -143,6 +148,17 @@ public class DailyRdahmmResultAnalyzer {
 		rangePattern = eleOutput.element("RangeFile").getText();
 		modelPattern = eleOutput.element("ModelFiles").getText();
 		swfInputPattern = eleOutput.element("SwfInputFile").getText();
+		dataSource = eleXml.elementText("data-source");
+		if (calBeginDate == null){
+			calBeginDate = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+		}
+		UtilSet.setDateByString(calBeginDate, eleXml.elementText("begin-date"));
+		if (calEndDate == null) {
+			calEndDate = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+		}
+		UtilSet.setDateByString(calEndDate, eleXml.elementText("end-date"));
+		mapCenterLon = eleXml.elementText("center-longitude");
+		mapCenterLat = eleXml.elementText("center-latitude");
 		
 		List lStations = eleXml.elements("station");
 		stationArray = new DailyRdahmmStation[lStations.size()];
@@ -294,12 +310,7 @@ public class DailyRdahmmResultAnalyzer {
 			StringBuffer res;
 			res = new StringBuffer();
 
-			Calendar theDate = new GregorianCalendar(
-					TimeZone.getTimeZone("GMT"));
-			theDate.set(Calendar.HOUR_OF_DAY, 12);
-			theDate.set(Calendar.MINUTE, 0);
-			theDate.set(Calendar.SECOND, 0);
-			theDate.set(Calendar.MILLISECOND, 0);
+			Calendar theDate = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
 			UtilSet.setDateByString(theDate, date);
 			for (int i = 0; i < stationArray.length; i++) {
 				res.append(getColorForStation(theDate, stationArray[i])).append(',');
@@ -322,7 +333,10 @@ public class DailyRdahmmResultAnalyzer {
 				getAndAnalyzeXmlRes();
 				calLastUpdate.setTimeInMillis(System.currentTimeMillis());
 			}
-
+			if (theDate.before(calBeginDate)) {
+				return '3';
+			}
+			
 			int NDAYS = 30;
 			Calendar firstDate = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
 			UtilSet.nDaysBefore(firstDate, NDAYS, theDate);
@@ -493,6 +507,13 @@ public class DailyRdahmmResultAnalyzer {
 	 * If there is no data for 'station' on 'theDate', get the index in the no data sections array
 	 * */
 	protected int getNoDataIdx(Calendar theDate, DailyRdahmmStation station) {
+		if (theDate.before(calBeginDate)) {
+			return 0;
+		}
+		if (theDate.after(calEndDate)) {
+			return station.noDataSections.length - 2;
+		}
+		
 		int idx1 = 0;
 		int idx2 = station.noDataSections.length / 2 - 1;
 		// since javascript time is larger than java time by timeDiff, and the time stored in the station Array is java time, we should reduce javascript time by timeDiff to make it comparable with java time

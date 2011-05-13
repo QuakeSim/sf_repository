@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Calendar;
+import java.util.Random;
+import java.util.TreeSet;
 import java.util.Vector;
 
 public class UtilSet {
@@ -341,5 +343,17 @@ public class UtilSet {
 		String res = service.calcStationColors(args[0], args[1]);
 		System.out.println(res);
 		*/
+		
+		Integer[] a = new Integer[20];
+		TreeSet<Integer> ts = new TreeSet<Integer>();
+		Random r = new Random();
+		for (int i=0; i<a.length; i++) {
+			ts.add(r.nextInt(100));
+		}
+		Integer[] res = ts.toArray(a);
+		for (int i=0; i<res.length; i++) {
+			System.out.print(res[i] + ", ");
+		}
+		
 	}
 }

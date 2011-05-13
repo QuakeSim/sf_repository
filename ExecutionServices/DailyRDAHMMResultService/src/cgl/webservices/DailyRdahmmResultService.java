@@ -35,6 +35,8 @@ public class DailyRdahmmResultService {
 	static long kmlCleanUpPeriod;
 	static long plotCleanUpPeriod;
 	static String resultLocalDir;
+	static String quakesimLogoLink;
+	static String kmlCameraHeight;
 	protected HashMap<String, DailyRdahmmResultAnalyzer> analyzerTable;
 	protected long lastKmlDeletionTime;
 	protected long lastPlotDeletionTime;
@@ -63,6 +65,8 @@ public class DailyRdahmmResultService {
 			kmlCleanUpPeriod = Long.parseLong(propConfig.getProperty("kmlCleanUpPeriodDays")) * ObsoleteFileDeleter.DAY_MILISEC_COUNT;
 			plotCleanUpPeriod = Long.parseLong(propConfig.getProperty("plotCleanUpPeriodDays"))	* ObsoleteFileDeleter.DAY_MILISEC_COUNT;
 			resultLocalDir = propConfig.getProperty("resultLocalDir");
+			quakesimLogoLink = propConfig.getProperty("quakesimLogoLink");
+			kmlCameraHeight = propConfig.getProperty("kmlCameraHeight");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -192,6 +196,79 @@ public class DailyRdahmmResultService {
 					fw.write("0\n");
 				}				
 				calTmp.set(Calendar.DATE, calTmp.get(Calendar.DATE) + 1);
+			}			
+			fw.flush();
+			fw.close();
+			return plotUrlPattern.replace("<fileName>", fileName);
+		} catch (Exception e){
+			e.printStackTrace();
+			return "";
+		}
+	}
+	
+	public String getStateChangeNumberTrace(String resUrl, float minLat, float maxLat, float minLong, float maxLong) {
+		if (resUrl == null || resUrl.length() == 0) {
+			return "";
+		}
+		
+		deleteObsoletePlot();				
+		DailyRdahmmResultAnalyzer analyzer = analyzerTable.get(resUrl);
+		if (analyzer == null) {
+			analyzer = addAnalyzer(resUrl);
+		}
+		
+		// count state changes for all stations within the bounding box
+		HashMap<String, Integer> stateChangeNums = new HashMap<String, Integer>();
+		Calendar tmpDate = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+		for (int i=0; i<analyzer.stationArray.length; i++) {
+			if (analyzer.stationArray[i].latitude < minLat || analyzer.stationArray[i].latitude > maxLat
+				|| analyzer.stationArray[i].longitude < minLong || analyzer.stationArray[i].longitude > maxLong ){
+				continue;
+			}
+			
+			int[] stateChanges = analyzer.stationArray[i].stateChanges;
+			if (stateChanges == null) {
+				continue;
+			}
+			for (int j=0; j<stateChanges.length; j+=3) {
+				tmpDate.setTimeInMillis(stateChanges[j] * DailyRdahmmResultAnalyzer.DAY_MILLI);
+				String dateStr = UtilSet.getDateString(tmpDate);
+				Integer oldCount = stateChangeNums.get(dateStr);
+				if (oldCount == null) {
+					oldCount = 0;
+				}
+				stateChangeNums.put(dateStr, oldCount+1);
+			}
+		}
+		
+		// save the counts into file
+		File destDirFile = new File(destPlotDir);
+		if (!destDirFile.exists()) {
+			if (!destDirFile.mkdirs())
+				return "";
+		}
+		long timeStamp = System.currentTimeMillis();
+		String fileName = "scn_" + timeStamp + ".txt";
+		String txtPath = destPlotDir + File.separator + fileName;
+		Calendar calTmp = UtilSet.getDateFromString("1994-01-01");
+		Calendar calToday = Calendar.getInstance();
+		calToday.set(Calendar.HOUR_OF_DAY, 12);
+		calToday.set(Calendar.MINUTE, 0);
+		calToday.set(Calendar.SECOND, 0);
+		calToday.set(Calendar.MILLISECOND, 0);
+		
+		try {
+			FileWriter fw = new FileWriter(txtPath, false);
+			fw.write("Date,NumberOfStateChanges\n");
+			while (calTmp.compareTo(calToday) <= 0) {
+				String strDate = UtilSet.getDateString(calTmp);
+				fw.write(strDate + ",");
+				if (stateChangeNums.containsKey(strDate)) {
+					fw.write(stateChangeNums.get(strDate).intValue() + "\n");
+				} else {
+					fw.write("0\n");
+				}				
+				calTmp.set(Calendar.DATE, calTmp.get(Calendar.DATE) + 1);
 			}
 			
 			fw.flush();
@@ -205,7 +282,7 @@ public class DailyRdahmmResultService {
 		String workDir = plotBinPath.substring(0, idx);
 		String res = UtilSet.exec(plotBinPath + " " + txtPath, new File(workDir));
 		System.out.println("output from plotting script: " + res);
-		return plotUrlPattern.replace("<fileName>", fileName + ".png");
+		return plotUrlPattern.replace("<fileName>", fileName);
 	}
 	
 	/**
@@ -272,6 +349,21 @@ public class DailyRdahmmResultService {
 			eleHref.setText(urls[i]);
 			eleStyle.addElement("LabelStyle").addElement("scale").setText("0");
 		}
+		
+		// add the quakesim logo
+		Element eleSo = eleDoc.addElement("ScreenOverlay");
+		eleSo.addElement("name").setText("QuakeSimLogo");
+		eleSo.addElement("Icon").addElement("href").setText(quakesimLogoLink);
+		Element eleOxy = eleSo.addElement("overlayXY");
+		eleOxy.addAttribute("x", "1");
+		eleOxy.addAttribute("y", "0");
+		eleOxy.addAttribute("xunits", "fraction");
+		eleOxy.addAttribute("yunits", "fraction");
+		Element eleSxy = eleSo.addElement("overlayXY");
+		eleSxy.addAttribute("x", "1");
+		eleSxy.addAttribute("y", "15");
+		eleSxy.addAttribute("xunits", "fraction");
+		eleSxy.addAttribute("yunits", "pixels");
 		
 		for (int i=0; i<stations.length; i++) {
 			Element eleMark = eleDoc.addElement("Placemark");
@@ -398,6 +490,21 @@ public class DailyRdahmmResultService {
 			eleStyle.addElement("LabelStyle").addElement("scale").setText("0");
 		}
 		
+		// add the quakesim logo
+		Element eleSo = eleDoc.addElement("ScreenOverlay");
+		eleSo.addElement("name").setText("QuakeSimLogo");
+		eleSo.addElement("Icon").addElement("href").setText(quakesimLogoLink);
+		Element eleOxy = eleSo.addElement("overlayXY");
+		eleOxy.addAttribute("x", "1");
+		eleOxy.addAttribute("y", "0");
+		eleOxy.addAttribute("xunits", "fraction");
+		eleOxy.addAttribute("yunits", "fraction");
+		Element eleSxy = eleSo.addElement("screenXY");
+		eleSxy.addAttribute("x", "1");
+		eleSxy.addAttribute("y", "15");
+		eleSxy.addAttribute("xunits", "fraction");
+		eleSxy.addAttribute("yunits", "pixels");
+		
 		while (calFrom.compareTo(calTo) <= 0) {
 			eleDoc = eleFolder.addElement("Document");
 			String dateStr = UtilSet.getDateString(calFrom);
@@ -442,7 +549,7 @@ public class DailyRdahmmResultService {
 			writer.close();
 			fw.close();
 			
-			String res = UtilSet.exec("zip -D " + kmzPath + " " + kmlFileName, new File(destKmlDir));
+			String res = UtilSet.exec("zip -r -D " + kmzPath + " " + kmlFileName, new File(destKmlDir));
 			res = res.toLowerCase();
 			if (res.indexOf("error") >= 0 || res.indexOf("not found") >= 0) {
 				return kmlUrlPattern.replace("<fileName>", kmlFileName);
@@ -469,16 +576,7 @@ public class DailyRdahmmResultService {
 			System.out.println("resUrl is null or empty in getKmlForDateRange2(). fromDate: " + fromDateStr + ", toDate: " + toDateStr);
 			return "";
 		}
-		
 		deleteObsoleteKml();
-		String contextGroup = "SOPAC";
-		if (resUrl.toUpperCase().indexOf("JPL") >= 0) {
-			contextGroup = "JPL";
-		}
-		String preTreat = "FILL";
-		if (resUrl.toUpperCase().indexOf("NOFILL") >= 0) {
-			preTreat = "NOFILL";
-		}
 		
 		Calendar calFrom = UtilSet.getDateFromString(fromDateStr);
 		Calendar calTo = UtilSet.getDateFromString(toDateStr);
@@ -492,8 +590,13 @@ public class DailyRdahmmResultService {
 		fromDateStr = UtilSet.getDateString(calFrom);
 		toDateStr = UtilSet.getDateString(calTo);
 		
+		DailyRdahmmResultAnalyzer analyzer = analyzerTable.get(resUrl);
+		if (analyzer == null) {
+			analyzer = addAnalyzer(resUrl);
+		}
+		
 		// create the directory for the kmz
-		String kmzDirName = contextGroup + "_" + preTreat + "_" + fromDateStr + "to" + toDateStr + "on" + todayStr;
+		String kmzDirName = analyzer.dataSource + "_" + fromDateStr + "to" + toDateStr + "on" + todayStr;
 		String kmzDirPath = destKmlDir + File.separator + kmzDirName;
 		String kmzFileName = kmzDirName + ".kmz";
 		String kmzFilePath = destKmlDir + File.separator + kmzFileName;
@@ -512,43 +615,47 @@ public class DailyRdahmmResultService {
 		}
 		kmzDirFile.mkdirs();
 		
-		// create the directory for sub kmls
-		String subDirName = "subdocs";
-		String subDirPath = kmzDirPath + File.separator + subDirName;
-		File subDirFile = new File(subDirPath);
-		subDirFile.mkdir();
-		
-		// create the top level kml
-		String kmlFileName = contextGroup + "_" + preTreat + "_" + fromDateStr + "to" + toDateStr + "on" + todayStr + ".kml";
+		// create the top level kml use "0.kml" as the file name to make sure it is first opened
+		String kmlFileName = kmzDirName + ".kml";
 		String kmlPath = kmzDirPath + File.separator + kmlFileName;		
 		Document kmlDoc = DocumentHelper.createDocument();
 		Element eleKml = kmlDoc.addElement("kml");
 		eleKml.addAttribute("xmlns", "http://www.opengis.net/kml/2.2");
 		Element eleFolder = eleKml.addElement("Folder");
-		eleFolder.addElement("open").setText("1");		
+		eleFolder.addElement("open").setText("1");
 		
+		// add the "LookAt" element in the top kml
+		Element eleLookAt = eleFolder.addElement("LookAt");
+		eleLookAt.addElement("longitude").setText(analyzer.mapCenterLon);
+		eleLookAt.addElement("latitude").setText(analyzer.mapCenterLat);
+		eleLookAt.addElement("altitude").setText(DailyRdahmmResultService.kmlCameraHeight);
+		eleLookAt.addElement("altitudeMode").setText("absolute");
+		
+		// add links to sub documents		
 		Calendar calTmp = Calendar.getInstance();
 		calTmp.setTimeInMillis(calFrom.getTimeInMillis());
 		Calendar calTmp2 = Calendar.getInstance();
-		calTmp2.set(Calendar.MONTH, Calendar.DECEMBER);
-		calTmp2.set(Calendar.DAY_OF_MONTH, 31);
+		calTmp2.setTimeInMillis(calTmp.getTimeInMillis());
+		calTmp2.set(Calendar.YEAR, calTmp2.get(Calendar.YEAR) + 1);
 		String tmpFromDateStr;
 		String tmpToDateStr;
-		while (calTmp.get(Calendar.YEAR) <= calTo.get(Calendar.YEAR)) {
-			if (calTmp.get(Calendar.YEAR) < calTo.get(Calendar.YEAR)) {
-				calTmp2.set(Calendar.YEAR, calTmp.get(Calendar.YEAR));
-				tmpFromDateStr = UtilSet.getDateString(calTmp);
+		while (calTmp.compareTo(calTo) <= 0) {
+			tmpFromDateStr = UtilSet.getDateString(calTmp);
+			if (calTmp2.compareTo(calTo) <= 0) {
 				tmpToDateStr = UtilSet.getDateString(calTmp2);
+				createSubKml(analyzer, calTmp, calTmp2, kmzDirPath, calTmp2.equals(calTo), calTmp.equals(calFrom));
 			} else {
-				tmpFromDateStr = UtilSet.getDateString(calTmp);
 				tmpToDateStr = UtilSet.getDateString(calTo);
-			}
-			String relSubDocPath = subDirName + File.separator + tmpFromDateStr + "to" + tmpToDateStr + ".kml";
-			eleFolder.addElement("Link").addElement("href").setText(relSubDocPath);
-			calTmp.set(Calendar.YEAR, calTmp.get(Calendar.YEAR) + 1);
-			calTmp.set(Calendar.MONTH, Calendar.JANUARY);
-			calTmp.set(Calendar.DAY_OF_MONTH, 1);
-		}		
+				createSubKml(analyzer, calTmp, calTo, kmzDirPath, true, calTmp.equals(calFrom));
+			}			
+			String relSubDocPath = kmzDirName + "/" + tmpFromDateStr + "to" + tmpToDateStr + ".xml";
+			Element eleNetLink = eleFolder.addElement("NetworkLink");
+			eleNetLink.addElement("Link").addElement("href").setText(relSubDocPath);
+			
+			calTmp.setTimeInMillis(calTmp2.getTimeInMillis() + ObsoleteFileDeleter.DAY_MILISEC_COUNT);
+			calTmp2.setTimeInMillis(calTmp.getTimeInMillis());
+			calTmp2.set(Calendar.YEAR, calTmp2.get(Calendar.YEAR) + 1);
+		}
 		try {
 			FileWriter fw = new FileWriter(kmlPath);
 			OutputFormat format = OutputFormat.createPrettyPrint();
@@ -561,16 +668,55 @@ public class DailyRdahmmResultService {
 			return "";
 		}
 		
-		// create sub kml documents
+		String res = UtilSet.exec("zip -D -r " + kmzFilePath + " " + kmzDirName, new File(destKmlDir));
+		res = res.toLowerCase();
+		if (res.indexOf("error") >= 0 || res.indexOf("not found") >= 0) {
+			return kmlUrlPattern.replace("<fileName>", kmzDirName + "/" + kmlFileName);
+		} else {
+			UtilSet.deleteDirectory(new File(kmzDirPath));
+			return kmlUrlPattern.replace("<fileName>", kmzFileName);
+		}
+	}
+	
+	/**
+	 * create sub kml document for the time between calFrom and calTo
+	 * @param analyzer
+	 * @param calFrom
+	 * @param CalTo
+	 * @param subDirPath
+	 * @param addPopUp
+	 */
+	protected void createSubKml(DailyRdahmmResultAnalyzer analyzer, Calendar calFrom, Calendar calTo, String subDirPath, boolean addPopUp, boolean addLogo) {
+		String fromDateStr = UtilSet.getDateString(calFrom);
+		String toDateStr = UtilSet.getDateString(calTo);		 
+		String kmlFileName = fromDateStr + "to" + toDateStr + ".xml";
+		String kmlPath = subDirPath + File.separator + kmlFileName;
+				
+		Document kmlDoc = DocumentHelper.createDocument();
+		Element eleKml = kmlDoc.addElement("kml");
+		eleKml.addAttribute("xmlns", "http://www.opengis.net/kml/2.2");
+		Element eleFolder = eleKml.addElement("Folder");
+		eleFolder.addElement("open").setText("1");
 		
-		
-		DailyRdahmmResultAnalyzer analyzer = analyzerTable.get(resUrl);
-		if (analyzer == null) {
-			analyzer = addAnalyzer(resUrl);
+		// add the quakesim logo
+		if (addLogo) {
+			Element eleDoc = eleFolder.addElement("Document");
+			Element eleSo = eleDoc.addElement("ScreenOverlay");
+			eleSo.addElement("name").setText("QuakeSimLogo");
+			eleSo.addElement("Icon").addElement("href").setText(quakesimLogoLink);
+			Element eleOxy = eleSo.addElement("overlayXY");
+			eleOxy.addAttribute("x", "1");
+			eleOxy.addAttribute("y", "0");
+			eleOxy.addAttribute("xunits", "fraction");
+			eleOxy.addAttribute("yunits", "fraction");
+			Element eleSxy = eleSo.addElement("screenXY");
+			eleSxy.addAttribute("x", "1");
+			eleSxy.addAttribute("y", "15");
+			eleSxy.addAttribute("xunits", "fraction");
+			eleSxy.addAttribute("yunits", "pixels");
 		}
 		
-		DailyRdahmmStation[] stations = analyzer.stationArray;
-		
+		// add the icon styles		
 		Element eleDoc = eleFolder.addElement("Document");
 		eleDoc.addElement("name").setText("Style Definitions");
 		String[] styleIds = {"greenIconStyle", "redIconStyle", "yellowIconStyle", "blueIconStyle", "grayIconStyle"};
@@ -593,11 +739,12 @@ public class DailyRdahmmResultService {
 			eleHref.setText(urls[i]);
 			eleStyle.addElement("LabelStyle").addElement("scale").setText("0");
 		}
-		
+				
+		DailyRdahmmStation[] stations = analyzer.stationArray;
 		while (calFrom.compareTo(calTo) <= 0) {
 			eleDoc = eleFolder.addElement("Document");
 			String dateStr = UtilSet.getDateString(calFrom);
-			eleDoc.addElement("name").setText(contextGroup + "_" + preTreat + "_" + dateStr);
+			eleDoc.addElement("name").setText(dateStr);
 			// add the "TimeSpan" element
 			Element eleTP = eleDoc.addElement("TimeSpan");
 			eleTP.addElement("begin").setText(dateStr + "T00:00:00Z");
@@ -613,16 +760,12 @@ public class DailyRdahmmResultService {
 				Element eleStyleUrl = eleMark.addElement("styleUrl");
 				int colorNum = Integer.valueOf(colors.substring(2*i, 2*i+1));
 				eleStyleUrl.setText("#" + styleIds[colorNum]);
-				if (calFrom.equals(calTo)) {
-					String fileUrlPrefix = analyzer.urlPattern.replace("{!station-id!}", stations[i].stationID) + "/" 
-											+ analyzer.dirPattern.replace("{!station-id!}", stations[i].stationID) + "/";
-					String rawUrl = fileUrlPrefix + analyzer.rawInputPattern.replace("{!station-id!}", stations[i].stationID);
-					String qUrl = fileUrlPrefix	+ analyzer.qPattern.replace("{!station-id!}", stations[i].stationID);
+				if (addPopUp && calFrom.equals(calTo)) {
 					String popUpHtml = popUpWinHtml;
-					popUpHtml = popUpHtml.replace("{!rawFileURL!}", rawUrl);
-					popUpHtml = popUpHtml.replace("{!qFileURL!}", qUrl);
+					popUpHtml = popUpHtml.replace("<stationId>", stations[i].stationID);
+					popUpHtml = popUpHtml.replace("<latitude>", Double.toString(stations[i].latitude));
+					popUpHtml = popUpHtml.replace("<longitude>", Double.toString(stations[i].longitude));
 					Element eleDesc = eleMark.addElement("description");
-					// eleDesc.setText("<![CDATA[" + popUpHtml + "]]");
 					eleDesc.setText(popUpHtml);
 				}
 			}
@@ -637,19 +780,8 @@ public class DailyRdahmmResultService {
 			writer.write(kmlDoc);
 			writer.close();
 			fw.close();
-			
-			String res = UtilSet.exec("zip -D " + kmzFilePath + " " + kmlFileName, new File(destKmlDir));
-			res = res.toLowerCase();
-			if (res.indexOf("error") >= 0 || res.indexOf("not found") >= 0) {
-				return kmlUrlPattern.replace("<fileName>", kmlFileName);
-			} else {
-				File fileKml = new File(kmlPath);
-				fileKml.delete();
-				return kmlUrlPattern.replace("<fileName>", kmzFileName);
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "";
 		}
 	}
 	
