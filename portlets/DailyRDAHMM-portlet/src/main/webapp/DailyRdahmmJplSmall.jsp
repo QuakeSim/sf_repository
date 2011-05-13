@@ -18,11 +18,11 @@
 	<script type="text/javascript" src="/yui_0.12.2/build/dom/dom.js"></script>
 	<script type="text/javascript" src="/yui_0.12.2/build/calendar/calendar.js"></script>
 	<script type="text/javascript" src="/yui_0.12.2/build/slider/slider.js"></script>
-	<script type="text/javascript" src="/yui_0.12.2/build/yahoo-dom-event/yahoo-dom-event.js" ></script> 
-	<script type="text/javascript" src="/yui_0.12.2/build/dragdrop/dragdrop-min.js" ></script> 
-	<script type="text/javascript" src="/yui_0.12.2/build/slider/slider-min.js" ></script> 
+	<script type="text/javascript" src="/yui_0.12.2/build/yahoo-dom-event/yahoo-dom-event.js" ></script>
+	<script type="text/javascript" src="/yui_0.12.2/build/dragdrop/dragdrop-min.js" ></script>
+	<script type="text/javascript" src="/yui_0.12.2/build/slider/slider-min.js" ></script>
 	<link type="text/css" rel="stylesheet" href="/yui_0.12.2/build/calendar/assets/calendar.css">
-  
+ 
 	<style>
 		#cal1Container {position:relative; width:210px;}
 		#slider-bg {
@@ -484,11 +484,11 @@
 	var minPattern = '<%=eleOutput.element("MinValFile").getText()%>';
 	var rangePattern = '<%=eleOutput.element("RangeFile").getText()%>';
 	var modelPattern = '<%=eleOutput.element("ModelFiles").getText()%>';
-<%				
+<%
 	List lStations = eleXml.elements("station");
 %>
 	// every station in the station array has 7 attributes: id, lat, long, null(for status change table), null(for output table), status change details, marker
-	// "status change details" is an array of 3*[status change count] elements; so there are 3 elements in the array for every change count: 
+	// "status change details" is an array of 3*[status change count] elements; so there are 3 elements in the array for every change count:
 	// the millisecond time value for the date of the change, the old status, and the new status
 	// we create the infoWindowTabs on the fly, cause they are eating up too much memory if created here
 	var stationArray = new Array(<%=lStations.size()%>);
@@ -531,10 +531,10 @@
 	mapcenter_y = ymin + (ymax - ymin)/2;
 	tmpCaldr.set(Calendar.YEAR, 1970);
 	tmpCaldr.set(Calendar.MONTH, 0);
-	tmpCaldr.set(Calendar.DAY_OF_MONTH, 2);				
+	tmpCaldr.set(Calendar.DAY_OF_MONTH, 2);
 %>
 	var DAY_MILLI = 86400000;
-	var timeDiff = parseInt(Date.UTC(1970,0,2)/DAY_MILLI) - <%=(tmpCaldr.getTime().getTime()/DAY_MILLI)%>;	
+	var timeDiff = parseInt(Date.UTC(1970,0,2)/DAY_MILLI) - <%=(tmpCaldr.getTime().getTime()/DAY_MILLI)%>;
 	var mapCenterY = <%=mapcenter_y%>;
 	var mapCenterX = <%=mapcenter_x%>;	
 	var caLat = 36.7477778;
@@ -555,8 +555,8 @@
 		window.setTimeout('overlayMarkersBody()',1);
 	}
 
-	function overlayMarkersBody(){        	
-		var dateShowText = document.getElementById("dateText");	
+	function overlayMarkersBody(){
+		var dateShowText = document.getElementById("dateText");
 		var showDateStr = dateShowText.getAttribute("value");
 		var icon;
 		var mapBounds = map.getBounds();
@@ -590,12 +590,12 @@
 							color = "blue";
 							break;
 					}
-			    	 		
+
 					if (stationArray[i][6] != null)
 						stationArray[i][6].getIcon().image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
 					else {
-						icon = new GIcon(baseIcon);	
-						icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";			
+						icon = new GIcon(baseIcon);
+						icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
 						stationArray[i][6] = createTabsInfoMarker(new GPoint(stationArray[i][2], stationArray[i][1]) , null, icon, i, document.getElementById("stationSelect"));
 					}
 					map.addOverlay(stationArray[i][6]);
@@ -619,7 +619,7 @@
 	}
 
 	function onMapMoveBody() {
-		var dateShowText = document.getElementById("dateText");	
+		var dateShowText = document.getElementById("dateText");
 		var showDateStr = dateShowText.getAttribute("value");
 		var icon;
 		var mapBounds = map.getBounds();
@@ -645,11 +645,11 @@
 							color = "blue";
 							break;
 					}
-			    	 		
+
 					if (stationArray[i][6] != null)
 						stationArray[i][6].getIcon().image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
 					else {
-						icon = new GIcon(baseIcon);	
+						icon = new GIcon(baseIcon);
 						icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
 						stationArray[i][6] = createTabsInfoMarker(new GPoint(stationArray[i][2], stationArray[i][1]) , null, icon, i);
 					}

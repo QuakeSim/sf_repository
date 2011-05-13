@@ -25,7 +25,7 @@
 <html>
 	<head>
 	<script
-    src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAlW-VacciIjziyRXAuwNEPRToCwzmKPcju0WT8bJ7uVS8tITbtRQndtxXxhE2HFQhC_hkBeEDcR7kZA" type="text/javascript"></script>
+    src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>
 	<script src="http://local.hostname/DailyRDAHMM-portlet/NmapAPI.js" type="text/javascript"></script>
 	<script src="http://local.hostname/DailyRDAHMM-portlet/dateUtil.js" type="text/javascript"></script>
 	<script src="http://danvk.org/dygraphs/dygraph-combined.js" type="text/javascript"></script>
@@ -38,23 +38,23 @@
 	<script type="text/javascript" src="/yui_0.12.2/build/dom/dom.js"></script>
 	<script type="text/javascript" src="/yui_0.12.2/build/calendar/calendar.js"></script>
 	<script type="text/javascript" src="/yui_0.12.2/build/slider/slider.js"></script>
-	<script type="text/javascript" src="/yui_0.12.2/build/yahoo-dom-event/yahoo-dom-event.js" ></script> 
-	<script type="text/javascript" src="/yui_0.12.2/build/dragdrop/dragdrop-min.js" ></script> 
-	<script type="text/javascript" src="/yui_0.12.2/build/slider/slider-min.js" ></script> 
+	<script type="text/javascript" src="/yui_0.12.2/build/yahoo-dom-event/yahoo-dom-event.js" ></script>
+	<script type="text/javascript" src="/yui_0.12.2/build/dragdrop/dragdrop-min.js" ></script>
+	<script type="text/javascript" src="/yui_0.12.2/build/slider/slider-min.js" ></script>
 	<link type="text/css" rel="stylesheet" href="/yui_0.12.2/build/calendar/assets/calendar.css">
-  
+ 
 	<style>
 		#cal1Container {position:relative; width:160px;}
-		#slider-bg { 
-			position: relative; 
-			background:url(/yui_0.12.2/build/slider/assets/horizBg.png) 5px 0; 
-			height:26px; 
-			width:693px;  
+		#slider-bg {
+			position: relative;
+			background:url(/yui_0.12.2/build/slider/assets/horizBg.png) 5px 0;
+			height:26px;
+			width:693px;
 		}
-		#slider-thumb { 
-			position: absolute; 
-			top: 4px; 
-		} 
+		#slider-thumb {
+			position: absolute;
+			top: 4px;
+		}
 	</style>
 
 	<style>
@@ -144,7 +144,7 @@
 		setCalByDate(denotedDate);
 		overlayMarkers();
 	}
-  
+ 
 	// when the left arrow clicked, go to one day before; go to one day after for right arrow click
 	function sliderArrowClick(obj) {
 		var n;
@@ -189,7 +189,7 @@
 	}
 	</script>
 
-<!-- inline functions about map api -->	
+<!-- inline functions about map api -->
 	<script type="text/javascript">
 	var markerWinHtmlStr = '<%=strTabContent%>';
 	// Create the marker and corresponding information window 
@@ -280,7 +280,7 @@
 			<td valign="top" width="176">
 				<font face="Verdana" size="2">
 				<div id="networksDiv"> Status changes and Colors:    </div>
-				<div id="cal1Container" align="center"> </div>          
+				<div id="cal1Container" align="center"> </div>
 				<div>    Or choose a date by dragging the slider under the map. </div>
 				<div> 
 					<table border="1" width="172">
@@ -302,7 +302,6 @@
 					<tr id="tabRow">
 						<td class="ooihj" nowrap onclick="ghbq(this)">View Map</td>
 						<td class="ooihs" nowrap onclick="ghbq(this)">State Change Number vs. Time Plot</td>
-						<td class="ooihs" nowrap onclick="ghbq(this)">Static State Change Number Plot</td>
 						<td class="ooihx" style="width:100%">&nbsp;</td>
 						</tr>
 				</table>
@@ -331,53 +330,45 @@
 						<td valign="top" align="center">
 						<table>
 							<tr>
-								<td><div id="scnPlotDiv" style="width: 742px; height: 539px"></div></td>
+								<td colspan="2"><div id="scnPlotDiv" style="width: 742px; height: 539px"></div></td>
 							</tr>
 							<tr align="center">
-								<td>(Usage: move mouse to see value, select an area to zoom in, and double click to zoom out.)</td>
+								<td colspan="2">(Select an area to zoom in, and double click to zoom out. Use the following "Plot" button to plot for a bounded area.)</td>
 							</tr>
-							<tr><td><br/></td></tr>
 							<tr>
 								<td>
-								<table valign="top" align="center" width="742px">
-								<tr>
-									<td>
-										<a id="scnTxtLink" target="_blank" href="">Click here to view the detailed data.</a>
+									<table>
+										<tr>
+											<td width="70">Latitude: </td>
+											<td width="30">from</td>
+											<td width="80"><input type="text" id="scnLatFromText" size="9"/></td> 
+											<td width="15"> to </td>
+											<td colspan="3" width="80"><input type="text" id="scnLatToText" size="9"/></td>
+										</tr>
+										<tr>
+											<td width="70">Longitude: </td>
+											<td width="30">from</td>
+											<td width="80"><input type="text" id="scnLongFromText" size="9"/></td>
+											<td width="15"> to </td>
+											<td width="80"><input type="text" id="scnLongToText" size="9"/></td>
+											<td><button id="scnPlotBtn" onClick="scnPlotBtnClick(this)">Plot</button></td>
+											<td><button id="scnWholeAreaBtn" onClick="scnWholeAreaBtnClick(this)">Whole network</button></td>
+										</tr>
+									</table>
+								</td>
+								<td valign="top">
+									<table valign="top" align="center">
+									<tr><td>
+										<a id="scnTxtLink" target="_blank" href="">Text data source for the plot.</a>
 										<br/>
-										<a id="videoLink" target="_blank" href="">Click here to get a video of the whole time since 1994.</a>
+										<a id="videoLink" target="_blank" href="">Video for the whole time since 1994.</a>
 										<br/>
-										<a id="allInputLink" target="_blank" href="">Click here to get a file containing the input of all stations.</a>
-									</td>
-								</tr>
-								</table>
+										<a id="allInputLink" target="_blank" href="">Big input file for all stations.</a>
+									</td></tr>
+									</table>
 								</td>
 							</tr>
 						</table>
-						</td>
-					</tr>
-					<tr valign="top" style="display: none">
-						<td>
-							<table align="left">
-								<tr><td colspan="7"><img id="scnPngImg" style="width:100%;height:100%;"></td></tr>
-								<tr><td colspan="7"><br/></td></tr>
-								<tr><td colspan="7">Get the plot for a bounded area:<br/></td></tr>
-								<tr>
-									<td width="70">Latitude: </td>
-									<td width="30">from</td>
-									<td width="80"><input type="text" id="scnLatFromText" size="9"/></td> 
-									<td width="15"> to </td>
-									<td colspan="3" width="80"><input type="text" id="scnLatToText" size="9"/></td>
-								</tr>
-								<tr>
-									<td width="70">Longitude: </td>
-									<td width="30">from</td>
-									<td width="80"><input type="text" id="scnLongFromText" size="9"/></td>
-									<td width="15"> to </td>
-									<td width="80"><input type="text" id="scnLongToText" size="9"/></td>
-									<td width="85"><button id="scnPlotBtn" onClick="scnPlotBtnClick(this)" style="width:70px;height:25px">Plot</button></td>
-									<td><button id="scnWholeAreaBtn" onClick="scnWholeAreaBtnClick(this)" style="width:200px;height:25px">Plot for the whole network</button></td>
-								</tr>
-							</table>
 						</td>
 					</tr>
 				</table>
@@ -418,12 +409,12 @@
 		networkInfo[i] = new Array(2);
 	}
 	networkInfo[0][0] = "no status change:";
-	networkInfo[0][1] = "http://labs.google.com/ridefinder/images/mm_20_green.png";	
+	networkInfo[0][1] = "http://labs.google.com/ridefinder/images/mm_20_green.png";
 	networkInfo[1][0] = "status changes on selected date:";
 	networkInfo[1][1] = "http://labs.google.com/ridefinder/images/mm_20_red.png";
 	networkInfo[2][0] = "status changed in last 30 days before selected date:";
-	networkInfo[2][1] = "http://labs.google.com/ridefinder/images/mm_20_yellow.png";	
-	networkInfo[3][0] = "no data on selected date:";	
+	networkInfo[2][1] = "http://labs.google.com/ridefinder/images/mm_20_yellow.png";
+	networkInfo[3][0] = "no data on selected date:";
 	networkInfo[3][1] = "http://labs.google.com/ridefinder/images/mm_20_gray.png";
 	networkInfo[4][0] = "no data on selected date, status changed in last 30 days before selected date:";
 	networkInfo[4][1] = "http://labs.google.com/ridefinder/images/mm_20_blue.png";
@@ -491,21 +482,43 @@
 			return;
 		}
 
-		var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/proxyCallHttpService?serviceUrl="
-					+ "http%3A%2F%2Fresult.service.hostname%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetStateChangeNumberPlot%3F"
-					+ "dataSource%3DJPL%26minLat%3D" + latFrom + "%26maxLat%3D" + latTo + "%26minLong%3D" + longFrom + "%26maxLong%3D" + longTo;
+		var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/getStateChangeNumberTrace?resUrl="
+					+ xmlResultUrl + "&minLat=" + latFrom + "&maxLat=" + latTo + "&minLong=" + longFrom + "&maxLong=" + longTo;
 		var link = callHttpService(url);
-		document.getElementById("scnPngImg").src = link;
-		//window.open(link);
+		scnPlotGraph = new Dygraph(document.getElementById("scnPlotDiv"), link,
+									{
+										colors:['#007FFF'],
+										strokeWidth:0.7,
+										pixelsPerXLabel:50,
+										rightGap:2,
+										stepPlot:true,
+										fillGraph:true,
+										fillAlpha:0.8
+									});
+		document.getElementById("scnTxtLink").href = link;
 	}
 
 	// show the state change number vs. time plot for the whole area
 	function scnWholeAreaBtnClick(btn) {
-		document.getElementById("scnPngImg").src = scnWholeAreaPngUrl;
+		if (document.getElementById("scnTxtLink").href == scnJsiLink) {
+			return;
+		}
+		scnPlotGraph = new Dygraph(document.getElementById("scnPlotDiv"), 
+							scnJsiLink, 
+							{
+								colors:['#007FFF'],
+								strokeWidth:0.7,
+								pixelsPerXLabel:50,
+								rightGap:2,
+								stepPlot:true,
+								fillGraph:true,
+								fillAlpha:0.8
+							});
 		document.getElementById("scnLatFromText").value = minLat;
 		document.getElementById("scnLatToText").value = maxLat;
 		document.getElementById("scnLongFromText").value = minLon;
 		document.getElementById("scnLongToText").value = maxLon;
+		document.getElementById("scnTxtLink").href = scnJsiLink;
 	}
 
 	// what to do when the user pressed a key in the input textbox for the end date of the get kml service
@@ -550,10 +563,8 @@
 		}
 		fromDateStr = getDateString(fromDate);
 		toDateStr = getDateString(toDate);
-		var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/proxyCallHttpService?serviceUrl="
-				  + "http%3A%2F%2Fresult.service.hostname%2Faxis2%2Fservices%2FDailyRdahmmResultService%2FgetKmlForDateRange%3FfromDateStr%3D"
-				  + fromDateStr + "%26toDateStr%3D" + toDateStr 
-				  + "%26resUrl%3Dhttp%3A%2F%2Fxml.access.hostname%2F%2Fdaily_rdahmmexec%2Fdaily%2FJPL_FILL%2Fstation-status-change-JPL_FILL.xml";
+		var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/getKmlForDateRange2?"
+				  + "fromDateStr=" + fromDateStr + "&toDateStr=" + toDateStr + "&resUrl=" + xmlResultUrl;
 		document.getElementById("waitScreen").style.visibility="visible";
 		var link = callHttpService(url);
 		window.open(link);
@@ -570,13 +581,13 @@
 		} else if (e.keyCode) {
 			keynum = e.keyCode;
 		}
-  				
+ 
 		if (e.target) {
 			targ=e.target;
 		} else if (e.srcElement) {
 			targ=e.srcElement;
 		}
-        	
+ 
 		var dateTxt = document.getElementById("dateText");
 		if(keynum == 13 && targ == dateTxt) {
 			var str = dateTxt.value;
@@ -594,12 +605,12 @@
 				if (tmpDate > today || tmpDate < modelStartDate) {
 					alert("Please input a date between " + getDateString(modelStartDate) + " and " + getDateString(today));
 					return;
-				}        			
+				}
 				dateTxt.setAttribute("value", str);
 				tmpNoActOnSlideChange = true;
 				setSliderValByDate(tmpDate);
 				setCalByDate(tmpDate);
-				overlayMarkers();	
+				overlayMarkers();
 			}
 		}
 	}
@@ -607,17 +618,17 @@
 	// if the date is like '2007-02-02', remove the '0's before '2's
 	function simplifyDateStr(dateStr) {
 		var str;
-		var i1, i2; 
-		str = dateStr;  	
+		var i1, i2;
+		str = dateStr;
 		i1 = str.indexOf('-');
 		if (str.charAt(i1+1) == '0')
 			str = str.substring(0, i1+1) + str.substring(i1+2);
-        	
+ 
 		i2 = str.indexOf('-', i1+1);
 		if (str.charAt(i2+1) == '0')
 			str = str.substring(0, i2+1) + str.substring(i2+2);
-        		
-		return str;       		
+
+		return str;
 	}
 
 	/* The status change xml file is formated like:
@@ -724,9 +735,10 @@
 	var scnWholeAreaPngUrl = urlPattern + "/" + scnTxtPattern + ".png";
 	var videoUrl = '<%=eleOutput.element("video-url").getText()%>';
 	var allInputPattern = '<%=eleOutput.element("allStationInputName").getText()%>';
-	
+	var scnJsiLink = "http://local.hostname/DailyRDAHMM-portlet/" + scnPattern;
+
 	var scnPlotGraph = new Dygraph(document.getElementById("scnPlotDiv"), 
-							"http://local.hostname/DailyRDAHMM-portlet/" + scnPattern, 
+							scnJsiLink, 
 							{
 								colors:['#007FFF'],
 								strokeWidth:0.7,
@@ -736,8 +748,7 @@
 								fillGraph:true,
 								fillAlpha:0.8
 							});
-	document.getElementById("scnTxtLink").href = urlPattern + "/" + scnPattern;
-	document.getElementById("scnPngImg").src = scnWholeAreaPngUrl;
+	document.getElementById("scnTxtLink").href = scnJsiLink;
 	document.getElementById("videoLink").href = videoUrl;
 	document.getElementById("allInputLink").href = urlPattern + "/" + allInputPattern;
 
@@ -757,11 +768,11 @@
 	var minPattern = '<%=eleOutput.element("MinValFile").getText()%>';
 	var rangePattern = '<%=eleOutput.element("RangeFile").getText()%>';
 	var modelPattern = '<%=eleOutput.element("ModelFiles").getText()%>';
-<%				
+<%
 	List lStations = eleXml.elements("station");
 %>
 	// every station in the station array has 7 attributes: id, lat, long, null(for status change table), null(for output table), status change details, marker
-	// "status change details" is an array of 3*[status change count] elements; so there are 3 elements in the array for every change count: 
+	// "status change details" is an array of 3*[status change count] elements; so there are 3 elements in the array for every change count:
 	// the millisecond time value for the date of the change, the old status, and the new status
 	// we create the infoWindowTabs on the fly, cause they are eating up too much memory if created here
 	var stationArray = new Array(<%=lStations.size()%>);
@@ -789,7 +800,7 @@
 			ymin = y;
 		if (ymax == 0 || y > ymax)
 			ymax = y;
-		changeCount = Integer.parseInt(eleStation.element("change-count").getText());					
+		changeCount = Integer.parseInt(eleStation.element("change-count").getText());
 		nodataCount = Integer.parseInt(eleStation.element("nodata-count").getText());
 %>
 		stationArray[<%=i%>] = new Array(7);	stationArray[<%=i%>][0] = '<%=eleStation.element("id").getText()%>';
@@ -797,10 +808,10 @@
 		var icon = new GIcon(baseIcon);
 		stationArray[<%=i%>][6] = createTabsInfoMarker(new GPoint('<%=y%>', '<%=x%>') , null, icon, <%=i%>, document.getElementById("stationSelect"));
 		/*stationArray[<%=i%>][6] = null; */
-<%				
+<%
 		if (changeCount == 0) {
 			out.write("stationArray[" + i + "][5] = null;");
-		} else {	
+		} else {
 			int changeIdx = 0;
 			List lChanges = eleStation.elements("status-changes");
 			int usefulChange = 10;
@@ -818,7 +829,7 @@
 					String changeDate = oneChange.substring(0, idxCollon);
 					String oldStatus = oneChange.substring(idxCollon + 1, idxTo);
 					String newStatus = oneChange.substring(idxTo + 2);
-								
+
 					String str = changeDate;
 					String year, month, day;
 					int i1, i2;
@@ -829,8 +840,8 @@
 					day = str.substring(i2+1);
 					tmpCaldr.set(Calendar.YEAR, Integer.parseInt(year, 10));
 					tmpCaldr.set(Calendar.MONTH, Integer.parseInt(month, 10)-1);
-					tmpCaldr.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day, 10));			
-%>								
+					tmpCaldr.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day, 10));
+%>
 					stationArray[<%=i%>][5][<%=changeIdx++%>] = <%=tmpCaldr.getTime().getTime() / DAY_MILLI%>; stationArray[<%=i%>][5][<%=changeIdx++%>] = <%=oldStatus%>; stationArray[<%=i%>][5][<%=changeIdx++%>] = <%=newStatus%>;
 <%				
 					if (changeIdx >= 30)
@@ -847,18 +858,18 @@
 					}
 				}
 				if (changeIdx >= 30)
-					break;		
+					break;
 			}
-		}				
+		}
 	}
 	mapcenter_x = xmin + (xmax - xmin)/2;
 	mapcenter_y = ymin + (ymax - ymin)/2;
 	tmpCaldr.set(Calendar.YEAR, 1970);
 	tmpCaldr.set(Calendar.MONTH, 0);
-	tmpCaldr.set(Calendar.DAY_OF_MONTH, 2);				
+	tmpCaldr.set(Calendar.DAY_OF_MONTH, 2);
 %>
 	var DAY_MILLI = 86400000;
-	var timeDiff = parseInt(Date.UTC(1970,0,2)/DAY_MILLI) - <%=(tmpCaldr.getTime().getTime()/DAY_MILLI)%>;	
+	var timeDiff = parseInt(Date.UTC(1970,0,2)/DAY_MILLI) - <%=(tmpCaldr.getTime().getTime()/DAY_MILLI)%>;
 	var mapCenterY = <%=mapcenter_y%>;
 	var mapCenterX = <%=mapcenter_x%>;	
 	var minLon = <%=ymin%>;
