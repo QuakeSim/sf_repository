@@ -73,8 +73,8 @@ public class DailyRdahmmResultAnalyzer {
 	
 	private Calendar calLastUpdate = null;
 	private Calendar calResXml = null;
-	private Calendar calBeginDate = null;
-	private Calendar calEndDate = null;
+	Calendar calBeginDate = null;
+	Calendar calEndDate = null;
 	private String dataLatestDate = null;
 	
 	String urlPattern;

@@ -178,16 +178,14 @@ public class DailyRdahmmResultService {
 		long timeStamp = System.currentTimeMillis();
 		String fileName = "scn_" + timeStamp + ".txt";
 		String txtPath = destPlotDir + File.separator + fileName;
-		Calendar calTmp = UtilSet.getDateFromString("1994-01-01");
-		Calendar calToday = Calendar.getInstance();
-		calToday.set(Calendar.HOUR_OF_DAY, 12);
-		calToday.set(Calendar.MINUTE, 0);
-		calToday.set(Calendar.SECOND, 0);
-		calToday.set(Calendar.MILLISECOND, 0);
+		Calendar calTmp = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+		calTmp.setTimeInMillis(analyzer.calBeginDate.getTimeInMillis());
+		Calendar calTo = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+		calTo.setTimeInMillis(analyzer.calEndDate.getTimeInMillis());
 		
 		try {
 			FileWriter fw = new FileWriter(txtPath, false);
-			while (calTmp.compareTo(calToday) <= 0) {
+			while (calTmp.compareTo(calTo) <= 0) {
 				String strDate = UtilSet.getDateString(calTmp);
 				fw.write(strDate + " ");
 				if (stateChangeNums.containsKey(strDate)) {
@@ -199,7 +197,12 @@ public class DailyRdahmmResultService {
 			}			
 			fw.flush();
 			fw.close();
-			return plotUrlPattern.replace("<fileName>", fileName);
+			// do plot
+			int idx = plotBinPath.lastIndexOf(File.separatorChar);
+			String workDir = plotBinPath.substring(0, idx);
+			String res = UtilSet.exec(plotBinPath + " " + txtPath, new File(workDir));
+			System.out.println("output from plotting script: " + res);
+			return plotUrlPattern.replace("<fileName>", fileName + ".png");
 		} catch (Exception e){
 			e.printStackTrace();
 			return "";
@@ -250,17 +253,15 @@ public class DailyRdahmmResultService {
 		long timeStamp = System.currentTimeMillis();
 		String fileName = "scn_" + timeStamp + ".txt";
 		String txtPath = destPlotDir + File.separator + fileName;
-		Calendar calTmp = UtilSet.getDateFromString("1994-01-01");
-		Calendar calToday = Calendar.getInstance();
-		calToday.set(Calendar.HOUR_OF_DAY, 12);
-		calToday.set(Calendar.MINUTE, 0);
-		calToday.set(Calendar.SECOND, 0);
-		calToday.set(Calendar.MILLISECOND, 0);
+		Calendar calTmp = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+		calTmp.setTimeInMillis(analyzer.calBeginDate.getTimeInMillis());
+		Calendar calTo = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+		calTo.setTimeInMillis(analyzer.calEndDate.getTimeInMillis());
 		
 		try {
 			FileWriter fw = new FileWriter(txtPath, false);
 			fw.write("Date,NumberOfStateChanges\n");
-			while (calTmp.compareTo(calToday) <= 0) {
+			while (calTmp.compareTo(calTo) <= 0) {
 				String strDate = UtilSet.getDateString(calTmp);
 				fw.write(strDate + ",");
 				if (stateChangeNums.containsKey(strDate)) {
@@ -273,16 +274,11 @@ public class DailyRdahmmResultService {
 			
 			fw.flush();
 			fw.close();
+			return plotUrlPattern.replace("<fileName>", fileName);
 		} catch (Exception e){
 			e.printStackTrace();
-		}
-		
-		// do plot
-		int idx = plotBinPath.lastIndexOf(File.separatorChar);
-		String workDir = plotBinPath.substring(0, idx);
-		String res = UtilSet.exec(plotBinPath + " " + txtPath, new File(workDir));
-		System.out.println("output from plotting script: " + res);
-		return plotUrlPattern.replace("<fileName>", fileName);
+			return "";
+		}		
 	}
 	
 	/**
