@@ -692,7 +692,7 @@
 	var scnWholeAreaPngUrl = urlPattern + "/" + scnTxtPattern + ".png";
 	var videoUrl = '<%=eleOutput.element("video-url").getText()%>';
 	var allInputPattern = '<%=eleOutput.element("allStationInputName").getText()%>';
-	var scnJsiLink = "http://gf5.ucs.indiana.edu:8080/DailyRDAHMM-portlet/" + scnPattern;
+	var scnJsiLink = "http://local.hostname/DailyRDAHMM-portlet/" + scnPattern;
 
 	var scnPlotGraph = new Dygraph(document.getElementById("scnPlotDiv"), scnJsiLink,
 							{
