@@ -420,6 +420,7 @@
 
 	// plot state change number vs time for a bounded area
 	function scnPlotBtnClick(btn) {
+		document.getElementById("waitScreen").style.visibility="visible";
 		var latFrom = document.getElementById("scnLatFromText").value;
 		var latTo = document.getElementById("scnLatToText").value;
 		var longFrom = document.getElementById("scnLongFromText").value;
@@ -457,6 +458,7 @@
 										fillAlpha:0.8
 									});
 		document.getElementById("scnTxtLink").href = link;
+		document.getElementById("waitScreen").style.visibility="hidden";
 	}
 
 	// show the state change number vs. time plot for the whole area
