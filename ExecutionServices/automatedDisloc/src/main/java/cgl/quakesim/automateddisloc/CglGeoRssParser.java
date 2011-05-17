@@ -22,10 +22,14 @@ public class CglGeoRssParser {
 	Document doc = null;
 	Element doce = null;
 
-	public CglGeoRssParser() {
-		
+	public CglGeoRssParser() {		
 	}
 	
+	 /**
+	  * Parse the RSS feed, hoping it is good XML.  This method 
+	  * sets up the the class variables db, doc, and doce that will
+	  * be used by getEntryList() below.
+	  */
 	public void parse(String url) {		
 			
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -56,6 +60,11 @@ public class CglGeoRssParser {
 			}			
 	}
 	
+	 /**
+	  * Returns the earthquake entries as a list of Entry objects.  
+	  * Note "entry" is a tag used by RSS. USGS uses it to 
+	  * denote a new earthquake.
+	  */ 
 	public List getEntryList() {
 		
 		List entry_list = new ArrayList();
@@ -72,13 +81,6 @@ public class CglGeoRssParser {
 			en.setGeorss_point(e.getElementsByTagName("georss:point").item(0).getTextContent());
 			en.setGeorss_elev(e.getElementsByTagName("georss:elev").item(0).getTextContent());
 			
-			/*
-			System.out.println(en.getId());			
-			System.out.println(en.getTitle());
-			System.out.println(en.getUpdated());
-			System.out.println(en.getGeorss_point());
-			System.out.println(en.getGeorss_elev());
-			*/
 			
 			entry_list.add(en);
 		}
@@ -87,6 +89,8 @@ public class CglGeoRssParser {
 	}
 
 	/**
+	 * This is a simple main method to simplify development.
+	 *
 	 * @param args
 	 */
 	public static void main(String[] args) {

@@ -1,6 +1,5 @@
 package cgl.quakesim.automateddisloc;
 
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -53,42 +52,35 @@ import gekmlib.Document;
 import gekmlib.Folder;
 import gekmlib.Kml;
 
-
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
-// import com.sun.jersey.api.client.Client;
-// import com.sun.jersey.api.client.WebResource;
 
+//Commons logging
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
 
+public class AutomatedDislocBean {
+	 static final int EARTHQUAKE_SLIP_SCENARIOS=4;
+	 static final int ONE_HOUR_IN_MILLISECONDS=3600000;
+	 private static Logger logger=Logger.getLogger(AutomatedDislocBean.class);
 
-public class AutomatedDislocBean
-{
-	public void run(String url) {
-		
-		RunautomatedDisloc rd = new RunautomatedDisloc(url);
-		rd.start();
-	}
-	
-	/*
-	public static void main( String[] args ) {
-	
-		// AutomatedDislocBean adb = new AutomatedDislocBean();
-		// adb.createProjectsFromRssph(adb.mover5_rss_url);
-		// adb.test("abc");
-		
-		Client c = Client.create();
-		WebResource webResource = c.resource("http://129.79.49.68:8080/axis2/services/AutomatedDislocBean/run?url=http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml");
-		// webResource.get(String.class);
-		System.out.println("[main] " + webResource.get(String.class));
-	}
-	*/
+	 //The input is the URL of the RSS/Atom feed we are processing.
+	 public void run(String url) {
+		  logger.info("URL for feed:"+url);
+		  //Really necessary to use a thread here?
+		  RunautomatedDisloc rd = new RunautomatedDisloc(url);
+		  rd.start();
+	 }	
 }
 
-
 class RunautomatedDisloc extends Thread {
-	
-	String mover5_rss_url = "http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml";
+	 private static Logger logger=Logger.getLogger(RunautomatedDisloc.class);
+	 //REVIEW: Shouldn't be hard coded.  Put in a property.
+	 //REVIEW: actually, it isn't used.  The "url" variable passed in to run() is 
+	 //the URL to use. 
+	 //	 String mover5_rss_url = "http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml";
+	 //	String mover5_rss_url = "http://localhost:8080/7day-M5.xml";
 	DecimalFormat df = new DecimalFormat(".###");
 	String contextBasePath;
 	String url = "";
@@ -125,65 +117,15 @@ class RunautomatedDisloc extends Thread {
 	String descBegin = "<description>";
 	String descEnd = "</description>";
 	
-	
 	int limitedsize = 800; 
-	
-	
+
 	public RunautomatedDisloc(String url) {
 		this.url = url;
 	}
 
-	public String test(String name) {
-		Properties properties = new Properties();
-		
-		try {
-			InputStream fis = this.getClass().getClassLoader().getResourceAsStream("automatedDisloc.properties");						
-			properties.load(fis);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		String dir = properties.getProperty("output.dest.dir");	
-		
-		// System.out.println("[getContextBasePath] called");
-		
-		File logfile = new File(dir + "/" + "log.txt");
-		
-		try {
-			logfile.createNewFile();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		
-		Date date = new Date();
-		Date date1 = new Date();
-		String s = logreader(logfile, false);		
-		try {
-			if (s=="" || s==null)
-				date1.setTime(0);
-			else
-				date1.setTime(dateFormat.parse(s).getTime());
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		Date date2 = new Date(date.getTime()-date1.getTime());	
-		
-		
-		//1 hour = 3600000
-		if (date2.getTime() > 3600000)
-			logwriter(logfile, dateFormat.format(date1));
-		
-		
-		return "hello, " + name;
-	}
-	
+	 /**
+	  * Load the project properties and set values.
+	  */
 	public void loadProperties() {
 		Properties properties = new Properties();
 		try {
@@ -194,9 +136,8 @@ class RunautomatedDisloc extends Thread {
 			e.printStackTrace();
 		}
 		
-		// System.out.println("[getContextBasePath] called");
+		// logger.info("[getContextBasePath] called");
 		contextBasePath = properties.getProperty("output.dest.dir");
-		
 		dislocServiceUrl = properties.getProperty("dislocServiceUrl"); 
 		dislocExtendedServiceUrl = properties.getProperty("dislocExtendedServiceUrl");		
 		// kmlGeneratorBaseurl = properties.getProperty("output.dest.dir");
@@ -206,7 +147,12 @@ class RunautomatedDisloc extends Thread {
 		baseurl = properties.getProperty("baseurl");
 		tomcatbase = properties.getProperty("tomcat.base");
 		// insarKmlUrl = properties.getProperty("output.dest.dir");
-		// System.out.println("[getContextBasePath] " + properties.getProperty("output.dest.dir"));
+		// logger.info("[getContextBasePath] " + properties.getProperty("output.dest.dir"));
+
+		logger.info("tocmat base:"+tomcatbase);
+		logger.info("baseurl:"+baseurl);
+		logger.info("rssdisloc_dir_name:"+rssdisloc_dir_name);
+
 	}
 	
 	public String getContextBasePath() {
@@ -217,8 +163,6 @@ class RunautomatedDisloc extends Thread {
 		this.contextBasePath = contextBasePath;
 	}
 	
-	
-
 	public String getTomcatbase() {
 		return tomcatbase;
 	}
@@ -227,22 +171,29 @@ class RunautomatedDisloc extends Thread {
 		this.tomcatbase = tomcatbase;
 	}
 
+	 /**
+	  * This creates a Disloc project.
+	  * Note this assumes this service and the associated client
+	  * (from RssDisloc3) are using the same file system.  
+	  *
+	  * REVIEW: This is bad design and needs to be rethought. Also the
+	  * pattern "overm5" is used as a magic string in both
+	  * the service and client webapps.
+	  */
 	public void createProject(String[] arrayList) {
 		
-		ObjectContainer db = null;
-		
+		ObjectContainer db = null;		
 		File projectDir = new File(getContextBasePath());
 		
 		if (!projectDir.exists())
 			projectDir.mkdirs();
 		
 		try {			
-			
-			
+			 //REVIEW: "over5" name pattern is a magic string and should be moved to a
+			 //system property.
 			db = Db4o.openFile(getContextBasePath() + "/overm5_temp.db");
 			
 			DislocProjectBean tmp = new DislocProjectBean();
-			
 			
 			ObjectSet results = db.get(DislocProjectBean.class);
 
@@ -250,22 +201,24 @@ class RunautomatedDisloc extends Thread {
 				// Create a new project. This may be overwritten later
 				DislocProjectBean currentProject = new DislocProjectBean();
 				currentProject.setProjectName(arrayList[nA]);
-				// System.out.println("[RunautomatedDisloc/createProject] " + arrayList[nA]);
+				// logger.info("[RunautomatedDisloc/createProject] " + arrayList[nA]);
 				
 				db.set(currentProject);				
 			}
-			System.out.println("[RunautomatedDisloc/createProject] finished");
+			logger.info("[RunautomatedDisloc/createProject] finished");
 			db.commit();
 		} catch (Exception e) {			
-			System.out.println("[RunautomatedDisloc/createProject] " + e);
+			logger.info("[RunautomatedDisloc/createProject] " + e);
 		}
 		finally {
-			if (db != null)
-				db.close();			
+			if (db != null)  db.close();			
 		}
-		// System.out.println("[createProject] " + arrayList.length);
+		// logger.info("[createProject] " + arrayList.length);
 	}
 	
+	 /**
+	  * REVIEW: this doens't seem to be used.
+	  */ 
 	public void getProject(String projectname) {
 		
 		ObjectContainer db = null;
@@ -296,21 +249,22 @@ class RunautomatedDisloc extends Thread {
 				// The project already exists, so update it.
 				else if (tmp.getProjectName().equals(projectname)) {					
 					currentProject = tmp;
-					// System.out.println("[getProject]" + currentProject.getProjectName());
+					// logger.info("[getProject]" + currentProject.getProjectName());
 					break;
 				}
 			}
-			
 						
 		} catch (Exception e) {			
-			System.out.println("[RunautomatedDisloc/getProject] " + e);
+			logger.error("[RunautomatedDisloc/getProject] " + e);
 		}
 		finally {
-			if (db != null)
-				db.close();			
+			if (db != null) db.close();			
 		}	
 	}
 
+	 /**
+	  * REVIEW: this is a strange method, not sure what it is doing.
+	  */ 
 	public void getDislocProjectSummaryBeanCount() {
 		
 		ObjectContainer db = null;
@@ -323,88 +277,37 @@ class RunautomatedDisloc extends Thread {
 		try {
 			File f = new File(getContextBasePath() + "/overm5_temp.db");
 			if (!f.exists())
-				System.out.println("[RunautomatedDisloc/DislocProjectSummaryBean] overm5_temp isn't existing.");
+				logger.info("[RunautomatedDisloc/DislocProjectSummaryBean] overm5_temp doesn't existing.");
 				
-			else{
+			else {
 				
 				db = Db4o.openFile(getContextBasePath() + "/overm5_temp.db");
-				
-				
 				ObjectSet results = db.get(DislocProjectSummaryBean.class);	
-				System.out.println("[RunautomatedDisloc/DislocProjectSummaryBean] the number of DislocProjectSummaryBean in the overm5_temp.db : " + results.size());
+				logger.info("[RunautomatedDisloc/DislocProjectSummaryBean] the number of DislocProjectSummaryBean in the overm5_temp.db : " + results.size());
 				
 				results = db.get(InsarParamsBean.class);
-				System.out.println("[RunautomatedDisloc/DislocProjectSummaryBean] the number of InsarParamasBean in the overm5_temp.db : " + results.size());
+				logger.info("[RunautomatedDisloc/DislocProjectSummaryBean] the number of InsarParamasBean in the overm5_temp.db : " + results.size());
 				
 			}					
 						
 		} catch (Exception e) {			
-			System.out.println("[RunautomatedDisloc/getDislocProjectSummaryBeanCount] " + e);
+			logger.info("[RunautomatedDisloc/getDislocProjectSummaryBeanCount] " + e);
 		}
 		finally {
 			if (db != null){
 				db.close();
-				System.out.println("[RunautomatedDisloc/getDislocProjectSummaryBeanCount] db closed");
+				logger.info("[RunautomatedDisloc/getDislocProjectSummaryBeanCount] db closed");
 			}
 		}	
 	}
-	
-	/*
-	public void addFault(HashMap hm) {
-		
-		Set entryset = hm.entrySet();
-		Iterator iter = entryset.iterator();
-				
-		File projectDir = new File(getContextBasePath() + "/overm5/");
-		
-		if (!projectDir.exists())
-			projectDir.mkdirs();
-		
-		int i = 0 ;
-		
-		while (iter.hasNext()) {
-			ObjectContainer db = null;
-			try {
-					Map.Entry e = (Map.Entry)iter.next();
-					
-					// System.out.println("[addFault] " + e.getKey() + "/" + ((Fault)e.getValue()).getFaultName());
-						
-					File f = new File(getContextBasePath() + "/overm5/" + e.getKey() + ".db");
-					if (f.exists())
-						f.delete();
-										
-					db = Db4o.openFile(getContextBasePath() + "/overm5/" + e.getKey() + ".db");			
-					
-					db.set((Fault)e.getValue());
-					db.commit();
-					
-					DislocParamsBean tmp = new DislocParamsBean();
-					tmp.setOriginLat(((Fault)e.getValue()).getFaultLatStart());
-					tmp.setOriginLon(((Fault)e.getValue()).getFaultLonStart());
-					db.set(tmp);
-					db.commit();
-									
-					
-					runBlockingDislocJSF(e.getKey().toString(), tmp, (Fault)e.getValue());					
-					
-					i++;
-				// setProjectOrigin(projectName);
-			} catch (Exception e) {			
-				System.out.println("[RunautomatedDisloc/addFault] " + e);
-			}
-			finally {
-				if (db != null)
-					db.close();
-			}
-		}
-		// System.out.println("[addFault] " + i);
-	}
-	*/
-	
+
+	 /**
+	  * This implements the required run() method for this thread. 
+	  */ 
 	public void run() {
 		
 		Properties properties = new Properties();
-		
+		//REVIEW: this seems redundant with loadProperties below.
 		try {
 			InputStream fis = this.getClass().getClassLoader().getResourceAsStream("automatedDisloc.properties");						
 			properties.load(fis);
@@ -417,33 +320,31 @@ class RunautomatedDisloc extends Thread {
 		
 		String dir = properties.getProperty("output.dest.dir");
 		
-		// System.out.println("[getContextBasePath] called");
+		// logger.info("[getContextBasePath] called");
 		
 		File logfile = new File(dir + "/" + "log.txt");
 		
 		try {
-			if (!logfile.exists())
+			 if (!logfile.exists()) {
 				logfile.createNewFile();
+			 }
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			 logger.error(e.getMessage());
+			 //			e.printStackTrace();
 		}
 
-
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");		
 		Date date = new Date();
 		Date date1 = new Date();
 		String s = logreader(logfile, false);
 		
-		// System.out.println("[RunautomatedDisloc/run] " + s);
+		// logger.info("[RunautomatedDisloc/run] " + s);
 		try {
 			if (s=="" || s==null)
 				date1.setTime(0);
 			else
 				date1.setTime(dateFormat.parse(s).getTime());
-			
-			
 			
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -452,25 +353,26 @@ class RunautomatedDisloc extends Thread {
 		
 		Date date2 = new Date(date.getTime()-date1.getTime());	
 		
-		System.out.println("[RunautomatedDisloc/run] the last update time : " + dateFormat.format(date1));
-		System.out.println("[RunautomatedDisloc/run] the current time : " +  dateFormat.format(date));
+		logger.info("[RunautomatedDisloc/run] the last update time : " + dateFormat.format(date1));
+		logger.info("[RunautomatedDisloc/run] the current time : " +  dateFormat.format(date));
 		
-		//1 hour = 3600000
 		getDislocProjectSummaryBeanCount();
 		
-		if (date2.getTime() > 3600000) {
+		//If it has been longer than 1 hour, get more data.  Otherwise, do nothing.
+		if (date2.getTime() > AutomatedDislocBean.ONE_HOUR_IN_MILLISECONDS) {
 			logwriter(logfile, dateFormat.format(date));
-			System.out.println("[RunautomatedDisloc/run] updated");
-			
+			logger.info("[RunautomatedDisloc/run] updated");
+
+			//Make sure the project master directory exists.
 			File projectDir = new File(getContextBasePath() + "/overm5/");
-			
-			if (!projectDir.exists())
+			if (!projectDir.exists()) {
 				projectDir.mkdirs();
+			}
 			
 			File f = new File(getContextBasePath() + "/overm5_temp.db");
-			if (f.exists())
-				f.delete();
+			if (f.exists()) f.delete();
 			
+			//This does the interesting work.
 			createProjectsFromRss(url);
 			
 			// to allow other process to have access to overm5.db while this webservice is updating, it's working on a temporary file and copying it at the end.
@@ -478,20 +380,20 @@ class RunautomatedDisloc extends Thread {
 			File newFileDB = new File(getContextBasePath() + "/overm5.db");
 			
 			try {
-				
-				if (!newFileDB.exists())				
-					newFileDB.createNewFile();
-				
-				copyFile(oldFileDB, newFileDB);
+				 if (!newFileDB.exists()) newFileDB.createNewFile();
+				 copyFile(oldFileDB, newFileDB);
 				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				 logger.error(e.getMessage());
+				 //				e.printStackTrace();
 			}
 		}
 	}
 	
-
+	 /**
+	  * This method constructs the project from the USGS RSS file.
+	  */ 
 	public void createProjectsFromRss(String url) {		
 			
 		CglGeoRssParser cgrp = new CglGeoRssParser();
@@ -499,13 +401,16 @@ class RunautomatedDisloc extends Thread {
 		List entry_list = new ArrayList();
 		List pns = new ArrayList();
 		entry_list = cgrp.getEntryList();
-		System.out.println("[RunautomatedDisloc/run] entry_list.size() : " + entry_list.size());
+		logger.info("[RunautomatedDisloc/run] entry_list.size() : " + entry_list.size());
 		
 		HashMap<String, Fault> hm = new HashMap<String, Fault>();
 		
+		//REVIEW: These should be static final and global.  Also, thr is thrust?  I think
+		//this is boolean.
 		double mu = 0.2E11;
 		double thr = 0;
 				
+		//Construct a KML file for the results.
 		Kml doc = new Kml();
 		Folder root = new Folder();
 		Document kmlDocument=new Document();
@@ -515,24 +420,25 @@ class RunautomatedDisloc extends Thread {
 		kmlDocument.addFolder(root);
 		doc.addDocument(kmlDocument);
 		
+		//REVIEW: Need a less clumsy way to handle this location.  Also should be
+		//in this webapp for portability. 
 		String newFaultFilename = "";
 		String localDestination = getContextBasePath() + "/../../../../../" + "gridsphere" + "/overm5.kml";
 		
-		System.out.println("[RunautomatedDisloc/run] Old fault kml file:" + localDestination);
+		logger.info("[RunautomatedDisloc/run] Old fault kml file:" + localDestination);
 		
 		File d = new File(getContextBasePath() + "/../../../../../" + "gridsphere");
-		if (!d.exists())
-			d.mkdirs();	
+		if (!d.exists()) d.mkdirs();	
 		
 		File oldFile = new File(localDestination);
 		if (oldFile.exists()) {
-			System.out.println("[RunautomatedDisloc/run] Deleting old fault kml file");
+			logger.info("[RunautomatedDisloc/run] Deleting old fault kml file");
 			oldFile.delete();			
 		}
-			
 		
 		long timeStamp = (new Date()).getTime();
-		PrintWriter out = null;
+		PrintWriter out = null;			 
+		//REVIEW: I think this try-catch is not properly constructed.
 		try {
 			out = new PrintWriter(new FileWriter(localDestination));
 			out.println(xmlHead);
@@ -540,22 +446,22 @@ class RunautomatedDisloc extends Thread {
 			out.println(docBegin);
 		} catch (IOException e) {
 				// TODO Auto-generated catch block			
-			e.printStackTrace();			
+			 //			 e.printStackTrace();			
+			 logger.error(e.getMessage());
 		}		 
-		
+
 		for (int nA = 0 ; nA < entry_list.size() ; nA++) {
-			
 			Entry entry = (Entry) entry_list.get(nA);
 			String lat_start = entry.getGeorss_point().trim().split(" ")[0];
 			String lon_start = entry.getGeorss_point().trim().split(" ")[1];
 			
-			// System.out.println("[createProjectsFromRss] " + entry.getTitle() + "/ " + lat_start + ", " + lon_start);
+			// logger.info("[createProjectsFromRss] " + entry.getTitle() + "/ " + lat_start + ", " + lon_start);
 			
-			for (int nB = 0 ; nB < 4 ; nB++) {
+			//We check for 4 possible scenarios.
+			for (int nB = 0 ; nB < AutomatedDislocBean.EARTHQUAKE_SLIP_SCENARIOS ; nB++) {
 				
 				// String projectname = entry.getTitle() + "(" + entry.getId().split(":")[3] + ")" + (nB+1);
-				
-				// System.out.println("[createProjectsFromRss] " + projectname + "/" + entry.getId().split(":")[3]);
+				// logger.info("[createProjectsFromRss] " + projectname + "/" + entry.getId().split(":")[3]);
 								
 				Fault fault = new Fault(); 
 				
@@ -564,7 +470,9 @@ class RunautomatedDisloc extends Thread {
 				fault.setFaultLatStart(Double.parseDouble(lat_start));
 				fault.setFaultLameLambda(1.0);
 				fault.setFaultLameMu(1.0);
-												
+				
+				//This is scenario #1
+				//REVIEW: width and length are set below, so why set dummy (0) values here.
 				if (nB == 0) {					
 					fault.setFaultLength(0);
 					fault.setFaultDipAngle(90);
@@ -575,6 +483,7 @@ class RunautomatedDisloc extends Thread {
 					thr = 0;
 				}
 				
+				//This is scenario #2
 				else if (nB == 1) {
 					fault.setFaultLength(0);
 					fault.setFaultDipAngle(90);
@@ -585,6 +494,7 @@ class RunautomatedDisloc extends Thread {
 					thr = 0;
 				}
 				
+				//Scenario #3
 				else if (nB == 2) {
 					fault.setFaultLength(0);
 					fault.setFaultDipAngle(45);
@@ -595,6 +505,7 @@ class RunautomatedDisloc extends Thread {
 					thr = 1;
 				}
 				
+				//Scenario #4
 				else if (nB == 3) {
 					fault.setFaultLength(0);
 					fault.setFaultDipAngle(45);
@@ -607,35 +518,44 @@ class RunautomatedDisloc extends Thread {
 				
 				double length;
 				double width;
-				if (!entry.isMover7()) {					
+				if (!entry.isMover7()) {
+					 //If magnitude is less than 7, the fault is square.
 					length = Math.sqrt(Math.sqrt(Math.pow(10, (3*(entry.getM()+10.7)/2))/(mu*0.6E-10)))/1E5;
 					width = length;
 				}
-				
 				else {				
+					 //Use a fixed width for M>7; the fault is rectangular instead of square
+					 //REVIEW: "20" is some magic number.
 					width = 20;
 					length = Math.sqrt(Math.pow(10,(3*(entry.getM()+10.7)/2))/(mu*0.6E-10))/(width*1E10);
 				}
 				
 				fault.setFaultLength(length);
 				fault.setFaultWidth(width);
+
+				//REVIEW: next several lines need to be explained.
 				fault.setFaultDepth(width/2);
-				double slip = 0.6*length*width;
-				// System.out.println("[AutomatedDislocBean/createProjectFromRss] slip = 0.6 * length * width (" + slip + " = 0.6 * " + length + " " + width);
-				
-				if (thr == 1)
+				double slip = 0.6*length*width;				
+				if (thr == 1) {
 					fault.setFaultDipSlip(slip * 10);
-				else
+				}
+				else {
 					fault.setFaultStrikeSlip(slip * 10);
+				}
 				
 				
 				// double x = (lonStart - currentParams.getOriginLon()) * factor(currentParams.getOriginLon(), currentParams.getOriginLat());
 				// double y = (latStart - currentParams.getOriginLat()) * 111.32;				
+
+				//We'll assume only one fault per simulation, so it will be 
+				//located at the origin
 				double x = 0; // because this will be always the first fault?
 				double y = 0; // because this will be always the first fault?
 				fault.setFaultLocationX(Double.parseDouble(df.format(x)));
 				fault.setFaultLocationY(Double.parseDouble(df.format(y)));
 				
+				//REVIEW: these should be inherited from the grandparent class.
+				//Also, all of this stuff should really be in a separate function.
 				double d2r = Math.acos(-1.0) / 180.0;
 				double flatten = 1.0/298.247;
 				double theFactor = d2r * Math.cos(d2r*Double.parseDouble(lat_start)) * 6378.139 * ( 1.0 - Math.sin(d2r * Double.parseDouble(lat_start)) * Math.sin(d2r * Double.parseDouble(lat_start)) * flatten);
@@ -691,20 +611,20 @@ class RunautomatedDisloc extends Thread {
 				
 				fault.setFaultLonEnd(lon_end);
 				fault.setFaultLatEnd(lat_end);
-				
-				
+
+				//REVIEW and this code has little to do with what came before.  It should 
+				//be in a separate function.
 				String projectname =  entry.getTitle() + "(" + entry.getId().split(":")[3] + ")_n_DA" + (double)Math.round((double)fault.getFaultDipAngle()*1000)/1000 + "_SA" + (double)Math.round((double)fault.getFaultStrikeAngle()*1000)/1000 + "_DS" + (double)Math.round((double)fault.getFaultDipSlip()*1000)/1000 + "_SS" + (double)Math.round((double)fault.getFaultStrikeSlip()*1000)/1000 + "_CASE_" + nB;
 				// String projectname = entry.getTitle() + "_" + nB;
-				
 				
 				pns.add(projectname);
 				hm.put(projectname, fault);
 				
 				// getProject(entry.getTitle() + "(" + entry.getId().split(":")[3] + ")" + (nB+1));
 				
+				//REVIEW: more disconnected code. Also, note the DB is deleted.
 				File f = new File(getContextBasePath() + "/overm5/" + projectname + ".db");
-				if (f.exists())
-					f.delete();
+				if (f.exists()) f.delete();
 				
 				ObjectContainer db = null;
 				DislocParamsBean tmp = null;
@@ -712,7 +632,6 @@ class RunautomatedDisloc extends Thread {
 				try {
 					db = Db4o.openFile(getContextBasePath() + "/overm5/" + projectname + ".db");
 					
-				
 					db.set(fault);
 					db.commit();
 					
@@ -720,6 +639,8 @@ class RunautomatedDisloc extends Thread {
 					tmp.setOriginLat(fault.getFaultLatStart());
 					tmp.setOriginLon(fault.getFaultLonStart());
 					
+					//Various magic numbers. These should be defined as static final
+					//fields somewhere.
 					tmp.setGridMinXValue(-100);
 					tmp.setGridMinYValue(-100);
 					tmp.setGridXIterations(420);
@@ -731,24 +652,16 @@ class RunautomatedDisloc extends Thread {
 					db.commit();				
 					
 				} catch (Exception e) {			
-					System.out.println("[RunautomatedDisloc/createProjectFromRss] " + e);
+					logger.info("[RunautomatedDisloc/createProjectFromRss] " + e);
 				}
 				
 				finally {
-					if (db != null)
-						db.close();
+					if (db != null) db.close();
 				}
-				
-				
-				// System.out.println("[addFault] " + e.getKey() + "/" + tmp.getOriginLat() + ", " + tmp.getOriginLon());
-				
+
 				OutputURLs ouls = null;
 				
 				// Now we assign x20 density by -100, -100, 0.5, 420. 09/22/2010 Jun Ji
-				
-
-				
-				
 				try {
 					ouls = runBlockingDislocJSF(projectname, tmp, fault, entry.getM(), nB);
 					getDislocProjectSummaryBeanCount();
@@ -757,6 +670,8 @@ class RunautomatedDisloc extends Thread {
 					e.printStackTrace();
 				}
 				
+				//REVIEW: Note these outs are associated with the the printwriter created
+				//previously. This is bad design.
 				out.println(pmBegin);
 				out.println("<name>"+projectname+"</name>");
 				
@@ -795,14 +710,13 @@ class RunautomatedDisloc extends Thread {
 		out.flush();
 		out.close();
 		
+		//REVIEW: More magic paths.
 		File newFile_rssdisloc = new File(getContextBasePath() + "/../../../../../" + rssdisloc_dir_name + "/overm5.kml");
-		
 		oldFile = new File(localDestination);
-		
+		//REVIEW: what is d?
 		d = new File(getContextBasePath() + "/../../../../../" + rssdisloc_dir_name);
 		
-		if (!d.exists())
-			d.mkdirs();
+		if (!d.exists()) d.mkdirs();
 		
 		try {
 			if(!newFile_rssdisloc.exists())
@@ -811,9 +725,9 @@ class RunautomatedDisloc extends Thread {
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			 //			e.printStackTrace();
+			 logger.error(e.getMessage());
 		}
-		
 		
 		Set s = hm.keySet();
 		String str[] = new String[pns.size()];
@@ -824,87 +738,11 @@ class RunautomatedDisloc extends Thread {
 		// addFault(hm);
 		createProject(str);	
 	}
-	
-	/*
-	private OutputURLs runBlockingDislocJSF(String projectName, DislocParamsBean currentParams, Fault fault, double M, int s_case) throws Exception {		
 		
-			
-			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] Started");
-			OutputURLs ourls = new OutputURLs();
-
-			try {
-
-				Fault[] faults = new Fault[1];
-				faults[0] = fault;
-				
-				ObsvPoint[] points = null;
-				DislocExtendedService dislocExtendedService = new DislocExtendedServiceServiceLocator().getDislocExtendedExec(new URL(dislocExtendedServiceUrl));
-				
-				System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] The project name: " + projectName);
-				System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] Faults : " + faults[0].getFaultName());
-				
-				
-				System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] projectName : " + projectName);
-				System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] points : " + points);
-				System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] faults : " + faults);
-				System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] currentParams : " + currentParams);
-
-				// This step runs disloc
-				DislocResultsBean dislocResultsBean = dislocExtendedService.runBlockingDislocExt("automatedDisloc", projectName, points, faults, currentParams, null);
-				// setJobToken(dislocResultsBean.getJobUIDStamp());
-				
-				System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] dislocResultsBean.getOutputFileUrl() :" + dislocResultsBean.getOutputFileUrl());
-				ourls.setDislocoutputURL(dislocResultsBean.getOutputFileUrl());
-
-				// This step makes the kml plots.  We allow this to fail.
-				String myKmlUrl = "";			
-				try {
-					 myKmlUrl = createKml(currentParams, dislocResultsBean, faults, projectName);
-					 System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] KmlUrl : " + myKmlUrl);
-					 // setJobToken(dislocResultsBean.getJobUIDStamp());
-				}
-				catch (Exception e) {
-					 e.printStackTrace();
-				}
-				
-				ourls.setDisplacementkmlURL(myKmlUrl);
-
-				// This step runs the insar plotting stuff.  We also allow this
-				// to fail.
-				InsarKmlService iks = new InsarKmlServiceServiceLocator().getInsarKmlExec(new URL(insarkmlServiceUrl));
-
-				insarKmlUrl="";
-				
-				try {
-					 insarKmlUrl = iks.runBlockingInsarKml("automatedDisloc", projectName, dislocResultsBean.getOutputFileUrl(), elevation, azimuth, frequency, "ExecInsarKml");
-					 System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] insarKmlUrl : " + insarKmlUrl);
-				}			
-				
-				catch (Exception e) {
-					 e.printStackTrace();
-				}
-				
-				ourls.setInsarkmlURL(insarKmlUrl);
-				// This sets the InSAR KML URL, which will be accessed by other
-				// pages.
-				// setInsarKmlUrl(insarKmlUrl);
-				storeProjectInContext("automatedDisloc", projectName, dislocResultsBean.getJobUIDStamp(), currentParams, dislocResultsBean, myKmlUrl, insarKmlUrl, elevation, azimuth, frequency);
-				
-			} catch (Exception e) {
-				 e.printStackTrace();
-			}
-			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] Finished");
-			
-			return ourls;
-		}
-		
-	*/
-	
-	// Using the pre-calculated insar images, disloc outputs. 09/23/2010 Jun Ji
-	
+	// Using the pre-calculated insar images, disloc outputs. 09/23/2010 Jun Ji	
 	private OutputURLs runBlockingDislocJSF(String projectName, DislocParamsBean currentParams, Fault fault, double M, int s_case) throws Exception {
 		
-		System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] Started");
+		logger.info("[AutomatedDislocBean/runBlockingDislocJSF] Started");
 		OutputURLs ourls = new OutputURLs();
 
 		try {
@@ -914,37 +752,16 @@ class RunautomatedDisloc extends Thread {
 			
 			ObsvPoint[] points = null;
 			
-			
-			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] The project name: " + projectName);
-			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] Faults : " + faults[0].getFaultName());
-			
-			
-			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] projectName : " + projectName);
-			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] points : " + points);
-			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] faults : " + faults);
-			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] currentParams : " + currentParams);			
-
-			// This step runs disloc
-			// DislocExtendedService dislocExtendedService = new DislocExtendedServiceServiceLocator().getDislocExtendedExec(new URL(dislocExtendedServiceUrl));
-			// DislocResultsBean dislocResultsBean = dislocExtendedService.runBlockingDislocExt("automatedDisloc", projectName, points, faults, currentParams, null);
-			// setJobToken(dislocResultsBean.getJobUIDStamp());
-			
-			// 09/17/2010 We will assign pre-calculated dislocResultsBean
-			
 			DislocResultsBean dislocResultsBean = getDislocResultsBean(projectName, currentParams, faults, points, M, s_case);	
 			
-			System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] dislocResultsBean.getOutputFileUrl() :" + dislocResultsBean.getOutputFileUrl());
+			logger.info("[AutomatedDislocBean/runBlockingDislocJSF] dislocResultsBean.getOutputFileUrl() :" + dislocResultsBean.getOutputFileUrl());
 			ourls.setDislocoutputURL(dislocResultsBean.getOutputFileUrl());
 
 			// This step makes the kml plots.  We allow this to fail.
-			String myKmlUrl = "no url";			
+			String myKmlUrl = "";			
 			try {
-				// currentParams.
-				
-				// Deprecated until we improve the KMLGenerator not to make the memory space error. Oct/07/2010
-				
 				myKmlUrl = createKml(currentParams, dislocResultsBean, faults, projectName);
-				 System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] KmlUrl : " + myKmlUrl);
+				 logger.info("[AutomatedDislocBean/runBlockingDislocJSF] KmlUrl : " + myKmlUrl);
 				 // setJobToken(dislocResultsBean.getJobUIDStamp());
 			}
 			catch (Exception e) {
@@ -960,21 +777,6 @@ class RunautomatedDisloc extends Thread {
 			// 09/17/2010 We will assign pre-calculated images
 			insarKmlUrl= getPrecalculatednsar(projectName, fault.getFaultLonStart(), fault.getFaultLatStart(), M, s_case, dislocResultsBean.getJobUIDStamp(), dislocResultsBean);
 			
-			/*
-			
-			InsarKmlService iks = new InsarKmlServiceServiceLocator().getInsarKmlExec(new URL(insarkmlServiceUrl));			
-			
-			try {
-				 insarKmlUrl = iks.runBlockingInsarKml("automatedDisloc", projectName, dislocResultsBean.getOutputFileUrl(), elevation, azimuth, frequency, "ExecInsarKml");
-				 System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] insarKmlUrl : " + insarKmlUrl);
-			}
-			
-			catch (Exception e) {
-				 e.printStackTrace();
-			}
-			*/
-			
-			
 			ourls.setInsarkmlURL(insarKmlUrl);
 			// This sets the InSAR KML URL, which will be accessed by other
 			// pages.
@@ -984,7 +786,7 @@ class RunautomatedDisloc extends Thread {
 		} catch (Exception e) {
 			 e.printStackTrace();
 		}
-		System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] Finished");
+		logger.info("[AutomatedDislocBean/runBlockingDislocJSF] Finished");
 		
 		return ourls;
 	}
@@ -995,14 +797,14 @@ class RunautomatedDisloc extends Thread {
 	    double yfactor = 111.32;
 	    
 	    double xfactor = 111.32*Math.cos(Math.toRadians(reflat))*(1.0 - flattening*Math.pow(Math.sin(Math.toRadians(reflat)), 2));
-	    System.out.println("x, y : " + x + ", " + y);
-	    System.out.println("xfactor : " + xfactor);
+	    logger.info("x, y : " + x + ", " + y);
+	    logger.info("xfactor : " + xfactor);
 	    
 	    double lon2 = x/xfactor + reflon; 
 	    double lat2 = y/yfactor + reflat;
 	    
-	    System.out.println("lon : " + lon2);
-	    System.out.println("lat : " + lat2);
+	    logger.info("lon : " + lon2);
+	    logger.info("lat : " + lat2);
 	    Double results[] = new Double[2];
 	    results[0] = lon2;
 	    results[1] = lat2;
@@ -1010,17 +812,25 @@ class RunautomatedDisloc extends Thread {
 	    return results;
 	}
 	
+	 /**
+	  * For the automated disloc, all fault models for a given magnitude earthquake are identical,
+	  * so the disloc results and interferrograms for a give M will be the same regardless of the 
+	  * location. 
+	  *
+	  * This method is used to see if precalculated results are available.  If so, they are used.  
+	  * If not, then new calculations for a given M are performed and the results are thereafter
+	  * available. 
+	  */ 
 	public String getPrecalculatednsar(String projectName, Double reflon, Double reflat, Double M, int s_case, String jobUID, DislocResultsBean drb) {		
 		
-		// http://156.56.104.99:8080//insarkmlservice/j.jun16@gmail.com/t1/-956396755/t1.output.png
-		
+		 //The precalculated results will be in a file following the pattern below.
 		File f = new File(tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case + "/M" + M + "_" + s_case + ".output.png");
 		String insarURL = null;
 		String insarimageURL = null;
 		
 		if (f.exists()) {		
 			
-			System.out.println("[AutomatedDislocBean/getPrecalculatednsar] " + projectName + " is using a precalculated insar image");
+			logger.info("[AutomatedDislocBean/getPrecalculatednsar] " + projectName + " is using a precalculated insar image");
 			
 			String north = "";
 			String south = "";
@@ -1029,13 +839,14 @@ class RunautomatedDisloc extends Thread {
 			
 			insarimageURL = baseurl + "/insar_precalculated/" + "M" + M + "_" + s_case + "/M" + M + "_" + s_case + ".output.png";
 			
-			
 			Double ts[] = null;
+			//REVIEW: Hard coded (-100, -100) not understood.
 			ts = dxy2lonlat(-100, -100, reflon, reflat);
 			
 			west = ts[0].toString();
 			south = ts[1].toString();
 			
+			//REVIEW: Hard coded (109.5,109.5) not understood
 			ts = dxy2lonlat(109.5, 109.5, reflon, reflat);
 			
 			east = ts[0].toString();
@@ -1091,13 +902,13 @@ class RunautomatedDisloc extends Thread {
 		
 		else {		
 			
-			System.out.println("[AutomatedDislocBean/getPrecalculatednsar] " + projectName + " is generating a new precalculated insar image");
+			logger.info("[AutomatedDislocBean/getPrecalculatednsar] " + projectName + " is generating a new precalculated insar image");
 			
 			InsarKmlService iks;
 			try {
 				iks = new InsarKmlServiceServiceLocator().getInsarKmlExec(new URL(insarkmlServiceUrl));
 				insarURL = iks.runBlockingInsarKml("automatedDisloc", projectName, drb.getOutputFileUrl(), elevation, azimuth, frequency, "ExecInsarKml");
-				System.out.println("[AutomatedDislocBean/runBlockingDislocJSF] insarKmlUrl : " + insarURL);
+				logger.info("[AutomatedDislocBean/runBlockingDislocJSF] insarKmlUrl : " + insarURL);
 				
 				f = new File(tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case);
 				if (!f.exists())
@@ -1127,9 +938,7 @@ class RunautomatedDisloc extends Thread {
 		return insarURL;		
 	}
 	
-	
-	private void SavefileFromUrl(String inputUrl, String fileName)
-	{	
+	private void SavefileFromUrl(String inputUrl, String fileName) 	{	
 			URL Url;
 			
 			try {
@@ -1173,7 +982,7 @@ class RunautomatedDisloc extends Thread {
 		
 		if (f.exists()) {
 			
-			System.out.println("[AutomatedDislocBean/getDislocResultsBean] " + projectName + " is using a precalculated disloc results");
+			logger.info("[AutomatedDislocBean/getDislocResultsBean] " + projectName + " is using a precalculated disloc results");
 			
 			drb = new DislocResultsBean();
 			drb.setProjectName(projectName);
@@ -1183,6 +992,7 @@ class RunautomatedDisloc extends Thread {
 					
 			String outputurl = baseurl + "/insar_precalculated/" + "M" + M + "_" + s_case + "/M" + M + "_" + s_case + ".output";
 			String stdouturl = baseurl + "/insar_precalculated/" + "M" + M + "_" + s_case + "/M" + M + "_" + s_case + ".stdout";
+			String kmlurl = baseurl + "/insar_precalculated/" + "M" + M + "_" + s_case + "/M" + M + "_" + s_case + ".kml";
 			
 			drb.setOutputFileUrl(outputurl);
 			drb.setStdoutUrl(stdouturl);
@@ -1190,21 +1000,20 @@ class RunautomatedDisloc extends Thread {
 		
 		else {			
 			
-			System.out.println("[AutomatedDislocBean/getDislocResultsBean] " + projectName + " is generating a new precalculated disloc results");
+			logger.info("[AutomatedDislocBean/getDislocResultsBean] " + projectName + " is generating a new precalculated disloc results");
 			
 			DislocExtendedService dislocExtendedService = new DislocExtendedServiceServiceLocator().getDislocExtendedExec(new URL(dislocExtendedServiceUrl));
 			drb = dislocExtendedService.runBlockingDislocExt("automatedDisloc", projectName, obsvPoints, faults, dislocParams, null);
 			
 			f = new File(tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case);
-			if (!f.exists())
-				f.mkdirs();
+			if (!f.exists()) f.mkdirs();
 			
 			SavefileFromUrl(drb.getOutputFileUrl(), tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case + "/M" + M + "_" + s_case + ".output");
 			
 			String stdout = drb.getOutputFileUrl().replace(".output", ".stdout");
 			SavefileFromUrl(stdout, tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case + "/M" + M + "_" + s_case + ".stdout");
+
 		}
-		
 		return drb;
 	}
 	
@@ -1218,7 +1027,7 @@ class RunautomatedDisloc extends Thread {
 		
 		String inputFile = tomcatbase + "/webapps/insar_precalculated/insar/" + jobUID + "/" + projectName + ".input";
 		String inputFileUrl = baseurl + "/insar_precalculated/insar/" + jobUID + "/" + projectName + ".input";
-		System.out.println("Input File: "+inputFile);
+		logger.info("Input File: "+inputFile);
 		PrintWriter pw=new PrintWriter(new FileWriter(inputFile),true);
 
 		//Create the input file.  First create the grid points
@@ -1232,7 +1041,7 @@ class RunautomatedDisloc extends Thread {
 		}
 
 		else {
-			System.out.println("Malformed disloc problem");
+			logger.info("Malformed disloc problem");
 			throw new Exception();
 		}
 
@@ -1253,7 +1062,6 @@ class RunautomatedDisloc extends Thread {
 	}
 	
 	protected void printFaultParams(PrintWriter pw, Fault[] faults) throws Exception {
-
 		for(int i=0;i<faults.length;i++) {
 			pw.println(faults[i].getFaultLocationX()
 					+ " " + faults[i].getFaultLocationY()
@@ -1272,7 +1080,6 @@ class RunautomatedDisloc extends Thread {
 		}
 	}
 	
-
 	protected void printGridObservationSites(PrintWriter pw, DislocParamsBean dislocParams) throws Exception {
 
 		pw.println(dislocParams.getGridMinXValue()
@@ -1290,10 +1097,8 @@ class RunautomatedDisloc extends Thread {
 		}
 	}
 			
-	
-	
 	public PointEntry[] LoadDataFromUrl(String InputUrl) {
-		System.out.println("[AutomatedDislocBean/LoadDataFromUrl] Creating Point Entry");
+		logger.info("[AutomatedDislocBean/LoadDataFromUrl] Creating Point Entry");
 		ArrayList dataset = new ArrayList();
 		ArrayList dataset_temp = new ArrayList();
 		try {
@@ -1304,8 +1109,7 @@ class RunautomatedDisloc extends Thread {
 			URLConnection uconn = inUrl.openConnection();
 			InputStream instream = inUrl.openStream();
 
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					instream));
+			BufferedReader in = new BufferedReader(new InputStreamReader(instream));
 
 			// Need to make sure this will work with multiple faults.
 			Pattern p = Pattern.compile(" {1,20}");
@@ -1313,17 +1117,14 @@ class RunautomatedDisloc extends Thread {
 				String tmp[] = p.split(line);
 
 				if (tmp[1].trim().equals("x") && tmp[2].trim().equals("y")) {
-					System.out.println("Past the faults");
+					logger.info("Past the faults");
 					break;
 				}
 			}
 			
 			while ((line = in.readLine()) != null) {
 				if (!line.trim().equalsIgnoreCase("")) {
-					
-					
 					PointEntry tempPoint = new PointEntry();
-
 					String tmp[] = p.split(line);
 
 					// Look for NaN or other problems.
@@ -1364,44 +1165,6 @@ class RunautomatedDisloc extends Thread {
 					 int dist = 1;
 					 int start_point = 0;
 					 int index_e = 0;
-					 
-					 // System.out.println("hello. " + total_points);			 
-					 /*
-					 if (nA < 700) {
-						 // 700
-						 ratio = 0.5;
-						 dist = 700;
-						 start_point = 0;
-						 index_e = 0;
-						 // System.out.println("1. " + total_points * 0.5);
-					 }
-					 
-					 else if (nA < 1100) {
-						 // 400
-						 ratio = 0.3;
-						 dist = 400;
-						 start_point = 700;
-						 index_e = (int) (total_points * 0.5);
-						 // System.out.println("2. " + nA + " <  " + total_points * 0.8);
-					 }
-					 
-					 else if (nA < 1300) {
-						 // 200
-						 ratio = 0.2;
-						 dist = 200;
-						 start_point = 1100;
-						 index_e = (int) (total_points * 0.8);
-						 // System.out.println("3. " + nA + " <  " + total_points * 1.0);
-					 }
-					 
-					 int nIndex = (int) ((total_points * ratio)/dist * (nA-start_point)) + index_e;
-					 // System.out.println(nIndex + " = " + total_points + "*" + ratio + "/" + dist + "*" + (nA-start_point));
-					 if (nIndex == total_points) {
-							 System.out.println("hit");
-							 nIndex -= 1;							 
-					 }
-					 
-					 */
 					 dist = limitedsize;
 					 int nIndex = (int) ((total_points * ratio)/dist * nA) + index_e;
 					 dataset.add(dataset_temp.get(nIndex));
@@ -1412,33 +1175,24 @@ class RunautomatedDisloc extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("[AutomatedDislocBean/LoadDataFromUrl] Finished");
+		logger.info("[AutomatedDislocBean/LoadDataFromUrl] Finished");
 		
 		return (PointEntry[]) (dataset.toArray(new PointEntry[dataset.size()]));
 	}
 	
 	protected String createKml(DislocParamsBean dislocParams, DislocResultsBean dislocResultsBean, Fault[] faults, String projectName) throws Exception {
-		System.out.println("[AutomatedDislocBean/createKml] Started");
-		System.out.println("[AutomatedDislocBean/createKml] Creating the KML file at " + kmlGeneratorUrl);
-		
 
 		// Get the project lat/lon origin. It is the lat/lon origin of the first fault.
 		String origin_lat = dislocParams.getOriginLat() + "";
 		String origin_lon = dislocParams.getOriginLon() + "";		
-
-		// System.out.println("[AutomatedDislocBean/createKml] The origin: " + origin_lon + " " + origin_lat);
-
-
-
 		PointEntry[] tmp_pointentrylist = LoadDataFromUrl(dislocResultsBean.getOutputFileUrl());
 		
-		
-		// System.out.println("[AutomatedDislocBean/createKml] The size of tmp_pointentrylist : " + tmp_pointentrylist.length);
-		// System.out.println("[AutomatedDislocBean/createKml] The size of faults of this project : " + faults.length);
-		System.out.println("[AutomatedDislocBean/createKml] The fault : " + faults[0].getFaultName());		
-		System.out.println("[AutomatedDislocBean/createKml] the length the fault : " + faults[0].getFaultLength());
-		System.out.println("[AutomatedDislocBean/createKml] the width the fault : " + faults[0].getFaultWidth());
-		// System.out.println("[AutomatedDislocBean/createKml] dislocResultsBean.getOutputFileUrl() : " + dislocResultsBean.getOutputFileUrl());
+		// logger.info("[AutomatedDislocBean/createKml] The size of tmp_pointentrylist : " + tmp_pointentrylist.length);
+		// logger.info("[AutomatedDislocBean/createKml] The size of faults of this project : " + faults.length);
+		logger.info("[AutomatedDislocBean/createKml] The fault : " + faults[0].getFaultName());		
+		logger.info("[AutomatedDislocBean/createKml] the length the fault : " + faults[0].getFaultLength());
+		logger.info("[AutomatedDislocBean/createKml] the width the fault : " + faults[0].getFaultWidth());
+		// logger.info("[AutomatedDislocBean/createKml] dislocResultsBean.getOutputFileUrl() : " + dislocResultsBean.getOutputFileUrl());
 
 		// These plot grid lines.
 		double start_x, start_y, end_x, end_y, xiterationsNumber, yiterationsNumber;
@@ -1451,27 +1205,8 @@ class RunautomatedDisloc extends Thread {
 		end_x = start_x + xinterval * (xiterationsNumber - 1);
 		end_y = start_y + yinterval * (yiterationsNumber - 1);
 
-		// kmlService.setGridLine("Grid Line", start_x, start_y, end_x, end_y, xinterval, yinterval);
-		// kmlService.setPointPlacemark("Icon Layer");
-		// kmlService.setArrowPlacemark("Arrow Layer", "ff66a1cc", 2);
-
 		
-		// get my kml
-		/*
-		SimpleXDataKml kmlService;
-		SimpleXDataKmlServiceLocator locator = new SimpleXDataKmlServiceLocator();
-		locator.setMaintainSession(true);
-		kmlService = locator.getKmlGenerator(new URL(kmlGeneratorUrl));
-		
-		kmlService.setOriginalCoordinate(origin_lon, origin_lat);
-		kmlService.setCoordinateUnit("1000");
-
-		kmlService.setDatalist(tmp_pointentrylist);
-		kmlService.setArrowPlacemark("Arrow Layer", "#000000", 0.95);
-		*/
-		
-		ExtendedSimpleXDataKml kmlservice;
-		
+		ExtendedSimpleXDataKml kmlservice;		
 		ExtendedSimpleXDataKmlServiceLocator locator = new ExtendedSimpleXDataKmlServiceLocator();
 		locator.setMaintainSession(true);
 		
@@ -1479,26 +1214,18 @@ class RunautomatedDisloc extends Thread {
 		kmlservice.setOriginalCoordinate(origin_lon, origin_lat);
 		kmlservice.setCoordinateUnit("1000");
 		
-		
-
 		// Plot the faults
 		for (int i = 0; i < faults.length; i++) {
 			// kmlService.setFaultPlot("", faults[i].getFaultName() + "", faults[i].getFaultLonStart() + "", faults[i].getFaultLatStart() + "", faults[i].getFaultLonEnd() + "", faults[i].getFaultLatEnd() + "", "ff6af0ff", 5.);
-			kmlservice.setFaultPlot("", faults[i].getFaultName() + "", faults[i].getFaultLonStart() + "", faults[i].getFaultLatStart() + "", faults[i].getFaultLonEnd() + "", faults[i].getFaultLatEnd() + "", "ff6af0ff", 5.);
-			
+			kmlservice.setFaultPlot("", faults[i].getFaultName() + "", faults[i].getFaultLonStart() + "", faults[i].getFaultLatStart() + "", faults[i].getFaultLonEnd() + "", faults[i].getFaultLatEnd() + "", "ff6af0ff", 5.);			
 		}
-
-		// String myKmlUrl = kmlService.runMakeKml("", "automatedDisloc", projectName, (dislocResultsBean.getJobUIDStamp()).hashCode() + "");
-		// String myKmlUrl = kmlservice.runMakeSubKmls(tmp_pointentrylist, "", "automatedDisloc", projectName, (dislocResultsBean.getJobUIDStamp()).hashCode() + "");
-		
-		System.out.println("[AutomatedDislocBean/createKml] going to runMakeSubKmls");
+		logger.info("[AutomatedDislocBean/createKml] going to runMakeSubKmls");
 		
 		String myKmlUrl = kmlservice.runMakeSubKmls(tmp_pointentrylist, "", "automatedDisloc", projectName, (dislocResultsBean.getJobUIDStamp()).hashCode() + "");
 		
-		System.out.println("[AutomatedDislocBean/createKml] Finished");
+		logger.info("[AutomatedDislocBean/createKml] Finished");
 		return myKmlUrl;
 	}
-	
 	
 	protected void storeProjectInContext(String userName, String projectName,
 			String jobUIDStamp, DislocParamsBean paramsBean,
@@ -1559,7 +1286,7 @@ class RunautomatedDisloc extends Thread {
 			
 		} catch (Exception e) {
 			
-			System.out.println("[AutomatedDislocBean/storeProjectInContext] " + e);
+			logger.info("[AutomatedDislocBean/storeProjectInContext] " + e);
 		}
 		
 		finally {
@@ -1588,8 +1315,8 @@ class RunautomatedDisloc extends Thread {
 					
 					else
 						returnstr = temp;
-					// System.out.println(file.getAbsolutePath());
-					// System.out.println("logreader : " + returnstr);
+					// logger.info(file.getAbsolutePath());
+					// logger.info("logreader : " + returnstr);
 				}
 				
 				loginput.close();
@@ -1627,11 +1354,11 @@ class RunautomatedDisloc extends Thread {
 	
 	 public void copyFile(File oldFileDB, File newFileDB) throws Exception {
 		 
-		  System.out.println("[AutomatedDislocBean/copyFile] From " + oldFileDB.toString() + " to " + newFileDB.toString());
-		  System.out.println("[AutomatedDislocBean/copyFile] oldFileDB.exists() : " + oldFileDB.exists());
-		  System.out.println("[AutomatedDislocBean/copyFile] oldFileDB.canRead() : " + oldFileDB.canRead());
-		  System.out.println("[AutomatedDislocBean/copyFile] newFileDB.exists() : " + newFileDB.exists());
-		  System.out.println("[AutomatedDislocBean/copyFile] newFileDB.canWrite() : " + newFileDB.canWrite());
+		  logger.info("[AutomatedDislocBean/copyFile] From " + oldFileDB.toString() + " to " + newFileDB.toString());
+		  logger.info("[AutomatedDislocBean/copyFile] oldFileDB.exists() : " + oldFileDB.exists());
+		  logger.info("[AutomatedDislocBean/copyFile] oldFileDB.canRead() : " + oldFileDB.canRead());
+		  logger.info("[AutomatedDislocBean/copyFile] newFileDB.exists() : " + newFileDB.exists());
+		  logger.info("[AutomatedDislocBean/copyFile] newFileDB.canWrite() : " + newFileDB.canWrite());
 		  
 
 		  if(oldFileDB.exists() && oldFileDB.canRead() 
@@ -1665,5 +1392,54 @@ class RunautomatedDisloc extends Thread {
 				System.err.println("[AutomatedDislocBean/copyFile] Copy failed");
 		  }
 	 }
+
+	public String test(String name) {
+		Properties properties = new Properties();
+		
+		try {
+			InputStream fis = this.getClass().getClassLoader().getResourceAsStream("automatedDisloc.properties");						
+			properties.load(fis);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String dir = properties.getProperty("output.dest.dir");	
+		
+		// logger.info("[getContextBasePath] called");
+		
+		File logfile = new File(dir + "/" + "log.txt");
+		
+		try {
+			logfile.createNewFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = new Date();
+		Date date1 = new Date();
+		String s = logreader(logfile, false);		
+
+		try {
+			if (s=="" || s==null)
+				date1.setTime(0);
+			else
+				date1.setTime(dateFormat.parse(s).getTime());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Date date2 = new Date(date.getTime()-date1.getTime());	
+		
+		//1 hour = 3600000
+		if (date2.getTime() > 3600000)
+			logwriter(logfile, dateFormat.format(date1));
+		
+		return "hello, " + name;
+	}
 }
 
