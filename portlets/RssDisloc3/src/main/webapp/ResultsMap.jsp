@@ -29,7 +29,8 @@
 	<script type="text/javascript" src="@host.base.url@@artifactId@/egeoxml_for_rssdisloc.js"></script>
  </head>
  
- <body onload="myInit()" onunload="GUnload()">
+ <body onload="myInit()" onunload="GUnload()"> 
+
 	<script type="text/javascript">
 	  //<![CDATA[
 		//Any "onload" operations for subcomponent includes need to go here.
@@ -44,10 +45,15 @@
 	</script>
 	
 	<f:view>
-	  <%-- This is needed to pull the data and may result in disloc executions --%>
-
 	  
 	  <h:outputText id="abdv1" styleClass="header2" value="Results Map"/>   
+     <f:verbatim>
+		 <ul>
+			<li>Click the earthquake name link to go its location. </li>
+			<li>Click the checkbox next to "InSAR Plot" or "Surface Displacement" to toggle results display on/off.</li>
+			<li>Click the "InSAR Plot" or "Surface Diplacement" links to download the source KML.
+		 </ul>
+	  </f:verbatim>
 	  <h:form id="refreshPage1">
 		 <h:commandLink id="lrilehdk239" action="disloc-this">
 			<h:outputText id="feo0re0" value="Refresh Page" />
@@ -56,14 +62,40 @@
 
 	  <p/>
 	  <h:form id="RssFaultsMap">
-	  <h:inputHidden id="projectNameList" value="DislocBean2.dbProjectNameList"/>
 		 <h:inputHidden id="faultName" value=""/> 
 		 
 		 <h:inputHidden id="projectsource" value="#{DislocBean2.projectsource}"/>   
 		 <h:inputHidden id="faultlistsize" value="#{DislocBean2.myFaultsForProjectListsize}"/>
 		 <h:panelGrid id="gridforbutton" columns="1" border="0" style="vertical-align:top;">
-
 		 </h:panelGrid>
+	<%
+	//<![CDATA[
+	//This is some crappy code for getting the disloc bean object.
+	//Needs to be improved and is probably conceptually flawed.
+	ExternalContext context = null;
+	FacesContext facesContext=FacesContext.getCurrentInstance();
+	try {
+	  context=facesContext.getExternalContext();
+	}
+	catch(Exception ex) {
+	  out.println(ex.getMessage());
+	}
+	Object requestObj=null;
+	requestObj=context.getRequest();
+	
+	DislocBean dsb = null;
+	
+	if(requestObj instanceof PortletRequest) {
+	  dsb = (DislocBean)((PortletRequest)requestObj).getPortletSession().getAttribute("DislocBean2");
+	}
+	else if(requestObj instanceof HttpServletRequest) {
+	  dsb = (DislocBean)request.getSession().getAttribute("DislocBean2");
+	}
+	//And this code calls the function that conditionally runs Disloc.
+	HashMap hm = dsb.getDbProjectNameList();
+	//]]>
+	%>
+
 		 <f:verbatim>
 				 <script type="text/javascript">
 					//<![CDATA[
@@ -76,7 +108,7 @@
 					}
 					
 					togglerssbox = function(n) {
-					var source =document.getElementById("RssFaultsMap:projectsource");
+					var source=document.getElementById("RssFaultsMap:projectsource");
 					
 					var a = new Array();
 					if (source.value != "")
@@ -106,38 +138,6 @@
 					}
 					//]]> //Keep for formatting
 				 </script>
-
-      <%
-		//<![CDATA[
-		ExternalContext context = null;
-		FacesContext facesContext=FacesContext.getCurrentInstance();
-		
-		try {
-		context=facesContext.getExternalContext();
-		}
-		catch(Exception ex) {
-		ex.printStackTrace();
-		}
-		
-		Object requestObj=null;
-		requestObj=context.getRequest();
-		
-		DislocBean dsb = null;
-		
-		List l = null;
-		List l2 = null;
-		
-		if(requestObj instanceof PortletRequest) {
-		// System.out.println("[LoadProject.jsp] requestObj is an instance of PortletRequest");
-		dsb = (DislocBean)((PortletRequest)requestObj).getPortletSession().getAttribute("DislocBean2");
-		}
-		
-		else if(requestObj instanceof HttpServletRequest) {
-		// System.out.println("[LoadProject.jsp] requestObj is an instance of HttpServletRequest");
-		dsb = (DislocBean)request.getSession().getAttribute("DislocBean2");
-		}
-		//]]>
-		%>
 
 		<h:panelGrid id="faultMapsideGrid" columns="2" border="1">
 		  <f:verbatim>
@@ -230,7 +230,7 @@
 	function myside(myvar,name,type,i,graphic) {
 	if((type == "polyline" || type == "polygon") || type == "GroundOverlay") {
 	var s = name.split("_n_")[1];
-	return '<input type="checkbox"  onchange="togglerssbox(\'' + name + '\')" value="1">' + '<a id="'+name+'" href="javascript:GEvent.trigger(document.getElementById(\'RssFaultsMap:faultName\'),\'click\',\''+name+'\','+myvar+'.gpolyobjs['+i+'], \'script\', '+myvar+'.gpolyobjs_desc['+i+'])">' + s + '</a>';
+	return '<a id="'+name+'" href="javascript:GEvent.trigger(document.getElementById(\'RssFaultsMap:faultName\'),\'click\',\''+name+'\','+myvar+'.gpolyobjs['+i+'], \'script\', '+myvar+'.gpolyobjs_desc['+i+'])">' + s + '</a>';
 	}
 	
 	return "";

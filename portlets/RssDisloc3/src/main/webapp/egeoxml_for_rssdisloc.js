@@ -764,16 +764,14 @@ EGeoXml.prototype.processing = function(doc) {
 	  }
 	    
 	    var html_temp = side_bar_list_ordered_html[idx];
-	    html_temp += '<ul><li><input type="checkbox" name="' + url_bits[0] + '_overlays"' + 'id="' + url_bits[0] + '_overlays_' + (i-this.overlaycounter) + '"' + ' onchange="' + this.myvar + '.togglechboxofOverlay(' + '\'' + url_bits[0] + '\',' + i + ',' + this.overlaycounter + ')" checked/>' + that.sidebarfn(that.myvar,bits[0],bits[1],bits[2],bits[3]);
+//	    html_temp += '<ul><li><input type="checkbox" name="' + url_bits[0] + '_overlays"' + 'id="' + url_bits[0] + '_overlays_' + (i-this.overlaycounter) + '"' + ' onchange="' + this.myvar + '.togglechboxofOverlay(' + '\'' + url_bits[0] + '\',' + i + ',' + this.overlaycounter + ')" checked/>' + that.sidebarfn(that.myvar,bits[0],bits[1],bits[2],bits[3]);
 
+		 html_temp += '<ul><li>';
+		 html_temp += that.sidebarfn(that.myvar,bits[0],bits[1],bits[2],bits[3]);
 	    html_temp += '<ul>';
-	    html_temp += '<li>'+ '<input type="checkbox" name="' + url_bits[0] + '_2_overlays"' + 'id="' + url_bits[0] + '_2_overlays_' + (i-this.overlaycounter) + '"' + ' onchange="' + this.myvar + '.toggleInsarKml(\'' + url_bits[0] + '\',' + i + ',\'' + this.insarkmls[i] + '\')" checked/><a href="' + this.insarkmls[i] + '">InSar Kml</a></li>';
-
-// Deprecated until we improve the KMLGenerator not to make the memory space error. Oct/07/2010
-//	    html_temp += '<li>'+
-// '<input type="checkbox" name="' + url_bits[0] + '_1_overlays"' + 'id="' + url_bits[0] + '_1_overlays_' + (i-this.overlaycounter) + '"' + ' onchange="' + this.myvar + '.toggleDisplacementKml(\'' + url_bits[0] + '\',' + i + ', \'' + this.displacementkmls[i] + '\')" checked/><a href="' + this.displacementkmls[i] + '">Displacement Kml</a><br>' +
-// '<input type="checkbox" name="' + url_bits[0] + '_2_overlays"' + 'id="' + url_bits[0] + '_2_overlays_' + (i-this.overlaycounter) + '"' + ' onchange="' + this.myvar + '.toggleInsarKml(\'' + url_bits[0] + '\',' + i + ',\'' + this.insarkmls[i] + '\')" checked/><a href="' + this.insarkmls[i] + '">InSar Kml</a></li>';
-
+	    html_temp += '<li>'+
+ '<input type="checkbox" name="' + url_bits[0] + '_1_overlays"' + 'id="' + url_bits[0] + '_1_overlays_' + (i-this.overlaycounter) + '"' + ' onchange="' + this.myvar + '.toggleDisplacementKml(\'' + url_bits[0] + '\',' + i + ', \'' + this.displacementkmls[i] + '\')" checked/><a href="' + this.displacementkmls[i] + '">Surface Displacement</a><br>' 
+     html_temp += '<input type="checkbox" name="' + url_bits[0] + '_2_overlays"' + 'id="' + url_bits[0] + '_2_overlays_' + (i-this.overlaycounter) + '"' + ' onchange="' + this.myvar + '.toggleInsarKml(\'' + url_bits[0] + '\',' + i + ',\'' + this.insarkmls[i] + '\')" checked/><a href="' + this.insarkmls[i] + '">InSar Plot</a></li>';
 	    html_temp += '</ul>';
 	    html_temp += '</li></ul>';
 
@@ -784,16 +782,7 @@ EGeoXml.prototype.processing = function(doc) {
 	      that.side_bar_html += side_bar_list_ordered_html[nA] + '</li>';
 	  }
 
-
-
-
-
-
-
 ///////////////////
-
-
-
 
 	if(n==this.urls.length-1) {
 		that.side_bar_html += '</ul>';

@@ -158,6 +158,7 @@ public class DislocBean extends GenericSopacBean {
 	public String getAutomatedDislocServiceUrl() {
 		return automatedDislocServiceUrl;
 	}
+
 	public void setAutomatedDislocServiceUrl(String automatedDislocServiceUrl) {
 		this.automatedDislocServiceUrl = automatedDislocServiceUrl;
 	}
@@ -197,6 +198,7 @@ public class DislocBean extends GenericSopacBean {
 
 		return point;
 	}
+
 	public void createFaultFromMap() {
 
 		Fault tmp_fault = new Fault();
@@ -297,6 +299,7 @@ public class DislocBean extends GenericSopacBean {
 
 		currentFault = tmp_fault;
 	}
+
 	/**
 	 * Create a KML file of the faults. The method assumes access to global
 	 * variables.
@@ -1758,95 +1761,6 @@ public class DislocBean extends GenericSopacBean {
 			e.printStackTrace();
 		}
 
-		/*
-		 * 
-		 * 
-		 * String theFault = faultAndSegment.substring(0,
-		 * faultAndSegment.indexOf("@")); String
-		 * theSegment=faultAndSegment.substring(faultAndSegment.indexOf("@") +
-		 * 1, faultAndSegment.indexOf("%"));
-		 * 
-		 * String
-		 * interpId=faultAndSegment.substring(faultAndSegment.indexOf("%") + 1,
-		 * faultAndSegment.length());
-		 * 
-		 * 
-		 * try { SelectService ss = new SelectServiceLocator(); Select select =
-		 * ss.getSelect(new URL(faultDBServiceUrl));
-		 * 
-		 * // -------------------------------------------------- // Make
-		 * queries. // -------------------------------------------------- double
-		 * dip = Double.parseDouble(getDBValue(select, "Dip", theFault,
-		 * theSegment,interpId)); double strike =
-		 * Double.parseDouble(getDBValue(select, "Strike", theFault,
-		 * theSegment,interpId)); double depth =
-		 * Double.parseDouble(getDBValue(select, "Depth", theFault,
-		 * theSegment,interpId)); double width =
-		 * Double.parseDouble(getDBValue(select, "Width", theFault,
-		 * theSegment,interpId));
-		 * 
-		 * // Get the length and width double latEnd =
-		 * Double.parseDouble(getDBValue(select, "LatEnd", theFault,
-		 * theSegment,interpId)); double latStart =
-		 * Double.parseDouble(getDBValue(select, "LatStart", theFault,
-		 * theSegment,interpId)); double lonStart =
-		 * Double.parseDouble(getDBValue(select, "LonStart", theFault,
-		 * theSegment,interpId)); double lonEnd =
-		 * Double.parseDouble(getDBValue(select, "LonEnd", theFault,
-		 * theSegment,interpId)); // Calculate the length double d2r =
-		 * Math.acos(-1.0) / 180.0; double flatten=1.0/298.247;
-		 * 
-		 * double x = (lonEnd - lonStart) * factor(lonStart,latStart); double y
-		 * = (latEnd - latStart) * 111.32; // String length =
-		 * df.format(Math.sqrt(x * x + y * y)); // double length = Math.sqrt(x *
-		 * x + y * y);
-		 * 
-		 * double length=Double.parseDouble(df.format(Math.sqrt(x * x + y *
-		 * y))); tmp_fault.setFaultName(theFault);
-		 * tmp_fault.setFaultLatStart(latStart);
-		 * tmp_fault.setFaultLonStart(lonStart);
-		 * tmp_fault.setFaultLonEnd(lonEnd); tmp_fault.setFaultLatEnd(latEnd);
-		 * tmp_fault.setFaultLength(length); tmp_fault.setFaultWidth(width);
-		 * tmp_fault.setFaultDepth(depth); tmp_fault.setFaultDipAngle(dip);
-		 * 
-		 * //This is the fault's strike angle strike=Math.atan2(x,y)/d2r;
-		 * tmp_fault.setFaultStrikeAngle(Double.parseDouble(df.format(strike)));
-		 * 
-		 * //This is the (x,y) of the fault relative to the project's origin
-		 * //The project origin is the lower left lat/lon of the first fault.
-		 * //If any of these conditions hold, we need to reset.
-		 * System.out.println("Origin:"+currentParams.getOriginLat()+" "
-		 * +currentParams.getOriginLon());
-		 * if(currentParams.getOriginLat()==DislocParamsBean.DEFAULT_LAT ||
-		 * currentParams.getOriginLon()==DislocParamsBean.DEFAULT_LON ) {
-		 * currentParams.setOriginLat(latStart);
-		 * currentParams.setOriginLon(lonStart); //Update the parameters
-		 * 
-		 * if(db!=null) db.close(); db=Db4o.openFile(getBasePath()+"/"
-		 * +getContextBasePath() +"/"+userName
-		 * +"/"+codeName+"/"+projectName+".db"); ObjectSet
-		 * result=db.get(DislocParamsBean.class); if(result.hasNext()) {
-		 * DislocParamsBean tmp=(DislocParamsBean)result.next(); db.delete(tmp);
-		 * } db.set(currentParams);
-		 * 
-		 * //Say goodbye. db.commit(); if(db!=null) db.close();
-		 * 
-		 * }
-		 * System.out.println("Updated Origin:"+currentParams.getOriginLat()+" "
-		 * +currentParams.getOriginLon());
-		 * 
-		 * //The following should be done in any case. //If the origin was just
-		 * (re)set above, //we will get a harmless (0,0); double
-		 * x1=(lonStart-currentParams.getOriginLon())
-		 * factor(currentParams.getOriginLon(), currentParams.getOriginLat());
-		 * double y1=(latStart-currentParams.getOriginLat())*111.32;
-		 * System.out.println("Fault origin: "+x1+" "+y1);
-		 * tmp_fault.setFaultLocationX(Double.parseDouble(df.format(x1)));
-		 * tmp_fault.setFaultLocationY(Double.parseDouble(df.format(y1))); //
-		 * tmp_fault.setFaultLocationX(x1); // tmp_fault.setFaultLocationY(y1);
-		 * 
-		 * } catch (Exception e) { e.printStackTrace(); }
-		 */
 		return tmp_fault;
 	}
 

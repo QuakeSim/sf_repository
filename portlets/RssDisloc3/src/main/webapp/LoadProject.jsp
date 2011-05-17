@@ -23,7 +23,7 @@
 
 <body>
 
- <script language="JavaScript">
+ <script type="text/javascript">
 
   function selectOne(form , button) {
    turnOffRadioForForm(form);
@@ -57,7 +57,7 @@
   }
 
   togglerssbox = function(n) {
-   var source =document.getElementById("dpdp1:projectsource");
+   var source=document.getElementById("dpdp1:projectsource");
    
    var a = new Array();
    if (source.value != "")
@@ -109,17 +109,11 @@
       <script type="text/javascript" src="@host.base.url@@artifactId@/lib/jquery.cookie.js"></script>
       <script type="text/javascript" src="@host.base.url@@artifactId@/jquery.treeview.js"></script>
       <script type="text/javascript" src="@host.base.url@@artifactId@/demo.js"></script>
-
+		
       <%
 
 	ExternalContext context = null;
 	FacesContext facesContext=FacesContext.getCurrentInstance();
-	/*
-	if(facesContext==null)
-	  System.out.println("[LoadProject.jsp] a null facesContext error");
-	else
-	  System.out.println("[LoadProject.jsp] the facesContext isn't null");
-	*/
 
 	try {
 	  context=facesContext.getExternalContext();
@@ -136,11 +130,6 @@
 	List l = null;
 	List l2 = null;
 	      
-	/*
-	Enumeration e = application.getAttributeNames();
-	while(e.hasMoreElements())
-	  System.out.println("[Disloc3/LoadProject] " + e.nextElement());
-	*/
 
 	if(requestObj instanceof PortletRequest) {
 	  // System.out.println("[LoadProject.jsp] requestObj is an instance of PortletRequest");
@@ -151,9 +140,6 @@
 	  // System.out.println("[LoadProject.jsp] requestObj is an instance of HttpServletRequest");
 	  dsb = (DislocBean)request.getSession().getAttribute("DislocBean2");
 	}
-	
-
-	// System.out.println(dsb.getCodeName());
 
       %>
 
