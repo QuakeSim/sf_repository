@@ -4,8 +4,6 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ page import="java.util.*, java.io.*, java.util.*, java.net.URL, java.lang.*, org.dom4j.*, org.dom4j.io.*, cgl.quakesim.disloc.*, javax.faces.context.ExternalContext, javax.servlet.http.HttpServletRequest, javax.portlet.PortletRequest, javax.faces.context.FacesContext, javax.faces.model.SelectItem, com.db4o.*"%>
 
-
-
 <html>
  <style>
    .alignTop {
@@ -88,10 +86,6 @@
    }
    source.setAttribute("value",c);    
   }
-
-
-
-
  </script>
 
  <f:view>
@@ -101,7 +95,6 @@
   <p/>
   <h:outputText id="lptv11" value="You don't have any archived projects." rendered="#{empty DislocBean2.myProjectNameList && empty DislocBean2.dbProjectNameList}"/>
   
-
   <h:panelGrid id="lptv12" columnClasses="alignTop,alignTop,alignTop, alignTop" columns="4" rendered="#{!(empty DislocBean2.myProjectNameList) || !empty DislocBean2.dbProjectNameList}" border="1">
 
 
@@ -149,8 +142,6 @@
 	  System.out.println("[Disloc3/LoadProject] " + e.nextElement());
 	*/
 
-	
-
 	if(requestObj instanceof PortletRequest) {
 	  // System.out.println("[LoadProject.jsp] requestObj is an instance of PortletRequest");
 	  dsb = (DislocBean)((PortletRequest)requestObj).getPortletSession().getAttribute("DislocBean2");
@@ -160,15 +151,11 @@
 	  // System.out.println("[LoadProject.jsp] requestObj is an instance of HttpServletRequest");
 	  dsb = (DislocBean)request.getSession().getAttribute("DislocBean2");
 	}
-
-      
 	
 
 	// System.out.println(dsb.getCodeName());
 
       %>
-
-
 
       <ul id="browser">
 

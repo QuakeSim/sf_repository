@@ -16,7 +16,7 @@
 <strong><br>QuakeSim2 OpenID login test page:<br><br>
 </strong>
 <input type="hidden" name="openid" value="https://www.google.com/accounts/o8/id" size="60"/><br>
-<input type="submit" value="log in into google"/>
+<input type="submit" value="Login with your Google ID"/>
 </form>
 <%
 } else {

@@ -36,7 +36,7 @@ import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSession;
 
 /**
- * Everything you need to set up and run MeshGenerator.
+ * Run disloc
  */
 
 public class DislocBean extends GenericSopacBean implements HttpSessionBindingListener {
@@ -100,7 +100,6 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	 //These are used for plotting outputs of the most recent run.
 	 String myKmlUrl=null;
 	 
-
 	// These are search parameter strings.
 	String forSearchStr = "";
 	

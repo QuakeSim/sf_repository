@@ -24,12 +24,10 @@ import TestClient.Select.SelectServiceLocator;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 
-
-
 import com.db4o.*;
 
 /**
- * Everything you need to set up and run MeshGenerator.
+ * Run the automated version of Disloc.
  */
 
 public class DislocBean extends GenericSopacBean {
@@ -135,14 +133,10 @@ public class DislocBean extends GenericSopacBean {
 	String projectsource = "";
 
 	String realPath;
+
 	boolean renderAddFaultFromDBForm = false;
 	boolean renderAddFaultSelectionForm = false;
 	boolean renderChooseObsvStyleForm = false;
-
-	/**
-	 * The following are property fields. Associated get/set methods are at the
-	 * end of the code listing.
-	 */
 	boolean renderCreateNewFaultForm = false;
 	boolean renderDislocGridParamsForm = false;
 	boolean renderFaultMap = false;
@@ -157,10 +151,10 @@ public class DislocBean extends GenericSopacBean {
 	String[] selectProjectsArray;
 	boolean usesGridPoints;
 	
-	
-	String automatedDislocServiceUrl;
-	
-
+	 String automatedDislocServiceUrl;
+	 String usgsFeedUrl="http://localhost:8080/7day-M5.xml";
+	 //String usgsFeedUrl="http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml";
+	 
 	public String getAutomatedDislocServiceUrl() {
 		return automatedDislocServiceUrl;
 	}
@@ -284,7 +278,6 @@ public class DislocBean extends GenericSopacBean {
 				if (projectdb!=null)
 					projectdb.close();
 			}
-
 		}
 		System.out.println("[" + getUserName() + "/RssDisloc3/DislocBean/createFaultFromMap] Updated Origin:" + currentParams.getOriginLat() + " " + currentParams.getOriginLon());
 
@@ -671,10 +664,6 @@ public class DislocBean extends GenericSopacBean {
 		return currentFault;
 	}
 
-
-
-
-
 	public DislocParamsBean getCurrentParams() {
 		return currentParams;
 	}
@@ -687,13 +676,14 @@ public class DislocBean extends GenericSopacBean {
 		return this.currentSummary;
 	}
 
-	public HashMap getDbProjectNameList()
-	{
+	public HashMap getDbProjectNameList() {
 
 		System.out.println("[" + getUserName() + "/DislocBean/getDbProjectNameList] called");
 
 		Client c = Client.create();
-		WebResource webResource = c.resource(getAutomatedDislocServiceUrl() + "/run?url=http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml");
+		//REVIEW: The USGS RSS feed URL should not be hard coded.
+		//		WebResource webResource = c.resource(getAutomatedDislocServiceUrl() + "/run?url=http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml");
+		WebResource webResource = c.resource(getAutomatedDislocServiceUrl() + "/run?url="+usgsFeedUrl);
 		System.out.println("[" + getUserName() + "/DislocBean/getDbProjectNameList] " + getAutomatedDislocServiceUrl());
 		
 		webResource.get(String.class);
@@ -2047,12 +2037,6 @@ public class DislocBean extends GenericSopacBean {
 			Fault[] faults = getFaultsFromDB();
 			ObsvPoint[] points = getObsvPointsFromDB();
 			initDislocExtendedService();
-
-			System.out.println("[" + getUserName() + "/RssDisloc3/DislocBean/runBlockingDislocJSF] userName : " + userName);
-			System.out.println("[" + getUserName() + "/RssDisloc3/DislocBean/runBlockingDislocJSF] projectName : " + projectName);
-			System.out.println("[" + getUserName() + "/RssDisloc3/DislocBean/runBlockingDislocJSF] points : " + points);
-			System.out.println("[" + getUserName() + "/RssDisloc3/DislocBean/runBlockingDislocJSF] faults : " + faults);
-			System.out.println("[" + getUserName() + "/RssDisloc3/DislocBean/runBlockingDislocJSF] currentParams : " + currentParams);
 
 			// This step runs disloc
 			DislocResultsBean dislocResultsBean = dislocExtendedService.runBlockingDislocExt(userName, projectName, points, faults, currentParams, null);

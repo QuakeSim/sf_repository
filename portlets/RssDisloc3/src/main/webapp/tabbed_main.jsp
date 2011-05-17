@@ -25,7 +25,7 @@
 function TapAccess(index){
 
       var s = '<iframe scrolling="yes" width=100% height="850" frameborder="1" src="@host.base.url@@artifactId@/' + index + '.faces?email=<%=session.getAttribute("email")%>"></iframe>'
-      document.getElementById("TabDiv").innerHTML = s;
+      document.getElementById("TabDiv").innerHTMLg = s;
  }
 
 </script>
@@ -50,7 +50,7 @@ function TapAccess(index){
 
 
 <div id="TabDiv" name="TabDiv" style="display:select">
-<iframe scrolling="yes" width=100% height="850" frameborder="1" src="@host.base.url@@artifactId@/LoadProject.faces?email=<%=session.getAttribute("email")%>"></iframe>
+<iframe scrolling="yes" width="100%" height="850" frameborder="1" src="@host.base.url@@artifactId@/LoadProject.faces?email=<%=session.getAttribute("email")%>"></iframe>
 </div>
 
 <script type="text/javascript">
