@@ -17,7 +17,7 @@
   </parent>
   
   <properties>
-	 <catalina.home>${env.HOME}/QuakeSim2/portal_deploy/apache-tomcat-5.5.20</catalina.home>
+	 <catalina.home>/home/gateway/QuakeSim2/portal_deploy/apache-tomcat-5.5.20</catalina.home>
   </properties>
 
   <dependencies>
