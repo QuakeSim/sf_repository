@@ -65,7 +65,7 @@ public class CglGeoRssParser {
 	  * Note "entry" is a tag used by RSS. USGS uses it to 
 	  * denote a new earthquake.
 	  */ 
-	public List getEntryList() {
+	public List <Entry>getEntryList() {
 		
 		List entry_list = new ArrayList();
 		
