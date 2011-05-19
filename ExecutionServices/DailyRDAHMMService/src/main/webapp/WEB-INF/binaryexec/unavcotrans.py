@@ -14,7 +14,7 @@
 #============================================
 
 import csv, sys, os, subprocess, urllib
-from datetime import datetime
+from datetime import datetime, timedelta
 
 numargv = len(sys.argv)
 unavco_client_path = "./unavcoClients"
@@ -56,7 +56,11 @@ elif numargv == 5:
     for row in inputReader:
         row = filter(None, row)
         if len(row) >= 25: 
-            rdate = datetime.strptime(row[0]+" "+row[1], "%Y%m%d %H%M%S")
+            if (row[1][-2:] == '60'):
+                row[1] = row[1][:-2] + '00'
+                rdate = datetime.strptime(row[0]+" "+row[1], "%Y%m%d %H%M%S") + timedelta(seconds=60)
+            else:
+                rdate = datetime.strptime(row[0]+" "+row[1], "%Y%m%d %H%M%S")
             if rdate >= bdate and rdate <= edate: 
                 date = rdate.strftime("%Y-%m-%dT%H:%M:%S")
                 lat, lon, vert = map(float, row[12:15])
