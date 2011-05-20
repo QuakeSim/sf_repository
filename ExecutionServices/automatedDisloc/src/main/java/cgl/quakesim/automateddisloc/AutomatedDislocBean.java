@@ -428,7 +428,14 @@ class RunautomatedDisloc extends Thread {
 			
 			ObsvPoint[] points = null;
 			
-			DislocResultsBean dislocResultsBean = getDislocResultsBean(projectName, currentParams, faults, points, M, s_case);	
+			//This method call checks to see if Disloc has been run for this problem. If so,
+			//results are reused, and if not, do a new calculation. 
+			DislocResultsBean dislocResultsBean = getDislocResultsBean(projectName, 
+																						  currentParams, 
+																						  faults, 
+																						  points, 
+																						  M, 
+																						  s_case);	
 			
 			ourls.setDislocoutputURL(dislocResultsBean.getOutputFileUrl());
 
@@ -647,6 +654,10 @@ class RunautomatedDisloc extends Thread {
 			}			
 	}
 	
+	 /**
+	  * Get the disloc results. These may be precalculated, but if not, do a new
+	  * disloc calculation.
+	  */
 	public DislocResultsBean getDislocResultsBean(String projectName, 
 																 DislocParamsBean dislocParams, 
 																 Fault[] faults, 
@@ -787,9 +798,15 @@ class RunautomatedDisloc extends Thread {
 			pw.println(obsvPoints[i].getXcartPoint() + " " + obsvPoints[i].getYcartPoint());
 		}
 	}
-			
+	 /**
+	  * Creates a PointEntry[] array from the output data of a disloc run. This is
+	  * input for the KML arrow plotting service.
+	  *
+	  * REVIEW: should this be public or protected?
+	  */
 	public PointEntry[] LoadDataFromUrl(String InputUrl) {
-		logger.info("[AutomatedDislocBean/LoadDataFromUrl] Creating Point Entry");
+		 logger.info("[AutomatedDislocBean/LoadDataFromUrl] Creating Point Entry");
+		 logger.info("Input URL:"+InputUrl);
 		ArrayList dataset = new ArrayList();
 		ArrayList dataset_temp = new ArrayList();
 		try {
@@ -849,9 +866,7 @@ class RunautomatedDisloc extends Thread {
 				dataset = dataset_temp;
 			
 			else {
-			
 				 for (int nA = 0 ; nA < limitedsize ; nA++) {
-					 
 					 double ratio = 1;
 					 int dist = 1;
 					 int start_point = 0;
@@ -859,7 +874,6 @@ class RunautomatedDisloc extends Thread {
 					 dist = limitedsize;
 					 int nIndex = (int) ((total_points * ratio)/dist * nA) + index_e;
 					 dataset.add(dataset_temp.get(nIndex));
-					 
 				 }
 			}
 			
@@ -868,7 +882,9 @@ class RunautomatedDisloc extends Thread {
 		}
 		logger.info("[AutomatedDislocBean/LoadDataFromUrl] Finished");
 		
-		return (PointEntry[]) (dataset.toArray(new PointEntry[dataset.size()]));
+		logger.info("Number of entries:"+dataset.size());
+		PointEntry[] pointEntries=(PointEntry[]) (dataset.toArray(new PointEntry[dataset.size()]));
+		return pointEntries;
 	}
 	
 	protected String createKml(DislocParamsBean dislocParams, DislocResultsBean dislocResultsBean, Fault[] faults, String projectName) throws Exception {
@@ -912,14 +928,27 @@ class RunautomatedDisloc extends Thread {
 		
 		// Plot the faults
 		for (int i = 0; i < faults.length; i++) {
-			// kmlService.setFaultPlot("", faults[i].getFaultName() + "", faults[i].getFaultLonStart() + "", faults[i].getFaultLatStart() + "", faults[i].getFaultLonEnd() + "", faults[i].getFaultLatEnd() + "", "ff6af0ff", 5.);
+			// kmlservice.setFaultPlot("", faults[i].getFaultName() + "", faults[i].getFaultLonStart() + "", faults[i].getFaultLatStart() + "", faults[i].getFaultLonEnd() + "", faults[i].getFaultLatEnd() + "", "ff6af0ff", 5.);
 			kmlservice.setFaultPlot("", faults[i].getFaultName() + "", faults[i].getFaultLonStart() + "", faults[i].getFaultLatStart() + "", faults[i].getFaultLonEnd() + "", faults[i].getFaultLatEnd() + "", "ff6af0ff", 5.);			
 		}
-		logger.info("[AutomatedDislocBean/createKml] going to runMakeSubKmls");
+		logger.info("[AutomatedDislocBean/createKml] runMakeKml");
 		
+		kmlservice.setDatalist(tmp_pointentrylist);
+		kmlservice.setOriginalCoordinate(origin_lon, origin_lat);
+		kmlservice.setCoordinateUnit("1000");
+		kmlservice.setArrowPlacemark("Arrow Layer", "#000000", 0.95);
+		// Plot the faults
+		for (int i = 0; i < faults.length; i++) {
+			 kmlservice.setFaultPlot("", faults[i].getFaultName() + "",
+											 faults[i].getFaultLonStart() + "", faults[i]
+											 .getFaultLatStart()
+											 + "", faults[i].getFaultLonEnd() + "", faults[i]
+											 .getFaultLatEnd()
+											 + "", "ff6af0ff", 5);
+		}
 		String myKmlUrl = kmlservice.runMakeKml("", "automatedDisloc", projectName,
-				(dislocResultsBean.getJobUIDStamp()).hashCode() + "");
-
+															 (dislocResultsBean.getJobUIDStamp()).hashCode() + "");
+		
 		//This is possibly an obsolete API call.
 		//		String myKmlUrl = kmlservice.runMakeSubKmls(tmp_pointentrylist, "", "automatedDisloc", projectName, (dislocResultsBean.getJobUIDStamp()).hashCode() + "");
 		
