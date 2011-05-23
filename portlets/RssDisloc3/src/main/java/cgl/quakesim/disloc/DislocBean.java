@@ -32,6 +32,8 @@ import com.db4o.*;
 
 public class DislocBean extends GenericSopacBean {
 
+	 private static final String ROOT="ROOT";
+
 	// Some navigation strings.
 	static final String DEFAULT_USER_NAME = "disloc_default_user";
 	static final String DISLOC_NAV_STRING = "disloc-submitted";
@@ -306,7 +308,7 @@ public class DislocBean extends GenericSopacBean {
 	 */
 	public String createFaultKmlFile() {
 		String newFaultFilename = "";
-		String oldLocalDestination = this.getBasePath() + "/" + "gridsphere" + "/" + getFaultKmlFilename();
+		String oldLocalDestination = this.getBasePath() + "/" + ROOT + "/" + getFaultKmlFilename();
 		String localDestination = "";
 
 		try {
@@ -322,7 +324,7 @@ public class DislocBean extends GenericSopacBean {
 			newFaultFilename = userName + "-" + codeName + "-" + projectName + "-" + timeStamp + ".kml";
 			setFaultKmlFilename(newFaultFilename);
 			// This should be the new file name.
-			localDestination = this.getBasePath() + "/" + "gridsphere" + "/" + getFaultKmlFilename();
+			localDestination = this.getBasePath() + "/" + ROOT + "/" + getFaultKmlFilename();
 
 			Fault[] faults = getProjectFaultsFromDB(userName, projectName, codeName, getBasePath(), getContextBasePath());
 			PrintWriter out = new PrintWriter(new FileWriter(localDestination));
@@ -472,7 +474,7 @@ public class DislocBean extends GenericSopacBean {
 	 */
 	public String createObsvKmlFile() {
 		String newObsvFilename = "";
-		String oldLocalDestination = this.getBasePath() + "/" + "gridsphere" + "/" + getObsvKmlFilename();
+		String oldLocalDestination = this.getBasePath() + "/" + ROOT + "/" + getObsvKmlFilename();
 		String localDestination = "";
 
 		try {
@@ -488,7 +490,7 @@ public class DislocBean extends GenericSopacBean {
 			newObsvFilename = userName + "-" + codeName + "-" + projectName + "-" + timeStamp + ".kml";
 			setObsvKmlFilename(newObsvFilename);
 			// This should be the new file name.
-			localDestination = this.getBasePath() + "/" + "gridsphere" + "/" + getObsvKmlFilename();
+			localDestination = this.getBasePath() + "/" + ROOT + "/" + getObsvKmlFilename();
 
 			PrintWriter out = new PrintWriter(new FileWriter(localDestination));
 
@@ -3030,7 +3032,7 @@ public class DislocBean extends GenericSopacBean {
 			System.out.println("[" + getUserName() + "/RssDisloc3/DislocBean/togglePlotProject] Found project:" + dpsb.getProjectName() + " " + dpsb.getJobUIDStamp() + dpsb.getKmlurl());
 			String kmlName = dpsb.getKmlurl().substring(dpsb.getKmlurl().lastIndexOf("/") + 1, dpsb.getKmlurl().length());
 
-			downloadKmlFile(dpsb.getKmlurl(), this.getBasePath() + "/" + "gridsphere" + "/" + kmlName);
+			downloadKmlFile(dpsb.getKmlurl(), this.getBasePath() + "/" + ROOT + "/" + kmlName);
 
 			System.out.println("[" + getUserName() + "/RssDisloc3/DislocBean/togglePlotProject] KML Name : " + kmlName);
 			setKmlProjectFile(kmlName);

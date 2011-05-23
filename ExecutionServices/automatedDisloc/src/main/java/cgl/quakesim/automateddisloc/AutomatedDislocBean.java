@@ -68,7 +68,7 @@ import org.apache.log4j.Level;
 
 public class AutomatedDislocBean {
 	 static final int EARTHQUAKE_SLIP_SCENARIOS=4;
-	 static final int ONE_HOUR_IN_MILLISECONDS=3600000;
+	 static final int ONE_HOUR_IN_MILLISECONDS=600000; //3600000;
 	 private static Logger logger=Logger.getLogger(AutomatedDislocBean.class);
 
 	 //The input is the URL of the RSS/Atom feed we are processing.
@@ -76,7 +76,12 @@ public class AutomatedDislocBean {
 		  logger.info("URL for feed:"+url);
 		  //Really necessary to use a thread here?
 		  RunautomatedDisloc rd = new RunautomatedDisloc(url);
-		  rd.start();
+		  
+		  //Only use one of these options
+		  //1. Use start() to run as a separate thread.  
+		  //rd.start();
+		  //2. Use run() to run this just as a regular command.
+		  rd.run();
 	 }	
 }
 
@@ -101,7 +106,9 @@ class RunautomatedDisloc extends Thread {
 	private String insarKmlUrl;
 	private String rssdisloc_dir_name;
 	private String baseurl;
-	
+	 private String projectName;
+	 private String kmlOutputDir;
+
 	private String elevation = "60";
 	private String azimuth = "0";
 	private String frequency = "1.26";
@@ -125,19 +132,36 @@ class RunautomatedDisloc extends Thread {
 	
 	private int limitedsize = 800; 
 
+	 private SimpleXDataKml kmlservice;
+	 private Properties properties;
+	 private static final DateFormat dateFormat=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
 	 //These are File objects and a PrintWriter that are usefully given class-wide scope.
 	 File destDir, oldFile;
 	 PrintWriter out;
 
 	 public RunautomatedDisloc(String url) {
 		  this.url = url;
+
+		  //Set up various things
+		  Properties properties=loadProperties();
+
+		  try {
+				//Set up the KML service connection
+				SimpleXDataKmlServiceLocator locator = new SimpleXDataKmlServiceLocator();
+				locator.setMaintainSession(true);		
+				kmlservice = locator.getKmlGenerator(new URL(kmlGeneratorUrl));
+		  } 
+		  catch(Exception ex) {
+				logger.error(ex.getMessage());
+		  }
 	 }
 	 
 	 /**
 	  * Load the project properties and set values.
 	  */
 	public Properties loadProperties() {
-		Properties properties = new Properties();
+		properties = new Properties();
 		try {
 			InputStream fis = this.getClass().getClassLoader().getResourceAsStream("automatedDisloc.properties");						
 			properties.load(fis);
@@ -147,6 +171,7 @@ class RunautomatedDisloc extends Thread {
 		}
 		
 		// logger.info("[getContextBasePath] called");
+		projectName=properties.getProperty("project.name");
 		contextBasePath = properties.getProperty("output.dest.dir");
 		dislocServiceUrl = properties.getProperty("dislocServiceUrl"); 
 		dislocExtendedServiceUrl = properties.getProperty("dislocExtendedServiceUrl");		
@@ -155,6 +180,8 @@ class RunautomatedDisloc extends Thread {
 		rssdisloc_dir_name= properties.getProperty("rssdisloc.dir.name");
 		baseurl = properties.getProperty("baseurl");
 		tomcatbase = properties.getProperty("tomcat.base");
+		
+		kmlOutputDir=tomcatbase+"/webapps/ROOT/";
 
 		//Some infoging messages to make sure properties are read correctly.
 		logger.info("[getContextBasePath] " + properties.getProperty("output.dest.dir"));
@@ -234,8 +261,7 @@ class RunautomatedDisloc extends Thread {
 	 public void run() {
 		 
 		  logger.info("Run method called");
-		Properties properties=loadProperties();
-		
+
 		String dir = properties.getProperty("output.dest.dir");
 		File logfile = new File(dir + "/" + "log.txt");		
 		//		getDislocProjectSummaryBeanCount();
@@ -273,11 +299,14 @@ class RunautomatedDisloc extends Thread {
 				  if (!newFileDB.exists()) newFileDB.createNewFile();
 				  copyFile(oldFileDB, newFileDB);
 				  logger.info("Project DB successfully copied");
-				  
+
 			 } catch (Exception e) {
 				  logger.error("Project DB not updated successfully");
 				  logger.error(e.getMessage());
 			 }
+
+			 //Only update the timestamp log after we are done with everything else.
+			 logwriter(logfile,dateFormat.format(new Date()));						  
 		}
 	 }
 	 
@@ -310,7 +339,7 @@ class RunautomatedDisloc extends Thread {
 		//REVIEW: Need a less clumsy way to handle this location.  Also should be
 		//in this webapp for portability. 
 		String newFaultFilename = "";
-		String destDirname=getContextBasePath() + "/../../../../../" + "gridsphere";
+		String destDirname=kmlOutputDir;
 		String destFilename="/overm5.kml";
 		String localDestination = destDir+destFilename;
 		
@@ -456,7 +485,7 @@ class RunautomatedDisloc extends Thread {
 			// to fail.
 			
 			// 09/17/2010 We will assign pre-calculated images
-			insarKmlUrl= getPrecalculatednsar(projectName, fault.getFaultLonStart(), fault.getFaultLatStart(), M, s_case, dislocResultsBean.getJobUIDStamp(), dislocResultsBean);
+			insarKmlUrl= getPrecalculatedInsar(projectName, fault.getFaultLonStart(), fault.getFaultLatStart(), M, s_case, dislocResultsBean.getJobUIDStamp(), dislocResultsBean);
 			
 			ourls.setInsarkmlURL(insarKmlUrl);
 			storeProjectInContext("automatedDisloc", projectName, dislocResultsBean.getJobUIDStamp(), currentParams, dislocResultsBean, myKmlUrl, insarKmlUrl, elevation, azimuth, frequency);
@@ -500,16 +529,23 @@ class RunautomatedDisloc extends Thread {
 	  * If not, then new calculations for a given M are performed and the results are thereafter
 	  * available. 
 	  */ 
-	public String getPrecalculatednsar(String projectName, Double reflon, Double reflat, Double M, int s_case, String jobUID, DislocResultsBean drb) {		
+	public String getPrecalculatedInsar(String projectName, 
+													Double reflon, 
+													Double reflat, 
+													Double M, 
+													int s_case, 
+													String jobUID, 
+													DislocResultsBean drb) {		
 		
 		 //The precalculated results will be in a file following the pattern below.
-		File f = new File(tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case + "/M" + M + "_" + s_case + ".output.png");
+		File imageFile = new File(tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case + "/M" + M + "_" + s_case + ".output.png");
 		String insarURL = null;
 		String insarimageURL = null;
 		
-		if (f.exists()) {		
+		//If the insar image file has already been created, reuse it.
+		if (imageFile.exists()) {		
 			
-			logger.info("[AutomatedDislocBean/getPrecalculatednsar] " + projectName + " is using a precalculated insar image");
+			logger.info("[AutomatedDislocBean/getPrecalculatedInsar] " + projectName + " is using a precalculated insar image");
 			
 			String north = "";
 			String south = "";
@@ -531,11 +567,12 @@ class RunautomatedDisloc extends Thread {
 			east = ts[0].toString();
 			north = ts[1].toString();
 			
-			File d = new File(tomcatbase + "/webapps/insar_precalculated/insar/" + jobUID);		
-			if (!d.exists())
-				d.mkdirs();
+			File precalcInsarDir = new File(tomcatbase + "/webapps/insar_precalculated/insar/" + jobUID);		
+			if (!precalcInsarDir.exists()) {
+				precalcInsarDir.mkdirs();
+			}
 			
-			d = new File(tomcatbase + "/webapps/insar_precalculated/insar/" + jobUID + "/" + projectName + ".output.kml");
+			File precalcInsarKml = new File(tomcatbase + "/webapps/insar_precalculated/insar/" + jobUID + "/" + projectName + ".output.kml");
 			
 			insarURL = baseurl + "/insar_precalculated/insar/" + jobUID + "/" + projectName + ".output.kml";
 			
@@ -550,7 +587,7 @@ class RunautomatedDisloc extends Thread {
 			
 			PrintWriter out = null;
 			try {
-				out = new PrintWriter(new FileWriter(d));
+				out = new PrintWriter(new FileWriter(precalcInsarKml));
 				out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 				out.println("<kml xmlns=\"http://earth.google.com/kml/2.2\">");
 				out.println("  <Folder>");
@@ -571,7 +608,6 @@ class RunautomatedDisloc extends Thread {
 				out.println("</kml>");
 	    
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				logger.error(e.getMessage());
 			}
 	
@@ -579,9 +615,10 @@ class RunautomatedDisloc extends Thread {
 			out.close();
 		}
 		
+		//The insar image file for this calculation does not exist, so we need to make one.
 		else {		
 			
-			logger.info("[AutomatedDislocBean/getPrecalculatednsar] " + projectName + " is generating a new precalculated insar image");
+			logger.info("[AutomatedDislocBean/getPrecalculatedInsar] " + projectName + " is generating a new insar image. This will be stored for later earthquakes with the same magnitude.");
 			
 			InsarKmlService iks;
 			try {
@@ -589,14 +626,15 @@ class RunautomatedDisloc extends Thread {
 				insarURL = iks.runBlockingInsarKml("automatedDisloc", projectName, drb.getOutputFileUrl(), elevation, azimuth, frequency, "ExecInsarKml");
 				logger.info("[AutomatedDislocBean/runBlockingDislocJSF] insarKmlUrl : " + insarURL);
 				
-				f = new File(tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case);
-				if (!f.exists())
-					f.mkdirs();
+				File insarCaseDir = new File(tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case);
+				if (!insarCaseDir.exists()) {
+					insarCaseDir.mkdirs();
+				}
 				
-				
-				File d = new File(tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case);		
-				if (!d.exists())
-					d.mkdirs();
+				// File d = new File(tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case);		
+				// if (!d.exists()){
+				// 	d.mkdirs();
+				// }
 				
 				insarimageURL = insarURL.replace(".kml", ".png");
 				SavefileFromUrl(insarimageURL, tomcatbase + "/webapps/insar_precalculated/" + "M" + M + "_" + s_case + "/M" + M + "_" + s_case + ".output.png");
@@ -732,7 +770,7 @@ class RunautomatedDisloc extends Thread {
 		logger.info("Input File: "+inputFile);
 		PrintWriter pw=new PrintWriter(new FileWriter(inputFile),true);
 
-		//Create the input file.  First create the grid points
+		//Create the input file.  First create the gripoints
 
 		//Print the header line
 		if(dislocParams.getObservationPointStyle()==1) {
@@ -887,20 +925,22 @@ class RunautomatedDisloc extends Thread {
 		return pointEntries;
 	}
 	
-	protected String createKml(DislocParamsBean dislocParams, DislocResultsBean dislocResultsBean, Fault[] faults, String projectName) throws Exception {
+	 /**
+	  * This method sets up and runs the methods for creating the point deformation plots
+	  * in KML.
+	  */ 
+	protected String createKml(DislocParamsBean dislocParams, 
+										DislocResultsBean dislocResultsBean, 
+										Fault[] faults, 
+										String projectName) throws Exception {
+
+		 logger.info("Creating KML point deformation plots");
 
 		// Get the project lat/lon origin. It is the lat/lon origin of the first fault.
 		String origin_lat = dislocParams.getOriginLat() + "";
 		String origin_lon = dislocParams.getOriginLon() + "";		
 		PointEntry[] tmp_pointentrylist = LoadDataFromUrl(dislocResultsBean.getOutputFileUrl());
 		
-		// logger.info("[AutomatedDislocBean/createKml] The size of tmp_pointentrylist : " + tmp_pointentrylist.length);
-		// logger.info("[AutomatedDislocBean/createKml] The size of faults of this project : " + faults.length);
-		logger.info("[AutomatedDislocBean/createKml] The fault : " + faults[0].getFaultName());		
-		logger.info("[AutomatedDislocBean/createKml] the length the fault : " + faults[0].getFaultLength());
-		logger.info("[AutomatedDislocBean/createKml] the width the fault : " + faults[0].getFaultWidth());
-		// logger.info("[AutomatedDislocBean/createKml] dislocResultsBean.getOutputFileUrl() : " + dislocResultsBean.getOutputFileUrl());
-
 		// These plot grid lines.
 		double start_x, start_y, end_x, end_y, xiterationsNumber, yiterationsNumber;
 		start_x = Double.valueOf(dislocParams.getGridMinXValue()).doubleValue();
@@ -918,19 +958,10 @@ class RunautomatedDisloc extends Thread {
 		// locator.setMaintainSession(true);
 		// kmlservice = locator.getKmlGenerator(new URL(kmlGeneratorUrl));
 
-		SimpleXDataKml kmlservice;
-		SimpleXDataKmlServiceLocator locator = new SimpleXDataKmlServiceLocator();
-		locator.setMaintainSession(true);		
-		kmlservice = locator.getKmlGenerator(new URL(kmlGeneratorUrl));
 
 		kmlservice.setOriginalCoordinate(origin_lon, origin_lat);
 		kmlservice.setCoordinateUnit("1000");
 		
-		// Plot the faults
-		for (int i = 0; i < faults.length; i++) {
-			// kmlservice.setFaultPlot("", faults[i].getFaultName() + "", faults[i].getFaultLonStart() + "", faults[i].getFaultLatStart() + "", faults[i].getFaultLonEnd() + "", faults[i].getFaultLatEnd() + "", "ff6af0ff", 5.);
-			kmlservice.setFaultPlot("", faults[i].getFaultName() + "", faults[i].getFaultLonStart() + "", faults[i].getFaultLatStart() + "", faults[i].getFaultLonEnd() + "", faults[i].getFaultLatEnd() + "", "ff6af0ff", 5.);			
-		}
 		logger.info("[AutomatedDislocBean/createKml] runMakeKml");
 		
 		kmlservice.setDatalist(tmp_pointentrylist);
@@ -1147,7 +1178,7 @@ class RunautomatedDisloc extends Thread {
 		}
 
 
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
 		Date date = new Date();
 		Date date1 = new Date();
 		String s = logreader(logfile, false);		
@@ -1211,7 +1242,7 @@ class RunautomatedDisloc extends Thread {
 		logger.info("[RunautomatedDisloc/run] the current time : " +  dateFormat.format(date));
 
 		if (date2.getTime() > timeInterval) {
-			 logwriter(logfile, dateFormat.format(date));	  
+			 //			 logwriter(logfile, dateFormat.format(date));	  
 			 return true;
 		}
 		else {

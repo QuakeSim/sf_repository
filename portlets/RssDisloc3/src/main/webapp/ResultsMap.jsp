@@ -121,7 +121,7 @@
 			  flistpolyline[nA] = null;
 			  }
 			  
-			  var kmllist = ["@host.base.url@/gridsphere/overm5.kml"];	
+			  var kmllist = ["@host.base.url@/overm5.kml"];	
 			  
 			  exmlFMap = new EGeoXml("exmlFMap", faultMap, kmllist, {sidebarfn:myside,nozoom:true,sidebarid:"faultMapside",parentformofsidebarid:"RssFaultsMap",clickpolyobjfn:clickpolyobj,iwwidth:300,off:true,width:1});       
 			  exmlFMap.parse();
