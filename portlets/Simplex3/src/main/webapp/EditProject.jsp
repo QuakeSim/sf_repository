@@ -238,6 +238,7 @@
 		  <%@include file="FaultSearchResultsPanel.jsp"%>
 		  <%@include file="FaultMapPanelFrame.jsp"%>
 		  <%@include file="UnavcoGPSMapPanel.jsp"%>
+		  <%@include file="CoseismicObservationPanel.jsp"%>
 		  <%@include file="AriaObservationPanel.jsp"%>
 		  <%@include file="ProjectMapPanel.jsp"%>
 		</h:panelGrid>

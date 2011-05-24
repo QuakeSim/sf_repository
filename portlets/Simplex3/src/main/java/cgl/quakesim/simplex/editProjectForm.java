@@ -29,6 +29,7 @@ public class editProjectForm extends GenericProjectBean {
 	 
 	 String obsvTextArea="";
 	 String obsvAriaTextArea="";
+	 String coseismicTextArea="";
 	 Fault currentFault = new Fault();
 	 Observation currentObservation = new Observation();
 	 String projectSelectionCode = "";
@@ -49,6 +50,7 @@ public class editProjectForm extends GenericProjectBean {
 	 boolean renderUnavcoGPSStationMap=false;
 	 boolean renderAriaObsvCutPaste=false;
 	 boolean renderProjectMap=false;
+	 boolean renderCoseismicDisp=false;
 
 	 String faultSelectionCode = "";
 	 boolean renderAddFaultFromDBForm = false;
@@ -121,6 +123,7 @@ public class editProjectForm extends GenericProjectBean {
 		 renderDrawingMap = false;
 		 renderUnavcoGPSStationMap=false;
 		 renderAriaObsvCutPaste=false;
+		 renderCoseismicDisp=false;
 		 renderProjectMap=false;
 	}	
 	 
@@ -175,6 +178,11 @@ public class editProjectForm extends GenericProjectBean {
 		else if(projectSelectionCode.equals("ShowAriaObsvCutPaste")) {
 			 renderAriaObsvCutPaste=!renderAriaObsvCutPaste;
 			 logger.info("Showing Aria cut and paste field: "+renderAriaObsvCutPaste);
+		}
+
+		else if(projectSelectionCode.equals("ShowCoseismicCutPaste")) {
+			 renderCoseismicDisp=!renderCoseismicDisp;
+			 logger.info("Showing coseismic cut and paste field: "+renderCoseismicDisp);
 		}
 
 		else if(projectSelectionCode.equals("ShowProjectMap")) {
@@ -688,6 +696,14 @@ public class editProjectForm extends GenericProjectBean {
 	 public void setRenderAriaObsvCutPaste(boolean renderAriaObsvCutPaste){
 		  this.renderAriaObsvCutPaste=renderAriaObsvCutPaste;
 	 }
+	 
+	 public void setRenderCoseismicDisp(boolean renderCoseismicDisp){
+		  this.renderCoseismicDisp=renderCoseismicDisp;
+	 }
+
+	 public boolean getRenderCoseismicDisp() {
+		  return this.renderCoseismicDisp;
+	 }
 
 	 public boolean getRenderProjectMap() {
 		  return this.renderProjectMap;
@@ -835,6 +851,14 @@ public class editProjectForm extends GenericProjectBean {
 		  return obsvTextArea;
 	 }
 	 
+	 public void setCoseismicTextArea(String coseismicTextArea) {
+		  this.coseismicTextArea=coseismicTextArea;
+	 }
+
+	 public String getCoseismicTextArea(){
+		  return this.coseismicTextArea;
+	 }
+
 	 public void setProjectEntry(projectEntry currentProject) {
 		  this.currentProject=currentProject;
 	 }

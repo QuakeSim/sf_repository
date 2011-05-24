@@ -79,6 +79,10 @@ public class SimplexBean extends GenericSopacBean {
 	private int ARIA_TOKEN_COUNT_V0 = 8;
 	 //Updated version adds vertical displacements and deletes the two dummy columns
 	private int ARIA_TOKEN_COUNT_V1= 7;
+	 //This is used for the "coseismic" input format.  Each line should have 
+	 //9 values.
+	 private static final int COSEISMIC_TOKEN_COUNT=9;
+	 
 
 	// This is the db4o database	
 
@@ -2089,6 +2093,10 @@ public class SimplexBean extends GenericSopacBean {
 		faultKmlUrl = createFaultKmlFile();
 	}
 	 
+	 /**
+	  * Add the ARIA input format. This was a special case
+	  * for the Japan M9 earthquake
+	  */
 	 public void toggleAddAriaObsvForProject(ActionEvent ev){
 		currentEditProjectForm.initEditFormsSelection();
 		
@@ -2190,6 +2198,99 @@ public class SimplexBean extends GenericSopacBean {
 							 tmpObsv[2].setObsvName(projectName + stationName);
 							 tmpObsv[2].setObsvValue(vertDisp);
 							 tmpObsv[2].setObsvError(errorDisp);
+							 tmpObsv[2].setObsvRefSite("1");
+							 
+							 tmpObsv=setXYLocations(tmpObsv, lat, lon);
+							 
+							 db.set(tmpObsv[0]);
+							 db.set(tmpObsv[1]);
+							 db.set(tmpObsv[2]);
+						}
+				  }
+			 }
+			 db.commit();
+		} catch (Exception e) {
+			 logger.error("[" + getUserName() + "/SimplexBean/toggleAddObsvTextAreaForProject] " + e);
+			 e.printStackTrace();
+		}
+		finally {
+			 if (db != null) db.close();			
+		}
+	 }
+
+	 /**
+	  * Add line-formatted coseismic displacements.  Format looks like this:
+	  * 
+	  * * Coseismic displacements from baja_100502A.org:  Date Thu May 20 21:27:51 EDT 2010
+	  * *  Long      Lat       dE       dN       E +-     N +-      dH       H +-  Site
+	  * *   deg      deg       mm       mm       mm       mm        mm       mm 
+	  * 243.57062  34.59428    -0.11    -3.03     1.02     1.11      2.89     2.24 AGMT 
+	  * 
+	  * Comments lines begin with a *.  First line gives entry order, second line gives units,
+	  * third line gives values for first station.  
+	  */ 
+	 public void toggleAddCoseismicObsvForProject(ActionEvent ev){
+		currentEditProjectForm.initEditFormsSelection();
+		
+		ObjectContainer db = null;
+		
+		try {
+			 db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
+									  + userName + "/" + codeName + "/" + projectName + ".db");
+			 //Each line corresponds to three observations.
+			 Observation[] tmpObsv=new Observation[3];
+			 
+			 StringTokenizer st1, st2;
+			 st1 = new StringTokenizer(currentEditProjectForm.getCoseismicTextArea().trim(), "\n");
+			 String line;
+			 
+			 while (st1.hasMoreTokens()) {
+				  line = st1.nextToken();
+				  if(line.indexOf("*")>-1) {
+						logger.info("Comment line: "+line);
+				  }
+				  else {
+						// Should accept spaces, tabs, commas
+						st2 = new StringTokenizer(line.trim(), "\t , "); 
+						logger.info("Coseismic line token count: "+st2.countTokens());
+						tmpObsv[0] = new Observation();
+						tmpObsv[1] = new Observation();
+						tmpObsv[2] = new Observation();  //Not used in V0
+						
+						if(st2.countTokens()==COSEISMIC_TOKEN_COUNT) {
+							 logger.debug("Detected properly tokenized coseismic input line");
+							 String firstToken=st2.nextToken();
+							 //Not a comment but make sure the line is properly formatted.
+							 //NOTE: We don't have anything to check for malformed lines.
+							 String lon=firstToken;
+							 String lat=st2.nextToken();
+							 String eastDisp=st2.nextToken();
+							 String northDisp=st2.nextToken();
+							 String errorEastDisp=st2.nextToken();
+							 String errorNorthDisp=st2.nextToken();
+							 String vertDisp=st2.nextToken();
+							 String errorVertDisp=st2.nextToken();
+							 String stationName=st2.nextToken();
+							 
+							 //This is the East displacement
+							 tmpObsv[0].setObsvType("1");							 
+							 tmpObsv[0].setObsvName(projectName + stationName);
+							 tmpObsv[0].setObsvValue(eastDisp);
+							 tmpObsv[0].setObsvError(errorEastDisp);
+							 tmpObsv[0].setObsvRefSite("1");
+							 
+							 //This is the North displacement
+							 tmpObsv[1].setObsvType("2");							 
+							 tmpObsv[1].setObsvName(projectName + stationName);
+							 tmpObsv[1].setObsvValue(northDisp);
+							 tmpObsv[1].setObsvError(errorNorthDisp);
+							 tmpObsv[1].setObsvRefSite("1");
+							 
+							 //This is the Vertical (Up) displacement
+							 tmpObsv[2].setObsvType("3");							 
+							 tmpObsv[2].setObsvName(projectName + stationName);
+							 tmpObsv[2].setObsvValue(vertDisp);
+							 tmpObsv[2].setObsvError(errorVertDisp);
 							 tmpObsv[2].setObsvRefSite("1");
 							 
 							 tmpObsv=setXYLocations(tmpObsv, lat, lon);
@@ -2602,6 +2703,12 @@ public class SimplexBean extends GenericSopacBean {
 		// Make these conversions
 		double gpsLat = Double.parseDouble(gpsStationLat);
 		double gpsLon = Double.parseDouble(gpsStationLon);
+		
+		//We use longitude values of (-180, 180) instead of (0,360),
+		//so check for this.
+		if(gpsLon>180.0 && gpsLon<360.0) {
+			 gpsLon=gpsLon-360.0;
+		}
 
 		// Project origin is not set, so set it.
 		if (origin_lat == projectEntry.DEFAULT_LAT

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.2">
+<Document>
+<Placemark>
+<description>
+<b>Fault: </b>Anacapa-Dume
+</description>
+<LineString>
+<coordinates>
+-119.5, 33.99, 0
+-118.69, 33.98, 0
+</coordinates>
+</LineString>
+</Placemark>
+</Document>
+</kml>

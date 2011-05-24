@@ -53,6 +53,10 @@
 		<f:selectItem id="ariaDisplacementForm"
 						  itemLabel="Import ARIA Data Files"
 						  itemValue="ShowAriaObsvCutPaste" />
+
+		<f:selectItem id="coseismicDisplacementForm"
+						  itemLabel="Import Coseismic Data Files"
+						  itemValue="ShowCoseismicCutPaste" />
 		
 		<f:selectItem id="item33221"
 						  itemLabel="Add Fault from Map (Preferred)"
