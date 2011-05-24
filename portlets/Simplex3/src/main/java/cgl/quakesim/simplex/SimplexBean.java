@@ -503,7 +503,7 @@ public class SimplexBean extends GenericSopacBean {
 
 			SimpleXOutputBean mega = new SimpleXOutputBean();
 			mega.setProjectName(projectName);
-			logger.info("ProjectName: "+projectName);
+			logger.debug("ProjectName: "+projectName);
 
 			ObjectContainer db = null;
 			
@@ -513,7 +513,7 @@ public class SimplexBean extends GenericSopacBean {
 						+ ".db");
 
 				ObjectSet results = db.get(new SimpleXOutputBean());
-				logger.info("Matches for "+projectName+":"+results.size());
+				logger.debug("Matches for "+projectName+":"+results.size());
 				while (results.hasNext()) {
 					SimpleXOutputBean sob = (SimpleXOutputBean) results.next();
 					tmpList.add(sob);
@@ -635,7 +635,8 @@ public class SimplexBean extends GenericSopacBean {
 			}
 
 		} catch (Exception e) {
-			 logger.info(e);
+			 logger.error(e);
+			 e.printStackTrace();
 		}
 		finally {
 			if (db != null) db.close();			
@@ -2252,7 +2253,7 @@ public class SimplexBean extends GenericSopacBean {
 				  else {
 						// Should accept spaces, tabs, commas
 						st2 = new StringTokenizer(line.trim(), "\t , "); 
-						logger.info("Coseismic line token count: "+st2.countTokens());
+						logger.debug("Coseismic line token count: "+st2.countTokens());
 						tmpObsv[0] = new Observation();
 						tmpObsv[1] = new Observation();
 						tmpObsv[2] = new Observation();  //Not used in V0
@@ -2870,7 +2871,7 @@ public class SimplexBean extends GenericSopacBean {
 				db.delete(dpsb);
 			}
 		} catch (Exception e) {
-			logger.info("[" + getUserName() + "/SimplexBean/toggleDeleteProjectSummary] " + e);
+			logger.error("[" + getUserName() + "/SimplexBean/toggleDeleteProjectSummary] " + e);
 		}
 		finally {
 			if (db != null) db.close();			
@@ -2947,7 +2948,7 @@ public class SimplexBean extends GenericSopacBean {
 			in.close();
 			out.close();
 		} catch (Exception ex) {
-			logger.info("[" + getUserName() + "/SimplexBean/downloadKmlFile] Unable to download kml file");
+			logger.error("[" + getUserName() + "/SimplexBean/downloadKmlFile] Unable to download kml file");
 			ex.printStackTrace();
 		}
 	}
