@@ -106,7 +106,7 @@
 
 	// The gridsphere container doesn't work with urls. That should be solved
 	// var kmllist = ["@host.base.url@@artifactId@/geo_000520-001216-sim_HDR_4rlks.unw.kml","@host.base.url@@artifactId@/QuakeTables_CGS_1996.kml","@host.base.url@@artifactId@/QuakeTables_CGS_2002.kml"];
-	var kmllist = ["QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml","QuakeTables_UCERF_2.4"];	
+	var kmllist = ["QuakeTables_CGS_1996.kml","QuakeTables_CGS_2002.kml","QuakeTables_UCERF_2.4.kml"];	
 	
 	exmlFMap = new EGeoXml("exmlFMap", faultMap, kmllist, {sidebarfn:myside,nozoom:true,sidebarid:"faultMapside",parentformofsidebarid:"faultKMLSelectorForm",clickpolyobjfn:clickpolyobj,iwwidth:400});       
 	exmlFMap.parse();
