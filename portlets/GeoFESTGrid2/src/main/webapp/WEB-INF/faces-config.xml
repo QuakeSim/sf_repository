@@ -20,7 +20,7 @@
 		
 		<managed-property>
                    <property-name>kmlfiles</property-name>
-                   <value>QuakeTables_CGS_1996.kml QuakeTables_CGS_2002.kml</value>
+                   <value>QuakeTables_CGS_1996.kml QuakeTables_CGS_2002.kml QuakeTables_UCERF_2.4.kml</value>
                 </managed-property>
 		
                 <managed-property>
