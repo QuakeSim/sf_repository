@@ -2,8 +2,8 @@
 				 columns="1"
 				 border="1"
 				 rendered="#{SimplexBean.currentEditProjectForm.renderCreateNewFaultForm}">
-  <h:form id="Faultform">
-	 
+
+  <h:form id="Faultform">	 
 	 <h:panelGrid id="FaultTable" columns="3" footerClass="subtitle"
 					  headerClass="subtitlebig" styleClass="medium"
 					  columnClasses="subtitle,medium">

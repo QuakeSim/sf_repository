@@ -827,13 +827,13 @@ public class SimplexBean extends GenericSopacBean {
 		}
 
 		reconstructMyFaultEntryForProjectList(projectName);
-		Collections.sort(this.myFaultsForProjectList,new Comparator(){
-				  public int compare(Object o1, Object o2) {
-						Fault f1=(Fault) o1;
-						Fault f2=(Fault) o2;
-						return f1.getFaultName().compareToIgnoreCase(f2.getFaultName());
-				  }
-			 });
+		// Collections.sort(this.myFaultsForProjectList,new Comparator(){
+		// 		  public int compare(Object o1, Object o2) {
+		// 				Fault f1=(Fault) o1;
+		// 				Fault f2=(Fault) o2;
+		// 				return f1.getFaultName().compareToIgnoreCase(f2.getFaultName());
+		// 		  }
+		// 	 });
 
 		return this.myFaultsForProjectList;
 	}

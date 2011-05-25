@@ -34,8 +34,7 @@
 			  panelGrid1.style.display=defaultVal;
 			  commandButton.style.display=defaultVal;
 		   }
-		}
-		
+		}		
 		  //]]>
 	 </script>
   </f:verbatim>
@@ -50,7 +49,6 @@
 			 optimization. 
 			 <u>Toggle the fault display on/off by double clicking anywhere in this fieldset.</u>
 			 <p/>
-			 
 		  </f:verbatim>
 
 		  <h:panelGrid id="dflelerkljg162" columns="2" border="0"  cellpadding="0" cellspacing="0">
