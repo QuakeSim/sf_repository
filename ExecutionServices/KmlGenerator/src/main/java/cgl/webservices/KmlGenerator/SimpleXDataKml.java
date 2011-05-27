@@ -652,8 +652,8 @@ public class SimpleXDataKml {
 				+ ": " +fontEnd+ datalist[i].getDeltaYValue() + " cm <br/>"; 
 				descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaZName() 
 				+ ": " +fontEnd+ datalist[i].getDeltaZValue() + " cm <br/>"; 
-				descriptionValue = descriptionValue + "<font color=blue>scale rate </font>" 
-				+ ":" +fontEnd+scaling + "cm:km <br/>";			 
+				//descriptionValue = descriptionValue + "<font color=blue>scale rate </font>" 
+				//+ ":" +fontEnd+scaling + "cm:km <br/>";			 
 				descriptionValue = descriptionValue 
 				+ "<font color=blue>tag name:</font>" 
 				+ datalist[i].getFolderTag()+br; 
