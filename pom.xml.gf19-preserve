@@ -1,0 +1,255 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <properties>
+	 <!--==================================================-->
+	 <!-- These need to be edited by the deployer -->
+	 <!--==================================================-->
+	 <portal.server.ip>156.56.104.99</portal.server.ip>
+	 <host.base.url>http://${portal.server.ip}:8080/</host.base.url>
+	 <google.master.key>ABQIAAAAxOZ1VuCkrWUtft6jtubycBRxYpIIOz9ynlSKjbx-4JMuN5JjrhR5gSOcKdieYppOZ4_yzZc_Ti15qw</google.master.key>
+	 <!--==================================================-->
+	 <!-- 
+			Specify your container.  Currently only gridsphere
+			is supported. See ogce-portal-only/containers for 
+			possible addional choices.
+		-->
+	 <!--==================================================-->
+    <portlet.container>gridsphere</portlet.container>
+	<!--==================================================-->
+	<!--These can be left as is for most builds, if you 
+		have unpacked everything in $HOME, are using gridsphere,
+		and don't have any unusual .globus requirements.
+		-->
+	 <!--==================================================-->
+	 <project.home>/home/gateway/QuakeSim2</project.home>
+	 <tomcat.bin.perm>755</tomcat.bin.perm>
+	 <tomcat.version>apache-tomcat-5.5.20</tomcat.version>
+	 <yui.version>yui_0.12.2</yui.version>
+    <catalina.home>${project.home}/portal_deploy/${tomcat.version}/</catalina.home>
+    <tomcat.base.dir>${project.home}/portal_deploy/${tomcat.version}/</tomcat.base.dir>
+	 <gridsphere.version>gridsphere-2.1.4</gridsphere.version>
+
+
+	<user.home>${user.home}</user.home>
+
+	<!-- These are the urls for the various services -->
+	<insarkml.service.url>${host.base.url}/insarkmlservice</insarkml.service.url>
+	<analyze_tseri.service.url>${host.base.url}/analyze-tseri-exec</analyze_tseri.service.url>
+	<disloc.service.url>${host.base.url}/dislocexec</disloc.service.url>
+	<geofest.service.url>${host.base.url}/geofestexec</geofest.service.url>
+	<parallel.geofest.service.url>${host.base.url}/geofest-parallel-exec</parallel.geofest.service.url>
+	<queue.service.url>${host.base.url}/QueueExec</queue.service.url>
+	<KmlGenerator.service.url>${host.base.url}/KmlGenerator</KmlGenerator.service.url>
+	<queue.service.url>${host.base.url}/queueservice</queue.service.url>
+	<rdahmm.service.url>${host.base.url}/rdahmmexec</rdahmm.service.url>
+	<daily_rdahmm.service.url>${host.base.url}/daily_rdahmmexec</daily_rdahmm.service.url>
+	<local.hostname>gf13.ucs.indiana.edu</local.hostname>
+	<dailyRdahmmResult.service.hostname>gf13.ucs.indiana.edu</dailyRdahmmResult.service.hostname>
+	<dailyRdahmm.service.hostname>gf13.ucs.indiana.edu</dailyRdahmm.service.hostname>
+	<realtimeRdahmmResult.access.hostname>gf13.ucs.indiana.edu</realtimeRdahmmResult.access.hostname>
+
+	
+	<!-- These are locations of 'third party' binary files -->
+	<bin.path>${catalina.home}/webapps/${project.artifactId}/WEB-INF/binaryexec</bin.path>
+	<geofest.bin.home>${env.HOME}/GEMCodes/GeoFEST/bin/</geofest.bin.home>
+	<parallel.geofest.bin.home>${env.HOME}/GEMCodes/GeoFEST-4.8/bin/</parallel.geofest.bin.home>
+	<rdahmm.bin.home>${env.HOME}/GEMCodes/RDAHMM2/bin/</rdahmm.bin.home>
+	<disloc.bin.home>${env.HOME}/GEMCodes/Disloc/</disloc.bin.home>
+	<simplex.bin.home>${env.HOME}/GEMCodes/Simplex/</simplex.bin.home>
+
+
+	<!-- Globus Stuff -->
+	<!--
+	<grid.proxy.location>/tmp/x509up_u500</grid.proxy.location>
+	<cosmos.proxy.location>/tmp/x509up_cosmos</cosmos.proxy.location>
+	<dot.globus.home>${env.HOME}/.globus/</dot.globus.home>
+	-->
+  </properties>
+  
+  <!-- The rest of this should not be edited --> 
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>quakesim</groupId>
+  <artifactId>main-driver</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0</version>
+  <name>main-driver</name>
+  <url>http://www.quakesim.org</url>
+
+  <build>
+	 <plugins>
+		<plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+			 <source>1.5</source>
+			 <target>1.5</target>
+        </configuration>
+		</plugin>
+	 </plugins>
+  </build>
+  
+  <repositories>
+	 <repository>
+		<id>ogce-maven-repo</id>
+		<url>http://www.collab-ogce.org/maven2</url>
+	 </repository>
+	 <repository>
+      <id>ogce-maven1-legacy-repo</id>
+      <url>http://www.collab-ogce.org/maven</url>
+      <layout>legacy</layout>
+    </repository>
+    <repository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>apache-maven-snapshots</id>
+      <url>http://cvs.apache.org/maven-snapshot-repository</url>
+    </repository>
+    <repository>
+		<id>codehaus</id>
+		<url>http://repository.codehaus.org/</url>
+	 </repository>
+    <repository>
+      <id>apache-maven</id>
+      <url>http://www.ibiblio.org/maven2</url>
+    </repository>
+    <!-- This is the apache repository for bridges -->
+    <repository>
+      <id>apache-maven-cvs</id>
+      <url>http://cvs.apache.org/repository</url>
+    </repository>
+	 
+    <!-- This is our local repository -->
+    <repository>
+      <id>crisisgrid-maven-repo</id>
+      <url>http://www.crisisgrid.org/maven2</url>
+    </repository>
+	 
+	 <repository>
+      <id>db4o</id>
+      <url>https://source.db4o.com/maven/</url>
+    </repository>
+	 
+    <repository>
+      <id>jboss</id>
+      <name>JBoss Repository</name>
+      <url>http://repository.jboss.org/maven2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+ 
+  <profiles>
+	 <profile>
+		<id>build-all</id>
+		<activation>
+		  <activeByDefault>true</activeByDefault>
+		</activation>
+		<modules>
+		  <!-- Various set up stuff -->
+		  <module>portal_deploy</module>
+		  <module>containers</module>
+		  <module>lnf4portal</module>
+		  
+		  <module>GenericQuakeSimProject</module>
+		  
+		  <!--These are the portlets.  Add new ones here. -->
+		  <module>portlets/DailyRDAHMM-portlet</module>
+		  <module>portlets/Disloc-portlet</module>
+		  <module>portlets/GeoFESTGrid-portlet</module>
+		  <module>portlets/NewMeshGen-portlet</module>
+		  <module>portlets/RDAHMM-portlet</module>
+		  <module>portlets/RealTimeRdahmm-portlet</module>
+		  <module>portlets/STFILTER-portlet</module>
+		  <module>portlets/Simplex-portlet</module>
+		  <module>portlets/StationMonitor-portlet</module>
+		  <module>portlets/FaultDB-portlet</module>
+		  <module>portlets/Disloc2</module>
+		  <module>portlets/rssportlet</module>
+		  <module>portlets/Disloc3</module>
+		  <module>portlets/Simplex3</module>
+		  <module>portlets/GeoFESTGrid2</module>
+		  
+		  <!-- These are services.  Add new ones here. -->
+		  <module>ExecutionServices/AnalyzeTseriService</module>
+		  <module>ExecutionServices/AntVisco</module>
+		  <module>ExecutionServices/DislocService</module>
+		  <module>ExecutionServices/GeoFESTService</module>
+		  <module>ExecutionServices/GridInfoService</module>
+		  <module>ExecutionServices/KmlGenerator</module>
+		  <module>ExecutionServices/QueueService</module>
+		  <module>ExecutionServices/STFilterService</module>
+		  <module>ExecutionServices/SimpleXService</module>
+		  <module>ExecutionServices/RDAHMMService</module>
+		  <module>ExecutionServices/DailyRDAHMMService</module>
+		  <module>ExecutionServices/DailyRDAHMMResultService</module>
+		</modules>
+	 </profile>
+	 <profile>
+		<id>build-portal</id>
+		<activation>
+		  <activeByDefault>false</activeByDefault>
+		  <property><name>quakesim-portal</name></property> 
+		</activation>
+		<modules>
+		  <!-- Various set up stuff -->
+		  <module>portal_deploy</module>
+		  <module>containers</module>
+		  <module>lnf4portal</module>
+		  
+		  <module>GenericQuakeSimProject</module>
+		  
+		  <!--
+				These are the portlets.  Add new ones here. This list
+				is edited to remove obsolete ones. 
+			 -->
+		  <module>portlets/DailyRDAHMM-portlet</module>
+		  <module>portlets/GeoFESTGrid-portlet</module>
+		  <module>portlets/NewMeshGen-portlet</module>
+		  <module>portlets/RDAHMM-portlet</module>
+		  <module>portlets/RealTimeRdahmm-portlet</module>
+		  <module>portlets/Simplex-portlet</module>
+		  <module>portlets/StationMonitor-portlet</module>
+		  <module>portlets/FaultDB-portlet</module>
+		  <module>portlets/Disloc2</module>
+		  <module>portlets/rssportlet</module>
+		  <module>portlets/Disloc3</module>
+		  <module>portlets/Simplex3</module>
+		  <module>portlets/GeoFESTGrid2</module>
+		</modules>
+	 </profile>
+	 <profile>
+		<id>build-services</id>
+		<activation>
+		  <activeByDefault>false</activeByDefault>
+		  <property><name>quakesim-services</name></property> 
+		</activation>
+		<modules>
+		  <!-- Various set up stuff -->
+		  <module>portal_deploy</module>
+		  
+		  <module>GenericQuakeSimProject</module>
+		  
+		  <!-- These are services.  Add new ones here. -->
+		  <module>ExecutionServices/AnalyzeTseriService</module>
+		  <module>ExecutionServices/AntVisco</module>
+		  <module>ExecutionServices/DislocService</module>
+		  <module>ExecutionServices/GeoFESTService</module>
+		  <module>ExecutionServices/GridInfoService</module>
+		  <module>ExecutionServices/KmlGenerator</module>
+		  <module>ExecutionServices/QueueService</module>
+		  <module>ExecutionServices/STFilterService</module>
+		  <module>ExecutionServices/SimpleXService</module>
+		  <module>ExecutionServices/RDAHMMService</module>
+		  <module>ExecutionServices/DailyRDAHMMService</module>
+		  <module>ExecutionServices/DailyRDAHMMResultService</module>
+		</modules>
+	 </profile>
+  </profiles>
+</project>
