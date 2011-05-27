@@ -83,87 +83,85 @@ public class GmapDataXml {
 			line=in.readLine();
 			while(line.indexOf("Residual displacements")<0){
 				 //Do nothing.  We must first find the above string.
-				 logger.info("Output line:"+line);
+				 System.out.println("Output line:"+line);
 				 line=in.readLine();
 			}
-			logger.info("Found beginning of output: "+line);
+			System.out.println("Found beginning of output: "+line);
 					
 			//We found "Residual Displacement" header, now skip ahead 3 lines
 			//until we get to the actual values.
 			while ((line = in.readLine()) != null) {
-				 logger.info("Output line:"+line);
-				 if (skipthreelines <= 3) {
+				 System.out.println("Output line:"+line);
+				 while (skipthreelines <= 3) {
 					  skipthreelines++;
-					  logger.info("Skipping column headings");
-				 } else {
-					 logger.info("Parse results line:"+line);
-					if (!line.trim().equalsIgnoreCase("")) {
-
-						String tmp[] = line.split("\t");
-
-						//  //See what we have.
-						//  logger.info("Original line: "+line);
-						//  for (int i=0;i<tmp.length;i++) {
-						// 	  logger.info(tmp[i]);
-						//  }
-						
-
-						double tmp_lat = Double.valueOf(tmp[1].trim())
-								.doubleValue();
-						double tmp_lon = Double.valueOf(tmp[2].trim())
-								.doubleValue();
-						int tmp_type = Integer.valueOf(tmp[0].trim())
-								.intValue();
-						double tmp_observ = Double.valueOf(tmp[3].trim())
-								.doubleValue();
-						double tmp_calc = Double.valueOf(tmp[4].trim())
-								.doubleValue();
-						double tmp_o_c = Double.valueOf(tmp[5].trim())
-								.doubleValue();
-						double tmp_error = Double.valueOf(tmp[6].trim())
-								.doubleValue();
-
-						ObservationPoint TmpObsPoint = new ObservationPoint();
-						if (MyObsPoints.get(new Coordinate(tmp_lat, tmp_lon)) != null) {
+					  System.out.println("Skipping column headings");
+				 }
+				 System.out.println("Parse results line:"+line);
+				 if (!line.trim().equalsIgnoreCase("")) {
+					  
+					  String tmp[] = line.split("\t");
+					  
+					  //  //See what we have.
+					  //  System.out.println("Original line: "+line);
+					  //  for (int i=0;i<tmp.length;i++) {
+					  // 	  System.out.println(tmp[i]);
+					  //  }
+					  
+					  
+					  double tmp_lat = Double.valueOf(tmp[1].trim())
+							.doubleValue();
+					  double tmp_lon = Double.valueOf(tmp[2].trim())
+							.doubleValue();
+					  int tmp_type = Integer.valueOf(tmp[0].trim())
+							.intValue();
+					  double tmp_observ = Double.valueOf(tmp[3].trim())
+							.doubleValue();
+					  double tmp_calc = Double.valueOf(tmp[4].trim())
+							.doubleValue();
+					  double tmp_o_c = Double.valueOf(tmp[5].trim())
+							.doubleValue();
+					  double tmp_error = Double.valueOf(tmp[6].trim())
+							.doubleValue();
+					  
+					  ObservationPoint TmpObsPoint = new ObservationPoint();
+					  if (MyObsPoints.get(new Coordinate(tmp_lat, tmp_lon)) != null) {
 							TmpObsPoint = (ObservationPoint) MyObsPoints
-									.get(new Coordinate(tmp_lat, tmp_lon));
-						}
-						if (tmp_type == 1) {
+								 .get(new Coordinate(tmp_lat, tmp_lon));
+					  }
+					  if (tmp_type == 1) {
 							TmpObsPoint.EastVec.type = tmp_type;
 							TmpObsPoint.EastVec.observ = tmp_observ;
 							TmpObsPoint.EastVec.calc = tmp_calc;
 							TmpObsPoint.EastVec.o_c = tmp_o_c;
 							TmpObsPoint.EastVec.error = tmp_error;
-						} else if (tmp_type == 2) {
+					  } else if (tmp_type == 2) {
 							TmpObsPoint.NorthVec.type = tmp_type;
 							TmpObsPoint.NorthVec.observ = tmp_observ;
 							TmpObsPoint.NorthVec.calc = tmp_calc;
 							TmpObsPoint.NorthVec.o_c = tmp_o_c;
 							TmpObsPoint.NorthVec.error = tmp_error;
-						} else if (tmp_type == 3) {
+					  } else if (tmp_type == 3) {
 							TmpObsPoint.UpVec.type = tmp_type;
 							TmpObsPoint.UpVec.observ = tmp_observ;
 							TmpObsPoint.UpVec.calc = tmp_calc;
 							TmpObsPoint.UpVec.o_c = tmp_o_c;
 							TmpObsPoint.UpVec.error = tmp_error;
-						}
-						TmpObsPoint.xloc = tmp_lat;
-						TmpObsPoint.yloc = tmp_lon;
-						MyObsPoints.put(new Coordinate(TmpObsPoint.xloc,
-								TmpObsPoint.yloc), TmpObsPoint);
-
-						// logger.info(line);
-					} else {
-						break;
-					}
-				}
+					  }
+					  TmpObsPoint.xloc = tmp_lat;
+					  TmpObsPoint.yloc = tmp_lon;
+					  MyObsPoints.put(new Coordinate(TmpObsPoint.xloc,
+																TmpObsPoint.yloc), TmpObsPoint);
+					  
+					  // System.out.println(line);
+					  
+				 }
 			}
 			in.close();
 		} catch (IOException ex1) {
-			ex1.printStackTrace();
+			 ex1.printStackTrace();
 		}
-
-	}
+	 
+	 }
 
 	public void CalculateMarker() {
 		Object obj;
@@ -173,7 +171,7 @@ public class GmapDataXml {
 			obj = e.nextElement();
 			tmp_obs = (ObservationPoint) MyObsPoints.get(obj);
 			double xloc = tmp_obs.xloc, yloc = tmp_obs.yloc;
-			logger.info(tmp_obs.NorthVec.observ + ":"
+			System.out.println(tmp_obs.NorthVec.observ + ":"
 					+ tmp_obs.EastVec.observ + ":" + tmp_obs.UpVec.observ);
 
 			// double rads;
@@ -190,8 +188,8 @@ public class GmapDataXml {
 			// );
 			// B=(int) ( a*Math.abs(Math.sin(rads))+b*Math.abs(Math.cos(rads))
 			// );
-			// logger.info( degs+"A:"+A+"B:"+B );
-			// logger.info(obj + ":" + tmp_obs);
+			// System.out.println( degs+"A:"+A+"B:"+B );
+			// System.out.println(obj + ":" + tmp_obs);
 
 			ObservMarkers.add(calDegsAndMakeMarker(xloc, yloc,
 					tmp_obs.EastVec.observ, tmp_obs.NorthVec.observ, tmp_obs));
