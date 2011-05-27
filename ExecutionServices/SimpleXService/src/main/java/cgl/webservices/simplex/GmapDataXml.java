@@ -73,6 +73,9 @@ public class GmapDataXml {
 
 	 //This reads the output file from Simplex. It is specific
 	 //to the version of simplex.
+	 //REVIEW: this is a terrible implementation, and it is
+	 //specific to a particular format as well. Should instead
+	 //do a regular expression match, for example.
 	 public void LoadDataFromFile(String InputFileName) {
 		try {
 			String line = new String();
