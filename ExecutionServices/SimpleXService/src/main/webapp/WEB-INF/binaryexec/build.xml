@@ -8,6 +8,11 @@
 </target>
 
 <target name="ExecSimplex">
+  <!--This is used to tell user which version of simplex is used -->
+  <exec executable="ident"
+		  output="${workDir.prop}/${projectName.prop}.stdout">
+	 <arg value="${bindir.prop}/simplex"/>
+  </exec>
    <exec executable="${bindir.prop}/simplex" 
          output="${workDir.prop}/${projectName.prop}.stdout"
 	 dir="${workDir.prop}">
