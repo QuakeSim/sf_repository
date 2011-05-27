@@ -470,7 +470,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			//Create one KML that has everything (observations, calculations, and residuals)
 			PointEntry[] tmp_pointentrylist = dw.getO_cList();
 			kmlService.setDatalist(tmp_pointentrylist);
-			kmlService.setArrowPlacemark("'Residual Displacements Arrow Layer", "ffff0000", 2);
+			kmlService.setArrowPlacemark("'Residual Displacements Arrow Layer", "ffff0000", 2,10.0);
 
 			tmp_pointentrylist = dw.getCalcList();
 			kmlService.setDatalist(tmp_pointentrylist);

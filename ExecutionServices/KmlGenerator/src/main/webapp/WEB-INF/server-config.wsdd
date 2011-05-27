@@ -43,8 +43,6 @@
         <beanMapping qname="myNS:PointEntry" xmlns:myNS="urn:SimpleXDataKml" languageSpecificType="java:cgl.webservices.KmlGenerator.PointEntry"/>
  </service>
 
-
-
  <service name="ExtendedKmlGenerator" provider="java:RPC">
   <parameter name="allowedMethods" value="setOriginalCoordinate setCoordinateUnit setFaultPlot runMakeSubKmls"/>
   <parameter name="scope" value="Session"/>
