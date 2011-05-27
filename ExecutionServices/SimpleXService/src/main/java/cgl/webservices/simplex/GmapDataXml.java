@@ -16,14 +16,17 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
+
+import org.apache.log4j.*;
 
 /**
  * Make up and write an XML document, using DOM UPDATED FOR JAXP.
  */
 public class GmapDataXml {
+	 
+	 static Logger logger = Logger.getLogger(GmapDataXml.class);
 
 	// private Document doc;
 
@@ -97,9 +100,9 @@ public class GmapDataXml {
 						String tmp[] = line.split("\t");
 
 						//  //See what we have.
-						//  System.out.println("Original line: "+line);
+						//  logger.info("Original line: "+line);
 						//  for (int i=0;i<tmp.length;i++) {
-						// 	  System.out.println(tmp[i]);
+						// 	  logger.info(tmp[i]);
 						//  }
 						
 
@@ -147,7 +150,7 @@ public class GmapDataXml {
 						MyObsPoints.put(new Coordinate(TmpObsPoint.xloc,
 								TmpObsPoint.yloc), TmpObsPoint);
 
-						// System.out.println(line);
+						// logger.info(line);
 					} else {
 						break;
 					}
@@ -169,7 +172,7 @@ public class GmapDataXml {
 			obj = e.nextElement();
 			tmp_obs = (ObservationPoint) MyObsPoints.get(obj);
 			double xloc = tmp_obs.xloc, yloc = tmp_obs.yloc;
-			System.out.println(tmp_obs.NorthVec.observ + ":"
+			logger.info(tmp_obs.NorthVec.observ + ":"
 					+ tmp_obs.EastVec.observ + ":" + tmp_obs.UpVec.observ);
 
 			// double rads;
@@ -186,8 +189,8 @@ public class GmapDataXml {
 			// );
 			// B=(int) ( a*Math.abs(Math.sin(rads))+b*Math.abs(Math.cos(rads))
 			// );
-			// System.out.println( degs+"A:"+A+"B:"+B );
-			// System.out.println(obj + ":" + tmp_obs);
+			// logger.info( degs+"A:"+A+"B:"+B );
+			// logger.info(obj + ":" + tmp_obs);
 
 			ObservMarkers.add(calDegsAndMakeMarker(xloc, yloc,
 					tmp_obs.EastVec.observ, tmp_obs.NorthVec.observ, tmp_obs));
