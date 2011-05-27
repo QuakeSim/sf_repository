@@ -429,81 +429,59 @@ public class SimpleXService extends AntVisco implements Runnable {
 		String[] kmlurls = new String[4];
 		try {
 			 System.out.println("Making the kml for the output");
-			String outputfilename = workDir + "/" + projectName + ".output";
-			GmapDataXml dw = new GmapDataXml();
-			dw.LoadDataFromFile(outputfilename);
+			 String outputfilename = workDir + "/" + projectName + ".output";
+			 GmapDataXml dw = new GmapDataXml();
+			 dw.LoadDataFromFile(outputfilename);
 
-			// get observ kml
+			//Set up the session wide service coordinates.
 			SimpleXDataKml kmlService;
 			SimpleXDataKmlServiceLocator locator = new SimpleXDataKmlServiceLocator();
 			locator.setMaintainSession(true);
 			kmlService = locator
 					.getKmlGenerator(new URL(KmlGeneratorServiceUrl));
-
-			PointEntry[] tmp_pointentrylist = dw.getObservList();
-
-			kmlService.setDatalist(tmp_pointentrylist);
 			kmlService.setOriginalCoordinate(lon, lat);
 			kmlService.setCoordinateUnit("1000");
+
+			//Set the faults
 			kmlService = setfaultplot(kmlService, faults);
+
+			//Pass in the observation list and plot
+			PointEntry[] tmp_pointentrylist = dw.getObservList();
+			kmlService.setDatalist(tmp_pointentrylist);
 			kmlService.setPointPlacemark("Icon Layer");
 			kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
-
 			String observKmlUrl = kmlService.runMakeKml("", userName,
-					projectName, "observ");
+																	  projectName, "observ");
 			System.out.println(observKmlUrl);
-			// get calc kml
-			locator = new SimpleXDataKmlServiceLocator();
-			locator.setMaintainSession(true);
-			kmlService = locator
-					.getKmlGenerator(new URL(KmlGeneratorServiceUrl));
+			
+			//Pass in the calculated values and plot
 			tmp_pointentrylist = dw.getCalcList();
 			kmlService.setDatalist(tmp_pointentrylist);
-			kmlService.setOriginalCoordinate(lon, lat);
-			kmlService.setCoordinateUnit("1000");
-			kmlService=setfaultplot(kmlService,faults);
-			//			kmlService.setPointPlacemark("Icon Layer");
 			kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
 			String calcKmlUrl = kmlService.runMakeKml("", userName,
-					projectName,"calc");
-
-			// get o_c kml
-			locator = new SimpleXDataKmlServiceLocator();
-			locator.setMaintainSession(true);
-			kmlService = locator
-					.getKmlGenerator(new URL(KmlGeneratorServiceUrl));
+																	projectName,"calc");
+			
+			//Pass in and calculate the residuals
 			tmp_pointentrylist = dw.getO_cList();
 			kmlService.setDatalist(tmp_pointentrylist);
-			kmlService.setOriginalCoordinate(lon, lat);
-			kmlService.setCoordinateUnit("1000");
-			kmlService=setfaultplot(kmlService,faults);
-			//kmlService.setPointPlacemark("Icon Layer");
 			kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
 			String o_cKmlUrl = kmlService.runMakeKml("", userName, projectName,"o_c");
-
-			// get total kml
-			locator = new SimpleXDataKmlServiceLocator();
-			locator.setMaintainSession(true);
-			kmlService = locator
-					.getKmlGenerator(new URL(KmlGeneratorServiceUrl));
+			
+			//Also create one KML that has everything (observations, calculations, and residuals)
 			tmp_pointentrylist = dw.getO_cList();
 			kmlService.setDatalist(tmp_pointentrylist);
-			kmlService.setOriginalCoordinate(lon, lat);
-			kmlService.setCoordinateUnit("1000");
-			kmlService=setfaultplot(kmlService,faults);
-			//			kmlService.setPointPlacemark("'Residual Displacements Icon Layer");
 			kmlService.setArrowPlacemark("'Residual Displacements Arrow Layer", "ffff0000", 2);
+
 			tmp_pointentrylist = dw.getCalcList();
 			kmlService.setDatalist(tmp_pointentrylist);
-			//			kmlService.setPointPlacemark("Calculated Displacements Icon Layer");
 			kmlService.setArrowPlacemark("Calculated Displacements Arrow Layer", "ff00ccff", 2);
+
 			tmp_pointentrylist = dw.getObservList();
 			kmlService.setDatalist(tmp_pointentrylist);
-			//			kmlService.setPointPlacemark("Observed Displacements Icon Layer");
 			kmlService.setArrowPlacemark("Observed Displacements Arrow Layer", "ff0000ff", 2);
 			String totalKmlUrl = kmlService.runMakeKml("", userName,
-					projectName,jobUIDStamp);
-
+																	 projectName,jobUIDStamp);
+			
 			kmlurls[0] = totalKmlUrl;
 			kmlurls[1] = observKmlUrl;
 			kmlurls[2] = calcKmlUrl;
