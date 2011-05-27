@@ -46,6 +46,15 @@ public class SimpleXService extends AntVisco implements Runnable {
 	 String antTarget;
 	 String creationDate;
 
+	 //These are variables associated with the arrow scaling.
+	 private double scale;
+	 private double longestlength;
+	 private double projectMinX;
+	 private double projectMaxX;
+	 private double projectMinY;
+	 private double projectMaxY;
+	 
+
 	/**
 	 * This is a main() for testing.
 	 */
@@ -82,6 +91,10 @@ public class SimpleXService extends AntVisco implements Runnable {
 	 */
 	public SimpleXService(boolean useClassLoader) throws Exception {
 		super();
+
+		//Re-initialize the arrow scaling variables
+		resetScalingVariables();
+
 		if (useClassLoader) {
 			// System.out.println("Using classloader");
 			// This is useful for command line clients but does not work
@@ -427,11 +440,26 @@ public class SimpleXService extends AntVisco implements Runnable {
 
 		//Set up the KML service, execute it, and add to the output object
 		String[] kmlurls = new String[4];
+
+
 		try {
 			 System.out.println("Making the kml for the output");
 			 String outputfilename = workDir + "/" + projectName + ".output";
 			 GmapDataXml dw = new GmapDataXml();
 			 dw.LoadDataFromFile(outputfilename);
+
+			PointEntry[] residualPointEntries = dw.getO_cList();
+			PointEntry[] calcPointEntries = dw.getCalcList();
+			PointEntry[] obsvPointEntries = dw.getObservList();
+
+			//Determine the scaling. We'll need to use one value for all 
+			//arrow plots, so we call the method multiple times.
+			double arrowScale=setGlobalKmlArrowScale(residualPointEntries);
+			logger.info("ArrowScale:"+arrowScale);
+			arrowScale=setGlobalKmlArrowScale(calcPointEntries);			
+			logger.info("ArrowScale:"+arrowScale);
+			arrowScale=setGlobalKmlArrowScale(obsvPointEntries);
+			logger.info("ArrowScale:"+arrowScale);
 
 			//Set up the session wide service coordinates.
 			SimpleXDataKml kmlService;
@@ -468,19 +496,29 @@ public class SimpleXService extends AntVisco implements Runnable {
 			// String o_cKmlUrl = kmlService.runMakeKml("", userName, projectName,"o_c");
 			
 			//Create one KML that has everything (observations, calculations, and residuals)
-			PointEntry[] tmp_pointentrylist = dw.getO_cList();
-			kmlService.setDatalist(tmp_pointentrylist);
-			kmlService.setArrowPlacemark("'Residual Displacements Arrow Layer", "ffff0000", 2,10.0);
 
-			tmp_pointentrylist = dw.getCalcList();
-			kmlService.setDatalist(tmp_pointentrylist);
-			kmlService.setArrowPlacemark("Calculated Displacements Arrow Layer", "ff00ccff", 2);
+			kmlService.setDatalist(residualPointEntries);
+			kmlService.setArrowPlacemark("'Residual Displacements Arrow Layer", 
+												  "ffff0000", 
+												  2, 
+												  arrowScale);
 
-			tmp_pointentrylist = dw.getObservList();
-			kmlService.setDatalist(tmp_pointentrylist);
-			kmlService.setArrowPlacemark("Observed Displacements Arrow Layer", "ff0000ff", 2);
-			String totalKmlUrl = kmlService.runMakeKml("", userName,
-																	 projectName,jobUIDStamp);
+			kmlService.setDatalist(calcPointEntries);
+			kmlService.setArrowPlacemark("Calculated Displacements Arrow Layer", 
+												  "ff00ccff", 
+												  2, 
+												  arrowScale);
+
+
+			kmlService.setDatalist(obsvPointEntries);
+			kmlService.setArrowPlacemark("Observed Displacements Arrow Layer", 
+												  "ff0000ff", 
+												  2,
+												  arrowScale);
+			String totalKmlUrl = kmlService.runMakeKml("", 
+																	 userName,
+																	 projectName,
+																	 jobUIDStamp);
 			
 			kmlurls[0] = totalKmlUrl;
 			kmlurls[1] = ""; //observKmlUrl;
@@ -491,8 +529,9 @@ public class SimpleXService extends AntVisco implements Runnable {
 			e.printStackTrace();
 		}
 
+		resetScalingVariables();
 		sxoutput.setKmlUrls(kmlurls);
-
+		
 		return sxoutput;
 	}
 
@@ -1085,5 +1124,68 @@ public class SimpleXService extends AntVisco implements Runnable {
 		  }
 		  printer.close();
 		  System.out.println("End of the fault output");
+	 }
+
+	 /**
+	  * This method is used to determine arrow scale.  It is stateful and uses
+	  * class-scoped variables, in case we have several arrow layers that we want to
+	  * put on the same plot with the same scale (which we do).
+	  */ 
+	 protected double setGlobalKmlArrowScale(PointEntry[] pointEntries){
+		  
+			System.out.println("[SimplexDataKml/setArrowPlacemark] pointEntries.length : " + pointEntries.length);
+			for (int i = 0; i < pointEntries.length; i++) {
+				
+				double x=Double.valueOf(pointEntries[i].getX());
+				double y=Double.valueOf(pointEntries[i].getX());
+				if(x<projectMinX) projectMinX=x;
+				if(x>projectMaxX) projectMaxX=x;
+				if(y<projectMinY) projectMinY=y;
+				if(y>projectMaxY) projectMaxY=y;
+				
+				double dx = Double.valueOf(pointEntries[i].getDeltaXValue()).doubleValue(); 
+				double dy = Double.valueOf(pointEntries[i].getDeltaYValue()).doubleValue();			 
+				double length = Math.sqrt(dx * dx + dy * dy);
+				
+				// System.out.println("[SimpleXService/setArrowPlacemark] dx : " + dx);
+				// System.out.println("[SimpleXService/setArrowPlacemark] dy : " + dy);
+				
+				
+				if (i == 0)
+					longestlength = length; 
+				
+				else if (length > longestlength)
+					longestlength = length; 
+			}
+			System.out.println("[SimpleXService/setArrowPlacemark] longestlength : " + longestlength);			
+			
+			double projectLength=(projectMaxX-projectMinX)*(projectMaxX-projectMinX);
+			projectLength+=(projectMaxY-projectMinY)*(projectMaxY-projectMinY);
+			projectLength=Math.sqrt(projectLength);
+			
+			//We arbitrarly set the longest displacement arrow to be 10% of the 
+			//project dimension.
+			double scaling = 0.7*projectLength/longestlength;
+			
+			System.out.println("[SimpleXService/setArrowPlacemark] projectLength : " + projectLength);			
+			return scaling;
+		  
+	 }
+
+	 /**
+	  * These are class-scoped variables that are stateful.  We 
+	  * encapsulate here the steps to re-initialize them.
+	  */
+	 protected void resetScalingVariables (){
+		  //All of these should be easily replaced.  Note value settings are 
+		  //superficially counter-intuitive: we want the default min values to 
+		  //be positive infinity because the first tested value will be less than
+		  //this value and thus replace it.
+		  scale=0.0;
+		  longestlength = 0.;
+		  projectMinX=Double.POSITIVE_INFINITY;
+		  projectMaxX=Double.NEGATIVE_INFINITY;
+		  projectMinY=Double.POSITIVE_INFINITY;
+		  projectMaxY=Double.NEGATIVE_INFINITY;
 	 }
 }

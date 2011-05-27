@@ -544,66 +544,27 @@ public class SimpleXDataKml {
 	 }
 	 
 	 public void setArrowPlacemark(String folderName, String LineColor, double LineWidth, double arrowScale) {
-		 
-			double longestlength = 0.;
-			double projectMinX=Double.valueOf(datalist[0].getX());
-			double projectMaxX=Double.valueOf(datalist[0].getX());
-			double projectMinY=Double.valueOf(datalist[0].getY());
-			double projectMaxY=Double.valueOf(datalist[0].getY());
 			
-			System.out.println("[SimplexDataKml/setArrowPlacemark] datalist.length : " + datalist.length);
-			for (int i = 0; i < datalist.length; i++) {
-				
-				double x=Double.valueOf(datalist[i].getX());
-				double y=Double.valueOf(datalist[i].getX());
-				if(x<projectMinX) projectMinX=x;
-				if(x>projectMaxX) projectMaxX=x;
-				if(y<projectMinY) projectMinY=y;
-				if(y>projectMaxY) projectMaxY=y;
-				
-				double dx = Double.valueOf(datalist[i].getDeltaXValue()).doubleValue(); 
-				double dy = Double.valueOf(datalist[i].getDeltaYValue()).doubleValue();			 
-				double length = Math.sqrt(dx * dx + dy * dy);
-				
-				// System.out.println("[SimplexDataKml/setArrowPlacemark] dx : " + dx);
-				// System.out.println("[SimplexDataKml/setArrowPlacemark] dy : " + dy);
-				
-				
-				if (i == 0)
-					longestlength = length; 
-				
-				else if (length > longestlength)
-					longestlength = length; 
-			}
-			System.out.println("[SimplexDataKml/setArrowPlacemark] longestlength : " + longestlength);			
-			
-			double projectLength=(projectMaxX-projectMinX)*(projectMaxX-projectMinX);
-			projectLength+=(projectMaxY-projectMinY)*(projectMaxY-projectMinY);
-			projectLength=Math.sqrt(projectLength);
-			
-			//We arbitrarly set the longest displacement arrow to be 10% of the 
-			//project dimension.
-			double scaling = 0.7*projectLength/longestlength;
-			
-			System.out.println("[SimplexDataKml/setArrowPlacemark] projectLength : " + projectLength);			
-			
-			setArrowPlacemarkProcess(folderName, LineColor, LineWidth, arrowScale, longestlength, scaling);			
+			setArrowPlacemarkProcess(folderName, LineColor, LineWidth, arrowScale);			
 	 }
 	 
-	 public void setArrowPlacemarkProcess(String folderName, 
-													  String LineColor, 
-													  double LineWidth, 
-													  double longestlength, 
-													  double scaling) {
-		  setArrowPlacemarkProcess(folderName, LineColor, LineWidth, arrowScale, longestlength, scaling);		 
-	 }
+	 /**
+	  * These methods are not exposed publically but do all the work.
+	  */
+	 // protected void setArrowPlacemarkProcess(String folderName, 
+	 // 												  String LineColor, 
+	 // 												  double LineWidth, 
+	 // 												  double scaling) {
+	 // 	  setArrowPlacemarkProcess(folderName, LineColor, LineWidth, arrowScale,scaling);		 
+	 // }
 	 
-	 public void setArrowPlacemarkProcess(String folderName, 
-													  String LineColor, 
-													  double LineWidth, 
-													  double arrowScale, 
-													  double longestlength, 
-													  double scaling) {
+	 /**
+	  *
+	  */
+	 protected void setArrowPlacemarkProcess(String folderName, 
+														  String LineColor, 
+														  double LineWidth, 
+														  double scaling) {
 		  
 		  System.out.println("[SimpleXDataKml/setArrowPlacemark] started");
 		  Folder container = new Folder();
@@ -637,7 +598,6 @@ public class SimpleXDataKml {
 			
 			kmlDocument.addStyle(gridlineStyle);
 			
-			//		System.out.println("Scale rate: "+scaling+" "+longestlength+" "+projectLength);
 			
 			System.out.println("[SimplexDataKml/setArrowPlacemark] the size of the datalist : " 
 									 + datalist.length);
@@ -693,7 +653,7 @@ public class SimpleXDataKml {
 				descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaZName() 
 				+ ": " +fontEnd+ datalist[i].getDeltaZValue() + " cm <br/>"; 
 				descriptionValue = descriptionValue + "<font color=blue>scale rate </font>" 
-				+ ":" +fontEnd+ longestlength + "cm  : " + scaling + "km <br/>";			 
+				+ ":" +fontEnd+scaling + "cm:km <br/>";			 
 				descriptionValue = descriptionValue 
 				+ "<font color=blue>tag name:</font>" 
 				+ datalist[i].getFolderTag()+br; 

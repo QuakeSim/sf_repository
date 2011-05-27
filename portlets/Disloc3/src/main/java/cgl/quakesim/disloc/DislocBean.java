@@ -104,12 +104,21 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	String forSearchStr = "";
 	
 	boolean faultdrawing = false;
+
+	 //These are variables associated with the arrow scaling.
+	 private double scale;
+	 private double longestlength;
+	 private double projectMinX;
+	 private double projectMaxX;
+	 private double projectMinY;
+	 private double projectMaxY;
+	 
 	 
 	 private static Logger logger;
-	
-	public ObjectServer getDbs() {
-		return dbs;
-	}
+	 
+	 public ObjectServer getDbs() {
+		  return dbs;
+	 }
 
 	public void setDbs(ObjectServer dbs) {
 		this.dbs = dbs;
@@ -126,6 +135,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		this.db = db;
 	}
 
+	 //REVIEW: What is this doing here?
 	ObjectServer dbs = null;
 
 	
@@ -143,11 +153,11 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	 public String getFaultName() {
 		return faultName;
 	}
-	public void setFaultName(String faultName) {
-		this.faultName = faultName;
-	}
-	
-	
+	 
+	 public void setFaultName(String faultName) {
+		  this.faultName = faultName;
+	 }
+	 
 	int myFaultsForProjectListsize;
 	public int getMyFaultsForProjectListsize() {
 		return myFaultsForProjectList.size();
@@ -233,16 +243,15 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	 */
 	public DislocBean() throws Exception {
 		super();
+		
+		//Re-initialize the arrow scaling variables
+		resetScalingVariables();
+
 		faultDBEntry = new FaultDBEntry();
 		df = new DecimalFormat(".###");
 		// currentParams.setObservationPointStyle(1);
 		
 		logger=Logger.getLogger(DislocBean.class);
-
-		//This method is normally called after loading a project,
-		//but we also put it here so that a default project is automatically
-		//created.
-
 
 		// We are done.
 		logger.info("Primary Disloc Bean Created");
@@ -582,8 +591,8 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 
 		PointEntry[] tmp_pointentrylist = LoadDataFromUrl(dislocResultsBean.getOutputFileUrl());
 		
-		System.out.println("[createKml] the size of tmp_pointentrylist : " + tmp_pointentrylist.length);
-		System.out.println("[createKml] dislocResultsBean.getOutputFileUrl() " + dislocResultsBean.getOutputFileUrl());
+		logger.info("[createKml] the size of tmp_pointentrylist : " + tmp_pointentrylist.length);
+		logger.info("[createKml] dislocResultsBean.getOutputFileUrl() " + dislocResultsBean.getOutputFileUrl());
 
 		kmlService.setDatalist(tmp_pointentrylist);
 		kmlService.setOriginalCoordinate(origin_lon, origin_lat);
@@ -608,7 +617,8 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		// xinterval,yinterval);
 		// kmlService.setPointPlacemark("Icon Layer");
 		// kmlService.setArrowPlacemark("Arrow Layer", "ff66a1cc", 2);
-		kmlService.setArrowPlacemark("Arrow Layer", "#000000", 0.95);
+		double arrowScale=setGlobalKmlArrowScale(tmp_pointentrylist);
+		kmlService.setArrowPlacemark("Arrow Layer", "#000000", 0.95, arrowScale);
 
 		// Plot the faults
 		for (int i = 0; i < faults.length; i++) {
@@ -623,6 +633,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		String myKmlUrl = kmlService.runMakeKml("", userName, projectName,
 				(dislocResultsBean.getJobUIDStamp()).hashCode() + "");
 		
+		resetScalingVariables();		
 		System.out.println("[createKml] Finished");
 		return myKmlUrl;
 	}
@@ -3796,4 +3807,70 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	 public void setMyKmlUrl(String myKmlUrl) {
 		  this.myKmlUrl=myKmlUrl;
 	 }
+	 /**
+	  * This method is used to determine arrow scale.  It is stateful and uses
+	  * class-scoped variables, in case we have several arrow layers that we want to
+	  * put on the same plot with the same scale (which we do).
+	  *
+	  * REVIEW: this should go in some utility class in GenericQuakeSimProject
+	  */ 
+	 protected double setGlobalKmlArrowScale(PointEntry[] pointEntries){
+		  
+			logger.info("[SimplexDataKml/setArrowPlacemark] pointEntries.length : " 
+							+ pointEntries.length);
+			for (int i = 0; i < pointEntries.length; i++) {
+				
+				double x=Double.valueOf(pointEntries[i].getX());
+				double y=Double.valueOf(pointEntries[i].getX());
+				if(x<projectMinX) projectMinX=x;
+				if(x>projectMaxX) projectMaxX=x;
+				if(y<projectMinY) projectMinY=y;
+				if(y>projectMaxY) projectMaxY=y;
+				
+				double dx = Double.valueOf(pointEntries[i].getDeltaXValue()).doubleValue(); 
+				double dy = Double.valueOf(pointEntries[i].getDeltaYValue()).doubleValue();			 
+				double length = Math.sqrt(dx * dx + dy * dy);
+				
+				// System.out.println("[SimpleXService/setArrowPlacemark] dx : " + dx);
+				// System.out.println("[SimpleXService/setArrowPlacemark] dy : " + dy);
+				
+				
+				if (i == 0)
+					longestlength = length; 
+				
+				else if (length > longestlength)
+					longestlength = length; 
+			}
+			System.out.println("[SimpleXService/setArrowPlacemark] longestlength : " + longestlength);			
+			
+			double projectLength=(projectMaxX-projectMinX)*(projectMaxX-projectMinX);
+			projectLength+=(projectMaxY-projectMinY)*(projectMaxY-projectMinY);
+			projectLength=Math.sqrt(projectLength);
+			
+			//We arbitrarly set the longest displacement arrow to be 10% of the 
+			//project dimension.
+			double scaling = 0.7*projectLength/longestlength;
+			
+			System.out.println("[SimpleXService/setArrowPlacemark] projectLength : " + projectLength);			
+			return scaling;
+		  
+	 }
+	 /**
+	  * These are class-scoped variables that are stateful.  We 
+	  * encapsulate here the steps to re-initialize them.
+	  */
+	 protected void resetScalingVariables (){
+		  //All of these should be easily replaced.  Note value settings are 
+		  //superficially counter-intuitive: we want the default min values to 
+		  //be positive infinity because the first tested value will be less than
+		  //this value and thus replace it.
+		  scale=0.0;
+		  longestlength = 0.;
+		  projectMinX=Double.POSITIVE_INFINITY;
+		  projectMaxX=Double.NEGATIVE_INFINITY;
+		  projectMinY=Double.POSITIVE_INFINITY;
+		  projectMaxY=Double.NEGATIVE_INFINITY;
+	 }
+
+
 }

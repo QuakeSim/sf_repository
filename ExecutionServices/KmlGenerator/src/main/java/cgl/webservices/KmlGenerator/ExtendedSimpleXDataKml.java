@@ -188,7 +188,7 @@ public class ExtendedSimpleXDataKml extends SimpleXDataKml {
 			super.setDatalist(pe);
 			
 			doc_init();
-			super.setArrowPlacemarkProcess("Arrow Layer", "#000000", 0.95, longestlength, scaling);			
+			super.setArrowPlacemarkProcess("Arrow Layer", "#000000", 0.95, scaling);			
 			
 			// (new UID().toString())			
 			String subkmlurl = runMakeSubKml(ServerTag, UserName, ProjectName, JobUID, destDir + "/sub", nA);
