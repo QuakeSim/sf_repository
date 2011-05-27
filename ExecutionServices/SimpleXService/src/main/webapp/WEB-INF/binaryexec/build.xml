@@ -10,13 +10,15 @@
 <target name="ExecSimplex">
   <!--This is used to tell user which version of simplex is used -->
   <exec executable="ident"
+		  append="true"
 		  output="${workDir.prop}/${projectName.prop}.stdout">
 	 <arg value="${bindir.prop}/simplex"/>
   </exec>
-   <exec executable="${bindir.prop}/simplex" 
-         output="${workDir.prop}/${projectName.prop}.stdout"
-	 dir="${workDir.prop}">
-      <arg value="${projectName.prop}.input"/>
+  <exec executable="${bindir.prop}/simplex" 
+		  output="${workDir.prop}/${projectName.prop}.stdout"
+		  append="true"
+		  dir="${workDir.prop}">
+	 <arg value="${projectName.prop}.input"/>
       <arg value="${projectName.prop}.output"/>
       <env key="PATH" path="${bindir.prop}:/bin/:$PATH"/>
    </exec>
