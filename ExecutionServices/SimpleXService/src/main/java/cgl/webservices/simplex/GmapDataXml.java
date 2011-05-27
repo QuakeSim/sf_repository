@@ -39,6 +39,10 @@ public class GmapDataXml {
 
 	private ArrayList ResidualMarkers = new ArrayList();
 
+	 
+	 /**
+	  * This is a main method for standalone debugging.
+	  */
 	public static void main(String[] av) throws IOException {
 
 		try {
@@ -64,17 +68,30 @@ public class GmapDataXml {
 		this.original_lon = Double.valueOf(tmp_str.trim() ).doubleValue();
 	}
 
-	//
-	public void LoadDataFromFile(String InputFileName) {
+	 //This reads the output file from Simplex. It is specific
+	 //to the version of simplex.
+	 public void LoadDataFromFile(String InputFileName) {
 		try {
 			String line = new String();
 			int skipthreelines = 1;
 			BufferedReader in = new BufferedReader(
 					new FileReader(InputFileName));
+			//Skip over anything before Residual displacements
+			line=in.readLine();
+			while(line.indexOf("Residual displacements")<-1 && line!=null){
+				 //Do nothing.  We must first find the above string.
+				 logger.info("Output line:"+line);
+				 line=in.readLine();
+			}
+					
+			//We found "Residual Displacement" header, now skip ahead 3 lines
+			//until we get to the actual values.
 			while ((line = in.readLine()) != null) {
 				if (skipthreelines <= 4) {
+				 logger.info("Output line:"+line);
 
 				} else {
+					 logger.info("Output line:"+line);
 					if (!line.trim().equalsIgnoreCase("")) {
 
 						String tmp[] = line.split("\t");
