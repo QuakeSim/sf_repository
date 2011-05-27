@@ -445,29 +445,29 @@ public class SimpleXService extends AntVisco implements Runnable {
 			//Set the faults
 			kmlService = setfaultplot(kmlService, faults);
 
-			//Pass in the observation list and plot
-			PointEntry[] tmp_pointentrylist = dw.getObservList();
-			kmlService.setDatalist(tmp_pointentrylist);
-			kmlService.setPointPlacemark("Icon Layer");
-			kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
-			String observKmlUrl = kmlService.runMakeKml("", userName,
-																	  projectName, "observ");
-			System.out.println(observKmlUrl);
+			// //Pass in the observation list and plot
+			// PointEntry[] tmp_pointentrylist = dw.getObservList();
+			// kmlService.setDatalist(tmp_pointentrylist);
+			// kmlService.setPointPlacemark("Icon Layer");
+			// kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
+			// String observKmlUrl = kmlService.runMakeKml("", userName,
+			// 														  projectName, "observ");
+			// System.out.println(observKmlUrl);
 			
-			//Pass in the calculated values and plot
-			tmp_pointentrylist = dw.getCalcList();
-			kmlService.setDatalist(tmp_pointentrylist);
-			kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
-			String calcKmlUrl = kmlService.runMakeKml("", userName,
-																	projectName,"calc");
+			// //Pass in the calculated values and plot
+			// tmp_pointentrylist = dw.getCalcList();
+			// kmlService.setDatalist(tmp_pointentrylist);
+			// kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
+			// String calcKmlUrl = kmlService.runMakeKml("", userName,
+			// 														projectName,"calc");
 			
-			//Pass in and calculate the residuals
-			tmp_pointentrylist = dw.getO_cList();
-			kmlService.setDatalist(tmp_pointentrylist);
-			kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
-			String o_cKmlUrl = kmlService.runMakeKml("", userName, projectName,"o_c");
+			// //Pass in and calculate the residuals
+			// tmp_pointentrylist = dw.getO_cList();
+			// kmlService.setDatalist(tmp_pointentrylist);
+			// kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
+			// String o_cKmlUrl = kmlService.runMakeKml("", userName, projectName,"o_c");
 			
-			//Also create one KML that has everything (observations, calculations, and residuals)
+			//Create one KML that has everything (observations, calculations, and residuals)
 			tmp_pointentrylist = dw.getO_cList();
 			kmlService.setDatalist(tmp_pointentrylist);
 			kmlService.setArrowPlacemark("'Residual Displacements Arrow Layer", "ffff0000", 2);
@@ -483,9 +483,9 @@ public class SimpleXService extends AntVisco implements Runnable {
 																	 projectName,jobUIDStamp);
 			
 			kmlurls[0] = totalKmlUrl;
-			kmlurls[1] = observKmlUrl;
-			kmlurls[2] = calcKmlUrl;
-			kmlurls[3] = o_cKmlUrl;
+			kmlurls[1] = ""; //observKmlUrl;
+			kmlurls[2] = ""; //calcKmlUrl;
+			kmlurls[3] = ""; //o_cKmlUrl;
 
 		} catch (Exception e) {
 			e.printStackTrace();
