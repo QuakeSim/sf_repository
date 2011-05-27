@@ -94,6 +94,7 @@ public class GmapDataXml {
 				 System.out.println("Output line:"+line);
 				 while (skipthreelines <= 3) {
 					  skipthreelines++;
+					  line=in.readLine();
 					  System.out.println("Skipping column headings");
 				 }
 				 System.out.println("Parse results line:"+line);
