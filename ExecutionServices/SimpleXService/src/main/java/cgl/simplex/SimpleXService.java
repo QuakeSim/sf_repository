@@ -468,7 +468,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			// String o_cKmlUrl = kmlService.runMakeKml("", userName, projectName,"o_c");
 			
 			//Create one KML that has everything (observations, calculations, and residuals)
-			tmp_pointentrylist = dw.getO_cList();
+			PointEntry[] tmp_pointentrylist = dw.getO_cList();
 			kmlService.setDatalist(tmp_pointentrylist);
 			kmlService.setArrowPlacemark("'Residual Displacements Arrow Layer", "ffff0000", 2);
 
