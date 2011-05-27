@@ -93,16 +93,16 @@ public class GmapDataXml {
 					
 			//We found "Residual Displacement" header, now skip ahead 3 lines
 			//until we get to the actual values.
-			while ((line = in.readLine()) != null) {
+			while ((line = in.readLine()) != null
+					 && line.indexOf("Coef")<0) {
 				 System.out.println("Output line:"+line);
 				 while (skipthreelines <= 3) {
 					  skipthreelines++;
 					  line=in.readLine();
 					  System.out.println("Skipping column headings");
 				 }
-				 System.out.println("Parse results line:"+line);
 				 if (!line.trim().equalsIgnoreCase("")) {
-					  
+					  System.out.println("Parse results line:"+line);	  
 					  String tmp[] = line.split("\t");
 					  
 					  //  //See what we have.
