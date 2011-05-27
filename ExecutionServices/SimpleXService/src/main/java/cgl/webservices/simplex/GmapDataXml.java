@@ -86,14 +86,16 @@ public class GmapDataXml {
 				 logger.info("Output line:"+line);
 				 line=in.readLine();
 			}
+			logger.info("Found beginning of output: "+line);
 					
 			//We found "Residual Displacement" header, now skip ahead 3 lines
 			//until we get to the actual values.
 			while ((line = in.readLine()) != null) {
-				if (skipthreelines <= 4) {
 				 logger.info("Output line:"+line);
-
-				} else {
+				 if (skipthreelines <= 3) {
+					  skipthreelines++;
+					  logger.info("Skipping column headings");
+				 } else {
 					 logger.info("Parse results line:"+line);
 					if (!line.trim().equalsIgnoreCase("")) {
 
@@ -155,7 +157,6 @@ public class GmapDataXml {
 						break;
 					}
 				}
-				skipthreelines++;
 			}
 			in.close();
 		} catch (IOException ex1) {
