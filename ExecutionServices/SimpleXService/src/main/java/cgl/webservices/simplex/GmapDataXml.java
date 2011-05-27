@@ -81,7 +81,7 @@ public class GmapDataXml {
 					new FileReader(InputFileName));
 			//Skip over anything before Residual displacements
 			line=in.readLine();
-			while(line.indexOf("Residual displacements")<-1){
+			while(line.indexOf("Residual displacements")<0){
 				 //Do nothing.  We must first find the above string.
 				 logger.info("Output line:"+line);
 				 line=in.readLine();
@@ -94,7 +94,7 @@ public class GmapDataXml {
 				 logger.info("Output line:"+line);
 
 				} else {
-					 logger.info("Output line:"+line);
+					 logger.info("Parse results line:"+line);
 					if (!line.trim().equalsIgnoreCase("")) {
 
 						String tmp[] = line.split("\t");
