@@ -41,13 +41,14 @@
 		year = str.substring(0, i1);
                 month = str.substring(i1+1, i2);
                 day = str.substring(i2+1);
-
-                theDate.setFullYear(parseInt(year, 10));
-                theDate.setMonth(parseInt(month, 10)-1);
-                theDate.setDate(parseInt(day, 10));
-                theDate.setHours(12);
-                theDate.setMinutes(0);
+				
+				theDate.setMilliseconds(0);
                 theDate.setSeconds(0);
-                theDate.setMilliseconds(0);
+                theDate.setMinutes(0);
+				theDate.setHours(12);
+				//setDate(), setMonth(), setDate() will make sure the resulted date is right.
+                theDate.setDate(1);
+				theDate.setMonth(parseInt(month, 10)-1);
+                theDate.setDate(parseInt(day, 10));
         }
 
