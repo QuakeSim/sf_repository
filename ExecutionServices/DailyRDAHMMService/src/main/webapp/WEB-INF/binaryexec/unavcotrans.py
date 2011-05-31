@@ -10,7 +10,7 @@
 #   python unavcotrans.py stationID destdir beginDate endDate
 #
 # output:
-#   stationID.pbo.igs05.pos [daily_project_stationID].unavco.raw
+#   stationID.pbo.igs05.pos [daily_project_stationID].unavco.raw [daily_project_stationID].unavco.ref
 #============================================
 
 import csv, sys, os, subprocess, urllib
@@ -51,10 +51,19 @@ elif numargv == 5:
 
     # convert UNAVCO data file into GRWS raw format
     rawfile = destdir + "/daily_project_" + stationID + ".unavco.raw"
+    reffile = destdir + "/daily_project_" + stationID + ".unavco.ref"
     inputReader = csv.reader(open(unavcofile, 'r'), delimiter = ' ')
     outputWriter = csv.writer(open(rawfile, 'w'), delimiter = ' ')
+    refWriter = csv.writer(open(reffile, 'w'), delimiter = ' ')
     for row in inputReader:
         row = filter(None, row)
+        if row[0] == 'NEU':
+            nref, eref, uref = map(float, row[4:7])
+            if eref > 180:
+                eref = eref - 360
+            refWriter.writerow([eref, nref, uref])
+            del refWriter
+            print reffile
         if len(row) >= 25: 
             if (row[1][-2:] == '60'):
                 row[1] = row[1][:-2] + '00'
@@ -66,8 +75,9 @@ elif numargv == 5:
                 lat, lon, vert = map(float, row[12:15])
 		if lon > 180:
 		    lon = lon - 360
-                dlat, dlon, dvert = map(float, row[18:21])
-                outputWriter.writerow([stationID, date, lon, lat, vert, dlon, dlat, dvert])
+                #dlat, dlon, dvert = map(float, row[18:21])
+                ndel, edel, udel = map(float, row[15:18])
+                outputWriter.writerow([stationID, date, lon, lat, vert, edel, ndel, udel])
     del inputReader, outputWriter
     print rawfile
 else:
