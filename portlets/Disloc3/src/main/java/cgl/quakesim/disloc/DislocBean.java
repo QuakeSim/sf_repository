@@ -87,6 +87,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	 boolean renderChooseObsvStyleForm = false;
 	 boolean renderFaultDrawing=false;
 	 boolean renderProjectOutputMap=false;
+	 boolean renderInsarParamsForm=false;
 
 	Fault currentFault = new Fault();
 	// DislocParamsBean dislocParams=new DislocParamsBean();
@@ -1103,6 +1104,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		renderChooseObsvStyleForm = false;
 		renderFaultDrawing=false;
 		renderProjectOutputMap=false;
+		renderInsarParamsForm=false;
 	}
 
 	/**
@@ -1270,10 +1272,20 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 			 renderFaultDrawing=!renderFaultDrawing;
 		} else if (projectSelectionCode.equals("ShowProjectOutputMap")) {
 			 renderProjectOutputMap=!renderProjectOutputMap;
+		} else if (projectSelectionCode.equals("ShowInsarForm")) {
+			 renderInsarParamsForm=!renderInsarParamsForm;
 		} else if (projectSelectionCode.equals("")) {
 			;
 		}
 	}
+
+	 /**
+	  * Update insar plotting parameters here.
+	  */
+	 public void toggleInsarParamsUpdate(ActionEvent ev) {
+		initEditFormsSelection();
+	 }
+
 
 	/**
 	 * This is where we set the project's observation style.
@@ -2426,6 +2438,14 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		this.projectSelectionCode = projectSelectionCode;
 	}
 	 
+	 public boolean getRenderInsarParamsForm() {
+		  return this.renderInsarParamsForm;
+	 }
+
+	 public void setRenderInsarParamsForm(boolean renderInsarParamsForm){
+		  this.renderInsarParamsForm=renderInsarParamsForm;
+	 }
+
 	 public boolean getRenderProjectOutputMap(){
 		  return this.renderProjectOutputMap;
 	 }
