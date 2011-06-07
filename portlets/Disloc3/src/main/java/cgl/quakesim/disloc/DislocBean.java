@@ -1280,12 +1280,12 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	}
 
 	 /**
-	  * Update insar plotting parameters here.
+	  * Update insar plotting parameters here.  Note that the elevation, azimuth, and 
+	  * frequency parameters are implicitly set and don't need to be handled explicitly.
 	  */
 	 public void toggleInsarParamsUpdate(ActionEvent ev) {
 		initEditFormsSelection();
 	 }
-
 
 	/**
 	 * This is where we set the project's observation style.

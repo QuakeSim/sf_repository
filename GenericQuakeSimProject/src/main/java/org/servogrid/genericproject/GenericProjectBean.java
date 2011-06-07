@@ -262,6 +262,7 @@ public class GenericProjectBean {
      * default empty constructor
      */
     public GenericProjectBean(){
+		  logger=Logger.getLogger(GenericProjectBean.class);
 		  userName=getPortalUserName();
 		  contextListVector=new Vector();
 		  contextListHash=new Hashtable();
