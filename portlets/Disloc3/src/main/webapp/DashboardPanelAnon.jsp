@@ -52,7 +52,7 @@
 	 </h:form>
 	 <h:form id="dislocDashboardMain2">
 		<f:verbatim>
-		  <b> Step 2: </b>Use this drop down to choose the output style you want: a grid or scattered surface points.<br/>
+		  <b> Step 2: </b>Use this drop down to choose the output style you want: a grid or scattered surface points. Use this also to change default settings for the interferogram calculations <br/>
 		</f:verbatim>
 		<h:selectOneMenu id="DislocParamsSelectionMenu" 
 							  title="Use this drop down to choose the output style you want: a grid or scattered surface points"
@@ -64,6 +64,11 @@
 		  <f:selectItem id="item1" 
 							 itemLabel="Update your observation grid or scatter points." 
 							 itemValue="CreateObservationGrid" /> 
+
+		  <f:selectItem id="item-insar-anon"
+							 itemLabel="Change default interferogram plotting frequency, elevation, and azimuth."
+							 itemValue="ShowInsarForm" />
+
 
 		  <f:selectItem id="item021"
 							 itemLabel="Select observation points on an interactive map (scatter style only)."
