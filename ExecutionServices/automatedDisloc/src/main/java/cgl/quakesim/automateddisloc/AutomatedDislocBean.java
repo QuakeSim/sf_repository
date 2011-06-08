@@ -68,7 +68,7 @@ import org.apache.log4j.Level;
 
 public class AutomatedDislocBean {
 	 static final int EARTHQUAKE_SLIP_SCENARIOS=4;
-	 static final int ONE_HOUR_IN_MILLISECONDS=600000; //3600000;
+	 static final int ONE_HOUR_IN_MILLISECONDS=3600000; //3600000;
 	 private static Logger logger=Logger.getLogger(AutomatedDislocBean.class);
 
 	 //The input is the URL of the RSS/Atom feed we are processing.
@@ -136,6 +136,14 @@ class RunautomatedDisloc extends Thread {
 	 private Properties properties;
 	 private static final DateFormat dateFormat=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
+	 //These are variables associated with the arrow scaling.
+	 private double scale;
+	 private double longestlength;
+	 private double projectMinX;
+	 private double projectMaxX;
+	 private double projectMinY;
+	 private double projectMaxY;
+
 	 //These are File objects and a PrintWriter that are usefully given class-wide scope.
 	 File destDir, oldFile;
 	 PrintWriter out;
@@ -143,14 +151,13 @@ class RunautomatedDisloc extends Thread {
 	 public RunautomatedDisloc(String url) {
 		  this.url = url;
 
+		  resetScalingVariables();
+
 		  //Set up various things
 		  Properties properties=loadProperties();
 
 		  try {
 				//Set up the KML service connection
-				SimpleXDataKmlServiceLocator locator = new SimpleXDataKmlServiceLocator();
-				locator.setMaintainSession(true);		
-				kmlservice = locator.getKmlGenerator(new URL(kmlGeneratorUrl));
 		  } 
 		  catch(Exception ex) {
 				logger.error(ex.getMessage());
@@ -936,6 +943,11 @@ class RunautomatedDisloc extends Thread {
 
 		 logger.info("Creating KML point deformation plots");
 
+		 //Create a new kmlservice for this instance.
+		 SimpleXDataKmlServiceLocator locator = new SimpleXDataKmlServiceLocator();
+		 locator.setMaintainSession(true);		
+		 kmlservice = locator.getKmlGenerator(new URL(kmlGeneratorUrl));
+
 		// Get the project lat/lon origin. It is the lat/lon origin of the first fault.
 		String origin_lat = dislocParams.getOriginLat() + "";
 		String origin_lon = dislocParams.getOriginLon() + "";		
@@ -952,12 +964,10 @@ class RunautomatedDisloc extends Thread {
 		end_x = start_x + xinterval * (xiterationsNumber - 1);
 		end_y = start_y + yinterval * (yiterationsNumber - 1);
 
-		
 		// ExtendedSimpleXDataKml kmlservice;		
 		// ExtendedSimpleXDataKmlServiceLocator locator = new ExtendedSimpleXDataKmlServiceLocator();
 		// locator.setMaintainSession(true);
 		// kmlservice = locator.getKmlGenerator(new URL(kmlGeneratorUrl));
-
 
 		kmlservice.setOriginalCoordinate(origin_lon, origin_lat);
 		kmlservice.setCoordinateUnit("1000");
@@ -967,7 +977,8 @@ class RunautomatedDisloc extends Thread {
 		kmlservice.setDatalist(tmp_pointentrylist);
 		kmlservice.setOriginalCoordinate(origin_lon, origin_lat);
 		kmlservice.setCoordinateUnit("1000");
-		kmlservice.setArrowPlacemark("Arrow Layer", "#000000", 0.95);
+		double arrowScale=setGlobalKmlArrowScale(tmp_pointentrylist);
+		kmlservice.setArrowPlacemark("Arrow Layer", "#000000", 0.95,arrowScale);
 		// Plot the faults
 		for (int i = 0; i < faults.length; i++) {
 			 kmlservice.setFaultPlot("", faults[i].getFaultName() + "",
@@ -983,6 +994,7 @@ class RunautomatedDisloc extends Thread {
 		//This is possibly an obsolete API call.
 		//		String myKmlUrl = kmlservice.runMakeSubKmls(tmp_pointentrylist, "", "automatedDisloc", projectName, (dislocResultsBean.getJobUIDStamp()).hashCode() + "");
 		
+		resetScalingVariables();
 		logger.info("[AutomatedDislocBean/createKml] Finished");
 		return myKmlUrl;
 	}
@@ -1624,5 +1636,71 @@ class RunautomatedDisloc extends Thread {
 				out.println(pmEnd);
 
 	 }
+	 /**
+	  * This method is used to determine arrow scale.  It is stateful and uses
+	  * class-scoped variables, in case we have several arrow layers that we want to
+	  * put on the same plot with the same scale (which we do).
+	  *
+	  * REVIEW: this should go in some utility class in GenericQuakeSimProject
+	  */ 
+	 protected double setGlobalKmlArrowScale(PointEntry[] pointEntries){
+		  
+			logger.info("[SimplexDataKml/setArrowPlacemark] pointEntries.length : " 
+							+ pointEntries.length);
+			for (int i = 0; i < pointEntries.length; i++) {
+				
+				double x=Double.valueOf(pointEntries[i].getX());
+				double y=Double.valueOf(pointEntries[i].getX());
+				if(x<projectMinX) projectMinX=x;
+				if(x>projectMaxX) projectMaxX=x;
+				if(y<projectMinY) projectMinY=y;
+				if(y>projectMaxY) projectMaxY=y;
+				
+				double dx = Double.valueOf(pointEntries[i].getDeltaXValue()).doubleValue(); 
+				double dy = Double.valueOf(pointEntries[i].getDeltaYValue()).doubleValue();			 
+				double length = Math.sqrt(dx * dx + dy * dy);
+				
+				// System.out.println("[SimpleXService/setArrowPlacemark] dx : " + dx);
+				// System.out.println("[SimpleXService/setArrowPlacemark] dy : " + dy);
+				
+				
+				if (i == 0)
+					longestlength = length; 
+				
+				else if (length > longestlength)
+					longestlength = length; 
+			}
+			logger.info("[SimpleXService/setArrowPlacemark] longestlength : " + longestlength);			
+			
+			double projectLength=(projectMaxX-projectMinX)*(projectMaxX-projectMinX);
+			projectLength+=(projectMaxY-projectMinY)*(projectMaxY-projectMinY);
+			projectLength=Math.sqrt(projectLength);
+			
+			//We arbitrarly set the longest displacement arrow to be 10% of the 
+			//project dimension.
+			double scaling = 0.7*projectLength/longestlength;
+			
+			logger.info("[SimpleXService/setArrowPlacemark] projectLength : " + projectLength);			
+			return scaling;
+		  
+	 }
+
+	 /**
+	  * These are class-scoped variables that are stateful.  We 
+	  * encapsulate here the steps to re-initialize them.
+	  */
+	 protected void resetScalingVariables (){
+		  //All of these should be easily replaced.  Note value settings are 
+		  //superficially counter-intuitive: we want the default min values to 
+		  //be positive infinity because the first tested value will be less than
+		  //this value and thus replace it.
+		  scale=0.0;
+		  longestlength = 0.;
+		  projectMinX=Double.POSITIVE_INFINITY;
+		  projectMaxX=Double.NEGATIVE_INFINITY;
+		  projectMinY=Double.POSITIVE_INFINITY;
+		  projectMaxY=Double.NEGATIVE_INFINITY;
+	 }
+
 }
 	 

@@ -26,6 +26,11 @@ import com.sun.jersey.api.client.WebResource;
 
 import com.db4o.*;
 
+//Commons logging
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
+
+
 /**
  * Run the automated version of Disloc.
  */
@@ -156,6 +161,17 @@ public class DislocBean extends GenericSopacBean {
 	 String automatedDislocServiceUrl;
 	 String usgsFeedUrl="http://localhost:8080/7day-M5.xml";
 	 //String usgsFeedUrl="http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml";
+
+	 //These are variables associated with the arrow scaling.
+	 private double scale;
+	 private double longestlength;
+	 private double projectMinX;
+	 private double projectMaxX;
+	 private double projectMinY;
+	 private double projectMaxY;
+	
+	 private static Logger logger;
+
 	 
 	public String getAutomatedDislocServiceUrl() {
 		return automatedDislocServiceUrl;
@@ -172,6 +188,10 @@ public class DislocBean extends GenericSopacBean {
 	 */
 	public DislocBean() throws Exception {
 		super();
+		logger=Logger.getLogger(DislocBean.class);
+		//Re-initialize arrow scaling variables
+		resetScalingVariables();
+		
 		faultDBEntry = new FaultDBEntry();
 		df = new DecimalFormat(".###");
 		// currentParams.setObservationPointStyle(1);
@@ -179,26 +199,27 @@ public class DislocBean extends GenericSopacBean {
 		// We are done.
 		System.out.println("[" + getUserName() + "/RssDisloc3/DislocBean/DislocBean] Primary Disloc Bean Created");
 	}
+
 	/**
 	 * Converts the provided lat and lon into cartesian coordinates.
 	 */
 	protected ObsvPoint convertLatLon(double lat, double lon,
-			double origin_lat, double origin_lon) {
-		double x = (lon - origin_lon) * factor(origin_lon, origin_lat);
-		double y = (lat - origin_lat) * 111.32;
-
-		x = Double.parseDouble(df.format(x));
-		y = Double.parseDouble(df.format(y));
-
-		System.out.println("[" + getUserName() + "/RssDisloc3/DislocBean/convertLatLon] ObsvPoints:" + lat + " " + lon + " " + x + " " + y);
-
-		ObsvPoint point = new ObsvPoint();
-		point.setXcartPoint(x + "");
-		point.setYcartPoint(y + "");
-		point.setLatPoint(lat + "");
-		point.setLonPoint(lon + "");
-
-		return point;
+												 double origin_lat, double origin_lon) {
+		 double x = (lon - origin_lon) * factor(origin_lon, origin_lat);
+		 double y = (lat - origin_lat) * 111.32;
+		 
+		 x = Double.parseDouble(df.format(x));
+		 y = Double.parseDouble(df.format(y));
+		 
+		 System.out.println("[" + getUserName() + "/RssDisloc3/DislocBean/convertLatLon] ObsvPoints:" + lat + " " + lon + " " + x + " " + y);
+		 
+		 ObsvPoint point = new ObsvPoint();
+		 point.setXcartPoint(x + "");
+		 point.setYcartPoint(y + "");
+		 point.setLatPoint(lat + "");
+		 point.setLonPoint(lon + "");
+		 
+		 return point;
 	}
 
 	public void createFaultFromMap() {
@@ -360,7 +381,6 @@ public class DislocBean extends GenericSopacBean {
 		return returnString;
 	}
 
-
 	/**
 	 * This method is used to generate the output plots with the remote KML
 	 * service.
@@ -407,7 +427,8 @@ public class DislocBean extends GenericSopacBean {
 		// xinterval,yinterval);
 		// kmlService.setPointPlacemark("Icon Layer");
 		// kmlService.setArrowPlacemark("Arrow Layer", "ff66a1cc", 2);
-		kmlService.setArrowPlacemark("Arrow Layer", "#000000", 0.95);
+		double arrowScale=setGlobalKmlArrowScale(tmp_pointentrylist);
+		kmlService.setArrowPlacemark("Arrow Layer", "#000000", 0.95, arrowScale);
 
 		// Plot the faults
 		for (int i = 0; i < faults.length; i++) {
@@ -415,9 +436,11 @@ public class DislocBean extends GenericSopacBean {
 		}
 
 		String myKmlUrl = kmlService.runMakeKml("", userName, projectName, (dislocResultsBean.getJobUIDStamp()).hashCode() + "");
+		resetScalingVariables();
 		System.out.println("[" + getUserName() + "/RssDisloc3/DislocBean/createKml] Finished");
 		return myKmlUrl;
 	}
+
 	/**
 	 * This method stores the new project in the DB and updates the
 	 * currentProject
@@ -3475,4 +3498,70 @@ public class DislocBean extends GenericSopacBean {
 	}
 
 	// --------------------------------------------------
+	 /**
+	  * This method is used to determine arrow scale.  It is stateful and uses
+	  * class-scoped variables, in case we have several arrow layers that we want to
+	  * put on the same plot with the same scale (which we do).
+	  *
+	  * REVIEW: this should go in some utility class in GenericQuakeSimProject
+	  */ 
+	 protected double setGlobalKmlArrowScale(PointEntry[] pointEntries){
+		  
+			logger.info("[SimplexDataKml/setArrowPlacemark] pointEntries.length : " 
+							+ pointEntries.length);
+			for (int i = 0; i < pointEntries.length; i++) {
+				
+				double x=Double.valueOf(pointEntries[i].getX());
+				double y=Double.valueOf(pointEntries[i].getX());
+				if(x<projectMinX) projectMinX=x;
+				if(x>projectMaxX) projectMaxX=x;
+				if(y<projectMinY) projectMinY=y;
+				if(y>projectMaxY) projectMaxY=y;
+				
+				double dx = Double.valueOf(pointEntries[i].getDeltaXValue()).doubleValue(); 
+				double dy = Double.valueOf(pointEntries[i].getDeltaYValue()).doubleValue();			 
+				double length = Math.sqrt(dx * dx + dy * dy);
+				
+				// System.out.println("[SimpleXService/setArrowPlacemark] dx : " + dx);
+				// System.out.println("[SimpleXService/setArrowPlacemark] dy : " + dy);
+				
+				
+				if (i == 0)
+					longestlength = length; 
+				
+				else if (length > longestlength)
+					longestlength = length; 
+			}
+			logger.info("[SimpleXService/setArrowPlacemark] longestlength : " + longestlength);			
+			
+			double projectLength=(projectMaxX-projectMinX)*(projectMaxX-projectMinX);
+			projectLength+=(projectMaxY-projectMinY)*(projectMaxY-projectMinY);
+			projectLength=Math.sqrt(projectLength);
+			
+			//We arbitrarly set the longest displacement arrow to be 10% of the 
+			//project dimension.
+			double scaling = 0.7*projectLength/longestlength;
+			
+			logger.info("[SimpleXService/setArrowPlacemark] projectLength : " + projectLength);			
+			return scaling;
+		  
+	 }
+
+	 /**
+	  * These are class-scoped variables that are stateful.  We 
+	  * encapsulate here the steps to re-initialize them.
+	  */
+	 protected void resetScalingVariables (){
+		  //All of these should be easily replaced.  Note value settings are 
+		  //superficially counter-intuitive: we want the default min values to 
+		  //be positive infinity because the first tested value will be less than
+		  //this value and thus replace it.
+		  scale=0.0;
+		  longestlength = 0.;
+		  projectMinX=Double.POSITIVE_INFINITY;
+		  projectMaxX=Double.NEGATIVE_INFINITY;
+		  projectMinY=Double.POSITIVE_INFINITY;
+		  projectMaxY=Double.NEGATIVE_INFINITY;
+	 }
+
 }

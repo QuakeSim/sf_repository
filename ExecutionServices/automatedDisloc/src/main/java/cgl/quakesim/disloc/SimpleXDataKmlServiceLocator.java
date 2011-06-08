@@ -2,12 +2,12 @@
  * SimpleXDataKmlServiceLocator.java
  *
  * This file was auto-generated from WSDL
- * by the Apache Axis 1.3 Oct 05, 2005 (05:23:37 EDT) WSDL2Java emitter.
+ * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
 package cgl.quakesim.disloc;
 
-public class SimpleXDataKmlServiceLocator extends org.apache.axis.client.Service implements SimpleXDataKmlService {
+public class SimpleXDataKmlServiceLocator extends org.apache.axis.client.Service implements cgl.quakesim.disloc.SimpleXDataKmlService {
 
     public SimpleXDataKmlServiceLocator() {
     }
@@ -22,7 +22,7 @@ public class SimpleXDataKmlServiceLocator extends org.apache.axis.client.Service
     }
 
     // Use to get a proxy class for KmlGenerator
-    private java.lang.String KmlGenerator_address = "http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator";
+    private java.lang.String KmlGenerator_address = "http://gf19.ucs.indiana.edu:8080/KmlGenerator/services/KmlGenerator";
 
     public java.lang.String getKmlGeneratorAddress() {
         return KmlGenerator_address;
@@ -39,7 +39,7 @@ public class SimpleXDataKmlServiceLocator extends org.apache.axis.client.Service
         KmlGeneratorWSDDServiceName = name;
     }
 
-    public SimpleXDataKml getKmlGenerator() throws javax.xml.rpc.ServiceException {
+    public cgl.quakesim.disloc.SimpleXDataKml getKmlGenerator() throws javax.xml.rpc.ServiceException {
        java.net.URL endpoint;
         try {
             endpoint = new java.net.URL(KmlGenerator_address);
@@ -50,9 +50,9 @@ public class SimpleXDataKmlServiceLocator extends org.apache.axis.client.Service
         return getKmlGenerator(endpoint);
     }
 
-    public SimpleXDataKml getKmlGenerator(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
+    public cgl.quakesim.disloc.SimpleXDataKml getKmlGenerator(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
         try {
-            KmlGeneratorSoapBindingStub _stub = new KmlGeneratorSoapBindingStub(portAddress, this);
+            cgl.quakesim.disloc.KmlGeneratorSoapBindingStub _stub = new cgl.quakesim.disloc.KmlGeneratorSoapBindingStub(portAddress, this);
             _stub.setPortName(getKmlGeneratorWSDDServiceName());
             return _stub;
         }
@@ -72,8 +72,8 @@ public class SimpleXDataKmlServiceLocator extends org.apache.axis.client.Service
      */
     public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         try {
-            if (SimpleXDataKml.class.isAssignableFrom(serviceEndpointInterface)) {
-                KmlGeneratorSoapBindingStub _stub = new KmlGeneratorSoapBindingStub(new java.net.URL(KmlGenerator_address), this);
+            if (cgl.quakesim.disloc.SimpleXDataKml.class.isAssignableFrom(serviceEndpointInterface)) {
+                cgl.quakesim.disloc.KmlGeneratorSoapBindingStub _stub = new cgl.quakesim.disloc.KmlGeneratorSoapBindingStub(new java.net.URL(KmlGenerator_address), this);
                 _stub.setPortName(getKmlGeneratorWSDDServiceName());
                 return _stub;
             }
@@ -105,7 +105,7 @@ public class SimpleXDataKmlServiceLocator extends org.apache.axis.client.Service
     }
 
     public javax.xml.namespace.QName getServiceName() {
-        return new javax.xml.namespace.QName("http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator", "SimpleXDataKmlService");
+        return new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/KmlGenerator/services/KmlGenerator", "SimpleXDataKmlService");
     }
 
     private java.util.HashSet ports = null;
@@ -113,7 +113,7 @@ public class SimpleXDataKmlServiceLocator extends org.apache.axis.client.Service
     public java.util.Iterator getPorts() {
         if (ports == null) {
             ports = new java.util.HashSet();
-            ports.add(new javax.xml.namespace.QName("http://gf1.ucs.indiana.edu:13080/KmlGenerator/services/KmlGenerator", "KmlGenerator"));
+            ports.add(new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/KmlGenerator/services/KmlGenerator", "KmlGenerator"));
         }
         return ports.iterator();
     }

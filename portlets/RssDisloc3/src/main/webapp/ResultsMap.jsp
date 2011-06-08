@@ -18,7 +18,7 @@
    }
  </style>
 
-	<title>Disloc Load and Delete Project</title>
+	<title>Display Disloc Results</title>
 	
 	<link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css"/>
 	<link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/jquery.treeview.css"/>
