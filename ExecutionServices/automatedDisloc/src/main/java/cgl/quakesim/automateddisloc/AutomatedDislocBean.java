@@ -66,14 +66,54 @@ import com.db4o.ObjectSet;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
 
+//Quartz
+import static org.quartz.JobBuilder.newJob;
+import static org.quartz.TriggerBuilder.newTrigger;
+import static org.quartz.DateBuilder.*;
+import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
+
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.JobDetail;
+import org.quartz.Trigger;
+import org.quartz.impl.StdSchedulerFactory;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+
+
 public class AutomatedDislocBean {
 	 static final int EARTHQUAKE_SLIP_SCENARIOS=4;
 	 static final int ONE_HOUR_IN_MILLISECONDS=3600000; //3600000;
 	 private static Logger logger=Logger.getLogger(AutomatedDislocBean.class);
 
+	 public AutomatedDislocBean(){
+	 	  logger.info("----------AutomatedDislocBean initiated--------");
+		  
+		  //Quartz stuff
+		  try {
+				Scheduler scheduler=StdSchedulerFactory.getDefaultScheduler();
+				scheduler.start();
+				JobDetail job=newJob(RunautomatedDisloc.class).withIdentity("job1","group1").build();
+				Trigger trigger=newTrigger().withIdentity("trigger1","group1").startNow()
+					 .withSchedule(simpleSchedule().withIntervalInSeconds(10).repeatForever()).build();
+				scheduler.scheduleJob(job,trigger);
+				//Thread.sleep(600L*1000L);
+				//scheduler.shutdown();
+		  }
+		  catch(SchedulerException ex) {
+				ex.printStackTrace();
+		  }
+		  catch(Exception ex2) {
+				ex2.printStackTrace();
+		  }
+
+	 }
+	 
 	 //The input is the URL of the RSS/Atom feed we are processing.
 	 public void run(String url) {
 		  logger.info("URL for feed:"+url);
+		  
 		  //Really necessary to use a thread here?
 		  RunautomatedDisloc rd = new RunautomatedDisloc(url);
 		  
@@ -85,7 +125,7 @@ public class AutomatedDislocBean {
 	 }	
 }
 
-class RunautomatedDisloc extends Thread {
+class RunautomatedDisloc extends Thread implements Job{
 	 private static Logger logger=Logger.getLogger(RunautomatedDisloc.class);
 	 //REVIEW: Shouldn't be hard coded.  Put in a property.
 	 //REVIEW: actually, it isn't used.  The "url" variable passed in to run() is 
@@ -149,6 +189,7 @@ class RunautomatedDisloc extends Thread {
 	 PrintWriter out;
 
 	 public RunautomatedDisloc(String url) {
+		  super();
 		  this.url = url;
 
 		  resetScalingVariables();
@@ -163,7 +204,21 @@ class RunautomatedDisloc extends Thread {
 				logger.error(ex.getMessage());
 		  }
 	 }
-	 
+
+	 /**
+	  * Required by Quartz
+	  */
+	 public void execute(JobExecutionContext context) throws JobExecutionException {
+		  logger.info("Execution called");
+		  System.out.println("execute called");
+	 }
+
+	 /**
+	  * 
+	  */
+	 public void runWithSleep(int sleepTime){
+	 }
+
 	 /**
 	  * Load the project properties and set values.
 	  */

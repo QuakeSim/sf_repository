@@ -181,7 +181,12 @@
              <groupId>QuakeSim2</groupId>
              <artifactId>db4o-java5</artifactId>
              <version>6.1</version>
-        </dependency>		
+        </dependency>
 		
+		  <dependency>
+			 <groupId>org.quartz-scheduler</groupId>
+			 <artifactId>quartz</artifactId>
+			 <version>2.0.1</version>
+		  </dependency>
 	</dependencies>
 </project>
