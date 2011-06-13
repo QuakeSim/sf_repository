@@ -22,13 +22,21 @@
 			<url>http://repo1.maven.org/maven2</url>
 		</repository>
 		<repository>
-			<id>axis2-maven-repo</id>
+			<id>main-maven-repo2</id>
 			<url>http://repo1.maven.org/maven2</url>
 		</repository>
 	</repositories>
 	
 	<build>
 		<plugins>
+		  <plugin>
+			 <groupId>org.codehaus.mojo</groupId>
+			 <artifactId>exec-maven-plugin</artifactId>
+			 <version>1.2</version>
+			 <configuration>
+				<mainClass>cgl.quakesim.automateddisloc.AutomatedDislocBean</mainClass>
+			 </configuration>
+		  </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
