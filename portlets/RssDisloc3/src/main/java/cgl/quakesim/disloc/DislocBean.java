@@ -160,7 +160,7 @@ public class DislocBean extends GenericSopacBean {
 	
 	 String automatedDislocServiceUrl;
 	 String usgsFeedUrl="http://localhost:8080/7day-M5.xml";
-	 //String usgsFeedUrl="http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml";
+	 //	 String usgsFeedUrl="http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml";
 
 	 //These are variables associated with the arrow scaling.
 	 private double scale;

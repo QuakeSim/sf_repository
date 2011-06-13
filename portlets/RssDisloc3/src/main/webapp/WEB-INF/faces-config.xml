@@ -62,7 +62,7 @@
 	  
 	  <managed-property>
 		 <property-name>automatedDislocServiceUrl</property-name>
-       <value>@host.base.url@/axis2/services/AutomatedDislocBean</value>
+       <value>@host.base.url@/axis2/services/RunautomatedDisloc</value>
      </managed-property>
 	  
 	</managed-bean>
