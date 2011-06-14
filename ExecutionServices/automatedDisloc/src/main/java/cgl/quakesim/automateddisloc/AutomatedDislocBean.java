@@ -89,7 +89,7 @@ import org.apache.axis2.description.AxisService;
 public class AutomatedDislocBean implements Runnable, ServiceLifeCycle {
 	 static final int EARTHQUAKE_SLIP_SCENARIOS=4;
 	 static final int ONE_HOUR_IN_MILLISECONDS=3600000; //3600000;
-	 static final int ONE_HOUR_IN_SECONDS=10;
+	 static final int ONE_HOUR_IN_SECONDS=3600;
 	 private static Logger logger=LoggerFactory.getLogger(AutomatedDislocBean.class);
 
 	 private Scheduler scheduler;
@@ -146,9 +146,30 @@ public class AutomatedDislocBean implements Runnable, ServiceLifeCycle {
 	 	  }
 	 }
 
+	 public static void printUsage(){
+		  System.out.println("--------------------------------------------------");
+		  System.out.println("Usage: java http://url.of.usgs/rss/feed.xml");
+		  System.out.println("Typically, run with the command mvn exec:java -Dexec.args=\"http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml\" -Dlog4j.configuration=file:///path/to/QuakeSim2/portal_deploy/apache-tomcat-5.5.20/common/classes/log4j.xml");
+		  System.out.println("--------------------------------------------------");
+	 }
+
+	 /**
+	  * This is a main method for running on the command line.
+	  */
 	 public static void main(String[] args) {
-		  AutomatedDislocBean autoBean=new AutomatedDislocBean();
-		  autoBean.runInBackground("http://localhost:8080/7day-M5.xml");
+		  if(args.length!=1) {
+				printUsage();
+		  }
+		  else {
+				try {
+					 AutomatedDislocBean autoBean=new AutomatedDislocBean();
+					 autoBean.runInBackground(args[0]);
+				}
+				catch(Exception ex) {
+					 ex.printStackTrace();
+					 printUsage();
+				}
+		  }
 	 }
 	 
 	 /**

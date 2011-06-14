@@ -101,10 +101,10 @@
 			
 			<h:panelGrid id="faultMapsideGrid" columns="2" border="1">
 			  <f:verbatim>
-				 <div id="faultMapside" style="width: 300px; height: 800px; overflow:auto;"></div>
+				 <div id="faultMapside" style="width: 300px; height: 600px; overflow:auto;"></div>
 			  </f:verbatim>
 			  <f:verbatim>
-				 <div id="faultMap" style="width: 850px; height: 800px;"></div>
+				 <div id="faultMap" style="width: 620px; height: 600px;"></div>
 			  </f:verbatim> 
 			</h:panelGrid>
 		 </f:verbatim>

@@ -451,7 +451,7 @@ EGeoXml.prototype.processing = function(doc) {
         if (desc.match(/^https:\/\//i)) {
 				desc = '<a href="' + desc + '">' + desc + '</a>';
         }
-		  
+
         that.displacementkmls.push(GXml.value(placemarks[i].getElementsByTagName("DisplacementKmlURL")[0]).replace(/^\s+|\s+$/g, ''));
         that.insarkmls.push(GXml.value(placemarks[i].getElementsByTagName("InsarKmlURL")[0]).replace(/^\s+|\s+$/g, ''));
 		  
