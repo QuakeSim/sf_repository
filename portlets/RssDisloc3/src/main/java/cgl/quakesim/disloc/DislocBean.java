@@ -704,17 +704,22 @@ public class DislocBean extends GenericSopacBean {
 		return this.currentSummary;
 	}
 
+	 /**
+	  * Returns the information from the automatically created project database.
+	  * This method no longer actually invokes the remote service, but the 
+	  * code is retained, commented out.
+	  */
 	public HashMap getDbProjectNameList() {
 
 		System.out.println("[" + getUserName() + "/DislocBean/getDbProjectNameList] called");
 
-		Client c = Client.create();
-		//REVIEW: The USGS RSS feed URL should not be hard coded.
-		//		WebResource webResource = c.resource(getAutomatedDislocServiceUrl() + "/run?url=http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml");
-		WebResource webResource = c.resource(getAutomatedDislocServiceUrl() + "/run?url="+usgsFeedUrl);
-		System.out.println("[" + getUserName() + "/DislocBean/getDbProjectNameList] " + getAutomatedDislocServiceUrl());
+		//This was code for invoking the rest service. This isn't needed.
+		// Client c = Client.create();
+		// WebResource webResource = c.resource(getAutomatedDislocServiceUrl() + "/run?url="+usgsFeedUrl);
+		// System.out.println("[" + getUserName() + "/DislocBean/getDbProjectNameList] " + getAutomatedDislocServiceUrl());
 		
-		webResource.get(String.class);
+		// webResource.get(String.class);
+
 		dbProjectNameList.clear();
 		List sl = null;
 		String pn = null;

@@ -215,7 +215,7 @@ EGeoXml.prototype.createMarker = function(point,name,desc,style) {
 }
 
 // Create Polyline
-EGeoXml.prototype.createPolyline = function(points,color,width,opacity,pbounds,name,desc) {  
+EGeoXml.prototype.createPolyline = function(points,color,width,opacity,pbounds,name,shortName,desc) {  
 	 var thismap = this.map;
 	 var clickpolyobjfn = this.clickpolyobjfn;
 	 var iwoptions = this.opts.iwoptions || {};
@@ -224,7 +224,7 @@ EGeoXml.prototype.createPolyline = function(points,color,width,opacity,pbounds,n
 	 // this.gpolylines.push(p);
 	 this.gpolyobjs.push(p);
 	 this.gpolyobjs_desc.push(desc); // [CGL Version] insert a description
-	 var html = "<div style='font-weight: bold; font-size: medium; margin-bottom: 0em;'>"+name+"</div>"
+	 var html = "<div style='font-weight: bold; font-size: medium; margin-bottom: 0em;'>"+shortName+"</div>"
         +"<div style='font-family: Arial, sans-serif;font-size: small;width:"+this.iwwidth+"px'>"+desc+"</div>";
 	 
 	 GEvent.addListener(p,"click", function() {
@@ -246,7 +246,7 @@ EGeoXml.prototype.createPolyline = function(points,color,width,opacity,pbounds,n
 }
 
 // Create Polygon
-EGeoXml.prototype.createPolygon = function(points,color,width,opacity,fillcolor,fillopacity,pbounds, name, desc) {  
+EGeoXml.prototype.createPolygon = function(points,color,width,opacity,fillcolor,fillopacity,pbounds, name, shortName,desc) {  
 	 var thismap = this.map;
 	 var clickpolyobjfn = this.clickpolyobjfn;
 	 var iwoptions = this.opts.iwoptions || {};
@@ -258,7 +258,7 @@ EGeoXml.prototype.createPolygon = function(points,color,width,opacity,fillcolor,
 	 this.gpolyobjs.push(p);
 	 this.gpolyobjs_desc.push(desc);
 	 
-	 var html = "<div style='font-weight: bold; font-size: medium; margin-bottom: 0em;'>"+name+"</div>"
+	 var html = "<div style='font-weight: bold; font-size: medium; margin-bottom: 0em;'>"+shortName+"</div>"
         +"<div style='font-family: Arial, sans-serif;font-size: small;width:"+this.iwwidth+"px'>"+desc+"</div>";
 	 GEvent.addListener(p,"click", function() {
 		  
@@ -444,6 +444,7 @@ EGeoXml.prototype.processing = function(doc) {
     var placemarks = xmlDoc.documentElement.getElementsByTagName("Placemark");
     for (var i = 0; i < placemarks.length; i++) {
         var name=GXml.value(placemarks[i].getElementsByTagName("name")[0]);
+		  var shortName=GXml.value(placemarks[i].getElementsByTagName("shortName")[0]);
         var desc=GXml.value(placemarks[i].getElementsByTagName("description")[0]);
         if (desc.match(/^http:\/\//i)) {
 				desc = '<a href="' + desc + '">' + desc + '</a>';
@@ -536,9 +537,9 @@ EGeoXml.prototype.processing = function(doc) {
 						  width = that.opts.width;
 					 
 					 if (!!that.opts.createpolyline) {
-						  that.opts.createpolyline(points,color,width,opacity,pbounds,name,desc);
+						  that.opts.createpolyline(points,color,width,opacity,pbounds,name,shortName,desc);
 					 } else {
-						  that.createPolyline(points,color,width,opacity,pbounds,name,desc);
+						  that.createPolyline(points,color,width,opacity,pbounds,name,shortName,desc);
 					 }
 				}
 				
@@ -598,9 +599,9 @@ EGeoXml.prototype.processing = function(doc) {
 					 }
 					 // Does the user have their own createmarker function?	  
 					 if (!!that.opts.createpolygon) {
-						  that.opts.createpolygon(points,color,width,opacity,fillcolor,fillopacity,pbounds,name,desc);
+						  that.opts.createpolygon(points,color,width,opacity,fillcolor,fillopacity,pbounds,name,shorName,desc);
 					 } else {	    
-						  that.createPolygon(points,color,width,opacity,fillcolor,fillopacity,pbounds,name,desc);
+						  that.createPolygon(points,color,width,opacity,fillcolor,fillopacity,pbounds,name,shortName,desc);
 					 }
 				}
         }

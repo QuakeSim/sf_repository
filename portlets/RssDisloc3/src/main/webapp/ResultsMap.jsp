@@ -18,7 +18,7 @@
    }
  </style>
 
-	<title>Display Disloc Results</title>
+	<title>RSS Disloc Results</title>
 	
 	<link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css"/>
 	<link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/jquery.treeview.css"/>
@@ -46,9 +46,14 @@
 	
 	<f:view>
 	  
-	  <h:outputText id="abdv1" styleClass="header2" value="Results Map"/>   
+	  <h:outputText id="abdv1" styleClass="header2" value="Disloc Results Map"/>   
 	  <f:verbatim>
+		 <p>
+		 This map shows results of surface deformation calculations for earthquakes
+		 from the USGS RSS feed for M>5. See <a href="http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml">http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml</a>.  Four different
+		 scenarios are calculated for each event.  
 		 <ul>
+			<li>Click the "+" or "-" icon to expand or contract the listings for a particular event.
 			<li>Click the earthquake name link to go its location. </li>
 			<li>Click the checkbox next to "InSAR Plot" or "Surface Displacement" to toggle results display on/off.</li>
 			<li>Click the "InSAR Plot" or "Surface Diplacement" links to download the source KML.

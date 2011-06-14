@@ -89,7 +89,7 @@ import org.apache.axis2.description.AxisService;
 public class AutomatedDislocBean implements Runnable, ServiceLifeCycle {
 	 static final int EARTHQUAKE_SLIP_SCENARIOS=4;
 	 static final int ONE_HOUR_IN_MILLISECONDS=3600000; //3600000;
-	 static final int ONE_HOUR_IN_SECONDS=3600;
+	 static final int ONE_HOUR_IN_SECONDS=600;
 	 private static Logger logger=LoggerFactory.getLogger(AutomatedDislocBean.class);
 
 	 private Scheduler scheduler;
