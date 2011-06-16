@@ -363,7 +363,8 @@ public class SimpleXService extends AntVisco implements Runnable {
 										(String)parkingParams.get(4),
 										(Fault[])parkingParams.get(5),
 										(String)parkingParams.get(6),
-										(String)parkingParams.get(7));
+										(String)parkingParams.get(7),
+										true);
 	 }
 
 	 public void callbackFailure(){
@@ -443,9 +444,19 @@ public class SimpleXService extends AntVisco implements Runnable {
 												 origin_lat, 
 												 faults, 
 												 timeStamp,
-												 creationDate);
+												 creationDate,
+												 false);
 	 }
 
+	 /**
+	  * This collects all the simplex output parameters into a bean that is returned to
+	  * the caller of the runSimplex method (typically a remote service).
+	  * 
+	  * Since simplex itself may need to run for a while but runSimplex runs in non-blocking mode
+	  * (that, returns immediately), we need to actually call this twice. The first time just sets
+	  * things up and the second time (invoked by the callback method when Simplex completes) actually
+	  * supplies the values.
+	  */
 	protected SimpleXOutputBean getAllTheSimpleXFiles(String KmlGeneratorServiceUrl, 
 																	  String userName, 
 																	  String projectName,
@@ -453,12 +464,14 @@ public class SimpleXService extends AntVisco implements Runnable {
 																	  String lat, 
 																	  Fault[] faults, 
 																	  String jobUIDStamp, 
-																	  String creationDate) {
+																	  String creationDate,
+																	  boolean simplexCompleted) {
 
+		 //The following are always called, regardless of the completion state.
 		SimpleXOutputBean sxoutput = new SimpleXOutputBean();
 		String baseUrl = generateBaseUrl(userName, projectName, jobUIDStamp);
 
-		// copy file to dest dir
+		//Set up the destination directory and files.
 		String destDir = generateOutputDestDir(userName, projectName,
 				jobUIDStamp);
 		String workDir = generateWorkDir(userName, projectName, jobUIDStamp);
@@ -466,29 +479,12 @@ public class SimpleXService extends AntVisco implements Runnable {
 		String outputFileDestLoc=destDir + "/" + projectName + ".output";
 		String stdoutFileDestLoc=destDir + "/" + projectName + ".stdout";
 		String faultFileDestLoc=destDir + "/" + projectName + ".fault";
+		String[] kmlurls={"","","",""};
 		try {
 			makeWorkDir(destDir);
-			copyFileToFile(new File(workDir + "/" + projectName + ".input"),
-								new File(inputFileDestLoc));
-			copyFileToFile(new File(workDir + "/" + projectName + ".output"),
-								new File(outputFileDestLoc));
-			copyFileToFile(new File(workDir + "/" + projectName + ".stdout"),
-								new File(stdoutFileDestLoc));
-			// copyFileToFile(new File(workDir + "/" + projectName + ".fault"),
-			// 		new File(destDir + "/" + projectName + ".fault"));
-		} // End of the try
-
+		}
 		catch (Exception ex) {
 			ex.printStackTrace();
-		}
-		
-		//Extract the fault information to a separate file
-		//REVIEW: This try/catch block needs to include the rest of the code.
-		try {
-			 extractFaultFromOutput(outputFileDestLoc,faultFileDestLoc);
-		}														
-		catch (Exception ex) {
-			 ex.printStackTrace();
 		}
 
 		//Set the metadata
@@ -499,98 +495,55 @@ public class SimpleXService extends AntVisco implements Runnable {
 		sxoutput.setLogUrl(baseUrl + "/" + projectName + ".stdout");
 		sxoutput.setFaultUrl(baseUrl + "/" + projectName + ".fault");
 		sxoutput.setCreationDate(creationDate);
+		//We'll need to reset this; the URLs won't be known until after the KML service is called.
+		sxoutput.setKmlUrls(kmlurls);
 
-		//Set up the KML service, execute it, and add to the output object
-		String[] kmlurls = new String[4];
-
-
-		try {
-			 logger.info("Making the kml for the output");
-			 String outputfilename = workDir + "/" + projectName + ".output";
-			 GmapDataXml dw = new GmapDataXml();
-			 dw.LoadDataFromFile(outputfilename);
-
-			PointEntry[] residualPointEntries = dw.getO_cList();
-			PointEntry[] calcPointEntries = dw.getCalcList();
-			PointEntry[] obsvPointEntries = dw.getObservList();
-
-			//Determine the scaling. We'll need to use one value for all 
-			//arrow plots, so we call the method multiple times.
-			double arrowScale=setGlobalKmlArrowScale(residualPointEntries);
-			logger.info("ArrowScale:"+arrowScale);
-			arrowScale=setGlobalKmlArrowScale(calcPointEntries);			
-			logger.info("ArrowScale:"+arrowScale);
-			arrowScale=setGlobalKmlArrowScale(obsvPointEntries);
-			logger.info("ArrowScale:"+arrowScale);
-
-			//Set up the session wide service coordinates.
-			SimpleXDataKml kmlService;
-			SimpleXDataKmlServiceLocator locator = new SimpleXDataKmlServiceLocator();
-			locator.setMaintainSession(true);
-			kmlService = locator
-					.getKmlGenerator(new URL(KmlGeneratorServiceUrl));
-			kmlService.setOriginalCoordinate(lon, lat);
-			kmlService.setCoordinateUnit("1000");
-
-			//Set the faults
-			kmlService = setfaultplot(kmlService, faults);
-
-			// //Pass in the observation list and plot
-			// PointEntry[] tmp_pointentrylist = dw.getObservList();
-			// kmlService.setDatalist(tmp_pointentrylist);
-			// kmlService.setPointPlacemark("Icon Layer");
-			// kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
-			// String observKmlUrl = kmlService.runMakeKml("", userName,
-			// 														  projectName, "observ");
-			
-			// //Pass in the calculated values and plot
-			// tmp_pointentrylist = dw.getCalcList();
-			// kmlService.setDatalist(tmp_pointentrylist);
-			// kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
-			// String calcKmlUrl = kmlService.runMakeKml("", userName,
-			// 														projectName,"calc");
-			
-			// //Pass in and calculate the residuals
-			// tmp_pointentrylist = dw.getO_cList();
-			// kmlService.setDatalist(tmp_pointentrylist);
-			// kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
-			// String o_cKmlUrl = kmlService.runMakeKml("", userName, projectName,"o_c");
-			
-			//Create one KML that has everything (observations, calculations, and residuals)
-
-			kmlService.setDatalist(residualPointEntries);
-			kmlService.setArrowPlacemark("'Residual Displacements Arrow Layer", 
-												  "ffff0000", 
-												  2, 
-												  arrowScale);
-
-			kmlService.setDatalist(calcPointEntries);
-			kmlService.setArrowPlacemark("Calculated Displacements Arrow Layer", 
-												  "ff00ccff", 
-												  2, 
-												  arrowScale);
-
-
-			kmlService.setDatalist(obsvPointEntries);
-			kmlService.setArrowPlacemark("Observed Displacements Arrow Layer", 
-												  "ff0000ff", 
-												  2,
-												  arrowScale);
-			String totalKmlUrl = kmlService.runMakeKml("", 
-																	 userName,
-																	 projectName,
-																	 jobUIDStamp);
-			
-			kmlurls[0] = totalKmlUrl;
-			kmlurls[1] = ""; //observKmlUrl;
-			kmlurls[2] = ""; //calcKmlUrl;
-			kmlurls[3] = ""; //o_cKmlUrl;
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		//Preempt the rest of this since simplex hasn't finished yet.
+		if(!simplexCompleted) {
+			 return sxoutput;
 		}
 
-		resetScalingVariables();
+
+		//The following are not done unless the job has completed.
+		
+		//Copy the files from the working directory to the web directory 
+		try {
+			 copyFileToFile(new File(workDir + "/" + projectName + ".input"),
+								 new File(inputFileDestLoc));
+			 copyFileToFile(new File(workDir + "/" + projectName + ".output"),
+								 new File(outputFileDestLoc));
+			 copyFileToFile(new File(workDir + "/" + projectName + ".stdout"),
+								 new File(stdoutFileDestLoc));
+			 // copyFileToFile(new File(workDir + "/" + projectName + ".fault"),
+			 // 		new File(destDir + "/" + projectName + ".fault"));
+		} // End of the try
+		
+		catch (Exception ex) {
+			 ex.printStackTrace();
+		}
+		
+		//2. Extract the fault information to a separate file. This is a
+		//Simplex output quirk.
+		//REVIEW: This try/catch block needs to include the rest of the code.
+		try {
+			 extractFaultFromOutput(outputFileDestLoc,faultFileDestLoc);
+		}														
+		catch (Exception ex) {
+			 ex.printStackTrace();
+		}
+
+
+		//Set up the KML service, execute it, and add to the output object
+		kmlurls=makeTheOutputKmls(workDir, 
+										  projectName,
+										  KmlGeneratorServiceUrl,
+										  lon,
+										  lat,
+										  faults,
+										  userName,
+										  jobUIDStamp);
+
+		//We have to call this again since we now have values for the URLs.
 		sxoutput.setKmlUrls(kmlurls);
 		
 		return sxoutput;
@@ -1248,5 +1201,85 @@ public class SimpleXService extends AntVisco implements Runnable {
 		  projectMaxX=Double.NEGATIVE_INFINITY;
 		  projectMinY=Double.POSITIVE_INFINITY;
 		  projectMaxY=Double.NEGATIVE_INFINITY;
+	 }
+
+	 /**
+	  * Set up and execute the KML service.
+	  */ 
+	 protected String[] makeTheOutputKmls(String workDir,
+													  String projectName,
+													  String KmlGeneratorServiceUrl,
+													  String lon,
+													  String lat,
+													  Fault[] faults,
+													  String userName,
+													  String jobUIDStamp){
+		String[] kmlurls = new String[4];
+		try {
+			 logger.info("Making the kml for the output");
+			 String outputfilename = workDir + "/" + projectName + ".output";
+			 GmapDataXml dw = new GmapDataXml();
+			 dw.LoadDataFromFile(outputfilename);
+			 
+			 PointEntry[] residualPointEntries = dw.getO_cList();
+			 PointEntry[] calcPointEntries = dw.getCalcList();
+			 PointEntry[] obsvPointEntries = dw.getObservList();
+			 
+			 //Determine the scaling. We'll need to use one value for all 
+			 //arrow plots, so we call the method multiple times.
+			 double arrowScale=setGlobalKmlArrowScale(residualPointEntries);
+			 logger.info("ArrowScale:"+arrowScale);
+			 arrowScale=setGlobalKmlArrowScale(calcPointEntries);			
+			 logger.info("ArrowScale:"+arrowScale);
+			 arrowScale=setGlobalKmlArrowScale(obsvPointEntries);
+			 logger.info("ArrowScale:"+arrowScale);
+
+			//Set up the session wide service coordinates.
+			SimpleXDataKml kmlService;
+			SimpleXDataKmlServiceLocator locator = new SimpleXDataKmlServiceLocator();
+			locator.setMaintainSession(true);
+			kmlService = locator
+					.getKmlGenerator(new URL(KmlGeneratorServiceUrl));
+			kmlService.setOriginalCoordinate(lon, lat);
+			kmlService.setCoordinateUnit("1000");
+
+			//Set the faults
+			kmlService = setfaultplot(kmlService, faults);
+
+			kmlService.setDatalist(residualPointEntries);
+			kmlService.setArrowPlacemark("'Residual Displacements Arrow Layer", 
+												  "ffff0000", 
+												  2, 
+												  arrowScale);
+
+			kmlService.setDatalist(calcPointEntries);
+			kmlService.setArrowPlacemark("Calculated Displacements Arrow Layer", 
+												  "ff00ccff", 
+												  2, 
+												  arrowScale);
+
+
+			kmlService.setDatalist(obsvPointEntries);
+			kmlService.setArrowPlacemark("Observed Displacements Arrow Layer", 
+												  "ff0000ff", 
+												  2,
+												  arrowScale);
+			String totalKmlUrl = kmlService.runMakeKml("", 
+																	 userName,
+																	 projectName,
+																	 jobUIDStamp);
+			
+			kmlurls[0] = totalKmlUrl;
+			kmlurls[1] = ""; //observKmlUrl;
+			kmlurls[2] = ""; //calcKmlUrl;
+			kmlurls[3] = ""; //o_cKmlUrl;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		resetScalingVariables();
+
+		return kmlurls;
 	 }
 }
