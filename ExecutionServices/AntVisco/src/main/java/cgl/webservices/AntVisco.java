@@ -9,7 +9,7 @@ import org.apache.log4j.*;
  */
 public class AntVisco implements Runnable{    
     static Logger logger=Logger.getLogger(AntVisco.class);
-    final public static String DONE="done", NOT_DONE="not done", FAILED="failed";
+    final public volatile String DONE="done", NOT_DONE="not done", FAILED="failed";
     final String SPACE=" ";
 
     String status=NOT_DONE;
@@ -51,14 +51,34 @@ public class AntVisco implements Runnable{
 		  buildfile=filename;
     }
 	 
+	 /**
+	  * This is a placeholder callback method that is invoked when the thread run completes
+	  * successfully.  Subclasses should implement.
+	  */
+	 public void callbackSuccess(){
+	 }
+
+	 /**
+	  * This is a placeholder callback method that is invoked when the thread run completes
+	  * unsuccessfully.
+	  */
+	 public void callbackFailure(){
+	 }
+	 
+	 /**
+	  * This is the required run method for threads.  It is invoked through start() by a thread but 
+	  * it can also be called directly within a single-threaded invocation.
+	  */ 
     public void run(){
 		  try {
 				cgl.webservices.MyMain2.main(getArgs());
 				status=DONE;
+				callbackSuccess();
 		  }
 		  catch (Exception ex){
 				System.err.println(ex.toString());
 				status=FAILED;
+				callbackFailure();
 				throw new RuntimeException();
 		  }
     }

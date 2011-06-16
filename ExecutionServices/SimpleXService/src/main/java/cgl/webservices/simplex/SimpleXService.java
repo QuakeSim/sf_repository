@@ -342,6 +342,14 @@ public class SimpleXService extends AntVisco implements Runnable {
 		return args;
 	}
 
+	 /**
+	  * This is an inherited callback method that should be called when a non-blocking 
+	  * invocation is complete.
+	  */
+	 public void callbackSuccess() {
+		  System.out.println("Callback success");
+	 }
+
 	/**
 	 * Actually runs Simplex. Always runs in non-blocking mode.
 	 */
