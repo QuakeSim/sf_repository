@@ -75,7 +75,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			 SimpleXService gfs = new SimpleXService(true);
 			 
 			 String timeStamp = gfs.generateTimeStamp();
-			 System.out.println("Running blocking version");
+			 logger.info("Running blocking version");
 			 SimpleXOutputBean sxb = gfs.runSimplex(userName, projectName,
 																 faults, observations, "1", "2", "12", "23", "Url",
 																 timeStamp);
@@ -96,7 +96,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 		resetScalingVariables();
 
 		if (useClassLoader) {
-			// System.out.println("Using classloader");
+			logger.debug("Using classloader");
 			// This is useful for command line clients but does not work
 			// inside Tomcat.
 			ClassLoader loader = ClassLoader.getSystemClassLoader();
@@ -108,7 +108,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 					.getResourceAsStream("simplexconfig.properties"));
 		} else {
 			// Extract the Servlet Context
-			// System.out.println("Using Servlet Context");
+			logger.debug("Using Servlet Context");
 			MessageContext msgC = MessageContext.getCurrentContext();
 			ServletContext context = ((HttpServlet) msgC
 					.getProperty(HTTPConstants.MC_HTTP_SERVLET))
@@ -116,7 +116,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 
 			String propertyFile = context.getRealPath("/")
 					+ "/WEB-INF/classes/simplexconfig.properties";
-			// System.out.println("Prop file location " + propertyFile);
+			logger.debug("Prop file location " + propertyFile);
 
 			properties = new Properties();
 			properties.load(new FileInputStream(propertyFile));
@@ -347,8 +347,26 @@ public class SimpleXService extends AntVisco implements Runnable {
 	  * invocation is complete.
 	  */
 	 public void callbackSuccess() {
-		  System.out.println("Callback success");
+		  logger.info("Callback success");
 	 }
+
+	 public void callbackFailure(){
+		  logger.info("Callback failure");
+	 }
+
+	 /**
+	  * 
+	  */
+	 protected void parkRunParams(String KmlGeneratorUrl, 
+											String userName, 
+											String projectName,
+											String origin_lon, 
+											String origin_lat,
+											Fault[] faults, 
+											String timeStamp,
+											String creationDate) {		  
+	 }
+	
 
 	/**
 	 * Actually runs Simplex. Always runs in non-blocking mode.
@@ -376,12 +394,22 @@ public class SimpleXService extends AntVisco implements Runnable {
 		  setArgs(args);
 		  //		  run();
 		  execute();
-		  System.out.println("Simplex Status: "+getStatus());
-		  while (getStatus().equals(AntVisco.NOT_DONE)) {
-		  		System.out.println("Simmplex Status: "+getStatus());
-		  		Thread.sleep(10000);
-		  }
+		  // logger.info("Simplex Status: "+getStatus());
+		  // while (getStatus().equals(AntVisco.NOT_DONE)) {
+		  // 		logger.info("Simmplex Status: "+getStatus());
+		  // 		Thread.sleep(10000);
+		  // }
 		  creationDate=createCreationDate();
+		  
+		  parkRunParams(KmlGeneratorUrl, 
+							 userName, 
+							 projectName,
+							 origin_lon, 
+							 origin_lat, 
+							 faults, 
+							 timeStamp,
+							 creationDate);
+
 		  return getAllTheSimpleXFiles(KmlGeneratorUrl, 
 												 userName, 
 												 projectName,
@@ -451,7 +479,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 
 
 		try {
-			 System.out.println("Making the kml for the output");
+			 logger.info("Making the kml for the output");
 			 String outputfilename = workDir + "/" + projectName + ".output";
 			 GmapDataXml dw = new GmapDataXml();
 			 dw.LoadDataFromFile(outputfilename);
@@ -488,7 +516,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			// kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
 			// String observKmlUrl = kmlService.runMakeKml("", userName,
 			// 														  projectName, "observ");
-			// System.out.println(observKmlUrl);
+			logger.debug(observKmlUrl);
 			
 			// //Pass in the calculated values and plot
 			// tmp_pointentrylist = dw.getCalcList();
@@ -607,7 +635,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			run();
 
 		} catch (Exception ex) {
-			System.out.println("prefabPlotGMTCall failed");
+			logger.info("prefabPlotGMTCall failed");
 			ex.printStackTrace();
 		}
 		return workDir + "/" + projectName + timeStamp + ".properties";
@@ -729,7 +757,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 					+ ".pdf"), new File(destDir + "/" + projectName
 					+ jobUIDStamp + ".pdf"));
 		} catch (Exception ex) {
-			System.out.println("Image not available");
+			logger.error("Image not available");
 			ex.printStackTrace();
 		}
 		String gmtPlotPdfUrl = baseUrl + "/" + projectName + jobUIDStamp
@@ -781,14 +809,14 @@ public class SimpleXService extends AntVisco implements Runnable {
 
 		// Find the shortest of the input files.
 		int shortCount = Integer.MAX_VALUE;
-		System.out.println("Max integer Value=" + shortCount);
+		logger.info("Max integer Value=" + shortCount);
 
 		for (int i = 0; i < inputFileArray.length; i++) {
 			int lineCount = getLineCount(inputFileArray[i]);
 			if (lineCount < shortCount)
 				shortCount = lineCount;
 		}
-		System.out.println("Shortest file length=" + shortCount);
+		logger.info("Shortest file length=" + shortCount);
 
 		// Now do the thing.
 		try {
@@ -861,7 +889,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 					filteredFileArray[i]), true);
 			String line = br.readLine();
 			while (line != null) {
-				// System.out.println(line);
+				logger.debug(line);
 				st = new StringTokenizer(line);
 				String newLine = "";
 				int tokenCount = st.countTokens();
@@ -872,7 +900,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 						newLine += temp + space;
 					}
 				}
-				// System.out.println(newLine);
+				logger.debug(newLine);
 				printer.println(newLine);
 				line = br.readLine();
 			}
@@ -882,7 +910,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 
 	private void makeWorkDir(String workDir) throws Exception {
 
-		System.out.println("Working Directory is " + workDir);
+		logger.info("Working Directory is " + workDir);
 		new File(workDir).mkdirs();
 		/* using ant to make a dir is not good idea */
 		// String[] args0 = new String[4];
@@ -915,9 +943,9 @@ public class SimpleXService extends AntVisco implements Runnable {
 			URL inputFileUrl = new URL(inputFileUrlString[i]);
 
 			String protocol = inputFileUrl.getProtocol();
-			System.out.println("Protocol: " + protocol);
+			logger.info("Protocol: " + protocol);
 			String fileSimpleName = extractSimpleName(inputFileUrl.getFile());
-			System.out.println(fileSimpleName);
+			logger.info(fileSimpleName);
 
 			fileLocalFullName[i] = inputFileDestDir + File.separator
 					+ fileSimpleName;
@@ -926,14 +954,14 @@ public class SimpleXService extends AntVisco implements Runnable {
 				String filePath = inputFileUrl.getFile();
 				fileSimpleName = inputFileUrl.getFile();
 
-				System.out.println("File path is " + filePath);
+				logger.info("File path is " + filePath);
 				File filePathObject = new File(filePath);
 				File destFileObject = new File(fileLocalFullName[i]);
 
 				// See if the inputFileUrl and the dest file are the same.
 				if (filePathObject.getCanonicalPath().equals(
 						destFileObject.getCanonicalPath())) {
-					System.out.println("Files are the same.  We're done.");
+					logger.info("Files are the same.  We're done.");
 					return fileLocalFullName;
 				}
 
@@ -947,7 +975,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			}
 
 			else {
-				System.out.println("Unknown protocol for accessing inputfile");
+				logger.error("Unknown protocol for accessing inputfile");
 				throw new Exception("Unknown protocol");
 			}
 		}
@@ -1127,11 +1155,11 @@ public class SimpleXService extends AntVisco implements Runnable {
 		  // second "residual" section.
 		  while(line!=null && line.indexOf("Residual")<0) {
 				printer.println(line);
-				//System.out.println("Fault line:"+line);
+				logger.debug("Fault line:"+line);
 				line=buf.readLine();
 		  }
 		  printer.close();
-		  System.out.println("End of the fault output");
+		  logger.info("End of the fault output");
 	 }
 
 	 /**
@@ -1141,7 +1169,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 	  */ 
 	 protected double setGlobalKmlArrowScale(PointEntry[] pointEntries){
 		  
-			System.out.println("[SimplexDataKml/setArrowPlacemark] pointEntries.length : " + pointEntries.length);
+			logger.info("[SimplexDataKml/setArrowPlacemark] pointEntries.length : " + pointEntries.length);
 			for (int i = 0; i < pointEntries.length; i++) {
 				
 				double x=Double.valueOf(pointEntries[i].getX());
@@ -1155,8 +1183,8 @@ public class SimpleXService extends AntVisco implements Runnable {
 				double dy = Double.valueOf(pointEntries[i].getDeltaYValue()).doubleValue();			 
 				double length = Math.sqrt(dx * dx + dy * dy);
 				
-				// System.out.println("[SimpleXService/setArrowPlacemark] dx : " + dx);
-				// System.out.println("[SimpleXService/setArrowPlacemark] dy : " + dy);
+				logger.debug("[SimpleXService/setArrowPlacemark] dx : " + dx);
+				logger.debug("[SimpleXService/setArrowPlacemark] dy : " + dy);
 				
 				
 				if (i == 0)
@@ -1165,7 +1193,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 				else if (length > longestlength)
 					longestlength = length; 
 			}
-			System.out.println("[SimpleXService/setArrowPlacemark] longestlength : " + longestlength);			
+			logger.info("[SimpleXService/setArrowPlacemark] longestlength : " + longestlength);			
 			
 			double projectLength=(projectMaxX-projectMinX)*(projectMaxX-projectMinX);
 			projectLength+=(projectMaxY-projectMinY)*(projectMaxY-projectMinY);
@@ -1175,7 +1203,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			//project dimension.
 			double scaling = 0.7*projectLength/longestlength;
 			
-			System.out.println("[SimpleXService/setArrowPlacemark] projectLength : " + projectLength);			
+			logger.info("[SimpleXService/setArrowPlacemark] projectLength : " + projectLength);			
 			return scaling;
 		  
 	 }
