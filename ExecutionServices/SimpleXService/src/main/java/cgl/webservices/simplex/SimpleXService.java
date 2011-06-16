@@ -368,11 +368,11 @@ public class SimpleXService extends AntVisco implements Runnable {
 		  setArgs(args);
 		  //		  run();
 		  execute();
-		  System.out.println("Simplex Status: "+getStatus());
-		  while (getStatus().equals(AntVisco.NOT_DONE)) {
-		  		System.out.println("Simmplex Status: "+getStatus());
-		  		Thread.sleep(10000);
-		  }
+		  // System.out.println("Simplex Status: "+getStatus());
+		  // while (getStatus().equals(AntVisco.NOT_DONE)) {
+		  // 		System.out.println("Simmplex Status: "+getStatus());
+		  // 		Thread.sleep(10000);
+		  // }
 		  creationDate=createCreationDate();
 		  return getAllTheSimpleXFiles(KmlGeneratorUrl, 
 												 userName, 
