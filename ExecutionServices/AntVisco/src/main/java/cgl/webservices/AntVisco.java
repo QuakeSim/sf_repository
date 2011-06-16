@@ -9,7 +9,7 @@ import org.apache.log4j.*;
  */
 public class AntVisco implements Runnable{    
     static Logger logger=Logger.getLogger(AntVisco.class);
-    final public volatile String DONE="done", NOT_DONE="not done", FAILED="failed";
+    final public static String DONE="done", NOT_DONE="not done", FAILED="failed";
     final String SPACE=" ";
 
     String status=NOT_DONE;
