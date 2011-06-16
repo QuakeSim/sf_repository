@@ -378,7 +378,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 		  parkingParams.add(userName);
 		  parkingParams.add(projectName);
 		  parkingParams.add(origin_lon);
-		  parkingParams.add(oring_lat);
+		  parkingParams.add(origin_lat);
 		  parkingParams.add(faults);
 		  parkingParams.add(timeStamp);
 		  parkingParams.add(creationDate);
