@@ -394,6 +394,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 		  setArgs(args);
 		  //		  run();
 		  execute();
+		  wait();
 		  // logger.info("Simplex Status: "+getStatus());
 		  // while (getStatus().equals(AntVisco.NOT_DONE)) {
 		  // 		logger.info("Simmplex Status: "+getStatus());

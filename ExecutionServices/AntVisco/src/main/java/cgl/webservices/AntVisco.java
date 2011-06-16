@@ -81,6 +81,7 @@ public class AntVisco implements Runnable{
 				callbackFailure();
 				throw new RuntimeException();
 		  }
+		  notifyAll();
     }
     
     public String getStatus(){
