@@ -53,7 +53,8 @@ public class SimpleXService extends AntVisco implements Runnable {
 	 private double projectMaxX;
 	 private double projectMinY;
 	 private double projectMaxY;
-	 
+	
+	 private ArrayList parkingParams;
 
 	/**
 	 * This is a main() for testing.
@@ -94,6 +95,8 @@ public class SimpleXService extends AntVisco implements Runnable {
 
 		//Re-initialize the arrow scaling variables
 		resetScalingVariables();
+
+		parkingParams=new ArrayList();
 
 		if (useClassLoader) {
 			logger.debug("Using classloader");
@@ -348,6 +351,11 @@ public class SimpleXService extends AntVisco implements Runnable {
 	  */
 	 public void callbackSuccess() {
 		  logger.info("--------------Callback success---------------");
+		  logger.info("Parking params check");
+		  logger.info(parkingParams.size());
+		  for(int i=0;i<parkingParams.size();i++) {
+				logger.info(parkingParams.get(i));
+		  }
 	 }
 
 	 public void callbackFailure(){
@@ -364,14 +372,24 @@ public class SimpleXService extends AntVisco implements Runnable {
 											String origin_lat,
 											Fault[] faults, 
 											String timeStamp,
-											String creationDate) {		  
+											String creationDate) {	
+		  parkingParams.clear();
+		  parkingParams.add(KmlGeneratorUrl);
+		  parkingParams.add(userName);
+		  parkingParams.add(projectName);
+		  parkingParams.add(origin_lon);
+		  parkingParams.add(oring_lat);
+		  parkingParams.add(faults);
+		  parkingParams.add(timeStamp);
+		  parkingParams.add(creationDate);
 	 }
 	
+	 
 
 	/**
 	 * Actually runs Simplex. Always runs in non-blocking mode.
 	 */
-	 public synchronized SimpleXOutputBean runSimplex(String userName, 
+	 public SimpleXOutputBean runSimplex(String userName, 
 													 String projectName,
 													 Fault[] faults, 
 													 Observation[] obsv, 
@@ -394,7 +412,6 @@ public class SimpleXService extends AntVisco implements Runnable {
 		  setArgs(args);
 		  //		  run();
 		  execute();
-		  wait();
 		  // logger.info("Simplex Status: "+getStatus());
 		  // while (getStatus().equals(AntVisco.NOT_DONE)) {
 		  // 		logger.info("Simmplex Status: "+getStatus());
