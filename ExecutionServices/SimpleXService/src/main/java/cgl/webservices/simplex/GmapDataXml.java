@@ -86,29 +86,29 @@ public class GmapDataXml {
 			line=in.readLine();
 			while(line.indexOf("Residual displacements")<0){
 				 //Do nothing.  We must first find the above string.
-				 System.out.println("Output line:"+line);
+				 logger.debug("Output line:"+line);
 				 line=in.readLine();
 			}
-			System.out.println("Found beginning of output: "+line);
+			logger.debug("Found beginning of output: "+line);
 					
 			//We found "Residual Displacement" header, now skip ahead 3 lines
 			//until we get to the actual values.
 			while ((line = in.readLine()) != null
 					 && line.indexOf("Coef")<0) {
-				 System.out.println("Output line:"+line);
+				 logger.debug("Output line:"+line);
 				 while (skipthreelines <= 3) {
 					  skipthreelines++;
 					  line=in.readLine();
-					  System.out.println("Skipping column headings");
+					  logger.debug("Skipping column headings");
 				 }
 				 if (!line.trim().equalsIgnoreCase("")) {
-					  System.out.println("Parse results line:"+line);	  
+					  logger.debug("Parse results line:"+line);	  
 					  String tmp[] = line.split("\t");
 					  
 					  //  //See what we have.
-					  //  System.out.println("Original line: "+line);
+					  //  logger.debug("Original line: "+line);
 					  //  for (int i=0;i<tmp.length;i++) {
-					  // 	  System.out.println(tmp[i]);
+					  // 	  logger.debug(tmp[i]);
 					  //  }
 					  
 					  
@@ -156,7 +156,7 @@ public class GmapDataXml {
 					  MyObsPoints.put(new Coordinate(TmpObsPoint.xloc,
 																TmpObsPoint.yloc), TmpObsPoint);
 					  
-					  // System.out.println(line);
+					  // logger.debug(line);
 					  
 				 }
 			}
@@ -175,7 +175,7 @@ public class GmapDataXml {
 			obj = e.nextElement();
 			tmp_obs = (ObservationPoint) MyObsPoints.get(obj);
 			double xloc = tmp_obs.xloc, yloc = tmp_obs.yloc;
-			System.out.println(tmp_obs.NorthVec.observ + ":"
+			logger.debug(tmp_obs.NorthVec.observ + ":"
 					+ tmp_obs.EastVec.observ + ":" + tmp_obs.UpVec.observ);
 
 			// double rads;
@@ -192,8 +192,8 @@ public class GmapDataXml {
 			// );
 			// B=(int) ( a*Math.abs(Math.sin(rads))+b*Math.abs(Math.cos(rads))
 			// );
-			// System.out.println( degs+"A:"+A+"B:"+B );
-			// System.out.println(obj + ":" + tmp_obs);
+			// logger.debug( degs+"A:"+A+"B:"+B );
+			// logger.debug(obj + ":" + tmp_obs);
 
 			ObservMarkers.add(calDegsAndMakeMarker(xloc, yloc,
 					tmp_obs.EastVec.observ, tmp_obs.NorthVec.observ, tmp_obs));
