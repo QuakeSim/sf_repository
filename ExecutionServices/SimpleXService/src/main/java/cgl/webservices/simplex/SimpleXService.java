@@ -371,7 +371,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 	/**
 	 * Actually runs Simplex. Always runs in non-blocking mode.
 	 */
-	 public SimpleXOutputBean runSimplex(String userName, 
+	 public synchronized SimpleXOutputBean runSimplex(String userName, 
 													 String projectName,
 													 Fault[] faults, 
 													 Observation[] obsv, 

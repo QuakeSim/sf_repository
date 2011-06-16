@@ -69,7 +69,7 @@ public class AntVisco implements Runnable{
 	  * This is the required run method for threads.  It is invoked through start() by a thread but 
 	  * it can also be called directly within a single-threaded invocation.
 	  */ 
-    public void run(){
+    public synchronized void run(){
 		  try {
 				cgl.webservices.MyMain2.main(getArgs());
 				status=DONE;
