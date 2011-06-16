@@ -347,11 +347,11 @@ public class SimpleXService extends AntVisco implements Runnable {
 	  * invocation is complete.
 	  */
 	 public void callbackSuccess() {
-		  logger.info("Callback success");
+		  logger.info("--------------Callback success---------------");
 	 }
 
 	 public void callbackFailure(){
-		  logger.info("Callback failure");
+		  logger.info("------------Callback failure------------");
 	 }
 
 	 /**
