@@ -481,7 +481,11 @@ public class SimpleXService extends AntVisco implements Runnable {
 		String faultFileDestLoc=destDir + "/" + projectName + ".fault";
 		String[] kmlurls={"","","",""};
 		try {
-			makeWorkDir(destDir);
+			 //Make the directory and copy the input file, which does exist at this point.
+			makeworkdir(destDir);
+			copyFileToFile(new File(workDir + "/" + projectName + ".input"),
+								new File(inputFileDestLoc));
+			
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -508,8 +512,6 @@ public class SimpleXService extends AntVisco implements Runnable {
 		
 		//Copy the files from the working directory to the web directory 
 		try {
-			 copyFileToFile(new File(workDir + "/" + projectName + ".input"),
-								 new File(inputFileDestLoc));
 			 copyFileToFile(new File(workDir + "/" + projectName + ".output"),
 								 new File(outputFileDestLoc));
 			 copyFileToFile(new File(workDir + "/" + projectName + ".stdout"),
