@@ -516,7 +516,6 @@ public class SimpleXService extends AntVisco implements Runnable {
 			// kmlService.setArrowPlacemark("Arrow Layer", "ff0000ff", 2);
 			// String observKmlUrl = kmlService.runMakeKml("", userName,
 			// 														  projectName, "observ");
-			logger.debug(observKmlUrl);
 			
 			// //Pass in the calculated values and plot
 			// tmp_pointentrylist = dw.getCalcList();
