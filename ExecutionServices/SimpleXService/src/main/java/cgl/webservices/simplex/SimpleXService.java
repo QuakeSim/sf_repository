@@ -482,7 +482,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 		String[] kmlurls={"","","",""};
 		try {
 			 //Make the directory and copy the input file, which does exist at this point.
-			makeworkdir(destDir);
+			makeWorkdir(destDir);
 			copyFileToFile(new File(workDir + "/" + projectName + ".input"),
 								new File(inputFileDestLoc));
 			
