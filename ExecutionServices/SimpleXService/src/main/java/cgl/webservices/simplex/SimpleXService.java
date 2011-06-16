@@ -356,14 +356,14 @@ public class SimpleXService extends AntVisco implements Runnable {
 		  for(int i=0;i<parkingParams.size();i++) {
 				logger.info(parkingParams.get(i));
 		  }
-		  getAllTheSimpleXFiles(parkingParams.get(0),
-										parkingParams.get(1),
-										parkingParams.get(2),
-										parkingParams.get(3),
-										parkingParams.get(4),
-										parkingParams.get(5),
-										parkingParams.get(6),
-										parkingParams.get(7));
+		  getAllTheSimpleXFiles((String)parkingParams.get(0),
+										(String)parkingParams.get(1),
+										(String)parkingParams.get(2),
+										(String)parkingParams.get(3),
+										(String)parkingParams.get(4),
+										(Fault[])parkingParams.get(5),
+										(String)parkingParams.get(6),
+										(String)parkingParams.get(7));
 	 }
 
 	 public void callbackFailure(){
