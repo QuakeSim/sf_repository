@@ -23,7 +23,7 @@
       <env key="PATH" path="${bindir.prop}:/bin/:$PATH"/>
    </exec>
 	<mail from="admin@quakesim.org"
-			to="${simplexUserEmail.prop}"
+			tolist="${simplexUserEmail.prop}"
 			subject="Simplex run for ${projectName.prop} completed"
 			message="Simplex run for ${projectName.prop} completed"/>
 </target>
