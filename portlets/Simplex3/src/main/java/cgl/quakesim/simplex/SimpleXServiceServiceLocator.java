@@ -22,7 +22,7 @@ public class SimpleXServiceServiceLocator extends org.apache.axis.client.Service
     }
 
     // Use to get a proxy class for SimpleXExec
-    private java.lang.String SimpleXExec_address = "http://localhost:8080/simplexexec/services/SimpleXExec";
+    private java.lang.String SimpleXExec_address = "http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec";
 
     public java.lang.String getSimpleXExecAddress() {
         return SimpleXExec_address;
@@ -105,7 +105,7 @@ public class SimpleXServiceServiceLocator extends org.apache.axis.client.Service
     }
 
     public javax.xml.namespace.QName getServiceName() {
-        return new javax.xml.namespace.QName("http://localhost:8080/simplexexec/services/SimpleXExec", "SimpleXServiceService");
+        return new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec", "SimpleXServiceService");
     }
 
     private java.util.HashSet ports = null;
@@ -113,7 +113,7 @@ public class SimpleXServiceServiceLocator extends org.apache.axis.client.Service
     public java.util.Iterator getPorts() {
         if (ports == null) {
             ports = new java.util.HashSet();
-            ports.add(new javax.xml.namespace.QName("http://localhost:8080/simplexexec/services/SimpleXExec", "SimpleXExec"));
+            ports.add(new javax.xml.namespace.QName("http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec", "SimpleXExec"));
         }
         return ports.iterator();
     }

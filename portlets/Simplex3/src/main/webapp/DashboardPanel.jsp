@@ -79,10 +79,20 @@
   <h:form id="dflelerkljk185" 
 			 rendered="#{!empty SimplexBean.myObservationEntryForProjectList 
 						  and !empty SimplexBean.myFaultEntryForProjectList}">
-	 <h:outputText id="simplexSubmitSeparator" 
-						escape="false"
-						value="<hr/>"/>
-	 <h:outputText value="Simplex is ready to run."/>
+	 <f:verbatim>
+		<hr/>
+		<p>
+		Simplex is ready to run.  This may take several minutes, so provide your email
+		address here to get an email notice when you job completes.  Then hit the "Run Simplex" button.
+		</p>
+	 </f:verbatim>
+	 <f:verbatim>
+		<b>Email Address:</b>
+	 </f:verbatim>
+	 <h:inputText id="simplexEmailNotification"
+					  required="true"
+					  value="#{SimplexBean.userEmailAddress}"/>
+						
 	 <h:commandButton rendered="#{!empty SimplexBean.myObservationEntryForProjectList
 										 and !empty SimplexBean.myFaultEntryForProjectList}"
 							id="runSimplex2" 

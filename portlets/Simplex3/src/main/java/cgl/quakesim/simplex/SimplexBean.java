@@ -201,8 +201,18 @@ public class SimplexBean extends GenericSopacBean {
 	 protected String obsvKmlUrl;
 	protected String portalBaseUrl;
 	 
+	 protected String userEmailAddress;
+
 	 //This is the logger
 	 private static Logger logger;
+	 
+	 public String getUserEmailAddress() {
+		  return this.userEmailAddress;
+	 }
+	 
+	 public void setuserEmailAddress(String userEmailAddress){
+		  this.userEmailAddress=userEmailAddress;
+	 }
 	 
 	 public String getGpsJSONValues(){
 		  return this.gpsJSONValues;
@@ -1019,7 +1029,9 @@ public class SimplexBean extends GenericSopacBean {
 																				 currentProjectEntry.maxIters, 
 																				 currentProjectEntry.getOrigin_lon()+ "", 
 																				 currentProjectEntry.getOrigin_lat() + "",
-																				 this.kmlGeneratorUrl, timeStamp);
+																				 this.kmlGeneratorUrl, 
+																				 timeStamp,
+																				 userEmailAddress);
 
 			logger.info("[" + getUserName() 
 									 + "/SimplexBean/toggleRunSimplex2] " 

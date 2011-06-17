@@ -79,8 +79,6 @@ mesh, click the button.
 				       <h:outputLink value="#{MGBean.projectMeshRunBean.refinerLog}" target="_blank">
 						    <h:outputText value="refinerLog"/>
 						 </h:outputLink>
-
-						 
 				</h:panelGrid>
 
  				<h:panelGrid columns="2" border="0">

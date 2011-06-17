@@ -35,7 +35,6 @@ public class Fault  implements java.io.Serializable {
     private java.lang.String faultLonStarts;
 
     private java.lang.String faultName;
-    
 
     private boolean faultOriginXVary;
 
@@ -54,7 +53,6 @@ public class Fault  implements java.io.Serializable {
     private java.lang.String faultWidth;
 
     private boolean faultWidthVary;
-    
 
     public Fault() {
     }
@@ -106,7 +104,6 @@ public class Fault  implements java.io.Serializable {
            this.faultStrikeSlipVary = faultStrikeSlipVary;
            this.faultWidth = faultWidth;
            this.faultWidthVary = faultWidthVary;
-           
     }
 
 
@@ -388,7 +385,6 @@ public class Fault  implements java.io.Serializable {
     public void setFaultName(java.lang.String faultName) {
         this.faultName = faultName;
     }
-
 
 
     /**

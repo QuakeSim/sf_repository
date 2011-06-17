@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions targetNamespace="http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec" xmlns:intf="http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="urn:SimpleXService" xmlns:tns2="urn:GatewayWS" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-<!--WSDL created by Apache Axis version: 1.2.1
-Built on Jun 14, 2005 (09:15:57 EDT)-->
+<wsdl:definitions targetNamespace="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec" xmlns:intf="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="urn:SimpleXService" xmlns:tns2="urn:GatewayWS" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
  <wsdl:types>
   <schema targetNamespace="urn:SimpleXService" xmlns="http://www.w3.org/2001/XMLSchema">
-   <import namespace="http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec"/>
+   <import namespace="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec"/>
    <import namespace="urn:GatewayWS"/>
    <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
    <complexType name="Fault">
@@ -47,6 +47,7 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
    </complexType>
    <complexType name="SimpleXOutputBean">
     <sequence>
+     <element name="creationDate" nillable="true" type="soapenc:string"/>
      <element name="faultUrl" nillable="true" type="soapenc:string"/>
      <element name="inputUrl" nillable="true" type="soapenc:string"/>
      <element name="jobUIDStamp" nillable="true" type="soapenc:string"/>
@@ -77,7 +78,7 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
     </sequence>
    </complexType>
   </schema>
-  <schema targetNamespace="http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec" xmlns="http://www.w3.org/2001/XMLSchema">
+  <schema targetNamespace="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec" xmlns="http://www.w3.org/2001/XMLSchema">
    <import namespace="urn:GatewayWS"/>
    <import namespace="urn:SimpleXService"/>
    <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
@@ -97,7 +98,7 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
    </complexType>
   </schema>
   <schema targetNamespace="urn:GatewayWS" xmlns="http://www.w3.org/2001/XMLSchema">
-   <import namespace="http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec"/>
+   <import namespace="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec"/>
    <import namespace="urn:SimpleXService"/>
    <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
    <complexType name="ArrayOf_soapenc_string">
@@ -109,6 +110,38 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
    </complexType>
   </schema>
  </wsdl:types>
+
+   <wsdl:message name="runSimplexRequest1">
+
+      <wsdl:part name="userName" type="soapenc:string"/>
+
+      <wsdl:part name="projectName" type="soapenc:string"/>
+
+      <wsdl:part name="faults" type="impl:ArrayOf_tns1_Fault"/>
+
+      <wsdl:part name="obsv" type="impl:ArrayOf_tns1_Observation"/>
+
+      <wsdl:part name="startTemp" type="soapenc:string"/>
+
+      <wsdl:part name="maxIters" type="soapenc:string"/>
+
+      <wsdl:part name="origin_lon" type="soapenc:string"/>
+
+      <wsdl:part name="origin_lat" type="soapenc:string"/>
+
+      <wsdl:part name="KmlGeneratorUrl" type="soapenc:string"/>
+
+      <wsdl:part name="timeStamp" type="soapenc:string"/>
+
+      <wsdl:part name="emailAddress" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runSimplexResponse">
+
+      <wsdl:part name="runSimplexReturn" type="tns1:SimpleXOutputBean"/>
+
+   </wsdl:message>
 
    <wsdl:message name="runPlotGMTRequest">
 
@@ -124,35 +157,9 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
 
    </wsdl:message>
 
-   <wsdl:message name="runSimplexResponse">
+   <wsdl:message name="runSimplexResponse1">
 
       <wsdl:part name="runSimplexReturn" type="tns1:SimpleXOutputBean"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="runRePlotGMTResponse">
-
-      <wsdl:part name="runRePlotGMTReturn" type="soapenc:string"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="runMakeMapXmlResponse">
-
-      <wsdl:part name="runMakeMapXmlReturn" type="soapenc:string"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="runMakeMapXmlRequest">
-
-      <wsdl:part name="userName" type="soapenc:string"/>
-
-      <wsdl:part name="projectName" type="soapenc:string"/>
-
-      <wsdl:part name="origin_lat" type="soapenc:string"/>
-
-      <wsdl:part name="origin_lon" type="soapenc:string"/>
-
-      <wsdl:part name="jobUIDStamp" type="soapenc:string"/>
 
    </wsdl:message>
 
@@ -192,13 +199,47 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
 
    </wsdl:message>
 
+   <wsdl:message name="runRePlotGMTResponse">
+
+      <wsdl:part name="runRePlotGMTReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runMakeMapXmlResponse">
+
+      <wsdl:part name="runMakeMapXmlReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
    <wsdl:message name="runPlotGMTResponse">
 
       <wsdl:part name="runPlotGMTReturn" type="tns1:GMTViewForm"/>
 
    </wsdl:message>
 
+   <wsdl:message name="runMakeMapXmlRequest">
+
+      <wsdl:part name="userName" type="soapenc:string"/>
+
+      <wsdl:part name="projectName" type="soapenc:string"/>
+
+      <wsdl:part name="origin_lat" type="soapenc:string"/>
+
+      <wsdl:part name="origin_lon" type="soapenc:string"/>
+
+      <wsdl:part name="jobUIDStamp" type="soapenc:string"/>
+
+   </wsdl:message>
+
    <wsdl:portType name="SimpleXService">
+
+      <wsdl:operation name="runMakeMapXml" parameterOrder="userName projectName origin_lat origin_lon jobUIDStamp">
+
+         <wsdl:input message="impl:runMakeMapXmlRequest" name="runMakeMapXmlRequest"/>
+
+         <wsdl:output message="impl:runMakeMapXmlResponse" name="runMakeMapXmlResponse"/>
+
+      </wsdl:operation>
 
       <wsdl:operation name="runSimplex" parameterOrder="userName projectName faults obsv startTemp maxIters origin_lon origin_lat KmlGeneratorUrl timeStamp">
 
@@ -208,19 +249,19 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
 
       </wsdl:operation>
 
+      <wsdl:operation name="runSimplex" parameterOrder="userName projectName faults obsv startTemp maxIters origin_lon origin_lat KmlGeneratorUrl timeStamp emailAddress">
+
+         <wsdl:input message="impl:runSimplexRequest1" name="runSimplexRequest1"/>
+
+         <wsdl:output message="impl:runSimplexResponse1" name="runSimplexResponse1"/>
+
+      </wsdl:operation>
+
       <wsdl:operation name="runPlotGMT" parameterOrder="userName projectName origin_lat origin_lon timeStamp">
 
          <wsdl:input message="impl:runPlotGMTRequest" name="runPlotGMTRequest"/>
 
          <wsdl:output message="impl:runPlotGMTResponse" name="runPlotGMTResponse"/>
-
-      </wsdl:operation>
-
-      <wsdl:operation name="runMakeMapXml" parameterOrder="userName projectName origin_lat origin_lon jobUIDStamp">
-
-         <wsdl:input message="impl:runMakeMapXmlRequest" name="runMakeMapXmlRequest"/>
-
-         <wsdl:output message="impl:runMakeMapXmlResponse" name="runMakeMapXmlResponse"/>
 
       </wsdl:operation>
 
@@ -238,6 +279,24 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
 
       <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
 
+      <wsdl:operation name="runMakeMapXml">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="runMakeMapXmlRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://simplex.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="runMakeMapXmlResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
       <wsdl:operation name="runSimplex">
 
          <wsdlsoap:operation soapAction=""/>
@@ -250,7 +309,25 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
 
          <wsdl:output name="runSimplexResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runSimplex">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="runSimplexRequest1">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://simplex.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="runSimplexResponse1">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec" use="encoded"/>
 
          </wsdl:output>
 
@@ -268,25 +345,7 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
 
          <wsdl:output name="runPlotGMTResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec" use="encoded"/>
-
-         </wsdl:output>
-
-      </wsdl:operation>
-
-      <wsdl:operation name="runMakeMapXml">
-
-         <wsdlsoap:operation soapAction=""/>
-
-         <wsdl:input name="runMakeMapXmlRequest">
-
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://simplex.webservices.cgl" use="encoded"/>
-
-         </wsdl:input>
-
-         <wsdl:output name="runMakeMapXmlResponse">
-
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec" use="encoded"/>
 
          </wsdl:output>
 
@@ -304,7 +363,7 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
 
          <wsdl:output name="runRePlotGMTResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec" use="encoded"/>
 
          </wsdl:output>
 
@@ -316,7 +375,7 @@ Built on Jun 14, 2005 (09:15:57 EDT)-->
 
       <wsdl:port binding="impl:SimpleXExecSoapBinding" name="SimpleXExec">
 
-         <wsdlsoap:address location="http://gf1.ucs.indiana.edu:13080/simplexexec/services/SimpleXExec"/>
+         <wsdlsoap:address location="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec"/>
 
       </wsdl:port>
 
