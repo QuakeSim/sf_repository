@@ -22,7 +22,7 @@
       <arg value="${projectName.prop}.output"/>
       <env key="PATH" path="${bindir.prop}:/bin/:$PATH"/>
   </exec>
-  <echo "Sending email to ${simplexUserEmail.prop}"/>
+  <echo message="Sending email to ${simplexUserEmail.prop}"/>
 	<mail from="admin@quakesim.org"
 			tolist="${simplexUserEmail.prop}"
 			subject="Simplex run for ${projectName.prop} completed"
