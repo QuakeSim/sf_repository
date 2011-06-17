@@ -29,8 +29,8 @@ public class SimpleXService extends AntVisco implements Runnable {
 	 static Logger logger = Logger.getLogger(SimpleXService.class);
 	 
 	 final String FILE_PROTOCOL = "file";
-	 
 	 final String HTTP_PROTOCOL = "http";
+	 final String DEFAULT_SIMPLEX_EMAIL = "mpierce@cs.indiana.edu";
 	 
 	 // These are the system properties that may have
 	 // default values.
@@ -313,14 +313,15 @@ public class SimpleXService extends AntVisco implements Runnable {
 	 * Set up the arg array. Note that the binDir and buildFilePath variables
 	 * are constants, so not explicitly passed in.
 	 */
-	protected String[] setUpSimpleXArgs(String workDir, String projectName) {
-		String[] args = new String[6];
+	 protected String[] setUpSimpleXArgs(String workDir, String projectName, String emailAddress) {
+		String[] args = new String[7];
 		args[0] = "-DworkDir.prop=" + workDir;
 		args[1] = "-DprojectName.prop=" + projectName;
 		args[2] = "-Dbindir.prop=" + binDir;
-		args[3] = "-buildfile";
-		args[4] = buildFilePath;
-		args[5] = "RunSimplex";
+		args[3] = "-DsimplexUserEmail.prop=" + emailAddress;
+		args[4] = "-buildfile";
+		args[5] = buildFilePath;
+		args[6] = "RunSimplex";
 		return args;
 	}
 
@@ -334,14 +335,15 @@ public class SimpleXService extends AntVisco implements Runnable {
 													  Observation[] obsv, 
 													  String startTemp,
 													  String maxIters, 
-													  String timeStamp) throws Exception {
+													  String timeStamp,
+													  String emailAddress) throws Exception {
 
 		String workDir = generateWorkDir(userName, projectName, timeStamp);
 		SimplexCreateInputFile(workDir, projectName, faults, obsv, startTemp,
 				maxIters);
 		String outputDestDir = generateOutputDestDir(userName, projectName,
 				timeStamp);
-		String[] args = setUpSimpleXArgs(workDir, projectName);
+		String[] args = setUpSimpleXArgs(workDir, projectName, emailAddress);
 		return args;
 	}
 
@@ -393,6 +395,33 @@ public class SimpleXService extends AntVisco implements Runnable {
 		  parkingParams.add(creationDate);
 	 }
 	
+
+	 /**
+	  * This run method is provided for backward compatibility.  I regret this.
+	  */
+	 public SimpleXOutputBean runSimplex(String userName, 
+													 String projectName,
+													 Fault[] faults, 
+													 Observation[] obsv, 
+													 String startTemp,
+													 String maxIters, 
+													 String origin_lon, 
+													 String origin_lat,
+													 String KmlGeneratorUrl, 
+													 String timeStamp) throws Exception {
+
+		  return runSimplex(userName,
+								  projectName,
+								  faults,
+								  obsv,
+								  startTemp,
+								  maxIters,
+								  origin_lon,
+								  origin_lat,
+								  KmlGeneratorUrl,
+								  timeStamp,
+								  DEFAULT_SIMPLEX_EMAIL);
+	 }
 	 
 
 	/**
@@ -407,7 +436,8 @@ public class SimpleXService extends AntVisco implements Runnable {
 													 String origin_lon, 
 													 String origin_lat,
 													 String KmlGeneratorUrl, 
-													 String timeStamp) throws Exception {
+													 String timeStamp,
+													 String emailAddress) throws Exception {
 		  
 		  // The target is always "tar.all".
 
@@ -417,7 +447,8 @@ public class SimpleXService extends AntVisco implements Runnable {
 														obsv,
 														startTemp, 
 														maxIters, 
-														timeStamp);
+														timeStamp, 
+														emailAddress);
 		  setArgs(args);
 		  //		  run();
 		  execute();
@@ -507,7 +538,6 @@ public class SimpleXService extends AntVisco implements Runnable {
 			 return sxoutput;
 		}
 
-
 		//The following are not done unless the job has completed.
 		
 		//Copy the files from the working directory to the web directory 
@@ -534,8 +564,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			 ex.printStackTrace();
 		}
 
-
-		//Set up the KML service, execute it, and add to the output object
+		//3. Set up the KML service, execute it, and add to the output object
 		kmlurls=makeTheOutputKmls(workDir, 
 										  projectName,
 										  KmlGeneratorServiceUrl,

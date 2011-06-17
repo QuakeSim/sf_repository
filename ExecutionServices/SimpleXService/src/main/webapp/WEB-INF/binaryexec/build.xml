@@ -22,6 +22,10 @@
       <arg value="${projectName.prop}.output"/>
       <env key="PATH" path="${bindir.prop}:/bin/:$PATH"/>
    </exec>
+	<mail from="admin@quakesim.org"
+			to="${simplexUserEmail.prop}"
+			subject="Simplex run for ${projectName.prop} completed"
+			message="Simplex run for ${projectName.prop} completed"/>
 </target>
 
 <target name="ExecPrePlotGMT">
