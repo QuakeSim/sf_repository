@@ -6,22 +6,22 @@
 						<!-- mx:SetProperty target="{stateToggle}" name="selectedIndex" value="0"/ -->
 						<mx:RemoveChild target="{eastChart}"/>
 						<mx:RemoveChild target="{upChart}"/>
-						<mx:RemoveChild target="{label2}"/>
-						<mx:RemoveChild target="{label3}"/>						
+						<mx:RemoveChild target="{hboxLat}"/>
+						<mx:RemoveChild target="{hboxHgt}"/>						
 				</mx:State>
 				<mx:State name="Latitude">
 						<mx:RemoveChild target="{northChart}"/>
 						<mx:RemoveChild target="{upChart}"/>
 						<!-- mx:SetProperty target="{stateToggle}" name="selectedIndex" value="1"/ -->
-						<mx:RemoveChild target="{label1}"/>
-						<mx:RemoveChild target="{label3}"/>
+						<mx:RemoveChild target="{hboxLon}"/>
+						<mx:RemoveChild target="{hboxHgt}"/>
 				</mx:State>
 				<mx:State name="Height">
 						<!-- mx:SetProperty target="{stateToggle}" name="selectedIndex" value="2"/ -->
 						<mx:RemoveChild target="{northChart}"/>
 						<mx:RemoveChild target="{eastChart}"/>
-						<mx:RemoveChild target="{label1}"/>
-						<mx:RemoveChild target="{label2}"/>
+						<mx:RemoveChild target="{hboxLat}"/>
+						<mx:RemoveChild target="{hboxLon}"/>
 				</mx:State>
 		</mx:states>
 		<mx:Script>
@@ -38,7 +38,21 @@
 			[Bindable] public var stationID:String;
 			[Bindable] public var lat:String;
 			[Bindable] public var long:String;
+			[Bindable] public var hgt:String;
+			[Bindable] public var minNorth:Number;
+			[Bindable] public var minEast:Number;
+			[Bindable] public var minUp:Number;
+			[Bindable] public var maxNorth:Number;
+			[Bindable] public var maxEast:Number;
+			[Bindable] public var maxUp:Number;
+			[Bindable] public var minNorthDisp:Number;
+			[Bindable] public var minEastDisp:Number;
+			[Bindable] public var minUpDisp:Number;
+			[Bindable] public var maxNorthDisp:Number;
+			[Bindable] public var maxEastDisp:Number;
+			[Bindable] public var maxUpDisp:Number;
 			[Bindable] public var maxValLen:Number;
+			[Bindable] public var maxDispLen:Number;
 			
 			private const millisecondsPerDay:int = 1000 * 60 * 60 * 24;
 			
@@ -47,7 +61,12 @@
 				this.stationID = Application.application.parameters.stationID;
 				this.lat = Application.application.parameters.lat;
 				this.long = Application.application.parameters.long;
-				this.maxValLen = 0;
+				this.hgt = Application.application.parameters.hgt;
+				this.labelLonDisp.percentWidth = 100;
+				this.labelLatDisp.percentWidth = 100;
+				this.labelHgtDisp.percentWidth = 100;
+				this.maxDispLen = 0;
+				this.maxValLen = 0;				
 				this.getInfo.url = Application.application.parameters.url;
 				this.getInfo.send();
 			}
@@ -78,7 +97,39 @@
 					}
 					closeDate = temp.date;
 					this.dateArray.push(temp.date);
-					
+					var northVal:Number = Number(currDayArray[2]);
+					var eastVal:Number = Number(currDayArray[3]);
+					var upVal:Number = Number(currDayArray[4]);
+					var northDisp:Number = Number(currDayArray[5]);
+					var eastDisp:Number = Number(currDayArray[6]);
+					var upDisp:Number = Number(currDayArray[7]);
+				 	
+				 	if ((!minNorth) || (northVal < minNorth))
+						minNorth = northVal;
+					if ((!minEast) || (eastVal < minEast))
+						minEast = eastVal;
+					if ((!minUp) || (upVal < minUp))
+						minUp = upVal;
+					if ((!maxNorth) || (northVal > maxNorth))
+						maxNorth = northVal;
+					if ((!maxEast) || (eastVal > maxEast))
+						maxEast = eastVal;
+					if ((!maxUp) || (upVal > maxUp))
+						maxUp = upVal;
+						
+					if ((!minNorthDisp) || (northDisp < minNorthDisp))
+						minNorthDisp = northDisp;
+					if ((!minEastDisp) || (eastDisp < minEastDisp))
+						minEastDisp = eastDisp;
+					if ((!minUpDisp) || (upDisp < minUpDisp))
+						minUpDisp = upDisp;
+					if ((!maxNorthDisp) || (northDisp > maxNorthDisp))
+						maxNorthDisp = northDisp;
+					if ((!maxEastDisp) || (eastDisp > maxEastDisp))
+						maxEastDisp = eastDisp;
+					if ((!maxUpDisp) || (upDisp > maxUpDisp))
+						maxUpDisp = upDisp;
+						
 					if (maxValLen < (currDayArray[2] as String).length) {
 						maxValLen = (currDayArray[2] as String).length;
 					}
@@ -88,73 +139,118 @@
 					if (maxValLen < (currDayArray[4] as String).length) {
 						maxValLen = (currDayArray[4] as String).length;
 					}
+					if (maxDispLen < (currDayArray[5] as String).length) {
+						maxDispLen = (currDayArray[5] as String).length;
+					}
+					if (maxDispLen < (currDayArray[6] as String).length) {
+						maxDispLen = (currDayArray[6] as String).length;
+					}
+					if (maxDispLen < (currDayArray[7] as String).length) {
+						maxDispLen = (currDayArray[7] as String).length;
+					}
 					
 					switch (temp.state)
 					{
 						case '1':
 							temp.value = Number(currDayArray[2]);
 							temp.value1 = Number(currDayArray[2]);
+							temp.valueDisp = Number(currDayArray[5]);
+							temp.value7 = 0;
 							tempNorth.addItem(ObjectUtil.copy(temp));
 							temp.value = Number(currDayArray[3]);
 							temp.value1 = Number(currDayArray[3]);
+							temp.valueDisp = Number(currDayArray[6]);
+							temp.value7 = 0;
 							tempEast.addItem(ObjectUtil.copy(temp));
 							temp.value = Number(currDayArray[4]);
 							temp.value1 = Number(currDayArray[4]);
+							temp.valueDisp = Number(currDayArray[7]);
+							temp.value7 = 0;
 							tempUp.addItem(ObjectUtil.copy(temp));
 							break;
 						case '2':
 							temp.value = Number(currDayArray[2]);
 							temp.value2 = Number(currDayArray[2]);
+							temp.valueDisp = Number(currDayArray[5]);
+							temp.value7 = 0;
 							tempNorth.addItem(ObjectUtil.copy(temp));
 							temp.value = Number(currDayArray[3]);
 							temp.value2 = Number(currDayArray[3]);
+							temp.valueDisp = Number(currDayArray[6]);
+							temp.value7 = 0;
 							tempEast.addItem(ObjectUtil.copy(temp));
 							temp.value = Number(currDayArray[4]);
 							temp.value2 = Number(currDayArray[4]);
+							temp.valueDisp = Number(currDayArray[7]);
+							temp.value7 = 0;
 							tempUp.addItem(ObjectUtil.copy(temp));
 							break;
 						case '3':
 							temp.value = Number(currDayArray[2]);
 							temp.value3 = Number(currDayArray[2]);
+							temp.valueDisp = Number(currDayArray[5]);
+							temp.value7 = 0;
 							tempNorth.addItem(ObjectUtil.copy(temp));
 							temp.value = Number(currDayArray[3]);
 							temp.value3 = Number(currDayArray[3]);
+							temp.valueDisp = Number(currDayArray[6]);
+							temp.value7 = 0;
 							tempEast.addItem(ObjectUtil.copy(temp));
 							temp.value = Number(currDayArray[4]);
 							temp.value3 = Number(currDayArray[4]);
+							temp.valueDisp = Number(currDayArray[7]);
+							temp.value7 = 0;
 							tempUp.addItem(ObjectUtil.copy(temp));
 							break;
 						case '4':
 							temp.value = Number(currDayArray[2]);
 							temp.value4 = Number(currDayArray[2]);
+							temp.valueDisp = Number(currDayArray[5]);
+							temp.value7 = 0;
 							tempNorth.addItem(ObjectUtil.copy(temp));
 							temp.value = Number(currDayArray[3]);
 							temp.value4 = Number(currDayArray[3]);
+							temp.valueDisp = Number(currDayArray[6]);
+							temp.value7 = 0;
 							tempEast.addItem(ObjectUtil.copy(temp));
 							temp.value = Number(currDayArray[4]);
 							temp.value4 = Number(currDayArray[4]);
+							temp.valueDisp = Number(currDayArray[7]);
+							temp.value7 = 0;
 							tempUp.addItem(ObjectUtil.copy(temp));
 							break;
 						case '5':
 							temp.value = Number(currDayArray[2]);
 							temp.value5 = Number(currDayArray[2]);
+							temp.valueDisp = Number(currDayArray[5]);
+							temp.value7 = 0;
 							tempNorth.addItem(ObjectUtil.copy(temp));
 							temp.value = Number(currDayArray[3]);
 							temp.value5 = Number(currDayArray[3]);
+							temp.valueDisp = Number(currDayArray[6]);
+							temp.value7 = 0;
 							tempEast.addItem(ObjectUtil.copy(temp));
 							temp.value = Number(currDayArray[4]);
 							temp.value5 = Number(currDayArray[4]);
+							temp.valueDisp = Number(currDayArray[7]);
+							temp.value7 = 0;
 							tempUp.addItem(ObjectUtil.copy(temp));
 							break;
 						case '6':
 							temp.value = Number(currDayArray[2]);
 							temp.value6 = Number(currDayArray[2]);
+							temp.valueDisp = Number(currDayArray[5]);
+							temp.value7 = 0;
 							tempNorth.addItem(ObjectUtil.copy(temp));
 							temp.value = Number(currDayArray[3]);
 							temp.value6 = Number(currDayArray[3]);
+							temp.valueDisp = Number(currDayArray[6]);
+							temp.value7 = 0;
 							tempEast.addItem(ObjectUtil.copy(temp));
 							temp.value = Number(currDayArray[4]);
 							temp.value6 = Number(currDayArray[4]);
+							temp.valueDisp = Number(currDayArray[7]);
+							temp.value7 = 0;
 							tempUp.addItem(ObjectUtil.copy(temp));
 					}
 				}
@@ -217,7 +313,7 @@
 		]]>
 	</mx:Script>
 	<mx:HTTPService id="getInfo" url="feeds/testInfo" result="getInfo_resultHandler(event)" resultFormat="text"/>
-	<mx:Panel height="100%" width="100%" title="Station : {stationID} Latitude : {lat} Longitude : {long}">
+	<mx:Panel height="100%" width="100%" title="Station: {stationID}  Reference point: [Longitude {long}, Latitude {lat}, Height {hgt}]">
 		<mx:VBox height="100%" width="100%">
 			<mx:ToggleButtonBar selectedIndex="0" id="stateToggle" itemClick="stateChange();">
 				<mx:dataProvider>
@@ -230,13 +326,25 @@
 				</mx:dataProvider>
 			</mx:ToggleButtonBar>
 			
-			<mx:VBox width="100%" height="100%">
-				<mx:Label text="Longitude (degree)" id="label1"/>
-				<components:rdahmmLineChart  data="{northData}" id="northChart" maxValLen="{maxValLen}" height="100%" width="100%" beginDate="{startDate.selectedDate}" endDate="{endDate.selectedDate}"/>
-				<mx:Label text="Latitude (degree)" id="label2"/>
-				<components:rdahmmLineChart data="{eastData}" id="eastChart" maxValLen="{maxValLen}" height="100%" width="100%" beginDate="{startDate.selectedDate}" endDate="{endDate.selectedDate}"/>
-				<mx:Label text="Height (meter)" id="label3"/>
-				<components:rdahmmLineChart data="{upData}" id="upChart" maxValLen="{maxValLen}" height="100%" width="100%" beginDate="{startDate.selectedDate}" endDate="{endDate.selectedDate}"/>			
+			<mx:VBox id="plotsVbox" width="100%" height="100%">
+				<mx:HBox width="100%" id="hboxLon">
+					<mx:Label text="East-West displacement (meters)" id="labelLonDisp"/>
+					<mx:Label text="Longitude (degrees)" id="labelLon"/>
+				</mx:HBox>
+				<components:rdahmmLineChart  data="{northData}" id="northChart" minVal="{minNorth}" maxVal="{maxNorth}" minDisp="{minNorthDisp}" maxDisp="{maxNorthDisp}"
+					maxValLen="{maxValLen}" maxDispLen="{maxDispLen}" height="100%" width="100%" beginDate="{startDate.selectedDate}" endDate="{endDate.selectedDate}"/>
+				<mx:HBox width="100%" id="hboxLat">
+					<mx:Label text="North-South displacement (meters)" id="labelLatDisp"/>
+					<mx:Label text="Latitude (degrees)" id="labelLat"/>
+				</mx:HBox>
+				<components:rdahmmLineChart data="{eastData}" id="eastChart" minVal="{minEast}" maxVal="{maxEast}" minDisp="{minEastDisp}" maxDisp="{maxEastDisp}" 
+					maxValLen="{maxValLen}" maxDispLen="{maxDispLen}" height="100%" width="100%" beginDate="{startDate.selectedDate}" endDate="{endDate.selectedDate}"/>
+				<mx:HBox width="100%" id="hboxHgt">
+					<mx:Label text="Up-Down displacement (meters)" id="labelHgtDisp"/>
+					<mx:Label text="Height (meters)" id="labelHgt"/>
+				</mx:HBox>
+				<components:rdahmmLineChart data="{upData}" id="upChart" minVal="{minUp}" maxVal="{maxUp}" minDisp="{minUpDisp}" maxDisp="{maxUpDisp}" 
+					maxValLen="{maxValLen}" maxDispLen="{maxDispLen}" height="100%" width="100%" beginDate="{startDate.selectedDate}" endDate="{endDate.selectedDate}"/>			
 			</mx:VBox>
 			<!--<mx:LineChart id="timeChart" dataProvider="{upData}" height="30" verticalAxisStyleNames="tickPlacement:none" horizontalAxisStyleNames="tickPlacement:none,">
 					<mx:series>
@@ -250,7 +358,7 @@
 			
 			<mx:Canvas width="100%">
 				<mx:Label text="Start Date:"/>
-	            <mx:DateField id="startDate" change="startChange()" x="65"/>	        
+	            <mx:DateField id="startDate" change="startChange()" x="65"/>
 	            <mx:Label text="End Date:" id="label4" right="65"/>
 	            <mx:DateField id="endDate" change="endChange()" right="10"/>
 			</mx:Canvas>		

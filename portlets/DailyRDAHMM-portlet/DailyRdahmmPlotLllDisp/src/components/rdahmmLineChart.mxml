@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:LineChart xmlns:mx="http://www.adobe.com/2006/mxml"
+	creationComplete="init()" dataProvider="{data}" showDataTips="true" dataTipFunction="tipData" dataTipMode="single">
+	<mx:Script>
+		<![CDATA[
+			import mx.graphics.Stroke;
+			import mx.charts.HitData;
+			import mx.collections.ArrayCollection;
+			import mx.charts.chartClasses.IAxisRenderer;
+			public var beginDate:Date;
+			public var endDate:Date;
+			[Bindable] public var minVal:Number;
+			[Bindable] public var maxVal:Number;
+			[Bindable] public var minDisp:Number;
+			[Bindable] public var maxDisp:Number;
+			[Bindable] public var maxDispLen:Number;
+			[Bindable] public var maxValLen:Number;
+			[Bindable] public var data:ArrayCollection = new ArrayCollection();
+			
+			private function init():void
+			{
+				data.filterFunction = filterData;
+				v2.minimum = minVal;
+				v2.maximum = maxVal;
+				plot1.setStyle('radius', 3);
+				plot2.setStyle('radius', 3);
+				plot3.setStyle('radius', 3);
+				plot4.setStyle('radius', 3);
+				plot5.setStyle('radius', 3);
+				plot6.setStyle('radius', 3);
+				rv1.labelFunction = leftAxisLabelFunc;
+				rv2.labelFunction = rightAxisLabelFunc;
+			}
+			
+			public function updateGraph():void
+			{
+				data.filterFunction = filterData;
+				data.refresh();
+			}
+			
+			private function filterData(item:Object):Boolean
+			{
+				if (item.date < beginDate)
+				{
+					return false;
+				}
+				if (item.date>endDate)
+				{
+					return false;
+				}
+				return true;
+			}
+			
+			private function tipData(hitData:HitData):String
+			{
+				return "Date: "+(hitData.item.date as Date).toDateString()+"\nValue: "+hitData.item.value+", Displacement: " 
+						+ hitData.item.valueDisp + "\nState : "+hitData.item.state;
+			}
+			
+			private function leftAxisLabelFunc(axisRenderer:IAxisRenderer, label:String):String {
+				var spaceCount:Number = maxDispLen - label.length;
+				if (spaceCount > 0) {
+					var tail:String = " ";
+					for (var i:Number=1; i<spaceCount; i++) {
+						tail = tail + " ";
+					}
+					return label + tail;
+				} else {
+					return label;
+				}
+			}
+			
+			private function rightAxisLabelFunc(axisRenderer:IAxisRenderer, label:String):String {
+				var spaceCount:Number = maxValLen - label.length;
+				if (spaceCount > 0) {
+					var tail:String = " ";
+					for (var i:Number=1; i<spaceCount; i++) {
+						tail = tail + " ";
+					}
+					return label + tail;
+				} else {
+					return label;
+				}
+			}
+		]]>
+	</mx:Script>
+	<!--Define Custom Color-->
+	
+	<mx:Stroke id="s0" color="gray" weight="2"/>
+	<mx:Stroke id="s1" color="red" weight="2" alpha="1"/>
+	<mx:Stroke id="s2" color="green" weight="2" alpha="1"/>
+	<mx:Stroke id="s3" color="blue" weight="2" alpha="1"/>
+	<mx:Stroke id="s4" color="purple" weight="2" alpha="1"/>
+	<mx:Stroke id="s5" color="cyan" weight="2" alpha="1"/>
+	<mx:Stroke id="s6" color="yellow" weight="2" alpha="1"/>
+	<mx:Stroke id="s7" color="white" weight="0" alpha="0.0"/>
+	<mx:Stroke id="p1" color="red" weight="2" />
+	<mx:Stroke id="p2" color="green" weight="2"/>
+	<mx:Stroke id="p3" color="blue" weight="2" />
+	<mx:Stroke id="p4" color="purple" weight="2"/>
+	<mx:Stroke id="p5" color="cyan" weight="2" />
+	<mx:Stroke id="p6" color="yellow" weight="2" />
+
+	<!--Define Solid Color-->
+	<mx:SolidColor id="f0" color="gray"/>
+	<mx:SolidColor id="f1" color="red"/>
+	<mx:SolidColor id="f2" color="green"/>
+	<mx:SolidColor id="f3" color="blue"/>
+	<mx:SolidColor id="f4" color="purple"/>
+	<mx:SolidColor id="f5" color="cyan"/>
+	<mx:SolidColor id="f6" color="yellow"/>	
+
+	<mx:horizontalAxis>
+		<mx:DateTimeAxis id="h1"/>
+	</mx:horizontalAxis>
+	<mx:verticalAxis>
+		<mx:LinearAxis id="v2" baseAtZero="false" minimum="{minVal}" maximum="{maxVal}"/>
+	</mx:verticalAxis>
+	
+	<mx:verticalAxisRenderers>
+		<mx:AxisRenderer id="rv1" placement="left" axis="{v1}"/>
+		<mx:AxisRenderer id="rv2" placement="right" axis="{v2}"/>
+	</mx:verticalAxisRenderers>
+	
+	<mx:series>
+		<mx:LineSeries id="baseLine" horizontalAxis="{h1}" verticalAxis="{v2}" lineStroke="{s0}" yField="value" xField="date" stroke="{s0}"/>		
+		<mx:LineSeries id="dummySeries" horizontalAxis="{h1}" lineStroke="{s7}" yField="value7" xField="date" stroke="{s7}" interactive="false">
+			<mx:verticalAxis>
+            	<mx:LinearAxis id="v1" maximum="{maxDisp}" minimum="{minDisp}"/>
+        	</mx:verticalAxis>
+		</mx:LineSeries>
+		<mx:LineSeries id="line1" horizontalAxis="{h1}" verticalAxis="{v2}" lineStroke="{s1}" yField="value1" xField="date" stroke="{s1}"/>
+		<mx:LineSeries id="line2" horizontalAxis="{h1}" verticalAxis="{v2}" lineStroke="{s2}" yField="value2" xField="date" stroke="{s2}"/>
+		<mx:LineSeries id="line3" horizontalAxis="{h1}" verticalAxis="{v2}" lineStroke="{s3}" yField="value3" xField="date" stroke="{s3}"/>
+		<mx:LineSeries id="line4" horizontalAxis="{h1}" verticalAxis="{v2}" lineStroke="{s4}" yField="value4" xField="date" stroke="{s4}"/>
+		<mx:LineSeries id="line5" horizontalAxis="{h1}" verticalAxis="{v2}" lineStroke="{s5}" yField="value5" xField="date" stroke="{s5}"/>
+		<mx:LineSeries id="line6" horizontalAxis="{h1}" verticalAxis="{v2}" lineStroke="{s6}" yField="value6" xField="date" stroke="{s6}"/>
+		<mx:PlotSeries id="plot1" horizontalAxis="{h1}" verticalAxis="{v2}" yField="value1" xField="date" fill="{f1}" stroke="{p1}" />
+		<mx:PlotSeries id="plot2" horizontalAxis="{h1}" verticalAxis="{v2}" yField="value2" xField="date" fill="{f2}" stroke="{p2}" />
+		<mx:PlotSeries id="plot3" horizontalAxis="{h1}" verticalAxis="{v2}" yField="value3" xField="date" fill="{f3}" stroke="{p3}" />
+		<mx:PlotSeries id="plot4" horizontalAxis="{h1}" verticalAxis="{v2}" yField="value4" xField="date" fill="{f4}" stroke="{p4}" />
+		<mx:PlotSeries id="plot5" horizontalAxis="{h1}" verticalAxis="{v2}" yField="value5" xField="date" fill="{f5}" stroke="{p5}" />
+		<mx:PlotSeries id="plot6" horizontalAxis="{h1}" verticalAxis="{v2}" yField="value6" xField="date" fill="{f6}" stroke="{p6}" />		
+	</mx:series>
+</mx:LineChart>

@@ -6,13 +6,22 @@
 			import mx.graphics.Stroke;
 			import mx.charts.HitData;
 			import mx.collections.ArrayCollection;
+			import mx.charts.chartClasses.IAxisRenderer;
 			public var beginDate:Date;
 			public var endDate:Date;
+			[Bindable] public var maxValLen:Number;
 			[Bindable] public var data:ArrayCollection = new ArrayCollection();
 			
 			private function init():void
 			{
+				plot1.setStyle('radius', 3);
+				plot2.setStyle('radius', 3);
+				plot3.setStyle('radius', 3);
+				plot4.setStyle('radius', 3);
+				plot5.setStyle('radius', 3);   //@_@ --> 0_0! --> *_* --> ^_^
+				plot6.setStyle('radius', 3);
 				data.filterFunction = filterData;
+				rv1.labelFunction = leftAxisLabelFunc;
 			}
 			
 			public function updateGraph():void
@@ -37,6 +46,19 @@
 			private function tipData(hitData:HitData):String
 			{
 				return "Date : "+(hitData.item.date as Date).toDateString()+"\nValue :"+hitData.item.value+"\nState : "+hitData.item.state;
+			}
+			
+			private function leftAxisLabelFunc(axisRenderer:IAxisRenderer, label:String):String {
+				var spaceCount:Number = maxValLen - label.length;
+				if (spaceCount > 0) {
+					var tail:String = " ";
+					for (var i:Number=1; i<spaceCount; i++) {
+						tail = tail + " ";
+					}
+					return label + tail;
+				} else {
+					return label;
+				}
 			}
 		]]>
 	</mx:Script>
@@ -64,15 +86,17 @@
 	<mx:SolidColor id="f4" color="purple"/>
 	<mx:SolidColor id="f5" color="cyan"/>
 	<mx:SolidColor id="f6" color="yellow"/>	
-	
 
 	<mx:horizontalAxis>
-		<mx:DateTimeAxis />
+		<mx:DateTimeAxis id="h1"/>
 	</mx:horizontalAxis>
 	<mx:verticalAxis>
-		<mx:LinearAxis baseAtZero="false"/>
+		<mx:LinearAxis id="v1" baseAtZero="false"/>
 	</mx:verticalAxis>
-
+	
+	<mx:verticalAxisRenderers>
+		<mx:AxisRenderer id="rv1" placement="left" axis="{v1}"/>
+	</mx:verticalAxisRenderers>
 	
 	<mx:series>
 		<mx:LineSeries id="baseLine" lineStroke="{s0}" yField="value" xField="date" stroke="{s0}"/>
@@ -82,11 +106,11 @@
 		<mx:LineSeries id="line4" lineStroke="{s4}" yField="value4" xField="date" stroke="{s4}"/>
 		<mx:LineSeries id="line5" lineStroke="{s5}" yField="value5" xField="date" stroke="{s5}"/>
 		<mx:LineSeries id="line6" lineStroke="{s6}" yField="value6" xField="date" stroke="{s6}"/>
-		<mx:PlotSeries radius="3" yField="value1" xField="date" fill="{f1}" stroke="{p1}" />
-		<mx:PlotSeries radius="3" yField="value2" xField="date" fill="{f2}" stroke="{p2}" />
-		<mx:PlotSeries radius="3" yField="value3" xField="date" fill="{f3}" stroke="{p3}" />
-		<mx:PlotSeries radius="3" yField="value4" xField="date" fill="{f4}" stroke="{p4}" />
-		<mx:PlotSeries radius="3" yField="value5" xField="date" fill="{f5}" stroke="{p5}" />
-		<mx:PlotSeries radius="3" yField="value6" xField="date" fill="{f6}" stroke="{p6}" />
+		<mx:PlotSeries id="plot1" yField="value1" xField="date" fill="{f1}" stroke="{p1}" />
+		<mx:PlotSeries id="plot2" yField="value2" xField="date" fill="{f2}" stroke="{p2}" />
+		<mx:PlotSeries id="plot3" yField="value3" xField="date" fill="{f3}" stroke="{p3}" />
+		<mx:PlotSeries id="plot4" yField="value4" xField="date" fill="{f4}" stroke="{p4}" />
+		<mx:PlotSeries id="plot5" yField="value5" xField="date" fill="{f5}" stroke="{p5}" />
+		<mx:PlotSeries id="plot6" yField="value6" xField="date" fill="{f6}" stroke="{p6}" />
 	</mx:series>
 </mx:LineChart>
