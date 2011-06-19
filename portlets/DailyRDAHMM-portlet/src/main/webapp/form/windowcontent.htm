@@ -1,21 +1,19 @@
-<div style="width:680px; height=520px">
 <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 			id="RDAHMMLine" width="100%" height="100%"
 			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
-			<param name="movie" value="RDAHMMLine.swf" />
+			<param name="movie" value="dailyRdahmmPlot" />
 			<param name="quality" value="high" />
 			<param name="bgcolor" value="#869ca7" />
 			<param name="allowScriptAccess" value="sameDomain" />
-			<param name="flashVars" value="rawDataURL={!rawFileURL!}&statesDataURL={!qFileURL!}"/>
-			<embed src="http://xml.access.hostname/daily_rdahmmexec/dailyRdahmmPlotLLH.swf" quality="high" bgcolor="#869ca7"
-				width="650" height="500" name="RDAHMMLine" align="middle"
+			<param name="flashVars" value="url={!swfInputURL!}&stationID={!stationId!}&lat={!latitude!}&long={!longitude!}&hgt={!height!}"/>
+			<embed src="http://xml.access.hostname/daily_rdahmmexec/{!swfName!}" quality="high" bgcolor="#869ca7"
+				width="100%" height="100%" name="dailyRdahmmPlot" align="middle"
 				play="true"
 				loop="false"
 				quality="high"
 				allowScriptAccess="sameDomain"
 				type="application/x-shockwave-flash"
-				flashVars="url={!swfInputURL!}&stationID={!stationId!}&lat={!latitude!}&long={!longitude!}"
+				flashVars="url={!swfInputURL!}&stationID={!stationId!}&lat={!latitude!}&long={!longitude!}&hgt={!height!}"
 				pluginspage="http://www.adobe.com/go/getflashplayer">
 			</embed>
-	</object>
-</div>
+</object>
