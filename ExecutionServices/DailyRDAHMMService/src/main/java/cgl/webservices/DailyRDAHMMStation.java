@@ -93,8 +93,9 @@ public class DailyRDAHMMStation {
 	static String mapCenterLat;
 	
 	String stationId;
-	float latitude;
-	float longitude;
+	double latitude;
+	double longitude;
+	double height;	
 	String network;
 	Calendar modelStartDate;
 	Calendar modelEndDate;
@@ -108,6 +109,7 @@ public class DailyRDAHMMStation {
 		this.stationId = stationId;
 		this.latitude = latitude;
 		this.longitude = longitude;
+		height = -1;
 		modelStartDate = null;
 		modelEndDate = null;
 		lastEvalDateTime = null;
@@ -123,17 +125,24 @@ public class DailyRDAHMMStation {
 	public void setStationId(String stationId) {
 		this.stationId = stationId;
 	}
-	public float getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
-	public void setLatitude(float latitude) {
+	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
-	public float getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
-	public void setLongitude(float longitude) {
+	public void setLongitude(double longitude) {
 		this.longitude = longitude;
+	}
+	public double getHeight() {
+		return height;
+	}
+
+	public void setHeight(double height) {
+		this.height = height;
 	}
 	public String getNetwork() {
 		return network;
@@ -927,6 +936,16 @@ public class DailyRDAHMMStation {
 			System.out.println("Standard Error: " + stdErrStr);
 			return "ERROR: " + stdErrStr;
 		} else {
+			int idx = stdOutStr.indexOf('\n');
+			if (idx >= 0) {
+				String refFilePath = stdOutStr.substring(0, idx);
+				String refLine = UtilSet.readOneLineFromFile(refFilePath, 0);
+				String[] refCoord = refLine.split(" ");
+				longitude = Double.valueOf(refCoord[0]);
+				latitude = Double.valueOf(refCoord[1]);
+				height = Double.valueOf(refCoord[2]);
+				stdOutStr = stdOutStr.substring(idx + 1);
+			}
 			return stdOutStr;
 		}
 	}
@@ -952,14 +971,11 @@ public class DailyRDAHMMStation {
 				//lineRaw is like "dond 2007-02-22T12:00:00 -2517566.0543 -4415531.3935 3841177.1618 0.0035 0.0055 0.0047"
 				int idx1 = lineRaw.indexOf(' ');
 				int idx2 = lineRaw.indexOf(' ', idx1+1);
-				int idx3 = lineRaw.indexOf(' ', idx2+1);
-				int idx4 = lineRaw.indexOf(' ', idx3+1);
-				int idx5 = lineRaw.indexOf(' ', idx4+1);
 				int idxT = lineRaw.indexOf('T', idx1);
 				
 				pwRes.print(lineQ);  // state number
 				pwRes.print(lineRaw.substring(idx1, idxT)); // date
-				pwRes.print(lineRaw.substring(idx2, idx5)); // coordinates
+				pwRes.print(lineRaw.substring(idx2)); // coordinates and displacements
 				pwRes.println();
 				
 				lineQ = brQ.readLine();
@@ -967,7 +983,7 @@ public class DailyRDAHMMStation {
 			}
 			brQ.close();
 			brRaw.close();
-			pwRes.close();			
+			pwRes.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1226,8 +1242,13 @@ public class DailyRDAHMMStation {
 		
 			String lineSrc = brSrc.readLine();
 			if (lineSrc != null) {
+				String stationId = "";
+				int idx = lineSrc.indexOf(' ');
+				if (idx >= 0) {
+					stationId = lineSrc.substring(0, idx);
+				}
 				String lineSrcPre = lineSrc;
-				String restLineSrcPre = lineSrcPre.substring(lineSrcPre.indexOf(' ', 5));
+				String restLineSrcPre = lineSrcPre.substring(lineSrcPre.indexOf(' ', idx+1));
 				Calendar cal1 = Calendar.getInstance();
 				Calendar cal2 = Calendar.getInstance();
 				Calendar calTmp = Calendar.getInstance();

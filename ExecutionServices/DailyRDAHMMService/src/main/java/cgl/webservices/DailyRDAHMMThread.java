@@ -73,8 +73,6 @@ public class DailyRDAHMMThread implements Runnable {
 						// rename the result file
 						String xmlPath = DailyRDAHMMStation.stateChangeXMLPath;
 						renameFile(resPath, xmlPath);
-						renameFile(resPath.substring(0, resPath.length()-4) + "2.xml", 
-									xmlPath.substring(0, xmlPath.length()-4) + "2.xml");
 						
 						// draw the plot for number of stations with state changes vs time
 						String scnPath = DailyRDAHMMStation.stateChangeNumTracePath;
@@ -100,8 +98,7 @@ public class DailyRDAHMMThread implements Runnable {
 					makeAllStationInput(DailyRDAHMMStation.baseDestDir, proNamesForBigInput, 
 							UtilSet.getDateFromString(DailyRDAHMMStation.defaultModelStartDate), today);
 					//delete yestoday's project directories
-					deleteDirectories(yestoday_proNames, DailyRDAHMMStation.baseWorkDir, 
-							DailyRDAHMMStation.baseDestDir, DailyRDAHMMStation.binDir);					
+					deleteDirectories(yestoday_proNames, DailyRDAHMMStation.baseWorkDir, DailyRDAHMMStation.baseDestDir, DailyRDAHMMStation.binDir);
 					
 					nextRunDateTime.setTimeInMillis(System.currentTimeMillis());
 					UtilSet.ndaysBeforeToday(nextRunDateTime, -1*DailyRDAHMMStation.repeatPeriodInDays, nextRunDateTime);
@@ -194,7 +191,6 @@ public class DailyRDAHMMThread implements Runnable {
 				boolean doNextStep = true, newFile = false;
 				resPath = resPath.replace('/', File.separatorChar);
 				File outputFile = new File(resPath);
-				File outputPretty = new File(resPath.substring(0, resPath.length()-4) + "2.xml");
 				// if result file out of date, create a new one
 				if (outputFile.exists()) {
 					Calendar modifyDate = Calendar.getInstance();
@@ -203,8 +199,7 @@ public class DailyRDAHMMThread implements Runnable {
 						|| modifyDate.get(Calendar.MONTH) < today.get(Calendar.MONTH)
 						|| modifyDate.get(Calendar.DAY_OF_MONTH) < today.get(Calendar.DAY_OF_MONTH)) {
 						if (outputFile.delete()) {
-							outputPretty.delete();
-							doNextStep = outputFile.createNewFile() && outputPretty.createNewFile();
+							doNextStep = outputFile.createNewFile();
 							newFile = true;
 						} else {
 							UtilSet.log(threadNum, "Failed to delete the old RDAHMM result file!");
@@ -212,29 +207,23 @@ public class DailyRDAHMMThread implements Runnable {
 						}
 					}					
 				} else {
-					doNextStep = outputFile.createNewFile() && outputPretty.createNewFile();
+					doNextStep = outputFile.createNewFile();
 					newFile = true;
 				}
 
 				// create the xml document to add stuff to
-				Document resDoc = null, resDocPretty = null;
-				Element eleXml = null, eleXmlPretty = null;
+				Document resDocPretty = null;
+				Element eleXmlPretty = null;
 				if (doNextStep) {
 					// create the xml document to append
 					if (newFile) {
-						resDoc = DocumentHelper.createDocument();
-						eleXml = resDoc.addElement("xml");
 						resDocPretty = DocumentHelper.createDocument();
 						eleXmlPretty = resDocPretty.addElement("xml");
 						doNextStep = true;
 					} else {
 						SAXReader xmlReader = new SAXReader();
-						try {
+						try {							
 							FileReader fr = new FileReader(outputFile);
-							resDoc = xmlReader.read(fr);
-							eleXml = resDoc.getRootElement();
-							fr.close();							
-							fr = new FileReader(outputPretty);
 							resDocPretty = xmlReader.read(fr);
 							eleXmlPretty = resDocPretty.getRootElement();
 							fr.close();
@@ -248,21 +237,15 @@ public class DailyRDAHMMThread implements Runnable {
 
 				// add the results to xml document, and write to the file
 				if (doNextStep) {
-					addResToXMLDoc(today, station, eleXml, eleXmlPretty);
+					addResToXMLDoc(today, station, eleXmlPretty);
 
 					// write the document back to file
 					OutputFormat format = OutputFormat.createPrettyPrint();
-					FileWriter fw2 = new FileWriter(outputPretty);
-					XMLWriter writer2 = new XMLWriter(fw2, format);
-					writer2.write(resDocPretty);
-					writer2.close();
-					fw2.close();
-					
 					FileWriter fw = new FileWriter(outputFile);
-					XMLWriter writer = new XMLWriter(fw);
-					writer.write(resDoc);
+					XMLWriter writer = new XMLWriter(fw, format);
+					writer.write(resDocPretty);
 					writer.close();
-					fw.close();				
+					fw.close();		
 				}
 			} 
 		} catch (Exception e) {
@@ -281,30 +264,26 @@ public class DailyRDAHMMThread implements Runnable {
 	 * @param lastLines
 	 * @param eleRoot
 	 */
-	private void addResToXMLDoc(Calendar today, DailyRDAHMMStation station, Element eleRoot, Element eleRootPretty) {
+	private void addResToXMLDoc(Calendar today, DailyRDAHMMStation station, Element eleRoot) {
 		// if the rdahmm result output-pattern element is not there, create a new one
 		addElePattern(station, eleRoot);
-		addElePattern(station, eleRootPretty);
 		
 		if (eleRoot.element("station-count") == null) {
 			eleRoot.addElement("station-count").setText( String.valueOf(runner.statoinList.size()) );
-			eleRootPretty.addElement("station-count").setText( String.valueOf(runner.statoinList.size()) );
 		}		
 		
 		// add the element to the xml document
 		Element eleStation = eleRoot.addElement("station");
-		Element eleStation2 = eleRootPretty.addElement("station");
 		// id
 		eleStation.addElement("id").setText(station.getStationId());
-		eleStation2.addElement("id").setText(station.getStationId());
 		
 		// latitude and longitude
 		String latText = String.valueOf(station.getLatitude());
 		String longText = String.valueOf(station.getLongitude());
+		String heightText = String.valueOf(station.getHeight());
 		eleStation.addElement("lat").setText(latText);
-		eleStation2.addElement("lat").setText(latText);
 		eleStation.addElement("long").setText(longText);
-		eleStation2.addElement("long").setText(longText);
+		eleStation.addElement("height").setText(heightText);
 		
 		// now the status changes
 		long status1 = -1, status2 = -1;
@@ -390,7 +369,6 @@ public class DailyRDAHMMThread implements Runnable {
 					if (count20 >= 20) {
 						// add a status change element
 						eleStation.addElement("status-changes").setText(sbgroup.toString());
-						eleStation2.addElement("status-changes").setText(sbgroup.toString());
 						sbgroup.setLength(0);
 						count20 = 0;						
 					} else {
@@ -422,19 +400,15 @@ public class DailyRDAHMMThread implements Runnable {
 		// if there are still some status change information not written in to xml
 		if (sbgroup.length() > 0) {
 			eleStation.addElement("status-changes").setText(sbgroup.toString());
-			eleStation2.addElement("status-changes").setText(sbgroup.toString());
 		}
 		
 		eleStation.addElement("change-count").setText(String.valueOf(changeCount));
-		eleStation2.addElement("change-count").setText(String.valueOf(changeCount));
 
 		if (sbMissData.length() > 0) {
 			eleStation.addElement("time-nodata").setText(sbMissData.toString());
-			eleStation2.addElement("time-nodata").setText(sbMissData.toString());
 		}
 		
 		eleStation.addElement("nodata-count").setText(String.valueOf(missCount));
-		eleStation2.addElement("nodata-count").setText(String.valueOf(missCount));
 	}
 
 	protected void addElePattern(DailyRDAHMMStation station, Element eleRoot) {
@@ -530,6 +504,7 @@ public class DailyRDAHMMThread implements Runnable {
 			tmpNode.setText(modelBasePat + ".range");
 			tmpNode = elePattern.addElement("ModelFiles");
 			tmpNode.setText(modelBasePat + ".zip");
+			elePattern.addElement("video-url");
 		}
 	}
 
@@ -824,43 +799,30 @@ public class DailyRDAHMMThread implements Runnable {
 		try {
 			resPath = resPath.replace('/', File.separatorChar);
 			File outputFile = new File(resPath);
-			File outputPretty = new File(resPath.substring(0, resPath.length()-4) + "2.xml");
 			
 			// create the xml document to add stuff to
-			Document resDoc = null, resDocPretty = null;
-			Element eleXml = null, eleXmlPretty = null;
+			Document resDoc = null;
+			Element eleXml = null;
 			SAXReader xmlReader = new SAXReader();
-
 			FileReader fr = new FileReader(outputFile);
 			resDoc = xmlReader.read(fr);
 			eleXml = resDoc.getRootElement();
-			fr.close();							
-			fr = new FileReader(outputPretty);
-			resDocPretty = xmlReader.read(fr);
-			eleXmlPretty = resDocPretty.getRootElement();
 			fr.close();
 			
 			Element elePattern = eleXml.element("output-pattern");
-			Element eleVideoUrl = elePattern.addElement("video-url");
+			Element eleVideoUrl = elePattern.element("video-url"); 
+			if (eleVideoUrl == null) {
+				eleVideoUrl = elePattern.addElement("video-url");
+			}
 			eleVideoUrl.setText(videoUrl);
-			
-			Element elePatternPretty = eleXmlPretty.element("output-pattern");
-			Element eleVideoUrlPretty = elePatternPretty.addElement("video-url");
-			eleVideoUrlPretty.setText(videoUrl);
 			
 			// write the document back to file					
 			OutputFormat format = OutputFormat.createPrettyPrint();
-			FileWriter fw2 = new FileWriter(outputPretty);
-			XMLWriter writer2 = new XMLWriter(fw2, format);
-			writer2.write(resDocPretty);
-			writer2.close();
-			fw2.close();					
-					
 			FileWriter fw = new FileWriter(outputFile);
-			XMLWriter writer = new XMLWriter(fw);
+			XMLWriter writer = new XMLWriter(fw, format);
 			writer.write(resDoc);
 			writer.close();
-			fw.close();				
+			fw.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 

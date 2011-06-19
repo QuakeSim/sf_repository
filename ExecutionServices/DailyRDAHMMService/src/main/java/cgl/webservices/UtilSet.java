@@ -186,13 +186,14 @@ public class UtilSet {
 	  	month = str.substring(i1+1, i2);
 	  	day = str.substring(i2+1);
 	  	
-	  	theDate.set(Calendar.YEAR, Integer.parseInt(year, 10));
+	  	theDate.set(Calendar.MILLISECOND, 0);
+	  	theDate.set(Calendar.SECOND, 0);
+	  	theDate.set(Calendar.MINUTE, 0);
+	  	theDate.set(Calendar.HOUR_OF_DAY, 12);
+	  	theDate.set(Calendar.DAY_OF_MONTH, 1);
 	  	theDate.set(Calendar.MONTH, Integer.parseInt(month, 10)-1);
 	  	theDate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day, 10));
-	  	theDate.set(Calendar.HOUR_OF_DAY, 12);
-	  	theDate.set(Calendar.MINUTE, 0);
-	  	theDate.set(Calendar.SECOND, 0);
-	  	theDate.set(Calendar.MILLISECOND, 0);
+	  	theDate.set(Calendar.YEAR, Integer.parseInt(year, 10));
 	}
 	
 	/**
@@ -201,7 +202,7 @@ public class UtilSet {
 	 * @param str
 	 */
 	public static void setDateTimeByString(Calendar theDateTime, String str) {
-	  	str = str.trim();
+		str = str.trim();
 		String year, month, day;
 	  	int i1, i2, iT;
 	  	i1 = str.indexOf("-");
@@ -210,18 +211,17 @@ public class UtilSet {
 	  	year = str.substring(0, i1);
 	  	month = str.substring(i1+1, i2);
 	  	day = str.substring(i2+1, iT);
-	  	
-	  	theDateTime.set(Calendar.YEAR, Integer.parseInt(year, 10));
-	  	theDateTime.set(Calendar.MONTH, Integer.parseInt(month, 10)-1);
-	  	theDateTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day, 10));
-	  	
 	  	i1 = str.indexOf(':', iT+1);
 	  	i2 = str.indexOf(':', i1+1);
 	  	
-	  	theDateTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(str.substring(iT+1, i1)));
-	  	theDateTime.set(Calendar.MINUTE, Integer.parseInt(str.substring(i1+1, i2)));
-	  	theDateTime.set(Calendar.SECOND, Integer.parseInt(str.substring(i2+1)));
 	  	theDateTime.set(Calendar.MILLISECOND, 0);
+	  	theDateTime.set(Calendar.SECOND, Integer.parseInt(str.substring(i2+1)));
+	  	theDateTime.set(Calendar.MINUTE, Integer.parseInt(str.substring(i1+1, i2)));
+	  	theDateTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(str.substring(iT+1, i1)));
+	  	theDateTime.set(Calendar.DAY_OF_MONTH, 1);
+	  	theDateTime.set(Calendar.MONTH, Integer.parseInt(month, 10)-1);
+	  	theDateTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day, 10));
+	  	theDateTime.set(Calendar.YEAR, Integer.parseInt(year, 10));
 	}
 	
 	/** get date-time from a string like "2007-03-08T08:08:08" */
@@ -803,8 +803,11 @@ public class UtilSet {
 			e.printStackTrace();
 		}*/
 		
-		File f = new File(args[0]);
-		System.out.println("eixistence of file " + args[0] + ": " + f.exists());
+		String s = "13.22 33.44 55.66";
+		String[] subs = s.split(" ");
+		for (int i=0; i<subs.length; i++) {
+			System.out.println(subs[i]);
+		}
 	}
 	
 	public static void main(String[] args) {
