@@ -853,6 +853,14 @@
 	}
 	mapcenter_x = xmin + (xmax - xmin)/2;
 	mapcenter_y = ymin + (ymax - ymin)/2;
+	Element eleLon = eleXml.element("center-longitude");
+	Element eleLat = eleXml.element("center-latitude");
+	if (eleLon != null) {
+		mapcenter_y = Double.valueOf(eleLon.getText());
+	}
+	if (eleLat != null) {
+		mapcenter_x = Double.valueOf(eleLat.getText());
+	}
 	tmpCaldr.set(Calendar.YEAR, 1970);
 	tmpCaldr.set(Calendar.MONTH, 0);
 	tmpCaldr.set(Calendar.DAY_OF_MONTH, 2);

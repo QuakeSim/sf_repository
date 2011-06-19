@@ -899,7 +899,6 @@
 		stationArray[<%=i%>][1] = <%=x%>;	stationArray[<%=i%>][2] = <%=y%>; stationArray[<%=i%>][4] = <%=h%>;
 		var icon = new GIcon(baseIcon);
 		stationArray[<%=i%>][6] = createTabsInfoMarker(new GPoint('<%=y%>', '<%=x%>') , null, icon, <%=i%>, stSelect);
-		/*stationArray[<%=i%>][6] = null; */
 <%
 		if (changeCount == 0) {
 			out.write("stationArray[" + i + "][5] = null;");
@@ -956,12 +955,13 @@
 	}
 	mapcenter_x = xmin + (xmax - xmin)/2;
 	mapcenter_y = ymin + (ymax - ymin)/2;
-	if (dataSource.equalsIgnoreCase("unavcoNucleusFill")) {
-		mapcenter_x = 43.812;
-		mapcenter_y = -120.6033;
-	} else if (dataSource.equalsIgnoreCase("unavcoPboFill")) {
-		mapcenter_x = 42.0201;
-		mapcenter_y = -117.7256;
+	Element eleLon = eleXml.element("center-longitude");
+	Element eleLat = eleXml.element("center-latitude");
+	if (eleLon != null) {
+		mapcenter_y = Double.valueOf(eleLon.getText());
+	}
+	if (eleLat != null) {
+		mapcenter_x = Double.valueOf(eleLat.getText());
 	}
 	tmpCaldr.set(Calendar.YEAR, 1970);
 	tmpCaldr.set(Calendar.MONTH, 0);
