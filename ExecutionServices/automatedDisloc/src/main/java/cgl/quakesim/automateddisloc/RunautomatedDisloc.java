@@ -174,7 +174,6 @@ public class RunautomatedDisloc implements Job {
 		  run(url);
 	 }
 
-
 	 /**
 	  * Load the project properties and set values.
 	  */
@@ -227,50 +226,6 @@ public class RunautomatedDisloc implements Job {
 	}
 
 	 /**
-	  * This creates a Disloc project.
-	  * Note this assumes this service and the associated client
-	  * (from RssDisloc3) are using the same file system.  
-	  *
-	  * REVIEW: The requirement that the client and server share
-	  * a file system is bad design and needs to be rethought. Also the
-	  * pattern "overm5" is used as a magic string in both
-	  * the service and client webapps.
-	  */
-	public void createProject(ArrayList <String> arrayList) {
-		
-		ObjectContainer db = null;		
-		File projectDir = new File(getContextBasePath());
-		
-		if (!projectDir.exists())
-			projectDir.mkdirs();
-		
-		try {			
-			 //REVIEW: "over5" name pattern is a magic string and should be moved to a
-			 //system property.
-			db = Db4o.openFile(getContextBasePath() + "/overm5_temp.db");
-			
-			DislocProjectBean tmp = new DislocProjectBean();
-			
-			ObjectSet results = db.get(DislocProjectBean.class);
-
-			for (int nA = 0 ; nA < arrayList.size() ; nA++) {
-				// Create a new project. This may be overwritten later
-				DislocProjectBean currentProject = new DislocProjectBean();
-				currentProject.setProjectName(arrayList.get(nA));
-				db.set(currentProject);				
-			}
-			logger.info("[RunautomatedDisloc/createProject] finished");
-			db.commit();
-		} catch (Exception e) {			
-			 logger.error("[RunautomatedDisloc/createProject] " + e.getMessage());
-		}
-		finally {
-			if (db != null)  db.close();			
-		}
-	}
-
-
-	 /**
 	  * This implements the required run() method for this thread. It does the following;
 	  * 1. Check to see if it is time to update.  If not, do nothing else.
 	  * 2. If time to update, run createProjectsFromRss().  
@@ -286,8 +241,8 @@ public class RunautomatedDisloc implements Job {
 		File logfile = new File(dir + "/" + "log.txt");		
 		//		getDislocProjectSummaryBeanCount();
 
-		//If it has been longer than 1 hour, get more data.  Otherwise, do nothing.
-		boolean getUpdates=timeToRunUpdate(logfile,AutomatedDislocBean.ONE_HOUR_IN_MILLISECONDS);
+		//If it has been longer than the trigger time, check for more data.  Otherwise, do nothing.
+		boolean getUpdates=timeToRunUpdate(logfile,AutomatedDislocBean.SCAN_TRIGGER_INTERVAL);
 		
 		if(getUpdates) {
 			 logger.info("[RunautomatedDisloc/run] Time to run updates");
@@ -334,20 +289,17 @@ public class RunautomatedDisloc implements Job {
 	 /**
 	  * This method constructs the project from the USGS RSS file.
 	  */ 
-	public void createProjectsFromRss(String url) {		
+	protected void createProjectsFromRss(String url) {		
 			
 		 //First, parse the RSS feed.
 		CglGeoRssParser cgrp = new CglGeoRssParser();
 		cgrp.parse(url);		
 		List <Entry> entry_list = cgrp.getEntryList();
-		ArrayList <String> pns = new ArrayList();
+		ArrayList <String> projectNameArray = new ArrayList();
 		logger.info("[RunautomatedDisloc/run] entry_list.size() : " + entry_list.size());
 		
 		//		HashMap<String, Fault> hm = new HashMap<String, Fault>();
 		
-		//REVIEW: These should be static final and global.  Also, thr is thrust?  I think
-		//this is boolean.
-				
 		//Construct a KML file for the results.
 		Kml doc = new Kml();
 		Folder root = new Folder();
@@ -370,52 +322,58 @@ public class RunautomatedDisloc implements Job {
 			 logger.info("Kml file locations set up");
 			 
 			 //Print header stuff.
-			out.println(xmlHead);
-			out.println(kmlHead);
-			out.println(docBegin);
+			 out.println(xmlHead);
+			 out.println(kmlHead);
+			 out.println(docBegin);
 
-			//Now go.  Loop over entry objects
+			//Now go.  
 			logger.info("Starting loop over entry objects");
-		for (int nA = 0 ; nA < entry_list.size() ; nA++) {
-			Entry entry = (Entry) entry_list.get(nA);
-			//We check for 4 possible scenarios.
-			for (int nB = 0 ; nB < AutomatedDislocBean.EARTHQUAKE_SLIP_SCENARIOS ; nB++) {
-				 
-				 //This does all the stuff needed to set up a fault of type nB.
-				 Fault fault=setFaultType(nB,entry);				
-				
-				 //Create the project name and put it in the DB
-				 DislocParamsBean dislocParams = null;
-				 String projectname=createProjectName(entry, fault, nB);
-				 pns.add(projectname);
-				 dislocParams=putProjectInDB(projectname, fault);
+			
+			for (int nA = 0 ; nA < entry_list.size() ; nA++) {
+				 Entry entry = (Entry) entry_list.get(nA);
+				 //We check for 4 possible scenarios.
+				 for (int nB = 0 ; nB < AutomatedDislocBean.EARTHQUAKE_SLIP_SCENARIOS ; nB++) {
+					  
+					  //This does all the stuff needed to set up a fault of type nB.
+					  Fault fault=setFaultType(nB,entry);				
+					  
+					  //Create the project name
+					  DislocParamsBean dislocParams = null;
+					  String projectname=createProjectName(entry, fault, nB);
 
-				 
-				 //Now we are ready to run disloc.  It returns
-				 //output URLs.
-				// Now we assign x20 density by -100, -100, 0.5, 420. 09/22/2010 Jun Ji
-				OutputURLs ouls = null;				
-				try {
-					ouls = runBlockingDislocJSF(projectname, dislocParams, fault, entry.getM(), nB);
-					//					getDislocProjectSummaryBeanCount();
-				} catch (Exception e) {
-					logger.error(e.getMessage());
-				}
+					  projectNameArray.add(projectname);
+					  dislocParams=putProjectInDB(projectname, fault);
+					  
+					  //Now we are ready to run disloc.  It returns
+					  //output URLs.
+					  // Now we assign x20 density by -100, -100, 0.5, 420. 09/22/2010 Jun Ji
+					  OutputURLs ouls = null;				
+					  try {
+							ouls = runBlockingDislocJSF(projectname, 
+																 dislocParams, 
+																 fault, 
+																 entry.getM(), 
+																 nB);
+							//					getDislocProjectSummaryBeanCount();
+					  } catch (Exception e) {
+								 logger.error(e.getMessage());
+					  }
 
-				//Make a shorter name for the project
-				String projectShortName=makeShortProjectName(projectname);
-
-				//Now print out the KML for this earthquake
-				printKmlForEarthquakeEntry(entry, fault, out, ouls, projectname,projectShortName);
-				
+					  //Make a shorter name for the project
+					  String projectShortName=makeShortProjectName(projectname);
+					  
+					  //Now print out the KML for this earthquake
+					  printKmlForEarthquakeEntry(entry, fault, out, ouls, projectname,projectShortName);
+					  
+				 }
 			}
-		}
-		logger.info("Loop over projects completed");
-		
-		out.println(docEnd);
-		out.println(kmlEnd);
-		out.flush();
-		out.close();
+
+			logger.info("Loop over projects completed");
+			
+			out.println(docEnd);
+			out.println(kmlEnd);
+			out.flush();
+			out.close();
 		} 
 		catch (Exception e) {
 			 logger.error(e.getMessage());
@@ -426,40 +384,10 @@ public class RunautomatedDisloc implements Job {
 				  out.close();
 			 }
 		}
-		
 
-		//Code below copies the old destination to the new destination. Not sure why this
-		//needs to be done.
-
-		// //REVIEW: More magic paths.
-		// File newFile_rssdisloc = new File(getContextBasePath() + "/../../../../../" + rssdisloc_dir_name + "/overm5.kml");
-		// oldFile = new File(localDestination);
-		// destDir = new File(getContextBasePath() + "/../../../../../" + rssdisloc_dir_name);
-		
-		// if (!destDir.exists()) destDir.mkdirs();
-		
-		// try {
-		// 	if(!newFile_rssdisloc.exists())
-		// 		newFile_rssdisloc.createNewFile();
-		// 	copyFile(oldFile, newFile_rssdisloc);
-			
-		// } catch (Exception e) {
-		// 	// TODO Auto-generated catch block
-		// 	 //			logger.error(e.getMessage());
-		// 	 logger.error(e.getMessage());
-		// }
-		
-		// //		Set s = hm.keySet();
-		// // String str[] = new String[pns.size()];
-		
-		// // for (int nA = 0 ; nA < pns.size() ; nA++)
-		// // 	str[nA] = (String)pns.get(nA);
-			
-		// // addFault(hm);
-
-
-		logger.info("Calling createProject()");
-		createProject(pns);	
+		//Finally, store the new project in the db
+		// logger.info("Calling createProject()");
+		// createProject(projectNameArray);	
 	}
 		
 	 /**
@@ -481,8 +409,10 @@ public class RunautomatedDisloc implements Job {
 			
 			ObsvPoint[] points = null;
 			
+			//--------------------------------------------------
 			//This method call checks to see if Disloc has been run for this problem. If so,
 			//results are reused, and if not, do a new calculation. 
+			//--------------------------------------------------
 			DislocResultsBean dislocResultsBean = getDislocResultsBean(projectName, 
 																						  currentParams, 
 																						  faults, 
@@ -491,24 +421,33 @@ public class RunautomatedDisloc implements Job {
 																						  s_case);	
 			
 			ourls.setDislocoutputURL(dislocResultsBean.getOutputFileUrl());
-
-			// This step makes the kml plots.  We allow this to fail.
-			String myKmlUrl = "";			
-			try {
-				myKmlUrl = createKml(currentParams, dislocResultsBean, faults, projectName);
-				 logger.info("[AutomatedDislocBean/runBlockingDislocJSF] KmlUrl : " + myKmlUrl);
-			}
-			catch (Exception e) {
-				 logger.error(e.getMessage());
-				 e.printStackTrace();
-			}
 			
+			//--------------------------------------------------
+			// This step makes the kml plots.  We allow this to fail; hence the
+			// embedded try/catch block.
+			//--------------------------------------------------
+			String myKmlUrl = "";	
+			if(!foundPreviousEntry(projectName)) {
+				 logger.info("Can't find previous project, so make new KML plots");
+				 try {
+					  myKmlUrl = createKml(currentParams, dislocResultsBean, faults, projectName);
+					  logger.info("[AutomatedDislocBean/runBlockingDislocJSF] KmlUrl : " + myKmlUrl);
+				 }
+				 catch (Exception e) {
+					  logger.error(e.getMessage());
+					  e.printStackTrace();
+				 }
+			}
+			else {
+				 logger.info("Found previous KML deformation plots");
+				 myKmlUrl=getMyKmlUrlFromDB(projectName);
+			} 
 			ourls.setDisplacementkmlURL(myKmlUrl);
 
+			//--------------------------------------------------
 			// This step runs the insar plotting stuff.  We also allow this
-			// to fail.
-			
-			// 09/17/2010 We will assign pre-calculated images
+			// to fail.			
+			//--------------------------------------------------
 			insarKmlUrl= getPrecalculatedInsar(projectName, fault.getFaultLonStart(), fault.getFaultLatStart(), M, s_case, dislocResultsBean.getJobUIDStamp(), dislocResultsBean);
 			
 			ourls.setInsarkmlURL(insarKmlUrl);
@@ -520,23 +459,26 @@ public class RunautomatedDisloc implements Job {
 		}
 		logger.info("[AutomatedDislocBean/runBlockingDislocJSF] Finished");
 		
-		return ourls;
+		return ourls
 	}
 	
-	public Double[] dxy2lonlat(double x, double y, double reflon, double reflat) {
+	 /**
+	  * Converts (x,y) values to lat/lon values.
+	  */
+	protected Double[] dxy2lonlat(double x, double y, double reflon, double reflat) {
 		
 	    double flattening = 1.0/298.247; 
 	    double yfactor = 111.32;
 	    
 	    double xfactor = 111.32*Math.cos(Math.toRadians(reflat))*(1.0 - flattening*Math.pow(Math.sin(Math.toRadians(reflat)), 2));
-	    logger.info("x, y : " + x + ", " + y);
-	    logger.info("xfactor : " + xfactor);
+	    logger.debug("x, y : " + x + ", " + y);
+	    logger.debug("xfactor : " + xfactor);
 	    
 	    double lon2 = x/xfactor + reflon; 
 	    double lat2 = y/yfactor + reflat;
 	    
-	    logger.info("lon : " + lon2);
-	    logger.info("lat : " + lat2);
+	    logger.debug("lon : " + lon2);
+	    logger.debug("lat : " + lat2);
 	    Double results[] = new Double[2];
 	    results[0] = lon2;
 	    results[1] = lat2;
@@ -553,7 +495,7 @@ public class RunautomatedDisloc implements Job {
 	  * If not, then new calculations for a given M are performed and the results are thereafter
 	  * available. 
 	  */ 
-	public String getPrecalculatedInsar(String projectName, 
+	protected String getPrecalculatedInsar(String projectName, 
 													Double reflon, 
 													Double reflat, 
 													Double M, 
@@ -1016,12 +958,17 @@ public class RunautomatedDisloc implements Job {
 		return myKmlUrl;
 	}
 	
-	protected void storeProjectInContext(String userName, String projectName,
-			String jobUIDStamp, DislocParamsBean paramsBean,
-			DislocResultsBean dislocResultsBean, String kml_url,
-			String insarKmlUrl, String elevation, String azimuth,
-			String frequency) throws Exception {
-
+	protected void storeProjectInContext(String userName, 
+													 String projectName,
+													 String jobUIDStamp, 
+													 DislocParamsBean paramsBean,
+													 DislocResultsBean dislocResultsBean, 
+													 String kml_url,
+													 String insarKmlUrl, 
+													 String elevation, 
+													 String azimuth,
+													 String frequency) throws Exception {
+		 
 		DislocProjectSummaryBean summaryBean = new DislocProjectSummaryBean();
 		summaryBean.setUserName(userName);
 		summaryBean.setProjectName(projectName);
@@ -1085,27 +1032,28 @@ public class RunautomatedDisloc implements Job {
 
 	}
 	
-	
-	private String logreader(File file, boolean all)
-	{
+	 /**
+	  * This is used to read the timestamp log file
+	  */
+	private String logreader(File file, boolean all) {
 		String returnstr = "";
 		String temp;
 				
-		if (file.exists())
-		{	
+		if (file.exists()) {	
 			try {
 				
 				BufferedReader loginput = new BufferedReader(new FileReader(file));
 					
-				while ((temp = loginput.readLine()) != null)
-				{
-					if (all == true)
+				while ((temp = loginput.readLine()) != null)	{
+					 if (all == true) {
 						returnstr += temp + "\n";
+					 }
 					
-					else
+					 else {
 						returnstr = temp;
 					// logger.info(file.getAbsolutePath());
 					// logger.info("logreader : " + returnstr);
+					 }
 				}
 				
 				loginput.close();
@@ -1238,7 +1186,8 @@ public class RunautomatedDisloc implements Job {
 	  * @param File logfile the file that contains the timestamp of the previous update
 	  * @param int timeInterval the minimum interval in milliseconds between updates
 	  */
-	 protected boolean timeToRunUpdate(File logfile, int timeInterval){
+	 protected boolean timeToRunUpdate(File logfile, int timeIntervalInSeconds){
+		  int timeIntervalInMilliseconds=timeIntervalInSeconds*1000;
 		try {
 			 if (!logfile.exists()) {
 				logfile.createNewFile();
@@ -1270,7 +1219,7 @@ public class RunautomatedDisloc implements Job {
 		logger.info("[RunautomatedDisloc/run] the last update time : " + dateFormat.format(date1));
 		logger.info("[RunautomatedDisloc/run] the current time : " +  dateFormat.format(date));
 
-		if (date2.getTime() > timeInterval) {
+		if (date2.getTime() > timeIntervalInMilliseconds) {
 			 //			 logwriter(logfile, dateFormat.format(date));	  
 			 return true;
 		}
@@ -1366,8 +1315,12 @@ public class RunautomatedDisloc implements Job {
 
 	 /** 
 	  * Utility method for setting up various class-scoped File objects.
+	  * Returns a boolean: true if we will append to an existing file, false 
+	  * if we need to start from scratch.
 	  */
 	 protected void setUpKmlFileLocations(String destDirName, String destFileName) throws Exception {
+		  
+		  boolean appendFile=false; 
 		  
 		  try {
 				//Set up the destination directory object and create it on the file system if
@@ -1376,11 +1329,11 @@ public class RunautomatedDisloc implements Job {
 				if (!destDir.exists()) destDir.mkdirs();	
 				
 				String localDestination=destDirName+"/"+destFileName;
-				File oldFile = new File(localDestination);
-				if (oldFile.exists()) {
-					 logger.info("[RunautomatedDisloc/run] Deleting old fault kml file");
-					 oldFile.delete();	
-				}
+				// File oldFile = new File(localDestination);
+				// if (oldFile.exists()) {
+				// 	 logger.info("[RunautomatedDisloc/run] Deleting old fault kml file");
+				// 	 oldFile.delete();	
+				// }
 				//Set up also the printwriter.  This is not very clean.
 				logger.info(localDestination);
 				out = new PrintWriter(new FileWriter(localDestination));		
@@ -1569,11 +1522,32 @@ public class RunautomatedDisloc implements Job {
 	 }
 
 	 /**
+	  * This method collects the code used to create the parameter bean.
+	  */
+	 protected DislocParamsBean createDislocParamsBean(String projectname,
+																		Fault fault) {
+		  DislocParamsBean tmp=new DislocParamsBean();
+		  tmp = new DislocParamsBean();
+		  tmp.setOriginLat(fault.getFaultLatStart());
+		  tmp.setOriginLon(fault.getFaultLonStart());
+		  
+		  //Various magic numbers. These should be defined as static final
+		  //fields somewhere.
+		  tmp.setGridMinXValue(-100);
+		  tmp.setGridMinYValue(-100);
+		  tmp.setGridXIterations(420);
+		  tmp.setGridXSpacing(0.5);
+		  tmp.setGridYIterations(420);
+		  tmp.setGridYSpacing(0.5);
+		  
+		  return tmp;
+	 }
+
+	 /**
 	  * Puts the named proejct into the db.
 	  */
 	 protected DislocParamsBean putProjectInDB(String projectname, 
 															 Fault fault) {
-		  //REVIEW: more disconnected code. Also, note the DB is deleted.
 		  File f = new File(getContextBasePath() + "/overm5/" + projectname + ".db");
 		  if (f.exists()) f.delete();
 				
@@ -1735,4 +1709,119 @@ public class RunautomatedDisloc implements Job {
 	 protected String makeShortProjectName(String projectName) {
 		  return projectName.substring(0,projectName.indexOf("_n_"));
 	 }
+	 
+	 /**
+	  * See if we have made a calculation for this entry before. 
+	  */
+	 protected boolean foundPreviousEntry(String projectname) {
+		  logger.info("Looking for previous entries:"+projectname);
+		  ObjectContainer db=null;
+		  boolean hasEntry=false;
+		  try {
+				//Open the old database
+				db=Db4o.openFile(getContextBasePath() + "/overm5.db");
+				ObjectSet results=db.get(DislocProjectSummaryBean.class);
+				logger.info("Previous project summaries:"+results.size());
+				
+				//If we find a previous entry, we are done, so close up and return true.
+				while(results.hasNext()){
+					 DislocProjectSummaryBean tmp=(DislocProjectSummaryBean) results.next();
+					 logger.info(tmp.getProjectName()+" "+projectname);
+					 if(tmp.getProjectName().equals(projectname)){
+						  hasEntry=true;
+						  logger.info("Found previous entry for "+projectname+":"+hasEntry);
+						  db.close();
+						  return hasEntry;
+					 }
+				}
+		  }
+		  catch(Exception ex){
+				hasEntry=false;
+				ex.printStackTrace();
+		  }
+		  
+		  finally {
+				if(db!=null) db.close();
+		  }
+		  //If we get here, hasEntry is false.
+		  logger.info("-------Found previous entry for "+projectname+":"+hasEntry+"-----------");
+		  return hasEntry;
+	 }
+	 
+	 protected String getMyKmlUrlFromDB(String projectName){
+		  String kmlUrl="";
+		  ObjectContainer db=null;
+		  try {
+				db=Db4o.openFile(getContextBasePath() + "/overm5.db");
+				ObjectSet results=db.get(DislocProjectSummaryBean.class);
+				while(results.hasNext()){
+					 DislocProjectSummaryBean testbean=(DislocProjectSummaryBean)results.next();
+					 if(testbean.getProjectName().equals(projectName)){
+						  logger.info("Found KML URL in DB:"+testbean.getKmlurl());
+						  return testbean.getKmlurl();
+					 }
+				}
+		  }
+		  catch(Exception ex) {
+				ex.printStackTrace();
+		  }
+		  finally {
+				if(db!=null) db.close();
+		  }
+		  
+		  return kmlUrl;
+		  
+	 }
+
+	 /**
+	  * This creates Disloc project beans for each entry name in the 
+	  * ArrayList. In practice, it will create four projects for each
+	  * earthquake entry in the RSS feed.
+	  * 
+	  * Note this assumes this service and the associated client
+	  * (from RssDisloc3) are using the same file system.  
+	  *
+	  * REVIEW: The requirement that the client and server share
+	  * a file system is bad design and needs to be rethought. Also the
+	  * pattern "overm5" is used as a magic string in both
+	  * the service and client webapps.
+	  *
+	  * REVIEW: What is the heck is this method doing anyway? It creates a bunch of
+	  * empty DislocProjectBeans.
+	  */
+	protected void createProject(ArrayList <String> arrayList) {
+		
+		ObjectContainer db = null;		
+		File projectDir = new File(getContextBasePath());
+		
+		if (!projectDir.exists()){
+			 projectDir.mkdirs();
+		}
+		
+		try {			
+			 //REVIEW: "over5" name pattern is a magic string and should be moved to a
+			 //system property.
+			db = Db4o.openFile(getContextBasePath() + "/overm5_temp.db");
+			
+			//REVIEW: are the next two lines necessary?
+			DislocProjectBean tmp = new DislocProjectBean();
+			ObjectSet results = db.get(DislocProjectBean.class);
+
+			for (int nA = 0 ; nA < arrayList.size() ; nA++) {
+				// Create a new project. This may be overwritten later
+				DislocProjectBean currentProject = new DislocProjectBean();
+				currentProject.setProjectName(arrayList.get(nA));
+				db.set(currentProject);				
+			}
+			logger.info("[RunautomatedDisloc/createProject] finished");
+			db.commit();
+		} catch (Exception e) {			
+			 logger.error("[RunautomatedDisloc/createProject] " + e.getMessage());
+		}
+		finally {
+			if (db != null)  db.close();			
+		}
+	}
+
+
 }

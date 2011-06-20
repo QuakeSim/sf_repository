@@ -88,8 +88,9 @@ import org.apache.axis2.description.AxisService;
 
 public class AutomatedDislocBean implements Runnable, ServiceLifeCycle {
 	 static final int EARTHQUAKE_SLIP_SCENARIOS=4;
-	 static final int ONE_HOUR_IN_MILLISECONDS=6*3600000; //3600000;
-	 static final int ONE_HOUR_IN_SECONDS=6*3600;
+	 static final int ONE_HOUR_IN_MILLISECONDS=3600*1000; //3600000;
+	 static final int ONE_HOUR_IN_SECONDS=3600;
+	 static final int SCAN_TRIGGER_INTERVAL=180; //6*ONE_HOUR_IN_SECONDS;
 	 private static Logger logger=LoggerFactory.getLogger(AutomatedDislocBean.class);
 
 	 private Scheduler scheduler;
@@ -131,7 +132,7 @@ public class AutomatedDislocBean implements Runnable, ServiceLifeCycle {
 	 			job.getJobDataMap().put(RunautomatedDisloc.URL_FOR_AUTOCALLS,getUrl());
 
 	 			Trigger trigger=newTrigger().withIdentity("trigger1","group1").startNow()
-	 				 .withSchedule(simpleSchedule().withIntervalInSeconds(ONE_HOUR_IN_SECONDS).repeatForever()).build();
+	 				 .withSchedule(simpleSchedule().withIntervalInSeconds(SCAN_TRIGGER_INTERVAL).repeatForever()).build();
 	 			scheduler.scheduleJob(job,trigger);
 
 	 			scheduler.start();
@@ -170,23 +171,7 @@ public class AutomatedDislocBean implements Runnable, ServiceLifeCycle {
 					 printUsage();
 				}
 		  }
-	 }
-	 
-	 /**
-	  *The input is the URL of the RSS/Atom feed we are processing.
-	  */
-	 // public void run(String url) {
-	 // 	  logger.info("URL for feed:"+url);
-		  
-	 // 	  //Really necessary to use a thread here?
-	 // 	  RunautomatedDisloc rd = new RunautomatedDisloc(url);
-		  
-	 // 	  //Only use one of these options
-	 // 	  //1. Use start() to run as a separate thread.  
-	 // 	  //rd.start();
-	 // 	  //2. Use run() to run this just as a regular command.
-	 // 	  rd.run(url);
-	 // }	
+	 }	 
 }
 
 	 

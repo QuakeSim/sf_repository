@@ -1,6 +1,6 @@
 package cgl.quakesim.automateddisloc;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -17,13 +17,14 @@ import org.xml.sax.SAXException;
 
 
 public class CglGeoRssParser {
-	
-	DocumentBuilder db = null;
-	Document doc = null;
-	Element doce = null;
+	 
+	 DocumentBuilder db = null;
+	 Document doc = null;
+	 Element doce = null;
+	 
 
-	public CglGeoRssParser() {		
-	}
+	 public CglGeoRssParser() {		
+	 }
 	
 	 /**
 	  * Parse the RSS feed, hoping it is good XML.  This method 
@@ -31,35 +32,33 @@ public class CglGeoRssParser {
 	  * be used by getEntryList() below.
 	  */
 	public void parse(String url) {		
-			
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			
-			URL u = null;
-			try {
-				u = new URL(url);
-				db = null;
-				try {
+		 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();			
+		 URL u = null;
+		 try {
+			  u = new URL(url);
+			  db = null;
+			  try {
 					db = dbf.newDocumentBuilder();
-				} catch (ParserConfigurationException e) {
+			  } catch (ParserConfigurationException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-			
-				doc = db.parse(u.openStream());
-				doce = doc.getDocumentElement();
-				
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch blockEnr
-				e.printStackTrace();
-			} catch (SAXException e) {
+			  }
+			  
+			  doc = db.parse(u.openStream());
+			  doce = doc.getDocumentElement();
+			  
+		 } catch (MalformedURLException e) {
+			  // TODO Auto-generated catch blockEnr
+			  e.printStackTrace();
+		 } catch (SAXException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
+			  e.printStackTrace();
+		 } catch (IOException e) {
+			  // TODO Auto-generated catch block
+			  e.printStackTrace();
+		 }			
 	}
-	
+	 
 	 /**
 	  * Returns the earthquake entries as a list of Entry objects.  
 	  * Note "entry" is a tag used by RSS. USGS uses it to 
@@ -80,7 +79,6 @@ public class CglGeoRssParser {
 			en.setUpdated(e.getElementsByTagName("updated").item(0).getTextContent());
 			en.setGeorss_point(e.getElementsByTagName("georss:point").item(0).getTextContent());
 			en.setGeorss_elev(e.getElementsByTagName("georss:elev").item(0).getTextContent());
-			
 			
 			entry_list.add(en);
 		}

@@ -64,7 +64,7 @@ function dataTableSelectOneRadio(radio) {
 
 			<h:outputText id="message1" escape="false"
 							  rendered="#{!(empty SimplexBean.myarchivedFileEntryList)}"							  
-							  value="You have the following archived data files. Download the input and output files for more information on the data. <br/>" />
+							  value="You have the following archived data files.  <b>NOTE:</b>Simplex may ktake several minutes to complete, so your newly created project's links may be broken. Check your email for job completion notification. <br/>" />
 			
 			<h:dataTable border="1"
 							 id="SimplexOutputPanel"
