@@ -981,12 +981,12 @@
 			nMarkerDoneForNewDate++;
 		}
 
-		var mapBounds = map.getBounds();
-		var sw = mapBounds.getSouthWest();
-		var ne = mapBounds.getNorthEast();
-		if (station[1] < sw.lat() || station[1] > ne.lat() || station[2] < sw.lng() || station[2] > ne.lng()) {
-			map.centerAndZoom(new GPoint(station[2], station[1]), 10);
-		}
+		//var mapBounds = map.getBounds();
+		//var sw = mapBounds.getSouthWest();
+		//var ne = mapBounds.getNorthEast();
+		//if (station[1] < sw.lat() || station[1] > ne.lat() || station[2] < sw.lng() || station[2] > ne.lng()) {
+		//	map.centerAndZoom(new GPoint(station[2], station[1]), 10);
+		//}
 
 		var stationId = station[0];
 		var lat = station[1];
@@ -994,8 +994,9 @@
 		var htmlStr2 = "<div align='center'><table border='0'><tr><td colspan='2'><b>Station ID</b>: " + stationId + "</td></tr>" +
 						"<tr><td><b>Longitude</b>: " + long + "</td><td><b>Latitude</b>: " + lat + "</td></tr>" +
 						"<tr><td colspan='2'><hr/></td></tr>" +
-						"<tr><td colspan='2'><button id='showTsBtn' onClick='showTsBtnClick(this)'>View Time Series</button></td></tr></table></div>";
-		station[6].openInfoWindowHtml(htmlStr2, {suppressMapPan:true});
+						"<tr><td colspan='2'><button id='showTsBtn' style='background-color:lightgreen' onClick='showTsBtnClick(this)'>View Time Series</button></td></tr></table></div>";
+		//station[6].openInfoWindowHtml(htmlStr2, {suppressMapPan:true});
+		station[6].openInfoWindowHtml(htmlStr2);
 	}
 	
 	function showTsBtnClick(obj) {

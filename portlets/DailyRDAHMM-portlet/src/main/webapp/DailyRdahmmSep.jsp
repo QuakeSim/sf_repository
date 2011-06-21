@@ -235,7 +235,8 @@
 		var preFix = urlPattern.replace(/{!station-id!}/g, stationId) + "/" + dirPattern.replace(/{!station-id!}/g, stationId) + "/";
 		var swfURL = preFix + swfInputPattern.replace(/{!station-id!}/g, stationId);
 		var modelLink = urlPattern.replace(/{!station-id!}/g, stationId) + "/" + modelPattern.replace(/{!station-id!}/g, stationId);
-		var outputTable = "<table border='0'><tr><td><a target='_blank' href='" + preFix + inputPattern.replace(/{!station-id!}/g, stationId) + "'>Input File</a></td></tr>"
+		var outputTable = "<table border='0'><tr><td align='center'><b>Output files</b></td></tr>"
+							+ "<tr><td><a target='_blank' href='" + preFix + inputPattern.replace(/{!station-id!}/g, stationId) + "'>Input File</a></td></tr>"
 							+ "<tr><td><a target='_blank' href='" +  preFix + rawInputPattern.replace(/{!station-id!}/g, stationId) + "'>All Raw Input Data</a></td></tr>"
 							+ "<tr><td><a target='_blank' href='" +  preFix + rangePattern.replace(/{!station-id!}/g, stationId) + "'>Range</a></td></tr>"
 							+ "<tr><td><a target='_blank' href='" +  preFix + qPattern.replace(/{!station-id!}/g, stationId) + "'>Optimal State Sequence File (Q)</a></td></tr>"
@@ -251,7 +252,7 @@
 							+ "<tr><td><a target='_blank' href='" +  swfURL + "'>Plot Component Input</a></td></tr>"
 							+ "<tr><td><b><a target='_blank' href='" +  modelLink + "'>Get all model files</a></b></td></tr></table>";
           
-		var changeTable = "<table border='1'> <tr> <td>Date</td> <td nowrap='nowrap'>Old State</td> <td nowrap='nowrap'>New State</td> </tr>";
+		var changeTable = "<table border='1'><tr><td>Date</td><td nowrap='nowrap'>Old State</td> <td nowrap='nowrap'>New State</td></tr>";
 		var dateTmp = new Date();
 		if (selectedStation[5] != null) {
 			var changeIdx = 0;
@@ -270,11 +271,15 @@
 		var htmlStr2 = "<div align='center'><table border='0'><tr><td colspan='2'><b>Station ID</b>: " + stationId + "</td></tr>" +
 						"<tr><td><b>Longitude</b>: " + long + "</td><td><b>Latitude</b>: " + lat + "</td></tr>" +
 						"<tr><td colspan='2'><hr/></td></tr>" +
-						"<tr><td align='center'><b>State Changes</b></td><td align='center'><b>Output files</b></td></tr>" +
-						"<tr valign='top'><td width='220'>" + changeTable + "</td><td width='220'>" + outputTable + "</td></tr>" +
-						"<tr><td colspan='2'><button id='showTsBtn' onClick='showTsBtnClick(this)'>View Time Series</button></td></tr></table></div>";
+						"<tr valign='top'><td width='230'>" +
+						"<table><tr><td align='center'><b>State Changes</b></td></tr>" +
+						"<tr><td>" + changeTable + "</td></tr>" +
+						"<tr><td><button id='showTsBtn' style='background-color:lightgreen' onClick='showTsBtnClick(this)'>View Time Series</button></td></tr>" +
+						"</table></td><td width='220'>" + outputTable + "</td></tr>" +
+						"</table></div>";
 		
-		marker.openInfoWindowHtml(htmlStr2, {suppressMapPan:true});
+		//marker.openInfoWindowHtml(htmlStr2, {suppressMapPan:true});
+		marker.openInfoWindowHtml(htmlStr2);
 	}
 
 	function showTsBtnClick(obj) {
@@ -712,12 +717,12 @@
 			nMarkerDoneForNewDate++;
 		}
 
-		var mapBounds = map.getBounds();
-		var sw = mapBounds.getSouthWest();
-		var ne = mapBounds.getNorthEast();
-		if (station[1] < sw.lat() || station[1] > ne.lat() || station[2] < sw.lng() || station[2] > ne.lng()) {
-			map.centerAndZoom(new GPoint(station[2], station[1]), 11);
-		}
+		//var mapBounds = map.getBounds();
+		//var sw = mapBounds.getSouthWest();
+		//var ne = mapBounds.getNorthEast();
+		//if (station[1] < sw.lat() || station[1] > ne.lat() || station[2] < sw.lng() || station[2] > ne.lng()) {
+			//map.centerAndZoom(new GPoint(station[2], station[1]), 11);
+		//}
 		selectedStation = station;
 		markerClickBody(station[6], selectedStation);
 	}
