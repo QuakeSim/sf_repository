@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:components="components.*"
-	creationComplete="init();" xmlns:code="http://code.google.com/p/flexlib/" currentState="Longitude">
+	creationComplete="init();" xmlns:code="http://code.google.com/p/flexlib/" currentState="">
 		<mx:states>
 				<mx:State name="Longitude">
 						<!-- mx:SetProperty target="{stateToggle}" name="selectedIndex" value="0"/ -->
@@ -315,7 +315,7 @@
 	<mx:HTTPService id="getInfo" url="feeds/testInfo" result="getInfo_resultHandler(event)" resultFormat="text"/>
 	<mx:Panel height="100%" width="100%" title="Station: {stationID}  Reference point: [Longitude {long}, Latitude {lat}, Height {hgt}]">
 		<mx:VBox height="100%" width="100%">
-			<mx:ToggleButtonBar selectedIndex="0" id="stateToggle" itemClick="stateChange();">
+			<mx:ToggleButtonBar selectedIndex="3" id="stateToggle" itemClick="stateChange();">
 				<mx:dataProvider>
 					<mx:Array>
 						<mx:String>Longitude</mx:String>

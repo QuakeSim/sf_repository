@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:components="components.*"
-	creationComplete="init();" xmlns:code="http://code.google.com/p/flexlib/" currentState="Longitude">
+	creationComplete="init();" xmlns:code="http://code.google.com/p/flexlib/" currentState="">
 		<mx:states>
 				<mx:State name="Longitude">
 						<!-- mx:SetProperty target="{stateToggle}" name="selectedIndex" value="0"/ -->
 						<mx:RemoveChild target="{eastChart}"/>
 						<mx:RemoveChild target="{upChart}"/>
 						<mx:RemoveChild target="{label2}"/>
-						<mx:RemoveChild target="{label3}"/>						
+						<mx:RemoveChild target="{label3}"/>
 				</mx:State>
 				<mx:State name="Latitude">
+						<!-- mx:SetProperty target="{stateToggle}" name="selectedIndex" value="1"/ -->
 						<mx:RemoveChild target="{northChart}"/>
 						<mx:RemoveChild target="{upChart}"/>
-						<!-- mx:SetProperty target="{stateToggle}" name="selectedIndex" value="1"/ -->
 						<mx:RemoveChild target="{label1}"/>
 						<mx:RemoveChild target="{label3}"/>
 				</mx:State>
@@ -219,7 +219,7 @@
 	<mx:HTTPService id="getInfo" url="feeds/testInfo" result="getInfo_resultHandler(event)" resultFormat="text"/>
 	<mx:Panel height="100%" width="100%" title="Station : {stationID} Latitude : {lat} Longitude : {long}">
 		<mx:VBox height="100%" width="100%">
-			<mx:ToggleButtonBar selectedIndex="0" id="stateToggle" itemClick="stateChange();">
+			<mx:ToggleButtonBar selectedIndex="3" id="stateToggle" itemClick="stateChange();">
 				<mx:dataProvider>
 					<mx:Array>
 						<mx:String>Longitude</mx:String>
@@ -230,19 +230,13 @@
 				</mx:dataProvider>
 			</mx:ToggleButtonBar>
 			
-			<mx:VBox width="100%" height="100%">
-				<mx:Label text="Longitude (degree)" id="label1"/>
-				<components:rdahmmLineChart  data="{northData}" id="northChart" maxValLen="{maxValLen}" height="100%" width="100%" beginDate="{startDate.selectedDate}" endDate="{endDate.selectedDate}"/>
-				<mx:Label text="Latitude (degree)" id="label2"/>
-				<components:rdahmmLineChart data="{eastData}" id="eastChart" maxValLen="{maxValLen}" height="100%" width="100%" beginDate="{startDate.selectedDate}" endDate="{endDate.selectedDate}"/>
-				<mx:Label text="Height (meter)" id="label3"/>
-				<components:rdahmmLineChart data="{upData}" id="upChart" maxValLen="{maxValLen}" height="100%" width="100%" beginDate="{startDate.selectedDate}" endDate="{endDate.selectedDate}"/>			
-			</mx:VBox>
-			<!--<mx:LineChart id="timeChart" dataProvider="{upData}" height="30" verticalAxisStyleNames="tickPlacement:none" horizontalAxisStyleNames="tickPlacement:none,">
-					<mx:series>
-						<mx:LineSeries displayName="Series 1" yField="value"/>
-					</mx:series>
-				</mx:LineChart>-->
+			<mx:Label text="Longitude (degree)" id="label1"/>
+			<components:rdahmmLineChart  data="{northData}" id="northChart" maxValLen="{maxValLen}" height="100%" width="100%" beginDate="{startDate.selectedDate}" endDate="{endDate.selectedDate}"/>			
+			<mx:Label text="Latitude (degree)" id="label2"/>
+			<components:rdahmmLineChart data="{eastData}" id="eastChart" maxValLen="{maxValLen}" height="100%" width="100%" beginDate="{startDate.selectedDate}" endDate="{endDate.selectedDate}"/>
+			<mx:Label text="Height (meter)" id="label3"/>
+			<components:rdahmmLineChart data="{upData}" id="upChart" maxValLen="{maxValLen}" height="100%" width="100%" beginDate="{startDate.selectedDate}" endDate="{endDate.selectedDate}"/>			
+			
 			<code:HSlider id="dateRange" allowThumbOverlap="false" thumbCount="2" showDataTip="false"
 				liveDragging="true" lockRegionsWhileDragging="true"
 				change="dateChange();" width="100%" 

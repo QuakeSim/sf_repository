@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:LineChart xmlns:mx="http://www.adobe.com/2006/mxml"
-	creationComplete="init()" dataProvider="{data}" showDataTips="true" dataTipFunction="tipData" dataTipMode="single">
+	creationComplete="init()" dataProvider="{data}" showDataTips="true" dataTipFunction="tipData" dataTipMode="single" verticalAxisRatio="0.9">
 	<mx:Script>
 		<![CDATA[
 			import mx.graphics.Stroke;
 			import mx.charts.HitData;
 			import mx.collections.ArrayCollection;
 			import mx.charts.chartClasses.IAxisRenderer;
+			import mx.charts.chartClasses.ChartLabel;
 			public var beginDate:Date;
 			public var endDate:Date;
 			[Bindable] public var maxValLen:Number;
@@ -48,14 +49,18 @@
 				return "Date : "+(hitData.item.date as Date).toDateString()+"\nValue :"+hitData.item.value+"\nState : "+hitData.item.state;
 			}
 			
+			// this is just for lining the vertical axes up
 			private function leftAxisLabelFunc(axisRenderer:IAxisRenderer, label:String):String {
 				var spaceCount:Number = maxValLen - label.length;
+				
+				// 2.5 is an number we get from experience at which we need to put an extra space to keep the line-up
+				spaceCount = spaceCount + Math.round(spaceCount / 2.5);
 				if (spaceCount > 0) {
-					var tail:String = " ";
+					var head:String = "";
 					for (var i:Number=1; i<spaceCount; i++) {
-						tail = tail + " ";
+						head = head + " ";
 					}
-					return label + tail;
+					return head + label + " ";
 				} else {
 					return label;
 				}
@@ -95,9 +100,10 @@
 	</mx:verticalAxis>
 	
 	<mx:verticalAxisRenderers>
-		<mx:AxisRenderer id="rv1" placement="left" axis="{v1}"/>
+		<mx:AxisRenderer id="rv1" placement="left" axis="{v1}" tickPlacement="inside" tickLength="5">
+		</mx:AxisRenderer>
 	</mx:verticalAxisRenderers>
-	
+
 	<mx:series>
 		<mx:LineSeries id="baseLine" lineStroke="{s0}" yField="value" xField="date" stroke="{s0}"/>
 		<mx:LineSeries id="line1" lineStroke="{s1}" yField="value1" xField="date" stroke="{s1}"/>
