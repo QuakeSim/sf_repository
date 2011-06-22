@@ -90,7 +90,7 @@ public class AutomatedDislocBean implements Runnable, ServiceLifeCycle {
 	 static final int EARTHQUAKE_SLIP_SCENARIOS=4;
 	 static final int ONE_HOUR_IN_MILLISECONDS=3600*1000; //3600000;
 	 static final int ONE_HOUR_IN_SECONDS=3600;
-	 static final int SCAN_TRIGGER_INTERVAL=180; //6*ONE_HOUR_IN_SECONDS;
+	 static final int SCAN_TRIGGER_INTERVAL=ONE_HOUR_IN_SECONDS;
 	 private static Logger logger=LoggerFactory.getLogger(AutomatedDislocBean.class);
 
 	 private Scheduler scheduler;

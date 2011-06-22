@@ -30,30 +30,26 @@
  </head>
  
  <body onload="myInit()" onunload="GUnload()"> 
-	 
-	 <script type="text/javascript">
-	 //<![CDATA[
-	 //Any "onload" operations for subcomponent includes need to go here.
-	 function myInit() {
-		  //Script below initializes the tree view for the FaultMapPanelFrame sidebar.
-		  $("#browser").treeview({
-				animated:"normal",
-				persist: "cookie"
-		  });
-	 }
-//]]>
-</script>
-	
+	 	
 	<f:view>
 	  
 	  <h:outputText id="abdv1" styleClass="header2" value="Disloc Results Map"/>   
 	  <f:verbatim>
 		 <p>
 		 This map shows results of surface deformation calculations for earthquakes
-		 from the USGS RSS feed for M>5. See <a href="http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml">http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml</a>.  Four different
-		 scenarios are calculated for each event.  
+		 from the USGS RSS feed for M>5. See <a href="http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml">http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml</a>.</p>  
+		 <p>Four different scenarios are calculated for each event.  
+		 <ol>
+			<li>Dip Angle=90 degrees, Strike Angle=0 degrees, strike slip, no dip slip</li>
+			<li>Dip Angle=90 degrees, Strike Angle=45 degrees, strike slip, no dip slip</li>
+			<li>Dip Angle=45 degrees, Strike Angle=0 degrees, dip slip, no strike slip</li>
+			<li>Dip Angle=45 degrees, Strike Angle=90 degrees, dip slip, no strike slip</li>
+		 </ol>
+		 Interferograms are calculated with elevation angle=60, azimuth=0, and frequency 1.26 GHz. 
+		 </p>
+		 <p><b>Usage Instructions</b>
 		 <ul>
-			<li>Click the "+" or "-" icon to expand or contract the listings for a particular event.
+			<li>Click the "+" or "-" icon to expand or contract the listings for an event.
 			<li>Click the earthquake name link to go its location. </li>
 			<li>Click the checkbox next to "InSAR Plot" or "Surface Displacement" to toggle results display on/off.</li>
 			<li>Click the "InSAR Plot" or "Surface Diplacement" links to download the source KML.
@@ -100,10 +96,6 @@
 		 //]]>
 		 %>
 		 
-		 <f:verbatim>
-			<script type="text/javascript">
-			</script>
-			
 			<h:panelGrid id="faultMapsideGrid" columns="2" border="1">
 			  <f:verbatim>
 				 <div id="faultMapside" style="width: 300px; height: 600px; overflow:auto;"></div>
@@ -112,11 +104,20 @@
 				 <div id="faultMap" style="width: 620px; height: 600px;"></div>
 			  </f:verbatim> 
 			</h:panelGrid>
-		 </f:verbatim>
-		 
-		 <f:verbatim>   
-			<script type="text/javascript">
-			  //<![CDATA[ //Use for formatting.
+
+		 <f:verbatim>
+		 <script type="text/javascript">
+			//<![CDATA[
+			//Any "onload" operations for subcomponent includes need to go here.
+			function myInit() {
+			//Script below initializes the tree view for the FaultMapPanelFrame sidebar.
+			$("#browser").treeview({
+			animated:"normal",
+			persist: "cookie",
+			collapsed: true
+			});
+			}
+
 			  // These are used by the fault map 	
 			  var faultMap=null;
 			  faultMap=new GMap2(document.getElementById("faultMap"));

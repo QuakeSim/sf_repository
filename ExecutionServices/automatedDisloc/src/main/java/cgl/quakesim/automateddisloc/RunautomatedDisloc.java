@@ -459,7 +459,7 @@ public class RunautomatedDisloc implements Job {
 		}
 		logger.info("[AutomatedDislocBean/runBlockingDislocJSF] Finished");
 		
-		return ourls
+		return ourls;
 	}
 	
 	 /**
