@@ -20,6 +20,11 @@ public class Observation {
 
 	String obsvRefSite;
 
+	 //These are optional parameters used by SAR (type 7) observations
+	 String obsvAzimuth;
+
+	 String obsvElevation;
+
 	public Observation() {
 
 	}
@@ -38,7 +43,27 @@ public class Observation {
 		obsvLocationNorth = "";
 
 		obsvRefSite = "";
+
+		obsvAzimuth = "";
+
+		obsvElevation = "";
 	}
+
+	 public void setObsvAzimuth(String azimuth){
+		  this.azimuth=azimuth;
+	 }
+	 
+	 public String getObsvAzimuth(){
+		  return this.azimuth;
+	 }
+
+	 public void setObsvElevation(String elevation){
+		  this.elevation=elevation;
+	 }
+
+	 public String getObsvElevation(){
+		  return this.elevation;
+	 }
 
 	public void setObsvName(String tmp_str) {
 		this.obsvName = tmp_str;
