@@ -520,7 +520,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 		String outputFileDestLoc=destDir + "/" + projectName + ".output";
 		String stdoutFileDestLoc=destDir + "/" + projectName + ".stdout";
 		String faultFileDestLoc=destDir + "/" + projectName + ".fault";
-		String[] kmlurls=drRunKmlGenerator(KmlGeneratorServiceUrl,userName,projectName,jobUIDStamp);
+		String[] kmlurls=dryRunKmlGenerator(KmlGeneratorServiceUrl,userName,projectName,jobUIDStamp);
 		try {
 			 //Make the directory and copy the input file, which does exist at this point.
 			makeWorkDir(destDir);
@@ -1261,7 +1261,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 																	userName,
 																	projectName,
 																	jobUIDStamp);
-		  
+		  String [] kmlurls=new String[4];
 		  kmlurls[0] = totalKmlUrl;
 		  kmlurls[1] = ""; //observKmlUrl;
 		  kmlurls[2] = ""; //calcKmlUrl;
