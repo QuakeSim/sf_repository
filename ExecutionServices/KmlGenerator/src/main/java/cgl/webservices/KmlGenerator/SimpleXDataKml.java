@@ -115,6 +115,11 @@ public class SimpleXDataKml {
 		  System.out.println("datalist.length = " + datalist.length);
 	 }
 	 
+	 /**
+	  * This method actually makes the KML file and returns the URL. It can 
+	  * be invoked as a dry-run method (just to generate th URL) in the case of
+	  * asynchronous invocation. 
+	  */
 	 public String runMakeKml (String ServerTag,String UserName, String ProjectName, String JobUID) {
 		  System.out.println("[SimpleXDataKml/runMakeKml] started");		  
 		  String destDir=generateOutputDestDir(ServerTag,UserName,ProjectName,JobUID); 
@@ -129,7 +134,7 @@ public class SimpleXDataKml {
 		  
 		 // System.out.println("Printing to file");
 		 // this.printToFile(this.doc.toKML(), destDir + "/" + ProjectName + JobUID +".kml"); 
-		  
+
 		  try { 
 				System.out.println("[SimpleXDataKml/runMakeKml] Directly printing KML to "+destDir + "/" + ProjectName + JobUID +".kml");
 				
