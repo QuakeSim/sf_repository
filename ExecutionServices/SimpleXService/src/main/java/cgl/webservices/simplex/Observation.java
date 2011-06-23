@@ -50,19 +50,19 @@ public class Observation {
 	}
 
 	 public void setObsvAzimuth(String azimuth){
-		  this.azimuth=azimuth;
+		  this.obsvAzimuth=azimuth;
 	 }
 	 
 	 public String getObsvAzimuth(){
-		  return this.azimuth;
+		  return this.obsvAzimuth;
 	 }
 
 	 public void setObsvElevation(String elevation){
-		  this.elevation=elevation;
+		  this.obsvElevation=elevation;
 	 }
 
 	 public String getObsvElevation(){
-		  return this.elevation;
+		  return this.obsvElevation;
 	 }
 
 	public void setObsvName(String tmp_str) {

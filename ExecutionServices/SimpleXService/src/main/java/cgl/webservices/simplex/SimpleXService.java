@@ -302,7 +302,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 				// These are optional parameters for Type 7 (SAR LOS) observables
 				if(obsv[i].obsvElevation!=null){
 					 pw.print(obsv[i].obsvElevation);
-					 pw.print(space)
+					 pw.print(space);
 				}
 				if(obsv[i].obsvAzimuth!=null){
 					 pw.print(obsv[i].obsvAzimuth);
