@@ -1247,21 +1247,27 @@ public class SimpleXService extends AntVisco implements Runnable {
 	 /**
 	  * Dry-run the KML service to make the placeholder URL
 	  */
-	 protected String[] dryRunKmlGenerator(String workDir,
-													  String projectName,
-													  String KmlGeneratorServiceUrl,
-													  String lon,
-													  String lat,
-													  Fault[] faults,
-													  String userName,
-													  String jobUIDStamp){
-		  kmlService = locator
-				.getKmlGenerator(new URL(KmlGeneratorServiceUrl));
-		  String totalKmlUrl = kmlService.runMakeKml("", 
-																	userName,
-																	projectName,
-																	jobUIDStamp);
+	 protected String[] dryRunKmlGenerator(String KmlGeneratorServiceUrl,
+														String userName,
+														String projectName,
+														String jobUIDStamp) {
 		  String [] kmlurls=new String[4];
+		  String totalKmlUrl="";
+
+		  try {
+				SimpleXDataKml kmlService;
+				SimpleXDataKmlServiceLocator locator = new SimpleXDataKmlServiceLocator();
+				kmlService = locator
+					 .getKmlGenerator(new URL(KmlGeneratorServiceUrl));
+				totalKmlUrl = kmlService.runMakeKml("", 
+																userName,
+																		 projectName,
+																jobUIDStamp);
+		  }
+		  catch(Exception ex) {
+				ex.printStackTrace();
+		  }
+		  
 		  kmlurls[0] = totalKmlUrl;
 		  kmlurls[1] = ""; //observKmlUrl;
 		  kmlurls[2] = ""; //calcKmlUrl;
