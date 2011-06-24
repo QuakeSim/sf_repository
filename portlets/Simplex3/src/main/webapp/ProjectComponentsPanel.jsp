@@ -407,6 +407,9 @@
 				  <h:outputText id="obsvTypeUp"
 									 rendered="#{myentry4.obsvType==3}"
 									 value="Up"/>
+				  <h:outputText id="obsvTypeSar"
+									 rendered="#{myentry4.obsvType==7}"
+									 value="SAR"/>
 				</h:column>
 				
 				<h:column>

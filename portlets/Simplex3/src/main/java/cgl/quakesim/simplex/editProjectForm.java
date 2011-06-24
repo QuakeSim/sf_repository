@@ -29,6 +29,7 @@ public class editProjectForm extends GenericProjectBean {
 	 
 	 String obsvTextArea="";
 	 String obsvAriaTextArea="";
+	 String obsvSARTextArea="";
 	 String coseismicTextArea="";
 	 Fault currentFault = new Fault();
 	 Observation currentObservation = new Observation();
@@ -51,6 +52,8 @@ public class editProjectForm extends GenericProjectBean {
 	 boolean renderAriaObsvCutPaste=false;
 	 boolean renderProjectMap=false;
 	 boolean renderCoseismicDisp=false;
+	 boolean renderSARObsvCutPaste=false;
+	 boolean renderProjectParams=false;
 
 	 String faultSelectionCode = "";
 	 boolean renderAddFaultFromDBForm = false;
@@ -124,13 +127,31 @@ public class editProjectForm extends GenericProjectBean {
 		 renderUnavcoGPSStationMap=false;
 		 renderAriaObsvCutPaste=false;
 		 renderCoseismicDisp=false;
+		 renderSARObsvCutPaste=false;
 		 renderProjectMap=false;
+		 renderProjectParams=false;
 	}	
 	 
 	 public void toggleShowObsvEntries(ActionEvent ev) {
 		  renderObsvEntries=!renderObsvEntries;
 	 }
 
+	 /**
+	  * These are convenience wrappers around toggleProjectSelection()
+	  */
+	 public void toggleProjectSelection1(ActionEvent ev) {
+		  toggleProjectSelection(ev);
+	 }
+	 public void toggleProjectSelection2(ActionEvent ev) {
+		  toggleProjectSelection(ev);
+	 }
+	 public void toggleProjectSelection3(ActionEvent ev) {
+		  toggleProjectSelection(ev);
+	 }
+	 
+	 /**
+	  * Handle the selection action.
+	  */
 	 public void toggleProjectSelection(ActionEvent ev) {
 		initEditFormsSelection();
 		if (projectSelectionCode.equals("ShowObservation")) {
@@ -180,9 +201,19 @@ public class editProjectForm extends GenericProjectBean {
 			 logger.info("Showing Aria cut and paste field: "+renderAriaObsvCutPaste);
 		}
 
+		else if(projectSelectionCode.equals("ShowSARObsvCutPaste")) {
+			 renderSARObsvCutPaste=!renderSARObsvCutPaste;
+			 logger.info("Showing SAR cut and paste field: "+renderSARObsvCutPaste);
+		}
+
 		else if(projectSelectionCode.equals("ShowCoseismicCutPaste")) {
 			 renderCoseismicDisp=!renderCoseismicDisp;
 			 logger.info("Showing coseismic cut and paste field: "+renderCoseismicDisp);
+		}
+
+		else if(projectSelectionCode.equals("ShowProjectParams")) {
+			 renderProjectParams=!renderProjectParams;
+			 logger.info("Showing project params: "+renderProjectParams);
 		}
 
 		else if(projectSelectionCode.equals("ShowProjectMap")) {
@@ -689,12 +720,28 @@ public class editProjectForm extends GenericProjectBean {
 		this.faultSelectionCode = tmp_str;
 	}
 
+	 public boolean getRenderProjectParams() {
+		  return this.renderProjectParams;
+	 }
+
+	 public void setRenderProjectParams(boolean renderProjectParams){
+		  this.renderProjectParams=renderProjectParams;
+	 }
+
 	 public boolean getRenderAriaObsvCutPaste() {
 		  return this.renderAriaObsvCutPaste;
 	 }
 
 	 public void setRenderAriaObsvCutPaste(boolean renderAriaObsvCutPaste){
 		  this.renderAriaObsvCutPaste=renderAriaObsvCutPaste;
+	 }
+
+	 public boolean getRenderSARObsvCutPaste() {
+		  return this.renderSARObsvCutPaste;
+	 }
+
+	 public void setRenderSARObsvCutPaste(boolean renderSARObsvCutPaste){
+		  this.renderSARObsvCutPaste=renderSARObsvCutPaste;
 	 }
 	 
 	 public void setRenderCoseismicDisp(boolean renderCoseismicDisp){
@@ -841,6 +888,14 @@ public class editProjectForm extends GenericProjectBean {
 	 
 	 public String getObsvAriaTextArea() {
 		  return obsvAriaTextArea;
+	 }
+
+	 public void setObsvSARTextArea(String obsvSARTextArea) {
+		  this.obsvSARTextArea=obsvSARTextArea;
+	 }
+	 
+	 public String getObsvSARTextArea() {
+		  return obsvSARTextArea;
 	 }
 
 	 public void setObsvTextArea(String obsvTextArea) {

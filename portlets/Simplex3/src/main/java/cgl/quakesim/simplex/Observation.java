@@ -8,6 +8,10 @@
 package cgl.quakesim.simplex;
 
 public class Observation  implements java.io.Serializable {
+    private java.lang.String obsvAzimuth;
+
+    private java.lang.String obsvElevation;
+
     private java.lang.String obsvError;
 
     private java.lang.String obsvLocationEast;
@@ -26,6 +30,8 @@ public class Observation  implements java.io.Serializable {
     }
 
     public Observation(
+           java.lang.String obsvAzimuth,
+           java.lang.String obsvElevation,
            java.lang.String obsvError,
            java.lang.String obsvLocationEast,
            java.lang.String obsvLocationNorth,
@@ -33,6 +39,8 @@ public class Observation  implements java.io.Serializable {
            java.lang.String obsvRefSite,
            java.lang.String obsvType,
            java.lang.String obsvValue) {
+           this.obsvAzimuth = obsvAzimuth;
+           this.obsvElevation = obsvElevation;
            this.obsvError = obsvError;
            this.obsvLocationEast = obsvLocationEast;
            this.obsvLocationNorth = obsvLocationNorth;
@@ -40,6 +48,46 @@ public class Observation  implements java.io.Serializable {
            this.obsvRefSite = obsvRefSite;
            this.obsvType = obsvType;
            this.obsvValue = obsvValue;
+    }
+
+
+    /**
+     * Gets the obsvAzimuth value for this Observation.
+     * 
+     * @return obsvAzimuth
+     */
+    public java.lang.String getObsvAzimuth() {
+        return obsvAzimuth;
+    }
+
+
+    /**
+     * Sets the obsvAzimuth value for this Observation.
+     * 
+     * @param obsvAzimuth
+     */
+    public void setObsvAzimuth(java.lang.String obsvAzimuth) {
+        this.obsvAzimuth = obsvAzimuth;
+    }
+
+
+    /**
+     * Gets the obsvElevation value for this Observation.
+     * 
+     * @return obsvElevation
+     */
+    public java.lang.String getObsvElevation() {
+        return obsvElevation;
+    }
+
+
+    /**
+     * Sets the obsvElevation value for this Observation.
+     * 
+     * @param obsvElevation
+     */
+    public void setObsvElevation(java.lang.String obsvElevation) {
+        this.obsvElevation = obsvElevation;
     }
 
 
@@ -194,6 +242,12 @@ public class Observation  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
+            ((this.obsvAzimuth==null && other.getObsvAzimuth()==null) || 
+             (this.obsvAzimuth!=null &&
+              this.obsvAzimuth.equals(other.getObsvAzimuth()))) &&
+            ((this.obsvElevation==null && other.getObsvElevation()==null) || 
+             (this.obsvElevation!=null &&
+              this.obsvElevation.equals(other.getObsvElevation()))) &&
             ((this.obsvError==null && other.getObsvError()==null) || 
              (this.obsvError!=null &&
               this.obsvError.equals(other.getObsvError()))) &&
@@ -226,6 +280,12 @@ public class Observation  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
+        if (getObsvAzimuth() != null) {
+            _hashCode += getObsvAzimuth().hashCode();
+        }
+        if (getObsvElevation() != null) {
+            _hashCode += getObsvElevation().hashCode();
+        }
         if (getObsvError() != null) {
             _hashCode += getObsvError().hashCode();
         }
@@ -258,6 +318,18 @@ public class Observation  implements java.io.Serializable {
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("urn:SimpleXService", "Observation"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("obsvAzimuth");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "obsvAzimuth"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("obsvElevation");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "obsvElevation"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("obsvError");
         elemField.setXmlName(new javax.xml.namespace.QName("", "obsvError"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));

@@ -8,17 +8,16 @@
 		  <legend class="portlet-form-label"> Project Dashboard </legend>
 		</f:verbatim>
 	
-  <h:outputText id="instructionezzze" 
-					 escape="false"
-					 value="You must add at least one observation point and one fault 
-							  before you can run Simplex."/>
+		<f:verbatim>
+		  <p>You must add at least one observation point and one fault 
+		  before you can run Simplex.</p>
+		</f:verbatim>
   
-  <h:form id="selectprojSimplex">  
 	 <%-- This is the first row --%>
 	 <h:panelGrid id="simplexDashboardMenu" 
 					  cellspacing="3"
 					  columns="4" 
-					  border="0">
+					  border="1">
 		<h:outputText id="lkdrq4" escape="false"
 							 value="<b>Project Name:</b> #{SimplexBean.projectName}" />
 		<h:outputText id="lkdrq5" escape="false"
@@ -30,10 +29,38 @@
 	 </h:panelGrid>
 	 
 	 <%-- This is the second row --%>
+  <h:form id="selectprojSimplex">  
+	 <f:verbatim>
+		<p><b>Step 1:</b> Add fault models to your project.<br/>
+	 </f:verbatim>
 	 <h:selectOneMenu id="SimplexSelectionMenu"
-							title="Use this drop down to add faults and observation points to 
+							title="Use this drop down to add faults points to 
 									 your project."
 							value="#{SimplexBean.currentEditProjectForm.projectSelectionCode}">
+		<f:selectItem id="item33221"
+						  itemLabel="Add Fault from Map (Preferred)"
+						  itemValue="ShowFaultMap" />
+		
+		<f:selectItem id="item2"
+						  itemLabel="Create New Fault"
+						  itemValue="CreateNewFault" />
+
+	 </h:selectOneMenu>
+	 <h:commandButton id="simplexSelectButton1" value="Make Selection"
+							actionListener="#{SimplexBean.currentEditProjectForm.toggleProjectSelection1}">
+	 </h:commandButton>
+  <f:verbatim></p></f:verbatim>
+  </h:form>
+
+  <h:form id="simplexSelection2">
+	 <f:verbatim>
+		<p><b>Step 2:</b> Input your observations. <br/>
+	 </f:verbatim>
+	 <h:selectOneMenu id="SimplexSelectionMenu2"
+							title="Use this drop down to add observation points to 
+									 your project."
+							value="#{SimplexBean.currentEditProjectForm.projectSelectionCode}">
+
 		<f:selectItem id="itemSimplexUnavco"
 						  itemLabel="Add UNAVCO GSRM North America GPS Observation Point (Preferred)"
 						  itemValue="ShowUnavcoGPSObsv" />
@@ -51,30 +78,44 @@
 						  itemValue="ShowObsvCutPaste" />
 
 		<f:selectItem id="ariaDisplacementForm"
-						  itemLabel="Import ARIA Data Files"
+						  itemLabel="Import ARIA Data File"
 						  itemValue="ShowAriaObsvCutPaste" />
 
 		<f:selectItem id="coseismicDisplacementForm"
-						  itemLabel="Import Coseismic Data Files"
+						  itemLabel="Import Coseismic Data File"
 						  itemValue="ShowCoseismicCutPaste" />
-		
-		<f:selectItem id="item33221"
-						  itemLabel="Add Fault from Map (Preferred)"
-						  itemValue="ShowFaultMap" />
-		
-		<f:selectItem id="item2"
-						  itemLabel="Create New Fault"
-						  itemValue="CreateNewFault" />
 
+		<f:selectItem id="SAR2SimplexDisplacementForm"
+						  itemLabel="Import SAR2Simplex Data File"
+						  itemValue="ShowSARObsvCutPaste" />
+	 </h:selectOneMenu>
+	 <h:commandButton id="simplexSelectButton2" value="Make Selection"
+							actionListener="#{SimplexBean.currentEditProjectForm.toggleProjectSelection2}">
+	 </h:commandButton>
+	 <f:verbatim></p></f:verbatim>
+  </h:form>
+  <h:form id="simplexSelection3">
+	 <f:verbatim>
+		<p><b>Step 3:</b> (Optional) View a map of your project inputs and reset parameters. <br/>
+	 </f:verbatim>
+		
+	 <h:selectOneMenu id="SimplexSelectionMenu3"
+							title="Use this drop down to add observation points to 
+									 your project."
+							value="#{SimplexBean.currentEditProjectForm.projectSelectionCode}">
+
+		<f:selectItem id="itemProjectParams"
+						  itemLabel="Edit Project Params"
+						  itemValue="ShowProjectParams" />
 		<f:selectItem id="itemProjectMap"
 						  itemLabel="Show Project Map"
 						  itemValue="ShowProjectMap" />
 	 </h:selectOneMenu>
-	 <h:commandButton id="button1" value="Make Selection"
-							actionListener="#{SimplexBean.currentEditProjectForm.toggleProjectSelection}">
+	 <h:commandButton id="simplexSelectButton3" value="Make Selection"
+							actionListener="#{SimplexBean.currentEditProjectForm.toggleProjectSelection3}">
 	 </h:commandButton>
+	 <f:verbatim></p></f:verbatim>
   </h:form>
-  
   
   <h:form id="dflelerkljk185" 
 			 rendered="#{!empty SimplexBean.myObservationEntryForProjectList 

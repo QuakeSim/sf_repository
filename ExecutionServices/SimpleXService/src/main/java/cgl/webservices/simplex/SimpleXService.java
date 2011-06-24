@@ -1212,7 +1212,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 				else if (length > longestlength)
 					longestlength = length; 
 			}
-			logger.info("[SimpleXService/setArrowPlacemark] longestlength : " + longestlength);			
+			logger.debug("[SimpleXService/setArrowPlacemark] longestlength : " + longestlength);			
 			
 			double projectLength=(projectMaxX-projectMinX)*(projectMaxX-projectMinX);
 			projectLength+=(projectMaxY-projectMinY)*(projectMaxY-projectMinY);
@@ -1222,7 +1222,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			//project dimension.
 			double scaling = 0.7*projectLength/longestlength;
 			
-			logger.info("[SimpleXService/setArrowPlacemark] projectLength : " + projectLength);			
+			logger.debug("[SimpleXService/setArrowPlacemark] projectLength : " + projectLength);			
 			return scaling;
 		  
 	 }
@@ -1302,11 +1302,11 @@ public class SimpleXService extends AntVisco implements Runnable {
 			 //Determine the scaling. We'll need to use one value for all 
 			 //arrow plots, so we call the method multiple times.
 			 double arrowScale=setGlobalKmlArrowScale(residualPointEntries);
-			 logger.info("ArrowScale:"+arrowScale);
+			 logger.debug("ArrowScale:"+arrowScale);
 			 arrowScale=setGlobalKmlArrowScale(calcPointEntries);			
-			 logger.info("ArrowScale:"+arrowScale);
+			 logger.debug("ArrowScale:"+arrowScale);
 			 arrowScale=setGlobalKmlArrowScale(obsvPointEntries);
-			 logger.info("ArrowScale:"+arrowScale);
+			 logger.debug("ArrowScale:"+arrowScale);
 
 			//Set up the session wide service coordinates.
 			SimpleXDataKml kmlService;
