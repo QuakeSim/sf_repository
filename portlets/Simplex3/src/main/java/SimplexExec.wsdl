@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec" xmlns:intf="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="urn:SimpleXService" xmlns:tns2="urn:GatewayWS" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema targetNamespace="urn:SimpleXService" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec"/>
+   <import namespace="urn:GatewayWS"/>
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="Fault">
+    <sequence>
+     <element name="faultDepth" nillable="true" type="soapenc:string"/>
+     <element name="faultDepthVary" type="xsd:boolean"/>
+     <element name="faultDipAngle" nillable="true" type="soapenc:string"/>
+     <element name="faultDipAngleVary" type="xsd:boolean"/>
+     <element name="faultDipSlipVary" type="xsd:boolean"/>
+     <element name="faultLatEnds" nillable="true" type="soapenc:string"/>
+     <element name="faultLatStarts" nillable="true" type="soapenc:string"/>
+     <element name="faultLength" nillable="true" type="soapenc:string"/>
+     <element name="faultLengthVary" type="xsd:boolean"/>
+     <element name="faultLocationX" nillable="true" type="soapenc:string"/>
+     <element name="faultLocationY" nillable="true" type="soapenc:string"/>
+     <element name="faultLonEnds" nillable="true" type="soapenc:string"/>
+     <element name="faultLonStarts" nillable="true" type="soapenc:string"/>
+     <element name="faultName" nillable="true" type="soapenc:string"/>
+     <element name="faultOriginXVary" type="xsd:boolean"/>
+     <element name="faultOriginYVary" type="xsd:boolean"/>
+     <element name="faultRakeAngle" nillable="true" type="soapenc:string"/>
+     <element name="faultSlip" nillable="true" type="soapenc:string"/>
+     <element name="faultStrikeAngle" nillable="true" type="soapenc:string"/>
+     <element name="faultStrikeAngleVary" type="xsd:boolean"/>
+     <element name="faultStrikeSlipVary" type="xsd:boolean"/>
+     <element name="faultWidth" nillable="true" type="soapenc:string"/>
+     <element name="faultWidthVary" type="xsd:boolean"/>
+    </sequence>
+   </complexType>
+   <complexType name="Observation">
+    <sequence>
+     <element name="obsvAzimuth" nillable="true" type="soapenc:string"/>
+     <element name="obsvElevation" nillable="true" type="soapenc:string"/>
+     <element name="obsvError" nillable="true" type="soapenc:string"/>
+     <element name="obsvLocationEast" nillable="true" type="soapenc:string"/>
+     <element name="obsvLocationNorth" nillable="true" type="soapenc:string"/>
+     <element name="obsvName" nillable="true" type="soapenc:string"/>
+     <element name="obsvRefSite" nillable="true" type="soapenc:string"/>
+     <element name="obsvType" nillable="true" type="soapenc:string"/>
+     <element name="obsvValue" nillable="true" type="soapenc:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="SimpleXOutputBean">
+    <sequence>
+     <element name="creationDate" nillable="true" type="soapenc:string"/>
+     <element name="faultUrl" nillable="true" type="soapenc:string"/>
+     <element name="inputUrl" nillable="true" type="soapenc:string"/>
+     <element name="jobUIDStamp" nillable="true" type="soapenc:string"/>
+     <element name="kmlUrls" nillable="true" type="tns2:ArrayOf_soapenc_string"/>
+     <element name="logUrl" nillable="true" type="soapenc:string"/>
+     <element name="outputUrl" nillable="true" type="soapenc:string"/>
+     <element name="projectName" nillable="true" type="soapenc:string"/>
+     <element name="view" type="xsd:boolean"/>
+    </sequence>
+   </complexType>
+   <complexType name="GMTViewForm">
+    <sequence>
+     <element name="area_prop" nillable="true" type="soapenc:string"/>
+     <element name="bplot_background" type="xsd:boolean"/>
+     <element name="bplot_calc" type="xsd:boolean"/>
+     <element name="bplot_causative" type="xsd:boolean"/>
+     <element name="bplot_obs" type="xsd:boolean"/>
+     <element name="bplot_resid" type="xsd:boolean"/>
+     <element name="gmtPlotPdfUrl" nillable="true" type="soapenc:string"/>
+     <element name="mapticks_prop" nillable="true" type="soapenc:string"/>
+     <element name="plot_background" nillable="true" type="soapenc:string"/>
+     <element name="plot_calc" nillable="true" type="soapenc:string"/>
+     <element name="plot_causative" nillable="true" type="soapenc:string"/>
+     <element name="plot_obs" nillable="true" type="soapenc:string"/>
+     <element name="plot_resid" nillable="true" type="soapenc:string"/>
+     <element name="scale_prop" nillable="true" type="soapenc:string"/>
+     <element name="vectormag_prop" nillable="true" type="soapenc:string"/>
+    </sequence>
+   </complexType>
+  </schema>
+  <schema targetNamespace="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="urn:GatewayWS"/>
+   <import namespace="urn:SimpleXService"/>
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="ArrayOf_tns1_Fault">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:Fault[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="ArrayOf_tns1_Observation">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:Observation[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+  </schema>
+  <schema targetNamespace="urn:GatewayWS" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec"/>
+   <import namespace="urn:SimpleXService"/>
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="ArrayOf_soapenc_string">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="soapenc:string[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="runSimplexRequest1">
+
+      <wsdl:part name="userName" type="soapenc:string"/>
+
+      <wsdl:part name="projectName" type="soapenc:string"/>
+
+      <wsdl:part name="faults" type="impl:ArrayOf_tns1_Fault"/>
+
+      <wsdl:part name="obsv" type="impl:ArrayOf_tns1_Observation"/>
+
+      <wsdl:part name="startTemp" type="soapenc:string"/>
+
+      <wsdl:part name="maxIters" type="soapenc:string"/>
+
+      <wsdl:part name="origin_lon" type="soapenc:string"/>
+
+      <wsdl:part name="origin_lat" type="soapenc:string"/>
+
+      <wsdl:part name="KmlGeneratorUrl" type="soapenc:string"/>
+
+      <wsdl:part name="timeStamp" type="soapenc:string"/>
+
+      <wsdl:part name="emailAddress" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runSimplexResponse">
+
+      <wsdl:part name="runSimplexReturn" type="tns1:SimpleXOutputBean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runPlotGMTRequest">
+
+      <wsdl:part name="userName" type="soapenc:string"/>
+
+      <wsdl:part name="projectName" type="soapenc:string"/>
+
+      <wsdl:part name="origin_lat" type="soapenc:string"/>
+
+      <wsdl:part name="origin_lon" type="soapenc:string"/>
+
+      <wsdl:part name="timeStamp" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runSimplexResponse1">
+
+      <wsdl:part name="runSimplexReturn" type="tns1:SimpleXOutputBean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runRePlotGMTRequest">
+
+      <wsdl:part name="userName" type="soapenc:string"/>
+
+      <wsdl:part name="projectName" type="soapenc:string"/>
+
+      <wsdl:part name="currentGMTViewForm" type="tns1:GMTViewForm"/>
+
+      <wsdl:part name="jobUIDStamp" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runSimplexRequest">
+
+      <wsdl:part name="userName" type="soapenc:string"/>
+
+      <wsdl:part name="projectName" type="soapenc:string"/>
+
+      <wsdl:part name="faults" type="impl:ArrayOf_tns1_Fault"/>
+
+      <wsdl:part name="obsv" type="impl:ArrayOf_tns1_Observation"/>
+
+      <wsdl:part name="startTemp" type="soapenc:string"/>
+
+      <wsdl:part name="maxIters" type="soapenc:string"/>
+
+      <wsdl:part name="origin_lon" type="soapenc:string"/>
+
+      <wsdl:part name="origin_lat" type="soapenc:string"/>
+
+      <wsdl:part name="KmlGeneratorUrl" type="soapenc:string"/>
+
+      <wsdl:part name="timeStamp" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runRePlotGMTResponse">
+
+      <wsdl:part name="runRePlotGMTReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runMakeMapXmlResponse">
+
+      <wsdl:part name="runMakeMapXmlReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runPlotGMTResponse">
+
+      <wsdl:part name="runPlotGMTReturn" type="tns1:GMTViewForm"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="runMakeMapXmlRequest">
+
+      <wsdl:part name="userName" type="soapenc:string"/>
+
+      <wsdl:part name="projectName" type="soapenc:string"/>
+
+      <wsdl:part name="origin_lat" type="soapenc:string"/>
+
+      <wsdl:part name="origin_lon" type="soapenc:string"/>
+
+      <wsdl:part name="jobUIDStamp" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="SimpleXService">
+
+      <wsdl:operation name="runMakeMapXml" parameterOrder="userName projectName origin_lat origin_lon jobUIDStamp">
+
+         <wsdl:input message="impl:runMakeMapXmlRequest" name="runMakeMapXmlRequest"/>
+
+         <wsdl:output message="impl:runMakeMapXmlResponse" name="runMakeMapXmlResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runSimplex" parameterOrder="userName projectName faults obsv startTemp maxIters origin_lon origin_lat KmlGeneratorUrl timeStamp">
+
+         <wsdl:input message="impl:runSimplexRequest" name="runSimplexRequest"/>
+
+         <wsdl:output message="impl:runSimplexResponse" name="runSimplexResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runSimplex" parameterOrder="userName projectName faults obsv startTemp maxIters origin_lon origin_lat KmlGeneratorUrl timeStamp emailAddress">
+
+         <wsdl:input message="impl:runSimplexRequest1" name="runSimplexRequest1"/>
+
+         <wsdl:output message="impl:runSimplexResponse1" name="runSimplexResponse1"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runPlotGMT" parameterOrder="userName projectName origin_lat origin_lon timeStamp">
+
+         <wsdl:input message="impl:runPlotGMTRequest" name="runPlotGMTRequest"/>
+
+         <wsdl:output message="impl:runPlotGMTResponse" name="runPlotGMTResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runRePlotGMT" parameterOrder="userName projectName currentGMTViewForm jobUIDStamp">
+
+         <wsdl:input message="impl:runRePlotGMTRequest" name="runRePlotGMTRequest"/>
+
+         <wsdl:output message="impl:runRePlotGMTResponse" name="runRePlotGMTResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="SimpleXExecSoapBinding" type="impl:SimpleXService">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="runMakeMapXml">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="runMakeMapXmlRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://simplex.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="runMakeMapXmlResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runSimplex">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="runSimplexRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://simplex.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="runSimplexResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runSimplex">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="runSimplexRequest1">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://simplex.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="runSimplexResponse1">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runPlotGMT">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="runPlotGMTRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://simplex.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="runPlotGMTResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="runRePlotGMT">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="runRePlotGMTRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://simplex.webservices.cgl" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="runRePlotGMTResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="SimpleXServiceService">
+
+      <wsdl:port binding="impl:SimpleXExecSoapBinding" name="SimpleXExec">
+
+         <wsdlsoap:address location="http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>
