@@ -37,22 +37,18 @@
 		
 	 </script>
 	 <f:view>
-		<h:form id="f1">
+		<h:form id="disloc3-f1">
 		  <h:commandLink id="blaheoru203" action="disloc-this">
 			 <h:outputText id="blaheoru129" value="Refresh Page" />
 		  </h:commandLink>
 		</h:form>
 
 		
-		<h:form id="f2">
-		  <h:panelGrid id="pgridmain" columns="1" border="0">
-			 <h:outputText id="header" escape="false" value="<h2>Archived Results</h2>" />
-			 <h:outputText id="message1" escape="false"
-								rendered="#{(empty DislocBean2.myArchivedDislocResultsList)}"
-								value="You don't have any archived results yet." />
+		<h:form id="disloc3-f2">
+
+			 <h:outputText id="header-fetchresults" escape="false" value="<h2>Archived Results</h2>" />
 			 
-			 <h:outputText id="dosomework" 
-								rendered="#{(!empty DislocBean2.myArchivedDislocResultsList)}"
+			 <h:outputText id="dosomework-disloc3" 
 								escape="false"
 								value="You have the following archived disloc runs. Click the 
 										 link to download the desired file to your desk top. To 
@@ -60,7 +56,6 @@
 										 button over the link and select." />
 			 
 			 <h:dataTable id="DislocOutputPanel3" var="summaryBean"
-							  rendered="#{(!empty DislocBean2.myArchivedDislocResultsList)}"
 							  value="#{DislocBean2.myArchivedDislocResultsList}" 
 							  binding="#{DislocBean2.myProjectSummaryDataTable}"
 							  border="1">
@@ -124,16 +119,6 @@
 				
 				<h:column>
 				  <f:facet name="header">
-					 <h:outputText id="blaheoru18" escape="false" value="<b>Delete</b>" />
-				  </f:facet>
-				  <h:panelGroup id="pgdelete">
-					 <h:commandButton id="DeleteSummaryDisloc" value="Delete"
-											actionListener="#{DislocBean2.toggleDeleteProjectSummary}"/>
-				  </h:panelGroup>
-				  
-				</h:column>					
-				<h:column>
-				  <f:facet name="header">
 					 <h:outputText id="blaheoru12" value="Stdout"/>
 				  </f:facet>
 				  <h:outputLink id="blaheoru13" 
@@ -141,9 +126,17 @@
 					 <h:outputText id="blaheoru14" value="Stdout"/>
 				  </h:outputLink>
 				</h:column>
+
+				<h:column>
+				  <f:facet name="header">
+					 <h:outputText id="blaheoru18" escape="false" value="<b>Delete</b>" />
+				  </f:facet>
+					 <h:commandButton id="DeleteSummaryDisloc" value="Delete"
+											action="#{DislocBean2.toggleDeleteProjectSummary}"/>
+				</h:column>					
 				
 			 </h:dataTable>
-		  </h:panelGrid>
+
 		</h:form>
 		
 		<f:verbatim><hr/> </f:verbatim>

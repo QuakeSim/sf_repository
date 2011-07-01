@@ -1657,7 +1657,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	/**
 	 * This will delete projects
 	 */
-	public void toggleDeleteProjectSummary(ActionEvent ev) {
+	public void toggleDeleteProjectSummary() {
 		logger.info("Deleting Project");
 		try {
 			 HtmlDataTable testTable=getMyProjectSummaryDataTable();
@@ -3711,6 +3711,9 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 
 	public void toggleDeleteInsar() throws Exception {
 		try {
+			 HtmlDataTable testtable=getMyInsarDataTable();
+			 logger.info(testtable.getRowCount()+" "+testtable.getId());
+
 			InsarParamsBean ipb = (InsarParamsBean) getMyInsarDataTable()
 					.getRowData();
 			if (db != null)

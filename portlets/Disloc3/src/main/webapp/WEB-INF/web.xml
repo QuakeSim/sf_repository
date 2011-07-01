@@ -85,37 +85,6 @@
                         1g - 1 GB</description>  
     </init-param>  
   </filter>  
-<!--
-   <filter>
-     <filter-name>JSFUnitFilter</filter-name>
-     <filter-class>org.jboss.jsfunit.framework.JSFUnitFilter</filter-class>
-   </filter>
--->
-
-
-
-  <!-- Filter Mappings -->  
-<!--
-   <filter-mapping>
-     <filter-name>JSFUnitFilter</filter-name>
-     <servlet-name>ServletTestRunner</servlet-name>
-   </filter-mapping>	
-   
-   <filter-mapping>
-     <filter-name>JSFUnitFilter</filter-name>
-     <servlet-name>ServletRedirector</servlet-name>
-   </filter-mapping>
-
-   <filter-mapping>
-     <filter-name>JSFUnitFilter</filter-name>
-     <servlet-name>JspRedirector</servlet-name>
-   </filter-mapping>
-
-<filter-mapping>
-     <filter-name>JSFUnitFilter</filter-name>
-     <servlet-name>ServletRedirectorSecure</servlet-name>
-</filter-mapping>
--->
   <filter-mapping>  
     <filter-name>extensionsFilter</filter-name>  
     <url-pattern>*.jsf</url-pattern>  
@@ -129,7 +98,6 @@
   <listener>  
     <listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>  
   </listener>  
-
   
   <!-- Faces Servlet --> 
   <servlet> 
@@ -138,59 +106,11 @@
     <load-on-startup>1</load-on-startup> 
   </servlet>
 
-<!--
-   <servlet>
-     <servlet-name>ServletRedirector</servlet-name>
-     <servlet-class>org.jboss.jsfunit.framework.JSFUnitServletRedirector</servlet-class>
-   </servlet>
--->
-<!--
-<servlet>
-     <servlet-name>ServletRedirector</servlet-name>
-     <servlet-class>org.jboss.jsfunit.framework.JSFUnitServletRedirector</servlet-class>
-   </servlet>
-  <servlet>
-    <servlet-name>ServletRedirectorSecure</servlet-name>
-    <servlet-class>org.jboss.jsfunit.framework.JSFUnitServletRedirector</servlet-class>
-  </servlet>
--->
-	<servlet>
-	<servlet-name>JspRedirector</servlet-name>
-	<jsp-file>/jspRedirector.jsp</jsp-file>
-	</servlet>
-   
-   <servlet>
-      <servlet-name>ServletTestRunner</servlet-name>
-      <servlet-class>org.apache.cactus.server.runner.ServletTestRunner</servlet-class>
-   </servlet> 
-
 
    <servlet-mapping>
      <servlet-name>Faces Servlet</servlet-name>
      <url-pattern>*.faces</url-pattern>
    </servlet-mapping>  
-
-   <servlet-mapping>
-     <servlet-name>ServletRedirector</servlet-name>
-     <url-pattern>/ServletRedirector</url-pattern>
-   </servlet-mapping> 
-
-  <servlet-mapping>
-    <servlet-name>ServletRedirectorSecure</servlet-name>
-    <url-pattern>/ServletRedirectorSecure</url-pattern>
-  </servlet-mapping>
-   
-   <servlet-mapping>
-      <servlet-name>ServletTestRunner</servlet-name>
-      <url-pattern>/ServletTestRunner</url-pattern>
-   </servlet-mapping> 
-
-	<servlet-mapping>
-	<servlet-name>JspRedirector</servlet-name>
-	<url-pattern>/JspRedirector</url-pattern>
-	</servlet-mapping>
-
-
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/Disloc3/*</url-pattern>
