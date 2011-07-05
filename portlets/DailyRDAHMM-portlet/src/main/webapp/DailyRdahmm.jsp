@@ -43,31 +43,46 @@
 	String xmlFileName = "station-status-change-SOPAC_FILL.xml";
 	String contextGroup = "SOPAC GLOBK";
 	String swfName = "dailyRdahmmPlotLLH.swf";
+	double defSwLat = 31.2973;
+	double defSwLng = -127.9907;
+	double defNeLat = 41.8532;
+	double defNeLng = -111.5552;
 	if (dataSource.equalsIgnoreCase("jplFill")) {
 		xmlUrl = "http://xml.access.hostname/daily_rdahmmexec/daily/JPL_FILL/station-status-change-JPL_FILL.xml";
 		xmlFileName = "station-status-change-JPL_FILL.xml";
 		contextGroup = "JPL GIPSY";
 		swfName = "dailyRdahmmPlotLLH.swf";
+		defSwLat = 31.2973;
+		defSwLng = -127.9907;
+		defNeLat = 41.8532;
+		defNeLng = -111.5552;
 	} else if (dataSource.equalsIgnoreCase("unavcoPboFill")) {
 		xmlUrl = "http://xml.access.hostname/daily_rdahmmexec/daily/unavcoPboFill/station-status-change-unavcoPboFill.xml";
 		xmlFileName = "station-status-change-unavcoPboFill.xml";
 		contextGroup = "UNAVCO PBO";
 		swfName = "dailyRdahmmPlotLlhDisp.swf";
+		defSwLat = 36.9323;
+		defSwLng = -125.9473;
+		defNeLat = 46.7248;
+		defNeLng = -109.5117;
 	} else if (dataSource.equalsIgnoreCase("unavcoNucleusFill")) {
 		xmlUrl = "http://xml.access.hostname/daily_rdahmmexec/daily/unavcoNucleusFill/station-status-change-unavcoNucleusFill.xml";
 		xmlFileName = "station-status-change-unavcoNucleusFill.xml";
 		contextGroup = "UNAVCO Nucleus";
 		swfName = "dailyRdahmmPlotLlhDisp.swf";
+		defSwLat = 38.8739;
+		defSwLng = -128.8257;
+		defNeLat = 48.3854;
+		defNeLng = -112.3901;
 	}
 %>
 
 <html>
 <head>
-<script
-    src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>
-<script src="http://local.hostname/DailyRDAHMM-portlet/NmapAPI.js" type="text/javascript"></script>
-<script src="http://local.hostname/DailyRDAHMM-portlet/dateUtil.js" type="text/javascript"></script>
-<script src="http://danvk.org/dygraphs/dygraph-combined.js" type="text/javascript"></script>
+	<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+	<script src="http://local.hostname/DailyRDAHMM-portlet/NmapAPI.js" type="text/javascript"></script>
+	<script src="http://local.hostname/DailyRDAHMM-portlet/dateUtil.js" type="text/javascript"></script>
+	<script src="http://danvk.org/dygraphs/dygraph-combined.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -234,10 +249,16 @@
 	var markerWinHtmlStr = '<%=strTabContent%>';
 	var selectedStation = null;
 	// Create the marker and corresponding information window
-	function createTabsInfoMarker(point, infoTabs ,icon1, idx, sel) {
-		var marker = new GMarker(point, {icon: icon1, clickable: true, title:stationArray[idx][0]});
-		GEvent.addListener(marker, "click", function() {
-				sel = document.getElementById("stationSelect");
+	function createInfoWinMarker(point, icon1, idx) {
+		var markerOpts = {
+			position: point,
+			icon: icon1,
+			clickable: true,
+			title: stationArray[idx][0]
+		};
+		var marker = new google.maps.Marker(markerOpts);
+		google.maps.event.addListener(marker, "click", function(mouseEvt) {
+				var sel = document.getElementById("stationSelect");
 				sel.selectedIndex = idx;
 				sltChange(sel);
 			});
@@ -294,7 +315,7 @@
 				<table class="ooib" id="obody" border="0" cellspacing="0" cellpadding="0" width="767" height="635">
 					<tr valign="top">
 						<td valign="top">
-							<div id="map" style="width: 765px; height: 600px">      </div>
+							<div id="mapDiv" style="width: 765px; height: 600px">      </div>
 							<table border='0'>
 								<tr>
 									<td>
@@ -376,22 +397,11 @@
 	<script type="text/javascript">
     
 	// Create a base icon for all of our markers
-	var req;
-	var baseIcon = new GIcon();
-	baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
-	baseIcon.iconSize = new GSize(15, 20);
-	baseIcon.shadowSize = new GSize(10, 10);
-	baseIcon.iconAnchor = new GPoint(1, 10);
-	baseIcon.infoWindowAnchor = new GPoint(5, 1);
-	baseIcon.infoShadowAnchor = new GPoint(5, 5);
-	baseIcon.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";
-
-	// Create the map
-	var map = new GMap(document.getElementById("map"));
-	map.addControl(new GLargeMapControl());
-	map.addControl(new GMapTypeControl());
-	map.addControl(new GScaleControl());
-
+	var iconSize = new google.maps.Size(15, 20);
+	var iconAnchor = new google.maps.Point(1, 10);
+	var iconDefImgUrl = "http://labs.google.com/ridefinder/images/mm_20_green.png";
+	var iconOrigin = new google.maps.Point(0, 0);
+	
 	var networkInfo = new Array(5);
 	for (i = 0; i < networkInfo.length; ++i){
 		networkInfo[i] = new Array(2);
@@ -765,7 +775,8 @@
 	// the millisecond time value for the date of the change, the old state, and the new state
 	// we create the infoWindowTabs on the fly, cause they are eating up too much memory if created here
 	var stationArray = new Array(<%=lStations.size()%>);
-	var icon; var dateTmp = new Date();
+	var icon; 
+	var dateTmp = new Date();
 <%
 	double mapcenter_y, mapcenter_x, xmin = 0, xmax = 0, ymin = 0, ymax = 0;
 	int changeCount = 0;
@@ -789,14 +800,13 @@
 			ymin = y;
 		if (ymax == 0 || y > ymax)
 			ymax = y;
-		changeCount = Integer.parseInt(eleStation.element("change-count").getText());					
+		changeCount = Integer.parseInt(eleStation.element("change-count").getText());
 		nodataCount = Integer.parseInt(eleStation.element("nodata-count").getText());
 %>
 		stationArray[<%=i%>] = new Array(7);	stationArray[<%=i%>][0] = '<%=eleStation.element("id").getText()%>';
 		stationArray[<%=i%>][1] = <%=x%>;	stationArray[<%=i%>][2] = <%=y%>;
-		var icon = new GIcon(baseIcon);
-		stationArray[<%=i%>][6] = createTabsInfoMarker(new GPoint('<%=y%>', '<%=x%>') , null, icon, <%=i%>, document.getElementById("stationSelect"));
-		/*stationArray[<%=i%>][6] = null; */
+		icon = new google.maps.MarkerImage(iconDefImgUrl, iconSize, iconOrigin, iconAnchor);
+		stationArray[<%=i%>][6] = createInfoWinMarker(new google.maps.LatLng(<%=x%>, <%=y%>), icon, <%=i%>);
 <%				
 		if (changeCount == 0) {
 			out.write("stationArray[" + i + "][5] = null;");
@@ -878,14 +888,28 @@
 	document.getElementById("scnLatToText").value = maxLat;
 	document.getElementById("scnLongFromText").value = minLon;
 	document.getElementById("scnLongToText").value = maxLon;
-
-	map.centerAndZoom(new GPoint(mapCenterY, mapCenterX), 10);
-	GEvent.addListener(map, "moveend", function() {	onMapMove(); } );
-	GEvent.addListener(map, "zoomend", function(oldLevel, newLevel) {
+	
+	// Create the map
+	var mapCenter = new google.maps.LatLng(mapCenterX, mapCenterY);
+	var mapOpts = {
+		zoom: 6,
+		center: mapCenter,
+		mapTypeId: google.maps.MapTypeId.ROADMAP
+	};
+	var map = new google.maps.Map(document.getElementById("mapDiv"), mapOpts);
+	var mapZoomLevel = map.getZoom();
+	google.maps.event.addListener(map, "dragend", function(){ onMapMove(); });
+	google.maps.event.addListener(map, "zoom_changed", function() {
+		var oldLevel = mapZoomLevel;
+		var newLevel = map.getZoom();
+		mapZoomLevel = newLevel;
 		// zoomin: newLevel > oldLevel; zoomout: newLevel < oldLevel
 		if (newLevel < oldLevel)
 			onMapMove();
 	} );
+	var quakeSimDiv = document.createElement('div');
+	quakeSimDiv.innerHTML = "<img src='http://local.hostname/DailyRDAHMM-portlet/QuakeSimLogoGrayEmboss.png'/>";
+	map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(quakeSimDiv);
 	
 	// show the list for staus changes
 	function printChangedStations() {
@@ -970,13 +994,13 @@
 			}
 		   	
 			if (station[6] != null)
-				station[6].getIcon().image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
+				station[6].getIcon().url = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
 			else {
-				icon = new GIcon(baseIcon);
-				icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
-				station[6] = createTabsInfoMarker(new GPoint(station[2], station[1]) , null, icon, stationIdx, stSelect);
+				icon = new google.maps.MarkerImage(iconDefImgUrl, iconSize, iconOrigin, iconAnchor);
+				icon.url = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
+				station[6] = createInfoWinMarker(new google.maps.LatLng(station[1], station[2]), icon, stationIdx);
 			}
-			map.addOverlay(station[6]);
+			station[6].setMap(map);
 			station[3] = true;
 			nMarkerDoneForNewDate++;
 		}
@@ -996,7 +1020,9 @@
 						"<tr><td colspan='2'><hr/></td></tr>" +
 						"<tr><td colspan='2'><button id='showTsBtn' style='background-color:lightgreen' onClick='showTsBtnClick(this)'>View Time Series</button></td></tr></table></div>";
 		//station[6].openInfoWindowHtml(htmlStr2, {suppressMapPan:true});
-		station[6].openInfoWindowHtml(htmlStr2);
+		var infoWin = new google.maps.InfoWindow();
+		infoWin.setContent(htmlStr2);
+		infoWin.open(map, station[6]);
 	}
 	
 	function showTsBtnClick(obj) {
@@ -1029,20 +1055,33 @@
 		window.setTimeout('overlayMarkersBody()',1);
 	}
 
+	function clearMapMarkers() {
+		for (var i=0; i<stationArray.length; i++) {
+			if (stationArray[i][6] != null) {
+				stationArray[i][6].setMap(null);
+			}
+		}
+	}
+
 	function overlayMarkersBody(){
 		var dateShowText = document.getElementById("dateText");
 		var showDateStr = dateShowText.getAttribute("value");
 		var icon;
+		var sw = new google.maps.LatLng(<%=defSwLat%>, <%=defSwLng%>);
+		var ne = new google.maps.LatLng(<%=defNeLat%>, <%=defNeLng%>);
 		var mapBounds = map.getBounds();
-		var sw = mapBounds.getSouthWest();
-		var ne = mapBounds.getNorthEast();
+		if (mapBounds != null) {
+			sw = mapBounds.getSouthWest();
+			ne = mapBounds.getNorthEast();
+		}
 		// convert the showDateStr to the format of "yyyy-mm-dd"
 		showDateStr = getDateString(getDateFromString(showDateStr));
 		if (showDateStr != "") {
 			url = "http://local.hostname/axis2/services/DailyRdahmmResultService/calcStationColors?date=" + showDateStr + "&resUrl=" + xmlResultUrl;
 			var colorStr = callHttpService(url);
 			if (colorStr.length != 0) {
-				map.clearOverlays();
+				globalColorStr = colorStr;
+				clearMapMarkers();
 				nMarkerDoneForNewDate = 0;
 				for (var i=0; i<stationArray.length; i++) {
 					stationArray[i][3] = false;									
@@ -1065,17 +1104,16 @@
 					}
 
 					if (stationArray[i][6] != null)
-						stationArray[i][6].getIcon().image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
+						stationArray[i][6].getIcon().url = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
 					else {
-						icon = new GIcon(baseIcon);
-						icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
-						stationArray[i][6] = createTabsInfoMarker(new GPoint(stationArray[i][2], stationArray[i][1]) , null, icon, i, document.getElementById("stationSelect"));
+						icon = new google.maps.MarkerImage(iconDefImgUrl, iconSize, iconOrigin, iconAnchor);
+						icon.url = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
+						stationArray[i][6] = createInfoWinMarker(new google.maps.LatLng(stationArray[i][1], stationArray[i][2]), icon, i);
 					}
-					map.addOverlay(stationArray[i][6]);
+					stationArray[i][6].setMap(map);
 					stationArray[i][3] = true;
 					nMarkerDoneForNewDate++;
 				}
-				globalColorStr = colorStr;
 			} else {
 				alert("calling http service at " + url + " Returns empty string");
 			}
@@ -1120,28 +1158,19 @@
 					}
 
 					if (stationArray[i][6] != null)
-						stationArray[i][6].getIcon().image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
+						stationArray[i][6].getIcon().url = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
 					else {
-						icon = new GIcon(baseIcon);
-						icon.image = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
-						stationArray[i][6] = createTabsInfoMarker(new GPoint(stationArray[i][2], stationArray[i][1]) , null, icon, i, document.getElementById("stationSelect"));
+						icon = new google.maps.MarkerImage(iconDefImgUrl, iconSize, iconOrigin, iconAnchor);
+						icon.url = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
+						stationArray[i][6] = createInfoWinMarker(new google.maps.LatLng(stationArray[i][1], stationArray[i][2]), icon, i);
 					}
-					map.addOverlay(stationArray[i][6]);
+					stationArray[i][6].setMap(map);
 					stationArray[i][3] = true;
 					nMarkerDoneForNewDate++;
 				}
 			}
 		}
 		document.getElementById("waitScreen").style.visibility="hidden";
-	}
-
-	function createMarker(networkName, name, lon, lat, icon) {
-		var marker = new GMarker(new GPoint(lon, lat),icon);
-		// Show this marker's name in the info window when it is clicked
-		var html = "<b>Station Name= </b>" + name + "<br><b>Lat=</b>" + lat + "<br><b>Lon= </b>" + lon + "<br><b>Network= </b>" + networkName;
-		GEvent.addListener(marker, "click", function() {
-			marker.openInfoWindowHtml(html);});
-		return marker;
 	}
 
 	// call a web service with http binding
@@ -1157,6 +1186,18 @@
 		return xmlhttp.responseText.substring(idx + str.length, idx2);
 	}
 
+	// call the daily RDAHMM result service to get data latest date
+	var dataLatestDate = new Date();
+	var strLatestDate = getDateString(dataLatestDate);
+	function queryDataLatestDate() {
+		var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/getDataLatestDate?resUrl=" + xmlResultUrl;
+		var res = callHttpService(url);
+		if (res.length > 0) {
+			setDateBySpecialString(dataLatestDate, res);
+			strLatestDate = getDateString(dataLatestDate);
+		}
+	}
+
 	YAHOO.example.calendar.cal1=new YAHOO.widget.Calendar("cal1","cal1Container");
 	YAHOO.example.calendar.cal1.selectEvent.subscribe(myShowDateHandler,YAHOO.example.calendar.cal1, true);
 	YAHOO.example.calendar.cal1.Style.CSS_CELL_TODAY = null;
@@ -1165,11 +1206,7 @@
 	slider = YAHOO.widget.Slider.getHorizSlider("slider-bg", "slider-thumb", 0, slider_range, 1);
 	slider.subscribe("change", onSlideChange);
 	slider.subscribe("slideEnd", onSlideEnd);
-	
-	var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/getDataLatestDate?resUrl=" + xmlResultUrl;
-	var strLatestDate = callHttpService(url);
-	var dataLatestDate = getDateFromString(strLatestDate);
-	strLatestDate = getDateString(dataLatestDate);
+	queryDataLatestDate();
 	document.getElementById("dateText").value = "";
 	clearBtnClick(document.getElementById("clearDateBtn"));
 	</script>
