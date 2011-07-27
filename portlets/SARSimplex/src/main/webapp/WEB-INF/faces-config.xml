@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE faces-config PUBLIC
+"-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+"http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+
+<faces-config>
+  
+  <!-- managed beans of the simple hello world app -->
+  <managed-bean>
+	 <managed-bean-name>SARSimplexBean</managed-bean-name>
+	 <managed-bean-class>cgl.quakesim.simplex.SimplexBean</managed-bean-class>
+	 <managed-bean-scope>session</managed-bean-scope>
+	 <!--Who we are-->
+	 <managed-property>
+		<property-name>portalBaseUrl</property-name>
+		<value>@host.base.url@</value>
+	 </managed-property>
+	 
+	 <managed-property>
+		<property-name>kmlfiles</property-name>
+		<value>QuakeTables_CGS_1996.kml QuakeTables_CGS_2002.kml QuakeTables_UCERF_2.4.kml</value>
+	 </managed-property>
+	 
+	 <managed-property>
+		<property-name>codeName</property-name>
+		<value>Simplex3</value>
+	 </managed-property>
+	 
+	 <!-- Needed for the selectdbURL service-->
+	 <managed-property>
+		<property-name>selectdbURL</property-name>
+		<value>http://gf19.ucs.indiana.edu:9898/axis/services/Select</value>
+	 </managed-property>
+	 
+	 <!-- Needed for the context service-->
+	 <managed-property>
+		<property-name>contextBasePath</property-name>
+		<value>/WebServices/WEB-INF/Descriptors/users/</value>
+	 </managed-property>
+	 
+	 <!-- Needed for the simplex service-->
+	 <managed-property>
+		<property-name>simpleXServiceUrl</property-name>
+		<value>http://gf19.ucs.indiana.edu:8080/simplexexec/services/SimpleXExec</value>
+	 </managed-property>
+	 
+	 <!--  Needed for the kmlGenerator service -->
+	 <managed-property>
+		<property-name>kmlGeneratorUrl</property-name>
+		<value>http://gf19.ucs.indiana.edu:8080/KmlGenerator/services/KmlGenerator</value>
+	 </managed-property>
+  </managed-bean>
+  
+  <navigation-rule>
+	 <display-name>SARSimplex Main Page</display-name>
+	 <from-view-id>/Main.jsp</from-view-id>
+	 <navigation-case>
+		<from-outcome>SARSimplex-new-project</from-outcome>
+		<to-view-id>/NewProject.jsp</to-view-id>
+	 </navigation-case>
+	 <navigation-case>
+		<from-outcome>SARSimplex-load-project</from-outcome>
+		<to-view-id>/LoadProject.jsp</to-view-id>
+	 </navigation-case>
+	 <navigation-case>
+		<from-outcome>SARSimplex-archived-data</from-outcome>
+		<to-view-id>/ArchivedData.jsp</to-view-id>
+	 </navigation-case>
+	 <navigation-case>
+		<from-outcome>SARSimplex-listgmt-archives</from-outcome>
+		<to-view-id>/ListGMTArchives.jsp</to-view-id>
+	 </navigation-case>
+	 
+  </navigation-rule>
+  
+  <navigation-rule>
+	 <from-view-id>/EditProject.jsp</from-view-id>
+	 <navigation-case>
+		<from-outcome>SARSimplex-this</from-outcome>
+		<to-view-id>/EditProject.jsp</to-view-id>
+	 </navigation-case>
+	 <navigation-case>
+		<from-outcome>SARSimplex-back</from-outcome>
+		<to-view-id>/LoadProject.jsp</to-view-id>
+	 </navigation-case>
+  </navigation-rule>
+  
+  <navigation-rule>
+	 <from-view-id>/LoadProject.jsp</from-view-id>
+	 <navigation-case>
+		<from-outcome>SARSimplex-edit-project</from-outcome>
+		<to-view-id>/EditProject.jsp</to-view-id>
+	 </navigation-case>
+	 <navigation-case>
+		<from-outcome>SARSimplex-this</from-outcome>
+		<to-view-id>/LoadProject.jsp</to-view-id>
+	 </navigation-case>
+	 <navigation-case>
+		<from-outcome>SARSimplex-back</from-outcome>
+		<to-view-id>/LoadProject.jsp</to-view-id>
+	 </navigation-case>
+  </navigation-rule>
+  
+  <navigation-rule>
+	 <from-view-id>/ArchivedData.jsp</from-view-id>
+	 <navigation-case>
+		<from-outcome>SARSimplex-back</from-outcome>
+		<to-view-id>/ArchivedData.jsp</to-view-id>
+	 </navigation-case>
+  </navigation-rule>
+  
+  <navigation-rule>
+	 <from-view-id>/ListGMTArchives.jsp</from-view-id>
+	 <navigation-case>
+		<from-outcome>SARSimplex-gmt-view</from-outcome>
+			<to-view-id>/GMTView.jsp</to-view-id>
+	 </navigation-case>
+		<navigation-case>
+		  <from-outcome>SARSimplex-google-map</from-outcome>
+		  <to-view-id>/gmt_googlemap.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+		  <from-outcome>SARSimplex-kml-viewer</from-outcome>
+		  <to-view-id>/kmlviewer.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+		  <from-outcome>SARSimplex-back</from-outcome>
+		  <to-view-id>/ListGMTArchives.jsp</to-view-id>
+		</navigation-case>
+  </navigation-rule>
+  
+  <navigation-rule>
+	 <from-view-id>/kmlviewer.jsp</from-view-id>
+	 <navigation-case>
+		<from-outcome>SARSimplex-this</from-outcome>
+		<to-view-id>/kmlviewer.jsp</to-view-id>
+	 </navigation-case>
+	 <navigation-case>
+		<from-outcome>SARSimplex-back</from-outcome>
+		<to-view-id>/kmlviewer.jsp</to-view-id>
+	 </navigation-case>
+  </navigation-rule>
+  
+  <navigation-rule>
+	 <from-view-id>/gmt_googlemap.jsp</from-view-id>
+	 <navigation-case>
+		<from-outcome>SARSimplex-this</from-outcome>
+		<to-view-id>/gmt_googlemap.jsp</to-view-id>
+	 </navigation-case>
+	 <navigation-case>
+		<from-outcome>SARSimplex-back</from-outcome>
+		<to-view-id>/gmt_googlemap.jsp</to-view-id>
+	 </navigation-case>
+  </navigation-rule>
+  
+  <navigation-rule>
+	 <from-view-id>/GMTView.jsp</from-view-id>
+	 <navigation-case>
+		<from-outcome>SARSimplex-this</from-outcome>
+		<to-view-id>/GMTView.jsp</to-view-id>
+	 </navigation-case>
+	 <navigation-case>
+		<from-outcome>SARSimplex-back</from-outcome>
+		<to-view-id>/GMTView.jsp</to-view-id>
+	 </navigation-case>
+  </navigation-rule>
+</faces-config>

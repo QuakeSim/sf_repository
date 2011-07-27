@@ -1,0 +1,57 @@
+.alignTop { 
+	 vertical-align:top; 
+} 
+
+.h2 { 
+	 display:block;
+	 font-family: Arial, sans-serif; 
+	 font-size: 18pt; 
+	 font-weight: bold; 
+	 margin-top:10px;
+	 margin-bottom: 10px;
+} 
+
+.h3 {
+	 display:block;
+	 font-family: Arial, sans-serif;
+	 font-size: 12pt;
+	 font-weight: bold;
+	 margin-top: 10px;
+	 margin-bottom: 10px;
+}
+
+.componentstableh {
+
+  width: 100px;
+  height: 40px;
+
+}
+
+.componentstableh2 {
+
+  width: 50px;
+  height: 40px;
+
+}
+
+.componentstablec {
+
+text-align:center;
+height: 40px;
+
+}
+
+/* This is used for standalone, will be overridden if used in a portlet container */
+.portlet-form-label{
+   color:black;
+   /* background-color:white;  */
+   font-weight:bold;
+   font-style:normal;
+   font-family:inherit;
+   line-height:normal;
+   text-align:left;
+   text-decoration:none;
+}
+
+/* This handles loading displays */
+#loading { display:none; position:fixed; left:33%; top:33%;	}
