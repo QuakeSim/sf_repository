@@ -11,14 +11,18 @@
 	 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" 
 				type="text/javascript"></script>
 	 -->
-	 <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
+
   </head>
   <body>
 	 <div id="InSARMap" style="width: 800px; height: 600px;"></div>
-	 
-	 <script src="script/sarselect.js">
+	 <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
+	 <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1.min.js"></script>
+	 <script src="script/sarselect.js"></script>
+	 <script>
+	 var insarMapDiv=document.getElementById("InSARMap");
+    var overlayUrl="http://gf19.ucs.indiana.edu:9898/uavsar-data/SanAnd_08504_10028-001_10057-101_0079d_s01_L090_01/SanAnd_08504_10028-001_10057-101_0079d_s01_L090HH_01.int.kml";
 	 $(function() {
-		  sarselect.setMap("InSARMap");
+		  sarselect.setMap(insarMapDiv,overlayUrl);
 	 });
 	 </script>
   </body>
