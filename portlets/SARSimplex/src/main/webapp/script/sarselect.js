@@ -7,14 +7,15 @@ var sarselect=sarselect || (function() {
     var markers = new Array();
 	 var insarMap;
 	 var leftClickOp;
-	 
-	 function setMap(insarMapDiv,overlayUrl) {
-		  console.log("setMap() function called");
-		  console.log("Map div name is "+insarMapDiv+ " "+overlayUrl);
+	 var markerNE, markerSW;
+ 
+	 function setMap(insarMapDiv,overlayUrl,drawFunctionType) {
+		  //console.log("setMap() function called");
+		  //console.log("Map div name is "+insarMapDiv+ " "+overlayUrl);
 		  
 		  //Decide which left click operation to use.
 		  //Default to the polygon plotting.
-//		  this.leftClickOp=leftClickOp || polygonLeftClick;
+		  //		  this.leftClickOp=leftClickOp || polygonLeftClick;
 
 		  //Create the map
 		var myOptions={
@@ -33,29 +34,46 @@ var sarselect=sarselect || (function() {
 		  var lowResSARLayer=new google.maps.KmlLayer(overlayUrl,{suppressInfoWindows: true, map: insarMap, clickable: false});
 
      google.maps.event.addListener(insarMap,"click",function(event) {
-			polygonLeftClick(event)
+			if(drawFunctionType=="polygon") {
+				 polygonLeftClick(event);
+			}
+			else if(drawFunctionType=="rectangle") {
+				 rectangleLeftClick(event);
+			}
+			else {
+				 alert("Invalid draw method provided. Should be either 'polygon' or 'rectangle'. Using 'rectangle' by default.");
+				 rectangleLeftClick(event);
+			}
 	  });
 	 }
      
 	 function rectangleLeftClick(event) {
-		  var markerNE=new google.maps.Marker({map: insarMap, 
+		  //If the marker doesn't exist, create it.
+		  if(!markerNE && !markerSW) {
+				//console.log("No markers found");
+				markerNE=new google.maps.Marker({map: insarMap, 
 															position: event.latLng, 
 															visible: true, 
 															draggable: true});
-		  var offset=new google.maps.Latlng();
-		  var markerSW=new google.maps.Marker({map: insarMap, 
-															position: event.latLng, 
+				var offset=new google.maps.LatLng(event.latLng.lat()-0.05,event.latLng.lng()-0.05);
+				markerSW=new google.maps.Marker({map: insarMap, 
+															position: offset, 
 															visible: true, 
 															draggable: true});
-		  markers.push(marker);
-		  		  
-		  // Make markers draggable			 
-		  google.maps.event.addListener(marker, "drag", function() {
-				drawPoly();
-		  });
-		  
+				markers.push(markerNE);
+				markers.push(markerSW);
+		  		
+				// Make markers draggable			 
+				google.maps.event.addListener(markerNE, "drag", function() {
+					 drawRectangle();
+				});
+				google.maps.event.addListener(markerSW, "drag", function() {
+					 drawRectangle();
+				});
+		  }
 
-		  
+		  //This is called after a drag event.
+		  drawRectangle();
 	 }
 
 	 function polygonLeftClick(event) {
@@ -87,6 +105,24 @@ var sarselect=sarselect || (function() {
 		  });
 		  drawPoly();
 		  //console.log("Done with leftClick()");
+	 }
+
+	 function drawRectangle() {
+		  //console.log("Drawing rectangle");
+		  if(polyShape) polyShape.setMap(null);
+		  var cornerSE=new google.maps.LatLng((markerNE.getPosition()).lat(),(markerSW.getPosition()).lng());
+		  var cornerNW=new google.maps.LatLng((markerSW.getPosition()).lat(),(markerNE.getPosition()).lng());
+		  polyPoints=new Array();
+		  polyPoints.push(markerNE.getPosition());		  
+		  polyPoints.push(cornerNW);
+		  polyPoints.push(markerSW.getPosition());
+		  polyPoints.push(cornerSE);
+		  
+		  polyShape=new google.maps.Polygon({paths:polyPoints,
+														 fillColor:polyFillColor,
+														 strokeColor:polyLineColor});
+		  polyShape.setMap(insarMap);
+		  
 	 }
 	 
 	 function drawPoly() {
