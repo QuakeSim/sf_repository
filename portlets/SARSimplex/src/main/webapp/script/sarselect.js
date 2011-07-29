@@ -6,11 +6,17 @@ var sarselect=sarselect || (function() {
     var polyPoints = new Array();
     var markers = new Array();
 	 var insarMap;
+	 var leftClickOp;
 	 
 	 function setMap(insarMapDiv,overlayUrl) {
 		  console.log("setMap() function called");
 		  console.log("Map div name is "+insarMapDiv+ " "+overlayUrl);
-	 //Create the map
+		  
+		  //Decide which left click operation to use.
+		  //Default to the polygon plotting.
+//		  this.leftClickOp=leftClickOp || polygonLeftClick;
+
+		  //Create the map
 		var myOptions={
 		   panControl: false,
 			zoomControl: true,
@@ -24,22 +30,35 @@ var sarselect=sarselect || (function() {
 		insarMap=new google.maps.Map(insarMapDiv,myOptions);
 				
       //Add the KML Layer
-//var lowResSARLayer=new google.maps.KmlLayer("http://gf19.ucs.indiana.edu:9898/uavsar-data/SanAnd_08504_10028-001_10057-101_0079d_s01_L090_01/SanAnd_08504_10028-001_10057-101_0079d_s01_L090HH_01.int.kml",{suppressInfoWindows: true, map: insarMap, clickable: false});
-var lowResSARLayer=new google.maps.KmlLayer(overlayUrl,{suppressInfoWindows: true, map: insarMap, clickable: false});
-//var highResSARLayer=new google.maps.KmlLayer("http://gf19.ucs.indiana.edu:9898/uavsar-data/SanAnd_08504_10028-001_10057-101_0079d_s01_L090_01/SanAnd_08504_10028-001_10057-101_0079d_s01_L090HH_01.int.kmz",{suppressInfoWindows:true});
+		  var lowResSARLayer=new google.maps.KmlLayer(overlayUrl,{suppressInfoWindows: true, map: insarMap, clickable: false});
 
      google.maps.event.addListener(insarMap,"click",function(event) {
-			leftClick(event)
+			polygonLeftClick(event)
 	  });
 	 }
      
-	 function leftClick(event) {
-		  //console.log("leftclick called");
-		  // Square marker icons
-		  //var square = new GIcon();
-		  //square.image = "mapIcons/square.png";
-		  //addIcon(square);
+	 function rectangleLeftClick(event) {
+		  var markerNE=new google.maps.Marker({map: insarMap, 
+															position: event.latLng, 
+															visible: true, 
+															draggable: true});
+		  var offset=new google.maps.Latlng();
+		  var markerSW=new google.maps.Marker({map: insarMap, 
+															position: event.latLng, 
+															visible: true, 
+															draggable: true});
+		  markers.push(marker);
+		  		  
+		  // Make markers draggable			 
+		  google.maps.event.addListener(marker, "drag", function() {
+				drawPoly();
+		  });
 		  
+
+		  
+	 }
+
+	 function polygonLeftClick(event) {
 		  //Make the marker and add to the map.
 		  //console.log("Create marker and add to the map");
 		  var marker=new google.maps.Marker({map: insarMap, 
