@@ -54,6 +54,7 @@ public class editProjectForm extends GenericProjectBean {
 	 boolean renderCoseismicDisp=false;
 	 boolean renderSARObsvCutPaste=false;
 	 boolean renderProjectParams=false;
+	 boolean renderSARSelectionMap=false;
 
 	 String faultSelectionCode = "";
 	 boolean renderAddFaultFromDBForm = false;
@@ -130,6 +131,7 @@ public class editProjectForm extends GenericProjectBean {
 		 renderSARObsvCutPaste=false;
 		 renderProjectMap=false;
 		 renderProjectParams=false;
+		 renderSARSelectionMap=false;
 	}	
 	 
 	 public void toggleShowObsvEntries(ActionEvent ev) {
@@ -204,6 +206,11 @@ public class editProjectForm extends GenericProjectBean {
 		else if(projectSelectionCode.equals("ShowSARObsvCutPaste")) {
 			 renderSARObsvCutPaste=!renderSARObsvCutPaste;
 			 logger.info("Showing SAR cut and paste field: "+renderSARObsvCutPaste);
+		}
+
+		else if(projectSelectionCode.equals("ShowSARSelectionMap")) {
+			 renderSARSelectionMap=!renderSARSelectionMap;
+			 logger.info("Showing SAR selection map: "+renderSARSelectionMap);
 		}
 
 		else if(projectSelectionCode.equals("ShowCoseismicCutPaste")) {
@@ -728,6 +735,14 @@ public class editProjectForm extends GenericProjectBean {
 		  this.renderProjectParams=renderProjectParams;
 	 }
 
+	 public boolean getRenderSARSelectionMap() {
+		  return renderSARSelectionMap;
+	 }
+
+	 public void setRenderSARSelectionMap(boolean renderSARSelectionMap) {
+		  this.renderSARSelectionMap=renderSARSelectionMap;
+	 }
+
 	 public boolean getRenderAriaObsvCutPaste() {
 		  return this.renderAriaObsvCutPaste;
 	 }
@@ -773,7 +788,7 @@ public class editProjectForm extends GenericProjectBean {
 	}
 
 	public void setRnderSearchByAuthorForm(boolean tmp_boolean) {
-		this.renderSearchByAuthorForm = tmp_boolean;
+		 this.renderSearchByAuthorForm = tmp_boolean;
 	}
 
 	public boolean getRenderSearchByLatLonForm() {

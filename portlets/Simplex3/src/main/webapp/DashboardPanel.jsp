@@ -88,6 +88,10 @@
 		<f:selectItem id="SAR2SimplexDisplacementForm"
 						  itemLabel="Import SAR2Simplex Data File"
 						  itemValue="ShowSARObsvCutPaste" />
+
+		<f:selectItem id="SAR2SimplexSelectionMap"
+						  itemLabel="Create Simplex Input from SAR Image"
+						  itemValue="ShowSARSelectionMap" />
 	 </h:selectOneMenu>
 	 <h:commandButton id="simplexSelectButton2" value="Make Selection"
 							actionListener="#{SimplexBean.currentEditProjectForm.toggleProjectSelection2}">
