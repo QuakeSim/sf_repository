@@ -242,7 +242,7 @@
 		  <%@include file="AriaObservationPanel.jsp"%>
 		  <%@include file="SAR2SimplexObservationPanel.jsp"%>
 		  <%@include file="SimplexProjectParams.jsp"%>
-		  <%@include file="SelectRegion.jsp"%>
+		  <%@include file="SARSelectRegion.jsp"%>
 		  <%@include file="ProjectMapPanel.jsp"%>
 		</h:panelGrid>
 		
