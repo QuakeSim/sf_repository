@@ -474,7 +474,7 @@ public class SimpleXDataKml {
 			descriptionValue = descriptionValue 
 					+ "<font color=blue>lon: </font>" + lon + "<br/>"; 
 			descriptionValue = descriptionValue 
-					+ "<font color=blue>length: </font>" + length + "cm <br/>"; 
+					+ "<font color=blue>length: </font>" + length + "mm <br/>"; 
 			descriptionValue = descriptionValue 
 					+ "<font color=blue>degrees: </font>" + degs + "<br/>"; 
 			descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaXName() 
@@ -647,18 +647,18 @@ public class SimpleXDataKml {
 				descriptionValue = descriptionValue 
 				+ "<font color=blue>lon: </font>" + lon + ""+br; 
 				descriptionValue = descriptionValue 
-				+ "<font color=blue>length: </font>" + length + " cm "+br; 
+				+ "<font color=blue>length: </font>" + length + " mm "+br; 
 				descriptionValue = descriptionValue 
 				+ "<font color=blue>degree: </font>" + degs + ""+br; 
 				
 				descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaXName() 
-				+ ": " +fontEnd+ datalist[i].getDeltaXValue() + " cm <br/>"; 
+				+ ": " +fontEnd+ datalist[i].getDeltaXValue() + " mm <br/>"; 
 				descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaYName() 
-				+ ": " +fontEnd+ datalist[i].getDeltaYValue() + " cm <br/>"; 
+				+ ": " +fontEnd+ datalist[i].getDeltaYValue() + " mm <br/>"; 
 				descriptionValue = descriptionValue + fontStart+datalist[i].getDeltaZName() 
-				+ ": " +fontEnd+ datalist[i].getDeltaZValue() + " cm <br/>"; 
+				+ ": " +fontEnd+ datalist[i].getDeltaZValue() + " mm <br/>"; 
 				//descriptionValue = descriptionValue + "<font color=blue>scale rate </font>" 
-				//+ ":" +fontEnd+scaling + "cm:km <br/>";			 
+				//+ ":" +fontEnd+scaling + "mm:km <br/>";			 
 				descriptionValue = descriptionValue 
 				+ "<font color=blue>tag name:</font>" 
 				+ datalist[i].getFolderTag()+br; 
