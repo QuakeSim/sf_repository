@@ -3928,19 +3928,22 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		  extractGridParams(bufStr.readLine());
 
 		  //Remaining lines contain faults.
-		  
+		  ArrayList faultList=new ArrayList();
 		  String faultLine1=bufStr.readLine();
 		  String faultLine2=bufStr.readLine();
 		  int i=0;
 		  while(faultLine1!=null && faultLine2!=null) {
 				Fault fault=extractFaults(faultLine1,faultLine2);
 				fault.setFaultName("fault_"+i);
+				faultList.add(fault);
 				faultLine1=bufStr.readLine();
 				faultLine2=bufStr.readLine();
 				i++;
 		  }
 
-		  
+		  //Set the current params in the DB
+		  addParamsToDB();
+		  addMultipleFaultsToDB(faultList);
 	 }
 	 
 	 private void extractOrigin(String line) throws Exception {
@@ -3984,7 +3987,79 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		  fault.setFaultLength(Double.parseDouble(st.nextToken()));
 		  fault.setFaultWidth(Double.parseDouble(st.nextToken()));
 
+		  //Calculate and set the fault's lat and lon
+		  double tmp_faultLon=fault.getFaultLocationX()/factor(currentParams.getOriginLon(), 
+																			  currentParams.getOriginLat())				
+
+				+currentParams.getOriginLon();
+		  
+		  double tmp_faultLat=fault.getFaultLocationY()/111.32+currentParams.getOriginLat();
+
+		  fault.setFaultLonStart(tmp_faultLon);
+		  fault.setFaultLatStart(tmp_faultLat);
+
+		  //Calculate and set the fault's ending lat and lon
+		  //First, find the x and y values of the end point
+		  double d2r=Math.acos(-1.0)/180.0;
+		  double sval=90.0-fault.getFaultStrikeAngle();
+		  double thetangent=Math.tan(sval*d2r);
+		  double xend=fault.getFaultLength()/Math.sqrt(1+thetangent*thetangent);
+		  double yend=Math.sqrt(fault.getFaultLength()*fault.getFaultLength()-xend*xend);
+		  double lonEnd=xend/factor(currentParams.getOriginLon(), currentParams.getOriginLat())
+				+fault.getFaultLonStart();
+		  double latEnd=yend/111.32+fault.getFaultLatStart();
+		  
+		  fault.setFaultLonEnd(lonEnd);
+		  fault.setFaultLatEnd(latEnd);
+		  
+
 		  return fault;
 	 }
 
+	 //This adds the curent params to the db. 
+	 private void addParamsToDB() throws Exception {
+		  try{
+				if (db != null) db.close();
+				db = Db4o.openFile(getBasePath() + "/"
+										 + getContextBasePath() + "/" + userName + "/"
+										 + codeName + "/" + projectName + ".db");
+				
+				ObjectSet result = db.get(DislocParamsBean.class);
+				if (result.hasNext()) {
+					 DislocParamsBean tmp = (DislocParamsBean) result.next();
+					 db.delete(tmp);
+				}
+				
+				db.set(currentParams);
+				
+				// Say goodbye.
+				db.commit();
+				if (db != null) db.close();
+		  } catch (Exception e) {
+				if (db != null)	db.close();
+		  }
+		  finally {
+				if (db != null)	db.close();			
+		  }		  
+	 }
+	 
+	 //This adds an array of faults to the DB
+	 private void addMultipleFaultsToDB(ArrayList faults) throws Exception {
+		  try {
+				if (db != null) db.close();
+				db = Db4o.openFile(getBasePath() + "/"
+										 + getContextBasePath() + "/" + userName + "/"
+										 + codeName + "/" + projectName + ".db");
+				for(int i=0;i<faults.size();i++) {
+					 db.set(faults.get(i));
+				}
+				db.commit();
+		  }
+		  catch (Exception e) {
+				if (db != null) db.close();
+		  }
+		  finally {
+				if (db != null) db.close();			
+		  }
+	 }	 
 }
