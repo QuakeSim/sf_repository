@@ -428,6 +428,7 @@ function getScrolling() {
 	 <%@include file="FaultMapPanelFrame.jsp"%>
 	 <%@include file="InsarParamsForm.jsp"%>
 	 <%@include file="ProjectOutputMap.jsp"%>
+	 <%@include file="DislocFileUpload.jsp"%>
   </h:panelGrid>
 
   <%@include file="ProjectComponentPanel.jsp" %>

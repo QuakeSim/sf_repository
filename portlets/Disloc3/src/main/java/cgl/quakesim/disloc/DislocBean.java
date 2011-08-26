@@ -88,6 +88,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	 boolean renderFaultDrawing=false;
 	 boolean renderProjectOutputMap=false;
 	 boolean renderInsarParamsForm=false;
+	 boolean renderDislocInputUploadForm=false;
 
 	Fault currentFault = new Fault();
 	// DislocParamsBean dislocParams=new DislocParamsBean();
@@ -113,7 +114,6 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	 private double projectMaxX;
 	 private double projectMinY;
 	 private double projectMaxY;
-	 
 	 
 	 private static Logger logger;
 	 
@@ -238,6 +238,8 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	 //Used to provide simple access to to input and output files.
 	 String dislocInputUrl="";
 	 String dislocOutputUrl="";
+
+	 String dislocFaultTextArea="";
 	 
 	/**
 	 * The client constructor.
@@ -1105,6 +1107,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		renderFaultDrawing=false;
 		renderProjectOutputMap=false;
 		renderInsarParamsForm=false;
+		renderDislocInputUploadForm=false;
 	}
 
 	/**
@@ -1274,6 +1277,8 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 			 renderProjectOutputMap=!renderProjectOutputMap;
 		} else if (projectSelectionCode.equals("ShowInsarForm")) {
 			 renderInsarParamsForm=!renderInsarParamsForm;
+		} else if (projectSelectionCode.equals("UploadDislocInputs")) {
+			 renderDislocInputUploadForm=!renderDislocInputUploadForm;
 		} else if (projectSelectionCode.equals("")) {
 			;
 		}
@@ -2524,6 +2529,14 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	public void setRenderDislocGridParamsForm(boolean tmp_boolean) {
 		this.renderDislocGridParamsForm = tmp_boolean;
 	}
+	 
+	 public void setRenderDislocInputUploadForm(boolean renderDislocInputUploadForm) {
+		  this.renderDislocInputUploadForm=renderDislocInputUploadForm;
+	 }
+
+	 public boolean getRenderDislocInputUploadForm() {
+		  return renderDislocInputUploadForm;
+	 }
 
 	public boolean getRenderMap() {
 		return this.renderMap;
@@ -3675,6 +3688,13 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		  return this.dislocOutputUrl;
 	 }
 
+	 public void setDislocFaultTextArea(String dislocFaultTextArea) {
+		  this.dislocFaultTextArea=dislocFaultTextArea;
+	 }
+	 
+	 public String getDislocFaultTextArea(){
+		  return this.dislocFaultTextArea;
+	 }
 
 	public List getMyInsarParamsList() {
 		myInsarParamsList.clear();
@@ -3895,5 +3915,76 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		  projectMaxY=Double.NEGATIVE_INFINITY;
 	 }
 
+
+	 public void toggleImportFaultsForProject(ActionEvent ev) throws Exception{
+		  initEditFormsSelection();
+
+		  BufferedReader bufStr=new BufferedReader(new StringReader(dislocFaultTextArea));
+		  //First line has the origin
+		  extractOrigin(bufStr.readLine());
+
+		  //Second line has grid information (starting points, spacing, etc). We will always
+		  //assume grid observation points. 
+		  extractGridParams(bufStr.readLine());
+
+		  //Remaining lines contain faults.
+		  
+		  String faultLine1=bufStr.readLine();
+		  String faultLine2=bufStr.readLine();
+		  int i=0;
+		  while(faultLine1!=null && faultLine2!=null) {
+				Fault fault=extractFaults(faultLine1,faultLine2);
+				fault.setFaultName("fault_"+i);
+				faultLine1=bufStr.readLine();
+				faultLine2=bufStr.readLine();
+				i++;
+		  }
+
+		  
+	 }
+	 
+	 private void extractOrigin(String line) throws Exception {
+		  StringTokenizer st=new StringTokenizer(line); //Only token should be spaces
+		  currentParams.setOriginLat(Double.parseDouble(st.nextToken()));
+		  currentParams.setOriginLon(Double.parseDouble(st.nextToken()));
+		  currentParams.setObservationPointStyle(Integer.parseInt(st.nextToken()));
+		  
+		  //Save to DB
+	 }
+	 
+	 private void extractGridParams(String line) throws Exception {
+		  StringTokenizer st=new StringTokenizer(line); //Only token should be spaces
+		  currentParams.setGridMinXValue(Double.parseDouble(st.nextToken()));
+		  currentParams.setGridXSpacing(Double.parseDouble(st.nextToken()));
+		  currentParams.setGridXIterations(Integer.parseInt(st.nextToken()));
+
+		  currentParams.setGridMinYValue(Double.parseDouble(st.nextToken()));
+		  currentParams.setGridYSpacing(Double.parseDouble(st.nextToken()));
+		  currentParams.setGridYIterations(Integer.parseInt(st.nextToken()));
+
+		  //Save to DB
+	 }
+
+	 private Fault extractFaults(String line1, String line2) throws Exception {
+		  StringTokenizer st=new StringTokenizer(line1);
+		  Fault fault=new Fault();
+		  fault.setFaultLocationX(Double.parseDouble(st.nextToken()));
+		  fault.setFaultLocationY(Double.parseDouble(st.nextToken()));
+		  fault.setFaultStrikeAngle(Double.parseDouble(st.nextToken()));
+
+		  st=new StringTokenizer(line2);
+		  String faultType=st.nextToken();  //This is always point type.  It is missing from Fault.java
+		  fault.setFaultDepth(Double.parseDouble(st.nextToken()));
+		  fault.setFaultDipAngle(Double.parseDouble(st.nextToken()));
+		  fault.setFaultLameLambda(Double.parseDouble(st.nextToken()));
+		  fault.setFaultLameMu(Double.parseDouble(st.nextToken()));
+		  fault.setFaultStrikeSlip(Double.parseDouble(st.nextToken()));
+		  fault.setFaultDipSlip(Double.parseDouble(st.nextToken()));
+		  fault.setFaultTensileSlip(Double.parseDouble(st.nextToken()));
+		  fault.setFaultLength(Double.parseDouble(st.nextToken()));
+		  fault.setFaultWidth(Double.parseDouble(st.nextToken()));
+
+		  return fault;
+	 }
 
 }

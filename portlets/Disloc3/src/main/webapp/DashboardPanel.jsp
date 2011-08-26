@@ -43,7 +43,9 @@
 		  <f:selectItem id="item2" 
 							 itemLabel="Specify geometry for a new fault segment." 
 							 itemValue="CreateNewFault" /> 
-
+		  <f:selectItem id="item290393" 
+							 itemLabel="Upload existing list of Disloc inputs (advanced)." 
+							 itemValue="UploadDislocInputs" /> 
 		</h:selectOneMenu>
 		<h:commandButton id="button1" 
 							  value="Make Selection" 
