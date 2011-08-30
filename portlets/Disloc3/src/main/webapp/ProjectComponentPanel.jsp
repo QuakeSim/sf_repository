@@ -205,8 +205,6 @@
 	</h:panelGrid>		
  </h:panelGrid>				
  
- <h:commandButton id="SelectFault4projj" value="Commit Fault Updates"
-						actionListener="#{DislocBean2.toggleUpdateFaults}" />
 </h:form>
 <f:verbatim></fieldset></f:verbatim>
 </h:panelGroup>
