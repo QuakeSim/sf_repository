@@ -130,35 +130,36 @@
 													  value="#{myentry31.faultOriginYVary}" />
 				  </h:panelGrid>
 				</h:column>
-				
+
 				<h:column>
 				  <f:facet name="header">
-					 <h:outputText id="lkdrqh1186" value="Length" />
+					 <h:outputText id="lkdrq11819" value="Strike Angle" />
 				  </f:facet>
-				  <h:panelGrid  id="spxpcp8" columns="2" cellpadding="0" cellspacing="0">
-					 <h:inputText id="FaultLength2" 
+				  <h:panelGrid id="spxpcp12" columns="2" cellpadding="0" cellspacing="0">
+					 <f:facet name="header">								
+					 </f:facet>
+					 <h:inputText id="FaultStrikeAngle2" 
 									  size="7"
 									  style="text-align:right" 
-									  value="#{myentry31.faultLength}"
-									  required="true" />
-					 <h:selectBooleanCheckbox id="faultLengthVary2"
-													  value="#{myentry31.faultLengthVary}" />
+									  value="#{myentry31.faultStrikeAngle}"
+									  required="false" />
+					 <h:selectBooleanCheckbox id="faultStrikeAngleVary2"
+													  value="#{myentry31.faultStrikeAngleVary}" />
 				  </h:panelGrid>
 				</h:column>
-				
+
 				<h:column>
 				  <f:facet name="header">
-					 <h:outputText id="lkdrh1189" value="Width" />
+					 <h:outputText id="lkdrqj11816" value="Dip Angle" />
 				  </f:facet>
-				  <h:panelGrid  id="spxpcp9" columns="2" cellpadding="0" cellspacing="0">
-					 
-					 <h:inputText id="FaultWidth2" 
+				  <h:panelGrid id="spxpcp11" columns="2" cellpadding="0" cellspacing="0">
+					 <h:inputText id="FaultDipAngle2" 
 									  size="7"
 									  style="text-align:right" 
-									  value="#{myentry31.faultWidth}"
+									  value="#{myentry31.faultDipAngle}"
 									  required="true" />
-					 <h:selectBooleanCheckbox id="faultWidthVary2"
-													  value="#{myentry31.faultWidthVary}" />
+					 <h:selectBooleanCheckbox id="faultDipAngleVary2"
+													  value="#{myentry31.faultDipAngleVary}" />
 				  </h:panelGrid>
 				</h:column>						
 				
@@ -178,53 +179,38 @@
 													  value="#{myentry31.faultDepthVary}" />
 				  </h:panelGrid>
 				</h:column>
-				
+								
 				<h:column>
 				  <f:facet name="header">
-					 <h:outputText id="lkdrqj11816" value="Dip Angle" />
+					 <h:outputText id="lkdrh1189" value="Width" />
 				  </f:facet>
-				  <h:panelGrid id="spxpcp11" columns="2" cellpadding="0" cellspacing="0">
-					 <h:inputText id="FaultDipAngle2" 
+				  <h:panelGrid  id="spxpcp9" columns="2" cellpadding="0" cellspacing="0">
+					 
+					 <h:inputText id="FaultWidth2" 
 									  size="7"
 									  style="text-align:right" 
-									  value="#{myentry31.faultDipAngle}"
+									  value="#{myentry31.faultWidth}"
 									  required="true" />
-					 <h:selectBooleanCheckbox id="faultDipAngleVary2"
-													  value="#{myentry31.faultDipAngleVary}" />
+					 <h:selectBooleanCheckbox id="faultWidthVary2"
+													  value="#{myentry31.faultWidthVary}" />
 				  </h:panelGrid>
 				</h:column>						
 				
 				<h:column>
 				  <f:facet name="header">
-					 <h:outputText id="lkdrq11819" value="Strike Angle" />
+					 <h:outputText id="lkdrqh1186" value="Length" />
 				  </f:facet>
-				  <h:panelGrid id="spxpcp12" columns="2" cellpadding="0" cellspacing="0">
-					 <f:facet name="header">								
-					 </f:facet>
-					 <h:inputText id="FaultStrikeAngle2" 
+				  <h:panelGrid  id="spxpcp8" columns="2" cellpadding="0" cellspacing="0">
+					 <h:inputText id="FaultLength2" 
 									  size="7"
 									  style="text-align:right" 
-									  value="#{myentry31.faultStrikeAngle}"
-									  required="false" />
-					 <h:selectBooleanCheckbox id="faultStrikeAngleVary2"
-													  value="#{myentry31.faultStrikeAngleVary}" />
-				  </h:panelGrid>
-				</h:column>
-				
-				<h:column>
-				  <f:facet name="header">
-					 <h:outputText id="dflelerkljj3" value="Dip Slip" />
-				  </f:facet>
-				  <h:panelGrid id="spxpcp13" columns="2" cellpadding="0" cellspacing="0">
-					 <h:inputText id="FaultSlip2" 
-									  size="7"
-									  style="text-align:right" 
-									  value="#{myentry31.faultSlip}"
+									  value="#{myentry31.faultLength}"
 									  required="true" />
-					 <h:selectBooleanCheckbox id="faultDipSlipVary2"
-													  value="#{myentry31.faultDipSlipVary}" />
+					 <h:selectBooleanCheckbox id="faultLengthVary2"
+													  value="#{myentry31.faultLengthVary}" />
 				  </h:panelGrid>
 				</h:column>
+
 				
 				<h:column>
 				  <f:facet name="header">
@@ -242,6 +228,22 @@
 													  value="#{myentry31.faultStrikeSlipVary}" />
 				  </h:panelGrid>
 				</h:column>						
+
+				<h:column>
+				  <f:facet name="header">
+					 <h:outputText id="dflelerkljj3" value="Dip Slip" />
+				  </f:facet>
+				  <h:panelGrid id="spxpcp13" columns="2" cellpadding="0" cellspacing="0">
+					 <h:inputText id="FaultSlip2" 
+									  size="7"
+									  style="text-align:right" 
+									  value="#{myentry31.faultSlip}"
+									  required="true" />
+					 <h:selectBooleanCheckbox id="faultDipSlipVary2"
+													  value="#{myentry31.faultDipSlipVary}" />
+				  </h:panelGrid>
+				</h:column>
+				
 				
 				<h:column>
 				  <f:facet name="header">
