@@ -1,7 +1,7 @@
 <h:form id="dislocInputForm" rendered="#{DislocBean2.renderDislocInputUploadForm}"> 
   <f:verbatim>
 	 <fieldset><legend class="portlet-form-label">Upload Fault File</legend>
-	 Use this form to upload one or more faults that are already in Disloc input file format.  The following example shows formatting:
+	 Use this form to upload one or more faults that are already in Disloc input file format.  The following example shows formatting:<br/>
     Line 1: 32.904255 -115.526449 1   (this is the lat, lon of the origin; and "1" signifies use of a grid).<br/>
     Line 2: -75 1 151 -40 1 41 (the grid: x0, x_delta, x_number, y0, y_delta, y_number) <br/>
     Line 3: 20.489759271 -80.624111128 355.0 (first fault patch: x, y (km) from origin and strike (degrees)<br/>
