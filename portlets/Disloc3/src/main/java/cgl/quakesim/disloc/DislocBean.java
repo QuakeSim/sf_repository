@@ -193,8 +193,8 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	List myInterpIdList = new ArrayList();
 	List myInsarParamsList = new ArrayList();
 
-	HtmlDataTable myFaultDataTable, myProjectSummaryDataTable;
-	HtmlDataTable myScatterPointsTable, myInsarDataTable;
+	 HtmlDataTable myFaultDataTable, myProjectSummaryDataTable,myFaultListingsDataTable;
+	 HtmlDataTable myScatterPointsTable, myInsarDataTable;
 
 	// Create the database
 	ObjectContainer db = null;
@@ -1345,7 +1345,7 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		faultSelectionCode = "";
 	}
 
-	public void toggleUpdateProjectObservations(ActionEvent ev) {
+	 public void toggleUpdateProjectObservations(ActionEvent ev) {
 		System.out.println("Updating observation entry for project");
 		try {
 			obsvEntryForProject tmp_ObsvEntryForProject = new obsvEntryForProject();
@@ -1497,12 +1497,83 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
-	public void toggleUpdateFaults(ActionEvent ev) {
-		System.out.println("[toggleUpdateFaults] started...");
-		String faultStatus = "Update";
+	 /**
+	  * This is used to delete a fault from the ProjectComponentPanel.
+	  */
+	 public void toggleDeleteFaults2() {
+		try {
+			 Fault faultToDelete=(Fault)(getMyFaultListingsDataTable().getRowData());
+			
+			 if (db != null) db.close();
+			 db = Db4o.openFile(getBasePath() + "/"
+									  + getContextBasePath() + "/" + userName + "/"
+									  + codeName + "/" + projectName + ".db");
+			 
+			 ObjectSet results=db.get(faultToDelete);
+			 if(results.hasNext()) {
+				  Fault todelete=(Fault)results.next();
+				  db.delete(todelete);
+			 }
+			 
+			 db.close();
+			 
+		} catch (Exception e) {
+			 if (db != null)
+				  db.close();
+			 System.out.println("[toggleUpdateFaults] " + e);
+		}
+		finally {
+			 if (db != null) db.close();			
+		}
+		
+		// Print this out as KML
+		faultKmlUrl = createFaultKmlFile();
+	 }
+
+	 /**
+	  * This method is used to update faults in ProjectComponentsPanel.
+	  */
+	 public void toggleUpdateFaults2() {
+		try {
+			 Fault faultToUpdate=(Fault)(getMyFaultListingsDataTable().getRowData());
+			 if (db != null) db.close();
+			 db = Db4o.openFile(getBasePath() + "/"
+									  + getContextBasePath() + "/" + userName + "/"
+									  + codeName + "/" + projectName + ".db");
+			 
+			 //Delete previous versions
+			 Fault oldFault=new Fault();
+			 oldFault.setFaultName(faultToUpdate.getFaultName());
+			 ObjectSet results=db.get(oldFault);
+			 if(results.hasNext()) {
+				  db.delete((Fault)results.next());
+			 }
+
+			 //Now insert the new fault.
+			 db.set(faultToUpdate);
+			 db.commit();
+		} 
+		catch (Exception e) {
+			 if (db != null) db.close();
+			 System.out.println("[toggleUpdateFaults] " + e);
+		}
+		finally {
+			 if (db != null) db.close();			
+		}
+		
+		// Print this out as KML
+		faultKmlUrl = createFaultKmlFile();
+	
+	 }
+	 
+	 /** 
+	  * TODO: This method may be now obsolete.
+	  */ 
+	 public void toggleUpdateFaults(ActionEvent ev) {
+		  System.out.println("[toggleUpdateFaults] started...");
+		  String faultStatus = "Update";
 		try {
 
 			int iSelectFault = -1;
@@ -2368,6 +2439,14 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	public void setFaultLonEnd(String tmp_str) {
 		this.faultLonEnd = tmp_str;
 	}
+
+	 public HtmlDataTable getMyFaultListingsDataTable() {
+		  return myFaultListingsDataTable;
+	 }
+
+	 public void setMyFaultListingsDataTable(HtmlDataTable myFaultListingsDataTable) {
+		  this.myFaultListingsDataTable=myFaultListingsDataTable;
+	 }
 
 	public HtmlDataTable getMyFaultDataTable() {
 		return myFaultDataTable;

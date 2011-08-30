@@ -108,7 +108,8 @@ function myInit() {
         }
 
 
-//This is used to calculate the length and strike angle.
+//This is used to calculate the length and strike angle when the lat and lon of the fault's
+//end points are known.
 function calculatelength(){
 var lonStart=document.getElementById("Faultform:faultLon");
 var lonEnd=document.getElementById("Faultform:faultLonende3r");
@@ -149,8 +150,9 @@ strike.value=Math.round(strikeValue*1000)/1000;
 }
 
 
+//This is used to calculate the lat and lon values of the fault's endpoint if the
+//lat and lon of the origin are known and the length and strike are known.
 function calculateendpoint(){
-
 // alert("debug");
 var lonStart=document.getElementById("Faultform:faultLon");
 var lonEnd=document.getElementById("Faultform:faultLonende3r");

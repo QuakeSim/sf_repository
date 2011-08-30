@@ -33,7 +33,9 @@
 						  id="dflelerh966" 
 						  headerClass="componentstableh" 
 						  columnClasses="componentstablec"
-						  value="#{DislocBean2.myFaultsForProjectList}" var="myentry31">
+						  binding="#{DislocBean2.myFaultListingsDataTable}"
+						  value="#{DislocBean2.myFaultsForProjectList}" 
+						  var="myentry31">
 			<h:column>
 			  <f:facet name="header">
 				 <h:outputText id="dflelerh967" escape="false" value="Name" />
@@ -181,36 +183,29 @@
 				 <h:inputText id="LameMu" style="text-align:right;width:30px" 
 								  value="#{myentry31.faultLameMu}" />
 			</h:column>
-		 </h:dataTable>
-
-		 <h:dataTable 
-			  border="1" 
-			  cellpadding="0" 
-			  cellspacing="0" 
-			  headerClass="componentstableh2" 
-			  columnClasses="componentstablec"
-			  id="dflelerkljk451"
-			  value="#{DislocBean2.myFaultEntryForProjectList}" 
-			  var="myentry3">
-			<h:column>
-			  <f:facet name="header">
-				 <h:outputText id="dflelerkljk454" value="Update Values" />
-			  </f:facet>
-			  <h:selectBooleanCheckbox value="#{myentry3.update}" id="dflelerkljk455"/>
-			</h:column>
 			
 			<h:column>
 			  <f:facet name="header">
-				 <h:outputText id="dflelerkljk456" value="Remove Fault" />
-			  </f:facet>									
-			  <h:selectBooleanCheckbox id="dflelerkljk457" value="#{myentry3.delete}"/>
+				 <f:verbatim>Update</f:verbatim>
+			  </f:facet>
+			  <h:commandButton id="UpdateFaultValues309u" value="Update"
+									 action="#{DislocBean2.toggleUpdateFaults2}"/>
+			  
 			</h:column>
+			<h:column>
+			  <f:facet name="header">
+				 <f:verbatim>Delete</f:verbatim>
+			  </f:facet>
+			  <h:commandButton id="DeleteFaultValues309" value="Delete"
+									 action="#{DislocBean2.toggleDeleteFaults2}"/>
+			</h:column>
+
 		 </h:dataTable>
 
 	</h:panelGrid>		
  </h:panelGrid>				
  
- <h:commandButton id="SelectFault4projj" value="UpdateFault"
+ <h:commandButton id="SelectFault4projj" value="Commit Fault Updates"
 						actionListener="#{DislocBean2.toggleUpdateFaults}" />
 </h:form>
 <f:verbatim></fieldset></f:verbatim>

@@ -139,8 +139,9 @@
 	 
 	 <f:facet name="footer"> 
 		<h:outputFormat id="output2" escape="false" 
-							 value="Click 'Do Math' to udpate length and strike. 
-									  Click 'Set Values' when you are done." /> 
+							 value="Click <i>Calculate Length</i> to udpate length and strike. 
+		                       Click <i>Calculate Endpoint</i> to calculate the fault's endpoint from length and strike. 
+									  Click <i>Set Values</i> when you are done." /> 
 	 </f:facet> 
   </h:panelGrid>		 
   <h:panelGrid id="faultbuttons93" columns="2">
@@ -148,9 +149,9 @@
 							actionListener="#{DislocBean2.toggleAddFaultForProject}" /> 
 	 <f:verbatim>
 		<input id="domath" type="button" 
-				 name="Update" value="Calculate length" onclick="calculatelength()"/>
+				 name="Update" value="Calculate Length" onclick="calculatelength()"/>
 		<input id="domath2" type="button" 
-				 name="Update2" value="Calculate endpoint" onclick="calculateendpoint()"/>
+				 name="Update2" value="Calculate Endpoint" onclick="calculateendpoint()"/>
 	 </f:verbatim>
   </h:panelGrid>
 	 <f:verbatim></fieldset></f:verbatim>
