@@ -102,34 +102,16 @@
 								  value="#{myentry31.faultLonEnd}"
 								  required="true" />
 			</h:column>						
-			
+
 			<h:column>
 			  <f:facet name="header">
-				 <h:outputText id="lkdrq11842" value="Length" />
+				 <h:outputText id="lkdrq1521" value="Strike Angle" />
 			  </f:facet>
-			  <h:inputText id="FaultLength" style="text-align:right;width:30px" 
-								  value="#{myentry31.faultLength}"
-								  required="true" />
+			  <h:inputText id="FaultStrikeAngle" style="text-align:right;width:30px" 
+								value="#{myentry31.faultStrikeAngle}"
+								required="false" />
 			</h:column>
-			
-			<h:column>
-			  <f:facet name="header">
-				 <h:outputText id="lkdrq11813" value="Width" />
-			  </f:facet>
-			  <h:inputText id="FaultWidth" style="text-align:right;width:30px" 
-								value="#{myentry31.faultWidth}"
-								required="true" />
-			</h:column>
-			
-			<h:column>
-			  <f:facet name="header">
-				 <h:outputText id="lkdrq11213" value="Depth" />
-			  </f:facet>
-			  <h:inputText id="FaultDepth" style="text-align:right;width:30px" 
-								value="#{myentry31.faultDepth}"
-								required="true" />
-			</h:column>
-			
+
 			<h:column>
 			  <f:facet name="header">
 				 <h:outputText id="lkdrqj11816" value="Dip Angle" />
@@ -141,20 +123,29 @@
 			
 			<h:column>
 			  <f:facet name="header">
-				 <h:outputText id="dflelerk123" value="Dip Slip" />
+				 <h:outputText id="lkdrq11213" value="Depth" />
 			  </f:facet>
-			  <h:inputText id="FaultSlip" style="text-align:right;width:30px" 
-								value="#{myentry31.faultDipSlip}"
+			  <h:inputText id="FaultDepth" style="text-align:right;width:30px" 
+								value="#{myentry31.faultDepth}"
 								required="true" />
 			</h:column>
-			
+
 			<h:column>
 			  <f:facet name="header">
-				 <h:outputText id="lkdrq1521" value="Strike Angle" />
+				 <h:outputText id="lkdrq11813" value="Width" />
 			  </f:facet>
-			  <h:inputText id="FaultStrikeAngle" style="text-align:right;width:30px" 
-								value="#{myentry31.faultStrikeAngle}"
-								required="false" />
+			  <h:inputText id="FaultWidth" style="text-align:right;width:30px" 
+								value="#{myentry31.faultWidth}"
+								required="true" />
+			</h:column>
+						
+			<h:column>
+			  <f:facet name="header">
+				 <h:outputText id="lkdrq11842" value="Length" />
+			  </f:facet>
+			  <h:inputText id="FaultLength" style="text-align:right;width:30px" 
+								  value="#{myentry31.faultLength}"
+								  required="true" />
 			</h:column>
 			
 			<h:column>
@@ -165,13 +156,14 @@
 								value="#{myentry31.faultStrikeSlip}"
 								required="true" />
 			</h:column>						
-			
+
 			<h:column>
 			  <f:facet name="header">
-				 <h:outputText id="dflelerklj1252" value="Tensile Slip" />
+				 <h:outputText id="dflelerk123" value="Dip Slip" />
 			  </f:facet>
-			  <h:inputText id="FaultTensileSlip" style="text-align:right;width:30px" 
-								value="#{myentry31.faultTensileSlip}" />
+			  <h:inputText id="FaultSlip" style="text-align:right;width:30px" 
+								value="#{myentry31.faultDipSlip}"
+								required="true" />
 			</h:column>
 			
 			<h:column>
