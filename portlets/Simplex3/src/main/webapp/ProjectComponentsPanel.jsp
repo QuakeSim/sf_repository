@@ -44,7 +44,6 @@
 		<f:verbatim>
 		  <fieldset ondblclick="toggleDisplay1(this)">
 			 <legend class="portlet-form-label">Fault Components</legend>
-			 <b>To update values: </b>Please click the 'update' button after value changes. 
 			 Click the checkbox if you want to allow Simplex to vary the value during
 			 optimization. 
 			 <u>Toggle the fault display on/off by double clicking anywhere in this fieldset.</u>
@@ -52,39 +51,13 @@
 		  </f:verbatim>
 
 		  <h:panelGrid id="dflelerkljg162" columns="2" border="0"  cellpadding="0" cellspacing="0">
-			 <h:dataTable border="1" 
-							  cellpadding="0" 
-							  cellspacing="0" 
-							  id="dflelegq24" 
-							  headerClass="componentstableh2" 
-							  columnClasses="componentstablec"											  
-							  value="#{SimplexBean.myFaultEntryForProjectList}" 
-							  var="myentry3">
-				<h:column>
-				  <f:facet name="header">
-					 <f:verbatim><b>Update</b></f:verbatim>
-				  </f:facet>
-				  <h:selectBooleanCheckbox value="#{myentry3.update}" 
-													style="text-align:center"
-													id="dflelerkljk455"/>
-				</h:column>
-				
-				<h:column>
-				  <f:facet name="header">
-					 <f:verbatim><b>Remove</b></f:verbatim>
-				  </f:facet>													  
-				  <h:selectBooleanCheckbox id="dflelerkljk457" 
-													style="text-align:center"
-													value="#{myentry3.delete}"/>
-				</h:column>
-			 </h:dataTable>
-
 			 <h:dataTable id="dflelerh966"  
 							  border="1" 
 							  cellpadding="0" 
 							  cellspacing="0"  
 							  headerClass="componentstableh" 
 							  columnClasses="componentstablec"
+							  binding="#{SimplexBean.myFaultListingsDataTable}"
 							  value="#{SimplexBean.myFaultsForProjectList}" 
 							  var="myentry31">
 				<h:column>
@@ -307,11 +280,26 @@
 									  value="#{myentry31.faultLatEnds}" />
 				  </h:panelGrid>
 				</h:column>
+
+				<h:column>
+				  <f:facet name="header">
+					 <f:verbatim>Update</f:verbatim>
+				  </f:facet>
+				  <h:commandButton id="UpdateFaultVals09e" 
+										 value="Update Fault"
+										 action="#{SimplexBean.toggleUpdateFaults2}" />
+				</h:column>
+				<h:column>
+				  <f:facet name="header">
+					 <f:verbatim>Delete</f:verbatim>
+				  </f:facet>
+				  <h:commandButton id="DeleteFaultVals09e" 
+										 value="Delete Fault"
+										 action="#{SimplexBean.toggleDeleteFaults2}" />
+				</h:column>
+
 			 </h:dataTable>
 		</h:panelGrid>
-		<h:commandButton id="SelectFault4projj" 
-							  value="UpdateFault"
-							  actionListener="#{SimplexBean.toggleUpdateFaults}" />
 	 <f:verbatim></fieldset></f:verbatim>		  
 	 </h:form>
 	 
@@ -323,62 +311,13 @@
 			 Please click the 'update' button after value changes.
 			 <u>Toggle the fault display on/off by double clicking anywhere in this fieldset.</u>
 		</f:verbatim>
-		
-		<h:commandButton id="SelectObservations4proj1"		
-							  style="display:none"
-							  value="Update Observations"
-							  actionListener="#{SimplexBean.toggleUpdateObservations}" />
-		
+				
 		<h:panelGrid id="aerbasd1" 
 						 style="display:none"
 						 columns="2" 
 						 border="0" 
 						 cellpadding="0" 
 						 cellspacing="0">    
-		  
-		  <h:dataTable border="1" 
-							cellpadding="0" 
-							cellspacing="0" 
-							id="dflelerz166" 
-							headerClass="componentstableh2" 
-							columnClasses="componentstablec"						
-							value="#{SimplexBean.myObservationEntryForProjectList}" 
-							var="myentry7">
-			 
-				<h:column>
-				  <f:facet name="header">
-					 <h:outputText id="dflelerkljk954" 
-										style="font:bold"
-										escape="false" 
-										value="Update" />
-				  </f:facet>
-				  
-				  <h:panelGrid id="spxpcp31" columns="2" cellpadding="0" 
-									cellspacing="0" styleClass="centered">
-					 <h:selectBooleanCheckbox value="#{myentry7.update}" id="dflelerkljk955" />
-					 <h:outputText id="spxpcp32"style="text-align:right;width:0px" value ="" />
-				  </h:panelGrid>
-				</h:column>
-				
-				<h:column>
-				  <f:facet name="header">
-					 <h:outputText id="dflelerkljk956" 
-										style="font:bold"
-										escape="false" 
-										value="Remove" />
-				  </f:facet>
-				  
-				  <h:panelGrid id="spxpcp35" 
-									columns="2" 
-									cellpadding="0" 
-									cellspacing="0" 
-									styleClass="centered">
-					 <h:selectBooleanCheckbox id="dflelerkljk957" 
-													  value="#{myentry7.delete}"/>
-					 <h:outputText id="spxpcp36" style="text-align:right;width:0px" value ="" />
-				  </h:panelGrid>
-				</h:column>
-			 </h:dataTable>
 
 			 <h:dataTable border="1" 
 							  cellpadding="0" 
@@ -386,6 +325,7 @@
 							  id="dflelerkljk1277" 
 							  headerClass="componentstableh2" 
 							  columnClasses="componentstablec"
+							  binding="#{SimplexBean.myObsvListingsDataTable}"
 							  value="#{SimplexBean.myObservationsForProjectList}"
 							  var="myentry4">
 				<h:column>
@@ -467,6 +407,25 @@
 										itemValue="-1" />
 				  </h:selectOneMenu>
 				</h:column>
+
+
+				<h:column>
+				  <f:facet name="header">
+					 <f:verbatim>Update Observation</f:verbatim>
+				  </f:facet>
+				  <h:commandButton id="UpdateObsvVals09e" 
+										 value="Update"
+										 action="#{SimplexBean.toggleUpdateObservations2}" />
+				</h:column>
+				<h:column>
+				  <f:facet name="header">
+					 <f:verbatim>Delete Observation</f:verbatim>
+				  </f:facet>
+				  <h:commandButton id="DeleteObsvVals09e" 
+										 value="Delete"
+										 action="#{SimplexBean.toggleDeleteObservations2}" />
+				</h:column>
+
 			 </h:dataTable>
 			 
 		</h:panelGrid>

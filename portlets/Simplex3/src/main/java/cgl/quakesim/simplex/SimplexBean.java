@@ -145,7 +145,7 @@ public class SimplexBean extends GenericSopacBean {
 
 	SimpleXOutputBean projectSimpleXOutput;
 
-	HtmlDataTable myArchiveDataTable;
+	 HtmlDataTable myArchiveDataTable, myFaultListingsDataTable, myObsvListingsDataTable;
 	UIData myArchiveDataTable2;
 
 	String kmlProjectFile = "network0.kml";
@@ -1538,8 +1538,78 @@ public class SimplexBean extends GenericSopacBean {
 	 }
 	 
 	 /**
+	  * This is used to delete an observation from the ProjectComponentPanel.
+	  */
+	 public void toggleDeleteObservations2() {
+		ObjectContainer db = null;
+		try {
+			 Observation obsvToDelete=(Observation)(getMyObsvListingsDataTable().getRowData());
+			 System.out.println("Obsv to delete:"+obsvToDelete.getObsvName());
+			
+			 if (db != null) db.close();
+			 db = Db4o.openFile(getBasePath() + "/"
+									  + getContextBasePath() + "/" + userName + "/"
+									  + codeName + "/" + projectName + ".db");
+			 
+			 ObjectSet results=db.get(obsvToDelete);
+			 if(results.hasNext()) {
+				  Observation todelete=(Observation)results.next();
+				  db.delete(todelete);
+			 }
+			 
+			 db.close();
+			 
+		} catch (Exception e) {
+			 if (db != null) db.close();
+			 System.out.println("[toggleDeleteObservations2] " + e);
+			 e.printStackTrace();
+		}
+		finally {
+			 if (db != null) db.close();			
+		}
+
+	 }
+
+	 /**
+	  * This method is used to update faults in ProjectComponentsPanel.
+	  */
+	 public void toggleUpdateObservations2() {
+		ObjectContainer db = null;
+		try {
+			 Observation obsvToUpdate=(Observation)(getMyObsvListingsDataTable().getRowData());
+			 System.out.println("Observation to update:"+obsvToUpdate.getObsvName());
+			 if (db != null) db.close();
+			 db = Db4o.openFile(getBasePath() + "/"
+									  + getContextBasePath() + "/" + userName + "/"
+									  + codeName + "/" + projectName + ".db");
+			 
+			 //Delete previous versions
+			 Observation oldObsv=new Observation();
+			 oldObsv.setObsvName(obsvToUpdate.getObsvName());
+			 ObjectSet results=db.get(oldObsv);
+			 if(results.hasNext()) {
+				  System.out.println("Found obsv to delete");
+				  db.delete((Observation)results.next());
+			 }
+
+			 //Now insert the new obsv.
+			 db.set(obsvToUpdate);
+			 db.commit();
+		} 
+		catch (Exception e) {
+			 if (db != null) db.close();
+			 System.out.println("[toggleUpdateFaults2] " + e);
+			 e.printStackTrace();
+		}
+		finally {
+			 if (db != null) db.close();			
+		}
+	 }
+
+	 /**
 	  * This method is associated with actions of the observations data table in 
 	  * ProjectComponentsPanel.jsp
+	  * TODO: probably now obsolete.
 	  */
 	 public void toggleUpdateObservations(ActionEvent ev) {
 		  String observationStatus = "Update";
@@ -1936,6 +2006,7 @@ public class SimplexBean extends GenericSopacBean {
 		return ("Simplex2-kml-viewer");
 	}
 
+
 	public void toggleUpdateFaultProjectEntry(ActionEvent ev) {
 		String faultStatus = "Update";
 		ObjectContainer db = null;
@@ -2004,6 +2075,83 @@ public class SimplexBean extends GenericSopacBean {
 		faultKmlUrl = createFaultKmlFile();
 	}
 
+	 /**
+	  * This is used to delete a fault from the ProjectComponentPanel.
+	  */
+	 public void toggleDeleteFaults2() {
+		ObjectContainer db = null;
+		try {
+			 Fault faultToDelete=(Fault)(getMyFaultListingsDataTable().getRowData());
+			 System.out.println("Fault to delete:"+faultToDelete.getFaultName());
+			
+			 if (db != null) db.close();
+			 db = Db4o.openFile(getBasePath() + "/"
+									  + getContextBasePath() + "/" + userName + "/"
+									  + codeName + "/" + projectName + ".db");
+			 
+			 ObjectSet results=db.get(faultToDelete);
+			 if(results.hasNext()) {
+				  Fault todelete=(Fault)results.next();
+				  db.delete(todelete);
+			 }
+			 
+			 db.close();
+			 
+		} catch (Exception e) {
+			 if (db != null) db.close();
+			 System.out.println("[toggleDeleteFaults2] " + e);
+			 e.printStackTrace();
+		}
+		finally {
+			 if (db != null) db.close();			
+		}
+		
+		// Print this out as KML
+		faultKmlUrl = createFaultKmlFile();
+	 }
+
+	 /**
+	  * This method is used to update faults in ProjectComponentsPanel.
+	  */
+	 public void toggleUpdateFaults2() {
+		ObjectContainer db = null;
+		try {
+			 Fault faultToUpdate=(Fault)(getMyFaultListingsDataTable().getRowData());
+			 System.out.println("Fault to update:"+faultToUpdate.getFaultName());
+			 if (db != null) db.close();
+			 db = Db4o.openFile(getBasePath() + "/"
+									  + getContextBasePath() + "/" + userName + "/"
+									  + codeName + "/" + projectName + ".db");
+			 
+			 //Delete previous versions
+			 Fault oldFault=new Fault();
+			 oldFault.setFaultName(faultToUpdate.getFaultName());
+			 ObjectSet results=db.get(oldFault);
+			 if(results.hasNext()) {
+				  System.out.println("Found fault to delete");
+				  db.delete((Fault)results.next());
+			 }
+
+			 //Now insert the new fault.
+			 db.set(faultToUpdate);
+			 db.commit();
+		} 
+		catch (Exception e) {
+			 if (db != null) db.close();
+			 System.out.println("[toggleUpdateFaults2] " + e);
+		}
+		finally {
+			 if (db != null) db.close();			
+		}
+		
+		// Print this out as KML
+		faultKmlUrl = createFaultKmlFile();
+	
+	 }
+
+	 /**
+	  * TODO: this method may be obsolete.
+	  */
 	public void toggleUpdateFaults(ActionEvent ev) {
 		logger.info("[" + getUserName() + "/SimplexBean/toggleUpdateFaults] started...");
 		String faultStatus = "Update";
@@ -3343,4 +3491,21 @@ public class SimplexBean extends GenericSopacBean {
 		  }
 		  return selectedGPSJSONValues;
 	 }
+
+	 public HtmlDataTable getMyFaultListingsDataTable() {
+		  return myFaultListingsDataTable;
+	 }
+
+	 public void setMyFaultListingsDataTable(HtmlDataTable myFaultListingsDataTable) {
+		  this.myFaultListingsDataTable=myFaultListingsDataTable;
+	 }
+
+	 public HtmlDataTable getMyObsvListingsDataTable() {
+		  return myObsvListingsDataTable;
+	 }
+
+	 public void setMyObsvListingsDataTable(HtmlDataTable myObsvListingsDataTable) {
+		  this.myObsvListingsDataTable=myObsvListingsDataTable;
+	 }
+
 }
