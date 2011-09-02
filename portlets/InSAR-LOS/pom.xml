@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>QuakeSim2</groupId>
+  <artifactId>InSAR-LOS</artifactId>
+  <packaging>war</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>A custom project using myfaces</name>
+  <url>http://www.myorganization.org</url>
+  
+  <parent>
+    <groupId>quakesim</groupId>
+    <artifactId>portlets-driver</artifactId>
+    <version>1.0</version>
+    <relativePath>..</relativePath>
+  </parent>
+  
+  <build>
+    <finalName>InSAR-LOS</finalName>
+    <resources>
+      <resource>
+	<directory>src/main/resources</directory>
+	<filtering>true</filtering>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+	<artifactId>maven-antrun-plugin</artifactId>
+	<executions>
+	  <execution>
+	    <id>Clean ${project.artifactId} portlet</id>
+	    <phase>clean</phase>
+	    <configuration>
+	      <!-- 
+		   Allow this to fail on error. This is not great, but we must do this
+		   since the parent pom is not abstract and so will get executed along with
+		   its children.
+	      -->
+	      <tasks>			 
+		<delete dir="${catalina.home}/webapps/${project.artifactId}">
+		</delete>
+		
+		<delete file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${project.artifactId}"/>
+          </tasks>
+	    </configuration>
+	    <goals>
+	      <goal>run</goal>
+	    </goals>
+       </execution>
+       <execution>
+	 <id>Convert ${project.artifactId} portlet</id>
+	 <phase>package</phase>
+	 <configuration>				
+	   <tasks if="to.jsf">
+	     <delete file="${basedir}/target/${project.artifactId}/WEB-INF/lib/portals-bridges-commons-1.0.jar"/>
+	     <delete file="${basedir}/target/${project.artifactId}/WEB-INF/lib/portals-bridges-jsf-1.0.jar"/>			 
+	   </tasks>
+	 </configuration>
+	 <goals>
+	   <goal>run</goal>
+	 </goals>
+       </execution>
+       
+       <execution>
+         <phase>package</phase>
+         <configuration>
+           <tasks>
+	     <echo message="Google Master Key: ${google.master.key}"/>
+	     <replace dir="${basedir}/target/${project.artifactId}" token="put.google.map.key.here" value="${google.master.key}">
+	       <include name="**/*.jsp"/>
+	     </replace>
+	     
+	     <echo message="Setting the host.base.url: ${host.base.url}"/>
+	     <replace dir="${basedir}/target/${project.artifactId}"
+		      token="@host.base.url@"
+		      value="${host.base.url}">
+	       <include name="**/*.*"/>
+	     </replace>
+           </tasks>
+	   
+         </configuration>
+         <goals>
+           <goal>run</goal>
+         </goals>
+       </execution> 
+	</executions>
+      </plugin>
+    </plugins>
+  </build>  
+</project>
