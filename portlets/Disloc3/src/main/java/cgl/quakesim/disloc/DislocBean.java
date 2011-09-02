@@ -345,7 +345,6 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		ObsvPoint[] returnPoints = null;
 
 		try {
-
 			if (db != null)
 				db.close();
 			db = Db4o.openFile(getBasePath() + "/" + getContextBasePath() + "/"
