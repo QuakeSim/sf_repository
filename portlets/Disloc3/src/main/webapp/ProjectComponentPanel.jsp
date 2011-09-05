@@ -52,7 +52,9 @@
 			  </f:facet>
 			  <h:panelGrid columns="2" cellpadding="0" cellspacing="0" id="kljerje22">
 				 <h:inputText id="dflelerklh968" 
-								  style="text-align:right;width:35px" 
+								  style="text-align:right;width:35px"
+								  onmouseover="expandTextField(this)" 
+								  onmouseout="resetTextFieldStyle(this)"
 								  value="#{myentry31.faultName}" 
 								  required="true" />
 			  </h:panelGrid>
@@ -67,6 +69,8 @@
 								  style="text-align:right;width:30px"
 								  value="#{myentry31.faultLocationX}" 
 								  onchange="updateLat0Lon0Lat1Lon1(this)"
+								  onmouseover="expandTextField(this)"
+								  onmouseout='resetTextFieldStyle(this)'
 								  required="true" />
 			  </h:panelGrid>
 			</h:column>
@@ -79,6 +83,9 @@
 				 <h:inputText id="FaultLocationY2" style="text-align:right;width:30px" 
 								  value="#{myentry31.faultLocationY}"
 								  onchange="updateLat0Lon0Lat1Lon1(this)"
+								  onmouseover="expandTextField(this)"
+								  onmouseout='resetTextFieldStyle(this)'
+
 								  required="true" />
 			  </h:panelGrid>
 			</h:column>
@@ -90,7 +97,9 @@
 			  <h:inputText id="FaultLatStart" style="text-align:right;width:30px" 
 								value="#{myentry31.faultLatStart}"
 								onchange="updateXYLengthStrike(this)"
-								required="true" />
+								  onmouseover="expandTextField(this)"
+								  onmouseout='resetTextFieldStyle(this)'
+								  required="true" />
 			</h:column>
 			
 			<h:column>
@@ -100,6 +109,8 @@
 				 <h:inputText id="FaultLonStart" style="text-align:right;width:30px" 
 								  value="#{myentry31.faultLonStart}"
 								  onchange="updateXYLengthStrike(this)"
+								  onmouseover="expandTextField(this)"
+								  onmouseout='resetTextFieldStyle(this)'
 								  required="true" />
 			</h:column>
 			
@@ -110,6 +121,8 @@
 			  <h:inputText id="FaultLatEnd" style="text-align:right;width:30px" 
 								value="#{myentry31.faultLatEnd}"
 								onchange="updateXYLengthStrike(this)"
+								onmouseover="expandTextField(this)"
+								onmouseout='resetTextFieldStyle(this)'
 								required="true" />
 			</h:column>
 			
@@ -120,6 +133,8 @@
 				 <h:inputText id="FaultLonEnd" style="text-align:right;width:30px" 
 								  value="#{myentry31.faultLonEnd}"
 								  onchange="updateXYLengthStrike(this)"
+								  onmouseover="expandTextField(this)"
+								  onmouseout='resetTextFieldStyle(this)'
 								  required="true" />
 			</h:column>						
 
@@ -130,6 +145,8 @@
 			  <h:inputText id="FaultStrikeAngle" style="text-align:right;width:30px" 
 								value="#{myentry31.faultStrikeAngle}"
 								onchange="updateLat0Lon0Lat1Lon1(this)"
+								onmouseover="expandTextField(this)"
+								onmouseout='resetTextFieldStyle(this)'
 								required="false" />
 			</h:column>
 
@@ -139,6 +156,8 @@
 			  </f:facet>
 			  <h:inputText id="FaultDipAngle" style="text-align:right;width:30px" 
 								value="#{myentry31.faultDipAngle}"
+								onmouseover="expandTextField(this)"
+								onmouseout='resetTextFieldStyle(this)'
 								required="true" />
 			</h:column>
 			
@@ -148,6 +167,8 @@
 			  </f:facet>
 			  <h:inputText id="FaultDepth" style="text-align:right;width:30px" 
 								value="#{myentry31.faultDepth}"
+								onmouseover="expandTextField(this)"
+								onmouseout='resetTextFieldStyle(this)'
 								required="true" />
 			</h:column>
 
@@ -157,6 +178,8 @@
 			  </f:facet>
 			  <h:inputText id="FaultWidth" style="text-align:right;width:30px" 
 								value="#{myentry31.faultWidth}"
+								  onmouseover="expandTextField(this)"
+								  onmouseout='resetTextFieldStyle(this)'
 								required="true" />
 			</h:column>
 						
@@ -166,7 +189,9 @@
 			  </f:facet>
 			  <h:inputText id="FaultLength" style="text-align:right;width:30px" 
 								  value="#{myentry31.faultLength}"
-								  onchange="updateLat0Lon0Lat1Lon1(source)"
+								  onchange="updateLat0Lon0Lat1Lon1(this)"
+								  onmouseover="expandTextField(this)"
+								  onmouseout='resetTextFieldStyle(this)'
 								  required="true" />
 			</h:column>
 			
@@ -176,7 +201,9 @@
 			  </f:facet>
 			  <h:inputText id="FaultStrikeSlip" style="text-align:right;width:30px" 
 								value="#{myentry31.faultStrikeSlip}"
-								onchange="updateLat0Lon0Lat1Lon1(source)"
+								onchange="updateLat0Lon0Lat1Lon1(this)"
+								onmouseover="expandTextField(this)"
+								onmouseout='resetTextFieldStyle(this)'
 								required="true" />
 			</h:column>						
 
@@ -186,6 +213,8 @@
 			  </f:facet>
 			  <h:inputText id="FaultSlip" style="text-align:right;width:30px" 
 								value="#{myentry31.faultDipSlip}"
+								onmouseover="expandTextField(this)"
+								onmouseout='resetTextFieldStyle(this)'
 								required="true" />
 			</h:column>
 			
@@ -194,6 +223,8 @@
 				 <f:verbatim>Lame Lambda</f:verbatim>
 			  </f:facet>
 			  <h:inputText id="LameLambda" style="text-align:right;width:30px" 
+								  onmouseover="expandTextField(this)"
+								  onmouseout='resetTextFieldStyle(this)'
 								value="#{myentry31.faultLameLambda}" />
 			</h:column>
 			
@@ -202,6 +233,8 @@
 				 <f:verbatim>Lame Mu</f:verbatim>
 			  </f:facet>
 				 <h:inputText id="LameMu" style="text-align:right;width:30px" 
+								  onmouseover="expandTextField(this)"
+								  onmouseout='resetTextFieldStyle(this)'
 								  value="#{myentry31.faultLameMu}" />
 			</h:column>
 			
@@ -232,6 +265,9 @@
 </h:panelGrid>
 <f:verbatim>
   <script>
+	 //TODO: The functions in this script are used by Disloc3, Simplex3 and possibly other components.
+	 //If updated here, they must be updated in other locations.  It would be better to put these
+	 //in a global library location.
 	 var d2r = Math.acos(-1.0) / 180.0;
 	 var flatten=1.0/298.247;
 
@@ -286,6 +322,8 @@
 	 else if (strike.value > 270 && strike.value < 360) { xend = xend*(-1.0); yend = yend*1.0;}
 	 }
 	 
+	 //Note we use the lat, lon of the fault's starting point here, not the origin's lat, lon, because
+	 //we are using the fault length (not the distance to the origin from the end point).
 	 var theFactor=d2r* Math.cos(d2r * latStart.value) * 6378.139 * (1.0 - Math.sin(d2r * latStart.value) * Math.sin(d2r * latStart.value) * flatten);
 	 console.log(theFactor);
 	 lonEnd.value = (xend*1.0)/theFactor + (lonStart.value*1.0);
@@ -379,5 +417,13 @@
 	 
 	 }
 
+
+	 function expandTextField(inputField) {
+	 inputField.style.width="70px";
+	 }
+	 
+	 function resetTextFieldStyle(inputField){
+	 inputField.style.width="35px";
+	 }
   </script>
 </f:verbatim>

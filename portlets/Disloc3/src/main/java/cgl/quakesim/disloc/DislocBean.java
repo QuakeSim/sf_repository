@@ -578,7 +578,6 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		System.out.println("[createKml] Started");
 		System.out.println("[createKml] Creating the KML file at " + kmlGeneratorUrl);
 		
-
 		// Get the project lat/lon origin. It is the lat/lon origin of the first fault.
 		String origin_lat = dislocParams.getOriginLat() + "";
 		String origin_lon = dislocParams.getOriginLon() + "";
@@ -4080,9 +4079,17 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		  //First, find the x and y values of the end point
 		  double d2r=Math.acos(-1.0)/180.0;
 		  double sval=90.0-fault.getFaultStrikeAngle();
+		  double strike=fault.getFaultStrikeAngle();
 		  double thetangent=Math.tan(sval*d2r);
 		  double xend=fault.getFaultLength()/Math.sqrt(1+thetangent*thetangent);
 		  double yend=Math.sqrt(fault.getFaultLength()*fault.getFaultLength()-xend*xend);
+
+		  //Get the alignment correct
+		  if (strike > 0.0 && strike < 90.0) { xend = xend*1.0; yend = yend*1.0;}
+		  else if (strike > 90.0 && strike < 180.0) { xend = xend*1.0; yend = yend* (-1.0);}
+		  else if (strike > 180.0 && strike < 270.0) { xend = xend*(-1.0); yend = yend*(-1.0);}
+		  else if (strike > 270.0 && strike < 360.0) { xend = xend*(-1.0); yend = yend*1.0;}
+
 		  double lonEnd=xend/factor(currentParams.getOriginLon(), currentParams.getOriginLat())
 				+fault.getFaultLonStart();
 		  double latEnd=yend/111.32+fault.getFaultLatStart();
