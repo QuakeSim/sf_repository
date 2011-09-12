@@ -45,6 +45,10 @@
 						  itemLabel="Create New Fault"
 						  itemValue="CreateNewFault" />
 
+		<f:selectItem id="item3"
+						  itemLabel="Quick Fault Add Form"
+						  itemValue="ShowFaultQuickAddForm" />
+
 	 </h:selectOneMenu>
 	 <h:commandButton id="simplexSelectButton1" value="Make Selection"
 							actionListener="#{SimplexBean.currentEditProjectForm.toggleProjectSelection1}">

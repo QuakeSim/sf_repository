@@ -34,6 +34,7 @@ public class editProjectForm extends GenericProjectBean {
 	 Fault currentFault = new Fault();
 	 Observation currentObservation = new Observation();
 	 String projectSelectionCode = "";
+	 String faultQuickAddTextArea="";
 
 	 boolean renderCreateObsvCutPaste=false;
 	 boolean renderCreateObservationForm = false;
@@ -55,6 +56,7 @@ public class editProjectForm extends GenericProjectBean {
 	 boolean renderSARObsvCutPaste=false;
 	 boolean renderProjectParams=false;
 	 boolean renderSARSelectionMap=false;
+	 boolean renderFaultsQuickAdd=false;
 
 	 String faultSelectionCode = "";
 	 boolean renderAddFaultFromDBForm = false;
@@ -132,6 +134,7 @@ public class editProjectForm extends GenericProjectBean {
 		 renderProjectMap=false;
 		 renderProjectParams=false;
 		 renderSARSelectionMap=false;
+		 renderFaultsQuickAdd=false;
 	}	
 	 
 	 public void toggleShowObsvEntries(ActionEvent ev) {
@@ -226,6 +229,11 @@ public class editProjectForm extends GenericProjectBean {
 		else if(projectSelectionCode.equals("ShowProjectMap")) {
 			 renderProjectMap=!renderProjectMap;
 			 logger.info("Showing project map: "+renderProjectMap);
+		}
+
+		else if(projectSelectionCode.equals("ShowFaultQuickAddForm")) {
+			 renderFaultsQuickAdd=!renderFaultsQuickAdd;
+			 logger.info("Showing project map: "+renderFaultsQuickAdd);
 		}
 
 		else if (projectSelectionCode.equals("")) {
@@ -542,98 +550,6 @@ public class editProjectForm extends GenericProjectBean {
 			      ex.printStackTrace();
 		      }		
 
-	      /*
-	      String theFault = faultAndSegment.substring(0, faultAndSegment.indexOf("@"));
-	      String theSegment=faultAndSegment.substring(faultAndSegment.indexOf("@") + 1, faultAndSegment.indexOf("%"));
-
-	      String interpId=faultAndSegment.substring(faultAndSegment.indexOf("%") + 1, faultAndSegment.length());
-
-	      faultAndSegment = "";
-
-	      try {
-
-		      SelectService ss = new SelectServiceLocator();
-		      Select select = ss.getSelect(new URL(selectdbURL));
-
-		      // --------------------------------------------------
-		      // Make queries.
-		      // --------------------------------------------------
-		      String dip = getDBValue(select, "Dip", theFault, theSegment,interpId);
-		      String strike = getDBValue(select, "Strike", theFault, theSegment,interpId);
-		      String depth = getDBValue(select, "Depth", theFault, theSegment,interpId);
-		      String width = getDBValue(select, "Width", theFault, theSegment,interpId);
-
-		      // Get the length and width
-		      double latEnd = Double.parseDouble(getDBValue(select, "LatEnd",
-																	      theFault, theSegment,interpId));
-		      double latStart = Double.parseDouble(getDBValue(select, "LatStart",
-																		      theFault, theSegment,interpId));
-		      double lonStart = Double.parseDouble(getDBValue(select, "LonStart",
-																		      theFault, theSegment,interpId));
-		      double lonEnd = Double.parseDouble(getDBValue(select, "LonEnd",
-																	      theFault, theSegment,interpId));
-		      
-		      // Calculate the length
-		      NumberFormat format = NumberFormat.getInstance();
-		      double d2r = Math.acos(-1.0) / 180.0;
-		      double flatten=1.0/298.247;
-
-		      double x = (lonEnd - lonStart) * factor(lonStart,latStart);
-		      double y = (latEnd - latStart) * 111.32;
-
-		      String length = df.format(Math.sqrt(x * x + y * y));
-		      tmp_fault.setFaultName(theFault );
-		      tmp_fault.setFaultLength(length);
-		      tmp_fault.setFaultWidth(width);
-		      tmp_fault.setFaultDepth (depth);
-		      tmp_fault.setFaultDipAngle(dip);
-		      
-		      //Probably hokey default values
-		      tmp_fault.setFaultSlip ("1.0"); 
-		      tmp_fault.setFaultRakeAngle("1.0");
-		      tmp_fault.setFaultLonStarts(lonStart+"");
-		      tmp_fault.setFaultLatStarts(latStart+"");
-		      tmp_fault.setFaultLonEnds(lonEnd+"");
-		      tmp_fault.setFaultLatEnds(latEnd+"");
-		      
-		      //Set the strike
-		      strike=df.format(Math.atan2(x,y)/d2r);
-		      tmp_fault.setFaultStrikeAngle(strike);
-		      
-		      //Set the origin
-		      //This is the (x,y) of the fault relative to the project's origin
-		      //The project origin is the lower left lat/lon of the first fault.
-		      //If any of these conditions hold, we need to reset.
-		      
-		      System.out.println("Check Project Origin: "
-								      +currentProject.getOrigin_lat()
-								      +currentProject.getOrigin_lon());
-		      
-		      if(currentProject.getOrigin_lat()==projectEntry.DEFAULT_LAT
-			      || currentProject.getOrigin_lon()==projectEntry.DEFAULT_LON ) {
-			      currentProject.setOrigin_lat(latStart);
-			      currentProject.setOrigin_lon(lonStart);
-		      }
-		      double projectOriginLat=currentProject.getOrigin_lat();
-		      double projectOriginLon=currentProject.getOrigin_lon();
-
-		      System.out.println("Confirm Project Origin: "
-								      +currentProject.getOrigin_lat()
-								      +currentProject.getOrigin_lon());
-					      
-		      //The following should be done in any case.  If the origin was just (re)set above,
-		      //we will get a harmless (0,0);
-		      double x1=(lonStart-projectOriginLon)*factor(projectOriginLon,projectOriginLat);
-		      double y1=(latStart-projectOriginLat)*111.32;
-		      System.out.println("Fault origin: "+x1+" "+y1);
-		      tmp_fault.setFaultLocationX(df.format(x1));
-		      tmp_fault.setFaultLocationY(df.format(y1));
-		      
-	      } catch (Exception ex) {
-		      ex.printStackTrace();
-	      }
-		  
-	    */	 
 		return tmp_fault;
 	}
 		
@@ -775,6 +691,14 @@ public class editProjectForm extends GenericProjectBean {
 		  this.renderProjectMap=renderProjectMap;
 	 }
 
+	 public void setRenderFaultsQuickAdd(boolean renderFaultsQuickAdd) {
+		  this.renderFaultsQuickAdd=renderFaultsQuickAdd;
+	 }
+
+	 public boolean getRenderFaultsQuickAdd() {
+		  return this.renderFaultsQuickAdd;
+	 }
+	 
 	public boolean getRenderSearchByFaultNameForm() {
 		return renderSearchByFaultNameForm;
 	}
@@ -921,6 +845,14 @@ public class editProjectForm extends GenericProjectBean {
 		  return obsvTextArea;
 	 }
 	 
+	 public void setFaultQuickAddTextArea() {
+		  this.faultQuickAddTextArea=faultQuickAddTextArea;
+	 }
+
+	 public String getFaultQuickAddTextArea() {
+		  return this.faultQuickAddTextArea;
+	 }
+
 	 public void setCoseismicTextArea(String coseismicTextArea) {
 		  this.coseismicTextArea=coseismicTextArea;
 	 }

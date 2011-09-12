@@ -2265,10 +2265,36 @@ public class SimplexBean extends GenericSopacBean {
 	}
 	 
 	 /**
+	  * Do a quick import of Simplex faults.  This is typically done when importing a legacy
+	  * simplex project.
+	  */ 
+	 public void toggleAddQuickSimplexFaults(ActionEvent ev) throws Exception {
+		  //Do this to reset the page.
+		  currentEditProjectForm.initEditFormsSelection();
+		  BufferedReader bufStr=new BufferedReader(new StringReader(currentEditProjectForm.getFaultQuickAddTextArea()));
+		  //First line should be the origin
+		  extractOrigin(bufStr.readLine());
+		  
+		  //Remaining lines are faults
+		  ArrayList faultList=new ArrayList();
+		  String faultLine=bufStr.readLine();
+		  int i=0;
+		  while(faultLine!=null) {
+				Fault fault=extractFault(faultLine);
+				fault.setFaultName("fault_"+i);
+				faultList.add(fault);
+				faultLine=bufStr.readLine();
+				i++;
+		  }
+		  addOriginToDB();
+		  addMultipleFaultsToDB(faultList);
+	 }
+
+	 /**
 	  * Add the ARIA input format. This was a special case
 	  * for the Japan M9 earthquake
 	  */
-	 public void toggleAddAriaObsvForProject(ActionEvent ev){
+	 public void toggleAddAriaObsvForProject(ActionEvent ev) throws Exception{
 		currentEditProjectForm.initEditFormsSelection();
 		
 		ObjectContainer db = null;
@@ -3507,5 +3533,108 @@ public class SimplexBean extends GenericSopacBean {
 	 public void setMyObsvListingsDataTable(HtmlDataTable myObsvListingsDataTable) {
 		  this.myObsvListingsDataTable=myObsvListingsDataTable;
 	 }
+
+	 private void extractOrigin(String line) throws Exception {
+		  StringTokenizer st=new StringTokenizer(line); //Only token should be spaces
+		  currentProjectEntry.setOrigin_lat(Double.parseDouble(st.nextToken()));
+		  currentProjectEntry.setOrigin_lon(Double.parseDouble(st.nextToken()));
+	 }
+	 
+	 private Fault extractFault(String line) throws Exception {
+		  StringTokenizer st=new StringTokenizer(line);
+		  Fault fault=new Fault();
+		  fault.setFaultLocationX(st.nextToken());
+		  fault.setFaultLocationY(st.nextToken());
+		  fault.setFaultStrikeAngle(st.nextToken());
+		  fault.setFaultDipAngle(st.nextToken());
+		  fault.setFaultDepth(st.nextToken());
+		  fault.setFaultWidth(st.nextToken());
+		  fault.setFaultLength(st.nextToken());
+		  fault.setFaultSlip(st.nextToken());
+		  
+		  
+		  //Calculate and set the fault's lat and lon
+		  double tmp_faultLon=Double.parseDouble(fault.getFaultLocationX())/factor(currentProjectEntry.getOrigin_lon(), 
+																											currentProjectEntry.getOrigin_lat())+currentProjectEntry.getOrigin_lon();
+		  
+		  double tmp_faultLat=Double.parseDouble(fault.getFaultLocationY())/111.32+currentProjectEntry.getOrigin_lat();
+
+		  fault.setFaultLonStarts(tmp_faultLon+"");
+		  fault.setFaultLatStarts(tmp_faultLat+"");
+
+		  //Calculate and set the fault's ending lat and lon
+		  //First, find the x and y values of the end point
+		  double d2r=Math.acos(-1.0)/180.0;
+		  double sval=90.0-Double.parseDouble(fault.getFaultStrikeAngle());
+		  double strike=Double.parseDouble(fault.getFaultStrikeAngle());
+		  double thetangent=Math.tan(sval*d2r);
+		  double dlength=Double.parseDouble(fault.getFaultLength());
+		  double xend=dlength/Math.sqrt(1+thetangent*thetangent);
+		  double yend=Math.sqrt(dlength-xend*xend);
+
+		  //Get the alignment correct
+		  if (strike > 0.0 && strike < 90.0) { xend = xend*1.0; yend = yend*1.0;}
+		  else if (strike > 90.0 && strike < 180.0) { xend = xend*1.0; yend = yend* (-1.0);}
+		  else if (strike > 180.0 && strike < 270.0) { xend = xend*(-1.0); yend = yend*(-1.0);}
+		  else if (strike > 270.0 && strike < 360.0) { xend = xend*(-1.0); yend = yend*1.0;}
+
+		  double lonEnd=xend/factor(currentProjectEntry.getOrigin_lon(), currentProjectEntry.getOrigin_lat())
+				+Double.parseDouble(fault.getFaultLonStarts());
+		  double latEnd=yend/111.32+Double.parseDouble(fault.getFaultLatStarts());
+		  
+		  fault.setFaultLonEnds(lonEnd+"");
+		  fault.setFaultLatEnds(latEnd+"");
+		  
+		  return fault;
+	 }
+
+	 //This adds the curent params to the db. 
+	 private void addOriginToDB() throws Exception {
+		  ObjectContainer db = null;
+		  try{
+				if (db != null) db.close();
+				db = Db4o.openFile(getBasePath() + "/"
+										 + getContextBasePath() + "/" + userName + "/"
+										 + codeName + "/" + projectName + ".db");
+				
+				ObjectSet result = db.get(projectEntry.class);
+				if (result.hasNext()) {
+					 projectEntry tmp = (projectEntry) result.next();
+					 db.delete(tmp);
+				}
+				
+				db.set(currentProjectEntry);
+				
+				// Say goodbye.
+				db.commit();
+				if (db != null) db.close();
+		  } catch (Exception e) {
+				if (db != null)	db.close();
+		  }
+		  finally {
+				if (db != null)	db.close();			
+		  }		  
+	 }
+	 
+	 //This adds an array of faults to the DB
+	 private void addMultipleFaultsToDB(ArrayList faults) throws Exception {		  
+		  ObjectContainer db = null;
+		  try {
+				if (db != null) db.close();
+				db = Db4o.openFile(getBasePath() + "/"
+										 + getContextBasePath() + "/" + userName + "/"
+										 + codeName + "/" + projectName + ".db");
+				for(int i=0;i<faults.size();i++) {
+					 db.set(faults.get(i));
+				}
+				db.commit();
+		  }
+		  catch (Exception e) {
+				if (db != null) db.close();
+		  }
+		  finally {
+				if (db != null) db.close();			
+		  }
+	 }	 
 
 }

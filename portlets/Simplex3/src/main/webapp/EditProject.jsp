@@ -231,6 +231,7 @@
 		  <%@include file="GPSMapPanel.jsp"%>
 		  <%@include file="ObsvListPanel.jsp"%>
 		  <%@include file="FaultParamsPanel.jsp"%>
+		  <%@include file="FaultsQuickAdd.jsp"%>
 		  <%@include file="FaultSelectionPanel.jsp"%>
 		  <%@include file="FaultNameSearchPanel.jsp"%>
 		  <%@include file="FaultLatLonSearchPanel.jsp"%>

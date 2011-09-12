@@ -124,30 +124,34 @@
 		<h:outputText id="dfadfaa8" value="Fault Lon Starts:" />
 		<h:panelGroup id="dnnnak9">
 		  <h:inputText id="FaultLonStarts"
+							required="true"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLonStarts}" />
 		</h:panelGroup>
-		<h:outputText  id="dnnasd10" value="optional" />
+		<h:outputText  id="dnnasd10" value="" />
 		
 		<h:outputText id="dfleanad11" value="Fault Lat Starts:" />
 		<h:panelGroup id="dflelerkljk12">
 		  <h:inputText id="FaultLatStarts"
+							required="true"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLatStarts}" />
 		</h:panelGroup>
-		<h:outputText  id="dfadfb43k13" value="optional" />
+		<h:outputText  id="dfadfb43k13" value="" />
 		
 		<h:outputText  id="dflelerkljk14" value="Fault Lon Ends:" />
 		<h:panelGroup id="dflelerkljk15">
 		  <h:inputText id="FaultLonEnds"
+							required="true"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLonEnds}" />
 		</h:panelGroup>
-		<h:outputText  id="dflelerkljk16" value="optional" />
+		<h:outputText  id="dflelerkljk16" value="" />
 		
 		<h:outputText id="dflelerkljk17" value="Fault Lat Ends:" />
 		<h:panelGroup id="dflelerkljk18">
 		  <h:inputText id="FaultLatEnds"
+							required="true"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLatEnds}" />
 		</h:panelGroup>
-		<h:outputText  id="dflelerkljk19" value="optional" />
+		<h:outputText  id="dflelerkljk19" value="" />
 		
 		<h:commandButton id="addfault" value="Set Values"
 							  actionListener="#{SimplexBean.toggleAddFaultForProject}" />
