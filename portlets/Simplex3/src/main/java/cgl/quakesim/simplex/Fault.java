@@ -40,11 +40,11 @@ public class Fault  implements java.io.Serializable {
 
     private boolean faultOriginYVary;
 
-    private java.lang.String faultRakeAngle;
+    private java.lang.String faultRakeAngle;  //This is actually used for Strike Slip
 
-    private java.lang.String faultSlip;
+    private java.lang.String faultSlip;  //This is Dip Slip
 
-    private java.lang.String faultStrikeAngle;
+    private java.lang.String faultStrikeAngle;  
 
     private boolean faultStrikeAngleVary;
 

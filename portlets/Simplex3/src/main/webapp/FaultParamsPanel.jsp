@@ -1,17 +1,16 @@
-<h:panelGrid id="kherl189"
-				 columns="1"
-				 border="1"
-				 rendered="#{SimplexBean.currentEditProjectForm.renderCreateNewFaultForm}">
+<h:panelGroup id="faultsParamPanelSimplex3"
+				  rendered="#{SimplexBean.currentEditProjectForm.renderCreateNewFaultForm}">	 
+  
+<h:form id="Simplex3Faultform">
 
-  <h:form id="Faultform">	 
-	 <h:panelGrid id="FaultTable" columns="3" footerClass="subtitle"
+<f:verbatim>
+  <fieldset style="width:100%">
+	 <legend class="portlet-form-label">Input Fault Geometry </legend>
+  </f:verbatim>
+  
+  <h:panelGrid id="FaultTable" columns="3" footerClass="subtitle"
 					  headerClass="subtitlebig" styleClass="medium"
 					  columnClasses="subtitle,medium">
-		
-		<f:facet name="header">
-		  <h:outputFormat id="output3" escape="false"
-								value="<b>Input Fault Geometry</b>" />
-		</f:facet>
 		
 		<h:outputText id="lkdmt117" value="Fault Name:" />
 		<h:panelGroup id="lkbarq118">
@@ -159,12 +158,14 @@
 		  <input id="domath" type="button" name="Update" value="Calculate length" onclick="calculatelength()"/>
 		  <input id="domath2" type="button" name="Update2" value="Calculate endpoint" onclick="calculateendpoint()"/>
 		</f:verbatim>
-		<f:facet name="footer"> 
-		  <h:outputFormat id="output2" escape="false" 
-								value="Click 'Do Math' to udpate length and strike. 
-										 Click 'Set Values' when you are done." /> 
-		</f:facet> 
-		
+		<f:facet name="footer">
+		  <f:verbatim>
+			 Click 'Calculate length' to find the length if you know the starting and ending lat and lon. <br/>
+			 Click 'Calculate endpoint' to find the ending fault lat and lon if you know the length and strike.<br/>
+			 Click 'Set Values' when you are ready to add the fault to your project.  All values are required.<br/>
+		  </f:verbatim>
+		</f:facet>
 	 </h:panelGrid>
+	 <f:verbatim></fieldset></f:verbatim>
   </h:form>
-</h:panelGrid>
+</h:panelGroup>

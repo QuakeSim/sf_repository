@@ -44,6 +44,7 @@ import org.apache.log4j.Level;
  */
 
 public class SimplexBean extends GenericSopacBean {
+
 	// KML stuff, need to move this to another place.
 	String xmlHead = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 	String kmlHead = "<kml xmlns=\"http://earth.google.com/kml/2.2\">";
@@ -200,7 +201,7 @@ public class SimplexBean extends GenericSopacBean {
 	protected String faultKmlFilename;
 	 protected String obsvKmlFilename;
 	 protected String obsvKmlUrl;
-	protected String portalBaseUrl;
+	 protected String portalBaseUrl;
 	 
 	 protected String userEmailAddress;
 
@@ -1533,8 +1534,12 @@ public class SimplexBean extends GenericSopacBean {
 	  * example.  Note changing the lat/lon value of the project origin can have 
 	  * side effects that we'll need to handle.
 	  */
-	 public void toggleUpdateSimplexProjectParams(ActionEvent ev) {
+	 public void toggleUpdateSimplexProjectParams(ActionEvent ev) throws Exception {
 		  logger.info("Updating project parameters");
+		  //The corresponding form modifies the in-memory values 
+		  currentEditProjectForm.initEditFormsSelection();
+		  updateFaultsOnOriginChange();
+		  saveSimplexProjectEntry(currentProjectEntry);
 	 }
 	 
 	 /**
@@ -2275,18 +2280,22 @@ public class SimplexBean extends GenericSopacBean {
 		  //First line should be the origin
 		  extractOrigin(bufStr.readLine());
 		  
+		  //Update the origins of any previously added faults and observations.
+		  updateFaultsOnOriginChange();
+
+		  int index=getMyFaultsForProjectList().size();
 		  //Remaining lines are faults
 		  ArrayList faultList=new ArrayList();
 		  String faultLine=bufStr.readLine();
-		  int i=0;
 		  while(faultLine!=null) {
 				Fault fault=extractFault(faultLine);
-				fault.setFaultName("fault_"+i);
+				fault.setFaultName("fault_"+index);
 				faultList.add(fault);
 				faultLine=bufStr.readLine();
-				i++;
+				index++;
 		  }
-		  addOriginToDB();
+		  
+		  //The origin values are added to the DB by extractOrigin.
 		  addMultipleFaultsToDB(faultList);
 	 }
 
@@ -3538,6 +3547,7 @@ public class SimplexBean extends GenericSopacBean {
 		  StringTokenizer st=new StringTokenizer(line); //Only token should be spaces
 		  currentProjectEntry.setOrigin_lat(Double.parseDouble(st.nextToken()));
 		  currentProjectEntry.setOrigin_lon(Double.parseDouble(st.nextToken()));
+		  saveSimplexProjectEntry(currentProjectEntry);
 	 }
 	 
 	 private Fault extractFault(String line) throws Exception {
@@ -3550,12 +3560,11 @@ public class SimplexBean extends GenericSopacBean {
 		  fault.setFaultDepth(st.nextToken());
 		  fault.setFaultWidth(st.nextToken());
 		  fault.setFaultLength(st.nextToken());
-		  fault.setFaultSlip(st.nextToken());
-		  
-		  
+		  fault.setFaultRakeAngle(st.nextToken());  // This is actually strike slip. Rake angle isn't used.
+		  fault.setFaultSlip(st.nextToken());  //This is Dip Slip
+
 		  //Calculate and set the fault's lat and lon
-		  double tmp_faultLon=Double.parseDouble(fault.getFaultLocationX())/factor(currentProjectEntry.getOrigin_lon(), 
-																											currentProjectEntry.getOrigin_lat())+currentProjectEntry.getOrigin_lon();
+		  double tmp_faultLon=Double.parseDouble(fault.getFaultLocationX())/factor(currentProjectEntry.getOrigin_lon(),currentProjectEntry.getOrigin_lat())+currentProjectEntry.getOrigin_lon();
 		  
 		  double tmp_faultLat=Double.parseDouble(fault.getFaultLocationY())/111.32+currentProjectEntry.getOrigin_lat();
 
@@ -3570,7 +3579,9 @@ public class SimplexBean extends GenericSopacBean {
 		  double thetangent=Math.tan(sval*d2r);
 		  double dlength=Double.parseDouble(fault.getFaultLength());
 		  double xend=dlength/Math.sqrt(1+thetangent*thetangent);
-		  double yend=Math.sqrt(dlength-xend*xend);
+		  double yend=Math.sqrt(dlength*dlength-xend*xend);
+
+		  String space=" ";
 
 		  //Get the alignment correct
 		  if (strike > 0.0 && strike < 90.0) { xend = xend*1.0; yend = yend*1.0;}
@@ -3578,44 +3589,15 @@ public class SimplexBean extends GenericSopacBean {
 		  else if (strike > 180.0 && strike < 270.0) { xend = xend*(-1.0); yend = yend*(-1.0);}
 		  else if (strike > 270.0 && strike < 360.0) { xend = xend*(-1.0); yend = yend*1.0;}
 
-		  double lonEnd=xend/factor(currentProjectEntry.getOrigin_lon(), currentProjectEntry.getOrigin_lat())
-				+Double.parseDouble(fault.getFaultLonStarts());
+		  double lonEnd=xend/factor(currentProjectEntry.getOrigin_lon(), currentProjectEntry.getOrigin_lat())+Double.parseDouble(fault.getFaultLonStarts());
 		  double latEnd=yend/111.32+Double.parseDouble(fault.getFaultLatStarts());
-		  
+
 		  fault.setFaultLonEnds(lonEnd+"");
 		  fault.setFaultLatEnds(latEnd+"");
 		  
 		  return fault;
 	 }
 
-	 //This adds the curent params to the db. 
-	 private void addOriginToDB() throws Exception {
-		  ObjectContainer db = null;
-		  try{
-				if (db != null) db.close();
-				db = Db4o.openFile(getBasePath() + "/"
-										 + getContextBasePath() + "/" + userName + "/"
-										 + codeName + "/" + projectName + ".db");
-				
-				ObjectSet result = db.get(projectEntry.class);
-				if (result.hasNext()) {
-					 projectEntry tmp = (projectEntry) result.next();
-					 db.delete(tmp);
-				}
-				
-				db.set(currentProjectEntry);
-				
-				// Say goodbye.
-				db.commit();
-				if (db != null) db.close();
-		  } catch (Exception e) {
-				if (db != null)	db.close();
-		  }
-		  finally {
-				if (db != null)	db.close();			
-		  }		  
-	 }
-	 
 	 //This adds an array of faults to the DB
 	 private void addMultipleFaultsToDB(ArrayList faults) throws Exception {		  
 		  ObjectContainer db = null;
@@ -3625,6 +3607,15 @@ public class SimplexBean extends GenericSopacBean {
 										 + getContextBasePath() + "/" + userName + "/"
 										 + codeName + "/" + projectName + ".db");
 				for(int i=0;i<faults.size();i++) {
+					 //Delete previous versions
+					 Fault oldFault=new Fault();
+					 Fault thisfault=(Fault)faults.get(i);
+					 oldFault.setFaultName(thisfault.getFaultName());
+					 ObjectSet results=db.get(oldFault);
+					 if(results.hasNext()) {
+						  db.delete((Fault)results.next());
+					 }
+					 //Add the revised fault.
 					 db.set(faults.get(i));
 				}
 				db.commit();
@@ -3637,4 +3628,88 @@ public class SimplexBean extends GenericSopacBean {
 		  }
 	 }	 
 
+	 private void addMultipleObsvToDB(ArrayList observations) throws Exception {		  
+		  ObjectContainer db = null;
+		  try {
+				if (db != null) db.close();
+				db = Db4o.openFile(getBasePath() + "/"
+										 + getContextBasePath() + "/" + userName + "/"
+										 + codeName + "/" + projectName + ".db");
+				for(int i=0;i<observations.size();i++) {
+					 //Delete previous versions
+					 Observation oldObsv=new Observation();
+					 Observation thisobsv=(Observation)observations.get(i);
+					 oldObsv.setObsvName(thisobsv.getObsvName());
+					 ObjectSet results=db.get(oldObsv);
+					 if(results.hasNext()) {
+						  db.delete((Observation)results.next());
+					 }
+					 //Add the revised fault.
+					 db.set(observations.get(i));
+				}
+				db.commit();
+		  }
+		  catch (Exception e) {
+				if (db != null) db.close();
+		  }
+		  finally {
+				if (db != null) db.close();			
+		  }
+	 }	 
+
+	 /**
+	  * This is called if the project origin changes.  The fault's starting and ending lat and lon are assumed
+	  * to be unchanged, but the cartesian locations will need to be changed.  This assumes that the 
+	  * project origin values are not at their default values.
+	  */
+	 private void updateFaultsOnOriginChange() throws Exception {
+		  ArrayList faults=(ArrayList)getMyFaultsForProjectList();
+		  double origin_lat = currentProjectEntry.getOrigin_lat();
+		  double origin_lon = currentProjectEntry.getOrigin_lon();
+		  if (origin_lat == projectEntry.DEFAULT_LAT && origin_lon == projectEntry.DEFAULT_LON) {
+				logger.error("UpdateFaultsOnOriginChange called when origin was still set to default, so aborting.");
+				return;
+		  }
+
+		  for(int i=0;i<faults.size();i++) {
+				Fault thisfault=(Fault)(faults.get(i));
+				double faultOriginLat=Double.parseDouble(thisfault.getFaultLatStarts());
+				double faultOriginLon=Double.parseDouble(thisfault.getFaultLonStarts());
+				
+				//Set the fault origin relative to the project origin.
+				double xFault=(faultOriginLon-origin_lon)*factor(origin_lon,origin_lat);
+				double yFault=(faultOriginLat-origin_lat)*111.32;
+
+				((Fault)faults.get(i)).setFaultLocationX(xFault+"");
+				((Fault)faults.get(i)).setFaultLocationY(yFault+"");
+				
+		  }
+		  addMultipleFaultsToDB(faults);		  
+	 }
+
+	 private void updateObsvOnOriginChange() throws Exception {
+		  ArrayList observations=(ArrayList)getMyObservationsForProjectList();
+		  double origin_lat = currentProjectEntry.getOrigin_lat();
+		  double origin_lon = currentProjectEntry.getOrigin_lon();
+		  if (origin_lat == projectEntry.DEFAULT_LAT && origin_lon == projectEntry.DEFAULT_LON) {
+				logger.error("UpdateObservationsOnOriginChange called when origin was still set to default, so aborting.");
+				return;
+		  }
+
+		  for(int i=0;i<observations.size();i++) {
+				Observation thisobservation=(Observation)(observations.get(i));
+				// double observationOriginLat=Double.parseDouble(thisobservation.getObservationLatStarts());
+				// double observationOriginLon=Double.parseDouble(thisobservation.getObservationLonStarts());
+				
+				// //Set the observation origin relative to the project origin.
+				// double xObservation=(observationOriginLon-origin_lon)*factor(origin_lon,origin_lat);
+				// double yObservation=(observationOriginLat-origin_lat)*111.32;
+
+				// ((Observation)observations.get(i)).setObsvLocationX(xObservation+"");
+				// ((Observation)observations.get(i)).setObsvLocationY(yObservation+"");
+				
+		  }
+		  addMultipleObsvToDB(observations);		  
+
+	 }
 }

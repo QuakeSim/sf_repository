@@ -6,10 +6,10 @@
   </f:verbatim>
   <h:form id="faultQuickAdd">
 	 <f:verbatim>
-		Project import form: use this if you are importing a command-line Simplex problem.<br/>
-		The first line must be the project's latitude and longitude. <br/>
+		Use this form if you already have your fault parameters. <br/>
+		The first line must be the project's latitude and longitude in decimal degrees. <br/>
 		The second and subsequent lines are faults (one per line) in the following required format:<br/>
-		X Y Strike Dip Depth Width Length StrikeSlip <br/>
+		<i>Location-X Location-Y Strike-Angle Dip-Angle Depth Width Length Strike-Slip Dip-Slip </i><br/>
 	 </f:verbatim>
 	 
 	 <h:panelGrid id="QuickFaultPG" columns="1">

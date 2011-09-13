@@ -845,7 +845,7 @@ public class editProjectForm extends GenericProjectBean {
 		  return obsvTextArea;
 	 }
 	 
-	 public void setFaultQuickAddTextArea() {
+	 public void setFaultQuickAddTextArea(String faultQuickAddTextArea) {
 		  this.faultQuickAddTextArea=faultQuickAddTextArea;
 	 }
 
