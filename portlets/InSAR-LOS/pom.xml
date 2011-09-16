@@ -17,10 +17,41 @@
     <relativePath>..</relativePath>
   </parent>
 
-    <!-- Project dependencies -->
-    <dependencies>
-
-		<!-- Faces Jars -->
+  <repositories>
+	 <!--These are needed for Jersey -->
+	 <repository>
+		<id>maven2-repository.dev.java.net</id>
+		<name>Java.net Repository for Maven</name>
+		<url>http://download.java.net/maven/2/</url>
+		<layout>default</layout>
+	 </repository> 
+	 <repository>
+		<id>maven-repository.dev.java.net</id>
+		<name>Java.net Maven 1 Repository (legacy)</name>
+		<url>http://download.java.net/maven/1</url>
+		<layout>legacy</layout>
+	 </repository>
+  </repositories>
+  <!-- Project dependencies -->
+  <dependencies>
+	 <dependency>
+		<groupId>com.sun.jersey</groupId>
+		<artifactId>jersey-server</artifactId>
+		<version>1.4</version>
+	 </dependency>
+	 <dependency>
+		<groupId>com.sun.grizzly</groupId>
+		<artifactId>grizzly-servlet-webserver</artifactId>
+		<version>1.9.18-i</version>
+	 </dependency>
+	 <dependency>
+		<groupId>com.sun.jersey.jersey-test-framework</groupId>
+		<artifactId>jersey-test-framework-grizzly</artifactId>
+		<version>1.4</version>
+		<scope>test</scope>
+	 </dependency>
+	 
+	 <!-- Faces Jars -->
 		<dependency>
 		  <groupId>myfaces</groupId>
 		  <artifactId>myfaces-api</artifactId>
@@ -66,7 +97,28 @@
 		  <artifactId>portals-bridges-jsf</artifactId>
 		  <version>1.0</version>
 		</dependency>
-		
+
+		<dependency>
+		  <groupId>org.slf4j</groupId>
+		  <artifactId>slf4j-api</artifactId>
+		  <version>1.6.1</version>
+		</dependency>
+
+		<dependency>
+		  <groupId>org.slf4j</groupId>
+		  <artifactId>slf4j-log4j12</artifactId>
+		  <version>1.6.1</version>
+		  <scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+		  <groupId>log4j</groupId>
+		  <artifactId>log4j</artifactId>
+		  <version>1.2.16</version>
+		  <scope>runtime</scope>
+		</dependency>
+
+
 	 </dependencies>  
 
 	 <build>

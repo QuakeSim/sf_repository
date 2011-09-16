@@ -11,25 +11,17 @@
 		</f:verbatim>
 	 </h:panelGroup>
   </f:view>
-  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" 
-			 type="text/javascript"></script>  
-  <script src="script/sarselect.js"></script>			 
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script src="script/sarselect.js"></script>			 
   
   <script>
 	 var insarMapDiv=document.getElementById("InSAR-All-Map");
-	 var map = new GMap2(insarMapDiv);
+	 var latlng=new google.maps.LatLng(32.3,-118.0);
+	 var myOpts={zoom:4, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP};
+	 var map=new google.maps.Map(insarMapDiv, myOpts);
 	 
-//	 map.addMapType(G_HYBRID_MAP);
-//	 map.addMapType(G_PHYSICAL_MAP);
-//	 map.addMapType(G_SATELLITE_MAP);
-//	 
-//	 map.setMapType(G_PHYSICAL_MAP);
-	 
-//	 map.addControl(new GMapTypeControl());
-	 
-	 var geoXml = new GGeoXml("http://quaketables.quakesim.org/kml?uid=all&ov=0");   
-	 map.addOverlay(geoXml);
-	 map.setUIToDefault();
+	 var kmlMapOpts={map:map, preserveViewport:true};
+	 var insarKml = new google.maps.KmlLayer("http://quaketables.quakesim.org/kml?uid=all&ov=0",kmlMapOpts);
 
   </script>
 </body>

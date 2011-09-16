@@ -9,7 +9,7 @@ var sarselect=sarselect || (function() {
 	 var leftClickOp;
 	 var markerNE, markerSW;
  
-	 function setMap(insarMapDiv,overlayUrl,drawFunctionType) {
+	 function setMap(insarMapDiv,westMarkerLat, westMarkerLon, eastMarkerLat, eastMarkerLon, overlayUrl,drawFunctionType) {
 		  //console.log("setMap() function called");
 		  //console.log("Map div name is "+insarMapDiv+ " "+overlayUrl);
 		  
@@ -40,6 +40,9 @@ var sarselect=sarselect || (function() {
 			else if(drawFunctionType=="rectangle") {
 				 rectangleLeftClick(event);
 			}
+			else if(drawFunctionType=="line") {
+				 lineLeftClick(event);
+			}
 			else {
 				 alert("Invalid draw method provided. Should be either 'polygon' or 'rectangle'. Using 'rectangle' by default.");
 				 rectangleLeftClick(event);
@@ -47,6 +50,45 @@ var sarselect=sarselect || (function() {
 	  });
 	 }
      
+	 function lineLeftClick(event) {
+		  //If the marker doesn't exist, create it.
+		  if(!markerNE && !markerSW) {
+				//console.log("No markers found");
+				markerNE=new google.maps.Marker({map: insarMap, 
+															position: event.latLng, 
+															visible: true, 
+															draggable: true});
+				var offset=new google.maps.LatLng(event.latLng.lat()-0.05,event.latLng.lng()-0.05);
+				markerSW=new google.maps.Marker({map: insarMap, 
+															position: offset, 
+															visible: true, 
+															draggable: true});
+				markers.push(markerNE);
+				markers.push(markerSW);
+		  		
+				westMarkerLat.value=markerSW.getPosition().lat();
+				westMarkerLon.value=markerSW.getPosition().lng();
+				eastMarkerLat.value=markerNE.getPosition().lat();
+				eastMarkerLon.value=markerNE.getPosition().lng();
+
+				// Make markers draggable			 
+				google.maps.event.addListener(markerNE, "drag", function() {
+					 eastMarkerLat.value=markerNE.getPosition().lat();
+					 eastMarkerLon.value=markerNE.getPosition().lng();
+					 drawLine();
+				});
+				google.maps.event.addListener(markerSW, "drag", function() {
+					 westMarkerLat.value=markerSW.getPosition().lat();
+					 westMarkerLon.value=markerSW.getPosition().lng();
+					 drawLine();
+				});
+		  }
+
+		  //This is called after a drag event.
+		  drawLine();
+
+	 }
+
 	 function rectangleLeftClick(event) {
 		  //If the marker doesn't exist, create it.
 		  if(!markerNE && !markerSW) {
@@ -107,6 +149,17 @@ var sarselect=sarselect || (function() {
 		  //console.log("Done with leftClick()");
 	 }
 
+	 function drawLine() {
+		  if(polyShape) polyShape.setMap(null);
+		  polyPoints=new Array();
+		  polyPoints.push(markerNE.getPosition());
+		  polyPoints.push(markerSW.getPosition());
+		  polyShape=new google.maps.Polyline({path:polyPoints,
+														  strokeColor:polyLineColor});
+		  polyShape.setMap(insarMap);
+		  
+	 }
+
 	 function drawRectangle() {
 		  //console.log("Drawing rectangle");
 		  if(polyShape) polyShape.setMap(null);
@@ -139,12 +192,13 @@ var sarselect=sarselect || (function() {
 															strokeColor: polyLineColor});
 		  polyShape.setMap(insarMap);
 		}
+
 	 
 	 /**
 	  * Public API for sarselect.js
 	  */
 	 return {
-		  setMap: setMap
+		  setMap: setMap,
 	 }
 	 
 })();

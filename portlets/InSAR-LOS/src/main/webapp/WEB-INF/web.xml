@@ -58,6 +58,7 @@
             Default: "false"</description>  
   </context-param>  
   <!-- Extensions Filter -->  
+
   <filter>  
     <filter-name>extensionsFilter</filter-name>  
     <filter-class>org.apache.myfaces.component.html.util.ExtensionsFilter</filter-class>  
@@ -83,7 +84,9 @@
                         1g - 1 GB</description>  
     </init-param>  
   </filter>  
+
   <!-- Filter Mappings -->  
+
   <filter-mapping>  
     <filter-name>extensionsFilter</filter-name>  
     <url-pattern>*.jsf</url-pattern>  
@@ -92,13 +95,16 @@
     <filter-name>extensionsFilter</filter-name>  
     <url-pattern>/faces/*</url-pattern>  
   </filter-mapping>  
-  
+
  <!-- Listener, that does all the startup work (configuration, init). -->  
+
   <listener>  
     <listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>  
   </listener>  
+
   
   <!-- Faces Servlet --> 
+
   <servlet> 
     <servlet-name>Faces Servlet</servlet-name> 
     <servlet-class>javax.faces.webapp.FacesServlet</servlet-class> 
@@ -109,6 +115,18 @@
         <servlet-name>PortletServlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet</servlet-class>
     </servlet>
+
+	 <!-- Jersey Servlet -->
+
+  <servlet>
+	 <servlet-name>Jersey Web Application</servlet-name>
+	 <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+    <init-param>
+      <param-name>com.sun.jersey.config.property.packages</param-name>
+      <param-value>cgl.quakesim.insar.los</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
 
     <servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
@@ -124,5 +142,11 @@
         <servlet-name>PortletServlet</servlet-name>
         <url-pattern>/jsr/Simplex3</url-pattern>
     </servlet-mapping>
+
+  <servlet-mapping>
+	 <servlet-name>Jersey Web Application</servlet-name>
+	 <url-pattern>/*</url-pattern>
+  </servlet-mapping>
+
 </web-app> 
  
