@@ -26,34 +26,34 @@ public class AnssCatalogService {
 	 String ANSSURL="http://www.ncedc.org/cgi-bin/catalog-search2.pl";
 	 //This regular expression parses the date in the description field of the ANSS catalog.
 	 String dateRegex="[1-2][0-9][0-9][0-9]/[0-1][0-9]/[0-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9][0-9]";
-
+	 
 	 //These are used only for testing.
 	 String[] paramArray = {"output","format","mintime","maxtime","minmag","maxmag","etype","outputloc"};
 	 String[] paramValArray = {"kml","cnss","2002/01/01,00:00:00","2010/12/01,00:00:00","8.0","10.0","E","web"};
-
+	 
 	 String kmzDownloadLocation="/tmp/junk.kmz";
 	 
 	 @GET 
-		  @Produces("application/vnd.google-earth.kml+xml") 
-		  public String getCatalog(@Context UriInfo ui) {
-		  MultivaluedMap<String,String> queryParams=ui.getQueryParameters();
+	 @Produces("application/vnd.google-earth.kml+xml") 
+	 public String getCatalog(@Context UriInfo ui) {
+									  MultivaluedMap<String,String> queryParams=ui.getQueryParameters();
+									  
+									  String memKml=null;
+									  try {
+											String ftpUrl=fetchAnssDataSetFtpUrl(ANSSURL,queryParams);
+											downloadCatalog(ftpUrl,getKmzDownloadLocation());
+											memKml=extractKmlFile(getKmzDownloadLocation());
+											ArrayList dateMatches=extractMatchingDates(memKml);
+											memKml=revisedKmlWithTimeStamps(memKml,dateMatches);
+											return memKml;
+									  }
+									  catch (Exception ex) {
+											ex.printStackTrace();
+									  }
+									  return memKml;
+									  }
 		  
-		  String memKml=null;
-		  try {
-				String ftpUrl=fetchAnssDataSetFtpUrl(ANSSURL,queryParams);
-				downloadCatalog(ftpUrl,getKmzDownloadLocation());
-				memKml=extractKmlFile(getKmzDownloadLocation());
-				ArrayList dateMatches=extractMatchingDates(memKml);
-				memKml=revisedKmlWithTimeStamps(memKml,dateMatches);
-				return memKml;
-		  }
-		  catch (Exception ex) {
-				ex.printStackTrace();
-		  }
-		  return memKml;
-	 }
-	 
-	 @POST
+		  @POST
 		  @Consumes("application/x-www-form-urlencoded")
 		  @Produces("application/vnd.google-earth.kml+xml") 
 		  public String postCatalog(MultivaluedMap<String,String> queryParams) {
@@ -74,7 +74,7 @@ public class AnssCatalogService {
 		  return memKml;
 		  
 	 }
-
+	 
 	 protected String fetchAnssDataSetFtpUrl(String anssUrl, 
 														  MultivaluedMap queryParams) throws Exception {
 		  String ftpUrl=null, data=null;
