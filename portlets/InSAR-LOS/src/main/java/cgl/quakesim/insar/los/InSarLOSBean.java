@@ -9,19 +9,7 @@ import javax.faces.event.ActionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//These are Jersey jars
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Produces;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.core.UriInfo;
 
-
-@Path("/insarlos/{format}/{lon0}/{lat0}/{lon1}/{lat1}")
 public class InSarLOSBean {
 
 	 private static final String IMAGE="image=InSAR:unw";
@@ -57,29 +45,8 @@ public class InSarLOSBean {
 	  * @return the URL (as a string) of the file containing the values.
 	  */
 	 public void getImageLOSValues(ActionEvent ev) throws Exception {
-		  System.out.println("action method called----------");
+		  logger.debug("action method called----------");
 		  outputResponse=getImageLOSValues(outputFormat, lat0, lon0, lat1, lon1);
-	 }
-
-	 /**
-	  * This is an exposed REST method. 
-	  */ 
-	 @GET
-    @Produces("text/plain")
-	 public String getImageLOSRest(@PathParam("format") String outputFormat,
-											 @PathParam("lon0") double lon0,
-											 @PathParam("lat0") double lat0,
-											 @PathParam("lon1") double lon1,
-											 @PathParam("lat1") double lat1) {
-		  outputResponse=null;  
-
-		  try {
-				outputResponse=getImageLOSValues(outputFormat,lat0, lon0, lat1, lon1);
-		  }
-		  catch(Exception ex) {
-					 ex.printStackTrace();
-		  }
-		  return outputResponse;
 	 }
 	 
 	 /**
@@ -91,7 +58,6 @@ public class InSarLOSBean {
 		  String bbox=lon0+COMMA+lat0+COMMA+lon1+COMMA+lat1;
 		  String urlToCall=INSAR_TOOL_URL+IMAGE+AMP+POINT+bbox+AMP+FORMAT+outputFormat;
 		  logger.debug("Calling URL:"+urlToCall);
-		  System.out.println("Calling URL:"+urlToCall);
 		  
 		  URL url=null;
 		  HttpURLConnection connect=null;
@@ -116,7 +82,7 @@ public class InSarLOSBean {
 		  finally {
 				connect.disconnect();
 		  }
-		  System.out.println("Here is the response:"+outputResponse);
+		  logger.debug("Here is the response:"+outputResponse);
 		  return outputResponse;
 	 }
 

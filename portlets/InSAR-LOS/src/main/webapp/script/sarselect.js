@@ -9,13 +9,7 @@ var sarselect=sarselect || (function() {
 	 var leftClickOp;
 	 var markerNE, markerSW;
  
-	 function setMap(insarMapDiv,westMarkerLat, westMarkerLon, eastMarkerLat, eastMarkerLon, overlayUrl,drawFunctionType) {
-		  //console.log("setMap() function called");
-		  //console.log("Map div name is "+insarMapDiv+ " "+overlayUrl);
-		  
-		  //Decide which left click operation to use.
-		  //Default to the polygon plotting.
-		  //		  this.leftClickOp=leftClickOp || polygonLeftClick;
+	 function setMap(insarMapDiv,overlayUrl,drawFunctionType) {
 
 		  //Create the map
 		var myOptions={
@@ -66,21 +60,21 @@ var sarselect=sarselect || (function() {
 				markers.push(markerNE);
 				markers.push(markerSW);
 		  		
-				westMarkerLat.value=markerSW.getPosition().lat();
-				westMarkerLon.value=markerSW.getPosition().lng();
-				eastMarkerLat.value=markerNE.getPosition().lat();
-				eastMarkerLon.value=markerNE.getPosition().lng();
+				getLosInSarValues();
 
 				// Make markers draggable			 
 				google.maps.event.addListener(markerNE, "drag", function() {
-					 eastMarkerLat.value=markerNE.getPosition().lat();
-					 eastMarkerLon.value=markerNE.getPosition().lng();
 					 drawLine();
 				});
 				google.maps.event.addListener(markerSW, "drag", function() {
-					 westMarkerLat.value=markerSW.getPosition().lat();
-					 westMarkerLon.value=markerSW.getPosition().lng();
 					 drawLine();
+				});
+
+				google.maps.event.addListener(markerNE, "dragend", function() {
+					 getLosInSarValues();
+				});
+				google.maps.event.addListener(markerSW, "dragend", function() {
+					 getLosInSarValues();
 				});
 		  }
 
@@ -193,12 +187,25 @@ var sarselect=sarselect || (function() {
 		  polyShape.setMap(insarMap);
 		}
 
-	 
+	 function getLosInSarValues() {
+		  westMarkerLat.value=markerSW.getPosition().lat();
+		  westMarkerLon.value=markerSW.getPosition().lng();
+		  eastMarkerLat.value=markerNE.getPosition().lat();
+		  eastMarkerLon.value=markerNE.getPosition().lng();
+
+		  var csv=$.ajax({
+				url:"/InSAR-LOS-REST/insarlos/csv/"+westMarkerLon.value+"/"+westMarkerLat.value+"/"+eastMarkerLon.value+"/"+eastMarkerLat.value,
+				async:false
+		  }).responseText;
+		  var g=new Dygraph(document.getElementById("outputGraph"),csv);		  
+	 }
+
 	 /**
 	  * Public API for sarselect.js
 	  */
 	 return {
 		  setMap: setMap,
+		  getLosInSarValues: getLosInSarValues
 	 }
 	 
 })();
