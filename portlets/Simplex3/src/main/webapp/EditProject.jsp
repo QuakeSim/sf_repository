@@ -61,13 +61,13 @@
 		//--------------------------------------------------
 		//This is used to calculate the length and strike angle.
 		function calculatelength(){
-		var lonStart = document.getElementById("Faultform:FaultLonStarts");
-		var lonEnd = document.getElementById("Faultform:FaultLonEnds");
-		var latStart = document.getElementById("Faultform:FaultLatStarts");
-		var latEnd = document.getElementById("Faultform:FaultLatEnds");
+		var lonStart = document.getElementById("Simplex3Faultform:FaultLonStarts");
+		var lonEnd = document.getElementById("Simplex3Faultform:FaultLonEnds");
+		var latStart = document.getElementById("Simplex3Faultform:FaultLatStarts");
+		var latEnd = document.getElementById("Simplex3Faultform:FaultLatEnds");
 		
-		var length = document.getElementById("Faultform:FaultLength");
-		var strike = document.getElementById("Faultform:FaultStrikeAngle");
+		var length = document.getElementById("Simplex3Faultform:FaultLength");
+		var strike = document.getElementById("Simplex3Faultform:FaultStrikeAngle");
 		
 		if ((latStart.value.length == 0) || (latStart.value == null)) { alert("Fault Origin Latitude is empty!"); }
 		else if ((lonStart.value.length == 0) || (lonStart.value == null)) { alert("Fault Origin Longititude is empty!"); }
@@ -94,13 +94,13 @@
   //This calculates the endpoint, given other parameters.
   function calculateendpoint(){
   // alert("debug");
-  var lonStart = document.getElementById("Faultform:FaultLonStarts");
-  var lonEnd = document.getElementById("Faultform:FaultLonEnds");
-  var latStart = document.getElementById("Faultform:FaultLatStarts");
-  var latEnd = document.getElementById("Faultform:FaultLatEnds");
+  var lonStart = document.getElementById("Simplex3Faultform:FaultLonStarts");
+  var lonEnd = document.getElementById("Simplex3Faultform:FaultLonEnds");
+  var latStart = document.getElementById("Simplex3Faultform:FaultLatStarts");
+  var latEnd = document.getElementById("Simplex3Faultform:FaultLatEnds");
   
-  var length = document.getElementById("Faultform:FaultLength");
-  var strike = document.getElementById("Faultform:FaultStrikeAngle");
+  var length = document.getElementById("Simplex3Faultform:FaultLength");
+  var strike = document.getElementById("Simplex3Faultform:FaultStrikeAngle");
   
   if ((latStart.value.length == 0) || (latStart.value == null)) { alert("Fault Origin Latitude is empty!"); }
   else if ((lonStart.value.length == 0) || (lonStart.value == null)) { alert("Fault Origin Longititude is empty!"); }
