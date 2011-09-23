@@ -27,19 +27,19 @@
 		<h:outputText id="lkdrq119" value="Location X:" />
 		<h:panelGroup id="lkdrq1181">
 		  <h:inputText id="FaultLocationX"
-							onchange="updateLat0Lon0Lat1Lon1(this)"
+							onchange="updateLat0Lon0Lat1Lon1FPP(this)"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLocationX}"
 							required="true" />
 		  <h:message id="lkdrq1182" for="FaultLocationX" showDetail="true"
 						 showSummary="true" errorStyle="color: red" />
 		</h:panelGroup>
-		
 		<h:selectBooleanCheckbox id="faultOriginXVary"
 										 value="#{SimplexBean.currentEditProjectForm.currentFault.faultOriginXVary}" />
+
 		<h:outputText id="lkdrq1183" value="Location Y:" />
 		<h:panelGroup id="lkdrq1184">
 		  <h:inputText id="FaultLocationY"
-							onchange="updateLat0Lon0Lat1Lon1(this)"
+							onchange="updateLat0Lon0Lat1Lon1FPP(this)"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLocationY}"
 							required="true" />
 		  <h:message id="lkdrq1185" for="FaultLocationY" showDetail="true"
@@ -52,7 +52,7 @@
 		<h:panelGroup id="lkdrq1187">
 		  <h:inputText id="FaultLength"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLength}"
-							onchange="updateLat0Lon0Lat1Lon1(this)"
+							onchange="updateLat0Lon0Lat1Lon1FPP(this)"
 							required="true" />
 		  <h:message id="lkdrq1188" for="FaultLength" showDetail="true" showSummary="false"
 						 errorStyle="color: red" />
@@ -97,7 +97,7 @@
 		<h:panelGroup id="bae2lerba">
 		  <h:inputText id="FaultStrikeAngle"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultStrikeAngle}"
-							onchange="updateLat0Lon0Lat1Lon1(this)"
+							onchange="updateLat0Lon0Lat1Lon1FPP(this)"
 							required="false" />
 		  <h:message id="dflelbaa42" for="FaultStrikeAngle" showDetail="true"
 						 showSummary="true" errorStyle="color: red" />
@@ -130,7 +130,7 @@
 		<h:outputText id="dfadfaa8" value="Fault Lon Starts:" />
 		<h:panelGroup id="dnnnak9">
 		  <h:inputText id="FaultLonStarts"
-							onchange="updateXYLengthStrike(this)"
+							onchange="updateXYLengthStrikeFPP(this)"
 							required="true"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLonStarts}" />
 		</h:panelGroup>
@@ -139,7 +139,7 @@
 		<h:outputText id="dfleanad11" value="Fault Lat Starts:" />
 		<h:panelGroup id="dflelerkljk12">
 		  <h:inputText id="FaultLatStarts"
-							onchange="updateXYLengthStrike(this)"
+							onchange="updateXYLengthStrikeFPP(this)"
 							required="true"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLatStarts}" />
 		</h:panelGroup>
@@ -148,7 +148,7 @@
 		<h:outputText  id="dflelerkljk14" value="Fault Lon Ends:" />
 		<h:panelGroup id="dflelerkljk15">
 		  <h:inputText id="FaultLonEnds"
-							onchange="updateXYLengthStrike(this)"
+							onchange="updateXYLengthStrikeFPP(this)"
 							required="true"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLonEnds}" />
 		</h:panelGroup>
@@ -157,7 +157,7 @@
 		<h:outputText id="dflelerkljk17" value="Fault Lat Ends:" />
 		<h:panelGroup id="dflelerkljk18">
 		  <h:inputText id="FaultLatEnds"
-							onchange="updateXYLengthStrike(this)"
+							onchange="updateXYLengthStrikeFPP(this)"
 							required="true"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLatEnds}" />
 		</h:panelGroup>
@@ -173,7 +173,6 @@
 	 </h:panelGrid>
 	 <f:verbatim></fieldset></f:verbatim>
   </h:form>
-</h:panelGroup>
 <f:verbatim>
   <script src="script/calculators.js"></script>
   <script>
@@ -184,41 +183,42 @@
 	 var d2r = Math.acos(-1.0) / 180.0;
 	 var flatten=1.0/298.247;
 
-	 var xstart;
-	 var ystart;
-	 var latStart;
-	 var lonStart;
-	 var latEnd;
-	 var lonEnd;
-	 var strike;
-	 var dipAngle;
-	 var length;
+	 var xstart_fpp;
+	 var ystart_fpp;
+	 var latStart_fpp;
+	 var lonStart_fpp;
+	 var latEnd_fpp;
+	 var lonEnd_fpp;
+	 var strike_fpp;
+	 var dipAngle_fpp;
+	 var length_fpp;
 
 	 //This is the lat+lon of the project origin.
-	 var origLat=document.getElementById("Simplex3Faultform:projectOriginLatFPP");
-	 var origLon=document.getElementById("Simplex3Faultform:projectOriginLonFPP");
+	 var origLat_fpp=document.getElementById("Simplex3Faultform:projectOriginLatFPP");
+	 console.log("Project origin lat:"+origLat_fpp.value);
+	 var origLon_fpp=document.getElementById("Simplex3Faultform:projectOriginLonFPP");
+	 console.log("Project origin lon:"+origLon_fpp.value);
 	 
-	 function updateXYLengthStrike(source) {
-	 setUpStuff(source);
-	 calculators.updateXYLengthStrike(origLat,origLon,xstart, ystart,latStart, lonStart, strike, dipAngle, length);
+	 function updateXYLengthStrikeFPP(source) {
+	 setUpStuffFPP(source);
+	 calculators.updateXYLengthStrike(origLat_fpp,origLon_fpp,xstart_fpp, ystart_fpp,latStart_fpp, lonStart_fpp, latEnd_fpp, lonEnd_fpp, strike_fpp, dipAngle_fpp, length_fpp);
 	 }
 	 
-	 function updateLat0Lon0Lat1Lon1(source) {
-	 setUpStuff(source);
-	 calculators.updateLat0Lon0Lat1Lon1(origLat, origLon, xstart, ystart,latStart, lonStart, strike, dipAngle, length);
+	 function updateLat0Lon0Lat1Lon1FPP(source) {
+	 setUpStuffFPP(source);
+	 calculators.updateLat0Lon0Lat1Lon1(origLat_fpp,origLon_fpp,xstart_fpp, ystart_fpp,latStart_fpp, lonStart_fpp, latEnd_fpp, lonEnd_fpp, strike_fpp, dipAngle_fpp, length_fpp);
 	 }
 
 	 //--------------------------------------------------
 	 //
 	 //--------------------------------------------------
-	 function setUpStuff(source){
+	 function setUpStuffFPP(source){
 		  var parts=source.getAttribute("id").split(":");
-		  var rowName=parts[0]+":"+parts[1];
-		  console.log("Origin Coordinates:"+origLat.value+" "+origLon.value);
-		  
+		  //var rowName=parts[0]+":"+parts[1];
+		  var rowName=parts[0];
 		  //Set up all the values from forms
-		  setFormValues(rowName);
-		  console.log(xstart.value+" "+ystart.value+" "+latStart.value+" "+lonStart.value+" "+latEnd.value+" "+lonEnd.value+" "+strike.value+" "+dipAngle.value+" "+length.value);
+		  setFormValuesFPP(rowName);
+		  console.log(xstart_fpp.value+" "+ystart_fpp.value+" "+latStart_fpp.value+" "+lonStart_fpp.value+" "+latEnd_fpp.value+" "+lonEnd_fpp.value+" "+strike_fpp.value+" "+dipAngle_fpp.value+" "+length_fpp.value);
 
 		  }
 
@@ -227,27 +227,25 @@
 	 // These have to correspond to the HTML ID attributes, so this may not
 	 // be portable. 
 	 //--------------------------------------------------
-	 function setFormValues(rowName) {
+	 function setFormValuesFPP(rowName) {
+	 console.log(rowName);
 	 //Here we get the values that we need from the form fields
-	 xstart=document.getElementById(rowName+":"+"FaultLocationX2");
-	 ystart=document.getElementById(rowName+":"+"FaultLocationY2");
-	 latStart=document.getElementById(rowName+":"+"FaultLatStarts2");
-	 lonStart=document.getElementById(rowName+":"+"FaultLonStarts2");
-	 latEnd=document.getElementById(rowName+":"+"FaultLatEnds2");
-	 lonEnd=document.getElementById(rowName+":"+"FaultLonEnds2");
-	 strike=document.getElementById(rowName+":"+"FaultStrikeAngle2");
-	 dipAngle=document.getElementById(rowName+":"+"FaultDipAngle2");
-	 length=document.getElementById(rowName+":"+"FaultLength2");	 
+	 xstart_fpp=document.getElementById(rowName+":"+"FaultLocationX");
+	 console.log(xstart_fpp.value);
+	 ystart_fpp=document.getElementById(rowName+":"+"FaultLocationY");
+	 console.log(ystart_fpp.value);
+	 latStart_fpp=document.getElementById(rowName+":"+"FaultLatStarts");
+	 console.log(latStart_fpp.value);
+	 lonStart_fpp=document.getElementById(rowName+":"+"FaultLonStarts");
+	 console.log(lonStart_fpp.value);
+	 latEnd_fpp=document.getElementById(rowName+":"+"FaultLatEnds");
+	 lonEnd_fpp=document.getElementById(rowName+":"+"FaultLonEnds");
+	 strike_fpp=document.getElementById(rowName+":"+"FaultStrikeAngle");
+	 dipAngle_fpp=document.getElementById(rowName+":"+"FaultDipAngle");
+	 length_fpp=document.getElementById(rowName+":"+"FaultLength");	 
 	 
 	 }
 
-
-	 function expandTextField(inputField) {
-	 inputField.style.width="70px";
-	 }
-	 
-	 function resetTextFieldStyle(inputField){
-	 inputField.style.width="35px";
-	 }
   </script>
 </f:verbatim>
+</h:panelGroup>

@@ -533,6 +533,7 @@
 	 // be portable. 
 	 //--------------------------------------------------
 	 function setFormValues(rowName) {
+	 console.log("Row name: "+rowName);
 	 //Here we get the values that we need from the form fields
 	 xstart=document.getElementById(rowName+":"+"FaultLocationX2");
 	 ystart=document.getElementById(rowName+":"+"FaultLocationY2");

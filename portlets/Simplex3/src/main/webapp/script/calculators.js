@@ -3,7 +3,7 @@ var calculators=calculators || (function() {
 	 //This function handles a fault's translation relative to the origin. 
 	 //That is, it handles changes to the fault's (x,y)
 	 //--------------------------------------------------
-	 function updateLat0Lon0Lat1Lon1(origLat, origLon, xstart, ystart,latStart, lonStart, strike, dipAngle, length){
+	 function updateLat0Lon0Lat1Lon1(origLat, origLon, xstart, ystart,latStart, lonStart, latEnd, lonEnd, strike, dipAngle, length){
 		  
 		  //Find the new lat/lon value of the modified starting point from (x,y).
 		  var theFactor=d2r* Math.cos(d2r * origLat.value) * 6378.139 * (1.0 - Math.sin(d2r * origLat.value) * Math.sin(d2r * origLat.value) * flatten);
@@ -51,7 +51,7 @@ var calculators=calculators || (function() {
 	 //This causes a rotation, expansion/contraction, and change in the
 	 //fault's Cartesian coordinates.
 	 //--------------------------------------------------
-	 function updateXYLengthStrike(origLat, origLon, xstart, ystart,latStart, lonStart, strike, dipAngle, length){
+	 function updateXYLengthStrike(origLat, origLon, xstart, ystart,latStart, lonStart, latEnd, lonEnd, strike, dipAngle, length){
 
 		  
 		  //First, calculate the new (x,y) of the fault
