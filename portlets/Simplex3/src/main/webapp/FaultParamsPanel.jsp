@@ -8,12 +8,16 @@
 <f:verbatim>
   <fieldset style="width:100%">
 	 <legend class="portlet-form-label">Input Fault Geometry </legend>
+	 Provide or update the parameter values in the fields below. Click the checkbox to allow
+    a specific parameter to vary.
   </f:verbatim>
   
   <h:panelGrid id="FaultTable" columns="3" footerClass="subtitle"
 					  headerClass="subtitlebig" styleClass="medium"
 					  columnClasses="subtitle,medium">
-		
+		<f:verbatim><b>Parameter</b></f:verbatim>
+		<f:verbatim><b>Value</b></f:verbatim>
+		<f:verbatim><b>Click to Vary</b></f:verbatim>
 		<h:outputText id="lkdmt117" value="Fault Name:" />
 		<h:panelGroup id="lkbarq118">
 		  <h:inputText id="FaultName"
@@ -27,7 +31,7 @@
 		<h:outputText id="lkdrq119" value="Location X:" />
 		<h:panelGroup id="lkdrq1181">
 		  <h:inputText id="FaultLocationX"
-							onchange="updateLat0Lon0Lat1Lon1FPP(this)"
+							onchange="fppCalc.updateLat0Lon0Lat1Lon1(this)"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLocationX}"
 							required="true" />
 		  <h:message id="lkdrq1182" for="FaultLocationX" showDetail="true"
@@ -39,7 +43,7 @@
 		<h:outputText id="lkdrq1183" value="Location Y:" />
 		<h:panelGroup id="lkdrq1184">
 		  <h:inputText id="FaultLocationY"
-							onchange="updateLat0Lon0Lat1Lon1FPP(this)"
+							onchange="fppCalc.updateLat0Lon0Lat1Lon1(this)"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLocationY}"
 							required="true" />
 		  <h:message id="lkdrq1185" for="FaultLocationY" showDetail="true"
@@ -52,7 +56,7 @@
 		<h:panelGroup id="lkdrq1187">
 		  <h:inputText id="FaultLength"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLength}"
-							onchange="updateLat0Lon0Lat1Lon1FPP(this)"
+							onchange="fppCalc.updateLat0Lon0Lat1Lon1(this)"
 							required="true" />
 		  <h:message id="lkdrq1188" for="FaultLength" showDetail="true" showSummary="false"
 						 errorStyle="color: red" />
@@ -97,7 +101,7 @@
 		<h:panelGroup id="bae2lerba">
 		  <h:inputText id="FaultStrikeAngle"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultStrikeAngle}"
-							onchange="updateLat0Lon0Lat1Lon1FPP(this)"
+							onchange="fppCalc.updateLat0Lon0Lat1Lon1(this)"
 							required="false" />
 		  <h:message id="dflelbaa42" for="FaultStrikeAngle" showDetail="true"
 						 showSummary="true" errorStyle="color: red" />
@@ -130,7 +134,7 @@
 		<h:outputText id="dfadfaa8" value="Fault Lon Starts:" />
 		<h:panelGroup id="dnnnak9">
 		  <h:inputText id="FaultLonStarts"
-							onchange="updateXYLengthStrikeFPP(this)"
+							onchange="fppCalc.updateXYLengthStrike(this)"
 							required="true"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLonStarts}" />
 		</h:panelGroup>
@@ -139,7 +143,7 @@
 		<h:outputText id="dfleanad11" value="Fault Lat Starts:" />
 		<h:panelGroup id="dflelerkljk12">
 		  <h:inputText id="FaultLatStarts"
-							onchange="updateXYLengthStrikeFPP(this)"
+							onchange="fppCalc.updateXYLengthStrike(this)"
 							required="true"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLatStarts}" />
 		</h:panelGroup>
@@ -148,7 +152,7 @@
 		<h:outputText  id="dflelerkljk14" value="Fault Lon Ends:" />
 		<h:panelGroup id="dflelerkljk15">
 		  <h:inputText id="FaultLonEnds"
-							onchange="updateXYLengthStrikeFPP(this)"
+							onchange="fppCalc.updateXYLengthStrike(this)"
 							required="true"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLonEnds}" />
 		</h:panelGroup>
@@ -157,7 +161,7 @@
 		<h:outputText id="dflelerkljk17" value="Fault Lat Ends:" />
 		<h:panelGroup id="dflelerkljk18">
 		  <h:inputText id="FaultLatEnds"
-							onchange="updateXYLengthStrikeFPP(this)"
+							onchange="fppCalc.updateXYLengthStrike(this)"
 							required="true"
 							value="#{SimplexBean.currentEditProjectForm.currentFault.faultLatEnds}" />
 		</h:panelGroup>
@@ -174,14 +178,13 @@
 	 <f:verbatim></fieldset></f:verbatim>
   </h:form>
 <f:verbatim>
-  <script src="script/calculators.js"></script>
+  <script src="/Simplex3/script/calculators.js"></script>
   <script>
 	 //TODO: The functions in this script are used by Disloc3, Simplex3 and possibly other components.
 	 //If updated here, they must be updated in other locations.  It would be better to put these
 	 //in a global library location.
 
-	 var d2r = Math.acos(-1.0) / 180.0;
-	 var flatten=1.0/298.247;
+	 var fppCalc=fppCalc || (function() {
 
 	 var xstart_fpp;
 	 var ystart_fpp;
@@ -199,25 +202,25 @@
 	 var origLon_fpp=document.getElementById("Simplex3Faultform:projectOriginLonFPP");
 	 console.log("Project origin lon:"+origLon_fpp.value);
 	 
-	 function updateXYLengthStrikeFPP(source) {
-	 setUpStuffFPP(source);
+	 function updateXYLengthStrike(source) {
+	 setUpStuff(source);
 	 calculators.updateXYLengthStrike(origLat_fpp,origLon_fpp,xstart_fpp, ystart_fpp,latStart_fpp, lonStart_fpp, latEnd_fpp, lonEnd_fpp, strike_fpp, dipAngle_fpp, length_fpp);
 	 }
 	 
-	 function updateLat0Lon0Lat1Lon1FPP(source) {
-	 setUpStuffFPP(source);
+	 function updateLat0Lon0Lat1Lon1(source) {
+	 setUpStuff(source);
 	 calculators.updateLat0Lon0Lat1Lon1(origLat_fpp,origLon_fpp,xstart_fpp, ystart_fpp,latStart_fpp, lonStart_fpp, latEnd_fpp, lonEnd_fpp, strike_fpp, dipAngle_fpp, length_fpp);
 	 }
 
 	 //--------------------------------------------------
 	 //
 	 //--------------------------------------------------
-	 function setUpStuffFPP(source){
+	 function setUpStuff(source){
 		  var parts=source.getAttribute("id").split(":");
 		  //var rowName=parts[0]+":"+parts[1];
 		  var rowName=parts[0];
 		  //Set up all the values from forms
-		  setFormValuesFPP(rowName);
+		  setFormValues(rowName);
 		  console.log(xstart_fpp.value+" "+ystart_fpp.value+" "+latStart_fpp.value+" "+lonStart_fpp.value+" "+latEnd_fpp.value+" "+lonEnd_fpp.value+" "+strike_fpp.value+" "+dipAngle_fpp.value+" "+length_fpp.value);
 
 		  }
@@ -227,7 +230,7 @@
 	 // These have to correspond to the HTML ID attributes, so this may not
 	 // be portable. 
 	 //--------------------------------------------------
-	 function setFormValuesFPP(rowName) {
+	 function setFormValues(rowName) {
 	 console.log(rowName);
 	 //Here we get the values that we need from the form fields
 	 xstart_fpp=document.getElementById(rowName+":"+"FaultLocationX");
@@ -245,6 +248,13 @@
 	 length_fpp=document.getElementById(rowName+":"+"FaultLength");	 
 	 
 	 }
+
+	 return {
+		  updateLat0Lon0Lat1Lon1:updateLat0Lon0Lat1Lon1,
+		  updateXYLengthStrike:updateXYLengthStrike	   
+	 }
+	 })();
+	 
 
   </script>
 </f:verbatim>

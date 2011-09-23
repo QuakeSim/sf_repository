@@ -92,7 +92,7 @@
 									  size="7"
 									  style="text-align:center;width:35px" 
 									  value="#{myentry31.faultLocationX}" 
-									  onchange="updateLat0Lon0Lat1Lon1(this)"
+									  onchange="pcpCalc.updateLat0Lon0Lat1Lon1(this)"
 									  onmouseover="expandTextField(this)"
 									  onmouseout='resetTextFieldStyle(this)'									  
 									  required="true" />
@@ -111,7 +111,7 @@
 									  size="7"
 									  style="text-align:center;width:35px" 
 									  value="#{myentry31.faultLocationY}"
-									  onchange="updateLat0Lon0Lat1Lon1(this)"
+									  onchange="pcpCalc.updateLat0Lon0Lat1Lon1(this)"
 									  onmouseover="expandTextField(this)"
 									  onmouseout='resetTextFieldStyle(this)'									  
 									  required="true" />
@@ -134,7 +134,7 @@
 					 <h:inputText id="FaultLatStarts2" 
 									  size="7"
 									  style="text-align:center;width:35px" 
-									  onchange="updateXYLengthStrike(this)"
+									  onchange="pcpCalc.updateXYLengthStrike(this)"
 									  onmouseover="expandTextField(this)"
 									  onmouseout='resetTextFieldStyle(this)'
 									  value="#{myentry31.faultLatStarts}" />
@@ -149,7 +149,7 @@
 					 <h:inputText id="FaultLonStarts2" 
 									  size="7"
 									  style="text-align:center;width:35px" 
-									  onchange="updateXYLengthStrike(this)"
+									  onchange="pcpCalc.updateXYLengthStrike(this)"
 									  onmouseover="expandTextField(this)"
 									  onmouseout='resetTextFieldStyle(this)'
 									  value="#{myentry31.faultLonStarts}" />
@@ -168,7 +168,7 @@
 					 <h:inputText id="FaultLatEnds2" 
 									  size="7"
 									  style="text-align:center;width:35px" 
-									  onchange="updateXYLengthStrike(this)"
+									  onchange="pcpCalc.updateXYLengthStrike(this)"
 									  onmouseover="expandTextField(this)"
 									  onmouseout='resetTextFieldStyle(this)'
 									  value="#{myentry31.faultLatEnds}" />
@@ -188,7 +188,7 @@
 					 <h:inputText id="FaultLonEnds2" 
 									  size="7"
 									  style="text-align:center;width:35px" 
-									  onchange="updateXYLengthStrike(this)"
+									  onchange="pcpCalc.updateXYLengthStrike(this)"
 									  onmouseover="expandTextField(this)"
 									  onmouseout='resetTextFieldStyle(this)'
 									  value="#{myentry31.faultLonEnds}" />
@@ -207,7 +207,7 @@
 									  size="7"
 									  style="text-align:center;width:35px" 
 									  value="#{myentry31.faultStrikeAngle}"
-									  onchange="updateLat0Lon0Lat1Lon1(this)"
+									  onchange="pcpCalc.updateLat0Lon0Lat1Lon1(this)"
 									  onmouseover="expandTextField(this)"
 									  onmouseout='resetTextFieldStyle(this)'
 									  required="false" />
@@ -279,7 +279,7 @@
 									  size="7"
 									  style="text-align:center;width:35px" 
 									  value="#{myentry31.faultLength}"
-									  onchange="updateLat0Lon0Lat1Lon1(this)"
+									  onchange="pcpCalc.updateLat0Lon0Lat1Lon1(this)"
 									  onmouseover="expandTextField(this)"
 									  onmouseout='resetTextFieldStyle(this)'
 									  required="true" />
@@ -478,16 +478,15 @@
 	 <f:verbatim></fieldset></f:verbatim>		  
   </h:form>
 </h:panelGroup>
-</h:panelGrid>
 <f:verbatim>
-  <script src="script/calculators.js"></script>
+  <script src="/Simplex3/script/calculators.js"></script>
   <script>
+	 //Wrap all of this stuff as a function so that hopefully we won't run into name conflicts with
+	 //other scripts in the same EditProject.jsp page.
+	 var pcpCalc=pcpCalc || (function() {
 	 //TODO: The functions in this script are used by Disloc3, Simplex3 and possibly other components.
 	 //If updated here, they must be updated in other locations.  It would be better to put these
 	 //in a global library location.
-
-	 var d2r = Math.acos(-1.0) / 180.0;
-	 var flatten=1.0/298.247;
 
 	 var xstart;
 	 var ystart;
@@ -505,12 +504,12 @@
 	 
 	 function updateXYLengthStrike(source) {
 	 setUpStuff(source);
-	 calculators.updateXYLengthStrike(origLat,origLon,xstart, ystart,latStart, lonStart, strike, dipAngle, length);
+	 calculators.updateXYLengthStrike(origLat,origLon,xstart, ystart,latStart, lonStart, latEnd, lonEnd, strike, dipAngle, length);
 	 }
 	 
 	 function updateLat0Lon0Lat1Lon1(source) {
 	 setUpStuff(source);
-	 calculators.updateLat0Lon0Lat1Lon1(origLat, origLon, xstart, ystart,latStart, lonStart, strike, dipAngle, length);
+	 calculators.updateLat0Lon0Lat1Lon1(origLat, origLon, xstart, ystart,latStart, lonStart, latEnd, lonEnd, strike, dipAngle, length);
 	 }
 
 	 //--------------------------------------------------
@@ -518,8 +517,9 @@
 	 //--------------------------------------------------
 	 function setUpStuff(source){
 		  var parts=source.getAttribute("id").split(":");
+		  //Note this row name works only with data tables.
 		  var rowName=parts[0]+":"+parts[1];
-		  console.log("Origin Coordinates:"+origLat.value+" "+origLon.value);
+		  console.log("Row Name:"+rowName);
 		  
 		  //Set up all the values from forms
 		  setFormValues(rowName);
@@ -546,8 +546,15 @@
 	 length=document.getElementById(rowName+":"+"FaultLength2");	 
 	 
 	 }
+	 return {
+	 updateLat0Lon0Lat1Lon1:updateLat0Lon0Lat1Lon1,
+	 updateXYLengthStrike:updateXYLengthStrike
+	 
+	 }
+	 })();
+  </script>
 
-
+  <script>	 
 	 function expandTextField(inputField) {
 	 inputField.style.width="70px";
 	 }
@@ -555,5 +562,7 @@
 	 function resetTextFieldStyle(inputField){
 	 inputField.style.width="35px";
 	 }
+	 
   </script>
 </f:verbatim>
+</h:panelGrid>
