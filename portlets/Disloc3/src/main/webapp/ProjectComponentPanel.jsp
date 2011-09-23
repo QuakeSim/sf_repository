@@ -68,7 +68,7 @@
 				 <h:inputText id="FaultLocationX2" 
 								  style="text-align:right;width:30px"
 								  value="#{myentry31.faultLocationX}" 
-								  onchange="updateLat0Lon0Lat1Lon1(this)"
+								  onchange="dislocPCPCalc.updateLat0Lon0Lat1Lon1(this)"
 								  onmouseover="expandTextField(this)"
 								  onmouseout='resetTextFieldStyle(this)'
 								  required="true" />
@@ -82,7 +82,7 @@
 			  <h:panelGrid columns="1" cellpadding="0" cellspacing="0" id="ljlejre122">
 				 <h:inputText id="FaultLocationY2" style="text-align:right;width:30px" 
 								  value="#{myentry31.faultLocationY}"
-								  onchange="updateLat0Lon0Lat1Lon1(this)"
+								  onchange="dislocPCPCalc.updateLat0Lon0Lat1Lon1(this)"
 								  onmouseover="expandTextField(this)"
 								  onmouseout='resetTextFieldStyle(this)'
 
@@ -96,7 +96,7 @@
 			  </f:facet>
 			  <h:inputText id="FaultLatStart" style="text-align:right;width:30px" 
 								value="#{myentry31.faultLatStart}"
-								onchange="updateXYLengthStrike(this)"
+								onchange="dislocPCPCalc.updateXYLengthStrike(this)"
 								  onmouseover="expandTextField(this)"
 								  onmouseout='resetTextFieldStyle(this)'
 								  required="true" />
@@ -108,7 +108,7 @@
 			  </f:facet>
 				 <h:inputText id="FaultLonStart" style="text-align:right;width:30px" 
 								  value="#{myentry31.faultLonStart}"
-								  onchange="updateXYLengthStrike(this)"
+								  onchange="dislocPCPCalc.updateXYLengthStrike(this)"
 								  onmouseover="expandTextField(this)"
 								  onmouseout='resetTextFieldStyle(this)'
 								  required="true" />
@@ -120,7 +120,7 @@
 			  </f:facet>
 			  <h:inputText id="FaultLatEnd" style="text-align:right;width:30px" 
 								value="#{myentry31.faultLatEnd}"
-								onchange="updateXYLengthStrike(this)"
+								onchange="dislocPCPCalc.updateXYLengthStrike(this)"
 								onmouseover="expandTextField(this)"
 								onmouseout='resetTextFieldStyle(this)'
 								required="true" />
@@ -132,7 +132,7 @@
 			  </f:facet>
 				 <h:inputText id="FaultLonEnd" style="text-align:right;width:30px" 
 								  value="#{myentry31.faultLonEnd}"
-								  onchange="updateXYLengthStrike(this)"
+								  onchange="dislocPCPCalc.updateXYLengthStrike(this)"
 								  onmouseover="expandTextField(this)"
 								  onmouseout='resetTextFieldStyle(this)'
 								  required="true" />
@@ -144,7 +144,7 @@
 			  </f:facet>
 			  <h:inputText id="FaultStrikeAngle" style="text-align:right;width:30px" 
 								value="#{myentry31.faultStrikeAngle}"
-								onchange="updateLat0Lon0Lat1Lon1(this)"
+								onchange="dislocPCPCalc.updateLat0Lon0Lat1Lon1(this)"
 								onmouseover="expandTextField(this)"
 								onmouseout='resetTextFieldStyle(this)'
 								required="false" />
@@ -189,7 +189,7 @@
 			  </f:facet>
 			  <h:inputText id="FaultLength" style="text-align:right;width:30px" 
 								  value="#{myentry31.faultLength}"
-								  onchange="updateLat0Lon0Lat1Lon1(this)"
+								  onchange="dislocPCPCalc.updateLat0Lon0Lat1Lon1(this)"
 								  onmouseover="expandTextField(this)"
 								  onmouseout='resetTextFieldStyle(this)'
 								  required="true" />
@@ -201,7 +201,7 @@
 			  </f:facet>
 			  <h:inputText id="FaultStrikeSlip" style="text-align:right;width:30px" 
 								value="#{myentry31.faultStrikeSlip}"
-								onchange="updateLat0Lon0Lat1Lon1(this)"
+								onchange="dislocPCPCalc.updateLat0Lon0Lat1Lon1(this)"
 								onmouseover="expandTextField(this)"
 								onmouseout='resetTextFieldStyle(this)'
 								required="true" />
@@ -262,14 +262,13 @@
 </h:form>
 <f:verbatim></fieldset></f:verbatim>
 </h:panelGroup>
-</h:panelGrid>
 <f:verbatim>
+  <script src="/Disloc3/script/calculators.js"></script>
   <script>
 	 //TODO: The functions in this script are used by Disloc3, Simplex3 and possibly other components.
 	 //If updated here, they must be updated in other locations.  It would be better to put these
 	 //in a global library location.
-	 var d2r = Math.acos(-1.0) / 180.0;
-	 var flatten=1.0/298.247;
+	 var dislocPCPCalc=dislocPCPCalc || (function() {
 
 	 var xstart;
 	 var ystart;
@@ -291,47 +290,7 @@
 	 //--------------------------------------------------
 	 function updateLat0Lon0Lat1Lon1(source){
 	 setUpStuff(source);
-	 
-	 //Find the new lat/lon value of the modified starting point from (x,y).
-	 var theFactor=d2r* Math.cos(d2r * origLat.value) * 6378.139 * (1.0 - Math.sin(d2r * origLat.value) * Math.sin(d2r * origLat.value) * flatten);
-	 console.log(theFactor);
-	 lonStart.value = (xstart.value*1.0)/theFactor + (origLon.value*1.0);
-	 latStart.value = ystart.value/111.32 + (origLat.value*1.0);
-	 console.log(lonStart.value+" "+latStart.value);
-	 	 
-	 //Now find the lat/lon values of the translated endpoint.
-	 //First, find the Cartesian coordinates of the endpoint.  
-
-	 if (strike.value == 0) {
-	 xend = 0; 
-	 yend = length.value;
-	 }
-	 else if (strike.value == 90) { xend = length.value; yend = 0;}
-	 else if (strike.value == 180) { xend = 0; yend = (-1.0) * length.value;}
-	 else if (strike.value == 270) { xend = (-1.0) * length.value; yend = 0;}
-	 else {
-	 var sval = 90 - strike.value;
-	 var thetan = Math.tan(sval*d2r);
-	 var xend = length.value/Math.sqrt(1 + thetan*thetan);
-	 var yend = Math.sqrt(length.value*length.value - xend*xend);
-	 
-
-	 if (strike.value > 0 && strike.value < 90) { xend = xend*1.0; yend = yend*1.0;}
-	 else if (strike.value > 90 && strike.value < 180) { xend = xend*1.0; yend = yend* (-1.0);}
-	 else if (strike.value > 180 && strike.value < 270) { xend = xend*(-1.0); yend = yend*(-1.0);}
-	 else if (strike.value > 270 && strike.value < 360) { xend = xend*(-1.0); yend = yend*1.0;}
-	 }
-	 
-	 //Note we use the lat, lon of the fault's starting point here, not the origin's lat, lon, because
-	 //we are using the fault length (not the distance to the origin from the end point).
-	 var theFactor=d2r* Math.cos(d2r * latStart.value) * 6378.139 * (1.0 - Math.sin(d2r * latStart.value) * Math.sin(d2r * latStart.value) * flatten);
-	 console.log(theFactor);
-	 lonEnd.value = (xend*1.0)/theFactor + (lonStart.value*1.0);
-	 latEnd.value = yend/111.32 + (latStart.value*1.0);
-	 
-	 lonEnd.value = Math.round(lonEnd.value*100)/100.0;
-	 latEnd.value = Math.round(latEnd.value*100)/100.0;
-	 console.log(xstart.value+" "+ystart.value+" "+latStart.value+" "+lonStart.value+" "+latEnd.value+" "+lonEnd.value+" "+strike.value+" "+dipAngle.value+" "+length.value);
+	 calculators.updateLat0Lon0Lat1Lon1(origLat, origLon, xstart, ystart,latStart, lonStart, latEnd, lonEnd, strike, dipAngle, length);
 	 }
 
 	 //--------------------------------------------------
@@ -341,53 +300,9 @@
 	 //--------------------------------------------------
 	 function updateXYLengthStrike(source) {
 	 setUpStuff(source);
-
-	 //First, calculate the new (x,y) of the fault
-	 var theFactor=d2r* Math.cos(d2r * origLat.value) * 6378.139 * (1.0 - Math.sin(d2r * origLat.value) * Math.sin(d2r * origLat.value) * flatten);
-	 console.log("The factor:"+theFactor);
-	 xstart.value=(lonStart.value-origLon.value)*theFactor;
-	 ystart.value=(latStart.value-origLat.value)*111.32;
-	 console.log("X and Y:"+xstart.value+" "+ystart.value);
-	 
-	 //Next, calculate the length
-	 var theFactor=d2r* Math.cos(d2r * latStart.value) * 6378.139 * (1.0 - Math.sin(d2r * latStart.value) * Math.sin(d2r * latStart.value) * flatten);
-	 console.log("The factor:"+theFactor);	
-	 console.log(lonEnd.value+" "+lonStart.value+" "+latEnd.value+" "+latStart.value);				
-	 xdiff=(lonEnd.value-lonStart.value)*theFactor;
-	 ydiff=(latEnd.value-latStart.value)*111.32;
-	 console.log("Sqrt:"+Math.sqrt(xdiff*xdiff-ydiff*ydiff));
-	 lengthValue=Math.sqrt(xdiff*xdiff+ydiff*ydiff);
-	 length.value=Math.round(lengthValue*1000/1000);
-	 console.log("xdiff, ydiff, length:"+xdiff+" "+ydiff+" "+length.value);
-
-	 //And the strike
-	 strikeValue=Math.atan2(xdiff,ydiff)/d2r;
-	 if (strikeValue < 0) { strikeVaule = strikeValue + 360; }
-	 strike.value=Math.round(strikeValue*1000)/1000;
-	 console.log("Strike:"+strike.value);
-	 console.log(xstart.value+" "+ystart.value+" "+latStart.value+" "+lonStart.value+" "+latEnd.value+" "+lonEnd.value+" "+strike.value+" "+dipAngle.value+" "+length.value);
+	 calculators.updateXYLengthStrike(origLat,origLon,xstart, ystart,latStart, lonStart, latEnd, lonEnd, strike, dipAngle, length);	 
 	 }
 	 
-	 //--------------------------------------------------
-	 //This function handles changes in the fault's ending lat and lon.  This 
-	 //causes a rotation and expansion/contraction
-	 //--------------------------------------------------
-	 function updateLengthStrike(source) {
-	 setUpStuff(source);
-
-	 }
-	 
-	 //--------------------------------------------------
-	 //This function handles changes in a fault's length and changes 
-	 //in the strike angle. The fault's starting (x,y) and (lat,lon) are constant.
-	 //--------------------------------------------------
-	 function updateLat1Lon1(source) {
-	 setUpStuff(source);
-	 }
-
-
-	 //--------------------------------------------------
-	 //
 	 //--------------------------------------------------
 	 function setUpStuff(source){
 	 var parts=source.getAttribute("name").split(":");
@@ -396,7 +311,7 @@
 
 	 //Set up all the values from forms
 	 setFormValues(rowName);
-	 console.log(xstart.value+" "+ystart.value+" "+latStart.value+" "+lonStart.value+" "+latEnd.value+" "+lonEnd.value+" "+strike.value+" "+dipAngle.value+" "+length.value);
+	 console.log("Setting values:"+xstart.value+" "+ystart.value+" "+latStart.value+" "+lonStart.value+" "+latEnd.value+" "+lonEnd.value+" "+strike.value+" "+dipAngle.value+" "+length.value);
 
 	 }
 
@@ -416,8 +331,15 @@
 	 length=document.getElementById(rowName+":"+"FaultLength");	 
 	 
 	 }
-
-
+	 return {
+		  updateLat0Lon0Lat1Lon1:updateLat0Lon0Lat1Lon1,
+		  updateXYLengthStrike:updateXYLengthStrike
+	 }
+	 
+	 })();
+	 
+  </script>
+  <script>
 	 function expandTextField(inputField) {
 	 inputField.style.width="70px";
 	 }
@@ -427,3 +349,4 @@
 	 }
   </script>
 </f:verbatim>
+</h:panelGrid>

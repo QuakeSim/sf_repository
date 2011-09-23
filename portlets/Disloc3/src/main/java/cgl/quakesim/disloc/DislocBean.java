@@ -3992,7 +3992,6 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		  projectMaxY=Double.NEGATIVE_INFINITY;
 	 }
 
-
 	 public void toggleImportFaultsForProject(ActionEvent ev) throws Exception{
 		  initEditFormsSelection();
 

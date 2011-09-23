@@ -1,4 +1,7 @@
-<h:form id="Faultform" rendered="#{DislocBean2.renderCreateNewFaultForm}"> 
+<h:form id="Disloc3Faultform" rendered="#{DislocBean2.renderCreateNewFaultForm}"> 
+  <h:inputHidden id="projectOriginLatFPP" value="#{DislocBean2.currentParams.originLat}"/>
+  <h:inputHidden id="projectOriginLonFPP" value="#{DislocBean2.currentParams.originLon}"/>
+
 	 <f:verbatim>
 		<fieldset><legend class="portlet-form-label">Fault Geometry Parameters</legend>
 	 </f:verbatim>	 
@@ -27,6 +30,7 @@
 	 <h:outputText  id="stuff17" value="Location X:" /> 
 	 <h:panelGroup  id="stuff18"> 
 		<h:inputText id="FaultLocationX" 
+						 onchange="fppCalc.updateLat0Lon0Lat1Lon1(this)"
 						 value="#{DislocBean2.currentFault.faultLocationX}" required="true" /> 
 	 </h:panelGroup> 
 	 <h:outputText  id="lkdjre3234" value="N/A" /> 
@@ -34,34 +38,42 @@
 	 <h:outputText  id="stuff19" value="Location Y:" /> 
 	 <h:panelGroup  id="stuff20"> 
 		<h:inputText id="FaultLocationY" 
+						 onchange="fppCalc.updateLat0Lon0Lat1Lon1(this)"
 						 value="#{DislocBean2.currentFault.faultLocationY}" required="true" /> 
 	 </h:panelGroup> 
 	 <h:outputText  id="lkdjre3122" value="N/A" /> 
 	 
 	 <h:outputText id="stufflat32" value="Fault Origin Latitude:" />
 	 <h:panelGroup id="stufflat32we">
-		<h:inputText id="faultLat" value="#{DislocBean2.currentFault.faultLatStart}"
+		<h:inputText id="FaultLatStartDisloc3" value="#{DislocBean2.currentFault.faultLatStart}"							
+						 onchange="fppCalc.updateXYLengthStrike(this)"
 						 required="true" />
 	 </h:panelGroup>
 	 <h:outputText  id="lkdj21re32" value="N/A" /> 
 	 
 	 <h:outputText id="stufflon32" value="Fault Origin Longitude" />
 	 <h:panelGroup id="stufflat323432">
-		<h:inputText id="faultLon" value="#{DislocBean2.currentFault.faultLonStart}"
+		<h:inputText id="FaultLonStartDisloc3" 
+						 value="#{DislocBean2.currentFault.faultLonStart}"
+						 onchange="fppCalc.updateXYLengthStrike(this)"
 						 required="true" />
 	 </h:panelGroup>
 	 <h:outputText  id="lkdj121re3dlkj2" value="N/A" /> 
 	 
 	 <h:outputText id="stufflonend32" value="Fault End Latitude:" />
 	 <h:panelGroup id="stufflat3q1432">
-		<h:inputText id="faultLatendere" value="#{DislocBean2.currentFault.faultLatEnd}"
+		<h:inputText id="FaultLatEndDisloc3" 
+						 onchange="fppCalc.updateXYLengthStrike(this)"
+						 value="#{DislocBean2.currentFault.faultLatEnd}"
 						 required="true" />
 	 </h:panelGroup>
 	 <h:outputText  id="lkdj23oi232" value="N/A" /> 
 	 
 	 <h:outputText id="stufflonend308" value="Fault End Longitude" />
 	 <h:panelGroup id="stufflatewe3w32">
-		<h:inputText id="faultLonende3r" value="#{DislocBean2.currentFault.faultLonEnd}"
+		<h:inputText id="FaultLonEndDisloc3" 
+						 onchange="fppCalc.updateXYLengthStrike(this)"
+						 value="#{DislocBean2.currentFault.faultLonEnd}"
 						 required="true" />
 	 </h:panelGroup>
 	 <h:outputText  id="lkdjr1212e32" value="N/A" /> 
@@ -69,7 +81,9 @@
 	 <h:outputText  id="stuff21" value="Length:" /> 
 	 <h:panelGroup  id="stuff22"> 
 		<h:inputText id="FaultLength" 
-						 value="#{DislocBean2.currentFault.faultLength}" required="true" /> 
+						 value="#{DislocBean2.currentFault.faultLength}" 
+						 onchange="fppCalc.updateLat0Lon0Lat1Lon1(this)"
+						 required="true" /> 
 	 </h:panelGroup> 
 	 <h:outputText  id="lkdj1re1132" value="km" /> 
 	 
@@ -104,7 +118,9 @@
 	 <h:outputText  id="stuff31" value="Strike Angle:" /> 
 	 <h:panelGroup  id="stuff32"> 
 		<h:inputText id="FaultStrikeAngle" 
-						 value="#{DislocBean2.currentFault.faultStrikeAngle}" required="true" /> 
+						 value="#{DislocBean2.currentFault.faultStrikeAngle}" 
+						 onchange="fppCalc.updateLat0Lon0Lat1Lon1(this)"
+						 required="true" /> 
 	 </h:panelGroup> 
 	 <h:outputText  id="r54r4djre32" value="degrees"/> 
 	 
@@ -137,22 +153,89 @@
 	 </h:panelGroup> 
 	 <h:outputText  id="e3434dff3d" value="N/A"/> 
 	 
-	 <f:facet name="footer"> 
-		<h:outputFormat id="output2" escape="false" 
-							 value="Click <i>Calculate Length</i> to udpate length and strike. 
-		                       Click <i>Calculate Endpoint</i> to calculate the fault's endpoint from length and strike. 
-									  Click <i>Set Values</i> when you are done." /> 
-	 </f:facet> 
   </h:panelGrid>		 
-  <h:panelGrid id="faultbuttons93" columns="2">
 	 <h:commandButton id="addfault" value="Set Values" 
 							actionListener="#{DislocBean2.toggleAddFaultForProject}" /> 
-	 <f:verbatim>
-		<input id="domath" type="button" 
-				 name="Update" value="Calculate Length" onclick="calculatelength()"/>
-		<input id="domath2" type="button" 
-				 name="Update2" value="Calculate Endpoint" onclick="calculateendpoint()"/>
-	 </f:verbatim>
-  </h:panelGrid>
 	 <f:verbatim></fieldset></f:verbatim>
+	 
+	 <f:verbatim>
+		<script src="/Disloc3/script/calculators.js"></script>		
+		<script>
+		  //TODO: The functions in this script are used by Disloc3, Simplex3 and possibly other components.
+		  //If updated here, they must be updated in other locations.  It would be better to put these
+		  //in a global library location.
+		  
+		  var fppCalc=fppCalc || (function() {
+		  
+		  var xstart_fpp;
+		  var ystart_fpp;
+		  var latStart_fpp;
+		  var lonStart_fpp;
+		  var latEnd_fpp;
+		  var lonEnd_fpp;
+		  var strike_fpp;
+		  var dipAngle_fpp;
+		  var length_fpp;
+		  
+		  //This is the lat+lon of the project origin.
+		  var origLat_fpp=document.getElementById("Disloc3Faultform:projectOriginLatFPP");
+		  console.log("Project origin lat:"+origLat_fpp.value);
+		  var origLon_fpp=document.getElementById("Disloc3Faultform:projectOriginLonFPP");
+		  console.log("Project origin lon:"+origLon_fpp.value);
+		  
+		  function updateXYLengthStrike(source) {
+		  setUpStuff(source);
+		  calculators.updateXYLengthStrike(origLat_fpp,origLon_fpp,xstart_fpp, ystart_fpp,latStart_fpp, lonStart_fpp, latEnd_fpp, lonEnd_fpp, strike_fpp, dipAngle_fpp, length_fpp);
+		  }
+		  
+		  function updateLat0Lon0Lat1Lon1(source) {
+		  setUpStuff(source);
+		  calculators.updateLat0Lon0Lat1Lon1(origLat_fpp,origLon_fpp,xstart_fpp, ystart_fpp,latStart_fpp, lonStart_fpp, latEnd_fpp, lonEnd_fpp, strike_fpp, dipAngle_fpp, length_fpp);
+		  }
+		  
+		  //--------------------------------------------------
+		  //
+		  //--------------------------------------------------
+		  function setUpStuff(source){
+		  var parts=source.getAttribute("id").split(":");
+		  //var rowName=parts[0]+":"+parts[1];
+		  var rowName=parts[0];
+		  //Set up all the values from forms
+		  setFormValues(rowName);
+		  console.log(xstart_fpp.value+" "+ystart_fpp.value+" "+latStart_fpp.value+" "+lonStart_fpp.value+" "+latEnd_fpp.value+" "+lonEnd_fpp.value+" "+strike_fpp.value+" "+dipAngle_fpp.value+" "+length_fpp.value);
+		  
+		  }
+
+		  //--------------------------------------------------
+		  // Sets a bunch of values for the given row name
+		  // These have to correspond to the HTML ID attributes, so this may not
+		  // be portable. 
+		  //--------------------------------------------------
+		  function setFormValues(rowName) {
+		  console.log(rowName);
+		  //Here we get the values that we need from the form fields
+		  xstart_fpp=document.getElementById(rowName+":"+"FaultLocationX");
+		  console.log(xstart_fpp.value);
+		  ystart_fpp=document.getElementById(rowName+":"+"FaultLocationY");
+		  console.log(ystart_fpp.value);
+		  latStart_fpp=document.getElementById(rowName+":"+"FaultLatStartDisloc3");
+		  console.log(latStart_fpp.value);
+		  lonStart_fpp=document.getElementById(rowName+":"+"FaultLonStartDisloc3");
+		  console.log(lonStart_fpp.value);
+		  latEnd_fpp=document.getElementById(rowName+":"+"FaultLatEndDisloc3");
+		  lonEnd_fpp=document.getElementById(rowName+":"+"FaultLonEndDisloc3");
+		  strike_fpp=document.getElementById(rowName+":"+"FaultStrikeAngle");
+		  dipAngle_fpp=document.getElementById(rowName+":"+"FaultDipAngle");
+		  length_fpp=document.getElementById(rowName+":"+"FaultLength");	 
+		  
+		  }
+		  
+		  return {
+		  updateLat0Lon0Lat1Lon1:updateLat0Lon0Lat1Lon1,
+		  updateXYLengthStrike:updateXYLengthStrike	   
+		  }
+		  })();
+  </script>
+
+	 </f:verbatim>
 </h:form> 
