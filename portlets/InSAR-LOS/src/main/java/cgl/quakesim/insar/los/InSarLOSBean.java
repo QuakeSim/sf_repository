@@ -9,7 +9,10 @@ import javax.faces.event.ActionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+/**
+ * This bean is used to call the InSAR_TOOL_URL REST service and parse the results. It assumes
+ * the use has selected a specific InSAR image.
+ */
 public class InSarLOSBean {
 
 	 private static final String IMAGE="image=InSAR:unw";

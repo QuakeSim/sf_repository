@@ -142,11 +142,10 @@
 		   since the parent pom is not abstract and so will get executed along with
 		   its children.
 	      -->
-	      <tasks>			 
-		<delete dir="${catalina.home}/webapps/${project.artifactId}">
-		</delete>
-		
-		<delete file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${project.artifactId}"/>
+			<tasks>			 
+			  <delete dir="${catalina.home}/webapps/${project.artifactId}">
+			  </delete>
+			  
           </tasks>
 	    </configuration>
 	    <goals>
