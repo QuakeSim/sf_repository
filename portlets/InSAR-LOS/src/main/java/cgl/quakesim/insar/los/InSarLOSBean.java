@@ -4,6 +4,8 @@ import java.net.URL;
 import java.net.HttpURLConnection;
 import java.io.*;
 import javax.faces.event.ActionEvent;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 //Logging
 import org.slf4j.Logger;
@@ -30,6 +32,8 @@ public class InSarLOSBean {
 	 private double lat0, lon0, lat1, lon1;
 	 private String outputFormat;
 	 private String outputResponse=null;
+	 private String overlayUrl=null;
+
 
 	 protected final Logger logger=LoggerFactory.getLogger(getClass());
 
@@ -39,6 +43,10 @@ public class InSarLOSBean {
 		  lat1=32.8296310667; 
 		  lon1=-115.335307904;
 		  outputFormat=CSV;
+
+		  HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		  overlayUrl=request.getParameter("overlayUrl");
+		  
 	 }
 
 	 /**
@@ -104,6 +112,7 @@ public class InSarLOSBean {
 	 public double getLat1() { return this.lat1; }
 	 public String getOutputFormat() { return this.outputFormat; }
 	 public String getOutputResponse() { return this.outputResponse; }
+	 public String getOverlayUrl() { return this.overlayUrl; }
 
 	 public void setLon0(double lon0) { this.lon0=lon0; }
 	 public void setLon1(double lon1) { this.lon1=lon1; }
@@ -111,5 +120,6 @@ public class InSarLOSBean {
 	 public void setLat1(double lat1) { this.lat1=lat1; }
 	 public void setOutputFormat(String outputFormat) { this.outputFormat=outputFormat; }
 	 public void setOutputResponse(String outputResponse) { this.outputResponse=outputResponse; }
-	 
+	 public void setOverlayUrl(String overlayUrl) { this.overlayUrl=overlayUrl; }
+ 	 
 }

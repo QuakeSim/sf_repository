@@ -9,7 +9,7 @@ var sarselect=sarselect || (function() {
 	 var leftClickOp;
 	 var markerNE, markerSW;
  
-	 function setMap(insarMapDiv,overlayUrl,drawFunctionType) {
+	 function setLOSMap(insarMapDiv,overlayUrl,drawFunctionType) {
 
 		  //Create the map
 		var myOptions={
@@ -188,23 +188,26 @@ var sarselect=sarselect || (function() {
 		}
 
 	 function getLosInSarValues() {
-		  westMarkerLat.value=markerSW.getPosition().lat();
-		  westMarkerLon.value=markerSW.getPosition().lng();
-		  eastMarkerLat.value=markerNE.getPosition().lat();
-		  eastMarkerLon.value=markerNE.getPosition().lng();
-
+		  var westMarkerLat=markerSW.getPosition().lat();
+		  var westMarkerLon=markerSW.getPosition().lng();
+		  var eastMarkerLat=markerNE.getPosition().lat();
+		  var eastMarkerLon=markerNE.getPosition().lng();
+		  
+		  var restUrl="/InSAR-LOS-REST/insarlos/csv/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat;
+		  console.log(restUrl);
 		  var csv=$.ajax({
-				url:"/InSAR-LOS-REST/insarlos/csv/"+westMarkerLon.value+"/"+westMarkerLat.value+"/"+eastMarkerLon.value+"/"+eastMarkerLat.value,
+				url:restUrl,
 				async:false
 		  }).responseText;
 		  var g=new Dygraph(document.getElementById("outputGraph"),csv);		  
 	 }
 
+
 	 /**
 	  * Public API for sarselect.js
 	  */
 	 return {
-		  setMap: setMap,
+		  setLOSMap: setLOSMap,
 		  getLosInSarValues: getLosInSarValues
 	 }
 	 

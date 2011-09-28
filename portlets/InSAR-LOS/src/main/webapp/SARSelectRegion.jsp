@@ -14,6 +14,7 @@
 			 <h:inputHidden id="westMarkerLon" value="#{InSarLOSBean.lon0}"/>
 			 <h:inputHidden id="eastMarkerLat" value="#{InSarLOSBean.lat1}"/>
 			 <h:inputHidden id="eastMarkerLon" value="#{InSarLOSBean.lon1}"/>
+			 <h:inputHidden id="overlayUrl" value="#{InSarLOSBean.overlayUrl}"/>
 			 <f:verbatim>
 				<div id="InSARMap" style="width: 800px; height: 600px;"></div>
 			 </f:verbatim>
@@ -36,14 +37,12 @@
 
 		//This creates the map.
 		var insarMapDiv=document.getElementById("InSARMap");
-		var westMarkerLat=document.getElementById("insarlosform:westMarkerLat");
-		var westMarkerLon=document.getElementById("insarlosform:westMarkerLon");
-		var eastMarkerLat=document.getElementById("insarlosform:eastMarkerLat");
-		var eastMarkerLon=document.getElementById("insarlosform:westMarkerLon");
-		var overlayUrl="http://gf19.ucs.indiana.edu:9898/uavsar-data/SanAnd_08504_10028-001_10057-101_0079d_s01_L090_01/SanAnd_08504_10028-001_10057-101_0079d_s01_L090HH_01.int.kml";
+		var overlayUrl=document.getElementById("insarlosform:overlayUrl");
+
+		console.log("Overlay URL is "+overlayUrl);
 		
 		$(function() {
-		sarselect.setMap(insarMapDiv,overlayUrl,"line");
+		sarselect.setLOSMap(insarMapDiv,overlayUrl.value,"line");
 		});
 		
 		
