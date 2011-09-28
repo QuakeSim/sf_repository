@@ -5,49 +5,74 @@ var sarselect=sarselect || (function() {
     var polyFillColor = "#335599";
     var polyPoints = new Array();
     var markers = new Array();
-	 var insarMap;
+	 var masterMap;
 	 var leftClickOp;
 	 var markerNE, markerSW;
- 
-	 function setLOSMap(insarMapDiv,overlayUrl,drawFunctionType) {
+	 var insarKml;
+	 var lowResSARLayer=null;
+
+	 function setMasterMap(insarMapDiv,tableDivName) {
+		  var latlng=new google.maps.LatLng(32.3,-118.0);
+		  var myOpts={zoom:6, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP};
+		  masterMap=new google.maps.Map(insarMapDiv, myOpts);
+		  
+		  
+		  var kmlMapOpts={map:masterMap, suppressInfoWindows:true, preserveViewport:true};
+		  insarKml = new google.maps.KmlLayer("http://quaketables.quakesim.org/kml?uid=all&ov=0",kmlMapOpts);
+		  
+		  //Find out where we are.
+		  google.maps.event.addListener(insarKml,"click",function(event) {
+				var finalUrl=constructWmsUrl(masterMap,event);
+				var results=$.ajax({url:finalUrl,async:false}).responseText;
+				var parsedResults=jQuery.parseJSON(results);
+				createTable(parsedResults,tableDivName);
+		  });
+	 }
+	 
+	 //Legacy method.
+	 function setLOSMap(insarMapDiv) {
 
 		  //Create the map
-		var myOptions={
-		   panControl: false,
-			zoomControl: true,
-
-			scaleControl: true,
-		   zoom: 6,
-			streetViewControl:false,
-			center: new google.maps.LatLng(32.5,-117.0),
-		   mapTypeId: google.maps.MapTypeId.ROADMAP
-		};
-		insarMap=new google.maps.Map(insarMapDiv,myOptions);
+		  var myOptions={
+				panControl: false,
+				zoomControl: true,
 				
-      //Add the KML Layer
-		  var lowResSARLayer=new google.maps.KmlLayer(overlayUrl,{suppressInfoWindows: true, map: insarMap, clickable: false});
-
-     google.maps.event.addListener(insarMap,"click",function(event) {
-			if(drawFunctionType=="polygon") {
-				 polygonLeftClick(event);
-			}
-			else if(drawFunctionType=="rectangle") {
-				 rectangleLeftClick(event);
-			}
-			else if(drawFunctionType=="line") {
-				 lineLeftClick(event);
-			}
-			else {
-				 alert("Invalid draw method provided. Should be either 'polygon' or 'rectangle'. Using 'rectangle' by default.");
-				 rectangleLeftClick(event);
-			}
-	  });
+				scaleControl: true,
+				zoom: 6,
+				streetViewControl:false,
+				center: new google.maps.LatLng(32.5,-117.0),
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+		  };
+		  var insarMap=new google.maps.Map(insarMapDiv,myOptions);
+		  return insarMap;  
 	 }
-     
-	 function lineLeftClick(event) {
+
+	 //Activates the low-res insar layer for LOS display.
+	 function activateLayerMap(insarMap,overlayUrl,drawFunctionType) {
+        //Add the KML Layer
+		  if(lowResSARLayer) lowResSARLayer.setMap(null);  //Remove any previous layers.
+		  lowResSARLayer=new google.maps.KmlLayer(overlayUrl,{suppressInfoWindows: true, map: insarMap, clickable: false});
+		  
+		  google.maps.event.addListener(insarMap,"click",function(event) {
+			if(drawFunctionType=="polygon") {
+				 polygonLeftClick(insarMap,event);
+			}
+				else if(drawFunctionType=="rectangle") {
+					 rectangleLeftClick(insarMap,event);
+				}
+				else if(drawFunctionType=="line") {
+					 lineLeftClick(insarMap,event);
+				}
+				else {
+					 alert("Invalid draw method provided. Should be either 'polygon' or 'rectangle'. Using 'rectangle' by default.");
+					 rectangleLeftClick(isarMap,event);
+				}
+		  });
+	 }
+    
+	 function lineLeftClick(insarMap,event) {
 		  //If the marker doesn't exist, create it.
 		  if(!markerNE && !markerSW) {
-				//console.log("No markers found");
 				markerNE=new google.maps.Marker({map: insarMap, 
 															position: event.latLng, 
 															visible: true, 
@@ -64,10 +89,10 @@ var sarselect=sarselect || (function() {
 
 				// Make markers draggable			 
 				google.maps.event.addListener(markerNE, "drag", function() {
-					 drawLine();
+					 drawLine(insarMap);
 				});
 				google.maps.event.addListener(markerSW, "drag", function() {
-					 drawLine();
+					 drawLine(insarMap);
 				});
 
 				google.maps.event.addListener(markerNE, "dragend", function() {
@@ -79,11 +104,11 @@ var sarselect=sarselect || (function() {
 		  }
 
 		  //This is called after a drag event.
-		  drawLine();
+		  drawLine(insarMap);
 
 	 }
 
-	 function rectangleLeftClick(event) {
+	 function rectangleLeftClick(insarMap,event) {
 		  //If the marker doesn't exist, create it.
 		  if(!markerNE && !markerSW) {
 				//console.log("No markers found");
@@ -101,18 +126,18 @@ var sarselect=sarselect || (function() {
 		  		
 				// Make markers draggable			 
 				google.maps.event.addListener(markerNE, "drag", function() {
-					 drawRectangle();
+					 drawRectangle(insarMap);
 				});
 				google.maps.event.addListener(markerSW, "drag", function() {
-					 drawRectangle();
+					 drawRectangle(insarMap);
 				});
 		  }
 
 		  //This is called after a drag event.
-		  drawRectangle();
+		  drawRectangle(insarMap);
 	 }
 
-	 function polygonLeftClick(event) {
+	 function polygonLeftClick(insarMap,event) {
 		  //Make the marker and add to the map.
 		  //console.log("Create marker and add to the map");
 		  var marker=new google.maps.Marker({map: insarMap, 
@@ -123,7 +148,7 @@ var sarselect=sarselect || (function() {
 		  
 		  // Make markers draggable			 
 		  google.maps.event.addListener(marker, "drag", function() {
-				drawPoly();
+				drawPoly(insarMap);
 		  });
 		  
 		  
@@ -137,13 +162,13 @@ var sarselect=sarselect || (function() {
 						}
 				}
 				markers.splice(n, 1);
-				drawPoly();
+				drawPoly(insarMap);
 		  });
-		  drawPoly();
+		  drawPoly(insarMap);
 		  //console.log("Done with leftClick()");
 	 }
 
-	 function drawLine() {
+	 function drawLine(insarMap) {
 		  if(polyShape) polyShape.setMap(null);
 		  polyPoints=new Array();
 		  polyPoints.push(markerNE.getPosition());
@@ -154,7 +179,7 @@ var sarselect=sarselect || (function() {
 		  
 	 }
 
-	 function drawRectangle() {
+	 function drawRectangle(insarMap) {
 		  //console.log("Drawing rectangle");
 		  if(polyShape) polyShape.setMap(null);
 		  var cornerSE=new google.maps.LatLng((markerNE.getPosition()).lat(),(markerSW.getPosition()).lng());
@@ -172,7 +197,7 @@ var sarselect=sarselect || (function() {
 		  
 	 }
 	 
-	 function drawPoly() {
+	 function drawPoly(insarMap) {
 		  //console.log("Redrawing the polyline.");
 		  if(polyShape) polyShape.setMap(null);
 		  polyPoints.length = 0;	
@@ -194,12 +219,109 @@ var sarselect=sarselect || (function() {
 		  var eastMarkerLon=markerNE.getPosition().lng();
 		  
 		  var restUrl="/InSAR-LOS-REST/insarlos/csv/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat;
-		  console.log(restUrl);
 		  var csv=$.ajax({
 				url:restUrl,
 				async:false
 		  }).responseText;
 		  var g=new Dygraph(document.getElementById("outputGraph"),csv);		  
+	 }
+		  
+	 function createTable(parsedResults,tableDivName) {
+		var dynatable='<table border="1">';
+		//Create the header row.
+		dynatable+='<tr>';
+		for(var index1 in parsedResults[0]) {
+		dynatable+='<th>'+index1+'</th>';
+		}
+		dynatable+='</tr>';
+		//Fill in the table.
+		for (var index1 in parsedResults) {
+		dynatable+='<tr onmouseover="sarselect.selectedRow(this)" onmouseout="sarselect.unselectedRow(this)" onclick="sarselect.selectRowAction(this)">';
+		for(var index2 in parsedResults[index1]) {
+		dynatable+='<td>'+parsedResults[index1][index2]+'</td>';
+		}
+		dynatable+='</tr>'
+		}
+		dynatable+='</table>';
+		document.getElementById(tableDivName).innerHTML=dynatable;
+	 }
+	 
+	 function constructWmsUrl(map,event) {
+	   var scale=Math.pow(2,map.getZoom());
+	   var nw=new google.maps.LatLng(map.getBounds().getNorthEast().lat(),map.getBounds().getSouthWest().lng());
+		var worldCoordNW=map.getProjection().fromLatLngToPoint(nw);
+		var worldCoord=map.getProjection().fromLatLngToPoint(event.latLng);
+		xpix=Math.floor((worldCoord.x-worldCoordNW.x)*scale);
+		ypix=Math.floor((worldCoord.y-worldCoordNW.y)*scale);
+
+		var width=map.getDiv().style.width;
+		width=width.substring(0,width.indexOf("px"));
+		var height=map.getDiv().style.height;
+		height=height.substring(0,height.indexOf("px"));
+
+		var slash="/";
+	   var urlToCall="/InSAR-LOS-REST/insarnav";
+	   urlToCall+=slash+map.getBounds().getSouthWest().lng();
+		urlToCall+=slash+map.getBounds().getSouthWest().lat();
+		urlToCall+=slash+map.getBounds().getNorthEast().lng();
+		urlToCall+=slash+map.getBounds().getNorthEast().lat();
+		urlToCall+=slash+width;
+		urlToCall+=slash+height;
+		urlToCall+=slash+xpix;
+		urlToCall+=slash+ypix;
+		
+		return urlToCall;
+    }
+	 function selectedRow(row) {
+	    row.style.backgroundColor="gray";
+		 row.style.cursor="pointer";
+	 }
+	 function unselectedRow(row) {
+	    row.style.backgroundColor="white";
+		 row.style.cursor="default";
+	 }
+	 function selectRowAction(row){
+	   //Find the ID of the row
+		var id=extractRowId(row);
+
+	   //Call REST service
+		var callResults=getImageMetadata(id);
+		
+		//Extract overlayUrl
+		var overlayUrl=extractOverlayUrl(callResults);
+
+		  //Turn off the master overlayer
+		  insarKml.setMap(null);
+		  
+		  //Turn on the new overlayer
+		  activateLayerMap(masterMap,overlayUrl,"line");
+		//Redirect to next page
+		//parent.location="./SARSelectRegion.faces?overlayUrl="+overlayUrl;
+	 }
+	 
+	 function extractOverlayUrl(callResults){
+	   var overlayUrl;
+		for(var index in callResults) {
+		    if(callResults[index].datatype=="int") {
+			    overlayUrl=callResults[index].kml;
+			 }
+		}
+	   return overlayUrl;
+	 }
+
+	 function extractRowId(row) {
+	    //Get the first td from the tr and return its innerHTML.
+	    //The ID is the value of the first <td> element.
+		 var td=row.firstChild;
+	    var id=td.innerHTML;
+		 return id;
+	 }
+	 
+	 function getImageMetadata(id) {
+	   var urlToCall="/InSAR-LOS-REST/insarid/"+id;
+		var tmpResults=$.ajax({url:urlToCall,async:false}).responseText;
+		jsonResults=jQuery.parseJSON(tmpResults);
+	   return jsonResults;
 	 }
 
 
@@ -207,8 +329,13 @@ var sarselect=sarselect || (function() {
 	  * Public API for sarselect.js
 	  */
 	 return {
+		  setMasterMap:setMasterMap,
+		  selectedRow:selectedRow,
+		  unselectedRow:unselectedRow,
+		  selectRowAction:selectRowAction,
 		  setLOSMap: setLOSMap,
-		  getLosInSarValues: getLosInSarValues
+		  getLosInSarValues: getLosInSarValues,
+		  activateLayerMap: activateLayerMap
 	 }
 	 
 })();

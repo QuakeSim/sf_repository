@@ -42,7 +42,8 @@
 		console.log("Overlay URL is "+overlayUrl);
 		
 		$(function() {
-		sarselect.setLOSMap(insarMapDiv,overlayUrl.value,"line");
+		var map=sarselect.setLOSMap(insarMapDiv);
+		sarselect.activateLayerMap(map,overlayUrl.value,"line");
 		});
 		
 		
