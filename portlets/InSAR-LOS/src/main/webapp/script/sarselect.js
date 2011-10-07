@@ -10,6 +10,8 @@ var sarselect=sarselect || (function() {
 	 var markerNE, markerSW;
 	 var insarKml;
 	 var lowResSARLayer=null;
+	 var dygraphLOSOpts={width:300,height:300,title:'InSAR Line of Sight Values',xlabel:'Distance',ylabel:'LOS Value'};
+	 var dygraphHgtOpts={width:300,height:300,title:'InSAR Height Values',xlabel:'Distance',ylabel:'Height'};
 
 	 function setMasterMap(insarMapDiv,tableDivName) {
 		  var latlng=new google.maps.LatLng(32.3,-118.0);
@@ -48,7 +50,7 @@ var sarselect=sarselect || (function() {
 	 }
 
 	 //Activates the low-res insar layer for LOS display.
-	 function activateLayerMap(insarMap,overlayUrl,drawFunctionType) {
+	 function activateLayerMap(insarMap,overlayUrl,drawFunctionType,uid) {
         //Add the KML Layer
 		  if(lowResSARLayer) lowResSARLayer.setMap(null);  //Remove any previous layers.
 		  lowResSARLayer=new google.maps.KmlLayer(overlayUrl,{suppressInfoWindows: true, map: insarMap, clickable: false});
@@ -61,7 +63,7 @@ var sarselect=sarselect || (function() {
 					 rectangleLeftClick(insarMap,event);
 				}
 				else if(drawFunctionType=="line") {
-					 lineLeftClick(insarMap,event);
+					 lineLeftClick(insarMap,event,uid);
 				}
 				else {
 					 alert("Invalid draw method provided. Should be either 'polygon' or 'rectangle'. Using 'rectangle' by default.");
@@ -70,7 +72,8 @@ var sarselect=sarselect || (function() {
 		  });
 	 }
     
-	 function lineLeftClick(insarMap,event) {
+	 function lineLeftClick(insarMap,event,uid) {
+		  console.log("Uid is "+uid);
 		  //If the marker doesn't exist, create it.
 		  if(!markerNE && !markerSW) {
 				markerNE=new google.maps.Marker({map: insarMap, 
@@ -85,7 +88,7 @@ var sarselect=sarselect || (function() {
 				markers.push(markerNE);
 				markers.push(markerSW);
 		  		
-				getLosInSarValues();
+				getInSarValues(uid);
 
 				// Make markers draggable			 
 				google.maps.event.addListener(markerNE, "drag", function() {
@@ -96,10 +99,10 @@ var sarselect=sarselect || (function() {
 				});
 
 				google.maps.event.addListener(markerNE, "dragend", function() {
-					 getLosInSarValues();
+					 getInSarValues(uid);
 				});
 				google.maps.event.addListener(markerSW, "dragend", function() {
-					 getLosInSarValues();
+					 getInSarValues(uid);
 				});
 		  }
 
@@ -212,18 +215,39 @@ var sarselect=sarselect || (function() {
 		  polyShape.setMap(insarMap);
 		}
 
-	 function getLosInSarValues() {
+	 function getInSarValues(uid) {
+		  getLosInSarValues(uid);
+		  getHgtInSarValues(uid);
+	 }
+
+	 function getLosInSarValues(uid) {
+		  console.log("Uid is "+uid);
 		  var westMarkerLat=markerSW.getPosition().lat();
 		  var westMarkerLon=markerSW.getPosition().lng();
 		  var eastMarkerLat=markerNE.getPosition().lat();
 		  var eastMarkerLon=markerNE.getPosition().lng();
-		  
-		  var restUrl="/InSAR-LOS-REST/insarlos/csv/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat;
+
+		  var restUrl="/InSAR-LOS-REST/insarlos/csv/"+uid+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat;
 		  var csv=$.ajax({
 				url:restUrl,
 				async:false
 		  }).responseText;
-		  var g=new Dygraph(document.getElementById("outputGraph"),csv);		  
+		  var g1=new Dygraph(document.getElementById("outputGraph1"),csv,dygraphLOSOpts);		  
+	 }
+
+	 function getHgtInSarValues(uid) {
+		  console.log("Uid is "+uid);
+		  var westMarkerLat=markerSW.getPosition().lat();
+		  var westMarkerLon=markerSW.getPosition().lng();
+		  var eastMarkerLat=markerNE.getPosition().lat();
+		  var eastMarkerLon=markerNE.getPosition().lng();
+
+		  var restUrl="/InSAR-LOS-REST/insarhgt/csv/"+uid+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat;
+		  var csv=$.ajax({
+				url:restUrl,
+				async:false
+		  }).responseText;
+		  var g2=new Dygraph(document.getElementById("outputGraph2"),csv,dygraphHgtOpts);		  
 	 }
 		  
 	 function createTable(parsedResults,tableDivName) {
@@ -281,11 +305,11 @@ var sarselect=sarselect || (function() {
 		 row.style.cursor="default";
 	 }
 	 function selectRowAction(row){
-	   //Find the ID of the row
-		var id=extractRowId(row);
+	     //Find the ID of the row
+		  var uid=extractRowId(row);
 
 	   //Call REST service
-		var callResults=getImageMetadata(id);
+		var callResults=getImageMetadata(uid);
 		
 		//Extract overlayUrl
 		var overlayUrl=extractOverlayUrl(callResults);
@@ -294,7 +318,7 @@ var sarselect=sarselect || (function() {
 		  insarKml.setMap(null);
 		  
 		  //Turn on the new overlayer
-		  activateLayerMap(masterMap,overlayUrl,"line");
+		  activateLayerMap(masterMap,overlayUrl,"line",uid);
 		//Redirect to next page
 		//parent.location="./SARSelectRegion.faces?overlayUrl="+overlayUrl;
 	 }
@@ -334,7 +358,9 @@ var sarselect=sarselect || (function() {
 		  unselectedRow:unselectedRow,
 		  selectRowAction:selectRowAction,
 		  setLOSMap: setLOSMap,
+		  getInSarValues: getInSarValues,
 		  getLosInSarValues: getLosInSarValues,
+		  getHgtInSarValues: getHgtInSarValues,
 		  activateLayerMap: activateLayerMap
 	 }
 	 

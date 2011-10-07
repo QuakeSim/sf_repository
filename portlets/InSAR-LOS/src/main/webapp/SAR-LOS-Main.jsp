@@ -9,10 +9,10 @@
 <body>
   <f:view>
 	 <f:verbatim><fieldset><legend><b>Interferogram Map Selection</b></legend></f:verbatim>
+	 <f:verbatim>Click on the map to select the region you want to use.</f:verbatim>
 	 <h:panelGrid id="InSAR-View-All" columns="2" columnClasses="alignTop,alignTop">
 		<h:panelGroup id="Sar-LOS-Panel-Left">
 		  <f:verbatim>
-			 Click on the map to select the region you want to use.
 			 <div id="InSAR-All-Map" style="width: 800px; height: 600px;"></div>
 		  </f:verbatim>
 		</h:panelGroup>
@@ -21,9 +21,14 @@
 			 <div id="dynatable"></div>
 		  </f:verbatim>
 		  <f:verbatim><p/></f:verbatim>
-		  <f:verbatim>
-			 <div id="outputGraph"></div>
-		  </f:verbatim>
+		  <h:panelGrid id="insar-results-table" columns="2" columnClasses="alignTop,alignTop">
+			 <f:verbatim>
+				<div id="outputGraph1"></div>
+			 </f:verbatim>
+			 <f:verbatim>
+				<div id="outputGraph2"></div>
+			 </f:verbatim>
+		  </h:panelGrid>
 		</h:panelGroup>
 	 </h:panelGrid>
 	 <f:verbatim></fieldset></f:verbatim>
