@@ -319,13 +319,13 @@ EGeoXml.addClickpolyobj = function() {
 EGeoXml.prototype.parse = function() {
 
   // [CGL Version] Setting a jquery treeview
-  $(document).ready(function(){
+//  $(document).ready(function(){
 	
-	$("#browser").treeview({
-		animated:"normal",
-		persist: "cookie"
-	});	
-  });
+//	$("#browser").treeview({
+//		animated:"normal",
+//		persist: "cookie"
+//	});	
+ // });
 
  var that = this;
  this.progress = this.urls.length;

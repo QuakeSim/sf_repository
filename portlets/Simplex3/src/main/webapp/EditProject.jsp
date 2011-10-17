@@ -14,11 +14,16 @@
   
   <head>
 	 <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css"/>
-	 
+	 <!--
 	 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" 
 				type="text/javascript"></script>
+	 -->
 	 <!-- These are needed by the fault map panel and are repeated there.  Remove redundancies.-->
+    <!--
 	 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+	 -->
+	 <!-- Get the latest jquery. This could be dangerous. -->
+	 <script src="http://code.jquery.com/jquery-latest.js"></script>
 	 <script type="text/javascript" src="@host.base.url@@artifactId@/lib/jquery.cookie.js"></script>
 	 <script type="text/javascript" src="@host.base.url@@artifactId@/jquery.treeview.js"></script>
 	 <script type="text/javascript" src="@host.base.url@@artifactId@/egeoxml.js"></script>
@@ -45,7 +50,8 @@
 		//Script below initializes the tree view for the FaultMapPanelFrame sidebar.
 		$("#browser").treeview({
 		animated:"normal",
-		persist: "cookie"
+      collapsed:true,
+      unique:true
 		});
 		
 		//This initializes the UNAVCO map

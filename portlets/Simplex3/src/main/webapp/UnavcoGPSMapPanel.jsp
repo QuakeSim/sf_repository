@@ -3,9 +3,10 @@
 				 rendered="#{SimplexBean.currentEditProjectForm.renderUnavcoGPSStationMap}">
   <f:verbatim>
 
-<!--  Inherit this from EditProject.jsp
-<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBRxYpIIOz9ynlSKjbx-4JMuN5JjrhR5gSOcKdieYppOZ4_yzZc_Ti15qw"type="text/javascript"></script>
--->
+	 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" 
+				type="text/javascript"></script>
+
+
     <script src='@host.base.url@@artifactId@/cookies.js' type='text/javascript'></script> 
     <script src='@host.base.url@@artifactId@/dragzoom.js' type='text/javascript'></script> 
 	 <script type='text/javascript'>  

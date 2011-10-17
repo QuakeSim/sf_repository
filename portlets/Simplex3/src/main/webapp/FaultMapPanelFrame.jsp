@@ -1,13 +1,14 @@
 <h:panelGroup id="FaultMapPanelFrame"
 				  rendered="#{SimplexBean.currentEditProjectForm.renderFaultMap}">
   <f:verbatim>
-	 <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/jquery.treeview.css">
-		
+	 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" 
+				type="text/javascript"></script>
+<!--		
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
 		<script type="text/javascript" src="@host.base.url@@artifactId@/lib/jquery.cookie.js"></script>
 		<script type="text/javascript" src="@host.base.url@@artifactId@/jquery.treeview.js"></script>
 		<script type="text/javascript" src="@host.base.url@@artifactId@/egeoxml.js"></script>
-		
+	-->	
 	 </f:verbatim>	
 	 
 	 <h:form id="faultKMLSelectorForm">

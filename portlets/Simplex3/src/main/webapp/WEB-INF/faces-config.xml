@@ -8,6 +8,11 @@
   
   <!-- managed beans of the simple hello world app -->
   <managed-bean>
+	 <managed-bean-name>InSARBean</managed-bean-name>
+	 <managed-bean-class>cgl.quakesim.simplex.InSARBean</managed-bean-class>
+	 <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+  <managed-bean>
 	 <managed-bean-name>SimplexBean</managed-bean-name>
 	 <managed-bean-class>cgl.quakesim.simplex.SimplexBean</managed-bean-class>
 	 <managed-bean-scope>session</managed-bean-scope>

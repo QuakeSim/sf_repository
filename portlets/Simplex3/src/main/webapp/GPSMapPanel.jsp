@@ -1,5 +1,10 @@
 <h:panelGroup id="lck093ks"
 				  rendered="#{SimplexBean.currentEditProjectForm.renderGPSStationMap}">
+  <f:verbatim>
+	 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" 
+				type="text/javascript"></script>
+  </f:verbatim>
+
   <h:inputHidden id="faultKmlUrl" value="#{SimplexBean.faultKmlUrl}" />
   
   <%
