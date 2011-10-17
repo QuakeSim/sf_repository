@@ -42,7 +42,7 @@
 				  </fileset>
 				</delete>
 
-				<delete file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${project.artifactId}"/>
+				<delete failonerror="false" file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${project.artifactId}"/>
           </tasks>
         </configuration>
         <goals>
