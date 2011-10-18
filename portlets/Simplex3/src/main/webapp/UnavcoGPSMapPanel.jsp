@@ -1,6 +1,7 @@
 <h:inputHidden id="unavcoRedJsonStations" value="#{SimplexBean.selectedGPSJSONValues}"/>
-<h:panelGroup id="unavcoMapncrap" 
+<h:panelGrid id="unavcoMapncrap" 
 				 rendered="#{SimplexBean.currentEditProjectForm.renderUnavcoGPSStationMap}">
+
   <f:verbatim>
 
 	 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" 
@@ -2246,12 +2247,11 @@ function toggleBorder() {
     </script> 	
   </f:verbatim>
 
-  <h:form id="unavcoobsvGPSMap">
-	 <h:panelGrid id="unavcosimplexSelectionMapGrid"
-					  columns="1"
-					  border="1">
-		<f:verbatim>
-		  <b>Select Stations from Map:</b> Select the stations that you want to use as observation points. Then, fetch the values and add them to your project observation list. This map interface and data are derived from the
+  <h:panelGroup id="simplexUnavcoPGHolder">
+  <f:verbatim><fieldset><legend><b>UNAVCO Station Map</b></legend></f:verbatim>
+	 <h:form id="unavcoobsvGPSMap">
+	 <f:verbatim>
+		  Select the stations that you want to use as observation points. Then, fetch the values and add them to your project observation list. This map interface and data are derived from the
 		  <a href="http://geon.unavco.org/unavco/GPSVelocityViewer.php" target="_blank">
 			 UNAVCO GPS Velocity Viewer
 			 </a>.
@@ -2259,7 +2259,7 @@ function toggleBorder() {
 		<h:panelGrid id="unavcomapsAndCrap" columns="2" columnClasses="alignTop,alignTop">
 		  <h:panelGroup id="unavcomapncrap1">
 			 <f:verbatim> 
-				<div id="unavcomap_canvas" style="width: 850px; height: 700px"></div>
+				<div id="unavcomap_canvas" style="width: 600px; height: 400px"></div>
 			 </f:verbatim>
 		  </h:panelGroup>
 		  <h:panelGroup id="unavcomapncrap2">
@@ -2344,6 +2344,7 @@ function toggleBorder() {
 		<h:graphicImage id="unavcosimplexKeyRedPin"
 							 url="images/mm_20_red.png"/>
 	 </h:panelGrid>
-  </h:panelGrid>
-</h:form>
+  </h:form>
+<f:verbatim></fieldset></f:verbatim>
 </h:panelGroup>
+</h:panelGrid>

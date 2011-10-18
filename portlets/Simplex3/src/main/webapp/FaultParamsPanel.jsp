@@ -1,5 +1,5 @@
-<h:panelGroup id="faultsParamPanelSimplex3"
-				  rendered="#{SimplexBean.currentEditProjectForm.renderCreateNewFaultForm}">	 
+<h:panelGrid id="faultsParamPanelSimplex3"
+				 rendered="#{SimplexBean.currentEditProjectForm.renderCreateNewFaultForm}">	 
   
 <h:form id="Simplex3Faultform">
   <h:inputHidden id="projectOriginLatFPP" value="#{SimplexBean.currentProjectEntry.origin_lat}"/>
@@ -258,4 +258,4 @@
 
   </script>
 </f:verbatim>
-</h:panelGroup>
+</h:panelGrid>

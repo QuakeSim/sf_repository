@@ -129,23 +129,16 @@
 	 <f:verbatim>
 		<hr/>
 		<p>
-		Simplex is ready to run.  This may take several minutes, so provide your email
-		address here to get an email notice when you job completes.  Then hit the "Run Simplex" button.
+		Simplex is ready to run. Hit the "Run Simplex" button.
 		</p>
 	 </f:verbatim>
-	 <f:verbatim>
-		<b>Email Address:</b>
-	 </f:verbatim>
-	 <h:inputText id="simplexEmailNotification"
-					  required="true"
-					  value="#{SimplexBean.userEmailAddress}"/>
 						
 	 <h:commandButton rendered="#{!empty SimplexBean.myObservationEntryForProjectList
 										 and !empty SimplexBean.myFaultEntryForProjectList}"
 							id="runSimplex2" 
 							onclick="showLoading()"
 							value="Run Simplex"
-							action="#{SimplexBean.toggleRunSimplex2}" />
+							action="#{SimplexBean.toggleRunSimplex2Anon}" />
   </h:form>	
 	 <f:verbatim></fieldset></f:verbatim>
   </h:panelGroup>

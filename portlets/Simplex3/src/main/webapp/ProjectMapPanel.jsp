@@ -1,9 +1,13 @@
 <h:panelGroup id="ProjectMapPanelFrame"
 				  rendered="#{SimplexBean.currentEditProjectForm.renderProjectMap}">
   <f:verbatim>
+	 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" 
+				type="text/javascript"></script>
+
 	 <script type="text/javascript" src="@host.base.url@@artifactId@/egeoxml.js"></script>
   </f:verbatim>	
   
+  <f:verbatim><fieldset><legend><b>Project Map</b></legend></f:verbatim>
   <h:form id="toggleProjectMapForm">
 	 <h:inputHidden id="projectObsvKml" 
 						 value="#{SimplexBean.obsvKmlUrl}"/>
@@ -43,4 +47,5 @@
 		</f:verbatim>
 	 </h:panelGrid>
   </h:form>  
+  <f:verbatim></fieldset></f:verbatim>
 </h:panelGroup>

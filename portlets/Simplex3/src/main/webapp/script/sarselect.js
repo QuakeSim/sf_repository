@@ -48,9 +48,10 @@ var sarselect=sarselect || (function() {
 		  return insarMap;  
 	 }
 
-	 //Activates the low-res insar layer for LOS display.
+	 //Activates the low-res insar layer.  
 	 function activateLayerMap(insarMap,overlayUrl,drawFunctionType,uid) {
         //Add the KML Layer
+		  console.log("Draw function type is "+drawFunctionType);
 		  if(lowResSARLayer) lowResSARLayer.setMap(null);  //Remove any previous layers.
 		  lowResSARLayer=new google.maps.KmlLayer(overlayUrl,{suppressInfoWindows: true, map: insarMap, clickable: false});
 		  
@@ -59,14 +60,14 @@ var sarselect=sarselect || (function() {
 				 polygonLeftClick(insarMap,event);
 			}
 				else if(drawFunctionType=="rectangle") {
-					 rectangleLeftClick(insarMap,event);
+					 rectangleLeftClick(insarMap,event,uid);
 				}
 				else if(drawFunctionType=="line") {
 					 lineLeftClick(insarMap,event,uid);
 				}
 				else {
 					 alert("Invalid draw method provided. Should be either 'polygon' or 'rectangle'. Using 'rectangle' by default.");
-					 rectangleLeftClick(isarMap,event);
+					 rectangleLeftClick(isarMap,event,uid);
 				}
 		  });
 	 }
@@ -110,7 +111,7 @@ var sarselect=sarselect || (function() {
 
 	 }
 
-	 function rectangleLeftClick(insarMap,event) {
+	 function rectangleLeftClick(insarMap,event,uid) {
 		  //If the marker doesn't exist, create it.
 		  if(!markerNE && !markerSW) {
 				//console.log("No markers found");
@@ -125,6 +126,8 @@ var sarselect=sarselect || (function() {
 															draggable: true});
 				markers.push(markerNE);
 				markers.push(markerSW);
+
+				getSimplexValues(uid);
 		  		
 				// Make markers draggable			 
 				google.maps.event.addListener(markerNE, "drag", function() {
@@ -133,6 +136,17 @@ var sarselect=sarselect || (function() {
 				google.maps.event.addListener(markerSW, "drag", function() {
 					 drawRectangle(insarMap);
 				});
+
+				//Update the selection
+				google.maps.event.addListener(markerNE, "dragend", function() {
+					 getSimplexValues(uid);
+					 console.log("NE Drag End");
+				});
+				google.maps.event.addListener(markerSW, "dragend", function() {
+					 getSimplexValues(uid);
+					 console.log("SW Drag End");
+				});
+
 		  }
 
 		  //This is called after a drag event.
@@ -213,6 +227,30 @@ var sarselect=sarselect || (function() {
 															strokeColor: polyLineColor});
 		  polyShape.setMap(insarMap);
 		}
+
+	 function getSimplexValues(uid) {
+		  var cornerSE=new google.maps.LatLng((markerNE.getPosition()).lat(),(markerSW.getPosition()).lng());
+		  var cornerNW=new google.maps.LatLng((markerSW.getPosition()).lat(),(markerNE.getPosition()).lng());
+
+		  var swMarkerLat=markerSW.getPosition().lat();
+		  var swMarkerLon=markerSW.getPosition().lng();
+		  var seMarkerLat=cornerSE.lat();
+		  var seMarkerLon=cornerSE.lng();
+		  var neMarkerLat=markerNE.getPosition().lat();
+		  var neMarkerLon=markerNE.getPosition().lng();
+		  var nwMarkerLat=cornerNW.lat();
+		  var nwMarkerLon=cornerNW.lng();
+
+		  //This must be clockwise. 
+		  var restUrl="/InSAR-LOS-REST/insarsimplex/"+uid+"/"+nwMarkerLon+"/"+nwMarkerLat+"/"+neMarkerLon+"/"+neMarkerLat+"/"+seMarkerLon+"/"+seMarkerLat+"/"+swMarkerLon+"/"+swMarkerLat;
+		  console.log(restUrl);
+		  var csv=$.ajax({
+				url:restUrl,
+				async:false
+		  }).responseText;
+
+		  console.log(csv);
+	 }
 
 	 function getInSarValues(uid) {
 		  getLosInSarValues(uid);
@@ -317,7 +355,7 @@ var sarselect=sarselect || (function() {
 		  insarKml.setMap(null);
 		  
 		  //Turn on the new overlayer
-		  activateLayerMap(masterMap,overlayUrl,"line",uid);
+		  activateLayerMap(masterMap,overlayUrl,"rectangle",uid);
 		//Redirect to next page
 		//parent.location="./SARSelectRegion.faces?overlayUrl="+overlayUrl;
 	 }

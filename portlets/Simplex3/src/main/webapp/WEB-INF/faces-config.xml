@@ -56,6 +56,22 @@
 		<value>http://gf19.ucs.indiana.edu:8080/KmlGenerator/services/KmlGenerator</value>
 	 </managed-property>
   </managed-bean>
+
+  <!--Handles anonymous user navigation -->
+	<navigation-rule>
+	  <from-view-id>/AnonProject.jsp</from-view-id>
+	  <navigation-case>
+		 <from-outcome>Simplex2-edit-project</from-outcome>
+		 <to-view-id>/EditProjectAnon.jsp</to-view-id>
+	  </navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+	  <from-view-id>/EditProjectAnon.jsp</from-view-id>
+	  <navigation-case>
+		 <from-outcome>anon-simplex-submitted</from-outcome>
+		 <to-view-id>/EditProjectAnon.jsp</to-view-id>
+	  </navigation-case>
+	</navigation-rule>
   
   <navigation-rule>
 	 <display-name>Simplex2 Main Page</display-name>

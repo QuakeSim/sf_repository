@@ -1,5 +1,5 @@
-<h:panelGroup id="lkdrq7FaultsQuickAdd" 
-				  rendered="#{SimplexBean.currentEditProjectForm.renderFaultsQuickAdd}">
+<h:panelGrid id="lkdrq7FaultsQuickAdd" 
+				 rendered="#{SimplexBean.currentEditProjectForm.renderFaultsQuickAdd}">
   <f:verbatim>
 	 <fieldset style="width:100%">
 	 <legend class="portlet-form-label">Project Importer </legend>
@@ -22,4 +22,4 @@
 	 </h:panelGrid>
   </h:form>
   <f:verbatim></fieldset></f:verbatim>
-</h:panelGroup>
+</h:panelGrid>

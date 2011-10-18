@@ -45,7 +45,7 @@
 		<h:inputHidden id="projectOriginLon" value="#{SimplexBean.currentProjectEntry.origin_lon}"/>
 		
 		<f:verbatim>
-		  <fieldset style="width:960px" ondblclick="toggleDisplay1(this)">
+		  <fieldset ondblclick="toggleDisplay1(this)">
 			 <legend class="portlet-form-label">Fault Components</legend>
 			 Click the checkbox if you want to allow Simplex to vary the value during
 			 optimization. 
@@ -54,7 +54,6 @@
 		  </f:verbatim>
 
 		  <h:panelGrid id="dflelerkljg162" 
-							style="width:920px"
 							columns="2" 
 							border="0"  
 							cellpadding="0" 

@@ -45,6 +45,11 @@ import org.apache.log4j.Level;
 
 public class SimplexBean extends GenericSopacBean {
 
+	 static final String DEFAULT_USER_NAME = "simplex_default_user";
+	 static final String SIMPLEX_NAV_STRING = "simplex-submitted";
+	 static final String SIMPLEX_ANON_NAV_STRING = "anon-simplex-submitted";
+	 static final String SIMPLEX_LOOP_NAV_STRING="simplex-this";
+	 
 	// KML stuff, need to move this to another place.
 	String xmlHead = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 	String kmlHead = "<kml xmlns=\"http://earth.google.com/kml/2.2\">";
@@ -1014,6 +1019,52 @@ public class SimplexBean extends GenericSopacBean {
 				.getSimpleXExec(new URL(simpleXServiceUrl));
 	}
 	 
+
+	 /**
+	  * This method runs simplex for an anonymous user using blocking mode. This must
+	  * be kept in sync with the non-blocking simplex.
+	  */
+	 public String toggleRunSimplex2Anon() {
+
+		  Observation[] obsv = getObservationsFromDB();
+		  Fault[] faults = getFaultsFromDB();
+		  // String timeStamp = "";
+		  String timeStamp = generateTimeStamp();		
+		  try {
+				initSimplexService();
+				
+				projectSimpleXOutput = simplexService.runBlockingSimplex(userName,
+																							projectName, 
+																							faults, 
+																							obsv, 
+																							currentProjectEntry.startTemp,
+																							currentProjectEntry.maxIters, 
+																							currentProjectEntry.getOrigin_lon()+ "", 
+																							currentProjectEntry.getOrigin_lat() + "",
+																							this.kmlGeneratorUrl, 
+																							timeStamp,
+																							userEmailAddress);
+				
+			logger.info("[" + getUserName() 
+									 + "/SimplexBean/toggleRunSimplex2] " 
+									 + projectSimpleXOutput.getProjectName());
+			logger.info("[" + getUserName() 
+									 + "/SimplexBean/toggleRunSimplex2] " 
+									 + projectSimpleXOutput.getInputUrl());
+			saveSimpleXOutputBeanToDB(projectSimpleXOutput);
+			saveSimplexProjectEntry(currentProjectEntry);
+		  } catch (Exception ex) {
+				ex.printStackTrace();
+		  }
+		  return SIMPLEX_ANON_NAV_STRING;
+
+
+	 }
+
+	 /**
+	  * This method runs simplex through the portal. Note this method and the the anonymous
+	  * version must be kept in synch.
+	  */
 	 public String toggleRunSimplex2() {
 		  
 		  Observation[] obsv = getObservationsFromDB();
@@ -1112,6 +1163,11 @@ public class SimplexBean extends GenericSopacBean {
 	 */
 	public String NewProjectThenEditProject() {
 		String returnMessage = "";
+		
+		if(getUserName().equals(getDefaultName())){
+			 this.setProjectName(ANONYMOUS_PROJECT_PREFIX+java.util.UUID.randomUUID().hashCode());
+			 logger.info("Detected default user, so create new project:"+this.projectName);
+		}
 		
 		mycandidateObservationsForProjectList.clear();
 		selectedGpsStationName = "";

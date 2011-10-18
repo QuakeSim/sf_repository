@@ -233,7 +233,7 @@
 						 columnClasses="alignTopFixWidth" 
 						 columns="1" 
 						 border="0">
-		  <%@include file="DashboardPanel.jsp"%>
+		  <%@include file="DashboardPanelAnon.jsp"%>
 		  <%@include file="ObservationPanel.jsp"%>
 		  <%@include file="GPSMapPanel.jsp"%>
 		  <%@include file="ObsvListPanel.jsp"%>
@@ -257,11 +257,7 @@
 		</h:panelGrid>
 		
 		<h:outputText id="simplexHorizontalLine" escape="false" value="<hr/>"/>
-	<h:form id="dflelerkljk186">
-	  <h:commandLink id="dflelerkljk187" action="Simplex2-back">
-		 <h:outputText id="Simplex3NavigationLink" value="#{SimplexBean.codeName} Main Menu" />
-	  </h:commandLink>
-	</h:form>
+		<%@include file="footerAnon.jsp" %>
 	
  </f:view>
  
