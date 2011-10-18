@@ -489,6 +489,61 @@ public class SimpleXService extends AntVisco implements Runnable {
 												 false);
 	 }
 
+	/**
+	 * Actually runs Simplex. Always runs in blocking mode.
+	 */
+	 public SimpleXOutputBean runBlockingSimplex(String userName, 
+																String projectName,
+																Fault[] faults, 
+																Observation[] obsv, 
+																String startTemp,
+																String maxIters, 
+																String origin_lon, 
+																String origin_lat,
+																String KmlGeneratorUrl, 
+																String timeStamp,
+																String emailAddress) throws Exception {
+		  
+		  // The target is always "tar.all".
+
+		  String[] args = prefabSimpleXCall(userName, 
+														projectName, 
+														faults, 
+														obsv,
+														startTemp, 
+														maxIters, 
+														timeStamp, 
+														emailAddress);
+		  setArgs(args);
+		  run();
+		  //execute();
+		  // logger.info("Simplex Status: "+getStatus());
+		  // while (getStatus().equals(AntVisco.NOT_DONE)) {
+		  // 		logger.info("Simmplex Status: "+getStatus());
+		  // 		Thread.sleep(10000);
+		  // }
+		  creationDate=createCreationDate();
+		  
+		  parkRunParams(KmlGeneratorUrl, 
+							 userName, 
+							 projectName,
+							 origin_lon, 
+							 origin_lat, 
+							 faults, 
+							 timeStamp,
+							 creationDate);
+
+		  return getAllTheSimpleXFiles(KmlGeneratorUrl, 
+												 userName, 
+												 projectName,
+												 origin_lon, 
+												 origin_lat, 
+												 faults, 
+												 timeStamp,
+												 creationDate,
+												 false);
+	 }
+
 	 /**
 	  * This collects all the simplex output parameters into a bean that is returned to
 	  * the caller of the runSimplex method (typically a remote service).
