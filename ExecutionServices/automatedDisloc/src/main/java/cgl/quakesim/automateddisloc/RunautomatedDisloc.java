@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -43,6 +44,9 @@ import cgl.quakesim.disloc.InsarKmlService;
 import cgl.quakesim.disloc.InsarKmlServiceServiceLocator;
 import cgl.quakesim.disloc.InsarParamsBean;
 import cgl.quakesim.disloc.ObsvPoint;
+
+//For now, we will call this directly, rather than as a remote service.
+import org.quakesim.restservices.OpenShaRestService;
 
 //These are not used.
 //import cgl.webservices.KmlGenerator.ExtendedSimpleXDataKml;
@@ -83,14 +87,20 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This code sets up and runs the Disloc job for each earthquake.  It is driven by the 
+ * class AutomatedDislocBean and implemented as a Quartz job.
+ */
 public class RunautomatedDisloc implements Job {
+	 
+	 private static final double d2r = Math.acos(-1.0) / 180.0;
+	 private static final double flatten = 1.0/298.247;
+
 	 public final static String URL_FOR_AUTOCALLS="RSS_FEED_URL";
+	 final static String BROKEN_HAZUS_MESSAGE="HAZUS Service Unavailable";
+	 final static String HAZUS_OK_MESSAGE="HAZUS Output Link (zip file)";
 	 private static Logger logger=LoggerFactory.getLogger(RunautomatedDisloc.class);
-	 //REVIEW: Shouldn't be hard coded.  Put in a property.
-	 //REVIEW: actually, it isn't used.  The "url" variable passed in to run() is 
-	 //the URL to use. 
-	 //	 String mover5_rss_url = "http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml";
-	 //	String mover5_rss_url = "http://localhost:8080/7day-M5.xml";
+
 	private DecimalFormat df = new DecimalFormat(".###");
 	private String contextBasePath;
 	private String url = "";
@@ -102,16 +112,28 @@ public class RunautomatedDisloc implements Job {
 	private String kmlGeneratorBaseurl;
 	private String kmlGeneratorUrl;
 	private String insarkmlServiceUrl;	
+	 private String openShaServiceUrl;
+
 	private String insarKmlUrl;
 	private String rssdisloc_dir_name;
 	private String baseurl;
 	 private String projectName;
 	 private String kmlOutputDir;
+	 private double gridSpacing;
 
-	private String elevation = "60";
-	private String azimuth = "0";
-	private String frequency = "1.26";
+
+	 //These are default values for the InSAR calculation.  
+	 //TODO: These may need to be passed in or put in a property file for more flexibility. (done)
+	 private String elevation;// = "60";
+	 private String azimuth;// = "0";
+	 private String frequency;// = "1.26";
 	
+	 //These are used by Disloc to set the computational area.
+	 private double GRID_X_MIN, GRID_Y_MIN, GRID_X_SPACING, GRID_Y_SPACING;
+	 private int GRID_X_ITER, GRID_Y_ITER;
+
+	 //These are used to construct the output KML. 
+	 //TODO: this could be improved.
 	private String xmlHead = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 	private String kmlHead = "<kml xmlns=\"http://earth.google.com/kml/2.2\">";
 	private String kmlEnd = "</kml>";
@@ -149,6 +171,13 @@ public class RunautomatedDisloc implements Job {
 	 File destDir, oldFile;
 	 PrintWriter out;
 
+	 //This is the OpenShaRestService object.
+	 OpenShaRestService osrs;
+
+	 /**
+	  * This is the default constructor.  It is the one used by Quartz.  The URL of the RSS feed will be
+	  * passed in through the 
+	  */
 	 public RunautomatedDisloc(){
 		  logger.info("Empty constructor of RunautomatedDisloc called.");
 		  
@@ -157,15 +186,20 @@ public class RunautomatedDisloc implements Job {
 		  //Set up various things
 		  Properties properties=loadProperties();
 		  
+		  //Construct the OpenShaRestService 
+		  osrs=new OpenShaRestService();		  
 	 }
 
+	 /**
+	  * This alternative constructor receives the URL for the RSS feed.  This isn't currently used.
+	  */
 	 public RunautomatedDisloc(String url) {
 		  this();
 		  this.url = url;
 	 }
 
 	 /**
-	  * Required by Quartz
+	  * Required by Quartz.  Quartz calls this method, which in turn does all the processing.
 	  */
 	 public void execute(JobExecutionContext context) throws JobExecutionException {
 		  JobDataMap jobmap=context.getJobDetail().getJobDataMap();
@@ -175,7 +209,7 @@ public class RunautomatedDisloc implements Job {
 	 }
 
 	 /**
-	  * Load the project properties and set values.
+	  * Load the project properties from the specified file and set values for various class variables.
 	  */
 	public Properties loadProperties() {
 		properties = new Properties();
@@ -188,6 +222,7 @@ public class RunautomatedDisloc implements Job {
 		}
 		
 		// logger.info("[getContextBasePath] called");
+		//Set values for class variables.
 		projectName=properties.getProperty("project.name");
 		contextBasePath = properties.getProperty("output.dest.dir");
 		dislocServiceUrl = properties.getProperty("dislocServiceUrl"); 
@@ -197,33 +232,51 @@ public class RunautomatedDisloc implements Job {
 		rssdisloc_dir_name= properties.getProperty("rssdisloc.dir.name");
 		baseurl = properties.getProperty("baseurl");
 		tomcatbase = properties.getProperty("tomcat.base");
+
+		openShaServiceUrl=properties.getProperty("openShaServiceUrl");
+		gridSpacing=Double.parseDouble(properties.getProperty("grid.spacing"));
+		elevation=properties.getProperty("insar.elevation");
+		azimuth=properties.getProperty("insar.azimuth");
+		frequency=properties.getProperty("insar.frequency");
+
+		GRID_X_MIN=Double.parseDouble(properties.getProperty("grid.x.min"));
+		GRID_Y_MIN=Double.parseDouble(properties.getProperty("grid.y.min"));
+		GRID_X_ITER=Integer.parseInt(properties.getProperty("grid.x.iter"));
+		GRID_Y_ITER=Integer.parseInt(properties.getProperty("grid.y.iter"));
+		GRID_X_SPACING=Double.parseDouble(properties.getProperty("grid.x.spacing"));
+		GRID_Y_SPACING=Double.parseDouble(properties.getProperty("grid.y.spacing"));
 		
 		kmlOutputDir=tomcatbase+"/webapps/ROOT/";
 
-		//Some infoging messages to make sure properties are read correctly.
-		logger.info("[getContextBasePath] " + properties.getProperty("output.dest.dir"));
-		logger.info("tomcat base:"+tomcatbase);
-		logger.info("baseurl:"+baseurl);
-		logger.info("rssdisloc_dir_name:"+rssdisloc_dir_name);
+		//Some logging messages to make sure properties are read correctly.
+		logger.debug("[getContextBasePath] " + properties.getProperty("output.dest.dir"));
+		logger.debug("tomcat base:"+tomcatbase);
+		logger.debug("baseurl:"+baseurl);
+		logger.debug("rssdisloc_dir_name:"+rssdisloc_dir_name);
 		
 		return properties;
 	}
 	
-	public String getContextBasePath() {
-		return contextBasePath;
-	}
-
-	public void setContextBasePath(String contextBasePath) {
-		this.contextBasePath = contextBasePath;
-	}
-	
-	public String getTomcatbase() {
-		return tomcatbase;
-	}
-
-	public void setTomcatbase(String tomcatbase) {
-		this.tomcatbase = tomcatbase;
-	}
+	 //--------------------------------------------------
+	 // Various getter and setter methods for public properties
+	 // are below.
+	 //--------------------------------------------------
+	 public String getContextBasePath() {
+		  return contextBasePath;
+	 }
+	 
+	 public void setContextBasePath(String contextBasePath) {
+		  this.contextBasePath = contextBasePath;
+	 }
+	 
+	 public String getTomcatbase() {
+		  return tomcatbase;
+	 }
+	 
+	 public void setTomcatbase(String tomcatbase) {
+		  this.tomcatbase = tomcatbase;
+	 }
+	 //--------------------------------------------------
 
 	 /**
 	  * This implements the required run() method for this thread. It does the following;
@@ -234,18 +287,17 @@ public class RunautomatedDisloc implements Job {
 	  */ 
 	 public void run(String url) {
 		  this.url=url;
-		 
 		  logger.info("Run method called");
-
-		String dir = properties.getProperty("output.dest.dir");
-		File logfile = new File(dir + "/" + "log.txt");		
-		//		getDislocProjectSummaryBeanCount();
-
-		//If it has been longer than the trigger time, check for more data.  Otherwise, do nothing.
-		boolean getUpdates=timeToRunUpdate(logfile,AutomatedDislocBean.SCAN_TRIGGER_INTERVAL);
-		
-		if(getUpdates) {
-			 logger.info("[RunautomatedDisloc/run] Time to run updates");
+		  
+		  String dir = properties.getProperty("output.dest.dir");
+		  File logfile = new File(dir + "/" + "log.txt");		
+		  //		getDislocProjectSummaryBeanCount();
+		  
+		  //If it has been longer than the trigger time, check for more data.  Otherwise, do nothing.
+		  boolean getUpdates=timeToRunUpdate(logfile,AutomatedDislocBean.SCAN_TRIGGER_INTERVAL);
+		  
+		  if(getUpdates) {
+				logger.info("[RunautomatedDisloc/run] Time to run updates");
 			 
 			 //Make sure the project master directory exists.
 			 File projectDir = new File(getContextBasePath() + "/overm5/");
@@ -291,16 +343,16 @@ public class RunautomatedDisloc implements Job {
 	  */ 
 	protected void createProjectsFromRss(String url) {		
 			
-		 //First, parse the RSS feed.
+		 //First, parse the RSS feed using our custom parser class.
+		 //TODO: propably parse() should just be a static method that returns the Entry list.
 		CglGeoRssParser cgrp = new CglGeoRssParser();
 		cgrp.parse(url);		
 		List <Entry> entry_list = cgrp.getEntryList();
 		ArrayList <String> projectNameArray = new ArrayList();
 		logger.info("[RunautomatedDisloc/run] entry_list.size() : " + entry_list.size());
 		
-		//		HashMap<String, Fault> hm = new HashMap<String, Fault>();
-		
 		//Construct a KML file for the results.
+		//The following code constructs the outer layers of the KML.
 		Kml doc = new Kml();
 		Folder root = new Folder();
 		Document kmlDocument=new Document();
@@ -309,7 +361,7 @@ public class RunautomatedDisloc implements Job {
 		kmlDocument.addFolder(root);
 		doc.addDocument(kmlDocument);
 		
-		//REVIEW: Need a less clumsy way to handle this location.  Also should be
+		//TODO: Need a less clumsy way to handle this location.  Also should be
 		//in this webapp for portability. 
 		String newFaultFilename = "";
 		String destDirname=kmlOutputDir;
@@ -317,7 +369,8 @@ public class RunautomatedDisloc implements Job {
 		String localDestination = destDir+destFilename;
 		
 		try {
-			 //Set everything up.  This also sets up the PrintWriter out.
+			 //Set everything up.  This also sets up the PrintWriter out used below.
+			 //TODO: this way of initializing the out is bad design.
 			 setUpKmlFileLocations(destDirname, destFilename);
 			 logger.info("Kml file locations set up");
 			 
@@ -326,20 +379,23 @@ public class RunautomatedDisloc implements Job {
 			 out.println(kmlHead);
 			 out.println(docBegin);
 
-			//Now go.  
+			//Now go. Loop over the entry list, creating the four fault scenarios for each entry.
 			logger.info("Starting loop over entry objects");
 			
 			for (int nA = 0 ; nA < entry_list.size() ; nA++) {
 				 Entry entry = (Entry) entry_list.get(nA);
-				 //We check for 4 possible scenarios.
-				 for (int nB = 0 ; nB < AutomatedDislocBean.EARTHQUAKE_SLIP_SCENARIOS ; nB++) {
+
+				 //We next loop over the 4 possible scenarios.
+				 //TODO: probably the loop size shouldn't be set in AutomatedDislocBean.
+				 //TODO: need a better location for the parameter for setting the loop size, but this is low priority.
+				 for (int scenario = 0 ; scenario < AutomatedDislocBean.EARTHQUAKE_SLIP_SCENARIOS ; scenario++) {
 					  
-					  //This does all the stuff needed to set up a fault of type nB.
-					  Fault fault=setFaultType(nB,entry);				
+					  //This does all the stuff needed to set up a fault of type scenario.
+					  Fault fault=setFaultType(scenario,entry);				
 					  
 					  //Create the project name
 					  DislocParamsBean dislocParams = null;
-					  String projectname=createProjectName(entry, fault, nB);
+					  String projectname=createProjectName(entry, fault, scenario);
 
 					  projectNameArray.add(projectname);
 					  dislocParams=putProjectInDB(projectname, fault);
@@ -353,7 +409,7 @@ public class RunautomatedDisloc implements Job {
 																 dislocParams, 
 																 fault, 
 																 entry.getM(), 
-																 nB);
+																 scenario);
 							//					getDislocProjectSummaryBeanCount();
 					  } catch (Exception e) {
 								 logger.error(e.getMessage());
@@ -361,10 +417,34 @@ public class RunautomatedDisloc implements Job {
 
 					  //Make a shorter name for the project
 					  String projectShortName=makeShortProjectName(projectname);
+
+					  //Calculate the Hazus products.
+					  String hazusOutputUrl="";
+					  String hazusOutputMessage="";
+
+					  //Determine the project min and max lat and lon
+					  double grid_x_max=GRID_X_MIN+GRID_X_SPACING*GRID_X_ITER;
+					  double grid_y_max=GRID_Y_MIN+GRID_Y_SPACING*GRID_Y_ITER;
+					  //Note the order of the array is minLat,maxLat,minLon,maxLon
+					  double[] bbox=getBoundingBox(fault.getFaultLatStart(),fault.getFaultLonStart(),GRID_X_MIN, GRID_Y_MIN, grid_x_max, grid_y_max); 
 					  
+
+					  // System.out.println("___________Calling the Hazus Service______________");
+					  // try {
+					  // 		//							hazusOutputUrl=invokeHazusService(openShaServiceUrl, bbox[0], bbox[1], bbox[2], bbox[3], gridSpacing, entry.getM(), fault.getFaultStrikeAngle(), fault.getFaultLatStart(), fault.getFaultLonStart(), fault.getFaultDepth(),fault.getFaultDipAngle());
+					  // 		hazusOutputUrl=invokeHazusServiceLocally(bbox[0], bbox[1], bbox[2], bbox[3], gridSpacing, entry.getM(), fault.getFaultStrikeAngle(), fault.getFaultLatStart(), fault.getFaultLonStart(), fault.getFaultDepth(),fault.getFaultDipAngle());
+					  // 		hazusOutputMessage=HAZUS_OK_MESSAGE;
+					  // 		System.out.println("HAZUS output URL:"+hazusOutputUrl);
+					  // }
+					  // catch (Exception ex) {
+					  // 		hazusOutputUrl="";
+					  // 		hazusOutputMessage=BROKEN_HAZUS_MESSAGE;
+					  // 		ex.printStackTrace();
+					  // }
+					  
+					  System.out.println("Here we are: "+hazusOutputUrl+" "+hazusOutputMessage);
 					  //Now print out the KML for this earthquake
-					  printKmlForEarthquakeEntry(entry, fault, out, ouls, projectname,projectShortName);
-					  
+					  printKmlForEarthquakeEntry(entry, fault, out, ouls, projectname,projectShortName,hazusOutputUrl,hazusOutputMessage);
 				 }
 			}
 
@@ -376,6 +456,7 @@ public class RunautomatedDisloc implements Job {
 			out.close();
 		} 
 		catch (Exception e) {
+			 e.printStackTrace();
 			 logger.error(e.getMessage());
 		}		 
 		finally {
@@ -396,7 +477,7 @@ public class RunautomatedDisloc implements Job {
 	 protected OutputURLs runBlockingDislocJSF(String projectName, 
 															 DislocParamsBean currentParams, 
 															 Fault fault, 
-															 double M, 
+															 double magnitude, 
 															 int s_case) throws Exception {
 		  
 		logger.info("[AutomatedDislocBean/runBlockingDislocJSF] Started");
@@ -417,7 +498,7 @@ public class RunautomatedDisloc implements Job {
 																						  currentParams, 
 																						  faults, 
 																						  points, 
-																						  M, 
+																						  magnitude, 
 																						  s_case);	
 			
 			ourls.setDislocoutputURL(dislocResultsBean.getOutputFileUrl());
@@ -448,7 +529,7 @@ public class RunautomatedDisloc implements Job {
 			// This step runs the insar plotting stuff.  We also allow this
 			// to fail.			
 			//--------------------------------------------------
-			insarKmlUrl= getPrecalculatedInsar(projectName, fault.getFaultLonStart(), fault.getFaultLatStart(), M, s_case, dislocResultsBean.getJobUIDStamp(), dislocResultsBean);
+			insarKmlUrl= getPrecalculatedInsar(projectName, fault.getFaultLonStart(), fault.getFaultLatStart(), magnitude, s_case, dislocResultsBean.getJobUIDStamp(), dislocResultsBean);
 			
 			ourls.setInsarkmlURL(insarKmlUrl);
 			storeProjectInContext("automatedDisloc", projectName, dislocResultsBean.getJobUIDStamp(), currentParams, dislocResultsBean, myKmlUrl, insarKmlUrl, elevation, azimuth, frequency);
@@ -1315,8 +1396,6 @@ public class RunautomatedDisloc implements Job {
 
 	 /** 
 	  * Utility method for setting up various class-scoped File objects.
-	  * Returns a boolean: true if we will append to an existing file, false 
-	  * if we need to start from scratch.
 	  */
 	 protected void setUpKmlFileLocations(String destDirName, String destFileName) throws Exception {
 		  
@@ -1360,25 +1439,33 @@ public class RunautomatedDisloc implements Job {
 				out=null;
 		  }
 	 }
+
 	 /**
-	  *
+	  * This method creates a Fault object for the indicated scenario from the provided 
+	  * Entry object from the RSS feed.
 	  */
-	 protected Fault setFaultType(int nB, Entry entry) {
+	 protected Fault setFaultType(int scenario, Entry entry) {
 		  
 		  Fault fault = new Fault(); 
 		  boolean thr=false;
 		  double mu = 0.2E11;
+
+		  //The following are dependent on the format of the RSS feed.
+		  //TODO: we shouldn't be splitting strings here. 
+		  //TODO: The lat, lon, and fault name should have methods in the Entry class.
 		  String lat_start = entry.getGeorss_point().trim().split(" ")[0];
 		  String lon_start = entry.getGeorss_point().trim().split(" ")[1];
-
 		  fault.setFaultName(entry.getId().split(":")[3]);
+
 		  fault.setFaultLonStart(Double.parseDouble(lon_start));
 		  fault.setFaultLatStart(Double.parseDouble(lat_start));
+		  //These are hard coded, but this is probably OK.
 		  fault.setFaultLameLambda(1.0);
 		  fault.setFaultLameMu(1.0);
 		  
 		  //This is scenario #1
-		  if (nB == 0) {					
+		  //TODO: instead of 0, 1, 2, 3 maybe have SCENARIO_DESCRIPTIVE_NAME
+		  if (scenario == 0) {					
 				fault.setFaultDipAngle(90);
 				fault.setFaultDipSlip(0);
 				fault.setFaultStrikeSlip(0);
@@ -1387,7 +1474,7 @@ public class RunautomatedDisloc implements Job {
 				}
 		  
 		  //This is scenario #2
-		  else if (nB == 1) {
+		  else if (scenario == 1) {
 				fault.setFaultDipAngle(90);
 				fault.setFaultDipSlip(0);
 				fault.setFaultStrikeSlip(0);
@@ -1396,7 +1483,7 @@ public class RunautomatedDisloc implements Job {
 		  }
 		  
 		  //Scenario #3
-		  else if (nB == 2) {
+		  else if (scenario == 2) {
 				fault.setFaultDipAngle(45);
 				fault.setFaultDipSlip(0);
 				fault.setFaultStrikeSlip(0);
@@ -1405,7 +1492,7 @@ public class RunautomatedDisloc implements Job {
 		  }
 		  
 		  //Scenario #4
-		  else if (nB == 3) {
+		  else if (scenario == 3) {
 				fault.setFaultDipAngle(45);
 				fault.setFaultDipSlip(0);
 				fault.setFaultStrikeSlip(0);
@@ -1413,14 +1500,18 @@ public class RunautomatedDisloc implements Job {
 				thr = true;
 		  }
 		  
-		  //Now set the fault length and width 
+		  //Now set the fault length and width. This is a general formula provided by Andrea.
+		  //TODO: need a citation for this formula.
+		  //TODO: need to make this a separate private function.
 		  double length;
 		  double width;
+		  //Faults for earthquakes with M<7 are square.
 		  if (!entry.isMover7()) {
 				//If magnitude is less than 7, the fault is square.
 				length = Math.sqrt(Math.sqrt(Math.pow(10, (3*(entry.getM()+10.7)/2))/(mu*0.6E-10)))/1E5;
 				width = length;
 		  }
+		  //Faults with M>=7 are rectangles, with a fixed width.
 		  else {				
 				//Use a fixed width for M>7; the fault is rectangular instead of square
 				//REVIEW: "20" is some magic number.
@@ -1431,17 +1522,17 @@ public class RunautomatedDisloc implements Job {
 		  fault.setFaultLength(length);
 		  fault.setFaultWidth(width);
 		  
-		  //Now set the depth.
-		  //REVIEW: next several lines need to be explained.
+		  //Now set the depth to 1/2 the width.
+		  //TODO: next several lines need to be explained.
 		  fault.setFaultDepth(width/2);
 		  double slip = 0.6*length*width;				
+		  //thr is thrust, which is set in in the previous 4 scenarios.
 		  if (thr) {
 				fault.setFaultDipSlip(slip * 10);
 		  }
 		  else {
 				fault.setFaultStrikeSlip(slip * 10);
 		  }
-
 
 		  //Now set the location in Cartesian and real-Earth coordinates
 		  //We'll assume only one fault per simulation, so it will be 
@@ -1451,10 +1542,10 @@ public class RunautomatedDisloc implements Job {
 		  fault.setFaultLocationX(Double.parseDouble(df.format(x)));
 		  fault.setFaultLocationY(Double.parseDouble(df.format(y)));
 		  
-		  //REVIEW: these should be inherited from the grandparent class.
-		  //Also, all of this stuff should really be in a separate function.
-		  double d2r = Math.acos(-1.0) / 180.0;
-		  double flatten = 1.0/298.247;
+		  //TODO: these should be inherited from a common project location.
+		  //TODO: all of this stuff should really be in a separate function.
+		  //		  double d2r = Math.acos(-1.0) / 180.0;
+		  //		  double flatten = 1.0/298.247;
 		  double theFactor = d2r * Math.cos(d2r*Double.parseDouble(lat_start)) * 6378.139 * ( 1.0 - Math.sin(d2r * Double.parseDouble(lat_start)) * Math.sin(d2r * Double.parseDouble(lat_start)) * flatten);
 		  
 		  //Set the strike angle
@@ -1514,10 +1605,11 @@ public class RunautomatedDisloc implements Job {
 	 }	  
 
 	 /**
-	  * This creates and returns the project name.
+	  * This creates and returns the project name.  
+	  * TODO: this is a little oblique.
 	  */
-	 protected String createProjectName(Entry entry, Fault fault, int nB){
-		  return entry.getTitle() + "(" + entry.getId().split(":")[3] + ")_n_DA" + (double)Math.round((double)fault.getFaultDipAngle()*1000)/1000 + "_SA" + (double)Math.round((double)fault.getFaultStrikeAngle()*1000)/1000 + "_DS" + (double)Math.round((double)fault.getFaultDipSlip()*1000)/1000 + "_SS" + (double)Math.round((double)fault.getFaultStrikeSlip()*1000)/1000 + "_CASE_" + nB;
+	 protected String createProjectName(Entry entry, Fault fault, int scenario){
+		  return entry.getTitle() + "(" + entry.getId().split(":")[3] + ")_n_DA" + (double)Math.round((double)fault.getFaultDipAngle()*1000)/1000 + "_SA" + (double)Math.round((double)fault.getFaultStrikeAngle()*1000)/1000 + "_DS" + (double)Math.round((double)fault.getFaultDipSlip()*1000)/1000 + "_SS" + (double)Math.round((double)fault.getFaultStrikeSlip()*1000)/1000 + "_CASE_" + scenario;
 
 	 }
 
@@ -1533,18 +1625,18 @@ public class RunautomatedDisloc implements Job {
 		  
 		  //Various magic numbers. These should be defined as static final
 		  //fields somewhere.
-		  tmp.setGridMinXValue(-100);
-		  tmp.setGridMinYValue(-100);
-		  tmp.setGridXIterations(420);
-		  tmp.setGridXSpacing(0.5);
-		  tmp.setGridYIterations(420);
-		  tmp.setGridYSpacing(0.5);
+		  tmp.setGridMinXValue(GRID_X_MIN);
+		  tmp.setGridMinYValue(GRID_Y_MIN);
+		  tmp.setGridXIterations(GRID_X_ITER);
+		  tmp.setGridXSpacing(GRID_Y_SPACING);
+		  tmp.setGridYIterations(GRID_Y_ITER);
+		  tmp.setGridYSpacing(GRID_Y_SPACING);
 		  
 		  return tmp;
 	 }
 
 	 /**
-	  * Puts the named proejct into the db.
+	  * Puts the named project into the db.
 	  */
 	 protected DislocParamsBean putProjectInDB(String projectname, 
 															 Fault fault) {
@@ -1565,8 +1657,7 @@ public class RunautomatedDisloc implements Job {
 				tmp.setOriginLat(fault.getFaultLatStart());
 				tmp.setOriginLon(fault.getFaultLonStart());
 					
-				//Various magic numbers. These should be defined as static final
-				//fields somewhere.
+				//TODO: Various magic numbers. These should be defined as static final fields somewhere.
 				tmp.setGridMinXValue(-100);
 				tmp.setGridMinYValue(-100);
 				tmp.setGridXIterations(420);
@@ -1596,7 +1687,10 @@ public class RunautomatedDisloc implements Job {
 															 PrintWriter out, 
 															 OutputURLs ouls, 
 															 String projectname,
-															 String projectShortName) {
+															 String projectShortName,
+															 String hazusOutputUrl,
+															 String hazusOutputMessage) {
+		  System.out.println("We are now printing the KML");
 				out.println(pmBegin);
 				out.println("<name>"+projectname+"</name>");
 				out.println("<shortName>"+projectShortName+"</shortName>");
@@ -1625,15 +1719,24 @@ public class RunautomatedDisloc implements Job {
 				out.println(ouls.getInsarkmlURL());
 				out.println("</InsarKmlURL>");
 				
+				if(!hazusOutputMessage.equals(BROKEN_HAZUS_MESSAGE)) {
+					 out.println("<HazusOutputURL>");
+					 out.println(hazusOutputUrl);
+					 out.println("</HazusOutputURL>");
+				}
+				else {
+					 out.println("<HazusOutputURL>");
+					 out.println(hazusOutputMessage);
+					 out.println("</HazusOutputURL>");
+				}
 				out.println(pmEnd);
-
 	 }
 	 /**
 	  * This method is used to determine arrow scale.  It is stateful and uses
 	  * class-scoped variables, in case we have several arrow layers that we want to
 	  * put on the same plot with the same scale (which we do).
 	  *
-	  * REVIEW: this should go in some utility class in GenericQuakeSimProject
+	  * TODO: this should go in some utility class in GenericQuakeSimProject
 	  */ 
 	 protected double setGlobalKmlArrowScale(PointEntry[] pointEntries){
 		  
@@ -1678,11 +1781,11 @@ public class RunautomatedDisloc implements Job {
 	 }
 
 	 /**
-	  * These are class-scoped variables that are stateful.  We 
+	  * These are class-scoped variables used in arrow scaling that are stateful.  We 
 	  * encapsulate here the steps to re-initialize them.
 	  */
 	 protected void resetScalingVariables (){
-		  //All of these should be easily replaced.  Note value settings are 
+		  //All of these could be easily replaced.  Note value settings are 
 		  //superficially counter-intuitive: we want the default min values to 
 		  //be positive infinity because the first tested value will be less than
 		  //this value and thus replace it.
@@ -1704,7 +1807,7 @@ public class RunautomatedDisloc implements Job {
 	 
 	 /** 
 	  * This makes a shorter name for the project by omitting the 
-	  * extension metadata. This is only used by the KML
+	  * extension metadata. This is only used by the KML.
 	  */
 	 protected String makeShortProjectName(String projectName) {
 		  return projectName.substring(0,projectName.indexOf("_n_"));
@@ -1748,6 +1851,10 @@ public class RunautomatedDisloc implements Job {
 		  return hasEntry;
 	 }
 	 
+	 /**
+	  * For the specified project, get the associated DislocProjectSummaryBean object and
+	  * return its KML URL.
+	  */
 	 protected String getMyKmlUrlFromDB(String projectName){
 		  String kmlUrl="";
 		  ObjectContainer db=null;
@@ -1770,10 +1877,89 @@ public class RunautomatedDisloc implements Job {
 		  }
 		  
 		  return kmlUrl;
+	 }
+
+	 /**
+	  * This invokes the OpenShaHazus service directly rather than through its rest interface.
+	  */
+	 protected String invokeHazusServiceLocally(double minLat, double maxLat, double minLon, double maxLon, double gridSpacing, double magnitude, double rake, double lat, double lon, double depth, double dipAngle) throws Exception {
+		  System.out.println("Here are the parameters:"+minLat+" "+maxLat+" "+minLon+" "+maxLon+" "+gridSpacing+" "+magnitude+" "+rake+" "+lat+" "+lon+" "+depth+" "+dipAngle);
+		  
+		  //		  String hazusOutUrl=osrs.getOpenShaHazusOutput(33.5,34.5,-119.0,-117.0,0.1,7.2,90,33.94,-117.87,5.0,27.5);
+		  String hazusOutUrl=osrs.getOpenShaHazusOutput(minLat,maxLat,minLon,maxLon,gridSpacing,magnitude,rake,lat,lon,depth,dipAngle);
+		  
+		  System.out.println("Hazus URL: "+hazusOutUrl);
+		  
+		  return hazusOutUrl;
+
+	 }
+
+	 /**
+	  * This invokes the Hazus service and returns the URL (on the OpenSHA server) to the output
+	  * of the code.  This may fail, so throw an Exception here.
+	  */ 
+	 protected String invokeHazusService(String hazusServiceUrl,double minLat, double maxLat, double minLon, double maxLon, double gridSpacing, double magnitude, double rake, double lat, double lon, double depth, double dipAngle) throws Exception {
+		  String SLASH="/";
+		  String hazusServiceCall=hazusServiceUrl+SLASH+minLat+SLASH+maxLat+SLASH+minLon+SLASH+maxLon+SLASH+gridSpacing+SLASH+magnitude+SLASH+rake+SLASH+lat+SLASH+lon+SLASH+depth+SLASH+dipAngle;
+		  URL url=null;
+		  HttpURLConnection connect=null;
+		  BufferedReader readResponse=null;
+		  String responseString="";
+		  
+		  System.out.println("Hazus Service URL:"+hazusServiceCall);
+		  
+		  try {
+				url=new URL(hazusServiceCall);
+				connect=(HttpURLConnection)url.openConnection();
+				readResponse=new BufferedReader(new InputStreamReader(connect.getInputStream()));
+				String line=null;
+				//There should only be one line of response. 
+				while((line=readResponse.readLine())!=null){
+					 responseString+=line+"\n";
+				} 
+		  }
+		  catch(Exception ex) {
+				responseString="Could not contact OpenSHA service.";
+				ex.printStackTrace();
+				throw ex;
+		  }
+		  finally {
+				try {
+					 connect.disconnect();
+				}
+				catch(Exception ex) {
+					 ex.printStackTrace();
+					 throw ex;
+				}
+				connect=null;
+		  }
+
+		  return responseString;
+	 }
+
+	 /**
+	  * Calculates the lat,lon values of the bounding box, given the (x,y) values of these points and
+	  * the lat and lon of the origin.  It returns a 4-element array of doubles: minLat, minLon, maxLat, maxLon
+	  */
+	 protected double[] getBoundingBox(double origLat,double origLon,double x_min,double y_min,double x_max, double y_max) {
+		  double theFactor=d2r* Math.cos(d2r * origLat) * 6378.139 * (1.0 - Math.sin(d2r * origLat) * Math.sin(d2r * origLat) * flatten);		 
+		  
+		  double minLon = x_min/theFactor + origLon;
+		  double minLat = y_min/111.32 + origLat;
+		  
+		  double maxLon=x_max/theFactor + origLon;
+		  double maxLat = y_max/111.32 + origLat;
+
+		  double[] bbox={minLat,maxLat,minLon,maxLon};
+
+		  System.out.println("Bounding box: "+origLat+" "+origLon+" "+minLat+" "+maxLat+" "+minLon+" "+maxLon);
+		  return bbox;
 		  
 	 }
 
 	 /**
+	  * TODO: this method is deprecated.
+	  * 
 	  * This creates Disloc project beans for each entry name in the 
 	  * ArrayList. In practice, it will create four projects for each
 	  * earthquake entry in the RSS feed.
@@ -1781,47 +1967,47 @@ public class RunautomatedDisloc implements Job {
 	  * Note this assumes this service and the associated client
 	  * (from RssDisloc3) are using the same file system.  
 	  *
-	  * REVIEW: The requirement that the client and server share
+	  * TODO: The requirement that the client and server share
 	  * a file system is bad design and needs to be rethought. Also the
 	  * pattern "overm5" is used as a magic string in both
 	  * the service and client webapps.
 	  *
-	  * REVIEW: What is the heck is this method doing anyway? It creates a bunch of
+	  * TODO: What is the heck is this method doing anyway? It creates a bunch of
 	  * empty DislocProjectBeans.
 	  */
-	protected void createProject(ArrayList <String> arrayList) {
+	// protected void createProject(ArrayList <String> arrayList) {
 		
-		ObjectContainer db = null;		
-		File projectDir = new File(getContextBasePath());
+	// 	ObjectContainer db = null;		
+	// 	File projectDir = new File(getContextBasePath());
 		
-		if (!projectDir.exists()){
-			 projectDir.mkdirs();
-		}
+	// 	if (!projectDir.exists()){
+	// 		 projectDir.mkdirs();
+	// 	}
 		
-		try {			
-			 //REVIEW: "over5" name pattern is a magic string and should be moved to a
-			 //system property.
-			db = Db4o.openFile(getContextBasePath() + "/overm5_temp.db");
+	// 	try {			
+	// 		 //REVIEW: "over5" name pattern is a magic string and should be moved to a
+	// 		 //system property.
+	// 		db = Db4o.openFile(getContextBasePath() + "/overm5_temp.db");
 			
-			//REVIEW: are the next two lines necessary?
-			DislocProjectBean tmp = new DislocProjectBean();
-			ObjectSet results = db.get(DislocProjectBean.class);
+	// 		//REVIEW: are the next two lines necessary?
+	// 		DislocProjectBean tmp = new DislocProjectBean();
+	// 		ObjectSet results = db.get(DislocProjectBean.class);
 
-			for (int nA = 0 ; nA < arrayList.size() ; nA++) {
-				// Create a new project. This may be overwritten later
-				DislocProjectBean currentProject = new DislocProjectBean();
-				currentProject.setProjectName(arrayList.get(nA));
-				db.set(currentProject);				
-			}
-			logger.info("[RunautomatedDisloc/createProject] finished");
-			db.commit();
-		} catch (Exception e) {			
-			 logger.error("[RunautomatedDisloc/createProject] " + e.getMessage());
-		}
-		finally {
-			if (db != null)  db.close();			
-		}
-	}
+	// 		for (int nA = 0 ; nA < arrayList.size() ; nA++) {
+	// 			// Create a new project. This may be overwritten later
+	// 			DislocProjectBean currentProject = new DislocProjectBean();
+	// 			currentProject.setProjectName(arrayList.get(nA));
+	// 			db.set(currentProject);				
+	// 		}
+	// 		logger.info("[RunautomatedDisloc/createProject] finished");
+	// 		db.commit();
+	// 	} catch (Exception e) {			
+	// 		 logger.error("[RunautomatedDisloc/createProject] " + e.getMessage());
+	// 	}
+	// 	finally {
+	// 		if (db != null)  db.close();			
+	// 	}
+	// }
 
 
 }

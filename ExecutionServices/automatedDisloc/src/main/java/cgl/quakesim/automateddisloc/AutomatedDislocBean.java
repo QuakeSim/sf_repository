@@ -100,6 +100,9 @@ public class AutomatedDislocBean implements Runnable, ServiceLifeCycle {
 	 	  logger.info("----------AutomatedDislocBean initiated--------");
 	 }
 	 
+	 /**
+	  * This is the method that we use.  The URL is passed in through the command line, typically.
+	  */
 	 public void runInBackground(String url) {
 		  this.url=url;
 		  run();

@@ -127,6 +127,12 @@
 
 	<dependencies>
 	  <dependency>
+		 <groupId>org.quakesim</groupId>
+		 <artifactId>OpenShaHazusService</artifactId>
+		 <version>1.0-SNAPSHOT</version>
+	  </dependency>
+
+	  <dependency>
 		 <groupId>org.apache.axis2</groupId>
 		 <artifactId>axis2</artifactId>
 		 <version>1.6.0</version>
@@ -157,7 +163,6 @@
 			<version>4.5</version>
 			<scope>test</scope>
 		</dependency>
-		
 		
         <dependency>
              <groupId>axis</groupId>
