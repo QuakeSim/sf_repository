@@ -18,7 +18,6 @@ var sarselect=sarselect || (function() {
 		  var myOpts={zoom:6, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP};
 		  masterMap=new google.maps.Map(insarMapDiv, myOpts);
 		  
-		  
 		  var kmlMapOpts={map:masterMap, suppressInfoWindows:true, preserveViewport:true};
 		  insarKml = new google.maps.KmlLayer("http://quaketables.quakesim.org/kml?uid=all&ov=0",kmlMapOpts);
 		  

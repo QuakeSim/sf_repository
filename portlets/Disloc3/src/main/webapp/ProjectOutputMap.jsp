@@ -1,4 +1,9 @@
 <h:form id="DislocDisplayProjectResults" rendered="#{DislocBean2.renderProjectOutputMap}">
+  <f:verbatim>
+	 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" 
+				type="text/javascript"></script>
+  </f:verbatim>
+
   <h:inputHidden id="myDislocOutput" value="#{DislocBean2.myKmlUrl}"/>
   <h:inputHidden id="myDislocInsar" value="#{DislocBean2.insarKmlUrl}"/>
   <f:verbatim>

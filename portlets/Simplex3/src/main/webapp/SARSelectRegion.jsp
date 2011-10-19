@@ -1,11 +1,11 @@
 <h:panelGroup id="SAR-Simplex-SelectionMap"
 				  rendered="#{SimplexBean.currentEditProjectForm.renderSARSelectionMap}">
-  <f:verbatim><fieldset style="width:960px"><legend><b>Interferogram Map Selection</b></legend></f:verbatim>
+  <f:verbatim><fieldset><legend><b>Interferogram Map Selection</b></legend></f:verbatim>
   <f:verbatim>Click on the map to select the region you want to use.</f:verbatim>
   <h:panelGrid id="InSAR-View-All" columns="2" columnClasses="alignTop,alignTop">
 	 
 	 <f:verbatim>
-		<div id="InSAR-All-Map" style="width: 600px; height: 400px;"></div>
+		<div id="InSAR-All-Map" style="width: 550px; height: 400px;"></div>
 	 </f:verbatim>
 	 <f:verbatim>
 		<div id="dynatable"></div>

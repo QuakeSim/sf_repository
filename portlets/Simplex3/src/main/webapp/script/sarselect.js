@@ -10,6 +10,9 @@ var sarselect=sarselect || (function() {
 	 var markerNE, markerSW;
 	 var insarKml;
 	 var lowResSARLayer=null;
+	 //The m and n params are used by the sar2simplex to set the coarseness.
+	 var param_m="100";
+	 var param_n="100";  
 	 var dygraphLOSOpts={width:300,height:300,title:'InSAR Line of Sight Values',xlabel:'Distance',ylabel:'LOS Value'};
 	 var dygraphHgtOpts={width:300,height:300,title:'InSAR Height Values',xlabel:'Distance',ylabel:'Height'};
 
@@ -51,7 +54,6 @@ var sarselect=sarselect || (function() {
 	 //Activates the low-res insar layer.  
 	 function activateLayerMap(insarMap,overlayUrl,drawFunctionType,uid) {
         //Add the KML Layer
-		  console.log("Draw function type is "+drawFunctionType);
 		  if(lowResSARLayer) lowResSARLayer.setMap(null);  //Remove any previous layers.
 		  lowResSARLayer=new google.maps.KmlLayer(overlayUrl,{suppressInfoWindows: true, map: insarMap, clickable: false});
 		  
@@ -73,7 +75,6 @@ var sarselect=sarselect || (function() {
 	 }
     
 	 function lineLeftClick(insarMap,event,uid) {
-		  console.log("Uid is "+uid);
 		  //If the marker doesn't exist, create it.
 		  if(!markerNE && !markerSW) {
 				markerNE=new google.maps.Marker({map: insarMap, 
@@ -140,11 +141,9 @@ var sarselect=sarselect || (function() {
 				//Update the selection
 				google.maps.event.addListener(markerNE, "dragend", function() {
 					 getSimplexValues(uid);
-					 console.log("NE Drag End");
 				});
 				google.maps.event.addListener(markerSW, "dragend", function() {
 					 getSimplexValues(uid);
-					 console.log("SW Drag End");
 				});
 
 		  }
@@ -242,14 +241,11 @@ var sarselect=sarselect || (function() {
 		  var nwMarkerLon=cornerNW.lng();
 
 		  //This must be clockwise. 
-		  var restUrl="/InSAR-LOS-REST/insarsimplex/"+uid+"/"+nwMarkerLon+"/"+nwMarkerLat+"/"+neMarkerLon+"/"+neMarkerLat+"/"+seMarkerLon+"/"+seMarkerLat+"/"+swMarkerLon+"/"+swMarkerLat;
-		  console.log(restUrl);
+		  var restUrl="/InSAR-LOS-REST/insarsimplex/"+uid+"/"+param_m+"/"+param_n+"/"+nwMarkerLon+"/"+nwMarkerLat+"/"+neMarkerLon+"/"+neMarkerLat+"/"+seMarkerLon+"/"+seMarkerLat+"/"+swMarkerLon+"/"+swMarkerLat;
 		  var csv=$.ajax({
 				url:restUrl,
 				async:false
 		  }).responseText;
-
-		  console.log(csv);
 	 }
 
 	 function getInSarValues(uid) {

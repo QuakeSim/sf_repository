@@ -60,11 +60,11 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	String descEnd = "</description>";
 
 	// Some navigation strings.
-	static final String DEFAULT_USER_NAME = "disloc_default_user";
-	static final String DISLOC_NAV_STRING = "disloc-submitted";
-	static final String DISLOC_ANON_NAV_STRING = "anon-disloc-submitted";
+	 static final String DEFAULT_USER_NAME = "disloc_default_user";
+	 static final String DISLOC_NAV_STRING = "disloc-submitted";
+	 static final String DISLOC_ANON_NAV_STRING = "anon-disloc-submitted";
 	 static final String DISLOC_LOOP_NAV_STRING="disloc-this";
-	static final String SEPARATOR = "/";
+	 static final String SEPARATOR = "/";
 	 
 	 //Some useful constants
 	 static final int MAX_PLOT_POINTS=500;
