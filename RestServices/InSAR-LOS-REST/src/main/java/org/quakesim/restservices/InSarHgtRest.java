@@ -20,11 +20,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.UriInfo;
 
 
-@Path("/insarlos/{format}/{uid}/{lon0}/{lat0}/{lon1}/{lat1}")
-public class InSarLosRest {
+@Path("/insarhgt/{format}/{uid}/{lon0}/{lat0}/{lon1}/{lat1}")
+public class InSarHgtRest {
 	 private static final String IMAGE="image=InSAR:";
 	 private static final String UID="uid";
-	 private static final String LOS="_los";
+	 private static final String HGT="_hgt";
 	 private static final String POINT="point=";
 	 private static final String FORMAT="format=";
 	 private static final String JSON="json";
@@ -38,11 +38,11 @@ public class InSarLosRest {
 	 private double lat0, lon0, lat1, lon1;
 	 private int uid;
 	 private String outputFormat;
-	 private String losOutputResponse=null;
+	 private String hgtOutputResponse=null;
 
 	 protected final Logger logger=LoggerFactory.getLogger(getClass());
 	 
-	 public InSarLosRest() {
+	 public InSarHgtRest() {
 		  lat0=32.6907989885; 
 		  lon0=-115.739447357;
 		  lat1=32.8296310667; 
@@ -51,20 +51,20 @@ public class InSarLosRest {
 	 }
 	 
 	 /**
-	  * The returned line should have the format "lon, lat, distance, value".  We only want
-	  * the last two values, so the method below does this.
+	  * The HGT returned CSV should have the format "lon, lat, distance, height".  We only 
+	  * want the distance and height.
 	  */
-	 protected String processLosLine(String line) {
+	 protected String processHgtLine(String line) {
 		  String[] splitLine=line.split(",");
 		  return splitLine[splitLine.length-2]+","+splitLine[splitLine.length-1];
 	 }
-
+	 
 	 public double getLon0() { return this.lon0; }
 	 public double getLon1() { return this.lon1; }
 	 public double getLat0() { return this.lat0; }
 	 public double getLat1() { return this.lat1; }
 	 public int getUid() { return this.uid; }
-	 public String getLosOutputResponse() { return this.losOutputResponse; }
+	 public String getHgtOutputResponse() { return this.hgtOutputResponse; }
 	 public String getOutputFormat() { return this.outputFormat; }
 	 
 	 public void setLon0(double lon0) { this.lon0=lon0; }
@@ -73,14 +73,15 @@ public class InSarLosRest {
 	 public void setLat1(double lat1) { this.lat1=lat1; }
 	 public void setUid(int uid) { this.uid=uid; }
 	 public void setOutputFormat(String outputFormat) { this.outputFormat=outputFormat; }
-	 public void setLosOutputResponse(String losOutputResponse) { this.losOutputResponse=losOutputResponse; }
+	 public void setHgtOutputResponse(String hgtOutputResponse) { this.hgtOutputResponse=hgtOutputResponse; }
 	 
+
 	 /**
 	  * This is an exposed REST method. 
 	  */ 
 	 @GET
     @Produces("text/plain")
-	 public String getImageLOSRest(@PathParam("format") String outputFormat,
+	 public String getImageHgtRest(@PathParam("format") String outputFormat,
 											 @PathParam("uid") int uid,
 											 @PathParam("lon0") double lon0,
 											 @PathParam("lat0") double lat0,
@@ -88,9 +89,9 @@ public class InSarLosRest {
 											 @PathParam("lat1") double lat1) 
 											 throws Exception {
 												  
-												  String losOutputResponse=null;
+												  String outputResponse=null;
 												  String bbox=lon0+COMMA+lat0+COMMA+lon1+COMMA+lat1;
-												  String urlToCall=INSAR_TOOL_URL+IMAGE+UID+uid+LOS+AMP+POINT+bbox+AMP+FORMAT+outputFormat;
+												  String urlToCall=INSAR_TOOL_URL+IMAGE+UID+uid+HGT+AMP+POINT+bbox+AMP+FORMAT+outputFormat;
 												  logger.debug("Calling URL:"+urlToCall);
 												  
 												  URL url=null;
@@ -99,13 +100,13 @@ public class InSarLosRest {
 												  String responseString=null;
 												  
 												  try {
-														losOutputResponse="Distance (km), Displacement\n";
+														outputResponse="Distance (km), Height\n";
 														url=new URL(urlToCall);
 														connect=(HttpURLConnection)url.openConnection();
 														readResponse=new BufferedReader(new InputStreamReader(connect.getInputStream()));
 														String line=null;
 														while((line=readResponse.readLine())!=null){
-															 losOutputResponse+=processLosLine(line)+"\n";
+															 outputResponse+=processHgtLine(line)+"\n";
 														} 
 												  }
 												  catch(Exception ex) {
@@ -122,8 +123,9 @@ public class InSarLosRest {
 														}
 														connect=null;
 												  }
-												  logger.debug("Here is the response:"+losOutputResponse);
-												  return losOutputResponse;
+												  logger.debug("Here is the response:"+outputResponse);
+												  return outputResponse;
 											 }
+
 
 											 }

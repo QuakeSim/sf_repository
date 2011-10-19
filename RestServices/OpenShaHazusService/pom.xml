@@ -3,23 +3,129 @@
 	 This is the POM for the ANSS Catalog KML service.
 -->
   <modelVersion>4.0.0</modelVersion>
-  <groupId>quakesim</groupId>
+  <groupId>org.quakesim</groupId>
   <artifactId>OpenShaHazusService</artifactId>
-  <packaging>war</packaging>
+  <!-- NOTE: Making this a jar for now since there are some obscure classloading issues with Tomcat -->
+  <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>${artifactId}</name>
   <url>http://www.quakesim.org</url>
+
+  <!-- NOTE: Parent dependencies removed for now since we want to deploy as a jar in our repository.
   <parent>
 	 <groupId>quakesim</groupId>
 	 <artifactId>rest-services-driver</artifactId>
 	 <version>1.0</version>
 	 <relativePath>..</relativePath>
   </parent>
-  
+  -->
   <properties>
 	 <catalina.home>${basedir}/../../portal_deploy/apache-tomcat-5.5.20</catalina.home>
   </properties>
+  
+  <build>
+	 <plugins>
+		  <plugin>
+			 <groupId>org.codehaus.mojo</groupId>
+			 <artifactId>exec-maven-plugin</artifactId>
+			 <version>1.2</version>
+			 <configuration>
+				<mainClass>org.quakesim.restservices.OpenShaRestService</mainClass>
+			 </configuration>
+		  </plugin>
+
+		<plugin>
+		  <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+			 <execution>
+				<id>Clean ${pom.artifactId} webapp</id>
+				<phase>clean</phase>
+				<configuration>
+				  <tasks>			 
+					 <echo message="Project home: ${project.home}"/>
+					 <echo message="Cleaning ${catalina.home}/webapps/${pom.name}"/>
+					 <delete failonerror="false">
+						<fileset dir="${catalina.home}/webapps/${pom.name}">
+						  <include name="**/*.jar"/>
+						  <include name="**/*.xml"/>
+						  <include name="**/*.properties"/>
+						  <include name="**/*.class"/>						  
+						  <include name="**/*.jsp"/>
+						  <include name="**/*.wsdd"/>
+						</fileset>
+					 </delete>
+					 <delete failonerror="false">
+						<fileset dir="${catalina.home}/webapps/${pom.artifactId}/WEB-INF/binaryexec"/>
+					 </delete>
+				  </tasks>
+				</configuration>
+				<goals>
+				  <goal>run</goal>
+				</goals>
+			 </execution>
+			 <execution>
+				<id>Install ${pom.artifactId} service</id>
+				<phase>install</phase>
+				<configuration>
+				  <tasks>			 
+					 <echo message="Copying ${basedir}/target/${pom.artifactId} to ${catalina.home}/webapps/${pom.name}"/>
+					 <copy overwrite="true" 
+							 filtering="false"
+							 failonerror="false"
+							 todir="${catalina.home}/webapps/${pom.name}">
+						<fileset dir="${basedir}/target/${pom.artifactId}-${pom.version}"/>
+					 </copy>
+				  </tasks>
+				</configuration>
+				<goals>
+				  <goal>run</goal>
+				</goals>
+			 </execution>
+        </executions>       
+		</plugin>
+    </plugins>
+	 <resources>
+		<resource>
+		  <directory>src/main/resources</directory>
+		  <filtering>true</filtering>
+		</resource>
+	 </resources>
+  </build>
+
+  <repositories>
+	 <!-- These are needed for Jersey -->
+	 <repository>
+		<id>maven2-repository.dev.java.net</id>
+		<name>Java.net Repository for Maven</name>
+		<url>http://download.java.net/maven/2/</url>
+		<layout>default</layout>
+	 </repository> 
+	 <repository>
+		<id>maven-repository.dev.java.net</id>
+		<name>Java.net Maven 1 Repository (legacy)</name>
+		<url>http://download.java.net/maven/1</url>
+		<layout>legacy</layout>
+	 </repository>
+  </repositories>
   <dependencies>
+	 <!-- These are the Jersey dependencies -->
+	 <dependency>
+		<groupId>com.sun.jersey</groupId>
+		<artifactId>jersey-server</artifactId>
+		<version>1.4</version>
+	 </dependency>
+	 <dependency>
+		<groupId>com.sun.grizzly</groupId>
+		<artifactId>grizzly-servlet-webserver</artifactId>
+		<version>1.9.18-i</version>
+	 </dependency>
+	 <dependency>
+		<groupId>com.sun.jersey.jersey-test-framework</groupId>
+		<artifactId>jersey-test-framework-grizzly</artifactId>
+		<version>1.4</version>
+		<scope>test</scope>
+	 </dependency>
+
 	 <!--OpenSHA dependencies -->
 	 <dependency>
 		<groupId>org.opensha</groupId>

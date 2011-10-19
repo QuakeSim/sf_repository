@@ -47,7 +47,7 @@ import org.opensha.sha.imr.ScalarIMR;
 import org.opensha.sha.mapping.GMT_MapGeneratorForShakeMaps;
 import org.opensha.sha.util.SiteTranslator;
 
-@Path("/openhazus/{minLat}/{maxLat}/{minLon}/{maxLon}/{gridSpacing}/{mag}/{rake}/{lat}/{lon}/{depth}")
+@Path("/openhazus/{minLat}/{maxLat}/{minLon}/{maxLon}/{gridSpacing}/{mag}/{rake}/{lat}/{lon}/{depth}/{dip}")
 public class OpenShaRestService implements ParameterChangeWarningListener {
 
 	 private static final String OPENSHA_SERVLET_URL="http://opensha.ucs.edu:8080/OpenSHA";
@@ -68,7 +68,16 @@ public class OpenShaRestService implements ParameterChangeWarningListener {
 	 private boolean pointSourceCorrection=false;
 	 private String defaultSiteType="DE";
 	 private String imt="PGA";
-	 private String dirName="/tmp/";
+	 private String dirName=null;
+
+	 /**
+	  * This is a main method for testing.
+	  */ 
+	 public static void main(String[] args) throws Exception {
+		  System.out.println("Main called for testing.");
+		  (new OpenShaRestService()).getOpenShaHazusOutput(33.5,34.5,-119.0,-117.0,0.1,7.2,0.0,33.94,-117.87,5.0,90.0);
+		  //(new OpenShaRestService()).getOpenShaHazusOutput(0.27358882500898296, 2.1600422924901186, 95.8797958013251, 97.76665461854239, 0.1, 5.3, 0.0, 1.1719, 96.7783, 4.777213961021833, 90.0);
+	 }
 
 	 public OpenShaRestService() {
 		  System.out.println("Calling Constructor");
@@ -78,45 +87,43 @@ public class OpenShaRestService implements ParameterChangeWarningListener {
 		  gmtMapGen=new GMT_MapGeneratorForShakeMaps();
 		  gmtMapGen.setParameter(gmtMapGen.LOG_PLOT_NAME,Boolean.FALSE);
 
-		  PropagationEffect propagationEffect = new PropagationEffect();
+		  //Taken from PagerShakeMapCalc, but I'm not sure if this is correct.
+		  PropagationEffect propagationEffect = new PropagationEffect();		  
+		  // ParameterList paramList = propagationEffect.getAdjustableParameterList();
+		  // paramList.getParameter(propagationEffect.APPROX_DIST_PARAM_NAME).setValue(new Boolean(true));
 		  
-		  ParameterList paramList = propagationEffect.getAdjustableParameterList();
-		  paramList.getParameter(propagationEffect.APPROX_DIST_PARAM_NAME).setValue(new Boolean(true));
-		  
-		  if (pointSourceCorrection){
-				paramList.getParameter(propagationEffect.POINT_SRC_CORR_PARAM_NAME).setValue(new Boolean(true));
-		  }
-		  else {
-				paramList.getParameter(propagationEffect.POINT_SRC_CORR_PARAM_NAME).setValue(new Boolean(false));
-		  }
+		  // if (pointSourceCorrection){
+		  // 		paramList.getParameter(propagationEffect.POINT_SRC_CORR_PARAM_NAME).setValue(new Boolean(true));
+		  // }
+		  // else {
+		  // 		paramList.getParameter(propagationEffect.POINT_SRC_CORR_PARAM_NAME).setValue(new Boolean(false));
+		  // }
 		  
 		  shakeMapCalc=new ScenarioShakeMapCalculator(propagationEffect);
 	 }
 	 
+	 /**
+	  * This is required by the ParameterChangeWarningListener interface, which we have to use as a workaround
+	  * for creating the attenuation relationships.
+	  */ 
 	 public void parameterChangeWarning(ParameterChangeWarningEvent event) {
 		  System.out.println("Really?");
 	 }
 
-	 public static void main(String[] args) {
-		  System.out.println("Main called for testing.");
-		  (new OpenShaRestService()).getOpenShaHazusOutput(33.5,34.5,-119.0,-117.0,0.1,7.2,90,33.94,-117.87,5.0);
-	 }
-
 	 /**
-	  * This is the primary exposed method.
+	  * This is the primary exposed method.  Works on either the command line or via REST call.
 	  */ 
 	 @GET
 	 @Produces("text/plain")
-	 public void getOpenShaHazusOutput(@PathParam("minLat") double minLat, @PathParam("maxLat") double maxLat, @PathParam("minLon") double minLon, @PathParam("maxLon") double maxLon, @PathParam("gridSpacing") double gridSpacing, @PathParam("mag") double mag, @PathParam("rake") double rake, @PathParam("lat") double lat, @PathParam("lon") double lon, @PathParam("depth") double depth) { 
-	 //	 public void getOpenShaHazusOutput() {  //For formatting
-	
-
+	 public String getOpenShaHazusOutput(@PathParam("minLat") double minLat, @PathParam("maxLat") double maxLat, @PathParam("minLon") double minLon, @PathParam("maxLon") double maxLon, @PathParam("gridSpacing") double gridSpacing, @PathParam("mag") double mag, @PathParam("rake") double rake, @PathParam("lat") double lat, @PathParam("lon") double lon, @PathParam("depth") double depth, @PathParam("aveDip") double aveDip) throws Exception { 
+												  //public void getOpenShaHazusOutput() {  //For formatting
+		  String retString="";
 		  try {		  
 				//Set up the data.
 				//These methods are from GenerateHazus...'s generateHazusFiles() method.
 				SitesInGriddedRegion sites=createGriddedRegion(minLat, maxLat, minLon, maxLon, gridSpacing);
-				EqkRupture eqkRupture=createEarthquakeRupture(mag,rake,lat,lon,depth);
-				ArrayList attrRelList=createAttenuationRelationships(eqkRupture);
+				EqkRupture eqkRupture=createEarthquakeRupture(mag,rake,lat,lon,depth,aveDip);
+				ArrayList attrRelList=createAttenuationRelationships(eqkRupture,imt);
 				ArrayList attrRelListWt=createAttenRelWeights();
 
 				sites=getSiteParamsForRegion(sites,(ScalarIMR)attrRelList.get(0));
@@ -127,36 +134,40 @@ public class OpenShaRestService implements ParameterChangeWarningListener {
 												  
 				//Make the maps.
 				//These methods are from ScenarioShakeMapApp's makeMapForHazus() method
-				setRegionForGMT(minLat, maxLat, minLon, maxLon, gridSpacing);
-				setGMT_ParamsForHazus();
-				makeHazusShapeFilesAndMap(sa_03xyzData,sa_10xyzData,pga_xyzData,pgv_xyzData,eqkRupture,metadata,dirName);
+				//setRegionForGMT(minLat, maxLat, minLon, maxLon, gridSpacing);
+				//setGMT_ParamsForHazus();
+				retString=makeHazusShapeFilesAndMap(sa_03xyzData,sa_10xyzData,pga_xyzData,pgv_xyzData,eqkRupture,metadata,dirName);
+				System.out.println("OpenSha Hazus URL:"+retString);
+				return retString;
 		  }
 		  catch (Exception ex) {
+				System.out.println("OpenShaRestService threw an exception: "+ex.getMessage());
 				ex.printStackTrace();
+				throw ex;
 		  }
 		}
 
 	 /**
 	  * Create an array list of attenuation relationships. For now, we only support one
-	  * AR type, Abrahamson_2000_AttenRel
+	  * AR type, AS_1997_AttenRel.  This code is stolen from PagerShakeMapCalc.
 	  */ 
-		  protected ArrayList createAttenuationRelationships(EqkRupture eqkRupture) throws Exception {
+		  protected ArrayList createAttenuationRelationships(EqkRupture eqkRupture, String imt) throws Exception {
 		  System.out.println("Creating attenuation relationships");
 		  String attenRelClassPackage = "org.opensha.sha.imr.attenRelImpl.";
 		  String attenRelImplClass="AS_1997_AttenRel";
-
+		  
+		  //
 		  Class listenerClass = Class.forName( "org.opensha.commons.param.event.ParameterChangeWarningListener" );
-		  Object[] paramObjects = new Object[]{ this };
+		  Object[] paramObjects = new Object[]{ this };  
 		  Class[] params = new Class[]{ listenerClass };
 
 		  Class imrClass = Class.forName(attenRelClassPackage+attenRelImplClass);
 		  Constructor con = imrClass.getConstructor( params );
-		  ScalarIMR attenRel = (ScalarIMR)con.newInstance( paramObjects );
+		  //The attenuationrelationships object requires a ParameterChangeWarningListener in its constructor,
+		  //so we point the newly created object to back to the OpenShaRestService class.
+		  ScalarIMR attenRel = (ScalarIMR)con.newInstance( paramObjects );  
 		  attenRel.setParamDefaults();
 		  attenRel.setEqkRupture(eqkRupture);
-
-		  
-
 		  attenRel.setIntensityMeasure(imt);
 		  if(imt.equalsIgnoreCase("SA")){
 				double period = 1.0;  //Hard coded
@@ -170,6 +181,9 @@ public class OpenShaRestService implements ParameterChangeWarningListener {
 		  return attRelList;
 	 }
 
+	 /**
+	  * Creates a gridded region from the bounding box and spacing.
+	  */
 	 protected SitesInGriddedRegion createGriddedRegion(double minLat,double maxLat, double minLon, double maxLon, double gridSpacing) {
 		  GriddedRegion eggr = new GriddedRegion(new Location(minLat, minLon),
 															  new Location(maxLat, maxLon),
@@ -191,12 +205,13 @@ public class OpenShaRestService implements ParameterChangeWarningListener {
 
 	 /**
 	  * Creates the earthquake rupture object. We currently consider only point source earthquakes.
+	  * This is taken from PagerShakeMapCalc.
 	  */ 
-	 protected EqkRupture createEarthquakeRupture(double mag, double rake, double lat, double lon, double depth) {
-		  double aveDip=27.0;
-		  double aveUpperSiesDepth=5.0;
+	 protected EqkRupture createEarthquakeRupture(double mag, double rake, double lat, double lon, double depth,double aveDip) {
+		  // double aveDip=27.0; //Should pass in
+		  // double aveUpperSiesDepth=5.0; //Should pass in
 		  System.out.println("Creating earthquake rupture");
-		  Location location=new Location(lat,lon,aveUpperSiesDepth);
+		  Location location=new Location(lat,lon,depth);
 		  EqkRupture rupture=new EqkRupture();
 		  rupture.setPointSurface(location,aveDip);
 		  rupture.setMag(mag);
@@ -205,7 +220,7 @@ public class OpenShaRestService implements ParameterChangeWarningListener {
 	 }
 	 
 	 /**
-	  * Create the SA data sets
+	  * Create the SA data sets.  This is taken from GenerateHazusControlPanelForSingleMultipleIMRs.
 	  */ 
 	 protected void hazusCalcForSA(ArrayList selectedAttenRels,ArrayList selectedAttenRelsWt,double imlProbValue,SitesInGriddedRegion sites, EqkRupture eqkRupture,boolean probAtIml) throws Exception {
 		  System.out.println("Doing calc for SA");
@@ -216,21 +231,15 @@ public class OpenShaRestService implements ParameterChangeWarningListener {
 
 		//Doing for SA-0.3sec
 		setSA_PeriodForSelectedIMRs(selectedAttenRels,0.3);
-
-		//		sa_03xyzData = generateShakeMap(selectedAttenRels,selectedAttenRelsWt,SA_Param.NAME,imlProbValue,sites,eqkRupture,probAtIml);
 		sa_03xyzData=shakeMapCalc.getScenarioShakeMapData(selectedAttenRels,selectedAttenRelsWt,sites,eqkRupture,probAtIml,imlProbValue);
-		metadata += "IMT = SA [ SA Damping = 5.0 ; SA Period = 0.3 ]"+"<br>\n";
 
 		//Doing for SA-1.0sec
 		setSA_PeriodForSelectedIMRs(selectedAttenRels,1.0);
-		
-		//		sa_10xyzData = generateShakeMap(selectedAttenRels,selectedAttenRelsWt,SA_Param.NAME,imlProbValue,sites,eqkRupture,probAtIml);
 		sa_10xyzData=shakeMapCalc.getScenarioShakeMapData(selectedAttenRels,selectedAttenRelsWt,sites,eqkRupture,probAtIml,imlProbValue);
-		metadata += "IMT = SA [ SA Damping = 5.0 ; SA Period = 1.0 ]"+"<br>\n";
 	}
 
 	 /**
-	  * Create the PGV data sets.
+	  * Create the PGV data sets. This is taken from GenerateHazusControlPanelForSingleMultipleIMRs.
 	  */ 
 	 protected void hazusCalcForPGV(ArrayList selectedAttenRels, ArrayList selectedAttenRelsWts, double imlProbValue,SitesInGriddedRegion sites,EqkRupture eqkRupture, boolean probAtIml) throws Exception {
 		  System.out.println("Doing pgv calc");
@@ -263,7 +272,7 @@ public class OpenShaRestService implements ParameterChangeWarningListener {
 	 }
 	 
 	 /**
-	  * Create the PGA data sets.
+	  * Create the PGA data sets. This is taken from GenerateHazusControlPanelForSingleMultipleIMRs.
 	  */ 
 	 protected void hazusCalcForPGA(ArrayList selectedAttenRels,ArrayList selectedAttenRelsWt,double imlProbValue,SitesInGriddedRegion sites, EqkRupture eqkRupture,boolean probAtIml) throws Exception {
 		  System.out.println("Calc for PGA");
@@ -271,29 +280,13 @@ public class OpenShaRestService implements ParameterChangeWarningListener {
 		  for(int i=0;i<size;++i) {
 				((ScalarIMR)selectedAttenRels.get(i)).setIntensityMeasure(PGA_Param.NAME);
 		  }
-		  //		  pga_xyzData = generateShakeMap(selectedAttenRels,selectedAttenRelsWt,PGA_Param.NAME,imlProbValue,sites,eqkRupture,probAtIml);
 		  pga_xyzData=shakeMapCalc.getScenarioShakeMapData(selectedAttenRels,selectedAttenRelsWt,sites,eqkRupture,probAtIml,imlProbValue);
-		  metadata += "IMT = PGA"+"\n";
+
 	 }
 	 
 	 /**
-	  * 
-	  */ 
-	 protected GeoDataSet generateShakeMap(ArrayList attenRel, ArrayList attenRelWts, String imt, double imlProbValue,SitesInGriddedRegion sites,EqkRupture eqkRupture, boolean probAtIml) throws Exception {
-		try {
-			double value=imlProbValue;
-			//calls the scenario shakemap calculator to generate the map data file on the server
-			GeoDataSet xyzDataSet = shakeMapCalc.getScenarioShakeMapData(attenRel,attenRelWts,sites,eqkRupture,probAtIml,value);
-			return xyzDataSet;
-		}
-		catch(Exception e){
-			 e.printStackTrace();
-			 throw e;
-		}
-		//return "";  //Shouldn't get here.
-	}
-
-	 
+	  * For some reason, we break the PGV calculation into two methods
+	  */
 	 private GeoDataSet doCalcForPGV_OnServer(ArrayList attenRelsSupportingPGV, ArrayList attenRelsNotSupportingPGV, ArrayList attenRelListPGV_Wts, ArrayList attenRelListNot_PGV_Wts, double imlProbValue, SitesInGriddedRegion sites,EqkRupture eqkRupture, boolean probAtIml) throws Exception {
 		  
 		  //contains the list of all the selected AttenuationRelationship models
@@ -321,17 +314,18 @@ public class OpenShaRestService implements ParameterChangeWarningListener {
 		  //setting the SA period to 1.0 for the atten rels not supporting PGV
 		  //		this.setSA_PeriodForSelectedIMRs(attenRelsNotSupportingPGV,1.0);
 		  
-		  //as the calculation will be done on the server so saves the XYZ object and returns the path to object file.
-		  //		  return generateShakeMap(attenRelList,attenRelWtList,PGV_Param.NAME,imlProbValue,sites,eqkRupture,probAtIml);
 		  return shakeMapCalc.getScenarioShakeMapData(attenRelList,attenRelWtList,sites,eqkRupture,probAtIml,imlProbValue);
 	}
 
+	 //This is needed to support the SA cases.
 	private void setSA_PeriodForSelectedIMRs(ArrayList selectedAttenRels, double period) {
 		int size = selectedAttenRels.size();
 		for(int i=0;i<size;++i)
 			((ScalarIMR)selectedAttenRels.get(i)).getParameter(PeriodParam.NAME).setValue(new Double(period));
 	}
 
+	 
+	 //This is probably a useless method.
 	 protected void setRegionForGMT(double minLat, double maxLat, double minLon, double maxLon, double gridSpacing){
 		  this.minLat=minLat;
 		  this.maxLat=maxLat;
@@ -340,22 +334,30 @@ public class OpenShaRestService implements ParameterChangeWarningListener {
 		  this.gridSpacing=gridSpacing;
 	 }
 	 
-	 protected void makeHazusShapeFilesAndMap(GeoDataSet sa03_xyzVals,GeoDataSet sa10_xyzVals,GeoDataSet pga_xyzVals,GeoDataSet pgv_xyzVals,EqkRupture eqkRupture,String metadataAsHTML, String dirName){
+	 /**
+	  * Make the files and map on the server.  
+	  */ 
+	 protected String makeHazusShapeFilesAndMap(GeoDataSet sa03_xyzVals,GeoDataSet sa10_xyzVals,GeoDataSet pga_xyzVals,GeoDataSet pgv_xyzVals,EqkRupture eqkRupture,String metadataAsHTML, String dirName) throws Exception {
 		  String[] imgNames = null;
+		  System.out.println("Making the Shape Files.");
 		  try {
-				//				imgNames = openConnectionToServerToGenerateShakeMapForHazus(sa03_xyzVals, sa10_xyzVals, pga_xyzVals, pgv_xyzVals, eqkRupture, metadataAsHTML);
+				System.out.println("Doing the shape file thing");
 				imgNames=gmtMapGen.makeHazusFileSetUsingServlet(sa03_xyzVals, sa10_xyzVals, pga_xyzVals, pgv_xyzVals, eqkRupture, metadataAsHTML,dirName);
+				System.out.println("*********************Imgnames array:"+imgNames[0]);
 				String webaddr = imgNames[0].substring(0,imgNames[0].lastIndexOf("/")+1);
 				metadataAsHTML += "";
-				
+				System.out.println("*********************Here is the hazus webaddr output: "+webaddr);
+				return webaddr;
 		  }
 		  catch (Exception ex) {
+				System.err.println("Error calling the Hazus service.");
 				ex.printStackTrace();
+				throw ex;
 		  }
 	 }
 
 	 /**
-	  * Sets a bunch of values.
+	  * Sets a bunch of values.  This probably isn't correct.
 	  */ 
 	protected void setGMT_ParamsForHazus(){
 		//checking if hazus file generator param is selected, if not then make it selected and the deselect it again
@@ -373,6 +375,10 @@ public class OpenShaRestService implements ParameterChangeWarningListener {
 		//}
 
 	}
+	 
+	 /**
+	  * Update the SitesInGriddedRegion parameters; taken from PagerShakeMapCalc.
+	  */
 	 private SitesInGriddedRegion getSiteParamsForRegion(SitesInGriddedRegion sites, ScalarIMR attenRel) {
 		  sites.addSiteParams(attenRel.getSiteParamsIterator());
 		  //getting Wills Site Class
