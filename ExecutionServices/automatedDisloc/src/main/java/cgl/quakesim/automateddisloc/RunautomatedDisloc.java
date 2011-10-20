@@ -172,7 +172,7 @@ public class RunautomatedDisloc implements Job {
 	 PrintWriter out;
 
 	 //This is the OpenShaRestService object.
-	 OpenShaRestService osrs;
+	 private OpenShaRestService osrs;
 
 	 /**
 	  * This is the default constructor.  It is the one used by Quartz.  The URL of the RSS feed will be
