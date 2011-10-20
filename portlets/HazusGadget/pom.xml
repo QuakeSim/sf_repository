@@ -161,14 +161,11 @@
         </profile>
     </profiles>
 
-
     <repositories>
         <repository>
             <id>apache-maven</id>
             <url>http://repo1.maven.org/maven2</url>
         </repository>
-
-
 
         <!-- This is our local repository -->
         <repository>
@@ -176,47 +173,47 @@
             <url>http://www.crisisgrid.org/maven2</url>
         </repository>
 
-
         <repository>
             <id>sopac</id>
             <url>http://sopac.ucsd.edu/repositories/maven2/SOPAC/</url>
         </repository>
 
-
-        <repository>
-        <id>jboss</id>
-        <name>JBoss Repository</name>
-        <url>http://repository.jboss.org/maven2</url>
-        <snapshots>
-        <enabled>false</enabled>
-        </snapshots>
-        </repository>
-	<repository>
-            <id>db4o</id>
-            <url>https://source.db4o.com/maven/</url>
-        </repository>
-	
-
+		  <repository>
+			 <id>jboss</id>
+			 <name>JBoss Repository</name>
+			 <url>http://repository.jboss.org/maven2</url>
+			 <snapshots>
+				<enabled>false</enabled>
+			 </snapshots>
+		  </repository>
+		  <repository>
+			 <id>db4o</id>
+			 <url>https://source.db4o.com/maven/</url>
+		  </repository>
     </repositories>
 
     <!-- Repositories for plugins -->
     <pluginRepositories>
-    </pluginRepositories>
+	 </pluginRepositories>
 
     <!-- Project dependencies -->
     <dependencies>
-
-        <!-- Faces Jars -->
-
-
-        <dependency>
-		<groupId>xerces</groupId>
-		<artifactId>xercesImpl</artifactId>
-		<version>2.9.1</version>
-		<scope>compile</scope>
-        </dependency>
-
-
+		<!--OpenSHA dependencies -->
+		<dependency>
+		  <groupId>org.opensha</groupId>
+		  <artifactId>ScenarioShakeMapLocalClean</artifactId>
+		  <version>1.0</version>
+		</dependency>
+		
+		<!-- Faces Jars -->
+		
+		<dependency>
+		  <groupId>xerces</groupId>
+		  <artifactId>xercesImpl</artifactId>
+		  <version>2.9.1</version>
+		  <scope>compile</scope>
+		</dependency>
+		
         <dependency>
             <groupId>myfaces</groupId>
             <artifactId>myfaces-api</artifactId>
@@ -254,7 +251,6 @@
             <scope>provided</scope>
         </dependency>
 
-
         <dependency>
             <groupId>ogce-misc</groupId>
             <artifactId>gridsphere-ui-tags</artifactId>
@@ -272,24 +268,6 @@
             <artifactId>portals-bridges-jsf</artifactId>
             <version>1.0</version>
         </dependency>
-
-
-	<!-- jsfunit -->
-
-    <dependency>
-      <groupId>org.jboss.jsfunit</groupId>
-      <artifactId>jboss-jsfunit-core</artifactId>
-      <version>1.0.0.GA</version>
-    </dependency>
-
-
-
-    <dependency>
-      <groupId>org.jboss.jsfunit</groupId>
-      <artifactId>jboss-jsfunit-ant</artifactId>
-      <version>1.0.0.GA</version>
-    </dependency>
-
 
         <!-- Servlet Dependencies -->
         <dependency>

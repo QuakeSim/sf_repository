@@ -418,7 +418,7 @@ function getScrolling() {
   <h:inputHidden id="faultKmlUrl" value="#{DislocBean2.faultKmlUrl}"/>
   <h:inputHidden id="obsvKmlUrl" value="#{DislocBean2.obsvKmlUrl}"/>
   <h:panelGrid id="EditProject"
-					columnClasses="alignTop"
+					columnClasses="alignTopFixWidth"
 					columns="1" 
 					border="0">
 	 
@@ -431,9 +431,8 @@ function getScrolling() {
 	 <%@include file="InsarParamsForm.jsp"%>
 	 <%@include file="ProjectOutputMap.jsp"%>
 	 <%@include file="DislocFileUpload.jsp"%>
+	 <%@include file="ProjectComponentPanel.jsp" %>
   </h:panelGrid>
-
-  <%@include file="ProjectComponentPanel.jsp" %>
   <%@include file="footer.jsp" %>
   
 </f:view>
