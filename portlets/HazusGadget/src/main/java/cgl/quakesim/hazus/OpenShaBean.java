@@ -106,7 +106,7 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 	  */ 
 	 public String getOpenShaHazusOutput(double minLat, double maxLat, double minLon, double maxLon, double gridSpacing, double mag, double rake, double lat, double lon, double depth, double aveDip) throws Exception { 
 												  //public void getOpenShaHazusOutput() {  //For formatting
-		  String retString="";
+		  String retString;
 		  try {		  
 				//Set up the data.
 				//These methods are from GenerateHazus...'s generateHazusFiles() method.
@@ -126,7 +126,6 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 				//setRegionForGMT(minLat, maxLat, minLon, maxLon, gridSpacing);
 				//setGMT_ParamsForHazus();
 				retString=makeHazusShapeFilesAndMap(sa_03xyzData,sa_10xyzData,pga_xyzData,pgv_xyzData,eqkRupture,metadata,dirName);
-				System.out.println("OpenSha Hazus URL:"+retString);
 				return retString;
 		  }
 		  catch (Exception ex) {

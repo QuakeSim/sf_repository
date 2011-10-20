@@ -11,18 +11,18 @@ var hazusgadget=hazusgadget || (function() {
 
 	 function createMap(mapDiv) {
 		  var latlng=new google.maps.LatLng(33.3,-118.0);
-		  var myOpts={zoom:6, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP};
+		  var myOpts={zoom:7, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP};
 		  map=new google.maps.Map(mapDiv, myOpts);
 	 }
 
-	 function setupSelectionBox(actionButton) {
+	 function setupSelectionBox(actionButton,lat0, lon0, lat1, lon1, lat2, lon2, lat3, lon3) {
 		  google.maps.event.addListener(map,"click",function(event){
-				rectangleLeftClick(event);
+				rectangleLeftClick(event,lat0, lon0, lat1, lon1, lat2, lon2, lat3, lon3);
 				activateSubmitButton(actionButton);
 		  });
 	 }
 
-	 function rectangleLeftClick(event) {
+	 function rectangleLeftClick(event, lat0, lon0, lat1, lon1, lat2, lon2, lat3, lon3) {
 		  //If the marker doesn't exist, create it.
 
 		  if(!markerNE && !markerSW) {
@@ -31,11 +31,14 @@ var hazusgadget=hazusgadget || (function() {
 															position: event.latLng, 
 															visible: true, 
 															draggable: true});
-				var offset=new google.maps.LatLng(event.latLng.lat()-0.05,event.latLng.lng()-0.05);
+				var offset=new google.maps.LatLng(event.latLng.lat()-0.2,event.latLng.lng()-0.2);
 				markerSW=new google.maps.Marker({map: map, 
 															position: offset, 
 															visible: true, 
 															draggable: true});
+				setBoundingBox(markerSW, markerNE, lat0, lon0, lat1, lon1, lat2, lon2, lat3, lon3);
+				drawRectangle(map);
+
 				// Make markers draggable			 
 				google.maps.event.addListener(markerNE, "drag", function() {
 					 drawRectangle(map);
@@ -46,10 +49,10 @@ var hazusgadget=hazusgadget || (function() {
 
 				//Update the selection
 				google.maps.event.addListener(markerNE, "dragend", function() {
-					 
+					 setBoundingBox(markerSW, markerNE, lat0, lon0, lat1, lon1, lat2, lon2, lat3, lon3);
 				});
 				google.maps.event.addListener(markerSW, "dragend", function() {
-
+					 setBoundingBox(markerSW, markerNE, lat0, lon0, lat1, lon1, lat2, lon2, lat3, lon3);
 				});
 
 		  }
@@ -77,6 +80,23 @@ var hazusgadget=hazusgadget || (function() {
 		  actionButton.disabled=false;
 	 }
 		  
+	 function setBoundingBox(markerSW, markerNE, lat0, lon0, lat1, lon1, lat2, lon2, lat3, lon3) {
+		  var cornerSE=new google.maps.LatLng((markerNE.getPosition()).lat(),(markerSW.getPosition()).lng());
+		  var cornerNW=new google.maps.LatLng((markerSW.getPosition()).lat(),(markerNE.getPosition()).lng());
+
+		  lat0.value=markerSW.getPosition().lat();
+		  lon0.value=markerSW.getPosition().lng();
+
+		  lat1.value=cornerNW.lat();
+		  lon1.value=cornerNW.lng();
+
+		  lat2.value=markerNE.getPosition().lat();
+		  lon2.value=markerNE.getPosition().lng();
+
+		  lat3.value=cornerSE.lat();
+		  lon3.value=cornerSE.lng();
+		  
+	 }
 
 	 /**
 	  * This is the public API
