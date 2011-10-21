@@ -524,14 +524,14 @@ public class SimpleXService extends AntVisco implements Runnable {
 		  // }
 		  creationDate=createCreationDate();
 		  
-		  parkRunParams(KmlGeneratorUrl, 
-							 userName, 
-							 projectName,
-							 origin_lon, 
-							 origin_lat, 
-							 faults, 
-							 timeStamp,
-							 creationDate);
+		  // parkRunParams(KmlGeneratorUrl, 
+		  // 					 userName, 
+		  // 					 projectName,
+		  // 					 origin_lon, 
+		  // 					 origin_lat, 
+		  // 					 faults, 
+		  // 					 timeStamp,
+		  // 					 creationDate);
 
 		  return getAllTheSimpleXFiles(KmlGeneratorUrl, 
 												 userName, 
