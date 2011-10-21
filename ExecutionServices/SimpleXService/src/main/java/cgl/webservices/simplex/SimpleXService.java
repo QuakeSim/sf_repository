@@ -619,6 +619,8 @@ public class SimpleXService extends AntVisco implements Runnable {
 			 ex.printStackTrace();
 		}
 		
+		System.out.println("---------Completing the Simplex run------------");
+
 		//2. Extract the fault information to a separate file. This is a
 		//Simplex output quirk.
 		//REVIEW: This try/catch block needs to include the rest of the code.
