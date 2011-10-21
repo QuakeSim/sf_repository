@@ -515,6 +515,16 @@ public class SimpleXService extends AntVisco implements Runnable {
 														timeStamp, 
 														emailAddress);
 		  setArgs(args);
+		  getAllTheSimpleXFiles(KmlGeneratorUrl, 
+										userName, 
+										projectName,
+										origin_lon, 
+										origin_lat, 
+										faults, 
+										timeStamp,
+										creationDate,
+										false);
+
 		  run();
 		  //execute();
 		  // logger.info("Simplex Status: "+getStatus());
