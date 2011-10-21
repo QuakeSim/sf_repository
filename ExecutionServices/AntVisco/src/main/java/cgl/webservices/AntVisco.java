@@ -77,6 +77,7 @@ public class AntVisco implements Runnable{
 		  }
 		  catch (Exception ex){
 				System.err.println(ex.toString());
+				ex.printStackTrace();
 				status=FAILED;
 				callbackFailure();
 				throw new RuntimeException();
