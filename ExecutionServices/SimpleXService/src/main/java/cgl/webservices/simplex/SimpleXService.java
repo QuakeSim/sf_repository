@@ -515,6 +515,17 @@ public class SimpleXService extends AntVisco implements Runnable {
 														timeStamp, 
 														emailAddress);
 		  setArgs(args);
+		  creationDate=createCreationDate();
+		  
+		  parkRunParams(KmlGeneratorUrl, 
+		  					 userName, 
+		  					 projectName,
+		  					 origin_lon, 
+		  					 origin_lat, 
+		  					 faults, 
+		  					 timeStamp,
+		  					 creationDate);
+
 		  getAllTheSimpleXFiles(KmlGeneratorUrl, 
 										userName, 
 										projectName,
@@ -532,16 +543,6 @@ public class SimpleXService extends AntVisco implements Runnable {
 		  // 		logger.info("Simmplex Status: "+getStatus());
 		  // 		Thread.sleep(10000);
 		  // }
-		  creationDate=createCreationDate();
-		  
-		  parkRunParams(KmlGeneratorUrl, 
-		  					 userName, 
-		  					 projectName,
-		  					 origin_lon, 
-		  					 origin_lat, 
-		  					 faults, 
-		  					 timeStamp,
-		  					 creationDate);
 
 		  return getAllTheSimpleXFiles(KmlGeneratorUrl, 
 												 userName, 
