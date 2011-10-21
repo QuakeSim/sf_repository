@@ -62,7 +62,7 @@
 							 itemValue="ChooseObsvStyleForm"/> 
 		  
 		  <f:selectItem id="item1" 
-							 itemLabel="Update your observation grid or scatter points." 
+							 itemLabel="Update your observation grid or scatter points and (re)set project origin." 
 							 itemValue="CreateObservationGrid" /> 
 
 		  <f:selectItem id="item-insar-anon"

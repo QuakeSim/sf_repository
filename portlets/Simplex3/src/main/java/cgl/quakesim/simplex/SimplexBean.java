@@ -45,6 +45,20 @@ import org.apache.log4j.Level;
 
 public class SimplexBean extends GenericSopacBean {
 
+	 //These are parameters needed by the Sar2Simplex service.
+	 private double sarSWLat;
+	 private double sarSWLon;
+	 private double sarSELat;
+	 private double sarSELon;
+	 private double sarNELat;
+	 private double sarNELon;
+	 private double sarNWLat;
+	 private double sarNWLon;
+	 private int sarParamM=100;
+	 private int sarParamN=100;
+	 private int sarImageUid;
+
+
 	 static final String DEFAULT_USER_NAME = "simplex_default_user";
 	 static final String SIMPLEX_NAV_STRING = "simplex-submitted";
 	 static final String SIMPLEX_ANON_NAV_STRING = "anon-simplex-submitted";
@@ -208,7 +222,7 @@ public class SimplexBean extends GenericSopacBean {
 	 protected String obsvKmlUrl;
 	 protected String portalBaseUrl;
 	 
-	 protected String userEmailAddress;
+	 protected String userEmailAddress="marpierc@gmail.com";  //Provide a default value
 
 	 //This is the logger
 	 private static Logger logger;
@@ -3768,4 +3782,161 @@ public class SimplexBean extends GenericSopacBean {
 		  addMultipleObsvToDB(observations);		  
 
 	 }
+
+	 //--------------------------------------------------
+	 // More accessor methods. These are for the sar2simplex script parameters.
+	 //--------------------------------------------------
+	 public double getSarSWLat() { return this.sarSWLat; }
+	 public double getSarSWLon() { return this.sarSWLon; }
+	 public double getSarSELat() { return this.sarSELat; }
+	 public double getSarSELon() { return this.sarSELon; }
+	 public double getSarNELat() { return this.sarNELat; }
+	 public double getSarNELon() { return this.sarNELon; }
+	 public double getSarNWLat() { return this.sarNWLat; }
+	 public double getSarNWLon() { return this.sarNWLon; }
+	 public int getSarParamM() { return this.sarParamM; }
+	 public int getSarParamN() { return this.sarParamN; }
+	 public int getSarImageUid() { return this.sarImageUid; }
+
+	 public void setSarSWLat(double sarSWLat) { this.sarSWLat = sarSWLat; }
+	 public void setSarSWLon(double sarSWLon) { this.sarSWLon = sarSWLon; }
+	 public void setSarSELat(double sarSELat) { this.sarSELat = sarSELat; }
+	 public void setSarSELon(double sarSELon) { this.sarSELon = sarSELon; }
+	 public void setSarNELat(double sarNELat) { this.sarNELat = sarNELat; }
+	 public void setSarNELon(double sarNELon) { this.sarNELon = sarNELon; }
+	 public void setSarNWLat(double sarNWLat) { this.sarNWLat = sarNWLat; }
+	 public void setSarNWLon(double sarNWLon) { this.sarNWLon = sarNWLon; }
+	 public void setSarParamM(int sarParamM) { this.sarParamM = sarParamM; }
+	 public void setSarParamN(int sarParamN) { this.sarParamN = sarParamN; }
+	 public void setSarImageUid(int sarImageUid) { this.sarImageUid = sarImageUid; }
+
+	 /**
+	  * Set the Simplex observation points and project origin from the
+	  * selected image and bounding box. This method depends on several parameters
+	  * that must be passed in separately through accessor methods.
+	  * 
+	  * We must reset the origin if it has already been set.
+	  */
+	 public void toggleSetObsvFromSarImage(ActionEvent ev) throws Exception {
+		  System.out.println("import params:"+sarSWLat+" "+sarSWLon+" "+sarNELat+" "+sarNELon+" "+sarNWLat+" "+sarNWLon+" "+sarSELat+" "+sarSELon+" "+sarImageUid);
+
+		  String resultsString=getSar2SimplexServiceResults(sarNWLat,sarNWLon,sarNELat,sarNELon,sarSELat,sarSELon,sarSWLat,sarSWLon,sarImageUid);
+		  
+		  convertServiceResponseToInputs(resultsString,sarImageUid);
+
+		  //Finally, reset the display.
+		  currentEditProjectForm.initEditFormsSelection();
+	 }
+	 
+	 /**
+	  * This method calls the sar2simplex service. The bounding box points must by in clockwise
+	  * order. The first returned line will be the project center, and the remaining lines will be
+	  * simplex observation points.
+	  *
+	  * The M and N parameters control the resolution of the returned values.  These are currently
+	  * fixed.
+	  */ 
+	 protected String getSar2SimplexServiceResults(double sarNWLat,double sarNWLon,double sarNELat,double sarNELon,double sarSELat,double sarSELon,double sarSWLat,double sarSWLon,int sarImageUid) throws Exception {
+		  String sarSimplexResponse="";
+
+		String AMP="&";
+		String INSAR_TOOL_URL="http://gf2.ucs.indiana.edu/insartool/simplex?";
+		String UID="uid=";
+		String POLYGON="polygon=";
+		String COMMA=",";
+		String PIPE="|";
+		String M="m=";
+		String N="n=";
+		
+		String polygon=sarNWLon+COMMA+sarNWLat+PIPE+sarNELon+COMMA+sarNELat+PIPE+sarSELon+COMMA+sarSELat+PIPE+sarSWLon+COMMA+sarSWLat+PIPE+sarNWLon+COMMA+sarNWLat;
+		String urlToCall=INSAR_TOOL_URL+UID+sarImageUid+AMP+M+sarParamM+AMP+N+sarParamN+AMP+POLYGON+polygon;
+		  
+		  System.out.println("urlToCall:"+urlToCall);
+		  URL url=null;
+		  HttpURLConnection connect=null;
+		  BufferedReader readResponse=null;
+		  String responseString="";
+		  
+		  try {
+				url=new URL(urlToCall);
+				connect=(HttpURLConnection)url.openConnection();
+				readResponse=new BufferedReader(new InputStreamReader(connect.getInputStream()));
+				String line=null;
+				while((line=readResponse.readLine())!=null){
+					 sarSimplexResponse+=line+"\n";
+				} 
+		  }
+		  catch(Exception ex) {
+				//logger.error(ex.getMessage());
+				ex.printStackTrace();
+		  }
+		  finally {
+				try {
+					 connect.disconnect();
+				}
+				catch(Exception ex) {
+					 ex.printStackTrace();
+					 throw ex;
+				}
+				connect=null;
+		  }
+		  //logger.debug("Here is the response:"+losOutputResponse);
+
+		  System.out.println(sarSimplexResponse);
+		  return sarSimplexResponse;
+
+	 }
+	 
+	 protected void convertServiceResponseToInputs(String resultsString, int uid) throws Exception {
+		  BufferedReader bufStr=new BufferedReader(new StringReader(resultsString));
+		  
+		  //Extract the origin, set it as the project origin, and update any
+		  //previously added faults and observations based on the new origin.
+		  extractOriginSar2Simplex(bufStr.readLine());
+		  updateFaultsOnOriginChange();
+		  updateObsvOnOriginChange();
+
+		  //Now extract the observations.
+		  ArrayList observations=new ArrayList();
+		  String obsvLine=bufStr.readLine();
+		  int iter=0;
+		  while(obsvLine!=null) {
+				Observation obsv=extractObsv(obsvLine);
+				obsv.setObsvName("SAR_OBSV_UID"+uid+"_"+iter);
+				observations.add(obsv);
+				iter++;
+				obsvLine=bufStr.readLine();
+		  }
+
+		  //Add them to the DB
+		  addMultipleObsvToDB(observations);		  
+		  
+		  //		  Go home.
+		  resultsString=null;
+	 }
+	 
+	 protected Observation extractObsv(String obsvLine) throws Exception {
+		  Observation obsv=new Observation();
+		  StringTokenizer st=new StringTokenizer(obsvLine,",");
+		  obsv.setObsvType(st.nextToken());
+		  obsv.setObsvLocationEast(st.nextToken());
+		  obsv.setObsvLocationNorth(st.nextToken());
+		  obsv.setObsvValue(st.nextToken());
+		  obsv.setObsvError(st.nextToken());
+		  obsv.setObsvElevation(st.nextToken());
+		  obsv.setObsvAzimuth(st.nextToken());
+		  obsv.setObsvRefSite("1");
+		  return obsv;
+	 }
+
+	 /**
+	  * Extracts the origin for a sar2simplex response. Order is lon, lat.
+	  */
+	 protected void extractOriginSar2Simplex(String line) throws Exception {
+		  StringTokenizer st=new StringTokenizer(line,","); //Only token should be spaces
+		  currentProjectEntry.setOrigin_lon(Double.parseDouble(st.nextToken()));
+		  currentProjectEntry.setOrigin_lat(Double.parseDouble(st.nextToken()));
+		  saveSimplexProjectEntry(currentProjectEntry);
+	 }
+
 }

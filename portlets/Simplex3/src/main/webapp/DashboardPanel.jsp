@@ -19,11 +19,11 @@
 		<h:outputText id="lkdrq4" escape="false"
 							 value="<b>Project Name:</b> #{SimplexBean.projectName}" />
 		<h:outputText id="lkdrq5" escape="false"
-							 value="<b>Starting Temperature:</b> #{SimplexBean.currentProjectEntry.startTemp}"/>
+							 value="<b>Starting Temp:</b> #{SimplexBean.currentProjectEntry.startTemp}"/>
 		<h:outputText id="lkdrq6" escape="false"
-							 value="<b>Maximum Iterations:</b> #{SimplexBean.currentProjectEntry.maxIters}"/>
+							 value="<b>Max Iterations:</b> #{SimplexBean.currentProjectEntry.maxIters}"/>
 		<h:outputText id="lkj3034f" escape="false"
-						  value="<b>Project Lat/Lon Origin</b>: (#{SimplexBean.currentProjectEntry.origin_lat}, #{SimplexBean.currentProjectEntry.origin_lon})"/>
+						  value="<b>Project Origin</b>: (#{SimplexBean.currentProjectEntry.origin_lat}, #{SimplexBean.currentProjectEntry.origin_lon})"/>
 	 </h:panelGrid>
 	 
 	 <%-- This is the second row --%>

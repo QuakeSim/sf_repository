@@ -20,6 +20,7 @@ public class HazusGadgetBean extends GenericProjectBean{
 	 private double faultDip;
 	 private double magnitude=5.0;
 	 private String faultType;
+	 private String resultsLink;
 
 	 public static final String LEFT_LATERAL_FAULT="Left Lateral Fault";
 	 public static final String THRUST_FAULT="Thrust Fault";
@@ -34,6 +35,7 @@ public class HazusGadgetBean extends GenericProjectBean{
 	 public HazusGadgetBean() {
 		  System.out.println("Constructing the HazusGadget Bean");
 		  osrs=new OpenShaBean();
+		  resultsLink="";
 	 }
 	
 	 /**
@@ -42,7 +44,7 @@ public class HazusGadgetBean extends GenericProjectBean{
 	  * JSF user interface.  
 	  */
 	 public String invokeHazusService() throws Exception {
-		  
+		  resultsLink="";
 		  LatLon[] faultStuff=getFaultOriginAndBBox(lat0, lon0, lat1, lon1, lat2, lon2, lat3, lon3);
 		  faultOriginLat=faultStuff[0].getLat();
 		  faultOriginLon=faultStuff[0].getLon();
@@ -57,9 +59,9 @@ public class HazusGadgetBean extends GenericProjectBean{
 				//				osrs.getOpenShaHazusOutput(33.5,34.5,-119.0,-117.0,0.1,7.2,0.0,33.94,-117.87,5.0,90.0);
 				//				System.out.println(faultStuff[1].getLat()+" "+faultStuff[2].getLat()+" "+faultStuff[1].getLon()+" "+faultStuff[2].getLon()+" "+gridSpacing+" "+magnitude+" "+theFault.getFaultStrikeAngle()+" "+theFault.getFaultLatStart()+" "+ theFault.getFaultLatStart()+" "+theFault.getFaultDepth()+" "+theFault.getFaultDepth());
 
-				String results=osrs.getOpenShaHazusOutput(faultStuff[1].getLat(),faultStuff[2].getLat(),faultStuff[1].getLon(),faultStuff[2].getLon(),gridSpacing,magnitude,theFault.getFaultStrikeAngle(),theFault.getFaultLatStart(), theFault.getFaultLatStart(),theFault.getFaultDepth(),theFault.getFaultDepth());
+				resultsLink=osrs.getOpenShaHazusOutput(faultStuff[1].getLat(),faultStuff[2].getLat(),faultStuff[1].getLon(),faultStuff[2].getLon(),gridSpacing,magnitude,theFault.getFaultStrikeAngle(),theFault.getFaultLatStart(), theFault.getFaultLatStart(),theFault.getFaultDepth(),theFault.getFaultDepth());
 				
-				System.out.println("Results");
+
 		  }
 		  catch (Exception ex) {
 				ex.printStackTrace();
@@ -279,6 +281,7 @@ public class HazusGadgetBean extends GenericProjectBean{
 	 public String getThrustFault() { return THRUST_FAULT; }
 	 public String getRightLateralFault() { return RIGHT_LATERAL_FAULT; }
 	 public String getNormalFault() { return NORMAL_FAULT; }
+	 public String getResultsLink() { return resultsLink; }
 
 	 public void setLat0(double lat0) { this.lat0=lat0; }
 	 public void setLon0(double lon0) { this.lon0=lon0; }
@@ -295,6 +298,7 @@ public class HazusGadgetBean extends GenericProjectBean{
 	 public void setFaultOriginLon(double faultOriginLon) { this.faultOriginLon=faultOriginLon; }
 	 public void setFaultDip(double faultDip) { this.faultDip=faultDip; }
 	 public void setFaultType(String faultType) { this.faultType=faultType; }
+	 public void setResultsLink(String resultsLink) { this.resultsLink=resultsLink; }
 	 
 }
 

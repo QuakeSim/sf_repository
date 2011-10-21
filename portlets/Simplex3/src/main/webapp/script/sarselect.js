@@ -15,8 +15,10 @@ var sarselect=sarselect || (function() {
 	 var param_n="100";  
 	 var dygraphLOSOpts={width:300,height:300,title:'InSAR Line of Sight Values',xlabel:'Distance',ylabel:'LOS Value'};
 	 var dygraphHgtOpts={width:300,height:300,title:'InSAR Height Values',xlabel:'Distance',ylabel:'Height'};
+	 var sarSWLatDiv,sarSWLonDiv,sarSELatDiv,sarSELonDiv,sarNELatDiv,sarNELonDiv,sarNWLatDiv,sarNWLonDiv,imageUidDiv;
 
 	 function setMasterMap(insarMapDiv,tableDivName) {
+
 		  var latlng=new google.maps.LatLng(32.3,-118.0);
 		  var myOpts={zoom:6, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP};
 		  masterMap=new google.maps.Map(insarMapDiv, myOpts);
@@ -128,7 +130,7 @@ var sarselect=sarselect || (function() {
 				markers.push(markerNE);
 				markers.push(markerSW);
 
-				getSimplexValues(uid);
+				setSimplexValues(uid);
 		  		
 				// Make markers draggable			 
 				google.maps.event.addListener(markerNE, "drag", function() {
@@ -140,10 +142,10 @@ var sarselect=sarselect || (function() {
 
 				//Update the selection
 				google.maps.event.addListener(markerNE, "dragend", function() {
-					 getSimplexValues(uid);
+					 setSimplexValues(uid);
 				});
 				google.maps.event.addListener(markerSW, "dragend", function() {
-					 getSimplexValues(uid);
+					 setSimplexValues(uid);
 				});
 
 		  }
@@ -227,7 +229,10 @@ var sarselect=sarselect || (function() {
 		  polyShape.setMap(insarMap);
 		}
 
-	 function getSimplexValues(uid) {
+	 /**
+	  * This method sets the values on the calling HTML page that will be used in the form action.
+	  */
+	 function setSimplexValues(uid) {
 		  var cornerSE=new google.maps.LatLng((markerNE.getPosition()).lat(),(markerSW.getPosition()).lng());
 		  var cornerNW=new google.maps.LatLng((markerSW.getPosition()).lat(),(markerNE.getPosition()).lng());
 
@@ -240,12 +245,32 @@ var sarselect=sarselect || (function() {
 		  var nwMarkerLat=cornerNW.lat();
 		  var nwMarkerLon=cornerNW.lng();
 
+		  var sarNWLatDiv=document.getElementById("Simplex3SarSelectForm:Simplex3SarNWLat");
+		  var sarNWLonDiv=document.getElementById("Simplex3SarSelectForm:Simplex3SarNWLon");
+		  var sarNELatDiv=document.getElementById("Simplex3SarSelectForm:Simplex3SarNELat");
+		  var sarNELonDiv=document.getElementById("Simplex3SarSelectForm:Simplex3SarNELon");
+		  var sarSELatDiv=document.getElementById("Simplex3SarSelectForm:Simplex3SarSELat");
+		  var sarSELonDiv=document.getElementById("Simplex3SarSelectForm:Simplex3SarSELon");
+		  var sarSWLatDiv=document.getElementById("Simplex3SarSelectForm:Simplex3SarSWLat");
+		  var sarSWLonDiv=document.getElementById("Simplex3SarSelectForm:Simplex3SarSWLon");
+		  var sarUidDiv=document.getElementById("Simplex3SarSelectForm:Simplex3SarUID");
+
+		  sarSWLatDiv.value=swMarkerLat;
+		  sarSWLonDiv.value=swMarkerLon;
+		  sarNELatDiv.value=neMarkerLat;
+		  sarNELonDiv.value=neMarkerLon;
+		  sarSELatDiv.value=seMarkerLat;
+		  sarSELonDiv.value=seMarkerLon;
+		  sarNWLatDiv.value=nwMarkerLat;
+		  sarNWLonDiv.value=nwMarkerLon;
+		  sarUidDiv.value=uid;
+		  
 		  //This must be clockwise. 
-		  var restUrl="/InSAR-LOS-REST/insarsimplex/"+uid+"/"+param_m+"/"+param_n+"/"+nwMarkerLon+"/"+nwMarkerLat+"/"+neMarkerLon+"/"+neMarkerLat+"/"+seMarkerLon+"/"+seMarkerLat+"/"+swMarkerLon+"/"+swMarkerLat;
-		  var csv=$.ajax({
-				url:restUrl,
-				async:false
-		  }).responseText;
+//		  var restUrl="/InSAR-LOS-REST/insarsimplex/"+uid+"/"+param_m+"/"+param_n+"/"+nwMarkerLon+"/"+nwMarkerLat+"/"+neMarkerLon+"/"+neMarkerLat+"/"+seMarkerLon+"/"+seMarkerLat+"/"+swMarkerLon+"/"+swMarkerLat;
+//		  var csv=$.ajax({
+//				url:restUrl,
+//				async:false
+//		  }).responseText;
 	 }
 
 	 function getInSarValues(uid) {

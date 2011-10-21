@@ -27,15 +27,22 @@
 				  </f:verbatim>
 				</h:panelGroup>
 				<h:panelGroup id="hazusgridrightpanel">
-				  <f:verbatim>Bounding Box:</f:verbatim>
-				  <h:inputText id="hgmlat0" value="#{HazusGadgetBean.lat0}"/>
-				  <h:inputText id="hgmlon0" value="#{HazusGadgetBean.lon0}"/>
-				  <h:inputText id="hgmlat1" value="#{HazusGadgetBean.lat1}"/>
-				  <h:inputText id="hgmlon1" value="#{HazusGadgetBean.lon1}"/>
-				  <h:inputText id="hgmlat2" value="#{HazusGadgetBean.lat2}"/>
-				  <h:inputText id="hgmlon2" value="#{HazusGadgetBean.lon2}"/>
-				  <h:inputText id="hgmlat3" value="#{HazusGadgetBean.lat3}"/>
-				  <h:inputText id="hgmlon3" value="#{HazusGadgetBean.lon3}"/>
+				  <h:inputHidden id="hgmlat0" value="#{HazusGadgetBean.lat0}"/>
+				  <h:inputHidden id="hgmlon0" value="#{HazusGadgetBean.lon0}"/>
+				  <h:inputHidden id="hgmlat1" value="#{HazusGadgetBean.lat1}"/>
+				  <h:inputHidden id="hgmlon1" value="#{HazusGadgetBean.lon1}"/>
+				  <h:inputHidden id="hgmlat2" value="#{HazusGadgetBean.lat2}"/>
+				  <h:inputHidden id="hgmlon2" value="#{HazusGadgetBean.lon2}"/>
+				  <h:inputHidden id="hgmlat3" value="#{HazusGadgetBean.lat3}"/>
+				  <h:inputHidden id="hgmlon3" value="#{HazusGadgetBean.lon3}"/>
+				  <f:verbatim>
+					 <table>
+						<tr>
+						  <td valign="top"><b>Bounding Box:</b></td>
+						  <td valign="top"><div id="hgmBBoxDiv">None selected.  Click the map.</div></td>
+						</tr>
+					 </table>
+				  </f:verbatim>
 				  
 				  <h:panelGrid id="hgmFaultInputs" columns="2">
 					 <f:verbatim>Fault Type:</f:verbatim>
@@ -70,7 +77,21 @@
 										 value="Run Hazus" 
 										 disabled="true"
 										 action="#{HazusGadgetBean.invokeHazusService}"/>
-				  
+				  <f:verbatim>
+					 <hr/>
+				  </f:verbatim>
+				  <h:panelGrid id="hgmOutputPanelGrid" columns="2">
+					 <f:verbatim><b>Results:</b></f:verbatim>
+					 <h:outputText rendered="#{(empty HazusGadgetBean.resultsLink)}"
+										value="No results.  Run the simulation first."/>
+					 <h:outputLink rendered="#{!(empty HazusGadgetBean.resultsLink)}"
+										id="hgmOutputLink" 
+										target="null"
+										value="#{HazusGadgetBean.resultsLink}">
+						<h:outputText id="hgmOutputText" 
+										  value="#{HazusGadgetBean.resultsLink}"/>
+					 </h:outputLink>
+				  </h:panelGrid>
 				</h:panelGroup>
 			 </h:panelGrid>
 		  </h:form>
@@ -89,9 +110,11 @@
 		var lon1=document.getElementById("RunHazusForm:hgmlon1");
 		var lon2=document.getElementById("RunHazusForm:hgmlon2");
 		var lon3=document.getElementById("RunHazusForm:hgmlon3");
-		
+
+		var bboxDiv=document.getElementById("hgmBBoxDiv");
+
 		hazusgadget.createMap(mapDiv);
-		hazusgadget.setupSelectionBox(actionButton, lat0, lon0, lat1, lon1, lat2, lon2, lat3, lon3);
+		hazusgadget.setupSelectionBox(actionButton, lat0, lon0, lat1, lon1, lat2, lon2, lat3, lon3, bboxDiv);
 	 </script>
   </body>
 </html>
