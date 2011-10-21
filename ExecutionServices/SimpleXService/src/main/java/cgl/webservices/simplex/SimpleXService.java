@@ -435,7 +435,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 	 
 
 	/**
-	 * Actually runs Simplex. Always runs in non-blocking mode.
+	 * Actually runs Simplex. This version always runs in non-blocking mode.
 	 */
 	 public SimpleXOutputBean runSimplex(String userName, 
 													 String projectName,
@@ -490,7 +490,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 	 }
 
 	/**
-	 * Actually runs Simplex. Always runs in blocking mode.
+	 * Actually runs Simplex. This version always runs in blocking mode.
 	 */
 	 public SimpleXOutputBean runBlockingSimplex(String userName, 
 																String projectName,
@@ -524,14 +524,14 @@ public class SimpleXService extends AntVisco implements Runnable {
 		  // }
 		  creationDate=createCreationDate();
 		  
-		  // parkRunParams(KmlGeneratorUrl, 
-		  // 					 userName, 
-		  // 					 projectName,
-		  // 					 origin_lon, 
-		  // 					 origin_lat, 
-		  // 					 faults, 
-		  // 					 timeStamp,
-		  // 					 creationDate);
+		  parkRunParams(KmlGeneratorUrl, 
+		  					 userName, 
+		  					 projectName,
+		  					 origin_lon, 
+		  					 origin_lat, 
+		  					 faults, 
+		  					 timeStamp,
+		  					 creationDate);
 
 		  return getAllTheSimpleXFiles(KmlGeneratorUrl, 
 												 userName, 
@@ -541,7 +541,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 												 faults, 
 												 timeStamp,
 												 creationDate,
-												 false);
+												 true);
 	 }
 
 	 /**
