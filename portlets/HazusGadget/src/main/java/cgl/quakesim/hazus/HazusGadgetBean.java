@@ -59,7 +59,7 @@ public class HazusGadgetBean extends GenericProjectBean{
 				//				osrs.getOpenShaHazusOutput(33.5,34.5,-119.0,-117.0,0.1,7.2,0.0,33.94,-117.87,5.0,90.0);
 				//				System.out.println(faultStuff[1].getLat()+" "+faultStuff[2].getLat()+" "+faultStuff[1].getLon()+" "+faultStuff[2].getLon()+" "+gridSpacing+" "+magnitude+" "+theFault.getFaultStrikeAngle()+" "+theFault.getFaultLatStart()+" "+ theFault.getFaultLatStart()+" "+theFault.getFaultDepth()+" "+theFault.getFaultDepth());
 
-				resultsLink=osrs.getOpenShaHazusOutput(faultStuff[1].getLat(),faultStuff[2].getLat(),faultStuff[1].getLon(),faultStuff[2].getLon(),gridSpacing,magnitude,theFault.getFaultStrikeAngle(),theFault.getFaultLatStart(), theFault.getFaultLatStart(),theFault.getFaultDepth(),theFault.getFaultDepth());
+				resultsLink=osrs.getOpenShaHazusOutput(faultStuff[1].getLat(),faultStuff[2].getLat(),faultStuff[1].getLon(),faultStuff[2].getLon(),gridSpacing,magnitude,theFault.getFaultStrikeAngle(),theFault.getFaultLatStart(), theFault.getFaultLonStart(),theFault.getFaultDepth(),theFault.getFaultDepth());
 				
 
 		  }
@@ -90,7 +90,7 @@ public class HazusGadgetBean extends GenericProjectBean{
 		  double aveLon=allLons[0]+(allLons[allLons.length-1]-allLons[0])/2.;
 		  
 		  // System.out.println(allLats+" "+allLons);
-		  // System.out.println("origin: "+aveLat+" "+aveLon);
+		  System.out.println("origin: "+aveLat+" "+aveLon);
 		  
 		  LatLon faultOrigin=new LatLon(aveLat,aveLon);
 		  LatLon bboxMin=new LatLon(allLats[0],allLons[0]);

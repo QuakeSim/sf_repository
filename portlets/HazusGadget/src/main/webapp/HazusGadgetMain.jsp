@@ -68,7 +68,7 @@
 						<f:validateDoubleRange minimum="5.0" maximum="10.0"/>
 					 </h:inputText>
 
-					 <f:verbatim>Grid Spacing (km):</f:verbatim>
+					 <f:verbatim>Grid Spacing (deg):</f:verbatim>
 					 <h:inputText id="hgmGridSpacing" required="true" value="#{HazusGadgetBean.gridSpacing}" title="Please provide a grid spacing value between 0.01-1.0">
 						<f:validateDoubleRange minimum="0.01" maximum="1.0"/>
 					 </h:inputText>

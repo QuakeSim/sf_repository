@@ -77,6 +77,7 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 		  //Create the GMT map generator and turn off log plotting.
 		  gmtMapGen=new GMT_MapGeneratorForShakeMaps();
 		  gmtMapGen.setParameter(gmtMapGen.LOG_PLOT_NAME,Boolean.FALSE);
+		  gmtMapGen.setParameter(gmtMapGen.HAZUS_SHAPE_PARAM_NAME,Boolean.TRUE);
 
 		  //Taken from PagerShakeMapCalc, but I'm not sure if this is correct.
 		  PropagationEffect propagationEffect = new PropagationEffect();		  
@@ -110,6 +111,9 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 		  try {		  
 				//Set up the data.
 				//These methods are from GenerateHazus...'s generateHazusFiles() method.
+				metadata="<br>Hazus Metadata: \n<br>"+
+					 "-------------------\n<br>";
+				
 				SitesInGriddedRegion sites=createGriddedRegion(minLat, maxLat, minLon, maxLon, gridSpacing);
 				EqkRupture eqkRupture=createEarthquakeRupture(mag,rake,lat,lon,depth,aveDip);
 				ArrayList attrRelList=createAttenuationRelationships(eqkRupture,imt);
@@ -204,6 +208,7 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 		  rupture.setPointSurface(location,aveDip);
 		  rupture.setMag(mag);
 		  rupture.setAveRake(rake);
+		  rupture.setHypocenterLocation(location);
 		  return rupture;
 	 }
 	 
@@ -212,6 +217,7 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 	  */ 
 	 protected void hazusCalcForSA(ArrayList selectedAttenRels,ArrayList selectedAttenRelsWt,double imlProbValue,SitesInGriddedRegion sites, EqkRupture eqkRupture,boolean probAtIml) throws Exception {
 		  System.out.println("Doing calc for SA");
+		metadata += "IMT = SA [ SA Damping = 5.0 ; SA Period = 0.3 ]"+"<br>\n";
 		//Doing for SA
 		int size = selectedAttenRels.size();
 		for(int i=0;i<size;++i)
@@ -269,7 +275,7 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 				((ScalarIMR)selectedAttenRels.get(i)).setIntensityMeasure(PGA_Param.NAME);
 		  }
 		  pga_xyzData=shakeMapCalc.getScenarioShakeMapData(selectedAttenRels,selectedAttenRelsWt,sites,eqkRupture,probAtIml,imlProbValue);
-
+		metadata += "IMT = PGA"+"\n";
 	 }
 	 
 	 /**
@@ -302,6 +308,7 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 		  //setting the SA period to 1.0 for the atten rels not supporting PGV
 		  //		this.setSA_PeriodForSelectedIMRs(attenRelsNotSupportingPGV,1.0);
 		  
+		  metadata += "IMT = PGV"+"<br>\n";
 		  return shakeMapCalc.getScenarioShakeMapData(attenRelList,attenRelWtList,sites,eqkRupture,probAtIml,imlProbValue);
 	}
 
