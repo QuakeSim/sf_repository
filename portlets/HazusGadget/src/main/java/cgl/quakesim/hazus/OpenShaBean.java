@@ -15,6 +15,7 @@ import org.opensha.commons.data.xyz.GeoDataSet;
 import org.opensha.commons.exceptions.GMT_MapException;
 import org.opensha.commons.geo.GriddedRegion;
 import org.opensha.commons.geo.Location;
+import org.opensha.commons.mapping.gmt.GMT_MapGenerator;
 import org.opensha.commons.param.Parameter;
 import org.opensha.commons.param.ParameterList;
 import org.opensha.commons.param.event.ParameterChangeWarningEvent;
@@ -78,6 +79,7 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 		  gmtMapGen=new GMT_MapGeneratorForShakeMaps();
 		  gmtMapGen.setParameter(gmtMapGen.LOG_PLOT_NAME,Boolean.FALSE);
 		  gmtMapGen.setParameter(gmtMapGen.HAZUS_SHAPE_PARAM_NAME,Boolean.TRUE);
+		  
 
 		  //Taken from PagerShakeMapCalc, but I'm not sure if this is correct.
 		  PropagationEffect propagationEffect = new PropagationEffect();		  
@@ -109,6 +111,13 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 												  //public void getOpenShaHazusOutput() {  //For formatting
 		  String retString;
 		  try {		  
+				
+				gmtMapGen.setParameter(GMT_MapGenerator.MIN_LAT_PARAM_NAME,minLat);
+				gmtMapGen.setParameter(GMT_MapGenerator.MAX_LAT_PARAM_NAME,maxLat);
+				gmtMapGen.setParameter(GMT_MapGenerator.MIN_LON_PARAM_NAME,minLon);
+				gmtMapGen.setParameter(GMT_MapGenerator.MAX_LON_PARAM_NAME,maxLon);
+				gmtMapGen.setParameter(GMT_MapGenerator.GRID_SPACING_PARAM_NAME,gridSpacing);
+				
 				//Set up the data.
 				//These methods are from GenerateHazus...'s generateHazusFiles() method.
 				metadata="<br>Hazus Metadata: \n<br>"+
@@ -120,6 +129,7 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 				ArrayList attrRelListWt=createAttenRelWeights();
 
 				sites=getSiteParamsForRegion(sites,(ScalarIMR)attrRelList.get(0));
+				sites.setSameSiteParams();
 
 				hazusCalcForSA(attrRelList,attrRelListWt,imlProbValue,sites,eqkRupture,imlAtProb);
 				hazusCalcForPGV(attrRelList,attrRelListWt,imlProbValue,sites,eqkRupture,imlAtProb);
