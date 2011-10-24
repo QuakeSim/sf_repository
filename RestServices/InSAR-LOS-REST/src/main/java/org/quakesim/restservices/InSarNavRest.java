@@ -25,7 +25,7 @@ public class InSarNavRest {
 	 
 	 static final String amp="&";
 	 static final String comma=",";
-	 static final String wmsUrl="http://gf2.ucs.indiana.edu:8080/geoserver/InSAR/wms?service=wms";
+	 static final String wmsUrl="http://gf1.ucs.indiana.edu:8080/geoserver/InSAR/wms?service=wms";
 	 static final String version="version=1.1.0";
 	 static final String request="request=GetfeatureInfo";
 	 static final String layers="layers=InSAR:insar";

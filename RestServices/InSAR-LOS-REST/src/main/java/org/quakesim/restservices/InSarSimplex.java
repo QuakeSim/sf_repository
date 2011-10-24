@@ -24,7 +24,7 @@ import javax.ws.rs.core.UriInfo;
 public class InSarSimplex {
 
 	 private static final String AMP="&";
-	 private static final String INSAR_TOOL_URL="http://gf2.ucs.indiana.edu/insartool/simplex?";
+	 private static final String INSAR_TOOL_URL="http://gf1.ucs.indiana.edu/insartool/simplex?";
 	 private static final String UID="uid=";
 	 private static final String POLYGON="polygon=";
 	 private static final String COMMA=",";

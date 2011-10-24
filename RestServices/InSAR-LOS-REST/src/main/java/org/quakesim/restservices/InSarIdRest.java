@@ -25,7 +25,7 @@ public class InSarIdRest {
 	 
 	 static final String amp="&";
 	 static final String comma=",";
-	 static final String wmsUrl="http://gf2.ucs.indiana.edu/insartool/checkkml?";
+	 static final String wmsUrl="http://gf1.ucs.indiana.edu/insartool/checkkml?";
 	 static final String format="format=json";
 	 static final String uid="uid=";
 

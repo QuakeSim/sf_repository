@@ -31,7 +31,7 @@ public class InSarHgtRest {
 	 private static final String CSV="csv";
 	 private static final String AMP="&";
 	 private static final String COMMA=",";
-	 private static final String INSAR_TOOL_URL = "http://gf2.ucs.indiana.edu/insartool/profile?";
+	 private static final String INSAR_TOOL_URL = "http://gf1.ucs.indiana.edu/insartool/profile?";
 
 	 //These are the latitude and longitude values of the west (0) and east (1) points. Getter and
 	 //Setter methods are below.  Provided values are defaults.
