@@ -6,8 +6,8 @@
   <f:view>	
 	 <h:form id="hitTheButtonform">
 		<f:verbatim>
-		  QuakeSim's elastic forward modeling code calculates surface deformations based on
-		  geometric fault models: see image below for parameter definitions. 
+		  QuakeSim's elastic inverse modeling code calculates fault parameters from surface 
+		  deformations based on geometric fault models: see image below for parameter definitions. 
 		  <p/>
 		</f:verbatim>
 		<f:verbatim>

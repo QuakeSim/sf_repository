@@ -252,6 +252,7 @@
 		  <%@include file="SimplexProjectParams.jsp"%>
 		  <%@include file="SARSelectRegion.jsp"%>
 		  <%@include file="ProjectMapPanel.jsp"%>
+		  <%@include file="ProjectOutputMapPanel.jsp"%>
 
 		  <%@include file="ProjectComponentsPanel.jsp"%>
 		</h:panelGrid>

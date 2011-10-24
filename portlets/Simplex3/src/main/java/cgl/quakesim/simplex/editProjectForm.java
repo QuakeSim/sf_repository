@@ -57,6 +57,7 @@ public class editProjectForm extends GenericProjectBean {
 	 boolean renderProjectParams=false;
 	 boolean renderSARSelectionMap=false;
 	 boolean renderFaultsQuickAdd=false;
+	 boolean renderProjectOutputMap=false;
 
 	 String faultSelectionCode = "";
 	 boolean renderAddFaultFromDBForm = false;
@@ -135,6 +136,7 @@ public class editProjectForm extends GenericProjectBean {
 		 renderProjectParams=false;
 		 renderSARSelectionMap=false;
 		 renderFaultsQuickAdd=false;
+		 renderProjectOutputMap=false;
 	}	
 	 
 	 public void toggleShowObsvEntries(ActionEvent ev) {
@@ -642,6 +644,12 @@ public class editProjectForm extends GenericProjectBean {
 	public void setFaultSelectionCode(String tmp_str) {
 		this.faultSelectionCode = tmp_str;
 	}
+
+	 public boolean getRenderProjectOutputMap() { return this.renderProjectOutputMap; }
+
+	 public void setRenderProjectOutputMap(boolean renderProjectOutputMap){
+		  this.renderProjectOutputMap=renderProjectOutputMap;
+	 }
 
 	 public boolean getRenderProjectParams() {
 		  return this.renderProjectParams;

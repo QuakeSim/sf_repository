@@ -1058,21 +1058,21 @@ public class SimplexBean extends GenericSopacBean {
 																							this.kmlGeneratorUrl, 
 																							timeStamp,
 																							userEmailAddress);
-				
-			logger.info("[" + getUserName() 
-									 + "/SimplexBean/toggleRunSimplex2] " 
-									 + projectSimpleXOutput.getProjectName());
-			logger.info("[" + getUserName() 
-									 + "/SimplexBean/toggleRunSimplex2] " 
-									 + projectSimpleXOutput.getInputUrl());
+
+				//Set these in the session for immediate plotting
+				myKmlUrl=projectSimpleXOutput.getKmlUrls()[0];
+				simplexInputUrl=projectSimpleXOutput.getInputUrl();
+				simplexOutputUrl=projectSimpleXOutput.getOutputUrl();
+
+				//Now save to the database
 			saveSimpleXOutputBeanToDB(projectSimpleXOutput);
 			saveSimplexProjectEntry(currentProjectEntry);
 		  } catch (Exception ex) {
 				ex.printStackTrace();
 		  }
+		  currentEditProjectForm.initEditFormsSelection();
+		  currentEditProjectForm.setRenderProjectOutputMap(true);
 		  return SIMPLEX_ANON_NAV_STRING;
-
-
 	 }
 
 	 /**
@@ -3937,6 +3937,33 @@ public class SimplexBean extends GenericSopacBean {
 		  currentProjectEntry.setOrigin_lon(Double.parseDouble(st.nextToken()));
 		  currentProjectEntry.setOrigin_lat(Double.parseDouble(st.nextToken()));
 		  saveSimplexProjectEntry(currentProjectEntry);
+	 }
+
+	 /**
+	  *  These accessor methods are used to expose the most recent simplex
+	  * simulation run through the browser session instead of the database.
+	  */
+	 private String myKmlUrl=null;
+	 private String simplexInputUrl=null;
+	 private String simplexOutputUrl=null;
+
+	 public String getMyKmlUrl() {
+		  return this.myKmlUrl;
+	 }
+	 public void setMyKmlUrl(String myKmlUrl) {
+		  this.myKmlUrl=myKmlUrl;
+	 }
+	 public String getSimplexInputUrl() {
+		  return this.simplexInputUrl;
+	 }
+	 public void setSimplexInputUrl(String simplexInputUrl) {
+		  this.simplexInputUrl=simplexInputUrl;
+	 }
+	 public String getSimplexOutputUrl() {
+		  return this.simplexOutputUrl;
+	 }
+	 public void setSimplexOutputUrl(String simplexOutputUrl) {
+		  this.simplexOutputUrl=simplexOutputUrl;
 	 }
 
 }
