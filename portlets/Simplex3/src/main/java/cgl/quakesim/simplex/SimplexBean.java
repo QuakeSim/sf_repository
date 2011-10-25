@@ -3840,7 +3840,7 @@ public class SimplexBean extends GenericSopacBean {
 		  String sarSimplexResponse="";
 
 		String AMP="&";
-		String INSAR_TOOL_URL="http://gf2.ucs.indiana.edu/insartool/simplex?";
+		String INSAR_TOOL_URL="http://gf1.ucs.indiana.edu/insartool/simplex?";
 		String UID="uid=";
 		String POLYGON="polygon=";
 		String COMMA=",";
