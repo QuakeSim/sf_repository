@@ -71,6 +71,8 @@ var sarselect=sarselect || (function() {
         //Add the KML Layer
 		  lowResSARLayer=new google.maps.KmlLayer(overlayUrl,{suppressInfoWindows: true, map: insarMap, clickable: false});
 		  
+		  google.maps.event.clearListeners(insarMap,"click");
+
 		  google.maps.event.addListener(insarMap,"click",function(event) {
 			if(drawFunctionType=="polygon") {
 				 polygonLeftClick(insarMap,event);
