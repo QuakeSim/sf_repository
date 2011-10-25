@@ -1,3 +1,7 @@
+.alignTopFixWidth {
+	 width:960px;
+	 vertical-align:top;
+}
 .alignTop {
 	 vertical-align:top;
 }

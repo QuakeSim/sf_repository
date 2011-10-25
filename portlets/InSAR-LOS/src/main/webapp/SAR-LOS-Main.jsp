@@ -13,7 +13,7 @@
 	 <h:panelGrid id="InSAR-View-All" columns="2" columnClasses="alignTop,alignTop">
 		<h:panelGroup id="Sar-LOS-Panel-Left">
 		  <f:verbatim>
-			 <div id="InSAR-All-Map" style="width: 800px; height: 600px;"></div>
+			 <div id="InSAR-All-Map" style="width: 500px; height: 400px;"></div>
 		  </f:verbatim>
 		</h:panelGroup>
 		<h:panelGroup id="Sar-LOS-Panel-Right">

@@ -50,8 +50,25 @@ var sarselect=sarselect || (function() {
 
 	 //Activates the low-res insar layer for LOS display.
 	 function activateLayerMap(insarMap,overlayUrl,drawFunctionType,uid) {
+		  console.log("ActivateLayerMap uid is "+uid);
+		  //Remove any previous layers and listeners
+
+		  if(lowResSARLayer) lowResSARLayer.setMap(null);  
+		  if(markerNE) {
+				console.log("Clean up MarkerNE");
+				google.maps.event.clearInstanceListeners(markerNE);
+				markerNE.setMap(null);
+				markerNE=null;
+		  }
+		  if(markerSW) {
+				console.log("Clean up MarkerSW");
+				google.maps.event.clearInstanceListeners(markerSW);
+				markerSW.setMap(null);
+				markerSW=null;
+		  }
+
+		  if(polyShape) polyShape.setMap(null);
         //Add the KML Layer
-		  if(lowResSARLayer) lowResSARLayer.setMap(null);  //Remove any previous layers.
 		  lowResSARLayer=new google.maps.KmlLayer(overlayUrl,{suppressInfoWindows: true, map: insarMap, clickable: false});
 		  
 		  google.maps.event.addListener(insarMap,"click",function(event) {
@@ -72,7 +89,7 @@ var sarselect=sarselect || (function() {
 	 }
     
 	 function lineLeftClick(insarMap,event,uid) {
-		  console.log("Uid is "+uid);
+		  console.log("lineLeftClick Uid is "+uid);
 		  //If the marker doesn't exist, create it.
 		  if(!markerNE && !markerSW) {
 				markerNE=new google.maps.Marker({map: insarMap, 
@@ -84,8 +101,8 @@ var sarselect=sarselect || (function() {
 															position: offset, 
 															visible: true, 
 															draggable: true});
-				markers.push(markerNE);
-				markers.push(markerSW);
+//				markers.push(markerNE);
+//				markers.push(markerSW);
 		  		
 				getInSarValues(uid);
 
@@ -215,12 +232,13 @@ var sarselect=sarselect || (function() {
 		}
 
 	 function getInSarValues(uid) {
+		  console.log("getInsarValues uid is "+uid);
 		  getLosInSarValues(uid);
 		  getHgtInSarValues(uid);
 	 }
 
 	 function getLosInSarValues(uid) {
-		  console.log("Uid is "+uid);
+		  console.log("Los Uid is "+uid);
 		  var westMarkerLat=markerSW.getPosition().lat();
 		  var westMarkerLon=markerSW.getPosition().lng();
 		  var eastMarkerLat=markerNE.getPosition().lat();
@@ -235,7 +253,7 @@ var sarselect=sarselect || (function() {
 	 }
 
 	 function getHgtInSarValues(uid) {
-		  console.log("Uid is "+uid);
+		  console.log("Hgt Uid is "+uid);
 		  var westMarkerLat=markerSW.getPosition().lat();
 		  var westMarkerLon=markerSW.getPosition().lng();
 		  var eastMarkerLat=markerNE.getPosition().lat();
