@@ -55,8 +55,27 @@ var sarselect=sarselect || (function() {
 
 	 //Activates the low-res insar layer.  
 	 function activateLayerMap(insarMap,overlayUrl,drawFunctionType,uid) {
+		  console.log("ActivateLayerMap uid is "+uid);
+		  //Remove any previous layers and listeners
+		  if(lowResSARLayer) lowResSARLayer.setMap(null);  
+		  if(markerNE) {
+				console.log("Clean up MarkerNE");
+				google.maps.event.clearInstanceListeners(markerNE);
+				markerNE.setMap(null);
+				markerNE=null;
+		  }
+		  if(markerSW) {
+				console.log("Clean up MarkerSW");
+				google.maps.event.clearInstanceListeners(markerSW);
+				markerSW.setMap(null);
+				markerSW=null;
+		  }
+
+		  if(polyShape) polyShape.setMap(null);
+		  google.maps.event.clearListeners(insarMap,"click");
+
+
         //Add the KML Layer
-		  if(lowResSARLayer) lowResSARLayer.setMap(null);  //Remove any previous layers.
 		  lowResSARLayer=new google.maps.KmlLayer(overlayUrl,{suppressInfoWindows: true, map: insarMap, clickable: false});
 		  
 		  google.maps.event.addListener(insarMap,"click",function(event) {
@@ -78,6 +97,7 @@ var sarselect=sarselect || (function() {
     
 	 function lineLeftClick(insarMap,event,uid) {
 		  //If the marker doesn't exist, create it.
+		  console.log("lineLeftClick Uid is "+uid);
 		  if(!markerNE && !markerSW) {
 				markerNE=new google.maps.Marker({map: insarMap, 
 															position: event.latLng, 
@@ -233,6 +253,7 @@ var sarselect=sarselect || (function() {
 	  * This method sets the values on the calling HTML page that will be used in the form action.
 	  */
 	 function setSimplexValues(uid) {
+		  console.log("setSimplexValues Uid is "+uid);
 		  var cornerSE=new google.maps.LatLng((markerNE.getPosition()).lat(),(markerSW.getPosition()).lng());
 		  var cornerNW=new google.maps.LatLng((markerSW.getPosition()).lat(),(markerNE.getPosition()).lng());
 

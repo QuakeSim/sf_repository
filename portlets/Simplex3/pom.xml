@@ -227,7 +227,7 @@
 	</dependency>
 
 	<!-- jsfunit -->
-
+<!--
     <dependency>
       <groupId>org.jboss.jsfunit</groupId>
       <artifactId>jboss-jsfunit-core</artifactId>
@@ -239,7 +239,7 @@
       <artifactId>jboss-jsfunit-ant</artifactId>
       <version>1.0.0.GA</version>
     </dependency>
-
+-->
         <!-- Servlet Dependencies -->
         <dependency>
             <groupId>javax.servlet</groupId>
