@@ -359,7 +359,7 @@
 				
 		<h:panelGrid id="aerbasd1" 
 						 style="display:none"
-						 columns="2" 
+						 columns="1" 
 						 border="0" 
 						 cellpadding="0" 
 						 cellspacing="0">    
