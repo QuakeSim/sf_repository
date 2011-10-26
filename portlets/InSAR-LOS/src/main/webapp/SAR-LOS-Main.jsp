@@ -9,6 +9,7 @@
 <body>
   <f:view>
 	 <h:panelGrid id="insarlospanelgrid" columns="1" columnClasses="alignTopFixWidth">
+		<h:panelGroup id="bigoldlospanelgroup">
 		<f:verbatim><fieldset><legend><b>Interferogram Map Selection</b></legend></f:verbatim>
 		<f:verbatim>Click on the map to select the region you want to use.</f:verbatim>
 		<h:panelGrid id="InSAR-View-All" columns="2" columnClasses="alignTop,alignTop">
@@ -33,6 +34,7 @@
 		  </h:panelGroup>
 		</h:panelGrid>
 		<f:verbatim></fieldset></f:verbatim>
+	 </h:panelGroup>
 	 </h:panelGrid>
   </f:view>
   <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>  
