@@ -404,7 +404,6 @@ public class MeshGeneratorBean extends GenericSopacBean {
 																										 envSettings,
 																										 meshExec);
 		  
-		  
 		  setJobToken(projectMeshRunBean.getJobUIDStamp());
 		  MeshDataMegaBean mega=storeMeshRunInContext(getUserName(),
 																	 projectName, 
