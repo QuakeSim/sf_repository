@@ -45,23 +45,19 @@
 				  </f:verbatim>
 				  
 				  <h:panelGrid id="hgmFaultInputs" columns="2">
-					 <f:verbatim>Fault Type:</f:verbatim>
-						<h:selectOneMenu id="hgmFaultTypeMenu" 
-											  required="true"
-											  value="#{HazusGadgetBean.faultType}">
-						  <f:selectItem id="type1" 
-												 itemLabel="#{HazusGadgetBean.leftLateralFault}"
-												 itemValue="#{HazusGadgetBean.leftLateralFault}"/>
-						  <f:selectItem id="type2" 
-												 itemLabel="#{HazusGadgetBean.thrustFault}"
-												 itemValue="#{HazusGadgetBean.thrustFault}"/>
-						  <f:selectItem id="type3" 
-												 itemLabel="#{HazusGadgetBean.rightLateralFault}"
-												 itemValue="#{HazusGadgetBean.rightLateralFault}"/>
-						  <f:selectItem id="type4" 
-												 itemLabel="#{HazusGadgetBean.normalFault}"
-												 itemValue="#{HazusGadgetBean.normalFault}"/>
-						</h:selectOneMenu>
+					 <f:verbatim>Fault Rake (deg):</f:verbatim>
+					 <h:inputText id="hgmFaultRake" 
+									  required="true"
+									  value="#{HazusGadgetBean.faultRake}">
+						<f:validateDoubleRange minimum="-180.0" maximum="180.0"/>
+					 </h:inputText>
+
+					 <f:verbatim>Fault Depth:</f:verbatim>
+					 <h:inputText id="hgmFaultDepth" 
+									  required="true"
+									  value="#{HazusGadgetBean.faultDepth}">
+						<f:validateDoubleRange maximum="0.0"/>					 
+					 </h:inputText>
 
 					 <f:verbatim>Magnitude:</f:verbatim>
 					 <h:inputText id="hgmMagnitude" required="true" value="#{HazusGadgetBean.magnitude}" title="Please provide a magnitude value between 5-10">

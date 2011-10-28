@@ -1,6 +1,7 @@
 package cgl.quakesim.hazus;
 
 import java.util.Arrays;
+import java.lang.Math;
 
 import org.servogrid.genericproject.GenericProjectBean;
 
@@ -49,17 +50,19 @@ public class HazusGadgetBean extends GenericProjectBean{
 		  faultOriginLat=faultStuff[0].getLat();
 		  faultOriginLon=faultStuff[0].getLon();
 		  
-		  Fault theFault=createFaultFromType(faultType,magnitude,faultOriginLat,faultOriginLon);
+		  Fault fault=new Fault(); //createFaultFromType(faultType,magnitude,faultOriginLat,faultOriginLon);
+		  fault.setFaultRakeAngle(faultRake);
+		  fault.setFaultLatStart(faultOriginLat);
+		  fault.setFaultLonStart(faultOriginLon);
+		  fault.setFaultDepth(faultDepth);
 
 		  System.out.println("Bottom Left:"+faultStuff[1].getLat()+" "+faultStuff[1].getLon());
 		  System.out.println("Origin:"+faultStuff[0].getLat()+" "+faultStuff[0].getLon());
 		  System.out.println("Top Right:"+faultStuff[2].getLat()+" "+faultStuff[2].getLon());
-
+		  
 		  try {
-				//				osrs.getOpenShaHazusOutput(33.5,34.5,-119.0,-117.0,0.1,7.2,0.0,33.94,-117.87,5.0,90.0);
-				//				System.out.println(faultStuff[1].getLat()+" "+faultStuff[2].getLat()+" "+faultStuff[1].getLon()+" "+faultStuff[2].getLon()+" "+gridSpacing+" "+magnitude+" "+theFault.getFaultStrikeAngle()+" "+theFault.getFaultLatStart()+" "+ theFault.getFaultLatStart()+" "+theFault.getFaultDepth()+" "+theFault.getFaultDepth());
-
-				resultsLink=osrs.getOpenShaHazusOutput(faultStuff[1].getLat(),faultStuff[2].getLat(),faultStuff[1].getLon(),faultStuff[2].getLon(),gridSpacing,magnitude,theFault.getFaultStrikeAngle(),theFault.getFaultLatStart(), theFault.getFaultLonStart(),theFault.getFaultDepth(),theFault.getFaultDepth());
+				
+				resultsLink=osrs.getOpenShaHazusOutput(faultStuff[1].getLat(),faultStuff[2].getLat(),faultStuff[1].getLon(),faultStuff[2].getLon(),gridSpacing,magnitude,fault.getFaultRakeAngle(),fault.getFaultLatStart(), fault.getFaultLonStart(),fault.getFaultDepth(),fault.getFaultDipAngle());
 				
 
 		  }
@@ -101,6 +104,7 @@ public class HazusGadgetBean extends GenericProjectBean{
 
 	 /**
 	  * For the provided fault type, create the fault. 
+	  * TODO: This method needs to be removed.
 	  */
 	 protected Fault createFaultFromType(String faultType, double magnitude, double originLat, double originLon) throws Exception {
 		  //Set the generic stuff
@@ -115,7 +119,6 @@ public class HazusGadgetBean extends GenericProjectBean{
 		  fault.setFaultLameMu(1.0);
 		  fault.setFaultLocationX(0.0);
 		  fault.setFaultLocationY(0.0);
-		  
 
 		  //Now set fault type specific params
 		  if(faultType.equals(LEFT_LATERAL_FAULT)) { 
@@ -157,13 +160,13 @@ public class HazusGadgetBean extends GenericProjectBean{
 		  fault.setFaultLength(length);
 		  fault.setFaultWidth(width);
 		  fault.setFaultDepth(width/2.0);
-		  double slip = 0.6*length*width;				
+		  double slip = 0.6*length*width*10.0; //Factor of 10 is for unit conversion.  Mag includes cm.				
 		  //thr is thrust, which is set in in the previous 4 scenarios.
 		  if (thrust) {
-				fault.setFaultDipSlip(slip * 10);
+		  		fault.setFaultDipSlip(slip);
 		  }
 		  else {
-				fault.setFaultStrikeSlip(slip * 10);
+		  		fault.setFaultStrikeSlip(slip);
 		  }
 
 		  double theFactor = d2r * Math.cos(d2r*originLat) * 6378.139 * ( 1.0 - Math.sin(d2r * originLat) * Math.sin(d2r * originLat) * flatten);
@@ -211,6 +214,14 @@ public class HazusGadgetBean extends GenericProjectBean{
 				}
 		  }
 
+		  //Set the rake
+		  if (thrust) {
+				fault.setFaultDipSlip(slip);
+		  }
+		  else {
+				fault.setFaultStrikeSlip(slip);
+		  }
+
 		  //Now set the fault ending location lat/lon.				
 		  double lon_end = xval/theFactor + originLon;
 		  double lat_end = (yval/111.32) + originLat;
@@ -226,33 +237,22 @@ public class HazusGadgetBean extends GenericProjectBean{
 
 	 protected Fault createLeftLateralFault(Fault fault, double magnitude, double originLat, double originLon){
 		  fault.setFaultDipAngle(90);
-		  fault.setFaultDipSlip(0);
-		  fault.setFaultStrikeSlip(0);
 		  fault.setFaultStrikeAngle(0);
 		  return fault;
 	 }
 	 protected Fault createThrustFault(Fault fault, double magnitude, double originLat, double originLon){
 		  fault.setFaultDipAngle(90);
-		  fault.setFaultDipSlip(0);
-		  fault.setFaultStrikeSlip(0);
 		  fault.setFaultStrikeAngle(45);
 		  return fault;
 	 }
 	 protected Fault createRightLateralFault(Fault fault, double magnitude, double originLat, double originLon){
 		  fault.setFaultDipAngle(45);
-		  fault.setFaultDipSlip(0);
-		  fault.setFaultStrikeSlip(0);
 		  fault.setFaultStrikeAngle(0);
-		  
 		  return fault;
-
 	 }
 	 protected Fault createNormalFault(Fault fault, double magnitude, double originLat, double originLon){
 		  fault.setFaultDipAngle(45);
-		  fault.setFaultDipSlip(0);
-		  fault.setFaultStrikeSlip(0);
 		  fault.setFaultStrikeAngle(90);
-		  
 		  return fault;
 	 }
 
@@ -296,6 +296,7 @@ public class HazusGadgetBean extends GenericProjectBean{
 	 public void setFaultRake(double faultRake) { this.faultRake=faultRake; }
 	 public void setFaultOriginLat(double faultOriginLat) { this.faultOriginLat=faultOriginLat; }
 	 public void setFaultOriginLon(double faultOriginLon) { this.faultOriginLon=faultOriginLon; }
+	 public void setFaultDepth(double faultDepth) { this.faultDepth=faultDepth; }
 	 public void setFaultDip(double faultDip) { this.faultDip=faultDip; }
 	 public void setFaultType(String faultType) { this.faultType=faultType; }
 	 public void setResultsLink(String resultsLink) { this.resultsLink=resultsLink; }
