@@ -1383,6 +1383,8 @@ public class SimpleXService extends AntVisco implements Runnable {
 			 //for all.
 			 Arrays.sort(arrowScale);
 
+			 System.out.println("Arrow scale values:"+arrowScale[0]+" "+arrowScale[1]+" "+arrowScale[2]);
+
 			//Set up the session wide service coordinates.
 			SimpleXDataKml kmlService;
 			SimpleXDataKmlServiceLocator locator = new SimpleXDataKmlServiceLocator();
