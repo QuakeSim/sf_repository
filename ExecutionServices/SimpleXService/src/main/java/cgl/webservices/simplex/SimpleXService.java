@@ -1401,20 +1401,20 @@ public class SimpleXService extends AntVisco implements Runnable {
 			kmlService.setArrowPlacemark("'Residual Displacements Arrow Layer", 
 												  "ffff0000", 
 												  2, 
-												  arrowScale[arrowScale.length-1]);
+												  arrowScale[0]);
 
 			kmlService.setDatalist(calcPointEntries);
 			kmlService.setArrowPlacemark("Calculated Displacements Arrow Layer", 
 												  "ff00ccff", 
 												  2, 
-												  arrowScale[arrowScale.length-1]);
+												  arrowScale[0]);
 
 
 			kmlService.setDatalist(obsvPointEntries);
 			kmlService.setArrowPlacemark("Observed Displacements Arrow Layer", 
 												  "ff0000ff", 
 												  2,
-												  arrowScale[arrowScale.length-1]);
+												  arrowScale[0]);
 			String totalKmlUrl = kmlService.runMakeKml("", 
 																	 userName,
 																	 projectName,
