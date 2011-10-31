@@ -1260,7 +1260,7 @@ public class SimpleXService extends AntVisco implements Runnable {
 			for (int i = 0; i < pointEntries.length; i++) {
 				
 				double x=Double.valueOf(pointEntries[i].getX());
-				double y=Double.valueOf(pointEntries[i].getX());
+				double y=Double.valueOf(pointEntries[i].getY());
 				if(x<projectMinX) projectMinX=x;
 				if(x>projectMaxX) projectMaxX=x;
 				if(y<projectMinY) projectMinY=y;
