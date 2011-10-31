@@ -151,6 +151,7 @@ public class GmapDataXml {
 							TmpObsPoint.UpVec.o_c = tmp_o_c;
 							TmpObsPoint.UpVec.error = tmp_error;
 					  } else if (tmp_type == 7) {
+							System.out.println("Found SAR type");
 							TmpObsPoint.SarVec.type = tmp_type;
 							TmpObsPoint.SarVec.observ = tmp_observ;
 							TmpObsPoint.SarVec.calc = tmp_calc;
