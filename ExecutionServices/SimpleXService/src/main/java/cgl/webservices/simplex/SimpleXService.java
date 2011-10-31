@@ -1290,6 +1290,8 @@ public class SimpleXService extends AntVisco implements Runnable {
 			//project dimension.
 			double scaling = 0.7*projectLength/longestlength;
 			
+			System.out.println("Project length and longest length:"+projctLength+" "+longestlength);
+			
 			logger.debug("[SimpleXService/setArrowPlacemark] projectLength : " + projectLength);			
 			return scaling;
 		  
