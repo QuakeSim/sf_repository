@@ -55,6 +55,7 @@
 	 </script>
 
 	 <f:view>
+		<h:panelGrid id="disloc3loadprojectoutergrid" columns="1" columnClasses="alignTopFixWidth">
 		<h:messages id="dislocMessagesLoadProject" 
 						showDetail="true"
 						showSummary="true"
@@ -173,7 +174,8 @@
 		  </h:panelGrid> 
 		  <f:verbatim></fieldset></f:verbatim>
 		</h:form> 
-		
+	 </h:panelGrid>
+
 		<%@ include file="footer.jsp" %> 
 		  
 		</f:view> 

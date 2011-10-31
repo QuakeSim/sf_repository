@@ -50,6 +50,7 @@
 	 </script>
 	 
 	 <f:view>	
+		<h:panelGrid id="simplex3loadprojectoutergrid" columns="1" columnClasses="alignTopFixWidth">
 		<h:messages id="simplexMessagesLoadProject" 
 						showDetail="true"
 						showSummary="true"
@@ -67,79 +68,78 @@
 					  columns="3" 
 					  rendered="#{!(empty SimplexBean.myProjectNameList)}"		 
 					  border="1">
-		
 		<h:form id="SimplexNewProjCheckBox">
-		  <h:panelGrid  id="lkdjf5" columns="1" border="0">
-			 <h:outputText  id="lkdjf6" escape="false" value="<b>Select Projects</b><br/>" />
-			 <h:outputText id="lkdjf7" 
-								escape="false"
+			 <h:panelGrid  id="lkdjf5" columns="1" border="0">
+				<h:outputText  id="lkdjf6" escape="false" value="<b>Select Projects</b><br/>" />
+				<h:outputText id="lkdjf7" 
+								  escape="false"
 								  value="Please select from one of the previous projects." />
-			 <h:selectManyCheckbox id="projectlistforload" 
-										  required="true"
-										  value="#{SimplexBean.selectProjectsList}"
-										  onchange="dataTableSelectOneRadio(this)"
-										  onclick="dataTableSelectOneRadio(this)"
-										  layout="pageDirection">
-					
-				<f:selectItems value="#{SimplexBean.myProjectNameList}" />
-			 </h:selectManyCheckbox>
-			 <h:commandButton id="lkdjf8" 							  
-									onclick="showLoading()"
-									value="Select"
-									action="#{SimplexBean.toggleSelectProject}" />
-		  </h:panelGrid>
+				<h:selectManyCheckbox id="projectlistforload" 
+											 required="true"
+											 value="#{SimplexBean.selectProjectsList}"
+											 onchange="dataTableSelectOneRadio(this)"
+											 onclick="dataTableSelectOneRadio(this)"
+											 layout="pageDirection">
+				  
+				  <f:selectItems value="#{SimplexBean.myProjectNameList}" />
+				</h:selectManyCheckbox>
+				<h:commandButton id="lkdjf8" 							  
+									  onclick="showLoading()"
+									  value="Select"
+									  action="#{SimplexBean.toggleSelectProject}" />
+			 </h:panelGrid>
+		  </h:form>
+
+		  <h:form id="SimplexCopyProjCheckBox">					 
+			 <h:panelGrid id="dlrfih1" columns="1" border="0">
+				<h:outputText escape="false" value="<b>Copy Project</b><br/>" />
+				<h:outputText escape="false"
+								  value="Please select from one of the previous projects." />
+				
+				<h:selectManyCheckbox id="projectlistforcopy" 
+											 required="true"
+											 value="#{SimplexBean.copyProjectsList}"
+											 onchange="dataTableSelectOneRadio(this)"
+											 onclick="dataTableSelectOneRadio(this)"
+											 layout="pageDirection">					
+				  <f:selectItems value="#{SimplexBean.myProjectNameList}" />
+				</h:selectManyCheckbox>
+				
+				<h:outputText value="New Project Name:"/>
+				<h:inputText id="newProjectName2" 
+								 required="true"
+								 value="#{SimplexBean.projectCopyName}"/>
+				
+				<h:commandButton id="simplex3CopyCmdButton" 
+									  onclick="showLoading()"
+									  value="Copy"
+									  action="#{SimplexBean.toggleCopyProject}" />
+			 </h:panelGrid>
 		</h:form>
-		
-		<h:form id="SimplexCopyProjCheckBox">					 
-		  <h:panelGrid id="dlrfih1" columns="1" border="0">
-			 <h:outputText escape="false" value="<b>Copy Project</b><br/>" />
-			 <h:outputText escape="false"
-								value="Please select from one of the previous projects." />
-			 
-			 <h:selectManyCheckbox id="projectlistforcopy" 
-										  required="true"
-										  value="#{SimplexBean.copyProjectsList}"
-										  onchange="dataTableSelectOneRadio(this)"
-										  onclick="dataTableSelectOneRadio(this)"
-										  layout="pageDirection">					
-				<f:selectItems value="#{SimplexBean.myProjectNameList}" />
-			 </h:selectManyCheckbox>
-			 
-			 <h:outputText value="New Project Name:"/>
-			 <h:inputText id="newProjectName2" 
-							  required="true"
-							  value="#{SimplexBean.projectCopyName}"/>
-			 
-			 <h:commandButton id="simplex3CopyCmdButton" 
-									onclick="showLoading()"
-									value="Copy"
-									action="#{SimplexBean.toggleCopyProject}" />
-		  </h:panelGrid>
-		</h:form>
-		
-		<h:form id="SimplexDeleteProjCheckBox">
-		  <h:panelGrid id="lkdjf9" columns="1" border="0">
-			 <h:outputText id="lkdjf10" escape="false" value="<b>Delete Projects</b><br/>" />
-			 <h:outputText  id="lkdjf11" escape="false"
-								 value="Please select from one of the previous projects." />
-			 <h:selectManyCheckbox id="projectfordelete" 
-										  value="#{SimplexBean.deleteProjectsList}"
+
+		<h:form id="SimplexDeleteProjCheckBox">		
+			 <h:panelGrid id="lkdjf9" columns="1" border="0">
+				<h:outputText id="lkdjf10" escape="false" value="<b>Delete Projects</b><br/>" />
+				<h:outputText  id="lkdjf11" escape="false"
+									value="Please select from one of the previous projects." />
+				<h:selectManyCheckbox id="projectfordelete" 
+											 value="#{SimplexBean.deleteProjectsList}"
 										  required="true"
 										  layout="pageDirection">
-				<f:selectItems value="#{SimplexBean.myProjectNameList}" />
-			 </h:selectManyCheckbox>
+				  <f:selectItems value="#{SimplexBean.myProjectNameList}" />
+				</h:selectManyCheckbox>
 				<h:commandButton id="lkdjf12" 
 									  onclick="showLoading()"
 									  value="Delete"
 									  action="#{SimplexBean.toggleDeleteProject}" />
 			 </h:panelGrid>
 		  </h:form>
-		  
+
 		</h:panelGrid>
 		<f:verbatim><p/></f:verbatim>
 		<h:form id="lkdjf13">
 		  <f:verbatim>
-			 <fieldset style="width:50%">
+			 <fieldset>
 				<legend class="portlet-form-label">Create New Project</legend>
 		  </f:verbatim>	 
 		  
@@ -175,6 +175,7 @@
 								 action="#{SimplexBean.NewProjectThenEditProject}" />
 		  <f:verbatim></fieldset></f:verbatim>	  
 		</h:form>	
+	 </h:panelGrid>
 		
 		<h:form id="lkdjf114">
 		  <h:commandLink  id="lkdjf115" action="Simplex2-back">
