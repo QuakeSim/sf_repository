@@ -103,6 +103,7 @@ public class GmapDataXml {
 				 }
 				 if (!line.trim().equalsIgnoreCase("")) {
 					  logger.debug("Parse results line:"+line);	  
+					  System.out.println("Parse results line:"+line);	  
 					  String tmp[] = line.split("\t");
 					  
 					  //  //See what we have.
