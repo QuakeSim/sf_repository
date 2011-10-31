@@ -152,12 +152,26 @@ public class GmapDataXml {
 							TmpObsPoint.UpVec.o_c = tmp_o_c;
 							TmpObsPoint.UpVec.error = tmp_error;
 					  } else if (tmp_type == 7) {
+							//For type 7, we only have a scalar, so we will
+							//just use "North" arrows.
 							System.out.println("Found SAR type");
-							TmpObsPoint.SarVec.type = tmp_type;
-							TmpObsPoint.SarVec.observ = tmp_observ;
-							TmpObsPoint.SarVec.calc = tmp_calc;
-							TmpObsPoint.SarVec.o_c = tmp_o_c;
-							TmpObsPoint.SarVec.error = tmp_error;
+							TmpObsPoint.NorthVec.type = 2;
+							TmpObsPoint.NorthVec.observ = tmp_observ;
+							TmpObsPoint.NorthVec.calc = tmp_calc;
+							TmpObsPoint.NorthVec.o_c = tmp_o_c;
+							TmpObsPoint.NorthVec.error = tmp_error;
+
+							TmpObsPoint.EastVec.type = 1;
+							TmpObsPoint.EastVec.observ = 0.0;
+							TmpObsPoint.EastVec.calc = 0.0;
+							TmpObsPoint.EastVec.o_c = 0.0;
+							TmpObsPoint.EastVec.error = 0.0;
+
+							TmpObsPoint.UpVec.type = 3;
+							TmpObsPoint.UpVec.observ = 0.0;
+							TmpObsPoint.UpVec.calc = 0.0;
+							TmpObsPoint.UpVec.o_c = 0.0;
+							TmpObsPoint.UpVec.error = 0.0;
 					  }
 					  TmpObsPoint.xloc = tmp_lat;
 					  TmpObsPoint.yloc = tmp_lon;
