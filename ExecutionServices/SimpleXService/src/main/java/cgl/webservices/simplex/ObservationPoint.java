@@ -15,6 +15,8 @@ public class ObservationPoint {
 
 	public VectorElement UpVec = new VectorElement();
 
+	 public VectorElement SarVec=new VectorElement();
+
 	public String toString() {
 		return "[xloc=" + xloc + ", yloc=" + yloc + "]";
 	}

@@ -150,6 +150,12 @@ public class GmapDataXml {
 							TmpObsPoint.UpVec.calc = tmp_calc;
 							TmpObsPoint.UpVec.o_c = tmp_o_c;
 							TmpObsPoint.UpVec.error = tmp_error;
+					  } else if (tmp_type == 7) {
+							TmpObsPoint.SarVec.type = tmp_type;
+							TmpObsPoint.SarVec.observ = tmp_observ;
+							TmpObsPoint.SarVec.calc = tmp_calc;
+							TmpObsPoint.SarVec.o_c = tmp_o_c;
+							TmpObsPoint.SarVec.error = tmp_error;
 					  }
 					  TmpObsPoint.xloc = tmp_lat;
 					  TmpObsPoint.yloc = tmp_lon;

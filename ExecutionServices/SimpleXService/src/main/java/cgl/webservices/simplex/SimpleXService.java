@@ -1281,13 +1281,14 @@ public class SimpleXService extends AntVisco implements Runnable {
 					longestlength = length; 
 			}
 			logger.debug("[SimpleXService/setArrowPlacemark] longestlength : " + longestlength);			
-			
+			//Project Length is the diagonal distance across the bounding box that 
+			//includes all the observation points.
 			double projectLength=(projectMaxX-projectMinX)*(projectMaxX-projectMinX);
 			projectLength+=(projectMaxY-projectMinY)*(projectMaxY-projectMinY);
 			projectLength=Math.sqrt(projectLength);
 			
-			//We arbitrarly set the longest displacement arrow to be 10% of the 
-			//project dimension.
+			//Set the scaling.  Make the longest result arrow length (from calc, obsv, or resid)
+			//equal to 0.7 (or some other value) of the project length.
 			double scaling = 0.7*projectLength/longestlength;
 			
 			System.out.println("Project length and longest length:"+projectLength+" "+longestlength);
@@ -1381,8 +1382,8 @@ public class SimpleXService extends AntVisco implements Runnable {
 			 
 			 //Sort the arrowScale values from lowest to highest.  It is 
 			 //also possible in the future that we need to retain the 3 different
-			 //scales.  For now, though, we use the longest arrowScale result
-			 //for all.
+			 //scales.  For now, though, we use the *shortest* arrowScale result
+			 //for all. This corresponds to the *longest* simplex result length.
 			 Arrays.sort(arrowScale);
 
 			 System.out.println("Arrow scale values:"+arrowScale[0]+" "+arrowScale[1]+" "+arrowScale[2]);
