@@ -71,6 +71,7 @@ public class AnssCatalogService {
 				memKml="Unable to retreive KML file.";
 				ex.printStackTrace();
 		  }
+		  System.out.println("returning kml");
 		  return memKml;
 		  
 	 }
