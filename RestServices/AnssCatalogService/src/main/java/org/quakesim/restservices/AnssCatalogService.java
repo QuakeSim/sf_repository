@@ -4,6 +4,7 @@ package org.quakesim.restservices;
 import javax.servlet.*;
 import java.io.*;
 import java.net.*;
+import java.util.UUID;
 import java.util.jar.*;
 import java.util.*;
 import java.util.regex.*;
@@ -31,31 +32,62 @@ public class AnssCatalogService {
 	 String[] paramArray = {"output","format","mintime","maxtime","minmag","maxmag","etype","outputloc"};
 	 String[] paramValArray = {"kml","cnss","2002/01/01,00:00:00","2010/12/01,00:00:00","8.0","10.0","E","web"};
 	 
-	 String kmzDownloadLocation="/tmp/junk.kmz";
+	 int uid;
+	 String kmzDownloadDirectory="/tmp/";
+	 String kmzDownloadLocation=null;  //This will be junk+uid+kmz
+
+	 
+
+	 //Get the servlet context
+	 @Context ServletContext context;
+
+	 public AnssCatalogService() {
+		  //The UID will be reused within the invocation of the service and then discarded.
+		  uid=(UUID.randomUUID()).hashCode();
+		  kmzDownloadLocation=kmzDownloadDirectory+"junk-"+uid+".kmz";
+	 }
 	 
 	 @GET 
-	 @Produces("application/vnd.google-earth.kml+xml") 
+	 /**
+	  * The GET version returns a URL pointing to the newly created KML file.
+	  * TODO: There is a better way to handle input parameters than this. See other QuakeSim REST examples.
+	  */ 
 	 public String getCatalog(@Context UriInfo ui) {
+									  //Use the servlet context to find out where we are.
+									  String outputFileName=null,outputFileShortName=null;
+									  outputFileName=context.getRealPath("");
+									  String outputDirName=(new File(outputFileName)).getName();
+									  outputFileName=outputFileName.substring(0,outputFileName.indexOf(outputDirName));
+									  outputFileName+="/ROOT/anss-catalog-movie-"+uid+".kml";
+									  outputFileShortName=(new File(outputFileName)).getName();
+									  System.out.println(outputFileName+" "+outputFileShortName);
+
 									  MultivaluedMap<String,String> queryParams=ui.getQueryParameters();
 									  
 									  String memKml=null;
+									  String kmlUrl=null;
 									  try {
 											String ftpUrl=fetchAnssDataSetFtpUrl(ANSSURL,queryParams);
 											downloadCatalog(ftpUrl,getKmzDownloadLocation());
 											memKml=extractKmlFile(getKmzDownloadLocation());
 											ArrayList dateMatches=extractMatchingDates(memKml);
 											memKml=revisedKmlWithTimeStamps(memKml,dateMatches);
-											return memKml;
+											createRevisedKmlFile(memKml,outputFileName);
+											kmlUrl="http://156.56.179.234:8080/"+outputFileShortName;
+											System.out.println("kml url:"+kmlUrl);
+											return kmlUrl;
 									  }
 									  catch (Exception ex) {
 											ex.printStackTrace();
 									  }
-									  return memKml;
+									  return kmlUrl;
 									  }
-		  
 		  @POST
 		  @Consumes("application/x-www-form-urlencoded")
 		  @Produces("application/vnd.google-earth.kml+xml") 
+		  /**
+			* The POST version returns the actual KML 
+			*/
 		  public String postCatalog(MultivaluedMap<String,String> queryParams) {
 		  
 		  String memKml=null;
@@ -73,7 +105,6 @@ public class AnssCatalogService {
 		  }
 		  System.out.println("returning kml");
 		  return memKml;
-		  
 	 }
 	 
 	 protected String fetchAnssDataSetFtpUrl(String anssUrl, 
@@ -257,7 +288,24 @@ public class AnssCatalogService {
 		  beginning=year+"-"+month+"-"+day;
 		  //		  System.out.println(beginning+ending);
 		  return beginning+ending;
-		  
+	 }
+
+	 protected void createRevisedKmlFile(String memKml,String outputFileName) throws Exception {
+		  System.out.println("Output file name: "+outputFileName);
+		  PrintWriter pw=new PrintWriter(new FileWriter(outputFileName));
+		  try {
+				pw.println(memKml);
+				pw.flush();
+				pw.close();
+		  }
+		  catch(Exception ex) {
+				ex.printStackTrace();
+				throw ex;
+		  }
+		  finally{
+				pw.flush();
+				pw.close();
+		  }
 		  
 	 }
 
