@@ -6,7 +6,11 @@
 <html>
   <head>
 	 <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/styles/quakesim_style.css"/>
+
+	 <script type="text/javascript" src="https://www.google.com/jsapi?key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBRHVVQ-3gUyVPTBA35K-1FKDOM5_hRFZSpddzaJbaPYJ4oXfR2X8O_0Jg"></script>
+	 <%--
 	 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+	 --%>
 	 <script src="@host.base.url@@artifactId@/scripts/anssgadget.js"></script>			 
   </head>
   <body>
@@ -24,7 +28,7 @@
 			 <h:panelGrid id="anssgadgetlayoutgrid" columns="2" columnClasses="alignTop,alignTop">
 				<h:panelGroup id="anssgadgetleftpanel">
 				  <f:verbatim>
-					 <div id="mapDiv" style="width: 550px; height: 400px;"></div>
+					 <div id="mapDiv" style="width: 600px; height: 500px;"></div>
 				  </f:verbatim>
 				</h:panelGroup>
 				<h:panelGroup id="anssgridrightpanel">
@@ -49,19 +53,23 @@
 					 <f:verbatim>Starting Date:</f:verbatim>
 					 <h:inputText id="acgMinDate" required="true" value="2002/01/01" title="Provide a starting date in the format yyyy/mm/dd">
 					 </h:inputText>
-
+					 <%-- Will default to 00:00:00 for now --%>
+					 <%--
 					 <f:verbatim>Starting Time:</f:verbatim>
 					 <h:inputText id="acgMinTime" required="true" value="00:00:00" title="Provide a starting time in the format hh:mm:ss">
 					 </h:inputText>
+					 --%>
 
 					 <f:verbatim>Ending Date:</f:verbatim>
 					 <h:inputText id="acgMaxDate" required="true" value="2010/01/01" title="Provide an ending date in the format yyyy/mm/dd">
 					 </h:inputText>
 
+					 <%-- Will default to 00:00:00 for now --%>
+					 <%--
 					 <f:verbatim>Ending Time:</f:verbatim>
 					 <h:inputText id="acgMaxTime" required="true" value="00:00:00" title="Provide an ending time in the format hh:mm:ss">
 					 </h:inputText>
-
+					 --%>
 					 <f:verbatim>Minimum Magnitude:</f:verbatim>
 					 <h:inputText id="acgMinMagnitude" required="true" value="5.0" title="Please provide a magnitude value between 3-10">
 					 </h:inputText>
@@ -72,7 +80,7 @@
 					 
 				  </h:panelGrid>
 				  <f:verbatim>
-					 <button id="RunAnssAction" onclick='anssgadget.submitMapRequest()'>
+					 <button id="RunAnssAction" onclick='anssgadget.submitMapRequest(minmag,maxmag,mindate,maxdate)'>
 						Fetch ANSS Catalog
 				  </button>
 				  </f:verbatim>
@@ -104,13 +112,13 @@
 
 		var minmag=document.getElementById("acgMinMagnitude");
 		var maxmag=document.getElementById("acgMaxMagnitude");
-		var minDate=document.getElementById("acgMinDate");
-		var minTime=document.getElementById("acgMinTime");
-		var maxDate=document.getElementById("acgMaxDate");
-		var maxTime=document.getElementById("acgMaxTime");
+		var mindate=document.getElementById("acgMinDate");
+		var mintime=document.getElementById("acgMinTime");
+		var maxdate=document.getElementById("acgMaxDate");
+		var maxtime=document.getElementById("acgMaxTime");
 
 		anssgadget.createMap(mapDiv);
-		anssgadget.setupSelectionBox(lat0, lon0, lat1, lon1, lat2, lon2, lat3, lon3, bboxDiv)
+//		anssgadget.setupSelectionBox(lat0, lon0, lat1, lon1, lat2, lon2, lat3, lon3, bboxDiv);
 	 </script>
   </body>
 </html>
