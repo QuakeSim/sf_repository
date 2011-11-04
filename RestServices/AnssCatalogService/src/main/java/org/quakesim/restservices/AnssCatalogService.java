@@ -73,7 +73,9 @@ public class AnssCatalogService {
 											ArrayList dateMatches=extractMatchingDates(memKml);
 											memKml=revisedKmlWithTimeStamps(memKml,dateMatches);
 											createRevisedKmlFile(memKml,outputFileName);
-											kmlUrl=ui.getBaseUri()+"/"+outputFileShortName;
+											String basePath=ui.getBaseUri();
+											basePath=basePath.substring(0,basePath.indexOf("AnssCatalogService")-1);
+											kmlUrl=basePath+"/"+outputFileShortName;
 											System.out.println("kml url:"+kmlUrl);
 											return kmlUrl;
 									  }
