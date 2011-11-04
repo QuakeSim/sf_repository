@@ -7,22 +7,9 @@
   <head>
 	 <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/styles/quakesim_style.css"/>
 	 <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
-	 <script type="text/javascript" src="https://www.google.com/jsapi?key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBRHVVQ-3gUyVPTBA35K-1FKDOM5_hRFZSpddzaJbaPYJ4oXfR2X8O_0Jg"></script>
+	 <script type="text/javascript" src="https://www.google.com/jsapi?key=put.google.map.key.here"></script>
+	 <%--Localhost key is ABQIAAAAxOZ1VuCkrWUtft6jtubycBRHVVQ-3gUyVPTBA35K-1FKDOM5_hRFZSpddzaJbaPYJ4oXfR2X8O_0Jg-->
 	 <script src="@host.base.url@@artifactId@/scripts/anssgadget.js"></script>			 
-	 <script type="text/javascript" src="http://dev.jquery.com/view/trunk/plugins/validate/jquery.validate.js"></script>
-	 <style type="text/css">
-		* { font-family: Verdana; font-size: 96%; }
-		label { width: 10em; float: left; }
-		label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
-		p { clear: both; }
-		.submit { margin-left: 12em; }
-		em { font-weight: bold; padding-right: 1em; vertical-align: top; }
-	 </style>
-	 <script>
-		$(document).ready(function(){
-		$("#acgForm").validate();
-		});
-	 </script>
   </head>
   <body>
 	 <f:view>
@@ -51,15 +38,35 @@
 					 <h:inputHidden id="acglon2" value=""/>
 					 <h:inputHidden id="acglat3" value=""/>
 					 <h:inputHidden id="acglon3" value=""/>
+					 
 					 <f:verbatim>
-						<table>
+						<b>Bounding Box:</b> 
+					 </f:verbatim>
+
+					 <%-- Retain this for draggable placemarks in future versions.
+					 <table>
+					 <f:verbatim>
 						  <tr>
 							 <td valign="top"><b>Bounding Box:</b></td>
 							 <td valign="top"><div id="acgBBoxDiv">None selected, will return for the entire earth by default. Click the map to select a specific bounding box to limit queries.</div></td>
 						  </tr>
 						</table>
 					 </f:verbatim>
+					 --%>
+					 <h:panelGrid id="acgBBoxStuff" columns="2">
+						<f:verbatim>Min Lat:</f:verbatim>
+						<h:inputText id="minlatbbox" value="31.0"/>
+						
+						<f:verbatim>Min Lon:</f:verbatim>
+						<h:inputText id="minlonbbox" value="-120.0"/>
+						
+						<f:verbatim>Max Lat:</f:verbatim>
+						<h:inputText id="maxlatbbox" value="35.0"/>
+						
+						<f:verbatim>Max Lon:</f:verbatim>
+						<h:inputText id="maxlonbbox" value="-116.0"/>
 					 
+					 </h:panelGrid>
 					 <h:panelGrid id="acgStuff" columns="2">
 						<f:verbatim>Starting Date:</f:verbatim>
 						<h:inputText id="acgMinDate" required="true" value="2002/01/01" title="Provide a starting date in the format yyyy/mm/dd">
@@ -72,7 +79,7 @@
 						--%>
 					 
 						<f:verbatim>Ending Date:</f:verbatim>
-						<h:inputText id="acgMaxDate" required="true" value="2010/01/01" title="Provide an ending date in the format yyyy/mm/dd">
+						<h:inputText id="acgMaxDate" required="true" value="2011/06/01" title="Provide an ending date in the format yyyy/mm/dd">
 						</h:inputText>
 						
 						<%-- Will default to 00:00:00 for now --%>
@@ -82,16 +89,16 @@
 						</h:inputText>
 						--%>
 						<f:verbatim>Minimum Magnitude:</f:verbatim>
-						<h:inputText id="acgMinMagnitude" class="required" required="true" value="5.0" title="Please provide a magnitude value between 3-10">
+						<h:inputText id="acgMinMagnitude" required="true" value="4.0" title="Please provide a magnitude value between 3-10">
 						</h:inputText>
 					 
 						<f:verbatim>Maximum Magnitude:</f:verbatim>
-						<h:inputText id="acgMaxMagnitude" class="required" required="true" value="10.0" title="Please provide a magnitude value between 3-10">
+						<h:inputText id="acgMaxMagnitude" required="true" value="10.0" title="Please provide a magnitude value between 3-10">
 						</h:inputText>
 						
 					 </h:panelGrid>
 				  <f:verbatim>
-					 <button id="RunAnssAction" onclick='anssgadget.submitMapRequest(minmag,maxmag,mindate,maxdate)'>
+					 <button id="RunAnssAction" onclick='anssgadget.submitMapRequest(minmag,maxmag,mindate,maxdate,minlat,minlon,maxlat,maxlon, resultKmlDiv)'>
 						Fetch ANSS Catalog
 					 </button>
 				  </f:verbatim>
@@ -100,7 +107,7 @@
 					 <hr/>
 				  </f:verbatim>
 				  <h:panelGrid id="acgOutputPanelGrid" columns="2">
-					 <f:verbatim><b>Results:</b></f:verbatim>
+					 <f:verbatim><b>Download Result KML:</b><div id="acgResultKml"></div></f:verbatim>
 				  </h:panelGrid>
 				</h:panelGroup>
 			 </h:panelGrid>
@@ -137,6 +144,12 @@
 		var mintime=document.getElementById("acgMinTime");
 		var maxdate=document.getElementById("acgMaxDate");
 		var maxtime=document.getElementById("acgMaxTime");
+		var minlat=document.getElementById("minlatbbox");
+		var minlon=document.getElementById("minlonbbox");
+		var maxlat=document.getElementById("maxlatbbox");
+		var maxlon=document.getElementById("maxlonbbox");
+
+		var resultKmlDiv=document.getElementById("acgResultKml");
 
 		anssgadget.createMap(mapDiv);
 //		anssgadget.setupSelectionBox(lat0, lon0, lat1, lon1, lat2, lon2, lat3, lon3, bboxDiv);

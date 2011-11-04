@@ -51,19 +51,25 @@ var anssgadget=anssgadget || (function() {
 		  console.log(errorcode.value);
 	 }
 
-	 function submitMapRequest(minmag,maxmag,mindate,maxdate) {
+	 function submitMapRequest(minmag,maxmag,mindate,maxdate,minlat,minlon,maxlat,maxlon,resultKmlDiv) {
 		  //Note this assumes the AnssCatalogService is co-located.
 		  console.log("Submitting request");
 		  var mintime=MINTIME+mindate.value+","+DEFAULT_MIN_WALLTIME;//"00:00:00";
 		  var maxtime=MAXTIME+maxdate.value+","+DEFAULT_MAX_WALLTIME;//"00:00:00";
 		  var minmag=MINMAG+minmag.value;
 		  var maxmag=MAXMAG+maxmag.value;
-		  var minlon=MINLON+"-120";
-		  var maxlon=MAXLON+"-116";
-		  var minlat=MINLAT+"31";
-		  var maxlat=MAXLAT+"35";
-		  var finalUrl=urlBase+"?"+OUTPUT_TYPE+amp+OUTPUT_FORMAT+amp+mintime+amp+maxtime+amp+minmag+amp+maxmag+amp+ETYPE+amp+OUTPUT_LOC+amp+minlon+amp+maxlon+amp+minlat+amp+maxlat;
-		  console.log(finalUrl);
+		  if(minlat && minlon && maxlat && maxlon) {
+				var minlon=MINLON+minlon.value;
+				var maxlon=MAXLON+maxlon.value;
+				var minlat=MINLAT+minlat.value;
+				var maxlat=MAXLAT+maxlat.value;
+				var finalUrl=urlBase+"?"+OUTPUT_TYPE+amp+OUTPUT_FORMAT+amp+mintime+amp+maxtime+amp+minmag+amp+maxmag+amp+ETYPE+amp+OUTPUT_LOC+amp+minlon+amp+maxlon+amp+minlat+amp+maxlat;
+				console.log(finalUrl);
+		  }
+		  else {
+				var finalUrl=urlBase+"?"+OUTPUT_TYPE+amp+OUTPUT_FORMAT+amp+mintime+amp+maxtime+amp+minmag+amp+maxmag+amp+ETYPE+amp+OUTPUT_LOC;
+				console.log(finalUrl);
+		  }
 
 		  var results=$.ajax({url:finalUrl,async:false}).responseText;
 		  console.log(results);
@@ -71,6 +77,7 @@ var anssgadget=anssgadget || (function() {
  		  google.earth.fetchKml(map,results,function(kmlObject){
 				if(kmlObject) {
 					 map.getFeatures().appendChild(kmlObject);
+					 resultKmlDiv.innerHTML="<a href='"+results+"' target='NULL'>"+results+"</a>";
 				}
 				if(kmlObject.getAbstractView()) {
 					 map.getView().setAbstractView(kmlObject.getAbstractView());
