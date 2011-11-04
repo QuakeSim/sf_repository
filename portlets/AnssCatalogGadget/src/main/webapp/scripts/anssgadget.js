@@ -72,6 +72,9 @@ var anssgadget=anssgadget || (function() {
 				if(kmlObject) {
 					 map.getFeatures().appendChild(kmlObject);
 				}
+				if(kmlObject.getAbstractView()) {
+					 map.getView().setAbstractView(kmlObject.getAbstractView());
+				}
 		  });
 		  
 //		  var kmlMapOpts={map:map};
