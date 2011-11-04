@@ -7,7 +7,8 @@
   <head>
 	 <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/styles/quakesim_style.css"/>
 	 <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
-	 <script type="text/javascript" src="https://www.google.com/jsapi?key=put.google.map.key.here"></script>
+	 <script type="text/javascript" src="https://www.google.com/jsapi?key=ABQIAAAAxOZ1VuCkrWUtft6jtubycBToCwzmKPcju0WT8bJ7uVS8tITbtRTTsrqBp0FU9RF-p-xe-lBo6_wm4A"></script>
+	 <%--gf4 key: ABQIAAAAxOZ1VuCkrWUtft6jtubycBToCwzmKPcju0WT8bJ7uVS8tITbtRTTsrqBp0FU9RF-p-xe-lBo6_wm4A--%>
 	 <%--Localhost key is ABQIAAAAxOZ1VuCkrWUtft6jtubycBRHVVQ-3gUyVPTBA35K-1FKDOM5_hRFZSpddzaJbaPYJ4oXfR2X8O_0Jg--%>
 	 <script src="@host.base.url@@artifactId@/scripts/anssgadget.js"></script>			 
   </head>
