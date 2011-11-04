@@ -73,7 +73,7 @@ public class AnssCatalogService {
 											ArrayList dateMatches=extractMatchingDates(memKml);
 											memKml=revisedKmlWithTimeStamps(memKml,dateMatches);
 											createRevisedKmlFile(memKml,outputFileName);
-											kmlUrl="http://156.56.179.234:8080/"+outputFileShortName;
+											kmlUrl=ui.getBaseUri()+"/"+outputFileShortName;
 											System.out.println("kml url:"+kmlUrl);
 											return kmlUrl;
 									  }
