@@ -55,7 +55,7 @@
 		 <p><b>Usage Instructions</b>
 		 <ul>
 			<li>Click the "+" or "-" icon to expand or contract the listings for an event.
-			<li>Click the earthquake name link to go its location. </li>
+			<li>Click the earthquake scenario link to go its location. </li>
 			<li>Click the checkbox next to "InSAR Plot" or "Surface Displacement" to toggle results display on/off.</li>
 			<li>Click the "InSAR Plot" or "Surface Diplacement" links to download the source KML.
 		 </ul>
@@ -101,13 +101,13 @@
 		 //]]>
 		 %>
 		 
-			<h:panelGrid id="faultMapsideGrid" columns="2" border="1">
+			<h:panelGrid id="faultMapsideGrid" columns="1" border="1">
 			  <f:verbatim>
-				 <div id="navbar" style="width: 300px; height: 600px; overflow:auto;"></div>
-			  </f:verbatim>
-			  <f:verbatim>
-				 <div id="faultMap" style="width: 620px; height: 600px;"></div>
+				 <div id="faultMap" style="width: 900px; height: 600px;"></div>
 			  </f:verbatim> 
+			  <f:verbatim>
+				 <div id="navbar" style="width: 900px; height: 150px; overflow:auto;"></div>
+			  </f:verbatim>
 			</h:panelGrid>
 		 <f:verbatim>
 		 <script type="text/javascript">
@@ -126,6 +126,8 @@
 			// Everything here should be a function later.
 			//--------------------------------------------------			
 			var infoWindowArray=new Array();
+			var kmlDispLayerArray=new Array();
+			var kmlInsarLayerArray=new Array();
 
          //This is the div for the navbar
          var navbar=document.getElementById('navbar');
@@ -141,31 +143,48 @@
 			eventList=$.parseXML(myM5List);
          var eventListHtml=navbar.innerHTML+"<ul id='browser'>";
 			//index1 is the scenario number.  index2 is the event index
-			var index1=0; index2=0;
+			var index1=1; index2=0;
          $(eventList).find('Placemark').each(function(){
 			    //We have to work around the poor formatting choices of the KML feed.
 				 //The faults will be grouped in 4's, each with the same shortname.
-				 if(index1==0) {
+				 if(index1==1) {
 				 eventListHtml+="<li>"+$(this).find('shortName').text();
 				 }
-				 if(index1<4) {
+				 if(index1<5) {
 				 //Next several lines should go in a helper function.
 				 var description=$(this).find('description').text();
 				 var content="<div style='font-family: Arial, sans-serif;font-size: small;width:300px'>"+description+"</div>";
+				 //Note the coordinates are in lng,lat order.
+				 var eventCoord=$(this).find('coordinates').text();
+				 eventCoord=eventCoord.split(" ")[0];  //We only keep the first lat,lon coordinates
+				 var eventLatLon=new google.maps.LatLng(eventCoord.split(",")[1],eventCoord.split(",")[0]);
 				 var infoWindow=new google.maps.InfoWindow({content:content});
-				 infoWindow.setPosition(latlng);
+				 infoWindow.setPosition(eventLatLon);
 				 infoWindowArray.push(infoWindow);
-				 eventListHtml+='<ul><li><a id="'+index2+'" onClick="popupInfoWindow(this)">'+'Scenario '+index1+'</a>';
+				 eventListHtml+="<ul><li><a id='eventInfoWindow_"+index2+"' onClick='popupInfoWindow(this)'>Scenario "+index1+"</a>";
 				 eventListHtml+="<ul>"
-             eventListHtml+="<li><a id='"+index2+"' target='blank' href='"+$(this).find('DislocOutputURL').text()+"'>Surface Displacement Outputs (text)</a></li>";
+             eventListHtml+="<li><a id='dislocOutput_"+index2+"' target='blank' href='"+$(this).find('DislocOutputURL').text()+"'>Surface Displacement Outputs (text)</a></li>";
 				 
-				 
-				 var kmlLayer=new google.maps.KmlLayer();
-             eventListHtml+="<li><a id='"+index2+"' href='"+$(this).find('DisplacementKmlURL').text()+"'>Surface Displacement Plot</a></li>";
-             eventListHtml+="<li><a id='"+index2+"' href='"+$(this).find('InsarKmlURL').text()+"'>InSAR Plot</a></li>";
+				 var kmlDispUrl=$(this).find('DisplacementKmlURL').text();
+             kmlDispUrl=kmlDispUrl.replace(/^\s+|\s+$/g, '');
+				 kmlDispOpts={map:null};
+				 var kmlDispLayer=new google.maps.KmlLayer(kmlDispUrl,kmlDispOpts);
+             kmlDispLayerArray.push(kmlDispLayer);
+             eventListHtml+="<li>"
+				              +"<input id='kmlDispLayer_"+index2+"' type='checkbox' onClick='toggleDispKml(this)'>"
+				              +"<a id='"+index2+"' target='blank' href='"+kmlDispUrl+"'>Surface Displacement Plot</a></li>";
+
+				 var kmlInsarUrl=$(this).find('InsarKmlURL').text();             
+				 kmlInsarUrl=kmlInsarUrl.replace(/^\s+|\s+$/g, '');
+				 kmlInsarOpts={map:null};
+				 var kmlInsarLayer=new google.maps.KmlLayer(kmlInsarUrl,kmlInsarOpts);
+				 kmlInsarLayerArray.push(kmlInsarLayer);
+             eventListHtml+="<li>"
+				              +"<input id='kmlInsarLayer_"+index2+"' type='checkbox' onClick='toggleInsarKml(this)'>"
+				              +"<a id='"+index2+"' target='blank' href='"+kmlInsarUrl+"'>InSAR Plot</a></li>";
              eventListHtml+="</ul></li></ul>";  //Close the inner lists
 				 index1++;
-				 if(index1==4) index1=0;
+				 if(index1==5) index1=1;
 				 }
 				 index2++;
          });         
@@ -173,19 +192,58 @@
            eventListHtml+="</ul>";
 
            navbar.innerHTML=eventListHtml;
+
+			  //Finally, go to the most recent event
+			  popupInfoWindow2();
 			//--------------------------------------------------			
 			
 			//--------------------------------------------------
-			//This function depends on a 'global' array of info windows.  The caller
-			//is the HTMLElement of the corresponding element that generated the call.
-			//Typically this method is called by an onClick event of an anchor tag, and
-			//we expect the id attribute of the tag to correspond to the infowWindow array 
-			//entry that we want.
+			// This function depends on a 'global' array of info windows.  The caller
+			// is the HTMLElement of the corresponding element that generated the call.
+			// Typically this method is called by an onClick event of an anchor tag, and
+			// we expect the id attribute of the tag to correspond to the infowWindow array 
+			// entry that we want.
+         //
+         // Note also that all of these assume the id attribute comes first (so use [0]).
+         // This is fragile. Also the ID extraction depends on convention.
 			//--------------------------------------------------
 			function popupInfoWindow(caller) {
 			  var callerId=caller.attributes[0];
-			  var infoWindow=infoWindowArray[callerId.value];
+			  var index=callerId.value.split("_")[1];
+			  var infoWindow=infoWindowArray[index];
 			  infoWindow.open(faultMap);
+			}
+
+			function toggleDispKml(caller) {
+			  var callerId=caller.attributes[0];
+			  var index=callerId.value.split("_")[1];
+			  var kmlDispLayer=kmlDispLayerArray[index];
+			  var checkbox=document.getElementById(callerId.value);
+			  if(checkbox.checked==true) {
+			      kmlDispLayer.setMap(faultMap);
+				}
+				else {
+			      kmlDispLayer.setMap(null);
+            }
+			}
+
+			function toggleInsarKml(caller) {
+			  var callerId=caller.attributes[0];
+			  var index=callerId.value.split("_")[1];
+			  var kmlInsarLayer=kmlInsarLayerArray[index];
+			  var checkbox=document.getElementById(callerId.value);
+			  if(checkbox.checked==true) {
+			      kmlInsarLayer.setMap(faultMap);
+				}
+				else {
+    			   kmlInsarLayer.setMap(null);
+            }
+			}
+
+			//This function opens the most recent event's info window.
+			function popupInfoWindow2() {
+             var infoWindow=infoWindowArray[0];
+				 infoWindow.open(faultMap);
 			}
 
 			  //]]> //Keep for formatting
