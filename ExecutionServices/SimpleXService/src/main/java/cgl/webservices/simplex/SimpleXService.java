@@ -689,9 +689,24 @@ public class SimpleXService extends AntVisco implements Runnable {
 
 									double theFactor=d2r* Math.cos(d2r * latStart) * 6378.139 * (1.0 - Math.sin(d2r * latStart) * Math.sin(d2r * latStart) * flatten);
 									double strikeAngle=Double.parseDouble(fts[i].getFaultStrikeAngle());
-									double theTan=Math.tan(strikeAngle*d2r);
+									double sval=90.0-strikeAngle;  //Strike is measured from "y" instead of "x".
+									double theTan=Math.tan(sval*d2r);
 									double xend=1000.0/Math.sqrt(1.0+theTan*theTan);
 									double yend=Math.sqrt(1000.0*1000.0-xend*xend);
+
+									if (strikeAngle > 0.0 && strikeAngle < 90.0) { 
+										 xend = xend*1.0; yend = yend*1.0;
+									}
+									else if (strikeAngle > 90.0 && strikeAngle < 180.0) { 
+										 xend = xend*1.0; yend = yend* (-1.0);
+									}
+									else if (strikeAngle > 180.0 && strikeAngle < 270.0) { 
+										 xend = xend*(-1.0); yend = yend*(-1.0);
+									}
+									else if (strikeAngle > 270.0 && strikeAngle < 360.0) { 
+										 xend = xend*(-1.0); yend = yend*1.0;
+									}
+							  
 									double lonEnd=xend/theFactor+lonStart;
 									double latEnd=yend/111.32+latStart;
 									kmlserv.setFaultPlot("", fts[i].getFaultName(), 
