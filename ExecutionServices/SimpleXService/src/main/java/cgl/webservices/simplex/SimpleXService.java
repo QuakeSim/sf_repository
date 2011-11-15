@@ -660,30 +660,57 @@ public class SimpleXService extends AntVisco implements Runnable {
 
 	private SimpleXDataKml setfaultplot(SimpleXDataKml kmlserv, Fault[] fts) {
 
-		for (int i = 0; i < fts.length; i++) {
-			try {
-				if (fts[i].getFaultLonStarts() != null
-						&& fts[i].getFaultLatStarts() != null
-						&& fts[i].getFaultLonEnds() != null
-						&& fts[i].getFaultLatEnds() != null) {
-					if (!(fts[i].getFaultLonStarts()).equals("")
-							&& !(fts[i].getFaultLatStarts()).equals("")
-							&& !(fts[i].getFaultLonEnds()).equals("")
-							&& !(fts[i].getFaultLatEnds()).equals("")) {
-						kmlserv.setFaultPlot("", fts[i]
-								.getFaultName(), fts[i].getFaultLonStarts(),
-								fts[i].getFaultLatStarts(), fts[i]
-										.getFaultLonEnds(), fts[i]
-										.getFaultLatEnds(), "ff0000ff", 5);
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return kmlserv;
-	}
+		 for (int i = 0; i < fts.length; i++) {
+			  try {
+					if (fts[i].getFaultLonStarts() != null
+						 && fts[i].getFaultLatStarts() != null
+						 && fts[i].getFaultLonEnds() != null
+						 && fts[i].getFaultLatEnds() != null) {
+						 if (!(fts[i].getFaultLonStarts()).equals("")
+							  && !(fts[i].getFaultLatStarts()).equals("")
+							  && !(fts[i].getFaultLonEnds()).equals("")
+							  && !(fts[i].getFaultLatEnds()).equals("")) {
 
+							  //TODO: This a hack to limit plots of faults to 1000 KM.
+							  double faultLength=Double.parseDouble(fts[i].getFaultLength());
+							  if(faultLength<1000.0) {
+									kmlserv.setFaultPlot("", fts[i].getFaultName(), 
+																fts[i].getFaultLonStarts(),
+																fts[i].getFaultLatStarts(), 
+																fts[i].getFaultLonEnds(), 
+																fts[i].getFaultLatEnds(), "ff0000ff", 5);
+							  }
+							  else {
+									//Fault >1000 KM, so just set it to 1000 for plotting purposes
+									double d2r = Math.acos(-1.0) / 180.0;
+									double flatten = 1.0 / 298.247;
+									double latStart=Double.parseDouble(fts[i].getFaultLatStarts());
+									double lonStart=Double.parseDouble(fts[i].getFaultLonStarts());
+
+									double theFactor=d2r* Math.cos(d2r * latStart) * 6378.139 * (1.0 - Math.sin(d2r * latStart) * Math.sin(d2r * latStart) * flatten);
+									double strikeAngle=Double.parseDouble(fts[i].getFaultStrikeAngle());
+									double theTan=Math.tan(strikeAngle*d2r);
+									double xend=1000.0/Math.sqrt(1.0+theTan*theTan);
+									double yend=Math.sqrt(1000.0*1000.0-xend*xend);
+									double lonEnd=xend/theFactor+lonStart;
+									double latEnd=yend/111.32+latStart;
+									kmlserv.setFaultPlot("", fts[i].getFaultName(), 
+																fts[i].getFaultLonStarts(),
+																fts[i].getFaultLatStarts(), 
+																lonEnd+"",
+																latEnd+"", 
+																"ff0000ff", 
+																5);
+							  }
+						 }
+					}
+			  } catch (Exception e) {
+					e.printStackTrace();
+			  }
+		 }
+		 return kmlserv;
+	}
+	 
 	protected String[] setPrePlotGMTPlotArgs(String workDir,
 			String projectName, String origin_lat, String origin_lon,
 			String timeStamp) {
