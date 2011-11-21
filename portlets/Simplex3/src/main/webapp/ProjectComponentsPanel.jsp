@@ -8,6 +8,7 @@
 		//<![CDATA[
       //--------------------------------------------------
       // This toggles displays of fieldsets.
+		// TODO: This code is now obsolete.
 		//--------------------------------------------------
 		function toggleDisplay1(fieldset) {
 		   var panelGrid1=document.getElementById("UpdateSelectFaultsForm:dflelerkljg162");
@@ -35,7 +36,7 @@
 			  commandButton.style.display=defaultVal;
 		   }
 		}		
-		  //]]>
+		//]]>
 	 </script>
   </f:verbatim>
   <h:panelGroup id="dflelerkljk161">
@@ -45,12 +46,27 @@
 		<h:inputHidden id="projectOriginLon" value="#{SimplexBean.currentProjectEntry.origin_lon}"/>
 		
 		<f:verbatim>
+		  <!--
 		  <fieldset ondblclick="toggleDisplay1(this)">
+			 -->
+		  <fieldset>
 			 <legend class="portlet-form-label">Fault Components</legend>
-			 Click the checkbox if you want to allow Simplex to vary the value during
-			 optimization. 
-			 <u>Toggle the fault display on/off by double clicking anywhere in this fieldset.</u>
+			 You can edit or delete your project fault components in the form below.  Please click
+			 the 'update' button after changing values.
+			 <br/>
+			 <a class="display-toggle-on" id="ToggleView1" href="#">View/Hide Faults</a><br/>
 			 <p/>
+			 <script>
+				  $('#ToggleView1').click(function() {
+				    if($('#UpdateSelectFaultsForm\\:dflelerkljg162').css('display')=='none') {
+					   $('#ToggleView1').removeClass('display-toggle-off').addClass('display-toggle-on');
+					 }
+					 else {
+					    $('#ToggleView1').removeClass('display-toggle-on').addClass('display-toggle-off');
+					 }
+					 $('#UpdateSelectFaultsForm\\:dflelerkljg162').toggle();
+					 });
+			 </script>
 		  </f:verbatim>
 
 		  <h:panelGrid id="dflelerkljg162" 
@@ -351,10 +367,23 @@
 	 <h:form id="UpdateSelectObservationForm"
 				rendered="#{!empty SimplexBean.myObservationsForProjectList}">
 		<f:verbatim>
-		  <fieldset ondblclick="toggleDisplay2(this)">
+		  <fieldset>
 			 <legend class="portlet-form-label">Observation Components</legend>
-			 Please click the 'update' button after value changes.
-			 <u>Toggle the fault display on/off by double clicking anywhere in this fieldset.</u>
+			 You can edit or delete your project observation components in the form below. Please click the 'update' button after value changes.<br/>
+			 <a class="display-toggle-off" id="ToggleView2" href="#">View/Hide Observations</a>
+			 <p/>
+			 <script>
+				  $('#ToggleView2').click(function() {
+				    if($('#UpdateSelectObservationForm\\:aerbasd1').css('display')=='none') {
+					   $('#ToggleView2').removeClass('display-toggle-off').addClass('display-toggle-on');
+					 }
+					 else {
+					    $('#ToggleView2').removeClass('display-toggle-on').addClass('display-toggle-off');
+					 }
+					 $('#UpdateSelectObservationForm\\:aerbasd1').toggle();
+					 });
+			 </script>
+
 		</f:verbatim>
 				
 		<h:panelGrid id="aerbasd1" 
