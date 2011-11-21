@@ -915,8 +915,8 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		KMLdescriptionparser kdp = new KMLdescriptionparser();
 		kdp.parseXml(getBasePath() + "/" + codeName + "/", kmlfiles);
 
-		kdp.getDesc(theFault);
-		kdp.parsevalues();
+		String desc=kdp.getDesc(theFault);
+		kdp.parsevalues(desc);
 
 		try {
 			double dip = kdp.getdip();

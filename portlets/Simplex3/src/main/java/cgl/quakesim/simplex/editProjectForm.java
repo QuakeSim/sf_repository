@@ -473,8 +473,8 @@ public class editProjectForm extends GenericProjectBean {
 		KMLdescriptionparser kdp = new KMLdescriptionparser();	 
 		kdp.parseXml(getBasePath() + "/" + codeName + "/", kmlfiles);
 		
-		kdp.getDesc(theFault);
-		kdp.parsevalues();
+		String desc=kdp.getDesc(theFault);
+		kdp.parsevalues(desc);
 		
 		try {
 			double dip = kdp.getdip();
@@ -505,8 +505,8 @@ public class editProjectForm extends GenericProjectBean {
 			tmp_fault.setFaultDipAngle(dip+"");
 			
 			//Probably hokey default values
-			tmp_fault.setFaultSlip ("1.0"); 
-			tmp_fault.setFaultRakeAngle("1.0");
+			tmp_fault.setFaultSlip (kdp.getdipslip()+""); 
+			tmp_fault.setFaultRakeAngle(kdp.getstrikeslip()+"");
 			tmp_fault.setFaultLonStarts(lonStart+"");
 			tmp_fault.setFaultLatStarts(latStart+"");
 			tmp_fault.setFaultLonEnds(lonEnd+"");

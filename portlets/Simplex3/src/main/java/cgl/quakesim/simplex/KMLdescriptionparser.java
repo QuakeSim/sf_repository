@@ -288,8 +288,8 @@ public class KMLdescriptionparser {
 					// System.out.println(((Element)nodelist.item(nB)).getElementsByTagnBme("nBme").item(0).getTextContent());
 				
 					
-					desc = ((Element)(((Element)nodelist.item(nB)).getElementsByTagName("description").item(0).getParentNode())).getElementsByTagName("description").item(0).getTextContent();
-					parsevalues();
+					 String desc = ((Element)(((Element)nodelist.item(nB)).getElementsByTagName("description").item(0).getParentNode())).getElementsByTagName("description").item(0).getTextContent();
+					parsevalues(desc);
 					
 					if ((attribute.compareTo("Name") == 0 && keyword.compareToIgnoreCase(faultname) == 0)
 							|| (attribute.compareTo("LonLat") == 0 && isItinaBox(keyword)) || (attribute.compareTo("All") == 0))
@@ -324,13 +324,16 @@ public class KMLdescriptionparser {
 		
 	}
 	
-	public void parsevalues(){		
+	public void parsevalues(String desc){		
 
 		String[] splitvalues = desc.split("<br>");
 		
-		for (int nA = 0 ; nA < splitvalues.length ; nA++)
-		{	
+		// System.out.println("===============Parsing infobox values==============");
+		// System.out.println("splitvalues:"+splitvalues.length);
+		
+		for (int nA = 0 ; nA < splitvalues.length ; nA++) {	
 			String[] temp = splitvalues[nA].split(":");
+			//			System.out.println(temp[0]+" "+temp[1]+" "+temp[1].split("&")[0]);
 			// System.out.println(temp[0]);
 			if (temp[0].compareTo("<b>Fault Name</b>") == 0)
 				this.faultname = temp[1];

@@ -228,8 +228,8 @@ public class KMLdescriptionparser {
 					// System.out.println(((Element)nodelist.item(nB)).getElementsByTagnBme("nBme").item(0).getTextContent());
 				
 					
-					desc = ((Element)(((Element)nodelist.item(nB)).getElementsByTagName("description").item(0).getParentNode())).getElementsByTagName("description").item(0).getTextContent();
-					parsevalues();
+					String desc = ((Element)(((Element)nodelist.item(nB)).getElementsByTagName("description").item(0).getParentNode())).getElementsByTagName("description").item(0).getTextContent();
+					parsevalues(desc);
 					
 					if ((attribute.compareTo("Name") == 0 && keyword.compareToIgnoreCase(faultname) == 0)
 							|| (attribute.compareTo("LonLat") == 0 && isItinaBox(keyword)) || (attribute.compareTo("All") == 0))
@@ -264,7 +264,7 @@ public class KMLdescriptionparser {
 		
 	}
 	
-	public void parsevalues(){		
+	public void parsevalues(String desc){		
 
 		String[] splitvalues = desc.split("<br>");
 		
