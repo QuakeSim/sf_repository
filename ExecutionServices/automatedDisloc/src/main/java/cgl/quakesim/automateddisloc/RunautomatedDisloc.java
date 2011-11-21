@@ -442,9 +442,12 @@ public class RunautomatedDisloc implements Job {
 					  // 		ex.printStackTrace();
 					  // }
 					  
-					  System.out.println("Here we are: "+hazusOutputUrl+" "+hazusOutputMessage);
+					  //					  System.out.println("Here we are: "+hazusOutputUrl+" "+hazusOutputMessage);
 					  //Now print out the KML for this earthquake
-					  printKmlForEarthquakeEntry(entry, fault, out, ouls, projectname,projectShortName,hazusOutputUrl,hazusOutputMessage);
+					  
+					  String eventLink=entry.getEventLink();
+					  String eventTime=entry.getUpdated();
+					  printKmlForEarthquakeEntry(entry, fault, out, ouls, projectname,projectShortName,hazusOutputUrl,hazusOutputMessage, eventLink, eventTime);
 				 }
 			}
 
@@ -1689,11 +1692,15 @@ public class RunautomatedDisloc implements Job {
 															 String projectname,
 															 String projectShortName,
 															 String hazusOutputUrl,
-															 String hazusOutputMessage) {
+															 String hazusOutputMessage,
+															 String eventLink,
+															 String eventTime) {
 		  System.out.println("We are now printing the KML");
 				out.println(pmBegin);
 				out.println("<name>"+projectname+"</name>");
 				out.println("<shortName>"+projectShortName+"</shortName>");
+				out.println("<eventLink>"+eventLink+"</eventLink>");
+				out.println("<eventTime>"+eventTime+"</eventTime>");
 				out.println(descBegin);				
 				String s = "<![CDATA[<b>Fault Name</b>: " + projectShortName + "<br><b>LatStart</b>: " + fault.getFaultLatStart() + "<br><b>LonStart</b>: " + fault.getFaultLonStart() + "<br><b>Length</b>: " + fault.getFaultLength() + " <br><b>Width</b>: " + fault.getFaultWidth() + "<br><b>Depth</b>: " + fault.getFaultDepth() + "<br><b>Dip Angle</b>: " + fault.getFaultDipAngle() + "<br><b>Strike Angle</b>: " + fault.getFaultStrikeAngle() + "<br><b>Dip Slip</b>: " + fault.getFaultDipSlip() + "<br><b>Strike Slip</b>: " + fault.getFaultStrikeSlip() + "<br><b>Location [x, y]</b>: [" + fault.getFaultLocationX() + ", " + fault.getFaultLocationY() + "]<br><b>Updated</b>:  " + entry.getUpdated() + "<br><a href= \"" + ouls.getDislocoutputURL() + "\"><b>DislocOutputURL</b></a><br><a href=\"http://maps.google.com/maps?q=" + ouls.getDisplacementkmlURL() + "&t=p\"><b>DisplacementKmlURL</b></a><br><a href=\"http://maps.google.com/maps?q=" + ouls.getInsarkmlURL() +"&t=p\"><b>InsarKmlURL</b></a><br><b>Comment</b>: Source URL is <a href=\""+url+"\">"+url+"<br><a href=\"http://www.quakesim.org\">QuakeSim Project</a><br>]]>";				
 				out.println(s);

@@ -2,17 +2,18 @@ package cgl.quakesim.automateddisloc;
 
 public class Entry {
 		
-	String id = null;
-	String title = null;
-	String updated = null;
-	String link1 = null;
-	String link2 = null;
-	String summary = null;
-	String georss_point = null;
-	String georss_elev = null;
-	String category = null;
+	 String id = null;
+	 String title = null;
+	 String updated = null;
+	 String link1 = null;
+	 String link2 = null;
+	 String summary = null;
+	 String georss_point = null;
+	 String georss_elev = null;
+	 String category = null;
+	 String eventLink=null;
 	
-	Double M = null;
+	 Double M = null;
 	
 	
 	public String getId() {
@@ -74,7 +75,14 @@ public class Entry {
 		return M;
 	}
 	
+	 public String getEventLink(){
+		  return eventLink;
+	 }
 	
+	 public void setEventLink(String eventLink) {
+		  this.eventLink=eventLink;
+	 } 
+
 	public boolean isMover7() {
 		
 		if (getM() >= 7.0)

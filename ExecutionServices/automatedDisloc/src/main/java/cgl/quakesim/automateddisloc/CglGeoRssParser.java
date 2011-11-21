@@ -79,7 +79,7 @@ public class CglGeoRssParser {
 			en.setUpdated(e.getElementsByTagName("updated").item(0).getTextContent());
 			en.setGeorss_point(e.getElementsByTagName("georss:point").item(0).getTextContent());
 			en.setGeorss_elev(e.getElementsByTagName("georss:elev").item(0).getTextContent());
-			
+			en.setEventLink(((Element)e.getElementsByTagName("link").item(0)).getAttribute("href"));
 			entry_list.add(en);
 		}
 		

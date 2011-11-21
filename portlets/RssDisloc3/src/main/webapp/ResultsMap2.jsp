@@ -59,6 +59,7 @@
 			<li>Click the checkbox next to "InSAR Plot" or "Surface Displacement" to toggle results display on/off.</li>
 			<li>Click the "InSAR Plot" or "Surface Diplacement" links to download the source KML.
 		 </ul>
+	  </div>
 	  </f:verbatim>
 	  <h:form id="refreshPage1">
 		 <h:commandLink id="lrilehdk239" action="disloc-this">
@@ -101,13 +102,13 @@
 		 //]]>
 		 %>
 		 
-		 <h:panelGrid id="faultMapsideGrid" columns="1" border="1">
+		 <h:panelGrid id="faultMapsideGrid" columns="2" border="1">
 			<f:verbatim>
-			  <div id="faultMap" style="width: 900px; height: 600px;"></div>
-			</f:verbatim> 
-			<f:verbatim>
-			  <div id="navbar" style="width: 900px; height: 150px; overflow:auto;"></div>
+			  <div id="navbar" style="width: 200px; height: 600px; overflow:auto;"></div>
 			</f:verbatim>
+			<f:verbatim>
+			  <div id="faultMap" style="width: 600px; height: 600px;"></div>
+			</f:verbatim> 
 		 </h:panelGrid>
 		 <f:verbatim>
 			

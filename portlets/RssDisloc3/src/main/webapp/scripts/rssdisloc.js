@@ -8,11 +8,11 @@ var rssdisloc=rssdisloc || (function() {
 	 var kmlInsarLayerArray=new Array();
 	 var faultMap;
 	 var navbar;
-	 
+	 	 
 	 function setMap(faultMapDiv) {	 
 		  //Create the map
 		  var latlng=new google.maps.LatLng(33.3,-118.0);
-		  var mapOpts={zoom:7, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP};
+		  var mapOpts={zoom:7, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP,panControl:false,scrollwheel:false,zoomControlOptions:{position:google.maps.ControlPosition.TOP_RIGHT,style:google.maps.ZoomControlStyle.SMALL}};
 		  faultMap=new google.maps.Map(faultMapDiv,mapOpts);
 	 }
 	 
@@ -29,12 +29,13 @@ var rssdisloc=rssdisloc || (function() {
 			   //We have to work around the poor formatting choices of the KML feed.
 				//The faults will be grouped in 4's, each with the same shortname.
 				if(index1==1) {
-					 eventListHtml+="<li>"+$(this).find('shortName').text();
+					 eventListHtml+="<li>"+"<a target='null' href='"+$(this).find('eventLink').text()+"'>"+$(this).find('shortName').text()+"</a>";
+					 eventListHtml+="<br/>"+$(this).find('eventTime').text();
 				}
 				if(index1<5) {
 					 //Next several lines should go in a helper function.
 					 var description=$(this).find('description').text();
-					 var content="<div style='font-family: Arial, sans-serif;font-size: small;width:300px'>"+description+"</div>";
+					 var content="<div style='font-family: Arial, sans-serif;font-size: small;width:280px'>"+description+"</div>";
 					 //Note the coordinates are in lng,lat order.
 					 var eventCoord=$(this).find('coordinates').text();
 					 eventCoord=eventCoord.split(" ")[0];  //We only keep the first lat,lon coordinates
