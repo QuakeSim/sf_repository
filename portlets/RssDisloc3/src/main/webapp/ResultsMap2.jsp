@@ -7,15 +7,29 @@
 <html>
  <head>
  <style>
-   .alignTop {
-    vertical-align:top;
-   }
+	.alignTop {
+	vertical-align:top;
+	}
+	
+	.header2 {
+	font-family: Arial, sans-serif;
+	font-size: 18pt;
+	font-weight: bold;
+	}
+	
+	.display-toggle-on {
+	background-image: url(/RssDisloc3/images/demo-spindown-open.gif);
+	background-repeat: no-repeat;
+	background-position: left center;
+	padding-left:10px;
+	}
 
-   .header2 {
-    font-family: Arial, sans-serif;
-    font-size: 18pt;
-    font-weight: bold;
-   }
+	.display-toggle-off {
+	background-image: url(/RssDisloc3/images/demo-spindown-closed.gif);
+	background-repeat: no-repeat;
+	background-position: left center;
+	padding-left:10px;
+	}
  </style>
 
 	<title>RSS Disloc Results</title>
@@ -41,6 +55,8 @@
 	  <h:outputText id="abdv1" styleClass="header2" value="Disloc Results Map"/>   
 	  <f:verbatim>
 		 <p>
+		 <a class="display-toggle-on" id="ToggleView" href="#">View/Hide Instructions</a>
+		 <div id="ViewInstructions">
 		 This map shows results of surface deformation calculations for earthquakes
 		 from the USGS RSS feed for M>5. See <a href="http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml">http://earthquake.usgs.gov/earthquakes/catalogs/7day-M5.xml</a>.</p>  
 		 <p>Four different scenarios are calculated for each event.  
@@ -51,7 +67,6 @@
 			<li>Dip Angle=45 degrees, Strike Angle=90 degrees, dip slip, no strike slip</li>
 		 </ol>
 		 Interferograms are calculated with elevation angle=60, azimuth=0, and frequency 1.26 GHz. 
-		 </p>
 		 <p><b>Usage Instructions</b>
 		 <ul>
 			<li>Click the "+" or "-" icon to expand or contract the listings for an event.
@@ -60,7 +75,21 @@
 			<li>Click the "InSAR Plot" or "Surface Diplacement" links to download the source KML.
 		 </ul>
 	  </div>
+	</p>
 	  </f:verbatim>
+	  <script>
+		 //This is a script to toggle the instructions' display
+		 $('#ToggleView').click(function() {
+           if($('#ViewInstructions').css('display')=='none') {
+		        $('#ToggleView').removeClass('display-toggle-off').addClass('display-toggle-on');
+		     }
+		     else {
+		        $('#ToggleView').removeClass('display-toggle-on').addClass('display-toggle-off');
+		     }
+		     $('#ViewInstructions').toggle();
+
+	    });
+	  </script>
 	  <h:form id="refreshPage1">
 		 <h:commandLink id="lrilehdk239" action="disloc-this">
 			<h:outputText id="feo0re0" value="Refresh Page" />
