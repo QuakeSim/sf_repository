@@ -1,3 +1,17 @@
+.display-toggle-on {
+	 background-image: url(/Simplex3/images/demo-spindown-open.gif);
+	 background-repeat: no-repeat;
+	 background-position: left center;
+	 padding-left:10px;
+}
+
+.display-toggle-off {
+	 background-image: url(/Simplex3/images/demo-spindown-closed.gif);
+	 background-repeat: no-repeat;
+	 background-position: left center;
+	 padding-left:10px;
+}
+
 table {
 	 border-collapse:collapse;
 }
