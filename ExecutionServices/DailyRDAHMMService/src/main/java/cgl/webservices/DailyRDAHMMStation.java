@@ -1217,9 +1217,9 @@ public class DailyRDAHMMStation {
 		}
 		
 		// delete old directories
-		for (int i=0; i<dirNames.size(); i++) {
-			UtilSet.deleteDirectory(new File(baseDestDir + File.separator + dirNames.get(i)));
-		}		
+		//for (int i=0; i<dirNames.size(); i++) {
+			//UtilSet.deleteDirectory(new File(baseDestDir + File.separator + dirNames.get(i)));
+		//}		
 		return true;
 	}
 	
