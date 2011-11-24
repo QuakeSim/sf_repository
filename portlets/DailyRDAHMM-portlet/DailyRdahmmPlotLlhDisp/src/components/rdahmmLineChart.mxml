@@ -60,8 +60,7 @@
 			// these are just for lining the vertical axes up
 			private function leftAxisLabelFunc(axisRenderer:IAxisRenderer, label:String):String {
 				var spaceCount:Number = maxDispLen - label.length;
-				// 2.5 is an number we get from experience at which we need to put an extra space to keep the line-up
-				spaceCount = spaceCount + Math.round(spaceCount / 2.5);
+				
 				if (spaceCount > 0) {
 					var head:String = "";
 					for (var i:Number=1; i<spaceCount; i++) {
@@ -76,7 +75,7 @@
 			private function rightAxisLabelFunc(axisRenderer:IAxisRenderer, label:String):String {
 				var spaceCount:Number = maxValLen - label.length;
 				// 2.5 is an number we get from experience at which we need to put an extra space to keep the line-up
-				spaceCount = spaceCount + Math.round(spaceCount / 2.5);
+				//spaceCount = spaceCount + Math.round(spaceCount / 2.5);
 				if (spaceCount > 0) {
 					var tail:String = "";
 					for (var i:Number=1; i<spaceCount; i++) {
@@ -123,8 +122,8 @@
 	</mx:verticalAxis>
 	
 	<mx:verticalAxisRenderers>
-		<mx:AxisRenderer id="rv1" placement="left" axis="{v1}" tickPlacement="inside" tickLength="5"/>
-		<mx:AxisRenderer id="rv2" placement="right" axis="{v2}" tickPlacement="inside" tickLength="5"/>
+		<mx:AxisRenderer id="rv1" placement="left" axis="{v1}" tickPlacement="inside" tickLength="5" fontFamily="courier new" fontSize="11"/>
+		<mx:AxisRenderer id="rv2" placement="right" axis="{v2}" tickPlacement="inside" tickLength="5" fontFamily="courier new" fontSize="11"/>
 	</mx:verticalAxisRenderers>
 	
 	<mx:series>
