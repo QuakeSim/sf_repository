@@ -1416,21 +1416,21 @@ public class SimpleXService extends AntVisco implements Runnable {
 			 
 			 //Determine the scaling. We'll need to use one value for all 
 			 //arrow plots, so we call the method multiple times.
-			 double[] arrowScale=new double[3];
-			 arrowScale[0]=setGlobalKmlArrowScale(residualPointEntries);
-			 logger.debug("ArrowScale:"+arrowScale[0]);
-			 arrowScale[1]=setGlobalKmlArrowScale(calcPointEntries);			
-			 logger.debug("ArrowScale:"+arrowScale[1]);
-			 arrowScale[2]=setGlobalKmlArrowScale(obsvPointEntries);
-			 logger.debug("ArrowScale:"+arrowScale[2]);
+			 // double[] arrowScale=new double[3];
+			 // arrowScale[0]=setGlobalKmlArrowScale(residualPointEntries);
+			 // logger.debug("ArrowScale:"+arrowScale[0]);
+			 // arrowScale[1]=setGlobalKmlArrowScale(calcPointEntries);			
+			 // logger.debug("ArrowScale:"+arrowScale[1]);
+			 // arrowScale[2]=setGlobalKmlArrowScale(obsvPointEntries);
+			 // logger.debug("ArrowScale:"+arrowScale[2]);
 			 
-			 //Sort the arrowScale values from lowest to highest.  It is 
-			 //also possible in the future that we need to retain the 3 different
-			 //scales.  For now, though, we use the *shortest* arrowScale result
-			 //for all. This corresponds to the *longest* simplex result length.
-			 Arrays.sort(arrowScale);
+			 // //Sort the arrowScale values from lowest to highest.  It is 
+			 // //also possible in the future that we need to retain the 3 different
+			 // //scales.  For now, though, we use the *shortest* arrowScale result
+			 // //for all. This corresponds to the *longest* simplex result length.
+			 // Arrays.sort(arrowScale);
 
-			 System.out.println("Arrow scale values:"+arrowScale[0]+" "+arrowScale[1]+" "+arrowScale[2]);
+			 // System.out.println("Arrow scale values:"+arrowScale[0]+" "+arrowScale[1]+" "+arrowScale[2]);
 
 			//Set up the session wide service coordinates.
 			SimpleXDataKml kmlService;
@@ -1447,18 +1447,18 @@ public class SimpleXService extends AntVisco implements Runnable {
 			kmlService.setDatalist(residualPointEntries);
 			kmlService.setArrowPlacemark("'Residual Displacements Arrow Layer", 
 												  "ffff0000", 
-												  2, arrowScale[0]);
+												  2);//, arrowScale[0]);
 
 			kmlService.setDatalist(calcPointEntries);
 			kmlService.setArrowPlacemark("Calculated Displacements Arrow Layer", 
 												  "ff00ccff", 
-												  2, arrowScale[0]);
+												  2);//, arrowScale[0]);
 
 
 			kmlService.setDatalist(obsvPointEntries);
 			kmlService.setArrowPlacemark("Observed Displacements Arrow Layer", 
 												  "ff0000ff", 
-												  2, arrowScale[0]);
+												  2);//, arrowScale[0]);
 			String totalKmlUrl = kmlService.runMakeKml("", 
 																	 userName,
 																	 projectName,
