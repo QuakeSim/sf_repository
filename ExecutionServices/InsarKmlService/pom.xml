@@ -78,13 +78,13 @@
         </repository>
 
         <repository>
-            <id>apache-maven</id>
+            <id>ibiblio-maven</id>
             <url>http://www.ibiblio.org/maven2</url>
         </repository>
 
         <!-- This is the apache repository for bridges -->
         <repository>
-            <id>apache-maven</id>
+            <id>apache-maven-cvs</id>
             <url>http://cvs.apache.org/repository</url>
         </repository>
 

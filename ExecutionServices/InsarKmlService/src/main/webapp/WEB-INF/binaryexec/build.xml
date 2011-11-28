@@ -6,6 +6,7 @@
 	 <mkdir dir="${workDir.prop}" />
   </target>
 
+<!--
   <target name="CopyLogo" depends="MakeWorkDir">
 	 <echo message="Copying logo from ${bindir.prop} to working directory ${workDir.prop}"/>
 	 <copy file="${bindir.prop}/QuakeSimLogoGrayEmboss.png"
@@ -13,8 +14,8 @@
     <copy file="${bindir.prop}/QuakeSimLogoGrayEmbossSmall.png"
 			 todir="${workDir.prop}"/>
   </target>
-  
-  <target name="ExecInsarKml" depends="CopyLogo">
+-->
+  <target name="ExecInsarKml"> 
     <echo message="Bin directory: ${bindir.prop}"/>
     <exec executable="${bindir.prop}/SARImage.py" 
           output="${workDir.prop}/${projectName.prop}.stdout"
