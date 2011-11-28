@@ -17,6 +17,10 @@ var calculators=calculators || (function() {
 		  latStart.value=Math.round(latStart.value*1000.0)/1000.0;
 		  console.log(lonStart.value+" "+latStart.value);
 	 	  
+		  //We'll use the convention that strike is -180 to 180. This is what Simplex assumes.  
+		  if(strike.value>180) strike.value=strike.value-360;
+		  if(strike.value<-180) strike.value=strike.value+360;
+
 		  //Now find the lat/lon values of the translated endpoint.
 		  //First, find the Cartesian coordinates of the endpoint.  
 		  
@@ -26,7 +30,7 @@ var calculators=calculators || (function() {
 		  }
 		  else if (strike.value == 90) { xend = length.value; yend = 0;}
 		  else if (strike.value == 180) { xend = 0; yend = (-1.0) * length.value;}
-		  else if (strike.value == 270) { xend = (-1.0) * length.value; yend = 0;}
+		  else if (strike.value == -90) { xend = (-1.0) * length.value; yend = 0;}
 		  else {
 				var sval = 90 - strike.value;
 				var thetan = Math.tan(sval*d2r);
@@ -35,8 +39,8 @@ var calculators=calculators || (function() {
 				
 				if (strike.value > 0 && strike.value < 90) { xend = xend*1.0; yend = yend*1.0;}
 				else if (strike.value > 90 && strike.value < 180) { xend = xend*1.0; yend = yend* (-1.0);}
-				else if (strike.value > 180 && strike.value < 270) { xend = xend*(-1.0); yend = yend*(-1.0);}
-				else if (strike.value > 270 && strike.value < 360) { xend = xend*(-1.0); yend = yend*1.0;}
+				else if (strike.value > -180 && strike.value < -90) { xend = xend*(-1.0); yend = yend*(-1.0);}
+				else if (strike.value > -90 && strike.value < 0) { xend = xend*(-1.0); yend = yend*1.0;}
 		  }
 		  
 		  //Note we use the lat, lon of the fault's starting point here, not the origin's lat, lon, because

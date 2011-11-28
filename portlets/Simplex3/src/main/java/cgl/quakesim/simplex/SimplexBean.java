@@ -3653,11 +3653,15 @@ public class SimplexBean extends GenericSopacBean {
 
 		  String space=" ";
 
+		  //We use strike angle convention of -180 to 180 instead of 0 to 360.
+		  if(strike>180) strike=strike-360;
+		  if(strike<-180) strike=strike+360;
+
 		  //Get the alignment correct
 		  if (strike > 0.0 && strike < 90.0) { xend = xend*1.0; yend = yend*1.0;}
 		  else if (strike > 90.0 && strike < 180.0) { xend = xend*1.0; yend = yend* (-1.0);}
-		  else if (strike > 180.0 && strike < 270.0) { xend = xend*(-1.0); yend = yend*(-1.0);}
-		  else if (strike > 270.0 && strike < 360.0) { xend = xend*(-1.0); yend = yend*1.0;}
+		  else if (strike > -180.0 && strike < -90.0) { xend = xend*(-1.0); yend = yend*(-1.0);}
+		  else if (strike > -90.0 && strike < 0.0) { xend = xend*(-1.0); yend = yend*1.0;}
 
 		  double lonEnd=xend/factor(currentProjectEntry.getOrigin_lon(), currentProjectEntry.getOrigin_lat())+Double.parseDouble(fault.getFaultLonStarts());
 		  double latEnd=yend/111.32+Double.parseDouble(fault.getFaultLatStarts());
