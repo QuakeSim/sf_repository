@@ -618,8 +618,11 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		// xinterval,yinterval);
 		// kmlService.setPointPlacemark("Icon Layer");
 		// kmlService.setArrowPlacemark("Arrow Layer", "ff66a1cc", 2);
-		double arrowScale=setGlobalKmlArrowScale(tmp_pointentrylist);
-		kmlService.setArrowPlacemark("Arrow Layer", "#000000", 0.95, arrowScale);
+
+		// Comment out since we will use the default.
+		//		double arrowScale=setGlobalKmlArrowScale(tmp_pointentrylist);
+		//		kmlService.setArrowPlacemark("Arrow Layer", "#000000", 0.95, arrowScale);
+		kmlService.setArrowPlacemark("Arrow Layer", "#000000", 0.95);
 
 		// Plot the faults
 		for (int i = 0; i < faults.length; i++) {
