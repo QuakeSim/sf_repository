@@ -131,13 +131,13 @@
 		 //]]>
 		 %>
 		 
-		 <h:panelGrid id="faultMapsideGrid" columns="2" border="1">
-			<f:verbatim>
-			  <div id="navbar" style="width: 200px; height: 600px; overflow:auto;"></div>
-			</f:verbatim>
+		 <h:panelGrid id="faultMapsideGrid" columns="1" border="1">
 			<f:verbatim>
 			  <div id="faultMap" style="width: 600px; height: 600px;"></div>
 			</f:verbatim> 
+			<f:verbatim>
+			  <div id="navbar" style="width: 600px; height: 300px; overflow:auto;"></div>
+			</f:verbatim>
 		 </h:panelGrid>
 		 <f:verbatim>
 			
