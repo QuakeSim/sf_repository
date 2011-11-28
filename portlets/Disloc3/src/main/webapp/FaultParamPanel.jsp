@@ -34,7 +34,7 @@
 						 value="#{DislocBean2.currentFault.faultLocationX}" required="true" /> 
 	 </h:panelGroup> 
 	 <h:outputText  id="lkdjre3234" value="N/A" /> 
-	 
+
 	 <h:outputText  id="stuff19" value="Location Y:" /> 
 	 <h:panelGroup  id="stuff20"> 
 		<h:inputText id="FaultLocationY" 
@@ -113,7 +113,7 @@
 		<h:inputText id="FaultSlip" 
 						 value="#{DislocBean2.currentFault.faultDipSlip}" required="true" /> 
 	 </h:panelGroup> 
-	 <h:outputText  id="lk67v342djre32" value="cm"/> 
+	 <h:outputText  id="lk67v342djre32" value="mm"/> 
 	 
 	 <h:outputText  id="stuff31" value="Strike Angle:" /> 
 	 <h:panelGroup  id="stuff32"> 
@@ -129,14 +129,14 @@
 		<h:inputText id="FaultStrikeSlip" 
 						 value="#{DislocBean2.currentFault.faultStrikeSlip}" required="true" /> 
 	 </h:panelGroup> 
-	 <h:outputText  id="er9e2djre32" value="cm"/> 
+	 <h:outputText  id="er9e2djre32" value="mm"/> 
 	 
 	 <h:outputText  id="stuff34" value="Tensile Slip:" /> 
 	 <h:panelGroup  id="stuff36"> 
 		<h:inputText id="FaultTensileSlip" 
 						 value="#{DislocBean2.currentFault.faultTensileSlip}" required="true" /> 
 	 </h:panelGroup> 
-	 <h:outputText  id="ee3e33c3" value="cm"/> 
+	 <h:outputText  id="ee3e33c3" value="mm"/> 
 	 
 	 
 	 <h:outputText  id="stuff37" value="Lame Lambda:" /> 
