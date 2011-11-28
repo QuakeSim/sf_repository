@@ -1039,6 +1039,8 @@ public class SimplexBean extends GenericSopacBean {
 	  * be kept in sync with the non-blocking simplex.
 	  */
 	 public String toggleRunSimplex2Anon() {
+		  //Turn off any panels showing in EditProject
+		  currentEditProjectForm.initEditFormsSelection();
 
 		  Observation[] obsv = getObservationsFromDB();
 		  Fault[] faults = getFaultsFromDB();
@@ -1080,7 +1082,9 @@ public class SimplexBean extends GenericSopacBean {
 	  * version must be kept in synch.
 	  */
 	 public String toggleRunSimplex2() {
-		  
+		  //Turn off any panels showing in EditProject
+		  currentEditProjectForm.initEditFormsSelection();
+
 		  Observation[] obsv = getObservationsFromDB();
 		  Fault[] faults = getFaultsFromDB();
 		  // String timeStamp = "";
@@ -1616,7 +1620,10 @@ public class SimplexBean extends GenericSopacBean {
 	  * This is used to delete an observation from the ProjectComponentPanel.
 	  */
 	 public void toggleDeleteObservations2() {
-		ObjectContainer db = null;
+		  //Turn off any panels showing in EditProject
+		  currentEditProjectForm.initEditFormsSelection();
+		  
+		  ObjectContainer db = null;
 		try {
 			 Observation obsvToDelete=(Observation)(getMyObsvListingsDataTable().getRowData());
 			 System.out.println("Obsv to delete:"+obsvToDelete.getObsvName());
@@ -1649,6 +1656,9 @@ public class SimplexBean extends GenericSopacBean {
 	  * This method is used to update faults in ProjectComponentsPanel.
 	  */
 	 public void toggleUpdateObservations2() {
+		  //Turn off any panels showing in EditProject
+		  currentEditProjectForm.initEditFormsSelection();
+
 		ObjectContainer db = null;
 		try {
 			 Observation obsvToUpdate=(Observation)(getMyObsvListingsDataTable().getRowData());
@@ -2154,6 +2164,9 @@ public class SimplexBean extends GenericSopacBean {
 	  * This is used to delete a fault from the ProjectComponentPanel.
 	  */
 	 public void toggleDeleteFaults2() {
+		  //Turn off any panels showing in EditProject
+		  currentEditProjectForm.initEditFormsSelection();
+
 		ObjectContainer db = null;
 		try {
 			 Fault faultToDelete=(Fault)(getMyFaultListingsDataTable().getRowData());
@@ -2189,6 +2202,9 @@ public class SimplexBean extends GenericSopacBean {
 	  * This method is used to update faults in ProjectComponentsPanel.
 	  */
 	 public void toggleUpdateFaults2() {
+		  //Turn off any panels showing in EditProject
+		  currentEditProjectForm.initEditFormsSelection();
+
 		ObjectContainer db = null;
 		try {
 			 Fault faultToUpdate=(Fault)(getMyFaultListingsDataTable().getRowData());

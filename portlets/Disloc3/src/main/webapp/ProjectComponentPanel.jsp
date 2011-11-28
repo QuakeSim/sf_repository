@@ -12,8 +12,7 @@
 
 	 <h:inputHidden id="projectOriginLat" value="#{DislocBean2.currentParams.originLat}"/>
 	 <h:inputHidden id="projectOriginLon" value="#{DislocBean2.currentParams.originLon}"/>
-	 <h:panelGrid id="dislocdirtyworkaroundgroup"
-					  columns="2">
+	 <h:panelGrid id="dislocdirtyworkaroundgroup" columns="1">
 		<f:verbatim>
 		  Below are the faults you have added to your project.  You can update the
 		  fault model parameters by 1) editing the value in the box and 2) clicking the "Update" button.
@@ -31,7 +30,7 @@
 					  style="width:920px" 
 					  columns="1" border="0" cellpadding="0" cellspacing="0">
 		<h:panelGrid id="dflelerkljg162" 
-						 columns="2" 
+						 columns="1" 
 						 border="0"  
 						 cellpadding="0" 
 						 cellspacing="0" 
@@ -50,7 +49,7 @@
 			  <f:facet name="header">
 				 <f:verbatim>Name</f:verbatim>
 			  </f:facet>
-			  <h:panelGrid columns="2" cellpadding="0" cellspacing="0" id="kljerje22">
+			  <h:panelGrid columns="1" cellpadding="0" cellspacing="0" id="kljerje22">
 				 <h:inputText id="dflelerklh968" 
 								  style="text-align:right;width:35px"
 								  onmouseover="expandTextField(this)" 

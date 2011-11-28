@@ -483,6 +483,8 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	public String runBlockingDislocJSF() throws Exception {
 		
 		logger.info("[runBlockingDislocJSF] Started");
+		//Turn off any open dashboard windows. 
+		initEditFormsSelection();
 
 		try {
 
@@ -1504,6 +1506,9 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	  * This is used to delete a fault from the ProjectComponentPanel.
 	  */
 	 public void toggleDeleteFaults2() {
+		  //Turn off any displayed stuff in EditProject.
+		  initEditFormsSelection();		  
+		  
 		try {
 			 Fault faultToDelete=(Fault)(getMyFaultListingsDataTable().getRowData());
 			
@@ -1537,6 +1542,8 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 	  * This method is used to update faults in ProjectComponentsPanel.
 	  */
 	 public void toggleUpdateFaults2() {
+		  //Turn off any displayed stuff in EditProject.
+		  initEditFormsSelection();		  
 		try {
 			 Fault faultToUpdate=(Fault)(getMyFaultListingsDataTable().getRowData());
 			 if (db != null) db.close();
