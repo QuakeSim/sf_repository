@@ -2376,6 +2376,14 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 			if (db != null)
 				db.close();			
 		}
+		Collections.sort(this.myProjectNameList, new Comparator() {
+				  public int compare (Object o1, Object o2) {
+						String p1=(String) ((SelectItem)o1).getValue();
+						String p2=(String) ((SelectItem)o2).getValue();
+						//							System.out.println(p2.getProjectName() +" "+p1.getProjectName());
+						return p1.compareToIgnoreCase(p2);
+				  }
+			 });
 
 		return this.myProjectNameList;
 	}
