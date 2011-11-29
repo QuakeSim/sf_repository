@@ -273,9 +273,9 @@
 	<script type="text/javascript">
     
 	// Create common icon elements for all markers
-	var iconSize = new google.maps.Size(15, 20);
+	var iconSize = new google.maps.Size(18, 18);
 	var iconAnchor = new google.maps.Point(1, 10);
-	var iconDefImgUrl = "http://labs.google.com/ridefinder/images/mm_20_green.png";
+	var iconDefImgUrl = "http://maps.google.com/mapfiles/ms/micons/green.png";
 	var iconOrigin = new google.maps.Point(0, 0);
 
 	var networkInfo = new Array(5);
@@ -283,15 +283,15 @@
 		networkInfo[i] = new Array(2);
 	}
 	networkInfo[0][0] = "no status change:";
-	networkInfo[0][1] = "http://labs.google.com/ridefinder/images/mm_20_green.png";
+	networkInfo[0][1] = "http://maps.google.com/mapfiles/ms/micons/green.png";
 	networkInfo[1][0] = "status changes on selected date:";
-	networkInfo[1][1] = "http://labs.google.com/ridefinder/images/mm_20_red.png";
+	networkInfo[1][1] = "http://maps.google.com/mapfiles/ms/micons/red.png";
 	networkInfo[2][0] = "status changed in last 30 days before selected date:";
-	networkInfo[2][1] = "http://labs.google.com/ridefinder/images/mm_20_yellow.png";
+	networkInfo[2][1] = "http://maps.google.com/mapfiles/ms/micons/yellow.png";
 	networkInfo[3][0] = "no data on selected date:";
-	networkInfo[3][1] = "http://labs.google.com/ridefinder/images/mm_20_gray.png";
+	networkInfo[3][1] = "http://maps.google.com/mapfiles/ms/micons/lightblue.png";
 	networkInfo[4][0] = "no data on selected date, status changed in last 30 days before selected date:";
-	networkInfo[4][1] = "http://labs.google.com/ridefinder/images/mm_20_blue.png";
+	networkInfo[4][1] = "http://maps.google.com/mapfiles/ms/micons/blue.png";
 
 	function printNetworkColors(array) {
 		var html = "<table border='1'><tr><td><b>Status</b></td><td nowrap><b>Color<b></td></tr>";
@@ -304,7 +304,7 @@
 				if(col==0)
 					html = html + "  <td>" + array [row] [col] + "</td>";
 				if(col==1)
-					html = html + "  <td align='center'><img border=0 src=" + array [row] [col] + "></td>";
+					html = html + "  <td align='center'><img border=0 width=18 height=18 src=" + array [row] [col] + "></td>";
 			}
 			html = html + " </tr>";
 		}
@@ -430,31 +430,19 @@
 	Element eleOutput = null;
 	try {
 		// if the file is old or does not exist, copy it from xmlUrl
-		boolean shouldCopy = false;		
 		File localFile = new File(config.getServletContext().getRealPath("station-status-change-JPL_FILL.xml"));
 		if (localFile.exists()) {		
-			Calendar calFile1 = Calendar.getInstance();
-			Calendar calFile2 = Calendar.getInstance();
-			calFile2.setTimeInMillis(localFile.lastModified());
-			shouldCopy = !( calFile1.get(Calendar.YEAR) == calFile2.get(Calendar.YEAR) && calFile1.get(Calendar.MONTH) == calFile2.get(Calendar.MONTH) && calFile1.get(Calendar.DATE) == calFile2.get(Calendar.DATE) && calFile2.get(Calendar.HOUR_OF_DAY) > 5);
-			if (shouldCopy) {
-				//shouldCopy = false;
-				localFile.delete();
-			}
-		} else {
-			shouldCopy = true;		
+			localFile.delete();
 		}
-		if (shouldCopy) {
-			InputStream inUrl = new URL(xmlUrl).openStream();
-			OutputStream outLocalFile = new FileOutputStream(localFile);
-			byte[] buf = new byte[1024];
-			int length;
-			while((length = inUrl.read(buf))>0) {
-				outLocalFile.write(buf,0,length);
-			}
-			inUrl.close();
-			outLocalFile.close();
-		}		
+		InputStream inUrl = new URL(xmlUrl).openStream();
+		OutputStream outLocalFile = new FileOutputStream(localFile);
+		byte[] buf = new byte[1024];
+		int length;
+		while((length = inUrl.read(buf))>0) {
+			outLocalFile.write(buf,0,length);
+		}
+		inUrl.close();
+		outLocalFile.close();
 
 		BufferedReader br = new BufferedReader(new FileReader(localFile));
 		StringBuffer sb = new StringBuffer();
@@ -546,7 +534,7 @@
 %>
 		stationArray[<%=i%>] = new Array(7);	stationArray[<%=i%>][0] = '<%=eleStation.element("id").getText()%>';
 		stationArray[<%=i%>][1] = <%=x%>;	stationArray[<%=i%>][2] = <%=y%>;
-		icon = new google.maps.MarkerImage(iconDefImgUrl, iconSize, iconOrigin, iconAnchor);
+		icon = new google.maps.MarkerImage(iconDefImgUrl, iconSize, iconOrigin, iconAnchor, iconSize);
 		stationArray[<%=i%>][6] = createInfoWinMarker(new google.maps.LatLng(<%=x%>, <%=y%>), icon, <%=i%>);
 <%
 		
@@ -634,7 +622,7 @@
 							color = "yellow";
 							break;
 						case '3':
-							color = "gray";
+							color = "lightblue";
 							break;
 						case '4':
 							color = "blue";
@@ -642,10 +630,10 @@
 					}
 
 					if (stationArray[i][6] != null)
-						stationArray[i][6].getIcon().url = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
+						stationArray[i][6].getIcon().url = "http://maps.google.com/mapfiles/ms/micons/" + color + ".png";
 					else {
-						icon = new google.maps.MarkerImage(iconDefImgUrl, iconSize, iconOrigin, iconAnchor);
-						icon.url = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
+						icon = new google.maps.MarkerImage(iconDefImgUrl, iconSize, iconOrigin, iconAnchor, iconSize);
+						icon.url = "http://maps.google.com/mapfiles/ms/micons/" + color + ".png";
 						stationArray[i][6] = createInfoWinMarker(new google.maps.LatLng(stationArray[i][1], stationArray[i][2]), icon, i);
 					}
 					stationArray[i][6].setMap(map);
@@ -688,7 +676,7 @@
 							color = "yellow";
 							break;
 						case '3':
-							color = "gray";
+							color = "lightblue";
 							break;
 						case '4':
 							color = "blue";
@@ -696,10 +684,10 @@
 					}
 
 					if (stationArray[i][6] != null)
-						stationArray[i][6].getIcon().url = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
+						stationArray[i][6].getIcon().url = "http://maps.google.com/mapfiles/ms/micons/" + color + ".png";
 					else {
-						icon = new google.maps.MarkerImage(iconDefImgUrl, iconSize, iconOrigin, iconAnchor);
-						icon.url = "http://labs.google.com/ridefinder/images/mm_20_" + color + ".png";
+						icon = new google.maps.MarkerImage(iconDefImgUrl, iconSize, iconOrigin, iconAnchor, iconSize);
+						icon.url = "http://maps.google.com/mapfiles/ms/micons/" + color + ".png";
 						stationArray[i][6] = createInfoWinMarker(new google.maps.LatLng(stationArray[i][1], stationArray[i][2]), icon, i);
 					}
 					stationArray[i][6].setMap(map);
