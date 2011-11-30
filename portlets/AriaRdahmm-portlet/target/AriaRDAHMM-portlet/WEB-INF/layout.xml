@@ -1,0 +1,21 @@
+<portlet-tabbed-pane>
+    <portlet-tab label="AriaRDAHMM-Portlet">
+        <title lang="en">AriaRDAHMM-Portlet</title>
+        <portlet-tabbed-pane style="sub-menu">
+            <portlet-tab label="AriaRDAHMM-portlet">
+                <title lang="en">AriaRDAHMM Portlet</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="AriaRDAHMM-PF">
+                                <portlet-class>AriaRDAHMM-portlet#AriaRDAHMM-portlet</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+        </portlet-tabbed-pane>
+    </portlet-tab>
+</portlet-tabbed-pane>
+
+

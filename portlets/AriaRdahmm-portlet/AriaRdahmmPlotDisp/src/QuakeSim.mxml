@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:components="components.*"
+	creationComplete="init();" xmlns:code="http://code.google.com/p/flexlib/" currentState="">
+		<mx:states>
+				<mx:State name="Longitude">
+						<!-- mx:SetProperty target="{stateToggle}" name="selectedIndex" value="0"/ -->
+						<mx:RemoveChild target="{eastChart}"/>
+						<mx:RemoveChild target="{upChart}"/>
+						<mx:RemoveChild target="{label1}"/>
+						<mx:RemoveChild target="{label2}"/>
+						<mx:RemoveChild target="{label3}"/>
+						
+				</mx:State>
+				<mx:State name="Latitude">
+						<mx:RemoveChild target="{northChart}"/>
+						<mx:RemoveChild target="{upChart}"/>
+						<!-- mx:SetProperty target="{stateToggle}" name="selectedIndex" value="1"/ -->
+						<mx:RemoveChild target="{label1}"/>
+						<mx:RemoveChild target="{label2}"/>
+						<mx:RemoveChild target="{label3}"/>
+				</mx:State>
+				<mx:State name="Height">
+						<!-- mx:SetProperty target="{stateToggle}" name="selectedIndex" value="2"/ -->
+						<mx:RemoveChild target="{northChart}"/>
+						<mx:RemoveChild target="{eastChart}"/>
+						<mx:RemoveChild target="{label1}"/>
+						<mx:RemoveChild target="{label3}"/>
+						<mx:RemoveChild target="{label2}"/>
+				</mx:State>
+		</mx:states>
+		<mx:Script>
+		<![CDATA[
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.ObjectUtil;
+			
+			[Bindable] public var northData:ArrayCollection = new ArrayCollection();
+			[Bindable] public var eastData: ArrayCollection = new ArrayCollection();
+			[Bindable] public var upData:ArrayCollection = new ArrayCollection();
+			//[Bindable] public var dateArray:Array = new Array();
+			[Bindable] public var stationID:String;
+			[Bindable] public var lat:String;
+			[Bindable] public var long:String;
+			[Bindable] public var intervalInMin:int;
+			[Bindable] public var plotStartDateTime:Date = new Date();
+			[Bindable] public var plotEndDateTime:Date = new Date();
+			[Bindable] public var maxValLen:Number;
+			private const milliTzOffset:Number = plotStartDateTime.timezoneOffset * 60 * 1000;
+			private const millisecondsPerDay:int = 1000 * 60 * 60 * 24;
+			
+			private function init():void
+			{
+				this.maxValLen = 0;
+				this.stationID = Application.application.parameters.stationID;
+				this.lat = Application.application.parameters.lat;
+				this.long = Application.application.parameters.long;
+				this.intervalInMin = Application.application.parameters.intervalInMin;
+				this.getInfo.url = Application.application.parameters.url;
+				this.getInfo.send();
+			}
+		
+			protected function getInfo_resultHandler(event:ResultEvent):void
+			{
+				// TODO Auto-generated method stub
+				var tempNorth:ArrayCollection = new ArrayCollection();
+				var tempEast:ArrayCollection = new ArrayCollection();
+				var tempUp:ArrayCollection = new ArrayCollection();
+				
+				
+				var dayArray:Array = event.result.toString().split('\n');
+				dayArray = dayArray.slice(0,dayArray.length-1);
+				var minNorth:Number;
+				var minEast:Number;
+				var minUp:Number;
+				var beginDate:Date;
+				var closeDate:Date;
+				for each (var currDay:String in dayArray)
+				{
+					var currDayArray:Array = currDay.split(' ');
+					var temp:Object = new Object();
+					temp.state = currDayArray[0];
+					var dateTimeArray:Array = String(currDayArray[1]).split('T');
+					var dateArray:Array = String(dateTimeArray[0]).split('-');
+					var timeArray:Array = String(dateTimeArray[1]).split(':');
+					temp.date = new Date(dateArray[0],dateArray[1]-1,dateArray[2], timeArray[0], timeArray[1], timeArray[2]);
+					
+					if (!beginDate)
+					{
+						beginDate = temp.date;
+					}
+					closeDate = temp.date;
+					
+					if (maxValLen < (currDayArray[2] as String).length) {
+						maxValLen = (currDayArray[2] as String).length;
+					}
+					if (maxValLen < (currDayArray[3] as String).length) {
+						maxValLen = (currDayArray[3] as String).length;
+					}
+					if (maxValLen < (currDayArray[4] as String).length) {
+						maxValLen = (currDayArray[4] as String).length;
+					}
+					
+					switch (temp.state)
+					{
+						case '1':
+							temp.value = Number(currDayArray[2]);
+							temp.value1 = Number(currDayArray[2]);
+							tempNorth.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[3]);
+							temp.value1 = Number(currDayArray[3]);
+							tempEast.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[4]);
+							temp.value1 = Number(currDayArray[4]);
+							tempUp.addItem(ObjectUtil.copy(temp));
+							break;
+						case '2':
+							temp.value = Number(currDayArray[2]);
+							temp.value2 = Number(currDayArray[2]);
+							tempNorth.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[3]);
+							temp.value2 = Number(currDayArray[3]);
+							tempEast.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[4]);
+							temp.value2 = Number(currDayArray[4]);
+							tempUp.addItem(ObjectUtil.copy(temp));
+							break;
+						case '3':
+							temp.value = Number(currDayArray[2]);
+							temp.value3 = Number(currDayArray[2]);
+							tempNorth.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[3]);
+							temp.value3 = Number(currDayArray[3]);
+							tempEast.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[4]);
+							temp.value3 = Number(currDayArray[4]);
+							tempUp.addItem(ObjectUtil.copy(temp));
+							break;
+						case '4':
+							temp.value = Number(currDayArray[2]);
+							temp.value4 = Number(currDayArray[2]);
+							tempNorth.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[3]);
+							temp.value4 = Number(currDayArray[3]);
+							tempEast.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[4]);
+							temp.value4 = Number(currDayArray[4]);
+							tempUp.addItem(ObjectUtil.copy(temp));
+							break;
+						case '5':
+							temp.value = Number(currDayArray[2]);
+							temp.value5 = Number(currDayArray[2]);
+							tempNorth.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[3]);
+							temp.value5 = Number(currDayArray[3]);
+							tempEast.addItem(ObjectUtil.copy(temp));
+							temp.value = Number(currDayArray[4]);
+							temp.value5 = Number(currDayArray[4]);
+							tempUp.addItem(ObjectUtil.copy(temp));
+							break;
+					}
+				}
+				
+				northData = tempNorth;
+				eastData = tempEast;
+				upData = tempUp;
+				
+				dateRange.minimum = beginDate.getTime();
+				dateRange.maximum = closeDate.getTime();
+				dateRange.values = [beginDate.getTime(), closeDate.getTime()];
+				plotStartDateTime.setTime(dateRange.values[0]);
+				plotEndDateTime.setTime(dateRange.values[1]);
+				dateRange.snapInterval = intervalInMin * 60 * 1000;
+				startDate.selectedDate = beginDate;
+				endDate.selectedDate = closeDate;
+				
+				var startHourSelIdx:int = 0;
+				var endHourSelIdx:int = 0;
+				var startMinuteSelIdx:int = 0;
+				var endMinuteSelIdx:int = 0;
+				var hours:ArrayCollection = new ArrayCollection();
+				var idx:int = 0;
+				for (idx=0; idx<24; idx++) {
+					if (idx == plotStartDateTime.getHours()) {
+						startHourSelIdx = idx;
+					}
+					if (idx == plotEndDateTime.getHours()) {
+						endHourSelIdx = idx;
+					}
+					
+					var item:Object = new Object();
+					item.label = "" + idx;
+					item.data = idx;
+					hours.addItem(item);
+				}
+				startHour.dataProvider = hours;
+				endHour.dataProvider = ObjectUtil.copy(hours);
+				
+				var minutes:ArrayCollection = new ArrayCollection();
+				var countMin:int = 0;
+				idx = 0;
+				while (countMin < 60) {
+					if (countMin == plotStartDateTime.getMinutes()) {
+						startMinuteSelIdx = idx;
+					}
+					if (countMin == plotEndDateTime.getMinutes()) {
+						endMinuteSelIdx = idx;
+					}
+					
+					var item2:Object = new Object();
+					item2.label = "" + countMin;
+					item2.data = countMin;
+					minutes.addItem(item2);
+					countMin += intervalInMin;
+					idx++;
+				}
+				startMinute.dataProvider = minutes;
+				endMinute.dataProvider = ObjectUtil.copy(minutes);
+				
+				startHour.selectedIndex = startHourSelIdx;
+				startMinute.selectedIndex = startMinuteSelIdx;
+				endHour.selectedIndex = endHourSelIdx;
+				endMinute.selectedIndex = endMinuteSelIdx;
+			}
+			
+			private function dateChange():void
+			{				
+				plotStartDateTime.setTime(dateRange.values[0]);
+				plotEndDateTime.setTime(dateRange.values[1]);
+				startDate.selectedDate = plotStartDateTime;
+				endDate.selectedDate = plotEndDateTime;
+				
+				var i:int = 0;
+				var hours:ArrayCollection = ArrayCollection(startHour.dataProvider);
+				for (i=0; i<hours.length; i++) {
+					if (hours.getItemAt(i).data == plotStartDateTime.getHours()) {
+						startHour.selectedIndex = i;
+						break;
+					}
+				}
+				
+				hours = ArrayCollection(endHour.dataProvider);
+				for (i=0; i<hours.length; i++) {
+					if (hours.getItemAt(i).data == plotEndDateTime.getHours()) {
+						endHour.selectedIndex = i;
+						break;
+					}
+				}
+				
+				var minutes:ArrayCollection = ArrayCollection(startMinute.dataProvider);
+				for (i=0; i<minutes.length; i++) {
+					if (minutes.getItemAt(i).data == plotStartDateTime.getMinutes()) {
+						startMinute.selectedIndex = i;
+						break;
+					}
+				}
+				
+				minutes = ArrayCollection(endMinute.dataProvider);
+				for (i=0; i<minutes.length; i++) {
+					if (minutes.getItemAt(i).data == plotEndDateTime.getMinutes()) {
+						endMinute.selectedIndex = i;
+						break;
+					}
+				}				
+			}
+			
+			private function startDateChange():void
+			{
+				var temp:Array = dateRange.values;
+				plotStartDateTime.setTime(startDate.selectedDate.getTime());
+				plotStartDateTime.setHours(startHour.selectedItem.data, startMinute.selectedItem.data);
+				temp[0] = plotStartDateTime.getTime();
+				dateRange.values = temp;
+				updateGraphs();
+			}
+
+			private function endDateChange():void
+			{
+				var temp:Array = dateRange.values;				
+				plotEndDateTime.setTime(endDate.selectedDate.getTime());
+				plotEndDateTime.setHours(endHour.selectedItem.data, endMinute.selectedItem.data);
+				temp[1] = plotEndDateTime.getTime();
+				dateRange.values = temp;
+				updateGraphs();
+			}
+			
+			private function startHourChange():void
+			{
+				var temp:Array = dateRange.values;
+				plotStartDateTime.setHours(startHour.selectedItem.data);
+				temp[0] = plotStartDateTime.getTime();
+				dateRange.values = temp;
+				updateGraphs();
+			}
+
+			private function endHourChange():void
+			{
+				var temp:Array = dateRange.values;
+				plotEndDateTime.setHours(endHour.selectedItem.data);
+				temp[1] = plotEndDateTime.getTime();
+				dateRange.values = temp;
+				updateGraphs();
+			}
+			
+			private function startMinuteChange():void
+			{
+				var temp:Array = dateRange.values;
+				plotStartDateTime.setMinutes(startMinute.selectedItem.data);
+				temp[0] = plotStartDateTime.getTime();
+				dateRange.values = temp;
+				updateGraphs();
+			}
+
+			private function endMinuteChange():void
+			{
+				var temp:Array = dateRange.values;
+				plotEndDateTime.setMinutes(endMinute.selectedItem.data);
+				temp[1] = plotEndDateTime.getTime();
+				dateRange.values = temp;
+				updateGraphs();
+			}
+			
+			private function updateGraphs():void
+			{
+				northChart.updateGraph();
+				eastChart.updateGraph();
+				upChart.updateGraph();
+			}
+			
+			private function stateChange():void
+			{
+				switch (stateToggle.selectedIndex)
+				{
+					case 0: this.setCurrentState('Longitude');
+						break;
+					case 1: this.setCurrentState('Latitude');
+						break;
+					case 2: this.setCurrentState('Height');
+						break;
+					case 3: this.setCurrentState('');
+						break;
+				}
+			}
+		]]>
+	</mx:Script>
+	<mx:HTTPService id="getInfo" url="feeds/testInfo" result="getInfo_resultHandler(event)" resultFormat="text"/>
+	<mx:Panel height="100%" width="100%" title="Station : {stationID} Latitude : {lat} Longitude : {long}">
+		<mx:VBox height="100%" width="100%">
+			<mx:ToggleButtonBar selectedIndex="3" id="stateToggle" itemClick="stateChange();">
+				<mx:dataProvider>
+					<mx:Array>
+						<mx:String>North</mx:String>
+						<mx:String>East</mx:String>
+						<mx:String>Up</mx:String>
+						<mx:String>All</mx:String>
+					</mx:Array>
+				</mx:dataProvider>
+			</mx:ToggleButtonBar>
+			
+			<mx:VBox width="100%" height="100%">
+				<mx:Label text="Note: line colors denote different HMM states." fontSize="10.5" fontWeight="bold"/>
+				<mx:Label text="North" id="label1"/>
+				<components:rdahmmLineChart  data="{northData}" id="northChart" height="100%" width="100%" maxValLen="{maxValLen}" beginDate="{this.plotStartDateTime}" endDate="{this.plotEndDateTime}"/>
+				<mx:Label text="East" id="label2"/>
+				<components:rdahmmLineChart data="{eastData}" id="eastChart" height="100%" width="100%" maxValLen="{maxValLen}" beginDate="{this.plotStartDateTime}" endDate="{this.plotEndDateTime}"/>
+				<mx:Label text="Up" id="label3"/>
+				<components:rdahmmLineChart data="{upData}" id="upChart" height="100%" width="100%" maxValLen="{maxValLen}" beginDate="{this.plotStartDateTime}" endDate="{this.plotEndDateTime}"/>
+			</mx:VBox>
+			<!--<mx:LineChart id="timeChart" dataProvider="{upData}" height="30" verticalAxisStyleNames="tickPlacement:none" horizontalAxisStyleNames="tickPlacement:none,">
+					<mx:series>
+						<mx:LineSeries displayName="Series 1" yField="value"/>
+					</mx:series>
+				</mx:LineChart>-->
+			<code:HSlider id="dateRange" allowThumbOverlap="false" thumbCount="2" showDataTip="false"
+				liveDragging="true" lockRegionsWhileDragging="true"
+				change="dateChange();" width="100%" 
+				showTrackHighlight="true" tickThickness="1" mouseUp="updateGraphs()"/>
+			
+			<mx:Canvas width="100%">
+				<mx:Label text="Start Time:"/>
+	            <mx:DateField id="startDate" change="startDateChange()" x="65"/>
+	            <mx:ComboBox id="startHour" change="startHourChange()" width="55" x="160"/>
+	            <mx:Label text=":" width="10" x="215"/>
+	            <mx:ComboBox id="startMinute" change="startMinuteChange()" width="55" x="225"/>
+	            <mx:Label id="testLabel" text="" width="100" x="280"/>
+	            
+	            <mx:Label text="End Time:" id="label4" right="220"/>
+	            <mx:DateField id="endDate" change="endDateChange()" right="130"/>
+	            <mx:ComboBox id="endHour" change="endHourChange()" width="55" right="70"/>
+	            <mx:Label text=":" width="10" right="60"/>
+	            <mx:ComboBox id="endMinute" change="endMinuteChange()" width="55" right="5"/>
+			</mx:Canvas>
+			
+             
+		</mx:VBox>
+	</mx:Panel>
+</mx:Application>

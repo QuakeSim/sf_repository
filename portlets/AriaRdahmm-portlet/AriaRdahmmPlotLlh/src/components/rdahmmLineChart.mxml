@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:LineChart xmlns:mx="http://www.adobe.com/2006/mxml"
+	creationComplete="init()" dataProvider="{data}" showDataTips="true" dataTipFunction="tipData" dataTipMode="single">
+	<mx:Script>
+		<![CDATA[
+			import mx.graphics.Stroke;
+			import mx.charts.HitData;
+			import mx.collections.ArrayCollection;
+			public var beginDate:Date;
+			public var endDate:Date;
+			[Bindable] public var data:ArrayCollection = new ArrayCollection();
+			
+			private function init():void
+			{
+				data.filterFunction = filterData;
+			}
+			
+			public function updateGraph():void
+			{
+				data.filterFunction = filterData;
+				data.refresh();
+			}
+			
+			private function filterData(item:Object):Boolean
+			{
+				if (item.date < beginDate)
+				{
+					return false;
+				}
+				if (item.date > endDate)
+				{
+					return false;
+				}
+				return true;
+			}
+			
+			private function getDateTimeString(date:Date):String
+			{
+				return date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes();
+				//return date.toUTCString();
+			}
+			
+			private function tipData(hitData:HitData):String
+			{
+				return "Date : "+getDateTimeString(hitData.item.date as Date)+"\nValue :"+hitData.item.value+"\nState : "+hitData.item.state;
+			}
+		]]>
+	</mx:Script>
+	<!--Define Custom Color-->
+	
+	<mx:Stroke id="s0" color="gray" weight="2"/>
+	<mx:Stroke id="s1" color="red" weight="2" alpha="1"/>
+	<mx:Stroke id="s2" color="green" weight="2" alpha="1"/>
+	<mx:Stroke id="s3" color="blue" weight="2" alpha="1"/>
+	<mx:Stroke id="s4" color="purple" weight="2" alpha="1"/>
+	<mx:Stroke id="s5" color="cyan" weight="2" alpha="1"/>
+	<mx:Stroke id="p1" color="red" weight="2" />
+	<mx:Stroke id="p2" color="green" weight="2"/>
+	<mx:Stroke id="p3" color="blue" weight="2" />
+	<mx:Stroke id="p4" color="purple" weight="2"/>
+	<mx:Stroke id="p5" color="cyan" weight="2" />
+
+	<!--Define Solid Color-->
+	<mx:SolidColor id="f0" color="gray"/>
+	<mx:SolidColor id="f1" color="red"/>
+	<mx:SolidColor id="f2" color="green"/>
+	<mx:SolidColor id="f3" color="blue"/>
+	<mx:SolidColor id="f4" color="purple"/>
+	<mx:SolidColor id="f5" color="cyan"/>	
+	
+
+	<mx:horizontalAxis>
+		<mx:DateTimeAxis displayLocalTime="true"/>
+	</mx:horizontalAxis>
+	<mx:verticalAxis>
+		<mx:LinearAxis baseAtZero="false"/>
+	</mx:verticalAxis>
+
+	
+	<mx:series>
+		<mx:LineSeries id="baseLine" lineStroke="{s0}" yField="value" xField="date" stroke="{s0}" />
+		<mx:LineSeries id="line1" lineStroke="{s1}" yField="value1" xField="date" stroke="{s1}" />
+		<mx:LineSeries id="line2" lineStroke="{s2}" yField="value2" xField="date" stroke="{s2}" />
+		<mx:LineSeries id="line3" lineStroke="{s3}" yField="value3" xField="date" stroke="{s3}" />
+		<mx:LineSeries id="line4" lineStroke="{s4}" yField="value4" xField="date" stroke="{s4}" />
+		<mx:LineSeries id="line5" lineStroke="{s5}" yField="value5" xField="date" stroke="{s5}" />
+		<mx:PlotSeries radius="3" yField="value1" xField="date" fill="{f1}" stroke="{p1}" />
+		<mx:PlotSeries radius="3" yField="value2" xField="date" fill="{f2}" stroke="{p2}" />
+		<mx:PlotSeries radius="3" yField="value3" xField="date" fill="{f3}" stroke="{p3}" />
+		<mx:PlotSeries radius="3" yField="value4" xField="date" fill="{f4}" stroke="{p4}" />
+		<mx:PlotSeries radius="3" yField="value5" xField="date" fill="{f5}" stroke="{p5}" />
+	</mx:series>
+</mx:LineChart>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<portlet-group>
+    <group-name>AriaRDAHMM-portlet</group-name>
+    <group-description>AriaRDAHMM Portlet</group-description>
+    <group-visibility>PUBLIC</group-visibility>
+    <portlet-role-info>
+        <portlet-class>AriaRDAHMM-portlet#AriaRDAHMM-portlet</portlet-class>
+        <required-role>USER</required-role>
+    </portlet-role-info>
+</portlet-group>
+
+
