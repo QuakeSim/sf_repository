@@ -24,7 +24,8 @@ import javax.ws.rs.core.UriInfo;
 public class InSarLosRest {
 	 private static final String IMAGE="image=InSAR:";
 	 private static final String UID="uid";
-	 private static final String LOS="_los";
+	 //	 private static final String LOS="_los";
+	 private static final String LOS="_unw";
 	 private static final String POINT="point=";
 	 private static final String FORMAT="format=";
 	 private static final String JSON="json";
