@@ -10,8 +10,8 @@ var sarselect=sarselect || (function() {
 	 var markerNE, markerSW;
 	 var insarKml;
 	 var lowResSARLayer=null;
-	 var dygraphLOSOpts={width:300,height:300,title:'InSAR Line of Sight Values',xlabel:'Distance',ylabel:'LOS Value'};
-	 var dygraphHgtOpts={width:300,height:300,title:'InSAR Height Values',xlabel:'Distance',ylabel:'Height'};
+	 var dygraphLOSOpts={width:300,height:300,title:'InSAR Line of Sight Values',xlabel:'Distance (km)',ylabel:'LOS Value (cm)'};
+	 var dygraphHgtOpts={width:300,height:300,title:'InSAR Height Values',xlabel:'Distance (km)',ylabel:'Height (m)'};
 
 	 function setMasterMap(insarMapDiv,tableDivName) {
 		  var latlng=new google.maps.LatLng(32.3,-118.0);
