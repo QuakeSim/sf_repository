@@ -18,7 +18,7 @@
 				<div id="InSAR-All-Map" style="width: 500px; height: 400px;"></div>
 			 </f:verbatim>
 			 <f:verbatim>				
-				<div id="InSAR-Map-Messages" style="width: 500px; height: 400px;">Hollow Div</div>
+				<div id="InSAR-Map-Messages" style="width: 500px; height: 400px;"></div>
 			 </f:verbatim>
 		  </h:panelGroup>
 		  <h:panelGroup id="Sar-LOS-Panel-Right">

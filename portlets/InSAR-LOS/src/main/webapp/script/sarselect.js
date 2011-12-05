@@ -14,6 +14,9 @@ var sarselect=sarselect || (function() {
 	 var dygraphLOSOpts={width:300,height:300,title:'InSAR Line of Sight Values',xlabel:'Distance (km)',ylabel:'LOS Value (cm)'};
 	 var dygraphHgtOpts={width:300,height:300,title:'InSAR Height Values',xlabel:'Distance (km)',ylabel:'Height (m)'};
 
+	 var blueIcon = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + "FF0000",new google.maps.Size(21,34),new google.maps.Point(0,0),new google.maps.Point(10,34));															  
+	 var redIcon = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + "0000FF",new google.maps.Size(21,34),new google.maps.Point(0,0),new google.maps.Point(10,34));
+
 	 function setMasterMap(insarMapDiv,tableDivName,messageDiv) {
 		  var latlng=new google.maps.LatLng(32.3,-118.0);
 		  var myOpts={zoom:6, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP};
@@ -104,11 +107,15 @@ var sarselect=sarselect || (function() {
 				markerNE=new google.maps.Marker({map: insarMap, 
 															position: event.latLng, 
 															visible: true, 
+															icon:redIcon,
+															title: "Ending point of LOS measurements",
 															draggable: true});
 				var offset=new google.maps.LatLng(event.latLng.lat()-0.05,event.latLng.lng()-0.05);
 				markerSW=new google.maps.Marker({map: insarMap, 
 															position: offset, 
 															visible: true, 
+															icon:blueIcon,
+															title: "Starting point of LOS measurements",
 															draggable: true});
 		  		
 				getInSarValues(uid);
