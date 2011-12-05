@@ -9,17 +9,24 @@ var sarselect=sarselect || (function() {
 	 var leftClickOp;
 	 var markerNE, markerSW;
 	 var insarKml;
+	 var messageDiv;
 	 var lowResSARLayer=null;
 	 var dygraphLOSOpts={width:300,height:300,title:'InSAR Line of Sight Values',xlabel:'Distance (km)',ylabel:'LOS Value (cm)'};
 	 var dygraphHgtOpts={width:300,height:300,title:'InSAR Height Values',xlabel:'Distance (km)',ylabel:'Height (m)'};
 
-	 function setMasterMap(insarMapDiv,tableDivName) {
+	 function setMasterMap(insarMapDiv,tableDivName,messageDiv) {
 		  var latlng=new google.maps.LatLng(32.3,-118.0);
 		  var myOpts={zoom:6, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP};
 		  masterMap=new google.maps.Map(insarMapDiv, myOpts);
 		  
 		  var kmlMapOpts={map:masterMap, suppressInfoWindows:true, preserveViewport:true};
 		  insarKml = new google.maps.KmlLayer("http://quaketables.quakesim.org/kml?uid=all&ov=0",kmlMapOpts);
+		  messageDiv.innerHTML="InSAR Catalog Loading...";
+
+		  //Add a listener for the insarKml map while it is loading.
+		  google.maps.event.addListener(insarKml,"metadata_changed",function(event) {
+				messageDiv.innerHTML="";
+		  });
 		  
 		  //Find out where we are.
 		  google.maps.event.addListener(insarKml,"click",function(event) {
@@ -66,8 +73,8 @@ var sarselect=sarselect || (function() {
 				markerSW.setMap(null);
 				markerSW=null;
 		  }
-
 		  if(polyShape) polyShape.setMap(null);
+
         //Add the KML Layer
 		  lowResSARLayer=new google.maps.KmlLayer(overlayUrl,{suppressInfoWindows: true, map: insarMap, clickable: false});
 		  
@@ -103,8 +110,6 @@ var sarselect=sarselect || (function() {
 															position: offset, 
 															visible: true, 
 															draggable: true});
-//				markers.push(markerNE);
-//				markers.push(markerSW);
 		  		
 				getInSarValues(uid);
 
@@ -338,8 +343,6 @@ var sarselect=sarselect || (function() {
 		  
 		  //Turn on the new overlayer
 		  activateLayerMap(masterMap,overlayUrl,"line",uid);
-		//Redirect to next page
-		//parent.location="./SARSelectRegion.faces?overlayUrl="+overlayUrl;
 	 }
 	 
 	 function extractOverlayUrl(callResults){

@@ -17,6 +17,9 @@
 			 <f:verbatim>
 				<div id="InSAR-All-Map" style="width: 500px; height: 400px;"></div>
 			 </f:verbatim>
+			 <f:verbatim>				
+				<div id="InSAR-Map-Messages" style="width: 500px; height: 400px;">Hollow Div</div>
+			 </f:verbatim>
 		  </h:panelGroup>
 		  <h:panelGroup id="Sar-LOS-Panel-Right">
 			 <f:verbatim>
@@ -46,7 +49,8 @@
 	 //Rendear the InSAR overlays.
 	 var insarMapDiv=document.getElementById("InSAR-All-Map");
 	 var tableDivName="dynatable";
-	 sarselect.setMasterMap(insarMapDiv,tableDivName);
+	 var messageDiv=document.getElementById("InSAR-Map-Messages");
+	 sarselect.setMasterMap(insarMapDiv,tableDivName,messageDiv);
   </script>
 </body>
 </html>
