@@ -36,7 +36,7 @@ var sarselect=sarselect || (function() {
 				var finalUrl=constructWmsUrl(masterMap,event);
 				var results=$.ajax({url:finalUrl,async:false}).responseText;
 				var parsedResults=jQuery.parseJSON(results);
-				createTable(parsedResults,tableDivName);
+				createTable(parsedResults,tableDivName,messageDiv);
 		  });
 	 }
 	 
@@ -59,8 +59,7 @@ var sarselect=sarselect || (function() {
 	 }
 
 	 //Activates the low-res insar layer for LOS display.
-	 function activateLayerMap(insarMap,overlayUrl,drawFunctionType,uid) {
-		  console.log("ActivateLayerMap uid is "+uid);
+	 function activateLayerMap(insarMap,overlayUrl,drawFunctionType,uid,messageDiv) {
 		  //Remove any previous layers and listeners
 
 		  if(lowResSARLayer) lowResSARLayer.setMap(null);  
@@ -80,7 +79,12 @@ var sarselect=sarselect || (function() {
 
         //Add the KML Layer
 		  lowResSARLayer=new google.maps.KmlLayer(overlayUrl,{suppressInfoWindows: true, map: insarMap, clickable: false});
-		  
+		  messageDiv.innerHTML="SAR Image Loading...";
+		  //Add a listener for the insarKml map while it is loading.
+		  google.maps.event.addListener(lowResSARLayer,"metadata_changed",function(event) {
+				messageDiv.innerHTML="";
+		  });
+
 		  google.maps.event.clearListeners(insarMap,"click");
 
 		  google.maps.event.addListener(insarMap,"click",function(event) {
@@ -98,10 +102,10 @@ var sarselect=sarselect || (function() {
 					 rectangleLeftClick(isarMap,event);
 				}
 		  });
+
 	 }
     
 	 function lineLeftClick(insarMap,event,uid) {
-		  console.log("lineLeftClick Uid is "+uid);
 		  //If the marker doesn't exist, create it.
 		  if(!markerNE && !markerSW) {
 				markerNE=new google.maps.Marker({map: insarMap, 
@@ -117,7 +121,7 @@ var sarselect=sarselect || (function() {
 															icon:blueIcon,
 															title: "Starting point of LOS measurements",
 															draggable: true});
-		  		
+		  		drawLine(insarMap);
 				getInSarValues(uid);
 
 				// Make markers draggable			 
@@ -135,10 +139,6 @@ var sarselect=sarselect || (function() {
 					 getInSarValues(uid);
 				});
 		  }
-
-		  //This is called after a drag event.
-		  drawLine(insarMap);
-
 	 }
 
 	 function rectangleLeftClick(insarMap,event) {
@@ -246,18 +246,16 @@ var sarselect=sarselect || (function() {
 		}
 
 	 function getInSarValues(uid) {
-		  console.log("getInsarValues uid is "+uid);
 		  getLosInSarValues(uid);
 		  getHgtInSarValues(uid);
 	 }
-
+	 
 	 function getLosInSarValues(uid) {
-		  console.log("Los Uid is "+uid);
 		  var westMarkerLat=markerSW.getPosition().lat();
 		  var westMarkerLon=markerSW.getPosition().lng();
 		  var eastMarkerLat=markerNE.getPosition().lat();
 		  var eastMarkerLon=markerNE.getPosition().lng();
-
+		  
 		  var restUrl="/InSAR-LOS-REST/insarlos/csv/"+uid+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat;
 		  var csv=$.ajax({
 				url:restUrl,
@@ -267,7 +265,6 @@ var sarselect=sarselect || (function() {
 	 }
 
 	 function getHgtInSarValues(uid) {
-		  console.log("Hgt Uid is "+uid);
 		  var westMarkerLat=markerSW.getPosition().lat();
 		  var westMarkerLon=markerSW.getPosition().lng();
 		  var eastMarkerLat=markerNE.getPosition().lat();
@@ -281,7 +278,7 @@ var sarselect=sarselect || (function() {
 		  var g2=new Dygraph(document.getElementById("outputGraph2"),csv,dygraphHgtOpts);		  
 	 }
 		  
-	 function createTable(parsedResults,tableDivName) {
+	 function createTable(parsedResults,tableDivName,messageDiv) {
 		var dynatable='<table border="1">';
 		//Create the header row.
 		dynatable+='<tr>';
@@ -291,7 +288,7 @@ var sarselect=sarselect || (function() {
 		dynatable+='</tr>';
 		//Fill in the table.
 		for (var index1 in parsedResults) {
-		dynatable+='<tr onmouseover="sarselect.selectedRow(this)" onmouseout="sarselect.unselectedRow(this)" onclick="sarselect.selectRowAction(this)">';
+		dynatable+='<tr onmouseover="sarselect.selectedRow(this)" onmouseout="sarselect.unselectedRow(this)" onclick="sarselect.selectRowAction(this,messageDiv)">';
 		for(var index2 in parsedResults[index1]) {
 		dynatable+='<td>'+parsedResults[index1][index2]+'</td>';
 		}
@@ -335,7 +332,8 @@ var sarselect=sarselect || (function() {
 	    row.style.backgroundColor="white";
 		 row.style.cursor="default";
 	 }
-	 function selectRowAction(row){
+	 function selectRowAction(row, messageDiv){
+
 	     //Find the ID of the row
 		  var uid=extractRowId(row);
 
@@ -349,7 +347,7 @@ var sarselect=sarselect || (function() {
 		  insarKml.setMap(null);
 		  
 		  //Turn on the new overlayer
-		  activateLayerMap(masterMap,overlayUrl,"line",uid);
+		  activateLayerMap(masterMap,overlayUrl,"line",uid,messageDiv);
 	 }
 	 
 	 function extractOverlayUrl(callResults){
