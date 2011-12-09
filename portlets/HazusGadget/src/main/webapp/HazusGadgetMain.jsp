@@ -45,18 +45,25 @@
 				  </f:verbatim>
 				  
 				  <h:panelGrid id="hgmFaultInputs" columns="2">
-					 <f:verbatim>Fault Rake (deg):</f:verbatim>
+					 <f:verbatim>Fault Rake Angle (deg):</f:verbatim>
 					 <h:inputText id="hgmFaultRake" 
 									  required="true"
 									  value="#{HazusGadgetBean.faultRake}">
 						<f:validateDoubleRange minimum="-180.0" maximum="180.0"/>
 					 </h:inputText>
 
+					 <f:verbatim>Fault Dip Angle (deg):</f:verbatim>
+					 <h:inputText id="hgmFaultDip" 
+									  required="true"
+									  value="#{HazusGadgetBean.faultDip}">
+						<f:validateDoubleRange minimum="0.0" maximum="90.0"/>
+					 </h:inputText>
+
 					 <f:verbatim>Fault Depth:</f:verbatim>
 					 <h:inputText id="hgmFaultDepth" 
 									  required="true"
 									  value="#{HazusGadgetBean.faultDepth}">
-						<f:validateDoubleRange maximum="0.0"/>					 
+						<f:validateDoubleRange minimum="0.0"/>					 
 					 </h:inputText>
 
 					 <f:verbatim>Magnitude:</f:verbatim>

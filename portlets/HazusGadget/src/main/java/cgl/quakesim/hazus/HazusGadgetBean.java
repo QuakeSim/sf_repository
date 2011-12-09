@@ -17,8 +17,8 @@ public class HazusGadgetBean extends GenericProjectBean{
 	 private double faultRake;
 	 private double faultOriginLat;
 	 private double faultOriginLon;
-	 private double faultDepth;
-	 private double faultDip;
+	 private double faultDepth=7.6;
+	 private double faultDip=90.0;
 	 private double magnitude=5.0;
 	 private String faultType;
 	 private String resultsLink;
@@ -55,6 +55,7 @@ public class HazusGadgetBean extends GenericProjectBean{
 		  fault.setFaultLatStart(faultOriginLat);
 		  fault.setFaultLonStart(faultOriginLon);
 		  fault.setFaultDepth(faultDepth);
+		  fault.setFaultDipAngle(faultDip);
 
 		  System.out.println("Bottom Left:"+faultStuff[1].getLat()+" "+faultStuff[1].getLon());
 		  System.out.println("Origin:"+faultStuff[0].getLat()+" "+faultStuff[0].getLon());

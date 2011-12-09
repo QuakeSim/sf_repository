@@ -42,7 +42,7 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 	 private static final String OPENSHA_SERVLET_URL="http://opensha.ucs.edu:8080/OpenSHA";
 
 	 //These are class variables that get modified by different methods as side effects.  Not good....
-	 private String metadata;
+	 private String metadata="";
 	 private GeoDataSet sa_03xyzData;
 	 private GeoDataSet sa_10xyzData;
 	 private GeoDataSet pgv_xyzData;
@@ -53,7 +53,7 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 	 private ScenarioShakeMapCalculator shakeMapCalc;
 	 private GMT_MapGeneratorForShakeMaps gmtMapGen;
 	 private double imlProbValue=0.5;
-	 private boolean imlAtProb=false;
+	 private boolean imlAtProb=true;
 	 private boolean pointSourceCorrection=false;
 	 private String defaultSiteType="DE";
 	 private String imt="PGA";
@@ -73,7 +73,6 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 	  */
 	 public OpenShaBean() {
 		  System.out.println("Calling Constructor");
-		  metadata="";
 
 		  //Create the GMT map generator and turn off log plotting.
 		  gmtMapGen=new GMT_MapGeneratorForShakeMaps();
@@ -120,9 +119,7 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 				
 				//Set up the data.
 				//These methods are from GenerateHazus...'s generateHazusFiles() method.
-				metadata="<br>Hazus Metadata: \n<br>"+
-					 "-------------------\n<br>";
-				
+
 				SitesInGriddedRegion sites=createGriddedRegion(minLat, maxLat, minLon, maxLon, gridSpacing);
 				EqkRupture eqkRupture=createEarthquakeRupture(mag,rake,lat,lon,depth,aveDip);
 				ArrayList attrRelList=createAttenuationRelationships(eqkRupture,imt);
@@ -153,7 +150,7 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 	  * Create an array list of attenuation relationships. For now, we only support one
 	  * AR type, AS_1997_AttenRel.  This code is stolen from PagerShakeMapCalc.
 	  */ 
-		  protected ArrayList createAttenuationRelationships(EqkRupture eqkRupture, String imt) throws Exception {
+	 protected ArrayList createAttenuationRelationships(EqkRupture eqkRupture, String imt) throws Exception {
 		  System.out.println("Creating attenuation relationships");
 		  String attenRelClassPackage = "org.opensha.sha.imr.attenRelImpl.";
 		  String attenRelImplClass="AS_1997_AttenRel";
@@ -219,6 +216,17 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 		  rupture.setMag(mag);
 		  rupture.setAveRake(rake);
 		  rupture.setHypocenterLocation(location);
+
+		  //Some additional new magic.  Taken from PagerShakeMapCalc code.  Note we only consider point surfaces
+		  if(rupture.getRuptureSurface() instanceof PointSurface) {
+				if (pointSourceCorrection) {
+					 ((PointSurface)rupture.getRuptureSurface()).setDistCorrMagAndType(rupture.getMag(), PtSrcDistCorr.Type.FIELD);
+				}
+				else {
+					 ((PointSurface)rupture.getRuptureSurface()).setDistCorrMagAndType(rupture.getMag(), PtSrcDistCorr.Type.NONE);
+				}
+		  }
+
 		  return rupture;
 	 }
 	 
@@ -227,19 +235,30 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 	  */ 
 	 protected void hazusCalcForSA(ArrayList selectedAttenRels,ArrayList selectedAttenRelsWt,double imlProbValue,SitesInGriddedRegion sites, EqkRupture eqkRupture,boolean probAtIml) throws Exception {
 		  System.out.println("Doing calc for SA");
-		metadata += "IMT = SA [ SA Damping = 5.0 ; SA Period = 0.3 ]"+"<br>\n";
 		//Doing for SA
 		int size = selectedAttenRels.size();
-		for(int i=0;i<size;++i)
+		for(int i=0;i<size;++i) {
 			((ScalarIMR)selectedAttenRels.get(i)).setIntensityMeasure(SA_Param.NAME);
-
+		}
 		//Doing for SA-0.3sec
 		setSA_PeriodForSelectedIMRs(selectedAttenRels,0.3);
 		sa_03xyzData=shakeMapCalc.getScenarioShakeMapData(selectedAttenRels,selectedAttenRelsWt,sites,eqkRupture,probAtIml,imlProbValue);
+		
+		// System.out.println("SA03 dataset:");
+		// org.opensha.commons.geo.LocationList loclist=sa_03xyzData.getLocationList();
+		// for(int i=0;i<loclist.size();i++){
+		// 	 System.out.println(loclist.get(i).getLatitude() +" "+ loclist.get(i).getLongitude() +" "+ loclist.get(i).getDepth());
+		// }
 
 		//Doing for SA-1.0sec
 		setSA_PeriodForSelectedIMRs(selectedAttenRels,1.0);
 		sa_10xyzData=shakeMapCalc.getScenarioShakeMapData(selectedAttenRels,selectedAttenRelsWt,sites,eqkRupture,probAtIml,imlProbValue);
+		// System.out.println("SA10 dataset:");
+		// org.opensha.commons.geo.LocationList loclist2=sa_10xyzData.getLocationList();
+		// for(int i=0;i<loclist2.size();i++){
+		// 	 System.out.println(loclist2.get(i).getLatitude() +" "+ loclist2.get(i).getLongitude() +" "+ loclist2.get(i).getDepth());
+		// }
+
 	}
 
 	 /**
@@ -247,7 +266,6 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 	  */ 
 	 protected void hazusCalcForPGV(ArrayList selectedAttenRels, ArrayList selectedAttenRelsWts, double imlProbValue,SitesInGriddedRegion sites,EqkRupture eqkRupture, boolean probAtIml) throws Exception {
 		  System.out.println("Doing pgv calc");
-		  metadata += "IMT = PGV"+"<br>\n";
 		  
 		  //creating the 2 seperate list for the attenRels selected, for one suuporting
 		  //the PGV and results calculated using PGV and other not supporting PGV and result
@@ -273,6 +291,12 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 				}
 		  }
 		  pgv_xyzData=doCalcForPGV_OnServer(attenRelListSupportingPGV,attenRelListNotSupportingPGV,attenRelListPGV_Wts,attenRelListNot_PGV_Wts,imlProbValue,sites,eqkRupture,probAtIml);
+		// System.out.println("PGV dataset:");
+		// org.opensha.commons.geo.LocationList loclist=pgv_xyzData.getLocationList();
+		// for(int i=0;i<loclist.size();i++){
+		// 	 System.out.println(loclist.get(i).getLatitude() +" "+ loclist.get(i).getLongitude() +" "+ loclist.get(i).getDepth());
+		// }
+
 	 }
 	 
 	 /**
@@ -285,7 +309,12 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 				((ScalarIMR)selectedAttenRels.get(i)).setIntensityMeasure(PGA_Param.NAME);
 		  }
 		  pga_xyzData=shakeMapCalc.getScenarioShakeMapData(selectedAttenRels,selectedAttenRelsWt,sites,eqkRupture,probAtIml,imlProbValue);
-		metadata += "IMT = PGA"+"\n";
+		// System.out.println("PGA dataset:");
+		// org.opensha.commons.geo.LocationList loclist=pga_xyzData.getLocationList();
+		// for(int i=0;i<loclist.size();i++){
+		// 	 System.out.println(loclist.get(i).getLatitude() +" "+ loclist.get(i).getLongitude() +" "+ loclist.get(i).getDepth());
+		// }
+
 	 }
 	 
 	 /**
@@ -318,7 +347,6 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 		  //setting the SA period to 1.0 for the atten rels not supporting PGV
 		  //		this.setSA_PeriodForSelectedIMRs(attenRelsNotSupportingPGV,1.0);
 		  
-		  metadata += "IMT = PGV"+"<br>\n";
 		  return shakeMapCalc.getScenarioShakeMapData(attenRelList,attenRelWtList,sites,eqkRupture,probAtIml,imlProbValue);
 	}
 
