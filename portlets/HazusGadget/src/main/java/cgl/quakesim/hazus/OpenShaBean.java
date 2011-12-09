@@ -24,6 +24,7 @@ import org.opensha.sha.calc.ScenarioShakeMapCalculator;
 import org.opensha.sha.earthquake.EqkRupture;
 import org.opensha.sha.faultSurface.EvenlyGriddedSurface;
 import org.opensha.sha.faultSurface.PointSurface;
+//import org.opensha.sha.faultSurface.utils.PtSrcDistCorr;
 import org.opensha.sha.imr.AttenuationRelationship;
 import org.opensha.sha.imr.ScalarIMR;
 import org.opensha.sha.imr.PropagationEffect;
@@ -218,14 +219,14 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 		  rupture.setHypocenterLocation(location);
 
 		  //Some additional new magic.  Taken from PagerShakeMapCalc code.  Note we only consider point surfaces
-		  if(rupture.getRuptureSurface() instanceof PointSurface) {
-				if (pointSourceCorrection) {
-					 ((PointSurface)rupture.getRuptureSurface()).setDistCorrMagAndType(rupture.getMag(), PtSrcDistCorr.Type.FIELD);
-				}
-				else {
-					 ((PointSurface)rupture.getRuptureSurface()).setDistCorrMagAndType(rupture.getMag(), PtSrcDistCorr.Type.NONE);
-				}
-		  }
+		  // if(rupture.getRuptureSurface() instanceof PointSurface) {
+		  // 		if (pointSourceCorrection) {
+		  // 			 ((PointSurface)rupture.getRuptureSurface()).setDistCorrMagAndType(rupture.getMag(), PtSrcDistCorr.Type.FIELD);
+		  // 		}
+		  // 		else {
+		  // 			 ((PointSurface)rupture.getRuptureSurface()).setDistCorrMagAndType(rupture.getMag(), PtSrcDistCorr.Type.NONE);
+		  // 		}
+		  // }
 
 		  return rupture;
 	 }
