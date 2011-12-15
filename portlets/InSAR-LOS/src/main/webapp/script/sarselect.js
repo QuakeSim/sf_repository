@@ -102,7 +102,6 @@ var sarselect=sarselect || (function() {
 					 rectangleLeftClick(isarMap,event);
 				}
 		  });
-
 	 }
     
 	 function lineLeftClick(insarMap,event,uid) {

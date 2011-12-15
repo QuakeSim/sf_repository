@@ -10,34 +10,34 @@
   <f:view>
 	 <h:panelGrid id="insarlospanelgrid" columns="1" columnClasses="alignTopFixWidth">
 		<h:panelGroup id="bigoldlospanelgroup">
-		<f:verbatim><fieldset><legend><b>Interferogram Map Selection</b></legend></f:verbatim>
-		<f:verbatim>Click on the map to select the region you want to use.</f:verbatim>
-		<h:panelGrid id="InSAR-View-All" columns="2" columnClasses="alignTop,alignTop">
-		  <h:panelGroup id="Sar-LOS-Panel-Left">
-			 <f:verbatim>
-				<div id="InSAR-All-Map" style="width: 500px; height: 400px;"></div>
-			 </f:verbatim>
-			 <f:verbatim>				
-				<div id="InSAR-Map-Messages" style="width: 500px; height: 400px;"></div>
-			 </f:verbatim>
-		  </h:panelGroup>
-		  <h:panelGroup id="Sar-LOS-Panel-Right">
-			 <f:verbatim>
-				<div id="dynatable"></div>
-			 </f:verbatim>
-			 <f:verbatim><p/></f:verbatim>
-			 <h:panelGrid id="insar-results-table" columns="2" columnClasses="alignTop,alignTop">
+		  <f:verbatim><fieldset><legend><b>Interferogram Map Selection</b></legend></f:verbatim>
+		  <f:verbatim>Click on the map to select the region you want to use.</f:verbatim>
+		  <h:panelGrid id="InSAR-View-All" columns="2" columnClasses="alignTop,alignTop">
+			 <h:panelGroup id="Sar-LOS-Panel-Left">
 				<f:verbatim>
-				  <div id="outputGraph1"></div>
+				  <div id="InSAR-All-Map" style="width: 600px; height: 400px;"></div>
 				</f:verbatim>
+				<f:verbatim>				
+				  <div id="InSAR-Map-Messages" style="width: 600px; height: 50px;"></div>
+				</f:verbatim>
+				<h:panelGrid id="plotgridpanel" columns="2" columnClasses="alignTop,alignTop">
+				  <f:verbatim>
+					 <div id="outputGraph1"></div>
+				  </f:verbatim>
+				  <f:verbatim>
+					 <div id="outputGraph2"></div>
+				  </f:verbatim>
+				</h:panelGrid>
+			 </h:panelGroup>
+			 <h:panelGroup id="Sar-LOS-Panel-Right">
 				<f:verbatim>
-				  <div id="outputGraph2"></div>
+				  <div id="dynatable" style="width: 400px"></div>
 				</f:verbatim>
+				<f:verbatim><p/></f:verbatim>
+			 </h:panelGroup>
 		  </h:panelGrid>
-		  </h:panelGroup>
-		</h:panelGrid>
-		<f:verbatim></fieldset></f:verbatim>
-	 </h:panelGroup>
+		  <f:verbatim></fieldset></f:verbatim>
+		</h:panelGroup>
 	 </h:panelGrid>
   </f:view>
   <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>  
