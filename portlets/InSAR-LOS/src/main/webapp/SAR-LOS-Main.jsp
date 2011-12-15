@@ -31,7 +31,7 @@
 			 </h:panelGroup>
 			 <h:panelGroup id="Sar-LOS-Panel-Right">
 				<f:verbatim>
-				  <div id="dynatable" style="width: 400px"></div>
+				  <div id="dynatable" style="width: 380px"></div>
 				</f:verbatim>
 				<f:verbatim><p/></f:verbatim>
 			 </h:panelGroup>
