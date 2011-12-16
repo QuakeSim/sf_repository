@@ -10,6 +10,7 @@ var sarselect=sarselect || (function() {
 	 var markerNE, markerSW;
 	 var insarKml;
 	 var messageDiv;
+	 var selectedRow=null;
 	 var lowResSARLayer=null;
 	 var dygraphLOSOpts={width:300,height:300,title:'InSAR Line of Sight Values',xlabel:'Distance (km)',ylabel:'LOS Value (cm)'};
 	 var dygraphHgtOpts={width:300,height:300,title:'InSAR Height Values',xlabel:'Distance (km)',ylabel:'Height (m)'};
@@ -328,11 +329,17 @@ var sarselect=sarselect || (function() {
 		 row.style.cursor="pointer";
 	 }
 	 function unselectedRow(row) {
-	    row.style.backgroundColor="white";
-		 row.style.cursor="default";
+		  if(row!=selectedRow) {
+				row.style.backgroundColor="white";
+				row.style.cursor="default";
+		  }
 	 }
 	 function selectRowAction(row, messageDiv){
-
+		  if(selectedRow!=null) {
+				selectedRow.style.backgroundColor="white";
+		  }
+		  selectedRow=row;
+	     selectedRow.style.backgroundColor="red";
 	     //Find the ID of the row
 		  var uid=extractRowId(row);
 
