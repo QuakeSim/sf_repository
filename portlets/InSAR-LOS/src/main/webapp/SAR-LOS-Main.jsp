@@ -17,6 +17,14 @@
 				<f:verbatim>
 				  <div id="InSAR-All-Map" style="width: 600px; height: 400px;"></div>
 				</f:verbatim>
+				<f:verbatim>
+				  <div id="iconGuide" style="display:none">
+					 <img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> 
+					 is the starting point. 
+					 <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/> 
+					 is the  ending point.
+				  </div>
+				</f:verbatim>
 				<f:verbatim>				
 				  <div id="InSAR-Map-Messages" style="width: 600px; height: 50px;"></div>
 				</f:verbatim>

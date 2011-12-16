@@ -18,6 +18,7 @@ var sarselect=sarselect || (function() {
 	 var blueIcon = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + "FF0000",new google.maps.Size(21,34),new google.maps.Point(0,0),new google.maps.Point(10,34));															  
 	 var redIcon = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + "0000FF",new google.maps.Size(21,34),new google.maps.Point(0,0),new google.maps.Point(10,34));
 
+
 	 function setMasterMap(insarMapDiv,tableDivName,messageDiv) {
 		  var latlng=new google.maps.LatLng(32.3,-118.0);
 		  var myOpts={zoom:6, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP};
@@ -106,6 +107,7 @@ var sarselect=sarselect || (function() {
 	 }
     
 	 function lineLeftClick(insarMap,event,uid) {
+		  $('#iconGuide').show();
 		  //If the marker doesn't exist, create it.
 		  if(!markerNE && !markerSW) {
 				markerNE=new google.maps.Marker({map: insarMap, 
