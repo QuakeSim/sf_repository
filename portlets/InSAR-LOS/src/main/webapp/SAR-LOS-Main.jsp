@@ -16,28 +16,43 @@
 		  </f:verbatim>
 		  <h:panelGrid id="InSAR-View-All" columns="2" columnClasses="alignTop,alignTop">
 			 <h:panelGroup id="Sar-LOS-Panel-Left">
-				<f:verbatim>
-				  <div id="InSAR-All-Map" style="width: 600px; height: 400px;"></div>
-				</f:verbatim>
-				<f:verbatim>
-				  <div id="iconGuide" style="display:none">
-					 <img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> 
-					 is the starting point. 
-					 <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/> 
-					 is the  ending point.
-				  </div>
-				</f:verbatim>
-				<f:verbatim>				
-				  <div id="InSAR-Map-Messages" style="width: 600px; height: 50px;"></div>
-				</f:verbatim>
-				<h:panelGrid id="plotgridpanel" columns="2" columnClasses="alignTop,alignTop">
+				<h:panelGroup id="The-Big-Map">
 				  <f:verbatim>
-					 <div id="outputGraph1"></div>
+					 <div id="InSAR-All-Map" style="width: 600px; height: 400px;"></div>
+				  </f:verbatim>
+				  <f:verbatim>				
+					 <div id="InSAR-Map-Messages" style="display:none;"></div>
+				  </f:verbatim>
+				</h:panelGroup>
+				<h:panelGroup id="Left-Column-Under-Map" style="display:none;">
+				  <f:verbatim>
+					 <div id="iconGuide">
+						<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> 
+						is the starting point. 
+						<image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/> 
+						is the  ending point.
+					 </div>
 				  </f:verbatim>
 				  <f:verbatim>
-					 <div id="outputGraph2"></div>
+					 <div id="Display_Instructions"><p/>Click and drag a plot to horizontally or vertically zoom.  Double-click 
+					 the plot to return to normal view.
+					 </div>
 				  </f:verbatim>
-				</h:panelGrid>
+				  <h:panelGrid id="plotgridpanel" columns="2" columnClasses="alignTop,alignTop">
+					 <f:verbatim>
+						<div id="outputGraph1"></div>
+					 </f:verbatim>
+					 <f:verbatim>
+						<div id="outputGraph2"></div>
+					 </f:verbatim>
+					 <f:verbatim>				
+						<div id="LOS-Data-Download"></div>
+					 </f:verbatim>
+					 <f:verbatim>				
+						<div id="HGT-Data-Download"></div>
+					 </f:verbatim>
+				  </h:panelGrid>
+				</h:panelGroup>
 			 </h:panelGroup>
 			 <h:panelGroup id="Sar-LOS-Panel-Right">
 				<f:verbatim>
@@ -60,7 +75,7 @@
 	 var insarMapDiv=document.getElementById("InSAR-All-Map");
 	 var tableDivName="dynatable";
 	 var messageDiv=document.getElementById("InSAR-Map-Messages");
-	 sarselect.setMasterMap(insarMapDiv,tableDivName,messageDiv);
+	 sarselect.setMasterMap(insarMapDiv,tableDivName);
   </script>
 </body>
 </html>

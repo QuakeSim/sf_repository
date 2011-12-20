@@ -9,7 +9,6 @@ var sarselect=sarselect || (function() {
 	 var leftClickOp;
 	 var markerNE, markerSW;
 	 var insarKml;
-	 var messageDiv;
 	 var rowSelected=null;
 	 var lowResSARLayer=null;
 	 var dygraphLOSOpts={width:300,height:300,title:'InSAR Line of Sight Values',xlabel:'Distance (km)',ylabel:'LOS Value (cm)'};
@@ -19,18 +18,20 @@ var sarselect=sarselect || (function() {
 	 var redIcon = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + "0000FF",new google.maps.Size(21,34),new google.maps.Point(0,0),new google.maps.Point(10,34));
 
 
-	 function setMasterMap(insarMapDiv,tableDivName,messageDiv) {
+	 function setMasterMap(insarMapDiv,tableDivName) {
 		  var latlng=new google.maps.LatLng(32.3,-118.0);
 		  var myOpts={zoom:6, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP};
 		  masterMap=new google.maps.Map(insarMapDiv, myOpts);
 		  
 		  var kmlMapOpts={map:masterMap, suppressInfoWindows:true, preserveViewport:true};
-		  insarKml = new google.maps.KmlLayer("http://quaketables.quakesim.org/kml?uid=all&ov=0",kmlMapOpts);
-		  messageDiv.innerHTML="InSAR Catalog Loading...";
+		  insarKml=new google.maps.KmlLayer("http://quaketables.quakesim.org/kml?uid=all&lowres=1",kmlMapOpts);
+//		  insarKml = new google.maps.KmlLayer("http://quaketables.quakesim.org/kml?uid=all&ov=0",kmlMapOpts);
+		  $("#InSAR-Map-Messages").show();
+		  $("#InSAR-Map-Messages").html("InSAR Catalog Loading...");
 
 		  //Add a listener for the insarKml map while it is loading.
 		  google.maps.event.addListener(insarKml,"metadata_changed",function(event) {
-				messageDiv.innerHTML="";
+				$("#InSAR-Map-Messages").hide();
 		  });
 		  
 		  //Find out where we are.
@@ -38,7 +39,7 @@ var sarselect=sarselect || (function() {
 				var finalUrl=constructWmsUrl(masterMap,event);
 				var results=$.ajax({url:finalUrl,async:false}).responseText;
 				var parsedResults=jQuery.parseJSON(results);
-				createTable(parsedResults,tableDivName,messageDiv);
+				createTable(parsedResults,tableDivName);
 		  });
 	 }
 	 
@@ -61,7 +62,8 @@ var sarselect=sarselect || (function() {
 	 }
 
 	 //Activates the low-res insar layer for LOS display.
-	 function activateLayerMap(insarMap,overlayUrl,drawFunctionType,uid,messageDiv) {
+	 function activateLayerMap(insarMap,overlayUrl,drawFunctionType,uid) {
+
 		  //Remove any previous layers and listeners
 
 		  if(lowResSARLayer) lowResSARLayer.setMap(null);  
@@ -78,14 +80,15 @@ var sarselect=sarselect || (function() {
 				markerSW=null;
 		  }
 		  if(polyShape) polyShape.setMap(null);
-
         //Add the KML Layer
 		  lowResSARLayer=new google.maps.KmlLayer(overlayUrl,{suppressInfoWindows: true, map: insarMap, clickable: false});
-		  messageDiv.innerHTML="SAR Image Loading...";
+		  $("#InSAR-Map-Messages").show();
+		  $("#InSAR-Map-Messages").html("SAR Image Loading...");
 		  //Add a listener for the insarKml map while it is loading.
 		  google.maps.event.addListener(lowResSARLayer,"metadata_changed",function(event) {
-				messageDiv.innerHTML="";
+				$("#InSAR-Map-Messages").hide()
 		  });
+
 
 		  google.maps.event.clearListeners(insarMap,"click");
 
@@ -107,7 +110,8 @@ var sarselect=sarselect || (function() {
 	 }
     
 	 function lineLeftClick(insarMap,event,uid) {
-		  $('#iconGuide').show();
+//		  $('#iconGuide').show();
+		  $("#Left-Column-Under-Map").show();
 		  //If the marker doesn't exist, create it.
 		  if(!markerNE && !markerSW) {
 				markerNE=new google.maps.Marker({map: insarMap, 
@@ -116,7 +120,7 @@ var sarselect=sarselect || (function() {
 															icon:redIcon,
 															title: "Ending point of LOS measurements",
 															draggable: true});
-				var offset=new google.maps.LatLng(event.latLng.lat()-0.05,event.latLng.lng()-0.05);
+				var offset=new google.maps.LatLng(event.latLng.lat()-0.1,event.latLng.lng()-0.1);
 				markerSW=new google.maps.Marker({map: insarMap, 
 															position: offset, 
 															visible: true, 
@@ -264,6 +268,8 @@ var sarselect=sarselect || (function() {
 				async:false
 		  }).responseText;
 		  var g1=new Dygraph(document.getElementById("outputGraph1"),csv,dygraphLOSOpts);		  
+//		  $("#LOS-Data-Download").show();
+		  $("#LOS-Data-Download").html("<center><a href='"+restUrl+"' target='null'>Download LOS Data</a></center>");
 	 }
 
 	 function getHgtInSarValues(uid) {
@@ -278,9 +284,11 @@ var sarselect=sarselect || (function() {
 				async:false
 		  }).responseText;
 		  var g2=new Dygraph(document.getElementById("outputGraph2"),csv,dygraphHgtOpts);		  
+//		  $("#HGT-Data-Download").show();
+		  $("#HGT-Data-Download").html("<center><a href='"+restUrl+"' target='null'>Download HGT Data</a></center>");
 	 }
 		  
-	 function createTable(parsedResults,tableDivName,messageDiv) {
+	 function createTable(parsedResults,tableDivName) {
 		var dynatable='<table border="1">';
 		//Create the header row.
 		dynatable+='<tr>';
@@ -290,7 +298,7 @@ var sarselect=sarselect || (function() {
 		dynatable+='</tr>';
 		//Fill in the table.
 		for (var index1 in parsedResults) {
-		dynatable+='<tr onmouseover="sarselect.selectedRow(this)" onmouseout="sarselect.unselectedRow(this)" onclick="sarselect.selectRowAction(this,messageDiv)">';
+		dynatable+='<tr onmouseover="sarselect.selectedRow(this)" onmouseout="sarselect.unselectedRow(this)" onclick="sarselect.selectRowAction(this)">';
 		for(var index2 in parsedResults[index1]) {
 		dynatable+='<td>'+parsedResults[index1][index2]+'</td>';
 		}
@@ -338,7 +346,8 @@ var sarselect=sarselect || (function() {
 				row.style.cursor="default";
 		  }
 	 }
-	 function selectRowAction(row, messageDiv){
+	 function selectRowAction(row){
+		  $("#Left-Column-Under-Map").hide();
 		  if(rowSelected!=null) {
 				rowSelected.style.backgroundColor="white";
 		  }
@@ -357,7 +366,7 @@ var sarselect=sarselect || (function() {
 		  insarKml.setMap(null);
 		  
 		  //Turn on the new overlayer
-		  activateLayerMap(masterMap,overlayUrl,"line",uid,messageDiv);
+		  activateLayerMap(masterMap,overlayUrl,"line",uid);
 	 }
 	 
 	 function extractOverlayUrl(callResults){
