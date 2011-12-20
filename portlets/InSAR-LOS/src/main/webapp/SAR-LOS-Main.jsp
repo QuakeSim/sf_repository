@@ -14,7 +14,7 @@
 		  <f:verbatim>Click on the map to select the region you want to use.  If you don't see green rectangles
 		  marking the UAVSAR swaths, try refreshing your browser.
 		  </f:verbatim>
-		  <h:panelGrid id="InSAR-View-All" columns="2" columnClasses="alignTop,alignTop">
+		  <h:panelGrid id="InSAR-View-All" columns="2" columnClasses="alignTopWidth1,alignTopWidth2">
 			 <h:panelGroup id="Sar-LOS-Panel-Left">
 				<h:panelGroup id="The-Big-Map">
 				  <f:verbatim>
@@ -54,7 +54,7 @@
 				  </h:panelGrid>
 				</h:panelGroup>
 			 </h:panelGroup>
-			 <h:panelGroup id="Sar-LOS-Panel-Right" style="width: 380px">
+			 <h:panelGroup id="Sar-LOS-Panel-Right">
 				<f:verbatim>
 				  <div id="dynatable"></div>
 				</f:verbatim>
