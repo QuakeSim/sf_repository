@@ -269,7 +269,7 @@ var sarselect=sarselect || (function() {
 		  }).responseText;
 		  var g1=new Dygraph(document.getElementById("outputGraph1"),csv,dygraphLOSOpts);		  
 //		  $("#LOS-Data-Download").show();
-		  $("#LOS-Data-Download").html("<center><a href='"+restUrl+"' target='null'>Download LOS Data</a></center>");
+		  $("#LOS-Data-Download").html("<center><a href='"+restUrl+"' target='_blank'>Download LOS Data</a></center>");
 	 }
 
 	 function getHgtInSarValues(uid) {
@@ -285,7 +285,7 @@ var sarselect=sarselect || (function() {
 		  }).responseText;
 		  var g2=new Dygraph(document.getElementById("outputGraph2"),csv,dygraphHgtOpts);		  
 //		  $("#HGT-Data-Download").show();
-		  $("#HGT-Data-Download").html("<center><a href='"+restUrl+"' target='null'>Download HGT Data</a></center>");
+		  $("#HGT-Data-Download").html("<center><a href='"+restUrl+"' target='_blank'>Download HGT Data</a></center>");
 	 }
 		  
 	 function createTable(parsedResults,tableDivName) {
