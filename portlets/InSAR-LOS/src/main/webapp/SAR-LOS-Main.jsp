@@ -54,9 +54,9 @@
 				  </h:panelGrid>
 				</h:panelGroup>
 			 </h:panelGroup>
-			 <h:panelGroup id="Sar-LOS-Panel-Right">
+			 <h:panelGroup id="Sar-LOS-Panel-Right" style="width: 380px">
 				<f:verbatim>
-				  <div id="dynatable" style="width: 380px"></div>
+				  <div id="dynatable"></div>
 				</f:verbatim>
 				<f:verbatim><p/></f:verbatim>
 			 </h:panelGroup>
