@@ -27,6 +27,7 @@ public class InSarLOSBean {
 	 private static final String CSV="csv";
 	 private static final String AMP="&";
 	 private static final String COMMA=",";
+	 private static final String RESOLUTION="resolution=";
 
 	 private static final String INSAR_TOOL_URL = "http://gf2.ucs.indiana.edu/insartool/profile?";
 
@@ -68,7 +69,7 @@ public class InSarLOSBean {
 	 public String getImageHgtValues(String outputFormat, int uid, double lat0, double lon0, double lat1, double lon1) throws Exception {
 		  String hgtOutputResponse=null;
 		  String bbox=lon0+COMMA+lat0+COMMA+lon1+COMMA+lat1;
-		  String urlToCall=INSAR_TOOL_URL+IMAGE+uid+HGT+AMP+POINT+bbox+AMP+FORMAT+outputFormat;
+		  String urlToCall=INSAR_TOOL_URL+IMAGE+uid+HGT+AMP+POINT+bbox+AMP+FORMAT+outputFormat+AMP+RESOLUTION+"low";
 		  logger.debug("Calling URL:"+urlToCall);
 		  
 		  URL url=null;
@@ -117,7 +118,7 @@ public class InSarLOSBean {
 	 public String getImageLOSValues(String outputFormat, int uid, double lat0, double lon0, double lat1, double lon1) throws Exception {
 		  String losOutputResponse=null;
 		  String bbox=lon0+COMMA+lat0+COMMA+lon1+COMMA+lat1;
-		  String urlToCall=INSAR_TOOL_URL+IMAGE+uid+LOS+AMP+POINT+bbox+AMP+FORMAT+outputFormat;
+		  String urlToCall=INSAR_TOOL_URL+IMAGE+uid+LOS+AMP+POINT+bbox+AMP+FORMAT+outputFormat+AMP+RESOLUTION+"low";
 		  logger.debug("Calling URL:"+urlToCall);
 		  
 		  URL url=null;

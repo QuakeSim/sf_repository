@@ -30,7 +30,11 @@
 						is the starting point. 
 						<image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/> 
 						is the  ending point.
+						<p/>
 					 </div>
+				  </f:verbatim>
+				  <f:verbatim>
+					 <div id="Endpoint_Lat_Lon"></div>
 				  </f:verbatim>
 				  <h:panelGrid id="plotgridpanel" columns="2" columnClasses="alignTop,alignTop">
 					 <f:verbatim>

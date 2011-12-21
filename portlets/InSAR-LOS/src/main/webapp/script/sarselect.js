@@ -120,7 +120,7 @@ var sarselect=sarselect || (function() {
 															icon:redIcon,
 															title: "Ending point of LOS measurements",
 															draggable: true});
-				var offset=new google.maps.LatLng(event.latLng.lat()-0.1,event.latLng.lng()-0.1);
+				var offset=new google.maps.LatLng(event.latLng.lat()-0.05,event.latLng.lng()-0.05);
 				markerSW=new google.maps.Marker({map: insarMap, 
 															position: offset, 
 															visible: true, 
@@ -129,6 +129,7 @@ var sarselect=sarselect || (function() {
 															draggable: true});
 		  		drawLine(insarMap);
 				getInSarValues(uid);
+				showEndpoints();
 
 				// Make markers draggable			 
 				google.maps.event.addListener(markerNE, "drag", function() {
@@ -140,11 +141,23 @@ var sarselect=sarselect || (function() {
 
 				google.maps.event.addListener(markerNE, "dragend", function() {
 					 getInSarValues(uid);
+					 showEndpoints();
 				});
 				google.maps.event.addListener(markerSW, "dragend", function() {
 					 getInSarValues(uid);
+					 showEndpoints();
 				});
 		  }
+	 }
+
+	 function showEndpoints(){
+		  $("#Endpoint_Lat_Lon").html("<b>Starting Point:</b> "
+												+"("+markerSW.getPosition().lat()+","
+												+markerSW.getPosition().lng()+")"
+												+"<br><b>Ending Point:</b> "
+												+"("+markerNE.getPosition().lat()+","
+												+markerNE.getPosition().lng()+")"												
+											  );
 	 }
 
 	 function rectangleLeftClick(insarMap,event) {
