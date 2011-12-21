@@ -33,11 +33,6 @@
 						is the  ending point.
 					 </div>
 				  </f:verbatim>
-				  <f:verbatim>
-					 <div id="Display_Instructions"><p/>Click and drag a plot to horizontally or vertically zoom.  Double-click 
-					 the plot to return to normal view.
-					 </div>
-				  </f:verbatim>
 				  <h:panelGrid id="plotgridpanel" columns="2" columnClasses="alignTop,alignTop">
 					 <f:verbatim>
 						<div id="outputGraph1"></div>
