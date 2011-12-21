@@ -31,6 +31,7 @@ public class InSarHgtRest {
 	 private static final String CSV="csv";
 	 private static final String AMP="&";
 	 private static final String COMMA=",";
+	 private static final String RESOLUTION="resolution=low";
 	 private static final String INSAR_TOOL_URL = "http://gf1.ucs.indiana.edu/insartool/profile?";
 
 	 //These are the latitude and longitude values of the west (0) and east (1) points. Getter and
@@ -91,7 +92,7 @@ public class InSarHgtRest {
 												  
 												  String outputResponse=null;
 												  String bbox=lon0+COMMA+lat0+COMMA+lon1+COMMA+lat1;
-												  String urlToCall=INSAR_TOOL_URL+IMAGE+UID+uid+HGT+AMP+POINT+bbox+AMP+FORMAT+outputFormat;
+												  String urlToCall=INSAR_TOOL_URL+IMAGE+UID+uid+HGT+AMP+POINT+bbox+AMP+FORMAT+outputFormat+AMP+RESOLUTION;
 												  logger.debug("Calling URL:"+urlToCall);
 												  
 												  URL url=null;
