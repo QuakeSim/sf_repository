@@ -11,8 +11,7 @@
 	 <h:panelGrid id="insarlospanelgrid" columns="1" columnClasses="alignTopFixWidth">
 		<h:panelGroup id="bigoldlospanelgroup">
 		  <f:verbatim><fieldset><legend><b>Interferogram Map Selection</b></legend></f:verbatim>
-		  <f:verbatim>Click on the map to select the region you want to use.  If you don't see green rectangles
-		  marking the UAVSAR swaths, try refreshing your browser.
+		  <f:verbatim>Click on the map to select the region you want to use. 
 		  </f:verbatim>
 		  <h:panelGrid id="InSAR-View-All" columns="2" columnClasses="alignTopWidth1,alignTopWidth2">
 			 <h:panelGroup id="Sar-LOS-Panel-Left">
