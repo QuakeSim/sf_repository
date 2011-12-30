@@ -302,7 +302,7 @@ var sarselect=sarselect || (function() {
 	 }
 		  
 	 function createTable(parsedResults,tableDivName) {
-		var dynatable='<table id="sartable">';
+		var dynatable='<table border="1">';
 		//Create the header row.
 		dynatable+='<tr>';
 		for(var index1 in parsedResults[0]) {
