@@ -13,3 +13,11 @@
 	 width:380px;
 	 vertical-align:top;
 }
+#sartable
+{
+border:1px solid black;
+}
+#sartable td
+{
+border:1px solid black;
+}

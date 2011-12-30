@@ -6,8 +6,9 @@
 <head>
   <link rel="stylesheet" href="@host.base.url@/InSAR-LOS/css/default.css"/>
 </head>
-<body>
+<body onload="initialize()">
   <f:view>
+	 <f:verbatim><div style="width: 1000px"></f:verbatim>
 	 <h:panelGrid id="insarlospanelgrid" columns="1" columnClasses="alignTopFixWidth">
 		<h:panelGroup id="bigoldlospanelgroup">
 		  <f:verbatim><fieldset><legend><b>Interferogram Map Selection</b></legend></f:verbatim>
@@ -54,7 +55,7 @@
 			 </h:panelGroup>
 			 <h:panelGroup id="Sar-LOS-Panel-Right">
 				<f:verbatim>
-				  <div id="dynatable"></div>
+				  <div id="dynatable" style="width:380px;"></div>
 				</f:verbatim>
 				<f:verbatim><p/></f:verbatim>
 			 </h:panelGroup>
@@ -62,6 +63,7 @@
 		  <f:verbatim></fieldset></f:verbatim>
 		</h:panelGroup>
 	 </h:panelGrid>
+	 <f:verbatim></div></f:verbatim>
   </f:view>
   <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>  
   <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1.min.js"></script>
@@ -70,10 +72,12 @@
   
   <script>
 	 //Rendear the InSAR overlays.
+	 function initialize() {
 	 var insarMapDiv=document.getElementById("InSAR-All-Map");
 	 var tableDivName="dynatable";
 	 var messageDiv=document.getElementById("InSAR-Map-Messages");
 	 sarselect.setMasterMap(insarMapDiv,tableDivName);
+	 }
   </script>
 </body>
 </html>
