@@ -369,7 +369,7 @@ var sarselect=sarselect || (function() {
 				rowSelected.style.backgroundColor="white";
 		  }
 		  rowSelected=row;
-	     rowSelected.style.backgroundColor="red";
+	     rowSelected.style.backgroundColor="lightgreen";
 	     //Find the ID of the row
 		  var uid=extractRowId2(row);
 
