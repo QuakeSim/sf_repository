@@ -8,17 +8,16 @@
 </head>
 <body onload="initialize()">
   <f:view>
-	 <f:verbatim><div style="width: 1000px"></f:verbatim>
 	 <h:panelGrid id="insarlospanelgrid" columns="1" columnClasses="alignTopFixWidth">
 		<h:panelGroup id="bigoldlospanelgroup">
 		  <f:verbatim><fieldset><legend><b>Interferogram Map Selection</b></legend></f:verbatim>
 		  <f:verbatim>Click on the map to select the region you want to use. 
 		  </f:verbatim>
-		  <h:panelGrid id="InSAR-View-All" columns="2" columnClasses="alignTopWidth1,alignTopWidth2">
+		  <h:panelGrid id="InSAR-View-All" columns="2" columnClasses="alignTop,alignTop">
 			 <h:panelGroup id="Sar-LOS-Panel-Left">
 				<h:panelGroup id="The-Big-Map">
 				  <f:verbatim>
-					 <div id="InSAR-All-Map" style="width: 600px; height: 400px;"></div>
+					 <div id="InSAR-All-Map" style="width:600px; height:400px"></div>
 				  </f:verbatim>
 				  <f:verbatim>				
 					 <div id="InSAR-Map-Messages" style="display:none;"></div>
@@ -55,7 +54,7 @@
 			 </h:panelGroup>
 			 <h:panelGroup id="Sar-LOS-Panel-Right">
 				<f:verbatim>
-				  <div id="dynatable" style="width:380px;"></div>
+				  <div id="dynatable"></div>
 				</f:verbatim>
 				<f:verbatim><p/></f:verbatim>
 			 </h:panelGroup>
@@ -63,7 +62,6 @@
 		  <f:verbatim></fieldset></f:verbatim>
 		</h:panelGroup>
 	 </h:panelGrid>
-	 <f:verbatim></div></f:verbatim>
   </f:view>
   <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>  
   <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1.min.js"></script>
