@@ -110,7 +110,6 @@ var sarselect=sarselect || (function() {
 	 }
     
 	 function lineLeftClick(insarMap,event,uid) {
-//		  $('#iconGuide').show();
 		  $("#Left-Column-Under-Map").show();
 		  //If the marker doesn't exist, create it.
 		  if(!markerNE && !markerSW) {
@@ -281,7 +280,6 @@ var sarselect=sarselect || (function() {
 				async:false
 		  }).responseText;
 		  var g1=new Dygraph(document.getElementById("outputGraph1"),csv,dygraphLOSOpts);		  
-//		  $("#LOS-Data-Download").show();
 		  $("#LOS-Data-Download").html("<center><a href='"+restUrl+"' target='_blank'>Download LOS Data</a></center>");
 	 }
 
@@ -297,7 +295,6 @@ var sarselect=sarselect || (function() {
 				async:false
 		  }).responseText;
 		  var g2=new Dygraph(document.getElementById("outputGraph2"),csv,dygraphHgtOpts);		  
-//		  $("#HGT-Data-Download").show();
 		  $("#HGT-Data-Download").html("<center><a href='"+restUrl+"' target='_blank'>Download HGT Data</a></center>");
 	 }
 		  
@@ -306,19 +303,26 @@ var sarselect=sarselect || (function() {
 		//Create the header row.
 		dynatable+='<tr>';
 		for(var index1 in parsedResults[0]) {
-		dynatable+='<th>'+index1+'</th>';
+			 //Ick 1. We don't show the UID header
+			 if(index1!='uid') {
+				  dynatable+='<th>'+index1+'</th>';
+			 }
 		}
 		dynatable+='</tr>';
 		//Fill in the table.
 		for (var index1 in parsedResults) {
-		dynatable+='<tr onmouseover="sarselect.selectedRow(this)" onmouseout="sarselect.unselectedRow(this)" onclick="sarselect.selectRowAction(this)">';
+		dynatable+='<tr onmouseover="sarselect.selectedRow(this)" onmouseout="sarselect.unselectedRow(this)" onclick="sarselect.selectRowAction(this)" id="'+parsedResults[index1]['uid']+'"'+'>';
 		for(var index2 in parsedResults[index1]) {
-		dynatable+='<td>'+parsedResults[index1][index2]+'</td>';
+			 //Ick 2.  We don't include the uid column.
+			 if(index2!='uid') {
+				  dynatable+='<td>'+parsedResults[index1][index2]+'</td>';
+			 }
 		}
-		dynatable+='</tr>'
+			dynatable+='</tr>'
 		}
 		dynatable+='</table>';
-		document.getElementById(tableDivName).innerHTML=dynatable;
+//		document.getElementById(tableDivName).innerHTML=dynatable;
+		  $('#dynatable').html(dynatable);
 	 }
 	 
 	 function constructWmsUrl(map,event) {
@@ -367,7 +371,7 @@ var sarselect=sarselect || (function() {
 		  rowSelected=row;
 	     rowSelected.style.backgroundColor="red";
 	     //Find the ID of the row
-		  var uid=extractRowId(row);
+		  var uid=extractRowId2(row);
 
 	   //Call REST service
 		var callResults=getImageMetadata(uid);
@@ -392,6 +396,15 @@ var sarselect=sarselect || (function() {
 	   return overlayUrl;
 	 }
 
+	 //This is the current preferred method.  It assumes 
+	 //the row id attribute has been set to the image uid value.
+	 function extractRowId2(row) {
+		  console.log(row.getAttribute('id'));
+		  return row.getAttribute('id');
+	 }
+
+	 //This is an obsolete method for extracting the image uid.  It assumes
+	 //the image uid values are in a displayed table column
 	 function extractRowId(row) {
 	    //Get the first td from the tr and return its innerHTML.
 	    //The ID is the value of the first <td> element.
