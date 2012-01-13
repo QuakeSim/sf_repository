@@ -21,6 +21,7 @@
 				  </f:verbatim>
 				  <f:verbatim>				
 					 <div id="InSAR-Map-Messages" style="display:none;"></div>
+					 <br/>
 				  </f:verbatim>
 				</h:panelGroup>
 				<h:panelGroup id="Left-Column-Under-Map" style="display:none;">
