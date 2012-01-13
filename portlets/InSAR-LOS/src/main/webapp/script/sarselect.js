@@ -25,6 +25,7 @@ var sarselect=sarselect || (function() {
 		  
 		  var kmlMapOpts={map:masterMap, suppressInfoWindows:true, preserveViewport:true};
 		  insarKml=new google.maps.KmlLayer("http://quaketables.quakesim.org/kml?uid=all&lowres=1",kmlMapOpts);
+//		  insarKml=new google.maps.KmlLayer("@host.base.url@/quakesim_uavsar.kml",kmlMapOpts);
 //		  insarKml = new google.maps.KmlLayer("http://quaketables.quakesim.org/kml?uid=all&ov=0",kmlMapOpts);
 		  $("#InSAR-Map-Messages").show();
 		  $("#InSAR-Map-Messages").html("InSAR Catalog Loading...");
@@ -150,13 +151,13 @@ var sarselect=sarselect || (function() {
 	 }
 
 	 function showEndpoints(){
-		  $("#Endpoint_Lat_Lon").html("<b>Starting Point:</b> "
-												+"("+markerSW.getPosition().lat()+","
-												+markerSW.getPosition().lng()+")"
-												+"<br><b>Ending Point:</b> "
-												+"("+markerNE.getPosition().lat()+","
-												+markerNE.getPosition().lng()+")"												
-											  );
+		  var swLat=markerSW.getPosition().lat().toFixed(5);
+		  var swLon=markerSW.getPosition().lng().toFixed(5);
+		  var neLat=markerNE.getPosition().lat().toFixed(5);
+		  var neLon=markerNE.getPosition().lng().toFixed(5);
+
+		  $("#iconGuide").html('<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> Lat: '+swLat+', Lon: '+swLon+'  <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/>  Lat: '+neLat+', Lon: '+neLon);
+
 	 }
 
 	 function rectangleLeftClick(insarMap,event) {
