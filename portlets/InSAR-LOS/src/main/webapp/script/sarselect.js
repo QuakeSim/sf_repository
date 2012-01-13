@@ -156,7 +156,7 @@ var sarselect=sarselect || (function() {
 		  var neLat=markerNE.getPosition().lat().toFixed(5);
 		  var neLon=markerNE.getPosition().lng().toFixed(5);
 
-		  $("#iconGuide").html('<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> Lat: '+swLat+', Lon: '+swLon+'  <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/>  Lat: '+neLat+', Lon: '+neLon);
+		  $("#iconGuide").html('<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> Lat: '+swLat+', Lon: '+swLon+'  <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/>  Lat: '+neLat+', Lon: '+neLon+' <p/>');
 
 	 }
 
