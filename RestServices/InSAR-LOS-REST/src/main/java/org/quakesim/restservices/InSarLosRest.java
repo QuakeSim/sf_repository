@@ -20,7 +20,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.UriInfo;
 
 
-@Path("/insarlos/{format}/{uid}/{lon0}/{lat0}/{lon1}/{lat1}")
+@Path("/insarlos/{format}/{uid}/{resolution}/{lon0}/{lat0}/{lon1}/{lat1}")
 public class InSarLosRest {
 	 private static final String IMAGE="image=InSAR:";
 	 private static final String UID="uid";
@@ -32,7 +32,7 @@ public class InSarLosRest {
 	 private static final String CSV="csv";
 	 private static final String AMP="&";
 	 private static final String COMMA=",";
-	 private static final String RESOLUTION="resolution=low";
+	 private static final String RESOLUTION="resolution=";
 	 private static final String INSAR_TOOL_URL = "http://gf1.ucs.indiana.edu/insartool/profile?";
 
 	 //These are the latitude and longitude values of the west (0) and east (1) points. Getter and
@@ -84,6 +84,7 @@ public class InSarLosRest {
     @Produces("text/plain")
 	 public String getImageLOSRest(@PathParam("format") String outputFormat,
 											 @PathParam("uid") int uid,
+											 @PathParam("resolution") String resolution,
 											 @PathParam("lon0") double lon0,
 											 @PathParam("lat0") double lat0,
 											 @PathParam("lon1") double lon1,
@@ -92,7 +93,7 @@ public class InSarLosRest {
 												  
 												  String losOutputResponse=null;
 												  String bbox=lon0+COMMA+lat0+COMMA+lon1+COMMA+lat1;
-												  String urlToCall=INSAR_TOOL_URL+IMAGE+UID+uid+LOS+AMP+POINT+bbox+AMP+FORMAT+outputFormat+AMP+RESOLUTION;
+												  String urlToCall=INSAR_TOOL_URL+IMAGE+UID+uid+LOS+AMP+POINT+bbox+AMP+FORMAT+outputFormat+AMP+RESOLUTION+resolution;
 												  logger.debug("Calling URL:"+urlToCall);
 												  
 												  URL url=null;

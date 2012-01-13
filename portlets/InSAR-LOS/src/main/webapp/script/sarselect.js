@@ -69,13 +69,11 @@ var sarselect=sarselect || (function() {
 
 		  if(lowResSARLayer) lowResSARLayer.setMap(null);  
 		  if(markerNE) {
-				console.log("Clean up MarkerNE");
 				google.maps.event.clearInstanceListeners(markerNE);
 				markerNE.setMap(null);
 				markerNE=null;
 		  }
 		  if(markerSW) {
-				console.log("Clean up MarkerSW");
 				google.maps.event.clearInstanceListeners(markerSW);
 				markerSW.setMap(null);
 				markerSW=null;
@@ -265,17 +263,24 @@ var sarselect=sarselect || (function() {
 		}
 
 	 function getInSarValues(uid) {
-		  getLosInSarValues(uid);
-		  getHgtInSarValues(uid);
+		  var resolution="low";
+		  if($("#high-res").is(':checked')) {
+				resolution="high";
+		  }
+		  else {
+				resolution="low";
+		  }
+		  getLosInSarValues(uid,resolution);
+		  getHgtInSarValues(uid,resolution);
 	 }
 	 
-	 function getLosInSarValues(uid) {
+	 function getLosInSarValues(uid,resolution) {
 		  var westMarkerLat=markerSW.getPosition().lat();
 		  var westMarkerLon=markerSW.getPosition().lng();
 		  var eastMarkerLat=markerNE.getPosition().lat();
 		  var eastMarkerLon=markerNE.getPosition().lng();
 		  
-		  var restUrl="/InSAR-LOS-REST/insarlos/csv/"+uid+"/"+"low"+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat;
+		  var restUrl="/InSAR-LOS-REST/insarlos/csv/"+uid+"/"+resolution+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat;
 		  var csv=$.ajax({
 				url:restUrl,
 				async:false
@@ -284,13 +289,13 @@ var sarselect=sarselect || (function() {
 		  $("#LOS-Data-Download").html("<center><a href='"+restUrl+"' target='_blank'>Download LOS Data</a></center>");
 	 }
 
-	 function getHgtInSarValues(uid) {
+	 function getHgtInSarValues(uid,resolution) {
 		  var westMarkerLat=markerSW.getPosition().lat();
 		  var westMarkerLon=markerSW.getPosition().lng();
 		  var eastMarkerLat=markerNE.getPosition().lat();
 		  var eastMarkerLon=markerNE.getPosition().lng();
 
-		  var restUrl="/InSAR-LOS-REST/insarhgt/csv/"+uid+"/"+"low"+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat;
+		  var restUrl="/InSAR-LOS-REST/insarhgt/csv/"+uid+"/"+resolution+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat;
 		  var csv=$.ajax({
 				url:restUrl,
 				async:false
@@ -400,7 +405,6 @@ var sarselect=sarselect || (function() {
 	 //This is the current preferred method.  It assumes 
 	 //the row id attribute has been set to the image uid value.
 	 function extractRowId2(row) {
-		  console.log(row.getAttribute('id'));
 		  return row.getAttribute('id');
 	 }
 

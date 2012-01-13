@@ -29,12 +29,16 @@
 						<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> 
 						is the starting point. 
 						<image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/> 
-						is the  ending point.
+						is the ending point.
 						<p/>
 					 </div>
 				  </f:verbatim>
 				  <f:verbatim>
-					 <div id="Endpoint_Lat_Lon"></div>
+					 <div id="Plot-Resolution">
+						<b>Plot Resolution:</b>
+						<input type="radio" name="resolution" id="low-res" value="Resolution" checked/>low
+						<input type="radio" name="resolution" id="high-res" value="Resolution"/>high
+					 </div>
 				  </f:verbatim>
 				  <h:panelGrid id="plotgridpanel" columns="2" columnClasses="alignTop,alignTop">
 					 <f:verbatim>
