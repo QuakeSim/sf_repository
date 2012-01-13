@@ -275,7 +275,7 @@ var sarselect=sarselect || (function() {
 		  var eastMarkerLat=markerNE.getPosition().lat();
 		  var eastMarkerLon=markerNE.getPosition().lng();
 		  
-		  var restUrl="/InSAR-LOS-REST/insarlos/csv/"+uid+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat;
+		  var restUrl="/InSAR-LOS-REST/insarlos/csv/"+uid+"/"+"low"+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat;
 		  var csv=$.ajax({
 				url:restUrl,
 				async:false
@@ -290,7 +290,7 @@ var sarselect=sarselect || (function() {
 		  var eastMarkerLat=markerNE.getPosition().lat();
 		  var eastMarkerLon=markerNE.getPosition().lng();
 
-		  var restUrl="/InSAR-LOS-REST/insarhgt/csv/"+uid+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat;
+		  var restUrl="/InSAR-LOS-REST/insarhgt/csv/"+uid+"/"+"low"+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat;
 		  var csv=$.ajax({
 				url:restUrl,
 				async:false
