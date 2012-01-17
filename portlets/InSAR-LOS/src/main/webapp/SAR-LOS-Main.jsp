@@ -11,7 +11,10 @@
 	 <h:panelGrid id="insarlospanelgrid" columns="1" columnClasses="alignTopFixWidth">
 		<h:panelGroup id="bigoldlospanelgroup">
 		  <f:verbatim><fieldset><legend><b>Interferogram Map Selection</b></legend></f:verbatim>
-		  <f:verbatim>Click on the map to select the region you want to use. 
+		  <f:verbatim>
+			 <div id="Instructions">
+				Click on the map to select the region you want to use.  
+			 </div>
 		  </f:verbatim>
 		  <h:panelGrid id="InSAR-View-All" columns="2" columnClasses="alignTop,alignTop">
 			 <h:panelGroup id="Sar-LOS-Panel-Left">
@@ -33,13 +36,6 @@
 						<p/>
 					 </div>
 				  </f:verbatim>
-				  <f:verbatim>
-					 <div id="Plot-Resolution">
-						<b>Plot Resolution:</b>
-						<input type="radio" name="resolution" id="low-res" value="Resolution" checked/>low
-						<input type="radio" name="resolution" id="high-res" value="Resolution"/>high
-					 </div>
-				  </f:verbatim>
 				  <h:panelGrid id="plotgridpanel" columns="2" columnClasses="alignTop,alignTop">
 					 <f:verbatim>
 						<div id="outputGraph1"></div>
@@ -57,6 +53,13 @@
 				</h:panelGroup>
 			 </h:panelGroup>
 			 <h:panelGroup id="Sar-LOS-Panel-Right">
+				  <f:verbatim>
+					 <div id="Plot-Resolution" style="display:none;">
+						<b>Plot Resolution:</b>
+						<input type="radio" name="resolution" id="low-res" value="Resolution" checked onclick="sarselect.plotLowRes()"/>low
+						<input type="radio" name="resolution" id="high-res" value="Resolution" onclick="sarselect.plotHighRes()"/>high
+					 </div>
+				  </f:verbatim>
 				<f:verbatim>
 				  <div id="dynatable"></div>
 				</f:verbatim>

@@ -11,6 +11,7 @@ var sarselect=sarselect || (function() {
 	 var insarKml;
 	 var rowSelected=null;
 	 var lowResSARLayer=null;
+	 var uid=null;  //This is global because we need to pass it between two unrelated functions. Not good.
 	 var dygraphLOSOpts={width:300,height:300,drawPoints:true,pointSize:2,strokeWidth:0.0,title:'InSAR Line of Sight Values',xlabel:'Distance (km)',ylabel:'LOS Value (cm)'};
 	 var dygraphHgtOpts={width:300,height:300,drawPoints:true,pointSize:2,strokeWidth:0.0,title:'InSAR Height Values',xlabel:'Distance (km)',ylabel:'Height (m)'};
 
@@ -41,6 +42,7 @@ var sarselect=sarselect || (function() {
 				var results=$.ajax({url:finalUrl,async:false}).responseText;
 				var parsedResults=jQuery.parseJSON(results);
 				createTable(parsedResults,tableDivName);
+				$("#Instructions").html("Now click the table entry that you want to plot.");
 		  });
 	 }
 	 
@@ -377,7 +379,8 @@ var sarselect=sarselect || (function() {
 		  rowSelected=row;
 	     rowSelected.style.backgroundColor="lightgreen";
 	     //Find the ID of the row
-		  var uid=extractRowId2(row);
+//		  var uid=extractRowId2(row);
+		  uid=extractRowId2(row);
 
 	   //Call REST service
 		var callResults=getImageMetadata(uid);
@@ -390,6 +393,9 @@ var sarselect=sarselect || (function() {
 		  
 		  //Turn on the new overlayer
 		  activateLayerMap(masterMap,overlayUrl,"line",uid);
+		  
+		  $("#Instructions").html("Now click the map to plot a line.  Move the end points to set the plot.");
+		  $("#Plot-Resolution").show();
 	 }
 	 
 	 function extractOverlayUrl(callResults){
@@ -425,6 +431,19 @@ var sarselect=sarselect || (function() {
 	   return jsonResults;
 	 }
 
+	 //This is a dangerous pattern: UID is a global variable set by a separate function
+	 //when the table is clicked. As long as the order of events is preserved, then
+	 //UID should be set correctly but changing things will break this function.
+	 function plotLowRes() {
+		  getInSarValues(uid);
+	 }
+
+	 //This is a dangerous pattern: UID is a global variable set by a separate function
+	 //when the table is clicked. As long as the order of events is preserved, then
+	 //UID should be set correctly but changing things will break this function.
+	 function plotHighRes(){
+		  getInSarValues(uid);
+	 }
 
 	 /**
 	  * Public API for sarselect.js
@@ -438,7 +457,9 @@ var sarselect=sarselect || (function() {
 		  getInSarValues: getInSarValues,
 		  getLosInSarValues: getLosInSarValues,
 		  getHgtInSarValues: getHgtInSarValues,
-		  activateLayerMap: activateLayerMap
+		  activateLayerMap: activateLayerMap,
+		  plotLowRes:plotLowRes,
+		  plotHighRes:plotHighRes
 	 }
 	 
 })();
