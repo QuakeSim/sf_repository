@@ -90,7 +90,6 @@ var sarselect=sarselect || (function() {
 				$("#InSAR-Map-Messages").hide()
 		  });
 
-
 		  google.maps.event.clearListeners(insarMap,"click");
 
 		  google.maps.event.addListener(insarMap,"click",function(event) {
@@ -156,7 +155,16 @@ var sarselect=sarselect || (function() {
 		  var neLat=markerNE.getPosition().lat().toFixed(5);
 		  var neLon=markerNE.getPosition().lng().toFixed(5);
 
-		  $("#iconGuide").html('<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> Lat: '+swLat+', Lon: '+swLon+'  <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/>  Lat: '+neLat+', Lon: '+neLon+' <p/>');
+		  //Using http://www.movable-type.co.uk/scripts/latlong.html
+		  var d2r=Math.PI/180.0;
+		  var dlon=(neLon-swLon)*d2r;
+		  var y=Math.sin(dlon)*Math.cos(neLat*d2r);
+		  var x=Math.cos(swLat*d2r)*Math.sin(neLat*d2r)-Math.sin(swLat*d2r)*Math.cos(swLat*d2r)*Math.cos(dlon);
+		  console.log(x, y, dlon);
+		  var azimuth=Math.atan2(y,x)/d2r;
+		  azimuth=azimuth.toFixed(5);
+
+		  $("#iconGuide").html('<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> Lat: '+swLat+', Lon: '+swLon+'  <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/>  Lat: '+neLat+', Lon: '+neLon+' <br/>Initial Bearing (azimuth): '+ azimuth +' degrees <p/>');
 
 	 }
 
@@ -244,7 +252,8 @@ var sarselect=sarselect || (function() {
 		  
 		  polyShape=new google.maps.Polygon({paths:polyPoints,
 														 fillColor:polyFillColor,
-														 strokeColor:polyLineColor});
+														 strokeColor:polyLineColor,
+														 zindex:1});
 		  polyShape.setMap(insarMap);
 		  
 	 }
