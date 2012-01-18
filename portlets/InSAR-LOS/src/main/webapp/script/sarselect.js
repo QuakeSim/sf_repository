@@ -103,7 +103,7 @@ var sarselect=sarselect || (function() {
 					 lineLeftClick(insarMap,event,uid);
 				}
 				else {
-					 alert("Invalid draw method provided. Should be either 'polygon' or 'rectangle'. Using 'rectangle' by default.");
+					 alert("Invalid draw method provided. Should be either 'line', 'polygon', or 'rectangle'. Using 'rectangle' by default.");
 					 rectangleLeftClick(isarMap,event);
 				}
 		  });
@@ -410,7 +410,7 @@ var sarselect=sarselect || (function() {
 	 function extractOverlayUrl(callResults){
 	   var overlayUrl;
 		for(var index in callResults) {
-		    if(callResults[index].datatype=="int") {
+		    if(callResults[index].datatype=="unw") {
 			    overlayUrl=callResults[index].kml;
 			 }
 		}
