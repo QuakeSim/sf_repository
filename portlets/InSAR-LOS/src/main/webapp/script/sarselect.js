@@ -164,7 +164,7 @@ var sarselect=sarselect || (function() {
 		  var azimuth=Math.atan2(y,x)/d2r;
 		  azimuth=azimuth.toFixed(5);
 
-		  $("#iconGuide").html('<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> Lat: '+swLat+', Lon: '+swLon+'  <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/>  Lat: '+neLat+', Lon: '+neLon+' <br/>Initial Bearing (azimuth): '+ azimuth +' degrees <p/>');
+		  $("#iconGuide").html('<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> Lat: '+swLat+', Lon: '+swLon+'  <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/>  Lat: '+neLat+', Lon: '+neLon+' <p/><div title="See http://www.movable-type.co.uk/scripts/latlong.html for definition and formula used here."><u>Initial Bearing (azimuth):</u> '+ azimuth +' degrees </div><p/>');
 
 	 }
 
@@ -342,6 +342,8 @@ var sarselect=sarselect || (function() {
 		  $('#dynatable').html(dynatable);
 	 }
 	 
+	 //This function constructs a REST call to a local service, insarnav. The code for this service is 
+	 //under QuakeSim's RestServices directory.
 	 function constructWmsUrl(map,event) {
 	   var scale=Math.pow(2,map.getZoom());
 	   var nw=new google.maps.LatLng(map.getBounds().getNorthEast().lat(),map.getBounds().getSouthWest().lng());
