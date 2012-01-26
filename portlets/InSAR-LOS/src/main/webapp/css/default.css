@@ -6,15 +6,15 @@
 	 vertical-align:top;
 }
 .alignTopWidth1 {
-	 width:600px;
+	 width:650px;
 	 vertical-align:top;
 }
 .alignTopWidth2 {
-	 width:380px;
+	 width:350px;
 	 vertical-align:top;
 }
 #sartable {
 	    table-layout:fixed;
-		 width:380px;
+		 width:350px;
 		 word-wrap:break-word
 }

@@ -21,7 +21,7 @@ var sarselect=sarselect || (function() {
 
 	 function setMasterMap(insarMapDiv,tableDivName) {
 		  var latlng=new google.maps.LatLng(32.3,-118.0);
-		  var myOpts={zoom:6, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP};
+		  var myOpts={zoom:6, center: latlng, mapTypeId: google.maps.MapTypeId.TERRAIN};
 		  masterMap=new google.maps.Map(insarMapDiv, myOpts);
 		  
 		  var kmlMapOpts={map:masterMap, suppressInfoWindows:true, preserveViewport:true};
@@ -162,9 +162,9 @@ var sarselect=sarselect || (function() {
 		  var x=Math.cos(swLat*d2r)*Math.sin(neLat*d2r)-Math.sin(swLat*d2r)*Math.cos(swLat*d2r)*Math.cos(dlon);
 		  console.log(x, y, dlon);
 		  var azimuth=Math.atan2(y,x)/d2r;
-		  azimuth=azimuth.toFixed(5);
+		  azimuth=azimuth.toFixed(1);
 
-		  $("#iconGuide").html('<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> Lat: '+swLat+', Lon: '+swLon+'  <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/>  Lat: '+neLat+', Lon: '+neLon+' <p/><div title="See http://www.movable-type.co.uk/scripts/latlong.html for definition and formula used here."><u>Initial Bearing (azimuth):</u> '+ azimuth +' degrees </div><p/>');
+		  $("#iconGuide").html('<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> Lat, Lon: ('+swLat+', '+swLon+')  <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/>  Lat, Lon: ('+neLat+', '+neLon+')  Azimuth: '+ azimuth +' deg <p/>');
 
 	 }
 
