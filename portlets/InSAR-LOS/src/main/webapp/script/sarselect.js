@@ -211,7 +211,6 @@ var sarselect=sarselect || (function() {
 				drawPoly(insarMap);
 		  });
 		  
-		  
 		  // Second click listener to remove the square
 		  google.maps.event.addListener(marker, "click", function() {
 				// Find out which square to remove
@@ -234,9 +233,9 @@ var sarselect=sarselect || (function() {
 		  polyPoints.push(markerNE.getPosition());
 		  polyPoints.push(markerSW.getPosition());
 		  polyShape=new google.maps.Polyline({path:polyPoints,
-														  strokeColor:polyLineColor});
-		  polyShape.setMap(insarMap);
-		  
+														  strokeColor:polyLineColor,
+														  map:insarMap,
+														  zIndex:1});
 	 }
 
 	 function drawRectangle(insarMap) {
@@ -255,7 +254,6 @@ var sarselect=sarselect || (function() {
 														 strokeColor:polyLineColor,
 														 zindex:1});
 		  polyShape.setMap(insarMap);
-		  
 	 }
 	 
 	 function drawPoly(insarMap) {
@@ -274,12 +272,12 @@ var sarselect=sarselect || (function() {
 		}
 
 	 function getInSarValues(uid) {
-		  var resolution="low";
+		  var resolution="1000";
 		  if($("#high-res").is(':checked')) {
-				resolution="high";
+				resolution="500";
 		  }
 		  else {
-				resolution="low";
+				resolution="1000";
 		  }
 		  getLosInSarValues(uid,resolution);
 		  getHgtInSarValues(uid,resolution);
@@ -390,7 +388,7 @@ var sarselect=sarselect || (function() {
 		  rowSelected=row;
 	     rowSelected.style.backgroundColor="lightgreen";
 	     //Find the ID of the row
-//		  var uid=extractRowId2(row);
+		  //var uid=extractRowId2(row);
 		  uid=extractRowId2(row);
 
 	   //Call REST service

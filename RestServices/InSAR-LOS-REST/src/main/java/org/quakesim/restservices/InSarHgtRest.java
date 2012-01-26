@@ -31,7 +31,8 @@ public class InSarHgtRest {
 	 private static final String CSV="csv";
 	 private static final String AMP="&";
 	 private static final String COMMA=",";
-	 private static final String RESOLUTION="resolution=";
+	 private static final String RESOLUTION="resolution=";  
+	 private static final String METHOD="method=";  //Hard-coded, needs to be updated
 	 private static final String INSAR_TOOL_URL = "http://gf1.ucs.indiana.edu/insartool/profile?";
 
 	 //These are the latitude and longitude values of the west (0) and east (1) points. Getter and
@@ -91,9 +92,10 @@ public class InSarHgtRest {
 											 @PathParam("lat1") double lat1) 
 											 throws Exception {
 												  
+												  String method="native";  //Hard-coded, need to pass this in.
 												  String outputResponse=null;
 												  String bbox=lon0+COMMA+lat0+COMMA+lon1+COMMA+lat1;
-												  String urlToCall=INSAR_TOOL_URL+IMAGE+UID+uid+HGT+AMP+POINT+bbox+AMP+FORMAT+outputFormat+AMP+RESOLUTION+resolution;
+												  String urlToCall=INSAR_TOOL_URL+IMAGE+UID+uid+HGT+AMP+POINT+bbox+AMP+FORMAT+outputFormat+AMP+RESOLUTION+resolution+AMP+METHOD+method;
 												  logger.debug("Calling URL:"+urlToCall);
 												  
 												  URL url=null;

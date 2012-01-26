@@ -28,6 +28,7 @@ public class InSarIdRest {
 	 static final String wmsUrl="http://gf1.ucs.indiana.edu/insartool/checkkml?";
 	 static final String format="format=json";
 	 static final String uid="uid=";
+	 static final String source="source=local";
 
 	 private String outputResponse=null;
 	 private String urlToCall=null;
@@ -45,7 +46,7 @@ public class InSarIdRest {
 	 public String getImageById(@PathParam("id") int id)
 										 throws Exception {
 											  outputResponse="";
-											  String urlToCall=wmsUrl+uid+id+amp+format;
+											  String urlToCall=wmsUrl+uid+id+amp+format+amp+source;
 											  
 											  System.out.println("Calling:"+urlToCall);
 											  
