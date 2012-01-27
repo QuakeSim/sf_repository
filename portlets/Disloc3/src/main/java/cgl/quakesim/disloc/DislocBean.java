@@ -1984,8 +1984,9 @@ public class DislocBean extends GenericSopacBean implements HttpSessionBindingLi
 		// If any of these conditions hold, we need to reset.
 		System.out.println("Origin:" + currentParams.getOriginLat() + " "
 				+ currentParams.getOriginLon());
-		if (currentParams.getOriginLat() == DislocParamsBean.DEFAULT_LAT
-				|| currentParams.getOriginLon() == DislocParamsBean.DEFAULT_LON) {
+		if (currentParams.getOriginLat()==DislocParamsBean.DEFAULT_LAT
+			 || currentParams.getOriginLon()==DislocParamsBean.DEFAULT_LON) {
+			 System.out.println("Setting origin--------------");
 			currentParams.setOriginLat(latStart);
 			currentParams.setOriginLon(lonStart);
 			// Update the parameters

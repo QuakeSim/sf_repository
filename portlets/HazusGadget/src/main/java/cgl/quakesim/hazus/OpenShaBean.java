@@ -80,18 +80,21 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 		  gmtMapGen.setParameter(gmtMapGen.LOG_PLOT_NAME,Boolean.FALSE);
 		  gmtMapGen.setParameter(gmtMapGen.HAZUS_SHAPE_PARAM_NAME,Boolean.TRUE);
 		  
-
+		  //--------------------------------------------------
+		  // TODO: All this stuff is suspicious, needs to be checked. May be the cause of our 
+		  // little problems.
+		  //--------------------------------------------------
 		  //Taken from PagerShakeMapCalc, but I'm not sure if this is correct.
 		  PropagationEffect propagationEffect = new PropagationEffect();		  
-		  // ParameterList paramList = propagationEffect.getAdjustableParameterList();
-		  // paramList.getParameter(propagationEffect.APPROX_DIST_PARAM_NAME).setValue(new Boolean(true));
+		  ParameterList paramList = propagationEffect.getAdjustableParameterList();
+		  paramList.getParameter(propagationEffect.APPROX_DIST_PARAM_NAME).setValue(new Boolean(true));
 		  
-		  // if (pointSourceCorrection){
-		  // 		paramList.getParameter(propagationEffect.POINT_SRC_CORR_PARAM_NAME).setValue(new Boolean(true));
-		  // }
-		  // else {
-		  // 		paramList.getParameter(propagationEffect.POINT_SRC_CORR_PARAM_NAME).setValue(new Boolean(false));
-		  // }
+		  if (pointSourceCorrection){
+		  		paramList.getParameter(propagationEffect.POINT_SRC_CORR_PARAM_NAME).setValue(new Boolean(true));
+		  }
+		  else {
+		  		paramList.getParameter(propagationEffect.POINT_SRC_CORR_PARAM_NAME).setValue(new Boolean(false));
+		  }
 		  
 		  shakeMapCalc=new ScenarioShakeMapCalculator(propagationEffect);
 	 }
@@ -123,7 +126,8 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 
 				SitesInGriddedRegion sites=createGriddedRegion(minLat, maxLat, minLon, maxLon, gridSpacing);
 				EqkRupture eqkRupture=createEarthquakeRupture(mag,rake,lat,lon,depth,aveDip);
-				ArrayList attrRelList=createAttenuationRelationships(eqkRupture,imt);
+				Location siteLoc=new Location(lat,lon,depth);
+				ArrayList attrRelList=createAttenuationRelationships(eqkRupture,siteLoc,imt);
 				ArrayList attrRelListWt=createAttenRelWeights();
 
 				sites=getSiteParamsForRegion(sites,(ScalarIMR)attrRelList.get(0));
@@ -138,6 +142,7 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 				//setRegionForGMT(minLat, maxLat, minLon, maxLon, gridSpacing);
 				//setGMT_ParamsForHazus();
 				retString=makeHazusShapeFilesAndMap(sa_03xyzData,sa_10xyzData,pga_xyzData,pgv_xyzData,eqkRupture,metadata,dirName);
+
 				return retString;
 		  }
 		  catch (Exception ex) {
@@ -151,13 +156,13 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 	  * Create an array list of attenuation relationships. For now, we only support one
 	  * AR type, AS_1997_AttenRel.  This code is stolen from PagerShakeMapCalc.
 	  */ 
-	 protected ArrayList createAttenuationRelationships(EqkRupture eqkRupture, String imt) throws Exception {
+	 protected ArrayList createAttenuationRelationships(EqkRupture eqkRupture, Location siteLoc, String imt) throws Exception {
 		  System.out.println("Creating attenuation relationships");
 		  String attenRelClassPackage = "org.opensha.sha.imr.attenRelImpl.";
 		  String attenRelImplClass="AS_1997_AttenRel";
 		  
 		  //
-		  Class listenerClass = Class.forName( "org.opensha.commons.param.event.ParameterChangeWarningListener" );
+		  Class listenerClass = Class.forName("org.opensha.commons.param.event.ParameterChangeWarningListener");
 		  Object[] paramObjects = new Object[]{ this };  
 		  Class[] params = new Class[]{ listenerClass };
 
@@ -168,12 +173,15 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 		  ScalarIMR attenRel = (ScalarIMR)con.newInstance( paramObjects );  
 		  attenRel.setParamDefaults();
 		  attenRel.setEqkRupture(eqkRupture);
+		  attenRel.setSiteLocation(siteLoc);
 		  attenRel.setIntensityMeasure(imt);
 		  if(imt.equalsIgnoreCase("SA")){
 				double period = 1.0;  //Hard coded
 				attenRel.getParameter(PeriodParam.NAME).setValue(new Double(period));
 				imt += "-"+period;
 		  }
+
+		  System.out.println(attenRel.getAllParamMetadata());
 
 		  ArrayList attRelList=new ArrayList();
 		  attRelList.add((AttenuationRelationship)attenRel);
@@ -432,6 +440,7 @@ public class OpenShaBean implements ParameterChangeWarningListener {
 				defaultSiteParams.add(tempParam);
 		  }
 		  sites.setDefaultSiteParams(defaultSiteParams);
+		  sites.setSameSiteParams();
 		  return sites;
 	 }
 	 

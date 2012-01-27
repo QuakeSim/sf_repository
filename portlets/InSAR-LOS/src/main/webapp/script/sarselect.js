@@ -8,7 +8,7 @@ var sarselect=sarselect || (function() {
 	 var masterMap;
 	 var leftClickOp;
 	 var markerNE, markerSW;
-	 var insarKml;
+	 var insarKml, ucerfKml;
 	 var rowSelected=null;
 	 var lowResSARLayer=null;
 	 var uid=null;  //This is global because we need to pass it between two unrelated functions. Not good.
@@ -24,6 +24,11 @@ var sarselect=sarselect || (function() {
 		  var myOpts={zoom:6, center: latlng, mapTypeId: google.maps.MapTypeId.TERRAIN};
 		  masterMap=new google.maps.Map(insarMapDiv, myOpts);
 		  
+		  //Add fault overlay (UCERF 2.4)
+		  var ucerfMapOpts={map:masterMap, preserveViewport:true};
+		  ucerfKml=new google.maps.KmlLayer("@host.base.url@/InSAR-LOS/kml//QuakeTables_UCERF_2.4.kml",ucerfMapOpts);
+
+		  //Add UAVSAR thumb overlay
 		  var kmlMapOpts={map:masterMap, suppressInfoWindows:true, preserveViewport:true};
 		  insarKml=new google.maps.KmlLayer("http://quaketables.quakesim.org/kml?uid=all&lowres=1",kmlMapOpts);
 //		  insarKml=new google.maps.KmlLayer("@host.base.url@/quakesim_uavsar.kml",kmlMapOpts);
@@ -164,7 +169,7 @@ var sarselect=sarselect || (function() {
 		  var azimuth=Math.atan2(y,x)/d2r;
 		  azimuth=azimuth.toFixed(1);
 
-		  $("#iconGuide").html('<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> Lat, Lon: ('+swLat+', '+swLon+')  <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/>  Lat, Lon: ('+neLat+', '+neLon+')  Azimuth: '+ azimuth +' deg <p/>');
+		  $("#iconGuide").html('<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> <b>Lat, Lon: </b>'+swLat+', '+swLon+'  <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/>  <b>Lat, Lon:</b> '+neLat+', '+neLon+'  <b>Azimuth:</b> '+ azimuth +' deg <p/>');
 
 	 }
 

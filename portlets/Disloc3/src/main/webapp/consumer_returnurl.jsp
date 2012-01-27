@@ -58,7 +58,7 @@ receivingURL.append("?").append(request.getQueryString());
 	        } 
 	    }
 		// response.sendRedirect("http://localhost:8080/Simplex-portlet/LoadProject.faces");  // success
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/tabbed_main.faces");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/LoadProject.faces");
 		dispatcher.forward(request, response);
 
             }

@@ -712,7 +712,7 @@ public class GenericProjectBean {
 	  */
 	 public void copyFile(File oldFileDB, File newFileDB) throws Exception {
 		 
-		  logger.info("[" + getUserName() + "/GenericProjectBean/copyFile] From " + oldFileDB.toString() + " to " + newFileDB.toString());
+		  System.out.println("[" + getUserName() + "/GenericProjectBean/copyFile] From " + oldFileDB.toString() + " to " + newFileDB.toString());
 		  if(oldFileDB.exists() && oldFileDB.canRead() 
 			  && newFileDB.exists() && newFileDB.canWrite()) {
 				FileInputStream from = null;

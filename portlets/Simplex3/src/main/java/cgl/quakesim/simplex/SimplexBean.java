@@ -1027,7 +1027,6 @@ public class SimplexBean extends GenericSopacBean {
 		}
 	 }
 	 
-
 	protected void initSimplexService() throws Exception {
 		simplexService = new SimpleXServiceServiceLocator()
 				.getSimpleXExec(new URL(simpleXServiceUrl));

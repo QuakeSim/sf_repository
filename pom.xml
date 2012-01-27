@@ -6,7 +6,7 @@
 	 <!--==================================================-->
 	 <!-- These need to be edited by the deployer -->
 	 <!--==================================================-->
-	 <portal.server.ip>129.79.49.102</portal.server.ip>
+	 <portal.server.ip>156.56.179.234</portal.server.ip>
 	 <host.base.url>http://${portal.server.ip}:8080/</host.base.url>
 <!--
 	 <google.master.key>ABQIAAAAxOZ1VuCkrWUtft6jtubycBRondEx7h7u3u8PwuunrGUWlbqzqhTJGVjiJCCikfESuSdSxDL5Oe5BEw</google.master.key>
@@ -52,10 +52,10 @@
 	<queue.service.url>${host.base.url}/queueservice</queue.service.url>
 	<rdahmm.service.url>${host.base.url}/rdahmmexec</rdahmm.service.url>
 	<daily_rdahmm.service.url>${host.base.url}/daily_rdahmmexec</daily_rdahmm.service.url>
-	<local.hostname>gf13.ucs.indiana.edu</local.hostname>
+	<local.hostname>localhost:8080</local.hostname>
 	<dailyRdahmmResult.service.hostname>gf13.ucs.indiana.edu</dailyRdahmmResult.service.hostname>
 	<dailyRdahmm.service.hostname>gf13.ucs.indiana.edu</dailyRdahmm.service.hostname>
-	<realtimeRdahmmResult.access.hostname>gf13.ucs.indiana.edu</realtimeRdahmmResult.access.hostname>
+	<realtimeRdahmmResult.access.hostname>localhost:8080</realtimeRdahmmResult.access.hostname>
 
 	
 	<!-- These are locations of 'third party' binary files -->
@@ -182,6 +182,7 @@
 		  <module>portlets/Disloc3</module>
 		  <module>portlets/Simplex3</module>
 		  <module>portlets/GeoFESTGrid2</module>
+		   <module>portlets/RssDisloc3</module>
 		  
 		  <!-- These are services.  Add new ones here. -->
 		  <module>ExecutionServices/AnalyzeTseriService</module>
@@ -196,6 +197,7 @@
 		  <module>ExecutionServices/RDAHMMService</module>
 		  <module>ExecutionServices/DailyRDAHMMService</module>
 		  <module>ExecutionServices/DailyRDAHMMResultService</module>
+		  <module>ExecutionServices/automatedDisloc</module>	
 		</modules>
 	 </profile>
 	 <profile>
@@ -225,6 +227,7 @@
 		  <module>portlets/Disloc3</module>
 		  <module>portlets/Simplex3</module>
 		  <module>portlets/GeoFESTGrid2</module>
+		  <module>portlets/RssDisloc3</module>
 		</modules>
 	 </profile>
 	 <profile>
@@ -252,6 +255,7 @@
 		  <module>ExecutionServices/RDAHMMService</module>
 		  <module>ExecutionServices/DailyRDAHMMService</module>
 		  <module>ExecutionServices/DailyRDAHMMResultService</module>
+		  <module>ExecutionServices/automatedDisloc</module>
 		</modules>
 	 </profile>
   </profiles>

@@ -19,7 +19,7 @@ public class HazusGadgetBean extends GenericProjectBean{
 	 private double faultOriginLon;
 	 private double faultDepth=7.6;
 	 private double faultDip=90.0;
-	 private double magnitude=5.0;
+	 private double magnitude=7.0;
 	 private String faultType;
 	 private String resultsLink;
 
