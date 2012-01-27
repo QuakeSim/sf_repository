@@ -189,12 +189,10 @@
 				var pngLink2 = preFix + yPattern.replace(/{!station-id!}/g, stationId);
 				var pngLink3 = preFix + zPattern.replace(/{!station-id!}/g, stationId);
 				var htmlStr = "<font face='Verdana' size='2'><img src='" + pngLink1 + "' style='width:100%;'/><br/>";
-<<<<<<< .mine
+
+	        //htmlStr = htmlStr + "See the <a href='http://portal.quakesim.org'>portal</a> for more functionalities.</font>"; 
 				htmlStr = htmlStr + "</font>"; 
-=======
-			        //htmlStr = htmlStr + "See the <a href='http://portal.quakesim.org'>portal</a> for more functionalities.</font>"; 
-				htmlStr = htmlStr + "</font>"; 
->>>>>>> .r2231
+
 				var htmlStr2 = "<font face='Verdana' size='2'><img src='" + pngLink2 + "' style='width:100%;'/><br/>";
 				var htmlStr3 = "<font face='Verdana' size='2'><img src='" + pngLink3 + "' style='width:100%;'/><br/>";
 				htmlStr3 = htmlStr3 + "See the <a href='http://portal.quakesim.org'>portal</a> for more functionalities.</font>";
