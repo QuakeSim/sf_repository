@@ -30,7 +30,8 @@ var sarselect=sarselect || (function() {
 
 		  //Add UAVSAR thumb overlay
 		  var kmlMapOpts={map:masterMap, suppressInfoWindows:true, preserveViewport:true};
-		  insarKml=new google.maps.KmlLayer("http://quaketables.quakesim.org/kml?uid=all&lowres=1",kmlMapOpts);
+		  insarKml=new google.maps.KmlLayer("http://quakesim.usc.edu/uavsar-data/kml/QuakeTables_UAVSAR_lowres.kmz",kmlMapOpts);
+//		  insarKml=new google.maps.KmlLayer("http://quaketables.quakesim.org/kml?uid=all&lowres=1",kmlMapOpts);
 //		  insarKml=new google.maps.KmlLayer("@host.base.url@/quakesim_uavsar.kml",kmlMapOpts);
 //		  insarKml = new google.maps.KmlLayer("http://quaketables.quakesim.org/kml?uid=all&ov=0",kmlMapOpts);
 		  $("#InSAR-Map-Messages").show();
