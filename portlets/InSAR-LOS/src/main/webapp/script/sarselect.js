@@ -24,10 +24,6 @@ var sarselect=sarselect || (function() {
 		  var myOpts={zoom:6, center: latlng, mapTypeId: google.maps.MapTypeId.TERRAIN};
 		  masterMap=new google.maps.Map(insarMapDiv, myOpts);
 		  
-		  //Add fault overlay (UCERF 2.4)
-		  var ucerfMapOpts={map:masterMap, preserveViewport:true};
-		  ucerfKml=new google.maps.KmlLayer("@host.base.url@/InSAR-LOS/kml//QuakeTables_UCERF_2.4.kml",ucerfMapOpts);
-
 		  //Add UAVSAR thumb overlay
 		  var kmlMapOpts={map:masterMap, suppressInfoWindows:true, preserveViewport:true};
 		  insarKml=new google.maps.KmlLayer("http://quakesim.usc.edu/uavsar-data/kml/QuakeTables_UAVSAR_lowres.kmz",kmlMapOpts);
@@ -86,7 +82,13 @@ var sarselect=sarselect || (function() {
 				markerSW.setMap(null);
 				markerSW=null;
 		  }
-		  if(polyShape) polyShape.setMap(null);
+		  if(polyShape) polyShape.setMap(null);		  
+
+		  //Add fault overlay (UCERF 2.4)
+		  var ucerfMapOpts={map:masterMap, preserveViewport:true};
+		  ucerfKml=new google.maps.KmlLayer("@host.base.url@/InSAR-LOS/kml//QuakeTables_UCERF_2.4.kml",ucerfMapOpts);
+
+
         //Add the KML Layer
 		  lowResSARLayer=new google.maps.KmlLayer(overlayUrl,{suppressInfoWindows: true, map: insarMap, clickable: false});
 		  $("#InSAR-Map-Messages").show();
@@ -116,6 +118,9 @@ var sarselect=sarselect || (function() {
 	 }
     
 	 function lineLeftClick(insarMap,event,uid) {
+		  $("#Plot-Method").show();
+		  $("#Plot-Resolution").show();
+
 		  $("#Left-Column-Under-Map").show();
 		  //If the marker doesn't exist, create it.
 		  if(!markerNE && !markerSW) {
@@ -278,24 +283,28 @@ var sarselect=sarselect || (function() {
 		}
 
 	 function getInSarValues(uid) {
-		  var resolution="1000";
-		  if($("#high-res").is(':checked')) {
-				resolution="500";
+		  var resolution=$("#resolution-value").val();
+		  var averaging=$("#averaging-value").val();
+		  var method="native";
+		  if($("#average-method").is(':checked')) {
+				method="average";
 		  }
 		  else {
-				resolution="1000";
+				method="native";
 		  }
-		  getLosInSarValues(uid,resolution);
-		  getHgtInSarValues(uid,resolution);
+		  getLosInSarValues(uid,resolution,method,averaging);
+		  getHgtInSarValues(uid,resolution,method,averaging);
 	 }
 	 
-	 function getLosInSarValues(uid,resolution) {
+	 function getLosInSarValues(uid,resolution,method,averaging) {
 		  var westMarkerLat=markerSW.getPosition().lat();
 		  var westMarkerLon=markerSW.getPosition().lng();
 		  var eastMarkerLat=markerNE.getPosition().lat();
 		  var eastMarkerLon=markerNE.getPosition().lng();
 		  
-		  var restUrl="/InSAR-LOS-REST/insarlos/csv/"+uid+"/"+resolution+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat;
+		  var restUrl="/InSAR-LOS-REST/insarlos/csv/"+uid+"/"+resolution+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat+"/"+method+"/"+averaging;
+        console.log(restUrl);
+
 		  var csv=$.ajax({
 				url:restUrl,
 				async:false
@@ -304,13 +313,15 @@ var sarselect=sarselect || (function() {
 		  $("#LOS-Data-Download").html("<center><a href='"+restUrl+"' target='_blank'>Download LOS Data</a></center>");
 	 }
 
-	 function getHgtInSarValues(uid,resolution) {
+	 function getHgtInSarValues(uid,resolution,method,averaging) {
 		  var westMarkerLat=markerSW.getPosition().lat();
 		  var westMarkerLon=markerSW.getPosition().lng();
 		  var eastMarkerLat=markerNE.getPosition().lat();
 		  var eastMarkerLon=markerNE.getPosition().lng();
 
-		  var restUrl="/InSAR-LOS-REST/insarhgt/csv/"+uid+"/"+resolution+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat;
+		  var restUrl="/InSAR-LOS-REST/insarhgt/csv/"+uid+"/"+resolution+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat+"/"+method+"/"+averaging;
+        console.log(restUrl);
+
 		  var csv=$.ajax({
 				url:restUrl,
 				async:false
@@ -410,7 +421,6 @@ var sarselect=sarselect || (function() {
 		  activateLayerMap(masterMap,overlayUrl,"line",uid);
 		  
 		  $("#Instructions").html("Now click the map to plot a line.  Move the end points to set the plot.");
-		  $("#Plot-Resolution").show();
 	 }
 	 
 	 function extractOverlayUrl(callResults){
@@ -449,14 +459,22 @@ var sarselect=sarselect || (function() {
 	 //This is a dangerous pattern: UID is a global variable set by a separate function
 	 //when the table is clicked. As long as the order of events is preserved, then
 	 //UID should be set correctly but changing things will break this function.
-	 function plotLowRes() {
+	 function plotNative() {
 		  getInSarValues(uid);
 	 }
 
 	 //This is a dangerous pattern: UID is a global variable set by a separate function
 	 //when the table is clicked. As long as the order of events is preserved, then
 	 //UID should be set correctly but changing things will break this function.
-	 function plotHighRes(){
+	 function plotAverage(){
+		  getInSarValues(uid);
+	 }
+
+	 function updateResolution() {
+		  getInSarValues(uid);
+	 }
+
+	 function updateAveraging() {
 		  getInSarValues(uid);
 	 }
 
@@ -473,8 +491,10 @@ var sarselect=sarselect || (function() {
 		  getLosInSarValues: getLosInSarValues,
 		  getHgtInSarValues: getHgtInSarValues,
 		  activateLayerMap: activateLayerMap,
-		  plotLowRes:plotLowRes,
-		  plotHighRes:plotHighRes
+		  plotNative:plotNative,
+		  plotAverage:plotAverage,
+		  updateResolution:updateResolution,
+		  updateAveraging:updateAveraging
 	 }
 	 
 })();

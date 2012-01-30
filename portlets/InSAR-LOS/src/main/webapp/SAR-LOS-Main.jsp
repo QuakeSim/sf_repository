@@ -54,10 +54,15 @@
 			 </h:panelGroup>
 			 <h:panelGroup id="Sar-LOS-Panel-Right">
 				  <f:verbatim>
+					 <div id="Plot-Method" style="display:none;">
+						<b>Plot Method:</b>
+						<input type="radio" name="plotmethod" id="native-method" value="native" checked onclick="sarselect.plotNative()"/>native
+						<input type="radio" name="plotmethod" id="average-method" value="average" onclick="sarselect.plotAverage()"/>average
+						<br/><b>Averaging Param:</b><input type="text" name="averaging" id="averaging-value" size="5" value="10" onchange="sarselect.updateAveraging()">
+					 </div>
 					 <div id="Plot-Resolution" style="display:none;">
 						<b>Plot Resolution:</b>
-						<input type="radio" name="resolution" id="low-res" value="Resolution" checked onclick="sarselect.plotLowRes()"/>low
-						<input type="radio" name="resolution" id="high-res" value="Resolution" onclick="sarselect.plotHighRes()"/>high
+						<input type="text" name="resolution" id="resolution-value" size="5" value="1000" onchange="sarselect.updateResolution()">						
 					 </div>
 				  </f:verbatim>
 				<f:verbatim>
