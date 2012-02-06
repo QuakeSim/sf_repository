@@ -53,18 +53,30 @@
 				</h:panelGroup>
 			 </h:panelGroup>
 			 <h:panelGroup id="Sar-LOS-Panel-Right">
-				  <f:verbatim>
-					 <div id="Plot-Method" style="display:none;">
-						<b>Plot Method:</b>
-						<input type="radio" name="plotmethod" id="native-method" value="native" checked onclick="sarselect.plotNative()"/>native
-						<input type="radio" name="plotmethod" id="average-method" value="average" onclick="sarselect.plotAverage()"/>average
-						<br/><b>Averaging Param:</b><input type="text" name="averaging" id="averaging-value" size="5" value="10" onchange="sarselect.updateAveraging()">
-					 </div>
-					 <div id="Plot-Resolution" style="display:none;">
-						<b>Plot Resolution:</b>
-						<input type="text" name="resolution" id="resolution-value" size="5" value="1000" onchange="sarselect.updateResolution()">						
-					 </div>
-				  </f:verbatim>
+				<f:verbatim>
+				  <div id="Plot-Parameters" style="display:none;">
+					 <table>
+						<tr>
+						  <td>
+							 <b>Plot Method:</b>
+							 <input type="radio" name="plotmethod" id="native-method" value="native" checked="checked" onclick="sarselect.plotNative()"/>native
+							 <input type="radio" name="plotmethod" id="average-method" value="average" onclick="sarselect.plotAverage()"/>average
+						  </td>
+						</tr>
+						<tr>
+						  <td>
+							 <b>Averaging Param:</b> <input type="text" name="averaging" id="averaging-value" size="5" value="10" onchange="sarselect.updateAveraging()" disabled="false"/>
+						  </td>
+						</tr>
+						<tr>
+						  <td>
+							 <b>Plot Resolution:</b>
+							 <input type="text" name="resolution" id="resolution-value" size="5" value="1000" onchange="sarselect.updateResolution()"/>
+						  </td>
+						</tr>
+					 </table>
+				  </div>
+				</f:verbatim>
 				<f:verbatim>
 				  <div id="dynatable"></div>
 				</f:verbatim>

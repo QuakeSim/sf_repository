@@ -118,8 +118,7 @@ var sarselect=sarselect || (function() {
 	 }
     
 	 function lineLeftClick(insarMap,event,uid) {
-		  $("#Plot-Method").show();
-		  $("#Plot-Resolution").show();
+		  $("#Plot-Parameters").show();
 
 		  $("#Left-Column-Under-Map").show();
 		  //If the marker doesn't exist, create it.
@@ -372,10 +371,10 @@ var sarselect=sarselect || (function() {
 		urlToCall+=slash+xpix;
 		urlToCall+=slash+ypix;
 		
+		  console.log("Constructed URL:"+urlToCall);
 		return urlToCall;
     }
 	 function selectedRow(row) {
-		  console.log("Selected Row");
 		  if(row!=rowSelected){
 				row.style.backgroundColor="gray";
 				row.style.cursor="pointer";
@@ -389,6 +388,7 @@ var sarselect=sarselect || (function() {
 	 }
 	 function selectRowAction(row){
 		  $("#Left-Column-Under-Map").hide();
+		  $("#Plot-Parameters").hide();
 		  if(rowSelected!=null) {
 				rowSelected.style.backgroundColor="white";
 		  }
@@ -450,6 +450,8 @@ var sarselect=sarselect || (function() {
 	 //when the table is clicked. As long as the order of events is preserved, then
 	 //UID should be set correctly but changing things will break this function.
 	 function plotNative() {
+		  //Disable the "averaging" input field.
+		  $("#averaging-value").attr('disabled',true);
 		  getInSarValues(uid);
 	 }
 
@@ -457,6 +459,8 @@ var sarselect=sarselect || (function() {
 	 //when the table is clicked. As long as the order of events is preserved, then
 	 //UID should be set correctly but changing things will break this function.
 	 function plotAverage(){
+		  //Enable the "averaging" input field.
+		  $("#averaging-value").attr('disabled',false);
 		  getInSarValues(uid);
 	 }
 
