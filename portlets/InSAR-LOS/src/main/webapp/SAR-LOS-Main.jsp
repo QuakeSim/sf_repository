@@ -20,7 +20,7 @@
 			 <h:panelGroup id="Sar-LOS-Panel-Left">
 				<h:panelGroup id="The-Big-Map">
 				  <f:verbatim>
-					 <div id="InSAR-All-Map" style="width:650px; height:400px"></div>
+					 <div id="InSAR-All-Map" style="width:550px; height:400px"></div>
 				  </f:verbatim>
 				  <f:verbatim>				
 					 <div id="InSAR-Map-Messages" style="display:none;"></div>
