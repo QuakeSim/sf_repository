@@ -329,31 +329,20 @@ var sarselect=sarselect || (function() {
 		  var g2=new Dygraph(document.getElementById("outputGraph2"),csv,dygraphHgtOpts);		  
 		  $("#HGT-Data-Download").html("<center><a href='"+restUrl+"' target='_blank'>Download HGT Data</a></center>");
 	 }
-		  
+	 
 	 function createTable(parsedResults,tableDivName) {
-		var dynatable='<table id="sartable" border="1">';
-		//Create the header row.
-		dynatable+='<tr>';
-		for(var index1 in parsedResults[0]) {
-			 //Ick 1. We don't show the UID header
-			 if(index1!='uid') {
-				  dynatable+='<th>'+index1+'</th>';
-			 }
-		}
-		dynatable+='</tr>';
-		//Fill in the table.
-		for (var index1 in parsedResults) {
-		dynatable+='<tr onmouseover="sarselect.selectedRow(this)" onmouseout="sarselect.unselectedRow(this)" onclick="sarselect.selectRowAction(this)" id="'+parsedResults[index1]['uid']+'"'+'>';
-		for(var index2 in parsedResults[index1]) {
-			 //Ick 2.  We don't include the uid column.
-			 if(index2!='uid') {
-				  dynatable+='<td>'+parsedResults[index1][index2]+'</td>';
-			 }
-		}
-			dynatable+='</tr>'
-		}
-		dynatable+='</table>';
-//		document.getElementById(tableDivName).innerHTML=dynatable;
+		  //Fill in the table.
+		  var dynatable='<table class="sartable-outer">';
+		  for (var index1 in parsedResults) {
+				dynatable+='<tr onmouseover="sarselect.selectedRow(this)" onmouseout="sarselect.unselectedRow(this)" onclick="sarselect.selectRowAction(this)" id="'+parsedResults[index1]['uid']+'"'+'>';
+				dynatable+='<td><table class="sartable-inner" border="1"><tr>';
+				dynatable+='<td colspan="2">'+parsedResults[index1]['dataname']+'</td>';
+				dynatable+='</tr><tr>';
+				dynatable+='<td>'+parsedResults[index1]['time1']+'</td><td>'+parsedResults[index1]['time2']+'</td>';
+				dynatable+='</tr></table></td>';
+				dynatable+='</tr>';
+		  }
+		  dynatable+='</table>';
 		  $('#dynatable').html(dynatable);
 	 }
 	 
@@ -386,6 +375,7 @@ var sarselect=sarselect || (function() {
 		return urlToCall;
     }
 	 function selectedRow(row) {
+		  console.log("Selected Row");
 		  if(row!=rowSelected){
 				row.style.backgroundColor="gray";
 				row.style.cursor="pointer";
