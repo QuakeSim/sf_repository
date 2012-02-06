@@ -88,6 +88,8 @@ var sarselect=sarselect || (function() {
 		  var ucerfMapOpts={map:masterMap, preserveViewport:true};
 		  ucerfKml=new google.maps.KmlLayer("@host.base.url@/InSAR-LOS/kml//QuakeTables_UCERF_2.4.kml",ucerfMapOpts);
 
+		  //Display the fault toggling checkbox
+		  $("#FaultToggler").show();
 
         //Add the KML Layer
 		  lowResSARLayer=new google.maps.KmlLayer(overlayUrl,{suppressInfoWindows: true, map: insarMap, clickable: false});
@@ -471,6 +473,17 @@ var sarselect=sarselect || (function() {
 	 function updateAveraging() {
 		  getInSarValues(uid);
 	 }
+	 
+	 //TODO: Note that masterMap and insarMap are synonymous.  Not clear why we need both names.
+	 //TODO: Note several functions take insarMap as input but this isn't easily done with the method below.
+	 function toggleFaultKml() {
+		  if($("#fault_toggle_id").is(':checked')) {
+				ucerfKml.setMap(masterMap);
+		  }
+		  else {
+				ucerfKml.setMap(null);
+		  }
+	 }
 
 	 /**
 	  * Public API for sarselect.js
@@ -488,7 +501,8 @@ var sarselect=sarselect || (function() {
 		  plotNative:plotNative,
 		  plotAverage:plotAverage,
 		  updateResolution:updateResolution,
-		  updateAveraging:updateAveraging
+		  updateAveraging:updateAveraging,
+		  toggleFaultKml:toggleFaultKml
 	 }
 	 
 })();

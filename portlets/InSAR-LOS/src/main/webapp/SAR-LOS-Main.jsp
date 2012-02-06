@@ -59,7 +59,7 @@
 						<tr>
 						  <td>
 							 <b>Plot Method:</b>
-							 <input type="radio" name="plotmethod" id="native-method" value="native" checked="checked" onclick="sarselect.plotNative()"/>native
+							 <input type="radio" name="plotmethod" id="native-method" value="native" checked="true" onclick="sarselect.plotNative()"/>native
 							 <input type="radio" name="plotmethod" id="average-method" value="average" onclick="sarselect.plotAverage()"/>average
 						  </td>
 						</tr>
@@ -78,6 +78,10 @@
 				  </div>
 				</f:verbatim>
 				<f:verbatim>
+				  <div id="FaultToggler" style="display:none">
+					 <b>Toggle Fault Display:</b>
+					 <input type="checkbox" name="fault_toggle" id="fault_toggle_id" checked="true" onclick="sarselect.toggleFaultKml()"/>
+				  </div>
 				  <div id="dynatable"></div>
 				</f:verbatim>
 				<f:verbatim><p/></f:verbatim>
