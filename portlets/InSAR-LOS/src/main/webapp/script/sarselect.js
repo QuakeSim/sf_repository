@@ -175,7 +175,7 @@ var sarselect=sarselect || (function() {
 		  var azimuth=Math.atan2(y,x)/d2r;
 		  azimuth=azimuth.toFixed(1);
 
-		  $("#iconGuide").html('<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> <b>Lat, Lon: </b>'+swLat+', '+swLon+'  <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/>  <b>Lat, Lon:</b> '+neLat+', '+neLon+'  <b>Azimuth:</b> '+ azimuth +' deg <p/>');
+		  $("#iconGuide").html('<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> <b>Lat, Lon: </b>'+swLat+', '+swLon+'  <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/>  <b>Lat, Lon:</b> '+neLat+', '+neLon+'  <b>Azimuth:</b> '+ azimuth +'&deg;<p/>');
 
 	 }
 
