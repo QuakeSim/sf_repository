@@ -12,8 +12,8 @@ var sarselect=sarselect || (function() {
 	 var rowSelected=null;
 	 var lowResSARLayer=null;
 	 var uid=null;  //This is global because we need to pass it between two unrelated functions. Not good.
-	 var dygraphLOSOpts={width:300,height:300,drawPoints:true,pointSize:2,strokeWidth:0.0,title:'InSAR Line of Sight Values',xlabel:'Distance (km)',ylabel:'LOS Value (cm)'};
-	 var dygraphHgtOpts={width:300,height:300,drawPoints:true,pointSize:2,strokeWidth:0.0,title:'InSAR Height Values',xlabel:'Distance (km)',ylabel:'Height (m)'};
+	 var dygraphLOSOpts={width:290,height:300,drawPoints:true,pointSize:2,strokeWidth:0.0,title:'InSAR Line of Sight Values',xlabel:'Distance (km)',ylabel:'LOS Value (cm)'};
+	 var dygraphHgtOpts={width:290,height:300,drawPoints:true,pointSize:2,strokeWidth:0.0,title:'InSAR Height Values',xlabel:'Distance (km)',ylabel:'Height (m)'};
 
 	 var blueIcon = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + "FF0000",new google.maps.Size(21,34),new google.maps.Point(0,0),new google.maps.Point(10,34));															  
 	 var redIcon = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + "0000FF",new google.maps.Size(21,34),new google.maps.Point(0,0),new google.maps.Point(10,34));
