@@ -10,18 +10,18 @@
 	 vertical-align:top;
 }
 .alignTopWidth2 {
-	 width:350px;
+	 width:330px;
 	 vertical-align:top;
 }
 .sartable-outer {
 	    table-layout:fixed;
-		 width:400px;
+		 width:380px;
 		 word-wrap:break-word;
 		 border-collapse:collapse;
 }
 .sartable-inner {
 	    table-layout:fixed;
-		 width:398px;
+		 width:378px;
 		 #word-wrap:break-word;
 		 border: 1px solid black;
 		 border-collapse:collapse;
