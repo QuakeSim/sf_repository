@@ -337,7 +337,7 @@ var sarselect=sarselect || (function() {
 		  for (var index1 in parsedResults) {
 				dynatable+='<tr onmouseover="sarselect.selectedRow(this)" onmouseout="sarselect.unselectedRow(this)" onclick="sarselect.selectRowAction(this)" id="'+parsedResults[index1]['uid']+'"'+'>';
 				dynatable+='<td><table class="sartable-inner" border="1"><tr>';
-				dynatable+='<td colspan="2">'+parsedResults[index1]['dataname']+'</td>';
+				dynatable+='<th colspan="2">'+parsedResults[index1]['dataname']+'</th>';
 				dynatable+='</tr><tr>';
 				dynatable+='<td>'+parsedResults[index1]['time1']+'</td><td>'+parsedResults[index1]['time2']+'</td>';
 				dynatable+='</tr></table></td>';

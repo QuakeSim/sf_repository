@@ -26,3 +26,12 @@
 		 border: 1px solid black;
 		 border-collapse:collapse;
 }
+.sartable-inner th {
+	 font-size:0.75em;
+	 font-family:Arial,sans-serif;
+	 font-weight:bold;
+}
+.sartable-inner td {
+	 font-family:Arial,sans-serif;
+	 font-size:0.75em;
+}
