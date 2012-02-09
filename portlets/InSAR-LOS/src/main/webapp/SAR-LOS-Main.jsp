@@ -49,6 +49,12 @@
 					 <f:verbatim>				
 						<div id="HGT-Data-Download"></div>
 					 </f:verbatim>
+					 <f:verbatim>				
+						<div id="LOS-Data-PointValue" style="text-align:center"></div>
+					 </f:verbatim>
+					 <f:verbatim>				
+						<div id="HGT-Data-PointValue" style="text-align:center"></div>
+					 </f:verbatim>
 				  </h:panelGrid>
 				</h:panelGroup>
 			 </h:panelGroup>
