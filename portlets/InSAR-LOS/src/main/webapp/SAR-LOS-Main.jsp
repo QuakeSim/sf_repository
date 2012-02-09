@@ -59,18 +59,25 @@
 						<tr>
 						  <td>
 							 <b>Plot Method:</b>
+						  </td>
+						  <td>
 							 <input type="radio" name="plotmethod" id="native-method" value="native" checked="true" onclick="sarselect.plotNative()"/>native
 							 <input type="radio" name="plotmethod" id="average-method" value="average" onclick="sarselect.plotAverage()"/>average
 						  </td>
 						</tr>
 						<tr>
 						  <td>
-							 <b>Averaging Param:</b> <input type="text" name="averaging" id="averaging-value" size="5" value="10" onchange="sarselect.updateAveraging()" disabled="false"/>
+							 <b>Averaging Param:</b> 
+						  </td>
+						  <td>
+							 <input type="text" name="averaging" id="averaging-value" size="5" value="10" onchange="sarselect.updateAveraging()" disabled="false"/>
 						  </td>
 						</tr>
 						<tr>
 						  <td>
 							 <b>Plot Resolution:</b>
+						  </td>
+						  <td>
 							 <input type="text" name="resolution" id="resolution-value" size="5" value="1000" onchange="sarselect.updateResolution()"/>
 						  </td>
 						</tr>
