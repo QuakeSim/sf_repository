@@ -1,0 +1,18 @@
+This project contains three user interfaces:
+
+1) DailyRdahmmJplSmall.jsp is for embedding in gadgets and other places with limited real estate.
+
+2) DailyRdahmm.jsp is the portlet version of the user interface.
+
+3) DailyRdahmmSep.jsp is the standalone version of the user interface.
+
+Effort will be concentrated in maintaining #3, primarily at the expense of #2.  
+
+All these interfaces depend upon RDAHMM processing services, and the top-level POM needs to be configured 
+correctly. Current working values are (assuming you are running the tests on a localhost tomcat server):
+
+	<local.hostname>localhost:8080</local.hostname>
+	<dailyRdahmmResult.service.hostname>gf13.ucs.indiana.edu</dailyRdahmmResult.service.hostname>
+	<dailyRdahmm.service.hostname>gf13.ucs.indiana.edu</dailyRdahmm.service.hostname>
+
+The user interface also depends on the local deployment of supporting Web services in QuakeSim2/Execution services: DailyRDAHMMREsultService. This is probably a JavaScript sandbox issue.

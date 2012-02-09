@@ -4,6 +4,10 @@
 <%@page import="java.util.*, java.net.URL, java.io.*, java.lang.*, org.dom4j.*, cgl.sensorgrid.common.*, org.dom4j.io.*"%>
 
 <%
+   //--------------------------------------------------
+   // This loads the content of the windowcontent.htm file, which embeds the RDAHMM flash plotting object. This is 
+	// read into the strTabContent String, which is passed to markerWinHtmlStr below.
+   //--------------------------------------------------
 	String strTabContent = new String();
 	java.io.BufferedInputStream bis=null;
 	try{
@@ -21,10 +25,20 @@
 		if (bis != null)bis.close();
 	}
 
+	//--------------------------------------------------
+	// The code below sets various parameters that need to be determined at load time, based on
+	// the value of the dataSource parameter provided.
+   //
+	// The dataSource has a value like jplFill, sopacFill, etc.  See the if block below.
+	// This is a required parameter to render the page.
+	//--------------------------------------------------
 	String dataSource = request.getParameter("dataSource");
 	if (dataSource == null) {
 		dataSource = "sopacFill";
 	}
+	//These will all be overridden if not sopacFill.  The string xml.access.hostname will be 
+	//overridden by Maven property filtering during deployment.  These values will be used 
+	//far below when we get the results and parse them.
 	String xmlUrl = "http://xml.access.hostname/daily_rdahmmexec/daily/SOPAC_FILL/station-status-change-SOPAC_FILL.xml";
 	String xmlFileName = "station-status-change-SOPAC_FILL.xml";
 	String contextGroup = "SOPAC GLOBK";
@@ -65,13 +79,14 @@
 
 <html>
 	<head>
+   <!-- TODO: these javascript imports can be unified and moved lower down for faster rendering -->
 	<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
 	<script src="http://local.hostname/DailyRDAHMM-portlet/NmapAPI.js" type="text/javascript"></script>
 	<script src="http://local.hostname/DailyRDAHMM-portlet/dateUtil.js" type="text/javascript"></script>
 	<script src="http://danvk.org/dygraphs/dygraph-combined.js" type="text/javascript"></script>
 	</head>
-	<body>
 
+	<body>
 	<!-- Initiating the yui controls -->
 	<script type="text/javascript" src="/yui_0.12.2/build/yahoo/yahoo.js"></script>
 	<script type="text/javascript" src="/yui_0.12.2/build/event/event.js"></script>
@@ -83,6 +98,7 @@
 	<script type="text/javascript" src="/yui_0.12.2/build/slider/slider-min.js"></script>
 	<link type="text/css" rel="stylesheet" href="/yui_0.12.2/build/calendar/assets/calendar.css"/>
  
+   <!-- These style declarations should be moved to a separate CSS file. -->
 	<style>
 		#cal1Container {position:relative; width:160px;}
 		#slider-bg {
@@ -97,6 +113,7 @@
 		}
 	</style>
 
+   <!-- These style declarations should be moved to a separate CSS file. -->
 	<style>
 		td      { font-size: 9pt;}
 		.ooib { border-width: 1px; border-style: none solid solid; border-color: #CC3333; background-color: #EDEDED;}
@@ -106,6 +123,7 @@
 		.ooihx { border-style: none none solid; border-color: #CC3333; }
 	</style>
 
+	<!-- Script should be moved to a separate JS file -->
 	<script>
 	//for manipulating the tabs
 	function ghbq(td) {
@@ -138,6 +156,7 @@
 	var modelStartDate = new Date(1994, 0, 1, 0, 0, 0);
 	
 	var tmpNoActOnCalSelect = false;
+	//This function handles all date change and display events.
 	function myShowDateHandler(type,args,obj) {
 		if (tmpNoActOnCalSelect) {
 			tmpNoActOnCalSelect = false;
@@ -244,8 +263,11 @@
 
 <!-- inline functions about map api -->
 	<script type="text/javascript">
+	//This value is set at the top of the page.  It is only a template. The values for a
+	//specific station will be set for each station.
 	var markerWinHtmlStr = '<%=strTabContent%>';
 	var selectedStation;
+
 	// Create the marker and corresponding information window 
 	function createInfoWinMarker(point, icon1, idx) {
 		var markerOpts = {
@@ -262,6 +284,7 @@
 		return marker;
 	}
 
+	//Creates the info window associated with the marker.  See "click" listener above.
 	function markerClickBody(marker, selectedStation) {
 		var stationId = selectedStation[0];
 		var lat = "" + selectedStation[1];
@@ -318,6 +341,9 @@
 		infoWin.open(map, marker);
 	}
 
+	//This is the "View Time Series" button action and opens the plotting window.  
+	//The data actually comes from the urlPatten variable, which is populated from the xmlUrl 
+	//variable for the appropriate data set. 
 	function showTsBtnClick(obj) {
 		var stationId = selectedStation[0];
 		var lat = "" + selectedStation[1];
@@ -339,6 +365,7 @@
 	}
 	</script>
 
+	<!-- This is the all-purpose waiting screen.  Its display is toggled by javascript functions -->
 	<DIV ID="waitScreen" STYLE="position:absolute;z-index:5;top:30%;left:20%;visibility:hidden;">
 		<TABLE BGCOLOR="#CCCCFF" BORDER=1 BORDERCOLOR="#6600CC" CELLPADDING=0 CELLSPACING=0 HEIGHT=150 WIDTH=300>
 			<TR>
@@ -351,6 +378,7 @@
 		</TABLE>
 	</DIV>
 
+	<!-- This organizes the main display.  Probably should reorganize code so that this comes earlier -->
 	<table align="left">
 		<tr>
 			<td width="936" colspan="2">
@@ -485,6 +513,8 @@
 	for (i = 0; i < networkInfo.length; ++i){
 		networkInfo[i] = new Array(2);
 	}
+
+	//This is used by the upper left state lexicon.  Why is this done in JavaScript?
 	networkInfo[0][0] = "no state change:";
 	networkInfo[0][1] = "http://maps.google.com/mapfiles/ms/micons/green.png";
 	networkInfo[1][0] = "state changes on selected date:";
@@ -496,6 +526,7 @@
 	networkInfo[4][0] = "no data on selected date, state changed in last 30 days before selected date:";
 	networkInfo[4][1] = "http://maps.google.com/mapfiles/ms/micons/blue.png";
 
+	//Creates the network information display. This is static information so why use javascript?
 	function printNetworkColors(array) {
 		var html = "<table border='1'><tr><td><b>State</b></td><td nowrap><b>Color<b></td></tr>";
 		var row;
@@ -519,9 +550,12 @@
 		idiv.innerHTML = html;
 	}
 	
+	//This calls the previously defined function.  This is the only place that function gets executed.
+	//TODO: Remove this and just make it HTML.
 	printNetworkColors(networkInfo);
 
-	// what to do when the "Clear" Button is clicked
+	//What to do when the "Clear" Button is clicked. This is "Latest" button in the left-side 
+	//data navigation. Takes you back to the latest available data.
 	function clearBtnClick(btn) {
 		var dateToShow=document.getElementById("dateText");
 		if (dateToShow.value != strLatestDate) {
@@ -560,6 +594,8 @@
 			return;
 		}
 
+		//Note local.hostname will get replaced by Maven.  Also note this service will need to 
+		//be deployed separately (mvn clean install -f ExecutionServices/DailyRDAHMMResultsService/pom.xml).
 		var url = "http://local.hostname/axis2/services/DailyRdahmmResultService/getStateChangeNumberTrace?resUrl="
 					+ xmlResultUrl + "&minLat=" + latFrom + "&maxLat=" + latTo + "&minLong=" + longFrom + "&maxLong=" + longTo;
 		var link = callHttpService(url);
@@ -788,6 +824,11 @@
 	</xml>
 	*/
 <%
+   //This seems to be used to parse the XML above into a consumable form. Several parameters
+	//like xmlUrl are defined at the top.  It looks like these remote files are downloaded and 
+	//grokked each time the page is loaded but only once.
+	//		  
+   //TODO: the Java below probably should be placed in a backing bean.
 	Document statusDoc = null;
 	Element eleXml = null;
 	Element eleOutput = null;
@@ -866,6 +907,7 @@
 	var rangePattern = '<%=eleOutput.element("RangeFile").getText()%>';
 	var modelPattern = '<%=eleOutput.element("ModelFiles").getText()%>';
 <%
+   //TODO: probably this java doesn't need 
 	List lStations = eleXml.elements("station");
 %>
 	// every station in the station array has 7 attributes: id, lat, long, null(for state change table), null(for output table), state change details, marker
@@ -877,6 +919,9 @@
 	var dateTmp = new Date();
 	var stSelect = document.getElementById("stationSelect");
 <%
+   //More java code.  Loops over stations, dynamically populates javascript arrays.  
+	//TODO: interleaving Java and JavaScript here is tricky. Probably we can separate out and
+   //make a REST service call for retreiving all of this.
 	double mapcenter_y, mapcenter_x, xmin = 0, xmax = 0, ymin = 0, ymax = 0;
 	int changeCount = 0;
 	int nodataCount = 0;
