@@ -96,6 +96,7 @@
 					 <input type="checkbox" name="fault_toggle" id="fault_toggle_id" checked="true" onclick="sarselect.toggleFaultKml()"/>
 				  </div>
 				  <div id="dynatable"></div>
+				  <div id="QuakeTables-Link"></div>
 				</f:verbatim>
 				<f:verbatim><p/></f:verbatim>
 			 </h:panelGroup>

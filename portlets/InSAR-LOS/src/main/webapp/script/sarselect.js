@@ -418,9 +418,14 @@ var sarselect=sarselect || (function() {
 		  //var uid=extractRowId2(row);
 		  uid=extractRowId2(row);
 
+		  //Construct the link to QuakeTables and turn on the display.
+		  $("#QuakeTables-Link").html('<p/><a target="_blank" href="http://quakesim.usc.edu/quaketables/uavsar.jsp?uid='+uid+'">Go to download page for selected data set</a>');
+
 	   //Call REST service
 		var callResults=getImageMetadata(uid);
-		
+		  
+		  console.log(callResults);
+
 		//Extract overlayUrl
 		var overlayUrl=extractOverlayUrl(callResults);
 
