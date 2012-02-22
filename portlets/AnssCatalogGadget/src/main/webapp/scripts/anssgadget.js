@@ -51,7 +51,7 @@ var anssgadget=anssgadget || (function() {
 		  console.log(errorcode.value);
 	 }
 
-	 function submitMapRequest(minmag,maxmag,mindate,maxdate,minlat,minlon,maxlat,maxlon,resultKmlDiv) {
+	 function submitMapRequest(minmag,maxmag,mindate,maxdate,minlat,minlon,maxlat,maxlon) {
 		  //Note this assumes the AnssCatalogService is co-located.
 		  console.log("Submitting request");
 		  var mintime=MINTIME+mindate.value+","+DEFAULT_MIN_WALLTIME;//"00:00:00";
@@ -71,22 +71,38 @@ var anssgadget=anssgadget || (function() {
 				console.log(finalUrl);
 		  }
 
-		  var results=$.ajax({url:finalUrl,async:false}).responseText;
-		  console.log(results);
-
- 		  google.earth.fetchKml(map,results,function(kmlObject){
-				if(kmlObject) {
-					 map.getFeatures().appendChild(kmlObject);
-					 resultKmlDiv.innerHTML="<a href='"+results+"' target='NULL'>"+results+"</a>";
-				}
-				if(kmlObject.getAbstractView()) {
-					 map.getView().setAbstractView(kmlObject.getAbstractView());
-				}
+		  var request=$.ajax({
+				url:finalUrl,
+				beforeSend: function() {$('#acgResultKml').html("Request submitted. Please wait.")}
 		  });
+		  request.done(function(results){
+				console.log("Request succeeded:"+results);
+ 				google.earth.fetchKml(map,results,function(kmlObject){
+					 if(kmlObject) {
+						  map.getFeatures().appendChild(kmlObject);
+						  $("#acgResultKml").html("KML loaded. Download availabe from <a href='"+results+"' target='NULL'>"+results+"</a>");
+					 }
+					 if(kmlObject.getAbstractView()) {
+						  map.getView().setAbstractView(kmlObject.getAbstractView());
+					 }
+				});
+//				var kmlMapOpts={map:map};
+//				var seismicCatalogLayer=new google.maps.KmlLayer(results,kmlMapOpts);
+				
+		  });
+		  
+		  request.fail(function(errorMsg) { 
+				$('#acgResultKml').html("Request failed: "+errorMsg);
+				console.log("Request failed:"+errorMsg)
+		  });
+
+//		  var results=$.ajax({url:finalUrl,async:false}).responseText;
+//		  console.log(results);
 		  
 //		  var kmlMapOpts={map:map};
 //		  var seismicCatalogLayer=new google.maps.KmlLayer(results,kmlMapOpts);
 	 }
+
 
 	 /**
 	  * This is the public API

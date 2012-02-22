@@ -99,7 +99,7 @@
 				  </h:inputText>
 				</h:panelGrid>
 				<f:verbatim>
-				  <button id="RunAnssAction" onclick='anssgadget.submitMapRequest(minmag,maxmag,mindate,maxdate,minlat,minlon,maxlat,maxlon,resultKmlDiv)'>
+				  <button id="RunAnssAction" onclick='anssgadget.submitMapRequest(minmag,maxmag,mindate,maxdate,minlat,minlon,maxlat,maxlon)'>
 					 Fetch ANSS Catalog
 				  </button>
 				</f:verbatim>
@@ -107,7 +107,7 @@
 				  <hr/>
 				</f:verbatim>
 				<h:panelGrid id="acgOutputPanelGrid" columns="2">
-				  <f:verbatim><b>Download Result KML:</b><div id="acgResultKml"></div></f:verbatim>
+				  <f:verbatim><b>Status:</b><span id="acgResultKml">Unsubmitted</span></f:verbatim>
 				</h:panelGrid>
 			 </h:panelGroup>
 		  </h:panelGrid>
