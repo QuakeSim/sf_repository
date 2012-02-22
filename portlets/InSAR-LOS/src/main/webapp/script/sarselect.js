@@ -333,7 +333,8 @@ var sarselect=sarselect || (function() {
 				async:true
 		  });
 		  csv.done(function(results) {
-				dygraph1=new Dygraph(document.getElementById("outputGraph1"),results,dygraphLOSOpts);		  
+				dygraph1=new Dygraph(document.getElementById("outputGraph1"),results,dygraphLOSOpts);
+				$('#LOS-Data-Download').show();
 				$("#LOS-Data-Download").html("<center><a href='"+restUrl+"' target='_blank'>Download LOS Data</a></center>");
 		  });
 	 }
@@ -357,6 +358,7 @@ var sarselect=sarselect || (function() {
 		  });
 		  csv.done(function(results) {
 				dygraph2=new Dygraph(document.getElementById("outputGraph2"),results,dygraphHgtOpts);		  
+				$('#HGT-Data-Download').show();
 				$("#HGT-Data-Download").html("<center><a href='"+restUrl+"' target='_blank'>Download HGT Data</a></center>");
 		  });
 		  csv.fail(function(errorMsg){
