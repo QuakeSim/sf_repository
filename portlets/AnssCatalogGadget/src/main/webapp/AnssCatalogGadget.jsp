@@ -107,7 +107,7 @@
 				  <hr/>
 				</f:verbatim>
 				<h:panelGrid id="acgOutputPanelGrid" columns="2">
-				  <f:verbatim><b>Status:</b><span id="acgResultKml">Unsubmitted</span></f:verbatim>
+				  <f:verbatim><b>Status: </b><span id="acgResultKml">Unsubmitted</span></f:verbatim>
 				</h:panelGrid>
 			 </h:panelGroup>
 		  </h:panelGrid>
