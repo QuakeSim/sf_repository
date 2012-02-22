@@ -6,6 +6,10 @@
 	 vertical-align:top; 
 } 
 
+body {
+	 font-family: Arial, sans-serif; 
+}
+
 .h2 { 
 	 display:block;
 	 font-family: Arial, sans-serif; 
