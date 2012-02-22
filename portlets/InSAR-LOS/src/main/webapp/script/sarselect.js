@@ -328,7 +328,7 @@ var sarselect=sarselect || (function() {
 				url:restUrl,
 				beforeSend: function() {if(dygraph1) {dygraph1.destroy(); }; 
 											  	$('#LOS-Data-Download').hide(); 
-												$('#outputGraph1').html('<center><img src="http://agspsrv95.agric.wa.gov.au/pestfax/Images/processing.gif"/></center>');
+												$('#outputGraph1').html('<center><img src="@host.base.url@/InSAR-LOS/images/processing.gif"/></center>');
 											  },
 				async:true
 		  });
@@ -350,7 +350,7 @@ var sarselect=sarselect || (function() {
 				url:restUrl,
 				beforeSend: function() { if(dygraph2) {dygraph2.destroy();};
 												 $('#HGT-Data-Download').hide(); 
-												 $('#outputGraph2').html('<center><img src="http://agspsrv95.agric.wa.gov.au/pestfax/Images/processing.gif"/></center>');
+												 $('#outputGraph2').html('<center><img src="@host.base.url@/InSAR-LOS/images/processing.gif"/></center>');
 											  },
 
 				async:true
