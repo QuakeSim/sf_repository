@@ -21,7 +21,7 @@
 		
 		<h:panelGrid id="acgMainPanel" columns="1" columnClasses="alignTopFixWidth">
 		  <f:verbatim>
-			 Click the map to select your region of interest, then click "Fetch ANSS Catalog".  This service
+			 Click the map to select your region of interest, then click "Fetch ANSS Catalog". <br/> This service
 			 harvests data from <a target="blank" href="http://www.ncedc.org/anss/catalog-search.html">http://www.ncedc.org/anss/catalog-search.html</a>
 		  </f:verbatim>
 		  <h:panelGrid id="anssgadgetlayoutgrid" columns="2" columnClasses="alignTop,alignTop">
