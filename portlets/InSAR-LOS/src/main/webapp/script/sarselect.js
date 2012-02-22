@@ -12,6 +12,8 @@ var sarselect=sarselect || (function() {
 	 var rowSelected=null;
 	 var lowResSARLayer=null;
 	 var uid=null;  //This is global because we need to pass it between two unrelated functions. Not good.
+	 var dygraph1, dygraph2;
+
 	 var dygraphLOSOpts={width:290,
 								height:300,
 								drawPoints:true,
@@ -190,7 +192,6 @@ var sarselect=sarselect || (function() {
 		  var dlon=(neLon-swLon)*d2r;
 		  var y=Math.sin(dlon)*Math.cos(neLat*d2r);
 		  var x=Math.cos(swLat*d2r)*Math.sin(neLat*d2r)-Math.sin(swLat*d2r)*Math.cos(swLat*d2r)*Math.cos(dlon);
-		  console.log(x, y, dlon);
 		  var azimuth=Math.atan2(y,x)/d2r;
 		  azimuth=azimuth.toFixed(1);
 
@@ -322,14 +323,19 @@ var sarselect=sarselect || (function() {
 		  var eastMarkerLon=markerNE.getPosition().lng();
 		  
 		  var restUrl="/InSAR-LOS-REST/insarlos/csv/"+uid+"/"+resolution+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat+"/"+method+"/"+averaging;
-        console.log(restUrl);
 
 		  var csv=$.ajax({
 				url:restUrl,
-				async:false
-		  }).responseText;
-		  var g1=new Dygraph(document.getElementById("outputGraph1"),csv,dygraphLOSOpts);		  
-		  $("#LOS-Data-Download").html("<center><a href='"+restUrl+"' target='_blank'>Download LOS Data</a></center>");
+				beforeSend: function() {if(dygraph1) {dygraph1.destroy(); }; 
+											  	$('#LOS-Data-Download').hide(); 
+												$('#outputGraph1').html('<center><img src="http://agspsrv95.agric.wa.gov.au/pestfax/Images/processing.gif"/></center>');
+											  },
+				async:true
+		  });
+		  csv.done(function(results) {
+				dygraph1=new Dygraph(document.getElementById("outputGraph1"),results,dygraphLOSOpts);		  
+				$("#LOS-Data-Download").html("<center><a href='"+restUrl+"' target='_blank'>Download LOS Data</a></center>");
+		  });
 	 }
 
 	 function getHgtInSarValues(uid,resolution,method,averaging) {
@@ -339,14 +345,23 @@ var sarselect=sarselect || (function() {
 		  var eastMarkerLon=markerNE.getPosition().lng();
 
 		  var restUrl="/InSAR-LOS-REST/insarhgt/csv/"+uid+"/"+resolution+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat+"/"+method+"/"+averaging;
-        console.log(restUrl);
 
 		  var csv=$.ajax({
 				url:restUrl,
-				async:false
-		  }).responseText;
-		  var g2=new Dygraph(document.getElementById("outputGraph2"),csv,dygraphHgtOpts);		  
-		  $("#HGT-Data-Download").html("<center><a href='"+restUrl+"' target='_blank'>Download HGT Data</a></center>");
+				beforeSend: function() { if(dygraph2) {dygraph2.destroy();};
+												 $('#HGT-Data-Download').hide(); 
+												 $('#outputGraph2').html('<center><img src="http://agspsrv95.agric.wa.gov.au/pestfax/Images/processing.gif"/></center>');
+											  },
+
+				async:true
+		  });
+		  csv.done(function(results) {
+				dygraph2=new Dygraph(document.getElementById("outputGraph2"),results,dygraphHgtOpts);		  
+				$("#HGT-Data-Download").html("<center><a href='"+restUrl+"' target='_blank'>Download HGT Data</a></center>");
+		  });
+		  csv.fail(function(errorMsg){
+				console.log("Failed to load HGT values: "+errorMsg);
+		  });
 	 }
 	 
 	 function createTable(parsedResults,tableDivName) {
@@ -391,7 +406,6 @@ var sarselect=sarselect || (function() {
 		urlToCall+=slash+xpix;
 		urlToCall+=slash+ypix;
 		
-		  console.log("Constructed URL:"+urlToCall);
 		return urlToCall;
     }
 	 function selectedRow(row) {
@@ -424,8 +438,6 @@ var sarselect=sarselect || (function() {
 	   //Call REST service
 		var callResults=getImageMetadata(uid);
 		  
-		  console.log(callResults);
-
 		//Extract overlayUrl
 		var overlayUrl=extractOverlayUrl(callResults);
 
