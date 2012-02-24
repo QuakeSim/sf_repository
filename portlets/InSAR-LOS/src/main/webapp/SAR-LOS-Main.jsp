@@ -68,7 +68,8 @@
 							 <input type="text" name="resolution" id="resolution-value" size="5" value="1000" onchange="sarselect.updateResolution()"/>
 						  </td>
 						  <td align="right">
-							 <img src="images/question_mark.png" title="The distance between points.  A value of 1000 means 1 point is plotted for every 1000 meters.  This is either the native value of the specific sampling point or the average value around the point determined by the averaging radius." width="20" height="20"/>
+							 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							 <img src="images/question_mark.png" title="The distance between points.  A value of 1000 means 1 point is plotted for every 1000 meters.  This is either the native value of the specific sampling point or the average value around the point determined by the averaging radius." width="15" height="15"/>
 						  </td>
 						</tr>
 						<tr>
@@ -78,7 +79,8 @@
 							 <input type="radio" name="plotmethod" id="average-method" value="average" onclick="sarselect.plotAverage()"/>average
 						  </td>
 						  <td align="right">
-							 <img src="images/question_mark.png" title="Native method returns actual pixel values at the sampled points.  Averaging retuns the average pixel value for sampled points." width="20" height="20"/>
+							 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							 <img src="images/question_mark.png" title="Native method returns actual pixel values at the sampled points.  Averaging retuns the average pixel value for sampled points." width="15" height="15"/>
 						  </td>
 						</tr>
 						<tr>
@@ -87,7 +89,8 @@
 							 <input type="text" name="averaging" id="averaging-value" size="5" value="10" onchange="sarselect.updateAveraging()" disabled="false"/>
 						  </td>
 						  <td align="right">
-							 <img src="images/question_mark.png" title="Use this to change the number of points used to sample." width="20" height="20"/>
+							 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							 <img id="averagingTip" title="Sets the number of points used if averaging." src="images/question_mark.png"  width="15" height="15"/>
 						  </td>
 						</tr>
 					 </table>
