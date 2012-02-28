@@ -92,7 +92,7 @@ var sarselect=sarselect || (function() {
 		  //Remove any previous layers and listeners
 
 		  if(lowResSARLayer) lowResSARLayer.setMap(null);  
-		  if(ucerfKml) ucerfkml.setMap(null);
+		  if(ucerfKml) ucerfKml.setMap(null);
 		  if(markerNE) {
 				google.maps.event.clearInstanceListeners(markerNE);
 				markerNE.setMap(null);
