@@ -107,7 +107,10 @@
 				  <hr/>
 				</f:verbatim>
 				<h:panelGrid id="acgOutputPanelGrid" columns="2">
-				  <f:verbatim><b>Status: </b><span id="acgResultKml">Unsubmitted</span></f:verbatim>
+				  <f:verbatim>
+					 <b>Status: </b><span id="acgResultKml">Unsubmitted</span>
+					 <div id="acgResultCSV"></div>
+				  </f:verbatim>
 				</h:panelGrid>
 			 </h:panelGroup>
 		  </h:panelGrid>
@@ -152,7 +155,6 @@
 		var resultKmlDiv=document.getElementById("acgResultKml");
 
 		anssgadget.createMap(mapDiv);
-		//		anssgadget.setupSelectionBox(lat0, lon0, lat1, lon1, lat2, lon2, lat3, lon3, bboxDiv);
 	 </script>
   </body>
 </html>

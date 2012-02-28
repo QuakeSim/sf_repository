@@ -115,6 +115,7 @@ public class AnssCSVCatalogService {
 		  			 //Look for the line that begins with URL
 		  			 if(line.indexOf("URL")>0) {
 		  				  ftpUrl=line.substring(line.indexOf("ftp://"));
+						  ftpUrl=ftpUrl.substring(0,ftpUrl.indexOf("\""));
 		  				  //We are done, so break out of the while loop.
 		  				  break;
 		  			 }			 

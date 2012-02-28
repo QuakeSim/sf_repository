@@ -8,16 +8,18 @@ var anssgadget=anssgadget || (function() {
     var polyLineColor = "#3355ff";
     var polyFillColor = "#335599";
 	 var urlBase="/AnssCatalogService/catalog";
+	 var urlBase2="/AnssCatalogService/csvcatalog";
 	 var amp="&";
 	 //These are parameters needed by the anss service.
 	 var OUTPUT_TYPE="output=kml";
+	 var OUTPUT_TYPE2="output=csv";
 	 var OUTPUT_FORMAT="format=cnss";
 	 var MINTIME="mintime=";
 	 var MAXTIME="maxtime=";
 	 var MINMAG="minmag=";
 	 var MAXMAG="maxmag=";
 	 var ETYPE="etype=E";
-	 var OUTPUT_LOC="outputloc=web";
+	 var OUTPUT_LOC="outputloc=ftp";
 	 var MINLON="minlon=";
 	 var MAXLON="maxlon=";
 	 var MINLAT="minlat=";
@@ -64,10 +66,12 @@ var anssgadget=anssgadget || (function() {
 				var minlat=MINLAT+minlat.value;
 				var maxlat=MAXLAT+maxlat.value;
 				var finalUrl=urlBase+"?"+OUTPUT_TYPE+amp+OUTPUT_FORMAT+amp+mintime+amp+maxtime+amp+minmag+amp+maxmag+amp+ETYPE+amp+OUTPUT_LOC+amp+minlon+amp+maxlon+amp+minlat+amp+maxlat;
+				var finalUrl2=urlBase2+"?"+OUTPUT_TYPE2+amp+OUTPUT_FORMAT+amp+mintime+amp+maxtime+amp+minmag+amp+maxmag+amp+ETYPE+amp+OUTPUT_LOC+amp+minlon+amp+maxlon+amp+minlat+amp+maxlat;
 				console.log(finalUrl);
 		  }
 		  else {
 				var finalUrl=urlBase+"?"+OUTPUT_TYPE+amp+OUTPUT_FORMAT+amp+mintime+amp+maxtime+amp+minmag+amp+maxmag+amp+ETYPE+amp+OUTPUT_LOC;
+				var finalUrl2=urlBase2+"?"+OUTPUT_TYPE2+amp+OUTPUT_FORMAT+amp+mintime+amp+maxtime+amp+minmag+amp+maxmag+amp+ETYPE+amp+OUTPUT_LOC;
 				console.log(finalUrl);
 		  }
 
@@ -86,8 +90,6 @@ var anssgadget=anssgadget || (function() {
 						  map.getView().setAbstractView(kmlObject.getAbstractView());
 					 }
 				});
-//				var kmlMapOpts={map:map};
-//				var seismicCatalogLayer=new google.maps.KmlLayer(results,kmlMapOpts);
 				
 		  });
 		  
@@ -96,11 +98,19 @@ var anssgadget=anssgadget || (function() {
 				console.log("Request failed:"+errorMsg)
 		  });
 
-//		  var results=$.ajax({url:finalUrl,async:false}).responseText;
-//		  console.log(results);
+		  var request2=$.ajax({
+				url:finalUrl2,
+		  });
+		  request2.done(function(results2){
+				console.log("FTP URL:"+results2);
+				$('#acgResultCSV').html('CSV Data: <a target="NULL" href="'+results2+'">'+results2+'</a>');
+		  });
 		  
-//		  var kmlMapOpts={map:map};
-//		  var seismicCatalogLayer=new google.maps.KmlLayer(results,kmlMapOpts);
+		  request2.fail(function(errorMsg2) { 
+				$('#acgResultCSV').html("Request failed: "+errorMsg2);
+				console.log("Request failed:"+errorMsg2)
+		  });
+
 	 }
 
 
