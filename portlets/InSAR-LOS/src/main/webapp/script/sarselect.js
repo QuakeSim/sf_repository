@@ -8,7 +8,9 @@ var sarselect=sarselect || (function() {
 	 var masterMap;
 	 var leftClickOp;
 	 var markerNE, markerSW;
-	 var insarKml, ucerfKml;
+	 var insarKml;
+	 var ucerfMapOpts={map:null, preserveViewport:true};
+	 var ucerfKml=new google.maps.KmlLayer("@host.base.url@/InSAR-LOS/kml//QuakeTables_UCERF_2.4.kml",ucerfMapOpts);
 	 var rowSelected=null;
 	 var lowResSARLayer=null;
 	 var uid=null;  //This is global because we need to pass it between two unrelated functions. Not good.
@@ -106,8 +108,9 @@ var sarselect=sarselect || (function() {
 		  if(polyShape) polyShape.setMap(null);		  
 
 		  //Add fault overlay (UCERF 2.4)
-		  var ucerfMapOpts={map:masterMap, preserveViewport:true};
-		  ucerfKml=new google.maps.KmlLayer("@host.base.url@/InSAR-LOS/kml//QuakeTables_UCERF_2.4.kml",ucerfMapOpts);
+//		  var ucerfMapOpts={map:masterMap, preserveViewport:true};
+//		  ucerfKml=new google.maps.KmlLayer("@host.base.url@/InSAR-LOS/kml//QuakeTables_UCERF_2.4.kml",ucerfMapOpts);
+		  ucerfKml.setMap(masterMap);
 
 		  //Display the fault toggling checkbox
 		  $("#FaultToggler").show();
