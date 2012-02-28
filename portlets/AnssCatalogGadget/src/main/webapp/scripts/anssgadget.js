@@ -103,7 +103,7 @@ var anssgadget=anssgadget || (function() {
 		  });
 		  request2.done(function(results2){
 				console.log("FTP URL:"+results2);
-				$('#acgResultCSV').html('CSV Data: <a target="NULL" href="'+results2+'">'+results2+'</a>');
+				$('#acgResultCSV').html('CSV Data Available: <a target="NULL" href="'+results2+'">'+results2+'</a>');
 		  });
 		  
 		  request2.fail(function(errorMsg2) { 
