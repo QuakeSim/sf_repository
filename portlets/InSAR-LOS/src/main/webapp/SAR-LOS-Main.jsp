@@ -69,7 +69,7 @@
 						  </td>
 						  <td align="right">
 							 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							 <img src="images/question_mark.png" title="The distance between points.  A value of 1000 means 1 point is plotted for every 1000 meters.  This is either the native value of the specific sampling point or the average value around the point determined by the averaging radius." width="15" height="15"/>
+								<img id="samplingInfoImg" src="images/question_mark.png" width="15" height="15"/>
 						  </td>
 						</tr>
 						<tr>
@@ -80,7 +80,7 @@
 						  </td>
 						  <td align="right">
 							 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							 <img src="images/question_mark.png" title="Native method returns actual pixel values at the sampled points.  Averaging retuns the average pixel value for sampled points." width="15" height="15"/>
+							 <img id="plotMethodImg" src="images/question_mark.png" width="15" height="15"/>
 						  </td>
 						</tr>
 						<tr>
@@ -90,7 +90,7 @@
 						  </td>
 						  <td align="right">
 							 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							 <img id="averagingTip" title="Sets the number of points used if averaging." src="images/question_mark.png"  width="15" height="15"/>
+							 <img id="averagingInfoImg" src="images/question_mark.png"  width="15" height="15"/>
 						  </td>
 						</tr>
 					 </table>
@@ -110,20 +110,45 @@
 		  <f:verbatim></fieldset></f:verbatim>
 		</h:panelGroup>
 	 </h:panelGrid>
+	 <f:verbatim>
+		<div id="samplingInfo" style="position:absolute;width:50px;height:50px;display:none;z-index:2"></div>
+		
+	 </f:verbatim>
   </f:view>
   <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>  
-  <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1.min.js"></script>
+  <script src="//code.jquery.com/jquery-latest.min.js"></script>
+  <!-- We use Qtip for the info windows. It must come after JQuery's import. -->
+  <script src="//craigsworks.com/projects/qtip/packages/1.0.0-rc3/jquery.qtip-1.0.0-rc3.js"></script>
   <script src="script/sarselect.js"></script>			 
   <script src="//dygraphs.com/dygraph-combined.js"></script>
   
   <script>
-	 //Rendear the InSAR overlays.
+	 //Render the InSAR overlays.
 	 function initialize() {
 	 var insarMapDiv=document.getElementById("InSAR-All-Map");
 	 var tableDivName="dynatable";
 	 var messageDiv=document.getElementById("InSAR-Map-Messages");
 	 sarselect.setMasterMap(insarMapDiv,tableDivName);
 	 }
+
+	 $('#samplingInfoImg').qtip({
+	 content: 'The distance between points.  A value of 1000 means 1 point is plotted for every 1000 meters.  This is either the native value of the specific sampling point or the average value around the point determined by the averaging radius.',
+	 show: 'mouseover',
+	 hide: 'mouseout'
+	 });
+
+	 $('#plotMethodImg').qtip({
+	 content: 'Native method returns actual pixel values at the sampled points.  Averaging retuns the average pixel value for sampled points.',
+	 show: 'mouseover',
+	 hide: 'mouseout'
+	 });
+
+	 $('#averagingInfoImg').qtip({
+	 content: 'Sets the number of points used if averaging.',
+	 show: 'mouseover',
+	 hide: 'mouseout'
+	 });
+
   </script>
 </body>
 </html>
