@@ -165,7 +165,7 @@ public class StationListMaker {
 		System.out.println("makeXmlFromUnavcoXml <UNAVCO xml station list path> <result xml station list path>");
 		System.out.println("makeDataWithFakeTime <old data file path> <starting date time> <interval in minutes> ");
 		System.out.println("makeDataFromBigFile <big data file path> <state sequence file path> <destination directory>");
-		System.out.println("makeAriaXmlResult <station list file path> <path of the directory for all stations' data>");
+		System.out.println("makeAriaXmlResult <station list file path> <path of the directory for all stations' data> <result XML path>");
 		System.out.println("makeDateTimeList <startTime> <endTime> <intervalInSec> <delimiter> <outputPath>");
 		System.out.println("updateUnavcoRawFile <parent directory> <unavco script path>");
 		System.out.println("repairBadRawFile <parent directory>");

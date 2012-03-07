@@ -63,6 +63,8 @@ public class DailyRDAHMMStation {
 	static String plotCmdPattern;
 	/** command line pattern for making the state change number vs. time plot*/
 	static String plotScnCmdPattern;
+	/** command line pattern for creating the Dygraph Javascript for plotting a station's time series */
+	static String dygraphsJsCreationCmdPattern;
 	/** command line pattern for zipping model files */
 	static String zipCmdPattern;
 	/** path to the XML file containing all stations */
@@ -237,6 +239,7 @@ public class DailyRDAHMMStation {
 		denoiseEnabled = Boolean.valueOf(prop.getProperty("dailyRdahmm.denoise.enabled"));
 		xyz2llhCmdPattern = prop.getProperty("dailyRdahmm.xyz2llh.cmd.pattern");
 		unavcoQueryCmdPattern = prop.getProperty("dailyRdahmm.unavcoQuery.cmd.pattern");
+		dygraphsJsCreationCmdPattern = prop.getProperty("dailyRdahmm.dygraphsJs.cmd.pattern");
 		mapCenterLat = prop.getProperty("dailyRdahmm.mapCenter.latitude");
 		mapCenterLon = prop.getProperty("dailyRdahmm.mapCenter.longitude");
 	}
@@ -830,6 +833,9 @@ public class DailyRDAHMMStation {
 			String plotSwfInputPath = evalDir + File.separator + projectName + ".plotswf.input";
 			makePlotSwfInput(allQPath, allRawPath, plotSwfInputPath);
 			
+			// make Dygraphs Javascript for plotting the station's time series
+			makeDygraphsJs(projectName, plotSwfInputPath);
+			
 			// plot evaluation results
 			executePlotCmd(projectName);
 		}
@@ -986,6 +992,32 @@ public class DailyRDAHMMStation {
 			pwRes.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * make the dygraphs Javascript for plotting the time series of this station
+	 * @param projectName
+	 * @param plotSwfInputPath
+	 * @return
+	 */
+	protected void makeDygraphsJs(String projectName, String plotSwfInputPath) {
+		String jsCreationCmd = dygraphsJsCreationCmdPattern;
+		jsCreationCmd = jsCreationCmd.replaceFirst("<jsCreatorDir>", binDir).replaceFirst("<plotSwfInputPath>", plotSwfInputPath);
+		
+		String progPath = UtilSet.getProgFromCmdLine(jsCreationCmd);
+		String[] args = UtilSet.getArgsFromCmdLine(jsCreationCmd);
+		String proDir = baseDestDir + File.separator + projectName;
+		String outputPath = proDir + File.separator + projectName + ".dygraphs.js";
+		String errPath = proDir + File.separator + projectName + ".dygraphysJs.err";
+		UtilSet.antExecute(progPath, args, binDir, null, null, outputPath, errPath);
+		String stdOutStr = UtilSet.readFileContentAsString(new File(outputPath));
+		String stdErrStr = UtilSet.readFileContentAsString(new File(errPath));
+		if (stdOutStr.length() <= 0 || stdOutStr.toLowerCase().indexOf("error") >=0 || stdErrStr.toLowerCase().indexOf("error") >= 0) {
+			System.out.println("Failed to dygraph Javascript when executing command:");
+			System.out.println(jsCreationCmd);
+			System.out.println("Standard Output: " + stdOutStr);
+			System.out.println("Standard Error: " + stdErrStr);
 		}
 	}
 	

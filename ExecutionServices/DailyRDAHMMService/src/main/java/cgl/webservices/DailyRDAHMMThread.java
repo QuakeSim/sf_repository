@@ -478,6 +478,8 @@ public class DailyRDAHMMThread implements Runnable {
 			tmpNode.setText(proNamePat + ".all.raw");
 			tmpNode = elePattern.addElement("SwfInputFile");
 			tmpNode.setText(proNamePat + ".plotswf.input");
+			tmpNode = elePattern.addElement("DygraphsInputFile");
+			tmpNode.setText(proNamePat + ".dygraphs.js");
 			tmpNode = elePattern.addElement("LFile");
 			tmpNode.setText(modelBasePat + ".L");			
 			tmpNode = elePattern.addElement("XPngFile");
