@@ -3,9 +3,12 @@
 
 <%@page import="java.util.*, java.net.URL, java.io.*, java.lang.*, org.dom4j.*, cgl.sensorgrid.common.*, org.dom4j.io.*"%>
 
-<%
+<jsp:scriptlet>
+  //TODO: We need a better way of handling this.
+
    //--------------------------------------------------
-   // This loads the content of the windowcontent.htm file, which embeds the RDAHMM flash plotting object. This is 
+   // This loads the content of the windowcontent.htm file, which embeds the RDAHMM flash '
+	// plotting object. This is 
 	// read into the strTabContent String, which is passed to markerWinHtmlStr below.
    //--------------------------------------------------
 	String strTabContent = new String();
@@ -24,6 +27,7 @@
 	finally {
 		if (bis != null)bis.close();
 	}
+
 
 	//--------------------------------------------------
 	// The code below sets various parameters that need to be determined at load time, based on
@@ -75,7 +79,8 @@
 		defNeLat = 48.3854;
 		defNeLng = -112.3901;
 	}
-%>
+
+</jsp:scriptlet>
 
 <html>
 	<head>
@@ -291,6 +296,7 @@
 		var long = "" + selectedStation[2];
 		var preFix = urlPattern.replace(/{!station-id!}/g, stationId) + "/" + dirPattern.replace(/{!station-id!}/g, stationId) + "/";
 		var swfURL = preFix + swfInputPattern.replace(/{!station-id!}/g, stationId);
+		var dygraphsURL = preFix + dygraphsInputPattern.replace(/{!station-id!}/g, stationId);
 		var modelLink = urlPattern.replace(/{!station-id!}/g, stationId) + "/" + modelPattern.replace(/{!station-id!}/g, stationId);
 		var outputTable = "<table border='0'><tr><td align='center'><b>Output files</b></td></tr>"
 							+ "<tr><td><a target='_blank' href='" + preFix + inputPattern.replace(/{!station-id!}/g, stationId) + "'>Input File</a></td></tr>"
@@ -306,7 +312,7 @@
 							+ "<tr><td><a target='_blank' href='" +  preFix + xPattern.replace(/{!station-id!}/g, stationId) + "'>Plot of North Values</a></td></tr>"
 							+ "<tr><td><a target='_blank' href='" +  preFix + yPattern.replace(/{!station-id!}/g, stationId) + "'>Plot of East Values</a></td></tr>"
 							+ "<tr><td><a target='_blank' href='" +  preFix + zPattern.replace(/{!station-id!}/g, stationId) + "'>Plot of Up Values</a></td></tr>"
-							+ "<tr><td><a target='_blank' href='" +  swfURL + "'>Plot Component Input</a></td></tr>"
+							+ "<tr><td><a target='_blank' href='" +  swfURL + "'>Plot Component Input</a></td></tr>"							+ "<tr><td><a target='_blank' href='" +  dygraphsURL + "'>Plot Component Input2</a></td></tr>"
 							+ "<tr><td><b><a target='_blank' href='" +  modelLink + "'>Get all model files</a></b></td></tr></table>";
           
 		var changeTable = "<table border='1'><tr><td>Date</td><td nowrap='nowrap'>Old State</td> <td nowrap='nowrap'>New State</td></tr>";
@@ -331,7 +337,8 @@
 						"<tr valign='top'><td width='230'>" +
 						"<table><tr><td align='center'><b>State Changes</b></td></tr>" +
 						"<tr><td>" + changeTable + "</td></tr>" +
-						"<tr><td><button id='showTsBtn' style='background-color:lightgreen' onClick='showTsBtnClick(this)'>View Time Series</button></td></tr>" +
+						"<tr><td><button id='showTsBtn' style='background-color:lightgreen' onClick='showTsBtnClick(this)'>View Time Series</button></td></tr>" +						
+						"<tr><td><button id='showTS2Btn' style='background-color:lightgreen' onClick='showTS2BtnClick(this)'>View Time Series (2)</button></td></tr>" +
 						"</table></td><td width='220'>" + outputTable + "</td></tr>" +
 						"</table></div>";
 		
@@ -362,6 +369,44 @@
 		newWin.document.writeln(tsHtmlStr);
 		newWin.document.title = stationId;
 		newWin.document.close();
+	}
+
+	function showTS2BtnClick(obj) {
+		var stationId = selectedStation[0];
+		var lat = "" + selectedStation[1];
+		var lon = "" + selectedStation[2];
+		var hgt = "" + selectedStation[4];
+		var preFix = urlPattern.replace(/{!station-id!}/g, stationId) + "/" + dirPattern.replace(/{!station-id!}/g, stationId) + "/";
+		var dygraphsURL = preFix + dygraphsInputPattern.replace(/{!station-id!}/g, stationId);
+		var dygraphsHtml="<html><body>";
+		 dygraphsHtml+="<div><b>Station ID:</b> "+stationId+" <b>Lat:</b> "+lat+" <b>Lon:</b> "+lon+"<\/div>";
+		 dygraphsHtml+="<br/>";
+		dygraphsHtml+="<script src='http://danvk.org/dygraphs/dygraph-combined.js' type='text/javascript'>";
+		dygraphsHtml+="<\/script>";
+		dygraphsHtml+="<script src='"+dygraphsURL+"'><\/script>";
+		dygraphsHtml+="<script src='http://dygraphs.com/tests/data.js'><\/script>";
+		 dygraphsHtml+="<div>Longitude (degrees)<\/div>";
+		dygraphsHtml+="<div id='plotDiv1' style='width:800px;height:150px'><\/div>";
+		 dygraphsHtml+="<br/>";
+		 dygraphsHtml+="<div> Latitude (degrees)<\/div>";
+		dygraphsHtml+="<div id='plotDiv2' style='width:800px;height:150px'><\/div>";
+		 dygraphsHtml+="<br/>";
+		 dygraphsHtml+="<div>Height (meters)<\/div>";
+		dygraphsHtml+="<div id='plotDiv3' style='width:800px;height:150px'><\/div>";
+		dygraphsHtml+="<script type='text/javascript'>";
+		dygraphsHtml+="var plot1=new Dygraph(document.getElementById('plotDiv1'),data_east,{yAxisLabelWidth:150,sigFigs:14})\;";
+		dygraphsHtml+="var plot2=new Dygraph(document.getElementById('plotDiv2'),data_north,{yAxisLabelWidth:150,sigFigs:14})\;";
+		dygraphsHtml+="var plot2=new Dygraph(document.getElementById('plotDiv3'),data_up,{yAxisLabelWidth:150,sigFigs:14})\;";
+		dygraphsHtml+="<\/script>";
+		dygraphsHtml+="<\/body><\/html>";
+
+		 var windowName=stationId+"-Dygraphs";
+		 var newWin = window.open("", windowName, "width=850,height=600");
+		newWin.document.writeln(dygraphsHtml);
+		newWin.document.title = stationId;
+		newWin.document.close();
+
+
 	}
 	</script>
 
@@ -788,7 +833,7 @@
 		markerClickBody(station[6], selectedStation);
 	}
 
-	/* The status change xml file is formated like:
+	/* The status change xml file is formated like (note this is obsolete):
 	<xml>
 		<output-pattern>
 		<server-url>http://156-56-104-131.dhcp-bl.indiana.edu:8080//daily_rdahmmexec</server-url>
@@ -896,6 +941,7 @@
 	var inputPattern = '<%=eleOutput.element("InputFile").getText()%>';
 	var rawInputPattern = '<%=eleOutput.element("RawInputFile").getText()%>';
 	var swfInputPattern = '<%=eleOutput.element("SwfInputFile").getText()%>';
+	var dygraphsInputPattern = '<%=eleOutput.element("DygraphsInputFile").getText()%>';
 	var lPattern = '<%=eleOutput.element("LFile").getText()%>';
 	var xPattern = '<%=eleOutput.element("XPngFile").getText()%>';
 	var yPattern = '<%=eleOutput.element("YPngFile").getText()%>';
