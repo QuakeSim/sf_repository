@@ -153,6 +153,7 @@
 		}
 	}
 
+	//TODO: switch this to JQuery for future maintainability.
 	YAHOO.namespace("example.calendar");
 	
 	var slider;
@@ -298,6 +299,7 @@
 		var swfURL = preFix + swfInputPattern.replace(/{!station-id!}/g, stationId);
 		var dygraphsURL = preFix + dygraphsInputPattern.replace(/{!station-id!}/g, stationId);
 		var modelLink = urlPattern.replace(/{!station-id!}/g, stationId) + "/" + modelPattern.replace(/{!station-id!}/g, stationId);
+		//TODO: SWF inputs are commented out but should be deleted
 		var outputTable = "<table border='0'><tr><td align='center'><b>Output files</b></td></tr>"
 							+ "<tr><td><a target='_blank' href='" + preFix + inputPattern.replace(/{!station-id!}/g, stationId) + "'>Input File</a></td></tr>"
 							+ "<tr><td><a target='_blank' href='" +  preFix + rawInputPattern.replace(/{!station-id!}/g, stationId) + "'>All Raw Input Data</a></td></tr>"
@@ -312,7 +314,7 @@
 							+ "<tr><td><a target='_blank' href='" +  preFix + xPattern.replace(/{!station-id!}/g, stationId) + "'>Plot of North Values</a></td></tr>"
 							+ "<tr><td><a target='_blank' href='" +  preFix + yPattern.replace(/{!station-id!}/g, stationId) + "'>Plot of East Values</a></td></tr>"
 							+ "<tr><td><a target='_blank' href='" +  preFix + zPattern.replace(/{!station-id!}/g, stationId) + "'>Plot of Up Values</a></td></tr>"
-							+ "<tr><td><a target='_blank' href='" +  swfURL + "'>Plot Component Input</a></td></tr>"							+ "<tr><td><a target='_blank' href='" +  dygraphsURL + "'>Plot Component Input2</a></td></tr>"
+							+ "<!-- <tr><td><a target='_blank' href='" +  swfURL + "'>Plot Component Input</a></td></tr>-->"							+ "<tr><td><a target='_blank' href='" +  dygraphsURL + "'>Plot Component Input</a></td></tr>"
 							+ "<tr><td><b><a target='_blank' href='" +  modelLink + "'>Get all model files</a></b></td></tr></table>";
           
 		var changeTable = "<table border='1'><tr><td>Date</td><td nowrap='nowrap'>Old State</td> <td nowrap='nowrap'>New State</td></tr>";
@@ -331,14 +333,15 @@
 		} 
 		changeTable += "</table>";
 
+		//TODO: Older SWF plot button is commented out but should be deleted.
 		var htmlStr2 = "<div align='center'><table border='0'><tr><td colspan='2'><b>Station ID</b>: " + stationId + "</td></tr>" +
 						"<tr><td><b>Longitude</b>: " + long + "</td><td><b>Latitude</b>: " + lat + "</td></tr>" +
 						"<tr><td colspan='2'><hr/></td></tr>" +
 						"<tr valign='top'><td width='230'>" +
 						"<table><tr><td align='center'><b>State Changes</b></td></tr>" +
 						"<tr><td>" + changeTable + "</td></tr>" +
-						"<tr><td><button id='showTsBtn' style='background-color:lightgreen' onClick='showTsBtnClick(this)'>View Time Series</button></td></tr>" +						
-						"<tr><td><button id='showTS2Btn' style='background-color:lightgreen' onClick='showTS2BtnClick(this)'>View Time Series (2)</button></td></tr>" +
+						"<!-- <tr><td><button id='showTsBtn' style='background-color:lightgreen' onClick='showTsBtnClick(this)'>View Time Series</button></td></tr> -->" +						
+						"<tr><td><button id='showTS2Btn' style='background-color:lightgreen' onClick='showTS2BtnClick(this)'>View Time Series</button></td></tr>" +
 						"</table></td><td width='220'>" + outputTable + "</td></tr>" +
 						"</table></div>";
 		
@@ -351,6 +354,8 @@
 	//This is the "View Time Series" button action and opens the plotting window.  
 	//The data actually comes from the urlPatten variable, which is populated from the xmlUrl 
 	//variable for the appropriate data set. 
+	//
+	//TODO: this is obsolete and can be deleted.
 	function showTsBtnClick(obj) {
 		var stationId = selectedStation[0];
 		var lat = "" + selectedStation[1];
@@ -385,18 +390,15 @@
 		dygraphsHtml+="<\/script>";
 		dygraphsHtml+="<script src='"+dygraphsURL+"'><\/script>";
 		dygraphsHtml+="<script src='http://dygraphs.com/tests/data.js'><\/script>";
-		 dygraphsHtml+="<div>Longitude (degrees)<\/div>";
 		dygraphsHtml+="<div id='plotDiv1' style='width:800px;height:150px'><\/div>";
 		 dygraphsHtml+="<br/>";
-		 dygraphsHtml+="<div> Latitude (degrees)<\/div>";
 		dygraphsHtml+="<div id='plotDiv2' style='width:800px;height:150px'><\/div>";
 		 dygraphsHtml+="<br/>";
-		 dygraphsHtml+="<div>Height (meters)<\/div>";
 		dygraphsHtml+="<div id='plotDiv3' style='width:800px;height:150px'><\/div>";
 		dygraphsHtml+="<script type='text/javascript'>";
-		dygraphsHtml+="var plot1=new Dygraph(document.getElementById('plotDiv1'),data_east,{yAxisLabelWidth:150,sigFigs:14})\;";
-		dygraphsHtml+="var plot2=new Dygraph(document.getElementById('plotDiv2'),data_north,{yAxisLabelWidth:150,sigFigs:14})\;";
-		dygraphsHtml+="var plot2=new Dygraph(document.getElementById('plotDiv3'),data_up,{yAxisLabelWidth:150,sigFigs:14})\;";
+		dygraphsHtml+="var plot1=new Dygraph(document.getElementById('plotDiv1'),data_east,{drawPoints:true, strokeWidth:0.0, title:\"Longitude (degrees)\",yAxisLabelWidth:150,sigFigs:14})\;";
+		dygraphsHtml+="var plot2=new Dygraph(document.getElementById('plotDiv2'),data_north,{drawPoints:true, strokeWidth:0.0, title:\"Latitude (degrees)\",yAxisLabelWidth:150,sigFigs:14})\;";
+		dygraphsHtml+="var plot2=new Dygraph(document.getElementById('plotDiv3'),data_up,{drawPoints:true, strokeWidth:0.0,title:\"Height (meters)\", yAxisLabelWidth:150,sigFigs:14})\;";
 		dygraphsHtml+="<\/script>";
 		dygraphsHtml+="<\/body><\/html>";
 
