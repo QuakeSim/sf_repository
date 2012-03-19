@@ -46,7 +46,7 @@ foreach my $val1 (@allArray) {
 	 my @lineArray=split(' ',$val1);
 
 	 if($lineArray[0]=="1") {
-		  $lineArray[1] . "," . $lineArray[3] . ",,,,\\n ";
+		  print $lineArray[1] . "," . $lineArray[3] . ",,,,\\n ";
 	 }
 	 elsif($lineArray[0]=="2") {
 		  print $lineArray[1] . ",," . $lineArray[3] . ",,,\\n ";
@@ -76,7 +76,7 @@ foreach my $val1 (@allArray) {
 	 my @lineArray=split(' ',$val1);
 
 	 if($lineArray[0]=="1") {
-		  $lineArray[1] . "," . $lineArray[4] . ",,,,\\n ";
+		  print $lineArray[1] . "," . $lineArray[4] . ",,,,\\n ";
 	 }
 	 elsif($lineArray[0]=="2") {
 		  print $lineArray[1] . ",," . $lineArray[4] . ",,,\\n ";
