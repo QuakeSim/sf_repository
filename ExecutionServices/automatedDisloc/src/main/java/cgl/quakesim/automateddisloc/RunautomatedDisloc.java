@@ -1531,10 +1531,10 @@ public class RunautomatedDisloc implements Job {
 		  double slip = 0.6*length*width;				
 		  //thr is thrust, which is set in in the previous 4 scenarios.
 		  if (thr) {
-				fault.setFaultDipSlip(slip * 10);
+				fault.setFaultDipSlip(slip);
 		  }
 		  else {
-				fault.setFaultStrikeSlip(slip * 10);
+				fault.setFaultStrikeSlip(slip);
 		  }
 
 		  //Now set the location in Cartesian and real-Earth coordinates
