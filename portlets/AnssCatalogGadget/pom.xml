@@ -230,18 +230,6 @@
             <version>2.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.portals.bridges</groupId>
-            <artifactId>portals-bridges-commons</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.portals.bridges</groupId>
-            <artifactId>portals-bridges-jsf</artifactId>
-            <version>1.0</version>
-        </dependency>
-
         <!-- Servlet Dependencies -->
         <dependency>
             <groupId>javax.servlet</groupId>

@@ -126,7 +126,7 @@
         <servlet-name>PortletServlet</servlet-name>
         <url-pattern>/jsr/AnssCatalogGadget</url-pattern>
     </servlet-mapping>
-
+<!--
 	 <error-page>
 		<error-code>500</error-code>
 		<location>/errorpages/ServerError.html</location>
@@ -139,6 +139,6 @@
 		<exception-type>javax.faces.FacesException</exception-type>
 		<location>/errorpages/ExceptionError.html</location>
 	 </error-page>
-	 
+-->	 
 </web-app> 
  
