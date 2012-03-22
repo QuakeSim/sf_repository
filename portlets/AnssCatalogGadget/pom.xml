@@ -9,59 +9,98 @@
     <url>http://www.myorganization.org</url>
 
   <parent>
+	 <!-- 
+			This should inherit directly from the top level POM since it will run as a standalone
+			app and not a gadget.
+	 -->
 	 <groupId>quakesim</groupId>
-	 <artifactId>portlets-driver</artifactId>
+	 <artifactId>main-driver</artifactId>
 	 <version>1.0</version>
-	 <relativePath>..</relativePath>
+	 <relativePath>../..</relativePath>
   </parent>
 
     <!-- We get this from the command line and pass to the resources
          via filtering -->
-    <build>
-        <finalName>AnssCatalogGadget</finalName>
+	 <build>
+		<finalName>AnssCatalogGadget</finalName>
         <resources>
-           <resource>
-               <directory>src/main/resources</directory>
-               <filtering>true</filtering>
-           </resource>
-        </resources>
-	 <plugins>
-		<plugin>
-		<artifactId>maven-antrun-plugin</artifactId>
-      <executions>
-       <execution>
-        <id>Clean ${pom.artifactId} portlet</id>
-		  <phase>clean</phase>
-        <configuration>
-			 <!-- 
-					Allow this to fail on error. This is not great, but we must do this
-					since the parent pom is not abstract and so will get executed along with
-					its children.
-				-->
-			 <tasks>			 
-				<delete failonerror="false">
-				  <fileset dir="${catalina.home}/webapps/${pom.artifactId}">
-					<include name="**/*"/>
-						<!--
-					 <include name="**/*.jar"/>
-					 <include name="**/*.xml"/>
-					 <include name="**/*.properties"/>
-					 <include name="**/*.class"/>						  
-					 <include name="**/*.jsp"/>
-					 <include name="**/*.wsdd"/>
+			 <resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			 </resource>
+		  </resources>
+		  <plugins>
+			 <plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+				  <execution>
+					 <id>Clean ${pom.artifactId} portlet</id>
+					 <phase>clean</phase>
+					 <configuration>
+						<!-- 
+							  Allow this to fail on error. This is not great, but we must do this
+							  since the parent pom is not abstract and so will get executed along with
+							  its children.
 						-->
-				  </fileset>
-				</delete>
-
-				<delete file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${pom.artifactId}"/>
-          </tasks>
-        </configuration>
-        <goals>
-			 <goal>run</goal>
-        </goals>
-       </execution>
-
-       <execution>
+						<tasks>			 
+						  <delete failonerror="false">
+							 <fileset dir="${catalina.home}/webapps/${pom.artifactId}">
+								<include name="**/*"/>
+								<!--
+									 <include name="**/*.jar"/>
+									 <include name="**/*.xml"/>
+									 <include name="**/*.properties"/>
+									 <include name="**/*.class"/>						  
+									 <include name="**/*.jsp"/>
+									 <include name="**/*.wsdd"/>
+								-->
+							 </fileset>
+						  </delete>
+						  
+						  <delete file="${catalina.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${pom.artifactId}"/>
+						</tasks>
+					 </configuration>
+					 <goals>
+						<goal>run</goal>
+					 </goals>
+				  </execution>
+				  <execution>
+					 <id>Install ${project.artifactId} portlet</id>
+					 <phase>install</phase>
+					 <configuration>
+						<!-- 
+							  Allow this to fail on error. This is not great, but we must do this
+							  since the parent pom is not abstract and so will get executed along with
+							  its children.
+						-->
+						<tasks>			 
+						  <copy overwrite="true" 
+								  filtering="false"
+								  failonerror="false"
+								  todir="${catalina.home}/webapps/${project.artifactId}">
+							 <fileset dir="${basedir}/target/${project.artifactId}"/>
+						  </copy>
+						  
+						  <!--
+								Update the portlet.xml files
+						  -->
+						  <copy overwrite="true" 
+								  filtering="true"
+								  failonerror="false"
+								  todir="${catalina.home}/webapps/${project.artifactId}">
+							 <fileset dir="${basedir}/target/${project.artifactId}">
+								<include name="**/portlet.xml"/>
+							 </fileset>
+							 
+						  </copy>
+						</tasks>
+					 </configuration>
+					 <goals>
+						<goal>run</goal>
+					 </goals>
+				  </execution>
+				  
+				  <execution>
 			<id>Convert ${pom.artifactId} portlet</id>
 			<phase>package</phase>
 			<configuration>				
@@ -73,11 +112,11 @@
 			<goals>
 			  <goal>run</goal>
 			</goals>
-       </execution>
-<execution>
-         <phase>package</phase>
-         <configuration>
-           <tasks>
+		 </execution>
+		 <execution>
+			<phase>package</phase>
+			<configuration>
+			  <tasks>
 				 <echo message="Setting the host.base.url: ${host.base.url}"/>
 				 <replace dir="${basedir}/target/${pom.artifactId}" token="@host.base.url@" value="${host.base.url}">
 					<include name="**/*.*"/>
