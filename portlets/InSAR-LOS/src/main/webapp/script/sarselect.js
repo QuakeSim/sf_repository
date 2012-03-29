@@ -8,13 +8,14 @@ var sarselect=sarselect || (function() {
 	 var masterMap;
 	 var leftClickOp;
 	 var markerNE, markerSW;
-	 var insarKml;
+//	 var insarKml;
 	 var ucerfMapOpts={map:null, preserveViewport:true};
 	 var ucerfKml=new google.maps.KmlLayer("@host.base.url@/InSAR-LOS/kml//QuakeTables_UCERF_2.4.kml",ucerfMapOpts);
 	 var rowSelected=null;
 	 var lowResSARLayer=null;
 	 var uid=null;  //This is global because we need to pass it between two unrelated functions. Not good.
 	 var dygraph1, dygraph2;
+	 var wmsMapType=null;
 
 	 var dygraphLOSOpts={width:290,
 								height:300,
@@ -45,23 +46,68 @@ var sarselect=sarselect || (function() {
 		  var latlng=new google.maps.LatLng(32.3,-118.0);
 		  var myOpts={zoom:6, scaleControl:true, center: latlng, mapTypeId: google.maps.MapTypeId.TERRAIN};
 		  masterMap=new google.maps.Map(insarMapDiv, myOpts);
+
+		  //Create the WMS overlay
+		  var wmsOptions= {
+            alt: "GeoServer",
+            getTileUrl: WMSGetTileUrl2,
+            isPng: true,
+            maxZoom: 17,
+            minZoom: 6,
+            name: "Geoserver",
+            tileSize: new google.maps.Size(256, 256),
+            credit: 'Image Credit: QuakeSim'
+		  };
+		  wmsMapType=new google.maps.ImageMapType(wmsOptions);
+
+		  //Add the overlay to the master map
+		  masterMap.overlayMapTypes.insertAt(0,wmsMapType);
 		  
 		  //Add UAVSAR thumb overlay
-		  var kmlMapOpts={map:masterMap, suppressInfoWindows:true, preserveViewport:true};
-		  insarKml=new google.maps.KmlLayer("http://quakesim.usc.edu/uavsar-data/kml/QuakeTables_UAVSAR_lowres.kmz",kmlMapOpts);
+//		  var kmlMapOpts={map:masterMap, suppressInfoWindows:true, preserveViewport:true};
+//		  insarKml=new google.maps.KmlLayer("http://quakesim.usc.edu/uavsar-data/kml/QuakeTables_UAVSAR_lowres.kmz",kmlMapOpts);
 //		  insarKml=new google.maps.KmlLayer("http://quaketables.quakesim.org/kml?uid=all&lowres=1",kmlMapOpts);
 //		  insarKml=new google.maps.KmlLayer("@host.base.url@/quakesim_uavsar.kml",kmlMapOpts);
 //		  insarKml = new google.maps.KmlLayer("http://quaketables.quakesim.org/kml?uid=all&ov=0",kmlMapOpts);
-		  $("#InSAR-Map-Messages").show();
-		  $("#InSAR-Map-Messages").html("InSAR Catalog Loading...");
+//		  $("#InSAR-Map-Messages").show();
+//		  $("#InSAR-Map-Messages").html("InSAR Catalog Loading...");
 
 		  //Add a listener for the insarKml map while it is loading.
-		  google.maps.event.addListener(insarKml,"metadata_changed",function(event) {
+//		  google.maps.event.addListener(insarKml,"metadata_changed",function(event) {
+//				$("#InSAR-Map-Messages").hide();
+//		  });
+
+		  //Add a listener for the WMS overlay map while it is loading, give feedback to the user.
+		  $("#InSAR-Map-Messages").show();
+		  $("#InSAR-Map-Messages").html("InSAR Catalog Loading...");
+		  google.maps.event.addListener(wmsMapType,"tilesloaded",function(event) {
 				$("#InSAR-Map-Messages").hide();
 		  });
+
+		  //Handle zoom and pan events--the tiles will need to be reloaded.
+		  google.maps.event.addListener(masterMap,"zoom_changed",function(event) {
+				//These will be hidden again when the "tilesloaded" event fires.
+				console.log("Reload the catalog");
+				//Remove and add the tiles overlay every time so that the loading message is correct. The
+				//problem is that tilesloaded won't fire after the first time.
+				//This may be dumb.
+				masterMap.overlayMapTypes.removeAt(0);
+				masterMap.overlayMapTypes.insertAt(0,wmsMapType);
+				$("#InSAR-Map-Messages").show();
+				$("#InSAR-Map-Messages").html("InSAR Catalog Loading...");
+		  });
+		  google.maps.event.addListener(masterMap,"dragend",function(event) {
+				//These will be hidden again when the "tilesloaded" event fires.
+				console.log("Reload the catalog");
+				masterMap.overlayMapTypes.removeAt(0);
+				masterMap.overlayMapTypes.insertAt(0,wmsMapType);
+				$("#InSAR-Map-Messages").show();
+				$("#InSAR-Map-Messages").html("InSAR Catalog Loading...");
+		  });
+
 		  
-		  //Find out where we are.
-		  google.maps.event.addListener(insarKml,"click",function(event) {
+		  //Find out where we are when the map is clicked.
+		  google.maps.event.addListener(masterMap,"click",function(event) {
 				var finalUrl=constructWmsUrl(masterMap,event);
 				var results=$.ajax({url:finalUrl,async:false}).responseText;
 				var parsedResults=jQuery.parseJSON(results);
@@ -77,7 +123,6 @@ var sarselect=sarselect || (function() {
 		  var myOptions={
 				panControl: false,
 				zoomControl: true,
-				
 				scaleControl: true,
 				zoom: 6,
 				streetViewControl:false,
@@ -90,11 +135,15 @@ var sarselect=sarselect || (function() {
 
 	 //Activates the low-res insar layer for LOS display.
 	 function activateLayerMap(insarMap,overlayUrl,drawFunctionType,uid) {
+		  //Remove the drag and zoom listeners on the master map.
+		  $("#InSAR-Map-Messages").hide();
+		  google.maps.event.clearListeners(masterMap,"dragend");
+		  google.maps.event.clearListeners(masterMap,"zoom");
 
-		  //Remove any previous layers and listeners
-
+		  //Remove any previous layers and listeners on markers from previous session
 		  if(lowResSARLayer) lowResSARLayer.setMap(null);  
 		  if(ucerfKml) ucerfKml.setMap(null);
+		  
 		  if(markerNE) {
 				google.maps.event.clearInstanceListeners(markerNE);
 				markerNE.setMap(null);
@@ -447,8 +496,9 @@ var sarselect=sarselect || (function() {
 		//Extract overlayUrl
 		var overlayUrl=extractOverlayUrl(callResults);
 
-		  //Turn off the master overlayer
-		  insarKml.setMap(null);
+		  //Turn off the thumbnail overlayer
+//		  insarKml.setMap(null);
+		  masterMap.overlayMapTypes.removeAt(0);
 		  
 		  //Turn on the new overlayer
 		  activateLayerMap(masterMap,overlayUrl,"line",uid);
@@ -525,6 +575,45 @@ var sarselect=sarselect || (function() {
 				ucerfKml.setMap(null);
 		  }
 	 }
+
+    //The code that reads in the WMS file.  To change the WMS layer the user would update the layers 
+	 //line.  As this is constructed now you need to have this code for each WMS layer.
+	 //Check with your Web Map Server to see what are the required components of the address.  You may 
+	 //need to add a couple of segements.  For example, the ArcServer WMS requires
+	 //a CRS value which is tacked on to the end of the url.  For an example 
+	 //visit http://www.gisdoctor.com/v3/arcserver_wms.html 
+	 function WMSGetTileUrl2(tile, zoom) {
+        var projection = masterMap.getProjection(); //NOTE masterMap is a global var (fix method?)
+        var zpow = Math.pow(2, zoom);
+        var ul = new google.maps.Point(tile.x * 256.0 / zpow, (tile.y + 1) * 256.0 / zpow);
+        var lr = new google.maps.Point((tile.x + 1) * 256.0 / zpow, (tile.y) * 256.0 / zpow);
+        var ulw = projection.fromPointToLatLng(ul);
+        var lrw = projection.fromPointToLatLng(lr);
+        //The user will enter the address to the public WMS layer here.  The data must be in WGS84
+        //var baseURL = "http://demo.cubewerx.com/demo/cubeserv/cubeserv.cgi?";
+		  var baseURL = "http://gf2.ucs.indiana.edu/geoserver/wms?";
+        var version = "1.3.0";
+        var request = "GetMap";
+        var format = "image%2Fpng"; //type of image returned  or image/jpeg
+        //The layer ID.  Can be found when using the layers properties tool in ArcMap or from the WMS settings 
+        var layers = "thumbnails";
+        //projection to display. This is the projection of google map. Don't change unless you know what you are doing.  
+        //Different from other WMS servers that the projection information is called by crs, instead of srs
+        var crs = "EPSG:4326";
+        //With the 1.3.0 version the coordinates are read in LatLon, as opposed to LonLat in previous versions
+        var bbox = ulw.lat() + "," + ulw.lng() + "," + lrw.lat() + "," + lrw.lng();
+        var service = "WMS";
+        //the size of the tile, must be 256x256
+        var width = "256";
+        var height = "256";
+        //Some WMS come with named styles.  The user can set to default.
+        var styles = "";
+        //Establish the baseURL.  Several elements, including &EXCEPTIONS=INIMAGE and &Service are unique to openLayers addresses.
+        var url = baseURL + "Layers=" + layers + "&version=" + version + "&EXCEPTIONS=INIMAGE" + "&Service=" + service + "&request=" + request + "&Styles=" + styles + "&format=" + format + "&CRS=" + crs + "&BBOX=" + bbox + "&width=" + width + "&height=" + height;
+        url = url + "&TRANSPARENT=true"
+		  return url;
+	 }
+	 
 
 	 /**
 	  * Public API for sarselect.js
