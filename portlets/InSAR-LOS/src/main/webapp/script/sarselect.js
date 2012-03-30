@@ -91,7 +91,9 @@ var sarselect=sarselect || (function() {
 				//Remove and add the tiles overlay every time so that the loading message is correct. The
 				//problem is that tilesloaded won't fire after the first time.
 				//This may be dumb.
-				masterMap.overlayMapTypes.removeAt(0);
+				if(masterMap.overlayMapTypes.getLength()>0) {
+					 masterMap.overlayMapTypes.removeAt(0);
+				}
 				masterMap.overlayMapTypes.insertAt(0,wmsMapType);
 				$("#InSAR-Map-Messages").show();
 				$("#InSAR-Map-Messages").html("InSAR Catalog Loading...");
@@ -99,7 +101,9 @@ var sarselect=sarselect || (function() {
 		  google.maps.event.addListener(masterMap,"dragend",function(event) {
 				//These will be hidden again when the "tilesloaded" event fires.
 				console.log("Reload the catalog");
-				masterMap.overlayMapTypes.removeAt(0);
+				if(masterMap.overlayMapTypes.getLength()>0) {
+					 masterMap.overlayMapTypes.removeAt(0);
+				}
 				masterMap.overlayMapTypes.insertAt(0,wmsMapType);
 				$("#InSAR-Map-Messages").show();
 				$("#InSAR-Map-Messages").html("InSAR Catalog Loading...");
@@ -498,7 +502,9 @@ var sarselect=sarselect || (function() {
 
 		  //Turn off the thumbnail overlayer
 //		  insarKml.setMap(null);
-		  masterMap.overlayMapTypes.removeAt(0);
+		  if(masterMap.overlayMapTypes.getLength()>0) {		  
+				masterMap.overlayMapTypes.removeAt(0);
+		  }
 		  
 		  //Turn on the new overlayer
 		  activateLayerMap(masterMap,overlayUrl,"line",uid);
