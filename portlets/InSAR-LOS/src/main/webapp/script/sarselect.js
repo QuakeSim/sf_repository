@@ -78,36 +78,36 @@ var sarselect=sarselect || (function() {
 //		  });
 
 		  //Add a listener for the WMS overlay map while it is loading, give feedback to the user.
-		  $("#InSAR-Map-Messages").show();
-		  $("#InSAR-Map-Messages").html("InSAR Catalog Loading...");
-		  google.maps.event.addListener(wmsMapType,"tilesloaded",function(event) {
-				$("#InSAR-Map-Messages").hide();
-		  });
+//		  $("#InSAR-Map-Messages").show();
+//		  $("#InSAR-Map-Messages").html("InSAR Catalog Loading...");
+//		  google.maps.event.addListener(wmsMapType,"tilesloaded",function(event) {
+//				$("#InSAR-Map-Messages").hide();
+//		  });
 
 		  //Handle zoom and pan events--the tiles will need to be reloaded.
-		  google.maps.event.addListener(masterMap,"zoom_changed",function(event) {
-				//These will be hidden again when the "tilesloaded" event fires.
-				console.log("Reload the catalog");
-				//Remove and add the tiles overlay every time so that the loading message is correct. The
-				//problem is that tilesloaded won't fire after the first time.
-				//This may be dumb.
-				if(masterMap.overlayMapTypes.getLength()>0) {
-					 masterMap.overlayMapTypes.removeAt(0);
-				}
-				masterMap.overlayMapTypes.insertAt(0,wmsMapType);
-				$("#InSAR-Map-Messages").show();
-				$("#InSAR-Map-Messages").html("InSAR Catalog Loading...");
-		  });
-		  google.maps.event.addListener(masterMap,"dragend",function(event) {
-				//These will be hidden again when the "tilesloaded" event fires.
-				console.log("Reload the catalog");
-				if(masterMap.overlayMapTypes.getLength()>0) {
-					 masterMap.overlayMapTypes.removeAt(0);
-				}
-				masterMap.overlayMapTypes.insertAt(0,wmsMapType);
-				$("#InSAR-Map-Messages").show();
-				$("#InSAR-Map-Messages").html("InSAR Catalog Loading...");
-		  });
+//		  google.maps.event.addListener(masterMap,"zoom_changed",function(event) {
+//				//These will be hidden again when the "tilesloaded" event fires.
+//				console.log("Reload the catalog");
+//				//Remove and add the tiles overlay every time so that the loading message is correct. The
+//				//problem is that tilesloaded won't fire after the first time.
+//				//This may be dumb.
+//				if(masterMap.overlayMapTypes.getLength()>0) {
+//					 masterMap.overlayMapTypes.removeAt(0);
+//				}
+//				masterMap.overlayMapTypes.insertAt(0,wmsMapType);
+//				$("#InSAR-Map-Messages").show();
+//				$("#InSAR-Map-Messages").html("InSAR Catalog Loading...");
+//		  });
+//		  google.maps.event.addListener(masterMap,"dragend",function(event) {
+//				//These will be hidden again when the "tilesloaded" event fires.
+//				console.log("Reload the catalog");
+//				if(masterMap.overlayMapTypes.getLength()>0) {
+//					 masterMap.overlayMapTypes.removeAt(0);
+//				}
+//				masterMap.overlayMapTypes.insertAt(0,wmsMapType);
+//				$("#InSAR-Map-Messages").show();
+//				$("#InSAR-Map-Messages").html("InSAR Catalog Loading...");
+//		  });
 
 		  
 		  //Find out where we are when the map is clicked.
@@ -502,9 +502,7 @@ var sarselect=sarselect || (function() {
 
 		  //Turn off the thumbnail overlayer
 //		  insarKml.setMap(null);
-		  if(masterMap.overlayMapTypes.getLength()>0) {		  
-				masterMap.overlayMapTypes.removeAt(0);
-		  }
+		  masterMap.overlayMapTypes.removeAt(0);
 		  
 		  //Turn on the new overlayer
 		  activateLayerMap(masterMap,overlayUrl,"line",uid);
