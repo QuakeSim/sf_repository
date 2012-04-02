@@ -377,6 +377,8 @@
 	}
 
 	function showTS2BtnClick(obj) {
+	   var dataSourceType = '<%=dataSource %>';
+		console.log("Data Source Type: "+dataSourceType);
 		var stationId = selectedStation[0];
 		var lat = "" + selectedStation[1];
 		var lon = "" + selectedStation[2];
@@ -384,22 +386,34 @@
 		var preFix = urlPattern.replace(/{!station-id!}/g, stationId) + "/" + dirPattern.replace(/{!station-id!}/g, stationId) + "/";
 		var dygraphsURL = preFix + dygraphsInputPattern.replace(/{!station-id!}/g, stationId);
 		var dygraphsHtml="<html><body>";
-		 dygraphsHtml+="<div><b>Station ID:</b> "+stationId+" <b>Lat:</b> "+lat+" <b>Lon:</b> "+lon+"<\/div>";
-		 dygraphsHtml+="<br/>";
+		dygraphsHtml+="<div><b>Station ID:</b> "+stationId+" <b>Lat:</b> "+lat+" <b>Lon:</b> "+lon+"<\/div>";
+		dygraphsHtml+="<br/>";
 		dygraphsHtml+="<script src='http://danvk.org/dygraphs/dygraph-combined.js' type='text/javascript'>";
 		dygraphsHtml+="<\/script>";
 		dygraphsHtml+="<script src='"+dygraphsURL+"'><\/script>";
 		dygraphsHtml+="<script src='http://dygraphs.com/tests/data.js'><\/script>";
 		dygraphsHtml+="<div id='plotDiv1' style='width:800px;height:150px'><\/div>";
-		 dygraphsHtml+="<br/>";
+		dygraphsHtml+="<br/>";
 		dygraphsHtml+="<div id='plotDiv2' style='width:800px;height:150px'><\/div>";
-		 dygraphsHtml+="<br/>";
+		dygraphsHtml+="<br/>";
 		dygraphsHtml+="<div id='plotDiv3' style='width:800px;height:150px'><\/div>";
-		dygraphsHtml+="<script type='text/javascript'>";
-		dygraphsHtml+="var plot1=new Dygraph(document.getElementById('plotDiv1'),data_east,{drawPoints:true, strokeWidth:0.0, title:\"Longitude (degrees)\",yAxisLabelWidth:150,sigFigs:14})\;";
-		dygraphsHtml+="var plot2=new Dygraph(document.getElementById('plotDiv2'),data_north,{drawPoints:true, strokeWidth:0.0, title:\"Latitude (degrees)\",yAxisLabelWidth:150,sigFigs:14})\;";
-		dygraphsHtml+="var plot2=new Dygraph(document.getElementById('plotDiv3'),data_up,{drawPoints:true, strokeWidth:0.0,title:\"Height (meters)\", yAxisLabelWidth:150,sigFigs:14})\;";
-		dygraphsHtml+="<\/script>";
+		//Use mm displacements for UNAVCO data types.  Note significant figures change from below
+		if(dataSourceType=='unavcoPboFill' || dataSourceType=='unavcoNucleusFill') {
+		   dygraphsHtml+="<script type='text/javascript'>";
+		   dygraphsHtml+="var plot1=new Dygraph(document.getElementById('plotDiv1'),data_east_disp,{drawPoints:true, strokeWidth:0.0, title:\"East Displacement (m)\",yAxisLabelWidth:150,sigFigs:6})\;";
+		   dygraphsHtml+="var plot2=new Dygraph(document.getElementById('plotDiv2'),data_north_disp,{drawPoints:true, strokeWidth:0.0, title:\"North Displacement (m)\",yAxisLabelWidth:150,sigFigs:6})\;";
+		   dygraphsHtml+="var plot2=new Dygraph(document.getElementById('plotDiv3'),data_up_disp,{drawPoints:true, strokeWidth:0.0,title:\"Height Displacement (m)\", yAxisLabelWidth:150,sigFigs:6})\;";
+		   dygraphsHtml+="<\/script>";
+		}
+		else {
+		   //All other cases, use lat/lon.
+		   dygraphsHtml+="<script type='text/javascript'>";
+			dygraphsHtml+="var plot1=new Dygraph(document.getElementById('plotDiv1'),data_east,{drawPoints:true, strokeWidth:0.0, title:\"Longitude (degrees)\",yAxisLabelWidth:150,sigFigs:14})\;";
+			dygraphsHtml+="var plot2=new Dygraph(document.getElementById('plotDiv2'),data_north,{drawPoints:true, strokeWidth:0.0, title:\"Latitude (degrees)\",yAxisLabelWidth:150,sigFigs:14})\;";
+			dygraphsHtml+="var plot2=new Dygraph(document.getElementById('plotDiv3'),data_up,{drawPoints:true, strokeWidth:0.0,title:\"Height (meters)\", yAxisLabelWidth:150,sigFigs:14})\;";
+			dygraphsHtml+="<\/script>";
+
+		}
 		dygraphsHtml+="<\/body><\/html>";
 
 		 var windowName=stationId+"-Dygraphs";
