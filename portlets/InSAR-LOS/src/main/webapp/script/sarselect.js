@@ -502,7 +502,8 @@ var sarselect=sarselect || (function() {
 
 		  //Turn off the thumbnail overlayer
 //		  insarKml.setMap(null);
-		  masterMap.overlayMapTypes.removeAt(0);
+		  masterMap.overlayMapTypes.clear();
+//		  masterMap.overlayMapTypes.removeAt(0);
 		  
 		  //Turn on the new overlayer
 		  activateLayerMap(masterMap,overlayUrl,"line",uid);
