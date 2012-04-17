@@ -63,52 +63,6 @@ var sarselect=sarselect || (function() {
 		  //Add the overlay to the master map
 		  masterMap.overlayMapTypes.insertAt(0,wmsMapType);
 		  
-		  //Add UAVSAR thumb overlay
-//		  var kmlMapOpts={map:masterMap, suppressInfoWindows:true, preserveViewport:true};
-//		  insarKml=new google.maps.KmlLayer("http://quakesim.usc.edu/uavsar-data/kml/QuakeTables_UAVSAR_lowres.kmz",kmlMapOpts);
-//		  insarKml=new google.maps.KmlLayer("http://quaketables.quakesim.org/kml?uid=all&lowres=1",kmlMapOpts);
-//		  insarKml=new google.maps.KmlLayer("@host.base.url@/quakesim_uavsar.kml",kmlMapOpts);
-//		  insarKml = new google.maps.KmlLayer("http://quaketables.quakesim.org/kml?uid=all&ov=0",kmlMapOpts);
-//		  $("#InSAR-Map-Messages").show();
-//		  $("#InSAR-Map-Messages").html("InSAR Catalog Loading...");
-
-		  //Add a listener for the insarKml map while it is loading.
-//		  google.maps.event.addListener(insarKml,"metadata_changed",function(event) {
-//				$("#InSAR-Map-Messages").hide();
-//		  });
-
-		  //Add a listener for the WMS overlay map while it is loading, give feedback to the user.
-//		  $("#InSAR-Map-Messages").show();
-//		  $("#InSAR-Map-Messages").html("InSAR Catalog Loading...");
-//		  google.maps.event.addListener(wmsMapType,"tilesloaded",function(event) {
-//				$("#InSAR-Map-Messages").hide();
-//		  });
-
-		  //Handle zoom and pan events--the tiles will need to be reloaded.
-//		  google.maps.event.addListener(masterMap,"zoom_changed",function(event) {
-//				//These will be hidden again when the "tilesloaded" event fires.
-//				console.log("Reload the catalog");
-//				//Remove and add the tiles overlay every time so that the loading message is correct. The
-//				//problem is that tilesloaded won't fire after the first time.
-//				//This may be dumb.
-//				if(masterMap.overlayMapTypes.getLength()>0) {
-//					 masterMap.overlayMapTypes.removeAt(0);
-//				}
-//				masterMap.overlayMapTypes.insertAt(0,wmsMapType);
-//				$("#InSAR-Map-Messages").show();
-//				$("#InSAR-Map-Messages").html("InSAR Catalog Loading...");
-//		  });
-//		  google.maps.event.addListener(masterMap,"dragend",function(event) {
-//				//These will be hidden again when the "tilesloaded" event fires.
-//				console.log("Reload the catalog");
-//				if(masterMap.overlayMapTypes.getLength()>0) {
-//					 masterMap.overlayMapTypes.removeAt(0);
-//				}
-//				masterMap.overlayMapTypes.insertAt(0,wmsMapType);
-//				$("#InSAR-Map-Messages").show();
-//				$("#InSAR-Map-Messages").html("InSAR Catalog Loading...");
-//		  });
-
 		  
 		  //Find out where we are when the map is clicked.
 		  google.maps.event.addListener(masterMap,"click",function(event) {
@@ -219,6 +173,8 @@ var sarselect=sarselect || (function() {
 				getInSarValues(uid);
 				showEndpoints();
 
+				setEndPointFormValues();
+
 				// Make markers draggable			 
 				google.maps.event.addListener(markerNE, "drag", function() {
 					 drawLine(insarMap);
@@ -229,10 +185,12 @@ var sarselect=sarselect || (function() {
 
 				google.maps.event.addListener(markerNE, "dragend", function() {
 					 getInSarValues(uid);
+					 setEndPointFormValues();
 					 showEndpoints();
 				});
 				google.maps.event.addListener(markerSW, "dragend", function() {
 					 getInSarValues(uid);
+					 setEndPointFormValues();
 					 showEndpoints();
 				});
 		  }
@@ -618,6 +576,52 @@ var sarselect=sarselect || (function() {
         url = url + "&TRANSPARENT=true"
 		  return url;
 	 }
+
+	 function updateStartLat(){
+		  console.log("Updating the SW marker.");
+		  var newPos=new google.maps.LatLng($("#startLat-value").val(),markerSW.getPosition().lng());
+		  markerSW.setPosition(newPos);
+		  google.maps.event.trigger(markerSW,"drag");
+		  google.maps.event.trigger(markerSW,"dragend");
+	 }
+
+	 function updateStartLon(){
+		  console.log("Updating the SW marker.");
+		  var newPos=new google.maps.LatLng(markerSW.getPosition().lat(),$("#startLon-value").val());
+		  markerSW.setPosition(newPos);
+		  google.maps.event.trigger(markerSW,"drag");
+		  google.maps.event.trigger(markerSW,"dragend");
+	 }
+
+	 function updateEndLat(){
+		  console.log("Updating the NE marker.");
+		  var newPos=new google.maps.LatLng($("#endLat-value").val(),markerNE.getPosition().lng());
+		  markerNE.setPosition(newPos);
+		  google.maps.event.trigger(markerNE,"drag");
+		  google.maps.event.trigger(markerNE,"dragend");
+	 }
+
+	 function updateEndLon(){
+		  console.log("Updating the NE marker.");
+		  var newPos=new google.maps.LatLng(markerNE.getPosition().lat(),$("#endLon-value").val());
+		  markerNE.setPosition(newPos);
+		  google.maps.event.trigger(markerNE,"drag");
+		  google.maps.event.trigger(markerNE,"dragend");
+	 }
+
+
+	 function setEndPointFormValues() {
+		  console.log("Setting endpoint values in the form");
+		  console.log(markerSW.getPosition().lat().toFixed(5));
+		  console.log(markerSW.getPosition().lng().toFixed(5));
+		  console.log(markerNE.getPosition().lat().toFixed(5));
+		  console.log(markerNE.getPosition().lng().toFixed(5));
+
+		  $("#startLat-value").val(markerSW.getPosition().lat().toFixed(5));
+		  $("#startLon-value").val(markerSW.getPosition().lng().toFixed(5));
+		  $("#endLat-value").val(markerNE.getPosition().lat().toFixed(5));
+		  $("#endLon-value").val(markerNE.getPosition().lng().toFixed(5));
+	 }
 	 
 
 	 /**
@@ -637,7 +641,11 @@ var sarselect=sarselect || (function() {
 		  plotAverage:plotAverage,
 		  updateResolution:updateResolution,
 		  updateAveraging:updateAveraging,
-		  toggleFaultKml:toggleFaultKml
+		  toggleFaultKml:toggleFaultKml,
+		  updateStartLat:updateStartLat,
+		  updateStartLon:updateStartLon,
+		  updateEndLat:updateEndLat,
+		  updateEndLon:updateEndLon
 	 }
 	 
 })();
