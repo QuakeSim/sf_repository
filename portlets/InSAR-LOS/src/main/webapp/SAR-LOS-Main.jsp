@@ -65,17 +65,17 @@
 						<tr>
 						  <td>
 						  <b>Start Lat:</b>
-						  <input type="text" name="startLat" id="startLat-value" size="10" value="" onchange="sarselect.updateStartLat()"/>
+						  <input type="text" name="startLat" id="startLat-value" size="8" value="" onchange="sarselect.updateStartLat()"/>
 						  <b>Start Lon:</b>
-						  <input type="text" name="startLon" id="startLon-value" size="10" value="" onchange="sarselect.updateStartLon()"/>
+						  <input type="text" name="startLon" id="startLon-value" size="8" value="" onchange="sarselect.updateStartLon()"/>
 						  </td>
 						</tr>
 						<tr>
 						  <td>
 						  <b>End Lat:</b>
-						  <input type="text" name="endLat" id="endLat-value" size="10" value="" onchange="sarselect.updateEndLat()"/>
+						  <input type="text" name="endLat" id="endLat-value" size="8" value="" onchange="sarselect.updateEndLat()"/>
 						  <b>End Lon:</b>
-						  <input type="text" name="endLon" id="endLon-value" size="10" value="" onchange="sarselect.updateEndLon()"/>
+						  <input type="text" name="endLon" id="endLon-value" size="8" value="" onchange="sarselect.updateEndLon()"/>
 						  </td>
 						</tr>
 						<tr>
