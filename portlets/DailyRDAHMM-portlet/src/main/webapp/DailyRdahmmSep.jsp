@@ -376,6 +376,7 @@
 		newWin.document.close();
 	}
 
+	//TODO: this function is very hard to modify. Need a better way of generating the plot page.
 	function showTS2BtnClick(obj) {
 	   var dataSourceType = '<%=dataSource %>';
 		console.log("Data Source Type: "+dataSourceType);
@@ -398,22 +399,25 @@
 		dygraphsHtml+="<br/>";
 		dygraphsHtml+="<div id='plotDiv3' style='width:800px;height:150px'><\/div>";
 		//Use mm displacements for UNAVCO data types.  Note significant figures change from below
+		dygraphsHtml+="<script type='text/javascript'>";
+		dygraphsHtml+="var graphs=[]\;"
+		dygraphsHtml+="var plot1, plot2, plot3\;";
 		if(dataSourceType=='unavcoPboFill' || dataSourceType=='unavcoNucleusFill') {
-		   dygraphsHtml+="<script type='text/javascript'>";
-		   dygraphsHtml+="var plot1=new Dygraph(document.getElementById('plotDiv1'),data_east_disp,{drawPoints:true, strokeWidth:0.0, title:\"East Displacement (m)\",yAxisLabelWidth:150,sigFigs:6})\;";
-		   dygraphsHtml+="var plot2=new Dygraph(document.getElementById('plotDiv2'),data_north_disp,{drawPoints:true, strokeWidth:0.0, title:\"North Displacement (m)\",yAxisLabelWidth:150,sigFigs:6})\;";
-		   dygraphsHtml+="var plot2=new Dygraph(document.getElementById('plotDiv3'),data_up_disp,{drawPoints:true, strokeWidth:0.0,title:\"Height Displacement (m)\", yAxisLabelWidth:150,sigFigs:6})\;";
-		   dygraphsHtml+="<\/script>";
+		   dygraphsHtml+="plot1=new Dygraph(document.getElementById('plotDiv1'),data_east_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"East Displacement (m)\",yAxisLabelWidth:150,sigFigs:6})\;";
+		   dygraphsHtml+="plot2=new Dygraph(document.getElementById('plotDiv2'),data_north_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"North Displacement (m)\",yAxisLabelWidth:150,sigFigs:6})\;";
+		   dygraphsHtml+="plot3=new Dygraph(document.getElementById('plotDiv3'),data_up_disp,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"Height Displacement (m)\", yAxisLabelWidth:150,sigFigs:6})\;";
 		}
 		else {
 		   //All other cases, use lat/lon.
-		   dygraphsHtml+="<script type='text/javascript'>";
-			dygraphsHtml+="var plot1=new Dygraph(document.getElementById('plotDiv1'),data_east,{drawPoints:true, strokeWidth:0.0, title:\"Longitude (degrees)\",yAxisLabelWidth:150,sigFigs:14})\;";
-			dygraphsHtml+="var plot2=new Dygraph(document.getElementById('plotDiv2'),data_north,{drawPoints:true, strokeWidth:0.0, title:\"Latitude (degrees)\",yAxisLabelWidth:150,sigFigs:14})\;";
-			dygraphsHtml+="var plot2=new Dygraph(document.getElementById('plotDiv3'),data_up,{drawPoints:true, strokeWidth:0.0,title:\"Height (meters)\", yAxisLabelWidth:150,sigFigs:14})\;";
-			dygraphsHtml+="<\/script>";
-
+			dygraphsHtml+="plot1=new Dygraph(document.getElementById('plotDiv1'),data_east,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"Longitude (degrees)\",yAxisLabelWidth:150,sigFigs:14})\;";
+			dygraphsHtml+="plot2=new Dygraph(document.getElementById('plotDiv2'),data_north,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"Latitude (degrees)\",yAxisLabelWidth:150,sigFigs:14})\;";
+			dygraphsHtml+="plot3=new Dygraph(document.getElementById('plotDiv3'),data_up,{drawPoints:true, strokeWidth:0.0, zoomCallback:zoomCallback, title:\"Height (meters)\", yAxisLabelWidth:150,sigFigs:14})\;";
 		}
+		dygraphsHtml+="graphs.push(plot1)\;";
+		dygraphsHtml+="graphs.push(plot2)\;";
+		dygraphsHtml+="graphs.push(plot3)\;";
+		dygraphsHtml+="function zoomCallback(minDate,maxDate){for (var i=0\;i<graphs.length\;i++){graphs[i].updateOptions({dateWindow:[minDate,maxDate]})}}\;";
+		dygraphsHtml+="<\/script>";
 		dygraphsHtml+="<\/body><\/html>";
 
 		 var windowName=stationId+"-Dygraphs";
