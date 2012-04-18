@@ -344,7 +344,7 @@ public class RunautomatedDisloc implements Job {
 	protected void createProjectsFromRss(String url) {		
 			
 		 //First, parse the RSS feed using our custom parser class.
-		 //TODO: propably parse() should just be a static method that returns the Entry list.
+		 //TODO: probably parse() should just be a static method that returns the Entry list.
 		CglGeoRssParser cgrp = new CglGeoRssParser();
 		cgrp.parse(url);		
 		List <Entry> entry_list = cgrp.getEntryList();
@@ -1963,58 +1963,5 @@ public class RunautomatedDisloc implements Job {
 		  return bbox;
 		  
 	 }
-
-	 /**
-	  * TODO: this method is deprecated.
-	  * 
-	  * This creates Disloc project beans for each entry name in the 
-	  * ArrayList. In practice, it will create four projects for each
-	  * earthquake entry in the RSS feed.
-	  * 
-	  * Note this assumes this service and the associated client
-	  * (from RssDisloc3) are using the same file system.  
-	  *
-	  * TODO: The requirement that the client and server share
-	  * a file system is bad design and needs to be rethought. Also the
-	  * pattern "overm5" is used as a magic string in both
-	  * the service and client webapps.
-	  *
-	  * TODO: What is the heck is this method doing anyway? It creates a bunch of
-	  * empty DislocProjectBeans.
-	  */
-	// protected void createProject(ArrayList <String> arrayList) {
-		
-	// 	ObjectContainer db = null;		
-	// 	File projectDir = new File(getContextBasePath());
-		
-	// 	if (!projectDir.exists()){
-	// 		 projectDir.mkdirs();
-	// 	}
-		
-	// 	try {			
-	// 		 //REVIEW: "over5" name pattern is a magic string and should be moved to a
-	// 		 //system property.
-	// 		db = Db4o.openFile(getContextBasePath() + "/overm5_temp.db");
-			
-	// 		//REVIEW: are the next two lines necessary?
-	// 		DislocProjectBean tmp = new DislocProjectBean();
-	// 		ObjectSet results = db.get(DislocProjectBean.class);
-
-	// 		for (int nA = 0 ; nA < arrayList.size() ; nA++) {
-	// 			// Create a new project. This may be overwritten later
-	// 			DislocProjectBean currentProject = new DislocProjectBean();
-	// 			currentProject.setProjectName(arrayList.get(nA));
-	// 			db.set(currentProject);				
-	// 		}
-	// 		logger.info("[RunautomatedDisloc/createProject] finished");
-	// 		db.commit();
-	// 	} catch (Exception e) {			
-	// 		 logger.error("[RunautomatedDisloc/createProject] " + e.getMessage());
-	// 	}
-	// 	finally {
-	// 		if (db != null)  db.close();			
-	// 	}
-	// }
-
 
 }
