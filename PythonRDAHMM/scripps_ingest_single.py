@@ -1,21 +1,24 @@
 #!/usr/bin/python
 #==========================================================================
-# Ingest a given scripps dataset into the corresponding database. 
+# Ingest a given scripps dataset into the corresponding databases. 
 # To be invoked by the overall scripps_ingest.py using subprocess, 
 # destination data directory and temporary working directory are hard-coded.
 #
 # input: path to the original scripps tar file; 
-# output: corresponding sqlite db file with all data ingested; 
+# output: corresponding overall sqlite db file with all data ingested;
+#   as well as duplicate-filled sqlite db file for individual stations 
 #
 # usage:
 #   scripps_ingest_single.py /path/to/download/scripps_data.tar
 #
 # output:
 #   /path/to/rdahmm/scripps_data.sqlite
+#   /path/to/rdahmm/stationID.sqlite
 #===========================================================================
 import os, sys, string, re
 import sqlite3 as db
 from datetime import date
+from datetime import timedelta
 
 numargv = len(sys.argv)
 if numargv == 1:
@@ -87,8 +90,29 @@ for datafile in dirlist:
         os.system(cmd)
         datafile = datafile[:-2]
         stationID = datafile[:4]
+
+        station_dbfile = datadir + stationID + ".sqlite"
+        if os.path.isfile(station_dbfile):
+            print "deleting old station database"
+            os.remove(station_dbfile)
+        station_conn = db.connect(station_dbfile)
+        station_cur = station_conn.cursor()
+        station_sql ="""CREATE TABLE StationGPSTimeSeries (
+                      North Num,
+                      East Num,
+                      Up  Num,
+                      Nsig Num,
+                      Esig Num, 
+                      Usig Num,
+                      Timestamp TEXT,
+                      Interploated INT Default 0,
+                      UNIQUE(Timestamp))"""
+        station_cur.execute(station_sql)
+        station_conn.commit()
+
     with open(workdir + datafile, 'r') as f:
         data = f.readlines()
+        last_line = ""
         for line in data:
             if "Reference position" in line:
                 refs = map(float, re.findall("(-?[0-9.]*[0-9]+)", line))
@@ -106,10 +130,35 @@ for datafile in dirlist:
                 sql = "INSERT INTO GPSTimeSeries (StationID, North, East, Up, Nsig, Esig, Usig, Timestamp) "
                 sql += " VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (stationID, north, east, up, nsig, esig, usig, timestamp)
                 cur.execute(sql)
+                
+                if last_line == "":
+                    last_line = line
+                else:
+                    last_record = string.split(last_line)
+                    [year, days] = map(int, last_record[1:3])
+                    last_timestamp = date.fromordinal(date(year,1,1).toordinal()+days -1)
+                    [lnorth, least, lup, lnsig, lesig, lusig] = last_record[3:9]
+                    # if missing days from last to current, fill with last
+                    for i in range(1, (timestamp - last_timestamp).days):
+                        ts = last_timestamp + timedelta(days=i)
+                        interploated = 1
+                        station_sql = "INSERT INTO StationGPSTimeSeries (North, East, Up, Nsig, Esig, Usig, Timestamp, Interploated) "
+                        station_sql += " VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (lnorth, least, lup, lnsig, lesig, lusig, ts, interploated)
+                        station_cur.execute(station_sql)
+
+                    station_sql = "INSERT INTO StationGPSTimeSeries (North, East, Up, Nsig, Esig, Usig, Timestamp) "
+                    station_sql += " VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (north, east, up, nsig, esig, usig, timestamp)
+                    station_cur.execute(station_sql)
+                    last_line = line
+
+    station_conn.commit()
     conn.commit()
     f.closed
+    station_cur.close()
+    station_conn.close()
+    #insert duplicates for missing days in the station database
 
-    # create index 
+# create index 
 sql = "CREATE INDEX idx_StationID ON GPSTimeSeries(StationID)"
 cur.execute(sql)
 sql = "CREATE INDEX idx_Timestamp ON GPSTimeSeries(Timestamp)"
