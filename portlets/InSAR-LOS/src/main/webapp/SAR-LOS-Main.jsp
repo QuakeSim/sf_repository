@@ -90,17 +90,28 @@
 						</tr>
 						<tr>
 						  <td>
+							 <input type="hidden" name="plotmethod" value="native"> <!-- Remove this later-->
+							 </td>
+								<!--
+									 <td>
 							 <b>Plot Method:</b>
 							 <input type="radio" name="plotmethod" id="native-method" value="native" checked="true" onclick="sarselect.plotNative()"/>native
 							 <input type="radio" name="plotmethod" id="average-method" value="average" onclick="sarselect.plotAverage()"/>average
+
 						  </td>
 						  <td align="right">
 							 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							 <img id="plotMethodImg" src="images/question_mark.png" width="15" height="15"/>
 						  </td>
+							 -->
 						</tr>
+						
 						<tr>
 						  <td>
+							 <input type="hidden" id="averaging-value" name="averaging" value="10"> <!-- Remove this when averaging works-->
+							 </td>
+								<!--
+								<td>
 							 <b>Averaging Radius:</b> 
 							 <input type="text" name="averaging" id="averaging-value" size="5" value="10" onchange="sarselect.updateAveraging()" disabled="false"/>
 						  </td>
@@ -108,6 +119,7 @@
 							 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							 <img id="averagingInfoImg" src="images/question_mark.png"  width="15" height="15"/>
 						  </td>
+						  -->
 						</tr>
 					 </table>
 				  </div>
