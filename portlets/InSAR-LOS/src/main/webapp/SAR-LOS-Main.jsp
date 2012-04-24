@@ -99,7 +99,6 @@
 							 <img id="plotMethodImg" src="images/question_mark.png" width="15" height="15"/>
 						  </td>
 						</tr>
-						<!--
 						<tr>
 						  <td>
 							 <b>Averaging Radius:</b> 
@@ -110,7 +109,6 @@
 							 <img id="averagingInfoImg" src="images/question_mark.png"  width="15" height="15"/>
 						  </td>
 						</tr>
-						-->
 					 </table>
 				  </div>
 				</f:verbatim>
