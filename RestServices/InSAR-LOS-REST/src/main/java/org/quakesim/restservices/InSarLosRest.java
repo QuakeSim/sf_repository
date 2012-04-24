@@ -110,8 +110,8 @@ public class InSarLosRest {
 												  
 												  try {
 														losOutputResponse="Distance (km), Displacement\n";
-														losOutputResponse+="#"+lat0+","+lon0+"\n";
-														losOutputResponse+="#"+lat1+","+lon1+"\n";
+														losOutputResponse+="#start,"+lat0+","+lon0+"\n";
+														losOutputResponse+="#end,"+lat1+","+lon1+"\n";
 														url=new URL(urlToCall);
 														connect=(HttpURLConnection)url.openConnection();
 														readResponse=new BufferedReader(new InputStreamReader(connect.getInputStream()));
