@@ -112,6 +112,8 @@ public class InSarHgtRest {
 												  
 												  try {
 														outputResponse="Distance (km), Height\n";
+														outputResponse+="#start,"+lat0+","+lon0+"\n";
+														outputResponse+="#end,"+lat1+","+lon1+"\n";
 														url=new URL(urlToCall);
 														connect=(HttpURLConnection)url.openConnection();
 														readResponse=new BufferedReader(new InputStreamReader(connect.getInputStream()));
