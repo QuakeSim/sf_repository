@@ -20,7 +20,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.UriInfo;
 
 
-@Path("/insarlos/{format}/{uid}/{resolution}/{lon0}/{lat0}/{lon1}/{lat1}/{method}/{averaging}")
+@Path("/insarlos/{format}/{uid}/{resolution}/{lon0}/{lat0}/{lon1}/{lat1}/{method}/{averaging}/{rpiName}")
 public class InSarLosRest {
 	 private static final String IMAGE="image=InSAR:";
 	 private static final String UID="uid";
@@ -42,6 +42,7 @@ public class InSarLosRest {
 	 private double lat0, lon0, lat1, lon1;
 	 private int uid;
 	 private String outputFormat;
+	 private String rpiName;
 	 private String losOutputResponse=null;
 
 	 protected final Logger logger=LoggerFactory.getLogger(getClass());
@@ -52,6 +53,7 @@ public class InSarLosRest {
 		  lat1=32.8296310667; 
 		  lon1=-115.335307904;
 		  outputFormat=CSV;
+		  rpiName="TEST";
 	 }
 	 
 	 /**
@@ -70,6 +72,7 @@ public class InSarLosRest {
 	 public int getUid() { return this.uid; }
 	 public String getLosOutputResponse() { return this.losOutputResponse; }
 	 public String getOutputFormat() { return this.outputFormat; }
+	 public String getRpiName() { return this.rpiName; }
 	 
 	 public void setLon0(double lon0) { this.lon0=lon0; }
 	 public void setLon1(double lon1) { this.lon1=lon1; }
@@ -77,6 +80,7 @@ public class InSarLosRest {
 	 public void setLat1(double lat1) { this.lat1=lat1; }
 	 public void setUid(int uid) { this.uid=uid; }
 	 public void setOutputFormat(String outputFormat) { this.outputFormat=outputFormat; }
+	 public void setRpiName(String rpiName) { this.rpiName=rpiName; }
 	 public void setLosOutputResponse(String losOutputResponse) { this.losOutputResponse=losOutputResponse; }
 	 
 	 /**
@@ -92,7 +96,8 @@ public class InSarLosRest {
 											 @PathParam("lon0") double lon0,
 											 @PathParam("lat0") double lat0,
 											 @PathParam("lon1") double lon1,
-											 @PathParam("lat1") double lat1) 
+											 @PathParam("lat1") double lat1,
+                                  @PathParam("rpiName") String rpiName) 
 											 throws Exception {
 												  
 												  String losOutputResponse=null;
@@ -110,6 +115,7 @@ public class InSarLosRest {
 												  
 												  try {
 														losOutputResponse="Distance (km), Displacement\n";
+														losOutputResponse+="#"+rpiName+"\n";
 														losOutputResponse+="#start,"+lat0+","+lon0+"\n";
 														losOutputResponse+="#end,"+lat1+","+lon1+"\n";
 														url=new URL(urlToCall);

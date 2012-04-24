@@ -22,7 +22,7 @@ import javax.ws.rs.core.UriInfo;
 //TODO: Note we make the averaging parameter value required but it is only used if the method
 //parameter is average.
 
-@Path("/insarhgt/{format}/{uid}/{resolution}/{lon0}/{lat0}/{lon1}/{lat1}/{method}/{averaging}")
+@Path("/insarhgt/{format}/{uid}/{resolution}/{lon0}/{lat0}/{lon1}/{lat1}/{method}/{averaging}/{rpiName}")
 public class InSarHgtRest {
 	 private static final String IMAGE="image=InSAR:";
 	 private static final String UID="uid";
@@ -44,6 +44,7 @@ public class InSarHgtRest {
 	 private int uid;
 	 private String outputFormat;
 	 private String hgtOutputResponse=null;
+	 private String rpiName;
 
 	 protected final Logger logger=LoggerFactory.getLogger(getClass());
 	 
@@ -53,6 +54,7 @@ public class InSarHgtRest {
 		  lat1=32.8296310667; 
 		  lon1=-115.335307904;
 		  outputFormat=CSV;
+		  rpiName="TEST";
 	 }
 	 
 	 /**
@@ -71,6 +73,7 @@ public class InSarHgtRest {
 	 public int getUid() { return this.uid; }
 	 public String getHgtOutputResponse() { return this.hgtOutputResponse; }
 	 public String getOutputFormat() { return this.outputFormat; }
+	 public String getRpiName() { return this.rpiName; }
 	 
 	 public void setLon0(double lon0) { this.lon0=lon0; }
 	 public void setLon1(double lon1) { this.lon1=lon1; }
@@ -78,6 +81,7 @@ public class InSarHgtRest {
 	 public void setLat1(double lat1) { this.lat1=lat1; }
 	 public void setUid(int uid) { this.uid=uid; }
 	 public void setOutputFormat(String outputFormat) { this.outputFormat=outputFormat; }
+	 public void setRpiName(String rpiName) { this.rpiName=rpiName; }
 	 public void setHgtOutputResponse(String hgtOutputResponse) { this.hgtOutputResponse=hgtOutputResponse; }
 	 
 
@@ -94,7 +98,8 @@ public class InSarHgtRest {
 											 @PathParam("lon0") double lon0,
 											 @PathParam("lat0") double lat0,
 											 @PathParam("lon1") double lon1,
-											 @PathParam("lat1") double lat1) 
+											 @PathParam("lat1") double lat1,
+                                  @PathParam("rpiName") String rpiName) 
 											 throws Exception {
 												  
 												  String outputResponse=null;
@@ -112,6 +117,7 @@ public class InSarHgtRest {
 												  
 												  try {
 														outputResponse="Distance (km), Height\n";
+														outputResponse+="#"+rpiName+"\n";
 														outputResponse+="#start,"+lat0+","+lon0+"\n";
 														outputResponse+="#end,"+lat1+","+lon1+"\n";
 														url=new URL(urlToCall);

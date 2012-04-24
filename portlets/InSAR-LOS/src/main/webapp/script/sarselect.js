@@ -14,6 +14,7 @@ var sarselect=sarselect || (function() {
 	 var rowSelected=null;
 	 var lowResSARLayer=null;
 	 var uid=null;  //This is global because we need to pass it between two unrelated functions. Not good.
+	 var rpiName=null;
 	 var dygraph1, dygraph2;
 	 var wmsMapType=null;
 
@@ -92,7 +93,7 @@ var sarselect=sarselect || (function() {
 	 }
 
 	 //Activates the low-res insar layer for LOS display.
-	 function activateLayerMap(insarMap,overlayUrl,drawFunctionType,uid) {
+	 function activateLayerMap(insarMap,overlayUrl,drawFunctionType,uid,rpiName) {
 		  //Remove the drag and zoom listeners on the master map.
 		  $("#InSAR-Map-Messages").hide();
 		  google.maps.event.clearListeners(masterMap,"dragend");
@@ -141,7 +142,7 @@ var sarselect=sarselect || (function() {
 					 rectangleLeftClick(insarMap,event);
 				}
 				else if(drawFunctionType=="line") {
-					 lineLeftClick(insarMap,event,uid);
+					 lineLeftClick(insarMap,event,uid,rpiName);
 				}
 				else {
 					 alert("Invalid draw method provided. Should be either 'line', 'polygon', or 'rectangle'. Using 'rectangle' by default.");
@@ -150,7 +151,7 @@ var sarselect=sarselect || (function() {
 		  });
 	 }
     
-	 function lineLeftClick(insarMap,event,uid) {
+	 function lineLeftClick(insarMap,event,uid,rpiName) {
 		  $("#Plot-Parameters").show();
 
 		  $("#Left-Column-Under-Map").show();
@@ -170,7 +171,7 @@ var sarselect=sarselect || (function() {
 															title: "Starting point of LOS measurements",
 															draggable: true});
 		  		drawLine(insarMap);
-				getInSarValues(uid);
+				getInSarValues(uid,rpiName);
 				showEndpoints();
 
 				setEndPointFormValues();
@@ -184,12 +185,12 @@ var sarselect=sarselect || (function() {
 				});
 
 				google.maps.event.addListener(markerNE, "dragend", function() {
-					 getInSarValues(uid);
+					 getInSarValues(uid,rpiName);
 					 setEndPointFormValues();
 					 showEndpoints();
 				});
 				google.maps.event.addListener(markerSW, "dragend", function() {
-					 getInSarValues(uid);
+					 getInSarValues(uid,rpiName);
 					 setEndPointFormValues();
 					 showEndpoints();
 				});
@@ -317,7 +318,8 @@ var sarselect=sarselect || (function() {
 		  polyShape.setMap(insarMap);
 		}
 
-	 function getInSarValues(uid) {
+	 function getInSarValues(uid,rpiName) {
+		  console.log(rpiName);
 		  var resolution=$("#resolution-value").val();
 		  var averaging=$("#averaging-value").val();
 		  var method="native";
@@ -327,17 +329,17 @@ var sarselect=sarselect || (function() {
 		  else {
 				method="native";
 		  }
-		  getLosInSarValues(uid,resolution,method,averaging);
-		  getHgtInSarValues(uid,resolution,method,averaging);
+		  getLosInSarValues(uid,resolution,method,averaging,rpiName);
+		  getHgtInSarValues(uid,resolution,method,averaging,rpiName);
 	 }
 	 
-	 function getLosInSarValues(uid,resolution,method,averaging) {
+	 function getLosInSarValues(uid,resolution,method,averaging,rpiName) {
 		  var westMarkerLat=markerSW.getPosition().lat();
 		  var westMarkerLon=markerSW.getPosition().lng();
 		  var eastMarkerLat=markerNE.getPosition().lat();
 		  var eastMarkerLon=markerNE.getPosition().lng();
 		  
-		  var restUrl="/InSAR-LOS-REST/insarlos/csv/"+uid+"/"+resolution+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat+"/"+method+"/"+averaging;
+		  var restUrl="/InSAR-LOS-REST/insarlos/csv/"+uid+"/"+resolution+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat+"/"+method+"/"+averaging+"/"+rpiName;
 
 		  var csv=$.ajax({
 				url:restUrl,
@@ -354,13 +356,13 @@ var sarselect=sarselect || (function() {
 		  });
 	 }
 
-	 function getHgtInSarValues(uid,resolution,method,averaging) {
+	 function getHgtInSarValues(uid,resolution,method,averaging,rpiName) {
 		  var westMarkerLat=markerSW.getPosition().lat();
 		  var westMarkerLon=markerSW.getPosition().lng();
 		  var eastMarkerLat=markerNE.getPosition().lat();
 		  var eastMarkerLon=markerNE.getPosition().lng();
 
-		  var restUrl="/InSAR-LOS-REST/insarhgt/csv/"+uid+"/"+resolution+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat+"/"+method+"/"+averaging;
+		  var restUrl="/InSAR-LOS-REST/insarhgt/csv/"+uid+"/"+resolution+"/"+westMarkerLon+"/"+westMarkerLat+"/"+eastMarkerLon+"/"+eastMarkerLat+"/"+method+"/"+averaging+"/"+rpiName;
 
 		  var csv=$.ajax({
 				url:restUrl,
@@ -448,6 +450,7 @@ var sarselect=sarselect || (function() {
 	     //Find the ID of the row
 		  //var uid=extractRowId2(row);
 		  uid=extractRowId2(row);
+		  rpiName=extractRowRpiName(row);
 
 		  //Construct the link to QuakeTables and turn on the display.
 		  $("#QuakeTables-Link").html('<p/><a target="_blank" href="http://quakesim.usc.edu/quaketables/uavsar.jsp?uid='+uid+'">Go to download page for selected data set</a>');
@@ -464,7 +467,7 @@ var sarselect=sarselect || (function() {
 //		  masterMap.overlayMapTypes.removeAt(0);
 		  
 		  //Turn on the new overlayer
-		  activateLayerMap(masterMap,overlayUrl,"line",uid);
+		  activateLayerMap(masterMap,overlayUrl,"line",uid,rpiName);
 		  
 		  $("#Instructions").html("Now click the map to plot a line.  Move the end points to set the plot.");
 	 }
@@ -483,6 +486,15 @@ var sarselect=sarselect || (function() {
 	 //the row id attribute has been set to the image uid value.
 	 function extractRowId2(row) {
 		  return row.getAttribute('id');
+	 }
+
+	 function extractRowRpiName(row) {
+		  var td=row.firstChild;
+		  var table2=td.firstChild;
+		  var thOfTable2=((table2.firstChild).firstChild).firstChild;
+		  var productName=thOfTable2.firstChild.nodeValue;
+		  console.log(productName);
+		  return productName;
 	 }
 
 	 //This is an obsolete method for extracting the image uid.  It assumes
@@ -508,7 +520,7 @@ var sarselect=sarselect || (function() {
 	 function plotNative() {
 		  //Disable the "averaging" input field.
 		  $("#averaging-value").attr('disabled',true);
-		  getInSarValues(uid);
+		  getInSarValues(uid,rpiName);
 	 }
 
 	 //This is a dangerous pattern: UID is a global variable set by a separate function
@@ -517,15 +529,15 @@ var sarselect=sarselect || (function() {
 	 function plotAverage(){
 		  //Enable the "averaging" input field.
 		  $("#averaging-value").attr('disabled',false);
-		  getInSarValues(uid);
+		  getInSarValues(uid,rpiName);
 	 }
 
 	 function updateResolution() {
-		  getInSarValues(uid);
+		  getInSarValues(uid,rpiName);
 	 }
 
 	 function updateAveraging() {
-		  getInSarValues(uid);
+		  getInSarValues(uid,rpiName);
 	 }
 	 
 	 //TODO: Note that masterMap and insarMap are synonymous.  Not clear why we need both names.
@@ -611,12 +623,6 @@ var sarselect=sarselect || (function() {
 
 
 	 function setEndPointFormValues() {
-		  console.log("Setting endpoint values in the form");
-		  console.log(markerSW.getPosition().lat().toFixed(5));
-		  console.log(markerSW.getPosition().lng().toFixed(5));
-		  console.log(markerNE.getPosition().lat().toFixed(5));
-		  console.log(markerNE.getPosition().lng().toFixed(5));
-
 		  $("#startLat-value").val(markerSW.getPosition().lat().toFixed(5));
 		  $("#startLon-value").val(markerSW.getPosition().lng().toFixed(5));
 		  $("#endLat-value").val(markerNE.getPosition().lat().toFixed(5));
