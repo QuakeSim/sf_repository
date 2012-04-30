@@ -1,0 +1,6 @@
+# wget command to download SCRIPPS data with striped directory structures, 
+# which puts everything under WesternNorthAmerica of current working directory.
+wget --user=anonymous --password='yuma@indiana.edu' -r -nH --cut-dirs=4 --no-parent --reject "index.html*" http://garner.ucsd.edu/pub/timeseries/measures/ats/WesternNorthAmerica/
+
+# simple wget for the list of all stations.
+wget --user=anonymous --password='yuma@indiana.edu' http://garner.ucsd.edu/pub/timeseries/measures/ats/WNAMsites

@@ -19,6 +19,7 @@ import os, sys, string, re
 import sqlite3 as db
 from datetime import date
 from datetime import timedelta
+from properties import properties
 
 numargv = len(sys.argv)
 if numargv == 1:
@@ -29,10 +30,12 @@ elif numargv == 2:
 else:
     sys.exit("Invalid number of parameters!")
 
-rdahmm_path = "/home/yuma/RDAHMM/Data/"
-temp_path = "/home/yuma/RDAHMM/TEMP/"
+#rdahmm_path = "/home/yuma/RDAHMM/Data/"
+#temp_path = "/home/yuma/RDAHMM/TEMP/"
+data_path = properties('data_path')
+temp_path = properties('temp_path')
 
-datadir = rdahmm_path + tarfile[:tarfile.rfind("_")] + "/"
+datadir = data_path + tarfile[:tarfile.rfind("_")] + "/"
 dbfile = datadir + tarfile[:-4] + ".sqlite"
 workdir = temp_path + tarfile[:tarfile.rfind("_")] + "/"
 #print datadir, dbfile
