@@ -63,7 +63,16 @@ public class InSarHgtRest {
 	  */
 	 protected String processHgtLine(String line) {
 		  String[] splitLine=line.split(",");
-		  return splitLine[splitLine.length-2]+","+splitLine[splitLine.length-1];
+		  String returnString="";
+		  //This is the usual case.
+		  if(splitLine.length==4) {
+				returnString=splitLine[2]+","+splitLine[3];
+		  }
+		  //Sometimes a value at the particular point is missing, so use an empty value.
+		  else if(splitLine.length==3) {
+				returnString=splitLine[2]+","+" ";
+		  }
+		  return returnString;
 	 }
 	 
 	 public double getLon0() { return this.lon0; }
