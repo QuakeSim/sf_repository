@@ -2,7 +2,8 @@
 #==========================================================================
 # Ingest a given scripps dataset into the corresponding databases. 
 # To be invoked by the overall scripps_ingest.py using subprocess, 
-# destination data directory and temporary working directory are hard-coded.
+# destination data directory and temporary working directory are defined in
+# properties.
 #
 # input: path to the original scripps tar file; 
 # output: corresponding overall sqlite db file with all data ingested;

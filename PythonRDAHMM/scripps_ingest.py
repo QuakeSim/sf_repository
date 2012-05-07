@@ -1,8 +1,8 @@
 #!/usr/bin/python
 #==========================================================================
 # Ingest all scripps datasets downloaded into proper directories and databases
-# Original download directory path is hard-coded. Use subprocess to invoke
-# multiple scripps_ingest_single.py for parallel processing
+# Original download directory path is defined in properties. Use subprocess to 
+# invoke multiple scripps_ingest_single.py for parallel processing
 #
 # usage: scripps_ingest.py
 #
