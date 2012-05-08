@@ -25,6 +25,7 @@ import os, sys, string
 import sqlite3 as db
 import datetime, csv
 from properties import properties
+import zipfile
 
 numargv = len(sys.argv)
 if numargv == 1:
@@ -109,5 +110,15 @@ for station in os.listdir(model_path):
     #print rdahmm_eval_cmd
     #os.system can be replaced with other non-blocking invocation method.
     os.system(rdahmm_eval_cmd)
-  
+
+    # start to produce plotting related files
+    # 1. zip file of the model results if not already exists
+    modelzip = eval_path + "daily_project_" + stationID  + ".zip"
+    if not os.path.exists(modelzip):
+        modelname = "daily_project_" + stationID + "/"
+        myzip = zipfile.ZipFile(modelzip, 'w')
+        for filename in os.listdir(model_path+modelname):
+            myzip.write(filename, modelname+filename, zipfile.ZIP_DEFLATED)
+        myzip.close()
+    # 2. 
     sys.exit(0)

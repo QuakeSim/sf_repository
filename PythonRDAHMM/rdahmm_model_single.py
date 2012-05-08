@@ -111,7 +111,7 @@ for dbfile in glob.glob(data_path+"/????.sqlite"):
     rdahmm_model_parm = string.replace(rdahmm_model_parm, "<dimensionCount>", dimensionCount) 
     rdahmm_model_cmd = rdahmm_bin + " " + rdahmm_model_parm
     #print rdahmm_model_cmd
-    #os.system can be replaced with other non-blocking invocation method.
+    # os.system can be replaced with other non-blocking invocation method.
     os.system(rdahmm_model_cmd)
   
     sys.exit(0)
