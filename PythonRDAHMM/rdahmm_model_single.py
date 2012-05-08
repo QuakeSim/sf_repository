@@ -9,13 +9,12 @@
 # a) All data should be trained for at least 3 years. 
 # b) Data with < 3 years should also be processed, 
 #    but user is warned that these are trained on insufficient data.  
-# c) Data > 3 years should trained up to Dec 31, 2011 or today's date, 
-#    which ever is longer. 
+# c) Data > 3 years should trained up to Dec 31, 2011.
 # d) Data with < 3 years should be trained on all the available data.  
 # e) We will need to retrain data < 3 years old every week.
 # f) We will need to let the user know the training period for all data 
-#    and when the data training period is changed 
-#    (if we change--say, years from now)
+#    and when the data training period is changed, and archive previous 
+#    results. 
 #
 # input: scripps dataset name, e.g WNAM_Clean_DetrendNeuTimeSeries_comb
 # output: RDAHMM input files and modeling results for each station
@@ -28,8 +27,7 @@
 #===========================================================================
 import os, sys, string, re, glob
 import sqlite3 as db
-from datetime import date
-from datetime import timedelta
+import datetime
 from properties import properties
 
 numargv = len(sys.argv)
@@ -57,18 +55,24 @@ for dbfile in glob.glob(data_path+"/????.sqlite"):
         os.system(cmd)
     # use station model directory as current working directory
     os.chdir(stationDir)
+    # copy station dbfile to the model directory for archiving purpose
+    cmd = "cp -p " + dbfile + " ."
+    os.system(cmd)
+    stationdb = stationDir + stationID + ".sqlite"
 
     # connect to the station database to generate training data file
-    conn = db.connect(dbfile)
+    conn = db.connect(stationdb)
     cur = conn.cursor()
     # check if there's more than 3 years of data by end of train_epoch 
-    sql ="SELECT count(*) FROM StationGPSTimeSeries WHERE Timestamp <= '" + train_epoch + "'"
-    modelcounts = cur.execute(sql).fetchone()[0]
-    if (modelcounts < 365*3):
-        sql = "SELECT MAX(Timestamp) FROM StationGPSTimeSeries"
-        end_epoch = cur.execute(sql).fetchone()[0]
-    else:
-        end_epoch = train_epoch
+    # if yes, model ends on defined train_epoch, otherwise use all available
+    # data for model run
     sql = "SELECT MIN(Timestamp) FROM StationGPSTimeSeries"
     start_epoch = cur.execute(sql).fetchone()[0]
+    end_epoch = train_epoch
+    start = datetime.datetime(*map(int, string.split(start_epoch, "-")))
+    end = datetime.datetime(*map(int, string.split(end_epoch, "-")))
+    if (end - start) < datetime.timedelta(days=(3*365)):
+        sql = "SELECT MAX(Timestamp) FROM StationGPSTimeSeries"
+        end_epoch = cur.execute(sql).fetchone()[0]
+    print start_epoch, end_epoch
     sys.exit(0)
