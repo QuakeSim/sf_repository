@@ -1,0 +1,12 @@
+dailyRdahmm.model.cmd.pattern=<rdahmmDir>/rdahmm -data <inputFile> -T <dataCount
+> -D <dimensionCount> -N 5 -output_type gauss -anneal -annealfactor 1.1 -betamin
+ 0.1 -regularize -omega 0 0 1 1.0e-6 -ntries 10 -seed 1234
+dailyRdahmm.evaluate.cmd.pattern=<rdahmmDir>/rdahmm -data <proBaseName>.all.inpu
+t -T <dataCount> -D <dimensionCount> -N 5 -output_type gauss -A <modelBaseName>.
+A -B <modelBaseName>.B -pi <modelBaseName>.pi -minvalfile <modelBaseName>.minval
+ -maxvalfile <modelBaseName>.maxval -rangefile <modelBaseName>.range -eval
+dailyRdahmm.evaluate2.cmd.pattern=<rdahmmDir>/rdahmm -data <proBaseName>.all.inp
+ut -T <dataCount> -D <dimensionCount> -N 5 -output_type gauss -A <modelBaseName>
+.A -B <modelBaseName>.B -pi <modelBaseName>.pi -minvalfile <modelBaseName>.minva
+l -maxvalfile <modelBaseName>.maxval -rangefile <modelBaseName>.range -eval -add
+state

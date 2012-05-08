@@ -129,7 +129,8 @@ for datafile in dirlist:
             if not "#" in line:
                 record = string.split(line)
                 [year, days] = map(int, record[1:3])
-                timestamp = date.fromordinal(date(year,1,1).toordinal()+days -1)
+	        # days is counted starting from 0
+                timestamp = date.fromordinal(date(year,1,1).toordinal()+days)
                 [north, east, up, nsig, esig, usig] = record[3:9]
                 sql = "INSERT INTO GPSTimeSeries (StationID, North, East, Up, Nsig, Esig, Usig, Timestamp) "
                 sql += " VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (stationID, north, east, up, nsig, esig, usig, timestamp)
@@ -140,7 +141,8 @@ for datafile in dirlist:
                 else:
                     last_record = string.split(last_line)
                     [year, days] = map(int, last_record[1:3])
-                    last_timestamp = date.fromordinal(date(year,1,1).toordinal()+days -1)
+	            # days is counted starting from 0
+                    last_timestamp = date.fromordinal(date(year,1,1).toordinal()+days)
                     [lnorth, least, lup, lnsig, lesig, lusig] = last_record[3:9]
                     # if missing days from last to current, fill with last
                     for i in range(1, (timestamp - last_timestamp).days):
@@ -149,11 +151,11 @@ for datafile in dirlist:
                         station_sql = "INSERT INTO StationGPSTimeSeries (North, East, Up, Nsig, Esig, Usig, Timestamp, Interploated) "
                         station_sql += " VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (lnorth, least, lup, lnsig, lesig, lusig, ts, interploated)
                         station_cur.execute(station_sql)
-
-                    station_sql = "INSERT INTO StationGPSTimeSeries (North, East, Up, Nsig, Esig, Usig, Timestamp) "
-                    station_sql += " VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (north, east, up, nsig, esig, usig, timestamp)
-                    station_cur.execute(station_sql)
                     last_line = line
+
+                station_sql = "INSERT INTO StationGPSTimeSeries (North, East, Up, Nsig, Esig, Usig, Timestamp) "
+                station_sql += " VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (north, east, up, nsig, esig, usig, timestamp)
+                station_cur.execute(station_sql)
 
     station_conn.commit()
     conn.commit()
