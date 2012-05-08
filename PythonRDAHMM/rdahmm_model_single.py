@@ -37,7 +37,7 @@ from properties import properties
 
 numargv = len(sys.argv)
 if numargv == 1:
-    sys.exit("usage: scripps_ingest_single.py scripps_dataset_name")
+    sys.exit("usage: rdahmm_model_single.py scripps_dataset_name")
 elif numargv == 2:
     dataset = sys.argv[1]
 else:
