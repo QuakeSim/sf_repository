@@ -107,7 +107,8 @@ for station in os.listdir(model_path):
     rdahmm_eval_parm = string.replace(rdahmm_eval_parm, "<modelBaseName>", modelBaseName) 
     rdahmm_eval_cmd = rdahmm_bin + " " + rdahmm_eval_parm
     #print rdahmm_eval_cmd
-    #os.system can be replaced with other non-blocking invocation method.
+    # os.system can be replaced with other non-blocking invocation method 
+    # for parallelism of individual stations.
     os.system(rdahmm_eval_cmd)
 
     # start to produce plotting related files
@@ -134,7 +135,23 @@ for station in os.listdir(model_path):
         newrows.append(newrow)
     csvWriter.writerows(newrows)
     del csvWriter
-    
+    # 4. required .plotswf.input file for plotting, again silly   
+    plotswffile = stationDir + "daily_project_" + stationID + "_" + today + ".plotswf.input"
+    allQfile = stationDir + "daily_project_" + stationID + "_" + today + ".all.Q"
+    with open(allQfile, 'r') as qfile:
+        qrows = qfile.read()
+    qfile.close
+    qrows = string.split(qrows)
+
+    csvWriter = csv.writer(open(plotswffile, 'w'), delimiter = ' ')
+    newrows = []
+    for i in range(len(rows)):
+        newrow = list(rows[i])
+        newrow.insert(0, qrows[i])
+        newrows.append(newrow)
+    csvWriter.writerows(newrows)
+    del csvWriter
+ 
     cur.close()
     conn.close()
     sys.exit(0)
