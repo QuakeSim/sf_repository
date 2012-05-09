@@ -38,7 +38,7 @@ The .Q file is renamed/copied to .all.Q for plotting conventions.
 
 To Do:
    - Generate overall state change XML and txt files of a given dataset, 
-required by plotting functions.
+required by plotting functions. Consider reuse existing Java implementation. 
    - Set up cron schedule for dataset download and evaluation. This takes some
 thoughts on directory structures on a production machine. All adjustment can be
 done by modifying corresponding path in properties.py.

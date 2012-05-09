@@ -29,6 +29,8 @@
 #         which was used to generate daily_project_stationID.input
 #       - daily_project_stationID.input.[start|end]time specifying model
 #         training range
+#       - daily_project_stationID.input.ref specifying station reference 
+#         location
 #===========================================================================
 import os, sys, string, glob
 import sqlite3 as db
@@ -48,6 +50,10 @@ model_path = properties('model_path') + "/" + dataset + "/"
 train_epoch = properties('train_epoch')
 rdahmm_bin = properties('rdahmm_bin')
 rdahmm_model_parm = properties('rdahmm_model_parm')
+
+datasetdb = glob.glob(data_path+dataset+"*.sqlite")[0]
+datasetconn = db.connect(datasetdb)
+datasetcur = datasetconn.cursor()
 
 if not os.path.exists(model_path):
     cmd = "mkdir -p " + model_path
@@ -104,6 +110,14 @@ for dbfile in glob.glob(data_path+"/????.sqlite"):
         f.write(end_epoch)
     f.close
    
+    # generate a .ref file for station lat, lon, height reference value.
+    sql = "SELECT Latitude, Longitude, Height FROM ReferencePositions WHERE StationID == '" + stationID + "'"
+    ref = datasetcur.execute(sql).fetchone()
+    reffile = modelfile + ".ref"
+    csvWriter = csv.writer(open(reffile, 'w'), delimiter = ' ')
+    csvWriter.writerow(ref)
+    del csvWriter
+
     # execute RDAHMM model command with properly replaced parameters
     dimensionCount = "3"
     rdahmm_model_parm = string.replace(rdahmm_model_parm, "<inputFile>", modelfile)
@@ -113,5 +127,8 @@ for dbfile in glob.glob(data_path+"/????.sqlite"):
     #print rdahmm_model_cmd
     # os.system can be replaced with other non-blocking invocation method.
     os.system(rdahmm_model_cmd)
-  
+
     sys.exit(0)
+
+datasetcur.close()
+datasetconn.close()

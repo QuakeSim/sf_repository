@@ -15,11 +15,6 @@
 #
 # output:
 #   /path/to/rdahmm/eval/daily_project_stationID_eval_date/*
-#   Besides rdahmm evaluation result files: 
-#       - stationID.sqlite is copied from scripps ingested data directory, 
-#         which was used to generate daily_project_stationID.input
-#       - daily_project_stationID.input.[start|end]time specifying model
-#         training range
 #===========================================================================
 import os, sys, string 
 import sqlite3 as db
@@ -134,7 +129,7 @@ for station in os.listdir(model_path):
     cmd = "cp -p " + proBaseName + ".Q " + proBaseName + ".all.Q"
     os.system(cmd)
     # 3. required .all.raw file for plot_go.sh, this is pretty silly
-    sql = "SELECT Timestamp, North, East, Up, Nsig, Esig, Usig FROM StationGPSTimeSeries ORDER BY Timestamp ASC" 
+    sql = "SELECT Timestamp, North, East, Up, Nsig, Esig, Usig, Interploated FROM StationGPSTimeSeries ORDER BY Timestamp ASC" 
     rows = cur.execute(sql).fetchall()
     rawfile = stationDir + "daily_project_" + stationID + "_" + today + ".all.raw"
     csvWriter = csv.writer(open(rawfile, 'w'), delimiter = ' ')
@@ -142,7 +137,11 @@ for station in os.listdir(model_path):
     for row in rows:
         newrow = list(row)
         newrow.insert(0, stationID)
-        newrows.append(newrow)
+        if newrow[-1] == 0:
+            newrow[1] = newrow[1] + "T12:00:00"
+        else:
+            newrow[1] = newrow[1] + "T22:22:22"
+        newrows.append(newrow[:-1])
     csvWriter.writerows(newrows)
     del csvWriter
     # 4. required .plotswf.input file for plotting, again silly   
@@ -158,7 +157,7 @@ for station in os.listdir(model_path):
     for i in range(len(rows)):
         newrow = list(rows[i])
         newrow.insert(0, qrows[i])
-        newrows.append(newrow)
+        newrows.append(newrow[:-1])
     csvWriter.writerows(newrows)
     del csvWriter
  
