@@ -10,6 +10,7 @@ def properties(key):
     V['download_path']="/home/yuma/RDAHMM/Download/"  
     V['script_path']="/home/yuma/PythonRDAHMM/"
     V['data_path']="/home/yuma/RDAHMM/Data/"
+    # temp_path is the temporary working directory for ingesting raw data
     V['temp_path']="/home/yuma/RDAHMM/TEMP/"
     V['model_path']="/home/yuma/RDAHMM/Model/"
     V['eval_path']="/home/yuma/RDAHMM/Eval/"

@@ -1,0 +1,54 @@
+This directory contains data processing, RDAHMM modeling and evaluation workflow
+for SCRIPPS dataset available at:
+http://garner.ucsd.edu/pub/timeseries/measures/ats/WesternNorthAmerica/
+
+Each step consists of 2 scripts: 
+    - [scripps_ingest|rdahmm_model|rdahmm_eval]_single.py processes a given
+    dataset/tarball;
+    - [scripps_ingest|rdahmm_model|rdahmm_eval].py invokes corresponding 
+    _single.py script in Threads to process all datasets in parallel
+
+crondownload contains wget command to download all tar balls from SCRIPPS 
+site with striped directory structures.
+
+rdahmmcmd is copied from QuakeSim2 setup showing how to use rdahmm binary. 
+
+properties.py defines global variables that can be adjusted for user setup. 
+
+The prototype is developed and tested under gf16.ucs.indiana.edu:/home/yuma. 
+
+Basic workflow:
+   - For each downloaded tarball (i.e. dataset), create a corresponding dataset
+directory (e.g. WNAM_Clean_DetrendNeuTimeSeries_comb). 
+   - All raw data are ingested into a SQLite database named after corresponding
+tar ball (e.g. WNAM_Clean_DetrendNeuTimeSeries_comb_20120421.sqlite)
+   - In addition, a SQLite db is created for each station (e.g zoa1.sqlite), 
+containing time series of a given station, missing valued filled wth duplicates.
+   - RDAHMM modeling and evaluation are based on individual station databases
+of a given dataset. 
+   - Modeling uses data up to train_epoch (2011-12-31) defined in properties.py,
+unless it's less than 3 years (365*3) of data, in which case all available data
+are used.
+   - Modeling start and end time are recorded respectively in 
+	daily_project_stationID.input.[start|end]time
+This record can be used for data re-train later on. 
+   - In evaluation, if the result daily_project_stationID_eval-date.Q file 
+contains 0, rdahmm_eval_cmd is re-run with additional "-addstate" parameter.
+The .Q file is renamed/copied to .all.Q for plotting conventions. 
+
+To Do:
+   - Generate overall state change XML and txt files of a given dataset, 
+required by plotting functions.
+   - Set up cron schedule for dataset download and evaluation. This takes some
+thoughts on directory structures on a production machine. All adjustment can be
+done by modifying corresponding path in properties.py.
+   - Need to be careful on how to replace the existing evaluation results with
+the latest one without interrupting data availability through web interface.
+   - May need a script to periodically retrain datasets that have 
+	daily_project_stationID.input.endtime
+newer than train_epoch, i.e. didn't have enough data during the original train.
+   - Existing plotting functions may be out of date, some produce errors on
+gf16, whose gnuplot library is 5 years newer than gf13. rdahmm_eval_single.py 
+currently has a section at the end to generate silly files just to accommodate
+existing plotting conventions, it needs to be updated when plotting method
+changes down the road.  
