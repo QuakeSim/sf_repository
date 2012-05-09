@@ -84,7 +84,7 @@ for dbfile in glob.glob(data_path+"/????.sqlite"):
     #print start_epoch, end_epoch
 
     # generate model input file using all data up to end_epoch
-    sql = "SELECT North, East, Up FROM StationGPSTimeSeries WHERE Timestamp <= '" + end_epoch + "'"
+    sql = "SELECT North, East, Up FROM StationGPSTimeSeries WHERE Timestamp <= '" + end_epoch + "' ORDER BY Timestamp ASC"
     rows = cur.execute(sql).fetchall()
     dataCount = str(len(rows))
     modelfile = stationDir + "daily_project_" + stationID + ".input"

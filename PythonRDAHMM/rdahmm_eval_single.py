@@ -72,31 +72,30 @@ for station in os.listdir(model_path):
     conn = db.connect(stationdb)
     cur = conn.cursor()
     # record start and end time of current evaluation
-    sql = "SELECT MIN(Timestamp) FROM StationGPSTimeSeries"
-    start_epoch = cur.execute(sql).fetchone()[0]
-    sql = "SELECT MAX(Timestamp) FROM StationGPSTimeSeries"
-    end_epoch = cur.execute(sql).fetchone()[0]
+    # sql = "SELECT MIN(Timestamp) FROM StationGPSTimeSeries"
+    # start_epoch = cur.execute(sql).fetchone()[0]
+    # sql = "SELECT MAX(Timestamp) FROM StationGPSTimeSeries"
+    # end_epoch = cur.execute(sql).fetchone()[0]
 
     # generate eval input file using all data up to date
-    sql = "SELECT North, East, Up FROM StationGPSTimeSeries" 
+    sql = "SELECT North, East, Up FROM StationGPSTimeSeries ORDER BY Timestamp ASC" 
     rows = cur.execute(sql).fetchall()
     dataCount = str(len(rows))
     evalfile = stationDir + "daily_project_" + stationID + "_" + today + ".all.input"
     csvWriter = csv.writer(open(evalfile, 'w'), delimiter = ' ')
     csvWriter.writerows(rows)
-    cur.close()
-    conn.close()
     del csvWriter
 
+    # following is commented out, since it's handled by plotting part
     # write start and end time of current evaluation in files
-    startfile = evalfile + ".starttime"
-    endfile = evalfile + ".endtime"
-    with (open(startfile, 'w')) as f:
-        f.write(start_epoch)
-    f.close
-    with (open(endfile, 'w')) as f:
-        f.write(end_epoch)
-    f.close
+    # startfile = evalfile + ".starttime"
+    # endfile = evalfile + ".endtime"
+    # with (open(startfile, 'w')) as f:
+    #    f.write(start_epoch)
+    # f.close
+    # with (open(endfile, 'w')) as f:
+    #     f.write(end_epoch)
+    # f.close
    
     # execute RDAHMM model command with properly replaced parameters
     dimensionCount = "3"
@@ -120,5 +119,22 @@ for station in os.listdir(model_path):
         for filename in os.listdir(model_path+modelname):
             myzip.write(filename, modelname+filename, zipfile.ZIP_DEFLATED)
         myzip.close()
-    # 2. 
+    # 2. eval result .Q file is renamed (use copy here for now) to .all.Q
+    cmd = "cp -p " + proBaseName + ".Q " + proBaseName + ".all.Q"
+    os.system(cmd)
+    # 3. required .all.raw file for plot_go.sh, this is pretty silly
+    sql = "SELECT Timestamp, North, East, Up, Nsig, Esig, Usig FROM StationGPSTimeSeries ORDER BY Timestamp ASC" 
+    rows = cur.execute(sql).fetchall()
+    rawfile = stationDir + "daily_project_" + stationID + "_" + today + ".all.raw"
+    csvWriter = csv.writer(open(rawfile, 'w'), delimiter = ' ')
+    newrows = []
+    for row in rows:
+        newrow = list(row)
+        newrow.insert(0, stationID)
+        newrows.append(newrow)
+    csvWriter.writerows(newrows)
+    del csvWriter
+    
+    cur.close()
+    conn.close()
     sys.exit(0)
