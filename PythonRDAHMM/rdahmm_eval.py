@@ -1,22 +1,18 @@
 #!/usr/bin/python
 #==========================================================================
-# Execute rdahmm modeling for all ingested scripps datasets.
-# Use subprocess to invoke multiple rdahmm_model_single.py for 
+# Execute rdahmm evaluation for all ingested scripps datasets.
+# Use subprocess to invoke multiple rdahmm_eval_single.py for 
 # parallel processing
 #
-# usage: rdahmm_model.py
+# usage: rdahmm_eval.py
 #
 #===========================================================================
-import os, glob, subprocess, sys
+import os, subprocess, sys
 from threading import Thread
 from properties import properties
-#import time
 
-#scripps_data = "/home/yuma/RDAHMM/Download/WesternNorthAmerica/*.tar"
-scripps_data = properties('download_path') + "/WesternNorthAmerica/*.tar"
-scripps_cmd = properties('script_path') + "/scripps_ingest_single.py"
-#print scripps_data, scripps_cmd
-#sys.exit(0)
+model_path = properties('model_path') 
+eval_cmd = properties('script_path') + "/rdahmm_eval_single.py"
 
 class ThreadJob(Thread):
 
@@ -25,8 +21,7 @@ class ThreadJob(Thread):
         self.dataset = dataset
 
     def run(self):
-        #cmd = "/home/yuma/RDAHMM/Scripts/scripps_ingest_single.py"
-        cmd = scripps_cmd
+        cmd = eval_cmd
         # start = time.time()
         print "+++Starting process ", dataset, " ..."
         p = subprocess.Popen([cmd, self.dataset], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -36,6 +31,6 @@ class ThreadJob(Thread):
             print p.stderr        
         print "+++Finished process ", dataset
 
-for dataset in glob.glob(scripps_data):
+for dataset in os.listdir(model_path):
     t = ThreadJob(dataset)
     t.start()

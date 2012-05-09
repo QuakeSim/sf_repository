@@ -108,9 +108,19 @@ for station in os.listdir(model_path):
     rdahmm_eval_cmd = rdahmm_bin + " " + rdahmm_eval_parm
     #print rdahmm_eval_cmd
     # os.system can be replaced with other non-blocking invocation method 
-    # for parallelism of individual stations.
+    # for parallelism of individual stations, but synchronization will get
+    # much more complicated.
     os.system(rdahmm_eval_cmd)
-
+    # check if results .Q file contains 0, if yes rerun with -addstate option
+    qfile = proBaseName + ".Q"
+    with open(qfile, 'r') as qf:
+        qlines = qf.read()
+        if "0" in qlines:
+            rdahmm_eval_cmd = rdahmm_eval_cmd + " -addstate"
+            #print rdahmm_eval_cmd
+            os.system(rdahmm_eval_cmd)
+    qf.close
+ 
     # start to produce plotting related files
     # 1. zip file of the model results if not already exists
     modelzip = eval_path + "daily_project_" + stationID  + ".zip"
