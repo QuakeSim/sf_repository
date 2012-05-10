@@ -58,4 +58,7 @@ newer than train_epoch, i.e. didn't have enough data during the original train.
 gf16, whose gnuplot library is 5 years newer than gf13. rdahmm_eval_single.py 
 currently has a section at the end to generate silly files just to accommodate
 existing plotting conventions, it needs to be updated when plotting method
-changes down the road.  
+changes down the road.
+
+Notes:
+  - Looks like the initial train of the complete dataset can take a week or so.
