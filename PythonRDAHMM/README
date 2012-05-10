@@ -39,6 +39,13 @@ The .Q file is renamed/copied to .all.Q for plotting conventions.
 To Do:
    - Generate overall state change XML and txt files of a given dataset, 
 required by plotting functions. Consider reuse existing Java implementation. 
+Per Xiaoming's note, we can write a standalone Java program that scans the 
+evaluation result directory ("eval_path"), use .all.Q and .all.raw file for
+each station of a given dataset, reuse following functions to generate XML:
+	- writeResToXML(), addResToXMLDoc(), addElePattern(), 
+	makeAllStationInput(), addStateChangeNum(), saveStateChangeNums(), 
+	plotStateChangeNums() in the DailyRDAHMMThread class
+	- makeFlatInputFile() in the DailyRDAHMMStation class
    - Set up cron schedule for dataset download and evaluation. This takes some
 thoughts on directory structures on a production machine. All adjustment can be
 done by modifying corresponding path in properties.py.

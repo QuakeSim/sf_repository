@@ -128,7 +128,7 @@ for dbfile in glob.glob(data_path+"/????.sqlite"):
     # os.system can be replaced with other non-blocking invocation method.
     os.system(rdahmm_model_cmd)
 
-    sys.exit(0)
+    #sys.exit(0)
 
 datasetcur.close()
 datasetconn.close()

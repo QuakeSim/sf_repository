@@ -163,4 +163,4 @@ for station in os.listdir(model_path):
  
     cur.close()
     conn.close()
-    sys.exit(0)
+    #sys.exit(0)
