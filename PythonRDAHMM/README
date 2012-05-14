@@ -62,3 +62,8 @@ changes down the road.
 
 Notes:
   - Looks like the initial train of the complete dataset can take a week or so.
+gf16.ucs.indiana.edu:/home/yuma/RDAHMM/Model/ results can be used to save time.
+  - checking_missing_data.py script looks for any time series that exists in 
+data_path but not in the corresponding model and evaluation path. It can be used
+to identify additional datasets to be individually processed without redo the 
+complete model run. 
