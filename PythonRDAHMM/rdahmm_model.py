@@ -32,5 +32,8 @@ class ThreadJob(Thread):
         print "+++Finished process ", dataset
 
 for dataset in os.listdir(data_path):
+    if "Strain" in dataset:
+        continue
+#    print dataset
     t = ThreadJob(dataset)
     t.start()
