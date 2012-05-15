@@ -10,6 +10,8 @@ model_path = properties('model_path')
 eval_path = properties('eval_path')
 
 for dataset in os.listdir(data_path):
+    if "Strain" in dataset:
+        continue
     src = data_path + "/" + dataset + "/"
     for dbfile in glob.glob(src +"/????.sqlite"):
         stationID = string.split(dbfile, "/")[-1][:-7]
