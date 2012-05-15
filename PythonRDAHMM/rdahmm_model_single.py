@@ -36,6 +36,7 @@ import os, sys, string, glob
 import sqlite3 as db
 import datetime, csv
 from properties import properties
+import subprocess
 
 numargv = len(sys.argv)
 if numargv == 1:
@@ -49,7 +50,6 @@ data_path = properties('data_path') + "/" + dataset + "/"
 model_path = properties('model_path') + "/" + dataset + "/"
 train_epoch = properties('train_epoch')
 rdahmm_bin = properties('rdahmm_bin')
-rdahmm_model_parm = properties('rdahmm_model_parm')
 
 datasetdb = glob.glob(data_path+dataset+"*.sqlite")[0]
 datasetconn = db.connect(datasetdb)
@@ -61,17 +61,19 @@ if not os.path.exists(model_path):
 
 for dbfile in glob.glob(data_path+"/????.sqlite"):
     stationID = string.split(dbfile, "/")[-1][:-7]
-    # print stationID
+    #print stationID
     stationDir = model_path + "daily_project_" + stationID + "/"
     if not os.path.exists(stationDir):
         cmd = "mkdir -p " + stationDir
         os.system(cmd)
     # use station model directory as current working directory
     os.chdir(stationDir)
+    #print os.getcwd()
     # copy station dbfile to the model directory for archiving purpose
     cmd = "cp -p " + dbfile + " ."
     os.system(cmd)
     stationdb = stationDir + stationID + ".sqlite"
+    #print stationdb
 
     # connect to the station database to generate training data file
     conn = db.connect(stationdb)
@@ -120,6 +122,7 @@ for dbfile in glob.glob(data_path+"/????.sqlite"):
 
     # execute RDAHMM model command with properly replaced parameters
     dimensionCount = "3"
+    rdahmm_model_parm = properties('rdahmm_model_parm')
     rdahmm_model_parm = string.replace(rdahmm_model_parm, "<inputFile>", modelfile)
     rdahmm_model_parm = string.replace(rdahmm_model_parm, "<dataCount>", dataCount)
     rdahmm_model_parm = string.replace(rdahmm_model_parm, "<dimensionCount>", dimensionCount) 
@@ -127,7 +130,9 @@ for dbfile in glob.glob(data_path+"/????.sqlite"):
     #print rdahmm_model_cmd
     # os.system can be replaced with other non-blocking invocation method.
     os.system(rdahmm_model_cmd)
+    #subprocess.check_call(string.split(rdahmm_model_cmd))
 
+    #print "==============="
     #sys.exit(0)
 
 datasetcur.close()

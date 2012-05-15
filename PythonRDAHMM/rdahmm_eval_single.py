@@ -34,7 +34,6 @@ data_path = properties('data_path') + "/" + dataset + "/"
 model_path = properties('model_path') + "/" + dataset + "/"
 eval_path = properties('eval_path') + "/" + dataset + "/"
 rdahmm_bin = properties('rdahmm_bin')
-rdahmm_eval_parm = properties('rdahmm_eval_parm')
 
 today = datetime.date.today().isoformat()
 
@@ -96,6 +95,7 @@ for station in os.listdir(model_path):
     dimensionCount = "3"
     proBaseName = "daily_project_" + stationID + "_" + today
     modelBaseName = "daily_project_" + stationID
+    rdahmm_eval_parm = properties('rdahmm_eval_parm')
     rdahmm_eval_parm = string.replace(rdahmm_eval_parm, "<proBaseName>", proBaseName)
     rdahmm_eval_parm = string.replace(rdahmm_eval_parm, "<dataCount>", dataCount)
     rdahmm_eval_parm = string.replace(rdahmm_eval_parm, "<dimensionCount>", dimensionCount) 
