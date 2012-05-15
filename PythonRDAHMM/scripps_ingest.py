@@ -37,5 +37,8 @@ class ThreadJob(Thread):
         print "+++Finished process ", dataset
 
 for dataset in glob.glob(scripps_data):
+    if "Strain" in dataset:
+        continue
+    #print dataset
     t = ThreadJob(dataset)
     t.start()

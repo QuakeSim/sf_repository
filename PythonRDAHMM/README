@@ -67,3 +67,5 @@ gf16.ucs.indiana.edu:/home/yuma/RDAHMM/Model/ results can be used to save time.
 data_path but not in the corresponding model and evaluation path. It can be used
 to identify additional datasets to be individually processed without redo the 
 complete model run. 
+  - *StrainNeuTimeSeries* contains bad formatted station files, exclude them 
+from processing for now. Emailed Mindy at SCRIPPS to report issues. 
