@@ -18,7 +18,7 @@ for dataset in os.listdir(data_path):
         model_dest = model_path + "/" + dataset + "/" + "daily_project_" + stationID + "/*.Q"
         eval_dest = eval_path + "/" + dataset + "/" + "daily_project_" + stationID + "*"
         #if not os.path.exists(model_dest):
-        #if glob.glob(model_dest) == []:
-        #    print model_dest
+        if glob.glob(model_dest) == []:
+            print model_dest
         if glob.glob(eval_dest) == []:
             print eval_dest
