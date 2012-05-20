@@ -69,3 +69,5 @@ to identify additional datasets to be individually processed without redo the
 complete model run. 
   - *StrainNeuTimeSeries* contains bad formatted station files, exclude them 
 from processing for now. Emailed Mindy at SCRIPPS to report issues. 
+  - Once trained with data up to 2011-12-31, evaluation runs of the complete
+dataset is pretty fast, took less than an hour.
