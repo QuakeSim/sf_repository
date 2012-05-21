@@ -207,7 +207,7 @@ var sarselect=sarselect || (function() {
 		  var d2r=Math.PI/180.0;
 		  var dlon=(neLon-swLon)*d2r;
 		  var y=Math.sin(dlon)*Math.cos(neLat*d2r);
-		  var x=Math.cos(swLat*d2r)*Math.sin(neLat*d2r)-Math.sin(swLat*d2r)*Math.cos(swLat*d2r)*Math.cos(dlon);
+		  var x=Math.cos(swLat*d2r)*Math.sin(neLat*d2r)-Math.sin(swLat*d2r)*Math.cos(neLat*d2r)*Math.cos(dlon);
 		  var azimuth=Math.atan2(y,x)/d2r;
 		  azimuth=azimuth.toFixed(1);
 
