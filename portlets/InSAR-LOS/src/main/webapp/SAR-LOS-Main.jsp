@@ -188,7 +188,6 @@
 	 show: 'mouseover',
 	 hide: 'mouseout'
 	 });
-
   </script>
 </body>
 </html>
