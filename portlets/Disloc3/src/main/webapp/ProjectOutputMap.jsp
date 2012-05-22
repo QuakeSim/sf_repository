@@ -85,6 +85,7 @@
 			  });
 			  });
 		  var projectResultsDiv=new GMap2(document.getElementById("projectResultsDiv"));
+		  projectResultsDiv.addControl(new GScaleControl());				  
 		  //This is a not very good workaround to just fade the insar overlay.
 		  var projectFaultKml="@host.base.url@@artifactId@/QuakeTables_CGS_2002.kml";
 		  var projectDislocOutput=document.getElementById("DislocDisplayProjectResults:myDislocOutput");

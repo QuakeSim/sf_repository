@@ -78,7 +78,7 @@ var calculators=calculators || (function() {
 		  console.log(lonEnd.value+" "+lonStart.value+" "+latEnd.value+" "+latStart.value);				
 		  xdiff=(lonEnd.value-lonStart.value)*theFactor;
 		  ydiff=(latEnd.value-latStart.value)*111.32;
-		  console.log("Sqrt:"+Math.sqrt(xdiff*xdiff-ydiff*ydiff));
+		  console.log("Sqrt:"+Math.sqrt(xdiff*xdiff+ydiff*ydiff));
 		  lengthValue=Math.sqrt(xdiff*xdiff+ydiff*ydiff);
 		  length.value=Math.round(lengthValue*1000.0)/1000.0;
 		  console.log("xdiff, ydiff, length:"+xdiff+" "+ydiff+" "+length.value);

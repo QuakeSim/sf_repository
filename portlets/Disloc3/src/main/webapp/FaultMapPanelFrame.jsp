@@ -132,6 +132,7 @@
 	faultMap.setCenter(new GLatLng(35.0,-118.5),6);
 	faultMap.addControl(new GLargeMapControl());
 	faultMap.addControl(new GMapTypeControl());
+	faultMap.addControl(new GScaleControl());
 
 	var faultdrawing = document.getElementById("faultKMLSelectorForm:dflab2");
 	faultdrawing.checked = false;
