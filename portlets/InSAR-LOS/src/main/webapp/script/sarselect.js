@@ -17,6 +17,7 @@ var sarselect=sarselect || (function() {
 	 var rpiName=null;
 	 var dygraph1, dygraph2;
 	 var wmsMapType=null;
+	 var faultWmsMapType=null;
 	 var azimuth;
 	 var losLength;
 
@@ -50,7 +51,7 @@ var sarselect=sarselect || (function() {
 		  var myOpts={zoom:6, scaleControl:true, center: latlng, mapTypeId: google.maps.MapTypeId.TERRAIN};
 		  masterMap=new google.maps.Map(insarMapDiv, myOpts);
 
-		  //Create the WMS overlay
+		  //Create the WMS overlay for the UAVSAR tiles
 		  var wmsOptions= {
             alt: "GeoServer",
             getTileUrl: WMSGetTileUrl2,
@@ -120,7 +121,7 @@ var sarselect=sarselect || (function() {
 		  //Add fault overlay (UCERF 2.4)
 //		  var ucerfMapOpts={map:masterMap, preserveViewport:true};
 //		  ucerfKml=new google.maps.KmlLayer("@host.base.url@/InSAR-LOS/kml//QuakeTables_UCERF_2.4.kml",ucerfMapOpts);
-		  ucerfKml.setMap(masterMap);
+//		  ucerfKml.setMap(masterMap);
 
 		  //Display the fault toggling checkbox
 		  $("#FaultToggler").show();
@@ -429,6 +430,20 @@ var sarselect=sarselect || (function() {
 		  masterMap.overlayMapTypes.clear();
 //		  masterMap.overlayMapTypes.removeAt(0);
 		  
+		  //Add the fault layer
+		  var faultWmsOptions= {
+            alt: "GeoServer2",
+            getTileUrl: faultsWMSGetTileUrl,
+            isPng: true,
+            maxZoom: 17,
+            minZoom: 6,
+            name: "Geoserver2",
+            tileSize: new google.maps.Size(256, 256),
+            credit: 'Image Credit: QuakeSim'
+		  };
+		  faultWmsMapType=new google.maps.ImageMapType(faultWmsOptions);
+
+		  masterMap.overlayMapTypes.insertAt(0,faultWmsMapType);
 		  //Turn on the new overlayer
 		  activateLayerMap(masterMap,overlayUrl,"line",uid,rpiName);
 		  
@@ -548,7 +563,43 @@ var sarselect=sarselect || (function() {
         var styles = "";
         //Establish the baseURL.  Several elements, including &EXCEPTIONS=INIMAGE and &Service are unique to openLayers addresses.
         var url = baseURL + "Layers=" + layers + "&version=" + version + "&EXCEPTIONS=INIMAGE" + "&Service=" + service + "&request=" + request + "&Styles=" + styles + "&format=" + format + "&CRS=" + crs + "&BBOX=" + bbox + "&width=" + width + "&height=" + height;
-        url = url + "&TRANSPARENT=true"
+        url = url + "&TRANSPARENT=true";
+		  return url;
+	 }
+	 
+	 //This code is used to display the fault layers
+	 //TODO: just repeats the code for the UAVSAR tiles. We need to combine these.
+	 	 function faultsWMSGetTileUrl(tile, zoom) {
+        var projection = masterMap.getProjection(); //NOTE masterMap is a global var (fix method?)
+        var zpow = Math.pow(2, zoom);
+        var ul = new google.maps.Point(tile.x * 256.0 / zpow, (tile.y + 1) * 256.0 / zpow);
+        var lr = new google.maps.Point((tile.x + 1) * 256.0 / zpow, (tile.y) * 256.0 / zpow);
+        var ulw = projection.fromPointToLatLng(ul);
+        var lrw = projection.fromPointToLatLng(lr);
+        //The user will enter the address to the public WMS layer here.  The data must be in WGS84
+		  var baseURL = "http://gf2.ucs.indiana.edu/geoserver/wms?";
+        var version = "1.1.0";
+        var request = "GetMap";
+        var format = "image%2Fpng"; //type of image returned  or image/jpeg
+        //The layer ID.  Can be found when using the layers properties tool in ArcMap or from the WMS settings 
+        var layers = "InSAR:fault";
+        //projection to display. This is the projection of google map. Don't change unless you know what you are doing.  
+        //Different from other WMS servers that the projection information is called by crs, instead of srs
+        var crs = "EPSG:4326";
+        //With the 1.3.0 version the coordinates are read in LatLon, as opposed to LonLat in previous versions
+//        var bbox = ulw.lat() + "," + ulw.lng() + "," + lrw.lat() + "," + lrw.lng();
+        var bbox = ulw.lng() + "," + ulw.lat() + "," + lrw.lng() + "," + lrw.lat();
+        var service = "WMS";
+        //the size of the tile, must be 256x256
+        var width = "256";
+        var height = "256";
+        //Some WMS come with named styles.  The user can set to default.
+        var styles = "";
+        //Establish the baseURL.  Several elements, including &EXCEPTIONS=INIMAGE and &Service are unique to openLayers addresses.
+        var url = baseURL + "Layers=" + layers + "&version=" + version + "&EXCEPTIONS=INIMAGE" + "&Service=" + service + "&request=" + request + "&Styles=" + styles + "&format=" + format + "&CRS=" + crs + "&BBOX=" + bbox + "&width=" + width + "&height=" + height;
+			  url = url + "&TRANSPARENT=true";
+			  
+			  console.log("Fault layer url:",url);
 		  return url;
 	 }
 
