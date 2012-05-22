@@ -15,7 +15,7 @@
 	 <h:panelGrid id="mapsAndCrap" columns="2" border="0" columnClasses="alignTop,alginTop">
 		<h:panelGroup id="mapncrap1">
 		  <f:verbatim>
-			 <div id="map" style="width: 800px; height: 600px"></div>
+			 <div id="map" style="width: 600px; height: 450px"></div>
 			 <script type="text/javascript">
 				initialize();
 			 </script>
