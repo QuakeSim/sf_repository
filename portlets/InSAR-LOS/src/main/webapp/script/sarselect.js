@@ -214,11 +214,22 @@ var sarselect=sarselect || (function() {
 
 		  //Using http://www.movable-type.co.uk/scripts/latlong.html
 		  var d2r=Math.PI/180.0;
-		  var dlon=(neLon-swLon)*d2r;
-		  var y=Math.sin(dlon)*Math.cos(neLat*d2r);
-		  var x=Math.cos(swLat*d2r)*Math.sin(neLat*d2r)-Math.sin(swLat*d2r)*Math.cos(neLat*d2r)*Math.cos(dlon);
-		  azimuth=Math.atan2(y,x)/d2r;
+		  var flatten=1.0/298.247;
+
+		  //This is the old formula.
+//		  var dlon=(neLon-swLon)*d2r;
+//		  var y=Math.sin(dlon)*Math.cos(neLat*d2r);
+//		  var x=Math.cos(swLat*d2r)*Math.sin(neLat*d2r)-Math.sin(swLat*d2r)*Math.cos(neLat*d2r)*Math.cos(dlon);
+//		  azimuth=Math.atan2(y,x)/d2r;
+
+		  var theFactor=d2r* Math.cos(d2r * swLat) * 6378.139 * (1.0 - Math.sin(d2r * swLat) * Math.sin(d2r * swLat) * flatten);
+		  var x=(neLon-swLon)*theFactor;
+		  var y=(neLat-swLat)*111.32;
+		  
+		  azimuth=Math.atan2(x,y)/d2r;
 		  azimuth=azimuth.toFixed(1);
+		  if (azimuth < 0) { azimuth = azimuth + 360; }
+		  console.log(x,y,theFactor,azimuth);
 
 		  $("#iconGuide").html('<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> <b>Lat, Lon: </b>'+swLat+', '+swLon+'  <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/>  <b>Lat, Lon:</b> '+neLat+', '+neLon+'  <b>Azimuth:</b> '+ azimuth +'&deg;<p/>');
 		  
@@ -581,7 +592,9 @@ var sarselect=sarselect || (function() {
 	 }
 
 	 function updateAzimuth() {
-		  
+		  losLength=$("#losLength-value").val();
+		  azimuth=$("#azimuth-value").val();
+		  setEndpointsFromAzimuthAndLength();
 	 }
 
 	 //Uses the new distance to calculate the new ending lat,lon
@@ -596,15 +609,17 @@ var sarselect=sarselect || (function() {
 	 // a length, and a strike (or azimuth) angle.
 	 //--------------------------------------------------
 	 function setEndpointsFromAzimuthAndLength() {
-		  var d2r = Math.acos(-1.0) / 180.0;
+		  var d2r = Math.PI / 180.0;
 		  var flatten=1.0/298.247;
 
 		  var latStart=markerSW.getPosition().lat().toFixed(5);
 		  var lonStart=markerSW.getPosition().lng().toFixed(5);
-		  var latEnd=markerNE.getPosition().lat().toFixed(5);
-		  var lonEnd=markerNE.getPosition().lng().toFixed(5);
+		  var latEnd;//=markerNE.getPosition().lat().toFixed(5);
+		  var lonEnd;//=markerNE.getPosition().lng().toFixed(5);
+		  var xend,yend,sval,thetan;
 
-		  console.log("Length:"+losLength);
+		  console.log(latStart,lonStart,latEnd,lonEnd);
+		  console.log("Length and azimuth:"+losLength,azimuth);
 
 		  //We'll use the convention that azimuth is -180 to 180. This is what Simplex assumes.  
 		  if(azimuth.value>180) azimuth.value=azimuth.value-360;
@@ -612,47 +627,76 @@ var sarselect=sarselect || (function() {
 
 		  //Now find the lat/lon values of the translated endpoint.
 		  //First, find the Cartesian coordinates of the endpoint.  
-		  
-		  if (azimuth.value == 0) {
+
+		  if (azimuth == 0) {
+				console.log("Azimuth is zero");
 				xend = 0; 
-				yend = losLength.value;
+				yend = losLength;
 		  }
-		  else if (azimuth.value == 90) { xend = losLength.value; yend = 0;}
-		  else if (azimuth.value == 180) { xend = 0; yend = (-1.0) * losLength.value;}
-		  else if (azimuth.value == -90) { xend = (-1.0) * losLength.value; yend = 0;}
+		  else if (azimuth == 90) { 
+				console.log("Azimuth is 90 deg");
+				xend = losLength; yend = 0;
+		  }
+		  else if (azimuth == 180) { 
+				console.log("Azimuth is 180 deg");
+				xend = 0; yend = (-1.0) * losLength;
+		  }
+		  else if (azimuth == -90) { 
+				console.log("Azimuth is -90 deg");
+				xend = (-1.0) * losLength; yend = 0;
+		  }
 		  else {
-				var sval = 90 - azimuth.value;
-				var thetan = Math.tan(sval*d2r);
-				var xend = losLength.value/Math.sqrt(1 + thetan*thetan);
-				var yend = Math.sqrt(length.value*losLength.value - xend*xend);
+				console.log("Doing the xend, yend calculation.");
+				sval = 90 - azimuth;//.value;
+				thetan = Math.tan(sval*d2r);
+				xend = losLength/Math.sqrt(1 + thetan*thetan);
+				yend = Math.sqrt(losLength*losLength - xend*xend);
 				
-				if (azimuth.value > 0 && azimuth.value < 90) { xend = xend*1.0; yend = yend*1.0;}
-				else if (azimuth.value > 90 && azimuth.value < 180) { xend = xend*1.0; yend = yend* (-1.0);}
-				else if (azimuth.value > -180 && azimuth.value < -90) { xend = xend*(-1.0); yend = yend*(-1.0);}
-				else if (azimuth.value > -90 && azimuth.value < 0) { xend = xend*(-1.0); yend = yend*1.0;}
+				if (azimuth > 0 && azimuth < 90) { 
+					 console.log("Azimuth in first quadrant");
+					 xend = xend*1.0; yend = yend*1.0;
+				}
+				else if (azimuth > 90 && azimuth < 180) { 
+					 console.log("Azimuth in second quadrant");
+					 xend = xend*1.0; yend = yend* (-1.0);
+				}
+				else if (azimuth > -180 && azimuth < -90) { 
+					 console.log("Azimuth in fourth quadrant");
+					 xend = xend*(-1.0); yend = yend*(-1.0);
+				}
+				else if (azimuth > -90 && azimuth < 0) { 
+					 console.log("Azimuth in third quadrant");
+					 xend = xend*(-1.0); yend = yend*1.0;
+				}
+				else {
+					 console.log("Incorrect quadrant determination");
+				}
 		  }
 		  
 		  //Note we use the lat, lon of the fault's starting point here, not the origin's lat, lon, because
 		  //we are using the fault length (not the distance to the origin from the end point).
-		  var theFactor=d2r* Math.cos(d2r * latStart.value) * 6378.139 * (1.0 - Math.sin(d2r * latStart.value) * Math.sin(d2r * latStart.value) * flatten);
+		  var theFactor=d2r* Math.cos(d2r * latStart) * 6378.139 * (1.0 - Math.sin(d2r * latStart) * Math.sin(d2r * latStart) * flatten);
 
-		  lonEnd.value = (xend*1.0)/theFactor + (lonStart.value*1.0);
-		  latEnd.value = yend/111.32 + (latStart.value*1.0);
+		  console.log(xend,yend,sval,theFactor,thetan);
+		  console.log(xend/theFactor,yend/111.32,lonStart*1.0,latStart*1.0);
+		  lonEnd = 1.0*xend/(1.0*theFactor) + lonStart*1.0;
+		  lonEnd=lonEnd.toFixed(5);
+		  latEnd = 1.0*yend/111.32 + latStart*1.0;
+		  latEnd=latEnd.toFixed(5);
 		  
-		  lonEnd.value = Math.round(lonEnd.value*1000.0)/1000.0;
-		  latEnd.value = Math.round(latEnd.value*1000.0)/1000.0;
-		  
-		  console.log("Final lat,lon: "+latEnd+","+lonEnd);
+		  console.log("Final lat,lon: ",latEnd,lonEnd);
 		  $("#endLat-value").val(latEnd);
 		  $("#endLon-value").val(lonEnd);
-		  updateEndLat();
-		  updateEndLon();
+
+		  var newPos=new google.maps.LatLng(latEnd,lonEnd);
+		  markerNE.setPosition(newPos);
+		  google.maps.event.trigger(markerNE,"drag");
+		  google.maps.event.trigger(markerNE,"dragend");
 	 }	 
 
 	 //--------------------------------------------------
 	 // This function calculates the distance between the starting 
-	 // and ending (lat,lon) points.  It uses the distance formula
-	 // from http://www.movable-type.co.uk/scripts/latlong.html.
+	 // and ending (lat,lon) points.  
 	 //--------------------------------------------------
 	 function calculateDistance() {
 		  var latStart=markerSW.getPosition().lat().toFixed(5);
@@ -661,14 +705,22 @@ var sarselect=sarselect || (function() {
 		  var lonEnd=markerNE.getPosition().lng().toFixed(5);
 
 		  var d2r = Math.PI / 180.0;
-		  var R=6371;
-		  var dlat=(latEnd-latStart)*d2r;
-		  var dlon=(lonEnd-lonStart)*d2r;
+		  var flatten=1.0/298.247;
+		  var theFactor=d2r* Math.cos(d2r * latStart) * 6378.139 * (1.0 - Math.sin(d2r * latStart) * Math.sin(d2r * latStart) * flatten);
+
+		  var xdiff=(lonEnd-lonStart)*theFactor;
+		  var ydiff=(latEnd-latStart)*111.32;
 		  
-		  var distance1=Math.sin(dlat/2.0)*Math.sin(dlat/2.)
-				distance1+=Math.sin(dlon/2.)*Math.sin(dlon/2.0)*Math.cos(latStart*d2r)*Math.cos(latEnd*d2r);
-		  var distance2=2.*Math.atan2(Math.sqrt(distance1), Math.sqrt(1.0-distance1));
-		  losLength=R*distance2; //Note this is a global variable.
+		  console.log(xdiff,ydiff,theFactor);
+
+		  losLength=Math.sqrt(xdiff*xdiff+ydiff*ydiff);
+		  losLength=losLength.toFixed(3);
+		  
+//		  var distance1=Math.sin(dlat/2.0)*Math.sin(dlat/2.)
+//				distance1+=Math.sin(dlon/2.)*Math.sin(dlon/2.0)*Math.cos(latStart*d2r)*Math.cos(latEnd*d2r);
+//		  var distance2=2.*Math.atan2(Math.sqrt(distance1), Math.sqrt(1.0-distance1));
+//		  losLength=R*distance2; //Note this is a global variable.
+//		  losLength=losLength.toFixed(5);
 		  console.log("Distance calculated is :"+losLength);
 		  
 		  $("#losLength-value").val(losLength);
