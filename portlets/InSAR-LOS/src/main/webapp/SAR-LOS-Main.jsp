@@ -172,7 +172,7 @@
 	 }
 
 	 $('#samplingInfoImg').qtip({
-	 content: 'The distance between points.  A value of 1000 means 1 point is plotted for every 1000 meters.  This is either the native value of the specific sampling point or the average value around the point determined by the averaging radius.',
+	 content: 'The distance between points.  A value of 1000 means 1 point is plotted for every 1000 meters. <p><b>NOTE:</b> most of the source images have a resolution of 1 pixel:6 meters, so sampling below resolution will return interpolated values.',
 	 show: 'mouseover',
 	 hide: 'mouseout'
 	 });
