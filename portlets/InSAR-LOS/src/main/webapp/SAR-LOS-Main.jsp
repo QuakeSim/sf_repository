@@ -80,6 +80,18 @@
 						</tr>
 						<tr>
 						  <td>
+							 <b>Azimuth:</b>
+							 <input type="text" name="azimuth-value" id="azimuth-value" size="8" value="" onchange="sarselect.updateAzimuth()"/>
+						  </td>
+						</tr>
+						<tr>
+						  <td>
+							 <b>Distance:</b>
+							 <input type="text" name="losLength-value" id="losLength-value" size="8" value="" onchange="sarselect.updateDistance()"/>
+						  </td>
+						</tr>
+						<tr>
+						  <td>
 							 <b>Sampling Distance (meters):</b>
 							 <input type="text" name="resolution" id="resolution-value" size="5" value="1000" onchange="sarselect.updateResolution()"/>
 						  </td>

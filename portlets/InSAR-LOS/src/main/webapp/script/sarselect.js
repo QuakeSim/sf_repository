@@ -17,6 +17,8 @@ var sarselect=sarselect || (function() {
 	 var rpiName=null;
 	 var dygraph1, dygraph2;
 	 var wmsMapType=null;
+	 var azimuth;
+	 var losLength;
 
 	 var dygraphLOSOpts={width:290,
 								height:300,
@@ -173,7 +175,7 @@ var sarselect=sarselect || (function() {
 		  		drawLine(insarMap);
 				getInSarValues(uid,rpiName);
 				showEndpoints();
-
+				calculateDistance();
 				setEndPointFormValues();
 
 				// Make markers draggable			 
@@ -188,15 +190,22 @@ var sarselect=sarselect || (function() {
 					 getInSarValues(uid,rpiName);
 					 setEndPointFormValues();
 					 showEndpoints();
+					 calculateDistance();
 				});
 				google.maps.event.addListener(markerSW, "dragend", function() {
 					 getInSarValues(uid,rpiName);
 					 setEndPointFormValues();
 					 showEndpoints();
+					 calculateDistance();
 				});
 		  }
 	 }
 
+	 //--------------------------------------------------
+	 // Calculates the azimuth and displays this along with
+	 // the icons under the map.  Also displays the azimuth
+	 // in the appropriate form area.
+	 //--------------------------------------------------
 	 function showEndpoints(){
 		  var swLat=markerSW.getPosition().lat().toFixed(5);
 		  var swLon=markerSW.getPosition().lng().toFixed(5);
@@ -208,71 +217,14 @@ var sarselect=sarselect || (function() {
 		  var dlon=(neLon-swLon)*d2r;
 		  var y=Math.sin(dlon)*Math.cos(neLat*d2r);
 		  var x=Math.cos(swLat*d2r)*Math.sin(neLat*d2r)-Math.sin(swLat*d2r)*Math.cos(neLat*d2r)*Math.cos(dlon);
-		  var azimuth=Math.atan2(y,x)/d2r;
+		  azimuth=Math.atan2(y,x)/d2r;
 		  azimuth=azimuth.toFixed(1);
 
 		  $("#iconGuide").html('<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> <b>Lat, Lon: </b>'+swLat+', '+swLon+'  <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/>  <b>Lat, Lon:</b> '+neLat+', '+neLon+'  <b>Azimuth:</b> '+ azimuth +'&deg;<p/>');
-
-	 }
-
-	 function rectangleLeftClick(insarMap,event) {
-		  //If the marker doesn't exist, create it.
-		  if(!markerNE && !markerSW) {
-				//console.log("No markers found");
-				markerNE=new google.maps.Marker({map: insarMap, 
-															position: event.latLng, 
-															visible: true, 
-															draggable: true});
-				var offset=new google.maps.LatLng(event.latLng.lat()-0.05,event.latLng.lng()-0.05);
-				markerSW=new google.maps.Marker({map: insarMap, 
-															position: offset, 
-															visible: true, 
-															draggable: true});
-				markers.push(markerNE);
-				markers.push(markerSW);
-		  		
-				// Make markers draggable			 
-				google.maps.event.addListener(markerNE, "drag", function() {
-					 drawRectangle(insarMap);
-				});
-				google.maps.event.addListener(markerSW, "drag", function() {
-					 drawRectangle(insarMap);
-				});
-		  }
-
-		  //This is called after a drag event.
-		  drawRectangle(insarMap);
-	 }
-
-	 function polygonLeftClick(insarMap,event) {
-		  //Make the marker and add to the map.
-		  //console.log("Create marker and add to the map");
-		  var marker=new google.maps.Marker({map: insarMap, 
-														 position: event.latLng, 
-														 visible: true, 
-														 draggable: true});
-		  markers.push(marker);
 		  
-		  // Make markers draggable			 
-		  google.maps.event.addListener(marker, "drag", function() {
-				drawPoly(insarMap);
-		  });
-		  
-		  // Second click listener to remove the square
-		  google.maps.event.addListener(marker, "click", function() {
-				// Find out which square to remove
-				for(var n = 0; n < markers.length; n++) {
-					 if(markers[n] == marker) {
-						  markers[n].setMap(null);
-						  break;
-						}
-				}
-				markers.splice(n, 1);
-				drawPoly(insarMap);
-		  });
-		  drawPoly(insarMap);
-		  //console.log("Done with leftClick()");
+		  $("#azimuth-value").val(azimuth);
 	 }
+
 
 	 function drawLine(insarMap) {
 		  if(polyShape) polyShape.setMap(null);
@@ -621,14 +573,106 @@ var sarselect=sarselect || (function() {
 		  google.maps.event.trigger(markerNE,"dragend");
 	 }
 
-
 	 function setEndPointFormValues() {
 		  $("#startLat-value").val(markerSW.getPosition().lat().toFixed(5));
 		  $("#startLon-value").val(markerSW.getPosition().lng().toFixed(5));
 		  $("#endLat-value").val(markerNE.getPosition().lat().toFixed(5));
 		  $("#endLon-value").val(markerNE.getPosition().lng().toFixed(5));
 	 }
-	 
+
+	 function updateAzimuth() {
+		  
+	 }
+
+	 //Uses the new distance to calculate the new ending lat,lon
+	 function updateDistance() {
+		  losLength=$("#losLength-value").val();
+		  azimuth=$("#azimuth-value").val();
+		  setEndpointsFromAzimuthAndLength();
+	 }
+
+	 //--------------------------------------------------
+	 // Sets the ending (lat,lon) from a provided initial (lat, lon), 
+	 // a length, and a strike (or azimuth) angle.
+	 //--------------------------------------------------
+	 function setEndpointsFromAzimuthAndLength() {
+		  var d2r = Math.acos(-1.0) / 180.0;
+		  var flatten=1.0/298.247;
+
+		  var latStart=markerSW.getPosition().lat().toFixed(5);
+		  var lonStart=markerSW.getPosition().lng().toFixed(5);
+		  var latEnd=markerNE.getPosition().lat().toFixed(5);
+		  var lonEnd=markerNE.getPosition().lng().toFixed(5);
+
+		  console.log("Length:"+losLength);
+
+		  //We'll use the convention that azimuth is -180 to 180. This is what Simplex assumes.  
+		  if(azimuth.value>180) azimuth.value=azimuth.value-360;
+		  if(azimuth.value<-180) azimuth.value=azimuth.value+360;
+
+		  //Now find the lat/lon values of the translated endpoint.
+		  //First, find the Cartesian coordinates of the endpoint.  
+		  
+		  if (azimuth.value == 0) {
+				xend = 0; 
+				yend = losLength.value;
+		  }
+		  else if (azimuth.value == 90) { xend = losLength.value; yend = 0;}
+		  else if (azimuth.value == 180) { xend = 0; yend = (-1.0) * losLength.value;}
+		  else if (azimuth.value == -90) { xend = (-1.0) * losLength.value; yend = 0;}
+		  else {
+				var sval = 90 - azimuth.value;
+				var thetan = Math.tan(sval*d2r);
+				var xend = losLength.value/Math.sqrt(1 + thetan*thetan);
+				var yend = Math.sqrt(length.value*losLength.value - xend*xend);
+				
+				if (azimuth.value > 0 && azimuth.value < 90) { xend = xend*1.0; yend = yend*1.0;}
+				else if (azimuth.value > 90 && azimuth.value < 180) { xend = xend*1.0; yend = yend* (-1.0);}
+				else if (azimuth.value > -180 && azimuth.value < -90) { xend = xend*(-1.0); yend = yend*(-1.0);}
+				else if (azimuth.value > -90 && azimuth.value < 0) { xend = xend*(-1.0); yend = yend*1.0;}
+		  }
+		  
+		  //Note we use the lat, lon of the fault's starting point here, not the origin's lat, lon, because
+		  //we are using the fault length (not the distance to the origin from the end point).
+		  var theFactor=d2r* Math.cos(d2r * latStart.value) * 6378.139 * (1.0 - Math.sin(d2r * latStart.value) * Math.sin(d2r * latStart.value) * flatten);
+
+		  lonEnd.value = (xend*1.0)/theFactor + (lonStart.value*1.0);
+		  latEnd.value = yend/111.32 + (latStart.value*1.0);
+		  
+		  lonEnd.value = Math.round(lonEnd.value*1000.0)/1000.0;
+		  latEnd.value = Math.round(latEnd.value*1000.0)/1000.0;
+		  
+		  console.log("Final lat,lon: "+latEnd+","+lonEnd);
+		  $("#endLat-value").val(latEnd);
+		  $("#endLon-value").val(lonEnd);
+		  updateEndLat();
+		  updateEndLon();
+	 }	 
+
+	 //--------------------------------------------------
+	 // This function calculates the distance between the starting 
+	 // and ending (lat,lon) points.  It uses the distance formula
+	 // from http://www.movable-type.co.uk/scripts/latlong.html.
+	 //--------------------------------------------------
+	 function calculateDistance() {
+		  var latStart=markerSW.getPosition().lat().toFixed(5);
+		  var lonStart=markerSW.getPosition().lng().toFixed(5);
+		  var latEnd=markerNE.getPosition().lat().toFixed(5);
+		  var lonEnd=markerNE.getPosition().lng().toFixed(5);
+
+		  var d2r = Math.PI / 180.0;
+		  var R=6371;
+		  var dlat=(latEnd-latStart)*d2r;
+		  var dlon=(lonEnd-lonStart)*d2r;
+		  
+		  var distance1=Math.sin(dlat/2.0)*Math.sin(dlat/2.)
+				distance1+=Math.sin(dlon/2.)*Math.sin(dlon/2.0)*Math.cos(latStart*d2r)*Math.cos(latEnd*d2r);
+		  var distance2=2.*Math.atan2(Math.sqrt(distance1), Math.sqrt(1.0-distance1));
+		  losLength=R*distance2; //Note this is a global variable.
+		  console.log("Distance calculated is :"+losLength);
+		  
+		  $("#losLength-value").val(losLength);
+	 }
 
 	 /**
 	  * Public API for sarselect.js
@@ -651,7 +695,9 @@ var sarselect=sarselect || (function() {
 		  updateStartLat:updateStartLat,
 		  updateStartLon:updateStartLon,
 		  updateEndLat:updateEndLat,
-		  updateEndLon:updateEndLon
+		  updateEndLon:updateEndLon,
+		  updateDistance:updateDistance,
+		  updateAzimuth:updateAzimuth
 	 }
 	 
 })();
