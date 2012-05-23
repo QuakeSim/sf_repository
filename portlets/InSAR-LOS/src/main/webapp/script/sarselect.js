@@ -18,6 +18,7 @@ var sarselect=sarselect || (function() {
 	 var dygraph1, dygraph2;
 	 var wmsMapType=null;
 	 var faultWmsMapType=null;
+	 var faultWmsOptions=null;
 	 var azimuth;
 	 var losLength;
 
@@ -67,6 +68,20 @@ var sarselect=sarselect || (function() {
 		  //Add the overlay to the master map
 		  masterMap.overlayMapTypes.insertAt(0,wmsMapType);
 		  
+		  //Add the fault layer. We set this up here but don't turn it on until 
+		  //later.
+		  faultWmsOptions= {
+            alt: "GeoServer2",
+            getTileUrl: faultsWMSGetTileUrl,
+            isPng: true,
+            maxZoom: 17,
+            minZoom: 6,
+            name: "Geoserver2",
+            tileSize: new google.maps.Size(256, 256),
+            credit: 'Image Credit: QuakeSim'
+		  };
+		  faultWmsMapType=new google.maps.ImageMapType(faultWmsOptions);
+
 		  
 		  //Find out where we are when the map is clicked.
 		  google.maps.event.addListener(masterMap,"click",function(event) {
@@ -249,39 +264,8 @@ var sarselect=sarselect || (function() {
 														  zIndex:1});
 	 }
 
-	 function drawRectangle(insarMap) {
-		  //console.log("Drawing rectangle");
-		  if(polyShape) polyShape.setMap(null);
-		  var cornerSE=new google.maps.LatLng((markerNE.getPosition()).lat(),(markerSW.getPosition()).lng());
-		  var cornerNW=new google.maps.LatLng((markerSW.getPosition()).lat(),(markerNE.getPosition()).lng());
-		  polyPoints=new Array();
-		  polyPoints.push(markerNE.getPosition());		  
-		  polyPoints.push(cornerNW);
-		  polyPoints.push(markerSW.getPosition());
-		  polyPoints.push(cornerSE);
-		  
-		  polyShape=new google.maps.Polygon({paths:polyPoints,
-														 fillColor:polyFillColor,
-														 strokeColor:polyLineColor,
-														 zindex:1});
-		  polyShape.setMap(insarMap);
-	 }
-	 
-	 function drawPoly(insarMap) {
-		  //console.log("Redrawing the polyline.");
-		  if(polyShape) polyShape.setMap(null);
-		  polyPoints.length = 0;	
-		  
-		  for(i = 0; i < markers.length; i++) {
-			 	polyPoints.push(markers[i].getPosition());
-		  }
-		  // Close the shape with the last line or not
-		  polyPoints.push(markers[0].getPosition());
-		  polyShape = new google.maps.Polygon({paths: polyPoints, 
-															strokeColor: polyLineColor});
-		  polyShape.setMap(insarMap);
-		}
-
+	 //Calls the "get LOS" and "get HGT" rest services based on the provided resolution, method, and 
+	 //(optionally) averaging radius. 
 	 function getInSarValues(uid,rpiName) {
 		  console.log(rpiName);
 		  var resolution=$("#resolution-value").val();
@@ -297,6 +281,7 @@ var sarselect=sarselect || (function() {
 		  getHgtInSarValues(uid,resolution,method,averaging,rpiName);
 	 }
 	 
+	 //Constructs the LOS REST service call, plots the output, and provides a download link.
 	 function getLosInSarValues(uid,resolution,method,averaging,rpiName) {
 		  var westMarkerLat=markerSW.getPosition().lat();
 		  var westMarkerLon=markerSW.getPosition().lng();
@@ -320,6 +305,7 @@ var sarselect=sarselect || (function() {
 		  });
 	 }
 
+	 //Constructs the HGT REST service call, plots the output, and provides a download link.
 	 function getHgtInSarValues(uid,resolution,method,averaging,rpiName) {
 		  var westMarkerLat=markerSW.getPosition().lat();
 		  var westMarkerLon=markerSW.getPosition().lng();
@@ -430,20 +416,8 @@ var sarselect=sarselect || (function() {
 		  masterMap.overlayMapTypes.clear();
 //		  masterMap.overlayMapTypes.removeAt(0);
 		  
-		  //Add the fault layer
-		  var faultWmsOptions= {
-            alt: "GeoServer2",
-            getTileUrl: faultsWMSGetTileUrl,
-            isPng: true,
-            maxZoom: 17,
-            minZoom: 6,
-            name: "Geoserver2",
-            tileSize: new google.maps.Size(256, 256),
-            credit: 'Image Credit: QuakeSim'
-		  };
-		  faultWmsMapType=new google.maps.ImageMapType(faultWmsOptions);
 
-		  masterMap.overlayMapTypes.insertAt(0,faultWmsMapType);
+//		  masterMap.overlayMapTypes.insertAt(0,faultWmsMapType);
 		  //Turn on the new overlayer
 		  activateLayerMap(masterMap,overlayUrl,"line",uid,rpiName);
 		  
@@ -522,10 +496,13 @@ var sarselect=sarselect || (function() {
 	 //TODO: Note several functions take insarMap as input but this isn't easily done with the method below.
 	 function toggleFaultKml() {
 		  if($("#fault_toggle_id").is(':checked')) {
-				ucerfKml.setMap(masterMap);
+				//				ucerfKml.setMap(masterMap);
+				masterMap.overlayMapTypes.clear();  //Note this will remove all layers, so need a better way.
+				masterMap.overlayMapTypes.insertAt(0,faultWmsMapType);
 		  }
 		  else {
-				ucerfKml.setMap(null);
+				masterMap.overlayMapTypes.clear();  //Note this will remove all layers, so need a better way.
+				//ucerfKml.setMap(null);
 		  }
 	 }
 
@@ -543,7 +520,6 @@ var sarselect=sarselect || (function() {
         var ulw = projection.fromPointToLatLng(ul);
         var lrw = projection.fromPointToLatLng(lr);
         //The user will enter the address to the public WMS layer here.  The data must be in WGS84
-        //var baseURL = "http://demo.cubewerx.com/demo/cubeserv/cubeserv.cgi?";
 		  var baseURL = "http://gf2.ucs.indiana.edu/geoserver/wms?";
         var version = "1.3.0";
         var request = "GetMap";
@@ -586,8 +562,6 @@ var sarselect=sarselect || (function() {
         //projection to display. This is the projection of google map. Don't change unless you know what you are doing.  
         //Different from other WMS servers that the projection information is called by crs, instead of srs
         var crs = "EPSG:4326";
-        //With the 1.3.0 version the coordinates are read in LatLon, as opposed to LonLat in previous versions
-//        var bbox = ulw.lat() + "," + ulw.lng() + "," + lrw.lat() + "," + lrw.lng();
         var bbox = ulw.lng() + "," + ulw.lat() + "," + lrw.lng() + "," + lrw.lat();
         var service = "WMS";
         //the size of the tile, must be 256x256

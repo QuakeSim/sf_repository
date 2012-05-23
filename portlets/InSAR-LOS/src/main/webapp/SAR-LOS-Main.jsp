@@ -139,7 +139,7 @@
 				<f:verbatim>
 				  <div id="FaultToggler" style="display:none">
 					 <b>Toggle Fault Display:</b>
-					 <input type="checkbox" name="fault_toggle" id="fault_toggle_id" checked="true" onclick="sarselect.toggleFaultKml()"/>
+					 <input type="checkbox" name="fault_toggle" id="fault_toggle_id" onclick="sarselect.toggleFaultKml()"/>
 				  </div>
 				  <div id="dynatable"></div>
 				  <div id="QuakeTables-Link"></div>
