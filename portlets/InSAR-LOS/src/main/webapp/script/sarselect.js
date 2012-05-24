@@ -21,6 +21,9 @@ var sarselect=sarselect || (function() {
 	 var faultWmsOptions=null;
 	 var azimuth;
 	 var losLength;
+	 var heading;
+	 var radarDirection;
+	 var availableDataSets;
 
 	 var dygraphLOSOpts={width:290,
 								height:300,
@@ -87,8 +90,8 @@ var sarselect=sarselect || (function() {
 		  google.maps.event.addListener(masterMap,"click",function(event) {
 				var finalUrl=constructWmsUrl(masterMap,event);
 				var results=$.ajax({url:finalUrl,async:false}).responseText;
-				var parsedResults=jQuery.parseJSON(results);
-				createTable(parsedResults,tableDivName);
+				availableDataSets=jQuery.parseJSON(results);
+				createTable(availableDataSets,tableDivName);
 				$("#Instructions").html("Now click the table entry that you want to plot.");
 		  });
 	 }
@@ -111,7 +114,10 @@ var sarselect=sarselect || (function() {
 	 }
 
 	 //Activates the low-res insar layer for LOS display.
-	 function activateLayerMap(insarMap,overlayUrl,drawFunctionType,uid,rpiName) {
+	 function activateLayerMap(insarMap,callResults,drawFunctionType,uid,rpiName) {
+		  //Extract overlayUrl
+		  var overlayUrl=extractOverlayUrl(callResults);
+
 		  //Remove the drag and zoom listeners on the master map.
 		  $("#InSAR-Map-Messages").hide();
 		  google.maps.event.clearListeners(masterMap,"dragend");
@@ -245,9 +251,8 @@ var sarselect=sarselect || (function() {
 		  azimuth=Math.atan2(x,y)/d2r;
 		  azimuth=azimuth.toFixed(1);
 		  if (azimuth < 0) { azimuth = azimuth + 360; }
-		  console.log(x,y,theFactor,azimuth);
 
-		  $("#iconGuide").html('<img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> <b>Lat, Lon: </b>'+swLat+', '+swLon+'  <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/>  <b>Lat, Lon:</b> '+neLat+', '+neLon+'  <b>Azimuth:</b> '+ azimuth +'&deg;<p/>');
+		  $("#iconGuide").html('<table><tr><td><img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> <b>Lat, Lon: </b>'+swLat+', '+swLon+'  <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/>  <b>Lat, Lon:</b> '+neLat+', '+neLon+'  <b>Azimuth:</b> '+ azimuth +'&deg;</td></tr><tr><td>'+'<b>Heading:</b>'+heading+'&deg'+'&nbsp; &nbsp;'+'<b>Radar Direction:</b>'+radarDirection+'</td></tr></table><p/>');
 		  
 		  $("#azimuth-value").val(azimuth);
 	 }
@@ -264,10 +269,11 @@ var sarselect=sarselect || (function() {
 														  zIndex:1});
 	 }
 
+	 //--------------------------------------------------
 	 //Calls the "get LOS" and "get HGT" rest services based on the provided resolution, method, and 
 	 //(optionally) averaging radius. 
+	 //--------------------------------------------------
 	 function getInSarValues(uid,rpiName) {
-		  console.log(rpiName);
 		  var resolution=$("#resolution-value").val();
 		  var averaging=$("#averaging-value").val();
 		  var method="native";
@@ -281,7 +287,9 @@ var sarselect=sarselect || (function() {
 		  getHgtInSarValues(uid,resolution,method,averaging,rpiName);
 	 }
 	 
+	 //--------------------------------------------------
 	 //Constructs the LOS REST service call, plots the output, and provides a download link.
+	 //--------------------------------------------------
 	 function getLosInSarValues(uid,resolution,method,averaging,rpiName) {
 		  var westMarkerLat=markerSW.getPosition().lat();
 		  var westMarkerLon=markerSW.getPosition().lng();
@@ -332,7 +340,8 @@ var sarselect=sarselect || (function() {
 				console.log("Failed to load HGT values: "+errorMsg);
 		  });
 	 }
-	 
+
+	 //Creates a table of all InSAR images associated with a specific point.
 	 function createTable(parsedResults,tableDivName) {
 		  //Fill in the table.
 		  var dynatable='<table class="sartable-outer">';
@@ -401,16 +410,15 @@ var sarselect=sarselect || (function() {
 		  //var uid=extractRowId2(row);
 		  uid=extractRowId2(row);
 		  rpiName=extractRowRpiName(row);
+		  heading=extractHeading(rpiName,availableDataSets);
+		  radarDirection=extractRadarDirection(rpiName,availableDataSets);
 
 		  //Construct the link to QuakeTables and turn on the display.
 		  $("#QuakeTables-Link").html('<p/><a target="_blank" href="http://quakesim.usc.edu/quaketables/uavsar.jsp?uid='+uid+'">Go to download page for selected data set</a>');
 
-	   //Call REST service
-		var callResults=getImageMetadata(uid);
+	     //Call REST service
+		  var callResults=getImageMetadata(uid);
 		  
-		//Extract overlayUrl
-		var overlayUrl=extractOverlayUrl(callResults);
-
 		  //Turn off the thumbnail overlayer
 //		  insarKml.setMap(null);
 		  masterMap.overlayMapTypes.clear();
@@ -419,7 +427,7 @@ var sarselect=sarselect || (function() {
 
 //		  masterMap.overlayMapTypes.insertAt(0,faultWmsMapType);
 		  //Turn on the new overlayer
-		  activateLayerMap(masterMap,overlayUrl,"line",uid,rpiName);
+		  activateLayerMap(masterMap,callResults,"line",uid,rpiName);
 		  
 		  $("#Instructions").html("Now click the map to plot a line.  Move the end points to set the plot.");
 	 }
@@ -434,8 +442,10 @@ var sarselect=sarselect || (function() {
 	   return overlayUrl;
 	 }
 
+	 //--------------------------------------------------
 	 //This is the current preferred method.  It assumes 
 	 //the row id attribute has been set to the image uid value.
+	 //--------------------------------------------------
 	 function extractRowId2(row) {
 		  return row.getAttribute('id');
 	 }
@@ -445,7 +455,6 @@ var sarselect=sarselect || (function() {
 		  var table2=td.firstChild;
 		  var thOfTable2=((table2.firstChild).firstChild).firstChild;
 		  var productName=thOfTable2.firstChild.nodeValue;
-		  console.log(productName);
 		  return productName;
 	 }
 
@@ -475,9 +484,11 @@ var sarselect=sarselect || (function() {
 		  getInSarValues(uid,rpiName);
 	 }
 
+	 //--------------------------------------------------
 	 //This is a dangerous pattern: UID is a global variable set by a separate function
 	 //when the table is clicked. As long as the order of events is preserved, then
 	 //UID should be set correctly but changing things will break this function.
+	 //--------------------------------------------------
 	 function plotAverage(){
 		  //Enable the "averaging" input field.
 		  $("#averaging-value").attr('disabled',false);
@@ -492,8 +503,10 @@ var sarselect=sarselect || (function() {
 		  getInSarValues(uid,rpiName);
 	 }
 	 
+	 //--------------------------------------------------
 	 //TODO: Note that masterMap and insarMap are synonymous.  Not clear why we need both names.
 	 //TODO: Note several functions take insarMap as input but this isn't easily done with the method below.
+	 //--------------------------------------------------
 	 function toggleFaultKml() {
 		  if($("#fault_toggle_id").is(':checked')) {
 				//				ucerfKml.setMap(masterMap);
@@ -506,12 +519,14 @@ var sarselect=sarselect || (function() {
 		  }
 	 }
 
+	 //--------------------------------------------------
     //The code that reads in the WMS file.  To change the WMS layer the user would update the layers 
 	 //line.  As this is constructed now you need to have this code for each WMS layer.
 	 //Check with your Web Map Server to see what are the required components of the address.  You may 
 	 //need to add a couple of segements.  For example, the ArcServer WMS requires
 	 //a CRS value which is tacked on to the end of the url.  For an example 
-	 //visit http://www.gisdoctor.com/v3/arcserver_wms.html 
+	 //visit http://www.gisdoctor.com/v3/arcserver_wms.html
+	 //-------------------------------------------------- 
 	 function WMSGetTileUrl2(tile, zoom) {
         var projection = masterMap.getProjection(); //NOTE masterMap is a global var (fix method?)
         var zpow = Math.pow(2, zoom);
@@ -543,8 +558,10 @@ var sarselect=sarselect || (function() {
 		  return url;
 	 }
 	 
+	 //--------------------------------------------------
 	 //This code is used to display the fault layers
 	 //TODO: just repeats the code for the UAVSAR tiles. We need to combine these.
+	 //--------------------------------------------------
 	 	 function faultsWMSGetTileUrl(tile, zoom) {
         var projection = masterMap.getProjection(); //NOTE masterMap is a global var (fix method?)
         var zpow = Math.pow(2, zoom);
@@ -573,12 +590,10 @@ var sarselect=sarselect || (function() {
         var url = baseURL + "Layers=" + layers + "&version=" + version + "&EXCEPTIONS=INIMAGE" + "&Service=" + service + "&request=" + request + "&Styles=" + styles + "&format=" + format + "&CRS=" + crs + "&BBOX=" + bbox + "&width=" + width + "&height=" + height;
 			  url = url + "&TRANSPARENT=true";
 			  
-			  console.log("Fault layer url:",url);
 		  return url;
 	 }
 
 	 function updateStartLat(){
-		  console.log("Updating the SW marker.");
 		  var newPos=new google.maps.LatLng($("#startLat-value").val(),markerSW.getPosition().lng());
 		  markerSW.setPosition(newPos);
 		  google.maps.event.trigger(markerSW,"drag");
@@ -586,7 +601,6 @@ var sarselect=sarselect || (function() {
 	 }
 
 	 function updateStartLon(){
-		  console.log("Updating the SW marker.");
 		  var newPos=new google.maps.LatLng(markerSW.getPosition().lat(),$("#startLon-value").val());
 		  markerSW.setPosition(newPos);
 		  google.maps.event.trigger(markerSW,"drag");
@@ -594,7 +608,6 @@ var sarselect=sarselect || (function() {
 	 }
 
 	 function updateEndLat(){
-		  console.log("Updating the NE marker.");
 		  var newPos=new google.maps.LatLng($("#endLat-value").val(),markerNE.getPosition().lng());
 		  markerNE.setPosition(newPos);
 		  google.maps.event.trigger(markerNE,"drag");
@@ -602,7 +615,6 @@ var sarselect=sarselect || (function() {
 	 }
 
 	 function updateEndLon(){
-		  console.log("Updating the NE marker.");
 		  var newPos=new google.maps.LatLng(markerNE.getPosition().lat(),$("#endLon-value").val());
 		  markerNE.setPosition(newPos);
 		  google.maps.event.trigger(markerNE,"drag");
@@ -643,9 +655,6 @@ var sarselect=sarselect || (function() {
 		  var lonEnd;//=markerNE.getPosition().lng().toFixed(5);
 		  var xend,yend,sval,thetan;
 
-		  console.log(latStart,lonStart,latEnd,lonEnd);
-		  console.log("Length and azimuth:"+losLength,azimuth);
-
 		  //We'll use the convention that azimuth is -180 to 180. This is what Simplex assumes.  
 		  if(azimuth.value>180) azimuth.value=azimuth.value-360;
 		  if(azimuth.value<-180) azimuth.value=azimuth.value+360;
@@ -654,43 +663,34 @@ var sarselect=sarselect || (function() {
 		  //First, find the Cartesian coordinates of the endpoint.  
 
 		  if (azimuth == 0) {
-				console.log("Azimuth is zero");
 				xend = 0; 
 				yend = losLength;
 		  }
 		  else if (azimuth == 90) { 
-				console.log("Azimuth is 90 deg");
 				xend = losLength; yend = 0;
 		  }
 		  else if (azimuth == 180) { 
-				console.log("Azimuth is 180 deg");
 				xend = 0; yend = (-1.0) * losLength;
 		  }
 		  else if (azimuth == -90) { 
-				console.log("Azimuth is -90 deg");
 				xend = (-1.0) * losLength; yend = 0;
 		  }
 		  else {
-				console.log("Doing the xend, yend calculation.");
 				sval = 90 - azimuth;//.value;
 				thetan = Math.tan(sval*d2r);
 				xend = losLength/Math.sqrt(1 + thetan*thetan);
 				yend = Math.sqrt(losLength*losLength - xend*xend);
 				
 				if (azimuth > 0 && azimuth < 90) { 
-					 console.log("Azimuth in first quadrant");
 					 xend = xend*1.0; yend = yend*1.0;
 				}
 				else if (azimuth > 90 && azimuth < 180) { 
-					 console.log("Azimuth in second quadrant");
 					 xend = xend*1.0; yend = yend* (-1.0);
 				}
 				else if (azimuth > -180 && azimuth < -90) { 
-					 console.log("Azimuth in fourth quadrant");
 					 xend = xend*(-1.0); yend = yend*(-1.0);
 				}
 				else if (azimuth > -90 && azimuth < 0) { 
-					 console.log("Azimuth in third quadrant");
 					 xend = xend*(-1.0); yend = yend*1.0;
 				}
 				else {
@@ -702,14 +702,11 @@ var sarselect=sarselect || (function() {
 		  //we are using the fault length (not the distance to the origin from the end point).
 		  var theFactor=d2r* Math.cos(d2r * latStart) * 6378.139 * (1.0 - Math.sin(d2r * latStart) * Math.sin(d2r * latStart) * flatten);
 
-		  console.log(xend,yend,sval,theFactor,thetan);
-		  console.log(xend/theFactor,yend/111.32,lonStart*1.0,latStart*1.0);
 		  lonEnd = 1.0*xend/(1.0*theFactor) + lonStart*1.0;
 		  lonEnd=lonEnd.toFixed(5);
 		  latEnd = 1.0*yend/111.32 + latStart*1.0;
 		  latEnd=latEnd.toFixed(5);
 		  
-		  console.log("Final lat,lon: ",latEnd,lonEnd);
 		  $("#endLat-value").val(latEnd);
 		  $("#endLon-value").val(lonEnd);
 
@@ -736,8 +733,6 @@ var sarselect=sarselect || (function() {
 		  var xdiff=(lonEnd-lonStart)*theFactor;
 		  var ydiff=(latEnd-latStart)*111.32;
 		  
-		  console.log(xdiff,ydiff,theFactor);
-
 		  losLength=Math.sqrt(xdiff*xdiff+ydiff*ydiff);
 		  losLength=losLength.toFixed(3);
 		  
@@ -746,9 +741,30 @@ var sarselect=sarselect || (function() {
 //		  var distance2=2.*Math.atan2(Math.sqrt(distance1), Math.sqrt(1.0-distance1));
 //		  losLength=R*distance2; //Note this is a global variable.
 //		  losLength=losLength.toFixed(5);
-		  console.log("Distance calculated is :"+losLength);
 		  
 		  $("#losLength-value").val(losLength);
+	 }
+
+	 function extractHeading(rpiName,availableDataSets) {
+		  var myHeading;
+		  for(var index1 in availableDataSets) {
+				if(availableDataSets[index1]['dataname']==rpiName) {
+					 myHeading=availableDataSets[index1]['heading'];
+					 break;
+				}
+		  }
+		  return myHeading;
+	 }
+
+	 function extractRadarDirection(rpiName,availableDataSets) {
+		  var myRadarDirection;
+		  for(var index1 in availableDataSets) {
+				if(availableDataSets[index1]['dataname']==rpiName) {
+					 myRadarDirection=availableDataSets[index1]['radardirection'];
+					 break;
+				}
+		  }
+		  return myRadarDirection;
 	 }
 
 	 /**

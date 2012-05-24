@@ -83,11 +83,19 @@
 							 <b>Azimuth:</b>
 							 <input type="text" name="azimuth-value" id="azimuth-value" size="8" value="" onchange="sarselect.updateAzimuth()"/>
 						  </td>
+						  <td align="right">
+							 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<img id="azimuthInfoImg" src="images/question_mark.png" width="15" height="15"/>
+						  </td>
 						</tr>
 						<tr>
 						  <td>
 							 <b>Distance:</b>
 							 <input type="text" name="losLength-value" id="losLength-value" size="8" value="" onchange="sarselect.updateDistance()"/>
+						  </td>
+						  <td align="right">
+							 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<img id="distanceInfoImg" src="images/question_mark.png" width="15" height="15"/>
 						  </td>
 						</tr>
 						<tr>
@@ -185,6 +193,18 @@
 
 	 $('#averagingInfoImg').qtip({
 	 content: 'Sets the number of points used if averaging.',
+	 show: 'mouseover',
+	 hide: 'mouseout'
+	 });
+
+	 $('#distanceInfoImg').qtip({
+	 content: 'Sets the distance for the line of sight.',
+	 show: 'mouseover',
+	 hide: 'mouseout'
+	 });
+
+	 $('#azimuthInfoImg').qtip({
+	 content: 'Sets the azimuth (bearing) angle, measured from due North, of the line of sight.',
 	 show: 'mouseover',
 	 hide: 'mouseout'
 	 });
