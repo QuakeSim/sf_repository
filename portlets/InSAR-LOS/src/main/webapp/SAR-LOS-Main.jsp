@@ -218,12 +218,12 @@
 	$(document).ready(function(){
 		$(".faderButton").click(function() {
 		  console.log("fader button clicked");
-		  $("#InSAR-All-Map").find("img").fadeTo("fast","0.50");			 
+		  $("#InSAR-All-Map").find("img[src*='mapsatt']").fadeTo("fast","0.50");			 
 		});
 
 		$(".resetButton").click(function() {
 		  console.log("reset button clicked");
-		  $("#InSAR-All-Map").find("img").fadeTo("fast","1.0");			 
+		  $("#InSAR-All-Map").find("img[src*='mapsatt']").fadeTo("fast","1.0");			 
 		});
 	});
   </script>
