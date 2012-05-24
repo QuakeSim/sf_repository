@@ -149,6 +149,12 @@
 					 <b>Toggle Fault Display:</b>
 					 <input type="checkbox" name="fault_toggle" id="fault_toggle_id" onclick="sarselect.toggleFaultKml()"/>
 				  </div>
+				  <div id="FadeDisplay" style="display:none">
+					 <b>Fade/Reset Display</b>
+					 <input type="button" value="Fade" class="faderButton"/>
+					 <input type="button" value="Reset" class="resetButton"/>
+				  </div>
+				  
 				  <div id="dynatable"></div>
 				  <div id="QuakeTables-Link"></div>
 				</f:verbatim>
@@ -203,11 +209,23 @@
 	 hide: 'mouseout'
 	 });
 
-	 $('#azimuthInfoImg').qtip({
-	 content: 'Sets the azimuth (bearing) angle, measured from due North, of the line of sight.',
-	 show: 'mouseover',
-	 hide: 'mouseout'
+	$('#azimuthInfoImg').qtip({
+		content: 'Sets the azimuth (bearing) angle, measured from due North, of the line of sight.',
+		show: 'mouseover',
+		hide: 'mouseout'
 	 });
+
+	$(document).ready(function(){
+		$(".faderButton").click(function() {
+		  console.log("fader button clicked");
+		  $("#InSAR-All-Map").find("img").fadeTo("fast","0.50");			 
+		});
+
+		$(".resetButton").click(function() {
+		  console.log("reset button clicked");
+		  $("#InSAR-All-Map").find("img").fadeTo("fast","1.0");			 
+		});
+	});
   </script>
 </body>
 </html>

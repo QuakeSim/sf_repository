@@ -146,6 +146,7 @@ var sarselect=sarselect || (function() {
 
 		  //Display the fault toggling checkbox
 		  $("#FaultToggler").show();
+		  $("#FadeDisplay").show();
 
         //Add the KML Layer
 		  lowResSARLayer=new google.maps.KmlLayer(overlayUrl,{suppressInfoWindows: true, map: insarMap, clickable: false});
@@ -252,7 +253,7 @@ var sarselect=sarselect || (function() {
 		  azimuth=azimuth.toFixed(1);
 		  if (azimuth < 0) { azimuth = azimuth + 360; }
 
-		  $("#iconGuide").html('<table><tr><td><img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> <b>Lat, Lon: </b>'+swLat+', '+swLon+'  <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/>  <b>Lat, Lon:</b> '+neLat+', '+neLon+'  <b>Azimuth:</b> '+ azimuth +'&deg;</td></tr><tr><td>'+'<b>Heading:</b>'+heading+'&deg'+'&nbsp; &nbsp;'+'<b>Radar Direction:</b>'+radarDirection+'</td></tr></table><p/>');
+		  $("#iconGuide").html('<table><tr><td><img src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000"/> <b>Lat, Lon: </b>'+swLat+', '+swLon+'  <image src="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF"/>  <b>Lat, Lon:</b> '+neLat+', '+neLon+'  <b>Azimuth:</b> '+ azimuth +'&deg;</td></tr><tr><td>'+'<b>Heading: </b>'+heading+'&deg'+'&nbsp; &nbsp;'+'<b>Radar Direction: </b>'+radarDirection+'</td></tr></table><p/>');
 		  
 		  $("#azimuth-value").val(azimuth);
 	 }
@@ -766,6 +767,7 @@ var sarselect=sarselect || (function() {
 		  }
 		  return myRadarDirection;
 	 }
+
 
 	 /**
 	  * Public API for sarselect.js
