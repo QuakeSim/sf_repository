@@ -150,7 +150,7 @@
 					 <input type="checkbox" name="fault_toggle" id="fault_toggle_id" onclick="sarselect.toggleFaultKml()"/>
 				  </div>
 				  <div id="FadeDisplay" style="display:none">
-					 <b>Fade/Reset Display</b>
+					 <b>Fade/Reset Display: </b>
 					 <input type="button" value="Fade" class="faderButton"/>
 					 <input type="button" value="Reset" class="resetButton"/>
 				  </div>
@@ -217,12 +217,10 @@
 
 	$(document).ready(function(){
 		$(".faderButton").click(function() {
-		  console.log("fader button clicked");
 		  $("#InSAR-All-Map").find("img[src*='mapsatt']").fadeTo("fast","0.50");			 
 		});
 
 		$(".resetButton").click(function() {
-		  console.log("reset button clicked");
 		  $("#InSAR-All-Map").find("img[src*='mapsatt']").fadeTo("fast","1.0");			 
 		});
 	});

@@ -24,6 +24,7 @@ var sarselect=sarselect || (function() {
 	 var heading;
 	 var radarDirection;
 	 var availableDataSets;
+	 var mapCenterChangeListener;
 
 	 var dygraphLOSOpts={width:290,
 								height:300,
@@ -54,6 +55,7 @@ var sarselect=sarselect || (function() {
 		  var latlng=new google.maps.LatLng(32.3,-118.0);
 		  var myOpts={zoom:6, scaleControl:true, center: latlng, mapTypeId: google.maps.MapTypeId.TERRAIN};
 		  masterMap=new google.maps.Map(insarMapDiv, myOpts);
+
 
 		  //Create the WMS overlay for the UAVSAR tiles
 		  var wmsOptions= {
@@ -204,18 +206,24 @@ var sarselect=sarselect || (function() {
 				// Make markers draggable			 
 				google.maps.event.addListener(markerNE, "drag", function() {
 					 drawLine(insarMap);
+					 //Keep map centered while dragging.
+					 disableMapDrag(insarMap);
 				});
 				google.maps.event.addListener(markerSW, "drag", function() {
 					 drawLine(insarMap);
+					 //Keep map centered while dragging.
+					 disableMapDrag(insarMap);
 				});
 
 				google.maps.event.addListener(markerNE, "dragend", function() {
+					 google.maps.event.clearListeners(insarMap,"center_changed");
 					 getInSarValues(uid,rpiName);
 					 setEndPointFormValues();
 					 showEndpoints();
 					 calculateDistance();
 				});
 				google.maps.event.addListener(markerSW, "dragend", function() {
+					 google.maps.event.clearListeners(insarMap,"center_changed");
 					 getInSarValues(uid,rpiName);
 					 setEndPointFormValues();
 					 showEndpoints();
@@ -767,7 +775,15 @@ var sarselect=sarselect || (function() {
 		  }
 		  return myRadarDirection;
 	 }
-
+	 
+	 function disableMapDrag(overlayMap) {
+		  var lastValidCenter=overlayMap.getCenter();
+		  //Use addListenerOnce since the disableMapDrag function is called throughout the drag.
+		  //However, it doesn't seem to be working correctly.
+		  google.maps.event.addListenerOnce(overlayMap,"center_changed",function(){
+				insarMap.panTo(lastValidCenter);
+		  });
+	 }
 
 	 /**
 	  * Public API for sarselect.js
