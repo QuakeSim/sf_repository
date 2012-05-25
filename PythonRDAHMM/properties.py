@@ -7,6 +7,7 @@
 
 def properties(key):
     V={}
+    V['cron_path']="/home/yuma/RDAHMM/CRON_Download/"  
     V['download_path']="/home/yuma/RDAHMM/Download/"  
     V['script_path']="/home/yuma/PythonRDAHMM/"
     V['data_path']="/home/yuma/RDAHMM/Data/"

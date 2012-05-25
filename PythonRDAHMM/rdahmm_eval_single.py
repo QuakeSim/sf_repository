@@ -16,7 +16,7 @@
 # output:
 #   /path/to/rdahmm/eval/daily_project_stationID_eval_date/*
 #===========================================================================
-import os, sys, string 
+import os, sys, string, glob
 import sqlite3 as db
 import datetime, csv
 from properties import properties
@@ -163,4 +163,13 @@ for station in os.listdir(model_path):
  
     cur.close()
     conn.close()
+
+    # 5. delete old evaluation result directory
+    evaldirs = eval_path + "daily_project_" + stationID + "_" + "*/"
+    todaydir = string.replace(stationDir, "//", "/")
+    for dir in glob.glob(evaldirs):
+        if not dir == stationDir:
+            cmd = "rm -r " + dir
+            #print cmd
+            os.system(cmd)    
     #sys.exit(0)
