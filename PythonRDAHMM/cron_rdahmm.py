@@ -93,7 +93,7 @@ for tarball in newdatasets:
     cmd = wgetcmd % tarball
     #print cmd
     os.system(cmd)
-    break
+    #break
 
 for tarball in glob.glob(cron_path + "WesternNorthAmerica/*.tar"):
     if "Strain" in tarball or "pbo" in tarball:
@@ -101,4 +101,4 @@ for tarball in glob.glob(cron_path + "WesternNorthAmerica/*.tar"):
     #print tarball
     t = ThreadJob(tarball)
     t.start()
-    sys.exit()
+    #sys.exit()

@@ -37,9 +37,11 @@ data_path = properties('data_path')
 temp_path = properties('temp_path')
 
 datadir = data_path + tarfile[:tarfile.rfind("_")] + "/"
-dbfile = datadir + tarfile[:-4] + ".sqlite"
+#dbfile = datadir + tarfile[:-4] + ".sqlite"
+dbfile = datadir + tarfile[:-13] + ".sqlite"
 workdir = temp_path + tarfile[:tarfile.rfind("_")] + "/"
 #print datadir, dbfile
+#sys.exit()
 
 if not os.path.exists(datadir):
     cmd = "mkdir -p " + datadir
