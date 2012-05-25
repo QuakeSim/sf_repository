@@ -38,6 +38,7 @@ temp_path = properties('temp_path')
 
 datadir = data_path + tarfile[:tarfile.rfind("_")] + "/"
 #dbfile = datadir + tarfile[:-4] + ".sqlite"
+# get rid of timestamp from db file name
 dbfile = datadir + tarfile[:-13] + ".sqlite"
 workdir = temp_path + tarfile[:tarfile.rfind("_")] + "/"
 #print datadir, dbfile

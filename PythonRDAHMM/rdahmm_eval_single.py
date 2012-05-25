@@ -164,7 +164,14 @@ for station in os.listdir(model_path):
     cur.close()
     conn.close()
 
-    # 5. delete old evaluation result directory
+    # 5. required .dygraphs.js file for plotting, use existing 
+    # dygraphsJsCreator.perl to generation from .plotswf.input
+    plotjsfile = stationDir + "daily_project_" + stationID + "_" + today + ".dygraphs.js"
+    dygraphsJscmd = properties('dygraphsJs')
+    cmd = dygraphsJscmd + " " + plotswffile + " > " + plotjsfile
+    os.system(cmd)
+
+    # 6. delete old evaluation result directory
     evaldirs = eval_path + "daily_project_" + stationID + "_" + "*/"
     todaydir = string.replace(stationDir, "//", "/")
     for dir in glob.glob(evaldirs):

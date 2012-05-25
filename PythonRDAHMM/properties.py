@@ -19,4 +19,5 @@ def properties(key):
     V['rdahmm_bin']="/home/yuma/RDAHMM/rdahmm3/bin/rdahmm"
     V['rdahmm_model_parm']="-data <inputFile> -T <dataCount> -D <dimensionCount> -N 5 -output_type gauss -anneal -annealfactor 1.1 -betamin 0.1 -regularize -omega 0 0 1 1.0e-6 -ntries 10 -seed 1234"
     V['rdahmm_eval_parm']="-data <proBaseName>.all.input -T <dataCount> -D <dimensionCount> -N 5 -output_type gauss -A <modelBaseName>.A -B <modelBaseName>.B -pi <modelBaseName>.pi -minvalfile <modelBaseName>.minval -maxvalfile <modelBaseName>.maxval -rangefile <modelBaseName>.range -eval"
+    V['dygraphsJs']="/home/yuma/PythonRDAHMM/dygraphsJsCreator.perl"
     return V[key]
