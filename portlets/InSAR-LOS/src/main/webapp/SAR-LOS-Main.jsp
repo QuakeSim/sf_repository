@@ -147,7 +147,7 @@
 				<f:verbatim>
 				  <div id="FaultToggler" style="display:none">
 					 <b>Toggle Fault Display:</b>
-					 <input type="checkbox" name="fault_toggle" id="fault_toggle_id" onclick="sarselect.toggleFaultKml()"/>
+					 <input type="checkbox" name="fault_toggle" id="fault_toggle_id" onclick="sarselect.toggleFaultGeoJSON()"/>
 				  </div>
 				  <div id="FadeDisplay" style="display:none">
 					 <b>Fade/Reset Display: </b>
@@ -174,6 +174,8 @@
   <!-- We use Qtip for the info windows. It must come after JQuery's import. -->
   <script src="//craigsworks.com/projects/qtip/packages/1.0.0-rc3/jquery.qtip-1.0.0-rc3.js"></script>
   <script src="script/sarselect.js"></script>			 
+  <script src="script/GeoJSON.js"></script>			 
+  <script src="script/faultgeojson.js"></script>			 
   <script src="//dygraphs.com/dygraph-combined.js"></script>
   
   <script>
@@ -184,6 +186,12 @@
 	 var messageDiv=document.getElementById("InSAR-Map-Messages");
 	 sarselect.setMasterMap(insarMapDiv,tableDivName);
 	 }
+  </script>
+	 
+  <script>
+	 //--------------------------------------------------
+	 // These are qtip setups.
+	 //--------------------------------------------------
 
 	 $('#samplingInfoImg').qtip({
 	 content: 'The distance between points.  A value of 1000 means 1 point is plotted for every 1000 meters. <p><b>NOTE:</b> most of the source images have a resolution of 1 pixel:6 meters, so sampling below resolution will return interpolated values.',
@@ -213,17 +221,23 @@
 		content: 'Sets the azimuth (bearing) angle, measured from due North, of the line of sight.',
 		show: 'mouseover',
 		hide: 'mouseout'
-	 });
-
-	$(document).ready(function(){
-		$(".faderButton").click(function() {
-		  $("#InSAR-All-Map").find("img[src*='mapsatt']").fadeTo("fast","0.50");			 
 		});
-
-		$(".resetButton").click(function() {
-		  $("#InSAR-All-Map").find("img[src*='mapsatt']").fadeTo("fast","1.0");			 
-		});
-	});
   </script>
+  
+  <script>
+	 //--------------------------------------------------
+	 // This function fades and restores the SAR image
+	 //--------------------------------------------------
+	 $(document).ready(function(){
+	 $(".faderButton").click(function() {
+	 $("#InSAR-All-Map").find("img[src*='mapsatt']").fadeTo("fast","0.50");			 
+	 });
+	 
+	 $(".resetButton").click(function() {
+	 $("#InSAR-All-Map").find("img[src*='mapsatt']").fadeTo("fast","1.0");			 
+	 });
+	 });
+  </script>
+
 </body>
 </html>

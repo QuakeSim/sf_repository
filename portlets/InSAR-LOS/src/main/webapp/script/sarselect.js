@@ -785,6 +785,91 @@ var sarselect=sarselect || (function() {
 		  });
 	 }
 
+	 //--------------------------------------------------
+	 // This displays and removes the GeoJSON fault overlays.
+	 //--------------------------------------------------
+	 currentFeature_or_Features = null;
+	 var infowindow = new google.maps.InfoWindow();
+	 function clearMap(){
+		  if (!currentFeature_or_Features)
+				return;
+		  if (currentFeature_or_Features.length){
+				for (var i = 0; i < currentFeature_or_Features.length; i++){
+					 if(currentFeature_or_Features[i].length){
+						  for(var j = 0; j < currentFeature_or_Features[i].length; j++){
+								currentFeature_or_Features[i][j].setMap(null);
+						  }
+					 }
+					 else{
+						  currentFeature_or_Features[i].setMap(null);
+					 }
+				}
+		  }else{
+				currentFeature_or_Features.setMap(null);
+		  }
+		  if (infowindow.getMap()){
+				infowindow.close();
+		  }
+	 }
+	 
+	 function showFeature(geojson, style, map){
+		  clearMap();
+		  currentFeature_or_Features = new GeoJSON(geojson, style || null);
+		  if (currentFeature_or_Features.type && currentFeature_or_Features.type == "Error"){
+				console.log(currentFeature_or_Features.message);
+				return;
+		  }
+		  if (currentFeature_or_Features.length){
+				for (var i = 0; i < currentFeature_or_Features.length; i++){
+					 if(currentFeature_or_Features[i].length){
+						  for(var j = 0; j < currentFeature_or_Features[i].length; j++){
+								currentFeature_or_Features[i][j].setMap(map);
+								if(currentFeature_or_Features[i][j].geojsonProperties) {
+									 setInfoWindow(currentFeature_or_Features[i][j],map);
+								}
+						  }
+					 }
+					 else{
+						  currentFeature_or_Features[i].setMap(map);
+					 }
+					 if (currentFeature_or_Features[i].geojsonProperties) {
+						  setInfoWindow(currentFeature_or_Features[i],map);
+					 }
+				}
+		  }else{
+				currentFeature_or_Features.setMap(map)
+				if (currentFeature_or_Features.geojsonProperties) {
+					 setInfoWindow(currentFeature_or_Features,map);
+				}
+		  }			
+		}
+	 
+	 function setInfoWindow (feature,map) {
+		  google.maps.event.addListener(feature, "click", function(event) {
+				var content = "<div id='infoBox'>";
+			   content += this.geojsonProperties['Description'] + "<br />";
+				content += "</div>";
+				infowindow.setContent(content);
+				infowindow.position = event.latLng;
+				infowindow.open(map);
+		  });
+	 }
+	 
+	 //--------------------------------------------------
+	 // This displays the GeoJSON on the map. The fault 
+	 // GeoJSON input file is currently hard-coded and
+	 // must be supplied by the calling HTML.
+	 //--------------------------------------------------
+	 function toggleFaultGeoJSON() {
+        if($("#fault_toggle_id").is(':checked')) {
+				showFeature(fault,null,masterMap);
+		  }
+		  else {
+				clearMap();  //Note this will remove all layers, so need a better way.
+		  }
+	 }
+												 
+
 	 /**
 	  * Public API for sarselect.js
 	  */
@@ -808,7 +893,8 @@ var sarselect=sarselect || (function() {
 		  updateEndLat:updateEndLat,
 		  updateEndLon:updateEndLon,
 		  updateDistance:updateDistance,
-		  updateAzimuth:updateAzimuth
+		  updateAzimuth:updateAzimuth,
+		  toggleFaultGeoJSON:toggleFaultGeoJSON
 	 }
 	 
 })();
