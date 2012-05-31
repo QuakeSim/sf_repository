@@ -861,8 +861,13 @@ var sarselect=sarselect || (function() {
 	 // must be supplied by the calling HTML.
 	 //--------------------------------------------------
 	 function toggleFaultGeoJSON() {
+		  var faultStyle={
+				strokeColor: "#FFFF00",
+				strokeWeight: 3,
+				strokeOpacity: 0.75
+		  }
         if($("#fault_toggle_id").is(':checked')) {
-				showFeature(fault,null,masterMap);
+				showFeature(fault,faultStyle,masterMap);
 		  }
 		  else {
 				clearMap();  //Note this will remove all layers, so need a better way.
