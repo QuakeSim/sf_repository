@@ -52,7 +52,8 @@ mapcenter_y = center_xy[1];
 function myInit() {
   	$("#browser").treeview({
 		animated:"normal",
-		persist: "cookie"
+		persist: "cookie",
+      collapsed: true
 		});
  }
 
