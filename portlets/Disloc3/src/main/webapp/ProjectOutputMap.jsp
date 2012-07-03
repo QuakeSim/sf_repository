@@ -93,7 +93,7 @@
 		  
 		  projectResultsDiv.addMapType(G_HYBRID_MAP);
 		  projectResultsDiv.addMapType(G_PHYSICAL_MAP);
-		  projectResultsDiv.addMapType(G_SATEfaultLITE_MAP);
+		  projectResultsDiv.addMapType(G_SATELITE_MAP);
 		  
 		  projectResultsDiv.setMapType(G_PHYSICAL_MAP);
 		  
