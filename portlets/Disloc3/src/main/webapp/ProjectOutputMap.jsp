@@ -34,7 +34,7 @@
 							id="faultKmlCheckbox" 
 							value="Fault Catalog KML (UCERF-2, v4)" 
 							onclick="toggleKmlDisplay(this)"
-							checked/>Fault KML
+							checked/>Fault Catalog KML (UCERF-2, v4)
 				</td></tr>
 				<tr><td>
 				  <input type="checkbox" 
