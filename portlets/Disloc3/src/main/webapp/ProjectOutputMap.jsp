@@ -32,7 +32,7 @@
 				<tr><td>
 				  <input type="checkbox" 
 							id="faultKmlCheckbox" 
-							value="Fault KML" 
+							value="Fault Catalog KML (UCERF-2, v4)" 
 							onclick="toggleKmlDisplay(this)"
 							checked/>Fault KML
 				</td></tr>
@@ -93,7 +93,7 @@
 		  
 		  projectResultsDiv.addMapType(G_HYBRID_MAP);
 		  projectResultsDiv.addMapType(G_PHYSICAL_MAP);
-		  projectResultsDiv.addMapType(G_SATELLITE_MAP);
+		  projectResultsDiv.addMapType(G_SATEfaultLITE_MAP);
 		  
 		  projectResultsDiv.setMapType(G_PHYSICAL_MAP);
 		  
