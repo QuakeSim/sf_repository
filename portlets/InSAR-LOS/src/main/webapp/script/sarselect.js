@@ -564,6 +564,7 @@ var sarselect=sarselect || (function() {
         //Establish the baseURL.  Several elements, including &EXCEPTIONS=INIMAGE and &Service are unique to openLayers addresses.
         var url = baseURL + "Layers=" + layers + "&version=" + version + "&EXCEPTIONS=INIMAGE" + "&Service=" + service + "&request=" + request + "&Styles=" + styles + "&format=" + format + "&CRS=" + crs + "&BBOX=" + bbox + "&width=" + width + "&height=" + height;
         url = url + "&TRANSPARENT=true";
+		  url = url + "&TILED=true";
 		  return url;
 	 }
 	 
