@@ -31,10 +31,10 @@ var sarselect=sarselect || (function() {
 								drawPoints:true,
 								pointSize:2,
 								strokeWidth:0.0,
-								title:'InSAR Ground Range Change',
+								title:'Ground Range Change',
 								titleHeight:24,
 								xlabel:'Distance (km)',
-								ylabel:'LOS Value (cm)',
+								ylabel:'Ground Range Change (cm)',
 								labelsDiv:document.getElementById('LOS-Data-PointValue')};
 	 var dygraphHgtOpts={width:290,
 								height:300,
@@ -44,7 +44,7 @@ var sarselect=sarselect || (function() {
 								title:'Topographic Height',
 								titleHeight:24,
 								xlabel:'Distance (km)',
-								ylabel:'Height (m)',
+								ylabel:'Topographic Height (m)',
 								labelsDiv:document.getElementById('HGT-Data-PointValue')};
 
 	 var blueIcon = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + "FF0000",new google.maps.Size(21,34),new google.maps.Point(0,0),new google.maps.Point(10,34));															  
