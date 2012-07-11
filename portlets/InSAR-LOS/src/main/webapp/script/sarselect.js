@@ -52,7 +52,7 @@ var sarselect=sarselect || (function() {
 
 
 	 function setMasterMap(insarMapDiv,tableDivName) {
-		  var latlng=new google.maps.LatLng(32.3,-118.0);
+		  var latlng=new google.maps.LatLng(36.0,-120.0);
 		  var myOpts={zoom:6, scaleControl:true, center: latlng, mapTypeId: google.maps.MapTypeId.TERRAIN};
 		  masterMap=new google.maps.Map(insarMapDiv, myOpts);
 
