@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <html>
 <head>
-  <link rel="stylesheet" href="@host.base.url@/InSAR-LOS/css/default.css"/>
+  <link rel="stylesheet" href="http://quakesim-iu.appspot.com/InSAR-LOS/stylesheets/default.css"/>
 </head>
 <body onload="initialize()">
   <f:view>
@@ -85,7 +85,7 @@
 						  </td>
 						  <td align="right">
 							 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								<img id="azimuthInfoImg" src="images/question_mark.png" width="15" height="15"/>
+								<img id="azimuthInfoImg" src="http://quakesim-iu.appspot.com/InSAR-LOS/images/question_mark.png" width="15" height="15"/>
 						  </td>
 						</tr>
 						<tr>
@@ -95,7 +95,7 @@
 						  </td>
 						  <td align="right">
 							 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								<img id="distanceInfoImg" src="images/question_mark.png" width="15" height="15"/>
+								<img id="distanceInfoImg" src="http://quakesim-iu.appspot.com/InSAR-LOS/images/question_mark.png" width="15" height="15"/>
 						  </td>
 						</tr>
 						<tr>
@@ -105,7 +105,7 @@
 						  </td>
 						  <td align="right">
 							 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								<img id="samplingInfoImg" src="images/question_mark.png" width="15" height="15"/>
+								<img id="samplingInfoImg" src="http://quakesim-iu.appspot.com/InSAR-LOS/images/question_mark.png" width="15" height="15"/>
 						  </td>
 						</tr>
 						<tr>
@@ -137,7 +137,7 @@
 						  </td>
 						  <td align="right">
 							 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							 <img id="averagingInfoImg" src="images/question_mark.png"  width="15" height="15"/>
+							 <img id="averagingInfoImg" src="http://quakesim-iu.appspot.com/InSAR-LOS/images/question_mark.png"  width="15" height="15"/>
 						  </td>
 						  -->
 						</tr>
@@ -173,9 +173,10 @@
   <script src="//code.jquery.com/jquery-latest.min.js"></script>
   <!-- We use Qtip for the info windows. It must come after JQuery's import. -->
   <script src="//craigsworks.com/projects/qtip/packages/1.0.0-rc3/jquery.qtip-1.0.0-rc3.js"></script>
-  <script src="script/sarselect.js"></script>			 
-  <script src="script/GeoJSON.js"></script>			 
-  <script src="script/faultgeojson.js"></script>			 
+  <!-- Since sarselect changes so much, we won't put it on appspot -->
+  <script src="scripts/sarselect.js"></script>			 
+  <script src="//quakesim-iu.appspot.com/InSAR-LOS/scripts/GeoJSON.js"></script>			 
+  <script src="//quakesim-iu.appspot.com/InSAR-LOS/scripts/faultgeojson.js"></script>			 
   <script src="//dygraphs.com/dygraph-combined.js"></script>
   
   <script>

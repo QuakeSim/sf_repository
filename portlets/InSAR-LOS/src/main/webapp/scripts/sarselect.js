@@ -10,7 +10,7 @@ var sarselect=sarselect || (function() {
 	 var markerNE, markerSW;
 //	 var insarKml;
 	 var ucerfMapOpts={map:null, preserveViewport:true};
-	 var ucerfKml=new google.maps.KmlLayer("@host.base.url@/InSAR-LOS/kml//QuakeTables_UCERF_2.4.kml",ucerfMapOpts);
+	 var ucerfKml=new google.maps.KmlLayer("http://quakeim-iu.appspot.com/InSAR-LOS/kml//QuakeTables_UCERF_2.4.kml",ucerfMapOpts);
 	 var rowSelected=null;
 	 var lowResSARLayer=null;
 	 var uid=null;  //This is global because we need to pass it between two unrelated functions. Not good.
@@ -52,7 +52,7 @@ var sarselect=sarselect || (function() {
 
 
 	 function setMasterMap(insarMapDiv,tableDivName) {
-		  var latlng=new google.maps.LatLng(36.0,-120.0);
+		  var latlng=new google.maps.LatLng(32.3,-118.0);
 		  var myOpts={zoom:6, scaleControl:true, center: latlng, mapTypeId: google.maps.MapTypeId.TERRAIN};
 		  masterMap=new google.maps.Map(insarMapDiv, myOpts);
 
@@ -311,7 +311,7 @@ var sarselect=sarselect || (function() {
 				url:restUrl,
 				beforeSend: function() {if(dygraph1) {dygraph1.destroy(); }; 
 											  	$('#LOS-Data-Download').hide(); 
-												$('#outputGraph1').html('<center><img src="@host.base.url@/InSAR-LOS/images/processing.gif"/></center>');
+												$('#outputGraph1').html('<center><img src="http://quakesim-iu.appspot.com/InSAR-LOS/images/processing.gif"/></center>');
 											  },
 				async:true
 		  });
