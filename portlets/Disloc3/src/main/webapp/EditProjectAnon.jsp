@@ -52,7 +52,7 @@ mapcenter_y = center_xy[1];
 <div id="loading">
 <center>
 <p>
-<img src="@host.base.url@@artifactId@/images/animation_processing.gif"/>
+<img src="http://quakesim-iu.appspot.com/images/animation_processing.gif"/>
 </p>
 </center>
 </div>
