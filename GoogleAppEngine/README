@@ -1,0 +1,1 @@
+This directory contains static files used by QuakeSim. These are deployed on Google App Engine as quakesim-iu.appspot.com, which we use as a simple content distribution network.
