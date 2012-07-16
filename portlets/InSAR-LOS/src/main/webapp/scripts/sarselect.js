@@ -52,7 +52,7 @@ var sarselect=sarselect || (function() {
 
 
 	 function setMasterMap(insarMapDiv,tableDivName) {
-		  var latlng=new google.maps.LatLng(32.3,-118.0);
+		  var latlng=new google.maps.LatLng(36.0,-120.0);
 		  var myOpts={zoom:6, scaleControl:true, center: latlng, mapTypeId: google.maps.MapTypeId.TERRAIN};
 		  masterMap=new google.maps.Map(insarMapDiv, myOpts);
 
@@ -335,7 +335,7 @@ var sarselect=sarselect || (function() {
 				url:restUrl,
 				beforeSend: function() { if(dygraph2) {dygraph2.destroy();};
 												 $('#HGT-Data-Download').hide(); 
-												 $('#outputGraph2').html('<center><img src="@host.base.url@/InSAR-LOS/images/processing.gif"/></center>');
+												 $('#outputGraph2').html('<center><img src="http://quakesim-iu.appspot.com/InSAR-LOS/images/processing.gif"/></center>');
 											  },
 
 				async:true
