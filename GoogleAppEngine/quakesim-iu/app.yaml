@@ -16,4 +16,12 @@ handlers:
 - url: /kml
   static_dir: kml
 
-  
+- url: /InSAR-LOS
+  static_dir: InSAR-LOS
+
+- url: /Disloc3
+  static_dir: Disloc3
+
+- url: /Simplex3
+  static_dir: Simplex3
+
