@@ -1,0 +1,45 @@
+body {
+	 font-family:Arial,sans-serif;
+	 font-size:0.9em;
+}
+.alignTopFixWidth {
+	 width:980px;
+	 vertical-align:top;
+}
+.alignTop {
+	 vertical-align:top;
+}
+.alignTopWidth1 {
+	 width:650px;
+	 vertical-align:top;
+}
+.alignTopWidth2 {
+	 width:330px;
+	 vertical-align:top;
+}
+.sartable-outer {
+	    table-layout:fixed;
+		 width:380px;
+		 word-wrap:break-word;
+		 border-collapse:collapse;
+}
+.sartable-inner {
+	    table-layout:fixed;
+		 width:378px;
+		 #word-wrap:break-word;
+		 border: 1px solid black;
+		 border-collapse:collapse;
+}
+.sartable-inner th {
+	 font-size:0.8em;
+	 font-family:Arial,sans-serif;
+	 font-weight:bold;
+}
+.sartable-inner td {
+	 font-family:Arial,sans-serif;
+	 font-size:0.8em;
+}
+
+#infoBox {
+	 width:300px;
+}
