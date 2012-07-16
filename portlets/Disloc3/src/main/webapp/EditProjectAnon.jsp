@@ -21,12 +21,22 @@ mapcenter_y = center_xy[1];
 
 <html> 
   <head> 
+<!--
 	 <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css"/>
     <link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/jquery.treeview.css"/>
-	 <!-- These are needed by the fault map panel and are repeated there.  Remove redundancies.-->
+-->
+	 <link rel="stylesheet" type="text/css" href="http://quakesim-iu.appspot.com/stylesheets/quakesim_style.css"/>
+    <link rel="stylesheet" type="text/css" href="http://quakesim-iu.appspot.com/stylesheets/jquery.treeview.css"/>
+
+<!--
 	 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
 	 <script type="text/javascript" src="@host.base.url@@artifactId@/lib/jquery.cookie.js"></script>
 	 <script type="text/javascript" src="@host.base.url@@artifactId@/jquery.treeview.js"></script>
+-->
+	 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+	 <script type="text/javascript" src="http://quakesim-iu.appspot.com/scripts/jquery.cookie.js"></script>
+	 <script type="text/javascript" src="http://quakesim-iu.appspot.com/scripts/jquery.treeview.js"></script>
+
 
 	 <!--Google and related APIs are imported here -->
 	 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" 
