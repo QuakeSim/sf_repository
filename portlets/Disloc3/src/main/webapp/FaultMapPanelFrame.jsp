@@ -2,8 +2,8 @@
   <h:inputHidden id="faultName" value="#{DislocBean2.mapFaultName}"/>
   <h:inputHidden id="faultlistsize" value="#{DislocBean2.myFaultsForProjectListsize}"/>
   <f:verbatim>
-	 <script type="text/javascript" src="@host.base.url@@artifactId@/demo.js"></script>
-	 <script type="text/javascript" src="@host.base.url@@artifactId@/egeoxml.js"></script>
+	 <script type="text/javascript" src="http://quakesim-iu.appspot.com/scripts/demo.js"></script>
+	 <script type="text/javascript" src="http://quakesim-iu.appspot.com/scripts/egeoxml.js"></script>
   </f:verbatim>
   <f:verbatim>
 	 <fieldset style="width:920px"><legend class="portlet-form-label">Fault Map</legend>

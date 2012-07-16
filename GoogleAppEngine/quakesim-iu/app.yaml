@@ -12,4 +12,8 @@ handlers:
 
 - url: /scripts
   static_dir: scripts
+
+- url: /kml
+  static_dir: kml
+
   
