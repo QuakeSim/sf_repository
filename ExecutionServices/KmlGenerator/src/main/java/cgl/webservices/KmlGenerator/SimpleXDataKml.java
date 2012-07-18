@@ -720,7 +720,7 @@ public class SimpleXDataKml {
 				innerBoundaryIs ob = new innerBoundaryIs();
 				
 				LinearRing lr = new LinearRing();
-				lr.setAltitude("relativeToGround");
+				lr.setAltitudeMode("relativeToGround");
 				
 				//Plot the arrow tails
 				double arrowTail1X = curarrow.getArrowTail1().getX(); 
