@@ -23,7 +23,7 @@ public class PointEntry {
 		return this.folderTag;
 	}
 	public void setDeltaZName(String tmp_str) {
-		this.deltaZName=tmp_str;
+		 this.deltaZName=tmp_str;
 	}
 	public String getDeltaZName() {
 		return this.deltaZName;

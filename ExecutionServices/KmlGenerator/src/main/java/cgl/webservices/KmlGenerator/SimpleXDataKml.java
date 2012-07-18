@@ -666,6 +666,7 @@ public class SimpleXDataKml {
 				mark1.setDescription(descriptionValue); 
 				
 				LineString newline = new LineString();
+				newline.setAltitudeMode("relativeToGround");
 	
 				mark1.setStyleUrl("#"+linestyleid);
 				
