@@ -33,19 +33,14 @@
  </style>
 
 	<title>RSS Disloc Results</title>
-	
-	<link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/quakesim_style.css"/>
-	<link rel="stylesheet" type="text/css" href="@host.base.url@@artifactId@/jquery.treeview.css"/>
-   <%--
-	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=put.google.map.key.here" type="text/javascript"></script>      
-	--%>
+	<link rel="stylesheet" type="text/css" href="http://quakesim-iu.appspot.com/stylesheets/quakesim_style.css"/>
+   <link rel="stylesheet" type="text/css" href="http://quakesim-iu.appspot.com/stylesheets/jquery.treeview.css"/>
+	 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+	 <script type="text/javascript" src="http://quakesim-iu.appspot.com/scripts/jquery.cookie.js"></script>
+	 <script type="text/javascript" src="http://quakesim-iu.appspot.com/scripts/jquery.treeview.js"></script>
+
 	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
-	<script type="text/javascript" src="@host.base.url@@artifactId@/lib/jquery.cookie.js"></script>
-	<script type="text/javascript" src="@host.base.url@@artifactId@/jquery.treeview.js"></script>
-	<%--
-	<script type="text/javascript" src="@host.base.url@@artifactId@/egeoxml_for_rssdisloc.js"></script>
-	--%>
  </head>
  
  <body onload="myInit()">
