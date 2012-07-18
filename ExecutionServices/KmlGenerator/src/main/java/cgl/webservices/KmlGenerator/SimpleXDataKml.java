@@ -714,6 +714,7 @@ public class SimpleXDataKml {
 				// Draw the arrow head by a polygon.
 				
 				Polygon p = new Polygon();			
+				p.setAltitudeMode("relativeToGround");
 				
 				p.setExtrude(true);
 				innerBoundaryIs ob = new innerBoundaryIs();
