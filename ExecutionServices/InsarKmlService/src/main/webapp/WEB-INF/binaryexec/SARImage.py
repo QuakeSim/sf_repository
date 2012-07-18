@@ -71,7 +71,7 @@ def generateKML(extent, outputname, imageurl, params):
         <href>%s</href> 
       </Icon> 
       <altitude>0</altitude>
-      <altitudeMode>clampToGround</altitude>
+      <altitudeMode>clampToGround</altitudeMode>
       <LatLonBox> 
         <north>%s</north> 
         <south>%s</south> 
