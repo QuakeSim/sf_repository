@@ -35,12 +35,12 @@
 	<title>RSS Disloc Results</title>
 	<link rel="stylesheet" type="text/css" href="http://quakesim-iu.appspot.com/stylesheets/quakesim_style.css"/>
    <link rel="stylesheet" type="text/css" href="http://quakesim-iu.appspot.com/stylesheets/jquery.treeview.css"/>
-	 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+<!--	 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>-->
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	 <script type="text/javascript" src="http://quakesim-iu.appspot.com/scripts/jquery.cookie.js"></script>
 	 <script type="text/javascript" src="http://quakesim-iu.appspot.com/scripts/jquery.treeview.js"></script>
 
-	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-	<script src="http://code.jquery.com/jquery-latest.js"></script>
  </head>
  
  <body onload="myInit()">
