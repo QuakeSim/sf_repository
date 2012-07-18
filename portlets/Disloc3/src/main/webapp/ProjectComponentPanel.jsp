@@ -139,7 +139,7 @@
 
 			<h:column>
 			  <f:facet name="header">
-				 <f:verbatim>Strike Angle</f:verbatim>
+				 <f:verbatim>Strike Angle (&deg;)</f:verbatim>
 			  </f:facet>
 			  <h:inputText id="FaultStrikeAngle" style="text-align:right;width:30px" 
 								value="#{myentry31.faultStrikeAngle}"
@@ -151,7 +151,7 @@
 
 			<h:column>
 			  <f:facet name="header">
-				 <f:verbatim>Dip Angle</f:verbatim>
+				 <f:verbatim>Dip Angle  (&deg;)</f:verbatim>
 			  </f:facet>
 			  <h:inputText id="FaultDipAngle" style="text-align:right;width:30px" 
 								value="#{myentry31.faultDipAngle}"
@@ -162,7 +162,7 @@
 			
 			<h:column>
 			  <f:facet name="header">
-				 <f:verbatim>Depth</f:verbatim>
+				 <f:verbatim>Depth (km)</f:verbatim>
 			  </f:facet>
 			  <h:inputText id="FaultDepth" style="text-align:right;width:30px" 
 								value="#{myentry31.faultDepth}"
@@ -173,7 +173,7 @@
 
 			<h:column>
 			  <f:facet name="header">
-				 <f:verbatim>Width</f:verbatim>
+				 <f:verbatim>Width (km)</f:verbatim>
 			  </f:facet>
 			  <h:inputText id="FaultWidth" style="text-align:right;width:30px" 
 								value="#{myentry31.faultWidth}"
@@ -184,7 +184,7 @@
 						
 			<h:column>
 			  <f:facet name="header">
-				 <f:verbatim>Length</f:verbatim>
+				 <f:verbatim>Length (km)</f:verbatim>
 			  </f:facet>
 			  <h:inputText id="FaultLength" style="text-align:right;width:30px" 
 								  value="#{myentry31.faultLength}"
@@ -196,7 +196,7 @@
 			
 			<h:column>
 			  <f:facet name="header">
-				 <f:verbatim>Strike Slip</f:verbatim>
+				 <f:verbatim>Strike Slip (mm)</f:verbatim>
 			  </f:facet>
 			  <h:inputText id="FaultStrikeSlip" style="text-align:right;width:30px" 
 								value="#{myentry31.faultStrikeSlip}"
@@ -208,7 +208,7 @@
 
 			<h:column>
 			  <f:facet name="header">
-				 <f:verbatim>Dip Slip</f:verbatim>
+				 <f:verbatim>Dip Slip (mm)</f:verbatim>
 			  </f:facet>
 			  <h:inputText id="FaultSlip" style="text-align:right;width:30px" 
 								value="#{myentry31.faultDipSlip}"

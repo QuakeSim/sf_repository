@@ -29,25 +29,37 @@ table {
 	 margin-bottom: 10px;
 }
 
+.body {
+  font-size:10pt;
+  font-family: Arial, sans-serif;
+}
+
 .componentstableh {
 
   width: 100px;
   height: 40px;
-
+  font-size:10pt;
+  font-weight:bold;
+  font-family: Arial, sans-serif;
 }
 
 .componentstableh2 {
 
   width: 50px;
   height: 40px;
+  font-size:10pt;
+  font-weight:bold;
+  font-family: Arial, sans-serif;
 
 }
 
 .componentstablec {
 
-text-align:center;
-height: 40px;
-
+	 text-align:center;
+	 height: 40px;
+	 font-size:10pt;
+	 font-weight:bold;
+	 font-family: Arial, sans-serif;
 }
 
 /* This is used for standalone, will be overridden if used in a portlet container */
