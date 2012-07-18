@@ -544,7 +544,7 @@ var sarselect=sarselect || (function() {
         var ulw = projection.fromPointToLatLng(ul);
         var lrw = projection.fromPointToLatLng(lr);
         //The user will enter the address to the public WMS layer here.  The data must be in WGS84
-		  var baseURL = "http://gf2.ucs.indiana.edu/geoserver/wms?";
+		  var baseURL = "http://gf9.ucs.indiana.edu/geoserver/wms?";
         var version = "1.3.0";
         var request = "GetMap";
         var format = "image%2Fpng"; //type of image returned  or image/jpeg
@@ -580,7 +580,7 @@ var sarselect=sarselect || (function() {
         var ulw = projection.fromPointToLatLng(ul);
         var lrw = projection.fromPointToLatLng(lr);
         //The user will enter the address to the public WMS layer here.  The data must be in WGS84
-		  var baseURL = "http://gf2.ucs.indiana.edu/geoserver/wms?";
+		  var baseURL = "http://gf9.ucs.indiana.edu/geoserver/wms?";
         var version = "1.1.0";
         var request = "GetMap";
         var format = "image%2Fpng"; //type of image returned  or image/jpeg
