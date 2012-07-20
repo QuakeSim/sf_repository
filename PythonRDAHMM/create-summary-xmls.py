@@ -21,6 +21,7 @@ stationCount="1532"
 
 # Used to separate parts of the station name
 SEPARATOR_CHARACTER="_"
+NO_DATA_TIME_STAMP="22:22:22"
 
 xmlHeaderTemplate="""  <update-time>%s</update-time>
   <data-source>%s</data-source>
@@ -141,11 +142,106 @@ def setStationRefLatLonHgt(stationDir,xmlFile):
     xmlFile.write("\t\t<long>"+refLon+"</long>\n");
     xmlFile.write("\t\t<height>"+refHgt+"</height>\n");
 
-def setStatusChanges():
-    pass
+def setStatusChanges(stationDir,xmlFile):
+    stationFiles=os.listdir(stationDir);
+    # Open the .all.Q and the .all.raw files.  We get the state from the first and
+    # the data from the second. 
+    # TODO: for now, we assume these files always exist
+    qFileName=""
+    rawFileName=""
+    #TODO: we could break out after both files are found.
+    for file in stationFiles:
+        if(file.endswith(".all.Q")):
+            qFileName=file
+        if(file.endswith(".all.raw")):
+            rawFileName=file
+    qFile=open(stationDir+"/"+qFileName,"r")
+    rawFile=open(stationDir+"/"+rawFileName,"r")
 
-def setTimesNoData():
-    pass
+    xmlFile.write("\t\t<status-changes>")
+    stateChangeList=""
+    # Now step through the Q file looking for state changes
+    # If we find a state change, get the date from the raw file
+    # We will save these to the string stateChangeList since we
+    # need to record in latest-first order
+    qline1=qFile.readline()
+    rline1=rawFile.readline()        
+    while True:
+        qline2=qFile.readline()
+        rline2=rawFile.readline()
+        if not qline2: break
+        
+        # See if qline1 and qline2 are the same.  If so, extract the dates from rline1 and rline2
+        # The line splits below are specific to the raw file line format.
+        if (qline1.rstrip()!=qline2.rstrip()):
+            eventdate=rline2.split(" ")[1] 
+            eventdate=eventdate.split("T")[0]
+            stateChangeList=eventdate+":"+qline1.rstrip()+"to"+qline2.rstrip()+";"+stateChangeList
+
+        # Make the previous "next" lines the "first" lines for the next comparison
+        qline1=qline2
+        rline1=rline2
+
+    # Clean up
+    xmlFile.write(stateChangeList)
+    xmlFile.write("</status-changes>\n")
+    qFile.close
+    rawFile.close
+
+def setTimesNoData(stationDir,xmlFile):
+    stationFiles=os.listdir(stationDir)
+    rawFileName=""
+    # Find the .all.raw file and open it
+    for file in stationFiles:
+        if(file.endswith(".all.raw")):
+            rawFileName=file
+    rawFile=open(stationDir+"/"+rawFileName,"r")
+    
+    xmlFile.write("\t\t<time-nodata>")
+    noDataString=""
+    # Step through the file to find the starting and ending dates with no data.
+    # By convention, this occurs when the line has a timestamp T22:22:22.  Also, by
+    # convention, we will record the latest to earliest dates with no data.
+    while True:
+        nodata=False
+        rline1=rawFile.readline()
+        if not rline1: break
+
+        # Get the date and timestamp, following format conventions
+        fulleventdate1=rline1.split(" ")[1]
+        eventdate1=fulleventdate1.split("T")[0]
+        timestamp1=fulleventdate1.split("T")[1]
+        # See if we have detected a no-data line
+        if(timestamp1==NO_DATA_TIME_STAMP):
+            nodata=True
+            #Keep eventdate1 in case this is an isolated no-data line.
+            eventdate_keep=eventdate1
+
+            # We have a no-data line, so step ahead until the 
+            # no-data line ends.
+            while(nodata):
+                rline2=rawFile.readline()
+                if not rline2: break
+                fulleventdate2=rline2.split(" ")[1]
+                eventdate2=fulleventdate2.split("T")[0]
+                timestamp2=fulleventdate2.split("T")[1]
+                if(timestamp2!=NO_DATA_TIME_STAMP):
+                    # Data exists for the second time stamp, so break out
+                    # The last no-data line was the previous line
+                    nodata=False
+                    break
+                else:
+                    # No data for this line either, so keep this timestamp
+                    # and start the while(nodata) loop again
+                    eventdate_keep=eventdate2
+
+            # We now know the range of no-data values, so insert this range, latest first
+            noDataString=eventdate_keep+"to"+eventdate1+";"+noDataString
+    xmlFile.write(noDataString)
+    # Clean up and close
+    xmlFile.write("<time-nodata>\n")
+    rawFile.close
+
 
 #--------------------------------------------------
 # Now run the script
@@ -182,8 +278,8 @@ for dataSet in os.listdir(eval_dir_path):
             openStationXml(xmlFile)
             setStationId(stationList,xmlFile)
             setStationRefLatLonHgt(projectDir+"/"+stationList,xmlFile)
-            setStatusChanges()
-            setTimesNoData()
+            setStatusChanges(projectDir+"/"+stationList,xmlFile)
+            setTimesNoData(projectDir+"/"+stationList,xmlFile)
             closeStationXml(xmlFile)
 
     # Write the end tag
